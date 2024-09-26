@@ -1083,6 +1083,17 @@ function guilgeeniiTuukh({ token }) {
                     sorter: () => 0,
                   },
                   {
+                    title: t("Гэрээний дугаар"),
+                    width: "11rem",
+                    dataIndex: "gereeniiDugaar",
+                    ellipsis: true,
+                    align: "center",
+                    render(a) {
+                      return a;
+                    },
+                    sorter: () => 0,
+                  },
+                  {
                     title: t("Алданги"),
                     dataIndex: "aldangiinUldegdel",
                     className: "text-center",

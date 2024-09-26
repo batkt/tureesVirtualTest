@@ -68,13 +68,13 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
       {ashiglaltiinZardal?.jagsaalt.map((a, i) => {
         return (
           <Select.Option key={a._id}>
-            <div className="flex justify-between border-b">
-              <p className="flex w-1/2 truncate border-r bg-green-400 bg-opacity-10 pl-2 text-left">
+            <div className="w-full flex justify-between border-b">
+              <p className="flex border-r bg-green-400 bg-opacity-10 pl-2 pr-2 text-left">
                 {a.ner}
               </p>
-              <div className="flex w-1/2 bg-blue-600 bg-opacity-5 pr-2">
-                <p className={`   w-1/2 border-r text-right`}>{t(a.turul)}</p>
-                <p className="w-1/2 text-right">
+              <div className="w-full justify-between flex bg-blue-600 bg-opacity-5 pl-2 pr-2">
+                <p className={`border-r text-right mr-5`}>{t(a.turul)}</p>
+                <p className="text-right">
                   {a.turul !== "Дурын" ? a.tariff : "Дурын"}
                   {a.turul !== "Дурын" && "₮"}
                 </p>

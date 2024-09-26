@@ -158,6 +158,8 @@ const Tulbur = ({
                   placeholder={t("Барьцаа дүн")}
                   style={{ width: "100%" }}
                   onChange={(e) => baritsaaDunChange(e)}
+                  formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                 />
               </Form.Item>
             </div>

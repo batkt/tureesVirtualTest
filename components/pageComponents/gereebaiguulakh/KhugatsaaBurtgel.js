@@ -155,12 +155,12 @@ const YurunkhiiMedeele = ({
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
         <Form.Item
           rules={[
-            { required: true, message: t("Төлөлт хийх өдөр бүртгэнэ үү!") },
+            { required: true, message: t("Авлага үүсэх өдөр бүртгэнэ үү!") },
           ]}
-          label={t("Төлөлт хийх өдөр")}
+          label={t("Авлага үүсэх өдөр")}
           extra={
             gereeniiZagvar?.turGereeEsekh !== true &&
-            t("Төлөлт хийх огноо сар бүрийн / өдөр")
+            t("Авлага үүсэх огноо сар бүрийн / өдөр")
           }
           name="tulukhUdur"
           required
@@ -170,14 +170,14 @@ const YurunkhiiMedeele = ({
               style={{ width: "100%" }}
               disabled
               allowClear
-              placeholder={t("Төлөлт хийх огноо")}
+              placeholder={t("Авлага үүсэх огноо")}
               prefix={<SolutionOutlined />}
             />
           ) : (
             <Select
               onChange={() => form.getFieldInstance("duusakhOgnoo").focus()}
               defaultValue={_.get(value, "tulukhUdur.0")}
-              placeholder={t("Төлөлт хийх огноо сар бүрийн / өдөр")}
+              placeholder={t("Авлага үүсгэх огноо сар бүрийн / өдөр")}
               prefix={<SolutionOutlined />}
             >
               {new Array(31).fill("").map((a, i) => (
@@ -193,7 +193,7 @@ const YurunkhiiMedeele = ({
         <Form.Item
           name="duusakhOgnoo"
           label={t("Гэрээ дуусах хугацаа")}
-          extra={t("Төлөлт хийх огноо сар бүрийн / өдөр")}
+          extra={t("Авлага үүсгэх огноо сар бүрийн / өдөр")}
           rules={[
             { required: true, message: t("Гэрээ дуусах хугацаа бүртгэнэ үү!") },
           ]}

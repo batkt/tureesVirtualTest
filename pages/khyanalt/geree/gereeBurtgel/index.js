@@ -1053,7 +1053,7 @@ function ZakhialgiinKhyanalt() {
               });
 
               value.map((mur) => {
-                butsaakhUtga?.dedKhesguud
+                data?.dedKhesguud
                   ?.filter(
                     (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
                   )
@@ -1286,7 +1286,7 @@ function ZakhialgiinKhyanalt() {
                   width: "5rem",
                 },
                 {
-                  title: t("Төлөлт хийх өдөр"),
+                  title: t("Авлага үүсэх өдөр"),
                   dataIndex: "tulukhUdur",
                   align: "center",
                   ellipsis: true,

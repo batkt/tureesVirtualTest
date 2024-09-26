@@ -25,7 +25,7 @@ import moment from "moment";
 import { t } from "i18next";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import formatNumber from "tools/function/formatNumber";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const order = { createdAt: -1 };
 
@@ -196,15 +196,12 @@ function MashinBurtgel(
         data.uldegdelKhungulukhKhugatsaa = data.khungulukhKhugatsaa;
       }
     }
-    if (data.turul === "Гэрээт" && gereetTulburBodokhEsekh) {
+    if (data.turul === "Гэрээт") {
       data.gereetTulburBodokhEsekh = gereetTulburBodokhEsekh;
-      data.tulburBodokhTsagEkhlekh = tulburBodokhTsag[0].format("HH:mm");
-      data.tulburBodokhTsagDuusakh = tulburBodokhTsag[1].format("HH:mm");
-      if(!!tulburBodokhTsagNemelt)
-      {
-        data.tulburBodokhTsagEkhlekhNeg = tulburBodokhTsagNemelt[0].format("HH:mm");
-        data.tulburBodokhTsagDuusakhNeg = tulburBodokhTsagNemelt[1].format("HH:mm");
-      }
+      data.tulburBodokhTsagEkhlekh = gereetTulburBodokhEsekh ? tulburBodokhTsag[0].format("HH:mm") : null;
+      data.tulburBodokhTsagDuusakh = gereetTulburBodokhEsekh ? tulburBodokhTsag[1].format("HH:mm") : null;
+      data.tulburBodokhTsagEkhlekhNeg = gereetTulburBodokhEsekhNemelt ? tulburBodokhTsagNemelt[0].format("HH:mm") : null;
+      data.tulburBodokhTsagDuusakhNeg = gereetTulburBodokhEsekhNemelt ? tulburBodokhTsagNemelt[1].format("HH:mm") : null;
     }
     const method = data?._id ? updateMethod : createMethod;
     method("mashin", token, data).then(({ data }) => {
@@ -638,6 +635,9 @@ function MashinBurtgel(
             value={tulburBodokhTsagNemelt}
             onChange={setTulburBodokhTsagNemelt}
           />
+          <Button className="ml-1" icon={<DeleteOutlined style={{ fontSize: "18px", color: "red" }} />} 
+            onClick={() => setGereetTulburBodokhEsekhNemelt(false)}>
+          </Button>
         </Form.Item>
       )}
     </Form>

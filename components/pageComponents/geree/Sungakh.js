@@ -61,6 +61,7 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
             gereeniiId: data?._id,
             barilgiinId: data?.barilgiinId,
             duusakhOgnoo,
+            sar,
           })
           .then(({ data }) => {
             if (data === "Amjilttai") {
@@ -116,6 +117,11 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
             style={{ width: "60%" }}
             value={duusakhOgnoo}
             onChange={setDuusakhOgnoo}
+            disabledDate={(current) => {
+              let minDate = moment(duusakhOgnoo).startOf("month").format("YYYY-MM-DD");
+              let maxDate = moment(duusakhOgnoo).endOf("month").format("YYYY-MM-DD");
+              return (current <= moment(maxDate, "YYYY-MM-DD") && current >= moment(minDate, "YYYY-MM-DD")) === false;
+            }} 
           />
         </div>
       </div>
