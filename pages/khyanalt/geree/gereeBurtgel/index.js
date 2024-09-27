@@ -237,6 +237,7 @@ const select = {
   talbainKhemjee: 1,
   talbainKhemjeeMetrKube: 1,
   davkhar: 1,
+  baritsaaAvakhDun: 1,
   baritsaaBairshuulakhKhugatsaa: 1,
   baritsaaAvakhKhugatsaa: 1,
   baiguullagiinId: 1,
