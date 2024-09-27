@@ -24,7 +24,6 @@ function Tulbur(
 ) {
   const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
   const [eBarimt, setEBarimt] = React.useState(null);
-
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
     defaultTurul === "ААН" ? true : false
   );
