@@ -228,6 +228,7 @@ function tulburTootsoo({ token }) {
               ) || "";
             medeelel.albanTushaal = medeelel.albanTushaal || "";
             medeelel.khayag = medeelel.khayag || "";
+            medeelel.customerTin = medeelel.customerTin || "";
             medeelel.zakhirliinOvog = medeelel.zakhirliinOvog || "";
             medeelel.zakhirliinNer = medeelel.zakhirliinNer || "";
             medeelel.khayag = medeelel.khayag || "";

@@ -193,6 +193,7 @@ function AjiltanBurtgel({ token }) {
     ner: undefined,
     ovog: undefined,
     register: undefined,
+    customerTin: undefined,
     khayag: undefined,
     segmentuud: [],
     utas: [],
@@ -481,6 +482,9 @@ function AjiltanBurtgel({ token }) {
           formRef.current.getFieldInstance("khayag").focus();
           break;
         case "control-ref_khayag":
+          formRef.current.getFieldInstance("customerTin").focus();
+          break;
+        case "control-ref_customerTin":
           formRef.current.getFieldInstance("mail").focus();
           break;
         case "control-ref_mail":
@@ -806,7 +810,6 @@ function AjiltanBurtgel({ token }) {
               </Form.Item>
             </div>
           )}
-
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
@@ -828,6 +831,25 @@ function AjiltanBurtgel({ token }) {
                 value={khariltsagchState.khayag}
                 onChange={(e) => onChange("khayag", e.target.value)}
                 prefix={<HomeOutlined style={iconColor} />}
+              ></Input>
+            </Form.Item>
+          </div>
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="500"
+          >
+            <Form.Item 
+              name="customerTin">
+              <Input
+                onKeyUp={focuser}
+                allowClear
+                placeholder={t("Бүртгэлийн дугаар")}
+                value={khariltsagchState.customerTin}
+                onChange={(e) =>
+                  onChange("customerTin", e.target.value)
+                }
+                prefix={<SolutionOutlined style={iconColor} />}
               ></Input>
             </Form.Item>
           </div>

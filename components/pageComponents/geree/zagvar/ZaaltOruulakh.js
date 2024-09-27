@@ -19,6 +19,7 @@ const talbaruud = [
   { ner: t("Гэрээний огноо"), talbar: "gereeniiOgnoo" },
   { ner: t("Төрөл"), talbar: "turul" },
   { ner: t("Регистр"), talbar: "register" },
+  { ner: t("Бүртгэлийн дугаар"), talbar: "customerTin" },
   { ner: t("Албан тушаал"), talbar: "albanTushaal" },
   { ner: t("Захиралын овог"), talbar: "zakhirliinOvog" },
   { ner: t("Захиралын нэр"), talbar: "zakhirliinNer" },

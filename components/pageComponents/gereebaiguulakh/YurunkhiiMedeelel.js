@@ -155,6 +155,7 @@ const YurunkhiiMedeele = ({
                 zakhirliinOvog: 1,
                 zakhirliinNer: 1,
                 khayag: 1,
+                customerTin: 1,
               },
             },
           })
@@ -168,6 +169,7 @@ const YurunkhiiMedeele = ({
                 zakhirliinOvog,
                 zakhirliinNer,
                 khayag,
+                customerTin,
               } = data?.jagsaalt[0];
               if (value.baiguullagaEsekh) {
                 var onookhKhariltsagch = {
@@ -178,6 +180,7 @@ const YurunkhiiMedeele = ({
                   khayag,
                   register: target.value,
                   ner,
+                  customerTin,
                 };
               } else {
                 var onookhKhariltsagch = {
@@ -187,6 +190,7 @@ const YurunkhiiMedeele = ({
                   mail,
                   khayag,
                   register: target.value,
+                  customerTin,
                 };
               }
               form.setFieldsValue(onookhKhariltsagch);
@@ -360,6 +364,7 @@ const YurunkhiiMedeele = ({
             onChange={(v) => {
               const khariltsagch = {
                 register: undefined,
+                customerTin: undefined,
                 ner: undefined,
                 utas: undefined,
                 ovog: undefined,
@@ -516,6 +521,16 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
+      <div data-aos="fade-right" data-aos-delay="800">
+        <Form.Item name="customerTin" label={t("Бүртгэлийн дугаар")}>
+          <Input
+            onKeyUp={focuser}
+            allowClear
+            placeholder={t("Бүртгэлийн дугаар")}
+            prefix={<SolutionOutlined />}
+          />
+        </Form.Item>
+      </div>
       {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item name="mail" label={t("И-мэйл хаяг")}>

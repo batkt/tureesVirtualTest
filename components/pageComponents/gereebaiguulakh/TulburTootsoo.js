@@ -152,7 +152,7 @@ const Tulbur = ({
           </div>
           {value.baritsaaAvakhEsekh === true && (
             <div data-aos="fade-right" data-aos-duration="1000">
-              <Form.Item label={t("Барьцаа дүн")}>
+              <Form.Item label={t("Барьцаа дүн")} name="baritsaaAvakhDun">
                 <InputNumber
                   value={value.baritsaaAvakhDun}
                   placeholder={t("Барьцаа дүн")}

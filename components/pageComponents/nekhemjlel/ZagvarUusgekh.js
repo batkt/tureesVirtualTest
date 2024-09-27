@@ -21,6 +21,7 @@ const undsenTalbaruud = [
   { ner: "Гэрээний огноо", talbar: "gereeniiOgnoo" },
   { ner: "Төрөл", talbar: "turul" },
   { ner: "Регистр", talbar: "register" },
+  { ner: "Бүртгэлийн дугаар", talbar: "customerTin" },
   { ner: "Албан тушаал", talbar: "albanTushaal" },
   { ner: "Захиралын овог", talbar: "zakhirliinOvog" },
   { ner: "Захиралын нэр", talbar: "zakhirliinNer" },
