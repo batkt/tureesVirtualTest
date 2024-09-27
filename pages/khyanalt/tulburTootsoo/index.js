@@ -521,7 +521,8 @@ function tulburTootsoo({ token }) {
                       <div
                         className={`text-500 flex items-center justify-center`}
                       >
-                        {a?.kholbosonGereeniiId &&
+                        {(a?.kholbosonGereeniiId ||
+                          !!baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh) &&
                         a?.ebarimtAvsanEsekh === true ? (
                           <Tooltip title="И-баримт хэвлэсэн байна">
                             <CheckOutlined
