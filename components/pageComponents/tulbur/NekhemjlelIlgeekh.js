@@ -13,7 +13,7 @@ import useNekhemjlekhDugaarlalt from "hooks/tulburTootsoo/useNekhemjlekhDugaarla
 
 const ilgeekhTurul = "davkharaar";
 
-function GuilgeeKhiikh({ data, token, onFinish, destroy, t }, ref) {
+function GuilgeeKhiikh({ data, token, onFinish, destroy, t, ajiltan }, ref) {
   const { dansGaralt } = useDans(token, data?.baiguullagiinId);
   const printRef = React.useRef(null);
   const [songogdsonDans, setDans] = React.useState();
@@ -110,7 +110,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t }, ref) {
         nemeltNekhemjlekh
       );
     }
-    return { zagvar, mail: medeelel?.mail };
+    return { zagvar, mail: medeelel?.mail, medeelel: medeelel };
   }, [barimt, nekhemjleliinJagsaalt, nekhemjlel]);
 
   function maileerIlgeekh() {
@@ -127,9 +127,16 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t }, ref) {
       mail: nekhemjlekh.mail,
       content: nekhemjlekh.zagvar,
     });
+    data.maililgeesenAjiltniiId = ajiltan.id;
+    data.maililgeesenAjiltniiNer = ajiltan.ner;
+    data.nekhemjlekhiinZagvarId = barimt;
+    data.tsonkhniiNer = "Гүйлгээний түүх";
+    data.medeelel = nekhemjlekh.medeelel
+    const tempGereenuud = [];
+    tempGereenuud.push(data);
     setLoading(true);
     uilchilgee(token)
-      .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
+      .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр", gereenuud: tempGereenuud })
       .then(({ data }) => {
         if (data === "Amjilttai") {
           notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });

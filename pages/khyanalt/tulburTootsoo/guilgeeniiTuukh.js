@@ -49,6 +49,7 @@ import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluu
 import Khuulga from "components/pageComponents/tulbur/Khuulga";
 import { useTranslation } from "react-i18next";
 import locale from "antd/lib/date-picker/locale/mn_MN";
+import NekhemjlekhiinTuukhTsonkh from "components/pageComponents/tulbur/NekhemjlekhiinTuukhTsonkh";
 
 //#endregion
 
@@ -539,6 +540,27 @@ function guilgeeniiTuukh({ token }) {
                 </Tooltip>
               </a>
               <a
+                onClick={() => nekhemjleliinTuukhKharakh(row)}
+                className=" text-green-500 hover:scale-110"
+              >
+                <Tooltip title={t("Нэхэмжлэлийн түүх харах")} className="flex w-full items-center  justify-center px-[6px] ">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-folder d-block mx-auto"
+                  >
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </Tooltip>
+              </a>
+              <a
                 onClick={() => khuulgaKharya(row)}
                 className="fill-current  text-green-500 hover:scale-110"
               >
@@ -733,11 +755,55 @@ function guilgeeniiTuukh({ token }) {
           ref={ref}
           token={token}
           onFinish={refreshData}
+          ajiltan={ajiltan}
         />
       ),
       footer: [],
     });
   }
+
+  function nekhemjleliinTuukhKharakh(data){
+    const footer = [
+      <Button
+        type="primary"
+        onClick={() => ref.current.khevlekh()}
+        icon={<PrinterOutlined />}
+      >
+        {t("Хэвлэх")}
+      </Button>,
+      <Button
+        onClick={() => ref.current.khaaya()}
+        icon={<CloseCircleOutlined />}
+      >
+        {t("Хаах")}
+      </Button>,
+    ];
+    modal({
+      title: (
+        <div className="relative flex w-full justify-between">
+          {t("Нэхэмжлэлийн түүх")}
+        </div>
+      ),
+      icon: <FileExcelOutlined />,
+      width: "90vw",
+      style: { top: 20 },
+      content: (
+        <NekhemjlekhiinTuukhTsonkh
+          data={data}
+          ajiltan={ajiltan}
+          barilgiinId={barilgiinId}
+          ref={ref}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+          ognoo={ognoo}
+          onFinish={refreshData}
+        />
+      ),
+      footer,
+    });
+  }
+
+
   function medegdelIlgeekh(data) {
     modal({
       title: "",

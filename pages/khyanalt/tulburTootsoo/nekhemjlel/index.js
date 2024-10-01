@@ -1159,10 +1159,13 @@ function tulburTootsoo({ token }) {
     }
     if (!excelZagvarSongogdson) {
       const mailuud = [];
+      const tuukhuud = [];
       songogdsonGereenuud.map((mur) => {
         var nekhemjlekh = _.cloneDeep(
           nekhemjleliinJagsaalt.find((a) => a._id === mur)
         );
+
+        const tuukh = _.cloneDeep(nekhemjlekh);
 
         const songosonZagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
           (a) => a._id === barimt
@@ -1509,10 +1512,16 @@ function tulburTootsoo({ token }) {
             content: text,
           });
         }
+        tuukh.maililgeesenAjiltniiId = ajiltan.id;
+        tuukh.maililgeesenAjiltniiNer = ajiltan.ner;
+        tuukh.nekhemjlekhiinZagvarId = barimt;
+        tuukh.tsonkhniiNer = "Нэхэмжлэл";
+        tuukh.medeelel = nekhemjlekh;
+        tuukhuud.push(tuukh);
       });
       setLoading(true);
       uilchilgee(token)
-        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
+        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр", gereenuud: tuukhuud, })
         .then(({ data }) => {
           if (data === "Amjilttai") {
             notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });

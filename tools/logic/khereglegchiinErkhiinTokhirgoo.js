@@ -1,6 +1,6 @@
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { BiCommentError } from "react-icons/bi";
-import { BiBellPlus } from "react-icons/bi";
+import { BiBellPlus, BiDesktop } from "react-icons/bi";
 import { BsGraphUp, BsPcDisplay } from "react-icons/bs";
 import { MdOutlineAnalytics } from "react-icons/md";
 import { FiHome } from "react-icons/fi";
@@ -183,7 +183,7 @@ export const tsonknuud = [
     key: "/khyanalt/zogsool/mashinBurtgel",
   },
   {
-    ner: "Камер - Касс",
+    ner: "Касс",
     key: "/khyanalt/zogsool/camera",
   },
   {
@@ -739,28 +739,10 @@ export const khuudasnuud = [
         ),
       },
       {
-        ner: "Камер - Касс",
+        ner: "Касс",
         khuudasniiNer: "Camera",
         href: "/khyanalt/zogsool/camera",
-        icon: (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            icon-name="video"
-            data-lucide="video"
-            className="lucide lucide-video mx-auto block"
-          >
-            <polygon points="23 7 16 12 23 17 23 7"></polygon>
-            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-          </svg>
-        ),
+        icon: <BiDesktop style={{ width: "24", height: "24" }} />,
       },
       {
         ner: "Камерын хяналт",
