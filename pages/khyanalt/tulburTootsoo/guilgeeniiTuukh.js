@@ -756,6 +756,7 @@ function guilgeeniiTuukh({ token }) {
           token={token}
           onFinish={refreshData}
           ajiltan={ajiltan}
+          baiguullaga={baiguullaga}
         />
       ),
       footer: [],

@@ -701,10 +701,12 @@ function tulburTootsoo({ token }) {
           }
           return {
             zagvar: zagvar?.nekhemjlekh,
+            medeelel: medeelel,
             mail: medeelel?.mail,
             khuudasniiKhemjee: zagvar?.khuudasniiKhemjee,
             chiglel: zagvar?.chiglel,
-            khatuuZagvarEsekh: zagvar.khatuuZagvarEsekh,
+            khatuuZagvarEsekh: zagvar?.khatuuZagvarEsekh,
+            zagvariinNer: zagvar?.ner,
           };
         });
     return [];
@@ -1159,14 +1161,10 @@ function tulburTootsoo({ token }) {
     }
     if (!excelZagvarSongogdson) {
       const mailuud = [];
-      const tuukhuud = [];
       songogdsonGereenuud.map((mur) => {
         var nekhemjlekh = _.cloneDeep(
           nekhemjleliinJagsaalt.find((a) => a._id === mur)
         );
-
-        const tuukh = _.cloneDeep(nekhemjlekh);
-
         const songosonZagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
           (a) => a._id === barimt
         );
@@ -1512,16 +1510,22 @@ function tulburTootsoo({ token }) {
             content: text,
           });
         }
-        tuukh.maililgeesenAjiltniiId = ajiltan.id;
-        tuukh.maililgeesenAjiltniiNer = ajiltan.ner;
-        tuukh.nekhemjlekhiinZagvarId = barimt;
-        tuukh.tsonkhniiNer = "Нэхэмжлэл";
-        tuukh.medeelel = nekhemjlekh;
-        tuukhuud.push(tuukh);
+      });
+      const gereenuud = [];
+      nekhemjlekhuud.map((mur, index) => {
+        const tempData = _.cloneDeep(nekhemjleliinJagsaalt.find((a) => a._id === mur.medeelel?._id));
+        tempData.medeelel = _.cloneDeep(tempData);
+        tempData.nekhemjlekh = mur.zagvar;
+        tempData.zagvariinNer = mur.zagvariinNer;
+        tempData.maililgeesenAjiltniiId = ajiltan.id;
+        tempData.maililgeesenAjiltniiNer = ajiltan.ner;
+        tempData.nekhemjlekhiinZagvarId = barimt;
+        tempData.tsonkhniiNer = "Нэхэмжлэл";
+        gereenuud.push(tempData);
       });
       setLoading(true);
       uilchilgee(token)
-        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр", gereenuud: tuukhuud, })
+        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр", gereenuud: gereenuud, })
         .then(({ data }) => {
           if (data === "Amjilttai") {
             notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
