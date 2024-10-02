@@ -6,7 +6,6 @@ import EBarimt from "./EBarimt";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { t } from "i18next";
 //#endregion
-
 function Tulbur(
   {
     destroy,
