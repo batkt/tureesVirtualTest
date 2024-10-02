@@ -20,9 +20,11 @@ import { useTranslation } from "react-i18next";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import useNekhemjlekh from "hooks/tulburTootsoo/useNekhemjlekh";
 import useNekhemjlekhiinZagvar from "hooks/tulburTootsoo/useNekhemjlekhiinZagvar";
+import khatuuZagvar from "tools/zagvar/tur";
+import khatuuZagvarFoodCity from "tools/zagvar/turFoodCityTemp";
 
 function NekhemjlekhiinTuukh(
-  { token, data, refreshData, ognoo, ajiltan, barilgiinId },
+  { token, data, refreshData, ognoo, ajiltan, barilgiinId, baiguullaga },
   ref
 ) {
   const { t, i18n } = useTranslation();
@@ -106,9 +108,10 @@ function NekhemjlekhiinTuukh(
 
   const nekhemjlekh = useMemo(() => {
     if (zagvariinId && data)
-      var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
-        (a) => a._id === zagvariinId
-      )?.nekhemjlekh;
+      var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === zagvariinId)?.nekhemjlekh;
+      if (zagvar?.khatuuZagvarEsekh) {
+        zagvar.nekhemjlekh = ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5" ? khatuuZagvarFoodCity(data, ajiltan, baiguullaga) : khatuuZagvar(data, ajiltan, baiguullaga);
+      }
     if (!!zagvar && !!medeelel) {
       for (const [key, value] of Object.entries(medeelel)) {
         if (key !== "nemeltNekhemjlekh")

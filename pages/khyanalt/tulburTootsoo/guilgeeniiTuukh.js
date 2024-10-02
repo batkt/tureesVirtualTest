@@ -789,6 +789,7 @@ function guilgeeniiTuukh({ token }) {
       style: { top: 20 },
       content: (
         <NekhemjlekhiinTuukhTsonkh
+          baiguullaga={baiguullaga}
           data={data}
           ajiltan={ajiltan}
           barilgiinId={barilgiinId}

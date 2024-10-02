@@ -4,6 +4,7 @@ import NekhemjlekhiinTuukh from "./NekhemjlekhiinTuukh";
 
 function NekhemjlekhiinTuukhTsonkh(
   {
+    baiguullaga,
     data,
     token,
     ognoo,
@@ -48,6 +49,7 @@ function NekhemjlekhiinTuukhTsonkh(
       style={{ height: "calc(100vh - 12rem)" }}
     >
       <NekhemjlekhiinTuukh
+        baiguullaga={baiguullaga}
         ajiltan={ajiltan}
         barilgiinId={barilgiinId}
         ref={refTuukh}
