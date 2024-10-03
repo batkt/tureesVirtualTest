@@ -122,7 +122,6 @@ function GereeBaiguulakh({ token, data }) {
     if (
       !data.dans ||
       !data.gereeniiDugaar ||
-      !data.register ||
       !data.utas ||
       (data.baiguullagaEsekh === true
         ? !data.zakhirliinNer || !data.zakhirliinOvog || !data.ner
@@ -188,7 +187,7 @@ function GereeBaiguulakh({ token, data }) {
     if (!!data?.zuvshuurliinZurag)
       data.zuvshuurliinZurag =
         _.get(data, "zuvshuurliinZurag.0.response.id") || null;
-
+        
     uilchilgee(token)
       .post("/gereeZasya", data)
       .then(({ data }) => {
@@ -243,6 +242,7 @@ function GereeBaiguulakh({ token, data }) {
         "turul",
         "utas",
         "zardluud",
+        "avlaga",
       ])
     )
       Modal.confirm({

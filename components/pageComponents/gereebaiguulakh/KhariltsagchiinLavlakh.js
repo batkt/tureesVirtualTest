@@ -109,7 +109,6 @@ const KhariltsagchiinLavlakh = ({
         onKeyUp={focuser}
         onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
         allowClear
-        maxLength={baiguullagaEsekh ? 7 : 10}
         value={register}
         placeholder={t("Регистр, Бүртгэлийн дугаар")}
         prefix={<SolutionOutlined />}

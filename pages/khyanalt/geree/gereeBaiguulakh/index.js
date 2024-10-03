@@ -97,7 +97,6 @@ function GereeBaiguulakh({ token }) {
       if (
         !data.dans ||
         !data.gereeniiDugaar ||
-        !data.register ||
         !data.utas ||
         (data.baiguullagaEsekh === true
           ? !data.zakhirliinNer || !data.zakhirliinOvog || !data.ner
@@ -150,6 +149,8 @@ function GereeBaiguulakh({ token }) {
       data.gereeniiZagvariinId = gereeniiZagvar._id;
       data.barilgiinId = barilgiinId;
       data.turGereeEsekh = gereeniiZagvar?.turGereeEsekh;
+      if(!!data.customerTin && data.register === data.customerTin)
+        data.register = undefined;
 
       const guilgeenuud = [...(data.avlaga.guilgeenuud || [])];
       if (gereeniiZagvar?.turGereeEsekh !== true && data?.baritsaaAvakhDun > 0)

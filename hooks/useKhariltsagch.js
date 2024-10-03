@@ -22,6 +22,7 @@ const fetcher = (
           $or: [
             { ner: { $regex: search, $options: "i" } },
             { register: { $regex: search, $options: "i" } },
+            { customerTin: { $regex: search, $options: "i" } },
             { utas: { $regex: search, $options: "i" } },
           ],
           ...query,

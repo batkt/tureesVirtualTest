@@ -25,6 +25,7 @@ const fetcher = (
           baiguullagiinId,
           $or: [
             { register: { $regex: search, $options: "i" } },
+            { customerTin: { $regex: search, $options: "i" } },
             { talbainDugaar: { $regex: search, $options: "i" } },
             { gereeniiDugaar: { $regex: search, $options: "i" } },
             { utas: { $regex: search, $options: "i" } },

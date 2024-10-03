@@ -158,6 +158,7 @@ function TableGuilgee({
 
 const searchKeys = [
   "register",
+  "customerTin",
   "talbainDugaar",
   "gereeniiDugaar",
   "utas",
@@ -344,6 +345,12 @@ function guilgeeniiTuukh({ token }) {
         align: "center",
         title: t("Регистр"),
         dataIndex: "register",
+      },
+      {
+        width: "7rem",
+        align: "center",
+        title: t("Бүртгэлийн дугаар"),
+        dataIndex: "customerTin",
       },
       {
         title: t("Талбай"),

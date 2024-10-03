@@ -221,6 +221,7 @@ const select = {
   ovog: 1,
   ner: 1,
   register: 1,
+  customerTin: 1,
   albanTushaal: 1,
   zakhirliinOvog: 1,
   zakhirliinNer: 1,
@@ -352,6 +353,13 @@ function ZakhialgiinKhyanalt() {
     {
       title: t("Регистр"),
       dataIndex: "register",
+      className: "text-center",
+      align: "center",
+      ellipsis: true,
+    },
+    {
+      title: t("Бүртгэлийн дугаар"),
+      dataIndex: "customerTin",
       className: "text-center",
       align: "center",
       ellipsis: true,
@@ -629,7 +637,7 @@ function ZakhialgiinKhyanalt() {
         showSorterTooltip: false,
         sorter: () => 0,
       },
-
+      
       {
         title: t("Регистр"),
         fixed: "left",
@@ -638,6 +646,17 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         width: "7rem",
         sortOrder: sortOrderShalgakh(order.register),
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Бүртгэлийн дугаар"),
+        fixed: "left",
+        dataIndex: "customerTin",
+        align: "center",
+        ellipsis: true,
+        width: "7rem",
+        sortOrder: sortOrderShalgakh(order.customerTin),
         showSorterTooltip: false,
         sorter: () => 0,
       },
