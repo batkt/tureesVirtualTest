@@ -13,6 +13,8 @@ import useNekhemjlekhDugaarlalt from "hooks/tulburTootsoo/useNekhemjlekhDugaarla
 import { renderToString } from "react-dom/server";
 import useJagsaalt from "hooks/useJagsaalt";
 import numberToWords from "tools/function/numberToWords";
+import khatuuZagvar from "tools/zagvar/tur";
+import khatuuZagvarFoodCity from "tools/zagvar/turFoodCityTemp";
 
 const ilgeekhTurul = "davkharaar";
 
@@ -61,7 +63,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t, ajiltan, baiguullaga
         zagvar.nekhemjlekh = ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5" ? khatuuZagvarFoodCity(medeelel, ajiltan, baiguullaga) : khatuuZagvar(medeelel, ajiltan, baiguullaga);
       }
       const barilga = baiguullaga?.barilguud?.find(
-        (a) => a._id === medeelel?.barilgiinId
+        (a) => a._id === data.barilgiinId
       );
 
       let khungulsunTalbainNiitUne = Math.abs(
