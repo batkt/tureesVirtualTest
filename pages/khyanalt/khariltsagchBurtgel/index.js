@@ -468,9 +468,12 @@ function AjiltanBurtgel({ token }) {
           formRef.current.getFieldInstance("ner").focus();
           break;
         case "control-ref_ner":
-          formRef.current.getFieldInstance("register").focus();
-          break;
+            formRef.current.getFieldInstance("register").focus();
+            break;  
         case "control-ref_register":
+          formRef.current.getFieldInstance("customerTin").focus();
+          break;
+        case "control-ref_customerTin":
           if (khariltsagchState?.turul === "ААН") {
             formRef.current.getFieldInstance("zakhirliinOvog")?.focus();
             break;
@@ -482,9 +485,6 @@ function AjiltanBurtgel({ token }) {
           formRef.current.getFieldInstance("khayag").focus();
           break;
         case "control-ref_khayag":
-          formRef.current.getFieldInstance("customerTin").focus();
-          break;
-        case "control-ref_customerTin":
           formRef.current.getFieldInstance("mail").focus();
           break;
         case "control-ref_mail":
@@ -731,7 +731,7 @@ function AjiltanBurtgel({ token }) {
               name="register"
               rules={[
                 {
-                  required: true,
+                  required: !khariltsagchState.customerTin,
                   len: formNuukh === "ААН" ? 7 : 10,
                   pattern:
                     formNuukh === "ААН"
@@ -755,7 +755,31 @@ function AjiltanBurtgel({ token }) {
               ></Input>
             </Form.Item>
           </div>
-
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="500"
+          >
+            <Form.Item 
+              name="customerTin"
+              rules={[
+                {
+                  required: !khariltsagchState.register,
+                  message: t("Бүртгэлийн дугаар бүртгэнэ үү!"),
+                },
+              ]}>
+              <Input
+                onKeyUp={focuser}
+                allowClear
+                placeholder={t("Бүртгэлийн дугаар")}
+                value={khariltsagchState.customerTin}
+                onChange={(e) =>
+                  onChange("customerTin", e.target.value)
+                }
+                prefix={<SolutionOutlined style={iconColor} />}
+              ></Input>
+            </Form.Item>
+          </div>
           {khariltsagchState.turul === "ААН" && (
             <div
               data-aos="fade-right"
@@ -834,26 +858,6 @@ function AjiltanBurtgel({ token }) {
               ></Input>
             </Form.Item>
           </div>
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="500"
-          >
-            <Form.Item 
-              name="customerTin">
-              <Input
-                onKeyUp={focuser}
-                allowClear
-                placeholder={t("Бүртгэлийн дугаар")}
-                value={khariltsagchState.customerTin}
-                onChange={(e) =>
-                  onChange("customerTin", e.target.value)
-                }
-                prefix={<SolutionOutlined style={iconColor} />}
-              ></Input>
-            </Form.Item>
-          </div>
-
           <div
             data-aos="fade-right "
             data-aos-duration="1000"
@@ -1124,6 +1128,11 @@ function AjiltanBurtgel({ token }) {
                             dataIndex: "register",
                             ellipsis: true,
                           },
+                          {
+                            title: t("Бүртгэлийн дугаар"),
+                            dataIndex: "customerTin",
+                            ellipsis: true,
+                          },
                           { title: t("Нэр"), dataIndex: "ner", ellipsis: true },
                           {
                             title: t("Хаяг"),
@@ -1246,6 +1255,14 @@ function AjiltanBurtgel({ token }) {
               {
                 title: t("Регистр"),
                 dataIndex: "register",
+                width: "6rem",
+                align: "center",
+                showSorterTooltip: false,
+                sorter: () => 0,
+              },
+              {
+                title: t("Бүртгэл №"),
+                dataIndex: "customerTin",
                 width: "6rem",
                 align: "center",
                 showSorterTooltip: false,

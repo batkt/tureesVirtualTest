@@ -22,7 +22,7 @@ const KhariltsagchiinLavlakh = ({
   const { t } = useTranslation()
   const [register, setRegister] = useState(null)
   const [dropDownNeekhEsekh, setDropDownNeekhEsekh] = useState(false);
-  const searchKeys = ["ner", "register"];
+  const searchKeys = ["ner", "register", "customerTin"];
   const kharitsagchQuery = useMemo(() => {
     return {
       barilgiinId: barilgiinId,
@@ -91,10 +91,10 @@ const KhariltsagchiinLavlakh = ({
         >
           {khariltsagchiinGaralt?.jagsaalt?.map((mur, i) => {
             const target = {};
-            target.value = mur.register;
+            target.value = mur.register ? mur.register : mur.customerTin;
             return (
-              <div key={i} onClick={() => { setRegister(mur.register); onChangeRegister({ target }); setDropDownNeekhEsekh(false) }} className="relative px-1 hover:bg-gray-100 py-1 flex cursor-pointer items-center justify-between">
-                <div>{mur.register}</div><div>{mur.ner}</div>
+              <div key={i} onClick={() => { setRegister(mur.register ? mur.register : mur.customerTin); onChangeRegister({ target }); setDropDownNeekhEsekh(false) }} className="relative px-1 hover:bg-gray-100 py-1 flex cursor-pointer items-center justify-between">
+                <div>{mur.register ? mur.register : mur.customerTin}</div><div>{mur.ner}</div>
               </div>
             );
           })}
@@ -111,7 +111,7 @@ const KhariltsagchiinLavlakh = ({
         allowClear
         maxLength={baiguullagaEsekh ? 7 : 10}
         value={register}
-        placeholder={t("Регистр")}
+        placeholder={t("Регистр, Бүртгэлийн дугаар")}
         prefix={<SolutionOutlined />}
         onChange={(e) => { onChangeRegister(e); setRegister(e.target.value); khariltsagchKhaikh(e.target.value) }}
       />

@@ -127,6 +127,7 @@ const YurunkhiiMedeele = ({
 
   function onChangeRegister({ target }) {
     var onookhKhariltsagch = {
+      customerTin: undefined,
       ner: undefined,
       utas: undefined,
       ovog: undefined,
@@ -136,7 +137,7 @@ const YurunkhiiMedeele = ({
     };
     form.setFieldsValue(onookhKhariltsagch);
     clearTimeout(timeout);
-    if (!!target.value && target.value.length > 6) {
+    if (!!target.value) {
       timeout = setTimeout(function () {
         uilchilgee(token)
           .get("/khariltsagch", {
@@ -144,7 +145,10 @@ const YurunkhiiMedeele = ({
               query: {
                 barilgiinId,
                 baiguullagiinId: baiguullaga._id,
-                register: target.value,
+                $or: [
+                  { register: target.value },
+                  { customerTin: target.value },
+                ],
                 turul: value.baiguullagaEsekh ? "ААН" : "Иргэн",
               },
               select: {
@@ -384,22 +388,36 @@ const YurunkhiiMedeele = ({
           label={t("Регистр")}
           rules={[
             {
-              required: true,
-              len: value.baiguullagaEsekh ? 7 : 10,
-              pattern: value.baiguullagaEsekh
-                ? new RegExp("(\\d{7})")
-                : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
+              required: value.customerTin !== value.register,
               message: t("Регистр бүртгэнэ үү!"),
             },
           ]}
         >
           <KhariltsagchiinLavlakh
-            khadgalsabRegister={value.register}
+            khadgalsabRegister={value.register ? value.register : value.customerTin}
             focuser={focuser}
             baiguullaga={baiguullaga}
             barilgiinId={barilgiinId}
             onChangeRegister={onChangeRegister}
             baiguullagaEsekh={value.baiguullagaEsekh}
+          />
+        </Form.Item>
+      </div>
+      <div data-aos="fade-right" data-aos-delay="800">
+        <Form.Item 
+          name="customerTin" 
+          label={t("Бүртгэлийн дугаар")}
+          rules={[
+            {
+              required: value.customerTin === value.register,
+              message: t("Регистр бүртгэнэ үү!"),
+            },
+          ]}>
+          <Input
+            onKeyUp={focuser}
+            allowClear
+            placeholder={t("Бүртгэлийн дугаар")}
+            prefix={<SolutionOutlined />}
           />
         </Form.Item>
       </div>
@@ -521,16 +539,6 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      <div data-aos="fade-right" data-aos-delay="800">
-        <Form.Item name="customerTin" label={t("Бүртгэлийн дугаар")}>
-          <Input
-            onKeyUp={focuser}
-            allowClear
-            placeholder={t("Бүртгэлийн дугаар")}
-            prefix={<SolutionOutlined />}
-          />
-        </Form.Item>
-      </div>
       {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item name="mail" label={t("И-мэйл хаяг")}>
