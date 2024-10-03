@@ -26,7 +26,6 @@ function Tulbur(
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
     defaultTurul === "ААН" ? true : false
   );
-
   const [irgenEsekh, setIrgenEsekh] = React.useState(
     defaultTurul === "Иргэн" ? true : false
   );
