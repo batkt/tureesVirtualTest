@@ -1,6 +1,27 @@
 const khatuuZagvar = (medeelel, ajiltan, baiguullaga) => {
   return `
   <div style="height: 100%; width: 100%;">
+    <div style="display: flex; justify-content: space-between;">
+      <div style="display: block; align-items: flex-start;">
+        <div style="display: block;">
+          НХМаягт Т-1
+        </div>
+      </div>
+      <div style="display: block; align-items: flex-end; flex-direction: column;">
+        <div style="display: block;">
+          Санхүү, эдийн засгийн сайд, Үндэсний
+        </div>
+        <div style="display: block;">
+          статистикийн газрын даргын 2017 оны 347
+        </div>
+        <div style="display: block;">
+          дугаар тушаалын хавсралт
+        </div>
+      </div>
+    </div>
+    <div style="text-align: center;">
+      <b>НЭХЭМЖЛЭХ №</b>
+    </div>
     <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
       <div style="display: block; width: 50%;">
         <p style="font-weight: 600;">Нэхэмжлэгч:</p>
