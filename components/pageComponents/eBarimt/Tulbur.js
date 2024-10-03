@@ -33,7 +33,6 @@ function Tulbur(
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false);
   const [loading, setLoading] = useState(false);
-
   const eBarimtRef = React.useRef(null);
   const pageStyle = `
   @page {
