@@ -1,27 +1,17 @@
   import {
-  Badge,
-  Button,
   DatePicker,
   Input,
-  message,
-  notification,
-  Popconfirm,
 } from "antd";
 import React, { useImperativeHandle, useMemo, useState } from "react";
-import axios, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { CloseCircleOutlined } from "@ant-design/icons";
-import { modal } from "components/ant/Modal";
 import { useReactToPrint } from "react-to-print";
 import _ from "lodash";
 import { useNekhemjlekhiinTuukh } from "hooks/useNekhemjlekhiinTuukh";
 import { useTranslation } from "react-i18next";
 import locale from "antd/lib/date-picker/locale/mn_MN";
-import useNekhemjlekh from "hooks/tulburTootsoo/useNekhemjlekh";
 import useNekhemjlekhiinZagvar from "hooks/tulburTootsoo/useNekhemjlekhiinZagvar";
-import khatuuZagvar from "tools/zagvar/tur";
-import khatuuZagvarFoodCity from "tools/zagvar/turFoodCityTemp";
 
 function NekhemjlekhiinTuukh(
   { token, data, refreshData, ognoo, ajiltan, barilgiinId, baiguullaga, },
@@ -164,7 +154,6 @@ function NekhemjlekhiinTuukh(
           <div className="border-2 p-5 bg-gray-50">
             <div className="flex justify-between">
               <div>
-                {nekhemjlekh.zagvariinNer}
               </div>
               <div>
                 <div

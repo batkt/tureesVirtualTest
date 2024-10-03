@@ -19,7 +19,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga) => {
         </div>
       </div>
     </div>
-    <div style="text-align: center;">
+    <div style="display: block; width: 65%; text-align: center;">
       <b>НЭХЭМЖЛЭХ №</b>
     </div>
     <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
