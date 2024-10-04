@@ -17,6 +17,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
 import { t } from "i18next";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import moment from "moment";
 
 const formItemLayout = {
   labelCol: {
@@ -168,8 +170,10 @@ const Zardal = ({
   next,
   prev,
   onChange,
+  token,
   value,
   barilgiinId,
+  gereeniiZagvar,
   formSubmit,
   t,
 }) => {
@@ -177,6 +181,34 @@ const Zardal = ({
   useEffect(() => {
     Aos.init({ once: true });
   });
+
+  useEffect(() => {
+    if (!!value.khugatsaa && !!value.zardluud)
+      uilchilgee(token)
+        .post(`/khuvaariUusgey`, {
+          dun: value.talbainNiitUne,
+          khugatsaa: value.khugatsaa,
+          tulukhUdruud: value.tulukhUdur,
+          ekhlekhOgnoo: moment(value.gereeniiOgnoo).format(
+            "YYYY-MM-DD 00:00:00"
+          ),
+          duusakhOgnoo: moment(value.duusakhOgnoo).format(
+            "YYYY-MM-DD 00:00:00"
+          ),
+          zardluud: value.zardluud,
+          mk: value.talbainKhemjee,
+          metrKube: value.talbainKhemjeeMetrKube,
+          turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
+        })
+        .then(({ data }) => {
+          console.log("avlaga ----------------->" + JSON.stringify(data));
+          _.set(value, "avlaga.guilgeenuud", data);
+          onChange({ ...value });
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+        });
+  }, [value.zardluud]);
 
   const ashiglaltiinZardal = useJagsaalt(
     "/ashiglaltiinZardluud",

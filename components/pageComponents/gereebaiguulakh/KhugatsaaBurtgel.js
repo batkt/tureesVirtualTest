@@ -8,6 +8,7 @@ import React, { useCallback, useEffect } from "react";
 import moment from "moment";
 import Aos from "aos";
 import _ from "lodash";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 const formItemLayout = {
   labelCol: {
@@ -21,6 +22,7 @@ const formItemLayout = {
 const YurunkhiiMedeele = ({
   next,
   prev,
+  token,
   onChange,
   value,
   gereeniiZagvar,
@@ -28,6 +30,34 @@ const YurunkhiiMedeele = ({
   t,
 }) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (!!value.khugatsaa && !!value.zardluud)
+      uilchilgee(token)
+        .post(`/khuvaariUusgey`, {
+          dun: value.talbainNiitUne,
+          khugatsaa: value.khugatsaa,
+          tulukhUdruud: value.tulukhUdur,
+          ekhlekhOgnoo: moment(value.gereeniiOgnoo).format(
+            "YYYY-MM-DD 00:00:00"
+          ),
+          duusakhOgnoo: moment(value.duusakhOgnoo).format(
+            "YYYY-MM-DD 00:00:00"
+          ),
+          zardluud: value.zardluud,
+          mk: value.talbainKhemjee,
+          metrKube: value.talbainKhemjeeMetrKube,
+          turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
+        })
+        .then(({ data }) => {
+          console.log("khugatsaa avlaga ----------------->" + JSON.stringify(data));
+          _.set(value, "avlaga.guilgeenuud", data);
+          onChange({ ...value });
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+        });
+  }, [value.khugatsaa, value.tulukhUdur]);
 
   const onValuesChange = (values, v) => {
     if (!!values?.gereeniiOgnoo && !!value?.khugatsaa) {
