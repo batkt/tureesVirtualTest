@@ -457,7 +457,7 @@ function tulburTootsoo() {
         dataIndex: "createdAt",
         ellipsis: true,
         align: "center",
-        width: "7rem",
+        width: "8rem",
         render: (data) => {
           return moment(data).format("YYYY-MM-DD hh:mm:ss");
         },
@@ -473,7 +473,7 @@ function tulburTootsoo() {
         title: t("Гэрээнүүд"),
         dataIndex: "khamaataiGereenuud",
         ellipsis: true,
-        width: "7rem",
+        width: "6rem",
         align: "center",
         render: (data) => {
           return (
@@ -555,7 +555,7 @@ function tulburTootsoo() {
         title: t("Төрөл"),
         dataIndex: "khungulukhTurul",
         ellipsis: true,
-        width: "7rem",
+        width: "5rem",
         align: "center",
         render: (data) => {
           switch (data) {
@@ -608,21 +608,21 @@ function tulburTootsoo() {
       },
       {
         title: t("Төрөл"),
-        width: "7rem",
+        width: "6rem",
         dataIndex: "turul",
         ellipsis: true,
         align: "center",
       },
       {
         title: t("Шалтгаан"),
-        width: "7rem",
+        width: "16rem",
         dataIndex: "shaltgaan",
         ellipsis: true,
         align: "center",
       },
       {
         title: t("Ажилтан"),
-        width: "7rem",
+        width: "6rem",
         dataIndex: "guilgeeKhiisenAjiltniiNer",
         align: "center",
         showSorterTooltip: false,
@@ -630,7 +630,7 @@ function tulburTootsoo() {
       },
       {
         title: () => <SettingOutlined />,
-        width: "60px",
+        width: "40px",
         align: "center",
         render(data) {
           return (
