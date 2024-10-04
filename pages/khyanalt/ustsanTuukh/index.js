@@ -541,7 +541,8 @@ function UstsanTuukh() {
               <div>
                 {moment(
                   tailbar?.object?.createdAt ||
-                    tailbar?.object?.guilgeeKhiisenOgnoo
+                    tailbar?.object?.guilgeeKhiisenOgnoo ||
+                    tailbar?.object?.ognoo
                 ).format("YYYY-MM-DD")}
               </div>
             </>
