@@ -33,7 +33,7 @@ const query = {};
 const searchKeys = ["ner"];
 
 const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
-  const [valueState, setValueState] = useState(undefined);
+  const [valueState, setValueState] = useState(value?.zardluud?.map((a) => a._id));
   const onValueChange = (selectedValues) => {
     console.log(selectedValues, "======================");
     const selectedObjects = ashiglaltiinZardal?.jagsaalt.filter((a) =>
@@ -305,6 +305,7 @@ const Zardal = ({
 
         <div className="w-full bg-white">
           <SongokhKheseg
+            value={value}
             t={t}
             id={"songokhKheseg"}
             ashiglaltiinZardal={ashiglaltiinZardal}
