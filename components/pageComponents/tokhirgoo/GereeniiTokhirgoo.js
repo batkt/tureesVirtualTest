@@ -243,7 +243,7 @@ function KhuviinMedeelel({
           <div className="flex justify-between p-5 ">
             <div>
               <Form form={form} autoComplete="off" className="">
-                <div className="flex w-full justify-between">
+                <div className="flex w-full flex-col">
                   <Form.Item name="turul">
                     <ImgCrop modalTitle="Зураг засах" rotationSlider>
                       <Upload
@@ -254,13 +254,14 @@ function KhuviinMedeelel({
                         method="POST"
                         onChange={(v) => zuragKhadgalakh(v, "tamga")}
                       >
-                        <div className="flex flex-row space-x-1">
+                        <div className="flex flex-col space-x-1">
                           {!barilga?.tamga && (
                             <Button icon={<UploadOutlined />}>
                               {t("Тамга зураг оруулах")}
                             </Button>
                           )}  
                           <Button
+                            className="mt-3"
                             icon={<EyeOutlined />}
                             onClick={(e) =>
                               tamgaZuragKharakh(e, `tamga/${barilga.tamga}`)
@@ -311,7 +312,7 @@ function KhuviinMedeelel({
                     </div>
                   )}
                 </div>
-                <div className="flex w-full justify-between">
+                <div className="flex w-full flex-col mt-3">
                   <Form.Item name="turul">
                     <ImgCrop modalTitle="Зураг засах" rotationSlider>
                       <Upload

@@ -532,13 +532,23 @@ function tulburTootsoo() {
         },
       },
       {
-        title: t("Хугацаа"),
+        title: t("Эхлэх хугацаа"),
         width: "7rem",
         dataIndex: "ognoonuud",
         ellipsis: true,
         align: "center",
         render: (data) => {
           return moment(data && data[0]).format("YYYY-MM-DD");
+        },
+      },
+      {
+        title: t("Дуусах хугацаа"),
+        width: "7rem",
+        dataIndex: "ognoonuud",
+        ellipsis: true,
+        align: "center",
+        render: (data) => {
+          return moment(data && data[1]).format("YYYY-MM-DD");
         },
       },
       {
