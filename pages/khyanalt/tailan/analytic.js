@@ -101,6 +101,9 @@ function converter(key) {
     case "register":
       ret = "Регистр";
       break;
+    case "customerTin":
+      ret = "Бүртгэлийн дугаар";
+      break;  
     case "sariinTurees":
       ret = "Сарын түрээс";
       break;
@@ -134,9 +137,30 @@ function converter(key) {
     case "utas":
       ret = "Утас";
       break;
-    case "zardluud":
-      ret = "Зардлууд";
+    case "zardliinNer":
+      ret = "Зардлын нэр";
       break;
+    case "zardliinTurul":
+      ret = "Зардлын төрөл";
+      break;
+    case "zardliinTariff":
+      ret = "Зардлын үнэ";
+      break;
+    case "avlagiinOgnoo":
+      ret = "Авлагын огноо";
+      break;
+    case "avlagiinUndsenDun":
+      ret = "Авлагын үндсэн дүн";
+      break;  
+    case "avlagiinTulukhDun":
+      ret = "Авлагын төлөх дүн";
+      break;
+    case "avlagiinTurul":
+      ret = "Авлагын төрөл";
+      break;  
+    case "avlagiinTailbar":
+      ret = "Авлагын тайлбар";
+      break;    
     default:
       break;
   }
@@ -204,6 +228,7 @@ function Tailan({ token }) {
         murutga.ner = tmur.ner || "";
         murutga.ovog = tmur.ovog || "";
         murutga.register = tmur.register || "";
+        murutga.customerTin = tmur.customerTin || "";
         murutga.sariinTurees = formatNumber(tmur.sariinTurees) || 0;
         murutga.segmentuud = tmur.segmentuud || "";
         murutga.talbainDugaar = tmur.talbainDugaar || "";
@@ -215,7 +240,24 @@ function Tailan({ token }) {
         murutga.turul = tmur.turul || "";
         murutga.uldegdel = formatNumber(tmur.uldegdel) || 0;
         murutga.utas = tmur.utas[0] || 0;
-        murutga.zardluud = tmur.zardluud || 0;
+        if(!!tmur.zardluud && tmur.zardluud.length > 0)
+        {
+          tmur.zardluud.forEach((zardalmur) => {
+            murutga.zardliinNer = zardalmur.ner || "";
+            murutga.zardliinTurul = zardalmur.turul || "";
+            murutga.zardliinTariff = formatNumber(zardalmur.tariff) || "";
+          });
+        }
+        if(!!tmur.avlaga?.guilgeenuud && tmur?.avlaga?.guilgeenuud.length > 0)
+        {
+          tmur?.avlaga?.guilgeenuud.forEach((avlaga) => {
+            murutga.avlagiinOgnoo = avlaga.ognoo || "";
+            murutga.avlagiinUndsenDun = formatNumber(avlaga.undsenDun) || "";
+            murutga.avlagiinTulukhDun = formatNumber(avlaga.tulukhDun) || "";
+            murutga.avlagiinTurul = avlaga.turul || "";
+            murutga.avlagiinTailbar = avlaga.tailbar || "";
+          });
+        }
 
         let mur = {};
         Object.entries(murutga).map((v) => {

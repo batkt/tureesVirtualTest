@@ -97,6 +97,10 @@ const turluud = [
     turul: "khungulult",
     text: "Хөнгөлөлт",
   },
+  {
+    turul: "tulultBurtgekh",
+    text: "Төлөлт бүртгэх",
+  },
 ];
 
 function UstsanTuukh() {
@@ -110,39 +114,17 @@ function UstsanTuukh() {
     moment(),
   ]);
   const query = useMemo(() => {
-    if (
-      turul === "voucher" ||
-      turul === "baritsaa" ||
-      turul === "avlaga" ||
-      turul === "ashiglalt" ||
-      turul === "barter" ||
-      turul === "zalruulga" ||
-      turul === "aldangi"
-    ) {
-      return {
-        baiguullagiinId: barilgiinId,
-        ajiltniiId: ajiltankhaikh,
-        "object.turul": turul,
-        createdAt: shuukhOgnoo
-          ? {
-              $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-              $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-            }
-          : undefined,
-      };
-    } else {
-      return {
-        "object.barilgiinId": barilgiinId,
-        ajiltniiId: ajiltankhaikh,
-        class: turul,
-        createdAt: shuukhOgnoo
-          ? {
-              $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-              $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-            }
-          : undefined,
-      };
-    }
+    return {
+      baiguullagiinId: barilgiinId,
+      ajiltniiId: ajiltankhaikh,
+      "object.turul": turul,
+      createdAt: shuukhOgnoo
+        ? {
+            $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+            $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+          }
+        : undefined,
+    };
   }, [ajiltankhaikh, shuukhOgnoo, turul, barilgiinId]);
 
   const { turulColumns } = React.useMemo(() => {
