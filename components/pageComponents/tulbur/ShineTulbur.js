@@ -12,7 +12,6 @@ import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import moment from "moment";
-import EBarimt from "../togloomiinTuv/EBarimt";
 import QRCode from "react-qr-code";
 import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
 import { useEffect } from "react";
@@ -97,6 +96,14 @@ function ShineTulbur(
 
   const handlePrint = useReactToPrint({
     content: () => eBarimtRef.current,
+    onAfterPrint: () => {
+      setEBarimt(null);
+      setBaiguullagaEsekh(false);
+      setIrgenEsekh(true);
+      setRegister("");
+      setTin("");
+      setQpayModalTuluv(false);
+    },
   });
 
   React.useImperativeHandle(
@@ -600,10 +607,6 @@ function ShineTulbur(
                 <div className="flex justify-between">
                   <p>ТТД:</p>
                   <p>{baiguullagiinMedeelel?.tin}</p>
-                  {console.log(
-                    baiguullagiinMedeelel,
-                    "baiguullaga mun uu???????????"
-                  )}
                 </div>
                 <div className="flex justify-between">
                   <p>Нэр:</p>
@@ -636,11 +639,6 @@ function ShineTulbur(
               <div className="flex justify-between">
                 <p className="w-1/2 text-right">НӨАТ-гүй:</p>
                 <p className="text-right">
-                  {console.log(
-                    `${eBarimt?.totalAmount} - ${eBarimt?.totalVAT} = ${
-                      eBarimt?.totalAmount - eBarimt?.totalVAT
-                    }`
-                  )}
                   {formatNumber(
                     eBarimt.status == "SUCCESS"
                       ? eBarimt?.totalAmount - eBarimt?.totalVAT
@@ -704,7 +702,6 @@ function ShineTulbur(
             )}
             <div>
               <p>
-                {console.log(eBarimt?.qrData, "333")}
                 <div className="flex w-full justify-center p-5 pt-3">
                   <div>
                     <QRCode level="L" value={eBarimt?.qrData} size={"100%"} />
@@ -1108,7 +1105,6 @@ function ShineTulbur(
                     : "Дутуу:"}
                 </div>
                 <div>
-                  {console.log(turulruuKhiikhDun, "turulruuKhiikhDun")}
                   {formatNumber(
                     parseInt(turulruuKhiikhDun) -
                       (niitDun - tulbur.reduce((a, b) => a + b.dun, 0)) || 0

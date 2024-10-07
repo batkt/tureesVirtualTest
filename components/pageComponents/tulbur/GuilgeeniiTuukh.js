@@ -372,11 +372,6 @@ function GuilgeeniiTuukh(
               {t("Хямдрал")}
             </td>
             <td
-              onClick={() => toggleSortOrder("tulsunAldangi")}
-              className="min-w-[8rem] overflow-hidden p-1 text-center">
-              {t("Төлсөн алданги")}
-            </td>
-            <td
               onClick={() => toggleSortOrder("tulsunDun")}
               className="min-w-[8rem] overflow-hidden p-1 text-center">
               {t("Төлсөн дүн")}
@@ -424,9 +419,6 @@ function GuilgeeniiTuukh(
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                   {formatNumber(a.khyamdral, 0)}
-                </td>
-                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.tulsunAldangi, 0)}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                   {formatNumber(a.tulsunDun, 0)}

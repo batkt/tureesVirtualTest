@@ -990,7 +990,6 @@ function Khyanalt({ token }) {
                         count: songogdsonKhariltsagch.length,
                       })}
                     </p>
-                    {console.log(songogdsonKhariltsagch)}
                     <div className="mt-1 text-gray-600 dark:text-gray-300">
                       {t("Та шаардлага илгээнэ үү.")}
                     </div>

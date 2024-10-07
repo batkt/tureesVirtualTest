@@ -277,9 +277,6 @@ function KhuviinMedeelel({
                     </ImgCrop>
                   </Form.Item>
 
-                  {console.log(`${url}/file?path=${kharakhZurgiinZam}`)}
-                  {console.log(`${url}/file?path=${barilga.tamga}`)}
-
                   {(!!tamga || !!barilga.tamga) && (
                     <div className="h-[54px] w-[115px] border">
                       {!!tamga ? (

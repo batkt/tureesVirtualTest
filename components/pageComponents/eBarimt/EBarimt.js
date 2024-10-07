@@ -197,8 +197,6 @@ function EBarimt({
                   <td className="border" colSpan={3}>
                     {ajiltan?.ner}
                   </td>
-
-                  {console.log(ajiltan, "dddddddddddddddddddddddddd")}
                 </tr>
                 {baiguullagaEsekh && (
                   <>

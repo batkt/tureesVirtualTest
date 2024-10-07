@@ -47,6 +47,7 @@ import BaganiinSongolt from "components/table/BaganiinSongolt";
 import useJagsaalt from "hooks/useJagsaalt";
 import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
 import Khuulga from "components/pageComponents/tulbur/Khuulga";
+import KhuulgaAldangi from "components/pageComponents/tulbur/KhuulgaAldangi";
 import { useTranslation } from "react-i18next";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import NekhemjlekhiinTuukhTsonkh from "components/pageComponents/tulbur/NekhemjlekhiinTuukhTsonkh";
@@ -430,6 +431,22 @@ function guilgeeniiTuukh({ token }) {
         sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
       },
       {
+        title: t("Алдангийн үлдэгдэл"),
+        width: "calc(18rem - 10rem)",
+        dataIndex: "aldangiinUldegdel",
+        align: "right",
+        summary: true,
+        render(text, row, index) {
+          return (
+            <div className={`text-right font-medium cursor-pointer ${row.aldangiinUldegdel > 0 ? "text-red-500" : "text-green-500"}`} onClick={() => aldangiinKhuulgaKharya(row)}>
+              {formatNumber(row?.aldangiinUldegdel, 2)}
+            </div>
+          );
+        },
+        showSorterTooltip: false,
+        sorter: (a, b) => Number(a.aldangiinUldegdel || 0) - Number(b.aldangiinUldegdel || 0),
+      },
+      {
         width: "9rem",
         align: "center",
         excelHeader: t("Төлөх огноо"),
@@ -510,6 +527,14 @@ function guilgeeniiTuukh({ token }) {
 
           let strokeColor = "rgba(16, 185, 129,1)";
           if (khuvi < 0) strokeColor = "rgba(245, 158, 18,1)";
+
+          const khuviAldangi =
+          row.aldangiinUldegdel > 0
+            ? (100 * row.tulsunAldangi) / row.aldangiinUldegdel
+            : 100;
+
+        let strokeColorAldangi = "rgba(16, 185, 129,1)";
+        if (khuviAldangi < 0) strokeColorAldangi = "rgba(245, 158, 18,1)";
 
           return (
             <div className="flex w-full flex-row items-center justify-center  divide-x-2 ">
@@ -863,6 +888,47 @@ function guilgeeniiTuukh({ token }) {
       style: { top: 20 },
       content: (
         <Khuulga
+          data={data}
+          ajiltan={ajiltan}
+          barilgiinId={barilgiinId}
+          ref={ref}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+          ognoo={ognoo}
+          onFinish={refreshData}
+        />
+      ),
+      footer,
+    });
+  }
+
+  function aldangiinKhuulgaKharya(data) {
+    const footer = [
+      <Button
+        type="primary"
+        onClick={() => ref.current.khevlekh()}
+        icon={<PrinterOutlined />}
+      >
+        {t("Хэвлэх")}
+      </Button>,
+      <Button
+        onClick={() => ref.current.khaaya()}
+        icon={<CloseCircleOutlined />}
+      >
+        {t("Хаах")}
+      </Button>,
+    ];
+    modal({
+      title: (
+        <div className="relative flex w-full justify-between">
+          {t("Алдангийн хуулга")}
+        </div>
+      ),
+      icon: <FileExcelOutlined />,
+      width: "90vw",
+      style: { top: 20 },
+      content: (
+        <KhuulgaAldangi
           data={data}
           ajiltan={ajiltan}
           barilgiinId={barilgiinId}

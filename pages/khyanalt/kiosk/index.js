@@ -959,7 +959,6 @@ const Kiosk = () => {
                 </div>
               </div>
             )}
-            {console.log(eBarimt, "eBarimt")}
             {eBarimt && eBarimtTurul === "baiguullaga" && (
               <div className="mt-16 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
                 <div className="flex w-full justify-between  pl-4">

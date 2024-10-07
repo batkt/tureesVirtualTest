@@ -20,7 +20,6 @@ import {
   Select,
   notification,
   InputNumber,
-  Popconfirm,
 } from "antd";
 import {
   StarOutlined,
@@ -28,10 +27,8 @@ import {
   WalletOutlined,
   SettingOutlined,
   ExclamationCircleOutlined,
-  MoreOutlined,
   CloseCircleOutlined,
   DollarCircleOutlined,
-  PlusOutlined,
   DownloadOutlined,
   FileExcelOutlined,
   DownOutlined,
@@ -39,11 +36,8 @@ import {
   CloseOutlined,
   FilterOutlined,
   ShareAltOutlined,
-  UploadOutlined,
   PrinterOutlined,
   CopyOutlined,
-  ReloadOutlined,
-  ArrowLeftOutlined,
   ArrowRightOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
@@ -59,14 +53,11 @@ import useUilchluulegch, {
 } from "hooks/useUilchluulegch";
 import useJagsaalt from "../../../hooks/useJagsaalt";
 import { modal } from "../../../components/ant/Modal";
-import Tulbur from "../../../components/pageComponents/zogsool/Tulbur";
-import _, { min } from "lodash";
+import _ from "lodash";
 import updateMethod from "../../../tools/function/crud/updateMethod";
-import { excelTatajAvya } from "./index";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 import axios from "axios";
 import { aldaaBarigch, socket } from "services/uilchilgee";
-import useSWR from "swr";
 import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
@@ -232,30 +223,6 @@ function tulburKhurvuulekh(v) {
   }
   return utga;
 }
-
-/*const TreeComponent = ()=>{
-    const { TreeNode } = Tree;
-
-    const TreeComponent = ({ hierarchy }) => {
-        const renderTreeNodes = data =>
-            data.map(item => {
-                if (item.children) {
-                    return (
-                        <TreeNode title={item.title} key={item.key} dataRef={item}>
-                            {renderTreeNodes(item.children)}
-                        </TreeNode>
-                    )
-                }
-                return <TreeNode key={item.key} {...item} />
-            })
-
-        return (
-            <Tree>
-                {renderTreeNodes(hierarchy)}
-            </Tree>
-        )
-    }
-}*/
 
 /**
  * Эхний байдлаар зөвхөн 1 зогсоол дээр төлбөр тооцхоор шийдлээ
@@ -774,20 +741,6 @@ function camera({ token }) {
           setModalNeelttei={setModalNeelttei}
           songogdsonZogsool={songogdzonZogsool}
         />
-        // <Tulbur
-        //   suuliikhEsekh={index === 0}
-        //   niitDun={niitDun}
-        //   camerVal={camerVal[1]}
-        //   ref={tulburRef}
-        //   data={_.cloneDeep(data)}
-        //   token={token}
-        //   baiguullaga={baiguullaga}
-        //   barilgiinId={barilgiinId}
-        //   ajiltan={ajiltan}
-        //   uilchluugchiinId={uilchluugchiinId}
-        //   onRefresh={onRefresh}
-        //   setModalNeelttei={setModalNeelttei}
-        // />
       ),
       footer: false,
       className: "!w-fit",
@@ -1428,35 +1381,7 @@ function camera({ token }) {
                   {t("Үнэгүй")}
                 </div>
               </div>
-            ); /*v[0]?.ebarimtAvsanEsekh ? (
-                        <div className="mx-auto flex w-max items-center bg-lime-500 rounded justify-center space-x-2 text-white px-3">
-                            <div className="flex items-center justify-center">
-                                <CheckCircleOutlined />
-                            </div>
-                            <div className="flex items-center justify-center">
-                                {t("Төлөгдсөн")}
-                            </div>
-                        </div>
-                    ) : (
-            <Button
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#253985",
-              }}
-              size="small"
-              onClick={() => tulburTulyu(v[0], parent._id)}>
-              <div className="flex items-center  justify-center space-x-2 text-white ">
-                <div className="flex items-center justify-center">
-                  <PaperClipOutlined />
-                </div>
-                <div className="flex items-center justify-center">
-                  {t("И-Баримт")}
-                </div>
-              </div>
-            </Button>
-          );*/
+            );
         },
       },
       {
@@ -1696,10 +1621,6 @@ function camera({ token }) {
   };
 
   function tulburiinDelgerengui() {
-    // if (!camerVal[1]) {
-    //   message.warn("Гарах камер сонгоно уу.");
-    //   return;
-    // }
     const footer = [
       <div className="flex w-full items-center justify-between">
         <Button type="primary" onClick={() => tailanRef.current.khaaya()}>
@@ -2153,19 +2074,8 @@ function camera({ token }) {
                   >
                     {t("Нээх")} [ {t("Орох")} F1 ]
                   </Button>
-                  {/*<Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className="w-full sm:w-auto"
-                    type="primary">
-                    Хаах
-                  </Button>*/}
                 </div>
                 <TreeSelect
-                  /*onClick={(e) => {
-                                        e.stopPropagation();
-                                    }}*/
                   placement={cameraKharakh === 1 ? "topRight" : "bottomLeft"}
                   showSearch
                   style={{
@@ -2282,14 +2192,6 @@ function camera({ token }) {
                   >
                     {t("Нээх")} [ {t("Гарах1")} F2 ]
                   </Button>
-                  {/*<Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className="w-full sm:w-auto"
-                    type="primary">
-                    Хаах
-                  </Button>*/}
                 </div>
                 <TreeSelect
                   onClick={(e) => {
@@ -2344,11 +2246,6 @@ function camera({ token }) {
                   value={ognoo}
                   onChange={setOgnoo}
                 />
-                {/* <div
-                  className={`h-3 w-1 bg-slate-100 ${
-                    refresh ? "rotate-90" : "rotate-0"
-                  }`}
-                ></div> */}
               </div>
               <div
                 className="mb-5 flex w-full flex-col justify-between gap-2 sm:justify-end md:mb-0 md:ml-auto lg:w-auto lg:flex-row lg:gap-0"
@@ -2402,17 +2299,6 @@ function camera({ token }) {
                       <div className="flex flex-col text-ellipsis">
                         <a
                           className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                          // onClick={() => {
-                          //     excelTatajAvya(
-                          //         token,
-                          //         "zogsoolUilchluulegch",
-                          //         uilchluulegchGaralt.niitMur,
-                          //         exlCol(),
-                          //         query,
-                          //         order,
-                          //         "Зогсоол"
-                          //     );
-                          // }}
                           onClick={() => {
                             uilchilgee(token)
                               .get("zogsoolUilchluulegch", {
@@ -3013,7 +2899,6 @@ function camera({ token }) {
                       className="ml-[10px]"
                     />
                   </Form.Item>
-                  {/*{console.log(cameraData)}*/}
                   <Form.Item
                     name="tulukhDun"
                     label={t("Дүн")}
@@ -3152,10 +3037,6 @@ function camera({ token }) {
                       </a>
                     ))}
                   </div>
-                  {/*<div className="flex w-full items-center">
-                                            <label>Дугаар</label>
-
-                                        </div>*/}
                 </>
               )}
             </Space>
