@@ -49,7 +49,7 @@ import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluu
 import Khuulga from "components/pageComponents/tulbur/Khuulga";
 import KhuulgaAldangi from "components/pageComponents/tulbur/KhuulgaAldangi";
 import { useTranslation } from "react-i18next";
-import locale from "antd/lib/date-picker/locale/mn_MN";
+import { LiaMoneyCheckAltSolid } from "react-icons/lia";
 import NekhemjlekhiinTuukhTsonkh from "components/pageComponents/tulbur/NekhemjlekhiinTuukhTsonkh";
 
 //#endregion
@@ -431,22 +431,6 @@ function guilgeeniiTuukh({ token }) {
         sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
       },
       {
-        title: t("Алдангийн үлдэгдэл"),
-        width: "calc(18rem - 10rem)",
-        dataIndex: "aldangiinUldegdel",
-        align: "right",
-        summary: true,
-        render(text, row, index) {
-          return (
-            <div className={`text-right font-medium cursor-pointer ${row.aldangiinUldegdel > 0 ? "text-red-500" : "text-green-500"}`} onClick={() => aldangiinKhuulgaKharya(row)}>
-              {formatNumber(row?.aldangiinUldegdel, 2)}
-            </div>
-          );
-        },
-        showSorterTooltip: false,
-        sorter: (a, b) => Number(a.aldangiinUldegdel || 0) - Number(b.aldangiinUldegdel || 0),
-      },
-      {
         width: "9rem",
         align: "center",
         excelHeader: t("Төлөх огноо"),
@@ -614,6 +598,17 @@ function guilgeeniiTuukh({ token }) {
                     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
                     <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
                   </svg>
+                </Tooltip>
+              </a>
+              <a
+                onClick={() => aldangiinKhuulgaKharya(row)}
+                className="fill-current  text-green-500 hover:scale-110"
+              >
+                <Tooltip
+                  title={t("Алдангийн хуулга")}
+                  className="flex w-full items-center  justify-center px-[6px] "
+                >
+                  <LiaMoneyCheckAltSolid className="text-[30px] text-green-500" />
                 </Tooltip>
               </a>
               <a
@@ -925,7 +920,7 @@ function guilgeeniiTuukh({ token }) {
         </div>
       ),
       icon: <FileExcelOutlined />,
-      width: "90vw",
+      width: "60vw",
       style: { top: 20 },
       content: (
         <KhuulgaAldangi

@@ -44,10 +44,7 @@ function KhuulgaAldangi(
     return () => document.removeEventListener("keyup", keyUp);
   }, []);
   return (
-    <div
-      className="flex flex-col space-y-2 overflow-x-auto"
-      style={{ height: "calc(100vh - 12rem)" }}
-    >
+    <div className="flex flex-col space-y-2">
       <GuilgeeniiTuukhAldangi
         ajiltan={ajiltan}
         barilgiinId={barilgiinId}
