@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect } from "react";
-import { DatePicker, message, Select, Upload, Switch } from "antd";
+import { DatePicker, message, Select, Upload, Switch, Tooltip,} from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import uilchilgee, { url } from "services/uilchilgee";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
@@ -8,6 +8,7 @@ import _ from "lodash";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import useJagsaalt from "hooks/useJagsaalt";
+import formatNumber from "tools/function/formatNumber";
 
 function GuilgeeExceleesOruulakhOlnoor(
   {
@@ -101,7 +102,14 @@ function GuilgeeExceleesOruulakhOlnoor(
         >
           {zardal?.jagsaalt?.map((a) => (
             <Select.Option key={a._id} value={a._id}>
-              {a.ner}
+              <Tooltip placement="top" title={a.ner + " " + (a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? ("Цэвэр ус: " + formatNumber(a.tseverUsDun, 2)) : formatNumber(a.tariff, 2)) 
+                                              + " "+ (a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? "Бохир ус: " + formatNumber(a.bokhirUsDun, 2) : "")
+                                              + " "+ ( a.ner === 'Халуун ус' ? "Ус халаасны: " + formatNumber(a.usKhalaasniiDun, 2) : "")}>
+
+                {a.ner + " " + (a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? ("Цэвэр ус: " + formatNumber(a.tseverUsDun, 2)) : formatNumber(a.tariff, 2)) 
+                                              + " "+ (a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? "Бохир ус: " + formatNumber(a.bokhirUsDun, 2) : "")
+                                              + " "+ ( a.ner === 'Халуун ус' ? "Ус халаасны: " + formatNumber(a.usKhalaasniiDun, 2) : "")}
+              </Tooltip>                                
             </Select.Option>
           ))}
         </Select>

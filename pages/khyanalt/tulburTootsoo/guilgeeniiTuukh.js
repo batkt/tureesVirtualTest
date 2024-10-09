@@ -920,7 +920,7 @@ function guilgeeniiTuukh({ token }) {
         </div>
       ),
       icon: <FileExcelOutlined />,
-      width: "60vw",
+      width: "68vw",
       style: { top: 20 },
       content: (
         <KhuulgaAldangi

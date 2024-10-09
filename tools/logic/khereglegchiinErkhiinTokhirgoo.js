@@ -2,6 +2,7 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { BiCommentError } from "react-icons/bi";
 import { BiBellPlus, BiDesktop } from "react-icons/bi";
 import { BsGraphUp, BsPcDisplay } from "react-icons/bs";
+import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
 import { MdOutlineAnalytics } from "react-icons/md";
 import { FiHome } from "react-icons/fi";
 import { FaSteam } from "react-icons/fa";
@@ -208,6 +209,10 @@ export const tsonknuud = [
   {
     ner: "Устгасан түүх",
     key: "/khyanalt/ustsanTuukh",
+  },
+  {
+    ner: "Зассан түүх",
+    key: "/khyanalt/zassanTuukh",
   },
   {
     ner: "Тоглоомын төв",
@@ -902,6 +907,12 @@ export const khuudasnuud = [
         />
       </svg>
     ),
+  },
+  {
+    ner: "Зассан түүх",
+    khuudasniiNer: "zassanTuukh",
+    href: "/khyanalt/zassanTuukh",
+    icon: <VscGitPullRequestGoToChanges style={{ width: "24", height: "24" }} />,
   },
   {
     ner: "Киоск",
