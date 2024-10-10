@@ -32,7 +32,7 @@ const turluud = [
 
 function ZassanTuukh() {
   const { t } = useTranslation();
-  const { baiguullaga, barilgiinId } = useAuth();
+  const { token, baiguullaga, barilgiinId } = useAuth();
   const [ajiltankhaikh, setAjiltankhaikh] = useState();
   const [turul, setTurul] = useState();
   const ref = React.useRef();
@@ -71,7 +71,7 @@ function ZassanTuukh() {
     modal({
       title: t("Дэлгэрэнгүй Мэдээлэл"),
       icon: <FileExcelOutlined />,
-      content: <ZassanDelgerenguiKharakh ref={ref} data={mur} />,
+      content: <ZassanDelgerenguiKharakh ref={ref} data={mur} token={token} baiguullaga={baiguullaga} />,
       width: "80vw",
       footer,
     });

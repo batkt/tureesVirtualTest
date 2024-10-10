@@ -102,14 +102,18 @@ function GuilgeeExceleesOruulakhOlnoor(
         >
           {zardal?.jagsaalt?.map((a) => (
             <Select.Option key={a._id} value={a._id}>
-              <Tooltip placement="top" title={a.ner + " " + (a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? ("Цэвэр ус: " + formatNumber(a.tseverUsDun, 2)) : formatNumber(a.tariff, 2)) 
-                                              + " "+ (a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? "Бохир ус: " + formatNumber(a.bokhirUsDun, 2) : "")
-                                              + " "+ ( a.ner === 'Халуун ус' ? "Ус халаасны: " + formatNumber(a.usKhalaasniiDun, 2) : "")}>
-
-                {a.ner + " " + (a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? ("Цэвэр ус: " + formatNumber(a.tseverUsDun, 2)) : formatNumber(a.tariff, 2)) 
-                                              + " "+ (a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? "Бохир ус: " + formatNumber(a.bokhirUsDun, 2) : "")
-                                              + " "+ ( a.ner === 'Халуун ус' ? "Ус халаасны: " + formatNumber(a.usKhalaasniiDun, 2) : "")}
-              </Tooltip>                                
+              <div className="w-full flex justify-between border-b">
+                <p className="flex border-r bg-green-400 bg-opacity-10 pl-2 pr-2 text-left">
+                  {a.ner}
+                </p>
+                <div className="w-full justify-between flex bg-blue-600 bg-opacity-5 pl-2 pr-2">
+                  <p className={`border-r text-right mr-5`}>{t(a.turul)}</p>
+                  <p className="text-right">
+                    {a.turul !== "Дурын" ? a.tariff : "Дурын"}
+                    {a.turul !== "Дурын" && "₮"}
+                  </p>
+                </div>
+              </div>
             </Select.Option>
           ))}
         </Select>

@@ -133,7 +133,7 @@ function Ajiltan() {
                       {t("Намайг сана")}
                     </label>
                   </div>
-                  <a href="">{t("Нууц үг сэргээх")}</a>
+                  {/* <a href="">{t("Нууц үг сэргээх")}</a> */}
                 </div>
 
                 <button

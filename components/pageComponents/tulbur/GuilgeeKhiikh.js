@@ -387,8 +387,17 @@ function GuilgeeKhiikh(
             {zardal.jagsaalt?.map((mur) =>
               mur.turul !== "1м2" ? (
                 <Select.Option key={mur._id} value={mur._id}>
-                  <div>
-                    {mur.ner}/{mur.turul}
+                  <div className="w-full flex justify-between border-b">
+                    <p className="flex border-r bg-green-400 bg-opacity-10 pl-2 pr-2 text-left">
+                      {mur.ner}
+                    </p>
+                    <div className="w-full justify-between flex bg-blue-600 bg-opacity-5 pl-2 pr-2">
+                      <p className={`border-r text-right mr-5`}>{t(mur.turul)}</p>
+                      <p className="text-right">
+                        {mur.turul !== "Дурын" ? mur.tariff : "Дурын"}
+                        {mur.turul !== "Дурын" && "₮"}
+                      </p>
+                    </div>
                   </div>
                 </Select.Option>
               ) : (
