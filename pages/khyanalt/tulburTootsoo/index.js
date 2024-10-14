@@ -948,7 +948,7 @@ function tulburTootsoo({ token }) {
               </div>
             )}
           </div>
-          <div className="md:flex w-full md:pt-1">
+          <div className="flex w-full md:pt-1">
             <div className="w-40 md:ml-4 mb-1">
               <Select
                 placeholder={t("Данс")}
@@ -979,7 +979,8 @@ function tulburTootsoo({ token }) {
                 {songogdsonDans.currency}
               </div>
             )}
-
+          </div>
+          <div className="md:flex w-full md:pt-1">  
             <div className="ml-auto">
               <Popover
                 content={() => (
