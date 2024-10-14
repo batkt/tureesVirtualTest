@@ -586,7 +586,7 @@ function GereeBaiguulakh({ token, data }) {
                       className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-100"
                     >
                       <div
-                        className="w-full text-center"
+                        className="sun-editor-editable w-full text-center"
                         dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                       />
                     </div>

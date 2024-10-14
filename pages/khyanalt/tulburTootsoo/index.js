@@ -924,7 +924,7 @@ function tulburTootsoo({ token }) {
           data-aos-duration="1000"
           data-aos-delay="200"
         >
-          <div className="flex">
+          <div className="md:flex">
             <RangePicker
               className="min-w-max"
               style={{ marginBottom: "20px" }}
@@ -932,13 +932,13 @@ function tulburTootsoo({ token }) {
               onChange={setEkhlekhOgnoo}
             />
             {ajiltan?.erkh === "Admin" && (
-              <div className="mb-5 ml-4 flex flex-row space-x-2 rounded-md bg-gray-200 dark:bg-gray-700">
+              <div className="mb-5 ml-4 flex flex-row space-x-2 rounded-md">
                 {["orlogo", "zarlaga"].map((text) => (
                   <div
                     className={`cursor-pointer rounded-md p-2 ${
                       khuulgaTurul === text
                         ? "dark bg-green-500 text-gray-50"
-                        : ""
+                        : "bg-gray-200 dark:bg-gray-700"
                     }`}
                     onClick={() => setKhuulgaTurul(text)}
                   >
@@ -948,8 +948,8 @@ function tulburTootsoo({ token }) {
               </div>
             )}
           </div>
-          <div className="flex w-full md:pt-1">
-            <div className="w-40 md:ml-4">
+          <div className="md:flex w-full md:pt-1">
+            <div className="w-40 md:ml-4 mb-1">
               <Select
                 placeholder={t("Данс")}
                 style={{ width: "100%" }}
@@ -965,7 +965,7 @@ function tulburTootsoo({ token }) {
             </div>
 
             {songogdsonDans && (
-              <div className="ml-5 hidden flex-row space-x-2 p-1 font-medium md:flex">
+              <div className="ml-5 mb-1 flex-row space-x-2 p-1 font-medium md:flex">
                 {t("Үлдэгдэл")}:{" "}
                 {uldegdel ? (
                   songogdsonDans?.bank === "tdb" ? (
