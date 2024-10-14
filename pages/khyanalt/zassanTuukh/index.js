@@ -32,7 +32,7 @@ const turluud = [
 
 function ZassanTuukh() {
   const { t } = useTranslation();
-  const { token, baiguullaga, barilgiinId } = useAuth();
+  const { token, ajiltan, baiguullaga, barilgiinId } = useAuth();
   const [ajiltankhaikh, setAjiltankhaikh] = useState();
   const [turul, setTurul] = useState();
   const ref = React.useRef();
@@ -62,7 +62,7 @@ function ZassanTuukh() {
     undefined,
     searchKeys
   );
-  const ajiltan = useJagsaalt("/ajiltan");
+  const ajiltanJagsaalt = useJagsaalt("/ajiltan");
 
   function medeelelKharakh(mur) {
     const footer = [
@@ -71,7 +71,7 @@ function ZassanTuukh() {
     modal({
       title: t("Дэлгэрэнгүй Мэдээлэл"),
       icon: <FileExcelOutlined />,
-      content: <ZassanDelgerenguiKharakh ref={ref} data={mur} token={token} baiguullaga={baiguullaga} />,
+      content: <ZassanDelgerenguiKharakh ref={ref} data={mur} token={token} barilgiinId={barilgiinId} baiguullaga={baiguullaga} ajiltan={ajiltan} />,
       width: "80vw",
       footer,
     });
@@ -205,7 +205,7 @@ function ZassanTuukh() {
               placeholder={t("Ажилтан")}
               onChange={(v) => setAjiltankhaikh(v)}
               allowClear>
-              {ajiltan?.jagsaalt.map((a) => (
+              {ajiltanJagsaalt?.jagsaalt.map((a) => (
                 <Select.Option key={a._id} value={a._id}>
                   {a.ner}
                 </Select.Option>
