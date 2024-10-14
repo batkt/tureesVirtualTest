@@ -24,7 +24,6 @@ function Ajiltan() {
   const [form] = Form.useForm();
   const [namaigsana, setNamaigsana] = useState(false);
   const { themeValue, setTheme } = useThemeValue();
-
   const { newterya } = useAuth();
 
   useEffect(async () => {
