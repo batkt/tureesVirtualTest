@@ -16,7 +16,7 @@ const BaganiinSongolt = ({
       setShineBagana(
         columns.filter((a) => {
           let parsedBaganuud = JSON.parse(baganuud);
-          return parsedBaganuud.find((b) => b === a.dataIndex);
+          return parsedBaganuud.find((b) => JSON.stringify(b) === JSON.stringify(a.dataIndex));
         })
       );
   }, []);
@@ -33,12 +33,12 @@ const BaganiinSongolt = ({
       jagsaalt.push(nemekhBagana);
     } else
       jagsaalt = shineBagana.filter(function (item) {
-        return item.dataIndex !== mur.dataIndex;
+        return JSON.stringify(item.dataIndex) !== JSON.stringify(mur.dataIndex);
       });
 
     localStorage.setItem(
       "bagana-" + window.location.href,
-      JSON.stringify(jagsaalt.map((a) => a.dataIndex))
+      JSON.stringify(jagsaalt.map((a) => JSON.stringify(a.dataIndex)))
     );
     setShineBagana([...jagsaalt]);
   }
@@ -53,7 +53,7 @@ const BaganiinSongolt = ({
                 <Menu.Item key={"bagana-" + i}>
                   <Checkbox
                     checked={
-                      !!shineBagana.find((a) => a.dataIndex === mur.dataIndex)
+                      !!shineBagana.find((a) => JSON.stringify(a.dataIndex) === JSON.stringify(mur.dataIndex))
                     }
                     onClick={(e) => baganaNemekh(e, mur)}>
                     {mur.title}

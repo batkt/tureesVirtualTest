@@ -4,6 +4,7 @@ import { BiBellPlus, BiDesktop } from "react-icons/bi";
 import { BsGraphUp, BsPcDisplay } from "react-icons/bs";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
 import { MdOutlineAnalytics } from "react-icons/md";
+import { TbReportMoney } from "react-icons/tb";
 import { FiHome } from "react-icons/fi";
 import { FaSteam } from "react-icons/fa";
 import { SiRiotgames } from "react-icons/si";
@@ -857,6 +858,12 @@ export const khuudasnuud = [
         khuudasniiNer: "analytictailan",
         href: "/khyanalt/tailan/analytic",
         icon: <MdOutlineAnalytics style={{ width: "24", height: "24" }} />,
+      },
+      {
+        ner: "Нэгтгэл тайлан",
+        khuudasniiNer: "negtgelTailan",
+        href: "/khyanalt/tailan/negtgelTailan",
+        icon: <TbReportMoney style={{ width: "24", height: "24" }} />,
       },
     ],
   },
