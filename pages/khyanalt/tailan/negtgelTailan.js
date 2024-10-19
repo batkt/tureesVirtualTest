@@ -507,9 +507,9 @@ function negtgelTailan({ token }) {
                     : 1,
                     pageSize: khadgalsanKhuudaslalt
                     ? khadgalsanKhuudaslalt?.khuudasniiKhemjee
-                    : 20,
+                    : 100,
                     total: tailanGaralt?.length,
-                    defaultPageSize: 20,
+                    defaultPageSize: 100,
                     showSizeChanger: true,
                     onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {
                     setTailanKhuudaslalt((kh) => ({
