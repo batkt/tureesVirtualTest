@@ -47,17 +47,18 @@ function iconAvya(a, bank) {
   let Icon = ExclamationOutlined;
   let color = "red";
   let tailbar = t("Гүйлгээ холбогдоогүй байна");
+  // if (
+  //   bank === "tdb"
+  //     ? a?.TxAddInf.includes("QPAY") || a?.TxAddInf.includes("qpay")
+  //     : bank === "golomt"
+  //     ? a?.tranDesc.includes("QPAY") || a?.tranDesc.includes("qpay")
+  //     : a?.description.includes("QPAY") || a?.description.includes("qpay")
+  // ) {
+  //   Icon = CheckOutlined;
+  //   color = "green";
+  //   tailbar = t("Гүйлгээ холбогдсон байна");
+  // } else 
   if (
-    bank === "tdb"
-      ? a?.TxAddInf.includes("QPAY") || a?.TxAddInf.includes("qpay")
-      : bank === "golomt"
-      ? a?.tranDesc.includes("QPAY") || a?.tranDesc.includes("qpay")
-      : a?.description.includes("QPAY") || a?.description.includes("qpay")
-  ) {
-    Icon = CheckOutlined;
-    color = "green";
-    tailbar = t("Гүйлгээ холбогдсон байна");
-  } else if (
     (a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
       a?.kholbosonDun > 0) ||
     (a?.magadlaltaiGereenuud?.length > 0 &&
@@ -79,7 +80,7 @@ function iconAvya(a, bank) {
         : "Холбох боломжтой гэрээнүүд байна";
   } else if (
     a?.kholbosonGereeniiId &&
-    a?.kholbosonDun === a[`${bank === "tdb" ? "Amt" : "amount"}`]
+    a?.kholbosonDun || 0 === a[`${bank === "tdb" ? "Amt" : "amount"}`]
   ) {
     Icon = CheckOutlined;
     color = "green";
@@ -233,16 +234,15 @@ function tulburTootsoo({ token }) {
 
   function guilgeeKholbyo(data) {
     if (
-      data.kholbosonDun - data.amount === 0 ||
+      data.kholbosonDun || 0 - data.amount || data.tranAmount === 0 ||
       data.balance - data.kholbosonDun === 0
     ) {
       notification.success({
         message: t("Гүйлгээ холбогдсон байна"),
       });
     } else {
-      if (
-        (data?.kholbosonGereeniiId &&
-          data?.kholbosonDun ===
+      if (data?.kholbosonGereeniiId?.length > 0 &&
+        ((data?.kholbosonDun ===
             data[
               `${
                 songogdsonDans?.bank === "tdb"
@@ -258,7 +258,7 @@ function tulburTootsoo({ token }) {
           ? data?.tranDesc?.includes("QPAY") || data?.tranDesc?.includes("qpay")
           : data?.description.includes("QPAY") ||
             data?.description.includes("qpay")
-      ) {
+      )) {
         message.info(t("Гүйлгээ гэрээнд холбогдсон байна."));
         return;
       }

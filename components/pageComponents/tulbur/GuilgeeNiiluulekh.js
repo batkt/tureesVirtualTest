@@ -317,7 +317,7 @@ function GuilgeeNiiluulekh(
   }
 
   const guilgeeniiDun = useMemo(() => {
-    return dans.bank === "tdb" ? data.Amt : data.amount;
+    return dans.bank === "tdb" ? data.Amt : (data.amount || data.tranAmount);
   }, [dans, data]);
 
   function onChangeKholbokhDun(target, index, talbar) {
@@ -387,9 +387,9 @@ function GuilgeeNiiluulekh(
         </div>
         <div className="grid w-full grid-cols-4 rounded-md border border-gray-400 bg-gray-100 p-2">
           <div className="col-span-4 lg:col-span-1">
-            {data.CtAcct || data.relatedAccount}
+            {data.CtAcct || data.relatedAccount || data.accNum}
           </div>
-          <div className="col-span-4 lg:col-span-1">{data.CtActnName}</div>
+          <div className="col-span-4 lg:col-span-1">{data.CtActnName || data.accName}</div>
           <div className="col-span-2 text-center lg:col-span-1">
             {moment(data.TxDt || data.tranDate).format("YYYY-MM-DD")}
           </div>
@@ -402,7 +402,7 @@ function GuilgeeNiiluulekh(
               className="rounded-md pr-7"
               value={
                 guilgeeniiTailbar === undefined
-                  ? data.TxAddInf?.split("-&gt;")[0] || data.description
+                  ? data.TxAddInf?.split("-&gt;")[0] || data.description || data.tranDesc
                   : guilgeeniiTailbar
               }
               onChange={inputChange}
