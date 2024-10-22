@@ -526,33 +526,33 @@ function negtgelTailan({ token }) {
                 }}
                 summary={(e) => (
                     <AntdTable.Summary className="border " fixed={'bottom'}>
-                      <AntdTable.Summary.Cell colSpan={1}>
-                        <div className="space-x-2 truncate text-base font-semibold ">
+                      <AntdTable.Summary.Cell index={0} colSpan={1}>
+                        <div className="space-x-2 truncate text-base font-bold ">
                           Нийт
                         </div>
                       </AntdTable.Summary.Cell>
-                      <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
-                      <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
+                      <AntdTable.Summary.Cell index={1}></AntdTable.Summary.Cell>
+                      <AntdTable.Summary.Cell index={2}></AntdTable.Summary.Cell>
                       <AntdTable.Summary.Cell index={3}>
-                        <div className="truncate text-center font-semibold ">
+                        <div className="truncate text-center font-bold ">
                           {formatNumber(
                             e?.reduce((a, b) => a + (b?._id?.talbainKhemjee || 0), 0),
                             2
                           )}
                         </div>
                       </AntdTable.Summary.Cell>
-                      <AntdTable.Summary.Cell colSpan={shineBagana?.length > 0 ? shineBagana?.length + 1 : 1}></AntdTable.Summary.Cell>
-                        {niitDunJagsaalt.sort((a, b) => a.columnIndex - b.columnIndex).map((mur) => {
+                      <AntdTable.Summary.Cell index={4} colSpan={shineBagana?.length > 0 ? shineBagana?.length + 1 : 1}></AntdTable.Summary.Cell>
+                        {niitDunJagsaalt.sort((a, b) => a.columnIndex - b.columnIndex).map((mur, index) => {
                             return (
-                            <AntdTable.Summary.Cell>
-                                <div className="truncate text-right font-semibold ">
+                            <AntdTable.Summary.Cell index={4 + shineBagana?.length + index + 1}>
+                                <div className="truncate text-right font-bold ">
                                     {mur.dun != 0 ? formatNumber(mur.dun, 2) : ""}
                                 </div>
                             </AntdTable.Summary.Cell>
                             );
                         })}
                         <AntdTable.Summary.Cell index={4 + niitDunJagsaalt?.length + shineBagana?.length + 1}>
-                            <div className="truncate text-right font-semibold ">
+                            <div className="truncate text-right font-bold ">
                                 {formatNumber(e?.reduce((a, b) => a + (b?.niitTulukhDun || 0), 0), 2)}
                             </div>
                         </AntdTable.Summary.Cell>

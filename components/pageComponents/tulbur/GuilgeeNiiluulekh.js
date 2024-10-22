@@ -50,6 +50,10 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
           guilgeeniiMur.ognoo = guilgee.tranDate;
           guilgeeniiMur.tulsunDans = guilgee.relatedAccount;
           break;
+        case "golomt":
+          guilgeeniiMur.ognoo = guilgee.tranDate;
+          guilgeeniiMur.tulsunDans = guilgee.accNum;
+          break;  
         default:
           aldaa.push(
             `${mur.talbainDugaar} талбайн холбох гүйлгээний данс тодорхоогүй байна`
@@ -70,6 +74,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
           baritsaaniiMur.ognoo = guilgee.TxDt;
           break;
         case "khanbank":
+        case "golomt":
           baritsaaniiMur.ognoo = guilgee.tranDate;
           break;
         default:
@@ -87,7 +92,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
     if (
       mur.aldangiinUldegdel > (mur.tulsunAldangi || 0) &&
       (mur.tulsunAldangi || 0) <
-        Number(dans.bank === "tdb" ? guilgee.Amt : guilgee.amount) -
+        Number(dans.bank === "tdb" ? guilgee.Amt : (guilgee.amount || guilgee.tranAmount)) -
           guilgee.kholbosonDun
     ) {
       aldaa.push(
