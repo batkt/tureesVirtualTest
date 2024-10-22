@@ -548,7 +548,7 @@ function tulburTootsoo() {
         ellipsis: true,
         align: "center",
         render: (data) => {
-          return moment(data && data[1]).format("YYYY-MM-DD");
+          return moment(data && data[data?.length - 1]).format("YYYY-MM-DD");
         },
       },
       {
