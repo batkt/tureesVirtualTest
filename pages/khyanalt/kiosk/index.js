@@ -683,9 +683,9 @@ const Kiosk = () => {
               {tulburiinKhelber === "pass" &&
                 "Pass апп-аас төлөн үргэлжлүүлэх дарна уу."}
             </div>
-            <div className="my-16 flex w-full items-center justify-between px-12 md:my-10">
+            <div className={`my-16 flex w-full items-center justify-${baiguullaga?._id === "6646fab6ae3f7ecc2ea5ecd9" ? "center": "between"} px-12 md:my-10`}>
               {tulburiinKhelberuud.map((mur) => {
-                return (
+                return baiguullaga?._id === "6646fab6ae3f7ecc2ea5ecd9" && (mur.key === "card" || mur.key === "pass") ? "" : (
                   <div
                     key={mur.key}
                     onClick={() => {
