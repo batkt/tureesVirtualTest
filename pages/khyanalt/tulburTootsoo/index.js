@@ -234,8 +234,8 @@ function tulburTootsoo({ token }) {
 
   function guilgeeKholbyo(data) {
     if (
-      data.kholbosonDun || 0 - data.amount || data.tranAmount === 0 ||
-      data.balance - data.kholbosonDun === 0
+      (data.kholbosonDun || 0) - (data.amount || data.tranAmount) === 0 ||
+      data.balance - (data.kholbosonDun || 0) === 0
     ) {
       notification.success({
         message: t("Гүйлгээ холбогдсон байна"),
