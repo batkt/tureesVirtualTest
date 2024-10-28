@@ -2827,6 +2827,7 @@ function camera({ token }) {
                           </Radio>
                           <Radio value="Тусгай зочид">Тусгай зочид</Radio>
                           <Radio value="Банк хамгаалалт">Банк хамгаалалт</Radio>
+                          <Radio value="Цэцэрлэг">Цэцэрлэг</Radio>
                         </Space.Compact>
                       </Space>
                     ) : (
