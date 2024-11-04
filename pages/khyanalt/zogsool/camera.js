@@ -1675,33 +1675,33 @@ function camera({ token }) {
     return aa;
   };
   const khaalgaNeey = (ip) => {
-    if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
-      let data =
-        '<?xml version="1.0" encoding="UTF-8"?><BarrierGate><ctrlMode>open</ctrlMode></BarrierGate>';
-      let config = {
-        method: "put",
-        maxBodyLength: Infinity,
-        url: "http://" + ip + "/ISAPI/Parking/channels/1/barrierGate",
-        auth: {
-          username: "admin",
-          password: "Asdf1199",
-        },
-        headers: {
-          Accept: "*/*",
-          Connection: "keep-alive",
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-        data: data,
-      };
-      axios
-        .request(config)
-        .then((response) => {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else
+    // if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
+    //   let data =
+    //     '<?xml version="1.0" encoding="UTF-8"?><BarrierGate><ctrlMode>open</ctrlMode></BarrierGate>';
+    //   let config = {
+    //     method: "put",
+    //     maxBodyLength: Infinity,
+    //     url: "http://" + ip + "/ISAPI/Parking/channels/1/barrierGate",
+    //     auth: {
+    //       username: "admin",
+    //       password: "Asdf1199",
+    //     },
+    //     headers: {
+    //       Accept: "*/*",
+    //       Connection: "keep-alive",
+    //       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+    //     },
+    //     data: data,
+    //   };
+    //   axios
+    //     .request(config)
+    //     .then((response) => {
+    //       console.log(JSON.stringify(response.data));
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // } else
       axios
         .get("http://localhost:5000/api/neeye/" + ip + "")
         .then(function (response) {
@@ -2143,7 +2143,17 @@ function camera({ token }) {
                     ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
                     USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
                   />
-                ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
+                ) : baiguullaga?._id === "6698c657c26994f4e0f8de62" && barilgiinId === "67285bb9e212a8d0cb42495f" 
+                        && camerVal[1] === "192.168.8.108" ? (
+                    <R2WPlayerComponent
+                      USER={"admin"}
+                      ROOT={"live"}
+                      PASSWD={"Admin123"}
+                      Camer={camerVal[1]}
+                      PORT={554}
+                    /> 
+                )
+                : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
                     <SocketStream
                       ip={camerVal[1]}
