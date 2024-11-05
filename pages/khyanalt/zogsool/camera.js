@@ -292,6 +292,22 @@ function camera({ token }) {
     streamQuery
   );
 
+  const songogdzonZogsoolOrokh = useMemo(() => {
+    var zogsool = {};
+    if (parkingJagsaalt && camerVal[0]) {
+      parkingJagsaalt?.forEach((item) => {
+        item?.khaalga?.forEach((khaalgaItem) => {
+          khaalgaItem?.camera?.forEach((cameraItem) => {
+            if (cameraItem?.cameraIP === camerVal[0]) {
+              zogsool = item;
+            }
+          });
+        });
+      });
+    }
+    return zogsool;
+  }, [parkingJagsaalt, camerVal]);
+
   const songogdzonZogsool = useMemo(() => {
     var zogsool = {};
     if (parkingJagsaalt && camerVal[1]) {
@@ -463,6 +479,11 @@ function camera({ token }) {
           !!uilchluulegch?.cameraIP
         ) {
           console.log("orohKhaalga", uilchluulegch?.cameraIP);
+          const filterData = zogsoolTusBuriinToo?.filter((mur) => mur?._id?.zogsool === songogdzonZogsoolOrokh?._id);
+          var sulToo = (songogdzonZogsoolOrokh?.too || 0) - (filterData?.length > 0 ? filterData[0].too : 0);
+          console.log("socket sulToo --->", sulToo);
+          if(songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh && (sulToo === 0 || sulToo <= -1))
+            yanzalsanMashiniiDugaar = "Дүүрсэн";
           var url = `http://localhost:5000/api/sambar/${
             uilchluulegch?.cameraIP
           }/${yanzalsanMashiniiDugaar}/${moment().format("HH:mm:ss")}`;
@@ -1702,6 +1723,14 @@ function camera({ token }) {
     //       console.log(error);
     //     });
     // } else
+    const filterData = zogsoolTusBuriinToo?.filter((mur) => mur?._id?.zogsool === songogdzonZogsoolOrokh?._id);
+    var sulToo = (songogdzonZogsoolOrokh?.too || 0) - (filterData?.length > 0 ? filterData[0].too : 0);
+    console.log("sulToo --->", sulToo);
+    if(ip === camerVal[0] && songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh && (sulToo === 0 || sulToo <= -1))
+    {
+      message.warn("Зогсоол дүүрсэн байна");
+      return;
+    } else
       axios
         .get("http://localhost:5000/api/neeye/" + ip + "")
         .then(function (response) {
