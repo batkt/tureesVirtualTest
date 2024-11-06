@@ -311,7 +311,7 @@ function GuilgeeniiTuukhAldangi(
                   {formatNumber(a.tulukhAldangi, 0)}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.tulsunAldangi, 0)}
+                  {formatNumber(a.tulsunAldangi || a.tulsunDun, 0)}
                 </td>
                 <td className="flex min-w-[8rem] justify-center p-1 text-center ">
                   {a.dansniiDugaar}

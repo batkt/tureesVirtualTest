@@ -1917,7 +1917,7 @@ function camera({ token }) {
   const excel = new Excel();
   return (
     <Admin
-      title="Касс"
+      title="Камер - Касс"
       tsonkhniiId={"64474e3e28c37d7cdda15d01"}
       khuudasniiNer="Camera"
       dedKhuudas={true}

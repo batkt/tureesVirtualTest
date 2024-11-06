@@ -68,6 +68,7 @@ function TulburiinDelgerenguiTailan(
   const { ajilchdiinGaralt, setAjiltniiKhuudaslalt } = useAjiltniiJagsaalt(
     token,
     baiguullagiinId,
+    barilgiinId,
     zogsooAjiltanQuery
   );
 

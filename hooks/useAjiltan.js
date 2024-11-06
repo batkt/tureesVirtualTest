@@ -33,8 +33,7 @@ const fetcherJagsaalt = (
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-export function useAjiltniiJagsaalt(token, baiguullagiinId, query) {
-  const { barilgiinId } = useAuth();
+export function useAjiltniiJagsaalt(token, baiguullagiinId, barilgiinId, query) {
   const [khuudaslalt, setAjiltniiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,

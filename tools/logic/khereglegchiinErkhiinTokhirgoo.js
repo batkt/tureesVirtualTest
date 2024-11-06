@@ -185,7 +185,7 @@ export const tsonknuud = [
     key: "/khyanalt/zogsool/mashinBurtgel",
   },
   {
-    ner: "Касс",
+    ner: "Камер - Касс",
     key: "/khyanalt/zogsool/camera",
   },
   {
@@ -745,7 +745,7 @@ export const khuudasnuud = [
         ),
       },
       {
-        ner: "Касс",
+        ner: "Камер - Касс",
         khuudasniiNer: "Camera",
         href: "/khyanalt/zogsool/camera",
         icon: <BiDesktop style={{ width: "24", height: "24" }} />,
