@@ -1727,13 +1727,15 @@ function camera({ token }) {
     const filterData = zogsoolTusBuriinToo?.filter((mur) => mur?._id?.zogsool === songogdzonZogsoolOrokh?._id);
     var sulToo = (songogdzonZogsoolOrokh?.too || 0) - (filterData?.length > 0 ? filterData[0].too : 0);
     console.log("sulToo --->", sulToo);
+    var localUrl = baiguullaga?._id === "6698c657c26994f4e0f8de62" && barilgiinId === "67285bb9e212a8d0cb42495f" && ip === "192.168.8.108" ? `http://localhost:5001` :  `http://localhost:5000`;
+    console.log("localUrl --->", localUrl);
     if(ip === camerVal[0] && songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh && (sulToo === 0 || sulToo <= -1))
     {
       message.warn("Зогсоол дүүрсэн байна");
       return;
     } else
       axios
-        .get("http://localhost:5000/api/neeye/" + ip + "")
+        .get(localUrl + "/api/neeye/" + ip + "")
         .then(function (response) {
           if (!!response) console.log("/api/neeye", response);
         })
