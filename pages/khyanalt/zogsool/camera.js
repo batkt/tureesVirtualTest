@@ -519,7 +519,8 @@ function camera({ token }) {
               );
           }
           if (yanzalsanNiitDun < 0) yanzalsanNiitDun = 0;
-          var url = `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`;
+          var localUrl = baiguullaga?._id === "6698c657c26994f4e0f8de62" && barilgiinId === "67285bb9e212a8d0cb42495f" && garsanKhaalga === "192.168.8.108" ? `http://localhost:5001` :  `http://localhost:5000`;
+          var url = localUrl + `/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`;
           if (
             baiguullaga?._id == "65cf2f027fbc788f85e50b90" ||
             baiguullaga?._id == "6549bbe0d437e6d25d557341"
@@ -528,7 +529,7 @@ function camera({ token }) {
               "YYYY-MM-DD HH:mm:ss"
             );
             var duusakhOgnoo = moment().format("YYYY-MM-DD HH:mm:ss");
-            url = `http://localhost:5000/api/sambarOgnootoi/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}/${ekhlekhOgnoo}/${duusakhOgnoo}`;
+            url = localUrl + `/api/sambarOgnootoi/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}/${ekhlekhOgnoo}/${duusakhOgnoo}`;
           }
 
           if (
