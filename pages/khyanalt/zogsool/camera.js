@@ -1702,34 +1702,34 @@ function camera({ token }) {
     } 
     else
     {
-      if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
-        let data =
-          '<?xml version="1.0" encoding="UTF-8"?><BarrierGate><ctrlMode>open</ctrlMode></BarrierGate>';
-        let config = {
-          method: "put",
-          maxBodyLength: Infinity,
-          url: "http://" + ip + "/ISAPI/Parking/channels/1/barrierGate",
-          auth: {
-            username: "admin",
-            password: "Asdf1199",
-          },
-          headers: {
-            Accept: "*/*",
-            Connection: "keep-alive",
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-            "Access-Control-Allow-Origin": "*",
-          },
-          data: data,
-        };
-        axios
-          .request(config)
-          .then((response) => {
-            console.log(JSON.stringify(response.data));
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else
+      // if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
+      //   let data =
+      //     '<?xml version="1.0" encoding="UTF-8"?><BarrierGate><ctrlMode>open</ctrlMode></BarrierGate>';
+      //   let config = {
+      //     method: "put",
+      //     maxBodyLength: Infinity,
+      //     url: "http://" + ip + "/ISAPI/Parking/channels/1/barrierGate",
+      //     auth: {
+      //       username: "admin",
+      //       password: "Asdf1199",
+      //     },
+      //     headers: {
+      //       Accept: "*/*",
+      //       Connection: "keep-alive",
+      //       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      //       "Access-Control-Allow-Origin": "*",
+      //     },
+      //     data: data,
+      //   };
+      //   axios
+      //     .request(config)
+      //     .then((response) => {
+      //       console.log(JSON.stringify(response.data));
+      //     })
+      //     .catch((error) => {
+      //       console.log(error);
+      //     });
+      // } else
           zogsoolUilchilgee()
           .get("/neeye/" + ip + "")
           .then(function (response) {
