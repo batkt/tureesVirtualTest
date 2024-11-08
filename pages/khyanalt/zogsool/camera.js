@@ -57,7 +57,7 @@ import _ from "lodash";
 import updateMethod from "../../../tools/function/crud/updateMethod";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 import axios from "axios";
-import { aldaaBarigch, socket } from "services/uilchilgee";
+import { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
 import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
@@ -479,17 +479,13 @@ function camera({ token }) {
           !!uilchluulegch?.cameraIP
         ) {
           console.log("orohKhaalga", uilchluulegch?.cameraIP);
-          const filterData = zogsoolTusBuriinToo?.filter((mur) => mur?._id?.zogsool === songogdzonZogsoolOrokh?._id);
-          var sulToo = (songogdzonZogsoolOrokh?.too || 0) - (filterData?.length > 0 ? filterData[0].too : 0);
-          console.log("socket sulToo --->", sulToo);
-          if(songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh && (sulToo === 0 || sulToo <= -1))
-            yanzalsanMashiniiDugaar = "Дүүрсэн";
-          var url = `http://localhost:5000/api/sambar/${
+          console.log("dugaar --->", yanzalsanMashiniiDugaar);
+          var url = `/sambar/${
             uilchluulegch?.cameraIP
           }/${yanzalsanMashiniiDugaar}/${moment().format("HH:mm:ss")}`;
 
           if (!!yanzalsanMashiniiDugaar)
-            axios
+            zogsoolUilchilgee()
               .get(url)
               .then((res) => {
                 if (res) {
@@ -519,8 +515,7 @@ function camera({ token }) {
               );
           }
           if (yanzalsanNiitDun < 0) yanzalsanNiitDun = 0;
-          var localUrl = baiguullaga?._id === "6698c657c26994f4e0f8de62" && barilgiinId === "67285bb9e212a8d0cb42495f" && garsanKhaalga === "192.168.8.108" ? `http://localhost:5001` :  `http://localhost:5000`;
-          var url = localUrl + `/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`;
+          var url = `/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`;
           if (
             baiguullaga?._id == "65cf2f027fbc788f85e50b90" ||
             baiguullaga?._id == "6549bbe0d437e6d25d557341"
@@ -529,7 +524,7 @@ function camera({ token }) {
               "YYYY-MM-DD HH:mm:ss"
             );
             var duusakhOgnoo = moment().format("YYYY-MM-DD HH:mm:ss");
-            url = localUrl + `/api/sambarOgnootoi/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}/${ekhlekhOgnoo}/${duusakhOgnoo}`;
+            url = `/sambarOgnootoi/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}/${ekhlekhOgnoo}/${duusakhOgnoo}`;
           }
 
           if (
@@ -557,7 +552,7 @@ function camera({ token }) {
             }
           }
           if (!!yanzalsanMashiniiDugaar)
-            axios
+            zogsoolUilchilgee()
               .get(url)
               .then((res) => {
                 if (res) {
@@ -1697,51 +1692,53 @@ function camera({ token }) {
     return aa;
   };
   const khaalgaNeey = (ip) => {
-    // if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
-    //   let data =
-    //     '<?xml version="1.0" encoding="UTF-8"?><BarrierGate><ctrlMode>open</ctrlMode></BarrierGate>';
-    //   let config = {
-    //     method: "put",
-    //     maxBodyLength: Infinity,
-    //     url: "http://" + ip + "/ISAPI/Parking/channels/1/barrierGate",
-    //     auth: {
-    //       username: "admin",
-    //       password: "Asdf1199",
-    //     },
-    //     headers: {
-    //       Accept: "*/*",
-    //       Connection: "keep-alive",
-    //       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-    //     },
-    //     data: data,
-    //   };
-    //   axios
-    //     .request(config)
-    //     .then((response) => {
-    //       console.log(JSON.stringify(response.data));
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // } else
     const filterData = zogsoolTusBuriinToo?.filter((mur) => mur?._id?.zogsool === songogdzonZogsoolOrokh?._id);
     var sulToo = (songogdzonZogsoolOrokh?.too || 0) - (filterData?.length > 0 ? filterData[0].too : 0);
-    console.log("sulToo --->", sulToo);
-    var localUrl = baiguullaga?._id === "6698c657c26994f4e0f8de62" && barilgiinId === "67285bb9e212a8d0cb42495f" && ip === "192.168.8.108" ? `http://localhost:5001` :  `http://localhost:5000`;
-    console.log("localUrl --->", localUrl);
+    console.log("sulTooff --->", sulToo);
     if(ip === camerVal[0] && songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh && (sulToo === 0 || sulToo <= -1))
     {
       message.warn("Зогсоол дүүрсэн байна");
       return;
-    } else
-      axios
-        .get(localUrl + "/api/neeye/" + ip + "")
-        .then(function (response) {
-          if (!!response) console.log("/api/neeye", response);
-        })
-        .catch(function (error) {
-          console.log("ERROR: /api/neeye", error);
-        });
+    } 
+    else
+    {
+      if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
+        let data =
+          '<?xml version="1.0" encoding="UTF-8"?><BarrierGate><ctrlMode>open</ctrlMode></BarrierGate>';
+        let config = {
+          method: "put",
+          maxBodyLength: Infinity,
+          url: "http://" + ip + "/ISAPI/Parking/channels/1/barrierGate",
+          auth: {
+            username: "admin",
+            password: "Asdf1199",
+          },
+          headers: {
+            Accept: "*/*",
+            Connection: "keep-alive",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "Access-Control-Allow-Origin": "*",
+          },
+          data: data,
+        };
+        axios
+          .request(config)
+          .then((response) => {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else
+          zogsoolUilchilgee()
+          .get("/neeye/" + ip + "")
+          .then(function (response) {
+            if (!!response) console.log("/api/neeye", response);
+          })
+          .catch(function (error) {
+            console.log("ERROR: /api/neeye", error);
+          });
+    }
   };
 
   const keyPadHandler = (v) => {
@@ -1752,6 +1749,7 @@ function camera({ token }) {
   };
 
   const dugaarBurtgekh = () => {
+    console.log("dugaarBurtgekh -------------------...");
     const body = form.getFieldsValue();
     uilchilgee(token)
       .post("/zogsoolSdkService", body)

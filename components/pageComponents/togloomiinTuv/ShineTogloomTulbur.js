@@ -5,7 +5,7 @@ import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import moment from "moment";
 import QRCode from "react-qr-code";
-import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
+import uilchilgee, { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
 import { useEffect } from "react";
 import { t } from "i18next";
 import QpayModal from "../tulbur/ShineQpay";
@@ -89,8 +89,8 @@ function ShineTogloomTulbur(
   }
 
   const khaalgaNeey = (barCodes) => {
-    axios
-    .get("http://localhost:5000/api/userKhadgalakh/" + barCodes + "")
+    zogsoolUilchilgee()
+    .get("/userKhadgalakh/" + barCodes + "")
     .then(function (response) {
         if (!!response.message) console.log("/api/userKhadgalakh", response);
     })

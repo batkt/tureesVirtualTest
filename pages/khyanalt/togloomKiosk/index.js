@@ -8,7 +8,7 @@ import { BsBackspaceFill } from "react-icons/bs";
 import formatNumber from "tools/function/formatNumber";
 import axios from "axios";
 import moment from "moment";
-import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, socket, zogsoolUilchilgee } from "services/uilchilgee";
 import QRCode from "react-qr-code";
 import { useReactToPrint } from "react-to-print";
 import Barcode from 'react-barcode';
@@ -74,8 +74,8 @@ const TogloomKiosk = () => {
     }
 
     const khaalgaNeey = (barCodes) => {
-        axios
-        .get("http://localhost:5000/api/userKhadgalakh/" + barCodes + "")
+        zogsoolUilchilgee()
+        .get("/userKhadgalakh/" + barCodes + "")
         .then(function (response) {
             if (!!response.message) console.log("/api/userKhadgalakh", response);
         })

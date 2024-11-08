@@ -13,7 +13,7 @@ import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import moment from "moment";
 import QRCode from "react-qr-code";
-import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, socket, zogsoolUilchilgee } from "services/uilchilgee";
 import { useEffect } from "react";
 import { t } from "i18next";
 import { useQRCode } from "next-qrcode";
@@ -310,8 +310,8 @@ function ShineTulbur(
           onRefresh();
           suuliikhEsekh === true &&
             !songogdsonZogsool?.garakhKhaalgaGarTokhirgoo;
-          axios
-            .get("http://localhost:5000/api/neeye/" + camerVal + "")
+            zogsoolUilchilgee()
+            .get("/neeye/" + camerVal + "")
             .then(function (response) {
               if (!!response) console.log("/api/neeye", response);
             })

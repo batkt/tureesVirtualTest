@@ -9,6 +9,7 @@ import axios from "axios";
 import { Button } from "antd";
 import { CloseOutlined, DragOutlined } from "@ant-design/icons";
 import { SocketStream } from "./stream";
+import { zogsoolUilchilgee } from "services/uilchilgee";
 
 function cameraVals({ token }) {
     const { t, i18n } = useTranslation();
@@ -100,8 +101,8 @@ function cameraVals({ token }) {
                 console.log(error);
             });
         } else
-            axios
-            .get("http://localhost:5000/api/neeye/" + ip + "")
+            zogsoolUilchilgee()
+            .get("/neeye/" + ip + "")
             .then(function (response) {
                 if (!!response) console.log("/api/neeye", response);
             })
