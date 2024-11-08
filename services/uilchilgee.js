@@ -54,6 +54,18 @@ export const togloomUilchilgee = (token) => {
   });
 };
 
+export const zogsoolUilchilgee = (token) => {
+  const headers = {
+    "Content-type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+  };
+  if (!!token) headers["Authorization"] = `bearer ${token}`;
+  return axios.create({
+    baseURL: "http://localhost:5000/api",
+    headers,
+  });
+};
+
 const uilchilgee = (token) => {
   const headers = {
     "Content-type": "application/json",
