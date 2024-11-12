@@ -42,6 +42,7 @@ function GuilgeeKhiikh(
   const [suuriKhuraamj, setSuuriKhuraamj] = useState(null);
   const { t, i18n } = useTranslation();
   const [nuatBodokhEsekh, setNuatBodokhEsekh] = useState(true);
+  const [ekhniiUldegdelEsekh, setEkhniiUldegdelEsekh] = useState(false);
 
   const [busadTurul, setBusadTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
@@ -111,10 +112,7 @@ function GuilgeeKhiikh(
               turul: turul,
               tulsunDun: turul === "voucher" ? dun : 0,
               tulukhDun: turul === "avlaga" ? dun : 0,
-              ognoo:
-                turul === "avlaga"
-                  ? moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00")
-                  : new Date(),
+              ognoo: turul === "avlaga" ? (ekhniiUldegdelEsekh ? moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59") :  moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00")) : new Date(),
               gereeniiId: data?._id,
               tailbar,
               nekhemjlekhDeerKharagdakh:
@@ -598,6 +596,15 @@ function GuilgeeKhiikh(
           value={tailbar}
           onChange={(e) => setTailbar(e.target.value)}
         />
+      )}
+      {turul === "avlaga" && (
+        <div className="flex flex-row justify-between">
+          <div />
+          <div className="space-x-2">
+            <label>{t("Эхний үлдэгдэл эсэх")}:</label>
+            <Switch checked={ekhniiUldegdelEsekh} onChange={setEkhniiUldegdelEsekh} />
+          </div>
+        </div>
       )}
       {(turul === "avlaga" || turul === "ashiglalt") && (
         <div className="flex flex-row justify-between">

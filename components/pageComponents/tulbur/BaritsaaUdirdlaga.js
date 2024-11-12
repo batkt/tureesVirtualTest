@@ -204,8 +204,7 @@ function BaritsaaUdirdlaga(
           )}
         </div>
       </div>
-      {turul === "ashiglakh" && (
-        <DatePicker
+      <DatePicker
           locale={i18n.language === "mn" && locale}
           value={ognoo}
           onChange={(v) => {
@@ -213,7 +212,6 @@ function BaritsaaUdirdlaga(
             document.getElementById("dunInputNumber").focus();
           }}
         />
-      )}
       <InputNumber
         onKeyDown={focuser}
         autoFocus="true"
