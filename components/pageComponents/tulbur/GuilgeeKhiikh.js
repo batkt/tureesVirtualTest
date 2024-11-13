@@ -115,8 +115,8 @@ function GuilgeeKhiikh(
               ognoo: turul === "avlaga" ? (ekhniiUldegdelEsekh ? moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59") :  moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00")) : new Date(),
               gereeniiId: data?._id,
               tailbar,
-              nekhemjlekhDeerKharagdakh:
-                turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
+              nekhemjlekhDeerKharagdakh: turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
+              ekhniiUldegdelEsekh: turul === "avlaga" ? ekhniiUldegdelEsekh : false,
             };
             break;
           case "ashiglalt":
