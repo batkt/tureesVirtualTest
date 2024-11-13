@@ -77,7 +77,6 @@ function ShineTogloomTulbur(
 
   const handlePrint = useReactToPrint({
     content: () => eBarimtRef.current,
-    onAfterPrint: () => khaaya(),
   });
 
   function khaaya() {
@@ -177,6 +176,7 @@ function ShineTogloomTulbur(
     setLoading(true);
     if (!!eBarimt) {
       handlePrint();
+      khaaya();
     } else {
       if (baiguullagaEsekh === true && register?.toString().length !== 7) {
         message.warning(t("Байгууллагын регистр оруулна уу"));
@@ -210,6 +210,7 @@ function ShineTogloomTulbur(
   useEffect(() => {
     if (!!eBarimt) {
       handlePrint();
+      khaaya();
     }
   }, [eBarimt]);
 

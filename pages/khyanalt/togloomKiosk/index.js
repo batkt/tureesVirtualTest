@@ -50,7 +50,6 @@ const TogloomKiosk = () => {
     
     const handlePrint = useReactToPrint({
         content: () => eBarimtRef.current,
-        onAfterPrint: () => khaaya(),
       });
 
     function khaaya() {
@@ -327,7 +326,10 @@ const TogloomKiosk = () => {
 
     useEffect(() => {
         if(alkham === 6 && !!eBarimt)
+        {
             handlePrint();
+            khaaya();
+        }
     }, [eBarimt]);
 
     useEffect(() => {
@@ -796,9 +798,7 @@ const TogloomKiosk = () => {
                         <div className="flex justify-center mt-10">
                             <button
                                 className="flex h-[151px] w-[450px] items-center justify-center gap-4 rounded-45 bg-[#1DB771] px-4 py-2 text-5xl font-bold text-white focus:outline-none"
-                                onClick={() => {
-                                    handlePrint(); 
-                                }}>
+                                onClick={() => { handlePrint(); khaaya();  }}>
                                 <div className="pl-10 pr-10">{t("Хэвлэх")}</div>
                                 <div className="mt-2 font-[800]">
                                     <img src="/VectorContiune.png" />
