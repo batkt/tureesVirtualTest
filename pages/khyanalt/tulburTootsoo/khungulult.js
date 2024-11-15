@@ -257,7 +257,7 @@ function tulburTootsoo() {
             var khymdarsanDun = parseFloat(tootsoolol?.khunglugdsunDun);
           }
         } else {
-          ugugdul.tailbar = "Түрээс";
+          ugugdul.tailbar = "Хөнгөлөлт";
           var khymdraaguiDun = x.sariinTurees;
           if (khungulukh === "khuvi") {
             var khymdarsanDun =
@@ -873,7 +873,7 @@ function tulburTootsoo() {
                     <DatePicker.RangePicker
                       allowClear={false}
                       style={{ width: "100%" }}
-                      disabledDate={disabledDate}
+                      // disabledDate={disabledDate}
                       picker="month"
                       placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
                       onChange={(v) => {

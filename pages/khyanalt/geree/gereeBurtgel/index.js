@@ -931,6 +931,11 @@ function ZakhialgiinKhyanalt() {
   }
   //#region dialogs
   function gereeTsutsalya(data) {
+    if (ajiltan?.erkh !== "Admin" && !_.get(ajiltan, `tokhirgoo.gereeTsutslakhErkh`)?.find((a) => a === data.barilgiinId))
+    {
+      notification.warning({ message: t("Таньд гэрээ цуцлах эрх байхгүй байна."), });
+      return;
+    }
     setGereeniiTokhirgoo(null);
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
@@ -955,6 +960,11 @@ function ZakhialgiinKhyanalt() {
   }
 
   function gereeSergeeye(data) {
+    if (ajiltan?.erkh !== "Admin" && !_.get(ajiltan, `tokhirgoo.gereeSergeekhErkh`)?.find((a) => a === data.barilgiinId))
+    {
+      notification.warning({ message: t("Таньд гэрээ сэргээх эрх байхгүй байна."), });
+      return;
+    }
     setGereeniiTokhirgoo(null);
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
@@ -980,6 +990,11 @@ function ZakhialgiinKhyanalt() {
   }
 
   function gereeSungaya(data) {
+    if (ajiltan?.erkh !== "Admin" && !_.get(ajiltan, `tokhirgoo.gereeSungakhErkh`)?.find((a) => a === data.barilgiinId))
+    {
+      notification.warning({ message: t("Таньд гэрээ сунгах эрх байхгүй байна."), });
+      return;
+    }
     setGereeniiTokhirgoo(null);
     const footer = [
       <Button onClick={() => sungaltRef.current.khaaya()}>{t("Хаах")}</Button>,

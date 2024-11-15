@@ -451,6 +451,21 @@ function index({ token, data }) {
             value: "gereeZasakhErkh",
           },
           {
+            ner: "Гэрээ сунгах эсэх",
+            tailbar: "Тухайн барилгын хувьд бүх гэрээг сунгах эсэх",
+            value: "gereeSungakhErkh",
+          },
+          {
+            ner: "Гэрээ сэргээх эсэх",
+            tailbar: "Тухайн барилгын хувьд бүх гэрээг сэргээх эсэх",
+            value: "gereeSergeekhErkh",
+          },
+          {
+            ner: "Гэрээ цуцлах эсэх",
+            tailbar: "Тухайн барилгын хувьд бүх гэрээг цуцлах эсэх",
+            value: "gereeTsutslakhErkh",
+          },
+          {
             ner: "Хөнгөлөлт үзүүлэх эсэх",
             tailbar: "Тухайн барилгын хувьд бүх гэрээг хөнгөлөх эсэх",
             value: "khungulultUzuulekhEsekh",
