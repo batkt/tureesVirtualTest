@@ -164,8 +164,9 @@ function tulburTootsoo() {
   }, [songogdsonGereenuud]);
 
   function disabledDate(current) {
-    return current && current < moment().startOf("day");
+    return _.get(ajiltan, `tokhirgoo.umkhunSaraarKhungulultEsekh`)?.find((a) => a === barilgiinId) ? false : current && current < moment().startOf("day");
   }
+
   function handleChange(value) {
     if (value.length > 0) {
       setShuult({
@@ -873,7 +874,7 @@ function tulburTootsoo() {
                     <DatePicker.RangePicker
                       allowClear={false}
                       style={{ width: "100%" }}
-                      // disabledDate={disabledDate}
+                      disabledDate={disabledDate}
                       picker="month"
                       placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
                       onChange={(v) => {

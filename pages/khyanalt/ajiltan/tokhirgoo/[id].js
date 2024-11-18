@@ -439,71 +439,80 @@ function index({ token, data }) {
             {t("Цонхны эрхийн тохиргоо")}
           </h2>
         </div>
-        {[
-          {
-            ner: "Гэрээ харах эсэх",
-            tailbar: "Тухайн барилгын хувьд бүх гэрээг харах эсэх",
-            value: "gereeKharakhErkh",
-          },
-          {
-            ner: "Гэрээ засах эсэх",
-            tailbar: "Тухайн барилгын хувьд бүх гэрээг засах эсэх",
-            value: "gereeZasakhErkh",
-          },
-          {
-            ner: "Гэрээ сунгах эсэх",
-            tailbar: "Тухайн барилгын хувьд бүх гэрээг сунгах эсэх",
-            value: "gereeSungakhErkh",
-          },
-          {
-            ner: "Гэрээ сэргээх эсэх",
-            tailbar: "Тухайн барилгын хувьд бүх гэрээг сэргээх эсэх",
-            value: "gereeSergeekhErkh",
-          },
-          {
-            ner: "Гэрээ цуцлах эсэх",
-            tailbar: "Тухайн барилгын хувьд бүх гэрээг цуцлах эсэх",
-            value: "gereeTsutslakhErkh",
-          },
-          {
-            ner: "Хөнгөлөлт үзүүлэх эсэх",
-            tailbar: "Тухайн барилгын хувьд бүх гэрээг хөнгөлөх эсэх",
-            value: "khungulultUzuulekhEsekh",
-          },
-          {
-            ner: "Гүйлгээ устгах эсэх",
-            tailbar: "Тухайн барилгын хувьд бүх гэрээг гүйлгээ устгах эсэх",
-            value: "guilgeeUstgakhErkh",
-          },
-        ].map((mur) => (
-          <div className="box" key={mur.ner}>
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t(mur.ner)}</div>
-                <div className="text-gray-600 dark:text-gray-300">
-                  {t(mur.tailbar)}
+        <div
+          className="overflow-y-auto"
+          style={{ height: "calc( 100vh - 18rem )" }}
+        >
+          {[
+            {
+              ner: "Гэрээ харах эсэх",
+              tailbar: "Тухайн барилгын хувьд бүх гэрээг харах эсэх",
+              value: "gereeKharakhErkh",
+            },
+            {
+              ner: "Гэрээ засах эсэх",
+              tailbar: "Тухайн барилгын хувьд бүх гэрээг засах эсэх",
+              value: "gereeZasakhErkh",
+            },
+            {
+              ner: "Гэрээ сунгах эсэх",
+              tailbar: "Тухайн барилгын хувьд бүх гэрээг сунгах эсэх",
+              value: "gereeSungakhErkh",
+            },
+            {
+              ner: "Гэрээ сэргээх эсэх",
+              tailbar: "Тухайн барилгын хувьд бүх гэрээг сэргээх эсэх",
+              value: "gereeSergeekhErkh",
+            },
+            {
+              ner: "Гэрээ цуцлах эсэх",
+              tailbar: "Тухайн барилгын хувьд бүх гэрээг цуцлах эсэх",
+              value: "gereeTsutslakhErkh",
+            },
+            {
+              ner: "Өмнөх сараар хөнгөлөлт идэвхжүүлэх эсэх",
+              tailbar: "Өмнөх сараар хөнгөлөлт идэвхжүүлэх эсэх",
+              value: "umkhunSaraarKhungulultEsekh",
+            },
+            {
+              ner: "Хөнгөлөлт үзүүлэх эсэх",
+              tailbar: "Тухайн барилгын хувьд бүх гэрээг хөнгөлөх эсэх",
+              value: "khungulultUzuulekhEsekh",
+            },
+            {
+              ner: "Гүйлгээ устгах эсэх",
+              tailbar: "Тухайн барилгын хувьд бүх гэрээг гүйлгээ устгах эсэх",
+              value: "guilgeeUstgakhErkh",
+            },
+          ].map((mur) => (
+            <div className="box" key={mur.ner}>
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{t(mur.ner)}</div>
+                  <div className="text-gray-600 dark:text-gray-300">
+                    {t(mur.tailbar)}
+                  </div>
+                </div>
+                <div className="ml-auto">
+                  <Switch
+                    checked={
+                      !!_.get(tokhirgoo, `${mur?.value}`)?.find((a) =>
+                        barilgiinErkh.find((b) => a === b)
+                      )
+                    }
+                    onChange={(checked) => {
+                      setTokhirgoo((a) => {
+                        if (!checked) {
+                          _.set(a, `${mur?.value}`, undefined);
+                        } else _.set(a, `${mur?.value}`, barilgiinErkh);
+                        return { ...a };
+                      });
+                    }}
+                  />
                 </div>
               </div>
-              <div className="ml-auto">
-                <Switch
-                  checked={
-                    !!_.get(tokhirgoo, `${mur?.value}`)?.find((a) =>
-                      barilgiinErkh.find((b) => a === b)
-                    )
-                  }
-                  onChange={(checked) => {
-                    setTokhirgoo((a) => {
-                      if (!checked) {
-                        _.set(a, `${mur?.value}`, undefined);
-                      } else _.set(a, `${mur?.value}`, barilgiinErkh);
-                      return { ...a };
-                    });
-                  }}
-                />
-              </div>
             </div>
-          </div>
-        ))}
+          ))}
         {!!targetKeys.find((a) => a === "/khyanalt/zogsool/camera") && (
           <div className="box">
             <div className="flex items-center p-5">
@@ -565,7 +574,7 @@ function index({ token, data }) {
             </div>
           </div>
         )}
-
+        </div>
         <div className="bottom-5 right-3 col-span-12 ml-auto mr-2 flex w-full py-3 lg:absolute lg:w-36">
           <Button className="w-full" type="primary" onClick={khadgalya}>
             {t("Хадгалах")}

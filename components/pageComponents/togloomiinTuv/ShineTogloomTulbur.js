@@ -51,6 +51,7 @@ function ShineTogloomTulbur(
   const [tuluv, setTuluv] = React.useState(2);
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = React.useState();
   const [qpayModalTuluv, setQpayModalTuluv] = React.useState(false);
+  const [tin, setTin] = React.useState("");
   // const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
   //   data?.dutuuDun ? data?.dutuuDun : data?.niitDun
   // );
@@ -77,6 +78,14 @@ function ShineTogloomTulbur(
 
   const handlePrint = useReactToPrint({
     content: () => eBarimtRef.current,
+    onAfterPrint: () => {
+      setEBarimt(null);
+      setBaiguullagaEsekh(false);
+      setIrgenEsekh(true);
+      setRegister("");
+      setTin("");
+      setQpayModalTuluv(false);
+    },
   });
 
   function khaaya() {
@@ -156,7 +165,7 @@ function ShineTogloomTulbur(
       turulruuTooKhiikhFunction("belen");
     }
     batalgaajuulaltKhiiya();
-    ebarimtAvya(data?._id);
+    !loading && ebarimtAvya(data?._id);
   }
 
   const minToHour = (m) => {
@@ -191,6 +200,7 @@ function ShineTogloomTulbur(
         body.register = register;
         if (baiguullagaEsekh) body.turul = "3";
         else if (irgenEsekh) body.turul = "1";
+        if (baiguullagaEsekh) body.customerTin = tin;
       }
 
       uilchilgee(token)
@@ -1202,10 +1212,12 @@ function ShineTogloomTulbur(
         baiguullagiinMedeelel={baiguullagiinMedeelel}
         irgenEsekh={irgenEsekh}
         register={register}
+        tin={tin}
         setBaiguullaga={setBaiguullaga}
         setBaiguullagaEsekh={setBaiguullagaEsekh}
         setIrgenEsekh={setIrgenEsekh}
         setRegister={setRegister}
+        setTin={setTin}
       />
       {alkham === 2 && (
         <div className="mt-5 flex flex-row justify-between">
@@ -1215,7 +1227,7 @@ function ShineTogloomTulbur(
           <Button
             type="primary"
             loading={loading}
-            onClick={() => ebarimtAvya(data?._id)}
+            onClick={() => !loading && ebarimtAvya(data?._id)}
           >
             {t("Хэвлэх")}
           </Button>

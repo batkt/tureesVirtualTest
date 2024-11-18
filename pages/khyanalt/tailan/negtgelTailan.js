@@ -135,7 +135,8 @@ function negtgelTailan({ token }) {
                         render: (values) => {
                             var tempVal = values.filter((value) => moment(value.ognoo).format("YYYY-MM") === assessment.ognoo && 
                                                         (value.tailbar === assessment.tailbar || (assessment.tailbar === "Менежментийн зардал үнэ" && value.tailbar === "Менежментийн зардал")))
-                            var data = tempVal[0];  
+                            var filterVal = tempVal.filter((v) => v.tariff > 0 || v.tulukhDun > 0);
+                            var data = filterVal[0];
                             return assessment.tailbar === "Менежментийн зардал үнэ" ? (data?.tariff || 0) : (data?.tulukhDun || 0);
                         },
                     };
@@ -670,7 +671,7 @@ function negtgelTailan({ token }) {
                                         })}
                                         {avlaga?.sort((a, b) => a.ognoo - b.ognoo).map((murAvlaga, index) => {
                                             var tempAvlaga = mur.avlaga?.filter((v) => moment(v.ognoo).format("YYYY-MM") === murAvlaga.ognoo && (v.tailbar === murAvlaga.tailbar || (murAvlaga.tailbar === "Менежментийн зардал үнэ" && v.tailbar === "Менежментийн зардал")));
-                                            var value = tempAvlaga[0];
+                                            var value = tempAvlaga.filter((v) => v.tariff > 0 || v.tulukhDun > 0)[0];
                                             return (
                                                 <React.Fragment key={index}>
                                                     <th className="border border-gray-400 text-mashJijigiinJijig">
@@ -699,7 +700,7 @@ function negtgelTailan({ token }) {
                                     var niitTulukhDun = 0
                                     tailanGaralt?.map((mur, index) => {
                                         var tempAvlaga = mur?.avlaga?.filter((v) => moment(v.ognoo).format("YYYY-MM") === murAvlaga.ognoo && (v.tailbar === murAvlaga.tailbar || (murAvlaga.tailbar === "Менежментийн зардал үнэ" && v.tailbar === "Менежментийн зардал")));
-                                        var value = tempAvlaga[0];
+                                        var value = tempAvlaga.filter((v) => v.tulukhDun > 0)[0];
                                         niitTulukhDun += value?.tulukhDun || 0;
                                     })
                                     return (

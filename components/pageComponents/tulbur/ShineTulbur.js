@@ -165,9 +165,9 @@ function ShineTulbur(
     if (tulbur.length === 0) {
       turulruuTooKhiikhFunction("belen");
     }
-    alkham === 1 ? batalgaajuulaltKhiiya() : ebarimtAvya(uilchluugchiinId);
+    alkham === 1 ? batalgaajuulaltKhiiya() : (!loading && ebarimtAvya(uilchluugchiinId));
     if (alkham === 1 && eBarimtAshiglakhEsekh === true) {
-      eBarimtAutomataarShivikh ? ebarimtAvya(uilchluugchiinId) : setAlkham(2);
+      eBarimtAutomataarShivikh ? (!loading && ebarimtAvya(uilchluugchiinId)) : setAlkham(2);
     }
   }
   function f5darsan() {
@@ -1169,7 +1169,7 @@ function ShineTulbur(
           <Button
             type="primary"
             loading={loading}
-            onClick={() => ebarimtAvya(uilchluugchiinId)}
+            onClick={() => !loading && ebarimtAvya(uilchluugchiinId)}
           >
             {t("Хэвлэх")}
           </Button>
