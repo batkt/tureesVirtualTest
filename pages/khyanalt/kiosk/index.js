@@ -330,6 +330,7 @@ const Kiosk = () => {
           {
             params: {
               baiguullagiinId: baiguullaga?._id,
+              freeze: true,
             },
           }
         );

@@ -174,6 +174,7 @@ const KioskMobile = ({
           {
             params: {
               baiguullagiinId: baiguullagiinId,
+              freeze: true,
             },
           }
         );
