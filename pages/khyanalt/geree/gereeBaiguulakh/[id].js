@@ -242,7 +242,6 @@ function GereeBaiguulakh({ token, data }) {
         "turul",
         "utas",
         "zardluud",
-        "avlaga",
       ])
     )
       Modal.confirm({
