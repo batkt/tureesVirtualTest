@@ -187,7 +187,7 @@ function GereeBaiguulakh({ token, data }) {
     if (!!data?.zuvshuurliinZurag)
       data.zuvshuurliinZurag =
         _.get(data, "zuvshuurliinZurag.0.response.id") || null;
-        
+    console.log("----------------------->>>" + JSON.stringify(data));
     uilchilgee(token)
       .post("/gereeZasya", data)
       .then(({ data }) => {
