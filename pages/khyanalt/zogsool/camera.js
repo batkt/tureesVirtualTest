@@ -464,6 +464,13 @@ function camera({ token }) {
     setCameraData([a1, a2]);
   }, [jagsaalt]);
 
+  const {
+    uilchluulegchGaralt,
+    setUilchluulegchKhuudaslalt,
+    uilchluulegchMutate,
+    isValidating,
+  } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
+
   useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       let uilchluulegch = zogsool;
@@ -571,14 +578,7 @@ function camera({ token }) {
     return () => {
       socket().off(`zogsool${baiguullaga?._id}`);
     };
-  }, [baiguullaga]);
-
-  const {
-    uilchluulegchGaralt,
-    setUilchluulegchKhuudaslalt,
-    uilchluulegchMutate,
-    isValidating,
-  } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
+  }, [baiguullaga, uilchluulegchGaralt]);
 
   const tooQuery = useMemo(() => {
     const todayStart = moment().startOf("day").toDate();
