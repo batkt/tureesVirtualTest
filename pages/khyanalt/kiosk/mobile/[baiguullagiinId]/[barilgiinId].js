@@ -16,6 +16,7 @@ import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
 import DugaarKeyboardMobile from "components/pageComponents/kiosk/DugaarKeyboardMobile";
 import useQpayObject from "hooks/useQpayObject";
+import { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
 
 const KioskMobile = ({
   token,
@@ -38,6 +39,7 @@ const KioskMobile = ({
   const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
   const [khungulukhDun, setKhungulukhDun] = useState(khungulukh);
+  const [cameraIP, setCameraIP] = useState();
 
   const query = useMemo(() => {
     var query = {};
@@ -76,6 +78,18 @@ const KioskMobile = ({
 
   useEffect(() => {
     if (qpayObject && qpayObject.tulsunEsekh) {
+      if(!!cameraIP)
+      {
+        console.log("---------------->>>" + cameraIP);
+        zogsoolUilchilgee()
+          .get("/neeye/" + cameraIP + "")
+          .then(function (response) {
+            if (!!response) console.log("/api/neeye", response);
+          })
+          .catch(function (error) {
+            console.log("ERROR: /api/neeye", error);
+          });
+      }
       eBarimtTsonkhruuShiljye();
       if (khungulukhDun > 0)
         khungulultKhadgalya(
@@ -170,6 +184,7 @@ const KioskMobile = ({
     try {
       setUnshijBaina(true);
       if (data) {
+        setCameraIP(data?.tuukh[0]?.garsanKhaalga);
         const response = await uilchilgee().get(
           `/v1/search_car/${data?.mashiniiDugaar}`,
           {
