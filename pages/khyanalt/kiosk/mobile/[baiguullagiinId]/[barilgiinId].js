@@ -7,7 +7,7 @@ import {
 import { Drawer, Spin, message } from "antd";
 import useUilchluulegchWithQuery from "hooks/useUilchluulegchWithQuery";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
+import uilchilgee, { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
 import { ebarimtKhelberuud } from "tools/logic/tulburiinKhelberuud";
 import moment, { utc } from "moment";
 import Lottie from "lottie-react";
@@ -16,7 +16,6 @@ import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
 import DugaarKeyboardMobile from "components/pageComponents/kiosk/DugaarKeyboardMobile";
 import useQpayObject from "hooks/useQpayObject";
-import { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
 
 const KioskMobile = ({
   token,
