@@ -471,6 +471,14 @@ function camera({ token }) {
     isValidating,
   } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
 
+  useEffect(()=>{
+    socket().on(`qpayMobileSdk${baiguullaga?._id}`, (res) => {
+      khaalgaNeey(res.cameraIP);
+      onRefresh();
+    });
+    return () => { socket().off(`qpayMobileSdk${baiguullaga?._id}`); };
+  },[baiguullaga]);
+
   useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       let uilchluulegch = zogsool;

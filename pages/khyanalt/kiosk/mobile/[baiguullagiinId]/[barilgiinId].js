@@ -75,20 +75,27 @@ const KioskMobile = ({
     });
   };
 
+  const qpayMobileSdk = (data) => {
+    const yavuulakhData = {
+      baiguullagiinId: baiguullagiinId,
+      barilgiinId: barilgiinId,
+      mashiniiDugaar: data.plate_number,
+      cameraIP: data.garsanCameraIP,
+    };
+    uilchilgee(token)
+      .post("/qpayMobileSdk", yavuulakhData)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("qpayMobileSdk --------->>>");
+        }
+      })
+      .catch(aldaaBarigch);
+  };
+
   useEffect(() => {
     if (qpayObject && qpayObject.tulsunEsekh) {
-      if(!!cameraIP)
-      {
-        console.log("---------------->>>" + cameraIP);
-        zogsoolUilchilgee()
-          .get("/neeye/" + cameraIP + "")
-          .then(function (response) {
-            if (!!response) console.log("/api/neeye", response);
-          })
-          .catch(function (error) {
-            console.log("ERROR: /api/neeye", error);
-          });
-      }
+      if(!!songogdsonData?.garsanCameraIP && !!songogdsonData.plate_number)
+        qpayMobileSdk(songogdsonData);
       eBarimtTsonkhruuShiljye();
       if (khungulukhDun > 0)
         khungulultKhadgalya(
@@ -183,7 +190,6 @@ const KioskMobile = ({
     try {
       setUnshijBaina(true);
       if (data) {
-        setCameraIP(data?.tuukh[0]?.garsanKhaalga);
         const response = await uilchilgee().get(
           `/v1/search_car/${data?.mashiniiDugaar}`,
           {
