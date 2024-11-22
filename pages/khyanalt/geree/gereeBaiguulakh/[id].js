@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import useAktiinZagvar from "hooks/useAktiinZagvar";
 import dynamic from "next/dynamic";
 import formatNumber from "tools/function/formatNumber";
+import createMethod from "tools/function/crud/createMethod";
 
 const Konva = dynamic(() => import("components/konva"), { ssr: false });
 
@@ -187,9 +188,8 @@ function GereeBaiguulakh({ token, data }) {
     if (!!data?.zuvshuurliinZurag)
       data.zuvshuurliinZurag =
         _.get(data, "zuvshuurliinZurag.0.response.id") || null;
-
-    uilchilgee(token)
-      .post("/gereeZasya", data)
+    
+    createMethod("gereeZasya", token, data)  
       .then(({ data }) => {
         if (data === "Amjilttai") {
           setKhagalakhGeree({});
