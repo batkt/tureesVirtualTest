@@ -586,7 +586,7 @@ function camera({ token }) {
     return () => {
       socket().off(`zogsool${baiguullaga?._id}`);
     };
-  }, [baiguullaga, uilchluulegchGaralt]);
+  }, [baiguullaga]);
 
   const tooQuery = useMemo(() => {
     const todayStart = moment().startOf("day").toDate();
