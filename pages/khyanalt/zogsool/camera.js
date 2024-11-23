@@ -472,6 +472,19 @@ function camera({ token }) {
   } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
 
   useEffect(() => {
+    if(baiguullaga?._id === "6715ef2ca5cefb3e54505428") // jiguur grand
+    {
+      socket().on(`qpayMobileSdk${baiguullaga?._id}`, (res) => {
+        khaalgaNeey(res.cameraIP);
+        onRefresh();
+      });
+      return () => {
+        socket().off(`qpayMobileSdk${baiguullaga?._id}`);
+      }
+    }
+  }, [baiguullaga]);
+
+  useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       let uilchluulegch = zogsool;
 
@@ -575,14 +588,8 @@ function camera({ token }) {
       }
     });
 
-    socket().on(`qpayMobileSdk${baiguullaga?._id}`, (res) => {
-      khaalgaNeey(res.cameraIP);
-      onRefresh();
-    });
-
     return () => {
       socket().off(`zogsool${baiguullaga?._id}`);
-      socket().off(`qpayMobileSdk${baiguullaga?._id}`);
     };
   }, [baiguullaga]);
 

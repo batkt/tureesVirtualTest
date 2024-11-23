@@ -75,7 +75,7 @@ const KioskMobile = ({
     });
   };
 
-  const qpayMobileSdk = (data) => {
+  const zogsoolMobileSdk = (data) => {
     const yavuulakhData = {
       baiguullagiinId: baiguullagiinId,
       barilgiinId: barilgiinId,
@@ -83,10 +83,10 @@ const KioskMobile = ({
       cameraIP: data.garsanCameraIP,
     };
     uilchilgee(token)
-      .post("/qpayMobileSdk", yavuulakhData)
+      .post("/zogsoolMobileSdk", yavuulakhData)
       .then((res) => {
         if (res.status === 200) {
-          console.log("qpayMobileSdk --------->>>");
+          console.log("zogsoolMobileSdk --------->>>");
         }
       })
       .catch(aldaaBarigch);
@@ -94,8 +94,8 @@ const KioskMobile = ({
 
   useEffect(() => {
     if (qpayObject && qpayObject.tulsunEsekh) {
-      if(!!songogdsonData?.garsanCameraIP && !!songogdsonData.plate_number)
-        qpayMobileSdk(songogdsonData);
+      if(baiguullagiinId === "6715ef2ca5cefb3e54505428" && !!songogdsonData?.garsanCameraIP && !!songogdsonData.plate_number) // jiguur grand
+        zogsoolMobileSdk(songogdsonData);
       eBarimtTsonkhruuShiljye();
       if (khungulukhDun > 0)
         khungulultKhadgalya(
