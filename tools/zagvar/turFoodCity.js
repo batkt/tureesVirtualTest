@@ -4,7 +4,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
     <div style="text-align: right;">
       <b>Санхүү, эдийн засгийн сайдын, &nbsp;&nbsp;<br />
       2017 оны 12 сарын 05-өдөр 347 <br />
-        тоот тушаалын хавсралт&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+        тоот тушаалын хавсралт&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </b>
     </div>
     <div style="text-align: center;">
