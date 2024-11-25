@@ -189,7 +189,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 sensitivity: "base",
               });
             })
-            .filter(a => a.tailbar === "Менежмент төлбөр хуучин" || a.tailbar === "Менежмент төлбөр шинэ" || a.tailbar === "Дулааны төлбөр" || a.tailbar === "Дулаан")
+            .filter(a => a.tailbar === "Хөнгөлөлт" || a.tailbar === "Менежмент төлбөр хуучин" || a.tailbar === "Менежмент төлбөр шинэ" || a.tailbar === "Дулааны төлбөр" || a.tailbar === "Дулаан")
             .map((mur, index) => {
               return `
                 <tr key=${index}>
