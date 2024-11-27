@@ -746,7 +746,7 @@ const Kiosk = () => {
                     <div>{formatNumber(songogdsonData?.pay_amount, 0)}₮</div>
                   </div>
 
-                  {ajiltan._id === "66384a9061eeda747d01a320" && (
+                  {(ajiltan._id === "66384a9061eeda747d01a320" || ajiltan._id === "6746b7b1e3a4bd05bbac6880") && (
                     <>
                       <div className="w-full border border-[#1E1E1E]" />
                       <div className="flex w-full justify-between px-6 ">
