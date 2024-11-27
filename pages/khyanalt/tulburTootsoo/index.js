@@ -542,7 +542,7 @@ function tulburTootsoo({ token }) {
             },
           },
         ];
-    } else if (songogdsonDans?.bank === "khanbank") {
+    } else if (songogdsonDans?.bank === "khanbank" || songogdsonDans?.bank === "bogd") {
       baganuud = [
         {
           title: t("Огноо"),
@@ -569,9 +569,12 @@ function tulburTootsoo({ token }) {
           ellipsis: true,
           width: "4rem",
           render(a) {
-            if (_.isString(a))
-              return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
-            return "";
+            if(songogdsonDans?.bank === "bogd")
+              return a;
+            else
+              if (_.isString(a))
+                return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
+              return "";
           },
         },
         {

@@ -47,6 +47,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
           guilgeeniiMur.tulsunDans = guilgee.CtAcntOrg;
           break;
         case "khanbank":
+        case "bogd":
           guilgeeniiMur.ognoo = guilgee.tranDate;
           guilgeeniiMur.tulsunDans = guilgee.relatedAccount;
           break;

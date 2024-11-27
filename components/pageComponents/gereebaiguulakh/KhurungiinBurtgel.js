@@ -165,7 +165,7 @@ const YurunkhiiMedeele = ({
     } else
       value.talbainKhemjee = talbainuud.reduce((a, b) => b.talbainKhemjee, 0);
     value.talbainKhemjeeMetrKube = talbainuud.reduce(
-      (a, b) => b.talbainKhemjeeMetrKube,
+      (a, b) => a + b.talbainKhemjeeMetrKube,
       0
     );
     value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);

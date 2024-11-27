@@ -130,6 +130,9 @@ function DansBurtgel(
           <Select.Option key="golomt" value="golomt">
             {t("Голомт банк")}
           </Select.Option>
+          <Select.Option key="bogd" value="bogd">
+            {t("Богд банк")}
+          </Select.Option>
         </Select>
       </Form.Item>
       <Form.Item label={t("Дансны дугаар")} name="dugaar">
