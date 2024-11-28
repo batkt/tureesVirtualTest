@@ -214,7 +214,10 @@ function tulburTootsoo({ token }) {
             );
             medeelel.dans = dans?.dugaar;
             medeelel.bank =
-              dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+              dans?.bank === "khanbank" ? "Хаан банк" : 
+              dans?.bank === "golomt" ? "Голомт банк" :
+              dans?.bank === "bogd" ? "Богд банк" :
+              dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
             medeelel.dansniiNer = dans?.dansniiNer;
             medeelel.aldangiinUldegdel = formatNumber(
               medeelel.aldangiinUldegdel || 0

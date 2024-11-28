@@ -150,6 +150,14 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
             <td style="border: 1px solid #000; text-align: right; width: 16%;">&lt;khungulult&gt;</td>
             <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
           </tr>
+          <tr>
+            <td style="border: 1px solid #000; text-align: center;">2</td>
+            <td style="border: 1px solid #000; text-align: left;" colspan="4">Алданги</td>
+            <td style="border: 1px solid #000; text-align: right;"></td>
+            <td style="border: 1px solid #000; text-align: right;">&lt;aldangiinUldegdelNuat&gt;</td>
+            <td style="border: 1px solid #000; text-align: right; width: 16%;">&lt;aldangiinUldegdelNuatgui&gt;</td>
+            <td style="border: 1px solid #000; text-align: right;">&lt;aldangiinUldegdel&gt;</td>
+          </tr>
           `}
           ${medeelel.zardluud
             .sort((a, b) => {
@@ -162,7 +170,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               return `
                 <tr key=${index}>
                   <td style="border: 1px solid #000; text-align: center;">${
-                    index + 2
+                    index + 3
                   }</td>
                   <td style="border: 1px solid #000; text-align: left;" colspan="4">
                     ${mur.tailbar}
@@ -194,7 +202,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               return `
                 <tr key=${index}>
                   <td style="border: 1px solid #000; text-align: center;">${
-                    index + 2
+                    index + 3
                   }</td>
                   <td style="border: 1px solid #000; text-align: left;" colspan="4">
                     ${mur.tailbar}
@@ -345,6 +353,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                         <td style="border: 1px solid #000; text-align: right;">
                           
                         </td>
+                        <td style="border: 1px solid #000; text-align: right;">
+                          
+                        </td>
                       </tr>
                       <tr>
                         <td style="border: 1px solid #000; text-align: right;">
@@ -367,6 +378,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                         </td>
                         <td style="border: 1px solid #000; text-align: right; width: 16%;">
                           &lt;usxalaasniitulburDun&gt;
+                        </td>
+                        <td style="border: 1px solid #000; text-align: right;">
+                          
                         </td>
                         <td style="border: 1px solid #000; text-align: right;">
                           &lt;niilberDun&gt;
