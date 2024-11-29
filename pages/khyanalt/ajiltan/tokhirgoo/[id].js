@@ -480,6 +480,11 @@ function index({ token, data }) {
               value: "khungulultUzuulekhEsekh",
             },
             {
+              ner: "Гүйлгээ хийх эсэх",
+              tailbar: "Тухайн барилгын хувьд гүйлгээний түүх цонхонд дахь бүх гэрээний гүйлгээ хийх эсэх",
+              value: "guilgeeKhiikhEsekh",
+            },
+            {
               ner: "Гүйлгээ устгах эсэх",
               tailbar: "Тухайн барилгын хувьд бүх гэрээг гүйлгээ устгах эсэх",
               value: "guilgeeUstgakhErkh",

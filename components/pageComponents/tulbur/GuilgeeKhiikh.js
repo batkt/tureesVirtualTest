@@ -45,6 +45,7 @@ function GuilgeeKhiikh(
   const [ekhniiUldegdelEsekh, setEkhniiUldegdelEsekh] = useState(false);
 
   const [busadTurul, setBusadTurul] = useState();
+  const [zardliinTurul, setZardliinTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
     useState(false);
 
@@ -112,11 +113,12 @@ function GuilgeeKhiikh(
               turul: turul,
               tulsunDun: turul === "voucher" ? dun : 0,
               tulukhDun: turul === "avlaga" ? dun : 0,
-              ognoo: turul === "avlaga" ? (ekhniiUldegdelEsekh ? moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59") :  moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00")) : new Date(),
+              ognoo: turul === "avlaga" ? ognoo : new Date(),
               gereeniiId: data?._id,
               tailbar,
               nekhemjlekhDeerKharagdakh: turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
               ekhniiUldegdelEsekh: turul === "avlaga" ? ekhniiUldegdelEsekh : false,
+              zardliinTurul: turul === "avlaga" ? zardliinTurul : undefined,
             };
             break;
           case "ashiglalt":
@@ -310,15 +312,29 @@ function GuilgeeKhiikh(
       <Divider />
       <label>{t(labelTurul(turul))}</label>
       {turul === "avlaga" && (
-        <DatePicker.MonthPicker
-          id="dataPicker1"
-          locale={i18n.language === "mn" && locale}
-          value={ognoo}
-          onChange={(v) => {
-            setOgnoo(v);
-            // document.getElementById("guilgeeDunInputNumber").focus();
-          }}
-        />
+        <div className="flex w-full items-center justify-between gap-2">
+          <DatePicker
+            className="w-full"
+            id="dataPicker1"
+            locale={i18n.language === "mn" && locale}
+            value={ognoo}
+            onChange={(v) => {
+              setOgnoo(v);
+              // document.getElementById("guilgeeDunInputNumber").focus();
+            }}
+          />    
+          <Select
+            className="w-full"
+            id="selectType"
+            placeholder={t("Зардал хийх төрөл")}
+            onChange={(v) => {
+            setZardliinTurul(v);
+            }}
+          >
+            <Option value="management">{t("Менежмент")}</Option>
+            <Option value="dulaan">{t("Дулаан")}</Option>
+          </Select>
+        </div>
       )}
       {turul === "ashiglalt" && (
         <DatePicker

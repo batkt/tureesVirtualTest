@@ -15,6 +15,7 @@ import {
   Select,
   Popover,
   Space,
+  notification,
 } from "antd";
 import {
   FileExcelOutlined,
@@ -54,15 +55,15 @@ import NekhemjlekhiinTuukhTsonkh from "components/pageComponents/tulbur/Nekhemjl
 
 //#endregion
 
-function GereeniiUldegdel({ ugugdul, token }) {
+function GereeniiUldegdel({ ugugdul, token, ognoo, }) {
   const { barilgiinId } = useAuth();
   const { data, mutate, isValidating } = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
-      ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar]
+      ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar, ognoo]
       : null,
-    (url, barilgiinId, gereeniiDugaar) =>
+    (url, barilgiinId, gereeniiDugaar, ognoo) =>
       uilchilgee(token)
-        .post(url, { barilgiinId, gereeniiDugaar })
+        .post(url, { barilgiinId, gereeniiDugaar, ognoo })
         .then(({ data }) => data),
     {
       revalidateOnFocus: false,
@@ -424,6 +425,7 @@ function guilgeeniiTuukh({ token }) {
               show={index === loadingIndex}
               setLoadingIndex={setLoadingIndex}
               urt={gereeniiMedeelel?.jagsaalt?.length}
+              ognoo={ognoo}
             />
           );
         },
@@ -736,6 +738,11 @@ function guilgeeniiTuukh({ token }) {
   }
 
   function guilgeeKhiiya(data) {
+    if (ajiltan?.erkh !== "Admin" && !_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.find((a) => a === data.barilgiinId))
+    {
+      notification.warning({ message: t("Таньд гүйлгээ хийх эрх байхгүй байна."), });
+      return;
+    }
     function refresh() {
       setTimeout(() => data.mutate && data.mutate(), 500);
       refreshData();

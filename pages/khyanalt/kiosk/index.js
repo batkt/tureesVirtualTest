@@ -209,7 +209,7 @@ const Kiosk = () => {
 
   useEffect(() => {
     if (
-      ajiltan?._id === "66384a9061eeda747d01a320" &&
+      (ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880") &&
       songogdsonData?.enter_date &&
       !songogdsonData?.fitnessHungulult
     ) {
@@ -224,8 +224,8 @@ const Kiosk = () => {
         setSongogdsonData((prev) => {
           return {
             ...prev,
-            fitnessHungulult: 3000,
-            pay_amount: prev?.pay_amount - 3000,
+            fitnessHungulult: ajiltan?._id === "6746b7b1e3a4bd05bbac6880" ? 4000 : 3000,
+            pay_amount: prev?.pay_amount - (ajiltan?._id === "6746b7b1e3a4bd05bbac6880" ? 4000 : 3000),
           };
         });
       }
