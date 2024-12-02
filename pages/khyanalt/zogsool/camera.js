@@ -1620,8 +1620,8 @@ function camera({ token }) {
                 if (data === "Amjilttai") {
                   message.success(t("Амжилттай хадгаллаа"));
                   if (
-                    value !== "Маргалдсан" ||
-                    value !== "Журам зөрчсөн" ||
+                    value !== "Маргалдсан" &&
+                    value !== "Журам зөрчсөн" &&
                     value !== "Зугтаасан"
                   ) {
                     khaalgaNeey(body?.tuukh?.[0]?.garsanKhaalga);
