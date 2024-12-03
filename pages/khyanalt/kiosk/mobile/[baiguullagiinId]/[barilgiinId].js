@@ -4,7 +4,7 @@ import {
   LoadingOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Drawer, Spin, message } from "antd";
+import { Button, Drawer, Spin, message } from "antd";
 import useUilchluulegchWithQuery from "hooks/useUilchluulegchWithQuery";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import uilchilgee, { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
@@ -16,6 +16,9 @@ import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
 import DugaarKeyboardMobile from "components/pageComponents/kiosk/DugaarKeyboardMobile";
 import useQpayObject from "hooks/useQpayObject";
+import ZuvhunKhunglukhModalContent from "../../ZuvhunKhunglukhModalContent";
+import { MdOutlineDiscount } from "react-icons/md";
+import { modal } from "components/ant/Modal";
 
 const KioskMobile = ({
   token,
@@ -39,6 +42,8 @@ const KioskMobile = ({
   const [eBarimt, setEbarimt] = useState();
   const [khungulukhDun, setKhungulukhDun] = useState(khungulukh);
   const [cameraIP, setCameraIP] = useState();
+  const khungulultRef = React.useRef(null);
+  const [servereesAvsonOdooTsag, setServereesAvsonOdooTsag] = useState();
 
   const query = useMemo(() => {
     var query = {};
@@ -64,6 +69,20 @@ const KioskMobile = ({
 
   const { qpayObject } = useQpayObject(token, qpayerTulukh?.id);
 
+  useEffect(() => {
+    if (token)
+      uilchilgee(token)
+        .get("/ognooAvya")
+        .then(({ data }) => {
+          if (!!data) {
+            setServereesAvsonOdooTsag(data);
+          }
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+        });
+  }, [token]);
+
   const msgNotif = (content) => {
     messageApi.open({
       content: content,
@@ -74,6 +93,31 @@ const KioskMobile = ({
       duration: 2,
     });
   };
+
+  function showKhunglult() {
+    const footer = [
+      <Button onClick={() => khungulultRef.current.khaaya()}>Үгүй</Button>,
+      <Button
+        className="space-x-2"
+        type="primary"
+        onClick={() => khungulultRef.current.ilgeeye()}
+      >
+        Тийм
+      </Button>,
+    ];
+    modal({
+      title: "Хөнгөлөлт",
+      content: (
+        <ZuvhunKhunglukhModalContent
+          songogdsonData={songogdsonData}
+          barilgiinId={barilgiinId}
+          token={token}
+          ref={khungulultRef}
+        />
+      ),
+      footer,
+    });
+  }
 
   const zogsoolMobileSdk = (data) => {
     const yavuulakhData = {
@@ -118,6 +162,31 @@ const KioskMobile = ({
       setBaiguullagaNer();
     }
   }, [register]);
+
+  useEffect(() => {
+    if (
+      (baiguullagiinId === "673d88133987e97992f77c02") &&
+      songogdsonData?.enter_date &&
+      !songogdsonData?.fitnessHungulult
+    ) {
+      // const odooTsag = moment(servereesAvsonOdooTsag);
+
+      // const guravTsagiinDaraa = moment(songogdsonData.enter_date).add(
+      //   3,
+      //   "hours"
+      // );
+      // const guravTsagiinDataaGarsanEsekh = odooTsag.isAfter(guravTsagiinDaraa);
+      // if (guravTsagiinDataaGarsanEsekh) {
+        setSongogdsonData((prev) => {
+          return {
+            ...prev,
+            fitnessHungulult: 3000,
+            pay_amount: prev?.pay_amount < 3000 ? 0 : (prev?.pay_amount - 3000),
+          };
+        });
+      // }
+    }
+  }, [songogdsonData?.enter_date, servereesAvsonOdooTsag, baiguullagiinId]);
 
   function onTimeout() {
     setDrawerOngoikh(false);
@@ -460,6 +529,23 @@ const KioskMobile = ({
                     <div>Хөнгөлөлт</div>
                     <div>{formatNumber(khungulukhDun, 0)}₮</div>
                   </div>
+                )}
+                {(baiguullagiinId === "673d88133987e97992f77c02") && (
+                  <>
+                    <div className="w-full border border-[#1E1E1E]" />
+                    <div className="flex w-full justify-between px-6 ">
+                      <div className="text-red-400">Хөнгөлөлт</div>
+                      <div className="flex gap-4">
+                        <Button
+                          onClick={() => showKhunglult()}
+                          className="cursor-pointer"
+                        >
+                          <MdOutlineDiscount className="text-green-400" />
+                        </Button>
+                        {formatNumber(songogdsonData?.fitnessHungulult, 0)}₮
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             )}

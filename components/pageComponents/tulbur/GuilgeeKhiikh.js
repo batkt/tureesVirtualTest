@@ -109,17 +109,35 @@ function GuilgeeKhiikh(
             break;
           case "voucher":
           case "avlaga":
-            guilgee = {
-              turul: turul,
-              tulsunDun: turul === "voucher" ? dun : 0,
-              tulukhDun: turul === "avlaga" ? dun : 0,
-              ognoo: turul === "avlaga" ? ognoo : new Date(),
-              gereeniiId: data?._id,
-              tailbar,
-              nekhemjlekhDeerKharagdakh: turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
-              ekhniiUldegdelEsekh: turul === "avlaga" ? ekhniiUldegdelEsekh : false,
-              zardliinTurul: turul === "avlaga" ? zardliinTurul : undefined,
-            };
+            if(zardliinTurul === "turees")
+            {
+              guilgee = {
+                turul: 'khuvaari',
+                undsenDun: dun,
+                tulukhDun: dun,
+                ognoo: ognoo,
+                khyamdral: 0,
+                gereeniiId: data?._id,
+                tailbar,
+                nekhemjlekhDeerKharagdakh: turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
+                ekhniiUldegdelEsekh: turul === "avlaga" ? ekhniiUldegdelEsekh : false,
+                zardliinTurul: turul === "avlaga" ? zardliinTurul : undefined,
+              };
+            }
+            else
+            {
+              guilgee = {
+                turul: turul,
+                tulsunDun: turul === "voucher" ? dun : 0,
+                tulukhDun: turul === "avlaga" ? dun : 0,
+                ognoo: turul === "avlaga" ? ognoo : new Date(),
+                gereeniiId: data?._id,
+                tailbar,
+                nekhemjlekhDeerKharagdakh: turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
+                ekhniiUldegdelEsekh: turul === "avlaga" ? ekhniiUldegdelEsekh : false,
+                zardliinTurul: turul === "avlaga" ? zardliinTurul : undefined,
+              };
+            }
             break;
           case "ashiglalt":
             {
@@ -331,6 +349,7 @@ function GuilgeeKhiikh(
             setZardliinTurul(v);
             }}
           >
+            <Option value="turees">{t("Түрээсийн төлбөр")}</Option>
             <Option value="management">{t("Менежмент")}</Option>
             <Option value="dulaan">{t("Дулаан")}</Option>
           </Select>
