@@ -569,6 +569,11 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
+      <div data-aos="fade-right" data-aos-delay="800">
+        <Form.Item label={t("Нэршил")} name={"khariltsagchiinNershil"}>
+          <Input placeholder={t("Дэлгүүр, брэнд нэр")} />
+        </Form.Item>
+      </div>
       <div data-aos="fade-right" data-aos-delay="900">
         <Form.List name="segmentuud" className=" ">
           {(fields, { add, remove }) => (

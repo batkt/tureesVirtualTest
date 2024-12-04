@@ -27,6 +27,7 @@ const undsenTalbaruud = [
   { ner: "Захиралын нэр", talbar: "zakhirliinNer" },
   { ner: "Утас", talbar: "utas" },
   { ner: "Хаяг", talbar: "khayag" },
+  { ner: "Нэршил", talbar: "khariltsagchiinNershil" },
   { ner: "Гэрээний дугаар", talbar: "gereeniiDugaar" },
 ];
 
@@ -51,6 +52,8 @@ const talbainiiTalbaruud = [
   { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
   { ner: "Зардлын дүн", talbar: "zardliinDun" },
   { ner: "Зориулалт", talbar: "zoriulalt" },
+  { ner: "Тусгай зориулалт", talbar: "tusgaiZoriulalt" },
+  { ner: "Талбайн нэмэлт нөхцөл", talbar: "talbaiNemeltNukhtsul" },
 ];
 
 const baritsaaniiTalbaruud = [
@@ -166,6 +169,11 @@ function NekhemjlekhZasvar({
         songokhTalbaruud.push({
           ner: `${a.ner}.Тариф`,
           talbar: `${a.ner}.tariff`,
+        });
+
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Тариф үсгээр`,
+          talbar: `${a.ner}.tariffUsgeer`,
         });
 
         songokhTalbaruud.push({

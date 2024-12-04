@@ -515,9 +515,11 @@ function camera({ token }) {
               .catch((err) => {
                 console.log("aldaa:", err);
               });
-
-          khaalgaNeey(uilchluulegch?.cameraIP);
-          onRefresh();
+          if(yanzalsanMashiniiDugaar !== "Зогсоол дүүрсэн")    
+          {
+            khaalgaNeey(uilchluulegch?.cameraIP);
+            onRefresh();
+          }
         } else {
           const garsanKhaalga = uilchluulegch?.tuukh?.[0]?.garsanKhaalga;
           // var yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
@@ -2052,6 +2054,29 @@ function camera({ token }) {
                       USER={"admin"}
                       ROOT={"live"}
                       PASSWD={"Admin123"}
+                      Camer={camerVal[0]}
+                      PORT={554}
+                    />
+                  ) : (
+                    <R2WPlayerComponent
+                      USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                      Camer={camerVal[0]}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                    />
+                  )
+                ) : baiguullaga?._id === "671f0d5d53b82cbedf0f81a3" && barilgiinId === "671f0d5d53b82cbedf0f81a4" ? (
+                  camerVal[0] === "192.168.51.155" ||
+                  camerVal[0] === "192.168.51.156" ||
+                  camerVal[0] === "192.168.51.157" ||
+                  camerVal[0] === "192.168.51.158" ||
+                  camerVal[0] === "192.168.51.159" ||
+                  camerVal[0] === "192.168.51.160"  ? (
+                    <R2WPlayerComponent
+                      USER={"admin"}
+                      ROOT={"live"}
+                      PASSWD={"admin123"}
                       Camer={camerVal[0]}
                       PORT={554}
                     />

@@ -4,6 +4,7 @@ import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 import compareFields from "tools/function/compareFields";
 import { useTranslation } from "react-i18next";
+import numberToWords from "tools/function/numberToWords";
 
 function ZardalBurtgel(
   { data, destroy, baiguullagiinId, barilgiinId, token,togtmolEsekh, refresh },
@@ -93,6 +94,14 @@ function ZardalBurtgel(
     setHideTariff(valueNer === "Халуун ус" || valueNer === "Хүйтэн ус");
   },[])
 
+  function onChangeTariff(e) {
+    form.setFieldValue("tariffUsgeer", numberToWords(e,
+      { fixed: 2, suffix: "n" },
+      "төгрөг",
+      "мөнгө"
+    ));
+  }
+
   return (
     <Form
       form={form}
@@ -174,12 +183,19 @@ function ZardalBurtgel(
       </Form.Item>
      <Form.Item label={t("Тариф")} name="tariff" hidden={hideTariff}>
         <InputNumber
+          onChange={(e) => onChangeTariff(e)}
           min={0}
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />
+      </Form.Item>
+      <Form.Item label={t("Тариф үсгээр")} name="tariffUsgeer" hidden={hideTariff}>
+        <Input
+          disabled={true}
+          style={{ width: "100%" }}
         />
       </Form.Item>
       <Form.Item label={t("Суурь хураамж")} name="suuriKhuraamj" hidden={hideTariff}>

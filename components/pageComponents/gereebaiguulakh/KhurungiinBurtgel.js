@@ -422,6 +422,12 @@ const YurunkhiiMedeele = ({
       <Form.Item label={t("Зориулалт")} name={"zoriulalt"}>
         <Input placeholder={t("Ашиглах зориулалт")} />
       </Form.Item>
+      <Form.Item label={t("Тусгай зориулалт")} name={"tusgaiZoriulalt"}>
+        <Input placeholder={t("Ашиглах тусгай зориулалт")} />
+      </Form.Item>
+      <Form.Item label={t("Талбайн нэмэлт нөхцөл")} name={"talbaiNemeltNukhtsul"}>
+        <Input placeholder={t("Талбайн нэмэлт нөхцөл")} />
+      </Form.Item>
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
           className="flex w-full flex-col justify-between gap-4 md:flex-row"

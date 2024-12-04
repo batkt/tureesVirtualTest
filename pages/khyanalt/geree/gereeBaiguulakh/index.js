@@ -347,6 +347,16 @@ function GereeBaiguulakh({ token }) {
               b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"), formatNumber(mur.tulukhDun));
             });
         });
+        
+        value.map((mur) => {
+          butsaakhUtga?.dedKhesguud
+            ?.filter(
+              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariffUsgeer`) !== -1
+            )
+            .map((b) => {
+              b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tariffUsgeer&gt;`, "g"), mur.tariffUsgeer);
+            });
+        });
       } else {
         butsaakhUtga.dedKhesguud?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
           .map((b) => {
