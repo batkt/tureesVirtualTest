@@ -295,13 +295,47 @@ function MashinBurtgel(
           }}
           placeholder={t("Төрөл")}
         >
-          {["Гэрээт", "Түрээслэгч", "Дотоод", "Дурын"].map((a) => (
+          {["Гэрээт", "Түрээслэгч", "Дотоод", "Дурын", "СӨХ"].map((a) => (
             <Select.Option key={a} value={a}>
               {t(a)}
             </Select.Option>
           ))}
         </Select>
       </Form.Item>
+      {turulShalgah === "СӨХ" && (
+        <React.Fragment>
+          <Form.Item
+            label={t("Төлөв")}
+            name="tuluv"
+            requiredMark={"optional"}
+            rules={[
+              {
+                required: true,
+                message: t("Төлөв сонгоно уу!"),
+              },
+            ]}
+          >
+            <Select
+              onChange={(e) => {
+                form.setFieldValue("nemeltTuluv", undefined);
+                form.setFieldValue("khungulultTurul", undefined);
+                form.setFieldValue("khungulult", undefined);
+                form.setFieldValue("tsagiinTurul", undefined);
+                form.setFieldValue("khungulukhKhugatsaa", undefined);
+                setNemeltTurulShalgah(e);
+                setKhungulultiinTurul(undefined);
+              }}
+              placeholder={t("Төлөв сонгох")}
+            >
+              {["Дотор", "Гадна"].map((a) => (
+                <Select.Option key={a} value={a}>
+                  {t(a)}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </React.Fragment>
+      )}
       {turulShalgah === "Түрээслэгч" && (
         <React.Fragment>
           <Form.Item
