@@ -135,12 +135,11 @@ function negtgelTailan({ token }) {
                         render: (values) => {
                             var tempVal = values.filter((value) => moment(value.ognoo).format("YYYY-MM") === assessment.ognoo && 
                                                         (value.tailbar === assessment.tailbar || (assessment.tailbar === "Менежмент нэгж" && value.tailbar === "Менежментийн зардал")))
-                            var filterVal = tempVal.filter((v) => v.tariff > 0 || v.tulukhDun > 0);
                             var sumTulukhDun = tempVal.filter((v) => v.tulukhDun > 0).reduce((a, b) => a + b.tulukhDun, 0);
-                            return assessment.tailbar === "Менежмент нэгж" ? (filterVal[0]?.tariff || 0) : (sumTulukhDun || 0);
+                            return assessment.tailbar === "Менежмент нэгж" ? (sumTulukhDun/(tempVal[0]?.talbainKhemjee || 1) || 0) : (sumTulukhDun || 0);
                         },
                     };
-                    })
+                })
             }
             excelCol.push(col);
         });    
@@ -281,8 +280,9 @@ function negtgelTailan({ token }) {
                             })
                             if(assessment.tailbar === "Менежмент нэгж")
                             {
-                                var valFilter = values?.filter((e) => e.tailbar === "Менежментийн зардал" && moment(e.ognoo).format("YYYY-MM") === a && e.tariff > 0)
-                                return (<div className="flex justify-center truncate">{valFilter?.length > 0 ? formatNumber(valFilter[0].tariff) : ""}</div>);
+                                var valFilter = values?.filter((e) => e.tailbar === "Менежментийн зардал" && moment(e.ognoo).format("YYYY-MM") === a && e.tulukhDun > 0);
+                                var dun = valFilter?.reduce((a, b) => a + b.tulukhDun, 0);
+                                return (<div className="flex justify-center truncate">{valFilter?.length > 0 ? formatNumber((dun/(valFilter[0]?.talbainKhemjee || 1) || 0)) : ""}</div>);
                             }
                             else
                             {
@@ -686,12 +686,11 @@ function negtgelTailan({ token }) {
                                         })}
                                         {avlaga?.map((murAvlaga, index) => {
                                             var tempAvlaga = mur.avlaga?.filter((v) => moment(v.ognoo).format("YYYY-MM") === murAvlaga.ognoo && (v.tailbar === murAvlaga.tailbar || (murAvlaga.tailbar === "Менежмент нэгж" && v.tailbar === "Менежментийн зардал")));
-                                            var value = tempAvlaga.filter((v) => v.tariff > 0 || v.tulukhDun > 0)[0];
                                             var sumTulukhDun = tempAvlaga.filter((v) => v.tulukhDun > 0).reduce((a, b) => a + b.tulukhDun, 0);
                                             return (
                                                 <React.Fragment key={index}>
                                                     <th className="border border-gray-400 text-mashJijigiinJijig">
-                                                        {murAvlaga.tailbar === "Менежмент нэгж" ? (<div className="flex justify-center truncate">{value?.tariff > 0 ? formatNumber(value?.tariff) : ""}</div>)
+                                                        {murAvlaga.tailbar === "Менежмент нэгж" ? (<div className="flex justify-center truncate">{tempAvlaga?.length > 0 ? formatNumber(sumTulukhDun/(tempAvlaga[0]?.talbainKhemjee || 1) || 0) : ""}</div>)
                                                             : (<div className="flex justify-end truncate">{sumTulukhDun > 0 ? formatNumber(sumTulukhDun) : ""}</div>)}
                                                     </th> 
                                                 </React.Fragment>
