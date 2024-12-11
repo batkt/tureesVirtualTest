@@ -211,6 +211,8 @@ function GuilgeeKhiikh(
       turul,
       tailbar,
       nekhemjlekhDeerKharagdakh,
+      ekhniiUldegdelEsekh,
+      zardliinTurul,
       busadTurul,
       negjUne,
       ognoo,
@@ -365,6 +367,9 @@ function GuilgeeKhiikh(
             <Option value="turees">{t("Түрээсийн төлбөр")}</Option>
             <Option value="management">{t("Менежмент")}</Option>
             <Option value="dulaan">{t("Дулаан")}</Option>
+            <Option value="tsakhilgaan">{t("Цахилгаан")}</Option>
+            <Option value="khulaanUs">{t("Халуун ус")}</Option>
+            <Option value="khuitenUs">{t("Хүйтэн ус")}</Option>
           </Select>
         </div>
       )}

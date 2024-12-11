@@ -460,7 +460,8 @@ function GuilgeeniiTuukh(
                       a.turul === "zalruulga" ||
                       a.turul === "baritsaa" ||
                       a.turul === "qpay" ||
-                      a.turul === "tulultBurtgekh") && (
+                      a.turul === "tulultBurtgekh" || 
+                      (a.turul === "khuvaari" && a.zardliinTurul === "turees")) && (
                       <Popconfirm
                         title={t("Төлөлт устгах уу?")}
                         okText={t("Тийм")}

@@ -129,15 +129,15 @@ function negtgelTailan({ token }) {
                     return {
                         title: assessment.tailbar,
                         dataIndex: "avlaga",
-                        __style__: { h: "right" },
+                        __style__: { h: "right", fontName: "arial" },
                         __numFmt__: "#,##0.00",
                         __cellType__: "TypeNumeric",
                         render: (values) => {
                             var tempVal = values.filter((value) => moment(value.ognoo).format("YYYY-MM") === assessment.ognoo && 
-                                                        (value.tailbar === assessment.tailbar || (assessment.tailbar === "Менежментийн зардал үнэ" && value.tailbar === "Менежментийн зардал")))
+                                                        (value.tailbar === assessment.tailbar || (assessment.tailbar === "Менежмент нэгж" && value.tailbar === "Менежментийн зардал")))
                             var filterVal = tempVal.filter((v) => v.tariff > 0 || v.tulukhDun > 0);
-                            var data = filterVal[0];
-                            return assessment.tailbar === "Менежментийн зардал үнэ" ? (data?.tariff || 0) : (data?.tulukhDun || 0);
+                            var sumTulukhDun = tempVal.filter((v) => v.tulukhDun > 0).reduce((a, b) => a + b.tulukhDun, 0);
+                            return assessment.tailbar === "Менежмент нэгж" ? (filterVal[0]?.tariff || 0) : (sumTulukhDun || 0);
                         },
                     };
                     })
@@ -235,15 +235,18 @@ function negtgelTailan({ token }) {
             if(avlaga.filter((c) => c.tailbar === b.tailbar && c.ognoo === tempOgnoo)?.length === 0)
             {
                 if(b.tailbar === "Менежментийн зардал")
-                    avlaga.push({tailbar: b.tailbar + " үнэ", ognoo: tempOgnoo});    
-                avlaga.push({tailbar: b.tailbar, ognoo: tempOgnoo});
+                    avlaga.push({tailbar: "Менежмент нэгж", ognoo: tempOgnoo, index: Number(tempOgnoo?.split("-")[1])});    
+                avlaga.push({tailbar: b.tailbar, ognoo: tempOgnoo, index: Number(tempOgnoo?.split("-")[1])});
             }
           });  
         })
+        avlaga.sort((a, b) => a.index - b.index);
         setJagsaaltOgnoo(jagsaaltOgnoo);
         setAvlaga(avlaga);
         var temp = [];
         var niitDunJagsaalt = [];
+        var indexVal = 0;
+        jagsaaltOgnoo.sort();
         jagsaaltOgnoo.forEach((a) => {
             var col = {
                 title: a,
@@ -252,6 +255,7 @@ function negtgelTailan({ token }) {
                 align: "center",
                 ellipsis: true,
                 children: avlaga.filter((v) => v.ognoo === a).map((assessment, colIndex) => {
+                    indexVal += colIndex;
                     return {
                         title: assessment.tailbar,
                         className: "text-mashJijig",
@@ -259,29 +263,40 @@ function negtgelTailan({ token }) {
                         align: "center",
                         width: "12rem",
                         summary: true,
-                        render: (values) =>
-                        values.map((value, index) => {
-                            var tempOgnoo = moment(value.ognoo).format("YYYY-MM") 
-                            if(value.tailbar === assessment.tailbar && tempOgnoo === a || assessment.tailbar === "Менежментийн зардал үнэ")
-                            {
-                                var tempDun = assessment.tailbar === "Менежментийн зардал үнэ" ? 0 : (value.tulukhDun || 0);
-                                var filterDun = niitDunJagsaalt.filter((t) => t.key === (a + ";" + assessment.tailbar));
-                                if(filterDun?.length === 0)
-                                    niitDunJagsaalt.push({key: (a + ";" + assessment.tailbar), dun: tempDun, columnIndex: colIndex});
-                                else
+                        render: (values) => {
+                            values.map((value, index) => {
+                                var tempOgnoo = moment(value.ognoo).format("YYYY-MM") 
+                                if(value.tailbar === assessment.tailbar && tempOgnoo === a || assessment.tailbar === "Менежмент нэгж")
                                 {
-                                    niitDunJagsaalt.splice(niitDunJagsaalt.indexOf(filterDun[0]), 1);
-                                    niitDunJagsaalt.push({key: (a + ";" + assessment.tailbar), dun: filterDun[0].dun + tempDun, columnIndex: filterDun[0].columnIndex})
+                                    var tempDun = assessment.tailbar === "Менежмент нэгж" ? 0 : (value.tulukhDun || 0);
+                                    var filterDun = niitDunJagsaalt.filter((t) => t.key === (a + ";" + assessment.tailbar));
+                                    if(filterDun?.length === 0)
+                                        niitDunJagsaalt.push({key: (a + ";" + assessment.tailbar), dun: tempDun, columnIndex: indexVal});
+                                    else
+                                    {
+                                        niitDunJagsaalt.splice(niitDunJagsaalt.indexOf(filterDun[0]), 1);
+                                        niitDunJagsaalt.push({key: (a + ";" + assessment.tailbar), dun: filterDun[0].dun + tempDun, columnIndex: filterDun[0].columnIndex})
+                                    }
                                 }
+                            })
+                            if(assessment.tailbar === "Менежмент нэгж")
+                            {
+                                var valFilter = values?.filter((e) => e.tailbar === "Менежментийн зардал" && moment(e.ognoo).format("YYYY-MM") === a && e.tariff > 0)
+                                return (<div className="flex justify-center truncate">{valFilter?.length > 0 ? formatNumber(valFilter[0].tariff) : ""}</div>);
                             }
-                            return assessment.tailbar === "Менежментийн зардал үнэ" ? (<div className="flex justify-center truncate">{value.tailbar === "Менежментийн зардал" && tempOgnoo === a && value.tariff > 0 ? formatNumber(value.tariff) : ""}</div>)
-                                : (<div className="flex justify-end truncate">{value.tailbar === assessment.tailbar && tempOgnoo === a && value.tulukhDun > 0 ? formatNumber(value.tulukhDun) : ""}</div>);
-                        })
+                            else
+                            {
+                                var valFilterDun = values?.filter((s) => s.tailbar === assessment.tailbar && moment(s.ognoo).format("YYYY-MM") === a && s.tulukhDun > 0)
+                                return (<div className="flex justify-end truncate">{valFilterDun?.length > 0 ? formatNumber(valFilterDun?.reduce((a, b) => a + b.tulukhDun, 0)) : ""}</div>);
+                            }
+                        }
                     };
                     })
             }
             temp.push(col);
+            indexVal++;
         });
+        niitDunJagsaalt.sort();
         setNiitDunJagsaalt(niitDunJagsaalt);
         temp.push({
             title: "Нийт",
@@ -620,7 +635,7 @@ function negtgelTailan({ token }) {
                                 </th>
                             </tr>
                             <tr className="bg-gray-400 text-white">
-                                {avlaga?.sort((a, b) => a.ognoo - b.ognoo).map((murAvlaga, index) => {
+                                {avlaga?.map((murAvlaga, index) => {
                                     return (
                                         <React.Fragment key={index}>
                                             <th className="border border-gray-400 text-mashJijigiinJijig">
@@ -669,14 +684,15 @@ function negtgelTailan({ token }) {
                                                 </React.Fragment>
                                             );
                                         })}
-                                        {avlaga?.sort((a, b) => a.ognoo - b.ognoo).map((murAvlaga, index) => {
-                                            var tempAvlaga = mur.avlaga?.filter((v) => moment(v.ognoo).format("YYYY-MM") === murAvlaga.ognoo && (v.tailbar === murAvlaga.tailbar || (murAvlaga.tailbar === "Менежментийн зардал үнэ" && v.tailbar === "Менежментийн зардал")));
+                                        {avlaga?.map((murAvlaga, index) => {
+                                            var tempAvlaga = mur.avlaga?.filter((v) => moment(v.ognoo).format("YYYY-MM") === murAvlaga.ognoo && (v.tailbar === murAvlaga.tailbar || (murAvlaga.tailbar === "Менежмент нэгж" && v.tailbar === "Менежментийн зардал")));
                                             var value = tempAvlaga.filter((v) => v.tariff > 0 || v.tulukhDun > 0)[0];
+                                            var sumTulukhDun = tempAvlaga.filter((v) => v.tulukhDun > 0).reduce((a, b) => a + b.tulukhDun, 0);
                                             return (
                                                 <React.Fragment key={index}>
                                                     <th className="border border-gray-400 text-mashJijigiinJijig">
-                                                        {murAvlaga.tailbar === "Менежментийн зардал үнэ" ? (<div className="flex justify-center truncate">{value?.tariff > 0 ? formatNumber(value?.tariff) : ""}</div>)
-                                                            : (<div className="flex justify-end truncate">{value?.tulukhDun > 0 ? formatNumber(value?.tulukhDun) : ""}</div>)}
+                                                        {murAvlaga.tailbar === "Менежмент нэгж" ? (<div className="flex justify-center truncate">{value?.tariff > 0 ? formatNumber(value?.tariff) : ""}</div>)
+                                                            : (<div className="flex justify-end truncate">{sumTulukhDun > 0 ? formatNumber(sumTulukhDun) : ""}</div>)}
                                                     </th> 
                                                 </React.Fragment>
                                             );
@@ -696,17 +712,17 @@ function negtgelTailan({ token }) {
                                 <td></td>
                                 <td className="border border-gray-400 text-mashJijigiinJijig text-center"> {formatNumber(tailanGaralt?.reduce((a, b) => a + (b?._id?.talbainKhemjee || 0), 0), 2)} </td>
                                 <td colSpan={shineBagana?.length > 0 ? shineBagana?.length + 1 : 1}></td>
-                                {avlaga?.sort((a, b) => a.ognoo - b.ognoo).map((murAvlaga, index) => {
+                                {avlaga?.map((murAvlaga, index) => {
                                     var niitTulukhDun = 0
                                     tailanGaralt?.map((mur, index) => {
-                                        var tempAvlaga = mur?.avlaga?.filter((v) => moment(v.ognoo).format("YYYY-MM") === murAvlaga.ognoo && (v.tailbar === murAvlaga.tailbar || (murAvlaga.tailbar === "Менежментийн зардал үнэ" && v.tailbar === "Менежментийн зардал")));
-                                        var value = tempAvlaga.filter((v) => v.tulukhDun > 0)[0];
-                                        niitTulukhDun += value?.tulukhDun || 0;
+                                        var tempAvlaga = mur?.avlaga?.filter((v) => moment(v.ognoo).format("YYYY-MM") === murAvlaga.ognoo && (v.tailbar === murAvlaga.tailbar || (murAvlaga.tailbar === "Менежмент нэгж" && v.tailbar === "Менежментийн зардал")));
+                                        var value = tempAvlaga.filter((v) => v.tulukhDun > 0).reduce((a, b) => a + b.tulukhDun, 0);
+                                        niitTulukhDun += value || 0;
                                     })
                                     return (
                                         <React.Fragment key={index}>
                                             <th className="border border-gray-400 text-mashJijigiinJijig">
-                                                {murAvlaga.tailbar === "Менежментийн зардал үнэ" ? "" : (<div className="flex justify-end truncate">{niitTulukhDun > 0 ? formatNumber(niitTulukhDun) : ""}</div>)}
+                                                {murAvlaga.tailbar === "Менежмент нэгж" ? "" : (<div className="flex justify-end truncate">{niitTulukhDun > 0 ? formatNumber(niitTulukhDun) : ""}</div>)}
                                             </th> 
                                         </React.Fragment>
                                     );
