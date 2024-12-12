@@ -140,7 +140,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
             `;
           })
           .join("")}
-        ${medeelel.zardluud.filter(a => a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" || a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд").length > 0 ? "" :
+        ${medeelel.zardluud.filter(a => a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" || a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд" || a.tailbar === "Түрээсийн төлбөр нэмэлт").length > 0 ? "" :
           `
           <tr>
             <td style="border: 1px solid #000; text-align: center;">1</td>
@@ -165,7 +165,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 sensitivity: "base",
               });
             })
-            .filter(a => a.tailbar === "Менежментийн төлбөр" || a.tailbar === "Менежментийн зардал" || a.tailbar === "Менежмент")
+            .filter(a => a.tailbar === "Менежментийн төлбөр" || a.tailbar === "Менежментийн зардал" || a.tailbar === "Менежмент" || a.tailbar === "Менежментийн төлбөр нэмэлт")
             .map((mur, index) => {
               return `
                 <tr key=${index}>
@@ -197,7 +197,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 sensitivity: "base",
               });
             })
-            .filter(a => a.tailbar === "Менежмент төлбөр хуучин" || a.tailbar === "Менежмент төлбөр шинэ" || a.tailbar === "Дулааны төлбөр" || a.tailbar === "Дулаан")
+            .filter(a => a.tailbar === "Менежмент төлбөр хуучин" || a.tailbar === "Менежмент төлбөр шинэ" || a.tailbar === "Дулааны төлбөр" || a.tailbar === "Дулаан" || a.tailbar === "Дулаан нэмэлт")
             .map((mur, index) => {
               return `
                 <tr key=${index}>
@@ -237,7 +237,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   sensitivity: "base",
                 });
               })
-              .filter(a => a.tailbar === "Цахилгаан")
+              .filter(a => a.tailbar === "Цахилгаан" || a.tailbar === "Цахилгаан нэмэлт")
               .map((mur, index) => {
                 return `
                   <tr>
@@ -276,7 +276,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                     sensitivity: "base",
                   });
                 })
-                .filter(a => a.tailbar === "Халуун ус") //  a.tailbar === "Халуун ус"
+                .filter(a => a.tailbar === "Халуун ус" || a.tailbar === "Халуун ус нэмэлт") //  a.tailbar === "Халуун ус"
                 .map((mur, index) => {
                   return `
                     <tr>
@@ -325,7 +325,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                       sensitivity: "base",
                     });
                   })
-                  .filter(a => a.tailbar === "Хүйтэн ус") //  a.tailbar === "Хүйтэн ус"
+                  .filter(a => a.tailbar === "Хүйтэн ус" || a.tailbar === "Хүйтэн ус нэмэлт") //  a.tailbar === "Хүйтэн ус"
                   .map((mur, index) => {
                     return `
                       <tr key=${index}>
@@ -353,9 +353,6 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                         <td style="border: 1px solid #000; text-align: right;">
                           
                         </td>
-                        <td style="border: 1px solid #000; text-align: right;">
-                          
-                        </td>
                       </tr>
                       <tr>
                         <td style="border: 1px solid #000; text-align: right;">
@@ -378,9 +375,6 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                         </td>
                         <td style="border: 1px solid #000; text-align: right; width: 16%;">
                           &lt;usxalaasniitulburDun&gt;
-                        </td>
-                        <td style="border: 1px solid #000; text-align: right;">
-                          
                         </td>
                         <td style="border: 1px solid #000; text-align: right;">
                           &lt;niilberDun&gt;

@@ -452,6 +452,8 @@ function tulburTootsoo({ token }) {
               
               if(a.tailbar === "Цахилгаан" || a.tailbar === "Халуун ус" || a.tailbar === "Хүйтэн ус")
                 a.tariff = ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === a.tailbar).map((b) => b.tariff); 
+              if(a.tailbar === "Цахилгаан нэмэлт")
+                a.tariff = ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === "Цахилгаан").map((b) => b.tariff); 
               
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
@@ -477,16 +479,16 @@ function tulburTootsoo({ token }) {
               
               // { tailbar : "Халуун ус", umnukhzaalt, suuliin zaalt, dun, nuat, boxirus, tseverus, usxalaasniitulbur }
               // { tailbar : "Хүйтэн ус", umnukhzaalt, suuliin zaalt, dun, nuat, boxirus, tseverus, usxalaasniitulbur }
-              if(a.tailbar === "Цахилгаан" || a.tailbar === "Халуун ус" || a.tailbar === "Хүйтэн ус")
+              if(a.tailbar === "Цахилгаан" || a.tailbar === "Цахилгаан нэмэлт" || a.tailbar === "Халуун ус" || a.tailbar === "Хүйтэн ус")
               {
                 a.zuruuZaalt = (a.suuliinZaalt || 0) - (a.umnukhZaalt || 0)
                 zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                   new RegExp(`&lt;${a.tailbar}.zuruuZaalt&gt;`, "g"),
                   formatNumber(a.zuruuZaalt || 0) || ""
                 );
-                if(a.tailbar === "Цахилгаан")
+                if(a.tailbar === "Цахилгаан" || a.tailbar === "Цахилгаан нэмэлт")
                 {
-                  a.tsakhilgaanUrjver = ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === a.tailbar).map((b) => b.tsakhilgaanUrjver); 
+                  a.tsakhilgaanUrjver = ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === "Цахилгаан").map((b) => b.tsakhilgaanUrjver); 
                   zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                     new RegExp(`&lt;${a.tailbar}.tsakhilgaanUrjver&gt;`, "g"),
                     formatNumber(a.tsakhilgaanUrjver || 0) || ""
