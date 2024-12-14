@@ -515,7 +515,7 @@ function camera({ token }) {
               .catch((err) => {
                 console.log("aldaa:", err);
               });
-          if(yanzalsanMashiniiDugaar !== "Зогсоол дүүрсэн")    
+          if(!uilchluulegch?.oruulakhguiEsekh)   
           {
             khaalgaNeey(uilchluulegch?.cameraIP);
             onRefresh();

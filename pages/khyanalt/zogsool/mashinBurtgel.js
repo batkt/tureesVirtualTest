@@ -423,6 +423,14 @@ function mashinBurtgel({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
       },
+      {
+        title: t("Камер"),
+        align: "center",
+        dataIndex: "cameraIP",
+        width: "7rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
       ...shinecol,
       {
         title: t("Тайлбар"),

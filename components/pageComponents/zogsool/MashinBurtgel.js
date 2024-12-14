@@ -322,6 +322,7 @@ function MashinBurtgel(
                 form.setFieldValue("khungulult", undefined);
                 form.setFieldValue("tsagiinTurul", undefined);
                 form.setFieldValue("khungulukhKhugatsaa", undefined);
+                form.getFieldInstance("cameraIP").focus();
                 setNemeltTurulShalgah(e);
                 setKhungulultiinTurul(undefined);
               }}
@@ -333,6 +334,15 @@ function MashinBurtgel(
                 </Select.Option>
               ))}
             </Select>
+          </Form.Item>
+          <Form.Item
+            label={t("Камер")}
+            name="cameraIP"
+          >
+            <Input
+              style={{ width: "100%" }}
+              placeholder="Камер IP оруулна уу..."
+            />
           </Form.Item>
         </React.Fragment>
       )}

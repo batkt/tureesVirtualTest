@@ -18,6 +18,16 @@ function StreamTokhirgooIp(
     cameraObject?.tokhirgoo?.socketEsekh || false
   );
 
+  const [dotorKamerEsekh, setDotorKamerEsekh] = useState(
+    cameraObject?.tokhirgoo?.dotorKamerEsekh || false
+  );
+
+  const [dotorDulaanKamerEsekh, setDotorDulaanKamerEsekh] = useState(
+    cameraObject?.tokhirgoo?.dotorDulaanKamerEsekh || false
+  );
+
+  
+
   useImperativeHandle(
     ref,
     () => ({
@@ -118,6 +128,18 @@ function StreamTokhirgooIp(
           </Form.Item>
         </div>
       )}
+      <Form.Item
+        name={"dotorKamerEsekh"}
+        label={"Дотор"}
+      >
+        <Switch checked={dotorKamerEsekh} onChange={(v) => setDotorKamerEsekh(v)} />
+      </Form.Item>
+      <Form.Item
+        name={"dotorDulaanKamerEsekh"}
+        label={"Дотор дулаан"}
+      >
+        <Switch checked={dotorDulaanKamerEsekh} onChange={(v) => setDotorDulaanKamerEsekh(v)} />
+      </Form.Item>
     </Form>
   );
 }

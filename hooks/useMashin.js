@@ -40,6 +40,7 @@ const fetcher = (
             { ezemshigchiinRegister: { $regex: search, $options: "i" } },
             { ezemshigchiinUtas: { $regex: search, $options: "i" } },
             { dugaar: { $regex: search, $options: "i" } },
+            { cameraIP: { $regex: search, $options: "i" } },
           ],
           ...query,
         },

@@ -1113,7 +1113,7 @@ function Zogsool({ token }) {
                         .get("zogsoolUilchluulegch", {
                           params: {
                             order: order,
-                            query: query,
+                            query: { ...que, ...query, },
                             khuudasniiKhemjee: uilchluulegchGaralt?.niitMur,
                           },
                         })
