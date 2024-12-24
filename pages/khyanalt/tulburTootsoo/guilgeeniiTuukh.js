@@ -55,15 +55,15 @@ import NekhemjlekhiinTuukhTsonkh from "components/pageComponents/tulbur/Nekhemjl
 
 //#endregion
 
-function GereeniiUldegdel({ ugugdul, token, ognoo, }) {
+function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
   const { barilgiinId } = useAuth();
   const { data, mutate, isValidating } = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
-      ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar, ognoo]
+      ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar, ognoo, tsutsalsanTurul]
       : null,
     (url, barilgiinId, gereeniiDugaar, ognoo) =>
       uilchilgee(token)
-        .post(url, { barilgiinId, gereeniiDugaar, ognoo })
+        .post(url, { barilgiinId, gereeniiDugaar, ognoo, tsutsalsanTurul })
         .then(({ data }) => data),
     {
       revalidateOnFocus: false,
@@ -108,7 +108,7 @@ function TableGuilgee({
             {mur.summary
               ? formatNumber(
                   garalt?.jagsaalt?.reduce(
-                    (a, b) => a + (b[mur.dataIndex] || 0),
+                    (a, b) => a + (Number(b[mur.dataIndex]) || 0),
                     0
                   )
                 )
@@ -419,6 +419,7 @@ function guilgeeniiTuukh({ token }) {
         render(text, record, index) {
           return (
             <GereeniiUldegdel
+              tsutsalsanTurul={turul === "tsutslagdsanAvlaga"}
               token={token}
               ugugdul={record}
               index={index}
