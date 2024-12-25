@@ -984,17 +984,27 @@ function guilgeeniiTuukh({ token }) {
       var dataIndex = a.dataIndex;
       const render = a.render;
       if (a.title !== "№" && a.title !== "Үйлдэл") {
-        a.dataIndex === "tuluvluguut" ||
-        a.dataIndex === "sariinTurees" ||
-        a.dataIndex === "talbainNiitUne" ||
-        a.dataIndex === "aldangiinUldegdel" ||
         a.dataIndex === "daraagiinTulukhOgnoo" ||
         a.dataIndex === "gereeniiOgnoo"
           ? forExcel.push({
               title: a.excelHeader || a.title,
               dataIndex,
               render,
-            })
+            }) :
+        a.dataIndex === "uldegdel" ||    
+        a.dataIndex === "voucherDun" ||    
+        a.dataIndex === "khungulult" ||    
+        a.dataIndex === "tulsunDun" ||    
+        a.dataIndex === "tuluvluguut" ||
+        a.dataIndex === "sariinTurees" ||
+        a.dataIndex === "talbainNiitUne" ||
+        a.dataIndex === "aldangiinUldegdel"
+            ? forExcel.push({
+                title: a.excelHeader || a.title,
+                __numFmt__: "#,##0.00",
+                __cellType__: "TypeNumeric",
+                dataIndex,
+              })    
           : forExcel.push({ title: a.excelHeader || a.title, dataIndex });
       }
     });
@@ -1308,8 +1318,8 @@ function guilgeeniiTuukh({ token }) {
         >
           <TableGuilgee
             columns={columns}
-            garalt={gereeniiMedeelel}
-            setKhuudaslalt={setKhuudaslalt}
+            garalt={turul === "eneSardTulukh" ? eneSardTuluuguiGereenuud : gereeniiMedeelel}
+            setKhuudaslalt={turul === "eneSardTulukh" ? setEneSardTuluuguiGereenuud : setKhuudaslalt}
             setLoadingIndex={setLoadingIndex}
             onChange={khusnegtOrderChange}
           />
