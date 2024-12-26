@@ -94,6 +94,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
       </div>
     </div>
     <div style="text-align: right;">
+      <b>Үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;niitUldegdel&gt;&nbsp;&nbsp;</b><br />
+    </div>
+    <div style="text-align: right;">
       <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinUrTulbur&gt;&nbsp;&nbsp;</b><br />
     </div>
     <div>
