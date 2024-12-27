@@ -139,9 +139,9 @@ const KioskMobile = ({
 
   useEffect(() => {
     if (qpayObject && qpayObject.tulsunEsekh) {
+      eBarimtTsonkhruuShiljye();
       if(baiguullagiinId === "6715ef2ca5cefb3e54505428" && !!songogdsonData?.garsanCameraIP && !!songogdsonData.plate_number) // jiguur grand
         zogsoolMobileSdk(songogdsonData);
-      eBarimtTsonkhruuShiljye();
       if (khungulukhDun > 0)
         khungulultKhadgalya(
           songogdsonData.session_id,
