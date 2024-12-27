@@ -126,7 +126,6 @@ const KioskMobile = ({
       barilgiinId: barilgiinId,
       mashiniiDugaar: data.plate_number,
       cameraIP: data.garsanCameraIP,
-      qpayObject: qpayObject,
     };
     uilchilgee(token)
       .post("/zogsoolMobileSdk", yavuulakhData)

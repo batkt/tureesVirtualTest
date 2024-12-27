@@ -476,7 +476,7 @@ function camera({ token }) {
     {
       socket().on(`qpayMobileSdk${baiguullaga?._id}`, (res) => {
         let dataObject = res
-        if(dataObject?.qpayObject && dataObject?.qpayObject?.tulsunEsekh)
+        if(dataObject && dataObject?.khaalgaTurul === "Гарах" && !!dataObject?.mashiniiDugaar)
         {
           khaalgaNeey(res.cameraIP);
           onRefresh();
