@@ -49,9 +49,13 @@ const KioskMobile = ({
     var query = {};
     if (drawerOngoikh) {
       query["tuukh.0.tuluv"] = 0;
-      query["niitDun"] = { $gt: 0 }
-      // query["tuukh.0.garsanKhaalga"] = { $exists: false };
-      query["tuukh.0.tulbur"] = { $eq: [] }
+      if(baiguullagiinId === "6715ef2ca5cefb3e54505428") // jiguur gadaa qr
+      {
+        query["niitDun"] = { $gt: 0 }
+        query["tuukh.0.tulbur"] = { $eq: [] }
+      }
+      else
+        query["tuukh.0.garsanKhaalga"] = { $exists: false };
       query["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
         $gte: moment().subtract(3, "days").startOf("day"),
         $lte: moment().endOf("day"),
