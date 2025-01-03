@@ -41,7 +41,7 @@ import formatNumber from "tools/function/formatNumber";
 import React, { useMemo, useEffect, useState } from "react";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import { useGereeniiJagsaaltToollolt } from "hooks/useGereeniiJagsaalt";
-import uilchilgee, { url } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import GereeKharakh from "components/pageComponents/geree/Kharakh";
 import router from "next/router";
 import { useReactToPrint } from "react-to-print";
@@ -93,11 +93,13 @@ function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
 }
 
 const Tailbar = React.forwardRef(
-  ({ token, destroy, confirm, data, service }, ref) => {
+  ({ token, baiguullaga, destroy, confirm, data, service }, ref) => {
     const { t } = useTranslation();
     const [shaltgaan, setTailbar] = React.useState("");
     const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment());
     const [sergeekhOgnoo, setSergeekhOgnoo] = React.useState(moment());
+    const [tsutslakhOgnoo, setTsutslakhOgnoo] = React.useState(moment());
+    const [odoogiinUldegdel, setOdoogiinUldegdel] = React.useState(0);
 
     React.useImperativeHandle(
       ref,
@@ -147,6 +149,24 @@ const Tailbar = React.forwardRef(
     }
 
     useEffect(() => {
+      var ognoo = [data?.gereeniiOgnoo, moment(new Date())];
+      uilchilgee(token)
+        .post("/uldegdelBodyo", {
+          baiguullagiinId: data.baiguullagiinId,
+          barilgiinId: data.barilgiinId,
+          gereeniiDugaar: data.gereeniiDugaar,
+          ognoo: ognoo,
+        })
+        .then(({ data }) => {
+          if (!!data) {
+            // data.uldegdel;
+            setOdoogiinUldegdel(data.uldegdel);
+          }
+        })
+        .catch(aldaaBarigch);
+    }, [data.gereeniiDugaar])
+
+    useEffect(() => {
       function keyUp(e) {
         if (e.key === "Escape") {
           e.preventDefault();
@@ -161,6 +181,33 @@ const Tailbar = React.forwardRef(
     useEffect(() => {
       document.getElementById("shaltgaanTextArea").focus();
     }, []);
+
+    function disabledDate(current) {
+      let minDate = moment().startOf("month").format("YYYY-MM-DD");
+      let maxDate = moment().endOf("month").format("YYYY-MM-DD");
+      return (current <= moment(maxDate, "YYYY-MM-DD") && current >= moment(minDate, "YYYY-MM-DD")) === false;
+    }
+
+    function changeOgnoo(e)
+    {
+      setTsutslakhOgnoo(e);
+      setOdoogiinUldegdel(0);
+      var ognoo = [data?.gereeniiOgnoo, moment(e[0]).subtract(1, "month")];
+      uilchilgee(token)
+        .post("/uldegdelBodyo", {
+          baiguullagiinId: data.baiguullagiinId,
+          barilgiinId: data.barilgiinId,
+          gereeniiDugaar: data.gereeniiDugaar,
+          ognoo: ognoo,
+        })
+        .then(({ data }) => {
+          if (!!data) {
+            // data.uldegdel;
+            setOdoogiinUldegdel(data.uldegdel);
+          }
+        })
+        .catch(aldaaBarigch);
+    }
 
     return (
       <div className="w-full space-y-2">
@@ -197,7 +244,21 @@ const Tailbar = React.forwardRef(
           {service !== "/gereeSergeeye" && (
             <div className="flex w-full flex-row justify-between">
               <div className="text-right">{t("Авлагын дүн")}:</div>
-              <div>{formatNumber(data?.uldegdel)}</div>
+              <div>{formatNumber(odoogiinUldegdel)}</div>
+            </div>
+          )}
+          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right"> Цуцлах огноо </div>
+              <DatePicker.RangePicker placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]} disabledDate={disabledDate} value={tsutslakhOgnoo} onChange={(e) => changeOgnoo(e)} />
+            </div>
+          )}
+          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right">{t("Тухайн цуцалсан сарын ашигласан хоног")}:</div>
+              <div>
+                {moment(tsutslakhOgnoo[1]).diff(moment(tsutslakhOgnoo[0]), "day")}
+              </div>
             </div>
           )}
         </div>
@@ -952,6 +1013,7 @@ function ZakhialgiinKhyanalt() {
           ref={tailbarRef}
           data={data}
           token={token}
+          baiguullaga={baiguullaga}
           confirm={() => refresh()}
         />
       ),
@@ -1011,6 +1073,7 @@ function ZakhialgiinKhyanalt() {
           ref={sungaltRef}
           data={data}
           token={token}
+          baiguullaga={baiguullaga}
           confirm={() => refresh()}
         />
       ),

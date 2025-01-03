@@ -773,6 +773,7 @@ function guilgeeniiTuukh({ token }) {
           barilgiinId={barilgiinId}
           onFinish={refresh}
           date={ognoo}
+          baiguullaga={baiguullaga}
         />
       ),
       footer,

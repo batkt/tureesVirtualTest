@@ -223,6 +223,75 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("Цахилгааны тооцоололд ашиглах эсэх")}
+                </div>
+                <div className="text-gray-600">
+                  {t("Гүйдлийн коэффициент болон бичилтийн хоног идэвхжүүлэх")}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh}
+                  onChange={(v) =>
+                    setGereeTokhirgoo((a) => ({
+                      ...(a || {}),
+                      guidelBuchiltKhonogEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("Цуцлах үед өдрөөр тооцоололд ашиглах эсэх")}
+                </div>
+                <div className="text-gray-600">
+                  {t("Гэрээ цуцлах үед өдрөөр тооцоолол идэвхжүүлэх")}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={baiguullaga?.tokhirgoo?.udruurBodokhEsekh}
+                  onChange={(v) =>
+                    setGereeTokhirgoo((a) => ({
+                      ...(a || {}),
+                      udruurBodokhEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("Гэрээ сунгах үед барьцаа дүн өөрчлөх эсэх")}
+                </div>
+                <div className="text-gray-600">
+                  {t("Гэрээ сунгах үед түрээсийн үнэ барьцаа үнэтэй адилтгах идэвхжүүлэх")}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={baiguullaga?.tokhirgoo?.baritsaaUneAdiltgakhEsekh}
+                  onChange={(v) =>
+                    setGereeTokhirgoo((a) => ({
+                      ...(a || {}),
+                      baritsaaUneAdiltgakhEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
           <div
             className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
               !!gereeTokhirgoo ? "flex" : "hidden"
