@@ -2053,7 +2053,7 @@ function camera({ token }) {
                     PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
                   />
                 ) : baiguullaga?._id === "669e28beb13f35e669e773a6" ? (
-                  camerVal[0] === "192.168.0.109" || camerVal[0] === "192.168.0.110" ? (
+                  camerVal[0] === "192.168.0.109" ? (
                     <R2WPlayerComponent
                       USER={"admin"}
                       ROOT={"live"}
@@ -2213,6 +2213,14 @@ function camera({ token }) {
                   />
                 ) : baiguullaga?._id === "6698c657c26994f4e0f8de62" && barilgiinId === "67285bb9e212a8d0cb42495f" 
                         && camerVal[1] === "192.168.8.108" ? (
+                    <R2WPlayerComponent
+                      USER={"admin"}
+                      ROOT={"live"}
+                      PASSWD={"Admin123"}
+                      Camer={camerVal[1]}
+                      PORT={554}
+                    /> 
+                ) : baiguullaga?._id === "669e28beb13f35e669e773a6" && camerVal[1] === "192.168.0.110" ? (
                     <R2WPlayerComponent
                       USER={"admin"}
                       ROOT={"live"}
