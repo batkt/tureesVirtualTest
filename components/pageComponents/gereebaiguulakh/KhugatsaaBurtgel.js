@@ -38,7 +38,7 @@ const YurunkhiiMedeele = ({
           dun: value.talbainNiitUne,
           khugatsaa: value.khugatsaa,
           tulukhUdruud: value.tulukhUdur,
-          ekhlekhOgnoo: moment(value.gereeniiOgnoo).format(
+          ekhlekhOgnoo: moment(!value._id ? value.gereeniiOgnoo : moment().add(1, "month").startOf("month")).format(
             "YYYY-MM-DD 00:00:00"
           ),
           duusakhOgnoo: moment(value.duusakhOgnoo).format(
@@ -50,7 +50,6 @@ const YurunkhiiMedeele = ({
           turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
         })
         .then(({ data }) => {
-          console.log("khugatsaa avlaga ----------------->" + JSON.stringify(data));
           _.set(value, "avlaga.guilgeenuud", data);
           onChange({ ...value });
         })
@@ -129,6 +128,10 @@ const YurunkhiiMedeele = ({
     next();
   }
 
+  function disabledDate(current) {
+    return value._id && current && current < moment().startOf('day');
+  }
+
   return (
     <Form
       form={form}
@@ -148,6 +151,7 @@ const YurunkhiiMedeele = ({
           label={t("Гэрээ хийх огноо")}
         >
           <DatePicker
+            disabled={!!value._id}
             style={{ width: "100%" }}
             allowClear={false}
             placeholder={t("Гэрээ хийх огноо")}
@@ -172,7 +176,7 @@ const YurunkhiiMedeele = ({
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
             max={480}
-            min={1}
+            min={!value._id ? 1 : moment(value?.duusakhOgnoo).diff(moment(value?.gereeniiOgnoo), "month", true).toFixed()}
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             placeholder={t(
               `Гэрээний хугацаа ${
@@ -229,6 +233,7 @@ const YurunkhiiMedeele = ({
           ]}
         >
           <DatePicker
+            disabledDate={disabledDate}
             onChange={() =>
               document.getElementById("tureesinTalbaiButton").focus()
             }

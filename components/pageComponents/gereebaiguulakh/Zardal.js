@@ -189,7 +189,7 @@ const Zardal = ({
           dun: value.talbainNiitUne,
           khugatsaa: value.khugatsaa,
           tulukhUdruud: value.tulukhUdur,
-          ekhlekhOgnoo: moment(value.gereeniiOgnoo).format(
+          ekhlekhOgnoo: moment(!value._id ? value.gereeniiOgnoo : moment().add(1, "month").startOf("month")).format(
             "YYYY-MM-DD 00:00:00"
           ),
           duusakhOgnoo: moment(value.duusakhOgnoo).format(
@@ -201,7 +201,6 @@ const Zardal = ({
           turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
         })
         .then(({ data }) => {
-          console.log("avlaga ----------------->" + JSON.stringify(data));
           _.set(value, "avlaga.guilgeenuud", data);
           onChange({ ...value });
         })
