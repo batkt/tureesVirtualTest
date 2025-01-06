@@ -67,13 +67,13 @@ const Tulbur = ({
       );
     });
     // console.log('000000000', value);
-    if (!!value.khugatsaa)
+    if (!!value.khugatsaa && value.duusakhOgnoo > moment().startOf("month"))
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
           dun: value.talbainNiitUne,
           khugatsaa: value.khugatsaa,
           tulukhUdruud: value.tulukhUdur,
-          ekhlekhOgnoo: moment(!value._id ? value.gereeniiOgnoo : moment().add(1, "month").startOf("month")).format(
+          ekhlekhOgnoo: moment(!value._id ? value.gereeniiOgnoo : moment().startOf("month")).format(
             "YYYY-MM-DD 00:00:00"
           ),
           duusakhOgnoo: moment(value.duusakhOgnoo).format(
