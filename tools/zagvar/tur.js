@@ -1,4 +1,4 @@
-const khatuuZagvar = (medeelel, ajiltan, baiguullaga) => {
+const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
   return `
   <div style="height: 100%; width: 100%;">
     <div style="display: flex; justify-content: space-between;">
@@ -28,7 +28,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Байгууллагын нэр:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${baiguullaga.ner}
+            ${barilgiinId === "6735c77a7fc60cd66deb290a" ? "Мастер Түншлэл ХХК" : baiguullaga.ner}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
@@ -40,13 +40,13 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Утас, Факс:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-          ${baiguullaga?.utas?.join(",")}
+          ${barilgiinId === "6735c77a7fc60cd66deb290a" ? "90088007" : barilgiinId === "67512183c60497546f59513a" ? "90611148"  : baiguullaga?.utas?.join(",")}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">И-мэйл:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-          ${baiguullaga?.mail?.join(",")}
+          ${barilgiinId === "67512183c60497546f59513a" ? "gotofinance@master.mn" : baiguullaga?.mail?.join(",")}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
@@ -225,7 +225,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga) => {
           <td></td>
           <td><p>Хүлээн авсан</p></td>
           <td></td>
-          <td><p>/${medeelel?.ovog?.[0]}. ${medeelel?.ner}/</p></td>
+          <td><p>/${medeelel?.ovog?.[0] ? medeelel?.ovog?.[0] : ""}${medeelel?.ovog?.[0] ? "." : ""} ${medeelel?.ner}/</p></td>
           <td></td>
           <td></td>
           <td></td>

@@ -2037,7 +2037,13 @@ function camera({ token }) {
                       PORT={554}
                     />
                   ) : (
-                    <Stream1 ip={camerVal[0]} />
+                    <R2WPlayerComponent
+                      USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                      Camer={camerVal[0]}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                    />
                   )
                 ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
                   <R2WPlayerComponent
@@ -2196,7 +2202,13 @@ function camera({ token }) {
                       PORT={554}
                     />
                   ) : (
-                    <Stream2 ip={camerVal[1]} />
+                    <R2WPlayerComponent
+                      Camer={camerVal[1]}
+                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                      USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                    />
                   )
                 ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
                   <R2WPlayerComponent

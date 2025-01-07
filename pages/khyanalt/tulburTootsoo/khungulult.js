@@ -135,8 +135,8 @@ function tulburTootsoo() {
 
   const qZardal = useMemo(
     () => ({
-      turul: { $in: ["Тогтмол", "1м2", "1м3/талбай"] },
-      tariff: { $exists: true },
+      turul: { $in: ["Дурын", "Тогтмол", "1м2", "1м3/талбай"] },
+      // tariff: { $exists: true },
       barilgiinId,
     }),
     [barilgiinId]
@@ -249,7 +249,7 @@ function tulburTootsoo() {
 
           console.log(urjuulekhData, "urjuulekhData");
 
-          var khymdraaguiDun = zardliinData?.tariff * urjuulekhData;
+          var khymdraaguiDun = zardliinData?.turul === "Дурын" ? zardliinData.dun : zardliinData?.tariff * urjuulekhData;
 
           if (khungulukh === "khuvi") {
             var khymdarsanDun =
@@ -390,20 +390,24 @@ function tulburTootsoo() {
           var zardliinData = data?.zardluud?.find(
             (e) => e?._id === form.getFieldValue("zardliinId")
           );
-
-          var urjuulekhData =
+          if(zardliinData)
+          {
+            var urjuulekhData =
             zardliinData?.turul === "1м3/талбай"
               ? data.talbainKhemjeeMetrKube || 1
               : zardliinData?.turul === "1м2"
               ? data?.talbainKhemjee
               : zardliinData?.turul === "Тогтмол" && 1;
 
-          var kharuulakhData = formatNumber(
-            zardliinData?.tariff * urjuulekhData,
-            2
-          );
+            var kharuulakhData = formatNumber(
+              zardliinData?.tariff * urjuulekhData,
+              2
+            );
 
-          return kharuulakhData || 0;
+            return zardliinData?.turul === "Дурын" ? (zardliinData?.dun || 0) : (kharuulakhData || 0);
+          }
+          else
+            return 0;
         },
       });
     }
@@ -704,6 +708,8 @@ function tulburTootsoo() {
             tootsoolol.niitSariinTurees =
               tootsoolol.niitSariinTurees +
               e.talbainKhemjeeMetrKube * zardal.tariff;
+          else if (zardal.turul === "Дурын")
+            tootsoolol.niitSariinTurees = tootsoolol.niitSariinTurees + zardal.dun;
           else
             tootsoolol.niitSariinTurees =
               zardal.tariff + tootsoolol.niitSariinTurees;

@@ -60,7 +60,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t, ajiltan, baiguullaga
     const medeelel = _.get(nekhemjlel, "jagsaalt.0");
     if (!!zagvar && !!medeelel) {
       if (zagvar?.khatuuZagvarEsekh) {
-        zagvar.nekhemjlekh = ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5" ? khatuuZagvarFoodCity(medeelel, ajiltan, baiguullaga) : khatuuZagvar(medeelel, ajiltan, baiguullaga);
+        zagvar.nekhemjlekh = ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5" ? khatuuZagvarFoodCity(medeelel, ajiltan, baiguullaga) : khatuuZagvar(medeelel, ajiltan, baiguullaga, barilgiinId);
       }
       const barilga = baiguullaga?.barilguud?.find(
         (a) => a._id === data.barilgiinId
@@ -280,7 +280,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t, ajiltan, baiguullaga
         medeelel.ekhlekhUdur = moment(ognoo).format("DD");
         medeelel.duusakhOn = moment(ognoo).format("YYYY");
         medeelel.duusakhSar = moment(ognoo).format("MM");
-        medeelel.duusakhUdur = moment(ognoo).set("date", 15).format("DD");
+        medeelel.duusakhUdur = moment(ognoo).set("date", data.barilgiinId === "6735c77a7fc60cd66deb290a" || data.barilgiinId === "67512183c60497546f59513a" ? 20 : 15).format("DD");
         medeelel.eneEkhlehUdur = moment(ognoo).startOf("month").format("YYYY/MM/DD");
         medeelel.eneDuusakhUdur = moment(ognoo).endOf("month").format("YYYY/MM/DD");
 
