@@ -41,7 +41,10 @@ function KhuviinMedeelel({
   );
   const [kharakhZurgiinZam, setKharakhZurgiinZam] = useState(false);
   const [gariinUsegKharakhZam, setGariinUsegKharakhZam] = useState(false);
-  const [gereeTokhirgoo, setGereeTokhirgoo] = useState(null);
+  const [gereeTokhirgoo, setGereeTokhirgoo] = useState({
+    guidelBuchiltKhonogEsekh: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh,
+    bichiltKhonog: baiguullaga?.tokhirgoo?.bichiltKhonog || 0,
+  });
 
   const gereeTokhirgooKhadgalya = () => {
     uilchilgee(token)
@@ -240,12 +243,44 @@ function KhuviinMedeelel({
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
                       guidelBuchiltKhonogEsekh: v,
+                      bichiltKhonog: v ? 30 : 0,
                     }))
                   }
                 />
               </div>
             </div>
           </div>
+          {gereeTokhirgoo?.guidelBuchiltKhonogEsekh && (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">
+                    {t("Цахилгааны тооцоололд ашиглах эсэх")}
+                  </div>
+                  <div className="text-gray-600">
+                    {t("Тухайн сарын бичилтийн хоног тохируулах")}
+                  </div>
+                </div>
+                <div className="ml-auto">
+                  <InputNumber
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    style={{ width: "100%", textAlign: "center" }}
+                    value={gereeTokhirgoo?.bichiltKhonog}
+                    onChange={(v) => 
+                      setGereeTokhirgoo((a) => ({
+                        ...(a || {}),
+                        bichiltKhonog: v,
+                      }))
+                    }
+                    min={0}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">

@@ -35,6 +35,7 @@ import NekhemjlelIlgeekh from "components/pageComponents/tulbur/NekhemjlelIlgeek
 import MedegdelIlgeekh from "components/pageComponents/tulbur/MedegdelIlgeekh";
 import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh";
 import GuilgeeExceleesOruulakhOlnoor from "components/pageComponents/tulbur/GuilgeeExceleesOruulakhOlnoor";
+import GuilgeeEkhniiUldegdelExceleesOruulakhOlnoor from "components/pageComponents/tulbur/GuilgeeEkhniiUldegdelExceleesOruulakhOlnoor";
 import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga";
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
@@ -978,6 +979,32 @@ function guilgeeniiTuukh({ token }) {
     });
   }
 
+  function olnoorEkhniiUldegdelOruulakhExcel() {
+    const footer = [
+      <Space>
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
+      </Space>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <GuilgeeEkhniiUldegdelExceleesOruulakhOlnoor
+          ref={excelref}
+          token={token}
+          barilgiinId={barilgiinId}
+          baiguullaga={baiguullaga}
+          onFinish={refresh}
+          zam="ekhniiUldegdelOruulya"
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Эхний үлдэгдэл excel файл"
+          zagvariinZam="ekhniiUldegdelZagvarOruulya"
+        />
+      ),
+      footer,
+    });
+  }
+
   const excelColumns = useMemo(() => {
     var forExcel = [];
     columns.forEach((a) => {
@@ -1306,6 +1333,16 @@ function guilgeeniiTuukh({ token }) {
               icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
               <span>Заалт оруулах</span>
+                <DownOutlined width={5} />
+              </Button>
+            </Popover>
+            <Popover>
+              <Button
+              type="primary"
+              onClick={olnoorEkhniiUldegdelOruulakhExcel}
+              icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
+              <span>Эхний үлдэгдэл оруулах</span>
                 <DownOutlined width={5} />
               </Button>
             </Popover>
