@@ -32,7 +32,7 @@ const YurunkhiiMedeele = ({
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!!value.khugatsaa && !!value.zardluud && value.duusakhOgnoo > moment().startOf("month"))
+    // if (!!value.khugatsaa && !!value.zardluud && value.duusakhOgnoo > moment().startOf("month"))
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
           dun: value.talbainNiitUne,
@@ -56,7 +56,7 @@ const YurunkhiiMedeele = ({
         .catch((e) => {
           aldaaBarigch(e);
         });
-  }, [value.khugatsaa, value.tulukhUdur]);
+  }, [value.khugatsaa, value.tulukhUdur, value.duusakhOgnoo]);
 
   const onValuesChange = (values, v) => {
     if (!!values?.gereeniiOgnoo && !!value?.khugatsaa) {
