@@ -93,6 +93,9 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t, ajiltan, baiguullaga
         kaidudZoriulsanNiitTulburiinNiilber += medeelel.umnukhSariinUrTulbur
           ? medeelel.umnukhSariinUrTulbur
           : 0;
+
+      if(zagvar?.khatuuZagvarEsekh && ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d")    
+        kaidudZoriulsanNiitTulburiinNiilber += ((medeelel.baritsaaAvakhDun || 0) - (medeelel.baritsaaniiUldegdel || 0));   
       
       if (!!zagvar?.nekhemjlekh) {
         medeelel.eneSardTulukhUsgeer = numberToWords(
@@ -267,6 +270,15 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t, ajiltan, baiguullaga
         medeelel.umnukhSariinUrTulburNuatgui = formatNumber(
           medeelel.umnukhSariinUrTulbur -
             medeelel.umnukhSariinUrTulburNuat || 0
+        );
+
+        medeelel.baritsaaUldegdel = formatNumber((medeelel.baritsaaAvakhDun || 0) - (medeelel.baritsaaniiUldegdel || 0));
+        medeelel.baritsaaUldegdelNuat = formatNumber(
+          medeelel.baritsaaUldegdel / 10 || 0
+        );
+        medeelel.baritsaaUldegdelNuatgui = formatNumber(
+          medeelel.baritsaaUldegdel -
+            medeelel.baritsaaUldegdelNuat || 0
         );
 
         medeelel.khevlesenOgnoo = moment(ognoo).format("YYYY-MM-DD");

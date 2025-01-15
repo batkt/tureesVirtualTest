@@ -138,6 +138,22 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         </tr>
         <tr>
           <td style="border: 1px solid #000; text-align: center;">2</td>
+          <td style="border: 1px solid #000; text-align: left;">Барьцаа үлдэгдэл</td>
+          <td style="border: 1px solid #000; text-align: left;"></td>
+          <td style="border: 1px solid #000; text-align: left;"></td>
+          <td style="border: 1px solid #000; text-align: right;">
+            &lt;baritsaaUldegdelNuat&gt;
+          </td>
+          <td style="border: 1px solid #000; text-align: right;">
+            &lt;baritsaaUldegdelNuatgui&gt;
+          </td>
+          <td style="border: 1px solid #000; text-align: right;"></td>
+          <td style="border: 1px solid #000; text-align: right;">
+            &lt;baritsaaUldegdel&gt;
+          </td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid #000; text-align: center;">3</td>
           <td style="border: 1px solid #000; text-align: left;">Алданги</td>
           <td style="border: 1px solid #000; text-align: left;"></td>
           <td style="border: 1px solid #000; text-align: left;"></td>
@@ -153,7 +169,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           </td>
         </tr>
         <tr>
-          <td style="border: 1px solid #000; text-align: center;">3</td>
+          <td style="border: 1px solid #000; text-align: center;">4</td>
           <td style="border: 1px solid #000; text-align: left;">
             Түрээсийн төлбөр
           </td>
@@ -174,7 +190,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             return `
               <tr key=${index}>
                 <td style="border: 1px solid #000; text-align: center;">${
-                  index + 4
+                  index + 5
                 }</td>
                 <td style="border: 1px solid #000; text-align: left;">
                   ${mur.tailbar}
