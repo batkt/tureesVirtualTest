@@ -441,6 +441,29 @@ function BarilgiinTokhirgoo({
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("Corporate ашиглах үед")}
+                </div>
+                <div className="text-gray-600">
+                  {t("И Баримтын сугалааны дугаар болон төлсөн дүнг хэрэглэгч руу мессежээр илгээх эсэх")}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  checked={barilgaTokhirgoo?.eBarimtMessageIlgeekhEsekh}
+                  onChange={(v) =>
+                    setBarilgaTokhirgoo((a) => ({
+                      ...(a || {}),
+                      eBarimtMessageIlgeekhEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
           <div
             className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
               !!barilgaTokhirgoo ? "flex" : "hidden"
