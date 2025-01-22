@@ -21,6 +21,7 @@ import MSearch from "./tolgoi/MSearch";
 import moment from "moment";
 import Updater from "./Updater";
 import Zaavar from "./Zaavar";
+import MsgToololt from "./MsgToololt";
 import { GoArrowLeft } from "react-icons/go";
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { TbArrowBarLeft } from "react-icons/tb";
@@ -456,6 +457,11 @@ function Admin({
             </h2>
           </div>
           <div className="flex w-full flex-row justify-between md:w-auto md:space-x-3 lg:space-x-6">
+            {token && baiguullaga?._id && barilgiinId && (
+              <div className="hidden h-8 items-center justify-center md:flex ">
+                <MsgToololt token={token} baiguullagiinId={baiguullaga?._id} barilgiinId={barilgiinId} />
+              </div>
+            )}
             {tsonkhniiId && (
               <div className="hidden h-8 items-center justify-center md:flex ">
                 <Zaavar token={token} id={tsonkhniiId} />
