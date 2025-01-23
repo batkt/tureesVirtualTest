@@ -32,8 +32,10 @@ import {
   Space,
   message,
   Input,
+  InputNumber,
   notification,
   Modal,
+  Switch,
 } from "antd";
 import { toWords } from "mon_num";
 import Admin from "components/Admin";
@@ -100,6 +102,11 @@ const Tailbar = React.forwardRef(
     const [sergeekhOgnoo, setSergeekhOgnoo] = React.useState(moment());
     const [tsutslakhOgnoo, setTsutslakhOgnoo] = React.useState(moment());
     const [odoogiinUldegdel, setOdoogiinUldegdel] = React.useState(0);
+    const [ekhniiUldegdel, setEkhniiUldegdel] = React.useState(0);
+    const [avlagaUldegdel, setAvlagaUldegdel] = React.useState(0);
+    const [niilberAvlaga, setNiilberAvlaga] = React.useState(0);
+    const [garaasAvlagaOruulakh, setGaraasAvlagaOruulakh] = React.useState(false);
+    const [suuliinSariinAvlaguud, setSuuliinSariinAvlaguud] = React.useState([]);
 
     React.useImperativeHandle(
       ref,
@@ -112,7 +119,10 @@ const Tailbar = React.forwardRef(
             });
             return;
           }
-
+          var tempAvlaguud = [];
+          if(baiguullaga?.tokhirgoo?.udruurBodokhEsekh)
+            tempAvlaguud = garaasAvlagaOruulakh && niilberAvlaga > 0 ? [{ turul: "avlaga", tailbar: shaltgaan, ognoo: tsutslakhOgnoo[0], tulukhDun: niilberAvlaga, }] : suuliinSariinAvlaguud;
+          
           uilchilgee(token)
             .post(service, {
               gereeniiId: data?._id,
@@ -120,6 +130,8 @@ const Tailbar = React.forwardRef(
               shaltgaan,
               duusakhOgnoo,
               sergeekhOgnoo,
+              suuliinSariinAvlaguud: tempAvlaguud,
+              udruurBodokhEsekh: baiguullaga?.tokhirgoo?.udruurBodokhEsekh,
             })
             .then(({ data }) => {
               if (data === "Amjilttai") {
@@ -135,7 +147,7 @@ const Tailbar = React.forwardRef(
           destroy();
         },
       }),
-      [shaltgaan, duusakhOgnoo, sergeekhOgnoo]
+      [shaltgaan, duusakhOgnoo, sergeekhOgnoo, suuliinSariinAvlaguud, garaasAvlagaOruulakh, niilberAvlaga, tsutslakhOgnoo]
     );
     function garya() {
       if (shaltgaan !== "")
@@ -159,11 +171,30 @@ const Tailbar = React.forwardRef(
         })
         .then(({ data }) => {
           if (!!data) {
-            // data.uldegdel;
             setOdoogiinUldegdel(data.uldegdel);
           }
         })
         .catch(aldaaBarigch);
+    }, [data.gereeniiDugaar])
+
+    useEffect(() => {
+      if(service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh)
+      {
+        var ognoo = [data?.gereeniiOgnoo, moment(new Date()).subtract(1, "month")];
+        uilchilgee(token)
+          .post("/uldegdelBodyo", {
+            baiguullagiinId: data.baiguullagiinId,
+            barilgiinId: data.barilgiinId,
+            gereeniiDugaar: data.gereeniiDugaar,
+            ognoo: ognoo,
+          })
+          .then(({ data }) => {
+            if (!!data) {
+              setEkhniiUldegdel(data.uldegdel);
+            }
+          })
+          .catch(aldaaBarigch);
+      }
     }, [data.gereeniiDugaar])
 
     useEffect(() => {
@@ -191,27 +222,42 @@ const Tailbar = React.forwardRef(
     function changeOgnoo(e)
     {
       setTsutslakhOgnoo(e);
-      setOdoogiinUldegdel(0);
-      var ognoo = [data?.gereeniiOgnoo, moment(e[0]).subtract(1, "month")];
-      uilchilgee(token)
-        .post("/uldegdelBodyo", {
-          baiguullagiinId: data.baiguullagiinId,
-          barilgiinId: data.barilgiinId,
-          gereeniiDugaar: data.gereeniiDugaar,
-          ognoo: ognoo,
+      setAvlagaUldegdel(0);
+      setSuuliinSariinAvlaguud([]);
+      var diffDay = moment(e[1]).diff(moment(e[0]), "day") + 1;
+      if(diffDay > 0)
+      {
+        uilchilgee(token)
+        .post("/ashiglakhKhonogTootsoolokh", {
+          gereeniiId: data?._id,
+          diffDay: diffDay,
+          ekhniiUldegdel: ekhniiUldegdel,
         })
         .then(({ data }) => {
           if (!!data) {
-            // data.uldegdel;
-            setOdoogiinUldegdel(data.uldegdel);
+            setAvlagaUldegdel(data.uldegdelAvlaga);
+            setSuuliinSariinAvlaguud(data.avlagas);
           }
         })
-        .catch(aldaaBarigch);
+        .catch(aldaaBarigch);  
+      }
+    }
+
+    function garaasAvlagaUusgekh(e)
+    {
+      setGaraasAvlagaOruulakh(e);
+      if(e)
+      {
+        setNiilberAvlaga(0);
+        setSuuliinSariinAvlaguud([]);
+      }
+      else
+        changeOgnoo(tsutslakhOgnoo);
     }
 
     return (
       <div className="w-full space-y-2">
-        <div className="w-full space-y-1 font-medium">
+        <div className="w-full space-y-1">
           <div className="flex w-full flex-row justify-between">
             <div className="text-right">
               {t(
@@ -222,7 +268,7 @@ const Tailbar = React.forwardRef(
             {service === "/gereeSergeeye" ? (
               <DatePicker value={sergeekhOgnoo} onChange={setSergeekhOgnoo} />
             ) : (
-              <div>{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
+              <div className="font-medium">{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
             )}
           </div>
           <div className="flex w-full flex-row justify-between">
@@ -230,13 +276,13 @@ const Tailbar = React.forwardRef(
             {service === "/gereeSergeeye" ? (
               <DatePicker value={duusakhOgnoo} onChange={setDuusakhOgnoo} />
             ) : (
-              <div>{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
+              <div className="font-medium">{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
             )}
           </div>
           {service !== "/gereeSergeeye" && (
             <div className="flex w-full flex-row justify-between">
               <div className="text-right">{t("Ашигласан хоног")}:</div>
-              <div>
+              <div className="font-medium">
                 {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
               </div>
             </div>
@@ -244,20 +290,57 @@ const Tailbar = React.forwardRef(
           {service !== "/gereeSergeeye" && (
             <div className="flex w-full flex-row justify-between">
               <div className="text-right">{t("Авлагын дүн")}:</div>
-              <div>{formatNumber(odoogiinUldegdel)}</div>
+              <div className="font-medium">{formatNumber(odoogiinUldegdel)}</div>
             </div>
           )}
           {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
             <div className="flex w-full flex-row justify-between">
-              <div className="text-right"> Цуцлах огноо </div>
-              <DatePicker.RangePicker placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]} disabledDate={disabledDate} value={tsutslakhOgnoo} onChange={(e) => changeOgnoo(e)} />
+              <div className="text-right">{t("Авлагын эхний үлдэгдэл")}:</div>
+              <div className="font-medium">{formatNumber(ekhniiUldegdel)}</div>
+            </div>
+          )}
+          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right">{t("Авлагын эцсийн үлдэгдэл")}:</div>
+              <div className="font-medium">{formatNumber(avlagaUldegdel)}</div>
+            </div>
+          )}
+          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right"> Ашиглах огноо </div>
+              <DatePicker.RangePicker className="font-medium" placeholder={["Эхлэх огноо", "Дуусах огноо"]} disabledDate={disabledDate} value={tsutslakhOgnoo} onChange={(e) => changeOgnoo(e)} />
             </div>
           )}
           {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
             <div className="flex w-full flex-row justify-between">
               <div className="text-right">{t("Тухайн цуцалсан сарын ашигласан хоног")}:</div>
-              <div>
-                {moment(tsutslakhOgnoo[1]).diff(moment(tsutslakhOgnoo[0]), "day")}
+              <div className="font-medium">
+                {moment(tsutslakhOgnoo[1]).diff(moment(tsutslakhOgnoo[0]), "day") + 1}
+              </div>
+            </div>
+          )}
+          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right">{t("Гараас нийлбэр авлага оруулах эсэх")}:</div>
+              <div className="font-medium">
+                <Switch
+                  defaultChecked={garaasAvlagaOruulakh}
+                  onChange={(v) => garaasAvlagaUusgekh(v) }
+                />
+              </div>
+            </div>
+          )}
+          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && garaasAvlagaOruulakh && (
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right">{t("Нийлбэр авлага үүсгэх дүн")}:</div>
+              <div className="flex w-1/2 font-medium">
+                <InputNumber 
+                  value={niilberAvlaga} 
+                  onChange={(v) => setNiilberAvlaga(v)} 
+                  formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} 
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  style={{ width: "100%" }}
+                  />
               </div>
             </div>
           )}

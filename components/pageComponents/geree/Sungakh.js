@@ -80,24 +80,24 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
 
   return (
     <div className="w-full space-y-2">
-      <div className="w-full space-y-2 font-medium">
+      <div className="w-full space-y-2">
         <div className="flex w-full flex-row justify-between">
           <div className="text-right">{t("Эхлэх огноо")}:</div>
-          <div>{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
+          <div className="font-medium">{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
         </div>
         <div className="flex w-full flex-row justify-between">
           <div className="text-right">{t("Дуусах огноо")}:</div>
-          <div>{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
+          <div className="font-medium">{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
         </div>
         <div className="flex w-full flex-row justify-between">
           <div className="text-right">{t("Ашигласан хоног")}:</div>
-          <div>
+          <div className="font-medium">
             {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
           </div>
         </div>
         <div className="flex w-full flex-row justify-between">
           <div className="text-right">{t("Авлагын дүн")}:</div>
-          <div>{formatNumber(data?.uldegdel)}</div>
+          <div className="font-medium">{formatNumber(data?.uldegdel)}</div>
         </div>
         <div className="flex w-full flex-row justify-between">
           <div className="text-right">{data?.turGereeEsekh === true ? "Сунгах өдөр:" : "Сунгах сар:"}</div>
@@ -107,12 +107,14 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
             style={{ width: "60%" }}
             value={sar}
             onChange={setSar}
+            className="font-medium"
           />
         </div>
         <div className="flex w-full flex-row justify-between">
           <div className="text-right">{t("Дуусгах огноо")}:</div>
           <DatePicker
             id="ognoo"
+            className="font-medium"
             allowClear={false}
             style={{ width: "60%" }}
             value={duusakhOgnoo}
