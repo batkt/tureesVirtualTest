@@ -464,6 +464,8 @@ function TalbaiBurtgekh({ token }) {
     talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId;
     talbaiState.barilgiinId = barilgiinId;
     talbaiState.khurunguud = khurunguud.khurunguud;
+    talbaiState.talbainKhemjee = parseFloat(talbaiState.talbainKhemjee?.toFixed(2));
+    talbaiState.talbainKhemjeeMetrKube = parseFloat(talbaiState.talbainKhemjeeMetrKube?.toFixed(2));
     if (khurunguud?.khurunguud?.length > 0) {
       if (talbaiState.khurunguud[0].zurgiinId !== undefined) {
         talbaiState.khurunguud.map(

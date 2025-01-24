@@ -71,7 +71,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Гэрчилгээний №:</p>
+          <p style="white-space: nowrap;">Гэрээний №:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
             &nbsp;&lt;gereeniiDugaar&gt;
           </p>

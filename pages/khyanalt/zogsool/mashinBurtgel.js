@@ -451,19 +451,23 @@ function mashinBurtgel({ token }) {
         width: "6rem",
         align: "center",
         dataIndex: "tsenegleltUldegdel",
-        render: (v) => {
-          if (!!v) {
-            return (
-              <div className="w-full truncate rounded-lg bg-green-500 px-2 py-1 text-white">
-                {formatNumber(v, 0)}
-              </div>
-            );
-          } else {
-            return (
-              <div className="w-full truncate rounded-lg bg-green-500 px-2 py-1 text-white">
-                0
-              </div>
-            );
+        render: (v, data) => {
+          if(data?.turul === "Дотоод")
+            return "";
+          {
+            if (!!v) {
+              return (
+                <div className="w-full truncate rounded-lg bg-green-500 px-2 py-1 text-white">
+                  {formatNumber(v, 0)}
+                </div>
+              );
+            } else {
+              return (
+                <div className="w-full truncate rounded-lg bg-green-500 px-2 py-1 text-white">
+                  0
+                </div>
+              );
+            }
           }
         },
       },
@@ -479,7 +483,7 @@ function mashinBurtgel({ token }) {
               trigger="hover"
               content={() => (
                 <div className="flex w-24 flex-col space-y-2">
-                  <a
+                  {data?.turul !== "Дотоод" && (<a
                     className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                     onClick={() => {
                       tsenegliy(data);
@@ -487,7 +491,8 @@ function mashinBurtgel({ token }) {
                   >
                     <DollarCircleOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Цэнэглэх")}</label>
-                  </a>
+                  </a>)
+                  }
                   <a
                     className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                     onClick={() => {

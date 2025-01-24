@@ -1027,12 +1027,16 @@ function guilgeeniiTuukh({ token }) {
         a.dataIndex === "sariinTurees" ||
         a.dataIndex === "talbainNiitUne" ||
         a.dataIndex === "aldangiinUldegdel" ||
-        a.dataIndex === "baritsaaAvakhDun" 
+        a.dataIndex === "baritsaaAvakhDun" ||
+        a.dataIndex === "baritsaaniiUldegdel"
             ? forExcel.push({
                 title: a.excelHeader || a.title,
                 __numFmt__: "#,##0.00",
                 __cellType__: "TypeNumeric",
                 dataIndex,
+                render: (val, data) => {
+                  return a.dataIndex === "baritsaaAvakhDun" ? ((val || 0) - (data?.baritsaaniiUldegdel || 0)) : val;
+                },
               })    
           : forExcel.push({ title: a.excelHeader || a.title, dataIndex });
       }
@@ -1304,6 +1308,22 @@ function guilgeeniiTuukh({ token }) {
                       return (
                         <div className="w-full text-right">
                           {formatNumber((baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0))}
+                        </div>
+                      );
+                    },
+                  },
+                  {
+                    title: t("Барьцааны төлөлт"),
+                    dataIndex: "baritsaaniiUldegdel",
+                    className: "text-center",
+                    align: "center",
+                    ellipsis: true,
+                    width: "7rem",
+                    summary: true,
+                    render: (baritsaaniiUldegdel) => {
+                      return (
+                        <div className="w-full text-right">
+                          {formatNumber(baritsaaniiUldegdel || 0)}
                         </div>
                       );
                     },

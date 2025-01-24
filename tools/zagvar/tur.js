@@ -77,7 +77,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Гэрчилгээний №:</p>
+          <p style="white-space: nowrap;">Гэрээний №:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
             &lt;gereeniiDugaar&gt;
           </p>
@@ -251,7 +251,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td></td>
           <td><p>Нэхэмжлэл бичсэн</p></td>
           <td></td>
-          <td><p>/${ajiltan?.ovog?.[0]}. ${ajiltan?.ner}/</p></td>
+          <td><p>/${ajiltan?.ovog?.[0] ? ajiltan?.ovog?.[0] : ""}${ajiltan?.ovog?.[0] ? "." : ""} ${ajiltan?.ner}/</p></td>
           <td></td>
           <td></td>
           <td></td>
