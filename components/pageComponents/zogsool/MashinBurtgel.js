@@ -568,8 +568,8 @@ function MashinBurtgel(
             required: form.getFieldValue("mashiniiDugaar")?.length > 0 && true,
             min: 6,
             max: 7,
-            pattern: new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}"),
-            message: t("Машины дугаар 4 тоо 3 үсэг байх ёстой"),
+            pattern: new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"),
+            message: t("Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"),
           },
         ]}
         label={t("Машины дугаар")}
