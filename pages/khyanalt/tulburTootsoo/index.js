@@ -1,6 +1,6 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { useAuth } from "services/auth";
 import {
   Card,
@@ -151,6 +151,8 @@ function tulburTootsoo({ token }) {
   const { dansGaralt } = useDans(token, baiguullaga?._id);
   const [songogdsonDans, setSongogdsonDans] = React.useState(null);
   const [songogdsonTurul, setSongogdsonTurul] = React.useState(null);
+  const [loading, setLoading] = useState(false);
+  const [loadingBaritsaa, setLoadingBaritsaa] = useState(false);
 
   const [khuulgaTurul, setKhuulgaTurul] = React.useState("orlogo");
 
@@ -268,7 +270,7 @@ function tulburTootsoo({ token }) {
             {t("Хаах")}
           </Button>
           ,
-          <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
+          <Button type="primary" onClick={() => !loading && !loadingBaritsaa && refGuilgee.current.khadgalya()}>
             {t("Хадгалах")}
           </Button>
         </div>,
@@ -286,6 +288,8 @@ function tulburTootsoo({ token }) {
             token={token}
             baiguullagiinId={baiguullaga?._id}
             onFinish={refreshData}
+            setLoading={setLoading}
+            setLoadingBaritsaa={setLoadingBaritsaa}
           />
         ),
         footer,

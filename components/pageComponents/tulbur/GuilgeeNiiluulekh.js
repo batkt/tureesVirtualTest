@@ -81,20 +81,18 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         default:
           break;
       }
-      if (
-        (mur?.baritsaaAvakhDun || 0) - (mur?.baritsaaniiUldegdel || 0) <
-        mur.baritsaaTulbur
-      )
+      var baritsaaDun = Math.round((((mur?.baritsaaAvakhDun || 0) - (mur?.baritsaaniiUldegdel || 0)) + Number.EPSILON) * 10000)/ 10000
+      if (baritsaaDun < mur.baritsaaTulbur)
         aldaa.push(
           `${mur.talbainDugaar} талбайн холбох гүйлгээний барьцааны дүн хэтэрсэн байна`
         );
       baritsaa.push(baritsaaniiMur);
     }
+    var aldangiDun = Math.round(((dans.bank === "tdb" ? guilgee.Amt : (guilgee.amount || guilgee.tranAmount)) + Number.EPSILON) * 10000)/ 10000;
+    var aldangiinUldegdel = Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000)/ 10000;
     if (
-      mur.aldangiinUldegdel > (mur.tulsunAldangi || 0) &&
-      (mur.tulsunAldangi || 0) <
-        Number(dans.bank === "tdb" ? guilgee.Amt : (guilgee.amount || guilgee.tranAmount)) -
-          guilgee.kholbosonDun
+      aldangiinUldegdel > (mur.tulsunAldangi || 0) &&
+      (mur.tulsunAldangi || 0) < aldangiDun - guilgee.kholbosonDun
     ) {
       aldaa.push(
         t("талбайн холбох гүйлгээний алдангийн дүнг түрүүлж төлнө үү", {too: mur.talbainDugaar}) 
@@ -120,13 +118,12 @@ async function baritsaaniiGuilgeeKhiiya(token, guilgeenuud) {
         aldaa.push(`${e.message}`);
       });
     if (khariu !== "Amjilttai") break;
-    break;
   }
   return { aldaa };
 }
 
 function GuilgeeNiiluulekh(
-  { data, dans, token, baiguullagiinId, destroy, onFinish, barilgiinId },
+  { data, dans, token, baiguullagiinId, destroy, onFinish, barilgiinId , setLoading, setLoadingBaritsaa },
   ref
 ) {
   const [gereenuud, setGereenuud] = useState([]);
@@ -178,6 +175,7 @@ function GuilgeeNiiluulekh(
           return;
         }
         if (baritsaa.length > 0) {
+          setLoadingBaritsaa(true);
           const baritsaaniiGuilgee = await baritsaaniiGuilgeeKhiiya(
             token,
             baritsaa
@@ -197,7 +195,9 @@ function GuilgeeNiiluulekh(
             _.isFunction(onFinish) && onFinish();
             destroy();
           }
+          setLoadingBaritsaa(false);
         }
+        setLoading(true);
         if (!!guilgeeniiTailbar)
           undsenGuilgee?.forEach((mur) => {
             mur.tailbar = guilgeeniiTailbar;
@@ -216,7 +216,8 @@ function GuilgeeNiiluulekh(
                 destroy();
               }
             })
-            .catch(aldaaBarigch);
+            .catch(aldaaBarigch)
+            .finally(() => setLoading(false));
       },
     }),
     [gereenuud]
