@@ -39,6 +39,7 @@ import {
   PrinterOutlined,
   CopyOutlined,
   ArrowRightOutlined,
+  VideoCameraAddOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -1487,6 +1488,30 @@ function camera({ token }) {
           ) : null;
         },
       },
+      {
+        title: () => <VideoCameraAddOutlined />,
+        width: "2rem",
+        align: "center",
+        render: (data) => {
+          return (<div className="flex justify-center">
+            <Popover
+              content={() =>
+                data?.tuukh?.map((mur) => (
+                  <div className="dark:text-gray-200">
+                    {mur.orsonKhaalga}
+                  </div>
+                ))
+              }
+              placement="bottom"
+              trigger="click"
+            >
+              <Button
+                icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
+              ></Button>
+            </Popover>
+          </div>)
+        },
+      },
     ];
   }, [
     turul,
@@ -2782,6 +2807,18 @@ function camera({ token }) {
                                               v?.[0]?.niitKhugatsaa <= 30
                                             ? t("30 мин")
                                             : t(parent.zurchil);
+                                      },
+                                    },
+                                    {
+                                      title: t("Орсон хаалга"),
+                                      dataIndex: "tuukh",
+                                      render: (v) => {
+                                        var khaalguud = "";
+                                        v?.map((a) => 
+                                        {
+                                          khaalguud = khaalguud + (khaalguud ? ", " : "" ) + a.orsonKhaalga;
+                                        })
+                                        return khaalguud;
                                       },
                                     },
                                   ])
