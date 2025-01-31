@@ -34,11 +34,15 @@ function ShineEbarimt({
   function registerShalgaya(register) {
     setRegister(register);
     // setCustomerTin(customerTin);
+    setTin(null);
     setBaiguullaga(null);
     if (register?.toString().length === 7 && baiguullagaEsekh)
       uilchilgee()
         .get(`/tatvaraasBaiguullagaAvya/${register}`)
-        .then(({ data }) => setBaiguullaga(data));
+        .then(({ data }) => {
+          setBaiguullaga(data); 
+          setTin(data?.tin);
+        });
   }
   if (alkham === 2)
     return (
