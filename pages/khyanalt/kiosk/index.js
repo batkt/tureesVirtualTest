@@ -34,6 +34,7 @@ const Kiosk = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [register, setRegister] = useState("");
   const [baiguullagaNer, setBaiguullagaNer] = useState();
+  const [customerTin, setCustomerTin] = useState();
   const [eBarimtTurul, setEbarimtTurul] = useState("");
   const [drawerOngoikh, setDrawerOngoikh] = useState(false);
   const [songogdsonData, setSongogdsonData] = useState(null);
@@ -165,12 +166,14 @@ const Kiosk = () => {
   }, [khuleegdejBuiPass, baiguullaga]);
 
   useEffect(() => {
+    setCustomerTin();
     if (register.length > 6) {
       uilchilgee()
         .get(`/tatvaraasBaiguullagaAvya/${register}`)
         .then(({ data }) => {
           if (data) {
             setBaiguullagaNer(data);
+            setCustomerTin(data?.tin);
           }
         })
         .catch((e) => {
@@ -484,7 +487,8 @@ const Kiosk = () => {
     uilchluulegchiinId,
     customer_no,
     individual,
-    paid_amount
+    paid_amount,
+    customerTin,
   ) => {
     uilchilgee(token)
       .post("/v1/kioskEbarimtAvya", {
@@ -492,6 +496,8 @@ const Kiosk = () => {
         customer_no,
         individual,
         paid_amount,
+        customerNo: customer_no,
+        customerTin,
       })
       .then(({ data }) => {
         if (!!data) {
@@ -557,7 +563,8 @@ const Kiosk = () => {
           songogdsonData?.session_id,
           register,
           register !== "" ? false : true,
-          songogdsonData?.pay_amount
+          songogdsonData?.pay_amount,
+          customerTin,
         );
       }
     } else {
@@ -565,7 +572,8 @@ const Kiosk = () => {
         songogdsonData?.session_id,
         register,
         register !== "" ? false : true,
-        songogdsonData?.pay_amount
+        songogdsonData?.pay_amount,
+        null,
       );
     }
   };

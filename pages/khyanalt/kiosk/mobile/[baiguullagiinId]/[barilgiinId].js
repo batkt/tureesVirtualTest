@@ -31,6 +31,7 @@ const KioskMobile = ({
   const [messageApi, contextHolder] = message.useMessage();
   const [register, setRegister] = useState("");
   const [baiguullagaNer, setBaiguullagaNer] = useState();
+  const [customerTin, setCustomerTin] = useState();
   const [eBarimtTurul, setEbarimtTurul] = useState("");
   const [drawerOngoikh, setDrawerOngoikh] = useState(false);
   const [songogdsonData, setSongogdsonData] = useState(null);
@@ -155,12 +156,14 @@ const KioskMobile = ({
   }, [qpayObject]);
 
   useEffect(() => {
+    setCustomerTin();
     if (register.length > 6) {
       uilchilgee()
         .get(`/tatvaraasBaiguullagaAvya/${register}`)
         .then(({ data }) => {
           if (data) {
             setBaiguullagaNer(data);
+            setCustomerTin(data?.tin);
           }
         });
     } else {
@@ -345,7 +348,8 @@ const KioskMobile = ({
     uilchluulegchiinId,
     customer_no,
     individual,
-    paid_amount
+    paid_amount,
+    customerTin,
   ) => {
     uilchilgee(token)
       .post("/v1/kioskEbarimtAvya", {
@@ -353,6 +357,8 @@ const KioskMobile = ({
         customer_no,
         individual,
         paid_amount,
+        customerNo: customer_no,
+        customerTin,
       })
       .then(({ data }) => {
         if (!!data) {
@@ -396,7 +402,8 @@ const KioskMobile = ({
       songogdsonData?.session_id,
       register,
       register !== "" ? false : true,
-      songogdsonData?.pay_amount
+      songogdsonData?.pay_amount,
+      customerTin,
     );
   };
 
