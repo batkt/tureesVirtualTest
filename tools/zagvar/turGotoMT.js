@@ -205,7 +205,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           </p>  
         </div>
         <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
-          Холбогдох утас: 90088007
+          Холбогдох утас: 99900335
         </div>
         <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Хүлээн зөвшөөрсөн...................................</p>
