@@ -1444,13 +1444,22 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.niitAshiglaltiinZardal =
           formatNumber(nekhemjlekh.niitAshiglaltiinZardal) || "";
 
-        nekhemjlekh.sar = moment().format("MM");
-        nekhemjlekh.ekhlekhOn = moment().format("YYYY");
-        nekhemjlekh.ekhelkhSar = moment().format("MM");
-        nekhemjlekh.ekhlekhUdur = moment().format("DD");
-        nekhemjlekh.duusakhOn = moment().format("YYYY");
-        nekhemjlekh.duusakhSar = moment().format("MM");
-        nekhemjlekh.duusakhUdur = moment().format("DD");
+        nekhemjlekh.sar = moment(ognoo).format("MM");
+        nekhemjlekh.ekhlekhOn = moment(ognoo).format("YYYY");
+        nekhemjlekh.ekhelkhSar = moment(ognoo).format("MM");
+        nekhemjlekh.ekhlekhUdur = moment(ognoo).format("DD");
+        nekhemjlekh.duusakhOn = moment(ognoo).format("YYYY");
+        nekhemjlekh.duusakhSar = moment(ognoo).format("MM");
+        nekhemjlekh.duusakhUdur = moment(ognoo).format("DD");
+
+        nekhemjlekh.KhhurunguEkhlekhUdur = moment(ognoo).startOf("month").format("DD");
+        nekhemjlekh.KhhurunguEkhlekhSar = moment(ognoo).startOf("month").format("MM");
+        nekhemjlekh.KhhurunguDuusakhUdur = moment(ognoo).endOf("month").format("DD");
+        nekhemjlekh.KhhurunguDuusakhSar = moment(ognoo).endOf("month").format("MM");
+        nekhemjlekh.ashiglaltEkhlehUdur = moment(ognoo).subtract(1, 'month').startOf("month").format("MM/DD");
+        nekhemjlekh.ashiglaltDuusakhUdur = moment(ognoo).subtract(1, 'month').endOf("month").format("MM/DD");
+        nekhemjlekh.tureesEkhlehUdur = moment(ognoo).add(1, 'month').startOf("month").format("MM/DD");
+        nekhemjlekh.tureesDuusakhUdur = moment(ognoo).add(1, 'month').endOf("month").format("MM/DD");
 
         var niilberAshiglaltDunGoTo = 0
         var niilberNekhemjlelDunGoto = 0
