@@ -129,7 +129,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             sensitivity: "base",
           });
           })
-          .filter(a => a.tailbar === "Худалдааны менежмент")
+          .filter(a => a.tailbar === "Тавилга түрээс" || a.tailbar === "Худалдааны менежмент")
           .map((mur, index) => {
           return `
             <tr key=${index}>
@@ -196,9 +196,9 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
     <div style="display: block; width: 100%; text-align: left; margin-top: 2rem; ">
       Мастер түншлэл ХХК
     </div>
-    <div style="margin-top: 0.5rem; display: flex; width: 100%; align-items: flex-start; justify-content: space-between;">
-      <div style="width: 40%;">
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+    <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between;">
+      <div style="width: 80%;">
+        <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /С.Туяацэцэг/
@@ -207,17 +207,15 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
           Холбогдох утас: 90088007
         </div>
-      </div>
-      <div style="width: 20%;">
-        <p style="white-space: nowrap; padding: 0.5rem">&lt;tamga&gt;</p>
-      </div>
-      <div style="width: 40%;">
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+        <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Хүлээн зөвшөөрсөн...................................</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">
             &lt;ner&gt;
           </p>
         <div>
+      </div>
+      <div style="width: 20%;">
+        &lt;tamga&gt;
       </div>
     </div>
   </div>`;

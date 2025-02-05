@@ -166,8 +166,7 @@ function tulburTootsoo({ token }) {
           );
 
           var niilberDunGoto = (medeelel.umnukhSariinUrTulbur || 0) + (medeelel?.aldangiinUldegdel || 0);
-          // if(ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5")
-            niilberDunGoto += (((medeelel.baritsaaAvakhDun || 0) - (medeelel.baritsaaniiUldegdel || 0)) + khungulsunTalbainNiitUne);
+          niilberDunGoto += (((medeelel.baritsaaAvakhDun || 0) - (medeelel.baritsaaniiUldegdel || 0)) + khungulsunTalbainNiitUne);
           
           let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
             ? (khungulsunTalbainNiitUne / 1.1) * 0.1
@@ -306,19 +305,37 @@ function tulburTootsoo({ token }) {
                 />
               </span>
             );
-            medeelel.tamga = renderToString(
-              <span style={{ position: "absolute", zIndex: 1 }}>
-                <img
-                  src={`${url}/file?path=tamga/${barilga.tamga}`}
-                  style={{
-                    width: 115,
-                    height: 100,
-                    transform: "translate(-10%, -50%)",
-                    opacity: 0.65,
-                  }}
-                />
-              </span>
-            );
+            if(ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909") // goto 
+            {
+              medeelel.tamga = renderToString(
+                <span style={{ position: "absolute", zIndex: 1 }}>
+                  <img
+                    src={`${url}/file?path=tamga/${barilga.tamga}`}
+                    style={{
+                      width: 200,
+                      height: 160,
+                      transform: "translate(5%, -80%)",
+                      opacity: 0.65,
+                    }}
+                  />
+                </span>
+              );
+            }
+            else
+              medeelel.tamga = renderToString(
+                <span style={{ position: "absolute", zIndex: 1 }}>
+                  <img
+                    src={`${url}/file?path=tamga/${barilga.tamga}`}
+                    style={{
+                      width: 115,
+                      height: 100,
+                      transform: "translate(-10%, -50%)",
+                      opacity: 0.65,
+                    }}
+                  />
+                </span>
+              );
+            
             medeelel.khuviinTamga = renderToString(
               <span style={{ position: "absolute", zIndex: 1 }}>
                 <img
@@ -562,9 +579,9 @@ function tulburTootsoo({ token }) {
               
               kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
               if(a.tailbar === "Цахилгаан" || a.tailbar === "Эрүүл ахуйч" || a.tailbar === "Харуул хамгаалалт, ОБЕГ, ХАБ" || a.tailbar === "Дулаан" || a.tailbar === "Ус")
-                niilberAshiglaltDunGoTo += a.tulukhDun
+                niilberAshiglaltDunGoTo += khungulultKhassanTulukhDun;
               if(a.tailbar === "Худалдааны менежмент" || a.tailbar === "Хөрөнгийн менежмент" || a.tailbar === "Тавилга түрээс")
-                niilberNekhemjlelDunGoto += a.tulukhDun
+                niilberNekhemjlelDunGoto += khungulultKhassanTulukhDun;
             });
             medeelel.zuruuDun = zuruuDun
             medeelel.tseverusDun = tseverusDun
@@ -2090,7 +2107,8 @@ function tulburTootsoo({ token }) {
               return (
                 <div
                   key={`khevlekhNekhemjlel${i}`}
-                  className={`print text-xs "`}
+                  className={`print text-xs`}
+                  // className={`block h-[5.845in] text-xs"`}
                   dangerouslySetInnerHTML={{
                     __html: nekhemjlekh.zagvar,
                   }}

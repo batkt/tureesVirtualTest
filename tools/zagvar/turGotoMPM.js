@@ -120,7 +120,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             sensitivity: "base",
           });
           })
-          .filter(a => a.tailbar === "Тавилга түрээс" || a.tailbar === "Хөрөнгийн менежмент")
+          .filter(a => a.tailbar === "Хөрөнгийн менежмент")
           .map((mur, index) => {
           return `
             <tr key=${index}>
@@ -244,28 +244,29 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
     <div style="display: block; width: 100%; text-align: left; margin-top: 2rem; ">
       Мастер проперти менежмент ХХК
     </div>
-    <div style="margin-top: 1rem; display: flex; width: 100%; align-items: flex-start; justify-content: space-between;">
-      <div style="width: 40%;">
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+    <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between;">
+      <div style="width: 85%; margin-top: 1rem; ">
+        <div style="width: 100%; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / Б.Хонгорзул/ 
           </p>  
         </div>
-        <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
-          Холбогдох утас: 90611148
+        <div style="width: 100%; margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Холбогдох утас: 90611148</p>
+          <p style="width: 40%; text-align: left; font-weight: 600;">
+            &nbsp;&nbsp;&nbsp;
+          </p>
         </div>
-      </div>
-      <div style="width: 20%;">
-        <p style="white-space: nowrap; padding: 0.5rem">&lt;tamga&gt;</p>
-      </div>
-      <div style="width: 40%;">
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+        <div style="width: 100%; margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Нэхэмжлэх хүлээн авсан:</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">
-            &lt;ner&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ner&gt;
           </p>
         <div>
+      </div>
+      <div style="width: 15%;">
+        <p style="white-space: nowrap;">&lt;tamga&gt;</p>
       </div>
     </div>
   </div>`;
