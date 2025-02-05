@@ -31,6 +31,7 @@ function Tulbur(
     defaultTurul === "Иргэн" ? true : false
   );
   const [register, setRegister] = React.useState(defaultRegister || "");
+  const [customerTin, setCustomerTin] = React.useState();
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false);
   const [loading, setLoading] = useState(false);
@@ -93,6 +94,7 @@ function Tulbur(
       if (baiguullagaEsekh === true || irgenEsekh === true) {
         body.turul = "3";
         body.register = register;
+        body.customerTin = customerTin;
       }
 
       uilchilgee(token)
@@ -134,6 +136,7 @@ function Tulbur(
         barimtKhevlekhEsekh={barimtKhevlekhEsekh}
         setBarimtKhevlekhEsekh={setBarimtKhevlekhEsekh}
         eBarimtAutomataarShivikh={eBarimtAutomataarShivikh}
+        setCustomerTin={setCustomerTin}
       />
       <div className="mt-5 flex flex-row justify-between">
         <Button type="primary" danger onClick={khaaya}>

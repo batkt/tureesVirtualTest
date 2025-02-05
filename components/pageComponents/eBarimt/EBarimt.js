@@ -27,6 +27,7 @@ function EBarimt({
   barimtKhevlekhEsekh,
   setBarimtKhevlekhEsekh,
   eBarimtAutomataarShivikh,
+  setCustomerTin,
 }) {
   // const { ajiltan } = useAuth();
   function registerShalgaya(register) {
@@ -34,6 +35,7 @@ function EBarimt({
       register = register?.toUpperCase();
     setRegister(register);
     setBaiguullaga(null);
+    setCustomerTin();
     if (
       register?.toString().length === 7 ||
       (irgenEsekh && register?.toString().length === 10)
@@ -41,7 +43,11 @@ function EBarimt({
       uilchilgee()
         .get(`/tatvaraasBaiguullagaAvya/${register}`)
         .then(({ data }) => {
-          if (data?.found === true) setBaiguullaga(data);
+          if (data?.found === true)
+          {
+            setBaiguullaga(data);
+            setCustomerTin(data?.tin);
+          }
         });
   }
 

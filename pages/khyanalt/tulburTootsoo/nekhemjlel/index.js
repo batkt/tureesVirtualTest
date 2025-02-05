@@ -42,6 +42,8 @@ import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 import khatuuZagvar from "tools/zagvar/tur";
 import khatuuZagvarFoodCity from "tools/zagvar/turFoodCityTemp";
+import khatuuZagvarGotoMPM from "tools/zagvar/turGotoMPM";
+import khatuuZagvarGotoMT from "tools/zagvar/turGotoMT";
 
 const ilgeekhTurul = "davkharaar";
 
@@ -146,7 +148,14 @@ function tulburTootsoo({ token }) {
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
           if (zagvar?.khatuuZagvarEsekh) {
-            zagvar.nekhemjlekh = ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5" ? khatuuZagvarFoodCity(medeelel, ajiltan, baiguullaga) : khatuuZagvar(medeelel, ajiltan, baiguullaga, barilgiinId);
+            if(ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5") // foodcity
+              zagvar.nekhemjlekh = khatuuZagvarFoodCity(medeelel, ajiltan, baiguullaga)
+            else if(ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" && barilgiinId === "67512183c60497546f59513a")  // goto MPM
+              zagvar.nekhemjlekh = khatuuZagvarGotoMPM(medeelel, ajiltan, baiguullaga, barilgiinId);
+            else if(ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" && barilgiinId === "6735c77a7fc60cd66deb290a")  // goto MT
+              zagvar.nekhemjlekh = khatuuZagvarGotoMT(medeelel, ajiltan, baiguullaga, barilgiinId);
+            else
+              zagvar.nekhemjlekh = khatuuZagvar(medeelel, ajiltan, baiguullaga, barilgiinId);
           }
           const barilga = baiguullaga?.barilguud?.find(
             (a) => a._id === medeelel?.barilgiinId
@@ -156,6 +165,10 @@ function tulburTootsoo({ token }) {
             medeelel.talbainNiitUne - (medeelel.khungulult || 0)
           );
 
+          var niilberDunGoto = (medeelel.umnukhSariinUrTulbur || 0) + (medeelel?.aldangiinUldegdel || 0);
+          // if(ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5")
+            niilberDunGoto += (((medeelel.baritsaaAvakhDun || 0) - (medeelel.baritsaaniiUldegdel || 0)) + khungulsunTalbainNiitUne);
+          
           let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
             ? (khungulsunTalbainNiitUne / 1.1) * 0.1
             : 0;
@@ -382,6 +395,11 @@ function tulburTootsoo({ token }) {
             medeelel.eneEkhlehUdur = moment(ognoo).startOf("month").format("YYYY/MM/DD");
             medeelel.eneDuusakhUdur = moment(ognoo).endOf("month").format("YYYY/MM/DD");
 
+            medeelel.ashiglaltEkhlehUdur = moment(ognoo).subtract(1, 'month').startOf("month").format("MM/DD");
+            medeelel.ashiglaltDuusakhUdur = moment(ognoo).subtract(1, 'month').endOf("month").format("MM/DD");
+            medeelel.tureesEkhlehUdur = moment(ognoo).add(1, 'month').startOf("month").format("MM/DD");
+            medeelel.tureesDuusakhUdur = moment(ognoo).add(1, 'month').endOf("month").format("MM/DD");
+
             medeelel.nekhemjlekhiinDugaar =
               moment().format("YY") + "/" + (dugaarlalt + i);
 
@@ -405,6 +423,8 @@ function tulburTootsoo({ token }) {
             var boxirusDun = 0
             var usxalaasniitulburDun = 0
             var niilberDun = 0
+            var niilberAshiglaltDunGoTo = 0
+            var niilberNekhemjlelDunGoto = 0
             medeelel?.zardluud?.map((a) => {
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.khemjikhNegj&gt;`, "g"),
@@ -537,13 +557,20 @@ function tulburTootsoo({ token }) {
               }
               
               kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
+              if(a.tailbar === "Цахилгаан" || a.tailbar === "Эрүүл ахуйч" || a.tailbar === "Харуул хамгаалалт, ОБЕГ, ХАБ" || a.tailbar === "Дулаан" || a.tailbar === "Ус")
+                niilberAshiglaltDunGoTo += a.tulukhDun
+              if(a.tailbar === "Худалдааны менежмент" || a.tailbar === "Хөрөнгийн менежмент" || a.tailbar === "Тавилга түрээс")
+                niilberNekhemjlelDunGoto += a.tulukhDun
             });
             medeelel.zuruuDun = zuruuDun
             medeelel.tseverusDun = tseverusDun
             medeelel.boxirusDun = boxirusDun
             medeelel.usxalaasniitulburDun = usxalaasniitulburDun
             medeelel.niilberDun = niilberDun 
-
+            medeelel.niilberAshiglaltDunGoTo = niilberAshiglaltDunGoTo
+            medeelel.niilberNekhemjlelDunGoto = niilberNekhemjlelDunGoto + niilberAshiglaltDunGoTo;
+            medeelel.niilberDunGoto = (niilberDunGoto || 0) + (niilberNekhemjlelDunGoto || 0) + (niilberAshiglaltDunGoTo || 0);
+            
             zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
               new RegExp(`&lt;zuruuDun&gt;`, "g"),
               formatNumber(medeelel.zuruuDun || 0)
@@ -567,6 +594,33 @@ function tulburTootsoo({ token }) {
             zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
               new RegExp(`&lt;niilberDun&gt;`, "g"),
               formatNumber(medeelel.niilberDun || 0)
+            );
+
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;niilberAshiglaltDunGoTo&gt;`, "g"),
+              formatNumber(medeelel.niilberAshiglaltDunGoTo || 0)
+            );
+
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;niilberNekhemjlelDunGoto&gt;`, "g"),
+              formatNumber(medeelel.niilberNekhemjlelDunGoto || 0)
+            );
+
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;niilberDunGoto&gt;`, "g"),
+              formatNumber(medeelel.niilberDunGoto || 0)
+            );
+
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;niilberDunGotoUsgeer&gt;`, "g"),
+              capitalize(
+                numberToWords(
+                  Math.abs(medeelel.niilberDunGoto),
+                  { fixed: 2, suffix: "n" },
+                  "төгрөг",
+                  "мөнгө"
+                )
+              )
             );
 
             ashiglaltiinZardal?.jagsaalt?.map((a) => {
@@ -1989,11 +2043,7 @@ function tulburTootsoo({ token }) {
               return (
                 <div
                   key={`khevlekhNekhemjlel${i}`}
-                  className={
-                    !nekhemjlekh.khatuuZagvarEsekh
-                      ? `print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10"`
-                      : `block h-[5.845in] text-xs`
-                  }
+                  className={`print text-xs "`}
                   dangerouslySetInnerHTML={{
                     __html: nekhemjlekh.zagvar,
                   }}
