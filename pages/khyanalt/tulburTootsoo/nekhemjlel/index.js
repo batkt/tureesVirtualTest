@@ -395,6 +395,10 @@ function tulburTootsoo({ token }) {
             medeelel.eneEkhlehUdur = moment(ognoo).startOf("month").format("YYYY/MM/DD");
             medeelel.eneDuusakhUdur = moment(ognoo).endOf("month").format("YYYY/MM/DD");
 
+            medeelel.KhhurunguEkhlekhUdur = moment(ognoo).startOf("month").format("DD");
+            medeelel.KhhurunguEkhlekhSar = moment(ognoo).startOf("month").format("MM");
+            medeelel.KhhurunguDuusakhUdur = moment(ognoo).endOf("month").format("DD");
+            medeelel.KhhurunguDuusakhSar = moment(ognoo).endOf("month").format("MM");
             medeelel.ashiglaltEkhlehUdur = moment(ognoo).subtract(1, 'month').startOf("month").format("MM/DD");
             medeelel.ashiglaltDuusakhUdur = moment(ognoo).subtract(1, 'month').endOf("month").format("MM/DD");
             medeelel.tureesEkhlehUdur = moment(ognoo).add(1, 'month').startOf("month").format("MM/DD");
@@ -1255,7 +1259,10 @@ function tulburTootsoo({ token }) {
         );
 
         var text = songosonZagvar?.khatuuZagvarEsekh
-          ? (ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5" ? khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga) : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId))
+          ? (ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5" ? khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga) 
+          : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" && barilgiinId === "67512183c60497546f59513a" ? khatuuZagvarGotoMPM(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
+          : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" && barilgiinId === "6735c77a7fc60cd66deb290a" ? khatuuZagvarGotoMT(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)  
+          : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId))
           : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
               ?.nekhemjlekh;
 
@@ -1291,6 +1298,9 @@ function tulburTootsoo({ token }) {
           ? khungulsunTalbainNiitUne - khungulsunTalbainNiitUneNuat
           : 0;
 
+        var niilberDunGoto = (nekhemjlekh.umnukhSariinUrTulbur || 0) + (nekhemjlekh?.aldangiinUldegdel || 0);
+        niilberDunGoto += (((nekhemjlekh.baritsaaAvakhDun || 0) - (nekhemjlekh.baritsaaniiUldegdel || 0)) + khungulsunTalbainNiitUne);
+        
         nekhemjlekh.mungunDunUsgeer = numberToWords(
           nekhemjlekh.sariinTurees,
           { fixed: 2, suffix: "n" },
@@ -1425,6 +1435,8 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.duusakhSar = moment().format("MM");
         nekhemjlekh.duusakhUdur = moment().format("DD");
 
+        var niilberAshiglaltDunGoTo = 0
+        var niilberNekhemjlelDunGoto = 0
         nekhemjlekh?.zardluud?.map((a) => {
           text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.khemjikhNegj&gt;`, "g"),
@@ -1500,7 +1512,42 @@ function tulburTootsoo({ token }) {
             formatNumber(a.khungulult || 0) || ""
           );
           kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
+          if(a.tailbar === "Цахилгаан" || a.tailbar === "Эрүүл ахуйч" || a.tailbar === "Харуул хамгаалалт, ОБЕГ, ХАБ" || a.tailbar === "Дулаан" || a.tailbar === "Ус")
+            niilberAshiglaltDunGoTo += a.tulukhDun
+          if(a.tailbar === "Худалдааны менежмент" || a.tailbar === "Хөрөнгийн менежмент" || a.tailbar === "Тавилга түрээс")
+            niilberNekhemjlelDunGoto += a.tulukhDun
         });
+
+        nekhemjlekh.niilberAshiglaltDunGoTo = niilberAshiglaltDunGoTo
+        nekhemjlekh.niilberNekhemjlelDunGoto = niilberNekhemjlelDunGoto + niilberAshiglaltDunGoTo;
+        nekhemjlekh.niilberDunGoto = (niilberDunGoto || 0) + (niilberNekhemjlelDunGoto || 0) + (niilberAshiglaltDunGoTo || 0);
+
+        text = text?.replace(
+          new RegExp(`&lt;niilberAshiglaltDunGoTo&gt;`, "g"),
+          formatNumber(nekhemjlekh.niilberAshiglaltDunGoTo || 0)
+        );
+
+        text = text?.replace(
+          new RegExp(`&lt;niilberNekhemjlelDunGoto&gt;`, "g"),
+          formatNumber(nekhemjlekh.niilberNekhemjlelDunGoto || 0)
+        );
+
+        text = text?.replace(
+          new RegExp(`&lt;niilberDunGoto&gt;`, "g"),
+          formatNumber(nekhemjlekh.niilberDunGoto || 0)
+        );
+
+        text = text?.replace(
+          new RegExp(`&lt;niilberDunGotoUsgeer&gt;`, "g"),
+          capitalize(
+            numberToWords(
+              Math.abs(nekhemjlekh.niilberDunGoto),
+              { fixed: 2, suffix: "n" },
+              "төгрөг",
+              "мөнгө"
+            )
+          )
+        );
 
         ashiglaltiinZardal?.jagsaalt?.map((a) => {
           text = text?.replace(

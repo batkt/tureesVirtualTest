@@ -81,7 +81,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: 1px solid #000; text-align: center;">Төлбөрийн төрөл</td>
           <td style="border: 1px solid #000; text-align: center;">Хугацаа</td>
           <td style="border: 1px solid #000; text-align: center;">Төлөх дүн</td>
-          <td style="border: 1px solid #000; text-align: center;" rowspan="5">Нэхэмжлэгч байгууллага</td>
+          <td style="border: 1px solid #000; text-align: center;">Нэхэмжлэгч байгууллага</td>
         </tr>
       </thead>
       <tbody>
@@ -93,7 +93,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: 1px solid #000; text-align: right;">
             &lt;baritsaaUldegdel&gt;
           </td>
-          <td style="border: 1px solid #000; text-align: center;" rowspan="5">
+          <td style="border: 1px solid #000; text-align: center;" rowspan="6">
             <div style="display: block;">
               ХААН БАНК
             </div>
@@ -137,7 +137,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
                 ${mur.tailbar}
               </td>
               <td style="border: 1px solid #000; text-align: center;">
-                &lt;ekhelkhSar&gt;/&lt;ekhlekhUdur&gt;-&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;
+                &lt;KhhurunguEkhlekhSar&gt;/&lt;KhhurunguEkhlekhUdur&gt;-&lt;KhhurunguDuusakhSar&gt;/&lt;KhhurunguDuusakhUdur&gt;
               </td>
               <td style="border: 1px solid #000; text-align: right;">&lt;${
                 mur.tailbar
@@ -201,7 +201,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /Б.Оюунболор/ 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /С.Туяацэцэг/
           </p>  
         </div>
         <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">

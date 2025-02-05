@@ -91,7 +91,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: 1px solid #000; text-align: right;">
             &lt;umnukhSariinUrTulbur&gt;
           </td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
+          <td style="border: 1px solid #000; text-align: left;" rowspan="2"></td>
         </tr>
         <tr>
           <td style="border: 1px solid #000; text-align: left; font-weight: 600;" colspan="3">
@@ -100,7 +100,6 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: 1px solid #000; text-align: right;">
             &lt;aldangiinUldegdel&gt;
           </td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
         </tr>
       </tbody>
     </table>
@@ -111,7 +110,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: 1px solid #000; text-align: center;">Хугацаа</td>
           <td style="border: 1px solid #000; text-align: center;">Дүн</td>
           <td style="border: 1px solid #000; text-align: center;">Төлөх дүн</td>
-          <td style="border: 1px solid #000; text-align: center;" rowspan="5">Нэхэмжлэгч байгууллага</td>
+          <td style="border: 1px solid #000; text-align: center;">Нэхэмжлэгч байгууллага</td>
         </tr>
       </thead>
       <tbody>
@@ -129,13 +128,24 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
                 ${mur.tailbar}
               </td>
               <td style="border: 1px solid #000; text-align: center;">
-                &lt;ekhelkhSar&gt;/&lt;ekhlekhUdur&gt;-&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;
+                &lt;KhhurunguEkhlekhSar&gt;/&lt;KhhurunguEkhlekhUdur&gt;-&lt;KhhurunguDuusakhSar&gt;/&lt;KhhurunguDuusakhUdur&gt;
               </td>
               <td style="border: 1px solid #000; text-align: left;">
               </td>
               <td style="border: 1px solid #000; text-align: right;">&lt;${
                 mur.tailbar
               }.khungulultKhassanTulukhDun&gt;</td>
+              <td style="border: 1px solid #000; text-align: center;" rowspan="8">
+                <div style="display: block;">
+                  Мастер проперти
+                </div>
+                <div style="display: block;">
+                  менежмент ХХК Хаан 
+                </div>
+                <div style="display: block;">
+                  банк: &lt;dans&gt; 
+                </div>
+              </td>
             </tr>
           `;
           })
@@ -148,17 +158,6 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: 1px solid #000; text-align: left;"></td>
           <td style="border: 1px solid #000; text-align: right;">
             &lt;niilberAshiglaltDunGoTo&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: center;" rowspan="8">
-            <div style="display: block;">
-              Мастер проперти
-            </div>
-            <div style="display: block;">
-              менежмент ХХК Хаан 
-            </div>
-            <div style="display: block;">
-              банк: &lt;dans&gt; 
-            </div>
           </td>
         </tr>
         ${medeelel.zardluud
