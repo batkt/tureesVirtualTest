@@ -2116,8 +2116,11 @@ function tulburTootsoo({ token }) {
               return (
                 <div
                   key={`khevlekhNekhemjlel${i}`}
-                  className={`print text-xs`}
-                  // className={`block h-[5.845in] text-xs"`}
+                  className={
+                    !nekhemjlekh.khatuuZagvarEsekh
+                      ? `print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10"`
+                      : `print text-xs`
+                  }
                   dangerouslySetInnerHTML={{
                     __html: nekhemjlekh.zagvar,
                   }}
