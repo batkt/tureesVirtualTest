@@ -137,7 +137,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
                 ${mur.tailbar}
               </td>
               <td style="border: 1px solid #000; text-align: center;">
-                &lt;KhhurunguEkhlekhSar&gt;/&lt;KhhurunguEkhlekhUdur&gt;-&lt;KhhurunguDuusakhSar&gt;/&lt;KhhurunguDuusakhUdur&gt;
+                &lt;tureesEkhlehUdur&gt;-&lt;tureesDuusakhUdur&gt;
               </td>
               <td style="border: 1px solid #000; text-align: right;">&lt;${
                 mur.tailbar
