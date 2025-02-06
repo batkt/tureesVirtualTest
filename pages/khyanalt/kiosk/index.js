@@ -227,8 +227,8 @@ const Kiosk = () => {
         setSongogdsonData((prev) => {
           return {
             ...prev,
-            fitnessHungulult: ajiltan?._id === "6746b7b1e3a4bd05bbac6880" ? 4000 : 3000,
-            pay_amount: prev?.pay_amount - (ajiltan?._id === "6746b7b1e3a4bd05bbac6880" ? 4000 : 3000),
+            fitnessHungulult: 4000,
+            pay_amount: prev?.pay_amount - 4000,
           };
         });
       }

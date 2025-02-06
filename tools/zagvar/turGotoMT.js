@@ -93,7 +93,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: 1px solid #000; text-align: right;">
             &lt;baritsaaUldegdel&gt;
           </td>
-          <td style="border: 1px solid #000; text-align: center;" rowspan="6">
+          <td style="border: 1px solid #000; text-align: center;" rowspan=&lt;gotoMTCount&gt;>
             <div style="display: block;">
               ХААН БАНК
             </div>
@@ -164,7 +164,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           </td>
         </tr>
         <tr>
-          <td style="border: 1px solid #000; text-align: center; font-weight: bold;" colspan="4">
+          <td style="border: 1px solid #000; text-align: center; font-weight: bold;" colspan="3">
             &lt;niilberDunGotoUsgeer&gt;
           </td>
         </tr>
