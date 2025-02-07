@@ -45,7 +45,7 @@ function useEBarimt(token, baiguullagiinId, query, order, searchKeys) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setEBarimtKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 100,
+    khuudasniiKhemjee: 500,
     search: "",
     jagsaalt: [],
   });

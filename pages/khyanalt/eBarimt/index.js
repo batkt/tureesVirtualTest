@@ -10,6 +10,7 @@ import {
   Popconfirm,
   Spin,
   Select,
+  Table as AntdTable
 } from "antd";
 
 import Admin from "components/Admin";
@@ -26,7 +27,7 @@ import { useTranslation } from "react-i18next";
 
 const { RangePicker } = DatePicker;
 
-const searchKeys = ["customerNo", "cashAmount", "billId", "id", "customerTin"];
+const searchKeys = ["customerNo", "cashAmount", "billId", "id", "customerTin", "mashiniiDugaar", "gereeniiDugaar", "talbainDugaar"];
 //#endregion
 
 function EbarimtMedeelel({ token }) {
@@ -188,6 +189,15 @@ function EbarimtMedeelel({ token }) {
         : [];
     return [
       {
+        title: t("№"),
+        key: "index",
+        align: "center",
+        width: "60px",
+        render: (a, b, index) => {
+          return index + 1;
+        },
+      },
+      {
         title: t("Огноо"),
         dataIndex: "createdAt",
         ellipsis: true,
@@ -235,7 +245,8 @@ function EbarimtMedeelel({ token }) {
         title: t("Дүн"),
         dataIndex: "cashAmount",
         ellipsis: true,
-        align: "center",
+        align: "right",
+        summary: true,
         render: (data, object) => {
           if (!!object.cashAmount) return formatNumber(data);
           else return formatNumber(object.totalAmount);
@@ -430,9 +441,14 @@ function EbarimtMedeelel({ token }) {
             dataSource={eBarimtGaralt?.jagsaalt}
             pagination={{
               current: eBarimtGaralt?.khuudasniiDugaar,
-              pageSize: 100,
               total: eBarimtGaralt?.niitMur,
+              pageSizeOptions: [100, 300, 500],
+              defaultPageSize: [500],
               showSizeChanger: true,
+              // current: eBarimtGaralt?.khuudasniiDugaar,
+              // pageSize: 100,
+              // total: eBarimtGaralt?.niitMur,
+              // showSizeChanger: true,
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                 setEBarimtKhuudaslalt((kh) => ({
                   ...kh,
@@ -445,6 +461,28 @@ function EbarimtMedeelel({ token }) {
             rowKey={(row) => row._id}
             className="t-head"
             columns={columns}
+            summary={(e) => (
+              <AntdTable.Summary className="border " fixed={'bottom'}>
+                <AntdTable.Summary.Cell>
+                  <div className="space-x-2 truncate text-base font-bold ">
+                    Нийт
+                  </div>
+                </AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell colSpan={uilchilgeeAvi === "Зогсоол" ? 2 : 1}>
+                  <div className="truncate text-right font-bold ">
+                    {formatNumber(
+                      e?.reduce((a, b) => a + (b?.cashAmount || b?.totalAmount || 0), 0),
+                      2
+                    )}
+                  </div>
+                </AntdTable.Summary.Cell>
+              </AntdTable.Summary>
+            )}
           />
         </div>
       </Card>
