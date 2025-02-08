@@ -183,7 +183,7 @@ const Zardal = ({
   });
 
   useEffect(() => {
-    if (!!value.khugatsaa && !!value.zardluud && value.duusakhOgnoo > moment().startOf("month"))
+    if (!!value.khugatsaa && value.duusakhOgnoo > moment().startOf("month") || !!value._id)
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
           dun: value.talbainNiitUne,
