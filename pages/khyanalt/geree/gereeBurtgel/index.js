@@ -132,6 +132,7 @@ const Tailbar = React.forwardRef(
               sergeekhOgnoo,
               suuliinSariinAvlaguud: tempAvlaguud,
               udruurBodokhEsekh: baiguullaga?.tokhirgoo?.udruurBodokhEsekh,
+              tsutslakhOgnoo: baiguullaga?.tokhirgoo?.udruurBodokhEsekh ? tsutslakhOgnoo[0] : moment(),
             })
             .then(({ data }) => {
               if (data === "Amjilttai") {
@@ -180,7 +181,8 @@ const Tailbar = React.forwardRef(
     useEffect(() => {
       if(service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh)
       {
-        var ognoo = [data?.gereeniiOgnoo, moment(new Date()).subtract(1, "month")];
+        setEkhniiUldegdel(0);
+        var ognoo = [data?.gereeniiOgnoo, moment(tsutslakhOgnoo[0]).subtract(1, "month")];
         uilchilgee(token)
           .post("/uldegdelBodyo", {
             baiguullagiinId: data.baiguullagiinId,
@@ -195,7 +197,7 @@ const Tailbar = React.forwardRef(
           })
           .catch(aldaaBarigch);
       }
-    }, [data.gereeniiDugaar])
+    }, [data.gereeniiDugaar, tsutslakhOgnoo])
 
     useEffect(() => {
       function keyUp(e) {
@@ -214,7 +216,7 @@ const Tailbar = React.forwardRef(
     }, []);
 
     function disabledDate(current) {
-      let minDate = moment().startOf("month").format("YYYY-MM-DD");
+      let minDate = moment().subtract(1, "month").startOf("month").format("YYYY-MM-DD");
       let maxDate = moment().endOf("month").format("YYYY-MM-DD");
       return (current <= moment(maxDate, "YYYY-MM-DD") && current >= moment(minDate, "YYYY-MM-DD")) === false;
     }
@@ -229,6 +231,8 @@ const Tailbar = React.forwardRef(
       {
         uilchilgee(token)
         .post("/ashiglakhKhonogTootsoolokh", {
+          ashiglakhEkhlekhOgnoo: e[0],
+          ashiglakhDuuskhOgnoo: e[1],
           gereeniiId: data?._id,
           diffDay: diffDay,
           ekhniiUldegdel: ekhniiUldegdel,

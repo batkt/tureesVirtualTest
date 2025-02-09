@@ -16,22 +16,12 @@ export const socket = () =>
   });
 
 export const aldaaBarigch = (e) => {
-  if (e?.response?.data?.aldaa === "jwt expired" || e?.response?.data?.aldaa === "jwt malformed") {
+  if (e?.response?.data?.aldaa === "jwt expired" || e?.response?.data?.aldaa === "jwt malformed") 
     window.location.href = "/";
-  } else if (!!e?.response?.data?.aldaa)
-    notification.error({
-      description: t(e?.response?.data?.aldaa),
-      message: t("Алдаа"),
-    });
-  else if (!!e?.response?.errors)
-    notification.error({
-      description: t(JSON.stringify(e?.response?.errors)),
-      message: t("Алдаа"),
-    });
   else
-    notification.error({
-      description: t(JSON.stringify(e)),
-      message: t("Алдаа"),
+    notification.warning({
+      description: t("Интернэтийн холболт тасалдсан эсвэл хугацаа дууссан байна. Та F5 товч дарах эсвэл хуудас сэргээнэ үү!!!"),
+      message: t("Анхааруулга"),
     });
 };
 

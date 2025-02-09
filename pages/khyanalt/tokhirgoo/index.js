@@ -408,7 +408,7 @@ function AjiltanBurtgel({ token }) {
   }, [ajiltan, baiguullaga, barilgiinId]);
 
   const Tsonkh = useMemo(() => {
-    return tokhirgoo[songogdsonTsonkhniiIndex].tsonkh;
+    return tokhirgoo[songogdsonTsonkhniiIndex]?.tsonkh;
   }, [tokhirgoo, songogdsonTsonkhniiIndex]);
 
   return (
