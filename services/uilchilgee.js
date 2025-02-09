@@ -18,6 +18,11 @@ export const socket = () =>
 export const aldaaBarigch = (e) => {
   if (e?.response?.data?.aldaa === "jwt expired" || e?.response?.data?.aldaa === "jwt malformed") 
     window.location.href = "/";
+  else if (!!e?.response?.data?.aldaa)
+    notification.warning({
+      description: t(e?.response?.data?.aldaa),
+      message: t("Анхааруулга"),
+    });
   else
     notification.warning({
       description: t("Интернэтийн холболт тасалдсан эсвэл хугацаа дууссан байна. Та F5 товч дарах эсвэл хуудас сэргээнэ үү!!!"),
