@@ -490,6 +490,11 @@ function camera({ token }) {
   }, [baiguullaga]);
 
   useEffect(() => {
+    if(!modalOpen?.bool && modalOpen?.type ===  "unegui" && value === "F9 Үнэгүй")
+      khadgalakh();
+  }, [modalOpen, value]);
+
+  useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       let uilchluulegch = zogsool;
 
@@ -640,6 +645,7 @@ function camera({ token }) {
   useKeyboardTovchlol("F1", f3Darsan);
   useKeyboardTovchlol("F2", f4Darsan);
   useKeyboardTovchlol("F8", f8Darsan);
+  useKeyboardTovchlol("F9", f9Darsan);
   useKeyboardTovchlol("+", nemekhDarsan);
   useKeyboardTovchlol("-", khasakhDarsan);
 
@@ -673,6 +679,22 @@ function camera({ token }) {
     setTimeout(() => {
       mashiniiDugaarRef.current.focus();
     }, 200);
+  }
+
+  function f9Darsan() {
+    const data = uilchluulegchGaralt?.jagsaalt?.[0];
+    if (!data) {
+      return notification.error({
+      message: "Мэдээлэл алга",
+      duration: 1,
+      });
+    }
+    setValue("F9 Үнэгүй");
+    setModalOpen({
+      bool: false,
+      item: data,
+      type: "unegui",
+    });
   }
   function khasakhDarsan() {
     setModalOpen({

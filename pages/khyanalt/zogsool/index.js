@@ -17,6 +17,7 @@ import {
   Table,
   Tabs,
   Tooltip,
+  Table as AntdTable
 } from "antd";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -676,6 +677,19 @@ function Zogsool({ token }) {
         },
       },
       {
+        title: t("И-Баримт"),
+        align: "right",
+        width: "10rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render(v, data) {
+          var ebarimtDun = 0;
+          if(data.ebarimtAvsanEsekh && data.tuukh[0]?.tulbur?.length > 0)
+            ebarimtDun = data.tuukh[0]?.tulbur?.reduce((a, b) => a + (b.dun || 0), 0);
+          return data.ebarimtAvsanEsekh ? formatNumber(ebarimtDun, 0) : "";
+        },
+      },
+      {
         title: (
           <Popover
             placement="bottom"
@@ -1226,6 +1240,37 @@ function Zogsool({ token }) {
                                 },
                               },
                               {
+                                title: "Бодогдсон",
+                                dataIndex: "niitDun",
+                                __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
+                                render: (v) => {
+                                  return v || 0;
+                                },
+                              },
+                              {
+                                title: "Төлбөр",
+                                __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
+                                render: (v, data) => {
+                                  return data.tuukh[0]?.tulbur?.reduce((a, b) => a + (b.dun || 0), 0);
+                                },
+                              },
+                              {
+                                title: "И-Баримт",
+                                __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
+                                render: (v, data) => {
+                                  var ebarimtDun = 0;
+                                  if(data.ebarimtAvsanEsekh && data.tuukh[0]?.tulbur?.length > 0)
+                                    ebarimtDun = data.tuukh[0]?.tulbur?.reduce((a, b) => a + (b.dun || 0), 0);
+                                  return data.ebarimtAvsanEsekh ? ebarimtDun : 0;
+                                },
+                              },
+                              {
                                 title: t("Бэлэн"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
@@ -1582,15 +1627,15 @@ function Zogsool({ token }) {
                 label: "Машинаар",
                 children: (
                   <Table
-                    className="mt-8 hidden overflow-auto md:block"
-                    tableLayout="auto"
+                    className="t-head"
                     loading={!uilchluulegchGaralt}
                     dataSource={uilchluulegchGaralt?.jagsaalt}
                     scroll={{ y: "calc(100vh - 30rem)" }}
+                    tableLayout={"fixed"}
                     size="small"
+                    rowClassName="hover:bg-blue-100"
                     bordered
-                    rowSelection={rowSelection}
-                    rowKey={"_id"}
+                    rowKey={(row) => row._id}
                     columns={columns}
                     onChange={onChangeTable}
                     pagination={{
@@ -1605,6 +1650,39 @@ function Zogsool({ token }) {
                           khuudasniiKhemjee,
                         })),
                     }}
+                    summary={(e) => (
+                      <AntdTable.Summary className="border " fixed={'bottom'}>
+                        <AntdTable.Summary.Cell colSpan={6}>
+                          <div className="space-x-2 truncate text-base font-bold ">
+                            Нийт
+                          </div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold ">
+                            {formatNumber(
+                              e?.reduce((a, b) => a + (b.niitDun || 0), 0),
+                              2
+                            )}
+                          </div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold ">
+                            {formatNumber(
+                              e?.reduce((a, b) => a + (b?.tuukh[0]?.tulbur?.reduce((c, d) => c + (d.dun || 0), 0) || 0), 0),
+                              2
+                            )}
+                          </div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold ">
+                            {formatNumber(
+                              e?.reduce((a, b) => a + (b?.ebarimtAvsanEsekh ? b?.tuukh[0]?.tulbur?.reduce((c, d) => c + (d.dun || 0), 0) : 0), 0),
+                              2
+                            )}
+                          </div>
+                        </AntdTable.Summary.Cell>
+                      </AntdTable.Summary>
+                    )}
                   />
                 ),
               },
@@ -1620,8 +1698,7 @@ function Zogsool({ token }) {
                     scroll={{ y: "calc(100vh - 30rem)" }}
                     size="small"
                     bordered
-                    rowSelection={rowSelection}
-                    rowKey={"_id"}
+                    rowKey={(row) => row._id}
                     columns={columns}
                     onChange={onChangeTable}
                     pagination={{
@@ -1636,7 +1713,41 @@ function Zogsool({ token }) {
                           khuudasniiKhemjee,
                         })),
                     }}
+                    summary={(e) => (
+                      <AntdTable.Summary className="border " fixed={'bottom'}>
+                        <AntdTable.Summary.Cell colSpan={6}>
+                          <div className="space-x-2 truncate text-base font-bold ">
+                            Нийт
+                          </div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold ">
+                            {formatNumber(
+                              e?.reduce((a, b) => a + (b.niitDun || 0), 0),
+                              2
+                            )}
+                          </div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold ">
+                            {formatNumber(
+                              e?.reduce((a, b) => a + (b?.tuukh[0]?.tulbur?.reduce((c, d) => c + (d.dun || 0), 0) || 0), 0),
+                              2
+                            )}
+                          </div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold ">
+                            {formatNumber(
+                              e?.reduce((a, b) => a + (b?.ebarimtAvsanEsekh ? b?.tuukh[0]?.tulbur?.reduce((c, d) => c + (d.dun || 0), 0) : 0), 0),
+                              2
+                            )}
+                          </div>
+                        </AntdTable.Summary.Cell>
+                      </AntdTable.Summary>
+                    )}
                   />
+
                 ),
               },
             ]}

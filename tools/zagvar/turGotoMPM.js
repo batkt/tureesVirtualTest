@@ -120,7 +120,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             sensitivity: "base",
           });
           })
-          .filter(a => a.tailbar === "Хөрөнгийн менежмент")
+          .filter(a => a.tailbar === "Хөрөнгийн менежмент" || a.tailbar === "Худалдааны менежмент")
           .map((mur, index) => {
           return `
             <tr key=${index}>
@@ -135,7 +135,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
               <td style="border: 1px solid #000; text-align: right;">&lt;${
                 mur.tailbar
               }.khungulultKhassanTulukhDun&gt;</td>
-              <td style="border: 1px solid #000; text-align: center;" rowspan=&lt;gotoMPMCount&gt;>
+              ${index === 0 ? `<td style="border: 1px solid #000; text-align: center;" rowspan=&lt;gotoMPMCount&gt;>
                 <div style="display: block;">
                   Мастер проперти
                 </div>
@@ -145,7 +145,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
                 <div style="display: block;">
                   банк: &lt;dans&gt; 
                 </div>
-              </td>
+              </td>` : ""}
             </tr>
           `;
           })

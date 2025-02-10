@@ -601,7 +601,7 @@ function tulburTootsoo({ token }) {
             medeelel.niilberDunGoto = (niilberDunGoto || 0) + (niilberNekhemjlelDunGoto || 0) + (niilberAshiglaltDunGoTo || 0);
             medeelel.ashiglaltCount = ashiglaltCount;
             medeelel.menejmentCount = menejmentCount;
-            medeelel.gotoMPMCount = ashiglaltCount + 6;
+            medeelel.gotoMPMCount = ashiglaltCount + 7;
             medeelel.gotoMTCount = menejmentCount + 6;
 
             
@@ -1590,7 +1590,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.niilberDunGoto = (niilberDunGoto || 0) + (niilberNekhemjlelDunGoto || 0) + (niilberAshiglaltDunGoTo || 0);
         nekhemjlekh.ashiglaltCount = ashiglaltCount;
         nekhemjlekh.menejmentCount = menejmentCount;
-        nekhemjlekh.gotoMPMCount = ashiglaltCount + 5;
+        nekhemjlekh.gotoMPMCount = ashiglaltCount + 7;
         nekhemjlekh.gotoMTCount = menejmentCount + 6;
 
         text = text?.replace(
