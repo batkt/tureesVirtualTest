@@ -1635,7 +1635,8 @@ function Zogsool({ token }) {
                     size="small"
                     rowClassName="hover:bg-blue-100"
                     bordered
-                    rowKey={(row) => row._id}
+                    rowSelection={rowSelection}
+                    rowKey={"_id"}
                     columns={columns}
                     onChange={onChangeTable}
                     pagination={{
@@ -1652,7 +1653,7 @@ function Zogsool({ token }) {
                     }}
                     summary={(e) => (
                       <AntdTable.Summary className="border " fixed={'bottom'}>
-                        <AntdTable.Summary.Cell colSpan={6}>
+                        <AntdTable.Summary.Cell colSpan={7}>
                           <div className="space-x-2 truncate text-base font-bold ">
                             Нийт
                           </div>
@@ -1698,7 +1699,8 @@ function Zogsool({ token }) {
                     scroll={{ y: "calc(100vh - 30rem)" }}
                     size="small"
                     bordered
-                    rowKey={(row) => row._id}
+                    rowSelection={rowSelection}
+                    rowKey={"_id"}
                     columns={columns}
                     onChange={onChangeTable}
                     pagination={{
@@ -1715,7 +1717,7 @@ function Zogsool({ token }) {
                     }}
                     summary={(e) => (
                       <AntdTable.Summary className="border " fixed={'bottom'}>
-                        <AntdTable.Summary.Cell colSpan={6}>
+                        <AntdTable.Summary.Cell colSpan={7}>
                           <div className="space-x-2 truncate text-base font-bold ">
                             Нийт
                           </div>

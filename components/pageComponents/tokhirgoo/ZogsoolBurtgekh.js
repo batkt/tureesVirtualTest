@@ -31,7 +31,6 @@ import moment from "moment";
 import StreamTokhirgoo from "./StreamTokhirgoo";
 import StreamTokhirgooIp from "./StreamTokhirgooIp";
 import { modal } from "components/ant/Modal";
-import camera from "pages/khyanalt/zogsool/camera";
 
 /**
  * khaalga.turul Select.Option value(Орох, Гарах) гэснийг өөрчилж болохгүй
