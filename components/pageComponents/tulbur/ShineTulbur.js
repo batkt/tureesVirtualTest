@@ -159,7 +159,7 @@ function ShineTulbur(
   //Keyboard tovchlol ekhlel
 
   useKeyboardTovchlol("F4", f4Darsan);
-  useKeyboardTovchlol("F5", f5darsan);
+  useKeyboardTovchlol("F3", f3darsan);
 
   function f4Darsan() {
     if (tulbur.length === 0) {
@@ -170,8 +170,12 @@ function ShineTulbur(
       eBarimtAutomataarShivikh ? (!loading && ebarimtAvya(uilchluugchiinId)) : setAlkham(2);
     }
   }
-  function f5darsan() {
+  function f3darsan() {
     turulruuTooKhiikhFunction("khaan");
+    alkham === 1 ? batalgaajuulaltKhiiya() : (!loading && ebarimtAvya(uilchluugchiinId));
+    if (alkham === 1 && eBarimtAshiglakhEsekh === true) {
+      eBarimtAutomataarShivikh ? (!loading && ebarimtAvya(uilchluugchiinId)) : setAlkham(2);
+    }
   }
   function ebarimtguiTulburDuusgakh() {
     ref.current.khaaya();

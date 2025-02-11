@@ -23,11 +23,6 @@ export const aldaaBarigch = (e) => {
       description: t(e?.response?.data?.aldaa),
       message: t("Анхааруулга"),
     });
-  else
-    notification.warning({
-      description: t("Интернэтийн холболт тасалдсан эсвэл хугацаа дууссан байна. Та F5 товч дарах эсвэл хуудас сэргээнэ үү!!!"),
-      message: t("Анхааруулга"),
-    });
 };
 
 /*axios.interceptors.response.use(function (response) {

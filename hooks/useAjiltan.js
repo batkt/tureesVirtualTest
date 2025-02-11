@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
