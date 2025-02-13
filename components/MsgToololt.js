@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import useJagsaalt from "../hooks/useJagsaalt";
+import useMsgToololJagsaalt from "../hooks/useMsgToololJagsaalt";
 import { Modal, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 import useOrder from "tools/function/useOrder";
@@ -11,7 +11,7 @@ function MsgToololt({ token, baiguullagiinId, barilgiinId }) {
     return { baiguullagiinId: baiguullagiinId, barilgiinId: barilgiinId };
   });
 
-  const msjTuukh = useJagsaalt("/msgTuukh", query, order);
+  const msjTuukh = useMsgToololJagsaalt("/msgTuukh", query, order);
   const niitToo = useMemo(() => {
     return <span className="font-bold text-green-500">{msjTuukh?.jagsaalt?.length}</span>;
   }, [msjTuukh]);

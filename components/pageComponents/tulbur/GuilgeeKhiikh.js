@@ -44,6 +44,9 @@ function GuilgeeKhiikh(
   const [nuatBodokhEsekh, setNuatBodokhEsekh] = useState(true);
   const [ekhniiUldegdelEsekh, setEkhniiUldegdelEsekh] = useState(false);
   const [m2argaarBodokhEsekh, setM2argaarBodokhEsekh] = useState(false);
+  const [tureesEkhniiUldegdelEsekh, setTureesEkhniiUldegdelEsekh] = React.useState(true);
+  const [ashiglaltiinId, setAshiglaltiinId] = React.useState(null);
+  const [ashiglaltiinNer, setAshiglaltiinNer] = React.useState(null);
 
   const [busadTurul, setBusadTurul] = useState();
   const [zardliinTurul, setZardliinTurul] = useState();
@@ -76,6 +79,12 @@ function GuilgeeKhiikh(
     }),
     [data, barilgiinId]
   );
+  const queryZardal = useMemo(
+    () => ({
+      barilgiinId,
+    }),
+    [data, barilgiinId]
+  );
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
     token,
     data?._id,
@@ -84,6 +93,15 @@ function GuilgeeKhiikh(
   const zardal = useJagsaalt(
     data?.zardluud && "/ashiglaltiinZardluud",
     query,
+    undefined,
+    undefined,
+    undefined,
+    token
+  );
+
+  const zardalAll = useJagsaalt(
+    "/ashiglaltiinZardluud",
+    queryZardal,
     undefined,
     undefined,
     undefined,
@@ -127,7 +145,7 @@ function GuilgeeKhiikh(
             break;
           case "voucher":
           case "avlaga":
-            if(zardliinTurul === "turees")
+            if(tureesEkhniiUldegdelEsekh)
             {
               guilgee = {
                 turul: 'khuvaari',
@@ -139,7 +157,7 @@ function GuilgeeKhiikh(
                 tailbar,
                 nekhemjlekhDeerKharagdakh: turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
                 ekhniiUldegdelEsekh: turul === "avlaga" ? ekhniiUldegdelEsekh : false,
-                zardliinTurul: turul === "avlaga" ? zardliinTurul : undefined,
+                zardliinTurul: turul === "avlaga" ? "turees" : undefined,
               };
             }
             else
@@ -154,6 +172,8 @@ function GuilgeeKhiikh(
                 nekhemjlekhDeerKharagdakh: turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
                 ekhniiUldegdelEsekh: turul === "avlaga" ? ekhniiUldegdelEsekh : false,
                 zardliinTurul: turul === "avlaga" ? zardliinTurul : undefined,
+                zardliinId: turul === "avlaga" ? ashiglaltiinId : undefined,
+                zardliinNer: turul === "avlaga" ? ashiglaltiinNer : undefined,
               };
             }
             break;
@@ -245,6 +265,9 @@ function GuilgeeKhiikh(
       niitDun,
       tsekhDun,
       chadalDun,
+      tureesEkhniiUldegdelEsekh,
+      ashiglaltiinId,
+      ashiglaltiinNer,
     ]
   );
   function labelTurul(guilgeeTurul) {
@@ -382,21 +405,47 @@ function GuilgeeKhiikh(
               // document.getElementById("guilgeeDunInputNumber").focus();
             }}
           />    
-          <Select
-            className="w-full"
-            id="selectType"
-            placeholder={t("Зардал хийх төрөл")}
+          <div className="flex justify-end gap-1 w-full">
+            <label>{t("Түрээс эсэх")}: </label>
+            <Switch checked={tureesEkhniiUldegdelEsekh} onChange={setTureesEkhniiUldegdelEsekh} />
+          </div>
+          {!tureesEkhniiUldegdelEsekh && (
+            <Select
+            placeholder={t("Ашиглалтын зардал")}
             onChange={(v) => {
-            setZardliinTurul(v);
-            }}
-          >
-            <Option value="turees">{t("Түрээсийн төлбөр")}</Option>
-            <Option value="management">{t("Менежмент")}</Option>
-            <Option value="dulaan">{t("Дулаан")}</Option>
-            <Option value="tsakhilgaan">{t("Цахилгаан")}</Option>
-            <Option value="khulaanUs">{t("Халуун ус")}</Option>
-            <Option value="khuitenUs">{t("Хүйтэн ус")}</Option>
-          </Select>
+                const tukhainZardal = zardalAll.jagsaalt.find((a) => a._id === v);
+                var tempTurul = tukhainZardal?.ner === "Менежментийн төлбөр" ? "management" : 
+                            tukhainZardal?.ner === "Дулаан" ? "dulaan" : 
+                              tukhainZardal?.ner === "Цахилгаан" ? "tsakhilgaan" :
+                                tukhainZardal?.ner === "Халуун ус" ? "khulaanUs" :
+                                  tukhainZardal?.ner === "Ус" ? "us" :
+                                    tukhainZardal?.ner === "Хүйтэн ус" ? "khuitenUs" :
+                                      tukhainZardal?.ner === "Хөрөнгийн менежмент" || tukhainZardal?.ner === "Худалдааны менежмент" ? "managementGoto" : "busad";
+                setAshiglaltiinId(v);
+                setAshiglaltiinNer(tukhainZardal.ner);
+                setZardliinTurul(tempTurul);
+              }
+            }
+            style={{ width: "100%" }}
+            >
+            {zardalAll?.jagsaalt?.map((a) => (
+              <Select.Option key={a._id} value={a._id}>
+              <div className="w-full flex justify-between border-b">
+                <p className="flex border-r bg-green-400 bg-opacity-10 pl-2 pr-2 text-left">
+                {a.ner}
+                </p>
+                <div className="w-full justify-between flex bg-blue-600 bg-opacity-5 pl-2 pr-2">
+                <p className={`border-r text-right mr-5`}>{t(a.turul)}</p>
+                <p className="text-right">
+                  {a.turul !== "Дурын" ? a.tariff : "Дурын"}
+                  {a.turul !== "Дурын" && "₮"}
+                </p>
+                </div>
+              </div>
+              </Select.Option>
+            ))}
+            </Select>
+          )}
         </div>
       )}
       {turul === "ashiglalt" && (
