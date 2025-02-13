@@ -41,7 +41,7 @@ function useMsgToololJagsaalt(url, query, order, select, searchKeys, supToken) {
 
   const [khuudaslalt, setKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 10000,
+    khuudasniiKhemjee: 1000000,
     search: "",
     jagsaalt: [],
   });
