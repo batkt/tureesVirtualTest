@@ -2124,12 +2124,12 @@ function camera({ token }) {
                     />
                   )
                 ) : baiguullaga?._id === "671f0d5d53b82cbedf0f81a3" && barilgiinId === "671f0d5d53b82cbedf0f81a4" ? (
-                  camerVal[0] === "192.168.51.155" ||
-                  camerVal[0] === "192.168.51.156" ||
-                  camerVal[0] === "192.168.51.157" ||
-                  camerVal[0] === "192.168.51.158" ||
-                  camerVal[0] === "192.168.51.159" ||
-                  camerVal[0] === "192.168.51.160"  ? (
+                  camerVal[0] === "192.168.1.155" ||
+                  camerVal[0] === "192.168.1.156" ||
+                  camerVal[0] === "192.168.1.157" ||
+                  camerVal[0] === "192.168.1.158" ||
+                  camerVal[0] === "192.168.1.159" ||
+                  camerVal[0] === "192.168.1.160"  ? (
                     <R2WPlayerComponent
                       USER={"admin"}
                       ROOT={"live"}
