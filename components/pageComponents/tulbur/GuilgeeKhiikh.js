@@ -144,6 +144,17 @@ function GuilgeeKhiikh(
             };
             break;
           case "voucher":
+            guilgee = {
+              turul: turul,
+              tulsunDun: dun,
+              tulukhDun: 0,
+              ognoo: new Date(),
+              gereeniiId: data?._id,
+              tailbar,
+              nekhemjlekhDeerKharagdakh: false,
+              ekhniiUldegdelEsekh: false,
+            };
+            break;
           case "avlaga":
             if(tureesEkhniiUldegdelEsekh)
             {
