@@ -46,7 +46,7 @@ function GereeExceleesOruulakh(
 
   function zagvarAvya() {
     uilchilgee(token)
-      .get(`/${zagvariinZam}`, { responseType: "blob" })
+      .get(`/${zagvariinZam}/${barilgiinId}`, { responseType: "blob" })
       .then(({ data }) => {
         const url = window.URL.createObjectURL(data);
         const a = document.createElement("a");

@@ -67,7 +67,7 @@ const Tulbur = ({
       );
     });
     // console.log('000000000', value);
-    if ((!!value.khugatsaa && !!value.zardluud && value.duusakhOgnoo > moment().startOf("month")) || !!value._id)
+    if ((!!value.khugatsaa && (!!value.zardluud || !!value.talbainuud) && value.duusakhOgnoo > moment().startOf("month")) || !!value._id)
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
           dun: value.talbainNiitUne,

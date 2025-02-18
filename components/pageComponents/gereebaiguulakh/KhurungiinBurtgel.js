@@ -22,6 +22,7 @@ import useTalbai from "hooks/useTalbai";
 import { useAuth } from "services/auth";
 import formatNumber from "tools/function/formatNumber";
 import getListMethod from "tools/function/crud/getListMethod";
+import moment from "moment";
 
 const formItemLayout = {
   labelCol: {
@@ -113,6 +114,33 @@ const YurunkhiiMedeele = ({
       });
     }
   }, [value]);
+
+  useEffect(() => {
+    if ((!!value.khugatsaa && !!value.talbainIdnuud && value.duusakhOgnoo > moment().startOf("month")) || !!value._id)
+      uilchilgee(token)
+        .post(`/khuvaariUusgey`, {
+          dun: value.talbainNiitUne,
+          khugatsaa: value.khugatsaa,
+          tulukhUdruud: value.tulukhUdur,
+          ekhlekhOgnoo: moment(!value._id ? moment(value.gereeniiOgnoo).startOf("month") : moment().startOf("month")).format(
+            "YYYY-MM-DD 00:00:00"
+          ),
+          duusakhOgnoo: moment(value.duusakhOgnoo).format(
+            "YYYY-MM-DD 00:00:00"
+          ),
+          zardluud: value.zardluud,
+          mk: value.talbainKhemjee,
+          metrKube: value.talbainKhemjeeMetrKube,
+          turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
+        })
+        .then(({ data }) => {
+          _.set(value, "avlaga.guilgeenuud", data);
+          onChange({ ...value });
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+        });
+  }, [value.talbainIdnuud]);
 
   const sulEsekh = (talbainDugaar, callback) => {
     uilchilgee(token)

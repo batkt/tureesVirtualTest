@@ -359,85 +359,36 @@ function TalbaiBurtgekh({ token }) {
 
   function onChange(talbar, utga) {
     if (talbar === "talbainNegjUne") {
-      let value = Number(utga) * Number(talbaiState.talbainKhemjee);
-      if (
-        (_.isNumber(Number(talbaiState.talbainNegjUne)) &&
-          _.isNumber(utga) &&
-          value) ||
-        0
-      ) {
-        talbaiState.talbainNiitUne = value.toFixed(2);
-        formRef.current.setFieldsValue({
-          talbainNiitUne: talbaiState.talbainNiitUne,
-        });
-        talbaiState.tureesiinTulbur =
-          Number(talbaiState.niitAshiglaltiinZardal || 0) +
-          Number(talbaiState.talbainNiitUne || 0);
-        formRef.current.setFieldsValue({
-          tureesiinTulbur: talbaiState.tureesiinTulbur,
-        });
-      }
-    }
-    if (talbar === "ashiglaltiinZardal") {
-      talbaiState.niitAshiglaltiinZardal = (
-        utga * talbaiState.talbainKhemjee || 0
-      ).toFixed(2);
+      talbaiState.talbainNiitUne = (Number(utga || 0) * Number(talbaiState.talbainKhemjee || 0)).toFixed(2);
+      talbaiState.tureesiinTulbur = Number(talbaiState.niitAshiglaltiinZardal || 0) + Number(talbaiState.talbainNiitUne || 0);
       formRef.current.setFieldsValue({
-        niitAshiglaltiinZardal: talbaiState.niitAshiglaltiinZardal,
+        talbainNiitUne: talbaiState.talbainNiitUne,
       });
-      talbaiState.tureesiinTulbur =
-        Number(talbaiState.niitAshiglaltiinZardal || 0) +
-        Number(talbaiState.talbainNiitUne || 0);
       formRef.current.setFieldsValue({
         tureesiinTulbur: talbaiState.tureesiinTulbur,
       });
     }
+    if (talbar === "ashiglaltiinZardal") {
+      talbaiState.niitAshiglaltiinZardal = (utga * talbaiState.talbainKhemjee || 0).toFixed(2);
+      formRef.current.setFieldsValue({ niitAshiglaltiinZardal: talbaiState.niitAshiglaltiinZardal, });
+      talbaiState.tureesiinTulbur = Number(talbaiState.niitAshiglaltiinZardal || 0) + Number(talbaiState.talbainNiitUne || 0);
+      formRef.current.setFieldsValue({ tureesiinTulbur: talbaiState.tureesiinTulbur, });
+    }
     if (talbar === "talbainNiitUne") {
-      let value = Number(utga) / Number(talbaiState.talbainKhemjee);
-      if (
-        (_.isNumber(Number(talbaiState.talbainNegjUne)) &&
-          _.isNumber(utga) &&
-          value) ||
-        0
-      ) {
-        talbaiState.talbainNegjUne = value.toFixed(2);
-        formRef.current.setFieldsValue({
-          talbainNegjUne: talbaiState.talbainNegjUne,
-        });
-        talbaiState.tureesiinTulbur =
-          Number(talbaiState.niitAshiglaltiinZardal) + Number(utga);
-        formRef.current.setFieldsValue({
-          tureesiinTulbur: talbaiState.tureesiinTulbur,
-        });
-      }
+      talbaiState.talbainNegjUne = (Number(utga || 0) / Number(talbaiState.talbainKhemjee || 1)).toFixed(2);
+      formRef.current.setFieldsValue({ talbainNegjUne: talbaiState.talbainNegjUne, });
+      talbaiState.tureesiinTulbur = Number(talbaiState.niitAshiglaltiinZardal) + Number(utga);
+      formRef.current.setFieldsValue({ tureesiinTulbur: talbaiState.tureesiinTulbur, });
     }
     if (talbar === "talbainKhemjee") {
-      talbaiState.niitAshiglaltiinZardal = (
-        utga * talbaiState.ashiglaltiinZardal || 0
-      ).toFixed(2);
-      if (!!talbaiState.niitAshiglaltiinZardal) {
-        formRef.current.setFieldsValue({
-          niitAshiglaltiinZardal: talbaiState.niitAshiglaltiinZardal,
-        });
-      }
+      talbaiState.niitAshiglaltiinZardal = ( utga * talbaiState.ashiglaltiinZardal || 0 ).toFixed(2);
+      if (!!talbaiState.niitAshiglaltiinZardal)
+        formRef.current.setFieldsValue({ niitAshiglaltiinZardal: talbaiState.niitAshiglaltiinZardal, });
+      
 
-      let value =
-        talbaiState.talbainNegjUne === undefined
-          ? Number(talbaiState.talbainNiitUne) / Number(utga)
-          : Number(utga) * Number(talbaiState.talbainNegjUne);
-
-      if (_.isNumber(value) && !_.isNaN(value)) {
-        if (talbaiState.talbainNegjUne === undefined) {
-          formRef.current.setFieldsValue({
-            talbainNegjUne: value.toFixed(2),
-          });
-        } else {
-          talbaiState.talbainNiitUne = value.toFixed(2);
-          formRef.current.setFieldsValue({
-            talbainNiitUne: value.toFixed(2),
-          });
-        }
-      }
+      let value = talbaiState.talbainNegjUne === undefined ? Number(talbaiState.talbainNiitUne || 0) / Number(utga || 1) : Number(utga) * Number(talbaiState.talbainNegjUne || 0);
+      talbaiState.talbainNiitUne = value.toFixed(2);
+      formRef.current.setFieldsValue({ talbainNiitUne: value.toFixed(2), });
       if (
         talbaiState.talbainNiitUne > 0 &&
         talbaiState.niitAshiglaltiinZardal > 0
@@ -451,7 +402,7 @@ function TalbaiBurtgekh({ token }) {
       }
     }
     if (talbar === "khurunguUne") {
-      talbaiState.talbainNiitUne = (utga * talbaiState.talbainKhemjee).toFixed(
+      talbaiState.talbainNiitUne = (utga * (talbaiState.talbainKhemjee || 0)).toFixed(
         2
       );
       formRef.current.setFieldsValue({});

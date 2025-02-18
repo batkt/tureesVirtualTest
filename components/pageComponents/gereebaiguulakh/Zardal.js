@@ -19,6 +19,7 @@ import useJagsaalt from "hooks/useJagsaalt";
 import { t } from "i18next";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
+import formatNumber from "tools/function/formatNumber";
 
 const formItemLayout = {
   labelCol: {
@@ -76,8 +77,10 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
               </p>
               <div className="w-full justify-between flex bg-blue-600 bg-opacity-5 pl-2 pr-2">
                 <p className={`border-r text-right mr-5`}>{t(a.turul)}</p>
+                <div className='ml-auto'>{(a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? ("Цэвэр ус: " + formatNumber(a.tseverUsDun, 2)) : formatNumber(a.tariff, 2)) 
+                                              + " "+ (a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? "Бохир ус: " + formatNumber(a.bokhirUsDun, 2) : "")
+                                              + " "+ ( a.ner === 'Халуун ус' ? "Ус халаасны: " + formatNumber(a.usKhalaasniiDun, 2) : "")}</div>
                 <p className="text-right">
-                  {a.turul !== "Дурын" ? a.tariff : "Дурын"}
                   {a.turul !== "Дурын" && "₮"}
                 </p>
               </div>
@@ -100,7 +103,7 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
       `}
     >
       <div
-        className={`absolute -left-2/4 top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
+        className={`absolute -left-${value?.zardluud && (value?.zardluud[i]?.ner === "Халуун ус" || value?.zardluud[i]?.ner === "Халуун ус") ? "2/3": "2/4"} top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
            dark:bg-green-600`}
       />
       <div className="z-10 flex gap-1">
@@ -136,7 +139,12 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
             </Form.Item>
             <div>₮</div>
           </div>
-        ) : (
+        ) : value?.zardluud && (value?.zardluud[i].ner === "Халуун ус" || value?.zardluud && value?.zardluud[i]?.ner === "Хүйтэн ус") ? (
+          <div className='ml-auto'>{(value?.zardluud[i].ner === 'Хүйтэн ус' || value?.zardluud[i].ner === 'Халуун ус' ? ("Цэвэр ус: " + formatNumber(value?.zardluud[i].tseverUsDun, 2)) : formatNumber(value?.zardluud[i].tariff, 2)) 
+            + " "+ (value?.zardluud[i].ner === 'Хүйтэн ус' || value?.zardluud[i].ner === 'Халуун ус' ? "Бохир ус: " + formatNumber(value?.zardluud[i].bokhirUsDun, 2) : "")
+            + " "+ ( value?.zardluud[i].ner === 'Халуун ус' ? "Ус халаасны: " + formatNumber(value?.zardluud[i].usKhalaasniiDun, 2) : "")}</div>
+        )
+        : (
           <div className="z-10">
             {value?.zardluud && value?.zardluud[i]?.turul}{" "}
             {value?.zardluud &&
