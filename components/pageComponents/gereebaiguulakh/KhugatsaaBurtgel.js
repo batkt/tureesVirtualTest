@@ -38,12 +38,8 @@ const YurunkhiiMedeele = ({
           dun: value.talbainNiitUne,
           khugatsaa: value.khugatsaa,
           tulukhUdruud: value.tulukhUdur,
-          ekhlekhOgnoo: moment(!value._id ? moment(value.gereeniiOgnoo).startOf("month") : moment().startOf("month")).format(
-            "YYYY-MM-DD 00:00:00"
-          ),
-          duusakhOgnoo: moment(value.duusakhOgnoo).format(
-            "YYYY-MM-DD 00:00:00"
-          ),
+          ekhlekhOgnoo: moment(gereeniiZagvar?.turGereeEsekh ? value.gereeniiOgnoo : (!value._id ? moment(value.gereeniiOgnoo).startOf("month") : moment().startOf("month"))).format("YYYY-MM-DD 00:00:00"),
+          duusakhOgnoo: moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00"),
           zardluud: value.zardluud,
           mk: value.talbainKhemjee,
           metrKube: value.talbainKhemjeeMetrKube,
@@ -56,7 +52,7 @@ const YurunkhiiMedeele = ({
         .catch((e) => {
           aldaaBarigch(e);
         });
-  }, [value.khugatsaa, value.tulukhUdur, value.duusakhOgnoo]);
+  }, [form.getFieldValue("khugatsaa"), form.getFieldValue("tulukhUdur"), form.getFieldValue("duusakhOgnoo")]);
 
   const onValuesChange = (values, v) => {
     if (!!values?.gereeniiOgnoo && !!value?.khugatsaa) {
