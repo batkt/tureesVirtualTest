@@ -63,7 +63,7 @@ function negtgelTailan({ token }) {
             khariltsagchiinId: songogdsonIds.length > 0 ? songogdsonIds : undefined,
         };
       }, [ognoo, baiguullaga, barilgiinId, songogdsonIds]);
-    const { tailanGaralt, unshijBaina, setTailanKhuudaslalt } = useNegtgelTailan(token, query, searchKeys);
+    const { tailanGaralt, unshijBaina, setTailanKhuudaslalt } = useNegtgelTailan(token, query, searchKeys, 500);
 
     const excelNemekhCol = useMemo(() => {
         return shineBagana.map((e, i) => {
@@ -518,14 +518,10 @@ function negtgelTailan({ token }) {
                 size="small"
                 className="text-xs overflow-auto"
                 pagination={{
-                    current: khadgalsanKhuudaslalt
-                    ? khadgalsanKhuudaslalt?.khuudasniiDugaar
-                    : 1,
-                    pageSize: khadgalsanKhuudaslalt
-                    ? khadgalsanKhuudaslalt?.khuudasniiKhemjee
-                    : 100,
+                    current: tailanGaralt?.khuudasniiDugaar,
                     total: tailanGaralt?.length,
-                    defaultPageSize: 100,
+                    pageSizeOptions: [100, 300, 500],
+                    defaultPageSize: [500],
                     showSizeChanger: true,
                     onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {
                     setTailanKhuudaslalt((kh) => ({

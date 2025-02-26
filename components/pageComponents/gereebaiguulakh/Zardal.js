@@ -103,7 +103,7 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
       `}
     >
       <div
-        className={`absolute -left-${value?.zardluud && (value?.zardluud[i]?.ner === "Халуун ус" || value?.zardluud[i]?.ner === "Халуун ус") ? "2/3": "2/4"} top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
+        className={`absolute ${value?.zardluud && (value?.zardluud[i]?.ner === "Халуун ус" || value?.zardluud[i]?.ner === "Халуун ус") ? "-left-2/3": "-left-2/4"} top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
            dark:bg-green-600`}
       />
       <div className="z-10 flex gap-1">

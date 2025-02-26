@@ -40,7 +40,7 @@ function useEneSardTuluuguiGereenuudAvya(token, ognoo,query) {
     
     const [khuudaslalt, setEneSardTuluuguiGereenuud] = useState({
         khuudasniiDugaar: 1,
-        khuudasniiKhemjee: 100,
+        khuudasniiKhemjee: 500,
         search: "",
     })
 

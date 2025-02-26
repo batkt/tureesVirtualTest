@@ -41,6 +41,7 @@ import useDans from "hooks/useDans";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 import khatuuZagvar from "tools/zagvar/tur";
+import khatuuZagvarUranGan from "tools/zagvar/turUranGan"; 
 import khatuuZagvarFoodCity from "tools/zagvar/turFoodCityTemp";
 import khatuuZagvarGotoMPM from "tools/zagvar/turGotoMPM";
 import khatuuZagvarGotoMT from "tools/zagvar/turGotoMT";
@@ -154,6 +155,8 @@ function tulburTootsoo({ token }) {
               zagvar.nekhemjlekh = khatuuZagvarGotoMPM(medeelel, ajiltan, baiguullaga, barilgiinId);
             else if(ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" && barilgiinId === "6735c77a7fc60cd66deb290a")  // goto MT
               zagvar.nekhemjlekh = khatuuZagvarGotoMT(medeelel, ajiltan, baiguullaga, barilgiinId);
+            else if(ajiltan?.baiguullagiinId === "679aea9032299b7ba8462a77")  // urangan   
+              zagvar.nekhemjlekh = khatuuZagvarUranGan(medeelel, ajiltan, baiguullaga, barilgiinId);
             else
               zagvar.nekhemjlekh = khatuuZagvar(medeelel, ajiltan, baiguullaga, barilgiinId);
           }
@@ -1312,6 +1315,7 @@ function tulburTootsoo({ token }) {
           ? (ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5" ? khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga) 
           : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" && barilgiinId === "67512183c60497546f59513a" ? khatuuZagvarGotoMPM(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
           : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" && barilgiinId === "6735c77a7fc60cd66deb290a" ? khatuuZagvarGotoMT(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)  
+          : ajiltan?.baiguullagiinId === "679aea9032299b7ba8462a77" ? khatuuZagvarUranGan(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
           : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId))
           : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
               ?.nekhemjlekh;

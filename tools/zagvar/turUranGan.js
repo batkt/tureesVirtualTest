@@ -1,4 +1,4 @@
-const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
+const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
   return `
   <div style="height: 100%; width: 100%;">
     <div style="display: flex; justify-content: space-between;">
@@ -117,58 +117,6 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
       </thead>
       <tbody>
         <tr>
-          <td style="border: 1px solid #000; text-align: center; font-weight: 600;">
-            1
-          </td>
-          <td style="border: 1px solid #000; text-align: left;">
-            Өмнөх төлбөрийн үлдэгдэл
-          </td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;umnukhSariinUrTulburNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;umnukhSariinUrTulburNuatgui&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;umnukhSariinUrTulbur&gt;
-          </td>
-        </tr>
-        <tr>
-          <td style="border: 1px solid #000; text-align: center;">2</td>
-          <td style="border: 1px solid #000; text-align: left;">Барьцаа үлдэгдэл</td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;baritsaaUldegdelNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;baritsaaUldegdelNuatgui&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;baritsaaUldegdel&gt;
-          </td>
-        </tr>
-        <tr>
-          <td style="border: 1px solid #000; text-align: center;">3</td>
-          <td style="border: 1px solid #000; text-align: left;">Алданги</td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;aldangiinUldegdelNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;aldangiinUldegdelNuatgui&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;aldangiinUldegdel&gt;
-          </td>
-        </tr>
-        <tr>
           <td style="border: 1px solid #000; text-align: center;">4</td>
           <td style="border: 1px solid #000; text-align: left;">
             Түрээсийн төлбөр
@@ -268,6 +216,9 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         </tr>
       </tfoot>
     </table>
+    <div style="margin-left: 2rem;">
+      <b>Санамж:&nbsp;Эрхэм харицагч та төлбөрөө төлөхдөө 5-ны дотор төлж байгаа тохиолдолд зөвхөн түрээсийн төлбөрөөс 10%-ийн хөнгөлөлтийг хасан шилжүүлнэ үү</br>        
+    </div>
   </div>`;
 };
-export default khatuuZagvar;
+export default khatuuZagvarUranGan;

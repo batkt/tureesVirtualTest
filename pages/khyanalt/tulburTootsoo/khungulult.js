@@ -287,6 +287,8 @@ function tulburTootsoo() {
         return;
       }
 
+      console.log("------------------>>>" + JSON.stringify(ugugdul));
+
       createMethod("khungulultKhadgalya", token, ugugdul)
         .then(({ data }) => {
           if (data === "Amjilttai") {

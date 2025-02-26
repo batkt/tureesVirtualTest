@@ -137,8 +137,9 @@ function TableGuilgee({
       }
       pagination={{
         current: garalt?.khuudasniiDugaar,
-        pageSize: garalt?.khuudasniiKhemjee,
         total: garalt?.niitMur,
+        pageSizeOptions: [100, 300, 500],
+        defaultPageSize: [500],
         showSizeChanger: true,
         onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {
           setLoadingIndex(0);
@@ -304,7 +305,7 @@ function guilgeeniiTuukh({ token }) {
     onSearch: onSearchMedeelel,
     setKhuudaslalt,
     isValidating,
-  } = useJagsaalt(sericeName, query, order, undefined, searchKeys);
+  } = useJagsaalt(sericeName, query, order, undefined, searchKeys, null, 500);
 
   const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
     useEneSardTuluuguiGereenuudAvya(
@@ -1068,7 +1069,7 @@ function guilgeeniiTuukh({ token }) {
               turul: "avlaga",
               utga: "Хуримтлагдсан авлага",
               tailbar:
-                "Өмнө сарын төлбөрийн үлдэгдлүүдийн нийлбэр буюу энэ сарыг тооцоогүй болно.",
+                "Өмнө сарын төлбөрийн үлдэгдлүүдийн нийлбэр болон энэ сарын тооцоо болно.",
             },
             {
               too: formatNumber(
