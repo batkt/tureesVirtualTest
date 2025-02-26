@@ -195,7 +195,7 @@ function tulburTootsoo({ token }) {
               ? medeelel.umnukhSariinUrTulbur
               : 0;
 
-          if(zagvar?.khatuuZagvarEsekh && ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d")    
+          if(zagvar?.khatuuZagvarEsekh && ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d" && ajiltan?.baiguullagiinId !== "679aea9032299b7ba8462a77") // foodctiy and urangan   
             kaidudZoriulsanNiitTulburiinNiilber += ((medeelel.baritsaaAvakhDun || 0) - (medeelel.baritsaaniiUldegdel || 0));
           
           if (!!zagvar?.nekhemjlekh) {
