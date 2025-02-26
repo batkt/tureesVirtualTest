@@ -117,7 +117,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
       </thead>
       <tbody>
         <tr>
-          <td style="border: 1px solid #000; text-align: center;">4</td>
+          <td style="border: 1px solid #000; text-align: center;">1</td>
           <td style="border: 1px solid #000; text-align: left;">
             Түрээсийн төлбөр
           </td>
@@ -138,7 +138,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             return `
               <tr key=${index}>
                 <td style="border: 1px solid #000; text-align: center;">${
-                  index + 5
+                  index + 2
                 }</td>
                 <td style="border: 1px solid #000; text-align: left;">
                   ${mur.tailbar}
