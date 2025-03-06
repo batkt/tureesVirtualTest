@@ -1359,17 +1359,21 @@ function camera({ token }) {
                 trigger="click"
                 content={
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <div
-                      onClick={() => khungulyu(parent, parent?._id)}
-                      className="flex w-28 cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
-                    >
-                      <div className="flex items-center justify-center">
-                        <CiDiscount1 />
-                      </div>
-                      <div className="flex items-center justify-center">
-                        Хөнгөлөх
-                      </div>
-                    </div>
+                    {(ajiltan?.tokhirgoo?.zogsooliinKhungulultEsekh ===
+                      true ||
+                      ajiltan?.erkh === "Admin") && (
+                        <div
+                          onClick={() => khungulyu(parent, parent?._id)}
+                          className="flex w-28 cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
+                        >
+                          <div className="flex items-center justify-center">
+                            <CiDiscount1 />
+                          </div>
+                          <div className="flex items-center justify-center">
+                            Хөнгөлөх
+                          </div>
+                        </div>
+                    )}
                     <div
                       onClick={() => {
                         dugaarGaraasBurtgekh(parent);

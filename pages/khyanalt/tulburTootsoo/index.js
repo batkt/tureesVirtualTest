@@ -997,9 +997,9 @@ function tulburTootsoo({ token }) {
                       onClick={() => {
                         const { Excel } = require("antd-table-saveas-excel");
                         const excelExport = new Excel();
-                        excelExport
-                          .addSheet("Дансны хуулга")
-                          .addColumns([
+                        var baganuud = [];  
+                        if (songogdsonDans?.bank === "tdb") {
+                          baganuud = [
                             {
                               title: t("Огноо"),
                               align: "center",
@@ -1019,12 +1019,14 @@ function tulburTootsoo({ token }) {
                             {
                               title: t("Гүйлгээний утга"),
                               dataIndex: "TxAddInf",
+                              __style__: { width: 120 },
                             },
                             {
                               title: t("Гүйлгээний дүн"),
-                              showSorterTooltip: false,
-                              sorter: () => 0,
                               dataIndex: "Amt",
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
                               render(a) {
                                 return a;
                               },
@@ -1032,13 +1034,94 @@ function tulburTootsoo({ token }) {
                             {
                               title: t("Шилжүүлсэн данс"),
                               dataIndex: "CtAcntOrg",
+                              __style__: { h: "center" },
                             },
                             {
                               title: t("Талбай"),
                               dataIndex: "kholbosonTalbainId",
                             },
-                          ])
-                          .addDataSource(dansniiKhuulgaGaralt?.jagsaalt || [])
+                          ];
+                        } else if (songogdsonDans?.bank === "khanbank" || songogdsonDans?.bank === "bogd") {
+                          baganuud = [
+                            {
+                              title: t("Огноо"),
+                              align: "center",
+                              dataIndex: "tranDate",
+                              render(date) {
+                                return moment(date).format("YYYY-MM-DD");
+                              },
+                            },
+                            {
+                              title: t("Цаг"),
+                              dataIndex: "time",
+                              render(a) {
+                                if(songogdsonDans?.bank === "bogd")
+                                  return a;
+                                else
+                                  if (_.isString(a))
+                                    return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
+                                  return "";
+                              },
+                            },
+                            {
+                              title: t("Гүйлгээний утга"),
+                              dataIndex: "description",
+                              __style__: { width: 120 },
+                            },
+                            {
+                              title: t("Гүйлгээний дүн"),
+                              dataIndex: "amount",
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
+                            },
+                            {
+                              title: t("Шилжүүлсэн данс"),
+                              dataIndex: "relatedAccount",
+                              __style__: { h: "center" },
+                            },
+                            {
+                              title: t("Талбай"),
+                              dataIndex: "kholbosonTalbainId",
+                            },
+                          ];
+                        } else if (songogdsonDans?.bank === "golomt") {
+                          baganuud = [
+                            {
+                              title: t("Огноо"),
+                              dataIndex: "tranPostedDate",
+                              render(date) {
+                                return moment(date).format("YYYY-MM-DD HH:mm:ss");
+                              },
+                            },
+                            {
+                              title: t("Гүйлгээний утга"),
+                              dataIndex: "tranDesc",
+                              __style__: { width: 120 },
+                            },
+                            {
+                              title: t("Гүйлгээний дүн"),
+                              dataIndex: "tranAmount",
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
+                            },
+                            {
+                              title: t("Шилжүүлсэн данс"),
+                              align: "center",
+                              dataIndex: "accNum",
+                              __style__: { h: "center" },
+                            },
+                            {
+                              title: t("Талбай"),
+                              dataIndex: "kholbosonTalbainId",
+                            },
+                          ];
+                        }
+                        excelExport
+                          .addSheet("Дансны хуулга")
+                          .addColumns(baganuud)
+                          .addDataSource(dansniiKhuulgaGaralt?.jagsaalt)
                           .saveAs("Дансны хуулга.xlsx");
                       }}
                     >

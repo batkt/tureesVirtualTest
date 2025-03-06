@@ -1001,7 +1001,7 @@ function tulburTootsoo({ token }) {
       kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh.umnukhSariinUrTulbur
         ? nekhemjlekh.umnukhSariinUrTulbur
         : 0;
-      if(songosonZagvar?.khatuuZagvarEsekh && ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d")    
+      if(songosonZagvar?.khatuuZagvarEsekh && ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d" && ajiltan?.baiguullagiinId !== "679aea9032299b7ba8462a77")    
         kaidudZoriulsanNiitTulburiinNiilber += ((nekhemjlekh.baritsaaAvakhDun || 0) - (nekhemjlekh.baritsaaniiUldegdel || 0));  
 
       const dans = dansGaralt?.jagsaalt?.find(
@@ -1376,8 +1376,8 @@ function tulburTootsoo({ token }) {
           ? nekhemjlekh.umnukhSariinUrTulbur
           : 0;
 
-        if(songosonZagvar?.khatuuZagvarEsekh && ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d")    
-            kaidudZoriulsanNiitTulburiinNiilber += ((nekhemjlekh.baritsaaAvakhDun || 0) - (nekhemjlekh.baritsaaniiUldegdel || 0)); 
+        if(songosonZagvar?.khatuuZagvarEsekh && ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d" && ajiltan?.baiguullagiinId !== "679aea9032299b7ba8462a77")
+            kaidudZoriulsanNiitTulburiinNiilber += ((nekhemjlekh.baritsaaAvakhDun || 0) - (nekhemjlekh.baritsaaniiUldegdel || 0));
 
         const dans = dansGaralt?.jagsaalt?.find(
           (a) => a.dugaar === songogdsonDans

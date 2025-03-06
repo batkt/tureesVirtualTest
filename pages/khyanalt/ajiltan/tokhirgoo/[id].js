@@ -579,6 +579,39 @@ function index({ token, data }) {
             </div>
           </div>
         )}
+        {!!targetKeys.find((a) => a === "/khyanalt/zogsool/camera") && (
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("Зогсоолын хөнгөлөлт үзүүлэх эсэх")}
+                </div>
+                <div className="text-gray-600 dark:text-gray-300">
+                  {t(
+                    "Тухайн ажилтан зогсоолд зогссон машиныг хөнгөлөлт үзүүлэх эсэх."
+                  )}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  checked={_.get(
+                    tokhirgoo,
+                    `zogsooliinKhungulultEsekh`
+                  )}
+                  onChange={(checked) => {
+                    setTokhirgoo((a) => {
+                      if (!checked) {
+                        _.set(a, `zogsooliinKhungulultEsekh`, false);
+                      } else
+                        _.set(a, `zogsooliinKhungulultEsekh`, true);
+                      return { ...a };
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
         </div>
         <div className="bottom-5 right-3 col-span-12 ml-auto mr-2 flex w-full py-3 lg:absolute lg:w-36">
           <Button className="w-full" type="primary" onClick={khadgalya}>
