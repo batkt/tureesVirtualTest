@@ -296,7 +296,6 @@ function negtgelTailan({ token }) {
             temp.push(col);
             indexVal++;
         });
-        niitDunJagsaalt.sort();
         setNiitDunJagsaalt(niitDunJagsaalt);
         temp.push({
             title: "Нийт",
@@ -509,11 +508,8 @@ function negtgelTailan({ token }) {
         <div className="flex col-span-12 mt-12 2xl:mt-0 justify-center items-center text-mashJijig">
             <Table
                 sticky={{ offsetHeader: 0 }}
-                scroll={{ y: "calc(1000vh - 29rem)", x: "calc(100vw - 25rem)" }}
+                scroll={{ y: "calc(100vh - 29rem)", x: "calc(100vw - 25rem)" }}
                 tableLayout="fixed"
-                style={{
-                    height: "75vh",
-                }}
                 bordered
                 size="small"
                 className="text-xs overflow-auto"
@@ -552,13 +548,14 @@ function negtgelTailan({ token }) {
                             2
                           )}
                         </div>
-                      </AntdTable.Summary.Cell>
-                      <AntdTable.Summary.Cell index={4} colSpan={shineBagana?.length > 0 ? shineBagana?.length + 1 : 1}></AntdTable.Summary.Cell>
-                        {niitDunJagsaalt.sort((a, b) => a.columnIndex - b.columnIndex).map((mur, index) => {
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell index={4} colSpan={shineBagana?.length > 0 ? shineBagana?.length + 1 : 1}></AntdTable.Summary.Cell>
+                        {avlaga?.map((mur, index) => {
+                            var dun = niitDunJagsaalt?.filter((a) => a.key === mur.ognoo + ";" + mur.tailbar).reduce((a, b) => a + (b.dun || 0), 0); 
                             return (
                             <AntdTable.Summary.Cell index={4 + shineBagana?.length + index + 1}>
                                 <div className="truncate text-right font-bold ">
-                                    {mur.dun != 0 ? formatNumber(mur.dun, 2) : ""}
+                                    {formatNumber(dun)}
                                 </div>
                             </AntdTable.Summary.Cell>
                             );
