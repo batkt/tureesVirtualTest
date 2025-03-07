@@ -450,18 +450,7 @@ function GuilgeeniiTuukh(
                   {(ajiltan?.erkh === "Admin" ||
                     !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
                       (a) => a === barilgiinId
-                    )) &&
-                    (a.turul === "avlaga" ||
-                      a.turul === "voucher" ||
-                      a.turul === "barter" ||
-                      a.turul === "bank" ||
-                      a.turul === "khyamdral" ||
-                      a.turul === "aldangi" ||
-                      a.turul === "zalruulga" ||
-                      a.turul === "baritsaa" ||
-                      a.turul === "qpay" ||
-                      a.turul === "tulultBurtgekh" || 
-                      (a.turul === "khuvaari" && a.zardliinTurul === "turees")) && (
+                    )) && (
                       <Popconfirm
                         title={t("Төлөлт устгах уу?")}
                         okText={t("Тийм")}
