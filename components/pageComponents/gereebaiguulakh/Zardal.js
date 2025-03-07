@@ -211,7 +211,7 @@ const Zardal = ({
         .catch((e) => {
           aldaaBarigch(e);
         });
-  }, [value.zardluud]);
+  }, [form.getFieldValue("zardluud")]);
 
   const ashiglaltiinZardal = useJagsaalt(
     "/ashiglaltiinZardluud",

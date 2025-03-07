@@ -7,13 +7,11 @@ import useMailiinZagvar from "hooks/useMailiinZagvar";
 import {
   Button,
   Checkbox,
-  Input,
   message,
   notification,
   Popconfirm,
   Select,
   Spin,
-  Upload,
 } from "antd";
 import {
   ArrowLeftOutlined,
@@ -22,10 +20,8 @@ import {
   EyeInvisibleOutlined,
   FileExcelOutlined,
   SnippetsOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
-import router from "next/router";
 import ZagvarBurtgel from "components/pageComponents/medegdel/ZagvarBurtgel";
 import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh";
 import deleteMethod from "tools/function/crud/deleteMethod";
@@ -36,7 +32,6 @@ import { modal } from "components/ant/Modal";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
 import useOrder from "tools/function/useOrder";
-import useKhariltsagchDavkhraarAvya from "hooks/useKhariltsagchDavkhraarAvya";
 import { useTranslation } from "react-i18next";
 import useMashin from "hooks/useMashin";
 
