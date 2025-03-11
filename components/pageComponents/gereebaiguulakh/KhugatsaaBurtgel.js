@@ -1,4 +1,4 @@
-import { Form, Button, DatePicker, InputNumber, Select, Input } from "antd";
+import { Form, Button, DatePicker, InputNumber, Select, Input, Switch } from "antd";
 import {
   SolutionOutlined,
   ArrowRightOutlined,
@@ -44,6 +44,11 @@ const YurunkhiiMedeele = ({
           mk: value.talbainKhemjee,
           metrKube: value.talbainKhemjeeMetrKube,
           turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
+          shineGereeEsekh: !value._id,
+          guchKhonogOruulakhEsekh: value.guchKhonogOruulakhEsekh,
+          garaasKhonogOruulakhEsekh: value.garaasKhonogOruulakhEsekh,
+          ekhniiSariinKhonog: value.ekhniiSariinKhonog,
+          gereeniiOgnoo: value.gereeniiOgnoo,
         })
         .then(({ data }) => {
           _.set(value, "avlaga.guilgeenuud", data);
@@ -52,7 +57,7 @@ const YurunkhiiMedeele = ({
         .catch((e) => {
           aldaaBarigch(e);
         });
-  }, [form.getFieldValue("khugatsaa"), form.getFieldValue("tulukhUdur"), form.getFieldValue("duusakhOgnoo")]);
+  }, [form.getFieldValue("khugatsaa"), form.getFieldValue("tulukhUdur"), form.getFieldValue("duusakhOgnoo"), form.getFieldValue("guchKhonogOruulakhEsekh"), form.getFieldValue("garaasKhonogOruulakhEsekh"), form.getFieldValue("ekhniiSariinKhonog")]);
 
   const onValuesChange = (values, v) => {
     if (!!values?.gereeniiOgnoo && !!value?.khugatsaa) {
@@ -240,7 +245,43 @@ const YurunkhiiMedeele = ({
           />
         </Form.Item>
       </div>
-      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
+      {!value._id && (
+        <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400" className="flex w-full justify-end gap-2 ">
+          <p className="mt-1 dark:text-gray-200">{t("30 хонгоор оруулах эсэх")}:</p>
+          <Form.Item name="guchKhonogOruulakhEsekh" valuePropName="checked">
+            <Switch />
+          </Form.Item>
+        </div>  
+      )}
+      {!value._id && (
+        <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400" className="flex w-full justify-end gap-2 ">
+          <p className="mt-1 dark:text-gray-200">{t("Гараас ашиглах хоног оруулах эсэх")}:</p>
+          <Form.Item name="garaasKhonogOruulakhEsekh" valuePropName="checked">
+            <Switch />
+          </Form.Item>
+        </div>  
+      )}
+      {!value._id && value.garaasKhonogOruulakhEsekh && (
+        <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
+          <Form.Item
+            name="ekhniiSariinKhonog"
+            label={t("Эхний сарын ашиглах хоног")}
+          >
+            <InputNumber
+              onKeyUp={focuser}
+              max={30}
+              min={1}
+              style={{ width: "100%" }}
+              formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              placeholder="Гэрээний эхний сарын ашиглах хоног оруулах"
+            />
+          </Form.Item> 
+        </div>  
+      )}
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
         <Form.Item wrapperCol={{ span: 24 }}>
           <div className="flex w-full flex-col justify-between gap-4 md:flex-row">
             <Button

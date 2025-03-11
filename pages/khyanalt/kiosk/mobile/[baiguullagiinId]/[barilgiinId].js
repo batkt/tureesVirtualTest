@@ -10,7 +10,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import uilchilgee, { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
 import { ebarimtKhelberuud } from "tools/logic/tulburiinKhelberuud";
 import moment, { utc } from "moment";
-import Lottie from "lottie-react";
+//import Lottie from "lottie-react";
 import amjilttaiAnimation from "../../amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
@@ -19,7 +19,9 @@ import useQpayObject from "hooks/useQpayObject";
 import ZuvhunKhunglukhModalContent from "../../ZuvhunKhunglukhModalContent";
 import { MdOutlineDiscount } from "react-icons/md";
 import { modal } from "components/ant/Modal";
+import dynamic from 'next/dynamic';
 
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 const KioskMobile = ({
   token,
   zogsool,

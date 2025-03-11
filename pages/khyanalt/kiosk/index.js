@@ -21,14 +21,16 @@ import {
 import { MdOutlineDiscount } from "react-icons/md";
 import moment, { utc } from "moment";
 import axios from "axios";
-import Lottie from "lottie-react";
+//import Lottie from "lottie-react";
 import amjilttaiAnimation from "./amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
 import { modal } from "components/ant/Modal";
 import ZuvhunKhunglukhModalContent from "./ZuvhunKhunglukhModalContent";
 import ShineDugaarKeyboard from "components/pageComponents/kiosk/ShineKeyboard";
+import dynamic from 'next/dynamic';
 
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 const Kiosk = () => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
   const [messageApi, contextHolder] = message.useMessage();

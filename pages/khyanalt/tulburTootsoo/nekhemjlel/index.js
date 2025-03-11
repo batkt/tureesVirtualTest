@@ -2553,6 +2553,18 @@ function tulburTootsoo({ token }) {
                     align: "center",
                   },
                   {
+                    title: t("Алданги"),
+                    width: "7rem",
+                    showSorterTooltip: false,
+                    sorter: (a, b) => a.aldangiinUldegdel - b.aldangiinUldegdel,
+                    dataIndex: "aldangiinUldegdel",
+                    render(a) {
+                      return formatNumber(a);
+                    },
+                    ellipsis: true,
+                    align: "center",
+                  },
+                  {
                     title: t("Үлдэгдэл"),
                     width: "7rem",
                     showSorterTooltip: false,

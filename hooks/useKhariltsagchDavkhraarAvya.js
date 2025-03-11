@@ -8,14 +8,12 @@ const fetcher = (
   token,
   query,
   barilgiinId,
-  davkhar,
   { search, ...khuudaslalt },
   tuluv
 ) =>
   axios(token)
     .post(url, {
       barilgiinId,
-      davkhar,
       query: {
         $and: [
           {
@@ -23,8 +21,8 @@ const fetcher = (
               { ner: { $regex: search, $options: "i" } },
               { register: { $regex: search, $options: "i" } },
               { utas: { $regex: search, $options: "i" } },
-              { "geree.gereeniiDugaar": { $regex: search, $options: "i" } },
-              { "geree.talbainDugaar": { $regex: search, $options: "i" } },
+              // { "geree.gereeniiDugaar": { $regex: search, $options: "i" } },
+              // { "geree.talbainDugaar": { $regex: search, $options: "i" } },
             ],
           },
           tuluv !== null
@@ -45,7 +43,7 @@ const fetcher = (
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-function useKhariltsagchDavkhraarAvya(token, query, davkhar, tuluv) {
+function useKhariltsagchDavkhraarAvya(token, query, tuluv) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setKhuudaslalt] = useState({
     search: "",
@@ -57,7 +55,6 @@ function useKhariltsagchDavkhraarAvya(token, query, davkhar, tuluv) {
           token,
           query,
           barilgiinId,
-          davkhar,
           khuudaslalt,
           tuluv,
         ]

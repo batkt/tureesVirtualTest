@@ -203,6 +203,11 @@ const Zardal = ({
           mk: value.talbainKhemjee,
           metrKube: value.talbainKhemjeeMetrKube,
           turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
+          shineGereeEsekh: !value._id,
+          guchKhonogOruulakhEsekh: value.guchKhonogOruulakhEsekh,
+          garaasKhonogOruulakhEsekh: value.garaasKhonogOruulakhEsekh,
+          ekhniiSariinKhonog: value.ekhniiSariinKhonog,
+          gereeniiOgnoo: value.gereeniiOgnoo,
         })
         .then(({ data }) => {
           _.set(value, "avlaga.guilgeenuud", data);

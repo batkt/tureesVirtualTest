@@ -96,7 +96,7 @@ function Khyanalt({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
   const { t } = useTranslation();
   const [khariltsagch, setKhariltsagch] = useState(null);
-  const [davkhar, setDavkhar] = useState(null);
+  // const [davkhar, setDavkhar] = useState(null);
   const [content, setContent] = useState();
   const [ner, setNer] = useState();
   const [msj, onTextChange] = useState("");
@@ -122,9 +122,6 @@ function Khyanalt({ token }) {
   const { setKhariltsagchKhuudaslalt, jagsaalt } = useKhariltsagchDavkhraarAvya(
     token,
     khariltsagchiinQuery,
-    davkhar?.length < 1 || davkhar === null
-      ? undefined
-      : (davkhar = { $in: davkhar }),
     tuluv
   );
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
@@ -526,9 +523,9 @@ function Khyanalt({ token }) {
     }
   }
 
-  function davkharuudSongokh(e) {
-    setDavkhar(e);
-  }
+  // function davkharuudSongokh(e) {
+  //   setDavkhar(e);
+  // }
 
   function turulSongokh(mur) {
     setTurul(mur);
@@ -616,7 +613,7 @@ function Khyanalt({ token }) {
               ))}
             </Select>
           </div>
-          <div className="col-span-6">
+          {/* <div className="col-span-6">
             <Select
               mode="multiple"
               allowClear
@@ -631,7 +628,7 @@ function Khyanalt({ token }) {
                   </Select.Option>
                 ))}
             </Select>
-          </div>
+          </div> */}
         </div>
 
         {turul === "SMS" ? (
@@ -771,7 +768,7 @@ function Khyanalt({ token }) {
               type="text"
               className="block w-full rounded-md border border-slate-300 bg-white  px-3 py-1 text-sm shadow-sm focus:border-[#8aaaef] focus:outline-none focus:ring-1
               focus:ring-[#8aaaef] dark:bg-gray-500 "
-              placeholder={t("Хайх /Нэр, Регистр, Утас, Гэрээ, Талбай/")}
+              placeholder={t("Хайх /Нэр, Регистр, Утас/")}
               onChange={({ target }) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {
