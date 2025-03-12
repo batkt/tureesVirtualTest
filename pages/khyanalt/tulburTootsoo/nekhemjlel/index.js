@@ -1747,6 +1747,7 @@ function tulburTootsoo({ token }) {
         }
         if (!!nekhemjlekh.mail) {
           mailuud.push({
+            gereeniiDugaar: nekhemjlekh.gereeniiDugaar,
             mail: nekhemjlekh.mail,
             content: text,
           });
