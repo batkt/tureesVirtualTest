@@ -237,16 +237,12 @@ function tulburTootsoo({ token }) {
               dans?.bank === "bogd" ? "Богд банк" :
               dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
             medeelel.dansniiNer = dans?.dansniiNer;
-            medeelel.aldangiinUldegdel = formatNumber(
-              medeelel.aldangiinUldegdel || 0
-            );
-            medeelel.aldangiinUldegdelNuat = formatNumber(
-              medeelel.aldangiinUldegdel / 10 || 0
-            );
-            medeelel.aldangiinUldegdelNuatgui =
-              formatNumber(
-                medeelel.aldangiinUldegdel - medeelel.aldangiinUldegdelNuat || 0
-              ) || "";
+            medeelel.aldangiinUldegdel = medeelel.aldangiinUldegdel || 0;
+            medeelel.aldangiinUldegdelNuat = (medeelel.aldangiinUldegdel || 0) / 10;
+            medeelel.aldangiinUldegdelNuatgui = formatNumber(medeelel.aldangiinUldegdel - medeelel.aldangiinUldegdelNuat || 0);
+            medeelel.aldangiinUldegdelNuat = formatNumber(medeelel.aldangiinUldegdelNuat || 0);
+            medeelel.aldangiinUldegdel = formatNumber(medeelel.aldangiinUldegdel || 0);
+
             medeelel.albanTushaal = medeelel.albanTushaal || "";
             medeelel.khayag = medeelel.khayag || "";
             medeelel.customerTin = medeelel.customerTin || "";
@@ -379,25 +375,31 @@ function tulburTootsoo({ token }) {
               </span>
             );
 
+            medeelel.umnukhSariinUrTulburNuat = (medeelel.umnukhSariinUrTulbur || 0) / 10
+            medeelel.umnukhSariinUrTulburNuatgui = formatNumber(
+              (medeelel.umnukhSariinUrTulbur || 0) -
+                (medeelel.umnukhSariinUrTulburNuat || 0)
+            );
+            medeelel.umnukhSariinUrTulburNuat = formatNumber(
+              medeelel.umnukhSariinUrTulburNuat
+            );
             medeelel.umnukhSariinUrTulbur = formatNumber(
               medeelel.umnukhSariinUrTulbur
             );
-            medeelel.umnukhSariinUrTulburNuat = formatNumber(
-              medeelel.umnukhSariinUrTulbur / 10 || 0
-            );
-            medeelel.umnukhSariinUrTulburNuatgui = formatNumber(
-              medeelel.umnukhSariinUrTulbur -
-                medeelel.umnukhSariinUrTulburNuat || 0
-            );
             
-            medeelel.baritsaaUldegdel = formatNumber((medeelel.baritsaaAvakhDun || 0) - (medeelel.baritsaaniiUldegdel || 0));
-
-            medeelel.baritsaaUldegdelNuat = formatNumber(
-              medeelel.baritsaaUldegdel / 10 || 0
-            );
+            medeelel.baritsaaUldegdel = (medeelel.baritsaaAvakhDun || 0) - (medeelel.baritsaaniiUldegdel || 0);
+            medeelel.baritsaaUldegdelNuat = (medeelel.baritsaaUldegdel || 0) / 10
             medeelel.baritsaaUldegdelNuatgui = formatNumber(
               medeelel.baritsaaUldegdel -
                 medeelel.baritsaaUldegdelNuat || 0
+            );
+
+            medeelel.baritsaaUldegdelNuat = formatNumber(
+              medeelel.baritsaaUldegdelNuat
+            );
+
+            medeelel.baritsaaUldegdel = formatNumber(
+              medeelel.baritsaaUldegdel
             );
 
             medeelel.khevlesenOgnoo = moment(ognoo).format("YYYY-MM-DD");
@@ -1012,14 +1014,11 @@ function tulburTootsoo({ token }) {
         dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
       nekhemjlekh.dansniiNer = dans?.dansniiNer;
       nekhemjlekh.khayag = nekhemjlekh.khayag || "";
-      nekhemjlekh.aldangiinUldegdel =
-        formatNumber(nekhemjlekh.aldangiinUldegdel) || "";
-      nekhemjlekh.aldangiinUldegdelNuat =
-        formatNumber(nekhemjlekh.aldangiinUldegdel / 10) || "";
-      nekhemjlekh.aldangiinUldegdelNuatgui =
-        formatNumber(
-          nekhemjlekh.aldangiinUldegdel - nekhemjlekh.aldangiinUldegdelNuat
-        ) || "";
+      nekhemjlekh.aldangiinUldegdel = nekhemjlekh.aldangiinUldegdel || 0;
+      nekhemjlekh.aldangiinUldegdelNuat = (nekhemjlekh.aldangiinUldegdel || 0) / 10;
+      nekhemjlekh.aldangiinUldegdelNuatgui = formatNumber(nekhemjlekh.aldangiinUldegdel - nekhemjlekh.aldangiinUldegdelNuat || 0);
+      nekhemjlekh.aldangiinUldegdelNuat = formatNumber(nekhemjlekh.aldangiinUldegdelNuat || 0);
+      nekhemjlekh.aldangiinUldegdel = formatNumber(nekhemjlekh.aldangiinUldegdel || 0);
       nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
       nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
       nekhemjlekh.zakhirliinNer = nekhemjlekh.zakhirliinNer || "";
@@ -1387,16 +1386,11 @@ function tulburTootsoo({ token }) {
           dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
         nekhemjlekh.dansniiNer = dans?.dansniiNer;
         nekhemjlekh.khayag = nekhemjlekh.khayag || "";
-        nekhemjlekh.aldangiinUldegdelNuat = formatNumber(
-          nekhemjlekh.aldangiinUldegdel / 10 || 0
-        );
-        nekhemjlekh.aldangiinUldegdelNuatgui =
-          formatNumber(
-            nekhemjlekh.aldangiinUldegdel - nekhemjlekh.aldangiinUldegdelNuat ||
-              0
-          ) || "";
-        nekhemjlekh.aldangiinUldegdel =
-          formatNumber(nekhemjlekh.aldangiinUldegdel) || "";
+        nekhemjlekh.aldangiinUldegdel = nekhemjlekh.aldangiinUldegdel || 0;
+        nekhemjlekh.aldangiinUldegdelNuat = (nekhemjlekh.aldangiinUldegdel || 0) / 10;
+        nekhemjlekh.aldangiinUldegdelNuatgui = formatNumber(nekhemjlekh.aldangiinUldegdel - nekhemjlekh.aldangiinUldegdelNuat || 0);
+        nekhemjlekh.aldangiinUldegdelNuat = formatNumber(nekhemjlekh.aldangiinUldegdelNuat || 0);
+        nekhemjlekh.aldangiinUldegdel = formatNumber(nekhemjlekh.aldangiinUldegdel || 0);
         nekhemjlekh.khuviinTamga = renderToString(
           <span style={{ position: "absolute", zIndex: 1 }}>
             <img
@@ -1456,24 +1450,32 @@ function tulburTootsoo({ token }) {
           khungulsunTalbainNiitUneNuatgui || 0
         );
         nekhemjlekh.khungulult = formatNumber(nekhemjlekh.khungulult || 0);
-        nekhemjlekh.umnukhSariinUrTulburNuat = formatNumber(
-          nekhemjlekh.umnukhSariinUrTulbur / 10
-        );
+
+        nekhemjlekh.umnukhSariinUrTulburNuat = (nekhemjlekh.umnukhSariinUrTulbur || 0) / 10
         nekhemjlekh.umnukhSariinUrTulburNuatgui = formatNumber(
-          nekhemjlekh.umnukhSariinUrTulbur -
-            nekhemjlekh.umnukhSariinUrTulburNuat
+          (nekhemjlekh.umnukhSariinUrTulbur || 0) -
+            (nekhemjlekh.umnukhSariinUrTulburNuat || 0)
+        );
+        nekhemjlekh.umnukhSariinUrTulburNuat = formatNumber(
+          nekhemjlekh.umnukhSariinUrTulburNuat
         );
         nekhemjlekh.umnukhSariinUrTulbur = formatNumber(
           nekhemjlekh.umnukhSariinUrTulbur
         );
 
-        nekhemjlekh.baritsaaUldegdel = formatNumber((nekhemjlekh.baritsaaAvakhDun || 0) - (nekhemjlekh.baritsaaniiUldegdel || 0));
-        nekhemjlekh.baritsaaUldegdelNuat = formatNumber(
-          nekhemjlekh.baritsaaUldegdel / 10 || 0
-        );
+        nekhemjlekh.baritsaaUldegdel = (nekhemjlekh.baritsaaAvakhDun || 0) - (nekhemjlekh.baritsaaniiUldegdel || 0);
+        nekhemjlekh.baritsaaUldegdelNuat = (nekhemjlekh.baritsaaUldegdel || 0) / 10
         nekhemjlekh.baritsaaUldegdelNuatgui = formatNumber(
           nekhemjlekh.baritsaaUldegdel -
-          nekhemjlekh.baritsaaUldegdelNuat || 0
+            nekhemjlekh.baritsaaUldegdelNuat || 0
+        );
+
+        nekhemjlekh.baritsaaUldegdelNuat = formatNumber(
+          nekhemjlekh.baritsaaUldegdelNuat
+        );
+
+        nekhemjlekh.baritsaaUldegdel = formatNumber(
+          nekhemjlekh.baritsaaUldegdel
         );
 
         nekhemjlekh.khevlesenOgnoo = moment().format("YYYY-MM-DD");
