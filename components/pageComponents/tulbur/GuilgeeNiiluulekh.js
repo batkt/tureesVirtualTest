@@ -268,43 +268,7 @@ function GuilgeeNiiluulekh(
   const content = useMemo(
     () => (
       <div className=" relative space-y-1 bg-white p-3  shadow-xl drop-shadow-xl dark:bg-gray-900 dark:text-gray-200 lg:absolute lg:left-0 lg:w-[180%]">
-        {data?.magadlaltaiGereenuud?.length > 0 ? (magadlaltaiGereenuud?.map((mur, i) => (
-          <div
-            className="grid cursor-pointer grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
-            key={`gereeniisongolt${i}`}
-            onClick={() => {
-              if (gereenuud.find((a) => a._id === mur._id)) {
-                notification.warning({
-                  message: t("Анхаар"),
-                  description: t("Гэрээ сонгогдсон байна"),
-                });
-                return;
-              }
-              uilchilgee(token)
-                .post("/uldegdelBodyo", {
-                  barilgiinId,
-                  gereeniiDugaar: mur.gereeniiDugaar,
-                })
-                .then(({ data }) => {
-                  if (!!data) {
-                    mur.uldegdel = data.uldegdel;
-                    setGereenuud((a) => {
-                      a.push(mur);
-                      return [...a];
-                    });
-                    setVisible(false);
-                  }
-                })
-                .catch(aldaaBarigch);
-            }}
-          >
-            <div className="truncate px-2">{mur.talbainDugaar}</div>
-            <div className="px-2">{mur.register}</div>
-            <div className="px-2">{mur.ner}</div>
-          </div>
-        )))
-		      :
-		      gereeniiMedeelel?.jagsaalt?.map((mur, i) => (
+        {gereeniiMedeelel?.jagsaalt?.map((mur, i) => (
           <div
             className="grid cursor-pointer grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
             key={`gereeniisongolt${i}`}
@@ -431,6 +395,19 @@ function GuilgeeNiiluulekh(
 
   return (
     <div className="flex w-full flex-col space-y-2">
+      {magadlaltaiGereenuud?.length > 0 && (
+        <div >
+          <div className="py-2 text-lg font-medium">
+            {t("Магадлалтай гэрээ")}
+          </div>
+          {magadlaltaiGereenuud?.map((mur, i) => (
+          <div className="grid grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700" key={`gereeniisongolt${i}`}>
+            <div className="truncate px-2">{mur.talbainDugaar}</div>
+            <div className="px-2">{mur.register}</div>
+            <div className="px-2">{mur.ner}</div>
+          </div>
+          ))}
+        </div>)}
       <div className="space-y-2 ">
         <div className="flex justify-between">
           <span className="text-sm font-medium dark:text-gray-100 lg:text-xl">
