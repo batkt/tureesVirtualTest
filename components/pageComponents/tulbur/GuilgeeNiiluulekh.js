@@ -21,6 +21,7 @@ import {
   FormOutlined,
 } from "@ant-design/icons";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import getListMethod from "../../../tools/function/crud/getListMethod";
 import { t } from "i18next";
 
 var timeout = null;
@@ -130,6 +131,7 @@ function GuilgeeNiiluulekh(
   const [visible, setVisible] = useState(false);
   const [khaagdsanGereeEsekh, setKhaagdsanGereeEsekh] = useState(false);
   const [guilgeeniiTailbar, setGuilgeeniiTailbar] = useState();
+  const [magadlaltaiGereenuud, setMagadlaltaiGereenuud] = React.useState([]);
   const inputRef = React.useRef();
 
   const query = useMemo(() => {
@@ -147,6 +149,15 @@ function GuilgeeNiiluulekh(
   useEffect(() => {
     inputRef.current.focus();
   }, [guilgeeniiTailbar]);
+
+  useEffect(() => {
+    data?.magadlaltaiGereenuud &&
+      getListMethod("geree", token, {
+        query: { _id: data?.magadlaltaiGereenuud, barilgiinId },
+      }).then(({ data }) => {
+        setMagadlaltaiGereenuud(data?.jagsaalt);
+      });
+  }, []);
 
   React.useImperativeHandle(
     ref,
@@ -257,7 +268,7 @@ function GuilgeeNiiluulekh(
   const content = useMemo(
     () => (
       <div className=" relative space-y-1 bg-white p-3  shadow-xl drop-shadow-xl dark:bg-gray-900 dark:text-gray-200 lg:absolute lg:left-0 lg:w-[180%]">
-        {gereeniiMedeelel?.jagsaalt?.map((mur, i) => (
+        {data?.magadlaltaiGereenuud?.length > 0 ? (magadlaltaiGereenuud?.map((mur, i) => (
           <div
             className="grid cursor-pointer grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
             key={`gereeniisongolt${i}`}
@@ -291,10 +302,47 @@ function GuilgeeNiiluulekh(
             <div className="px-2">{mur.register}</div>
             <div className="px-2">{mur.ner}</div>
           </div>
-        ))}
+        )))
+		      :
+		      gereeniiMedeelel?.jagsaalt?.map((mur, i) => (
+          <div
+            className="grid cursor-pointer grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
+            key={`gereeniisongolt${i}`}
+            onClick={() => {
+              if (gereenuud.find((a) => a._id === mur._id)) {
+                notification.warning({
+                  message: t("Анхаар"),
+                  description: t("Гэрээ сонгогдсон байна"),
+                });
+                return;
+              }
+              uilchilgee(token)
+                .post("/uldegdelBodyo", {
+                  barilgiinId,
+                  gereeniiDugaar: mur.gereeniiDugaar,
+                })
+                .then(({ data }) => {
+                  if (!!data) {
+                    mur.uldegdel = data.uldegdel;
+                    setGereenuud((a) => {
+                      a.push(mur);
+                      return [...a];
+                    });
+                    setVisible(false);
+                  }
+                })
+                .catch(aldaaBarigch);
+            }}
+          >
+            <div className="truncate px-2">{mur.talbainDugaar}</div>
+            <div className="px-2">{mur.register}</div>
+            <div className="px-2">{mur.ner}</div>
+          </div>
+        ))
+      }
       </div>
     ),
-    [gereeniiMedeelel, gereenuud]
+    [gereeniiMedeelel, gereenuud, magadlaltaiGereenuud]
   );
 
   function zuruuZun(index, talbar) {

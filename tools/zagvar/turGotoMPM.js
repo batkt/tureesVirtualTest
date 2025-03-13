@@ -114,6 +114,26 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         </tr>
       </thead>
       <tbody>
+        ${medeelel.zardluud.filter(a => a.tailbar === "Хөрөнгийн менежмент" || a.tailbar === "Худалдааны менежмент").length > 0 ? "" :
+        `
+        <tr>
+          <td style="border: 1px solid #000; text-align: left;">&nbsp;</td>
+          <td style="border: 1px solid #000; text-align: left;">&nbsp;</td>
+          <td style="border: 1px solid #000; text-align: left;">&nbsp;</td>
+          <td style="border: 1px solid #000; text-align: left;">&nbsp;</td>
+          <td style="border: 1px solid #000; text-align: center;" rowspan=&lt;gotoMPMCount&gt;>
+            <div style="display: block;">
+              Мастер проперти
+            </div>
+            <div style="display: block;">
+              менежмент ХХК Хаан 
+            </div>
+            <div style="display: block;">
+              банк: &lt;dans&gt; 
+            </div>
+          </td>
+        </tr>
+        `}
         ${medeelel.zardluud
           .sort((a, b) => {
           return a.tailbar.localeCompare(b.tailbar, "en", {

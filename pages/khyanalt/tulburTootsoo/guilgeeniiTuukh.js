@@ -107,12 +107,20 @@ function TableGuilgee({
             align="right"
           >
             {mur.summary
-              ? formatNumber(
+              ? (mur.dataIndex === "avlagiinUldegdel" ? (
+                formatNumber(
                   garalt?.jagsaalt?.reduce(
-                    (a, b) => a + (Number(b[mur.dataIndex]) || 0),
+                    (a, b) => a + (parseFloat(b["uldegdel"]) || 0) + (parseFloat(b["aldangiinUldegdel"]) || 0),
                     0
                   )
                 )
+              )
+                : formatNumber(garalt?.jagsaalt?.reduce(
+                  (a, b) => a + (parseFloat(b[mur.dataIndex]) || 0),
+                  0
+                )
+              ))
+
               : ""}
           </Table.Summary.Cell>
         ))}
@@ -1293,6 +1301,22 @@ function guilgeeniiTuukh({ token }) {
                       return (
                         <div className="w-full text-right">
                           {formatNumber(aldangiinUldegdel || 0)}
+                        </div>
+                      );
+                    },
+                  },
+                  {
+                    title: t("Авлагын үлдэгдэл"),
+                    dataIndex: "avlagiinUldegdel",
+                    className: "text-center",
+                    align: "center",
+                    ellipsis: true,
+                    width: "7rem",
+                    summary: true,
+                    render(text, data, index) {
+                      return (
+                        <div className="w-full text-right">
+                          {formatNumber(( parseFloat(data.uldegdel) || 0) + (data.aldangiinUldegdel || 0))}
                         </div>
                       );
                     },

@@ -247,7 +247,7 @@ const YurunkhiiMedeele = ({
       </div>
       {!value._id && (
         <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400" className="flex w-full justify-end gap-2 ">
-          <p className="mt-1 dark:text-gray-200">{t("30 хонгоор оруулах эсэх")}:</p>
+          <p className="mt-1 dark:text-gray-200">{t("30 хоногоор оруулах эсэх")}:</p>
           <Form.Item name="guchKhonogOruulakhEsekh" valuePropName="checked">
             <Switch />
           </Form.Item>
