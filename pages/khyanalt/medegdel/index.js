@@ -96,7 +96,7 @@ function Khyanalt({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
   const { t } = useTranslation();
   const [khariltsagch, setKhariltsagch] = useState(null);
-  // const [davkhar, setDavkhar] = useState(null);
+  const [davkhar, setDavkhar] = useState(null);
   const [content, setContent] = useState();
   const [ner, setNer] = useState();
   const [msj, onTextChange] = useState("");
@@ -122,6 +122,7 @@ function Khyanalt({ token }) {
   const { setKhariltsagchKhuudaslalt, jagsaalt } = useKhariltsagchDavkhraarAvya(
     token,
     khariltsagchiinQuery,
+    davkhar,
     tuluv
   );
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
@@ -523,9 +524,9 @@ function Khyanalt({ token }) {
     }
   }
 
-  // function davkharuudSongokh(e) {
-  //   setDavkhar(e);
-  // }
+  function davkharuudSongokh(e) {
+    setDavkhar(e);
+  }
 
   function turulSongokh(mur) {
     setTurul(mur);
@@ -613,7 +614,7 @@ function Khyanalt({ token }) {
               ))}
             </Select>
           </div>
-          {/* <div className="col-span-6">
+          <div className="col-span-6">
             <Select
               mode="multiple"
               allowClear
@@ -628,7 +629,7 @@ function Khyanalt({ token }) {
                   </Select.Option>
                 ))}
             </Select>
-          </div> */}
+          </div>
         </div>
 
         {turul === "SMS" ? (
