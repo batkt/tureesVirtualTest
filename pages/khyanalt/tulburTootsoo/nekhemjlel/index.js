@@ -1404,6 +1404,52 @@ function tulburTootsoo({ token }) {
             />
           </span>
         );
+        const barilga = baiguullaga?.barilguud?.find(
+          (a) => a._id === nekhemjlekh?.barilgiinId
+        );
+        nekhemjlekh.gariinUseg = renderToString(
+          <span style={{ position: "absolute" }}>
+            <img
+              src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+              style={{
+                width: 100,
+                height: 50,
+                transform: "translate(10%, -30%)",
+              }}
+            />
+          </span>
+        );
+        if(ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909") // goto 
+        {
+          nekhemjlekh.tamga = renderToString(
+            <span style={{ position: "absolute", zIndex: 1 }}>
+              <img
+                src={`${url}/file?path=tamga/${barilga.tamga}`}
+                style={{
+                  width: 200,
+                  height: 160,
+                  transform: "translate(5%, -80%)",
+                  opacity: 0.65,
+                }}
+              />
+            </span>
+          );
+        }
+        else
+          nekhemjlekh.tamga = renderToString(
+            <span style={{ position: "absolute", zIndex: 1 }}>
+              <img
+                src={`${url}/file?path=tamga/${barilga.tamga}`}
+                style={{
+                  width: 115,
+                  height: 100,
+                  transform: "translate(-10%, -50%)",
+                  opacity: 0.65,
+                }}
+              />
+            </span>
+          );
+
         nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
         nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
         nekhemjlekh.zakhirliinNer = nekhemjlekh.zakhirliinNer || "";
