@@ -227,6 +227,7 @@ function GuilgeeKhiikh(
                 gereeniiId: data?._id,
                 tailbar,
                 nekhemjlekhDeerKharagdakh,
+                nuatBodokhEsekh,
                 tsakhilgaanKBTST: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? tsakhilgaanKBTST : 0,
                 guidliinKoep: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? guidliinKoep : 0,
                 bichiltKhonog: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? (baiguullaga?.tokhirgoo?.bichiltKhonog || 0) : 0,
@@ -750,7 +751,7 @@ function GuilgeeKhiikh(
             )}
             {!m2argaarBodokhEsekh && (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && bodokhArga === "Khatuu" && !nuatBodokhEsekh && (
               <div className="flex w-full items-center justify-between gap-2">
-                <div>{t("Нийт дүн")}:</div>
+                <div>{t("Нөатгүй дүн")}:</div>
                 <div>
                   {formatNumber(tseverUsDun * dun + bokhirUsDun * dun + (tailbar === "Халуун ус" ? usKhalaasniiDun * dun : 0) + (suuriKhuraamj || 0) || 0, 2)}
                 </div>

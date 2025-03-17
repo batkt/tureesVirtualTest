@@ -238,7 +238,7 @@ function tulburTootsoo({ token }) {
               dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
             medeelel.dansniiNer = dans?.dansniiNer;
             medeelel.aldangiinUldegdel = medeelel.aldangiinUldegdel || 0;
-            medeelel.aldangiinUldegdelNuat = (medeelel.aldangiinUldegdel || 0) / 10;
+            medeelel.aldangiinUldegdelNuat = ((medeelel.aldangiinUldegdel || 0) / 1.1) * 0.1;
             medeelel.aldangiinUldegdelNuatgui = formatNumber(medeelel.aldangiinUldegdel - medeelel.aldangiinUldegdelNuat || 0);
             medeelel.aldangiinUldegdelNuat = formatNumber(medeelel.aldangiinUldegdelNuat || 0);
             medeelel.aldangiinUldegdel = formatNumber(medeelel.aldangiinUldegdel || 0);
@@ -375,7 +375,7 @@ function tulburTootsoo({ token }) {
               </span>
             );
 
-            medeelel.umnukhSariinUrTulburNuat = (medeelel.umnukhSariinUrTulbur || 0) / 10
+            medeelel.umnukhSariinUrTulburNuat = ((medeelel.umnukhSariinUrTulbur || 0) / 1.1) * 0.1;
             medeelel.umnukhSariinUrTulburNuatgui = formatNumber(
               (medeelel.umnukhSariinUrTulbur || 0) -
                 (medeelel.umnukhSariinUrTulburNuat || 0)
@@ -388,7 +388,7 @@ function tulburTootsoo({ token }) {
             );
             
             medeelel.baritsaaUldegdel = (medeelel.baritsaaAvakhDun || 0) - (medeelel.baritsaaniiUldegdel || 0);
-            medeelel.baritsaaUldegdelNuat = (medeelel.baritsaaUldegdel || 0) / 10
+            medeelel.baritsaaUldegdelNuat = ((medeelel.baritsaaUldegdel || 0) / 1.1) * 0.1;
             medeelel.baritsaaUldegdelNuatgui = formatNumber(
               medeelel.baritsaaUldegdel -
                 medeelel.baritsaaUldegdelNuat || 0
@@ -1015,7 +1015,7 @@ function tulburTootsoo({ token }) {
       nekhemjlekh.dansniiNer = dans?.dansniiNer;
       nekhemjlekh.khayag = nekhemjlekh.khayag || "";
       nekhemjlekh.aldangiinUldegdel = nekhemjlekh.aldangiinUldegdel || 0;
-      nekhemjlekh.aldangiinUldegdelNuat = (nekhemjlekh.aldangiinUldegdel || 0) / 10;
+      nekhemjlekh.aldangiinUldegdelNuat = ((nekhemjlekh.aldangiinUldegdel || 0) / 1.1) * 0.1;
       nekhemjlekh.aldangiinUldegdelNuatgui = formatNumber(nekhemjlekh.aldangiinUldegdel - nekhemjlekh.aldangiinUldegdelNuat || 0);
       nekhemjlekh.aldangiinUldegdelNuat = formatNumber(nekhemjlekh.aldangiinUldegdelNuat || 0);
       nekhemjlekh.aldangiinUldegdel = formatNumber(nekhemjlekh.aldangiinUldegdel || 0);
@@ -1050,7 +1050,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.umnukhSariinUrTulbur
       );
       nekhemjlekh.umnukhSariinUrTulburNuat = formatNumber(
-        nekhemjlekh.umnukhSariinUrTulbur / 10 || 0
+        (nekhemjlekh.umnukhSariinUrTulbur / 1.1) * 0.1
       );
       nekhemjlekh.umnukhSariinUrTulburNuatgui = formatNumber(
         nekhemjlekh.umnukhSariinUrTulbur -
@@ -1060,7 +1060,7 @@ function tulburTootsoo({ token }) {
       nekhemjlekh.baritsaaUldegdel = formatNumber((nekhemjlekh.baritsaaAvakhDun || 0) - (nekhemjlekh.baritsaaniiUldegdel || 0));
 
       nekhemjlekh.baritsaaUldegdelNuat = formatNumber(
-        nekhemjlekh.baritsaaUldegdel / 10 || 0
+        (nekhemjlekh.baritsaaUldegdel / 1.1) * 0.1
       );
       nekhemjlekh.baritsaaUldegdelNuatgui = formatNumber(
         nekhemjlekh.baritsaaUldegdel -
@@ -1387,7 +1387,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.dansniiNer = dans?.dansniiNer;
         nekhemjlekh.khayag = nekhemjlekh.khayag || "";
         nekhemjlekh.aldangiinUldegdel = nekhemjlekh.aldangiinUldegdel || 0;
-        nekhemjlekh.aldangiinUldegdelNuat = (nekhemjlekh.aldangiinUldegdel || 0) / 10;
+        nekhemjlekh.aldangiinUldegdelNuat = ((nekhemjlekh.aldangiinUldegdel || 0) / 1.1) * 0.1;
         nekhemjlekh.aldangiinUldegdelNuatgui = formatNumber(nekhemjlekh.aldangiinUldegdel - nekhemjlekh.aldangiinUldegdelNuat || 0);
         nekhemjlekh.aldangiinUldegdelNuat = formatNumber(nekhemjlekh.aldangiinUldegdelNuat || 0);
         nekhemjlekh.aldangiinUldegdel = formatNumber(nekhemjlekh.aldangiinUldegdel || 0);
@@ -1497,7 +1497,7 @@ function tulburTootsoo({ token }) {
         );
         nekhemjlekh.khungulult = formatNumber(nekhemjlekh.khungulult || 0);
 
-        nekhemjlekh.umnukhSariinUrTulburNuat = (nekhemjlekh.umnukhSariinUrTulbur || 0) / 10
+        nekhemjlekh.umnukhSariinUrTulburNuat = ((nekhemjlekh.umnukhSariinUrTulbur || 0) / 1.1) * 0.1;
         nekhemjlekh.umnukhSariinUrTulburNuatgui = formatNumber(
           (nekhemjlekh.umnukhSariinUrTulbur || 0) -
             (nekhemjlekh.umnukhSariinUrTulburNuat || 0)
@@ -1510,7 +1510,7 @@ function tulburTootsoo({ token }) {
         );
 
         nekhemjlekh.baritsaaUldegdel = (nekhemjlekh.baritsaaAvakhDun || 0) - (nekhemjlekh.baritsaaniiUldegdel || 0);
-        nekhemjlekh.baritsaaUldegdelNuat = (nekhemjlekh.baritsaaUldegdel || 0) / 10
+        nekhemjlekh.baritsaaUldegdelNuat = ((nekhemjlekh.baritsaaUldegdel || 0) / 1.1) * 0.1;
         nekhemjlekh.baritsaaUldegdelNuatgui = formatNumber(
           nekhemjlekh.baritsaaUldegdel -
             nekhemjlekh.baritsaaUldegdelNuat || 0
