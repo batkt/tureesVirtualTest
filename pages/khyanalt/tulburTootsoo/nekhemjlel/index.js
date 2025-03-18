@@ -1011,7 +1011,10 @@ function tulburTootsoo({ token }) {
       );
       nekhemjlekh.dans = dans?.dugaar;
       nekhemjlekh.bank =
-        dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+              dans?.bank === "khanbank" ? "Хаан банк" : 
+              dans?.bank === "golomt" ? "Голомт банк" :
+              dans?.bank === "bogd" ? "Богд банк" :
+              dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
       nekhemjlekh.dansniiNer = dans?.dansniiNer;
       nekhemjlekh.khayag = nekhemjlekh.khayag || "";
       nekhemjlekh.aldangiinUldegdel = nekhemjlekh.aldangiinUldegdel || 0;
@@ -1383,7 +1386,10 @@ function tulburTootsoo({ token }) {
         );
         nekhemjlekh.dans = dans?.dugaar;
         nekhemjlekh.bank =
-          dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+              dans?.bank === "khanbank" ? "Хаан банк" : 
+              dans?.bank === "golomt" ? "Голомт банк" :
+              dans?.bank === "bogd" ? "Богд банк" :
+              dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
         nekhemjlekh.dansniiNer = dans?.dansniiNer;
         nekhemjlekh.khayag = nekhemjlekh.khayag || "";
         nekhemjlekh.aldangiinUldegdel = nekhemjlekh.aldangiinUldegdel || 0;
@@ -1802,6 +1808,9 @@ function tulburTootsoo({ token }) {
         }
       });
       const gereenuud = [];
+      const dans = dansGaralt?.jagsaalt?.find(
+        (a) => a.dugaar === songogdsonDans
+      );
       nekhemjlekhuud.map((mur, index) => {
         const tempData = _.cloneDeep(nekhemjleliinJagsaalt.find((a) => a._id === mur.medeelel?._id));
         tempData.medeelel = _.cloneDeep(tempData);
@@ -1811,6 +1820,13 @@ function tulburTootsoo({ token }) {
         tempData.maililgeesenAjiltniiNer = ajiltan.ner;
         tempData.nekhemjlekhiinZagvarId = barimt;
         tempData.tsonkhniiNer = "Нэхэмжлэл";
+        tempData.nekhemjlekhiinDans = dans?.dugaar;
+        tempData.nekhemjlekhiinDansniiNer = dans?.dansniiNer;
+        tempData.nekhemjlekhiinBank =
+              dans?.bank === "khanbank" ? "Хаан банк" : 
+              dans?.bank === "golomt" ? "Голомт банк" :
+              dans?.bank === "bogd" ? "Богд банк" :
+              dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
         gereenuud.push(tempData);
       });
       setLoading(true);
@@ -1893,7 +1909,10 @@ function tulburTootsoo({ token }) {
           );
           medeelel.dans = dans?.dugaar;
           medeelel.bank =
-            dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+              dans?.bank === "khanbank" ? "Хаан банк" : 
+              dans?.bank === "golomt" ? "Голомт банк" :
+              dans?.bank === "bogd" ? "Богд банк" :
+              dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
           medeelel.dansniiNer = dans?.dansniiNer;
           medeelel.aldangiinUldegdel =
             formatNumber(medeelel.aldangiinUldegdel) || "";
@@ -2027,9 +2046,15 @@ function tulburTootsoo({ token }) {
         "төгрөг",
         "мөнгө"
       );
+      const dans = dansGaralt?.jagsaalt?.find(
+        (a) => a.dugaar === songogdsonDans
+      );
       nekhemjlekh.dans = dans?.dugaar;
       nekhemjlekh.bank =
-        dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+              dans?.bank === "khanbank" ? "Хаан банк" : 
+              dans?.bank === "golomt" ? "Голомт банк" :
+              dans?.bank === "bogd" ? "Богд банк" :
+              dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
       nekhemjlekh.dansniiNer = dans?.dansniiNer;
       nekhemjlekh.khayag = nekhemjlekh.khayag || "";
       nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
