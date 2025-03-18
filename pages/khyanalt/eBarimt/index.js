@@ -232,6 +232,21 @@ function EbarimtMedeelel({ token }) {
       },
       ...shineColumn,
       {
+        title: <div className="text-center font-semibold">Төрөл</div>,
+        align: "center",
+        width: "12rem",
+        render(mur) {
+          if (mur.type === "B2B_RECEIPT")
+            return (
+              <div className="flex flex-row space-x-2">
+                <div>Байгууллага</div>
+                <div>{mur.customerTin}</div>
+              </div>
+            );
+          return <div>Иргэн</div>;
+        },
+      },
+      {
         title: t("ДДТД"),
         dataIndex: "billId",
         width: "300px",
