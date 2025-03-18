@@ -1816,8 +1816,9 @@ function camera({ token }) {
 
   const dugaarBurtgekh = () => {
     console.log("dugaarBurtgekh -------------------...");
-    form.setFieldValue("barilgiinId", barilgiinId);
     const body = form.getFieldsValue();
+    if(!!barilgiinId)
+      body["barilgiinId"] = barilgiinId;
     uilchilgee(token)
       .post("/zogsoolSdkService", body)
       .then((res) => {
@@ -1849,6 +1850,7 @@ function camera({ token }) {
           duration: 2,
         });
       }
+      console.log("----------->>" + camerVal[1]);
       const yavuulakhData = {
         mashiniiDugaar: data.mashiniiDugaar,
         CAMERA_IP: camerVal[1],
