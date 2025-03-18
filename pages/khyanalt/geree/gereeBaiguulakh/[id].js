@@ -241,6 +241,7 @@ function GereeBaiguulakh({ token, data }) {
         "tuluv",
         "turul",
         "utas",
+        "khayag",
         "zardluud",
       ])
     )
