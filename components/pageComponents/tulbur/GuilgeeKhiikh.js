@@ -66,9 +66,13 @@ function GuilgeeKhiikh(
   const tsekhDun = useMemo(() => {
     return negjUne * tsakhilgaanKBTST;
   }, [negjUne, tsakhilgaanKBTST]);
+
+  const sekhDemjikhTulburDun = useMemo(() => {
+    return (suuliinZaalt - umnukhZaalt) * tsakhilgaanUrjver * 23.79;
+  }, [suuliinZaalt, umnukhZaalt, tsakhilgaanUrjver]);
     
   const niitDun = useMemo(() => {
-    return chadalDun + tsekhDun;
+    return chadalDun + tsekhDun + (baiguullaga?._id === "679aea9032299b7ba8462a77" ? sekhDemjikhTulburDun : 0);
   }, [chadalDun, tsekhDun]);
 
   const query = useMemo(
@@ -234,6 +238,7 @@ function GuilgeeKhiikh(
                 bichiltKhonog: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? (baiguullaga?.tokhirgoo?.bichiltKhonog || 0) : 0,
                 tsekhDun: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? tsekhDun : 0,
                 chadalDun: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? chadalDun : 0,
+                sekhDemjikhTulburDun: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? sekhDemjikhTulburDun : 0,
               };
               if (khemjikhNegj === "кВт" || khemjikhNegj === "1м3") {
                 guilgee["suuliinZaalt"] = suuliinZaalt;
@@ -672,6 +677,13 @@ function GuilgeeKhiikh(
           </div>
           <div style={{ width: "48%" }}>
             <div className="flex justify-end">Чадлын төлбөр/төг/ {formatNumber(chadalDun || 0)}</div>
+          </div>
+        </div>
+      )}
+       {turul === "ashiglalt" && tailbar === "Цахилгаан" && baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && baiguullaga?._id === "679aea9032299b7ba8462a77" && (
+        <div className="flex w-full items-start justify-between">
+          <div style={{ width: "48%" }}>
+            <div className="flex justify-start">Сэх дэмжих төлбөр {formatNumber(sekhDemjikhTulburDun || 0)}</div>
           </div>
         </div>
       )}
