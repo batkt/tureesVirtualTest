@@ -15,6 +15,7 @@ import {
   Select,
   Table,
   Tabs,
+  Switch,
 } from "antd";
 import Admin from "components/Admin";
 import useGereeniiJagsaalt, {
@@ -75,6 +76,7 @@ function tulburTootsoo() {
   const formRef = useRef();
   const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([]);
   const [ognoonuud, setOgnoonuud] = useState([]);
+  const [khonogTootsokhEsekh, setKhonogTootsokhEsekh] = useState(false);
   const [turul, setTurul] = useState("turees");
   const tailbarRef = React.useRef(null);
   const [shuult, setShuult] = React.useState({
@@ -226,7 +228,8 @@ function tulburTootsoo() {
     }
     if (songogdsonGereenuud.length > 0) {
       var ugugdul = form.getFieldsValue();
-      ugugdul.ognoonuud = dundakhSaruudAvya(ognoonuud[0], ognoonuud[1]);
+      if(!ugugdul.khonogTootsokhEsekh)
+        ugugdul.ognoonuud = dundakhSaruudAvya(ognoonuud[0], ognoonuud[1]);
       ugugdul.barilgiinId = barilgiinId;
       ugugdul.tulukhDun = tootsoolol.niitSariinTurees;
       ugugdul.khungulsunDun = tootsoolol.niitTulukhDun;
@@ -559,6 +562,16 @@ function tulburTootsoo() {
         },
       },
       {
+        title: t("Хоног"),
+        width: "4rem",
+        dataIndex: "khungulultKhonog",
+        ellipsis: true,
+        align: "center",
+        render: (data) => {
+          return data;
+        },
+      },
+      {
         title: t("Төрөл"),
         dataIndex: "khungulukhTurul",
         ellipsis: true,
@@ -615,14 +628,14 @@ function tulburTootsoo() {
       },
       {
         title: t("Төрөл"),
-        width: "6rem",
+        width: "5rem",
         dataIndex: "turul",
         ellipsis: true,
         align: "center",
       },
       {
         title: t("Шалтгаан"),
-        width: "16rem",
+        width: "13rem",
         dataIndex: "shaltgaan",
         ellipsis: true,
         align: "center",
@@ -770,10 +783,10 @@ function tulburTootsoo() {
                   name="control-ref"
                   initialValues={{ remember: true }}
                   labelCol={{
-                    span: 9,
+                    span: 12,
                   }}
                   wrapperCol={{
-                    span: 14,
+                    span: 30,
                   }}
                   layout="horizontal"
                 >
@@ -869,27 +882,66 @@ function tulburTootsoo() {
                       </div>
                     </>
                   )} */}
-                  <Form.Item
-                    name="ognoonuud"
-                    label={t("Хөнгөлөх сар")}
-                    rules={[
-                      {
-                        required: true,
-                        message: t("Хөнгөлөх сар бүртгэнэ үү!"),
-                      },
-                    ]}
+                  {baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh ? (<Form.Item
+                    name="khonogTootsokhEsekh"
+                    label={t("Хоногийн хөнгөлөлт эсэх")}
                   >
-                    <DatePicker.RangePicker
-                      allowClear={false}
-                      style={{ width: "100%" }}
-                      disabledDate={disabledDate}
-                      picker="month"
-                      placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
-                      onChange={(v) => {
-                        setOgnoonuud(v);
+                    <Switch checked={khonogTootsokhEsekh} onChange={(v) => setKhonogTootsokhEsekh(v)} /> 
+                  </Form.Item>) : ""}
+                  {khonogTootsokhEsekh ? (<Form.Item
+                      labelCol={{
+                        span: 8,
                       }}
+                      name="ognoonuud"
+                      label={t("Хөнгөлөх өдөр")}
+                      rules={[
+                        {
+                          required: true,
+                          message: t("Хөнгөлөх сар бүртгэнэ үү!"),
+                        },
+                      ]}
+                    >
+                      <DatePicker.RangePicker
+                        style={{ width: "100%" }}
+                        disabledDate={disabledDate}
+                        placeholder={[t("Эхлэх өдөр"), t("Дуусах өдөр")]}
+                        onChange={(v) => {
+                          setOgnoonuud(v);
+                          form.setFieldValue("khungulultKhonog", moment(v[1]).diff(v[0], "d") + 1);
+                        }}
+                      />
+                    </Form.Item>) : (
+                    <Form.Item
+                      name="ognoonuud"
+                      label={t("Хөнгөлөх сар")}
+                      rules={[
+                        {
+                          required: true,
+                          message: t("Хөнгөлөх сар бүртгэнэ үү!"),
+                        },
+                      ]}
+                    >
+                      <DatePicker.RangePicker
+                        allowClear={false}
+                        style={{ width: "100%" }}
+                        disabledDate={disabledDate}
+                        picker="month"
+                        placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
+                        onChange={(v) => {
+                          setOgnoonuud(v);
+                        }}
+                      />
+                    </Form.Item>  
+                  )}
+                  {khonogTootsokhEsekh ? (<Form.Item
+                    label={"Хөнгөлөх хоног" }
+                    name="khungulultKhonog"
+                  >
+                    <Input
+                      type={"number"}
+                      placeholder={"Хөнгөлөх хоног"}
                     />
-                  </Form.Item>
+                  </Form.Item>) : ""}
                   <Form.Item name="turul" label={t("Нөхцөл")}>
                     <Select
                       placeholder={t("Нөхцөл")}

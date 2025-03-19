@@ -90,6 +90,27 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">{t("Хоногоор хөнгөлөлт идэвхжүүлэх")}</div>
+                <div className="text-gray-600">{t("Хөнгөлөлтийн цонхноос хонгоор хөнгөлөлт оруулах боломж идэвхжүүлэх")}</div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={
+                    baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh
+                  }
+                  onChange={(v) =>
+                    setKhungulultiinTokhirgoo((a) => ({
+                      ...(a || {}),
+                      khonogKhungulultOruulakhEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
           <div
             className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${!!khungulultiinTokhirgoo ? "flex" : "hidden"
               }`}
