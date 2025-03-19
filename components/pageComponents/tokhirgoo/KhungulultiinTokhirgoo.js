@@ -181,7 +181,8 @@ function KhuviinMedeelel({
                         ...(a || {}),
                         khungulukhSarBuriinTurul: v,
                       }))
-                      setKhungulukhSarBuriinTurul(v)
+                      setKhungulukhSarBuriinTurul(v),
+                      setKhungulukhSarBuriinUtga(0)
                     }}
                   >
                     <Select.Option key={"khuvi"}>Хувь</Select.Option>
