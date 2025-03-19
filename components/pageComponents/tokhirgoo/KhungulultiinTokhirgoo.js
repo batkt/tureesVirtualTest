@@ -99,7 +99,7 @@ function KhuviinMedeelel({
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">{t("Хоногоор хөнгөлөлт идэвхжүүлэх")}</div>
-                <div className="text-gray-600">{t("Хөнгөлөлтийн цонхноос хонгоор хөнгөлөлт оруулах боломж идэвхжүүлэх")}</div>
+                <div className="text-gray-600">{t("Хөнгөлөлтийн цонхноос хоногоор хөнгөлөлт оруулах боломж идэвхжүүлэх")}</div>
               </div>
               <div className="ml-auto">
                 <Switch

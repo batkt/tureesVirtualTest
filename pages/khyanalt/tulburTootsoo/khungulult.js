@@ -254,7 +254,12 @@ function tulburTootsoo() {
 
           var khymdraaguiDun = zardliinData?.turul === "Дурын" ? zardliinData.dun : zardliinData?.tariff * urjuulekhData;
           if(khonogTootsokhEsekh && baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh)
-            var khymdarsanDun = (ugugdul.khungulultKhonog * khymdraaguiDun) / (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1)
+          {
+            if(!!ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0)
+              var khymdarsanDun = ugugdul.khungulultKhonog * ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100);
+            else
+              var khymdarsanDun = (ugugdul.khungulultKhonog * khymdraaguiDun) / (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1)
+          }
           else 
             if (khungulukh === "khuvi") {
               var khymdarsanDun =
@@ -266,7 +271,12 @@ function tulburTootsoo() {
           ugugdul.tailbar = "Хөнгөлөлт";
           var khymdraaguiDun = x.sariinTurees;
           if(khonogTootsokhEsekh && baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh)
-            var khymdarsanDun = (ugugdul.khungulultKhonog * khymdraaguiDun) / (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1)
+          {
+            if(!!ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0)
+              var khymdarsanDun = ugugdul.khungulultKhonog * ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100);
+            else
+              var khymdarsanDun = (ugugdul.khungulultKhonog * khymdraaguiDun) / (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1)
+          }
           else
             if (khungulukh === "khuvi") {
               var khymdarsanDun =
@@ -742,7 +752,14 @@ function tulburTootsoo() {
     }
     tootsoolol.niitTalbai = songogdsonGereenuud?.length;
     if(khonogTootsokhEsekh && baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh)
-      tootsoolol.khunglugdsunDun = (form.getFieldValue("khungulultKhonog") * tootsoolol.niitSariinTurees) / (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1)
+    {
+      
+      var khungulultKhuvi = form.getFieldValue("khungulultKhuvi")
+      if(!!khungulultKhuvi && khungulultKhuvi > 0)
+        tootsoolol.khunglugdsunDun = form.getFieldValue("khungulultKhonog") * ((khungulultKhuvi * tootsoolol.niitSariinTurees) / 100);
+      else
+        tootsoolol.khunglugdsunDun = (form.getFieldValue("khungulultKhonog") * tootsoolol.niitSariinTurees) / (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1)
+    }
     else
       tootsoolol.khunglugdsunDun = khungulukh === "khuvi" ? (Number(tootsoolol.niitSariinTurees) * dun) / 100 : dun;
     tootsoolol.niitTulukhDun = Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
@@ -892,7 +909,7 @@ function tulburTootsoo() {
                     label={t("Хоногийн хөнгөлөлт эсэх")}
                     labelAlign="left"
                   >
-                    <Switch checked={khonogTootsokhEsekh} onChange={(v) => setKhonogTootsokhEsekh(v)} /> 
+                    <Switch checked={khonogTootsokhEsekh} onChange={(v) => { form.setFieldValue("khungulultKhuvi", 0); form.setFieldValue("khungulultKhonog", 0); setKhonogTootsokhEsekh(v); khungulukhDunTootsoolyo(); }} /> 
                   </Form.Item>) : ""}
                   {khonogTootsokhEsekh ? (<Form.Item
                       labelCol={{
@@ -904,7 +921,7 @@ function tulburTootsoo() {
                       rules={[
                         {
                           required: true,
-                          message: t("Хөнгөлөх сар бүртгэнэ үү!"),
+                          message: t("Хөнгөлөх өдөр бүртгэнэ үү!"),
                         },
                       ]}
                     >
@@ -915,6 +932,7 @@ function tulburTootsoo() {
                         onChange={(v) => {
                           setOgnoonuud(v);
                           form.setFieldValue("khungulultKhonog", moment(v[1]).diff(v[0], "d") + 1);
+                          khungulukhDunTootsoolyo();
                         }}
                       />
                     </Form.Item>) : (
@@ -942,13 +960,25 @@ function tulburTootsoo() {
                     </Form.Item>  
                   )}
                   {khonogTootsokhEsekh ? (<Form.Item
-                    label={"Хөнгөлөх хоног" }
+                    label={t("Хөнгөлөх хоног")}
                     name="khungulultKhonog"
                     labelAlign="left"
                   >
                     <Input
                       type={"number"}
-                      placeholder={"Хөнгөлөх хоног"}
+                      placeholder={t("Хөнгөлөх хоног")}
+                      onChange={khungulukhDunTootsoolyo}
+                    />
+                  </Form.Item>) : ""}
+                  {khonogTootsokhEsekh ? (<Form.Item
+                    label={"Хөнгөлөх хувь" }
+                    name="khungulultKhuvi"
+                    labelAlign="left"
+                  >
+                    <Input
+                      min={0}
+                      type={"number"}
+                      placeholder={"Хөнгөлөх хувь"}
                       onChange={khungulukhDunTootsoolyo}
                     />
                   </Form.Item>) : ""}
