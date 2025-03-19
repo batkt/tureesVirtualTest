@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, InputNumber, notification, Switch } from "antd";
+import { Button, InputNumber, notification, Switch, Select, Input } from "antd";
 import uilchilgee, { url } from "services/uilchilgee";
 
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
@@ -20,7 +20,12 @@ function KhuviinMedeelel({
   );
 
   const [khungulultiinTokhirgoo, setKhungulultiinTokhirgoo] = useState(null);
-  const [khungulukhKhuvi, setKhungulukhKhuvi] = useState(baiguullaga?.tokhirgoo?.deedKhungulultiinKhuvi)
+  const [khungulukhKhuvi, setKhungulukhKhuvi] = useState(baiguullaga?.tokhirgoo?.deedKhungulultiinKhuvi);
+  const [sarBurAutoKhungulultOruulakhEsekh, setSarBurAutoKhungulultOruulakhEsekh] = useState(baiguullaga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh);
+  const [khungulukhSarBuriinUdur, setKhungulukhSarBuriinUdur] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinUdur ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinUdur : 1);
+  const [khungulukhSarBuriinShalguurDun, setKhungulukhSarBuriinShalguurDun] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinShalguurDun ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinShalguurDun : 0);
+  const [khungulukhSarBuriinTurul, setKhungulukhSarBuriinTurul] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinTurul ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinTurul : "khuvi");
+  const [khungulukhSarBuriinUtga, setKhungulukhSarBuriinUtga] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinUtga ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinUtga : 0);
 
   const khungulultiinTokhirgooKhadgalya = () => {
     uilchilgee(token)
@@ -111,6 +116,145 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-3">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">{t("Автомат хөнгөлөлт идэвхжүүлэх")}</div>
+                <div className="text-gray-600">{t("Сар бүр тогтмол өдөр хөнгөлөлт оруулах боломж идэвхжүүлэх")}</div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={
+                    baiguullaga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
+                  }
+                  onChange={(v) => {
+                      setKhungulultiinTokhirgoo((a) => ({
+                        ...(a || {}),
+                        sarBurAutoKhungulultOruulakhEsekh: v,
+                      }))
+                      setSarBurAutoKhungulultOruulakhEsekh(v)
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          {sarBurAutoKhungulultOruulakhEsekh && (
+            <div className="box">
+              <div className="flex items-center p-3">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{t("Хөнгөлөлтийн өдөр тохируулах")}</div>
+                  <div className="text-gray-600"></div>
+                </div>
+                <div className="ml-auto">
+                  <InputNumber
+                    value={khungulukhSarBuriinUdur}
+                    max={5}
+                    min={1}
+                    onChange={(v) => {
+                      setKhungulultiinTokhirgoo((a) => ({
+                        ...(a || {}),
+                        khungulukhSarBuriinUdur: v,
+                      }))
+                      setKhungulukhSarBuriinUdur(v)
+                    }
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+          {sarBurAutoKhungulultOruulakhEsekh && (
+            <div className="box">
+              <div className="flex items-center p-3">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{t("Хөнгөлөх төрөл")}</div>
+                  <div className="text-gray-600"></div>
+                </div>
+                <div className="ml-auto">
+                  <Select
+                    placeholder="Хөнгөлөх төрөл"
+                    className="w-32"
+                    value={khungulukhSarBuriinTurul}
+                    onChange={(v) => {
+                      setKhungulultiinTokhirgoo((a) => ({
+                        ...(a || {}),
+                        khungulukhSarBuriinTurul: v,
+                      }))
+                      setKhungulukhSarBuriinTurul(v)
+                    }}
+                  >
+                    <Select.Option key={"khuvi"}>Хувь</Select.Option>
+                    <Select.Option key={"mungunDun"}>
+                      Мөнгөн дүн
+                    </Select.Option>
+                  </Select>  
+                </div>
+              </div>
+            </div>
+          )}
+          {sarBurAutoKhungulultOruulakhEsekh && (
+            <div className="box">
+              <div className="flex items-center p-3">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{khungulukhSarBuriinTurul === "khuvi" ? t("Хөнгөлөх хувь") : t("Хөнгөлөх дүн")}</div>
+                  <div className="text-gray-600"></div>
+                </div>
+                <div className="ml-auto">
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      min={0}
+                      parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                      formatter={(value) =>
+                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }
+                      placeholder={
+                        khungulukhSarBuriinTurul === "khuvi"
+                          ? "Хөнгөлөх хувь"
+                          : "Хөнгөлөх дүн"
+                      }
+                      value={khungulukhSarBuriinUtga}
+                      onChange={(v) => {
+                        setKhungulultiinTokhirgoo((a) => ({
+                          ...(a || {}),
+                          khungulukhSarBuriinUtga: v,
+                        }))
+                        setKhungulukhSarBuriinUtga(v)
+                      }}
+                    />
+                </div>
+              </div>
+            </div>
+          )}
+          {sarBurAutoKhungulultOruulakhEsekh && (
+            <div className="box">
+              <div className="flex items-center p-3">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{t("Хөнгөлөлт бодох шалгуурын доод хэмжээг тохируулах")}</div>
+                  <div className="text-gray-600"></div>
+                </div>
+                <div className="ml-auto">
+                  <InputNumber
+                    style={{ width: "100%" }}
+                    value={khungulukhSarBuriinShalguurDun}
+                    min={0}
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    onChange={(v) => {
+                      setKhungulultiinTokhirgoo((a) => ({
+                        ...(a || {}),
+                        khungulukhSarBuriinShalguurDun: v,
+                      }))
+                      setKhungulukhSarBuriinShalguurDun(v)
+                    }
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          )}
           <div
             className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${!!khungulultiinTokhirgoo ? "flex" : "hidden"
               }`}
