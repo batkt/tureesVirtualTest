@@ -59,7 +59,8 @@ function GuilgeeKhiikh(
 
   const chadalDun = useMemo(() => {
     var bichiltKhonog = baiguullaga?.tokhirgoo?.bichiltKhonog || 0;
-    return bichiltKhonog > 0 && tsakhilgaanKBTST > 0 ? (tsakhilgaanKBTST/bichiltKhonog/12 * 15500) : 0;
+    var togtmolDun = baiguullaga?._id === "679aea9032299b7ba8462a77" ? 11520 : 15500;
+    return bichiltKhonog > 0 && tsakhilgaanKBTST > 0 ? (tsakhilgaanKBTST/bichiltKhonog/12 * togtmolDun) : 0;
   }, [tsakhilgaanKBTST, baiguullaga?.tokhirgoo?.bichiltKhonog]);
 
   const tsekhDun = useMemo(() => {
