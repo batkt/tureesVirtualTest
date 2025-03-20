@@ -214,7 +214,7 @@ const Kiosk = () => {
 
   useEffect(() => {
     if (
-      (ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880" || ajiltan._id == "67d92062513ec21e26bdb604") &&
+      (ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880" || ajiltan?._id == "67d92062513ec21e26bdb604") &&
       songogdsonData?.enter_date &&
       !songogdsonData?.fitnessHungulult
     ) {
@@ -229,8 +229,8 @@ const Kiosk = () => {
         setSongogdsonData((prev) => {
           return {
             ...prev,
-            fitnessHungulult: (ajiltan._id == "67d92062513ec21e26bdb604" ? 7000 : 4000),
-            pay_amount: prev?.pay_amount - (ajiltan._id == "67d92062513ec21e26bdb604" ? 7000 : 4000),
+            fitnessHungulult: (ajiltan?._id == "67d92062513ec21e26bdb604" ? 7000 : 4000),
+            pay_amount: prev?.pay_amount - (ajiltan?._id == "67d92062513ec21e26bdb604" ? 7000 : 4000),
           };
         });
       }
@@ -755,7 +755,7 @@ const Kiosk = () => {
                     <div>{formatNumber(songogdsonData?.pay_amount, 0)}₮</div>
                   </div>
 
-                  {(ajiltan._id === "66384a9061eeda747d01a320" || ajiltan._id === "6746b7b1e3a4bd05bbac6880" || ajiltan._id == "67d92062513ec21e26bdb604") && (
+                  {(ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880" || ajiltan?._id == "67d92062513ec21e26bdb604") && (
                     <>
                       <div className="w-full border border-[#1E1E1E]" />
                       <div className="flex w-full justify-between px-6 ">
