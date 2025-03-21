@@ -1638,6 +1638,11 @@ function camera({ token }) {
       .then(({ data }) => {
         if (!!data) {
           let body = modalOpen.item;
+          if(!!body && body.tuukh?.length > 0)
+          {
+            body.tuukh[0].burtgesenAjiltaniiId = ajiltan?._id;
+            body.tuukh[0].burtgesenAjiltaniiNer = ajiltan?.ner;
+          }
           if (modalOpen.type === "zurchil") {
             if (!value || value === "" || value === undefined) {
               message.warn("Зөрчлийн шалтгаан оруулна уу!");
@@ -1645,8 +1650,6 @@ function camera({ token }) {
             }
             body.zurchil = value;
             body.tuukh[0].tuluv = -2;
-            body.tuukh[0].burtgesenAjiltaniiId = ajiltan?._id;
-            body.tuukh[0].burtgesenAjiltaniiNer = ajiltan?.ner;
             if (!!camerVal[1] && value === "Зугтаасан") {
               body.tuukh[0].garsanKhaalga = camerVal[1];
               body.tuukh[0].tsagiinTuukh[0].garsanTsag = data;
@@ -2559,7 +2562,7 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return v?.[0]?.tulukhDun || 0;
+                                        return v?.[0]?.tulukhDun || v?.[1]?.tulukhDun || 0;
                                       },
                                     },
                                     {

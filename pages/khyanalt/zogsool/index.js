@@ -513,7 +513,7 @@ function Zogsool({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
         render(v, parents) {
-          const d = parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag;
+          const d = parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag || parents?.tuukh[1]?.tsagiinTuukh[0]?.garsanTsag;
           return d && moment(d).format("YYYY-MM-DD HH:mm");
         },
       },
@@ -1200,7 +1200,7 @@ function Zogsool({ token }) {
                                 render: (v) => {
                                   const d =
                                     v?.length > 0 &&
-                                    v[0]?.tsagiinTuukh[0]?.garsanTsag;
+                                    (v[0]?.tsagiinTuukh[0]?.garsanTsag || v[1]?.tsagiinTuukh[0]?.garsanTsag);
                                   return (
                                     d && moment(d).format("YYYY-MM-DD HH:mm")
                                   );
@@ -1236,7 +1236,7 @@ function Zogsool({ token }) {
                                 __numFmt__: "#,##0.00",
                                 __cellType__: "TypeNumeric",
                                 render: (v) => {
-                                  return v[0]?.tulukhDun || 0;
+                                  return v[0]?.tulukhDun || v[1]?.tulukhDun;
                                 },
                               },
                               {

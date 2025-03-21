@@ -202,12 +202,8 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
                 <td style="border: 1px solid #000; text-align: left;">${
                   mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
                 }</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.khungulultKhassanTulukhDunNuat&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.khungulultKhassanTulukhDunNuatgui&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">${mur.nuatBodokh === 1 ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;` : ""} </td>
+                <td style="border: 1px solid #000; text-align: right;">${mur.nuatBodokh === 1 ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;` : ""}</td>
                 <td style="border: 1px solid #000; text-align: right;">&lt;${
                   mur.tailbar
                 }.khungulult&gt;</td>
