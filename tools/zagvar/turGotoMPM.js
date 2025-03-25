@@ -131,6 +131,9 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             <div style="display: block;">
               банк: &lt;dans&gt; 
             </div>
+            <div style="display: block;">
+              IBAN: &lt;ibanDugaar&gt; 
+            </div>
           </td>
         </tr>
         `}
@@ -164,6 +167,9 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
                 </div>
                 <div style="display: block;">
                   банк: &lt;dans&gt; 
+                </div>
+                <div style="display: block;">
+                  IBAN: &lt;ibanDugaar&gt; 
                 </div>
               </td>` : ""}
             </tr>

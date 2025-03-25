@@ -61,6 +61,12 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             &lt;dans&gt;
           </p>
         </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">IBAN дугаар:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            &lt;ibanDugaar&gt;
+          </p>
+        </div>
       </div>
       <div style="display: block; width: 50%;">
         <p style="font-weight: 600;">Төлөгч:</p>

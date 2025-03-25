@@ -6,7 +6,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         &lt;barilgiinlogo&gt;
       </div
       <div style="display: block; width: 65%;">
-        <b>Шаардах хуудас №${medeelel?.gereeniiDugaar}</b>
+        <b>НЭХЭМЖЛЭХ №${medeelel?.gereeniiDugaar}</b>
       </div
     </div>
     <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
@@ -54,6 +54,12 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <p style="white-space: nowrap;">Банкны дансны дугаар:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
             &lt;dans&gt;
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">IBAN дугаар:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            &lt;ibanDugaar&gt;
           </p>
         </div>
       </div>
@@ -122,7 +128,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <td style="border: 1px solid #000; text-align: center;">м2</td>
           <td style="border: 1px solid #000; text-align: center;">&lt;talbainKhemjee&gt;</td>
           <td style="border: 1px solid #000; text-align: center;">&lt;talbainNegjUne&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">${medeelel.talbainNiitUne}</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;sariinTurees&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;tureesEkhlehUdur&gt;-&lt;tureesDuusakhUdur&gt;</td>
         </tr>
         <tr>

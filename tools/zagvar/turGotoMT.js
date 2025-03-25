@@ -103,6 +103,9 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             <div style="display: block;">
               ХХК: &lt;dans&gt; 
             </div>
+            <div style="display: block;">
+              IBAN: &lt;ibanDugaar&gt; 
+            </div>
           </td>
         </tr>
         <tr>

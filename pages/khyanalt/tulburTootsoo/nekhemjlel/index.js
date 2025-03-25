@@ -264,6 +264,7 @@ function tulburTootsoo({ token }) {
               dans?.bank === "bogd" ? "Богд банк" :
               dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
             medeelel.dansniiNer = dans?.dansniiNer;
+            medeelel.ibanDugaar = dans?.ibanDugaar;
             medeelel.aldangiinUldegdel = medeelel.aldangiinUldegdel || 0;
             medeelel.aldangiinUldegdelNuat = ((medeelel.aldangiinUldegdel || 0) / 1.1) * 0.1;
             medeelel.aldangiinUldegdelNuatgui = formatNumber(medeelel.aldangiinUldegdel - medeelel.aldangiinUldegdelNuat || 0);
@@ -340,7 +341,7 @@ function tulburTootsoo({ token }) {
                     style={{
                       width: 200,
                       height: 160,
-                      transform: "translate(15%, -90%)",
+                      transform: "translate(15%, -80%)",
                       opacity: 0.65,
                     }}
                   />
@@ -1084,6 +1085,7 @@ function tulburTootsoo({ token }) {
               dans?.bank === "bogd" ? "Богд банк" :
               dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
       nekhemjlekh.dansniiNer = dans?.dansniiNer;
+      nekhemjlekh.ibanDugaar = dans?.ibanDugaar;
       nekhemjlekh.khayag = nekhemjlekh.khayag || "";
       nekhemjlekh.aldangiinUldegdel = nekhemjlekh.aldangiinUldegdel || 0;
       nekhemjlekh.aldangiinUldegdelNuat = ((nekhemjlekh.aldangiinUldegdel || 0) / 1.1) * 0.1;
@@ -1490,6 +1492,7 @@ function tulburTootsoo({ token }) {
               dans?.bank === "bogd" ? "Богд банк" :
               dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
         nekhemjlekh.dansniiNer = dans?.dansniiNer;
+        nekhemjlekh.ibanDugaar = dans?.ibanDugaar;
         nekhemjlekh.khayag = nekhemjlekh.khayag || "";
         nekhemjlekh.aldangiinUldegdel = nekhemjlekh.aldangiinUldegdel || 0;
         nekhemjlekh.aldangiinUldegdelNuat = ((nekhemjlekh.aldangiinUldegdel || 0) / 1.1) * 0.1;
@@ -1973,6 +1976,7 @@ function tulburTootsoo({ token }) {
         tempData.tsonkhniiNer = "Нэхэмжлэл";
         tempData.nekhemjlekhiinDans = dans?.dugaar;
         tempData.nekhemjlekhiinDansniiNer = dans?.dansniiNer;
+        tempData.nekhemjlekhiinIbanDugaar = dans?.ibanDugaar;
         tempData.nekhemjlekhiinBank =
               dans?.bank === "khanbank" ? "Хаан банк" : 
               dans?.bank === "golomt" ? "Голомт банк" :
