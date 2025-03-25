@@ -211,7 +211,7 @@ function tulburTootsoo({ token }) {
             medeelel.barilgiinlogo = renderToString(
               <span style={{ position: "absolute", zIndex: 1 }}>
                 <img
-                  src={barilgiinId === "679aea9032299b7ba8462a78" ? "/urangan_group.png" : barilgiinId === "679aea9032299b7ba8462a78" ? "/arena_logo.png" : "/ug_exp.png"}
+                  src={barilgiinId === "679aea9032299b7ba8462a78" ? "/urangan_group.png" : (barilgiinId === "67a067e8e87d437b4a45a4a1" ? "/arena_logo.png" : "/ug_exp.png")}
                   style={{
                     width: 200,
                     height: 50,
@@ -1462,7 +1462,7 @@ function tulburTootsoo({ token }) {
             nekhemjlekh.barilgiinlogo = renderToString(
               <span style={{ position: "absolute", zIndex: 1 }}>
                 <img
-                  src={barilgiinId === "679aea9032299b7ba8462a78" ? "/urangan_group.png" : barilgiinId === "679aea9032299b7ba8462a78" ? "/arena_logo.png" : "/ug_exp.png"}
+                  src={barilgiinId === "679aea9032299b7ba8462a78" ? "/urangan_group.png" : (barilgiinId === "67a067e8e87d437b4a45a4a1" ? "/arena_logo.png" : "/ug_exp.png")}
                   style={{
                     width: 200,
                     height: 50,
