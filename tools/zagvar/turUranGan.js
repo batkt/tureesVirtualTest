@@ -62,6 +62,18 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
             &lt;ibanDugaar&gt;
           </p>
         </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Банкны нэр:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "УРАНГАН ХХК" : "БЭСТТОВЕР ХХК"}
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Банкны дансны дугаар:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "1601003598" : "2105191070"}
+          </p>
+        </div>
       </div>
       <div style="display: block; width: 50%;">
         <p style="font-weight: 600;">Төлөгч:</p>
