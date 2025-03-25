@@ -197,9 +197,9 @@ function tulburTootsoo({ token }) {
           let niitDunUrangan = 0;     
           if(ajiltan?.baiguullagiinId === "679aea9032299b7ba8462a77") // Urangan
           {
-            niitDunUrangan = medeelel.umnukhSariinUrTulbur ? medeelel.umnukhSariinUrTulbur : 0;
-            khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne ? khungulsunTalbainNiitUne / 10 : 0;
-            let uranganTureesNiitDun = khungulsunTalbainNiitUne + khungulsunTalbainNiitUneNuat + (medeelel?.aldangiinUldegdel || 0);
+            khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne ? (khungulsunTalbainNiitUne / 1.1) * 0.1 : 0;
+            let uranganTureesNiitDun = khungulsunTalbainNiitUne + (medeelel?.aldangiinUldegdel || 0);
+            niitDunUrangan = (medeelel.umnukhSariinUrTulbur ? medeelel.umnukhSariinUrTulbur : 0) + uranganTureesNiitDun;
             medeelel.uranganTureesNiitDun = formatNumber(uranganTureesNiitDun || 0);
             medeelel.uranganTureesNiitDunUsgeer = numberToWords(
               uranganTureesNiitDun,
@@ -1453,9 +1453,9 @@ function tulburTootsoo({ token }) {
           let niitDunUrangan = 0;
           if(ajiltan?.baiguullagiinId === "679aea9032299b7ba8462a77") // Urangan
           {
-            niitDunUrangan = nekhemjlekh.umnukhSariinUrTulbur ? nekhemjlekh.umnukhSariinUrTulbur : 0;
-            khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne ? khungulsunTalbainNiitUne / 10 : 0;
-            let uranganTureesNiitDun = khungulsunTalbainNiitUne + khungulsunTalbainNiitUneNuat + (nekhemjlekh?.aldangiinUldegdel || 0);
+            khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne ? (khungulsunTalbainNiitUne / 1.1) * 0.1 : 0;
+            let uranganTureesNiitDun = khungulsunTalbainNiitUne + (nekhemjlekh?.aldangiinUldegdel || 0);
+            niitDunUrangan = (nekhemjlekh.umnukhSariinUrTulbur ? nekhemjlekh.umnukhSariinUrTulbur : 0) + uranganTureesNiitDun;
             nekhemjlekh.uranganTureesNiitDun = formatNumber(uranganTureesNiitDun || 0);
             nekhemjlekh.uranganTureesNiitDunUsgeer = numberToWords(
               uranganTureesNiitDun,
