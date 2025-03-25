@@ -340,7 +340,7 @@ function tulburTootsoo({ token }) {
                     style={{
                       width: 200,
                       height: 160,
-                      transform: "translate(5%, -80%)",
+                      transform: "translate(15%, -97%)",
                       opacity: 0.65,
                     }}
                   />
@@ -1548,7 +1548,7 @@ function tulburTootsoo({ token }) {
                 style={{
                   width: 200,
                   height: 160,
-                  transform: "translate(10%, -105%)",
+                  transform: "translate(15%, -97%)",
                   opacity: 0.65,
                 }}
               />
