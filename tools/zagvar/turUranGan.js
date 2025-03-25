@@ -1,26 +1,13 @@
-const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
+const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinId) => {
   return `
-  <div style="height: 100%; width: 100%;">
-    <div style="display: flex; justify-content: space-between;">
-      <div style="display: block; align-items: flex-start;">
-        <div style="display: block;">
-          НХМаягт Т-1
-        </div>
-      </div>
-      <div style="display: block; align-items: flex-end; flex-direction: column;">
-        <div style="display: block;">
-          Санхүү, эдийн засгийн сайд, Үндэсний
-        </div>
-        <div style="display: block;">
-          статистикийн газрын даргын 2017 оны 347
-        </div>
-        <div style="display: block;">
-          дугаар тушаалын хавсралт
-        </div>
-      </div>
-    </div>
-    <div style="display: block; width: 65%; text-align: center;">
-      <b>НЭХЭМЖЛЭХ №</b>
+  <div style="height: 100%; width: 100%; page-break-after: always;">
+    <div style="display: flex; width: 100%; margin-top: 2rem;">
+      <div style="display: block; width: 35%;">
+        &lt;barilgiinlogo&gt;
+      </div
+      <div style="display: block; width: 65%;">
+        <b>Шаардах хуудас №${medeelel?.gereeniiDugaar}</b>
+      </div
     </div>
     <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
       <div style="display: block; width: 50%;">
@@ -28,7 +15,9 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Байгууллагын нэр:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${barilgiinId === "6735c77a7fc60cd66deb290a" ? "Мастер Түншлэл ХХК" : baiguullaga.ner}
+            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "УРАНГАН ХХК" : 
+                barilgiinId === "67a067eee87d437b4a45b39d" || barilgiinId === "67b6c9cbff52df36f5725515" ? "БЭСТТОВЕР ХХК" :
+                  baiguullaga.ner}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
@@ -40,13 +29,19 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Утас, Факс:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-          ${barilgiinId === "6735c77a7fc60cd66deb290a" ? "90088007" : barilgiinId === "67512183c60497546f59513a" ? "90611148"  : baiguullaga?.utas?.join(",")}
+          ${baiguullaga?.utas?.join(",")}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">И-мэйл:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-          ${barilgiinId === "67512183c60497546f59513a" ? "gotofinance@master.mn" : baiguullaga?.mail?.join(",")}
+          ${baiguullaga?.mail?.join(",")}
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Регистрийн дугаар:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${barilga?.register}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
@@ -65,7 +60,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
       <div style="display: block; width: 50%;">
         <p style="font-weight: 600;">Төлөгч:</p>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Иргэн:</p>
+          <p style="white-space: nowrap;">${medeelel?.turul}:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
             &lt;ner&gt;
           </p>
@@ -77,26 +72,169 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Гэрээний №:</p>
+          <p style="white-space: nowrap;">Утас:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;gereeniiDugaar&gt;
+            ${medeelel?.utas}
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">И-мэйл:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${medeelel?.mail}          
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Регистрийн дугаар:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${medeelel?.register}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Нэхэмжилсэн огноо:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;ekhelkhSar&gt;/&lt;ekhlekhUdur&gt;/&lt;ekhlekhOn&gt;
+            &lt;ekhlekhOn&gt;.&lt;ekhelkhSar&gt;.&lt;ekhlekhUdur&gt;
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Төлбөр хийх хугацаа:</p>
+          <p style="white-space: nowrap;">Төлбөл зохих огноо:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;
+            &lt;duusakhOn&gt;.&lt;duusakhSar&gt;.&lt;duusakhUdur&gt;
           </p>
         </div>
       </div>
     </div>
     <table style="margin-top: 2rem; width: 100%;">
+      <thead style="background-color: #d1d5db; font-weight: 600;">
+        <tr>
+          <td style="border: 1px solid #000; text-align: center;">№</td>
+          <td style="border: 1px solid #000; text-align: center;">Ажил үйлчилгээний нэр</td>
+          <td style="border: 1px solid #000; text-align: center;">Хэмжих нэгж</td>
+          <td style="border: 1px solid #000; text-align: center;">Тоо ширхэг</td>
+          <td style="border: 1px solid #000; text-align: center;">Нэг бүрийн үнэ</td>
+          <td style="border: 1px solid #000; text-align: center;">Бүгд үнэ</td>
+          <td style="border: 1px solid #000; text-align: center;">Тайлбар</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="border: 1px solid #000; text-align: center;">1</td>
+          <td style="border: 1px solid #000; text-align: left;">Түрээсийн төлбөр</td>
+          <td style="border: 1px solid #000; text-align: center;">м2</td>
+          <td style="border: 1px solid #000; text-align: center;">&lt;talbainKhemjee&gt;</td>
+          <td style="border: 1px solid #000; text-align: center;">&lt;talbainNegjUne&gt;</td>
+          <td style="border: 1px solid #000; text-align: right;">${medeelel.talbainNiitUne}</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;tureesEkhlehUdur&gt;-&lt;tureesDuusakhUdur&gt;</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid #000; text-align: center;">2</td>
+          <td style="border: 1px solid #000; text-align: left;">Хөнгөлөлт</td>
+          <td style="border: 1px solid #000; text-align: center;"></td>
+          <td style="border: 1px solid #000; text-align: center;"></td>
+          <td style="border: 1px solid #000; text-align: center;"></td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;khungulult&gt;</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;tureesEkhlehUdur&gt;-&lt;tureesDuusakhUdur&gt;</td>
+        </tr>
+        <tr>
+          <td colspan="5"></td>
+          <td style="border: 1px solid #000; text-align: center;">Дүн:</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
+        </tr>
+        <tr>
+          <td colspan="5"></td>
+          <td style="border: 1px solid #000; text-align: center;">НӨАТ:</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUneNuat&gt;</td>
+        </tr>
+        <tr>
+          <td colspan="5"></td>
+          <td style="border: 1px solid #000; text-align: center;">Нийт Алданги:</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;aldangiinUldegdel&gt;</td>
+        </tr>
+        <tr>
+          <td colspan="5"></td>
+          <td style="border: 1px solid #000; text-align: center;">Нийт дүн:</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;uranganTureesNiitDun&gt;</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="7">&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+          <td>Мөнгөн дүн (үсгээр):</td>
+          <td colspan="6">
+            <p>&lt;uranganTureesNiitDunUsgeer&gt; болно</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: center;" colspan="7">Жич: Төлбөл зохих огноонд төлөөгүй тохиолдолд Түрээсийн гэрээний 6.1-д заасны дагуу Түрээслэгчийн үйл ажиллагааг зогсоож, хаалга</td>
+        </tr>
+        <tr>
+          <td style="text-align: center;" colspan="7">лацдаж, цахилгаан хязгаарлан, цаашлан хууль хүчний байгууллагад шилжүүлэхийг үүгээр мэдэгдэж байна.</td>
+        </tr>
+        <tr>
+          <td colspan="7">&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="7">&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="7">&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr style="margin-top: 1rem;">
+          <td rowspan="3">Тамга:</td>
+          <td colspan="3" rowspan="3">&lt;tamga&gt;</td>
+          <td colspan="3">Тооцооллыг гаргасан:</td>
+        </tr>
+        <tr style="margin-top: 1rem;">
+          <td colspan="3">Хүлээгсэн өгсөн:</td>
+        </tr>
+        <tr style="margin-top: 1rem;">
+          <td colspan="3">Хүлээн авсан:</td>
+        </tr>
+      </tfoot>
+    </table>
+    <div style="display: flex; width: 100%; margin-top: 3rem; border: none; border-top: 2px dotted black">
+    </div>
+    <div style="display: flex; width: 100%; margin-top: 3rem; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
+      <div style="display: block; width: 50%;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Банкны нэр:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            &lt;bank&gt;
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Банкны дансны дугаар:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            &lt;dans&gt;
+          </p>
+        </div>
+      </div>
+      <div style="display: block; width: 50%;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Хамрах хугацаа:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            &lt;ashiglaltEkhlehUdur&gt;-&lt;ashiglaltDuusakhUdur&gt;
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Хэвлэсэн огноо:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            &lt;khevlesenOgnoo&gt;
+          </p>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: center;">
+      <b>ТӨЛБӨРИЙН НЭХЭМЖЛЭХ</b><br />
+    </div>
+    <div style="text-align: center;">
+      харилцагчийн дугаар: &nbsp;&nbsp;&nbsp;${medeelel?.register}&nbsp;&nbsp;<br />
+    </div>
+    <div style="text-align: right;">
+      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinUrTulbur&gt;&nbsp;&nbsp;</b><br />
+    </div>
+    <table style="width: 100%;">
       <thead style="background-color: #d1d5db; font-weight: 600;">
         <tr>
           <td style="border: 1px solid #000; text-align: center;">№</td>
@@ -116,109 +254,67 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         </tr>
       </thead>
       <tbody>
+      ${medeelel.zardluud
+        .filter(a => a.tailbar != "Хөнгөлөлт")
+        .sort((a, b) => {
+          return a.tailbar.localeCompare(b.tailbar, "en", {
+            sensitivity: "base",
+          });
+        })
+        .map((mur, index) => {
+          return `
+            <tr key=${index}>
+              <td style="border: 1px solid #000; text-align: center;">${
+                index + 1
+              }</td>
+              <td style="border: 1px solid #000; text-align: left;">
+                ${mur.tailbar}
+              </td>
+              <td style="border: 1px solid #000; text-align: left;">${
+                mur.umnukhZaalt === null ? "" : mur.umnukhZaalt
+              }</td>
+              <td style="border: 1px solid #000; text-align: left;">${
+                mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
+              }</td>
+              <td style="border: 1px solid #000; text-align: right;">${mur.nuatBodokh === 1 ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;` : ""} </td>
+              <td style="border: 1px solid #000; text-align: right;">${mur.nuatBodokh === 1 ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;` : ""}</td>
+              <td style="border: 1px solid #000; text-align: right;">&lt;${
+                mur.tailbar
+              }.khungulult&gt;</td>
+              <td style="border: 1px solid #000; text-align: right;">&lt;${
+                mur.tailbar
+              }.khungulultKhassanTulukhDun&gt;</td>
+            </tr>
+          `;
+        })
+        .join("")}
         <tr>
-          <td style="border: 1px solid #000; text-align: center;">1</td>
-          <td style="border: 1px solid #000; text-align: left;">
-            Түрээсийн төлбөр
-          </td>
-          <td style="border: 1px solid #000; text-align: center;"></td>
-          <td style="border: 1px solid #000; text-align: center;"></td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUneNuat&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUneNuatgui&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
+          <td colspan="6" rowspan="2">Мөнгөн дүн (үсгээр): &lt;niitDunUranganUsgeer&gt; болно</td>
+          <td style="border: 1px solid #000; text-align: center;">&lt;sar&gt; -Р САРЫН НЭХЭМЖИЛСЭН ДҮН:</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;niilberDunUrangan&gt;</td>
         </tr>
-        ${medeelel.zardluud
-          .sort((a, b) => {
-            return a.tailbar.localeCompare(b.tailbar, "en", {
-              sensitivity: "base",
-            });
-          })
-          .map((mur, index) => {
-            return `
-              <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;">${
-                  index + 2
-                }</td>
-                <td style="border: 1px solid #000; text-align: left;">
-                  ${mur.tailbar}
-                </td>
-                <td style="border: 1px solid #000; text-align: left;">${
-                  mur.umnukhZaalt === null ? "" : mur.umnukhZaalt
-                }</td>
-                <td style="border: 1px solid #000; text-align: left;">${
-                  mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
-                }</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.khungulultKhassanTulukhDunNuat&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.khungulultKhassanTulukhDunNuatgui&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.khungulult&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.khungulultKhassanTulukhDun&gt;</td>
-              </tr>
-            `;
-          })
-          .join("")} 
+        <tr>
+          <td style="border: 1px solid #000; text-align: center;">ЭЦСИЙН ҮЛДЭГДЭЛ:</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;niitDunUrangan&gt;</td>
+        </tr>
+        <tr>
+          <td colspan="8">&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="8">&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="8" style="text-align: center;">
+            <div style="width: 100%; display: flex; align-items: flex-start; justify-content: space-between;">
+              <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
+              <p style="width: 40%; text-align: left; font-weight: 600;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / С.Сандагдорж/ 
+              </p>  
+            </div>
+          </td>
+        </tr>
       </tbody>
-      <tfoot>
-        <tr style="background-color: #d1d5db; font-weight: 600;">
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td style="text-align: right;">&lt;garaasBodsonNiitDun&gt;</td>
-        </tr>
-        <tr style="margin-top: 1rem;">
-          <td></td>
-          <td></td>
-          <td colspan="6">
-            <p>&lt;garaasBodsonNiitDunUsgeer&gt; болно</p>
-          </td>
-        </tr>
-        <tr style="margin-top: 1rem;">
-          <td></td>
-          <td></td>
-          <td><p>Хүлээн авсан</p></td>
-          <td></td>
-          <td><p>/${medeelel?.ovog?.[0] ? medeelel?.ovog?.[0] : ""}${medeelel?.ovog?.[0] ? "." : ""} ${medeelel?.ner}/</p></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr style="margin-top: 1rem;">
-          <td></td>
-          <td></td>
-          <td><p>Нэхэмжлэл бичсэн</p></td>
-          <td></td>
-          <td><p>/${ajiltan?.ovog?.[0] ? ajiltan?.ovog?.[0] : ""}${ajiltan?.ovog?.[0] ? "." : ""} ${ajiltan?.ner}/</p></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr style="margin-top: 1rem;">
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>&lt;tamga&gt;</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tfoot>
     </table>
-    <div style="margin-left: 2rem;">
-      <b>Санамж:&nbsp;Эрхэм харицагч та төлбөрөө төлөхдөө 5-ны дотор төлж байгаа тохиолдолд зөвхөн түрээсийн төлбөрөөс 10%-ийн хөнгөлөлтийг хасан шилжүүлнэ үү</br>        
-    </div>
   </div>`;
 };
 export default khatuuZagvarUranGan;
