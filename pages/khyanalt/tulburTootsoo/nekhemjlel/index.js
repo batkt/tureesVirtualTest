@@ -148,6 +148,9 @@ function tulburTootsoo({ token }) {
           const medeelel = _.cloneDeep(
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
+          const barilga = baiguullaga?.barilguud?.find(
+            (a) => a._id === medeelel?.barilgiinId
+          );
           if (zagvar?.khatuuZagvarEsekh) {
             if(ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5") // foodcity
               zagvar.nekhemjlekh = khatuuZagvarFoodCity(medeelel, ajiltan, baiguullaga)
@@ -160,9 +163,6 @@ function tulburTootsoo({ token }) {
             else
               zagvar.nekhemjlekh = khatuuZagvar(medeelel, ajiltan, baiguullaga, barilgiinId);
           }
-          const barilga = baiguullaga?.barilguud?.find(
-            (a) => a._id === medeelel?.barilgiinId
-          );
 
           let khungulsunTalbainNiitUne = Math.abs(
             medeelel.talbainNiitUne - (medeelel.khungulult || 0)
@@ -1380,6 +1380,9 @@ function tulburTootsoo({ token }) {
         const songosonZagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
           (a) => a._id === barimt
         );
+        const barilga = baiguullaga?.barilguud?.find(
+          (a) => a._id === nekhemjlekh?.barilgiinId
+        );
 
         var text = songosonZagvar?.khatuuZagvarEsekh
           ? (ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6659717af6cab41f3ec723b5" ? khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga) 
@@ -1505,9 +1508,6 @@ function tulburTootsoo({ token }) {
               }}
             />
           </span>
-        );
-        const barilga = baiguullaga?.barilguud?.find(
-          (a) => a._id === nekhemjlekh?.barilgiinId
         );
         if(ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909") // goto 
         {

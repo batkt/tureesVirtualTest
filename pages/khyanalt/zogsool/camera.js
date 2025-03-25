@@ -2140,11 +2140,12 @@ function camera({ token }) {
                   camerVal[0] === "192.168.1.157" ||
                   camerVal[0] === "192.168.1.158" ||
                   camerVal[0] === "192.168.1.159" ||
-                  camerVal[0] === "192.168.1.160"  ? (
+                  camerVal[0] === "192.168.1.160" ||
+                  camerVal[0] === "192.168.1.206" ? (
                     <R2WPlayerComponent
                       USER={"admin"}
                       ROOT={"live"}
-                      PASSWD={"admin123"}
+                      PASSWD={camerVal[0] === "192.168.1.206" ? "Admin123@" : "admin123"}
                       Camer={camerVal[0]}
                       PORT={554}
                     />
