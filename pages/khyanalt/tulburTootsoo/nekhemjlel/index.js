@@ -11,6 +11,7 @@ import {
   Popconfirm,
   Spin,
   notification,
+  Switch,
 } from "antd";
 import {
   EditOutlined,
@@ -67,11 +68,13 @@ function tulburTootsoo({ token }) {
   const [waiting, setWaiting] = useState(false);
   const [nekhemjleliinJagsaalt, setNekhemjleliinJagsaalt] = React.useState([]);
   const [songogdsonDans, setDans] = React.useState();
+  const [olnoorSaraarEsekh, setOlnoorSaraarEsekh] = useState(false);
   const { nekhemjlel, setNekhemjlelKhuudaslalt, isValidating } = useNekhemjlekh(
     token,
     ognoo,
     davkhar,
-    ilgeekhTurul
+    ilgeekhTurul,
+    olnoorSaraarEsekh,
   );
   const [tatsanExcelZagvar, setTatsanExcelZagvar] = useState(null);
   const { dansGaralt } = useDans(token, baiguullaga?._id);
@@ -2455,6 +2458,10 @@ function tulburTootsoo({ token }) {
             data-aos-duration="1000"
           >
             <div className="mb-3 flex w-full flex-col gap-2 md:ml-auto md:w-auto md:flex-row">
+              <div className="flex w-full justify-between gap-2">
+                <label>{t("Олон сараар нэхэмжлэх эсэх")}:</label>
+                <Switch checked={olnoorSaraarEsekh} onChange={setOlnoorSaraarEsekh} />
+              </div>
               <div className="flex w-full justify-between gap-2">
                 <DatePicker
                   className="w-1/2 lg:w-auto"
