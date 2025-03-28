@@ -1,6 +1,6 @@
 const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinId) => {
   return `
-  <div style="height: 100%; width: 100%; page-break-after: always;">
+  <div style="height: 100%; width: 100%;">
     <div style="display: flex; width: 100%; margin-top: 2rem;">
       <div style="display: block; width: 35%;">
         &lt;barilgiinlogo&gt;
@@ -121,7 +121,10 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         </div>
       </div>
     </div>
-    <table style="margin-top: 2rem; width: 100%;">
+    <div style="text-align: right;">
+      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinUrTulbur&gt;&nbsp;&nbsp;</b><br />
+    </div>
+    <table style="width: 100%;">
       <thead style="background-color: #d1d5db; font-weight: 600;">
         <tr>
           <td style="border: 1px solid #000; text-align: center;">№</td>
@@ -153,22 +156,19 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <td style="border: 1px solid #000; text-align: right;">&lt;tureesEkhlehUdur&gt;-&lt;tureesDuusakhUdur&gt;</td>
         </tr>
         <tr>
-          <td colspan="5"></td>
+          <td colspan="5" rowspan="4">Мөнгөн дүн (үсгээр): &lt;uranganTureesNiitDunUsgeer&gt; болно</td>
           <td style="border: 1px solid #000; text-align: center;">Дүн:</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
         </tr>
         <tr>
-          <td colspan="5"></td>
           <td style="border: 1px solid #000; text-align: center;">НӨАТ:</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUneNuat&gt;</td>
         </tr>
         <tr>
-          <td colspan="5"></td>
           <td style="border: 1px solid #000; text-align: center;">Нийт Алданги:</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;aldangiinUldegdel&gt;</td>
         </tr>
         <tr>
-          <td colspan="5"></td>
           <td style="border: 1px solid #000; text-align: center;">Нийт дүн:</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;uranganTureesNiitDun&gt;</td>
         </tr>
@@ -176,12 +176,6 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
       <tfoot>
         <tr>
           <td colspan="7">&nbsp;&nbsp;&nbsp;</td>
-        </tr>
-        <tr>
-          <td>Мөнгөн дүн (үсгээр):</td>
-          <td colspan="6">
-            <p>&lt;uranganTureesNiitDunUsgeer&gt; болно</p>
-          </td>
         </tr>
         <tr>
           <td style="text-align: center;" colspan="7">Жич: Төлбөл зохих огноонд төлөөгүй тохиолдолд Түрээсийн гэрээний 6.1-д заасны дагуу Түрээслэгчийн үйл ажиллагааг зогсоож, хаалга</td>
@@ -199,9 +193,16 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <td colspan="7">&nbsp;&nbsp;&nbsp;</td>
         </tr>
         <tr style="margin-top: 1rem;">
-          <td rowspan="3">Тамга:</td>
-          <td colspan="3" rowspan="3">&lt;tamga&gt;</td>
-          <td colspan="3">Тооцооллыг гаргасан:</td>
+          <td colspan="2" rowspan="3">Тамга:</td>
+          <td colspan="2" rowspan="3">&lt;tamga&gt;</td>
+          <td colspan="3">
+            <div style="width: 100%; display: flex; align-items: flex-start; justify-content: space-between;">
+              <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
+              <p style="width: 40%; text-align: left; font-weight: 600;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /Б.Туул/ 
+              </p>
+            </div>
+          </td>
         </tr>
         <tr style="margin-top: 1rem;">
           <td colspan="3">Хүлээгсэн өгсөн:</td>
@@ -211,10 +212,51 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         </tr>
       </tfoot>
     </table>
-    <div style="display: flex; width: 100%; margin-top: 3rem; border: none; border-top: 2px dotted black">
+    <div style="display: flex; width: 100%; margin-top: 3rem; page-break-before: always;">
     </div>
-    <div style="display: flex; width: 100%; margin-top: 3rem; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
+    <div style="display: flex; width: 100%; margin-top: 5rem;">
+      <div style="display: block; width: 35%;">
+        &lt;barilgiinlogo&gt;
+      </div
+      <div style="display: block; width: 65%;">
+        <b>НЭХЭМЖЛЭХ №${medeelel?.gereeniiDugaar}</b>
+      </div
+    </div>
+    <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
       <div style="display: block; width: 50%;">
+        <p style="font-weight: 600;">Нэхэмжлэгч:</p>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Байгууллагын нэр:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "УРАНГАН ХХК" : 
+                barilgiinId === "67a067eee87d437b4a45b39d" || barilgiinId === "67b6c9cbff52df36f5725515" ? "БЭСТТОВЕР ХХК" :
+                  baiguullaga.ner}
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Хаяг:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${baiguullaga?.khayag || ""}
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Утас, Факс:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+          ${baiguullaga?.utas?.join(",")}
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">И-мэйл:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+          ${baiguullaga?.mail?.join(",")}
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Регистрийн дугаар:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${barilga?.register}
+          </p>
+        </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Банкны нэр:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
@@ -227,30 +269,70 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
             &lt;dans&gt;
           </p>
         </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">IBAN дугаар:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            &lt;ibanDugaar&gt;
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Банкны нэр:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "УРАНГАН ХХК" : "БЭСТТОВЕР ХХК"}
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Банкны дансны дугаар:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "1601003598" : "2105191070"}
+          </p>
+        </div>
       </div>
       <div style="display: block; width: 50%;">
+        <p style="font-weight: 600;">Төлөгч:</p>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Хамрах хугацаа:</p>
+          <p style="white-space: nowrap;">${medeelel?.turul}:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;ashiglaltEkhlehUdur&gt;-&lt;ashiglaltDuusakhUdur&gt;
+            &lt;ner&gt;
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Хэвлэсэн огноо:</p>
+          <p style="white-space: nowrap;">Хаяг:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;khevlesenOgnoo&gt;
+            ${medeelel?.khayag || ""}
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Утас:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${medeelel?.utas}
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">И-мэйл:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${medeelel?.mail}          
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Регистрийн дугаар:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            ${medeelel?.register}
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Нэхэмжилсэн огноо:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            &lt;ekhlekhOn&gt;.&lt;ekhelkhSar&gt;.&lt;ekhlekhUdur&gt;
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Төлбөл зохих огноо:</p>
+          <p style="width: 100%; text-align: left; font-weight: 600;">
+            &lt;duusakhOn&gt;.&lt;duusakhSar&gt;.&lt;duusakhUdur&gt;
           </p>
         </div>
       </div>
-    </div>
-    <div style="text-align: center;">
-      <b>ТӨЛБӨРИЙН НЭХЭМЖЛЭХ</b><br />
-    </div>
-    <div style="text-align: center;">
-      харилцагчийн дугаар: &nbsp;&nbsp;&nbsp;${medeelel?.register}&nbsp;&nbsp;<br />
-    </div>
-    <div style="text-align: right;">
-      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinUrTulbur&gt;&nbsp;&nbsp;</b><br />
     </div>
     <table style="width: 100%;">
       <thead style="background-color: #d1d5db; font-weight: 600;">
@@ -319,17 +401,37 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <td colspan="8">&nbsp;&nbsp;&nbsp;</td>
         </tr>
         <tr>
+          <td style="text-align: center;" colspan="8">Жич: Төлбөл зохих огноонд төлөөгүй тохиолдолд Түрээсийн гэрээний 6.1-д заасны дагуу Түрээслэгчийн үйл ажиллагааг зогсоож, хаалга</td>
+        </tr>
+        <tr>
+          <td style="text-align: center;" colspan="8">лацдаж, цахилгаан хязгаарлан, цаашлан хууль хүчний байгууллагад шилжүүлэхийг үүгээр мэдэгдэж байна.</td>
+        </tr>
+        <tr>
           <td colspan="8">&nbsp;&nbsp;&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="8" style="text-align: center;">
+          <td colspan="8">&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="8">&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr style="margin-top: 1rem;">
+          <td colspan="2" rowspan="3">Тамга:</td>
+          <td colspan="3" rowspan="3">&lt;tamga&gt;</td>
+          <td colspan="3">
             <div style="width: 100%; display: flex; align-items: flex-start; justify-content: space-between;">
               <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
               <p style="width: 40%; text-align: left; font-weight: 600;">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / С.Сандагдорж/ 
-              </p>  
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /Б.Туул/ 
+              </p>
             </div>
           </td>
+        </tr>
+        <tr style="margin-top: 1rem;">
+          <td colspan="3">Хүлээгсэн өгсөн:</td>
+        </tr>
+        <tr style="margin-top: 1rem;">
+          <td colspan="3">Хүлээн авсан:</td>
         </tr>
       </tbody>
     </table>
