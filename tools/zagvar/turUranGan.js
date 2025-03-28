@@ -1,6 +1,6 @@
 const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinId) => {
   return `
-  <div style="height: 100%; width: 100%;">
+  <div style="height: 100%; width: 100%; page-break-after: always;">
     <div style="display: flex; width: 100%; margin-top: 2rem;">
       <div style="display: block; width: 35%;">
         &lt;barilgiinlogo&gt;
