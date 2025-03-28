@@ -1,6 +1,6 @@
 const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinId) => {
   return `
-  <div style="height: 100%; width: 100%; page-break-after: always;">
+  <div style="display: block; height: 100%; width: 100%; page-break-after: always; h-[5.845in]; font-size: 0.75rem; line-height: 1rem;">
     <div style="display: flex; width: 100%; margin-top: 2rem;">
       <div style="display: block; width: 35%;">
         &lt;barilgiinlogo&gt;
@@ -122,7 +122,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
       </div>
     </div>
     <div style="text-align: right;">
-      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinUrTulbur&gt;&nbsp;&nbsp;</b><br />
+      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinTureesUrTulbur&gt;&nbsp;&nbsp;</b><br />
     </div>
     <table style="width: 100%;">
       <thead style="background-color: #d1d5db; font-weight: 600;">
@@ -333,6 +333,9 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           </p>
         </div>
       </div>
+    </div>
+    <div style="text-align: right;">
+      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinAshiglaltUrTulbur&gt;&nbsp;&nbsp;</b><br />
     </div>
     <table style="width: 100%;">
       <thead style="background-color: #d1d5db; font-weight: 600;">
