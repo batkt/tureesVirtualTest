@@ -202,7 +202,7 @@ function tulburTootsoo({ token }) {
           {
             khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne ? (khungulsunTalbainNiitUne / 1.1) * 0.1 : 0;
             let uranganTureesNiitDun = khungulsunTalbainNiitUne + (medeelel?.aldangiinUldegdel || 0);
-            niitDunUrangan = (medeelel.umnukhSariinUrTulbur ? medeelel.umnukhSariinUrTulbur : 0) + uranganTureesNiitDun;
+            niitDunUrangan = (medeelel.umnukhSariinTureesUrTulbur ? medeelel.umnukhSariinTureesUrTulbur : 0) + (medeelel.umnukhSariinAshiglaltUrTulbur ? medeelel.umnukhSariinAshiglaltUrTulbur : 0) + uranganTureesNiitDun;
             medeelel.uranganTureesNiitDun = formatNumber(uranganTureesNiitDun || 0);
             medeelel.uranganTureesNiitDunUsgeer = numberToWords(
               uranganTureesNiitDun,
@@ -416,6 +416,14 @@ function tulburTootsoo({ token }) {
             );
             medeelel.umnukhSariinUrTulbur = formatNumber(
               medeelel.umnukhSariinUrTulbur
+            );
+
+            medeelel.umnukhSariinTureesUrTulbur = formatNumber(
+              medeelel.umnukhSariinTureesUrTulbur
+            );
+
+            medeelel.umnukhSariinAshiglaltUrTulbur = formatNumber(
+              medeelel.umnukhSariinAshiglaltUrTulbur
             );
             
             medeelel.baritsaaUldegdel = (medeelel.baritsaaAvakhDun || 0) - (medeelel.baritsaaniiUldegdel || 0);
@@ -1458,7 +1466,7 @@ function tulburTootsoo({ token }) {
           {
             khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne ? (khungulsunTalbainNiitUne / 1.1) * 0.1 : 0;
             let uranganTureesNiitDun = khungulsunTalbainNiitUne + (nekhemjlekh?.aldangiinUldegdel || 0);
-            niitDunUrangan = (nekhemjlekh.umnukhSariinUrTulbur ? nekhemjlekh.umnukhSariinUrTulbur : 0) + uranganTureesNiitDun;
+            niitDunUrangan = (nekhemjlekh.umnukhSariinTureesUrTulbur ? nekhemjlekh.umnukhSariinTureesUrTulbur : 0) + (nekhemjlekh.umnukhSariinAshiglaltUrTulbur ? nekhemjlekh.umnukhSariinAshiglaltUrTulbur : 0) + uranganTureesNiitDun;
             nekhemjlekh.uranganTureesNiitDun = formatNumber(uranganTureesNiitDun || 0);
             nekhemjlekh.uranganTureesNiitDunUsgeer = numberToWords(
               uranganTureesNiitDun,
@@ -1633,6 +1641,14 @@ function tulburTootsoo({ token }) {
         );
         nekhemjlekh.umnukhSariinUrTulbur = formatNumber(
           nekhemjlekh.umnukhSariinUrTulbur
+        );
+
+        nekhemjlekh.umnukhSariinTureesUrTulbur = formatNumber(
+          nekhemjlekh.umnukhSariinTureesUrTulbur
+        );
+
+        nekhemjlekh.umnukhSariinAshiglaltUrTulbur = formatNumber(
+          nekhemjlekh.umnukhSariinAshiglaltUrTulbur
         );
 
         nekhemjlekh.baritsaaUldegdel = (nekhemjlekh.baritsaaAvakhDun || 0) - (nekhemjlekh.baritsaaniiUldegdel || 0);
