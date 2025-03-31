@@ -385,6 +385,7 @@ const KioskMobile = ({
         turul: "Хөнгөлөлт/ "+ tsag+ " цаг",
         zogsooliinId,
         paid_amount: khungulukhDun,
+        barilgiinId,
       })
       .then(({ data }) => {
         if (!!data) {
