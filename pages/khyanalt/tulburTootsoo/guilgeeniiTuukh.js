@@ -3,6 +3,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import uilchilgee from "services/uilchilgee";
 import Admin from "components/Admin";
 import React, { useMemo, useState, useEffect } from "react";
+
 import { useAuth } from "services/auth";
 import {
   Card,
@@ -34,6 +35,7 @@ import useOrder from "tools/function/useOrder";
 import NekhemjlelIlgeekh from "components/pageComponents/tulbur/NekhemjlelIlgeekh";
 import MedegdelIlgeekh from "components/pageComponents/tulbur/MedegdelIlgeekh";
 import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh";
+import OnlyFcGuilgeeExcelees from "components/pageComponents/tulbur/onlyFcGuilgeeExcelees";
 import GuilgeeExceleesOruulakhOlnoor from "components/pageComponents/tulbur/GuilgeeExceleesOruulakhOlnoor";
 import GuilgeeEkhniiUldegdelExceleesOruulakhOlnoor from "components/pageComponents/tulbur/GuilgeeEkhniiUldegdelExceleesOruulakhOlnoor";
 import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga";
@@ -60,7 +62,13 @@ function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
   const { barilgiinId } = useAuth();
   const { data, mutate, isValidating } = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
-      ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar, ognoo, tsutsalsanTurul]
+      ? [
+          "/uldegdelBodyo",
+          barilgiinId,
+          ugugdul?.gereeniiDugaar,
+          ognoo,
+          tsutsalsanTurul,
+        ]
       : null,
     (url, barilgiinId, gereeniiDugaar, ognoo) =>
       uilchilgee(token)
@@ -107,20 +115,22 @@ function TableGuilgee({
             align="right"
           >
             {mur.summary
-              ? (mur.dataIndex === "avlagiinUldegdel" ? (
-                formatNumber(
-                  garalt?.jagsaalt?.reduce(
-                    (a, b) => a + (parseFloat(b["uldegdel"]) || 0) + (parseFloat(b["aldangiinUldegdel"]) || 0),
-                    0
+              ? mur.dataIndex === "avlagiinUldegdel"
+                ? formatNumber(
+                    garalt?.jagsaalt?.reduce(
+                      (a, b) =>
+                        a +
+                        (parseFloat(b["uldegdel"]) || 0) +
+                        (parseFloat(b["aldangiinUldegdel"]) || 0),
+                      0
+                    )
                   )
-                )
-              )
-                : formatNumber(garalt?.jagsaalt?.reduce(
-                  (a, b) => a + (parseFloat(b[mur.dataIndex]) || 0),
-                  0
-                )
-              ))
-
+                : formatNumber(
+                    garalt?.jagsaalt?.reduce(
+                      (a, b) => a + (parseFloat(b[mur.dataIndex]) || 0),
+                      0
+                    )
+                  )
               : ""}
           </Table.Summary.Cell>
         ))}
@@ -197,7 +207,6 @@ function guilgeeniiTuukh({ token }) {
   const [neesenEsekh, setNeesenEsekh] = useState(false);
   const [loadingIndex, setLoadingIndex] = React.useState(0);
   const [davkhar, setDavkhar] = React.useState(undefined);
-
   const { guilgeeniiToololt, guilgeeniiToololtMutate } =
     useGuilgeeniiToololtAvya(token, ognoo, barilgiinId);
   const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
@@ -526,12 +535,12 @@ function guilgeeniiTuukh({ token }) {
           if (khuvi < 0) strokeColor = "rgba(245, 158, 18,1)";
 
           const khuviAldangi =
-          row.aldangiinUldegdel > 0
-            ? (100 * row.tulsunAldangi) / row.aldangiinUldegdel
-            : 100;
+            row.aldangiinUldegdel > 0
+              ? (100 * row.tulsunAldangi) / row.aldangiinUldegdel
+              : 100;
 
-        let strokeColorAldangi = "rgba(16, 185, 129,1)";
-        if (khuviAldangi < 0) strokeColorAldangi = "rgba(245, 158, 18,1)";
+          let strokeColorAldangi = "rgba(16, 185, 129,1)";
+          if (khuviAldangi < 0) strokeColorAldangi = "rgba(245, 158, 18,1)";
 
           return (
             <div className="flex w-full flex-row items-center justify-center  divide-x-2 ">
@@ -572,7 +581,10 @@ function guilgeeniiTuukh({ token }) {
                 onClick={() => nekhemjleliinTuukhKharakh(row)}
                 className=" text-green-500 hover:scale-110"
               >
-                <Tooltip title={t("Нэхэмжлэлийн түүх харах")} className="flex w-full items-center  justify-center px-[6px] ">
+                <Tooltip
+                  title={t("Нэхэмжлэлийн түүх харах")}
+                  className="flex w-full items-center  justify-center px-[6px] "
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -749,9 +761,15 @@ function guilgeeniiTuukh({ token }) {
   }
 
   function guilgeeKhiiya(data) {
-    if (ajiltan?.erkh !== "Admin" && !_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.find((a) => a === data.barilgiinId))
-    {
-      notification.warning({ message: t("Таньд гүйлгээ хийх эрх байхгүй байна."), });
+    if (
+      ajiltan?.erkh !== "Admin" &&
+      !_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.find(
+        (a) => a === data.barilgiinId
+      )
+    ) {
+      notification.warning({
+        message: t("Таньд гүйлгээ хийх эрх байхгүй байна."),
+      });
       return;
     }
     function refresh() {
@@ -809,7 +827,7 @@ function guilgeeniiTuukh({ token }) {
     });
   }
 
-  function nekhemjleliinTuukhKharakh(data){
+  function nekhemjleliinTuukhKharakh(data) {
     const footer = [
       <Button
         type="primary"
@@ -850,7 +868,6 @@ function guilgeeniiTuukh({ token }) {
       footer,
     });
   }
-
 
   function medegdelIlgeekh(data) {
     modal({
@@ -987,7 +1004,77 @@ function guilgeeniiTuukh({ token }) {
       footer,
     });
   }
+  function olnoorGuilgeeOruulakhExcelFc() {
+    const footer = [
+      <Space>
+        
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
+      </Space>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <OnlyFcGuilgeeExcelees
+          ref={excelref}
+          token={token}
+          barilgiinId={barilgiinId}
+          baiguullaga={baiguullaga}
+          onFinish={refresh}
+          zam="tooluurZaaltOruulya"
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Гүйлгээний загвар excel файл"
+          zagvariinZam="tooluurZaaltZagvarAvya"
+        />
+      ),
+      footer,
+    });
+  }
 
+  // function olnoorGuilgeeoruulahExcelFc({ baiguullaga }) {
+  //   useEffect(() => {
+  //     if (baiguullaga === "foodcity") {
+  //       showModal();
+  //     } else {
+  //       closeModal();
+  //     }
+  //   }, [baiguullaga]);
+
+  //   const showModal = () => {
+  //     modal({
+  //       title: "",
+  //       icon: <FileExcelOutlined />,
+  //       content: (
+  //         <GuilgeeExceleesOruulakhOlnoor
+  //           ref={excelref}
+  //           token={token}
+  //           barilgiinId={barilgiinId}
+  //           baiguullaga={baiguullaga}
+  //           onFinish={refresh}
+  //           zam="tooluurZaaltOruulya"
+  //           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+  //           tailbar="Гүйлгээний загвар excel файл"
+  //           zagvariinZam="tooluurZaaltZagvarAvya"
+  //         />
+  //       ),
+  //       footer: (
+  //         <Space>
+  //           <Button onClick={() => excelref.current.khaaya()}>
+  //             {t("Хаах")}
+  //           </Button>
+  //         </Space>
+  //       ),
+  //     });
+  //   };
+
+  //   const closeModal = () => {
+  //     modal.destroy();
+  //   };
+
+  //   return null;
+  // }
+
+  //#region Medeeleltatya
   function olnoorEkhniiUldegdelOruulakhExcel() {
     const footer = [
       <Space>
@@ -1027,26 +1114,28 @@ function guilgeeniiTuukh({ token }) {
               title: a.excelHeader || a.title,
               dataIndex,
               render,
-            }) :
-        a.dataIndex === "uldegdel" ||    
-        a.dataIndex === "voucherDun" ||    
-        a.dataIndex === "khungulult" ||    
-        a.dataIndex === "tulsunDun" ||    
-        a.dataIndex === "tuluvluguut" ||
-        a.dataIndex === "sariinTurees" ||
-        a.dataIndex === "talbainNiitUne" ||
-        a.dataIndex === "aldangiinUldegdel" ||
-        a.dataIndex === "baritsaaAvakhDun" ||
-        a.dataIndex === "baritsaaniiUldegdel"
-            ? forExcel.push({
-                title: a.excelHeader || a.title,
-                __numFmt__: "#,##0.00",
-                __cellType__: "TypeNumeric",
-                dataIndex,
-                render: (val, data) => {
-                  return a.dataIndex === "baritsaaAvakhDun" ? ((val || 0) - (data?.baritsaaniiUldegdel || 0)) : val;
-                },
-              })    
+            })
+          : a.dataIndex === "uldegdel" ||
+            a.dataIndex === "voucherDun" ||
+            a.dataIndex === "khungulult" ||
+            a.dataIndex === "tulsunDun" ||
+            a.dataIndex === "tuluvluguut" ||
+            a.dataIndex === "sariinTurees" ||
+            a.dataIndex === "talbainNiitUne" ||
+            a.dataIndex === "aldangiinUldegdel" ||
+            a.dataIndex === "baritsaaAvakhDun" ||
+            a.dataIndex === "baritsaaniiUldegdel"
+          ? forExcel.push({
+              title: a.excelHeader || a.title,
+              __numFmt__: "#,##0.00",
+              __cellType__: "TypeNumeric",
+              dataIndex,
+              render: (val, data) => {
+                return a.dataIndex === "baritsaaAvakhDun"
+                  ? (val || 0) - (data?.baritsaaniiUldegdel || 0)
+                  : val;
+              },
+            })
           : forExcel.push({ title: a.excelHeader || a.title, dataIndex });
       }
     });
@@ -1316,7 +1405,10 @@ function guilgeeniiTuukh({ token }) {
                     render(text, data, index) {
                       return (
                         <div className="w-full text-right">
-                          {formatNumber(( parseFloat(data.uldegdel) || 0) + (data.aldangiinUldegdel || 0))}
+                          {formatNumber(
+                            (parseFloat(data.uldegdel) || 0) +
+                              (data.aldangiinUldegdel || 0)
+                          )}
                         </div>
                       );
                     },
@@ -1332,7 +1424,10 @@ function guilgeeniiTuukh({ token }) {
                     render: (baritsaaAvakhDun, data) => {
                       return (
                         <div className="w-full text-right">
-                          {formatNumber((baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0))}
+                          {formatNumber(
+                            (baritsaaAvakhDun || 0) -
+                              (data.baritsaaniiUldegdel || 0)
+                          )}
                         </div>
                       );
                     },
@@ -1390,21 +1485,31 @@ function guilgeeniiTuukh({ token }) {
             </Popover>
             <Popover>
               <Button
-              type="primary"
-              onClick={olnoorGuilgeeOruulakhExcel}
-              icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                type="primary"
+                onClick={olnoorGuilgeeOruulakhExcel}
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
-              <span>Заалт оруулах</span>
+                <span>Заалт оруулах</span>
                 <DownOutlined width={5} />
               </Button>
             </Popover>
             <Popover>
               <Button
-              type="primary"
-              onClick={olnoorEkhniiUldegdelOruulakhExcel}
-              icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                type="primary"
+                onClick={olnoorGuilgeeOruulakhExcelFc}
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
-              <span>Эхний үлдэгдэл оруулах</span>
+                <span>Заалт</span>
+                <DownOutlined width={5} />
+              </Button>
+            </Popover>
+            <Popover>
+              <Button
+                type="primary"
+                onClick={olnoorEkhniiUldegdelOruulakhExcel}
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
+                <span>Эхний үлдэгдэл оруулах</span>
                 <DownOutlined width={5} />
               </Button>
             </Popover>
@@ -1418,8 +1523,16 @@ function guilgeeniiTuukh({ token }) {
         >
           <TableGuilgee
             columns={columns}
-            garalt={turul === "eneSardTulukh" ? eneSardTuluuguiGereenuud : gereeniiMedeelel}
-            setKhuudaslalt={turul === "eneSardTulukh" ? setEneSardTuluuguiGereenuud : setKhuudaslalt}
+            garalt={
+              turul === "eneSardTulukh"
+                ? eneSardTuluuguiGereenuud
+                : gereeniiMedeelel
+            }
+            setKhuudaslalt={
+              turul === "eneSardTulukh"
+                ? setEneSardTuluuguiGereenuud
+                : setKhuudaslalt
+            }
             setLoadingIndex={setLoadingIndex}
             onChange={khusnegtOrderChange}
           />

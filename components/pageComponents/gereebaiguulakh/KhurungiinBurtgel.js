@@ -116,14 +116,27 @@ const YurunkhiiMedeele = ({
   }, [value]);
 
   useEffect(() => {
-    if ((!!value.khugatsaa && !!value.talbainIdnuud && value.duusakhOgnoo > moment().startOf("month")) || !!value._id)
+    if (
+      (!!value.khugatsaa &&
+        !!value.talbainIdnuud &&
+        value.duusakhOgnoo > moment().startOf("month")) ||
+      !!value._id
+    )
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
           dun: value.talbainNiitUne,
           khugatsaa: value.khugatsaa,
           tulukhUdruud: value.tulukhUdur,
-          ekhlekhOgnoo: moment(gereeniiZagvar?.turGereeEsekh ? value.gereeniiOgnoo : (!value._id ? moment(value.gereeniiOgnoo).startOf("month") : moment().startOf("month"))).format("YYYY-MM-DD 00:00:00"),
-          duusakhOgnoo: moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00"),
+          ekhlekhOgnoo: moment(
+            gereeniiZagvar?.turGereeEsekh
+              ? value.gereeniiOgnoo
+              : !value._id
+              ? moment(value.gereeniiOgnoo).startOf("month")
+              : moment().startOf("month")
+          ).format("YYYY-MM-DD 00:00:00"),
+          duusakhOgnoo: moment(value.duusakhOgnoo).format(
+            "YYYY-MM-DD 00:00:00"
+          ),
           zardluud: value.zardluud,
           mk: value.talbainKhemjee,
           metrKube: value.talbainKhemjeeMetrKube,
@@ -217,6 +230,8 @@ const YurunkhiiMedeele = ({
     }
     function talbaiOruulya() {
       value.talbainuud = value.talbainuud || [];
+      v.tooluuriinDugaar = v.tooluuriinDugaar || "";
+
       if (gereeniiZagvar?.turGereeEsekh === true) {
         v.talbainKhemjee = 0;
         v.talbainNiitUne = 0;
@@ -228,6 +243,7 @@ const YurunkhiiMedeele = ({
     if (gereeniiZagvar?.turGereeEsekh) {
       talbaiOruulya();
     } else sulEsekh(v.kod, talbaiOruulya);
+    // console.log(" ---  v.tooluuriinDugaar --- ", v.tooluuriinDugaar);
   }
 
   function talbaiUstgaya(index) {
@@ -454,7 +470,10 @@ const YurunkhiiMedeele = ({
       <Form.Item label={t("Тусгай зориулалт")} name={"tusgaiZoriulalt"}>
         <Input placeholder={t("Ашиглах тусгай зориулалт")} />
       </Form.Item>
-      <Form.Item label={t("Талбайн нэмэлт нөхцөл")} name={"talbaiNemeltNukhtsul"}>
+      <Form.Item
+        label={t("Талбайн нэмэлт нөхцөл")}
+        name={"talbaiNemeltNukhtsul"}
+      >
         <Input placeholder={t("Талбайн нэмэлт нөхцөл")} />
       </Form.Item>
       <Form.Item wrapperCol={{ span: 24 }}>
