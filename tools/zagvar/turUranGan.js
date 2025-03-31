@@ -6,7 +6,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         &lt;barilgiinlogo&gt;
       </div
       <div style="display: block; width: 65%;">
-        <b>НЭХЭМЖЛЭХ №${medeelel?.gereeniiDugaar}</b>
+        <b>ТҮРЭЭСИЙН НЭХЭМЖЛЭХ №${medeelel?.gereeniiDugaar}</b>
       </div
     </div>
     <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
@@ -121,16 +121,13 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         </div>
       </div>
     </div>
-    <div style="text-align: right;">
-      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinUrTulbur&gt;&nbsp;&nbsp;</b><br />
-    </div>
     <table style="width: 100%;">
       <thead style="background-color: #d1d5db; font-weight: 600;">
         <tr>
           <td style="border: 1px solid #000; text-align: center;">№</td>
           <td style="border: 1px solid #000; text-align: center;">Ажил үйлчилгээний нэр</td>
           <td style="border: 1px solid #000; text-align: center;">Хэмжих нэгж</td>
-          <td style="border: 1px solid #000; text-align: center;">Тоо ширхэг</td>
+          <td style="border: 1px solid #000; text-align: center;">м2</td>
           <td style="border: 1px solid #000; text-align: center;">Нэг бүрийн үнэ</td>
           <td style="border: 1px solid #000; text-align: center; width: 20%;">Бүгд үнэ</td>
           <td style="border: 1px solid #000; text-align: center; width: 20%;">Тайлбар</td>
@@ -165,15 +162,70 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUneNuat&gt;</td>
         </tr>
         <tr>
-          <td style="border: 1px solid #000; text-align: center;">Нийт Алданги:</td>
-          <td style="border: 1px solid #000; text-align: right;"><b>&lt;aldangiinUldegdel&gt;</b></td>
-        </tr>
-        <tr>
           <td style="border: 1px solid #000; text-align: center;">Нийт дүн:</td>
           <td style="border: 1px solid #000; text-align: right;"><b>&lt;uranganTureesNiitDun&gt;</b></td>
         </tr>
       </tbody>
       <tfoot>
+        <tr>
+          <td colspan="7">&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid #000; text-align: center;">№</td>
+          <td style="border: 1px solid #000; text-align: center;">Ажил үйлчилгээний нэр</td>
+          <td style="border: 1px solid #000; text-align: center;">НӨАТ</td>
+          <td style="border: 1px solid #000; text-align: center;">НӨАТ-гүй дүн</td>
+          <td style="border: 1px solid #000; text-align: center; width: 20%;">Бүгд үнэ</td>
+          <td style="border: 1px solid #000; text-align: center; width: 20%;" colspan="2">Тайлбар</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid #000; text-align: center; font-weight: 600;">
+            1
+          </td>
+          <td style="border: 1px solid #000; text-align: left;">
+            Өмнөх сарын үлдэгдэл
+          </td>
+          <td style="border: 1px solid #000; text-align: right;">
+            &lt;umnukhSariinUrTulburNuat&gt;
+          </td>
+          <td style="border: 1px solid #000; text-align: right;">
+            &lt;umnukhSariinUrTulburNuatgui&gt;
+          </td>
+          <td style="border: 1px solid #000; text-align: right;">
+            &lt;umnukhSariinUrTulbur&gt;
+          </td>
+          <td style="border: 1px solid #000; text-align: right;" colspan="2">
+              &lt;umnukhSar&gt; - р сарын ашиглалтын үлдэгдэл болон &lt;umnukhSar&gt; - р сарын түрээсийн үлдэгдэл
+          </td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid #000; text-align: center;">2</td>
+          <td style="border: 1px solid #000; text-align: left;">Алданги</td>
+          <td style="border: 1px solid #000; text-align: right;">
+            &lt;aldangiinUldegdelNuat&gt;
+          </td>
+          <td style="border: 1px solid #000; text-align: right;">
+            &lt;aldangiinUldegdelNuatgui&gt;
+          </td>
+          <td style="border: 1px solid #000; text-align: right;">
+            &lt;aldangiinUldegdel&gt;
+          </td>
+          <td style="border: 1px solid #000; text-align: center;">Нийт Алданги:</td>
+          <td style="border: 1px solid #000; text-align: right;"><b>&lt;aldangiinUldegdel&gt;</b></td>
+        </tr>
+        <tr>
+          <td colspan="5" rowspan="3"></td>
+          <td style="border: 1px solid #000; text-align: center;">Дүн:</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;umnukhSariinUldegdelNUATgui&gt;</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid #000; text-align: center;">НӨАТ:</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;umnukhSariinUldegdelNUAT&gt;</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid #000; text-align: center;">Өмнөх сарын нийт дүн:</td>
+          <td style="border: 1px solid #000; text-align: right;"><b>&lt;umnukhSariinUldegdel&gt;</b></td>
+        </tr>
         <tr>
           <td colspan="7">&nbsp;&nbsp;&nbsp;</td>
         </tr>
@@ -219,7 +271,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         &lt;barilgiinlogo&gt;
       </div
       <div style="display: block; width: 65%;">
-        <b>НЭХЭМЖЛЭХ №${medeelel?.gereeniiDugaar}</b>
+        <b>АШИГЛАЛТЫН НЭХЭМЖЛЭХ №${medeelel?.gereeniiDugaar}</b>
       </div
     </div>
     <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">

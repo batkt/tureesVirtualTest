@@ -199,7 +199,13 @@ function tulburTootsoo({ token }) {
               : 0;
           if(ajiltan?.baiguullagiinId === "679aea9032299b7ba8462a77") // Urangan
           {
-            let uranganTureesNiitDun = khungulsunTalbainNiitUne + (medeelel?.aldangiinUldegdel || 0);
+            medeelel.umnukhSariinUldegdel = (medeelel.umnukhSariinUrTulbur || 0) + (medeelel?.aldangiinUldegdel || 0);
+            medeelel.umnukhSariinUldegdelNUAT = (medeelel.umnukhSariinUldegdel / 1.1 ) * 0.1;
+            medeelel.umnukhSariinUldegdelNUATgui = medeelel.umnukhSariinUldegdel - medeelel.umnukhSariinUldegdelNUAT;
+            medeelel.umnukhSariinUldegdel = formatNumber(medeelel.umnukhSariinUldegdel || 0);
+            medeelel.umnukhSariinUldegdelNUAT = formatNumber(medeelel.umnukhSariinUldegdelNUAT || 0);
+            medeelel.umnukhSariinUldegdelNUATgui = formatNumber(medeelel.umnukhSariinUldegdelNUATgui || 0);
+            let uranganTureesNiitDun = khungulsunTalbainNiitUne;
             medeelel.uranganTureesNiitDun = formatNumber(uranganTureesNiitDun || 0);
             medeelel.uranganTureesNiitDunUsgeer = numberToWords(
               uranganTureesNiitDun,
@@ -447,6 +453,7 @@ function tulburTootsoo({ token }) {
               medeelel.tureesDuusakhUdur = moment(ognoo).endOf("month").format("YYYY.MM.DD");
               medeelel.khevlesenOgnoo = moment(ognoo).format("YYYY/MM/DD");
               medeelel.sar = moment(ognoo).format("MM");
+              medeelel.umnukhSar =  moment(ognoo).subtract(1, 'month').format("MM");
             }
             else
             {
@@ -1451,7 +1458,13 @@ function tulburTootsoo({ token }) {
           : 0;
           if(ajiltan?.baiguullagiinId === "679aea9032299b7ba8462a77") // Urangan
           {
-            let uranganTureesNiitDun = khungulsunTalbainNiitUne + (nekhemjlekh?.aldangiinUldegdel || 0);
+            nekhemjlekh.umnukhSariinUldegdel = (nekhemjlekh.umnukhSariinUrTulbur || 0) + (nekhemjlekh?.aldangiinUldegdel || 0);
+            nekhemjlekh.umnukhSariinUldegdelNUAT = (nekhemjlekh.umnukhSariinUldegdel / 1.1 ) * 0.1;
+            nekhemjlekh.umnukhSariinUldegdelNUATgui = nekhemjlekh.umnukhSariinUldegdel - nekhemjlekh.umnukhSariinUldegdelNUAT;
+            nekhemjlekh.umnukhSariinUldegdel = formatNumber(nekhemjlekh.umnukhSariinUldegdel || 0);
+            nekhemjlekh.umnukhSariinUldegdelNUAT = formatNumber(nekhemjlekh.umnukhSariinUldegdelNUAT || 0);
+            nekhemjlekh.umnukhSariinUldegdelNUATgui = formatNumber(nekhemjlekh.umnukhSariinUldegdelNUATgui || 0);
+            let uranganTureesNiitDun = khungulsunTalbainNiitUne;
             nekhemjlekh.uranganTureesNiitDun = formatNumber(uranganTureesNiitDun || 0);
             nekhemjlekh.uranganTureesNiitDunUsgeer = numberToWords(
               uranganTureesNiitDun,
@@ -1661,6 +1674,7 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.tureesDuusakhUdur = moment(ognoo).endOf("month").format("YYYY.MM.DD");
           nekhemjlekh.khevlesenOgnoo = moment(ognoo).format("YYYY/MM/DD");
           nekhemjlekh.sar = moment(ognoo).format("MM");
+          nekhemjlekh.umnukhSar =  moment(ognoo).subtract(1, 'month').format("MM");
         }
         else
         {
