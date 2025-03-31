@@ -286,9 +286,11 @@ const KioskMobile = ({
               console.log("data?.tuukh[0]?.tulbur", data?.tuukh[0]?.tulbur);
               setKhungulukhDun(0);
             }
-            console.log("khungulukhDun11", khungulukhDun);
+            console.log("khungulukhDun before ", khungulukhDun);
+            console.log("une -> ", response.data?.data?.parkingUndsenUne);
+            console.log("tsag -> ", tsag);
             var khungulukhDun = (response.data?.data?.parkingUndsenUne || 0) * (tsag || 0);
-            console.log("tsag ---------->>>" + khungulukhDun);
+            console.log("khungulukhDun ---------->>>" + khungulukhDun);
             if (khungulukhDun > 0) {
               console.log("end2");
               if (khungulukhDun < response.data?.data?.pay_amount) {
@@ -814,10 +816,7 @@ export const getServerSideProps = async (ctx) => {
         zogsool,
         baiguullagiinId: ctx.query.baiguullagiinId,
         barilgiinId,
-        khungulukh:
-          khungululttei && zogsool?.qrKhungulukhDun
-            ? zogsool?.qrKhungulukhDun
-            : 0,
+        tsag: ctx.query.tsag,
       },
     };
   } catch (error) {
