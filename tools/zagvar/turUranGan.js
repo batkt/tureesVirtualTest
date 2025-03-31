@@ -349,8 +349,8 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <td style="border: 1px solid #000; text-align: center;">
             НӨАТ-гүй дүн
           </td>
-          <td style="border: 1px solid #000; text-align: center;">Хөнгөлөлт</td>
-          <td style="border: 1px solid #000; text-align: center;">Нийт дүн</td>
+          <td style="border: 1px solid #000; text-align: center; width: 15%;">Хөнгөлөлт</td>
+          <td style="border: 1px solid #000; text-align: center; width: 15%;">Нийт дүн</td>
         </tr>
       </thead>
       <tbody>
@@ -378,10 +378,10 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
               }</td>
               <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;</td>
               <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;</td>
-              <td style="border: 1px solid #000; text-align: right;">&lt;${
+              <td style="border: 1px solid #000; text-align: right; width: 15%;">&lt;${
                 mur.tailbar
               }.khungulult&gt;</td>
-              <td style="border: 1px solid #000; text-align: right; width: 20%;">&lt;${
+              <td style="border: 1px solid #000; text-align: right; width: 15%;">&lt;${
                 mur.tailbar
               }.khungulultKhassanTulukhDun&gt;</td>
             </tr>
