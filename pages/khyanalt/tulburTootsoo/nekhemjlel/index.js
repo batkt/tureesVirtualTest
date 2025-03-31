@@ -1790,7 +1790,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.gotoMTCount = menejmentCount + 6;
 			  nekhemjlekh.niilberDunUrangan = niilberDunUrangan; 
         nekhemjlekh.niilberDunUranganNUAT = (niilberDunUrangan / 1.1) * 0.1;
-        nekhemjlekh.niilberDunUranganNUATgui = niilberDunUrangan - medeelel.niilberDunUranganNUAT;
+        nekhemjlekh.niilberDunUranganNUATgui = niilberDunUrangan - nekhemjlekh.niilberDunUranganNUAT;
 
         text = text?.replace(
           new RegExp(`&lt;niilberDunUranganUsgeer&gt;`, "g"),
