@@ -68,16 +68,18 @@ function GuilgeeExceleesOruulakhOlnoor(
         ashiglaltiinId: ashiglaltiinId,
         barilgiinId: barilgiinId,
         nuatBodokhEsekh: nuatBodokhEsekh,
-        jagsaalt: data.map((item) => ({
-          baiguullagiinId: baiguullaga._id,
-          barilgiinId: barilgiinId,
-          ognoo: moment(ognoo).format("YYYY-MM-DD HH:mm:ss"),
-          zardliinId: ashiglaltiinId,
-          zardliinNer: "Цахилгаан",
-          talbainDugaar: item.talbainDugaar,
-          suuliinZaalt: item.suuliinZaalt,
-          guidliinKoep: item.guidliinKoep,
-        })),
+        jagsaalt: data
+          .filter((item) => item.guidliinKoep > 0)
+          .map((item) => ({
+            baiguullagiinId: baiguullaga._id,
+            barilgiinId: barilgiinId,
+            ognoo: moment(ognoo).format("YYYY-MM-DD HH:mm:ss"),
+            zardliinId: ashiglaltiinId,
+            zardliinNer: "Цахилгаан",
+            talbainDugaar: item.talbainDugaar,
+            suuliinZaalt: item.suuliinZaalt,
+            guidliinKoep: item.guidliinKoep,
+          })),
       };
 
       const response = await uilchilgee(token).post(
@@ -179,7 +181,7 @@ function GuilgeeExceleesOruulakhOlnoor(
         <InputNumber
           min={0}
           //   step={0.01}
-          value={record.guidliinKoep}
+          value={record.guidliinKoep || 0}
           onChange={(value) => {
             const newData = [...data];
             newData[index].guidliinKoep = value;
@@ -189,6 +191,45 @@ function GuilgeeExceleesOruulakhOlnoor(
       ),
     },
   ];
+  // const columns = [
+  //   {
+  //     title: t("Талбайн Дугаар"),
+  //     dataIndex: "talbainDugaar",
+  //     key: "talbainDugaar",
+  //   },
+  //   {
+  //     title: t("Тоолуурын Дугаар"),
+  //     dataIndex: "tooluuriinDugaar",
+  //     key: "tooluuriinDugaar",
+  //   },
+  //   {
+  //     title: t("Заалт"),
+  //     dataIndex: "suuliinZaalt",
+  //     key: "suuliinZaalt",
+  //     render: (text) => <span>{text.toFixed(2)}</span>,
+  //   },
+  //   {
+  //     title: t("Гүйдлийн коэффициент"),
+  //     dataIndex: "guidliinKoep",
+  //     key: "guidliinKoep",
+  //     render: (text, record, index) => (
+  //       <InputNumber
+  //         min={0}
+  //         value={record.guidliinKoep || 0}
+  //         onChange={(value) => {
+  //           const newData = [...data];
+  //           newData[index].guidliinKoep = value;
+
+  //           if (value > 0) {
+  //             message.warning("Гүйдлийн коэффициент 0-с их байна!", 3);
+  //           }
+
+  //           setData(newData);
+  //         }}
+  //       />
+  //     ),
+  //   },
+  // ];
 
   const selectedZardal = useMemo(() => {
     return zardal?.jagsaalt?.find((z) => z._id === ashiglaltiinId);
