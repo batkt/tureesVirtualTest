@@ -122,7 +122,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
       </div>
     </div>
     <div style="text-align: right;">
-      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinTureesUrTulbur&gt;&nbsp;&nbsp;</b><br />
+      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinUrTulbur&gt;&nbsp;&nbsp;</b><br />
     </div>
     <table style="width: 100%;">
       <thead style="background-color: #d1d5db; font-weight: 600;">
@@ -334,9 +334,6 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         </div>
       </div>
     </div>
-    <div style="text-align: right;">
-      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinAshiglaltUrTulbur&gt;&nbsp;&nbsp;</b><br />
-    </div>
     <table style="width: 100%;">
       <thead style="background-color: #d1d5db; font-weight: 600;">
         <tr>
@@ -392,13 +389,9 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         })
         .join("")}
         <tr>
-          <td colspan="6" rowspan="2">Мөнгөн дүн (үсгээр): &lt;niitDunUranganUsgeer&gt; болно</td>
+          <td colspan="6" rowspan="2">Мөнгөн дүн (үсгээр): &lt;niilberDunUranganUsgeer&gt; болно</td>
           <td style="border: 1px solid #000; text-align: center;">&lt;sar&gt; -Р САРЫН НЭХЭМЖИЛСЭН ДҮН:</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;niilberDunUrangan&gt;</td>
-        </tr>
-        <tr>
-          <td style="border: 1px solid #000; text-align: center;">ЭЦСИЙН ҮЛДЭГДЭЛ:</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;niitDunUrangan&gt;</td>
         </tr>
         <tr>
           <td colspan="8">&nbsp;&nbsp;&nbsp;</td>
