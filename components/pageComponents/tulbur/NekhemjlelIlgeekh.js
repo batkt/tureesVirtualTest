@@ -50,6 +50,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t, ajiltan, baiguullaga
     ognoo,
     data.davkhar,
     ilgeekhTurul,
+    false,
     data.barilgiinId,
     data._id
   );

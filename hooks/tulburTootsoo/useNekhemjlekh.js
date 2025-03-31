@@ -18,12 +18,13 @@ const fetcher = (
   davkhar,
   barilgiinId,
   ilgeekhTurul,
+  olnoorSaraarEsekh,
   _id
 ) =>
   axios(token)
     .post(url, {
       barilgiinId,
-      ekhlekhOgnoo: moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
+      ekhlekhOgnoo: olnoorSaraarEsekh ? moment().startOf("month").format("YYYY-MM-DD 00:00:00") : moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59"),
       nekhemjlekhAvakhOgnoo: ognoo.format("YYYY-MM-DD 23:59:59"),
       query: {
@@ -56,6 +57,7 @@ function useNekhemjlekh(
   ognoo,
   davkhar,
   ilgeekhTurul,
+  olnoorSaraarEsekh,
   mbarilgiinId,
   _id
 ) {
@@ -76,6 +78,7 @@ function useNekhemjlekh(
           davkhar,
           barilgiinId || mbarilgiinId,
           ilgeekhTurul,
+          olnoorSaraarEsekh,
           _id,
         ]
       : null,
