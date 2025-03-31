@@ -132,8 +132,8 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <td style="border: 1px solid #000; text-align: center;">Хэмжих нэгж</td>
           <td style="border: 1px solid #000; text-align: center;">Тоо ширхэг</td>
           <td style="border: 1px solid #000; text-align: center;">Нэг бүрийн үнэ</td>
-          <td style="border: 1px solid #000; text-align: center;">Бүгд үнэ</td>
-          <td style="border: 1px solid #000; text-align: center;">Тайлбар</td>
+          <td style="border: 1px solid #000; text-align: center; width: 20%;">Бүгд үнэ</td>
+          <td style="border: 1px solid #000; text-align: center; width: 20%;">Тайлбар</td>
         </tr>
       </thead>
       <tbody>
@@ -143,8 +143,8 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <td style="border: 1px solid #000; text-align: center;">м2</td>
           <td style="border: 1px solid #000; text-align: center;">&lt;talbainKhemjee&gt;</td>
           <td style="border: 1px solid #000; text-align: center;">&lt;talbainNegjUne&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;sariinTurees&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;tureesEkhlehUdur&gt;-&lt;tureesDuusakhUdur&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; width: 20%;">&lt;sariinTurees&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; width: 20%;">&lt;tureesEkhlehUdur&gt;-&lt;tureesDuusakhUdur&gt;</td>
         </tr>
         <tr>
           <td style="border: 1px solid #000; text-align: center;">2</td>
@@ -152,8 +152,8 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <td style="border: 1px solid #000; text-align: center;"></td>
           <td style="border: 1px solid #000; text-align: center;"></td>
           <td style="border: 1px solid #000; text-align: center;"></td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;khungulult&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;tureesEkhlehUdur&gt;-&lt;tureesDuusakhUdur&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; width: 20%;">&lt;khungulult&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; width: 20%;">&lt;tureesEkhlehUdur&gt;-&lt;tureesDuusakhUdur&gt;</td>
         </tr>
         <tr>
           <td colspan="5" rowspan="4">Мөнгөн дүн (үсгээр): &lt;uranganTureesNiitDunUsgeer&gt; болно</td>
@@ -370,10 +370,10 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
               <td style="border: 1px solid #000; text-align: left;">
                 ${mur.tailbar}
               </td>
-              <td style="border: 1px solid #000; text-align: left;">${
+              <td style="border: 1px solid #000; text-align: center;">${
                 mur.umnukhZaalt === null ? "" : mur.umnukhZaalt
               }</td>
-              <td style="border: 1px solid #000; text-align: left;">${
+              <td style="border: 1px solid #000; text-align: center;">${
                 mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
               }</td>
               <td style="border: 1px solid #000; text-align: right;">${mur.nuatBodokh === 1 ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;` : ""} </td>
@@ -381,7 +381,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
               <td style="border: 1px solid #000; text-align: right;">&lt;${
                 mur.tailbar
               }.khungulult&gt;</td>
-              <td style="border: 1px solid #000; text-align: right;">&lt;${
+              <td style="border: 1px solid #000; text-align: right; width: 20%;">&lt;${
                 mur.tailbar
               }.khungulultKhassanTulukhDun&gt;</td>
             </tr>
