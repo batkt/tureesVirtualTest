@@ -158,7 +158,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         <tr>
           <td colspan="5" rowspan="4">Мөнгөн дүн (үсгээр): &lt;uranganTureesNiitDunUsgeer&gt; болно</td>
           <td style="border: 1px solid #000; text-align: center;">Дүн:</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUneNuatgui&gt;</td>
         </tr>
         <tr>
           <td style="border: 1px solid #000; text-align: center;">НӨАТ:</td>
@@ -376,8 +376,8 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
               <td style="border: 1px solid #000; text-align: center;">${
                 mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
               }</td>
-              <td style="border: 1px solid #000; text-align: right;">${mur.nuatBodokh === 1 ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;` : ""} </td>
-              <td style="border: 1px solid #000; text-align: right;">${mur.nuatBodokh === 1 ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;` : ""}</td>
+              <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;</td>
+              <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;</td>
               <td style="border: 1px solid #000; text-align: right;">&lt;${
                 mur.tailbar
               }.khungulult&gt;</td>
@@ -389,7 +389,15 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         })
         .join("")}
         <tr>
-          <td colspan="6" rowspan="2">Мөнгөн дүн (үсгээр): &lt;niilberDunUranganUsgeer&gt; болно</td>
+          <td colspan="6" rowspan="3">Мөнгөн дүн (үсгээр): &lt;niilberDunUranganUsgeer&gt; болно</td>
+          <td style="border: 1px solid #000; text-align: center;">Дүн:</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;niilberDunUranganNUATgui&gt;</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid #000; text-align: center;">НӨАТ:</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;niilberDunUranganNUAT&gt;</td>
+        </tr>
+        <tr>
           <td style="border: 1px solid #000; text-align: center;">&lt;sar&gt; -Р САРЫН НЭХЭМЖИЛСЭН ДҮН:</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;niilberDunUrangan&gt;</td>
         </tr>

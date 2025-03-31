@@ -314,6 +314,7 @@ const KioskMobile = ({
                 setTulburiinKhelber("qpay");
                 setUnshijBaina(false);
               }
+              setKhungulukhDun(khungulukhDun);
             } else {
               console.log("end1");
               setSongogdsonData(response.data?.data);
@@ -381,7 +382,7 @@ const KioskMobile = ({
     uilchilgee(token)
       .post("/v1/kioskPay", {
         uilchluulegchiinId,
-        turul: "qpayKhungulult",
+        turul: "Хөнгөлөлт/ "+ tsag+ " цаг",
         zogsooliinId,
         paid_amount: khungulukhDun,
       })
@@ -569,7 +570,7 @@ const KioskMobile = ({
             )}
             {qpayerTulukh && (
               <div className="mt-2 grid max-h-[400px] w-full grid-cols-4 gap-2 overflow-y-auto px-4 py-2">
-                {qpayerTulukh.urls.map((mur) => {
+                {qpayerTulukh?.urls?.map((mur) => {
                   return (
                     <a
                       href={mur.link}
