@@ -88,6 +88,7 @@ function GuilgeeExceleesOruulakhOlnoor(
       if (response.status === 200) {
         message.success("Өөрчлөлтүүд амжилттай хадгалагдлаа!");
         console.log(" ----- response -----", response);
+        destroy();
       } else {
         message.error("Алдаа гарлаа. Дахин оролдоно уу.");
       }
@@ -214,22 +215,24 @@ function GuilgeeExceleesOruulakhOlnoor(
           onChange={setGereeniiZagvar}
           style={{ width: "100%" }}
         >
-          {zardal?.jagsaalt?.map((a) => (
-            <Select.Option key={a._id} value={a._id}>
-              <div className="flex w-full justify-between border-b">
-                <p className="flex border-r bg-green-400 bg-opacity-10 pl-2 pr-2 text-left">
-                  {a.ner}
-                </p>
-                <div className="flex w-full justify-between bg-blue-600 bg-opacity-5 pl-2 pr-2">
-                  <p className={`mr-5 border-r text-right`}>{t(a.turul)}</p>
-                  <p className="text-right">
-                    {a.turul !== "Дурын" ? a.tariff : "Дурын"}
-                    {a.turul !== "Дурын" && "₮"}
+          {zardal?.jagsaalt
+            ?.filter((a) => a.ner === "Цахилгаан")
+            .map((a) => (
+              <Select.Option key={a._id} value={a._id}>
+                <div className="flex w-full justify-between border-b">
+                  <p className="flex border-r bg-green-400 bg-opacity-10 pl-2 pr-2 text-left">
+                    {a.ner}
                   </p>
+                  <div className="flex w-full justify-between bg-blue-600 bg-opacity-5 pl-2 pr-2">
+                    <p className={`mr-5 border-r text-right`}>{t(a.turul)}</p>
+                    <p className="text-right">
+                      {a.turul !== "Дурын" ? a.tariff : "Дурын"}
+                      {a.turul !== "Дурын" && "₮"}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Select.Option>
-          ))}
+              </Select.Option>
+            ))}
         </Select>
       </div>
 
@@ -251,7 +254,6 @@ function GuilgeeExceleesOruulakhOlnoor(
           )}
 
           <div className="mt-5" />
-
           <Table
             columns={columns}
             dataSource={data}
@@ -259,18 +261,20 @@ function GuilgeeExceleesOruulakhOlnoor(
             pagination={true}
             style={{ marginTop: "20px" }}
           />
-          <Button
-            type="primary"
-            style={{
-              marginTop: 20,
-              display: "flex",
-              justifyContent: "end",
-              alignItems: "center",
-            }}
-            onClick={handleSave}
-          >
-            Хадгалах
-          </Button>
+          <div className="flex items-end justify-end">
+            <Button
+              type="primary"
+              style={{
+                marginTop: 10,
+                display: "flex",
+                justifyContent: "end",
+                alignItems: "end",
+              }}
+              onClick={handleSave}
+            >
+              Хадгалах
+            </Button>
+          </div>
         </>
       )}
     </div>
