@@ -166,11 +166,11 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         </tr>
         <tr>
           <td style="border: 1px solid #000; text-align: center;">Нийт Алданги:</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;aldangiinUldegdel&gt;</td>
+          <td style="border: 1px solid #000; text-align: right;"><b>&lt;aldangiinUldegdel&gt;</b></td>
         </tr>
         <tr>
           <td style="border: 1px solid #000; text-align: center;">Нийт дүн:</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;uranganTureesNiitDun&gt;</td>
+          <td style="border: 1px solid #000; text-align: right;"><b>&lt;uranganTureesNiitDun&gt;</b></td>
         </tr>
       </tbody>
       <tfoot>
@@ -399,7 +399,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         </tr>
         <tr>
           <td style="border: 1px solid #000; text-align: center;">&lt;sar&gt; -Р САРЫН НЭХЭМЖИЛСЭН ДҮН:</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;niilberDunUrangan&gt;</td>
+          <td style="border: 1px solid #000; text-align: right;"><b>&lt;niilberDunUrangan&gt;</b></td>
         </tr>
         <tr>
           <td colspan="8">&nbsp;&nbsp;&nbsp;</td>
