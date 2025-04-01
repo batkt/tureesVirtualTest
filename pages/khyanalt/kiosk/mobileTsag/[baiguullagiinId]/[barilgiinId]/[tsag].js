@@ -307,7 +307,6 @@ const KioskMobile = ({
                   response.data?.data?.plate_number
                 );
                 setUnshijBaina(false);
-                setKhungulukhDun(khungulukhDun);
               } else {
                 setKhungulukhDun(response.data?.data?.pay_amount);
                 setSongogdsonData(response.data?.data);
@@ -315,6 +314,7 @@ const KioskMobile = ({
                 setTulburiinKhelber("qpay");
                 setUnshijBaina(false);
               }
+              setKhungulukhDun(khungulukhDun);
             } else {
               console.log("end1");
               setSongogdsonData(response.data?.data);
