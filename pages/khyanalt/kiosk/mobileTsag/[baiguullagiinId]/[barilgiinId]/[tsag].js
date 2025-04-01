@@ -281,7 +281,7 @@ const KioskMobile = ({
         if (response.data.success == true) {
           if (response.data?.data?.pay_amount > 0) {
             if (
-              !!data?.tuukh[0]?.tulbur?.find((x) => x.turul == "qpayKhungulult")
+              !!data?.tuukh[0]?.tulbur?.find((x) => x.turul == ("Хөнгөлөлт/ "+ tsag+ " цаг"))
             ) {
               console.log("data?.tuukh[0]?.tulbur", data?.tuukh[0]?.tulbur);
               setKhungulukhDun(0);
