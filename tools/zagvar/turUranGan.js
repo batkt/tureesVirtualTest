@@ -227,13 +227,13 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <td style="border: 1px solid #000; text-align: right;"><b>&lt;umnukhSariinUldegdel&gt;</b></td>
         </tr>
         <tr>
-          <td colspan="7">&nbsp;&nbsp;&nbsp;</td>
+          <td colspan="7"><b>Анхааруулга:</b> &nbsp;&nbsp;&nbsp;</td>
         </tr>
         <tr>
-          <td style="text-align: center;" colspan="7">Жич: Төлбөл зохих огноонд төлөөгүй тохиолдолд Түрээсийн гэрээний 6.1-д заасны дагуу Түрээслэгчийн үйл ажиллагааг зогсоож, хаалга</td>
+          <td style="text-align: left;" colspan="7">1. Төлбөл зохих огноонд төлөөгүй тохиолдолд Түрээсийн гэрээний 6.1-д заасны дагуу Түрээслэгчийн үйл ажиллагааг зогсоож, хаалга лацдаж, цахилгаан хязгаарлан, цаашлан хууль хүчний байгууллагад шилжүүлэхийг үүгээр мэдэгдэж байна. </td>
         </tr>
         <tr>
-          <td style="text-align: center;" colspan="7">лацдаж, цахилгаан хязгаарлан, цаашлан хууль хүчний байгууллагад шилжүүлэхийг үүгээр мэдэгдэж байна.</td>
+          <td style="text-align: left;" colspan="7">2. Эрхэм харилцагч та төлбөрөө төлөхдөө 5-ний дотор төлж байгаа тохиолдолд зөвхөн түрээсийн төлбөрөөс 10%-ийн хөнгөлөлтийг хасаж шилжүүлнэ үү </td>
         </tr>
         <tr>
           <td colspan="7">&nbsp;&nbsp;&nbsp;</td>
@@ -454,13 +454,13 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
           <td style="border: 1px solid #000; text-align: right;"><b>&lt;niilberDunUrangan&gt;</b></td>
         </tr>
         <tr>
-          <td colspan="8">&nbsp;&nbsp;&nbsp;</td>
+          <td colspan="8"><b>Анхааруулга:</b> &nbsp;&nbsp;&nbsp;</td>
         </tr>
         <tr>
-          <td style="text-align: center;" colspan="8">Жич: Төлбөл зохих огноонд төлөөгүй тохиолдолд Түрээсийн гэрээний 6.1-д заасны дагуу Түрээслэгчийн үйл ажиллагааг зогсоож, хаалга</td>
+          <td style="text-align: left;" colspan="8">1. Төлбөл зохих огноонд төлөөгүй тохиолдолд Түрээсийн гэрээний 6.1-д заасны дагуу Түрээслэгчийн үйл ажиллагааг зогсоож, хаалга лацдаж, цахилгаан хязгаарлан, цаашлан хууль хүчний байгууллагад шилжүүлэхийг үүгээр мэдэгдэж байна. </td>
         </tr>
         <tr>
-          <td style="text-align: center;" colspan="8">лацдаж, цахилгаан хязгаарлан, цаашлан хууль хүчний байгууллагад шилжүүлэхийг үүгээр мэдэгдэж байна.</td>
+          <td style="text-align: left;" colspan="8">2. Эрхэм харилцагч та төлбөрөө төлөхдөө 5-ний дотор төлж байгаа тохиолдолд зөвхөн түрээсийн төлбөрөөс 10%-ийн хөнгөлөлтийг хасаж шилжүүлнэ үү </td>
         </tr>
         <tr>
           <td colspan="8">&nbsp;&nbsp;&nbsp;</td>

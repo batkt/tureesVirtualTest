@@ -1772,12 +1772,12 @@ function tulburTootsoo({ token }) {
           if(a.tailbar === "Цахилгаан" || a.tailbar === "Эрүүл ахуйч" || a.tailbar === "Харуул хамгаалалт, ОБЕГ, ХАБ" || a.tailbar === "Дулаан" || a.tailbar === "Ус")
           {
             ashiglaltCount++;
-            niilberAshiglaltDunGoTo += a.tulukhDun;
+            niilberAshiglaltDunGoTo += khungulultKhassanTulukhDun;
           }
           if(a.tailbar === "Худалдааны менежмент" || a.tailbar === "Хөрөнгийн менежмент" || a.tailbar === "Тавилга түрээс")
           {
             menejmentCount++;
-            niilberNekhemjlelDunGoto += a.tulukhDun;
+            niilberNekhemjlelDunGoto += khungulultKhassanTulukhDun;
           }
         });
 
