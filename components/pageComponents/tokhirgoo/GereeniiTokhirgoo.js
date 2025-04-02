@@ -43,6 +43,7 @@ function KhuviinMedeelel({
   const [gariinUsegKharakhZam, setGariinUsegKharakhZam] = useState(false);
   const [gereeTokhirgoo, setGereeTokhirgoo] = useState({
     guidelBuchiltKhonogEsekh: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh,
+    sekhDemjikhTulburAvakhEsekh: baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh,
     bichiltKhonog: baiguullaga?.tokhirgoo?.bichiltKhonog || 0,
   });
 
@@ -276,6 +277,27 @@ function KhuviinMedeelel({
                       }))
                     }
                     min={0}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">
+                    {t("Цахилгааны тооцоололд ашиглах эсэх")}
+                  </div>
+                  <div className="text-gray-600">
+                    {t("Сэх дэмжих төлбөр идэвхжүүлэх")}
+                  </div>
+                </div>
+                <div className="ml-auto">
+                  <Switch
+                    defaultChecked={baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh}
+                    onChange={(v) =>
+                      setGereeTokhirgoo((a) => ({
+                        ...(a || {}),
+                        sekhDemjikhTulburAvakhEsekh: v,
+                      }))
+                    }
                   />
                 </div>
               </div>

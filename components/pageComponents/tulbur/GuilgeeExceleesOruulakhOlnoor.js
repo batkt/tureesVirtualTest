@@ -32,7 +32,7 @@ function GuilgeeExceleesOruulakhOlnoor(
 
   const query = useMemo(
     () => ({
-      turul: { $in: ["кВт", "1м3"] },
+      turul: { $in: ["кВт", "1м3", "кг"] },
       barilgiinId,
     }),
     [barilgiinId]

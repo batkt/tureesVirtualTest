@@ -33,6 +33,7 @@ function GuilgeeKhiikh(
   const [bokhirUsDun, setBokhirUsDun] = useState("");
   const [usKhalaasniiDun, setUsKhalaasniiDun] = useState("");
   const [tsakhilgaanUrjver, setTsakhilgaanUrjver] = useState("");
+  const [togtmolGaz, setTogtmolGaz] = useState("");
   const [bodokhArga, setBodokhArga] = useState("");
   const [umnukhZaalt, setUmnukhZaalt] = useState(0);
   const [guidliinKoep, setGuidliinKoep] = useState(0);
@@ -72,13 +73,17 @@ function GuilgeeKhiikh(
   }, [suuliinZaalt, umnukhZaalt, tsakhilgaanUrjver]);
     
   const niitDun = useMemo(() => {
-    return chadalDun + tsekhDun + (baiguullaga?._id === "679aea9032299b7ba8462a77" ? sekhDemjikhTulburDun : 0);
+    return chadalDun + tsekhDun + (baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh ? sekhDemjikhTulburDun : 0);
   }, [chadalDun, tsekhDun]);
+
+  const niitDunGaz = useMemo(() => {
+    return (suuliinZaalt - umnukhZaalt) * togtmolGaz * negjUne;
+  }, [suuliinZaalt, umnukhZaalt]);
 
   const query = useMemo(
     () => ({
       ner: data?.zardluud && { $in: data.zardluud.map((a) => a.ner) },
-      turul: { $in: ["кВт", "1м3", "1м2"] },
+      turul: { $in: ["кВт", "1м3", "1м2", "кг"] },
       // tariff: { $exists: true },
       barilgiinId,
     }),
@@ -196,7 +201,7 @@ function GuilgeeKhiikh(
           case "ashiglalt":
             {
               if (
-                (khemjikhNegj === "кВт" || khemjikhNegj === "1м3") &&
+                (khemjikhNegj === "кВт" || khemjikhNegj === "1м3" || khemjikhNegj === "кг") &&
                 umnukhZaalt > suuliinZaalt
               ) {
                 notification.warning({
@@ -205,7 +210,7 @@ function GuilgeeKhiikh(
                 return;
               }
               if (
-                (khemjikhNegj === "кВт" || khemjikhNegj === "1м3") &&
+                (khemjikhNegj === "кВт" || khemjikhNegj === "1м3" || khemjikhNegj === "кг") &&
                 ognoo > new Date()
               ) {
                 notification.warning({
@@ -213,7 +218,7 @@ function GuilgeeKhiikh(
                 });
                 return;
               }
-              var tempDun = m2argaarBodokhEsekh ? dun * data?.talbainKhemjee  : ((tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && bodokhArga === "Khatuu" ? (tseverUsDun * dun + bokhirUsDun * dun + (tailbar === "Халуун ус" ? usKhalaasniiDun * dun : 0)) : (baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? niitDun : negjUne * (tsakhilgaanUrjver || 1) * (dun || 0)))
+              var tempDun = m2argaarBodokhEsekh ? dun * data?.talbainKhemjee  : ((tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && bodokhArga === "Khatuu" ? (tseverUsDun * dun + bokhirUsDun * dun + (tailbar === "Халуун ус" ? usKhalaasniiDun * dun : 0)) : (baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? niitDun : khemjikhNegj === "кг" ? niitDunGaz : negjUne * (tsakhilgaanUrjver || 1) * (dun || 0)))
               guilgee = {
                 turul: "avlaga",
                 tulsunDun: 0,
@@ -239,8 +244,9 @@ function GuilgeeKhiikh(
                 tsekhDun: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? tsekhDun : 0,
                 chadalDun: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? chadalDun : 0,
                 sekhDemjikhTulburDun: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? sekhDemjikhTulburDun : 0,
+                togtmolUtga: khemjikhNegj === "кг" ? togtmolGaz : 0,
               };
-              if (khemjikhNegj === "кВт" || khemjikhNegj === "1м3") {
+              if (khemjikhNegj === "кВт" || khemjikhNegj === "1м3" || khemjikhNegj === "кг" ) {
                 guilgee["suuliinZaalt"] = suuliinZaalt;
                 guilgee["umnukhZaalt"] = umnukhZaalt;
               }
@@ -286,6 +292,8 @@ function GuilgeeKhiikh(
       tureesEkhniiUldegdelEsekh,
       ashiglaltiinId,
       ashiglaltiinNer,
+      niitDunGaz,
+      togtmolGaz,
     ]
   );
   function labelTurul(guilgeeTurul) {
@@ -514,6 +522,7 @@ function GuilgeeKhiikh(
               const utga = zardal.jagsaalt.find((a) => a._id === v);
               setBodokhArga(utga.bodokhArga);
               setTsakhilgaanUrjver(utga.ner === "Цахилгаан" ? (utga.tsakhilgaanUrjver || 1) : 1);
+              setTogtmolGaz(utga.togtmolUtga || 0);
               setNegjUne(utga.tariff || 0);
               setTseverUsDun(utga.tseverUsDun || 0)
               setBokhirUsDun(utga.bokhirUsDun || 0)
@@ -523,7 +532,7 @@ function GuilgeeKhiikh(
               setSuuriKhuraamj(Number(utga.suuriKhuraamj || 0));
               setSuuliinZaalt(null);
               setDun(0);
-              if (utga.turul === "кВт" || utga.turul === "1м3") {
+              if (utga.turul === "кВт" || utga.turul === "1м3" || utga.turul === "кг") {
                 var suuliinGuilgee = guilgeeniiTuukh.filter(
                   (x) => x.khemjikhNegj == utga.turul && x.tailbar == utga.ner
                 );
@@ -532,7 +541,12 @@ function GuilgeeKhiikh(
                 if (!!suuliinGuilgee?.suuliinZaalt) {
                   setUmnukhZaalt(suuliinGuilgee.suuliinZaalt);
                   setUmnukhZaalttaiEsekh(true);
-                } else setUmnukhZaalt(0);
+                } 
+                else 
+                {
+                  setUmnukhZaalt(0);
+                  setUmnukhZaalttaiEsekh(false);
+                }
               }
             }}
             id="select2"
@@ -593,7 +607,7 @@ function GuilgeeKhiikh(
           </div>
         )}
       </div>
-      {turul === "ashiglalt" && !m2argaarBodokhEsekh && (khemjikhNegj === "кВт" || khemjikhNegj === "1м3") ? (
+      {turul === "ashiglalt" && !m2argaarBodokhEsekh && (khemjikhNegj === "кВт" || khemjikhNegj === "1м3" || khemjikhNegj === "кг") ? (
         <div className="flex w-full justify-between">
           <div style={{ width: "49%" }}>
             <div>Өмнөх заалт</div>
@@ -680,7 +694,7 @@ function GuilgeeKhiikh(
           </div>
         </div>
       )}
-       {turul === "ashiglalt" && tailbar === "Цахилгаан" && baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && baiguullaga?._id === "679aea9032299b7ba8462a77" && (
+       {turul === "ashiglalt" && tailbar === "Цахилгаан" && baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh && (
         <div className="flex w-full items-start justify-between">
           <div style={{ width: "48%" }}>
             <div className="flex justify-start">Сэх дэмжих төлбөр {formatNumber(sekhDemjikhTulburDun || 0)}</div>
@@ -691,6 +705,7 @@ function GuilgeeKhiikh(
         <div className="flex w-full items-start justify-between">
           <div>Суурь хураамж: {formatNumber(suuriKhuraamj || 0, 2)}</div>
           {tailbar === "Цахилгаан" ? (<div>КВЦТ: {formatNumber((tsakhilgaanUrjver || 1), 4)}</div>) : ""}
+          {khemjikhNegj === "кг" ? (<div>Тогтмол: {formatNumber((togtmolGaz || 0), 4)}</div>) : ""}
           <div
             className={`${nuatBodokhEsekh ? "p-0" : "p-2"}dark:text-gray-100`}
           >
@@ -699,14 +714,14 @@ function GuilgeeKhiikh(
                 <div className="flex w-full items-center justify-between gap-2">
                   <div>Бодсон үнэ: </div>
                   <div>
-                    {formatNumber((m2argaarBodokhEsekh ? dun * data?.talbainKhemjee : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? niitDun : negjUne * dun * tsakhilgaanUrjver) + (suuriKhuraamj || 0) || 0, 2)}
+                    {formatNumber((m2argaarBodokhEsekh ? dun * data?.talbainKhemjee : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? niitDun : khemjikhNegj === "кг" ? niitDunGaz : negjUne * dun * tsakhilgaanUrjver) + (suuriKhuraamj || 0) || 0, 2)}
                   </div>
                 </div>
                 <div className="flex w-full items-center justify-between gap-2">
                   <div>НӨАТ:</div>
                   <div>
                     {formatNumber(
-                      ((m2argaarBodokhEsekh ? dun * data?.talbainKhemjee : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? niitDun : negjUne * dun * tsakhilgaanUrjver) + (suuriKhuraamj || 0) || 0) / 10
+                      ((m2argaarBodokhEsekh ? dun * data?.talbainKhemjee : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? niitDun : khemjikhNegj === "кг" ? niitDunGaz : negjUne * dun * tsakhilgaanUrjver) + (suuriKhuraamj || 0) || 0) / 10
                     )}
                   </div>
                 </div>
@@ -716,7 +731,7 @@ function GuilgeeKhiikh(
               <div className="flex w-full items-center justify-between gap-2">
                 <div>{t("Нийт үнэ")}:</div>
                 <div>
-                  {formatNumber((m2argaarBodokhEsekh ? dun * data?.talbainKhemjee : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? niitDun : negjUne * dun * tsakhilgaanUrjver) + (suuriKhuraamj || 0) || 0, 2)}
+                  {formatNumber((m2argaarBodokhEsekh ? dun * data?.talbainKhemjee : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? niitDun : khemjikhNegj === "кг" ? niitDunGaz : negjUne * dun * tsakhilgaanUrjver) + (suuriKhuraamj || 0) || 0, 2)}
                 </div>
               </div>
             )}
@@ -725,7 +740,7 @@ function GuilgeeKhiikh(
                 <div>{t("Нийт үнэ")}:</div>
                 <div>
                   {formatNumber(
-                    ((m2argaarBodokhEsekh ? dun * data?.talbainKhemjee : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? niitDun : negjUne * dun * tsakhilgaanUrjver) + (suuriKhuraamj || 0) || 0) * 1.1
+                    ((m2argaarBodokhEsekh ? dun * data?.talbainKhemjee : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && tailbar === "Цахилгаан" ? niitDun : khemjikhNegj === "кг" ? niitDunGaz : negjUne * dun * tsakhilgaanUrjver) + (suuriKhuraamj || 0) || 0) * 1.1
                   )}
                 </div>
               </div>

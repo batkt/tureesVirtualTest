@@ -16,6 +16,7 @@ function ZardalBurtgel(
   const [hideCoefficent,setHideCoefficent] = useState(true)
   const [hideKhaluunus,setHideKhaluunus] = useState(true)
   const [hideKhuitenus,setHideKhuitenus] = useState(true)
+  const [hideTogtmol, setHideTogtmol] = useState(true)
 
   function garya() {
     const values = form.getFieldsValue()
@@ -88,6 +89,7 @@ function ZardalBurtgel(
 
   const keyDowner = useCallback((e)=>{
     var valueNer = form.getFieldValue('ner');
+    setHideTogtmol(valueNer !== "Газ");
     setHideCoefficent(valueNer !== "Цахилгаан");
     setHideKhaluunus(valueNer !== "Халуун ус");
     setHideKhuitenus(valueNer !== "Халуун ус" && valueNer !== "Хүйтэн ус");
@@ -126,7 +128,10 @@ function ZardalBurtgel(
           <Select.Option key="Дурын" value="Дурын">
             {t("Дурын")}
           </Select.Option>
-        </Select> : <Select onKeyUp={focuser}>
+        </Select> : <Select onChange={(v) => { setHideTogtmol(v !== "кг"); }} onKeyUp={focuser}>
+          <Select.Option key="кг" value="кг">
+            {t("кг")}
+          </Select.Option>
           <Select.Option key="кВт" value="кВт">
             {t("кВт")}
           </Select.Option>
@@ -140,6 +145,16 @@ function ZardalBurtgel(
             1{t("м")}<sup>2</sup>
           </Select.Option>
         </Select>}
+      </Form.Item>
+      <Form.Item label={t("Тогтмол")} name="togtmolUtga" hidden={hideTogtmol}>
+        <InputNumber
+          defaultValue={1}
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />     
       </Form.Item>
      <Form.Item label={t("КВЦТ")} name="tsakhilgaanUrjver" hidden={hideCoefficent}>
         <InputNumber
