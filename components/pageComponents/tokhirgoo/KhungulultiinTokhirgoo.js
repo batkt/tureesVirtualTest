@@ -22,7 +22,6 @@ function KhuviinMedeelel({
   const [khungulultiinTokhirgoo, setKhungulultiinTokhirgoo] = useState(null);
   const [khungulukhKhuvi, setKhungulukhKhuvi] = useState(baiguullaga?.tokhirgoo?.deedKhungulultiinKhuvi);
   const [sarBurAutoKhungulultOruulakhEsekh, setSarBurAutoKhungulultOruulakhEsekh] = useState(baiguullaga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh);
-  const [khungulukhSarBuriinUdur, setKhungulukhSarBuriinUdur] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinUdur ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinUdur : 1);
   const [khungulukhSarBuriinShalguurDun, setKhungulukhSarBuriinShalguurDun] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinShalguurDun ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinShalguurDun : 0);
   const [khungulukhSarBuriinTurul, setKhungulukhSarBuriinTurul] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinTurul ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinTurul : "khuvi");
   const [khungulukhSarBuriinUtga, setKhungulukhSarBuriinUtga] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinUtga ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinUtga : 0);
@@ -120,7 +119,7 @@ function KhuviinMedeelel({
             <div className="flex items-center p-3">
               <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">{t("Автомат хөнгөлөлт идэвхжүүлэх")}</div>
-                <div className="text-gray-600">{t("Сар бүр тогтмол өдөр хөнгөлөлт оруулах боломж идэвхжүүлэх")}</div>
+                <div className="text-gray-600">{t("Сар бүр тогтмол өдөр буюу түрээсийн авлагын дараагийн өдөр хөнгөлөлт үүсгэх боломж идэвхжүүлэх")}</div>
               </div>
               <div className="ml-auto">
                 <Switch
@@ -143,20 +142,24 @@ function KhuviinMedeelel({
             <div className="box">
               <div className="flex items-center p-3">
                 <div className="border-l-2 border-green-500 pl-4">
-                  <div className="font-medium">{t("Хөнгөлөлтийн өдөр тохируулах")}</div>
-                  <div className="text-gray-600"></div>
+                  <div className="font-medium">{t("Хөнгөлөлт бодох шалгуурын дээд мөнгөн дүн тохируулах")}</div>
+                  <div className="text-gray-600">{t("Өмнөх сарын авлагын үлдэгдлийг шалгуурын дээд мөнгөн дүнтэй харьцуулж хөнгөлөлт идэвхжүүлэх")}</div>
                 </div>
                 <div className="ml-auto">
                   <InputNumber
-                    value={khungulukhSarBuriinUdur}
-                    max={5}
-                    min={1}
+                    style={{ width: "100%" }}
+                    value={khungulukhSarBuriinShalguurDun}
+                    min={0}
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
                     onChange={(v) => {
                       setKhungulultiinTokhirgoo((a) => ({
                         ...(a || {}),
-                        khungulukhSarBuriinUdur: v,
+                        khungulukhSarBuriinShalguurDun: v,
                       }))
-                      setKhungulukhSarBuriinUdur(v)
+                      setKhungulukhSarBuriinShalguurDun(v)
                     }
                     }
                   />
@@ -223,35 +226,6 @@ function KhuviinMedeelel({
                         setKhungulukhSarBuriinUtga(v)
                       }}
                     />
-                </div>
-              </div>
-            </div>
-          )}
-          {sarBurAutoKhungulultOruulakhEsekh && (
-            <div className="box">
-              <div className="flex items-center p-3">
-                <div className="border-l-2 border-green-500 pl-4">
-                  <div className="font-medium">{t("Хөнгөлөлт бодох шалгуурын доод хэмжээг тохируулах")}</div>
-                  <div className="text-gray-600"></div>
-                </div>
-                <div className="ml-auto">
-                  <InputNumber
-                    style={{ width: "100%" }}
-                    value={khungulukhSarBuriinShalguurDun}
-                    min={0}
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                    formatter={(value) =>
-                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
-                    onChange={(v) => {
-                      setKhungulultiinTokhirgoo((a) => ({
-                        ...(a || {}),
-                        khungulukhSarBuriinShalguurDun: v,
-                      }))
-                      setKhungulukhSarBuriinShalguurDun(v)
-                    }
-                    }
-                  />
                 </div>
               </div>
             </div>

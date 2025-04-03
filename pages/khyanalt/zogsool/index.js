@@ -51,6 +51,7 @@ import {
   ShareAltOutlined,
   UploadOutlined,
   VideoCameraAddOutlined,
+  VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Excel } from "antd-table-saveas-excel";
 import confirm from "antd/lib/modal/confirm";
@@ -496,7 +497,7 @@ function Zogsool({ token }) {
       {
         title: t("Орсон"),
         align: "center",
-        width: "10rem",
+        width: "8rem",
         dataIndex: "tuukh.0.tsagiinTuukh.0.orsonTsag",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -508,7 +509,7 @@ function Zogsool({ token }) {
       {
         title: t("Гарсан"),
         align: "center",
-        width: "10rem",
+        width: "8rem",
         dataIndex: "tuukh.0.tsagiinTuukh.0.garsanTsag",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -520,7 +521,7 @@ function Zogsool({ token }) {
       {
         title: t("Төрөл"),
         align: "center",
-        width: "10rem",
+        width: "8rem",
         dataIndex: "turul",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -529,7 +530,7 @@ function Zogsool({ token }) {
       {
         title: t("Дугаар"),
         align: "center",
-        width: "10rem",
+        width: "6rem",
         dataIndex: "mashiniiDugaar",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -538,7 +539,7 @@ function Zogsool({ token }) {
       {
         title: t("Хугацаа/мин"),
         align: "center",
-        width: "10rem",
+        width: "8rem",
         ellipsis: true,
         dataIndex: "tuukh",
         render(v) {
@@ -551,7 +552,7 @@ function Zogsool({ token }) {
       {
         title: t("Бодогдсон"),
         align: "right",
-        width: "10rem",
+        width: "9rem",
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "niitDun",
@@ -633,7 +634,7 @@ function Zogsool({ token }) {
           </Popover>
         ),
         align: "right",
-        width: "10rem",
+        width: "9rem",
         dataIndex: "tuukh",
         render(v) {
           let r = null;
@@ -679,7 +680,7 @@ function Zogsool({ token }) {
       {
         title: t("И-Баримт"),
         align: "right",
-        width: "10rem",
+        width: "9rem",
         showSorterTooltip: false,
         sorter: () => 0,
         render(v, data) {
@@ -777,7 +778,7 @@ function Zogsool({ token }) {
           </Popover>
         ),
         align: "center",
-        width: "10rem",
+        width: "8rem",
         showSorterTooltip: false,
         dataIndex: "tuukh",
         render(v, data) {
@@ -923,6 +924,30 @@ function Zogsool({ token }) {
                 data?.tuukh?.map((mur) => (
                   <div className="dark:text-gray-200">
                     {mur.orsonKhaalga}
+                  </div>
+                ))
+              }
+              placement="bottom"
+              trigger="click"
+            >
+              <Button
+                icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
+              ></Button>
+            </Popover>
+          </div>)
+        },
+      },
+      {
+        title: () => <VideoCameraOutlined />,
+        width: "2rem",
+        align: "center",
+        render: (data) => {
+          return (<div className="flex justify-center">
+            <Popover
+              content={() =>
+                data?.tuukh?.map((mur) => (
+                  <div className="dark:text-gray-200">
+                    {mur.garsanKhaalga}
                   </div>
                 ))
               }
@@ -1560,6 +1585,18 @@ function Zogsool({ token }) {
                                   v?.map((a) => 
                                   {
                                     khaalguud = khaalguud + (khaalguud ? ", " : "" ) + a.orsonKhaalga;
+                                  })
+                                  return khaalguud;
+                                },
+                              },
+                              {
+                                title: t("Гарсан хаалга"),
+                                dataIndex: "tuukh",
+                                render: (v) => {
+                                  var khaalguud = "";
+                                  v?.map((a) => 
+                                  {
+                                    khaalguud = khaalguud + (khaalguud ? ", " : "" ) + (a.garsanKhaalga || "");
                                   })
                                   return khaalguud;
                                 },
