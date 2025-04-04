@@ -22,8 +22,9 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
     <div style="display: block; width: 65%; text-align: center; margin-top: 20px;">
       <b style="font-size: 16px;">НЭХЭМЖЛЭХ №</b>
     </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
-      <div style="padding: 15px; background-color: #fff;">
+
+    <div style="  display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem; ">
+      <div style="padding: 1rem; background-color: #fff; flex: 1; text-align: center;">
         <p style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">Нэхэмжлэгч:</p>
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
           <span style="color: #4b5563; font-size: 12px;">Байгууллагын нэр:</span>
@@ -70,7 +71,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <span style="font-weight: bold; font-size: 12px;">&lt;ibanDugaar&gt;</span>
         </div>
       </div>
-      <div style="padding: 15px; background-color: #fff; ">
+      <div style="padding: 1rem; background-color: #fff; flex: 1; text-align: center;">
         <p style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">Төлөгч:</p>
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
           <span style="color: #4b5563; font-size: 12px;">Иргэн:</span>
