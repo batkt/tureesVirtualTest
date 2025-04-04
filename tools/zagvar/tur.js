@@ -97,7 +97,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         </div>
       </div>
     </div>
-    <table style="width: 100%; border-collapse: collapse; margin-top: 20px; border: 1px solid #000;">
+    <table style="width: 100%; margin-top: 20px;">
       <thead style="background-color: #d1d5db; font-weight: bold;">
         <tr>
           <td style="border: 1px solid #000; text-align: center; padding: 10px; font-size: 12px;">№</td>
@@ -194,57 +194,57 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           })
           .join("")} 
       </tbody>
-      <tfoot>
-        <tr style="background-color: #d1d5db; font-weight: bold;">
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td style="text-align: right; font-size: 12px;">&lt;garaasBodsonNiitDun&gt;</td>
+      <tfoot style="border: none;">
+        <tr style="background-color: #d1d5db; font-weight: bold; border: none;">
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="text-align: right; font-size: 12px; border: none;">&lt;garaasBodsonNiitDun&gt;</td>
         </tr>
         <tr>
-          <td></td>
-          <td></td>
-          <td colspan="6">
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td colspan="6" style="border: none;">
             <p style="font-size: 12px;">&lt;garaasBodsonNiitDunUsgeer&gt; болно</p>
           </td>
         </tr>
         <tr>
-          <td></td>
-          <td></td>
-          <td><p style="font-size: 12px;">Хүлээн авсан</p></td>
-          <td></td>
-          <td><p style="font-size: 12px;">/${
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"><p style="font-size: 12px;">Хүлээн авсан</p></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"><p style="font-size: 12px;">/${
             medeelel?.ovog?.[0] ? medeelel?.ovog?.[0] : ""
           }${medeelel?.ovog?.[0] ? "." : ""} ${medeelel?.ner}/</p></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
         </tr>
         <tr>
-          <td></td>
-          <td></td>
-          <td><p style="font-size: 12px;">Нэхэмжлэл бичсэн</p></td>
-          <td></td>
-          <td><p style="font-size: 12px;">/${
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"><p style="font-size: 12px;">Нэхэмжлэл бичсэн</p></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"><p style="font-size: 12px;">/${
             ajiltan?.ovog?.[0] ? ajiltan?.ovog?.[0] : ""
           }${ajiltan?.ovog?.[0] ? "." : ""} ${ajiltan?.ner}/</p></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
         </tr>
         <tr style="margin-top: 1rem;">
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>&lt;tamga&gt;</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;">&lt;tamga&gt;</td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
         </tr>
       </tfoot>
     </table>

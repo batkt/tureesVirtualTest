@@ -1,4 +1,10 @@
-const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinId) => {
+const khatuuZagvarUranGan = (
+  medeelel,
+  ajiltan,
+  baiguullaga,
+  barilga,
+  barilgiinId
+) => {
   return `
   <div style="display: block; height: 100%; width: 100%; page-break-after: always; h-[5.845in]; font-size: 0.75rem; line-height: 1rem;">
     <div style="display: flex; width: 100%; margin-top: 2rem;">
@@ -15,9 +21,15 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Байгууллагын нэр:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "УРАНГАН ХХК" : 
-                barilgiinId === "67a067eee87d437b4a45b39d" || barilgiinId === "67b6c9cbff52df36f5725515" ? "БЭСТТОВЕР ХХК" :
-                  baiguullaga.ner}
+            ${
+              barilgiinId === "679aea9032299b7ba8462a78" ||
+              barilgiinId === "67a067e8e87d437b4a45a4a1"
+                ? "УРАНГАН ХХК"
+                : barilgiinId === "67a067eee87d437b4a45b39d" ||
+                  barilgiinId === "67b6c9cbff52df36f5725515"
+                ? "БЭСТТОВЕР ХХК"
+                : baiguullaga.ner
+            }
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
@@ -65,13 +77,23 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Банкны нэр:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "УРАНГАН ХХК" : "БЭСТТОВЕР ХХК"}
+            ${
+              barilgiinId === "679aea9032299b7ba8462a78" ||
+              barilgiinId === "67a067e8e87d437b4a45a4a1"
+                ? "УРАНГАН ХХК"
+                : "БЭСТТОВЕР ХХК"
+            }
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Банкны дансны дугаар:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "1601003598" : "2105191070"}
+            ${
+              barilgiinId === "679aea9032299b7ba8462a78" ||
+              barilgiinId === "67a067e8e87d437b4a45a4a1"
+                ? "1601003598"
+                : "2105191070"
+            }
           </p>
         </div>
       </div>
@@ -280,9 +302,15 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Байгууллагын нэр:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "УРАНГАН ХХК" : 
-                barilgiinId === "67a067eee87d437b4a45b39d" || barilgiinId === "67b6c9cbff52df36f5725515" ? "БЭСТТОВЕР ХХК" :
-                  baiguullaga.ner}
+            ${
+              barilgiinId === "679aea9032299b7ba8462a78" ||
+              barilgiinId === "67a067e8e87d437b4a45a4a1"
+                ? "УРАНГАН ХХК"
+                : barilgiinId === "67a067eee87d437b4a45b39d" ||
+                  barilgiinId === "67b6c9cbff52df36f5725515"
+                ? "БЭСТТОВЕР ХХК"
+                : baiguullaga.ner
+            }
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
@@ -330,13 +358,23 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Банкны нэр:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "УРАНГАН ХХК" : "БЭСТТОВЕР ХХК"}
+            ${
+              barilgiinId === "679aea9032299b7ba8462a78" ||
+              barilgiinId === "67a067e8e87d437b4a45a4a1"
+                ? "УРАНГАН ХХК"
+                : "БЭСТТОВЕР ХХК"
+            }
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Банкны дансны дугаар:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${barilgiinId === "679aea9032299b7ba8462a78" || barilgiinId === "67a067e8e87d437b4a45a4a1" ? "1601003598" : "2105191070"}
+            ${
+              barilgiinId === "679aea9032299b7ba8462a78" ||
+              barilgiinId === "67a067e8e87d437b4a45a4a1"
+                ? "1601003598"
+                : "2105191070"
+            }
           </p>
         </div>
       </div>
@@ -407,7 +445,7 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
       </thead>
       <tbody>
       ${medeelel.zardluud
-        .filter(a => a.tailbar != "Хөнгөлөлт")
+        .filter((a) => a.tailbar != "Хөнгөлөлт")
         .sort((a, b) => {
           return a.tailbar.localeCompare(b.tailbar, "en", {
             sensitivity: "base",
@@ -428,8 +466,12 @@ const khatuuZagvarUranGan = (medeelel, ajiltan, baiguullaga, barilga, barilgiinI
               <td style="border: 1px solid #000; text-align: center;">${
                 mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
               }</td>
-              <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;</td>
-              <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;</td>
+              <td style="border: 1px solid #000; text-align: right;">&lt;${
+                mur.tailbar
+              }.khungulultKhassanTulukhDunNuat&gt;</td>
+              <td style="border: 1px solid #000; text-align: right;">&lt;${
+                mur.tailbar
+              }.khungulultKhassanTulukhDunNuatgui&gt;</td>
               <td style="border: 1px solid #000; text-align: right; width: 15%;">&lt;${
                 mur.tailbar
               }.khungulult&gt;</td>
