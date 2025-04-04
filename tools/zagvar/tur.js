@@ -1,193 +1,157 @@
 const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
   return `
-  <div style="height: 100%; width: 100%;">
+  <div style="height: 100%; width: 100%; font-family: Arial, sans-serif;">
     <div style="display: flex; justify-content: space-between;">
       <div style="display: block; align-items: flex-start;">
-        <div style="display: block;">
+        <div style="display: block; font-size: 14px; font-weight: bold;">
           НХМаягт Т-1
         </div>
       </div>
       <div style="display: block; align-items: flex-end; flex-direction: column;">
-        <div style="display: block;">
+        <div style="display: block; font-size: 12px;">
           Санхүү, эдийн засгийн сайд, Үндэсний
         </div>
-        <div style="display: block;">
+        <div style="display: block; font-size: 12px;">
           статистикийн газрын даргын 2017 оны 347
         </div>
-        <div style="display: block;">
+        <div style="display: block; font-size: 12px;">
           дугаар тушаалын хавсралт
         </div>
       </div>
     </div>
-    <div style="display: block; width: 65%; text-align: center;">
-      <b>НЭХЭМЖЛЭХ №</b>
+    <div style="display: block; width: 65%; text-align: center; margin-top: 20px;">
+      <b style="font-size: 16px;">НЭХЭМЖЛЭХ №</b>
     </div>
-    <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
-      <div style="display: block; width: 50%;">
-        <p style="font-weight: 600;">Нэхэмжлэгч:</p>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Байгууллагын нэр:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${barilgiinId === "6735c77a7fc60cd66deb290a" ? "Мастер Түншлэл ХХК" : baiguullaga.ner}
-          </p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+      <div style="padding: 15px; background-color: #fff;">
+        <p style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">Нэхэмжлэгч:</p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">Байгууллагын нэр:</span>
+          <span style="font-weight: bold; font-size: 12px;">${
+            barilgiinId === "6735c77a7fc60cd66deb290a"
+              ? "Мастер Түншлэл ХХК"
+              : baiguullaga.ner
+          }</span>
         </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Хаяг:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${baiguullaga?.khayag || ""}
-          </p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">Хаяг:</span>
+          <span style="font-weight: bold; font-size: 12px;">${
+            baiguullaga?.khayag || ""
+          }</span>
         </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Утас, Факс:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-          ${barilgiinId === "6735c77a7fc60cd66deb290a" ? "90088007" : barilgiinId === "67512183c60497546f59513a" ? "90611148"  : baiguullaga?.utas?.join(",")}
-          </p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">Утас, Факс:</span>
+          <span style="font-weight: bold; font-size: 12px;">${
+            barilgiinId === "6735c77a7fc60cd66deb290a"
+              ? "90088007"
+              : barilgiinId === "67512183c60497546f59513a"
+              ? "90611148"
+              : baiguullaga?.utas?.join(",")
+          }</span>
         </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">И-мэйл:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-          ${barilgiinId === "67512183c60497546f59513a" ? "gotofinance@master.mn" : baiguullaga?.mail?.join(",")}
-          </p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">И-мэйл:</span>
+          <span style="font-weight: bold; font-size: 12px;">${
+            barilgiinId === "67512183c60497546f59513a"
+              ? "gotofinance@master.mn"
+              : baiguullaga?.mail?.join(",")
+          }</span>
         </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Банкны нэр:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;bank&gt;
-          </p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">Банкны нэр:</span>
+          <span style="font-weight: bold; font-size: 12px;">&lt;bank&gt;</span>
         </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Банкны дансны дугаар:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;dans&gt;
-          </p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">Банкны дансны дугаар:</span>
+          <span style="font-weight: bold; font-size: 12px;">&lt;dans&gt;</span>
         </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">IBAN дугаар:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;ibanDugaar&gt;
-          </p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">IBAN дугаар:</span>
+          <span style="font-weight: bold; font-size: 12px;">&lt;ibanDugaar&gt;</span>
         </div>
       </div>
-      <div style="display: block; width: 50%;">
-        <p style="font-weight: 600;">Төлөгч:</p>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Иргэн:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;ner&gt;
-          </p>
+      <div style="padding: 15px; background-color: #fff; ">
+        <p style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">Төлөгч:</p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">Иргэн:</span>
+          <span style="font-weight: bold; font-size: 12px;">&lt;ner&gt;</span>
         </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Хаяг:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${medeelel?.khayag || ""}
-          </p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">Хаяг:</span>
+          <span style="font-weight: bold; font-size: 12px;">${
+            medeelel?.khayag || ""
+          }</span>
         </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Гэрээний №:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;gereeniiDugaar&gt;
-          </p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">Гэрээний №:</span>
+          <span style="font-weight: bold; font-size: 12px;">&lt;gereeniiDugaar&gt;</span>
         </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Нэхэмжилсэн огноо:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;ekhelkhSar&gt;/&lt;ekhlekhUdur&gt;/&lt;ekhlekhOn&gt;
-          </p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">Нэхэмжилсэн огноо:</span>
+          <span style="font-weight: bold; font-size: 12px;">&lt;ekhelkhSar&gt;/&lt;ekhlekhUdur&gt;/&lt;ekhlekhOn&gt;</span>
         </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Төлбөр хийх хугацаа:</p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;
-          </p>
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span style="color: #4b5563; font-size: 12px;">Төлбөр хийх хугацаа:</span>
+          <span style="font-weight: bold; font-size: 12px;">&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;</span>
         </div>
       </div>
     </div>
-    <table style="margin-top: 2rem; width: 100%;">
-      <thead style="background-color: #d1d5db; font-weight: 600;">
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px; border: 1px solid #000;">
+      <thead style="background-color: #d1d5db; font-weight: bold;">
         <tr>
-          <td style="border: 1px solid #000; text-align: center;">№</td>
-          <td style="border: 1px solid #000; text-align: center;">Материал</td>
-          <td style="border: 1px solid #000; text-align: center;">
-            Өмнөх заалт
-          </td>
-          <td style="border: 1px solid #000; text-align: center;">
-            Сүүлийн заалт
-          </td>
-          <td style="border: 1px solid #000; text-align: center;">НӨАТ</td>
-          <td style="border: 1px solid #000; text-align: center;">
-            НӨАТ-гүй дүн
-          </td>
-          <td style="border: 1px solid #000; text-align: center;">Хөнгөлөлт</td>
-          <td style="border: 1px solid #000; text-align: center;">Нийт дүн</td>
+          <td style="border: 1px solid #000; text-align: center; padding: 10px; font-size: 12px;">№</td>
+          <td style="border: 1px solid #000; text-align: center; padding: 10px; font-size: 12px;">Материал</td>
+          <td style="border: 1px solid #000; text-align: center; padding: 10px; font-size: 12px;">Өмнөх заалт</td>
+          <td style="border: 1px solid #000; text-align: center; padding: 10px; font-size: 12px;">Сүүлийн заалт</td>
+          <td style="border: 1px solid #000; text-align: center; padding: 10px; font-size: 12px;">НӨАТ</td>
+          <td style="border: 1px solid #000; text-align: center; padding: 10px; font-size: 12px;">НӨАТ-гүй дүн</td>
+          <td style="border: 1px solid #000; text-align: center; padding: 10px; font-size: 12px;">Хөнгөлөлт</td>
+          <td style="border: 1px solid #000; text-align: center; padding: 10px; font-size: 12px;">Нийт дүн</td>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td style="border: 1px solid #000; text-align: center; font-weight: 600;">
-            1
-          </td>
-          <td style="border: 1px solid #000; text-align: left;">
-            Өмнөх төлбөрийн үлдэгдэл
-          </td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;umnukhSariinUrTulburNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;umnukhSariinUrTulburNuatgui&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;umnukhSariinUrTulbur&gt;
-          </td>
+          <td style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 12px;">1</td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Өмнөх төлбөрийн үлдэгдэл</td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;umnukhSariinUrTulburNuat&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;umnukhSariinUrTulburNuatgui&gt;</td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;umnukhSariinUrTulbur&gt;</td>
         </tr>
         <tr>
-          <td style="border: 1px solid #000; text-align: center;">2</td>
-          <td style="border: 1px solid #000; text-align: left;">Барьцаа үлдэгдэл</td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;baritsaaUldegdelNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;baritsaaUldegdelNuatgui&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;baritsaaUldegdel&gt;
-          </td>
+          <td style="border: 1px solid #000; text-align: center; font-size: 12px;">2</td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Барьцаа үлдэгдэл</td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaUldegdelNuat&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaUldegdelNuatgui&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaUldegdel&gt;</td>
         </tr>
         <tr>
-          <td style="border: 1px solid #000; text-align: center;">3</td>
-          <td style="border: 1px solid #000; text-align: left;">Алданги</td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;aldangiinUldegdelNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;aldangiinUldegdelNuatgui&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;aldangiinUldegdel&gt;
-          </td>
+          <td style="border: 1px solid #000; text-align: center; font-size: 12px;">3</td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Алданги</td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;aldangiinUldegdelNuat&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;aldangiinUldegdelNuatgui&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;aldangiinUldegdel&gt;</td>
         </tr>
         <tr>
-          <td style="border: 1px solid #000; text-align: center;">4</td>
-          <td style="border: 1px solid #000; text-align: left;">
-            Түрээсийн төлбөр
-          </td>
-          <td style="border: 1px solid #000; text-align: center;"></td>
-          <td style="border: 1px solid #000; text-align: center;"></td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUneNuat&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUneNuatgui&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;khungulult&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
+          <td style="border: 1px solid #000; text-align: center; font-size: 12px;">4</td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Түрээсийн төлбөр</td>
+          <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;khungulsunTalbainNiitUneNuat&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;khungulsun TalbainNiitUneNuatgui&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;khungulult&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;khungulsunTalbainNiitUne&gt;</td>
         </tr>
         ${medeelel.zardluud
-          .filter(a => a.tailbar != "Хөнгөлөлт")
+          .filter((a) => a.tailbar != "Хөнгөлөлт")
           .sort((a, b) => {
             return a.tailbar.localeCompare(b.tailbar, "en", {
               sensitivity: "base",
@@ -196,24 +160,32 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           .map((mur, index) => {
             return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;">${
+                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${
                   index + 5
                 }</td>
-                <td style="border: 1px solid #000; text-align: left;">
-                  ${mur.tailbar}
-                </td>
-                <td style="border: 1px solid #000; text-align: left;">${
+                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
+                  mur.tailbar
+                }</td>
+                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
                   mur.umnukhZaalt === null ? "" : mur.umnukhZaalt
                 }</td>
-                <td style="border: 1px solid #000; text-align: left;">${
+                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
                   mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
                 }</td>
-                <td style="border: 1px solid #000; text-align: right;">${mur.nuatBodokh === 1 ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;` : ""} </td>
-                <td style="border: 1px solid #000; text-align: right;">${mur.nuatBodokh === 1 ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;` : ""}</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">${
+                  mur.nuatBodokh === 1
+                    ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;`
+                    : ""
+                }</td>
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">${
+                  mur.nuatBodokh === 1
+                    ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;`
+                    : ""
+                }</td>
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;${
                   mur.tailbar
                 }.khungulult&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;${
                   mur.tailbar
                 }.khungulultKhassanTulukhDun&gt;</td>
               </tr>
@@ -222,7 +194,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           .join("")} 
       </tbody>
       <tfoot>
-        <tr style="background-color: #d1d5db; font-weight: 600;">
+        <tr style="background-color: #d1d5db; font-weight: bold;">
           <td></td>
           <td></td>
           <td></td>
@@ -230,31 +202,35 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td></td>
           <td></td>
           <td></td>
-          <td style="text-align: right;">&lt;garaasBodsonNiitDun&gt;</td>
+          <td style="text-align: right; font-size: 12px;">&lt;garaasBodsonNiitDun&gt;</td>
         </tr>
-        <tr style="margin-top: 1rem;">
+        <tr>
           <td></td>
           <td></td>
           <td colspan="6">
-            <p>&lt;garaasBodsonNiitDunUsgeer&gt; болно</p>
+            <p style="font-size: 12px;">&lt;garaasBodsonNiitDunUsgeer&gt; болно</p>
           </td>
         </tr>
-        <tr style="margin-top: 1rem;">
+        <tr>
           <td></td>
           <td></td>
-          <td><p>Хүлээн авсан</p></td>
+          <td><p style="font-size: 12px;">Хүлээн авсан</p></td>
           <td></td>
-          <td><p>/${medeelel?.ovog?.[0] ? medeelel?.ovog?.[0] : ""}${medeelel?.ovog?.[0] ? "." : ""} ${medeelel?.ner}/</p></td>
+          <td><p style="font-size: 12px;">/${
+            medeelel?.ovog?.[0] ? medeelel?.ovog?.[0] : ""
+          }${medeelel?.ovog?.[0] ? "." : ""} ${medeelel?.ner}/</p></td>
           <td></td>
           <td></td>
           <td></td>
         </tr>
-        <tr style="margin-top: 1rem;">
+        <tr>
           <td></td>
           <td></td>
-          <td><p>Нэхэмжлэл бичсэн</p></td>
+          <td><p style="font-size: 12px;">Нэхэмжлэл бичсэн</p></td>
           <td></td>
-          <td><p>/${ajiltan?.ovog?.[0] ? ajiltan?.ovog?.[0] : ""}${ajiltan?.ovog?.[0] ? "." : ""} ${ajiltan?.ner}/</p></td>
+          <td><p style="font-size: 12px;">/${
+            ajiltan?.ovog?.[0] ? ajiltan?.ovog?.[0] : ""
+          }${ajiltan?.ovog?.[0] ? "." : ""} ${ajiltan?.ner}/</p></td>
           <td></td>
           <td></td>
           <td></td>
