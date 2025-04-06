@@ -55,7 +55,6 @@ import {
 } from "@ant-design/icons";
 import { Excel } from "antd-table-saveas-excel";
 import confirm from "antd/lib/modal/confirm";
-import useEBarimt from "hooks/useEBarimt";
 
 export function excelTatajAvya(
   token,
@@ -288,28 +287,6 @@ function Zogsool({ token }) {
     token,
     orlogoQuery
   );
-
-  const queryEBarimt = useMemo(() => {
-    const yavuulahQuery = {
-      ustgasanOgnoo: { $exists: false },
-      mashiniiDugaar: { $exists: true },
-      createdAt: {
-        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-      }
-    };
-    return yavuulahQuery;
-  }, [ognoo, tootsooKhelber]);
-  const { orderEBarimt } = useOrder({ createAt: -1 });
-  const searchKeysEBarimt = ["customerNo", "cashAmount", "billId", "id", "customerTin", "mashiniiDugaar", "gereeniiDugaar", "talbainDugaar"];
-  const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt, isValidatingEBarimt } =
-      useEBarimt(
-        barilgiinId && token,
-        baiguullaga?._id,
-        queryEBarimt,
-        orderEBarimt,
-        searchKeysEBarimt
-      );
 
   function tseverliy() {
     const songogdson = [...selectedRowkeys];
@@ -705,14 +682,11 @@ function Zogsool({ token }) {
         title: t("И-Баримт"),
         align: "right",
         width: "9rem",
-        dataIndex: "ebarimtDun",
+        dataIndex: "ebarimtAvsanDun",
         showSorterTooltip: false,
         sorter: () => 0,
-        render(v, data) {
-          var ebarimtDun = 0;
-          if(data.ebarimtAvsanEsekh)
-            ebarimtDun = eBarimtGaralt?.jagsaalt?.filter((a) => a.zogsooliinId === data._id).reduce((a, b) => a + (b.cashAmount || b.totalAmount), 0);
-          return data.ebarimtAvsanEsekh ? formatNumber(ebarimtDun, 0) : "";
+        render(v, parents) {
+          return v && formatNumber(v, 0);
         },
       },
       {
@@ -1310,14 +1284,12 @@ function Zogsool({ token }) {
                               },
                               {
                                 title: "И-Баримт",
+                                dataIndex: "ebarimtAvsanDun",
                                 __style__: { h: "right" },
                                 __numFmt__: "#,##0.00",
                                 __cellType__: "TypeNumeric",
                                 render: (v, data) => {
-                                  var ebarimtDun = 0;
-                                  if(data.ebarimtAvsanEsekh)
-                                    ebarimtDun = eBarimtGaralt?.jagsaalt?.filter((a) => a.zogsooliinId === data._id).reduce((a, b) => a + (b.cashAmount || b.totalAmount), 0);
-                                  return data.ebarimtAvsanEsekh ? ebarimtDun : 0;
+                                  return v || 0;
                                 },
                               },
                               {
@@ -1740,7 +1712,7 @@ function Zogsool({ token }) {
                         <AntdTable.Summary.Cell>
                           <div className="truncate text-right font-bold ">
                             {formatNumber(
-                              e?.reduce((a, b) => a + (b?.ebarimtAvsanEsekh ? eBarimtGaralt?.jagsaalt?.filter((a) => a.zogsooliinId === b._id).reduce((c, d) => c + (d.cashAmount || d.totalAmount), 0) : 0), 0),
+                              e?.reduce((a, b) => a + (b.ebarimtAvsanDun || 0), 0),
                               2
                             )}
                           </div>
@@ -1805,7 +1777,7 @@ function Zogsool({ token }) {
                         <AntdTable.Summary.Cell>
                           <div className="truncate text-right font-bold ">
                             {formatNumber(
-                              e?.reduce((a, b) => a + (b?.ebarimtAvsanEsekh ? eBarimtGaralt?.jagsaalt?.filter((a) => a.zogsooliinId === b._id).reduce((c, d) => c + (d.cashAmount || d.totalAmount), 0) : 0), 0),
+                              e?.reduce((a, b) => a + (b.ebarimtAvsanDun || 0), 0),
                               2
                             )}
                           </div>
