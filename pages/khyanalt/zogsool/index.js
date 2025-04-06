@@ -145,28 +145,6 @@ function Zogsool({ token }) {
 
   const shalgakhTsag = 18; //idevkhtei => todorkhoigui bolgoh shalguur tsag
 
-  const queryEBarimt = useMemo(() => {
-      const yavuulahQuery = {
-        ustgasanOgnoo: { $exists: false },
-        mashiniiDugaar: { $exists: true },
-        createdAt: {
-          $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-          $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-        }
-      };
-      return yavuulahQuery;
-    }, [ognoo]);
-  const { orderEBarimt } = useOrder({ createAt: -1 });
-  const searchKeysEBarimt = ["customerNo", "cashAmount", "billId", "id", "customerTin", "mashiniiDugaar", "gereeniiDugaar", "talbainDugaar"];
-  const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt, isValidatingEBarimt } =
-      useEBarimt(
-        barilgiinId && token,
-        baiguullaga?._id,
-        queryEBarimt,
-        orderEBarimt,
-        searchKeysEBarimt
-      );
-
   const [shaltgaan, setShaltgaan] = useState("Цэвэрлэсэн");
   const [tootsooKhelber, setTootsooKhelber] = useState("");
   const rowSelection = {
@@ -311,6 +289,28 @@ function Zogsool({ token }) {
     orlogoQuery
   );
 
+  const queryEBarimt = useMemo(() => {
+    const yavuulahQuery = {
+      ustgasanOgnoo: { $exists: false },
+      mashiniiDugaar: { $exists: true },
+      createdAt: {
+        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+      }
+    };
+    return yavuulahQuery;
+  }, [ognoo, tootsooKhelber]);
+  const { orderEBarimt } = useOrder({ createAt: -1 });
+  const searchKeysEBarimt = ["customerNo", "cashAmount", "billId", "id", "customerTin", "mashiniiDugaar", "gereeniiDugaar", "talbainDugaar"];
+  const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt, isValidatingEBarimt } =
+      useEBarimt(
+        barilgiinId && token,
+        baiguullaga?._id,
+        queryEBarimt,
+        orderEBarimt,
+        searchKeysEBarimt
+      );
+
   function tseverliy() {
     const songogdson = [...selectedRowkeys];
     if (songogdson && songogdson.length > 0) {
@@ -344,6 +344,7 @@ function Zogsool({ token }) {
                     duration: 2,
                   });
                   uilchluulegchMutate();
+                  eBarimtMutate();
                   tseverlekh();
                 }
               })
@@ -1032,11 +1033,18 @@ function Zogsool({ token }) {
       khuudasniiNer="zogsool"
       className="p-0 md:p-4"
       onSearch={(search) =>
-        setUilchluulegchKhuudaslalt((a) => ({
-          ...a,
-          search,
-          khuudasniiDugaar: 1,
-        }))
+        {
+          setUilchluulegchKhuudaslalt((a) => ({
+            ...a,
+            search,
+            khuudasniiDugaar: 1,
+          }));
+          setEBarimtKhuudaslalt((a) => ({
+            ...a,
+            search,
+            khuudasniiDugaar: 1,
+          }))
+        }
       }
       tsonkhniiId="61c2c7481c2830c4e6f90ce1"
       loading={isValidating}
@@ -1706,11 +1714,18 @@ function Zogsool({ token }) {
                       total: uilchluulegchGaralt?.niitMur,
                       showSizeChanger: true,
                       onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                      {
                         setUilchluulegchKhuudaslalt((kh) => ({
                           ...kh,
                           khuudasniiDugaar,
                           khuudasniiKhemjee,
-                        })),
+                        }));
+                        setEBarimtKhuudaslalt((kh) => ({
+                          ...kh,
+                          khuudasniiDugaar,
+                          khuudasniiKhemjee,
+                        }))
+                      }
                     }}
                     summary={(e) => (
                       <AntdTable.Summary className="border " fixed={'bottom'}>
@@ -1770,11 +1785,18 @@ function Zogsool({ token }) {
                       total: uilchluulegchGaralt?.niitMur,
                       showSizeChanger: true,
                       onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                      {
                         setUilchluulegchKhuudaslalt((kh) => ({
                           ...kh,
                           khuudasniiDugaar,
                           khuudasniiKhemjee,
-                        })),
+                        }));
+                        setEBarimtKhuudaslalt((kh) => ({
+                          ...kh,
+                          khuudasniiDugaar,
+                          khuudasniiKhemjee,
+                        }))
+                      }
                     }}
                     summary={(e) => (
                       <AntdTable.Summary className="border " fixed={'bottom'}>
