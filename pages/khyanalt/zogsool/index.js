@@ -55,6 +55,7 @@ import {
 } from "@ant-design/icons";
 import { Excel } from "antd-table-saveas-excel";
 import confirm from "antd/lib/modal/confirm";
+import useEBarimt from "hooks/useEBarimt";
 
 export function excelTatajAvya(
   token,
@@ -143,6 +144,28 @@ function Zogsool({ token }) {
   };
 
   const shalgakhTsag = 18; //idevkhtei => todorkhoigui bolgoh shalguur tsag
+
+  const queryEBarimt = useMemo(() => {
+      const yavuulahQuery = {
+        ustgasanOgnoo: { $exists: false },
+        mashiniiDugaar: { $exists: true },
+        createdAt: {
+          $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+          $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+        }
+      };
+      return yavuulahQuery;
+    }, [ognoo]);
+  const { orderEBarimt } = useOrder({ createAt: -1 });
+  const searchKeysEBarimt = ["customerNo", "cashAmount", "billId", "id", "customerTin", "mashiniiDugaar", "gereeniiDugaar", "talbainDugaar"];
+  const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt, isValidatingEBarimt } =
+      useEBarimt(
+        barilgiinId && token,
+        baiguullaga?._id,
+        queryEBarimt,
+        orderEBarimt,
+        searchKeysEBarimt
+      );
 
   const [shaltgaan, setShaltgaan] = useState("Цэвэрлэсэн");
   const [tootsooKhelber, setTootsooKhelber] = useState("");
@@ -681,12 +704,13 @@ function Zogsool({ token }) {
         title: t("И-Баримт"),
         align: "right",
         width: "9rem",
+        dataIndex: "ebarimtDun",
         showSorterTooltip: false,
         sorter: () => 0,
         render(v, data) {
           var ebarimtDun = 0;
-          if(data.ebarimtAvsanEsekh && data.tuukh[0]?.tulbur?.length > 0)
-            ebarimtDun = data.tuukh[0]?.tulbur?.reduce((a, b) => a + (b.dun || 0), 0);
+          if(data.ebarimtAvsanEsekh)
+            ebarimtDun = eBarimtGaralt?.jagsaalt?.filter((a) => a.zogsooliinId === data._id).reduce((a, b) => a + (b.cashAmount || b.totalAmount), 0);
           return data.ebarimtAvsanEsekh ? formatNumber(ebarimtDun, 0) : "";
         },
       },
@@ -1290,8 +1314,8 @@ function Zogsool({ token }) {
                                 __cellType__: "TypeNumeric",
                                 render: (v, data) => {
                                   var ebarimtDun = 0;
-                                  if(data.ebarimtAvsanEsekh && data.tuukh[0]?.tulbur?.length > 0)
-                                    ebarimtDun = data.tuukh[0]?.tulbur?.reduce((a, b) => a + (b.dun || 0), 0);
+                                  if(data.ebarimtAvsanEsekh)
+                                    ebarimtDun = eBarimtGaralt?.jagsaalt?.filter((a) => a.zogsooliinId === data._id).reduce((a, b) => a + (b.cashAmount || b.totalAmount), 0);
                                   return data.ebarimtAvsanEsekh ? ebarimtDun : 0;
                                 },
                               },
@@ -1714,7 +1738,7 @@ function Zogsool({ token }) {
                         <AntdTable.Summary.Cell>
                           <div className="truncate text-right font-bold ">
                             {formatNumber(
-                              e?.reduce((a, b) => a + (b?.ebarimtAvsanEsekh ? b?.tuukh[0]?.tulbur?.reduce((c, d) => c + (d.dun || 0), 0) : 0), 0),
+                              e?.reduce((a, b) => a + (b?.ebarimtAvsanEsekh ? eBarimtGaralt?.jagsaalt?.filter((a) => a.zogsooliinId === b._id).reduce((c, d) => c + (d.cashAmount || d.totalAmount), 0) : 0), 0),
                               2
                             )}
                           </div>
@@ -1778,7 +1802,7 @@ function Zogsool({ token }) {
                         <AntdTable.Summary.Cell>
                           <div className="truncate text-right font-bold ">
                             {formatNumber(
-                              e?.reduce((a, b) => a + (b?.ebarimtAvsanEsekh ? b?.tuukh[0]?.tulbur?.reduce((c, d) => c + (d.dun || 0), 0) : 0), 0),
+                              e?.reduce((a, b) => a + (b?.ebarimtAvsanEsekh ? eBarimtGaralt?.jagsaalt?.filter((a) => a.zogsooliinId === b._id).reduce((c, d) => c + (d.cashAmount || d.totalAmount), 0) : 0), 0),
                               2
                             )}
                           </div>
