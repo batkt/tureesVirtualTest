@@ -268,7 +268,7 @@ function Zogsool({ token }) {
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
-  } = useUilchluulegch(token, baiguullaga?._id, query, order, or);
+  } = useUilchluulegch(token, baiguullaga?._id, query, order, or, 500);
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
 
@@ -510,7 +510,7 @@ function Zogsool({ token }) {
         title: "№",
         align: "center",
         dataIndex: "dugaar",
-        width: "2rem",
+        width: "3rem",
         render: (text, record, index) =>
           (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
             (uilchluulegchGaralt?.khuudasniiKhemjee || 0) -
@@ -1033,18 +1033,11 @@ function Zogsool({ token }) {
       khuudasniiNer="zogsool"
       className="p-0 md:p-4"
       onSearch={(search) =>
-        {
-          setUilchluulegchKhuudaslalt((a) => ({
-            ...a,
-            search,
-            khuudasniiDugaar: 1,
-          }));
-          setEBarimtKhuudaslalt((a) => ({
-            ...a,
-            search,
-            khuudasniiDugaar: 1,
-          }))
-        }
+        setUilchluulegchKhuudaslalt((a) => ({
+          ...a,
+          search,
+          khuudasniiDugaar: 1,
+        }))
       }
       tsonkhniiId="61c2c7481c2830c4e6f90ce1"
       loading={isValidating}
@@ -1710,22 +1703,16 @@ function Zogsool({ token }) {
                     onChange={onChangeTable}
                     pagination={{
                       current: uilchluulegchGaralt?.khuudasniiDugaar,
-                      pageSize: uilchluulegchGaralt?.khuudasniiKhemjee,
                       total: uilchluulegchGaralt?.niitMur,
+                      pageSizeOptions: [100, 300, 500],
+                      defaultPageSize: [500],
                       showSizeChanger: true,
                       onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                      {
                         setUilchluulegchKhuudaslalt((kh) => ({
                           ...kh,
                           khuudasniiDugaar,
                           khuudasniiKhemjee,
-                        }));
-                        setEBarimtKhuudaslalt((kh) => ({
-                          ...kh,
-                          khuudasniiDugaar,
-                          khuudasniiKhemjee,
-                        }))
-                      }
+                        })),
                     }}
                     summary={(e) => (
                       <AntdTable.Summary className="border " fixed={'bottom'}>
@@ -1781,22 +1768,16 @@ function Zogsool({ token }) {
                     onChange={onChangeTable}
                     pagination={{
                       current: uilchluulegchGaralt?.khuudasniiDugaar,
-                      pageSize: uilchluulegchGaralt?.khuudasniiKhemjee,
                       total: uilchluulegchGaralt?.niitMur,
+                      pageSizeOptions: [100, 300, 500],
+                      defaultPageSize: [500],
                       showSizeChanger: true,
                       onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                      {
                         setUilchluulegchKhuudaslalt((kh) => ({
                           ...kh,
                           khuudasniiDugaar,
                           khuudasniiKhemjee,
-                        }));
-                        setEBarimtKhuudaslalt((kh) => ({
-                          ...kh,
-                          khuudasniiDugaar,
-                          khuudasniiKhemjee,
-                        }))
-                      }
+                        })),
                     }}
                     summary={(e) => (
                       <AntdTable.Summary className="border " fixed={'bottom'}>
