@@ -224,7 +224,7 @@ function KhuviinMedeelel({
             <div className="box">
               <div className="flex items-center p-3">
                 <div className="border-l-2 border-green-500 pl-4">
-                  <div className="font-medium">{t("Хөнгөлөлтийн өдөр тохируулах")}</div>
+                  <div className="font-medium">{t("Ашиглалтын төлбөрөөс хөнгөлөлт бодох эсэх")}</div>
                   <div className="text-gray-600"></div>
                 </div>
                 <div className="ml-auto">
