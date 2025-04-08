@@ -23,10 +23,30 @@ function KhuviinMedeelel({
   const [khungulukhKhuvi, setKhungulukhKhuvi] = useState(baiguullaga?.tokhirgoo?.deedKhungulultiinKhuvi);
   const [sarBurAutoKhungulultOruulakhEsekh, setSarBurAutoKhungulultOruulakhEsekh] = useState(baiguullaga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh);
   const [khungulukhSarBuriinShalguurDun, setKhungulukhSarBuriinShalguurDun] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinShalguurDun ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinShalguurDun : 0);
-  const [khungulukhSarBuriinTurul, setKhungulukhSarBuriinTurul] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinTurul ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinTurul : "khuvi");
+  const [khungulukhSarBuriinTurul, setKhungulukhSarBuriinTurul] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinTurul ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinTurul : "");
   const [khungulukhSarBuriinUtga, setKhungulukhSarBuriinUtga] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinUtga ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinUtga : 0);
-
+  const [khungulukhSarBuriinTulburEkhlekhUdur, setKhungulukhSarBuriinTulburEkhlekhUdur] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur : 0);
+  const [khungulukhSarBuriinTulburDuusakhUdur, setKhungulukhSarBuriinTulburDuusakhUdur] = useState(baiguullaga?.tokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur ? baiguullaga?.tokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur : 0);
+  
   const khungulultiinTokhirgooKhadgalya = () => {
+    if(sarBurAutoKhungulultOruulakhEsekh)
+    {
+      if(khungulukhSarBuriinTulburEkhlekhUdur === 0)   
+      {
+        notification.warning({ message: t("Хөнгөлөлт тооцож эхлэх өдрөө оруулна уу!!!") });
+        return
+      }
+      if(khungulukhSarBuriinTulburDuusakhUdur === 0)   
+      {
+        notification.warning({ message: t("Хөнгөлөлт тооцож дуусах өдрөө оруулна уу!!!") });
+        return
+      }
+      if(!khungulukhSarBuriinTurul)
+      {
+        notification.warning({ message: t("Хөнгөлөх төрлөө сонгож өгнө үү!!") });
+        return
+      }
+    }
     uilchilgee(token)
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: khungulultiinTokhirgoo })
       .then(({ data }) => {
@@ -138,6 +158,92 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
+          {sarBurAutoKhungulultOruulakhEsekh && (
+            <div className="box">
+              <div className="flex items-center p-3">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{t("Хөнгөлөлтийн өдөр тохируулах")}</div>
+                  <div className="text-gray-600"></div>
+                </div>
+                <div className="ml-auto">
+                  <InputNumber
+                    value={khungulukhSarBuriinTulburEkhlekhUdur}
+                    min={1}
+                    onChange={(v) => {
+                      setKhungulultiinTokhirgoo((a) => ({
+                        ...(a || {}),
+                        khungulukhSarBuriinTulburEkhlekhUdur: v,
+                      }))
+                      setKhungulukhSarBuriinTulburEkhlekhUdur(v)
+                    }
+                    }
+                  />
+                </div>
+                <div className="ml-auto">
+                  <InputNumber
+                    value={khungulukhSarBuriinTulburDuusakhUdur}
+                    min={1}
+                    onChange={(v) => {
+                      setKhungulultiinTokhirgoo((a) => ({
+                        ...(a || {}),
+                        khungulukhSarBuriinTulburDuusakhUdur: v,
+                      }))
+                      setKhungulukhSarBuriinTulburDuusakhUdur(v)
+                    }
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+          {sarBurAutoKhungulultOruulakhEsekh && (
+            <div className="box">
+              <div className="flex items-center p-3">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{t("Түрээсийн төлбөрөөс хөнгөлөлт бодох эсэх")}</div>
+                  <div className="text-gray-600"></div>
+                </div>
+                <div className="ml-auto">
+                  <Switch
+                    defaultChecked={
+                      baiguullaga?.tokhirgoo?.tureesiinDungeesKhungulukhEsekh
+                    }
+                    onChange={(v) => {
+                        setKhungulultiinTokhirgoo((a) => ({
+                          ...(a || {}),
+                          tureesiinDungeesKhungulukhEsekh: v,
+                        }))
+                      }
+                    }
+                  /> 
+                </div>
+              </div>
+            </div>
+          )}
+          {sarBurAutoKhungulultOruulakhEsekh && (
+            <div className="box">
+              <div className="flex items-center p-3">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{t("Хөнгөлөлтийн өдөр тохируулах")}</div>
+                  <div className="text-gray-600"></div>
+                </div>
+                <div className="ml-auto">
+                  <Switch
+                    defaultChecked={
+                      baiguullaga?.tokhirgoo?.ashiglaltDungeesKhungulukhEsekh
+                    }
+                    onChange={(v) => {
+                        setKhungulultiinTokhirgoo((a) => ({
+                          ...(a || {}),
+                          ashiglaltDungeesKhungulukhEsekh: v,
+                        }))
+                      }
+                    }
+                  /> 
+                </div>
+              </div>
+            </div>
+          )}
           {sarBurAutoKhungulultOruulakhEsekh && (
             <div className="box">
               <div className="flex items-center p-3">
