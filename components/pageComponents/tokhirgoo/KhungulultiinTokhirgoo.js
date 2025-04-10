@@ -14,8 +14,7 @@ function KhuviinMedeelel({
   setSongogdsonTsonkhniiIndex
 }) {
   const { t } = useTranslation()
-  const barilga = useMemo(() => baiguullaga?.barilguud?.find((a) => a._id === barilgiinId), [barilgiinId]);
-
+  
   const { ajilchdiinGaralt, ajiltniiJagsaaltMutate } = useAjiltniiJagsaalt(
     token,
     ajiltan?.baiguullagiinId
@@ -26,45 +25,47 @@ function KhuviinMedeelel({
   const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState();
   
   useEffect(() => {
-      if (barilga) {
-        setBarilgaTokhirgoo({
-          ...barilga?.tokhirgoo,
-          sarBurAutoKhungulultOruulakhEsekh: barilga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
-            ? barilga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
-            : undefined,
-          khungulukhSarBuriinShalguurDun: barilga?.tokhirgoo?.khungulukhSarBuriinShalguurDun
-            ? barilga?.tokhirgoo?.khungulukhSarBuriinShalguurDun
-            : undefined,
-          khungulukhSarBuriinTurul: barilga?.tokhirgoo?.khungulukhSarBuriinTurul
-            ? barilga?.tokhirgoo?.khungulukhSarBuriinTurul
-            : undefined,
-          khungulukhSarBuriinUtga: barilga?.tokhirgoo?.khungulukhSarBuriinUtga
-            ? barilga?.tokhirgoo?.khungulukhSarBuriinUtga
-            : undefined,
-          khungulukhSarBuriinTulburEkhlekhUdur: barilga?.tokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur
-            ? barilga?.tokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur
-            : undefined,
-          khungulukhSarBuriinTulburDuusakhUdur: barilga?.tokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur
-            ? barilga?.tokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur
-            : undefined,
-        });
-      }
-    }, [barilga]);
+    console.log("log ---->" + barilgiinId);
+    var barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
+    if (barilga) {
+      setBarilgaTokhirgoo({
+        ...barilga?.tokhirgoo,
+        sarBurAutoKhungulultOruulakhEsekh: barilga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
+          ? barilga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
+          : undefined,
+        khungulukhSarBuriinShalguurDun: barilga?.tokhirgoo?.khungulukhSarBuriinShalguurDun
+          ? barilga?.tokhirgoo?.khungulukhSarBuriinShalguurDun
+          : undefined,
+        khungulukhSarBuriinTurul: barilga?.tokhirgoo?.khungulukhSarBuriinTurul
+          ? barilga?.tokhirgoo?.khungulukhSarBuriinTurul
+          : undefined,
+        khungulukhSarBuriinUtga: barilga?.tokhirgoo?.khungulukhSarBuriinUtga
+          ? barilga?.tokhirgoo?.khungulukhSarBuriinUtga
+          : undefined,
+        khungulukhSarBuriinTulburEkhlekhUdur: barilga?.tokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur
+          ? barilga?.tokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur
+          : undefined,
+        khungulukhSarBuriinTulburDuusakhUdur: barilga?.tokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur
+          ? barilga?.tokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur
+          : undefined,
+      });
+    }
+  }, [barilgiinId]);
 
   const khungulultiinTokhirgooKhadgalya = () => {
     if(barilgaTokhirgoo)
     {
-      if(!barilgaTokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur || barilgaTokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur === 0)   
+      if(barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh && !barilgaTokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur || barilgaTokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur === 0)   
       {
         notification.warning({ message: t("Хөнгөлөлт тооцож эхлэх өдрөө оруулна уу!!!") });
         return
       }
-      if(!barilgaTokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur || barilgaTokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur === 0)   
+      if(barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh && !barilgaTokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur || barilgaTokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur === 0)   
       {
         notification.warning({ message: t("Хөнгөлөлт тооцож дуусах өдрөө оруулна уу!!!") });
         return
       }
-      if(!barilgaTokhirgoo?.khungulukhSarBuriinTurul)
+      if(barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh && !barilgaTokhirgoo?.khungulukhSarBuriinTurul)
       {
         notification.warning({ message: t("Хөнгөлөх төрлөө сонгож өгнө үү!!") });
         return
@@ -187,14 +188,14 @@ function KhuviinMedeelel({
             </div>
           </div>
           <div className="box">
-            <div className="flex items-center p-3">
+            <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">{t("Автомат хөнгөлөлт идэвхжүүлэх")}</div>
-                <div className="text-gray-600">{t("Сар бүр тогтмол өдөр буюу түрээсийн авлагын дараагийн өдөр хөнгөлөлт үүсгэх боломж идэвхжүүлэх")}</div>
+                <div className="text-gray-600">{t("Сар бүрийн тогтмол өдрөөр авлагын хөнгөлөлт тохируулах")}</div>
               </div>
               <div className="ml-auto">
                 <Switch
-                  defaultChecked={
+                  value={
                     barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
                   }
                   onChange={(v) =>
@@ -209,7 +210,7 @@ function KhuviinMedeelel({
           </div>
           {barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh && (
             <div className="box">
-              <div className="flex items-center p-3">
+              <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">
                   <div className="font-medium">{t("Хөнгөлөлтийн өдөр тохируулах")}</div>
                   <div className="text-gray-600"></div>
@@ -243,7 +244,7 @@ function KhuviinMedeelel({
           )}
           {barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh && (
             <div className="box">
-              <div className="flex items-center p-3">
+              <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">
                   <div className="font-medium">{t("Түрээсийн төлбөрөөс хөнгөлөлт бодох эсэх")}</div>
                   <div className="text-gray-600"></div>
@@ -266,7 +267,7 @@ function KhuviinMedeelel({
           )}
           {barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh && (
             <div className="box">
-              <div className="flex items-center p-3">
+              <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">
                   <div className="font-medium">{t("Ашиглалтын төлбөрөөс хөнгөлөлт бодох эсэх")}</div>
                   <div className="text-gray-600"></div>
@@ -289,7 +290,7 @@ function KhuviinMedeelel({
           )}
           {barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh && (
             <div className="box">
-              <div className="flex items-center p-3">
+              <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">
                   <div className="font-medium">{t("Хөнгөлөлт бодох шалгуурын дээд мөнгөн дүн тохируулах")}</div>
                   <div className="text-gray-600">{t("Өмнөх сарын авлагын үлдэгдлийг шалгуурын дээд мөнгөн дүнтэй харьцуулж хөнгөлөлт идэвхжүүлэх")}</div>
@@ -316,7 +317,7 @@ function KhuviinMedeelel({
           )}
           {barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh && (
             <div className="box">
-              <div className="flex items-center p-3">
+              <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">
                   <div className="font-medium">{t("Хөнгөлөх төрөл")}</div>
                   <div className="text-gray-600"></div>
@@ -345,7 +346,7 @@ function KhuviinMedeelel({
           )}
           {barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh && (
             <div className="box">
-              <div className="flex items-center p-3">
+              <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">
                   <div className="font-medium">{barilgaTokhirgoo?.khungulukhSarBuriinTurul === "khuvi" ? t("Хөнгөлөх хувь") : t("Хөнгөлөх дүн")}</div>
                   <div className="text-gray-600"></div>
