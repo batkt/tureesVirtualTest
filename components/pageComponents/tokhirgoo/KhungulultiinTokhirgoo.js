@@ -14,7 +14,7 @@ function KhuviinMedeelel({
   setSongogdsonTsonkhniiIndex
 }) {
   const { t } = useTranslation()
-  
+  const barilga = useMemo(() => baiguullaga?.barilguud?.find((a) => a._id === barilgiinId), [barilgiinId]);
   const { ajilchdiinGaralt, ajiltniiJagsaaltMutate } = useAjiltniiJagsaalt(
     token,
     ajiltan?.baiguullagiinId
@@ -26,7 +26,6 @@ function KhuviinMedeelel({
   
   useEffect(() => {
     console.log("log ---->" + barilgiinId);
-    var barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
     if (barilga) {
       setBarilgaTokhirgoo({
         ...barilga?.tokhirgoo,
