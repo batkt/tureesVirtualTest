@@ -294,6 +294,22 @@ function camera({ token }) {
     streamQuery
   );
 
+  const zurchilteiMashinMsgilgeekh = (mashiniiDugaar) => {
+    console.log("------------->>" +  mashiniiDugaar);
+    let yavuulakhData = {
+      baiguullagiinId: baiguullaga?._id,
+      barilgiinId: barilgiinId,
+      mashiniiDugaar: mashiniiDugaar,
+    };
+    console.log("zurchil --->>");
+    uilchilgee(token)
+      .post("/zurchilteiMashinMsgilgeekh", yavuulakhData)
+      .then((res) => {
+        if (res.status === 200) notification.success({ message: t("Амжилттай илгээгдлээ") });
+      })
+      .catch(aldaaBarigch);
+  };
+
   const songogdzonZogsoolOrokh = useMemo(() => {
     var zogsool = {};
     if (parkingJagsaalt && camerVal[0]) {
@@ -531,6 +547,8 @@ function camera({ token }) {
             khaalgaNeey(uilchluulegch?.cameraIP);
             onRefresh();
           }
+          if(baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
+            zurchilteiMashinMsgilgeekh(yanzalsanMashiniiDugaar);
         } else {
           const garsanKhaalga = uilchluulegch?.tuukh?.[0]?.garsanKhaalga;
           // var yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
@@ -1863,6 +1881,8 @@ function camera({ token }) {
             }));
             setKhaikh("");
           }
+          if(baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
+            zurchilteiMashinMsgilgeekh(body?.mashiniiDugaar);
           form.resetFields();
           onRefresh();
         }

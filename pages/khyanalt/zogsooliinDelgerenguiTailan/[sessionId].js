@@ -276,6 +276,16 @@ function TulburiinDelgerenguiTailan({ token}) {
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
+            case "Авлага":
+                ugugdul.push({
+                  ner: "Авлага",
+                  icon: "/budgeting.png",
+                  // icon: "/eWalletIcon.png",
+                  dun: element.niitDun,
+                  too: element.niitToo,
+                  khuvi: 100,
+                });
+                break;  
             case "Үнэгүй":
               ugugdul.push({
                 ner: "Үнэгүй",
@@ -670,6 +680,14 @@ function TulburiinDelgerenguiTailan({ token}) {
                   ) + "₮"}
                 </div>
               </div>
+              {baiguullagaIdgaarAvya?.tokhirgoo?.zurchulMsgeerSanuulakh && (
+                <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
+                  <div className="flex ">Зөрчилтэй авлага:</div>
+                  <div>
+                    {formatNumber(zogsoolTulburMedeelel?.filter((c) => c._id === "Авлага").reduce((a, b) => a + b.niitDun, 0) || 0) + "₮"}
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="flex h-52 w-full items-center justify-center">

@@ -136,6 +136,7 @@ function Zogsool({ token }) {
   const [zogsoolId, setZogsoolId] = useState();
   const [tulbur, setTulbur] = useState("");
   const [tuluv, setTuluv] = useState("");
+  const [tuluvZurchil, setTuluvZurchil] = useState("");
   const [ajiltniiNers, setAjiltniiNers] = useState([]);
   const [selectedRowkeys, setSelectedRowkeys] = useState([]);
   const onSelectChange = (newSelectedRowKeys) => {
@@ -144,17 +145,200 @@ function Zogsool({ token }) {
 
   const shalgakhTsag = 18; //idevkhtei => todorkhoigui bolgoh shalguur tsag
 
+  const streamQuery = useMemo(() => {
+    var query = {
+      baiguullagiinId: baiguullaga?._id,
+      barilgiinId: barilgiinId,
+      createdAt: {
+        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+      },
+    };
+    if(tuluvZurchil === 0)
+      query["tuluv"] = 0;
+    else if(tuluvZurchil === 1)
+      query["tuluv"] = 1;
+    return query;
+  }, [baiguullaga?._id, barilgiinId, tuluvZurchil, ognoo]);
+
+  const orderZurchil = { createdAt: -1 };
+  const searchKeysZurchil = ["mashiniiDugaar"];
+
+  const { jagsaalt: zurchilteiJagsaalt, mutate: zurchilteiMutate, setKhuudaslalt } = useJagsaalt(
+    "/zurchilteiMashin",
+    streamQuery,
+    orderZurchil,
+    null,
+    searchKeysZurchil,
+  );
+
+  const columnsZurchil = useMemo(() => {
+    return [
+      {
+        title: "№",
+        align: "center",
+        dataIndex: "dugaar",
+        width: "3rem",
+        render: (text, record, index) =>
+          (zurchilteiJagsaalt?.khuudasniiDugaar || 0) *
+            (zurchilteiJagsaalt?.khuudasniiKhemjee || 0) -
+          (zurchilteiJagsaalt?.khuudasniiKhemjee || 0) +
+          index +
+          1,
+      },
+      {
+        title: t("Огноо"),
+        align: "center",
+        width: "8rem",
+        dataIndex: "createdAt",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render(v, parents) {
+          return v && moment(v).format("YYYY-MM-DD HH:mm");
+        },
+      },
+      {
+        title: t("Орсон"),
+        align: "center",
+        width: "8rem",
+        dataIndex: "orsonTsag",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render(v, parents) {
+          return v && moment(v).format("YYYY-MM-DD HH:mm");
+        },
+      },
+      {
+        title: t("Гарсан"),
+        align: "center",
+        width: "8rem",
+        dataIndex: "garsanTsag",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render(v, parents) {
+          return v && moment(v).format("YYYY-MM-DD HH:mm");
+        },
+      },
+      {
+        title: t("Дугаар"),
+        align: "center",
+        width: "6rem",
+        dataIndex: "mashiniiDugaar",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Хугацаа/мин"),
+        align: "center",
+        width: "8rem",
+        ellipsis: true,
+        dataIndex: "niitKhugatsaa",
+      },
+      {
+        title: t("Орсон хаалга"),
+        align: "center",
+        width: "8rem",
+        dataIndex: "orsonKhaalga",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Гарсан хаалга"),
+        align: "center",
+        width: "8rem",
+        dataIndex: "garsanKhaalga",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Төлбөр"),
+        align: "right",
+        width: "9rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        dataIndex: "niitDun",
+        render(v, parents) {
+          return v && formatNumber(v, 0);
+        },
+      },
+      {
+        title: (
+          <Popover
+            placement="bottom"
+            content={
+              <div className="space-y-2">
+                <div
+                  onClick={() => {
+                    setTuluvZurchil("");
+                  }}
+                  className={`relative ${
+                    tuluvZurchil === "" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Бүгд")}
+                </div>
+                <div
+                  onClick={() => {
+                    setTuluvZurchil(1);
+                  }}
+                  className={`relative ${
+                    tuluvZurchil === 1 && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Төлсөн")}
+                </div>
+                <div
+                  onClick={() => {
+                    setTuluvZurchil(0);
+                  }}
+                  className={`relative ${
+                    tuluvZurchil === 0 && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Төлөөгүй")}
+                </div>
+              </div>
+            }
+          >
+            <div
+              className={`flex cursor-pointer items-center justify-center gap-3`}
+            >
+              <FilterOutlined className="text-lg text-green-600" />
+              {t("Төлөв")}
+            </div>
+          </Popover>
+        ),
+        align: "center",
+        width: "4rem",
+        dataIndex: "tuluv",
+        showSorterTooltip: false,
+        render(v) {
+          return (
+            <div className={`${v === 1 ? "bg-green-500 text-white dark:bg-green-700" : "bg-red-500 text-white dark:bg-red-700"} flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}>
+              {v === 1 ? "Төлсөн" : "Төлөөгүй"}
+            </div>
+          );
+        },
+      },
+    ];
+  }, [tuluvZurchil])
+
   const [shaltgaan, setShaltgaan] = useState("Цэвэрлэсэн");
   const [tootsooKhelber, setTootsooKhelber] = useState("");
   const rowSelection = {
     selectedRowKeys: selectedRowkeys,
     onChange: onSelectChange,
     getCheckboxProps: (record) => {
-      const untraakh =
-        !record?.tuukh?.[0]?.uneguiGarsan && !record?.tuukh?.[0]?.garsanKhaalga;
-      return {
-        disabled: !untraakh,
-      };
+      if(baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh && tootsooKhelber == 3)
+        return {
+          disabled: record?.tuluv === 1,
+        };
+      else
+      {
+        const untraakh = !record?.tuukh?.[0]?.uneguiGarsan && !record?.tuukh?.[0]?.garsanKhaalga;
+        return {
+          disabled: !untraakh,
+        };    
+      }
     },
   };
 
@@ -308,24 +492,45 @@ function Zogsool({ token }) {
         onOk: () => {
           if (!shaltgaan) {
             notification.warn({ message: "Тайлбар оруулна уу", duration: 2 });
-          } else {
-            uilchilgee(token)
-              .post("/uilchluulegchTseverliy", {
-                utguud: songogdson,
-                shaltgaan: shaltgaan,
-              })
-              .then(({ data }) => {
-                if (data === "Amjilttai") {
-                  notification.success({
-                    message: "Амжилттай цэвэрлэгдлээ",
-                    duration: 2,
-                  });
-                  uilchluulegchMutate();
-                  eBarimtMutate();
-                  tseverlekh();
-                }
-              })
-              .catch((err) => aldaaBarigch(err));
+          } 
+          else 
+          {
+            if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh && tootsooKhelber == 3) {
+              uilchilgee(token)
+                .post("/zurchiluudTulsunBolgoy", {
+                  utguud: songogdson,
+                  shaltgaan: shaltgaan,
+                })
+                .then(({ data }) => {
+                  if (data === "Amjilttai") {
+                    notification.success({
+                      message: "Амжилттай",
+                      duration: 2,
+                    });
+                    zurchilteiMutate();
+                    tseverlekh();
+                  }
+                })
+                .catch((err) => aldaaBarigch(err));
+            }
+            else
+              uilchilgee(token)
+                .post("/uilchluulegchTseverliy", {
+                  utguud: songogdson,
+                  shaltgaan: shaltgaan,
+                })
+                .then(({ data }) => {
+                  if (data === "Amjilttai") {
+                    notification.success({
+                      message: "Амжилттай цэвэрлэгдлээ",
+                      duration: 2,
+                    });
+                    uilchluulegchMutate();
+                    eBarimtMutate();
+                    tseverlekh();
+                  }
+                })
+                .catch((err) => aldaaBarigch(err));
           }
         },
       });
@@ -1007,11 +1212,18 @@ function Zogsool({ token }) {
       khuudasniiNer="zogsool"
       className="p-0 md:p-4"
       onSearch={(search) =>
-        setUilchluulegchKhuudaslalt((a) => ({
-          ...a,
-          search,
-          khuudasniiDugaar: 1,
-        }))
+        {
+          setUilchluulegchKhuudaslalt((a) => ({
+            ...a,
+            search,
+            khuudasniiDugaar: 1,
+          }));
+          setKhuudaslalt((a) => ({
+            ...a,
+            search,
+            khuudasniiDugaar: 1,
+          }));  
+        }
       }
       tsonkhniiId="61c2c7481c2830c4e6f90ce1"
       loading={isValidating}
@@ -1172,7 +1384,89 @@ function Zogsool({ token }) {
                     // }}
                     onClick={() => {
                       const excel = new Excel();
-                      uilchilgee(token)
+                      if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh && tootsooKhelber == 3) {
+                        uilchilgee(token)
+                        .get("zurchilteiMashin", {
+                          params: {
+                            order: orderZurchil,
+                            query: { ...streamQuery, },
+                            khuudasniiKhemjee: zurchilteiJagsaalt?.niitMur,
+                          },
+                        })
+                        .then(({ data }) => {
+                          excel
+                            .addSheet("Зөрчил сануулах жагсаалт")
+                            .addColumns([
+                              {
+                                title: "Огноо",
+                                __style__: { h: "center" },
+                                dataIndex: "createdAt",
+                                render: (v) => {
+                                  return (v && moment(v).format("YYYY-MM-DD HH:mm"));
+                                },
+                              },
+                              {
+                                title: "Орсон",
+                                __style__: { h: "center" },
+                                dataIndex: "orsonTsag",
+                                render: (v) => {
+                                  return (v && moment(v).format("YYYY-MM-DD HH:mm"));
+                                },
+                              },
+                              {
+                                title: "Гарсан",
+                                dataIndex: "garsanTsag",
+                                __style__: { h: "center" },
+                                render: (v) => {
+                                  return (v && moment(v).format("YYYY-MM-DD HH:mm"));
+                                },
+                              },
+                              {
+                                title: "Дугаар",
+                                __style__: { h: "center" },
+                                dataIndex: "mashiniiDugaar",
+                                render: (v) => {
+                                  return v && String(v).toUpperCase();
+                                },
+                              },
+                              {
+                                title: "Хугацаа/мин",
+                                __style__: { h: "center" },
+                                dataIndex: "niitKhugatsaa",
+                              },
+                              {
+                                title: t("Орсон хаалга"),
+                                dataIndex: "orsonKhaalga",
+                                __style__: { h: "center" },
+                              },
+                              {
+                                title: t("Гарсан хаалга"),
+                                dataIndex: "garsanKhaalga",
+                                __style__: { h: "center" },
+                              },
+                              {
+                                title: "Төлбөр",
+                                dataIndex: "niitDun",
+                                __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
+                              },
+                              {
+                                title: "Төлөв",
+                                __style__: { h: "center" },
+                                dataIndex: "tuluv",
+                                render: (v) => {
+                                  return v === 1 ? "Төлсөн" : "Төлөөгүй";
+                                },
+                              }
+                            ])
+                            .addDataSource(data?.jagsaalt)
+                            .saveAs("Зөрчил сануулах жагсаалт.xlsx");
+                        })
+                        .catch((aldaa) => aldaaBarigch(aldaa));    
+                      }
+                      else
+                        uilchilgee(token)
                         .get("zogsoolUilchluulegch", {
                           params: {
                             order: order,
@@ -1788,8 +2082,58 @@ function Zogsool({ token }) {
 
                 ),
               },
+              baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh ? {
+                key: "3", 
+                label: "Зөрчил сануулах",
+                children: (
+                  <Table
+                    className="mt-8 hidden overflow-auto md:block"
+                    tableLayout="auto"
+                    loading={!zurchilteiJagsaalt}
+                    dataSource={zurchilteiJagsaalt}
+                    scroll={{ y: "calc(100vh - 30rem)" }}
+                    size="small"
+                    bordered
+                    rowSelection={rowSelection}
+                    rowKey={"_id"}
+                    columns={columnsZurchil}
+                    onChange={onChangeTable}
+                    pagination={{
+                      current: zurchilteiJagsaalt?.khuudasniiDugaar,
+                      total: zurchilteiJagsaalt?.niitMur,
+                      pageSizeOptions: [100, 300, 500],
+                      defaultPageSize: [500],
+                      showSizeChanger: true,
+                      onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                        setKhuudaslalt((kh) => ({
+                          ...kh,
+                          khuudasniiDugaar,
+                          khuudasniiKhemjee,
+                        })),
+                    }}
+                    summary={(e) => (
+                      <AntdTable.Summary className="border " fixed={'bottom'}>
+                        <AntdTable.Summary.Cell colSpan={9}>
+                          <div className="space-x-2 truncate text-base font-bold ">
+                            Нийт
+                          </div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold ">
+                            {formatNumber(
+                              e?.reduce((a, b) => a + (b.niitDun || 0), 0),
+                              2
+                            )}
+                          </div>
+                        </AntdTable.Summary.Cell>
+                      </AntdTable.Summary>
+                    )}
+                  />
+
+                ),
+              } : null
             ]}
-            onChange={(v) => setTootsooKhelber(v)}
+            onChange={(v) => setTootsooKhelber(v) }
           />
           <CardList
             cardListTuluv={"utas"}
