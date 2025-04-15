@@ -162,12 +162,15 @@ function ShineTulbur(
   useKeyboardTovchlol("F3", f3darsan);
 
   function f4Darsan() {
-    if (tulbur.length === 0) {
-      turulruuTooKhiikhFunction("belen");
-    }
-    alkham === 1 ? batalgaajuulaltKhiiya() : (!loading && ebarimtAvya(uilchluugchiinId));
-    if (alkham === 1 && eBarimtAshiglakhEsekh === true) {
-      eBarimtAutomataarShivikh ? (!loading && ebarimtAvya(uilchluugchiinId)) : setAlkham(2);
+    if(alkham === 1)
+    {
+      if (tulbur.length === 0) {
+        turulruuTooKhiikhFunction("belen");
+      }
+      alkham === 1 ? batalgaajuulaltKhiiya() : (!loading && ebarimtAvya(uilchluugchiinId));
+      if (alkham === 1 && eBarimtAshiglakhEsekh === true) {
+        eBarimtAutomataarShivikh ? (!loading && ebarimtAvya(uilchluugchiinId)) : setAlkham(2);
+      }
     }
   }
   function f3darsan() {
