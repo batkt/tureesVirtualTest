@@ -1135,18 +1135,17 @@ function AjiltanBurtgel({ token }) {
                           },
                           { title: t("Нэр"), dataIndex: "ner", ellipsis: true },
                           {
+                            title: t("Утас"),
+                            dataIndex: "utas",
+                            __style__: { h: "center" },
+                          },
+                          {
                             title: t("Хаяг"),
                             dataIndex: "khayag",
-                            ellipsis: true,
-                            width: "5rem",
                           },
-
                           {
                             title: t("И-мэйл"),
                             dataIndex: "mail",
-                            ellipsis: true,
-                            width: "5rem",
-                            align: "center",
                           },
                           {
                             title: t("Төлөв"),
