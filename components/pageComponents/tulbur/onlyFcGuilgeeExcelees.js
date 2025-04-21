@@ -76,6 +76,7 @@ function GuilgeeExceleesOruulakhOlnoor(
             ognoo: moment(ognoo).format("YYYY-MM-DD HH:mm:ss"),
             zardliinId: ashiglaltiinId,
             zardliinNer: "Цахилгаан",
+            talbainId: item.talbainId,
             talbainDugaar: item.talbainDugaar,
             suuliinZaalt: item.suuliinZaalt,
             guidliinKoep: item.guidliinKoep,
