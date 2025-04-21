@@ -113,6 +113,14 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t, ajiltan, baiguullaga
           "төгрөг",
           "мөнгө"
         );
+
+        medeelel.niitAvlagaUldegdelUsgeer = numberToWords(
+          medeelel.niitAvlagaUldegdel * (medeelel.niitAvlagaUldegdel < 0 ? -1 : 1),
+          { fixed: 2, suffix: "n" },
+          "төгрөг",
+          "мөнгө"
+        );
+
         medeelel.talbainNiitUneUsgeer = numberToWords(
           medeelel?.talbainNiitUne *
             (medeelel?.talbainNiitUne < 0 ? -1 : 1),
@@ -138,6 +146,9 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t, ajiltan, baiguullaga
           dans?.bank === "bogd" ? "Богд банк" :
           dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
         medeelel.dansniiNer = dans?.dansniiNer;
+        medeelel.niitAvlagaUldegdel = formatNumber(
+          medeelel.niitAvlagaUldegdel || 0
+        );
         medeelel.aldangiinUldegdel = formatNumber(
           medeelel.aldangiinUldegdel || 0
         );

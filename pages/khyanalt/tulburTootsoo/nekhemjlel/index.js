@@ -246,6 +246,12 @@ function tulburTootsoo({ token }) {
               "төгрөг",
               "мөнгө"
             );
+            medeelel.niitAvlagaUldegdelUsgeer = numberToWords(
+              medeelel.niitAvlagaUldegdel * (medeelel.niitAvlagaUldegdel < 0 ? -1 : 1),
+              { fixed: 2, suffix: "n" },
+              "төгрөг",
+              "мөнгө"
+            );
             medeelel.talbainNiitUneUsgeer = numberToWords(
               medeelel?.talbainNiitUne *
                 (medeelel?.talbainNiitUne < 0 ? -1 : 1),
@@ -271,6 +277,7 @@ function tulburTootsoo({ token }) {
               dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "";
             medeelel.dansniiNer = dans?.dansniiNer;
             medeelel.ibanDugaar = dans?.ibanDugaar;
+            medeelel.niitAvlagaUldegdel = formatNumber(medeelel.niitAvlagaUldegdel || 0);
             medeelel.aldangiinUldegdel = medeelel.aldangiinUldegdel || 0;
             medeelel.aldangiinUldegdelNuat = ((medeelel.aldangiinUldegdel || 0) / 1.1) * 0.1;
             medeelel.aldangiinUldegdelNuatgui = formatNumber(medeelel.aldangiinUldegdel - medeelel.aldangiinUldegdelNuat || 0);
@@ -1032,6 +1039,13 @@ function tulburTootsoo({ token }) {
         "төгрөг",
         "мөнгө"
       );
+
+      nekhemjlekh.niitAvlagaUldegdelUsgeer = numberToWords(
+        nekhemjlekh.niitAvlagaUldegdel * (nekhemjlekh.niitAvlagaUldegdel < 0 ? -1 : 1),
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
       nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
         nekhemjlekh.talbainNiitUneUsgeer *
           (nekhemjlekh.talbainNiitUneUsgeer < 0 ? -1 : 1),
@@ -1094,6 +1108,7 @@ function tulburTootsoo({ token }) {
       nekhemjlekh.ibanDugaar = dans?.ibanDugaar;
       nekhemjlekh.khayag = nekhemjlekh.khayag || "";
       nekhemjlekh.aldangiinUldegdel = nekhemjlekh.aldangiinUldegdel || 0;
+      nekhemjlekh.niitAvlagaUldegdel = formatNumber(nekhemjlekh.niitAvlagaUldegdel || 0);
       nekhemjlekh.aldangiinUldegdelNuat = ((nekhemjlekh.aldangiinUldegdel || 0) / 1.1) * 0.1;
       nekhemjlekh.aldangiinUldegdelNuatgui = formatNumber(nekhemjlekh.aldangiinUldegdel - nekhemjlekh.aldangiinUldegdelNuat || 0);
       nekhemjlekh.aldangiinUldegdelNuat = formatNumber(nekhemjlekh.aldangiinUldegdelNuat || 0);
@@ -1415,6 +1430,12 @@ function tulburTootsoo({ token }) {
           "төгрөг",
           "мөнгө"
         );
+        nekhemjlekh.niitAvlagaUldegdelUsgeer = numberToWords(
+          nekhemjlekh.niitAvlagaUldegdel * (nekhemjlekh.niitAvlagaUldegdel < 0 ? -1 : 1),
+          { fixed: 2, suffix: "n" },
+          "төгрөг",
+          "мөнгө"
+        );
         nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
           nekhemjlekh?.talbainNiitUne *
             (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
@@ -1503,6 +1524,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.dansniiNer = dans?.dansniiNer;
         nekhemjlekh.ibanDugaar = dans?.ibanDugaar;
         nekhemjlekh.khayag = nekhemjlekh.khayag || "";
+        nekhemjlekh.niitAvlagaUldegdel = formatNumber(nekhemjlekh.niitAvlagaUldegdel || 0);
         nekhemjlekh.aldangiinUldegdel = nekhemjlekh.aldangiinUldegdel || 0;
         nekhemjlekh.aldangiinUldegdelNuat = ((nekhemjlekh.aldangiinUldegdel || 0) / 1.1) * 0.1;
         nekhemjlekh.aldangiinUldegdelNuatgui = formatNumber(nekhemjlekh.aldangiinUldegdel - nekhemjlekh.aldangiinUldegdelNuat || 0);
@@ -2053,6 +2075,12 @@ function tulburTootsoo({ token }) {
             "төгрөг",
             "мөнгө"
           );
+          medeelel.niitAvlagaUldegdelUsgeer = numberToWords(
+            medeelel.niitAvlagaUldegdel * (medeelel.niitAvlagaUldegdel < 0 ? -1 : 1),
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
           medeelel.talbainNiitUneUsgeer = numberToWords(
             medeelel?.talbainNiitUne * (medeelel?.talbainNiitUne < 0 ? -1 : 1),
             { fixed: 2, suffix: "n" },
@@ -2110,6 +2138,7 @@ function tulburTootsoo({ token }) {
           medeelel.sariinTurees = formatNumber(medeelel.sariinTurees);
           medeelel.eneSardTulukhDun = formatNumber(medeelel.eneSardTulukhDun);
           medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel);
+          medeelel.niitAvlagaUldegdel = formatNumber(medeelel.niitAvlagaUldegdel || 0);
           medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne);
           medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne);
           medeelel.umnukhSariinUrTulbur = formatNumber(
@@ -2196,6 +2225,12 @@ function tulburTootsoo({ token }) {
 
       nekhemjlekh.niitUldegdelUsgeer = numberToWords(
         nekhemjlekh.niitUldegdel * (nekhemjlekh.niitUldegdel < 0 ? -1 : 1),
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
+      nekhemjlekh.niitAvlagaUldegdelUsgeer = numberToWords(
+        nekhemjlekh.niitAvlagaUldegdel * (nekhemjlekh.niitAvlagaUldegdel < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
