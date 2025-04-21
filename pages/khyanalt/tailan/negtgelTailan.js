@@ -78,6 +78,11 @@ function negtgelTailan({ token }) {
               return moment(data).format("YYYY-MM-DD");
             };
           }
+          if (JSON.stringify(e.dataIndex) === JSON.stringify(["_id", "utas"])) {
+            column.render = (val, data) => {
+                return data?._id?.utas?.join(",");
+            };
+          }
           return column;
         });
       }, [shineBagana]);
