@@ -208,9 +208,17 @@ function GereeBaiguulakh({ token }) {
     if (!baiguullaga?.barilguud) baiguullaga.barilguud = [];
     if (barilga === "new") baiguullaga?.barilguud.push(burtgekhBarilga);
     else {
-      const { _id } = _.get(baiguullaga, `barilguud.${barilga}`);
-      _.set(burtgekhBarilga, `_id`, _id);
-      _.set(baiguullaga, `barilguud.${barilga}`, burtgekhBarilga);
+      _.set(baiguullaga, `barilguud.${barilga}.ner`, burtgekhBarilga?.ner);
+      _.set(baiguullaga, `barilguud.${barilga}.register`, burtgekhBarilga?.register);
+      _.set(baiguullaga, `barilguud.${barilga}.davkhar`, burtgekhBarilga?.davkhar);
+      _.set(baiguullaga, `barilguud.${barilga}.bdavkhar`, burtgekhBarilga?.bdavkhar);
+      _.set(baiguullaga, `barilguud.${barilga}.niitTalbai`, burtgekhBarilga?.niitTalbai);
+      _.set(baiguullaga, `barilguud.${barilga}.neekhTsag`, burtgekhBarilga?.neekhTsag);
+      _.set(baiguullaga, `barilguud.${barilga}.khaakhTsag`, burtgekhBarilga?.khaakhTsag);
+      _.set(baiguullaga, `barilguud.${barilga}.khayag`, burtgekhBarilga?.khayag);
+      _.set(baiguullaga, `barilguud.${barilga}.bairshil`, burtgekhBarilga?.bairshil);
+      _.set(baiguullaga, `barilguud.${barilga}.davkharuud`, burtgekhBarilga?.davkharuud);
+
       if (burtgekhBarilga?.licenseRegister) {
         _.set(baiguullaga, "licenseRegister", burtgekhBarilga?.licenseRegister);
       }
