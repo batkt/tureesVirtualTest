@@ -71,6 +71,7 @@ const tulburiinTalbaruud = [
   { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
   { ner: "Алдангын үлдэгдэл", talbar: "aldangiinUldegdel" },
+  { ner: "Нийт авлагын үлдэгдэл", talbar: "niitAvlagaUldegdel" },
 ];
 
 const nekhemjlekhiinTalbaruud = [
@@ -83,6 +84,7 @@ const nekhemjlekhiinTalbaruud = [
   { ner: "Өмнөх хуримтлагдсан өр төлбөр", talbar: "umnukhSariinUrTulbur" },
   { ner: "Энэ сард төлөх үсгээр", talbar: "eneSardTulukhUsgeer" },
   { ner: "Нийт үлдэгдэл үсгээр", talbar: "niitUldegdelUsgeer" },
+  { ner: "Нийт авлагын үлдэгдэл үсгээр", talbar: "niitAvlagaUldegdelUsgeer" },
 ];
 
 const nekhemjlekhiinNemelt = [
