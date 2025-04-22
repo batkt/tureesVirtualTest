@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import {
   DatePicker,
   message,
@@ -8,10 +8,11 @@ import {
   Tooltip,
   Button,
   Table,
+  Input,
   InputNumber,
 } from "antd";
 
-import { InboxOutlined } from "@ant-design/icons";
+import { InboxOutlined, SearchOutlined } from "@ant-design/icons";
 import uilchilgee, { url } from "services/uilchilgee";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import locale from "antd/lib/date-picker/locale/mn_MN";
@@ -41,6 +42,75 @@ function GuilgeeExceleesOruulakhOlnoor(
   const [ashiglaltiinId, setGereeniiZagvar] = React.useState(null);
   const [aldaa, setAldaa] = React.useState(null);
   const [nuatBodokhEsekh, setNuatBodokhEsekh] = React.useState(true);
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (newSelectedRowKeys) => {
+      setSelectedRowKeys(newSelectedRowKeys);
+    },
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          placeholder={`Хайх утга`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => {
+            confirm();
+            setSearchText(selectedKeys[0]);
+            setSearchedColumn(dataIndex);
+          }}
+          style={{ marginBottom: 8, display: "block" }}
+        />
+        <div className="space-x-2">
+          <Button
+            type="primary"
+            onClick={() => {
+              confirm();
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+            icon={<SearchOutlined />}
+            size="small"
+          >
+            Хайх
+          </Button>
+          <Button
+            onClick={() => {
+              clearFilters();
+              setSearchText("");
+              confirm();
+            }}
+            size="small"
+          >
+            Цэвэрлэх
+          </Button>
+        </div>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]?.toString().toLowerCase().includes(value.toLowerCase()),
+  });
+
+  const filteredData = data.filter((item) =>
+    item.talbainDugaar?.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   const fetchData = async () => {
     if (!ognoo) {
@@ -160,6 +230,7 @@ function GuilgeeExceleesOruulakhOlnoor(
       title: t("Талбайн Дугаар"),
       dataIndex: "talbainDugaar",
       key: "talbainDugaar",
+      // ...getColumnSearchProps("talbainDugaar"),
     },
     {
       title: t("Тоолуурын Дугаар"),
@@ -293,12 +364,20 @@ function GuilgeeExceleesOruulakhOlnoor(
               {t("Заалт татах")}
             </a>
           )}
-
+          <div className="mt-4 flex items-center justify-between">
+            <Input
+              placeholder="Талбайн дугаараар хайх..."
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              style={{ width: 200 }}
+            />
+          </div>
           <div className="mt-5" />
           <Table
             columns={columns}
-            dataSource={data}
+            dataSource={filteredData}
             rowKey="tooluuriinDugaar"
+            rowSelection={rowSelection}
             pagination={true}
             style={{ marginTop: "20px" }}
           />

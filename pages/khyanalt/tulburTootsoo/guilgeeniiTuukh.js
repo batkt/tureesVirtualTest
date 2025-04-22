@@ -1007,11 +1007,11 @@ function guilgeeniiTuukh({ token }) {
   function olnoorGuilgeeOruulakhExcelFc() {
     const footer = [
       <Space>
-        
         <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
       </Space>,
     ];
     modal({
+      width: "800px",
       title: "",
       icon: <FileExcelOutlined />,
       content: (
