@@ -459,7 +459,7 @@ function Admin({
           <div className="flex w-full flex-row justify-between md:w-auto md:space-x-3 lg:space-x-6">
             {token && baiguullaga?._id && barilgiinId && (
               <div className="hidden h-8 items-center justify-center md:flex ">
-                <MsgToololt token={token} baiguullagiinId={baiguullaga?._id} barilgiinId={barilgiinId} />
+                <MsgToololt token={token} baiguullagiinId={baiguullaga?._id} barilgiinId={barilgiinId} msgNegjUne={baiguullaga?.tokhirgoo?.msgNegjUne || 100}/>
               </div>
             )}
             {tsonkhniiId && (
