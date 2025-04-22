@@ -8,20 +8,24 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import formatNumber from "tools/function/formatNumber";
 
 function MsgToololt({ token, baiguullagiinId, barilgiinId, msgNegjUne }) {
-  
   const { order } = useOrder({ createdAt: -1 });
   const [ognoonuud, setOgnoonuud] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const query = useMemo(() => {
-    return { 
-      baiguullagiinId: baiguullagiinId, 
-      barilgiinId: barilgiinId, 
-      createdAt: ognoonuud?.length > 0
-        ? {
-            $gte: moment(ognoonuud[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(ognoonuud[1]).endOf("month").format("YYYY-MM-DD 23:59:59"),
-          }
-        : undefined,
+    return {
+      baiguullagiinId: baiguullagiinId,
+      barilgiinId: barilgiinId,
+      createdAt:
+        ognoonuud?.length > 0
+          ? {
+              $gte: moment(ognoonuud[0])
+                .startOf("month")
+                .format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(ognoonuud[1])
+                .endOf("month")
+                .format("YYYY-MM-DD 23:59:59"),
+            }
+          : undefined,
     };
   }, [ognoonuud, barilgiinId]);
 
@@ -31,11 +35,18 @@ function MsgToololt({ token, baiguullagiinId, barilgiinId, msgNegjUne }) {
   }, [msjTuukh, ognoonuud]);
 
   const zogsool = useMemo(() => {
-    return msjTuukh?.jagsaalt?.filter((a) => !!a.mashiniiDugaar && !a.turul)?.length || 0;
+    return (
+      msjTuukh?.jagsaalt?.filter((a) => !!a.mashiniiDugaar && !a.turul)
+        ?.length || 0
+    );
   }, [msjTuukh, ognoonuud]);
 
   const zogsoolAvlaga = useMemo(() => {
-    return msjTuukh?.jagsaalt?.filter((a) => !!a.mashiniiDugaar && a.turul === "zurchil")?.length || 0;
+    return (
+      msjTuukh?.jagsaalt?.filter(
+        (a) => !!a.mashiniiDugaar && a.turul === "zurchil"
+      )?.length || 0
+    );
   }, [msjTuukh, ognoonuud]);
 
   const geree = useMemo(() => {
@@ -57,20 +68,30 @@ function MsgToololt({ token, baiguullagiinId, barilgiinId, msgNegjUne }) {
   if (!!msjTuukh)
     return (
       <div className="cursor-pointer" style={{ lineHeight: 0 }}>
-        Мессеж: 
-        <Tooltip title={t("Мессеж")} className="font-bold text-green-500 p-1" onClick={toololtKharya}>
+        Мессеж:
+        <Tooltip
+          title={t("Мессеж")}
+          className="p-1 font-bold text-green-500"
+          onClick={toololtKharya}
+        >
           {niitToo}
         </Tooltip>
-        <Modal 
-          open={modalOpen} 
-          className="p-0" 
-          title={t("Мессеж дэлгэрэнгүй")} 
-          okText={t("Хаах")} 
+        <Modal
+          open={modalOpen}
+          className="p-0"
+          title={t("Мессеж дэлгэрэнгүй")}
+          okText={t("Хаах")}
           cancelButtonProps={{ style: { display: "none" } }}
           style={{ minWidth: "10vw" }}
           onCancel={handleCancel}
-          closeIcon={<div className={`flex p-4 text-xl hover:text-red-400`}> <CloseCircleOutlined /> </div>}
-          footer={false}>
+          closeIcon={
+            <div className={`flex p-4 text-xl hover:text-red-400`}>
+              {" "}
+              <CloseCircleOutlined />{" "}
+            </div>
+          }
+          footer={false}
+        >
           <div>
             <DatePicker.RangePicker
               allowClear={false}
@@ -81,39 +102,70 @@ function MsgToololt({ token, baiguullagiinId, barilgiinId, msgNegjUne }) {
                 setOgnoonuud(v);
               }}
             />
-            <table className="border-2 border-gray-500 w-full mt-2">
+            <table className="mt-2 w-full border-2 border-gray-500">
               <thead>
-                <tr className="bg-gray-400 text-white text-center">
+                <tr className="bg-gray-400 text-center text-white">
                   <td className="border border-gray-400 text-mashJijigiinJijig"></td>
-                  <td className="border border-gray-400 text-mashJijigiinJijig">Тоо</td>
-                  <td className="border border-gray-400 text-mashJijigiinJijig">Нэгж</td>
+                  <td className="border border-gray-400 text-mashJijigiinJijig">
+                    Тоо
+                  </td>
+                  <td className="border border-gray-400 text-mashJijigiinJijig">
+                    Нэгж
+                  </td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="border border-gray-400 text-mashJijigiinJijig">Гэрээ</td>
-                  <td className="border border-gray-400 text-mashJijigiinJijig text-center">{geree}</td>
-                  <td className="border border-gray-400 text-mashJijigiinJijig text-center" rowSpan={4}>{msgNegjUne}</td>
+                  <td className="border border-gray-400 text-mashJijigiinJijig">
+                    Гэрээ
+                  </td>
+                  <td className="border border-gray-400 text-center text-mashJijigiinJijig">
+                    {geree}
+                  </td>
+                  <td
+                    className="border border-gray-400 text-center text-mashJijigiinJijig"
+                    rowSpan={4}
+                  >
+                    {msgNegjUne}
+                  </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-400 text-mashJijigiinJijig">Зогсоол</td>
-                  <td className="border border-gray-400 text-mashJijigiinJijig text-center">{zogsool}</td>
+                  <td className="border border-gray-400 text-mashJijigiinJijig">
+                    Зогсоол
+                  </td>
+                  <td className="border border-gray-400 text-center text-mashJijigiinJijig">
+                    {zogsool}
+                  </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-400 text-mashJijigiinJijig">Зогсоолын Авлага</td>
-                  <td className="border border-gray-400 text-mashJijigiinJijig text-center">{zogsoolAvlaga}</td>
+                  <td className="border border-gray-400 text-mashJijigiinJijig">
+                    Зогсоолын Авлага
+                  </td>
+                  <td className="border border-gray-400 text-center text-mashJijigiinJijig">
+                    {zogsoolAvlaga}
+                  </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-400 text-mashJijigiinJijig">Гараас</td>
-                  <td className="border border-gray-400 text-mashJijigiinJijig text-center">{busad}</td>
+                  <td className="border border-gray-400 text-mashJijigiinJijig">
+                    Гараас
+                  </td>
+                  <td className="border border-gray-400 text-center text-mashJijigiinJijig">
+                    {busad}
+                  </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-400 text-mashJijigiinJijig">Нийт</td>
-                  <td className="border border-gray-400 text-mashJijigiinJijig text-center">{niitToo}</td>
-                  <td className="border border-gray-400 text-mashJijigiinJijig text-right font-bold">{formatNumber(msgNegjUne * niitToo, 2)}₮</td>
+                  <td className="border border-gray-400 text-mashJijigiinJijig">
+                    Нийт
+                  </td>
+                  <td className="border border-gray-400 text-center text-mashJijigiinJijig">
+                    {niitToo}
+                  </td>
+                  <td className="border border-gray-400 text-right text-mashJijigiinJijig font-bold">
+                    {formatNumber(msgNegjUne * niitToo, 2)}₮
+                  </td>
                 </tr>
-              </tbody>	
-            </table> 
+              </tbody>
+            </table>
           </div>
         </Modal>
       </div>

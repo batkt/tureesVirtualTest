@@ -1027,6 +1027,11 @@ function guilgeeniiTuukh({ token }) {
           zagvariinZam="tooluurZaaltZagvarAvya"
         />
       ),
+      bodyStyle: {
+        maxHeight: "80vh",
+        overflowY: "auto",
+        paddingRight: "12px",
+      },
       footer,
     });
   }

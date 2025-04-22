@@ -12,8 +12,10 @@ import {
   InputNumber,
 } from "antd";
 
+import uilchilgee, { aldaaBarigch } from "../../../services/uilchilgee";
+
 import { InboxOutlined, SearchOutlined } from "@ant-design/icons";
-import uilchilgee, { url } from "services/uilchilgee";
+// import uilchilgee, { url } from "services/uilchilgee";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import _ from "lodash";
@@ -46,6 +48,7 @@ function GuilgeeExceleesOruulakhOlnoor(
   const [searchedColumn, setSearchedColumn] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const rowSelection = {
     selectedRowKeys,
@@ -108,9 +111,13 @@ function GuilgeeExceleesOruulakhOlnoor(
       record[dataIndex]?.toString().toLowerCase().includes(value.toLowerCase()),
   });
 
-  const filteredData = data.filter((item) =>
-    item.talbainDugaar?.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  const filteredData = data.filter((item) => {
+    const search = searchValue.toLowerCase();
+    return (
+      item.talbainDugaar?.toLowerCase().includes(search) ||
+      item.tooluuriinDugaar?.toLowerCase().includes(search)
+    );
+  });
 
   const fetchData = async () => {
     if (!ognoo) {
@@ -118,6 +125,8 @@ function GuilgeeExceleesOruulakhOlnoor(
       return;
     }
     try {
+      setLoading(true);
+
       const response = await uilchilgee(token).post("/tooluurMedeelelTatya", {
         ognoo: moment(ognoo).format("YYYY-MM-DD HH:mm:ss"),
       });
@@ -129,46 +138,46 @@ function GuilgeeExceleesOruulakhOlnoor(
       console.error("Алдаа:", error);
       message.error("Өгөгдөл татахад алдаа гарлаа!");
     } finally {
+      setLoading(false);
     }
   };
 
   const handleSave = async () => {
-    try {
-      const payload = {
-        ashiglaltiinId: ashiglaltiinId,
-        barilgiinId: barilgiinId,
-        nuatBodokhEsekh: nuatBodokhEsekh,
-        jagsaalt: data
-          .filter((item) => item.guidliinKoep > 0)
-          .map((item) => ({
-            baiguullagiinId: baiguullaga._id,
-            barilgiinId: barilgiinId,
-            ognoo: moment(ognoo).format("YYYY-MM-DD HH:mm:ss"),
-            zardliinId: ashiglaltiinId,
-            zardliinNer: "Цахилгаан",
-            talbainId: item.talbainId,
-            talbainDugaar: item.talbainDugaar,
-            suuliinZaalt: item.suuliinZaalt,
-            guidliinKoep: item.guidliinKoep,
-          })),
-      };
+    const hadgalakhJagsaalt = data
+      .filter((item) => selectedRowKeys.includes(item.tooluuriinDugaar))
+      .map((item) => ({
+        baiguullagiinId: baiguullaga._id,
+        barilgiinId,
+        ognoo: moment(ognoo).format("YYYY-MM-DD HH:mm:ss"),
+        zardliinId: ashiglaltiinId,
+        zardliinNer: "Цахилгаан",
+        talbainId: item.talbainId,
+        talbainDugaar: item.talbainDugaar,
+        suuliinZaalt: item.suuliinZaalt,
+        guidliinKoep: item.guidliinKoep,
+      }));
 
-      const response = await uilchilgee(token).post(
-        "/zaaltOlnoorOruulya",
-        payload
-      );
+    // if (!hadgalakhJagsaalt.length) {
+    //   message.info("Хадгалах мөр сонгогдоогүй байна.");
+    //   return;
+    // }
 
-      if (response.status === 200) {
-        message.success("Өөрчлөлтүүд амжилттай хадгалагдлаа!");
-        console.log(" ----- response -----", response);
-        destroy();
-      } else {
-        message.error("Алдаа гарлаа. Дахин оролдоно уу.");
-      }
-    } catch (error) {
-      console.error("Алдаа:", error);
-      message.error("Өгөгдөл хадгалахад алдаа гарлаа!");
-    }
+    uilchilgee(token)
+      .post("/zaaltOlnoorOruulya", {
+        ashiglaltiinId,
+        barilgiinId,
+        nuatBodokhEsekh,
+        jagsaalt: hadgalakhJagsaalt,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          message.success("Өөрчлөлтүүд амжилттай хадгалагдлаа!");
+          destroy();
+        } else {
+          message.error("Хадгалахад алдаа гарлаа!");
+        }
+      })
+      .catch(aldaaBarigch);
   };
 
   const query = useMemo(
@@ -318,7 +327,10 @@ function GuilgeeExceleesOruulakhOlnoor(
       <div className="flex items-center justify-between gap-4 ">
         <DatePicker
           value={ognoo}
-          onChange={setOgnoo}
+          onChange={(val) => {
+            setOgnoo(val);
+            setLoading(true);
+          }}
           allowClear={false}
           locale={locale}
           style={{ width: "50%", borderRadius: 5 }}
@@ -365,18 +377,25 @@ function GuilgeeExceleesOruulakhOlnoor(
               {t("Заалт татах")}
             </a>
           )}
-          <div className="mt-4 flex items-center justify-between">
+          <div className="mt-4 flex justify-end">
             <Input
-              placeholder="Талбайн дугаараар хайх..."
+              placeholder="Талбай / Тоолуурын дугаар"
+              prefix={<SearchOutlined style={{ color: "#94a3b8" }} />} // 🔍 Icon дотроо
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              style={{ width: 200 }}
+              allowClear
+              style={{
+                width: 250,
+                borderRadius: 8,
+              }}
             />
           </div>
+
           <div className="mt-5" />
           <Table
             columns={columns}
             dataSource={filteredData}
+            loading={loading}
             rowKey="tooluuriinDugaar"
             rowSelection={rowSelection}
             pagination={true}
