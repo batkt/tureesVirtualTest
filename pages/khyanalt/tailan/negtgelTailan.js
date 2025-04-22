@@ -139,7 +139,7 @@ function negtgelTailan({ token }) {
                         __cellType__: "TypeNumeric",
                         render: (values) => {
                             var tempVal = values.filter((value) => moment(value.ognoo).format("YYYY-MM") === assessment.ognoo && 
-                                                        (value.tailbar === assessment.tailbar || (assessment.tailbar === "Менежмент нэгж" && value.tailbar === "Менежментийн төлбөр")))
+                                                        (value.tailbar === assessment.tailbar || (assessment.tailbar === "Менежмент нэгж" && value.tailbar?.includes("Менежментийн төлбөр"))))
                             var sumTulukhDun = tempVal.filter((v) => v.tulukhDun > 0).reduce((a, b) => a + b.tulukhDun, 0);
                             return assessment.tailbar === "Менежмент нэгж" ? (sumTulukhDun/(tempVal[0]?.talbainKhemjee || 1) || 0) : (sumTulukhDun || 0);
                         },
@@ -238,7 +238,7 @@ function negtgelTailan({ token }) {
                 jagsaaltOgnoo.push(tempOgnoo);
             if(avlaga.filter((c) => c.tailbar === b.tailbar && c.ognoo === tempOgnoo)?.length === 0)
             {
-                if(b.tailbar === "Менежментийн төлбөр")
+                if(b.tailbar?.includes("Менежментийн төлбөр"))
                     avlaga.push({tailbar: "Менежмент нэгж", ognoo: tempOgnoo, index: Number(tempOgnoo?.split("-")[1])});    
                 avlaga.push({tailbar: b.tailbar, ognoo: tempOgnoo, index: Number(tempOgnoo?.split("-")[1])});
             }
@@ -285,7 +285,7 @@ function negtgelTailan({ token }) {
                             })
                             if(assessment.tailbar === "Менежмент нэгж")
                             {
-                                var valFilter = values?.filter((e) => e.tailbar === "Менежментийн төлбөр" && moment(e.ognoo).format("YYYY-MM") === a && e.tulukhDun > 0);
+                                var valFilter = values?.filter((e) => e.tailbar?.includes("Менежментийн төлбөр") && moment(e.ognoo).format("YYYY-MM") === a && e.tulukhDun > 0);
                                 var dun = valFilter?.reduce((a, b) => a + b.tulukhDun, 0);
                                 return (<div className="flex justify-center truncate">{valFilter?.length > 0 ? formatNumber((dun/(valFilter[0]?.talbainKhemjee || 1) || 0)) : ""}</div>);
                             }
@@ -683,7 +683,7 @@ function negtgelTailan({ token }) {
                                             );
                                         })}
                                         {avlaga?.map((murAvlaga, index) => {
-                                            var tempAvlaga = mur.avlaga?.filter((v) => moment(v.ognoo).format("YYYY-MM") === murAvlaga.ognoo && (v.tailbar === murAvlaga.tailbar || (murAvlaga.tailbar === "Менежмент нэгж" && v.tailbar === "Менежментийн төлбөр")));
+                                            var tempAvlaga = mur.avlaga?.filter((v) => moment(v.ognoo).format("YYYY-MM") === murAvlaga.ognoo && (v.tailbar === murAvlaga.tailbar || (murAvlaga.tailbar === "Менежмент нэгж" && v.tailbar?.includes("Менежментийн төлбөр"))));
                                             var sumTulukhDun = tempAvlaga.filter((v) => v.tulukhDun > 0).reduce((a, b) => a + b.tulukhDun, 0);
                                             return (
                                                 <React.Fragment key={index}>
@@ -712,7 +712,7 @@ function negtgelTailan({ token }) {
                                 {avlaga?.map((murAvlaga, index) => {
                                     var niitTulukhDun = 0
                                     tailanGaralt?.map((mur, index) => {
-                                        var tempAvlaga = mur?.avlaga?.filter((v) => moment(v.ognoo).format("YYYY-MM") === murAvlaga.ognoo && (v.tailbar === murAvlaga.tailbar || (murAvlaga.tailbar === "Менежмент нэгж" && v.tailbar === "Менежментийн төлбөр")));
+                                        var tempAvlaga = mur?.avlaga?.filter((v) => moment(v.ognoo).format("YYYY-MM") === murAvlaga.ognoo && (v.tailbar === murAvlaga.tailbar || (murAvlaga.tailbar === "Менежмент нэгж" && v.tailbar?.includes("Менежментийн төлбөр"))));
                                         var value = tempAvlaga.filter((v) => v.tulukhDun > 0).reduce((a, b) => a + b.tulukhDun, 0);
                                         niitTulukhDun += value || 0;
                                     })

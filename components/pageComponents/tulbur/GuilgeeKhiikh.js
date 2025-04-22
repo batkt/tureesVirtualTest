@@ -440,7 +440,7 @@ function GuilgeeKhiikh(
             placeholder={t("Ашиглалтын зардал")}
             onChange={(v) => {
                 const tukhainZardal = zardalAll.jagsaalt.find((a) => a._id === v);
-                var tempTurul = tukhainZardal?.ner === "Менежментийн төлбөр" ? "management" : 
+                var tempTurul = tukhainZardal?.ner?.includes("Менежментийн төлбөр") ? "management" : 
                             tukhainZardal?.ner === "Дулаан" ? "dulaan" : 
                               tukhainZardal?.ner === "Цахилгаан" ? "tsakhilgaan" :
                                 tukhainZardal?.ner === "Халуун ус" ? "khulaanUs" :
