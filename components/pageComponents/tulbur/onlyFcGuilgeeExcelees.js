@@ -111,9 +111,13 @@ function GuilgeeExceleesOruulakhOlnoor(
       record[dataIndex]?.toString().toLowerCase().includes(value.toLowerCase()),
   });
 
-  const filteredData = data.filter((item) =>
-    item.talbainDugaar?.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  const filteredData = data.filter((item) => {
+    const search = searchValue.toLowerCase();
+    return (
+      item.talbainDugaar?.toLowerCase().includes(search) ||
+      item.tooluuriinDugaar?.toLowerCase().includes(search)
+    );
+  });
 
   const fetchData = async () => {
     if (!ognoo) {
@@ -153,10 +157,10 @@ function GuilgeeExceleesOruulakhOlnoor(
         guidliinKoep: item.guidliinKoep,
       }));
 
-    if (!hadgalakhJagsaalt.length) {
-      message.info("Хадгалах мөр сонгогдоогүй байна.");
-      return;
-    }
+    // if (!hadgalakhJagsaalt.length) {
+    //   message.info("Хадгалах мөр сонгогдоогүй байна.");
+    //   return;
+    // }
 
     uilchilgee(token)
       .post("/zaaltOlnoorOruulya", {
@@ -375,15 +379,15 @@ function GuilgeeExceleesOruulakhOlnoor(
           )}
           <div className="mt-4 flex justify-end">
             <Input
-              placeholder="Талбайн дугаараар хайх..."
+              placeholder="Талбай / Тоолуурын дугаар"
               prefix={<SearchOutlined style={{ color: "#94a3b8" }} />} // 🔍 Icon дотроо
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
+              allowClear
               style={{
                 width: 250,
                 borderRadius: 8,
               }}
-              allowClear
             />
           </div>
 
