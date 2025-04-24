@@ -227,7 +227,7 @@ function GuilgeeKhiikh(
         medeelel.khungulult = formatNumber(medeelel.khungulult);
 
         medeelel.gariinUseg = renderToString(
-          <span style={{ position: "absolute" }}>
+          <span>
             <img
               src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
               style={{

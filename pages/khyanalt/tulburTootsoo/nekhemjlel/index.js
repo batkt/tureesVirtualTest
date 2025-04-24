@@ -271,7 +271,7 @@ function tulburTootsoo({ token }) {
             );
 
             medeelel.barilgiinlogo = renderToString(
-              <span style={{ position: "absolute", zIndex: 1 }}>
+              <span>
                 <img
                   src={`${url}/file?path=logo/${barilga.logo}`}
                   style={{
@@ -1710,7 +1710,7 @@ function tulburTootsoo({ token }) {
           );
 
           nekhemjlekh.barilgiinlogo = renderToString(
-            <span style={{ position: "absolute", zIndex: 1 }}>
+            <span>
               <img
                 src={`${url}/file?path=logo/${barilga.logo}`}
                 style={{

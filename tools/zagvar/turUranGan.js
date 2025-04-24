@@ -8,7 +8,7 @@ const khatuuZagvarUranGan = (
   return `
   <div style="display: block; height: 100%; width: 100%; page-break-after: always; h-[5.845in]; font-size: 0.75rem; line-height: 1;">
     <div style="display: flex; width: 100%; margin-top: 2rem;">
-      <div style="display: block; width: 35%; position: sticky; top: 0; background-color: white;">
+      <div style="display: block; width: 35%; top: 0; background-color: white;">
         &lt;barilgiinlogo&gt;
       </div>
     <div style="display: block; width: 65%; padding-left: 1rem;">
@@ -460,7 +460,7 @@ const khatuuZagvarUranGan = (
     <tr style="margin-top: 1rem;">
       <td colspan="2" rowspan="3">Тамга:</td>
       <td colspan="3" rowspan="3">&lt;tamga&gt;</td>
-      <td colspan="3">
+      <td style="position: relative;" colspan="3">
         <div style="width: 100%; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="color: #4b5563;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">

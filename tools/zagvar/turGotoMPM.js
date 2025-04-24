@@ -272,7 +272,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
     <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between;">
       <div style="width: 85%; margin-top: 1rem; ">
         <div style="width: 100%; display: flex; align-items: flex-start; justify-content: space-between; height: 20px;">
-          <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
+          <p style="white-space: nowrap;">Нягтлан wбодогч: &nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / Б.Бат-Өлзий/ 
           </p>  

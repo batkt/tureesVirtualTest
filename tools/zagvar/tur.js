@@ -7,6 +7,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           НХМаягт Т-1
         </div>
       </div>
+      
       <div style="display: block; align-items: flex-end; flex-direction: column;">
         <div style="display: block; font-size: 12px;">
           Санхүү, эдийн засгийн сайд, Үндэсний
@@ -237,7 +238,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: none;"></td>
         </tr>
         <tr style="margin-top: 2rem; ">
-          <td style="border: none;"></td>
+          <td style=" border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none; position: relative; >&lt;tamga&gt;</td>
