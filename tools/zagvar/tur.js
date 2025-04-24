@@ -236,11 +236,11 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: none;"></td>
           <td style="border: none;"></td>
         </tr>
-        <tr style="margin-top: 1rem;">
+        <tr style="margin-top: 2rem; ">
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
-          <td style="border: none;">&lt;tamga&gt;</td>
+          <td style="border: none; position: relative; >&lt;tamga&gt;</td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>

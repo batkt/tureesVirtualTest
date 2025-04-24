@@ -157,10 +157,10 @@ function GuilgeeExceleesOruulakhOlnoor(
         guidliinKoep: item.guidliinKoep,
       }));
 
-    // if (!hadgalakhJagsaalt.length) {
-    //   message.info("Хадгалах мөр сонгогдоогүй байна.");
-    //   return;
-    // }
+    if (!hadgalakhJagsaalt.length) {
+      message.info("Хадгалах мөр сонгоно уу.");
+      return;
+    }
 
     uilchilgee(token)
       .post("/zaaltOlnoorOruulya", {

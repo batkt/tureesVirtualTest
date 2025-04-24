@@ -845,7 +845,7 @@ function guilgeeniiTuukh({ token }) {
     ];
     modal({
       title: (
-        <div className="relative flex w-full justify-between">
+        <div className=" flex w-full justify-between">
           {t("Нэхэмжлэлийн түүх")}
         </div>
       ),

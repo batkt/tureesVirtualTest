@@ -3,16 +3,7 @@ import React, { useEffect, useRef } from "react";
 import NekhemjlekhiinTuukh from "./NekhemjlekhiinTuukh";
 
 function NekhemjlekhiinTuukhTsonkh(
-  {
-    baiguullaga,
-    data,
-    token,
-    ognoo,
-    onFinish,
-    destroy,
-    ajiltan,
-    barilgiinId,
-  },
+  { baiguullaga, data, token, ognoo, onFinish, destroy, ajiltan, barilgiinId },
   ref
 ) {
   const refTuukh = useRef(null);
@@ -45,8 +36,8 @@ function NekhemjlekhiinTuukhTsonkh(
   }, []);
   return (
     <div
-      className="flex flex-col space-y-2 overflow-x-auto"
-      style={{ height: "calc(100vh - 12rem)" }}
+      className="flex flex-col space-y-2 "
+      style={{ height: "calc(100vh - 12rem)", overflowY: "auto" }}
     >
       <NekhemjlekhiinTuukh
         baiguullaga={baiguullaga}
