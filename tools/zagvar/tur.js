@@ -148,7 +148,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
           <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
           <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;khungulsunTalbainNiitUneNuat&gt;</td>
-          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;khungulsun TalbainNiitUneNuatgui&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;khungulsunTalbainNiitUneNuatgui&gt;</td>
           <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;khungulult&gt;</td>
           <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;khungulsunTalbainNiitUne&gt;</td>
         </tr>
