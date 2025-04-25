@@ -3306,9 +3306,10 @@ function camera({ token }) {
         </div>
       ) : (
         <div className="col-span-12 flex justify-center">
-          {t("зогсоолын эрх байхгүй байна.", {
+          {"Сүлжээний доголдол, сервертэй холбогдоход ачаалал үүссэн байна."}
+          {/* {t("зогсоолын эрх байхгүй байна.", {
             ajiltniiNer: ajiltan?.ner,
-          })}
+          })} */}
         </div>
       )}
     </Admin>
