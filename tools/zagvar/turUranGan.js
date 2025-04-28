@@ -256,8 +256,9 @@ const khatuuZagvarUranGan = (
     </tr>
   </tfoot>
 </table>
-    <div style="display: flex; width: 100%; margin-top: 3rem; page-break-before: always;">
-    </div>
+  ${medeelel.barilgiinId === "67a067eee87d437b4a45b39d" ? `` :
+   `<div style="display: flex; width: 100%; margin-top: 3rem; page-break-before: always;">
+    </div> 
     <div style="display: flex; width: 100%; margin-top: 5rem;">
       <div style="display: block; width: 35%;">
         &lt;barilgiinlogo&gt;
@@ -477,6 +478,6 @@ const khatuuZagvarUranGan = (
     </tr>
   </tbody>
 </table>
-  </div>`;
+  </div>`}`;
 };
 export default khatuuZagvarUranGan;
