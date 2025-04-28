@@ -5,7 +5,7 @@ import uilchilgee, { url } from "services/uilchilgee";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import { useTranslation } from "react-i18next";
 
-function KhuviinMedeelel({
+function KhungulultiinTokhirgoo({
   ajiltan = {},
   token,
   baiguullaga,
@@ -22,7 +22,27 @@ function KhuviinMedeelel({
 
   const [khungulultiinTokhirgoo, setKhungulultiinTokhirgoo] = useState(null);
   const [khungulukhKhuvi, setKhungulukhKhuvi] = useState(baiguullaga?.tokhirgoo?.deedKhungulultiinKhuvi);
-  const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState();
+  const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState({
+    ...barilga?.tokhirgoo,
+    sarBurAutoKhungulultOruulakhEsekh: barilga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
+      ? barilga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
+      : undefined,
+    khungulukhSarBuriinShalguurDun: barilga?.tokhirgoo?.khungulukhSarBuriinShalguurDun
+      ? barilga?.tokhirgoo?.khungulukhSarBuriinShalguurDun
+      : undefined,
+    khungulukhSarBuriinTurul: barilga?.tokhirgoo?.khungulukhSarBuriinTurul
+      ? barilga?.tokhirgoo?.khungulukhSarBuriinTurul
+      : undefined,
+    khungulukhSarBuriinUtga: barilga?.tokhirgoo?.khungulukhSarBuriinUtga
+      ? barilga?.tokhirgoo?.khungulukhSarBuriinUtga
+      : undefined,
+    khungulukhSarBuriinTulburEkhlekhUdur: barilga?.tokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur
+      ? barilga?.tokhirgoo?.khungulukhSarBuriinTulburEkhlekhUdur
+      : undefined,
+    khungulukhSarBuriinTulburDuusakhUdur: barilga?.tokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur
+      ? barilga?.tokhirgoo?.khungulukhSarBuriinTulburDuusakhUdur
+      : undefined,
+  });
   
   useEffect(() => {
     console.log("log ---->" + barilgiinId);
@@ -194,7 +214,7 @@ function KhuviinMedeelel({
               </div>
               <div className="ml-auto">
                 <Switch
-                  value={
+                  defaultChecked={
                     barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
                   }
                   onChange={(v) =>
@@ -388,4 +408,4 @@ function KhuviinMedeelel({
   );
 }
 
-export default KhuviinMedeelel;
+export default KhungulultiinTokhirgoo;
