@@ -4,21 +4,73 @@ const khatuuZagvarSoyoljMall = (
   baiguullaga,
   barilgiinId
 ) => {
+  const ashiglaltZardluud = medeelel.zardluud
+    ?.filter(
+      (a) =>
+        a.tailbar?.includes("Цахилгаан") ||
+        a.tailbar?.includes("Халуун ус") ||
+        a.tailbar?.includes("Хүйтэн ус")
+    )
+    .sort((a, b) =>
+      a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+    );
+
+  const ashiglaltTable =
+    ashiglaltZardluud.length > 0
+      ? `
+    <table style="width:100%; margin-top:20px; border-collapse:collapse;">
+      <thead style="background-color:#d1d5db;">
+        <tr>
+          <td style="border: 1px solid #000; text-align: center; font-weight: bold">№</td>
+          <td style="border:1px solid #000; text-align: center; font-weight: bold">Утга</td>
+          <td style="border:1px solid #000;text-align: center; font-weight: bold">Өмнөх заалт</td>
+          <td style="border:1px solid #000;text-align: center; font-weight: bold">Одоогийн заалт</td>
+          <td style="border:1px solid #000;text-align: center; font-weight: bold">Хэрэглээ</td>
+          <td style="border:1px solid #000; text-align: center; font-weight: bold">Нэгж үнэ</td>
+        </tr>
+      </thead>
+      <tbody>
+        ${ashiglaltZardluud
+          .map((mur, index) => {
+            return `
+              <tr key=${index}>
+                <td style="border: 1px solid #000; text-align: center;">${
+                  index + 1
+                }</td>
+                <td style="border: 1px solid #000; text-align: left;">${
+                  mur.tailbar
+                }</td>
+                <td style="border: 1px solid #000; text-align: center;">&lt;${
+                  mur.tailbar
+                }.umnukhZaalt&gt;</td>
+                <td style="border: 1px solid #000; text-align: center;">&lt;${
+                  mur.tailbar
+                }.suuliinZaalt&gt;</td>
+                <td style="border: 1px solid #000; text-align: center; width: 16%;">&lt;${
+                  mur.tailbar
+                }.zuruuZaalt&gt;</td>
+                <td style="border: 1px solid #000; text-align: center; width: 16%;">&lt;${
+                  mur.tailbar
+                }.tariff&gt;</td>
+              </tr>`;
+          })
+          .join("")}
+      </tbody>
+    </table>`
+      : "";
   return `
-  <div style="width: 100%; font-family: Arial, sans-serif; padding: 1rem;">
+  <div style="width: 100%; padding: 1rem;">
      <div style="display: flex; width: 100%; justify-content: space-between; align-items: flex-start; margin-top: 2rem;">
         <div style="background-color: white;">
        <span>&lt;barilgiinlogo&gt;</span>
         </div>
-        <div style="text-align: right; font-size: 12px; line-height: 1.5;">
-        <p style="margin: 0;">
-        Сангийн сайдын 2017 оны 12-р сарын 347-р<br/>
-        тоот тушаалын хавсралт
-        </p>
+            <div style="text-align: right; font-size: 12px; line-height: 1.5;">
+                <p style="margin: 0;">
+                Сангийн сайдын 2017 оны 12-р сарын 347-р<br/>
+                тоот тушаалын хавсралт
+                </p>
+            </div>
         </div>
-        </div>
-        
-        
         
         
     <div style="text-align: center; margin-top: 10px; font-size: 16px; font-weight: bold;">
@@ -30,33 +82,27 @@ const khatuuZagvarSoyoljMall = (
         <p style="font-weight: bold;">Нэхэмжлэгч:</p>
         <div style="display: flex; justify-content: space-between;">
           <span>Байгууллагын нэр:</span>
-          <span style="font-weight: bold;">Сөүолж ХХК "Сөүолж молл"</span>
+          <span style="">Сөүолж ХХК "Сөүолж молл"</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Хаяг:</span>
-          <span style="font-weight: bold;">&nbsp;${
-            baiguullaga?.khayag || ""
-          }</span>
+          <span style="">&nbsp;${baiguullaga?.khayag || ""}</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Утас:</span>
-          <span style="font-weight: bold;">&nbsp;${baiguullaga?.utas?.join(
-            ","
-          )}</span>
+          <span style="">&nbsp;${baiguullaga?.utas?.join(",")}</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Э-шуудан:</span>
-          <span style="font-weight: bold;">&nbsp;${baiguullaga?.mail?.join(
-            ","
-          )}</span>
+          <span style="">&nbsp;${baiguullaga?.mail?.join(",")}</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Банкны нэр:</span>
-          <span style="font-weight: bold;">&nbsp;&lt;bank&gt;&nbsp;&lt;dansniiNer&gt;</span>
+          <span style="">&nbsp;&lt;bank&gt;&nbsp;&lt;dansniiNer&gt;</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>IBAN дансны дугаар:</span>
-          <span style="font-weight: bold;">&lt;ibanDugaar&gt;</span>
+          <span style="">&lt;ibanDugaar&gt;</span>
         </div>
       </div>
 
@@ -64,27 +110,27 @@ const khatuuZagvarSoyoljMall = (
         <p style="font-weight: bold;">Төлөгч:</p>
         <div style="display: flex; justify-content: space-between;">
           <span>Нэр:</span>
-          <span style="font-weight: bold;">&lt;ner&gt;</span>
+          <span style="">&lt;ner&gt;</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>РД:</span>
-          <span style="font-weight: bold;">&lt;register&gt;</span>
+          <span style="">&lt;register&gt;</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Талбайн дугаар:</span>
-          <span style="font-weight: bold;">&lt;talbainDugaar&gt;</span>
+          <span style="">&lt;talbainDugaar&gt;</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Утас:</span>
-          <span style="font-weight: bold;">&lt;utas&gt;</span>
+          <span style="">&lt;utas&gt;</span>
         </div>
        <div style="display: flex; justify-content: space-between;">
-          <span style="color: #4b5563; font-size: 12px;">Нэхэмжилсэн огноо:</span>
-          <span style="font-weight: bold; font-size: 12px;">&lt;ekhelkhSar&gt;/&lt;ekhlekhUdur&gt;/&lt;ekhlekhOn&gt;</span>
+          <span style="">Нэхэмжилсэн огноо:</span>
+          <span style="">&lt;ekhelkhSar&gt;/&lt;ekhlekhUdur&gt;/&lt;ekhlekhOn&gt;</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
-          <span style="color: #4b5563; font-size: 12px;">Төлбөр хийх хугацаа:</span>
-          <span style="font-weight: bold; font-size: 12px;">&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;</span>
+          <span style="">Төлбөр хийх хугацаа:</span>
+          <span style="">&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;</span>
         </div>
       </div>
     </div>
@@ -92,8 +138,10 @@ const khatuuZagvarSoyoljMall = (
     <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
       <thead style="background-color: #d1d5db;">
       <tr>
-          <th style="border: none; text-align: center; " colspan="2">
-            Хамрах хугацаа: <b>&lt;ekhlekhOn&gt; оны &lt;ekhelkhSar&gt;-р сар</b>
+          <th style="border: none; " colspan="2">
+          <span style= "font-weight: normal;">
+          Хамрах хугацаа: &lt;ekhlekhOn&gt; оны &lt;ekhelkhSar&gt;-р сар
+          </span>
           </th>
           <th style="border: none;"></th>
           <th style="border: 1px solid #000;" colspan="2">
@@ -102,7 +150,6 @@ const khatuuZagvarSoyoljMall = (
           <th style="border: 1px solid #000; text-align: right;">
            &lt;umnukhSariinUrTulbur&gt;
           </th>
-          
       </tr>
         <tr>
           <th style="border: 1px solid #000;">№</th>
@@ -172,7 +219,11 @@ const khatuuZagvarSoyoljMall = (
            .join("")}
 
         ${medeelel.zardluud
-          .filter((a) => !a.tailbar?.includes("Менежментийн зардал"))
+          .filter(
+            (a) =>
+              !a.tailbar?.includes("Менежментийн зардал") &&
+              a.tailbar != "Хөнгөлөлт"
+          )
           .map(
             (mur, index) => `
           <tr>
@@ -197,7 +248,7 @@ const khatuuZagvarSoyoljMall = (
       </tbody>
        <tfoot style="border: none;">
         <tr style="background-color: #d1d5db; font-weight: bold; border: none;">
-          <td style="border: none; text-align: center; justify-content: center; " colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
+          <td style="border: none; text-align: center; justify-content: center; font-weight: normal;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
           <td style="border: 1px solid #000;">Дүн</td>
           <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuatgui&gt;</td>
         </tr>
@@ -247,7 +298,7 @@ const khatuuZagvarSoyoljMall = (
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td colspan="3" style="border: none; text-align: center;">
-            <p style="font-size: 12px;">Нягтлан бодогч .............../.............../</p>
+            <p style="font-size: 12px;">Нягтлан бодогч ............&lt;gariinUseg&gt;.../.............../</p>
           </td>
         </tr>
         <tr>
@@ -259,57 +310,7 @@ const khatuuZagvarSoyoljMall = (
       </tfoot>
     </table>
 
-    <table style="width:100%; margin-top:20px; border-collapse:collapse;">
-      <thead style="background-color:#d1d5db;">
-        <tr>
-        <td style="border: 1px solid #000; text-align: center;">№</td>
-          <td style="border:1px solid #000; text-align: center; ">Утга</td>
-          <td style="border:1px solid #000;text-align: center;">Өмнөх заалт</td>
-          <td style="border:1px solid #000;text-align: center;">Одоогийн заалт</td>
-          <td style="border:1px solid #000;text-align: center;">Хэрэглээ</td>
-          <td style="border:1px solid #000; text-align: center;">Нэгж үнэ</td>
-        </tr>
-      </thead>
-      <tbody>
-         ${medeelel.zardluud
-           .sort((a, b) => {
-             return a.tailbar.localeCompare(b.tailbar, "en", {
-               sensitivity: "base",
-             });
-           })
-           .filter(
-             (a) =>
-               a.tailbar?.includes("Цахилгаан") ||
-               a.tailbar?.includes("Халуун ус") ||
-               a.tailbar?.includes("Хүйтэн ус")
-           )
-           .map((mur, index) => {
-             return `
-              <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;">${
-                  index + 1
-                }</td>
-                <td style="border: 1px solid #000; text-align: left;" >
-                  ${mur.tailbar}
-                </td>
-                <td style="border: 1px solid #000; text-align: center;">
-                    &lt;${mur.tailbar}.umnukhZaalt&gt;
-                </td>
-                <td style="border: 1px solid #000; text-align: center;">
-                    &lt;${mur.tailbar}.suuliinZaalt&gt;
-                </td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%;">
-                    &lt;${mur.tailbar}.zuruuZaalt&gt;
-                </td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%;">
-                    &lt;${mur.tailbar}.tariff&gt;
-                </td>
-              </tr>
-            `;
-           })
-           .join("")}
-      </tbody>
-    </table>
+    ${ashiglaltTable}
   </div>`;
 };
 
