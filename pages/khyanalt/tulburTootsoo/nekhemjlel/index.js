@@ -46,6 +46,7 @@ import khatuuZagvarUranGan from "tools/zagvar/turUranGan";
 import khatuuZagvarFoodCity from "tools/zagvar/turFoodCityTemp";
 import khatuuZagvarGotoMPM from "tools/zagvar/turGotoMPM";
 import khatuuZagvarGotoMT from "tools/zagvar/turGotoMT";
+import khatuuZagvarSoyoljMall from "tools/zagvar/turSoyoljMall";
 
 const ilgeekhTurul = "davkharaar";
 
@@ -177,6 +178,21 @@ function tulburTootsoo({ token }) {
                 barilgiinId
               );
             else if (
+              (ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d" &&
+                barilgiinId === "6731b43bc23730ac1908da2e") ||
+              (ajiltan?.baiguullagiinId === "6115f350b35689cdbf1b9da3" &&
+                (barilgiinId === "622ec99a8e64e5b4f0c3acb6" ||
+                  barilgiinId === "619e267fdd4835aa2c168b28" ||
+                  barilgiinId === "657955ac70280a9ebe8f11ef"))
+            )
+              // soyoljMall
+              zagvar.nekhemjlekh = khatuuZagvarSoyoljMall(
+                medeelel,
+                ajiltan,
+                baiguullaga,
+                barilgiinId
+              );
+            else if (
               ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "6735c77a7fc60cd66deb290a"
             )
@@ -234,7 +250,6 @@ function tulburTootsoo({ token }) {
               ? khungulsunTalbainNiitUne
               : 0;
           }
-
           kaidudZoriulsanNiitTulburiinNiilber += medeelel?.aldangiinUldegdel
             ? medeelel?.aldangiinUldegdel
             : 0;
@@ -269,21 +284,20 @@ function tulburTootsoo({ token }) {
               "төгрөг",
               "мөнгө"
             );
-
-            medeelel.barilgiinlogo = renderToString(
-              <span>
-                <img
-                  src={`${url}/file?path=logo/${barilga.logo}`}
-                  style={{
-                    width: 200,
-                    height: 50,
-                    transform: "translate(5%, -80%)",
-                    opacity: 0.65,
-                  }}
-                />
-              </span>
-            );
           }
+          medeelel.barilgiinlogo = renderToString(
+            <span>
+              <img
+                src={`${url}/file?path=logo/${barilga.logo}`}
+                style={{
+                  width: 200,
+                  height: 50,
+                  transform: "translate(5%, -80%)",
+                  opacity: 0.65,
+                }}
+              />
+            </span>
+          );
           if (
             zagvar?.khatuuZagvarEsekh &&
             ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d" &&
@@ -1605,6 +1619,18 @@ function tulburTootsoo({ token }) {
                 ajiltan,
                 baiguullaga,
                 barilga,
+                barilgiinId
+              )
+            : (ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d" &&
+                barilgiinId === "6731b43bc23730ac1908da2e") ||
+              (ajiltan?.baiguullagiinId === "6115f350b35689cdbf1b9da3" &&
+                (barilgiinId === "622ec99a8e64e5b4f0c3acb6" ||
+                  barilgiinId === "619e267fdd4835aa2c168b28" ||
+                  barilgiinId === "657955ac70280a9ebe8f11ef"))
+            ? khatuuZagvarSoyoljMall(
+                nekhemjlekh,
+                ajiltan,
+                baiguullaga,
                 barilgiinId
               )
             : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
