@@ -54,79 +54,19 @@ function EBarimt({
   console.log(baiguullagiinMedeelel, "dddsadsa");
 
   useEffect(() => {
-    if (eBarimtAutomataarShivikh === true && register.length > 6)
+    if (register.length > 6)
       registerShalgaya(register);
-  }, [eBarimtAutomataarShivikh, register]);
+  }, [irgenEsekh, register]);
 
   return (
     <div className="flex flex-row">
       <div className="w-full p-2 dark:text-gray-100">
-        {eBarimtAutomataarShivikh !== true && (
-          <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>{t("Хувь хүн")}</div>
-            <div className="ml-auto">
-              <Switch
-                checked={barimtKhevlekhEsekh}
-                onChange={setBarimtKhevlekhEsekh}
-              />
-            </div>
+        <div className="flex flex-row justify-between border-b-2 border-dashed py-2">
+          <div>
+            {t(`${irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} регистр`)}
           </div>
-        )}
-        {eBarimtAutomataarShivikh !== true && (
-          <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>{t("ААН эсэх")}</div>
-            <div className="ml-auto">
-              <Switch
-                checked={baiguullagaEsekh}
-                onChange={setBaiguullagaEsekh}
-              />
-            </div>
-          </div>
-        )}
-        {eBarimtAutomataarShivikh !== true && (
-          <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>{t("Татвар төлөгч иргэнд эсэх")}</div>
-            <div className="ml-auto">
-              <Switch checked={irgenEsekh} onChange={setIrgenEsekh} />
-            </div>
-          </div>
-        )}
-        {eBarimtAutomataarShivikh !== true && baiguullagaEsekh && (
-          <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>{t("ААН регистр")}</div>
-            <div className="ml-auto">
-              <InputNumber
-                size="small"
-                maxLength={7}
-                minLength={7}
-                onChange={registerShalgaya}
-                value={register}
-              />
-            </div>
-          </div>
-        )}
-        {eBarimtAutomataarShivikh !== true && irgenEsekh && (
-          <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>{t("Иргэний регистр")}</div>
-            <div className="ml-auto">
-              <Input
-                size="small"
-                maxLength={10}
-                minLength={10}
-                onChange={({ target }) => registerShalgaya(target.value)}
-                value={register}
-              />
-            </div>
-          </div>
-        )}
-        {eBarimtAutomataarShivikh === true && (
-          <div className="flex flex-row justify-between border-b-2 border-dashed py-2">
-            <div>
-              {t(`${irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} регистр`)}
-            </div>
-            <div className="text-base font-medium">{register}</div>
-          </div>
-        )}
+          <div className="text-base font-medium">{register}</div>
+        </div>
         {baiguullagiinMedeelel?.name && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>{t(`${irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} нэр`)}</div>

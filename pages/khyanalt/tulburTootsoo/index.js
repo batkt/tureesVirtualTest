@@ -399,6 +399,7 @@ function tulburTootsoo({ token }) {
         },
         {
           title: t("Цаг"),
+          align: "center",
           showSorterTooltip: false,
           sorter: {
             compare: () => 0,

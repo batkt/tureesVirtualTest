@@ -2337,6 +2337,7 @@ function tulburTootsoo({ token }) {
           mailuud,
           subject: "Түрээсийн төлбөр",
           gereenuud: gereenuud,
+          ognoo: ognoo,
         })
         .then(({ data }) => {
           if (data === "Amjilttai") {
