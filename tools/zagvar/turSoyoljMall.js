@@ -9,7 +9,8 @@ const khatuuZagvarSoyoljMall = (
       (a) =>
         a.tailbar?.includes("Цахилгаан") ||
         a.tailbar?.includes("Халуун ус") ||
-        a.tailbar?.includes("Хүйтэн ус")
+        a.tailbar?.includes("Хүйтэн ус") ||
+        a.tailbar?.includes("Газ")
     )
     .sort((a, b) =>
       a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
@@ -58,6 +59,35 @@ const khatuuZagvarSoyoljMall = (
       </tbody>
     </table>`
       : "";
+
+  const rows = [];
+
+  if (Number(medeelel.baritsaaUldegdel) > 0) {
+    rows.push(`
+      <tr>
+        <td style="border: 1px solid #000; text-align: center; font-size: 12px;">1</td>
+        <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Барьцаа үлдэгдэл</td>
+        <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
+        <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
+        <td style="border: 1px solid #000; text-align: right; font-size: 12px;"></td>
+        <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaUldegdel&gt;</td>
+      </tr>
+    `);
+  }
+
+  if (Number(medeelel.aldangiinUldegdel) > 0) {
+    rows.push(`
+      <tr>
+        <td style="border: 1px solid #000; text-align: center; font-size: 12px;">2</td>
+        <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Алданги</td>
+        <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
+        <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
+        <td style="border: 1px solid #000; text-align: right; font-size: 12px;"></td>
+        <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;aldangiinUldegdel&gt;</td>
+      </tr>
+    `);
+  }
+
   return `
   <div style="width: 100%; padding: 1rem;">
      <div style="display: flex; width: 100%; justify-content: space-between; align-items: flex-start; margin-top: 2rem;">
@@ -161,22 +191,7 @@ const khatuuZagvarSoyoljMall = (
         </tr>
       </thead>
       <tbody>
-          <tr>
-          <td style="border: 1px solid #000; text-align: center; font-size: 12px;">1</td>
-          <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Барьцаа үлдэгдэл</td>
-          <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
-          <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
-          <td style="border: 1px solid #000; text-align: right; font-size: 12px;"></td>
-          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaUldegdel&gt;</td>
-          </tr>
-          <tr>
-          <td style="border: 1px solid #000; text-align: center; font-size: 12px;">2</td>
-          <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Алданги</td>
-          <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
-          <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
-          <td style="border: 1px solid #000; text-align: right; font-size: 12px;"></td>
-          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;aldangiinUldegdel&gt;</td>
-        </tr>
+     ${rows.join("\n")}
         <tr>
           <td style="border: 1px solid #000; text-align: center; font-size: 12px;">3</td>
           <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Түрээсийн төлбөр</td>
