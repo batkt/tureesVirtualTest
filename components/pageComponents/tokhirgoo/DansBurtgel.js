@@ -62,25 +62,13 @@ function DansBurtgel(
         const method = ugugdul?._id ? updateMethod : createMethod;
         ugugdul["barilgiinId"] = barilgiinId;
         ugugdul["baiguullagiinId"] = baiguullagiinId;
-        var dansDavkhatssanEsekh = false;
-        if (dansGaralt?.jagsaalt && dansGaralt?.jagsaalt?.length > 0) {
-          for (const a of dansGaralt.jagsaalt) {
-            if (ugugdul.dugaar == a.dugaar) {
-              dansDavkhatssanEsekh = true;
-            }
+        method("dans", token, { ...data, ...ugugdul }).then(({ data }) => {
+          if (data === "Amjilttai") {
+            notification.success({ message: t("Амжилттай хадгаллаа") });
+            dansMutate();
+            destroy();
           }
-        }
-        if (!dansDavkhatssanEsekh) {
-          method("dans", token, { ...data, ...ugugdul }).then(({ data }) => {
-            if (data === "Amjilttai") {
-              notification.success({ message: t("Амжилттай хадгаллаа") });
-              dansMutate();
-              destroy();
-            }
-          });
-        } else {
-          notification.warn({ message: "Данс давхардсан байна", duration: 3 });
-        }
+        });
       },
       khaaya() {
         garya();
