@@ -60,7 +60,6 @@ const khatuuZagvarSoyoljMall = (
       </tbody>
     </table>`
       : "";
-
   const rows = [];
 
   if (
@@ -117,7 +116,7 @@ const khatuuZagvarSoyoljMall = (
         <p style="font-weight: bold;">Нэхэмжлэгч:</p>
         <div style="display: flex; justify-content: space-between;">
           <span>Байгууллагын нэр:</span>
-          <span style="">${barilga?.ner}</span>
+          <span style="">${barilgiinId === "622ec99a8e64e5b4f0c3acb6" ? "Их наяд зүүн өндөр" : barilga?.ner}</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Хаяг:</span>
