@@ -184,7 +184,9 @@ function tulburTootsoo({ token }) {
                 (barilgiinId === "622ec99a8e64e5b4f0c3acb6" ||
                   barilgiinId === "619e267fdd4835aa2c168b28" ||
                   barilgiinId === "657955ac70280a9ebe8f11ef")) ||
-              (ajiltan?.baiguullagiinId === "612f457d185280db676d0b51" && barilgiinId === "633e52ba9e57e626978b7c47"))
+              (ajiltan?.baiguullagiinId === "612f457d185280db676d0b51" &&
+                barilgiinId === "633e52ba9e57e626978b7c47")
+            )
               // soyoljMall
               zagvar.nekhemjlekh = khatuuZagvarSoyoljMall(
                 medeelel,
@@ -347,7 +349,7 @@ function tulburTootsoo({ token }) {
             const dans = dansGaralt?.jagsaalt?.find(
               (a) => a.dugaar === songogdsonDans
             );
-            medeelel.dans = dans?.dugaar;
+            medeelel.dans = dans?.ibanDugaar ? dans.ibanDugaar : dans?.dugaar;
             medeelel.bank =
               dans?.bank === "khanbank"
                 ? "Хаан банк"
@@ -694,14 +696,21 @@ function tulburTootsoo({ token }) {
                 a.tailbar === "Цахилгаан" ||
                 a.tailbar === "Халуун ус" ||
                 a.tailbar === "Хүйтэн ус"
-              )
-                a.tariff = ashiglaltiinZardal?.jagsaalt
-                  ?.filter((b) => b.ner === a.tailbar)
-                  .map((b) => b.tariff);
-              if (a.tailbar === "Цахилгаан нэмэлт")
-                a.tariff = ashiglaltiinZardal?.jagsaalt
-                  ?.filter((b) => b.ner === "Цахилгаан")
-                  .map((b) => b.tariff);
+              ) {
+                const tariffValue = ashiglaltiinZardal?.jagsaalt?.find(
+                  (b) => b.ner === a.tailbar
+                )?.tariff;
+
+                a.tariff = tariffValue ?? 0;
+              }
+
+              if (a.tailbar === "Цахилгаан нэмэлт") {
+                const tariffValue = ashiglaltiinZardal?.jagsaalt?.find(
+                  (b) => b.ner === "Цахилгаан"
+                )?.tariff;
+
+                a.tariff = tariffValue ?? 0;
+              }
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),

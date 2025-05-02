@@ -1,9 +1,4 @@
-const khatuuZagvarSoyoljMall = (
-  medeelel,
-  ajiltan,
-  baiguullaga,
-  barilgiinId
-) => {
+const khatuuZagvarSoyoljMall = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
       (a) =>
