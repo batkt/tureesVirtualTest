@@ -183,8 +183,8 @@ function tulburTootsoo({ token }) {
               (ajiltan?.baiguullagiinId === "6115f350b35689cdbf1b9da3" &&
                 (barilgiinId === "622ec99a8e64e5b4f0c3acb6" ||
                   barilgiinId === "619e267fdd4835aa2c168b28" ||
-                  barilgiinId === "657955ac70280a9ebe8f11ef"))
-            )
+                  barilgiinId === "657955ac70280a9ebe8f11ef")) ||
+              (ajiltan?.baiguullagiinId === "612f457d185280db676d0b51" && barilgiinId === "633e52ba9e57e626978b7c47"))
               // soyoljMall
               zagvar.nekhemjlekh = khatuuZagvarSoyoljMall(
                 medeelel,

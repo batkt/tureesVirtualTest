@@ -62,7 +62,7 @@ const khatuuZagvarSoyoljMall = (
 
   const rows = [];
 
-  if (Number(medeelel.baritsaaUldegdel) > 0) {
+  if ((Number(medeelel.baritsaaAvakhDun || 0) - Number(medeelel.baritsaaniiUldegdel || 0)) > 0) {
     rows.push(`
       <tr>
         <td style="border: 1px solid #000; text-align: center; font-size: 12px;">1</td>
