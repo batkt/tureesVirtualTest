@@ -62,7 +62,11 @@ const khatuuZagvarSoyoljMall = (
 
   const rows = [];
 
-  if ((Number(medeelel.baritsaaAvakhDun || 0) - Number(medeelel.baritsaaniiUldegdel || 0)) > 0) {
+  if (
+    Number(medeelel.baritsaaAvakhDun || 0) -
+      Number(medeelel.baritsaaniiUldegdel || 0) >
+    0
+  ) {
     rows.push(`
       <tr>
         <td style="border: 1px solid #000; text-align: center; font-size: 12px;">1</td>
@@ -112,7 +116,7 @@ const khatuuZagvarSoyoljMall = (
         <p style="font-weight: bold;">Нэхэмжлэгч:</p>
         <div style="display: flex; justify-content: space-between;">
           <span>Байгууллагын нэр:</span>
-          <span style="">Сөүолж ХХК "Сөүолж молл"</span>
+          <span style="">Соёолж ХХК "Соёолж молл"</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Хаяг:</span>
