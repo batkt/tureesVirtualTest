@@ -243,7 +243,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   sensitivity: "base",
                 });
               })
-              .filter(a => a.tailbar === "Цахилгаан" || a.tailbar === "Цахилгаан нэмэлт")
+              .filter(a => a.tailbar?.includes("Цахилгаан") || a.tailbar === "Цахилгаан нэмэлт")
               .map((mur, index) => {
                 return `
                   <tr>

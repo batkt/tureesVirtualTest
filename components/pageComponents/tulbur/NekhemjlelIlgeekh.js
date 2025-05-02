@@ -417,7 +417,7 @@ function GuilgeeKhiikh(
           );
 
           if (
-            a.tailbar === "Цахилгаан" ||
+            a.tailbar?.includes("Цахилгаан") ||
             a.tailbar === "Халуун ус" ||
             a.tailbar === "Хүйтэн ус"
           )
@@ -450,7 +450,7 @@ function GuilgeeKhiikh(
           // { tailbar : "Халуун ус", umnukhzaalt, suuliin zaalt, dun, nuat, boxirus, tseverus, usxalaasniitulbur }
           // { tailbar : "Хүйтэн ус", umnukhzaalt, suuliin zaalt, dun, nuat, boxirus, tseverus, usxalaasniitulbur }
           if (
-            a.tailbar === "Цахилгаан" ||
+            a.tailbar?.includes("Цахилгаан") ||
             a.tailbar === "Халуун ус" ||
             a.tailbar === "Хүйтэн ус"
           ) {
@@ -459,7 +459,7 @@ function GuilgeeKhiikh(
               new RegExp(`&lt;${a.tailbar}.zuruuZaalt&gt;`, "g"),
               formatNumber(a.zuruuZaalt || 0) || ""
             );
-            if (a.tailbar === "Цахилгаан") {
+            if (a.tailbar?.includes("Цахилгаан")) {
               a.tsakhilgaanUrjver = ashiglaltiinZardal?.jagsaalt
                 ?.filter((b) => b.ner === a.tailbar)
                 .map((b) => b.tsakhilgaanUrjver);

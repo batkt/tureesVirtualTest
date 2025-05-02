@@ -317,7 +317,7 @@ function GuilgeeExceleesOruulakhOlnoor(
   }, [ashiglaltiinId, zardal]);
 
   useEffect(() => {
-    if (selectedZardal?.ner === "Цахилгаан" && ognoo) {
+    if (selectedZardal?.ner?.includes("Цахилгаан") && ognoo) {
       fetchData();
     }
   }, [selectedZardal, ognoo]);
@@ -341,7 +341,7 @@ function GuilgeeExceleesOruulakhOlnoor(
           style={{ width: "100%" }}
         >
           {zardal?.jagsaalt
-            ?.filter((a) => a.ner === "Цахилгаан")
+            ?.filter((a) => a.ner?.includes("Цахилгаан"))
             .map((a) => (
               <Select.Option key={a._id} value={a._id}>
                 <div className="flex w-full justify-between border-b">
@@ -361,7 +361,7 @@ function GuilgeeExceleesOruulakhOlnoor(
         </Select>
       </div>
 
-      {selectedZardal?.ner === "Цахилгаан" && (
+      {selectedZardal?.ner?.includes("Цахилгаан") && (
         <>
           <div className="mt-5" />
           <div className="space-x-2">
