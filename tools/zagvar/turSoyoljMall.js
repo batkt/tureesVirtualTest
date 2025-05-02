@@ -2,7 +2,8 @@ const khatuuZagvarSoyoljMall = (
   medeelel,
   ajiltan,
   baiguullaga,
-  barilgiinId
+  barilgiinId,
+  barilga
 ) => {
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
@@ -93,7 +94,7 @@ const khatuuZagvarSoyoljMall = (
   }
 
   return `
-  <div style="width: 100%; padding: 1rem;">
+  <div style="width: 100%; padding: 1rem; page-break-after: always;">
      <div style="display: flex; width: 100%; justify-content: space-between; align-items: flex-start; margin-top: 2rem;">
         <div style="background-color: white;">
        <span>&lt;barilgiinlogo&gt;</span>
@@ -116,7 +117,7 @@ const khatuuZagvarSoyoljMall = (
         <p style="font-weight: bold;">Нэхэмжлэгч:</p>
         <div style="display: flex; justify-content: space-between;">
           <span>Байгууллагын нэр:</span>
-          <span style="">Соёолж ХХК "Соёолж молл"</span>
+          <span style="">${barilga?.ner}</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Хаяг:</span>

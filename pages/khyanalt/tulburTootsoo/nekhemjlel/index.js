@@ -1640,6 +1640,7 @@ function tulburTootsoo({ token }) {
                 nekhemjlekh,
                 ajiltan,
                 baiguullaga,
+                barilga,
                 barilgiinId
               )
             : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
