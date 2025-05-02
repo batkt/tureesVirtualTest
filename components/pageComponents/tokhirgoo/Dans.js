@@ -32,12 +32,12 @@ function DansTile({ data, dansMutate, zasya, token, t }) {
 
   return (
     <div className="box w-full">
-      <div className="grid w-full grid-cols-4 items-center justify-between gap-2 p-5">
-        <div className="">
+      <div className="grid w-full grid-cols-6 items-center justify-between gap-2 p-5">
+        <div className="col-span-2">
           <div className="font-medium">{t("Данс")}</div>
           <div>{data.dugaar}</div>
         </div>
-        <div className="">
+        <div className="col-span-2">
           <div className="font-medium">{t("Дансны нэр")}</div>
           <div>{data.dansniiNer}</div>
         </div>

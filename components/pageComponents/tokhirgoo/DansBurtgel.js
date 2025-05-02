@@ -127,7 +127,7 @@ function DansBurtgel(
         </Select>
       </Form.Item>
       <Form.Item label={t("Дансны дугаар")} name="dugaar">
-        <InputNumber style={{ width: "100%" }} min={0} onKeyUp={focuser} />
+        <Input style={{ width: "100%" }} onKeyUp={focuser} />
       </Form.Item>
       <Form.Item label={t("Дансны нэр")} name="dansniiNer">
         <Input onKeyUp={focuser} />
