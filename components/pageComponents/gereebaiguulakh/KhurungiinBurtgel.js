@@ -107,6 +107,10 @@ const YurunkhiiMedeele = ({
   useEffect(() => {
     if (!!value.talbainIdnuud && !value.talbainuud) {
       getListMethod("talbai", token, {
+        ...{
+          khuudasniiDugaar: 1,
+          khuudasniiKhemjee: 1000,
+        },
         query: { _id: { $in: value.talbainIdnuud } },
       }).then(({ data }) => {
         value.talbainuud = data.jagsaalt;
@@ -322,7 +326,7 @@ const YurunkhiiMedeele = ({
         data-aos="fade-right"
         data-aos-duration="1000"
         data-aos-delay="100"
-        className="space-y-2 pb-4"
+        className="space-y-2 pb-4 max-h-[60vh] overflow-y-scroll"
       >
         {value.talbainuud?.map((talbai, index) => {
           return (
