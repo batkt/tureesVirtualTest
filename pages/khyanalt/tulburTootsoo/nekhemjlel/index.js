@@ -192,7 +192,8 @@ function tulburTootsoo({ token }) {
                 medeelel,
                 ajiltan,
                 baiguullaga,
-                barilgiinId
+                barilgiinId,
+                barilga
               );
             else if (
               ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
