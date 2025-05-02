@@ -976,6 +976,9 @@ function tulburTootsoo({ token }) {
               <div className="ml-5 mb-1 flex-row space-x-2 p-1 font-medium md:flex">
                 {t("Үлдэгдэл")}:{" "}
                 {uldegdel ? (
+                  songogdsonDans?.bank === "tdb" && songogdsonDans?.dugaar.includes("MN") ? (
+                    formatNumber(uldegdel)
+                  ) :
                   songogdsonDans?.bank === "tdb" ? (
                     uldegdel
                   ) : (
