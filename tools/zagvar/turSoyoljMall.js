@@ -1,4 +1,9 @@
-const khatuuZagvarSoyoljMall = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
+const khatuuZagvarSoyoljMall = (
+  medeelel,
+  ajiltan,
+  baiguullaga,
+  barilgiinId
+) => {
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
       (a) =>
@@ -131,7 +136,7 @@ const khatuuZagvarSoyoljMall = (medeelel, ajiltan, baiguullaga, barilgiinId) => 
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>IBAN дансны дугаар:</span>
-          <span style="">&lt;ibanDugaar&gt;</span>
+          <span style="">&lt;dans&gt;</span>
         </div>
       </div>
 

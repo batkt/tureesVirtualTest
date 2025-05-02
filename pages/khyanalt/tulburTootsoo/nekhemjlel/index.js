@@ -693,17 +693,23 @@ function tulburTootsoo({ token }) {
               );
 
               if (
-                a.tailbar?.includes("Цахилгаан") ||
+                a.tailbar === "Цахилгаан" ||
                 a.tailbar === "Халуун ус" ||
                 a.tailbar === "Хүйтэн ус"
-              )
-                a.tariff = ashiglaltiinZardal?.jagsaalt
-                  ?.filter((b) => b.ner === a.tailbar)
-                  .map((b) => b.tariff);
-              if (a.tailbar === "Цахилгаан нэмэлт")
-                a.tariff = ashiglaltiinZardal?.jagsaalt
-                  ?.filter((b) => b.ner?.includes("Цахилгаан"))
-                  .map((b) => b.tariff);
+              ) {
+                const tariffValue = ashiglaltiinZardal?.jagsaalt?.find(
+                  (b) => b.ner === a.tailbar
+                )?.tariff;
+
+                a.tariff = tariffValue ?? 0;
+              }
+              if (a.tailbar === "Цахилгаан нэмэлт") {
+                const tariffValue = ashiglaltiinZardal?.jagsaalt?.find(
+                  (b) => b.ner === "Цахилгаан"
+                )?.tariff;
+
+                a.tariff = tariffValue ?? 0;
+              }
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
@@ -1281,7 +1287,8 @@ function tulburTootsoo({ token }) {
       const dans = dansGaralt?.jagsaalt?.find(
         (a) => a.dugaar === songogdsonDans
       );
-      nekhemjlekh.dans = dans?.dugaar;
+      medeelel.dans = dans?.ibanDugaar ? dans.ibanDugaar : dans?.dugaar;
+
       nekhemjlekh.bank =
         dans?.bank === "khanbank"
           ? "Хаан банк"
