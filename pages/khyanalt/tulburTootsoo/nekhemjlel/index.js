@@ -693,24 +693,17 @@ function tulburTootsoo({ token }) {
               );
 
               if (
-                a.tailbar === "Цахилгаан" ||
+                a.tailbar?.includes("Цахилгаан") ||
                 a.tailbar === "Халуун ус" ||
                 a.tailbar === "Хүйтэн ус"
-              ) {
-                const tariffValue = ashiglaltiinZardal?.jagsaalt?.find(
-                  (b) => b.ner === a.tailbar
-                )?.tariff;
-
-                a.tariff = tariffValue ?? 0;
-              }
-
-              if (a.tailbar === "Цахилгаан нэмэлт") {
-                const tariffValue = ashiglaltiinZardal?.jagsaalt?.find(
-                  (b) => b.ner === "Цахилгаан"
-                )?.tariff;
-
-                a.tariff = tariffValue ?? 0;
-              }
+              )
+                a.tariff = ashiglaltiinZardal?.jagsaalt
+                  ?.filter((b) => b.ner === a.tailbar)
+                  .map((b) => b.tariff);
+              if (a.tailbar === "Цахилгаан нэмэлт")
+                a.tariff = ashiglaltiinZardal?.jagsaalt
+                  ?.filter((b) => b.ner?.includes("Цахилгаан"))
+                  .map((b) => b.tariff);
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
@@ -737,7 +730,7 @@ function tulburTootsoo({ token }) {
               // { tailbar : "Халуун ус", umnukhzaalt, suuliin zaalt, dun, nuat, boxirus, tseverus, usxalaasniitulbur }
               // { tailbar : "Хүйтэн ус", umnukhzaalt, suuliin zaalt, dun, nuat, boxirus, tseverus, usxalaasniitulbur }
               if (
-                a.tailbar === "Цахилгаан" ||
+                a.tailbar?.includes("Цахилгаан") ||
                 a.tailbar === "Цахилгаан нэмэлт" ||
                 a.tailbar === "Халуун ус" ||
                 a.tailbar === "Хүйтэн ус"
@@ -748,11 +741,11 @@ function tulburTootsoo({ token }) {
                   formatNumber(a.zuruuZaalt || 0) || ""
                 );
                 if (
-                  a.tailbar === "Цахилгаан" ||
+                  a.tailbar?.includes("Цахилгаан") ||
                   a.tailbar === "Цахилгаан нэмэлт"
                 ) {
                   a.tsakhilgaanUrjver = ashiglaltiinZardal?.jagsaalt
-                    ?.filter((b) => b.ner === "Цахилгаан")
+                    ?.filter((b) => b.ner?.includes("Цахилгаан"))
                     .map((b) => b.tsakhilgaanUrjver);
                   zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                     new RegExp(`&lt;${a.tailbar}.tsakhilgaanUrjver&gt;`, "g"),
@@ -805,7 +798,7 @@ function tulburTootsoo({ token }) {
               kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
               niilberDunUrangan += khungulultKhassanTulukhDun;
               if (
-                a.tailbar === "Цахилгаан" ||
+                a.tailbar?.includes("Цахилгаан") ||
                 a.tailbar === "Эрүүл ахуйч" ||
                 a.tailbar === "Харуул хамгаалалт, ОБЕГ, ХАБ" ||
                 a.tailbar === "Дулаан" ||
@@ -2093,7 +2086,7 @@ function tulburTootsoo({ token }) {
           kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
           niilberDunUrangan += khungulultKhassanTulukhDun;
           if (
-            a.tailbar === "Цахилгаан" ||
+            a.tailbar?.includes("Цахилгаан") ||
             a.tailbar === "Эрүүл ахуйч" ||
             a.tailbar === "Харуул хамгаалалт, ОБЕГ, ХАБ" ||
             a.tailbar === "Дулаан" ||
