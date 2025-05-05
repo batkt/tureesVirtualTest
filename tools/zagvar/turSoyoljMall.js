@@ -124,7 +124,7 @@ const khatuuZagvarSoyoljMall = (
             barilgiinId === "622ec99a8e64e5b4f0c3acb6"
               ? "Их наяд зүүн өндөр"
               : barilga?.ner
-          }</span>
+          }</span> 
         </div>
 
         <div style="display: flex; justify-content: space-between;">
@@ -162,9 +162,9 @@ const khatuuZagvarSoyoljMall = (
       </div>
 
       <div style="padding: 1rem; flex: 1;">
-        <p style="font-weight: bold;">Төлөгч:</p>
+        <p style="font-weight: bold;">Хариуцагч:</p>
         <div style="display: flex; justify-content: space-between;">
-          <span>Нэр:</span>
+          <span>Харилцагчын нэр:</span>
           <span style="">&lt;ner&gt;</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
@@ -176,7 +176,11 @@ const khatuuZagvarSoyoljMall = (
           <span style="">&lt;talbainDugaar&gt;</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
-          <span>Утас:</span>
+          <span>Утас: </span>
+          <span style="">&lt;utas&gt;</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span>Утас: </span>
           <span style="">&lt;utas&gt;</span>
         </div>
        <div style="display: flex; justify-content: space-between;">
