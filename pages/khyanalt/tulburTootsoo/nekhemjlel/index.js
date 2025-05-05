@@ -224,9 +224,8 @@ function tulburTootsoo({ token }) {
               );
           }
 
-          let khungulsunTalbainNiitUne = Math.abs(
-            medeelel.talbainNiitUne - (medeelel.khungulult || 0)
-          );
+          let khungulsunTalbainNiitUne =
+            medeelel.talbainNiitUne - (medeelel.khungulult || 0);
 
           var niilberDunGoto =
             (medeelel.umnukhSariinUrTulbur || 0) +
@@ -1677,9 +1676,8 @@ function tulburTootsoo({ token }) {
           "мөнгө"
         );
 
-        let khungulsunTalbainNiitUne = Math.abs(
-          nekhemjlekh.talbainNiitUne - (nekhemjlekh.khungulult || 0)
-        );
+        let khungulsunTalbainNiitUne =
+          nekhemjlekh.talbainNiitUne - (nekhemjlekh.khungulult || 0);
         let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
           ? khungulsunTalbainNiitUne / 11
           : 0;
