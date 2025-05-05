@@ -550,12 +550,15 @@ function tulburTootsoo({ token }) {
             medeelel.duusakhUdur = moment(ognoo)
               .set(
                 "date",
-                barilgiinId === "6735c77a7fc60cd66deb290a" ||
-                  barilgiinId === "67512183c60497546f59513a"
+                barilgiinId === "6731b43bc23730ac1908da2e"
+                  ? 10
+                  : barilgiinId === "6735c77a7fc60cd66deb290a" ||
+                    barilgiinId === "67512183c60497546f59513a"
                   ? 20
                   : 15
               )
               .format("DD");
+
             if (ajiltan?.baiguullagiinId === "679aea9032299b7ba8462a77") {
               medeelel.tureesEkhlehUdur = moment(ognoo)
                 .startOf("month")
@@ -1959,15 +1962,18 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.ekhlekhUdur = moment(ognoo).format("DD");
         nekhemjlekh.duusakhOn = moment(ognoo).format("YYYY");
         nekhemjlekh.duusakhSar = moment(ognoo).format("MM");
-        nekhemjlekh.duusakhUdur = moment(ognoo)
+        medeelel.duusakhUdur = moment(ognoo)
           .set(
             "date",
-            barilgiinId === "6735c77a7fc60cd66deb290a" ||
-              barilgiinId === "67512183c60497546f59513a"
+            barilgiinId === "6731b43bc23730ac1908da2e"
+              ? 10
+              : barilgiinId === "6735c77a7fc60cd66deb290a" ||
+                barilgiinId === "67512183c60497546f59513a"
               ? 20
               : 15
           )
           .format("DD");
+
         if (ajiltan?.baiguullagiinId === "679aea9032299b7ba8462a77") {
           nekhemjlekh.tureesEkhlehUdur = moment(ognoo)
             .startOf("month")

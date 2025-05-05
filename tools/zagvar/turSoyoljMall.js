@@ -96,7 +96,11 @@ const khatuuZagvarSoyoljMall = (
   <div style="width: 100%; padding: 1rem; page-break-after: always;">
      <div style="display: flex; width: 100%; justify-content: space-between; align-items: flex-start; margin-top: 2rem;">
         <div style="background-color: white;">
-       <span>&lt;barilgiinlogo&gt;</span>
+        ${
+          barilgiinId === "6731b43bc23730ac1908da2e"
+            ? `<img src="/SoyoljLogo.png" style="height: 60px;" />`
+            : `<span>&lt;barilgiinlogo&gt;</span>`
+        }
         </div>
             <div style="text-align: right; font-size: 12px; line-height: 1.5;">
                 <p style="margin: 0;">
@@ -116,7 +120,16 @@ const khatuuZagvarSoyoljMall = (
         <p style="font-weight: bold;">Нэхэмжлэгч:</p>
         <div style="display: flex; justify-content: space-between;">
           <span>Байгууллагын нэр:</span>
-          <span style="">${barilgiinId === "622ec99a8e64e5b4f0c3acb6" ? "Их наяд зүүн өндөр" : barilga?.ner}</span>
+          <span style="">${
+            barilgiinId === "622ec99a8e64e5b4f0c3acb6"
+              ? "Их наяд зүүн өндөр"
+              : barilga?.ner
+          }</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+          <span>РД:</span>
+          <span style=""> 5010071 </span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Хаяг:</span>
@@ -124,11 +137,19 @@ const khatuuZagvarSoyoljMall = (
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Утас:</span>
-          <span style="">&nbsp;${baiguullaga?.utas?.join(",")}</span>
+          <span style="">&nbsp;${
+            barilgiinId === "6731b43bc23730ac1908da2e"
+              ? "8910-9501"
+              : baiguullaga?.utas?.join(",")
+          }</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Э-шуудан:</span>
-          <span style="">&nbsp;${baiguullaga?.mail?.join(",")}</span>
+          <span style="">&nbsp;${
+            barilgiinId === "6731b43bc23730ac1908da2e"
+              ? "finance.sm@soyolj.com"
+              : baiguullaga?.mail?.join(",")
+          }</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>Банкны нэр:</span>
