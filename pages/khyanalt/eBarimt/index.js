@@ -10,7 +10,7 @@ import {
   Popconfirm,
   Spin,
   Select,
-  Table as AntdTable
+  Table as AntdTable,
 } from "antd";
 
 import Admin from "components/Admin";
@@ -24,10 +24,20 @@ import { useBarimtToollolt } from "hooks/useEBarimt";
 import useOrder from "tools/function/useOrder";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
+import { Excel } from "antd-table-saveas-excel";
 
 const { RangePicker } = DatePicker;
 
-const searchKeys = ["customerNo", "cashAmount", "billId", "id", "customerTin", "mashiniiDugaar", "gereeniiDugaar", "talbainDugaar"];
+const searchKeys = [
+  "customerNo",
+  "cashAmount",
+  "billId",
+  "id",
+  "customerTin",
+  "mashiniiDugaar",
+  "gereeniiDugaar",
+  "talbainDugaar",
+];
 //#endregion
 
 function EbarimtMedeelel({ token }) {
@@ -338,6 +348,76 @@ function EbarimtMedeelel({ token }) {
         setWaiting(false);
       });
   }
+
+  function exceleerTatya() {
+    const excel = new Excel();
+
+    const excelCol = [
+      {
+        title: "Огноо",
+        dataIndex: "createdAt",
+        __style__: { h: "center" },
+        render: (date) => moment(date).format("YYYY-MM-DD HH:mm"),
+      },
+      {
+        title: "Гэрээний дугаар",
+        __style__: { h: "center" },
+        dataIndex: "gereeniiDugaar",
+      },
+      {
+        title: "Регистр",
+        __style__: { h: "center" },
+        dataIndex: "customerNo",
+      },
+      ...(uilchilgeeAvi === "Зогсоол"
+        ? [
+            {
+              title: "Машины дугаар",
+              dataIndex: "mashiniiDugaar",
+              __style__: { h: "center" },
+            },
+          ]
+        : []),
+      {
+        title: "ДДТД",
+        __style__: { h: "center", width: 35 },
+        dataIndex: "id",
+      },
+      {
+        title: "Дүн",
+        dataIndex: "totalAmount",
+        __style__: { h: "right" },
+        __numFmt__: "#,##0.00",
+        __cellType__: "TypeNumeric",
+        render: (dun, row) => dun || row.totalAmount || 0,
+      },
+      {
+        title: "Төрөл",
+        dataIndex: "type",
+        __style__: { h: "center", width: 30 },
+        render: (type, row) =>
+          type === "B2B_RECEIPT" ? `Байгууллага (${row.customerTin})` : "Иргэн",
+      },
+      {
+        title: "Үйлчилгээ",
+        __style__: { h: "center" },
+        dataIndex: "",
+        render: (_, row) =>
+          row.mashiniiDugaar
+            ? "Зогсоол"
+            : row.gereeniiDugaar
+            ? "Түрээс"
+            : "Тоглоом",
+      },
+    ];
+
+    excel
+      .addSheet("eBarimt")
+      .addColumns(excelCol)
+      .addDataSource(eBarimtGaralt?.jagsaalt || [])
+      .saveAs("eBarimt_tailan.xlsx");
+  }
+
   return (
     <Admin
       khuudasniiNer="eBarimt"
@@ -422,6 +502,9 @@ function EbarimtMedeelel({ token }) {
             data-aos-duration="1000"
             data-aos-delay="300"
           >
+            <Button onClick={exceleerTatya} type="primary">
+              Excel татах
+            </Button>
             <Button
               title={t("Сүүлд илгээгдсэн огноо")}
               className="dark:bg-gray-800 dark:text-white  "
@@ -477,7 +560,7 @@ function EbarimtMedeelel({ token }) {
             className="t-head"
             columns={columns}
             summary={(e) => (
-              <AntdTable.Summary className="border " fixed={'bottom'}>
+              <AntdTable.Summary className="border " fixed={"bottom"}>
                 <AntdTable.Summary.Cell>
                   <div className="space-x-2 truncate text-base font-bold ">
                     Нийт
@@ -488,10 +571,15 @@ function EbarimtMedeelel({ token }) {
                 <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
                 <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
                 <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell colSpan={uilchilgeeAvi === "Зогсоол" ? 2 : 1}>
+                <AntdTable.Summary.Cell
+                  colSpan={uilchilgeeAvi === "Зогсоол" ? 2 : 1}
+                >
                   <div className="truncate text-right font-bold ">
                     {formatNumber(
-                      e?.reduce((a, b) => a + (b?.cashAmount || b?.totalAmount || 0), 0),
+                      e?.reduce(
+                        (a, b) => a + (b?.cashAmount || b?.totalAmount || 0),
+                        0
+                      ),
                       2
                     )}
                   </div>
