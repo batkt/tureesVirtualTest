@@ -95,20 +95,16 @@ const khatuuZagvarSoyoljMall = (
   return `
   <div style="width: 100%; padding: 1rem; page-break-after: always;">
      <div style="display: flex; width: 100%; justify-content: space-between; align-items: flex-start; margin-top: 2rem;">
-        <div style="background-color: white;">
-        ${
-          barilgiinId === "6731b43bc23730ac1908da2e"
-            ? `<img src="/SoyoljLogo.png" style="height: 60px;" />`
-            : `<span>&lt;barilgiinlogo&gt;</span>`
-        }
+        <div style="display: block; width: 35%; top: 0; background-color: white;">
+          &lt;barilgiinlogo&gt;
         </div>
-            <div style="text-align: right; font-size: 12px; line-height: 1.5;">
-                <p style="margin: 0;">
-                Сангийн сайдын 2017 оны 12-р сарын 347-р<br/>
-                тоот тушаалын хавсралт
-                </p>
-            </div>
+        <div style="text-align: right; font-size: 12px; line-height: 1.5;">
+            <p style="margin: 0;">
+            Сангийн сайдын 2017 оны 12-р сарын 347-р<br/>
+            тоот тушаалын хавсралт
+            </p>
         </div>
+    </div>
         
         
     <div style="text-align: center; margin-top: 10px; font-size: 16px; font-weight: bold;">
