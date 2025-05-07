@@ -287,19 +287,23 @@ const khatuuZagvarSoyoljMall = (
           .join("")}
       </tbody>
        <tfoot style="border: none;">
-        <tr style="background-color: #d1d5db; font-weight: bold; border: none;">
-          <td style="border: none; text-align: center; justify-content: center; font-weight: normal;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
-          <td style="border: 1px solid #000;">Дүн</td>
-          <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuatgui&gt;</td>
-        </tr>
-        <tr style="background-color: #d1d5db; font-weight: bold; border: none;">
-          <td style="border: none; border: 1px solid #000;" >НӨАТ</td>
-          <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuat&gt;</td>
-        </tr>
-        <tr style="background-color: #d1d5db; font-weight: bold; border: none;">
-          <td style="border: none; border: 1px solid #000;" >Нийт үнэ</td>
-          <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDun&gt;</td>
-        </tr>
+          ${ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d" ? 
+            `<tr style="background-color: #d1d5db; font-weight: bold; border: none;">
+              <td style="border: none; text-align: center; justify-content: center; font-weight: normal;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
+            </tr>` : 
+            `<tr style="background-color: #d1d5db; font-weight: bold; border: none;">
+              <td style="border: none; text-align: center; justify-content: center; font-weight: normal;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
+              <td style="border: 1px solid #000;">Дүн</td>
+              <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuatgui&gt;</td>
+            </tr>
+            <tr style="background-color: #d1d5db; font-weight: bold; border: none;">
+              <td style="border: none; border: 1px solid #000;" >НӨАТ</td>
+              <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuat&gt;</td>
+            </tr>`}
+            <tr style="background-color: #d1d5db; font-weight: bold; border: none;">
+              <td style="border: none; border: 1px solid #000;" >Нийт үнэ</td>
+              <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDun&gt;</td>
+            </tr>
             <tr>
               <td colspan="6"></br></td>
             </tr>

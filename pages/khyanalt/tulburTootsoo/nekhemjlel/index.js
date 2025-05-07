@@ -485,7 +485,22 @@ function tulburTootsoo({ token }) {
                   />
                 </span>
               );
-            } else
+            } 
+            else if(ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d") // soyolj
+              medeelel.tamga = renderToString(
+                <span style={{ position: "absolute", zIndex: 1 }}>
+                  <img
+                    src={`${url}/file?path=tamga/${barilga.tamga}`}
+                    style={{
+                      width: 180,
+                      height: 130,
+                      transform: "translate(-10%, -50%)",
+                      opacity: 0.65,
+                    }}
+                  />
+                </span>
+              );
+            else
               medeelel.tamga = renderToString(
                 <span style={{ position: "absolute", zIndex: 1 }}>
                   <img
@@ -498,7 +513,7 @@ function tulburTootsoo({ token }) {
                     }}
                   />
                 </span>
-              );
+              );        
 
             medeelel.khuviinTamga = renderToString(
               <span style={{ position: "absolute", zIndex: 1 }}>
