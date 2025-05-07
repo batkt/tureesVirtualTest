@@ -152,6 +152,7 @@ function GuilgeeExceleesOruulakhOlnoor(
         zardliinId: ashiglaltiinId,
         zardliinNer: "Цахилгаан",
         talbainId: item.talbainId,
+        tooluuriinDugaar: item.tooluuriinDugaar,
         talbainDugaar: item.talbainDugaar,
         suuliinZaalt: item.suuliinZaalt,
         guidliinKoep: item.guidliinKoep,
