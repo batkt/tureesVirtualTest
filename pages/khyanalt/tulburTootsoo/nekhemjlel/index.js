@@ -1962,7 +1962,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.ekhlekhUdur = moment(ognoo).format("DD");
         nekhemjlekh.duusakhOn = moment(ognoo).format("YYYY");
         nekhemjlekh.duusakhSar = moment(ognoo).format("MM");
-        medeelel.duusakhUdur = moment(ognoo)
+        nekhemjlekh.duusakhUdur = moment(ognoo)
           .set(
             "date",
             barilgiinId === "6731b43bc23730ac1908da2e"
