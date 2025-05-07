@@ -43,6 +43,7 @@ function ZuvhunKhunglukhModalContent(
           .then((res) => {
             if (res.data === "Amjilttai") {
               destroy();
+              message.success(t("Амжилттай хөнгөлөлт орууллаа"));
             }
           })
           .catch((err) => {
@@ -56,7 +57,7 @@ function ZuvhunKhunglukhModalContent(
     []
   );
 
-  return <div>Та хөнгөлөхдөө итгэлтэй байна уу?</div>;
+  return <div className="dark:text-white">Та уг машины дугаараар хөнгөлөлт оруулах гэж байна, Зөв уу?</div>;
 }
 
 export default React.forwardRef(ZuvhunKhunglukhModalContent);

@@ -550,6 +550,7 @@ const KioskMobile = ({
                     <div className="flex w-full justify-between px-6 ">
                       <div className="text-red-400">Хөнгөлөлт</div>
                       <div className="flex gap-4">
+                        Энд дар
                         <Button
                           onClick={() => showKhunglult()}
                           className="cursor-pointer"
