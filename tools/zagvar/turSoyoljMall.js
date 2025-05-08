@@ -231,14 +231,14 @@ const khatuuZagvarSoyoljMall = (
                sensitivity: "base",
              });
            })
-           .filter((a) => a.tailbar?.includes("Менежментийн зардал"))
+           .filter((a) => a.tailbar?.includes("менежмент"))
            .map((mur, index) => {
              return `
               <tr key=${index}>
                 <td style="border: 1px solid #000; text-align: center;">${
                   index + 1
                 }</td>
-                <td style="border: 1px solid #000; text-align: left;" colspan="4">
+                <td style="border: 1px solid #000; text-align: left;">
                   ${mur.tailbar}
                 </td>
                 <td style="border: 1px solid #000; text-align: center;">
@@ -261,7 +261,7 @@ const khatuuZagvarSoyoljMall = (
         ${medeelel.zardluud
           .filter(
             (a) =>
-              !a.tailbar?.includes("Менежментийн зардал") &&
+              !a.tailbar?.includes("менежмент") &&
               a.tailbar != "Хөнгөлөлт"
           )
           .map(

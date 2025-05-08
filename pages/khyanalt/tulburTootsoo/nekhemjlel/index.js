@@ -742,9 +742,10 @@ function tulburTootsoo({ token }) {
               );
 
               if (
-                a.tailbar === "Цахилгаан" ||
+                a.tailbar?.includes("Цахилгаан") ||
                 a.tailbar === "Халуун ус" ||
-                a.tailbar === "Хүйтэн ус"
+                a.tailbar === "Хүйтэн ус" ||
+                a.tailbar?.includes("менежмент")
               ) {
                 const tariffValue = ashiglaltiinZardal?.jagsaalt?.find(
                   (b) => b.ner === a.tailbar
