@@ -104,6 +104,15 @@ function ZardalBurtgel(
     ));
   }
 
+  function onChangeUsTariff(e) {
+    form.setFieldValue("tariff", e);
+    form.setFieldValue("tariffUsgeer", numberToWords(e,
+      { fixed: 2, suffix: "n" },
+      "төгрөг",
+      "мөнгө"
+    ));
+  }
+
   return (
     <Form
       form={form}
@@ -168,6 +177,7 @@ function ZardalBurtgel(
       </Form.Item>
       <Form.Item label={t("Цэвэр усны тариф")} name="tseverUsDun" hidden={hideKhuitenus}>
         <InputNumber
+          onChange={(e) => onChangeUsTariff(e)}
           min={0}
           style={{ width: "100%" }}
           formatter={(value) =>

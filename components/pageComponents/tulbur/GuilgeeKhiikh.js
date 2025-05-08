@@ -190,6 +190,7 @@ function GuilgeeKhiikh(
                 ognoo: turul === "avlaga" ? ognoo : new Date(),
                 gereeniiId: data?._id,
                 tailbar,
+                tariff: negjUne,
                 nekhemjlekhDeerKharagdakh: turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
                 ekhniiUldegdelEsekh: turul === "avlaga" ? ekhniiUldegdelEsekh : false,
                 zardliinTurul: turul === "avlaga" ? zardliinTurul : undefined,
@@ -448,6 +449,7 @@ function GuilgeeKhiikh(
                                     tukhainZardal?.ner === "Хүйтэн ус" ? "khuitenUs" :
                                       tukhainZardal?.ner === "Хөрөнгийн менежмент" || tukhainZardal?.ner === "Худалдааны менежмент" ? "managementGoto" : "busad";
                 setAshiglaltiinId(v);
+                setNegjUne(tukhainZardal.tariff);
                 setAshiglaltiinNer(tukhainZardal.ner);
                 setZardliinTurul(tempTurul);
               }
