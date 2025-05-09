@@ -118,6 +118,12 @@ function tulburKhurvuulekh(v) {
     case "khungulult":
       utga = "Хөнгөлөлт";
       break;
+    case "Fitness":
+      utga = "Fitness";
+      break;
+    case "Соёолж Ц/Д":
+      utga = "Соёолж Ц/Д";  
+      break;
     default:
       utga = v;
       break;
@@ -827,6 +833,22 @@ function Zogsool({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   Хөнгөлөлт
+                </div>
+                <div
+                  onClick={() => setTulbur("Fitness")}
+                  className={`relative ${
+                    tulbur === "Fitness" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                >
+                  Fitness
+                </div>
+                <div
+                  onClick={() => setTulbur("Соёолж Ц/Д")}
+                  className={`relative ${
+                    tulbur === "Соёолж Ц/Д" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                >
+                  Соёолж Ц/Д
                 </div>
               </div>
             }
@@ -1609,17 +1631,17 @@ function Zogsool({ token }) {
                                 title: t("Зээл"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
                                 render(v, p, i) {
-                                  return formatNumber(
-                                    (v[0]?.tulbur?.length > 0
+                                  return  (v[0]?.tulbur?.length > 0
                                       ? v[0]?.tulbur
                                           ?.filter((e) => e.turul === "zeel")
                                           .reduce(
                                             (a, b) => a + Number(b.dun || 0),
                                             0
                                           )
-                                      : 0) || 0
-                                  );
+                                      : 0) || 0;
                                 },
                               },
                               {
@@ -1674,34 +1696,34 @@ function Zogsool({ token }) {
                                 title: t("Токи"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
                                 render(v, p, i) {
-                                  return formatNumber(
-                                    (v[0]?.tulbur?.length > 0
+                                  return (v[0]?.tulbur?.length > 0
                                       ? v[0]?.tulbur
                                           ?.filter((e) => e.turul === "toki")
                                           .reduce(
                                             (a, b) => a + Number(b.dun || 0),
                                             0
                                           )
-                                      : 0) || 0
-                                  );
+                                      : 0) || 0;
                                 },
                               },
                               {
                                 title: t("Киоск"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
                                 render(v, p, i) {
-                                  return formatNumber(
-                                    (v[0]?.tulbur?.length > 0
+                                  return (v[0]?.tulbur?.length > 0
                                       ? v[0]?.tulbur
                                           ?.filter((e) => e.turul === "kiosk")
                                           .reduce(
                                             (a, b) => a + Number(b.dun || 0),
                                             0
                                           )
-                                      : 0) || 0
-                                  );
+                                      : 0) || 0;
                                 },
                               },
                               {
@@ -1716,6 +1738,48 @@ function Zogsool({ token }) {
                                       ? v[0]?.tulbur
                                           ?.filter(
                                             (e) => e.turul === "khungulult"
+                                          )
+                                          .reduce(
+                                            (a, b) => a + Number(b.dun || 0),
+                                            0
+                                          )
+                                      : 0) || 0
+                                  );
+                                },
+                              },
+                              {
+                                title: t("Fitness"),
+                                dataIndex: "tuukh",
+                                __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
+                                render(v, p, i) {
+                                  return (
+                                    (v[0]?.tulbur?.length > 0
+                                      ? v[0]?.tulbur
+                                          ?.filter(
+                                            (e) => e.turul === "Fitness"
+                                          )
+                                          .reduce(
+                                            (a, b) => a + Number(b.dun || 0),
+                                            0
+                                          )
+                                      : 0) || 0
+                                  );
+                                },
+                              },
+                              {
+                                title: t("Соёолж Ц/Д"),
+                                dataIndex: "tuukh",
+                                __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
+                                render(v, p, i) {
+                                  return (
+                                    (v[0]?.tulbur?.length > 0
+                                      ? v[0]?.tulbur
+                                          ?.filter(
+                                            (e) => e.turul === "Соёолж Ц/Д"
                                           )
                                           .reduce(
                                             (a, b) => a + Number(b.dun || 0),

@@ -2653,9 +2653,10 @@ function camera({ token }) {
                                       title: t("Зээл"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return formatNumber(
-                                          (v[0]?.tulbur?.length > 0
+                                        return (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) => e.turul === "zeel"
@@ -2665,8 +2666,7 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0
-                                        );
+                                            : 0) || 0;
                                       },
                                     },
                                     {
@@ -2676,8 +2676,7 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return formatNumber(
-                                          (v[0]?.tulbur?.length > 0
+                                        return (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) =>
@@ -2688,8 +2687,7 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0
-                                        );
+                                            : 0) || 0;
                                       },
                                     },
                                     {
@@ -2699,8 +2697,7 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return formatNumber(
-                                          (v[0]?.tulbur?.length > 0
+                                        return (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) =>
@@ -2716,17 +2713,17 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0
-                                        );
+                                            : 0) || 0;
                                       },
                                     },
                                     {
                                       title: t("Токи"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return formatNumber(
-                                          (v[0]?.tulbur?.length > 0
+                                        return (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) => e.turul === "toki"
@@ -2736,17 +2733,17 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0
-                                        );
+                                            : 0) || 0;
                                       },
                                     },
                                     {
                                       title: t("Киоск"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return formatNumber(
-                                          (v[0]?.tulbur?.length > 0
+                                        return (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) => e.turul === "kiosk"
@@ -2756,8 +2753,7 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0
-                                        );
+                                            : 0) || 0;
                                       },
                                     },
                                     {
@@ -2767,8 +2763,7 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return formatNumber(
-                                          (v[0]?.tulbur?.length > 0
+                                        return (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) =>
@@ -2779,8 +2774,7 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0
-                                        );
+                                            : 0) || 0;
                                       },
                                     },
                                     {
@@ -2790,8 +2784,7 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return formatNumber(
-                                          (v[0]?.tulbur?.length > 0
+                                        return (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) => e.turul === "qpay"
@@ -2801,8 +2794,7 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0
-                                        );
+                                            : 0) || 0;
                                       },
                                     },
                                     {
@@ -2812,8 +2804,7 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return formatNumber(
-                                          (v[0]?.tulbur?.length > 0
+                                        return (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) =>
@@ -2825,8 +2816,7 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0
-                                        );
+                                            : 0) || 0;
                                       },
                                     },
                                     {
@@ -2836,8 +2826,7 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return formatNumber(
-                                          (v[0]?.tulbur?.length > 0
+                                        return (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) => e.turul === "PosBelen"
@@ -2847,8 +2836,7 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0
-                                        );
+                                            : 0) || 0;
                                       },
                                     },
                                     {
@@ -2894,6 +2882,20 @@ function camera({ token }) {
                                                 )
                                             : 0) || 0
                                         );
+                                      },
+                                    },
+                                    {
+                                      title: "Төлөв",
+                                      dataIndex: "tuukh",
+                                      __style__: { h: "center" },
+                                      render: (v) => {
+                                        return v[0].tuluv === 1
+                                          ? "Төлсөн"
+                                          : v[0].tuluv === 0
+                                          ? "Төлөөгүй"
+                                          : v[0].tuluv === -2
+                                          ? "Зөрчилтэй"
+                                          : "";
                                       },
                                     },
                                     {
