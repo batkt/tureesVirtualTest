@@ -261,6 +261,7 @@ const Kiosk = () => {
         barilgiinId: barilgiinId,
         dun: ilgeekhDun,
         zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
+        mashiniiDugaar: songogdsonData?.plate_number + " kiosk",
       };
 
       if (zogsool?.zogsooliinDans) {
