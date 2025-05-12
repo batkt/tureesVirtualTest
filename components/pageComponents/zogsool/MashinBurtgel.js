@@ -38,6 +38,7 @@ function MashinBurtgel(
     onRefresh,
     mashinBurtgekhButtonId,
     baiguullagiinId,
+    dotorGadnaTsagEsekh,
   },
   ref
 ) {
@@ -512,6 +513,20 @@ function MashinBurtgel(
                   />
                 </Form.Item>
               )}
+              {dotorGadnaTsagEsekh && (<Form.Item
+                label={t("Зогсоолын төрөл")}
+                name="zogsooliinTurul"
+              >
+                <Select
+                  placeholder={t("Зогсоолын төрөл сонгоно уу!")}
+                >
+                  {["Бүгд", "Гадна", "Дотор", ""].map((a) => (
+                    <Select.Option key={a} value={a}>
+                      {t(a)}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>)}
             </React.Fragment>
           ) : null}
         </React.Fragment>

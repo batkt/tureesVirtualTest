@@ -799,6 +799,7 @@ function mashinBurtgel({ token }) {
           onRefresh={onRefresh}
           barilgiinId={barilgiinId}
           baiguullagiinId={baiguullaga?._id}
+          dotorGadnaTsagEsekh={baiguullaga?.tokhirgoo?.dotorGadnaTsagEsekh}
           data={data}
         />
       ),
