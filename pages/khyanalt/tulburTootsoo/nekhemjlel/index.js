@@ -1337,7 +1337,7 @@ function tulburTootsoo({ token }) {
       const dans = dansGaralt?.jagsaalt?.find(
         (a) => a.dugaar === songogdsonDans
       );
-      medeelel.dans = dans?.ibanDugaar ? dans.ibanDugaar : dans?.dugaar;
+      nekhemjlekh.dans = dans?.ibanDugaar ? dans.ibanDugaar : dans?.dugaar;
 
       nekhemjlekh.bank =
         dans?.bank === "khanbank"
