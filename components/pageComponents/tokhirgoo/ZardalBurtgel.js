@@ -93,7 +93,6 @@ function ZardalBurtgel(
     setHideCoefficent(!valueNer?.includes("Цахилгаан"));
     setHideKhaluunus(valueNer !== "Халуун ус");
     setHideKhuitenus(valueNer !== "Халуун ус" && valueNer !== "Хүйтэн ус");
-    setHideTariff(valueNer === "Халуун ус" || valueNer === "Хүйтэн ус");
   },[])
 
   function onChangeTariff(e) {
