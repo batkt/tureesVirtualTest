@@ -2131,11 +2131,11 @@ function camera({ token }) {
               >
                 {/*baiguullagiin id ni FoodCity.iin id */}
                 {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
-                  camerVal[0] === "192.168.2.234" ? (
+                  camerVal[0] === "192.168.2.75" ? (
                     <R2WPlayerComponent
                       USER={"admin"}
-                      ROOT={"live"}
-                      PASSWD={"food12345"}
+                      ROOT={"stream"}
+                      PASSWD={"123456"}
                       Camer={camerVal[0]}
                       PORT={554}
                     />
@@ -2319,6 +2319,15 @@ function camera({ token }) {
                       USER={"admin"}
                       ROOT={"live"}
                       PASSWD={"food2345"}
+                      Camer={camerVal[1]}
+                      PORT={554}
+                    />
+                  ) :
+                  camerVal[1] === "192.168.2.76" ? (
+                    <R2WPlayerComponent
+                      USER={"admin"}
+                      ROOT={"stream"}
+                      PASSWD={"123456"}
                       Camer={camerVal[1]}
                       PORT={554}
                     />

@@ -36,12 +36,9 @@ const searchKeys = ["ner"];
 const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
   const [valueState, setValueState] = useState(value?.zardluud?.map((a) => a._id));
   const onValueChange = (selectedValues) => {
-    console.log(selectedValues, "======================");
-    const selectedObjects = ashiglaltiinZardal?.jagsaalt.filter((a) =>
-      selectedValues.includes(a._id)
-    );
-    onChange(selectedObjects);
+    onChange(selectedValues);
     setValueState(selectedValues);
+    ashiglaltiinZardal.setKhuudaslalt((a) => ({ ...a, search: "", }))
   };
   return (
     <Select
@@ -226,6 +223,14 @@ const Zardal = ({
     searchKeys
   );
 
+  const zardluudiinJagsaalt = useJagsaalt(
+    "/ashiglaltiinZardluud",
+    (query = { barilgiinId: barilgiinId }),
+    undefined,
+    undefined,
+    searchKeys
+  );
+
   function onFinish() {
     next();
   }
@@ -242,12 +247,20 @@ const Zardal = ({
     //   });
     //   return;
     // }
-    console.log(v, "test hiij baina ");
     function zardalOruulya() {
-      value.zardluud = v || [];
+      var zardluud = zardluudiinJagsaalt.jagsaalt?.filter((a) => v.includes(a._id));
+      var oldZardluud = value.zardluud?.filter((a) => v.includes(a._id));
+      var ustgakhJagsaalt = []; 
+      oldZardluud?.map((a) => {
+        var filteredZardal = zardluud?.filter((b) => b._id === a._id);
+        if(filteredZardal?.length > 0)
+          ustgakhJagsaalt.push(filteredZardal[0]);
+      })
+      value.zardluud = oldZardluud || [];
+      value.zardluud.push(...zardluud?.filter((el) => !ustgakhJagsaalt.includes(el)));
       value.zardluud.map((el) => {
         if (el.turul === "Дурын") {
-          el.dun = "";
+          el.dun = el.dun ? el.dun : "";
         }
         var urjuulekhData = el?.turul === "1м2" ? value.talbainKhemjee : el?.turul === "Тогтмол" && 1;
         el.tulukhDun = el.tariff * urjuulekhData;
@@ -294,7 +307,6 @@ const Zardal = ({
       value.zardluud[index].dun = e;
     }
     console.log(value, "valuevalue");
-
     onChange({ ...value });
   };
   return (
