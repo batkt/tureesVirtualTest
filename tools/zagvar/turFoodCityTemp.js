@@ -276,6 +276,20 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 `;
               })
               .join("")}
+              ${medeelel.zardluud.filter(a => a.tailbar === "Хүйтэн ус" || a.tailbar === "Хүйтэн ус нэмэлт" || a.tailbar === "Халуун ус" || a.tailbar === "Халуун ус нэмэлт").length > 0 ?
+              `
+              <tr>
+                <td style="border: 1px solid #000; text-align: center;" rowspan="4">5</td>
+                <td style="border: 1px solid #000; text-align: center;">Усны төлбөр</td>
+                <td style="border: 1px solid #000; text-align: center;">Өмнөх</td>
+                <td style="border: 1px solid #000; text-align: center;">Одоо</td>
+                <td style="border: 1px solid #000; text-align: center;">Зөрүү</td>
+                <td style="border: 1px solid #000; text-align: center;">Цэвэр усны тариф</td>
+                <td style="border: 1px solid #000; text-align: center;">Бохир усны тариф</td>
+                <td style="border: 1px solid #000; text-align: center;">Ус халаасны тариф</td>
+                <td style="border: 1px solid #000; text-align: center;">Нийт дүн</td>
+              </tr>
+              ` : ``}
               ${medeelel.zardluud
                 .sort((a, b) => {
                   return a.tailbar.localeCompare(b.tailbar, "en", {
@@ -285,17 +299,6 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 .filter(a => a.tailbar === "Халуун ус" || a.tailbar === "Халуун ус нэмэлт") //  a.tailbar === "Халуун ус"
                 .map((mur, index) => {
                   return `
-                    <tr>
-                      <td style="border: 1px solid #000; text-align: center;" rowspan="4">5</td>
-                      <td style="border: 1px solid #000; text-align: center;">Усны төлбөр</td>
-                      <td style="border: 1px solid #000; text-align: center;">Өмнөх</td>
-                      <td style="border: 1px solid #000; text-align: center;">Одоо</td>
-                      <td style="border: 1px solid #000; text-align: center;">Зөрүү</td>
-                      <td style="border: 1px solid #000; text-align: center;">Цэвэр усны тариф</td>
-                      <td style="border: 1px solid #000; text-align: center;">Бохир усны тариф</td>
-                      <td style="border: 1px solid #000; text-align: center;">Ус халаасны тариф</td>
-                      <td style="border: 1px solid #000; text-align: center;">Нийт дүн</td>
-                    </tr> 
                     <tr key=${index}>
                       <td style="border: 1px solid #000; text-align: right;">
                         ${mur.tailbar}
@@ -360,36 +363,39 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                           
                         </td>
                       </tr>
-                      <tr>
-                        <td style="border: 1px solid #000; text-align: right;">
-                          
-                        </td>
-                        <td style="border: 1px solid #000; text-align: right;">
-                          
-                        </td>
-                        <td style="border: 1px solid #000; text-align: right;">
-                          
-                        </td>
-                        <td style="border: 1px solid #000; text-align: right; width: 16%;">
-                          &lt;zuruuDun&gt;
-                        </td>
-                        <td style="border: 1px solid #000; text-align: right; width: 16%;">
-                          &lt;tseverusDun&gt;
-                        </td>
-                        <td style="border: 1px solid #000; text-align: right; width: 16%;">
-                          &lt;boxirusDun&gt;
-                        </td>
-                        <td style="border: 1px solid #000; text-align: right; width: 16%;">
-                          &lt;usxalaasniitulburDun&gt;
-                        </td>
-                        <td style="border: 1px solid #000; text-align: right;">
-                          &lt;niilberDun&gt;
-                        </td>
-                      </tr>
                     `;
                   })
                   .join("")}   
-        </tbody>
+                  ${medeelel.zardluud.filter(a => a.tailbar === "Хүйтэн ус" || a.tailbar === "Хүйтэн ус нэмэлт" || a.tailbar === "Халуун ус" || a.tailbar === "Халуун ус нэмэлт").length > 0 ?
+                  `
+                  <tr>
+                    <td style="border: 1px solid #000; text-align: right;">
+                      
+                    </td>
+                    <td style="border: 1px solid #000; text-align: right;">
+                      
+                    </td>
+                    <td style="border: 1px solid #000; text-align: right;">
+                      
+                    </td>
+                    <td style="border: 1px solid #000; text-align: right; width: 16%;">
+                      &lt;zuruuDun&gt;
+                    </td>
+                    <td style="border: 1px solid #000; text-align: right; width: 16%;">
+                      &lt;tseverusDun&gt;
+                    </td>
+                    <td style="border: 1px solid #000; text-align: right; width: 16%;">
+                      &lt;boxirusDun&gt;
+                    </td>
+                    <td style="border: 1px solid #000; text-align: right; width: 16%;">
+                      &lt;usxalaasniitulburDun&gt;
+                    </td>
+                    <td style="border: 1px solid #000; text-align: right;">
+                      &lt;niilberDun&gt;
+                    </td>
+                  </tr>
+                  ` : ``}
+          </tbody>
         <tfoot>
           <tr style="background-color: #d1d5db; font-weight: 600;">
             <td style="text-align: right;" colspan="7">Нийт дүн</td>
