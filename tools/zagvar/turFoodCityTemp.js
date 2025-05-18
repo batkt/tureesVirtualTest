@@ -276,7 +276,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 `;
               })
               .join("")}
-              ${medeelel.zardluud.filter(a => a.tailbar === "Хүйтэн ус" || a.tailbar === "Хүйтэн ус нэмэлт" || a.tailbar === "Халуун ус" || a.tailbar === "Халуун ус нэмэлт").length > 0 ?
+              ${medeelel.zardluud.filter(a => a.tailbar?.includes("Хүйтэн ус") || a.tailbar === "Хүйтэн ус нэмэлт" || a.tailbar?.includes("Халуун ус") || a.tailbar === "Халуун ус нэмэлт").length > 0 ?
               `
               <tr>
                 <td style="border: 1px solid #000; text-align: center;" rowspan="4">5</td>
@@ -296,7 +296,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                     sensitivity: "base",
                   });
                 })
-                .filter(a => a.tailbar === "Халуун ус" || a.tailbar === "Халуун ус нэмэлт") //  a.tailbar === "Халуун ус"
+                .filter(a => a.tailbar?.includes("Халуун ус") || a.tailbar === "Халуун ус нэмэлт") //  a.tailbar?.includes("Халуун ус")
                 .map((mur, index) => {
                   return `
                     <tr key=${index}>
@@ -334,7 +334,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                       sensitivity: "base",
                     });
                   })
-                  .filter(a => a.tailbar === "Хүйтэн ус" || a.tailbar === "Хүйтэн ус нэмэлт") //  a.tailbar === "Хүйтэн ус"
+                  .filter(a => a.tailbar?.includes("Хүйтэн ус") || a.tailbar === "Хүйтэн ус нэмэлт") //  a.tailbar?.includes("Хүйтэн ус")
                   .map((mur, index) => {
                     return `
                       <tr key=${index}>
@@ -366,7 +366,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                     `;
                   })
                   .join("")}   
-                  ${medeelel.zardluud.filter(a => a.tailbar === "Хүйтэн ус" || a.tailbar === "Хүйтэн ус нэмэлт" || a.tailbar === "Халуун ус" || a.tailbar === "Халуун ус нэмэлт").length > 0 ?
+                  ${medeelel.zardluud.filter(a => a.tailbar?.includes("Хүйтэн ус") || a.tailbar === "Хүйтэн ус нэмэлт" || a.tailbar?.includes("Халуун ус") || a.tailbar === "Халуун ус нэмэлт").length > 0 ?
                   `
                   <tr>
                     <td style="border: 1px solid #000; text-align: right;">

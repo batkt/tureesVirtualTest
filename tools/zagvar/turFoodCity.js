@@ -207,7 +207,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                     sensitivity: "base",
                   });
                 })
-                .filter(a => a.tailbar === "Халуун ус") //  a.tailbar === "Халуун ус"
+                .filter(a => a.tailbar?.includes("Халуун ус")) //  a.tailbar?.includes("Халуун ус")
                 .map((mur, index) => {
                   return `
                     <tr>
@@ -256,7 +256,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                       sensitivity: "base",
                     });
                   })
-                  .filter(a => a.tailbar === "Хүйтэн ус") //  a.tailbar === "Хүйтэн ус"
+                  .filter(a => a.tailbar?.includes("Хүйтэн ус")) //  a.tailbar?.includes("Хүйтэн ус")
                   .map((mur, index) => {
                     return `
                       <tr key=${index}>

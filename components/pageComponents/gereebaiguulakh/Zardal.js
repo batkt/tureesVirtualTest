@@ -74,9 +74,9 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
               </p>
               <div className="w-full justify-between flex bg-blue-600 bg-opacity-5 pl-2 pr-2">
                 <p className={`border-r text-right mr-5`}>{t(a.turul)}</p>
-                <div className='ml-auto'>{(a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? ("Цэвэр ус: " + formatNumber(a.tseverUsDun, 2)) : formatNumber(a.tariff, 2)) 
-                                              + " "+ (a.ner === 'Хүйтэн ус' || a.ner === 'Халуун ус' ? "Бохир ус: " + formatNumber(a.bokhirUsDun, 2) : "")
-                                              + " "+ ( a.ner === 'Халуун ус' ? "Ус халаасны: " + formatNumber(a.usKhalaasniiDun, 2) : "")}</div>
+                <div className='ml-auto'>{(a.ner?.includes("Хүйтэн ус") || a.ner?.includes("Халуун ус") ? ("Цэвэр ус: " + formatNumber(a.tseverUsDun, 2)) : formatNumber(a.tariff, 2)) 
+                                              + " "+ (a.ner?.includes("Хүйтэн ус") || a.ner?.includes("Халуун ус") ? "Бохир ус: " + formatNumber(a.bokhirUsDun, 2) : "")
+                                              + " "+ ( a.ner?.includes("Халуун ус") ? "Ус халаасны: " + formatNumber(a.usKhalaasniiDun, 2) : "")}</div>
                 <p className="text-right">
                   {a.turul !== "Дурын" && "₮"}
                 </p>
@@ -100,7 +100,7 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
       `}
     >
       <div
-        className={`absolute ${value?.zardluud && (value?.zardluud[i]?.ner === "Халуун ус" || value?.zardluud[i]?.ner === "Халуун ус") ? "-left-2/3": "-left-2/4"} top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
+        className={`absolute ${value?.zardluud && (value?.zardluud[i]?.ner?.includes("Халуун ус") || value?.zardluud[i]?.ner?.includes("Халуун ус")) ? "-left-2/3": "-left-2/4"} top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
            dark:bg-green-600`}
       />
       <div className="z-10 flex gap-1">
@@ -136,10 +136,10 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
             </Form.Item>
             <div>₮</div>
           </div>
-        ) : value?.zardluud && (value?.zardluud[i].ner === "Халуун ус" || value?.zardluud && value?.zardluud[i]?.ner === "Хүйтэн ус") ? (
-          <div className='ml-auto'>{(value?.zardluud[i].ner === 'Хүйтэн ус' || value?.zardluud[i].ner === 'Халуун ус' ? ("Цэвэр ус: " + formatNumber(value?.zardluud[i].tseverUsDun, 2)) : formatNumber(value?.zardluud[i].tariff, 2)) 
-            + " "+ (value?.zardluud[i].ner === 'Хүйтэн ус' || value?.zardluud[i].ner === 'Халуун ус' ? "Бохир ус: " + formatNumber(value?.zardluud[i].bokhirUsDun, 2) : "")
-            + " "+ ( value?.zardluud[i].ner === 'Халуун ус' ? "Ус халаасны: " + formatNumber(value?.zardluud[i].usKhalaasniiDun, 2) : "")}</div>
+        ) : value?.zardluud && (value?.zardluud[i].ner?.includes("Халуун ус") || value?.zardluud && value?.zardluud[i]?.ner?.includes("Хүйтэн ус")) ? (
+          <div className='ml-auto'>{(value?.zardluud[i].ner?.includes("Хүйтэн ус") || value?.zardluud[i].ner?.includes("Халуун ус") ? ("Цэвэр ус: " + formatNumber(value?.zardluud[i].tseverUsDun, 2)) : formatNumber(value?.zardluud[i].tariff, 2)) 
+            + " "+ (value?.zardluud[i].ner?.includes("Хүйтэн ус") || value?.zardluud[i].ner?.includes("Халуун ус") ? "Бохир ус: " + formatNumber(value?.zardluud[i].bokhirUsDun, 2) : "")
+            + " "+ ( value?.zardluud[i].ner?.includes("Халуун ус") ? "Ус халаасны: " + formatNumber(value?.zardluud[i].usKhalaasniiDun, 2) : "")}</div>
         )
         : (
           <div className="z-10">

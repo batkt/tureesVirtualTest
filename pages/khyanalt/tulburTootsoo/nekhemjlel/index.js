@@ -743,8 +743,8 @@ function tulburTootsoo({ token }) {
 
               if (
                 a.tailbar?.includes("Цахилгаан") ||
-                a.tailbar === "Халуун ус" ||
-                a.tailbar === "Хүйтэн ус" ||
+                a.tailbar?.includes("Халуун ус") ||
+                a.tailbar?.includes("Хүйтэн ус") ||
                 a.tailbar?.includes("менежмент")
               ) {
                 const tariffValue = ashiglaltiinZardal?.jagsaalt?.find(
@@ -788,8 +788,8 @@ function tulburTootsoo({ token }) {
               if (
                 a.tailbar?.includes("Цахилгаан") ||
                 a.tailbar === "Цахилгаан нэмэлт" ||
-                a.tailbar === "Халуун ус" ||
-                a.tailbar === "Хүйтэн ус"
+                a.tailbar?.includes("Халуун ус") ||
+                a.tailbar?.includes("Хүйтэн ус")
               ) {
                 a.zuruuZaalt = (a.suuliinZaalt || 0) - (a.umnukhZaalt || 0);
                 zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
@@ -809,7 +809,7 @@ function tulburTootsoo({ token }) {
                   );
                 }
 
-                if (a.tailbar === "Халуун ус" || a.tailbar === "Хүйтэн ус") {
+                if (a.tailbar?.includes("Халуун ус") || a.tailbar?.includes("Хүйтэн ус")) {
                   a.tseverusTariff = ashiglaltiinZardal?.jagsaalt
                     ?.filter((b) => b.ner === a.tailbar)
                     .map((b) => b.tseverUsDun);
@@ -817,7 +817,7 @@ function tulburTootsoo({ token }) {
                     ?.filter((b) => b.ner === a.tailbar)
                     .map((b) => b.bokhirUsDun);
                   a.usxalaasniitulburTariff =
-                    a.tailbar === "Хүйтэн ус"
+                    a.tailbar?.includes("Хүйтэн ус")
                       ? 0
                       : ashiglaltiinZardal?.jagsaalt
                           ?.filter((b) => b.ner === a.tailbar)
@@ -827,10 +827,10 @@ function tulburTootsoo({ token }) {
                   tseverusDun += a.zuruuZaalt * a.tseverusTariff; // Халуун ус + Хүйтэн ус
                   boxirusDun += a.zuruuZaalt * a.boxirusTariff; // Халуун ус + Хүйтэн ус
                   usxalaasniitulburDun +=
-                    a.tailbar === "Хүйтэн ус"
+                    a.tailbar?.includes("Хүйтэн ус")
                       ? 0
                       : a.zuruuZaalt * a.usxalaasniitulburTariff; // Халуун ус
-                  // niilberDun += a.zuruuZaalt * a.tseverusTariff + a.zuruuZaalt * a.boxirusTariff + (a.tailbar === "Хүйтэн ус" ? 0 : (a.zuruuZaalt * a.usxalaasniitulburTariff))
+                  // niilberDun += a.zuruuZaalt * a.tseverusTariff + a.zuruuZaalt * a.boxirusTariff + (a.tailbar?.includes("Хүйтэн ус") ? 0 : (a.zuruuZaalt * a.usxalaasniitulburTariff))
                   niilberDun += a.tulukhDun;
 
                   zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(

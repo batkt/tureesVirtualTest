@@ -52,7 +52,7 @@ function ZardalBurtgel(
         const method = ugugdul?._id ? updateMethod : createMethod;
         ugugdul["barilgiinId"] = barilgiinId;
         ugugdul["baiguullagiinId"] = baiguullagiinId;
-        ugugdul["bodokhArga"] = (ugugdul.ner === "Халуун ус" || ugugdul.ner === "Хүйтэн ус" || ugugdul.ner?.includes("Цахилгаан")) ? "Khatuu" : undefined; 
+        ugugdul["bodokhArga"] = (ugugdul.ner?.includes("Халуун ус") || ugugdul.ner?.includes("Хүйтэн ус") || ugugdul.ner?.includes("Цахилгаан")) ? "Khatuu" : undefined; 
         method("ashiglaltiinZardluud", token, { ...data, ...ugugdul }).then(
           ({ data }) => {
             if (data === "Amjilttai") {
@@ -91,8 +91,8 @@ function ZardalBurtgel(
     var valueNer = form.getFieldValue('ner');
     setHideTogtmol(valueNer !== "Газ");
     setHideCoefficent(!valueNer?.includes("Цахилгаан"));
-    setHideKhaluunus(valueNer !== "Халуун ус");
-    setHideKhuitenus(valueNer !== "Халуун ус" && valueNer !== "Хүйтэн ус");
+    setHideKhaluunus(!valueNer?.includes("Халуун ус"));
+    setHideKhuitenus(!valueNer?.includes("Халуун ус") && !valueNer?.includes("Хүйтэн ус"));
   },[])
 
   function onChangeTariff(e) {
