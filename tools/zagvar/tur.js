@@ -67,10 +67,6 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <span style="color: #4b5563; font-size: 12px;">Банкны дансны дугаар:</span>
           <span style="font-weight: bold; font-size: 12px;">&lt;dans&gt;</span>
         </div>
-        <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
-          <span style="color: #4b5563; font-size: 12px;">IBAN дугаар:</span>
-          <span style="font-weight: bold; font-size: 12px;">&lt;ibanDugaar&gt;</span>
-        </div>
       </div>
       <div style="padding: 1rem; background-color: #fff; flex: 1; text-align: center;">
         <p style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">Төлөгч:</p>

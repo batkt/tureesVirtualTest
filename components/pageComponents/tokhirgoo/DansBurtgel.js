@@ -89,11 +89,8 @@ function DansBurtgel(
           form.getFieldInstance("dansniiNer").focus();
           form.getFieldInstance("dansniiNer").select();
           break;
-       case "ibanDugaar":
-            form.getFieldInstance("valyut").focus();
-            break;  
-        case "dansniiNer":
-          form.getFieldInstance("ibanDugaar").focus();
+       case "dansniiNer":
+          form.getFieldInstance("valyut").focus();
           break;
         default:
           break;
@@ -130,9 +127,6 @@ function DansBurtgel(
         <Input style={{ width: "100%" }} onKeyUp={focuser} />
       </Form.Item>
       <Form.Item label={t("Дансны нэр")} name="dansniiNer">
-        <Input onKeyUp={focuser} />
-      </Form.Item>
-      <Form.Item label={t("IBAN дугаар")} name="ibanDugaar">
         <Input onKeyUp={focuser} />
       </Form.Item>
       <Form.Item label={t("Валют")} name="valyut">
