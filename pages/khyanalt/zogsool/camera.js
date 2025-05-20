@@ -2322,15 +2322,6 @@ function camera({ token }) {
                       Camer={camerVal[1]}
                       PORT={554}
                     />
-                  ) :
-                  camerVal[1] === "192.168.2.76" ? (
-                    <R2WPlayerComponent
-                      USER={"admin"}
-                      ROOT={"stream"}
-                      PASSWD={"123456"}
-                      Camer={camerVal[1]}
-                      PORT={554}
-                    />
                   ) : (
                     <R2WPlayerComponent
                       Camer={camerVal[1]}
