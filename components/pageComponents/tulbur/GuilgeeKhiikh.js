@@ -69,8 +69,8 @@ function GuilgeeKhiikh(
   }, [negjUne, tsakhilgaanKBTST]);
 
   const sekhDemjikhTulburDun = useMemo(() => {
-    if(baiguullaga?._id === "64e855ce37fdc9b105f936e0") // kaidu 
-      return guidliinKoep === 1 ? ((suuliinZaalt - umnukhZaalt) * tsakhilgaanUrjver * 23.79) : (tsakhilgaanKBTST * 23.79);
+    if(baiguullaga?.tokhirgoo?.guidliinKoepEsekh) // kaidu 
+      return (suuliinZaalt - umnukhZaalt) * tsakhilgaanUrjver * guidliinKoep * 23.79;
     else
       return (suuliinZaalt - umnukhZaalt) * tsakhilgaanUrjver * 23.79;
   }, [suuliinZaalt, umnukhZaalt, tsakhilgaanUrjver, tsakhilgaanKBTST, guidliinKoep]);
