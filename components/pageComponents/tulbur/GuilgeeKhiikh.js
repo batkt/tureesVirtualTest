@@ -69,8 +69,11 @@ function GuilgeeKhiikh(
   }, [negjUne, tsakhilgaanKBTST]);
 
   const sekhDemjikhTulburDun = useMemo(() => {
-    return (suuliinZaalt - umnukhZaalt) * tsakhilgaanUrjver * 23.79;
-  }, [suuliinZaalt, umnukhZaalt, tsakhilgaanUrjver]);
+    if(baiguullaga?._id === "64e855ce37fdc9b105f936e0" && guidliinKoep === 1)
+      return (suuliinZaalt - umnukhZaalt) * tsakhilgaanUrjver * 23.79;
+    else
+      return tsakhilgaanKBTST * 23.79;
+  }, [suuliinZaalt, umnukhZaalt, tsakhilgaanUrjver, tsakhilgaanKBTST, guidliinKoep]);
     
   const niitDun = useMemo(() => {
     return chadalDun + tsekhDun + (baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh ? sekhDemjikhTulburDun : 0);
