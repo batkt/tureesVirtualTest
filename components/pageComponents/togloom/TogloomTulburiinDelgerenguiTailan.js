@@ -197,6 +197,14 @@ function TogloomTulburiinDelgerenguiTailan(
             khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
           });
           break;
+        case "ticket":
+          ugugdul.push({
+            ner: "Онлайн тасалбар",
+            icon: "/Rectangle85.png",
+            dun: element.niitDun,
+            khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+          });
+          break;  
         case "khungulult":
           ugugdul.push({
             ner: "Хөнгөлөлт",

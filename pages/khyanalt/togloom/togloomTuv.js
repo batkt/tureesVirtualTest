@@ -1896,6 +1896,9 @@ function togloom1() {
                                     case "khariltsakh":
                                       utga = "Дансаар";
                                       break;
+                                    case "ticket":
+                                      utga = "Онлайн тасалбар";
+                                      break;  
                                     default:
                                       utga = data?.[0].turul;
                                       break;

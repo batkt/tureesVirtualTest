@@ -135,6 +135,7 @@ function ShineTogloomTulbur(
     // const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
     const toki = tulbur.find((a) => a.turul === "toki")?.dun;
     const khungulult = tulbur.find((a) => a.turul === "khungulult")?.dun;
+    const ticket = tulbur.find((a) => a.turul === "ticket")?.dun;
 
     return {
       belen,
@@ -150,6 +151,7 @@ function ShineTogloomTulbur(
       qpay,
       monpay,
       socialpay,
+      ticket,
       // pocket,
       toki,
       khungulult,
@@ -938,6 +940,23 @@ function ShineTogloomTulbur(
 
             <div className="flex gap-[48px]">
               <div
+                className={`${
+                  value.ticket > 0 && "rounded-3xl border-[3px] border-green-600"
+                } relative h-[85px] hover:scale-110 p-0`}
+                onClick={() => {
+                  turulruuTooKhiikhFunction("ticket");
+                }}
+              >
+                {value.ticket > 0 ? (
+                  <div className="absolute right-[0] top-[-15px] z-10 rounded-xl border-[1px] border-green-600 bg-white p-1">
+                    <div className="font-semibold">
+                      {formatNumber(value.ticket)}₮
+                    </div>
+                  </div>
+                ) : null}
+                <Image preview={false} width={100} src="/Rectangle84.png" />
+              </div>
+              <div
                 className={`h-[85px] cursor-not-allowed rounded-3xl hover:scale-110`}
               >
                 <Image preview={false} width={100} src="/Rectangle66.png" />
@@ -946,11 +965,6 @@ function ShineTogloomTulbur(
                 className={`h-[85px] cursor-not-allowed rounded-3xl hover:scale-110`}
               >
                 <Image preview={false} width={100} src="/Rectangle81.png" />
-              </div>
-              <div
-                className={`h-[85px] cursor-not-allowed rounded-3xl  hover:scale-110`}
-              >
-                {/* <Image preview={false} width={100} src="/Rectangle83.png" /> */}
               </div>
             </div>
           </div>
