@@ -579,25 +579,27 @@ const KioskMobile = ({
             )}
             {qpayerTulukh && (
               <div className="mt-2 grid max-h-[400px] w-full grid-cols-4 gap-2 overflow-y-auto px-4 py-2">
-                {qpayerTulukh.urls.map((mur) => {
-                  return (
-                    <a
-                      href={mur.link}
-                      className="col-span-1 flex w-full flex-col gap-2 overflow-hidden rounded-[15px] border border-[#414143] bg-[#1E1E1E] p-4 hover:border-2"
-                    >
-                      <div className="flex items-center justify-center rounded-xl">
-                        <img
-                          className="h-10 w-10 overflow-hidden rounded-xl"
-                          src={`${mur?.logo}`}
-                          alt=""
-                        />
-                      </div>
-                      <div className="text-center text-buurJijig text-zinc-200">
-                        {mur.description}
-                      </div>
-                    </a>
-                  );
-                })}
+                {qpayerTulukh?.urls?.length > 0 ?
+                  (qpayerTulukh?.urls?.map((mur) => {
+                    return (
+                      <a
+                        href={mur.link}
+                        className="col-span-1 flex w-full flex-col gap-2 overflow-hidden rounded-[15px] border border-[#414143] bg-[#1E1E1E] p-4 hover:border-2"
+                      >
+                        <div className="flex items-center justify-center rounded-xl">
+                          <img
+                            className="h-10 w-10 overflow-hidden rounded-xl"
+                            src={`${mur?.logo}`}
+                            alt=""
+                          />
+                        </div>
+                        <div className="text-center text-buurJijig text-zinc-200">
+                          {mur.description}
+                        </div>
+                      </a>
+                    );
+                  })) : "QPay тохиргоо хийгдээгүй байна"
+                }
               </div>
             )}
             {khungulukhDun > 0 && (
