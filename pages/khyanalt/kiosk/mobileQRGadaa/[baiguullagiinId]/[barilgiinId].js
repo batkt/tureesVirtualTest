@@ -11,12 +11,12 @@ import uilchilgee, { zogsoolUilchilgee, aldaaBarigch, socket } from "services/ui
 import { ebarimtKhelberuud } from "tools/logic/tulburiinKhelberuud";
 import moment, { utc } from "moment";
 //import Lottie from "lottie-react";
-import amjilttaiAnimation from "../../../amjilttaiAnimation.json";
+import amjilttaiAnimation from "../../amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
 import DugaarKeyboardMobile from "components/pageComponents/kiosk/DugaarKeyboardMobile";
 import useQpayObject from "hooks/useQpayObject";
-import ZuvhunKhunglukhModalContent from "../../../ZuvhunKhunglukhModalContent";
+import ZuvhunKhunglukhModalContent from "../../ZuvhunKhunglukhModalContent";
 import { MdOutlineDiscount } from "react-icons/md";
 import { modal } from "components/ant/Modal";
 import dynamic from 'next/dynamic';
@@ -27,7 +27,7 @@ const KioskMobile = ({
   zogsool,
   baiguullagiinId,
   barilgiinId,
-  tsag,
+  khungulukh,
 }) => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
   const [messageApi, contextHolder] = message.useMessage();
@@ -43,16 +43,18 @@ const KioskMobile = ({
   const [unshijBaina, setUnshijBaina] = useState(false);
   const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
-  const [khungulukhDun, setKhungulukhDun] = useState(0);
+  const [khungulukhDun, setKhungulukhDun] = useState(khungulukh);
   const [cameraIP, setCameraIP] = useState();
   const khungulultRef = React.useRef(null);
   const [servereesAvsonOdooTsag, setServereesAvsonOdooTsag] = useState();
+  const [countdown, setCountdown] = useState(100000);
 
   const query = useMemo(() => {
     var query = {};
     if (drawerOngoikh) {
       query["tuukh.0.tuluv"] = 0;
-      query["tuukh.0.garsanKhaalga"] = { $exists: false };
+      query["niitDun"] = { $gt: 0 }
+      query["tuukh.0.tulbur"] = { $eq: [] }
       query["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
         $gte: moment().subtract(3, "days").startOf("day"),
         $lte: moment().endOf("day"),
@@ -121,6 +123,24 @@ const KioskMobile = ({
     });
   }
 
+  const zogsoolMobileSdk = (data) => {
+    const yavuulakhData = {
+      baiguullagiinId: baiguullagiinId,
+      barilgiinId: barilgiinId,
+      mashiniiDugaar: data.plate_number,
+      cameraIP: data.garsanCameraIP,
+    };
+    uilchilgee(token)
+      .post("/zogsoolMobileSdk", yavuulakhData)
+      .then((res) => {
+        console.log("1 --- zogsoolMobileSdk --------->>>");
+        if (res.status === 200) {
+          console.log("zogsoolMobileSdk --------->>>");
+        }
+      })
+      .catch(aldaaBarigch);
+  };
+
   useEffect(() => {
     if (qpayObject && qpayObject.tulsunEsekh) {
       eBarimtTsonkhruuShiljye();
@@ -131,6 +151,19 @@ const KioskMobile = ({
         );
     }
   }, [qpayObject]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCountdown(prev => prev - 1);
+      console.log(countdown);
+      console.log("2 ---- zogsoolMobileSdk --------->>>" + JSON.stringify(qpayObject));
+      if(qpayObject?.tulsunEsekh && !!songogdsonData?.garsanCameraIP && !!songogdsonData.plate_number) // jiguur grand
+      {
+        console.log("2 ---- zogsoolMobileSdk --------->>>");
+        zogsoolMobileSdk(songogdsonData);
+      }
+    }, 2000);
+  }, [countdown, qpayObject, songogdsonData]);
 
   useEffect(() => {
     setCustomerTin();
@@ -190,7 +223,8 @@ const KioskMobile = ({
     uilchluugchiinId,
     barilgiinId,
     ilgeekhDun,
-    mashiniiDugaar
+    mashiniiDugaar,
+    garsanCameraIP
   ) {
     setUnshijBaina(true);
     if (uilchluugchiinId && ilgeekhDun) {
@@ -208,6 +242,8 @@ const KioskMobile = ({
         yavuulakhBody["tulukhDun"] = ilgeekhDun;
         yavuulakhBody["zogsoolUilchluulegchiinId"] = uilchluugchiinId;
         yavuulakhBody["mashiniiDugaar"] = mashiniiDugaar;
+        yavuulakhBody["turul"] = "QRGadaa";
+        yavuulakhBody["cameraIP"] = garsanCameraIP;
       }
       uilchilgee(token)
         .post("/qpayGargaya", yavuulakhBody)
@@ -256,16 +292,12 @@ const KioskMobile = ({
         if (response.data.success == true) {
           if (response.data?.data?.pay_amount > 0) {
             if (
-              !!data?.tuukh[0]?.tulbur?.find((x) => x.turul == ("Хөнгөлөлт/ "+ tsag+ " цаг"))
+              !!data?.tuukh[0]?.tulbur?.find((x) => x.turul == "qpayKhungulult")
             ) {
               console.log("data?.tuukh[0]?.tulbur", data?.tuukh[0]?.tulbur);
               setKhungulukhDun(0);
             }
-            console.log("khungulukhDun before ", khungulukhDun);
-            console.log("une -> ", response.data?.data?.parkingUndsenUne);
-            console.log("tsag -> ", tsag);
-            var khungulukhDun = (response.data?.data?.parkingUndsenUne || 0) * (tsag || 0);
-            console.log("khungulukhDun ---------->>>" + khungulukhDun);
+            console.log("khungulukhDun11", khungulukhDun);
             if (khungulukhDun > 0) {
               console.log("end2");
               if (khungulukhDun < response.data?.data?.pay_amount) {
@@ -279,7 +311,8 @@ const KioskMobile = ({
                   response.data?.data?.session_id,
                   barilgiinId,
                   response.data?.data?.pay_amount - khungulukhDun,
-                  response.data?.data?.plate_number
+                  response.data?.data?.plate_number,
+                  response.data?.data?.garsanCameraIP
                 );
                 setUnshijBaina(false);
               } else {
@@ -289,7 +322,6 @@ const KioskMobile = ({
                 setTulburiinKhelber("qpay");
                 setUnshijBaina(false);
               }
-              setKhungulukhDun(khungulukhDun);
             } else {
               console.log("end1");
               setSongogdsonData(response.data?.data);
@@ -299,7 +331,8 @@ const KioskMobile = ({
                 response.data?.data?.session_id,
                 barilgiinId,
                 response.data?.data?.pay_amount,
-                response.data?.data?.plate_number
+                response.data?.data?.plate_number,
+                response.data?.data?.garsanCameraIP
               );
               setUnshijBaina(false);
             }
@@ -357,10 +390,9 @@ const KioskMobile = ({
     uilchilgee(token)
       .post("/v1/kioskPay", {
         uilchluulegchiinId,
-        turul: "Хөнгөлөлт/ "+ tsag+ " цаг",
+        turul: "qpayKhungulult",
         zogsooliinId,
         paid_amount: khungulukhDun,
-        barilgiinId,
       })
       .then(({ data }) => {
         if (!!data) {
@@ -531,6 +563,7 @@ const KioskMobile = ({
                     <div className="flex w-full justify-between px-6 ">
                       <div className="text-red-400">Хөнгөлөлт</div>
                       <div className="flex gap-4">
+                        Энд дар
                         <Button
                           onClick={() => showKhunglult()}
                           className="cursor-pointer"
@@ -546,7 +579,7 @@ const KioskMobile = ({
             )}
             {qpayerTulukh && (
               <div className="mt-2 grid max-h-[400px] w-full grid-cols-4 gap-2 overflow-y-auto px-4 py-2">
-                {qpayerTulukh?.urls?.map((mur) => {
+                {qpayerTulukh.urls.map((mur) => {
                   return (
                     <a
                       href={mur.link}
@@ -793,7 +826,10 @@ export const getServerSideProps = async (ctx) => {
         zogsool,
         baiguullagiinId: ctx.query.baiguullagiinId,
         barilgiinId,
-        tsag: ctx.query.tsag,
+        khungulukh:
+          khungululttei && zogsool?.qrKhungulukhDun
+            ? zogsool?.qrKhungulukhDun
+            : 0,
       },
     };
   } catch (error) {

@@ -490,7 +490,7 @@ function camera({ token }) {
   } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
 
   useEffect(() => {
-    if(baiguullaga?._id === "6715ef2ca5cefb3e54505428") // jiguur grand
+    if(baiguullaga?.tokhirgoo?.gadaaStickerAshiglakhEsekh) // gadaa sticker ashiglakh esekh
     {
       socket().on(`qpayMobileSdk${baiguullaga?._id}`, (res) => {
         let dataObject = res
