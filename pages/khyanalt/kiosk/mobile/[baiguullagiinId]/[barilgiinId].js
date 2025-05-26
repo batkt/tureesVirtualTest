@@ -47,6 +47,7 @@ const KioskMobile = ({
   const [cameraIP, setCameraIP] = useState();
   const khungulultRef = React.useRef(null);
   const [servereesAvsonOdooTsag, setServereesAvsonOdooTsag] = useState();
+  const [countdown, setCountdown] = useState(100000);
 
   const query = useMemo(() => {
     var query = {};
@@ -147,8 +148,6 @@ const KioskMobile = ({
   useEffect(() => {
     if (qpayObject && qpayObject.tulsunEsekh) {
       eBarimtTsonkhruuShiljye();
-      if(baiguullagiinId === "6715ef2ca5cefb3e54505428" && !!songogdsonData?.garsanCameraIP && !!songogdsonData.plate_number) // jiguur grand
-        zogsoolMobileSdk(songogdsonData);
       if (khungulukhDun > 0)
         khungulultKhadgalya(
           songogdsonData.session_id,
@@ -156,6 +155,15 @@ const KioskMobile = ({
         );
     }
   }, [qpayObject]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCountdown(prev => prev - 1);
+      console.log(countdown);
+      if(qpayObject?.tulsunEsekh && baiguullagiinId === "6715ef2ca5cefb3e54505428" && !!songogdsonData?.garsanCameraIP && !!songogdsonData.plate_number) // jiguur grand
+        zogsoolMobileSdk(songogdsonData);
+    }, 2000);
+  }, [countdown, qpayObject]);
 
   useEffect(() => {
     setCustomerTin();

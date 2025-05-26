@@ -127,28 +127,9 @@ const KioskMobile = ({
     });
   }
 
-  const zogsoolMobileSdk = (data) => {
-    const yavuulakhData = {
-      baiguullagiinId: baiguullagiinId,
-      barilgiinId: barilgiinId,
-      mashiniiDugaar: data.plate_number,
-      cameraIP: data.garsanCameraIP,
-    };
-    uilchilgee(token)
-      .post("/zogsoolMobileSdk", yavuulakhData)
-      .then((res) => {
-        if (res.status === 200) {
-          console.log("zogsoolMobileSdk --------->>>");
-        }
-      })
-      .catch(aldaaBarigch);
-  };
-
   useEffect(() => {
     if (qpayObject && qpayObject.tulsunEsekh) {
       eBarimtTsonkhruuShiljye();
-      if(baiguullagiinId === "6715ef2ca5cefb3e54505428" && !!songogdsonData?.garsanCameraIP && !!songogdsonData.plate_number) // jiguur grand
-        zogsoolMobileSdk(songogdsonData);
       if (khungulukhDun > 0)
         khungulultKhadgalya(
           songogdsonData.session_id,
