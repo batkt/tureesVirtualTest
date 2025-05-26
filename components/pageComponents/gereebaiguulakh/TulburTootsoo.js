@@ -202,9 +202,6 @@ const Tulbur = ({
         </div>  
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
-        {value.khungulultuud?.map((a) => {
-          "dun ---> " + a.khungulultiinDun
-        })}
         <Form.Item noStyle>
           <KhungulultiinKhuvaariUusgekh t={t} ugugdul={khungulultKhuvaari} hungulultUstgakh={hungulultUstgakh}/>
         </Form.Item>
