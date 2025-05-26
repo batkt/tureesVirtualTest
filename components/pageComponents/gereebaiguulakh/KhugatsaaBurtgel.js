@@ -9,6 +9,7 @@ import moment from "moment";
 import Aos from "aos";
 import _ from "lodash";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import { toWords } from "mon_num";
 
 const formItemLayout = {
   labelCol: {
@@ -30,6 +31,26 @@ const YurunkhiiMedeele = ({
   t,
 }) => {
   const [form] = Form.useForm();
+
+  const baritsaaChange = (e) => {
+    if (e === true) {
+      value.baritsaaAvakhEsekh = e;
+      value.baritsaaAvakhDun = value.sariinTurees;
+      value.baritsaaAvakhDunUsgeer = toWords(value.sariinTurees);
+    } else {
+      value.baritsaaAvakhDun = 0;
+      value.baritsaaAvakhEsekh = e;
+      value.baritsaaAvakhDunUsgeer = toWords(" ");
+    }
+    onChange({ ...value });
+  };
+  const baritsaaDunChange = (v) => {
+    if (v && value.baritsaaAvakhEsekh === true) {
+      value.baritsaaAvakhDun = v;
+      value.baritsaaAvakhDunUsgeer = toWords(v);
+    }
+    onChange({ ...value });
+  };
 
   useEffect(() => {
     if ((!!value.khugatsaa && (!!value.zardluud || !!value.talbainuud) && value.duusakhOgnoo > moment().startOf("month")) || !!value._id)
@@ -281,6 +302,80 @@ const YurunkhiiMedeele = ({
           </Form.Item> 
         </div>  
       )}
+      {gereeniiZagvar?.turGereeEsekh !== true ? (
+        <div>
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="100"
+            className="ml-auto"
+          >
+            <Form.Item
+              label={t("Барьцаа хөрөнгө авах эсэх")}
+              name="baritsaaAvakhEsekh"
+            >
+              <Switch
+                checked={value.baritsaaAvakhEsekh}
+                onChange={(e) => {
+                  baritsaaChange(e);
+                }}
+              />
+            </Form.Item>
+          </div>
+          {value.baritsaaAvakhEsekh === true && (
+            <div data-aos="fade-right" data-aos-duration="1000">
+              <Form.Item label={t("Барьцаа дүн")} name="baritsaaAvakhDun">
+                <InputNumber
+                  value={value.baritsaaAvakhDun}
+                  placeholder={t("Барьцаа дүн")}
+                  style={{ width: "100%" }}
+                  onChange={(e) => baritsaaDunChange(e)}
+                  formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                />
+              </Form.Item>
+            </div>
+          )}
+          {value.baritsaaAvakhEsekh === true && (
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
+            >
+              <Form.Item
+                name="baritsaaAvakhKhugatsaa"
+                label={t("Барьцаа авах хугацаа")}
+              >
+                <InputNumber
+                  onKeyUp={focuser}
+                  placeholder={t("Барьцаа авах хугацаа")}
+                  style={{ width: "100%" }}
+                  min={0}
+                />
+              </Form.Item>
+            </div>
+          )}
+          {value.baritsaaAvakhEsekh === true && (
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
+            >
+              <Form.Item
+                name="baritsaaBairshuulakhKhugatsaa"
+                label={t("Барьцаа байршуулах хугацаа")}
+              >
+                <InputNumber
+                  onKeyUp={focuser}
+                  placeholder={t("Барьцаа байршуулах хугацаа")}
+                  style={{ width: "100%" }}
+                  min={0}
+                />
+              </Form.Item>
+            </div>
+          )}
+        </div>
+      ) : null}
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
         <Form.Item wrapperCol={{ span: 24 }}>
           <div className="flex w-full flex-col justify-between gap-4 md:flex-row">

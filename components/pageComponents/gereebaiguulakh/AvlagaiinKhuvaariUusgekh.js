@@ -48,6 +48,17 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
               },
             },
             {
+              title: t("Хөнгөлөлт"),
+              dataIndex: "khyamdral",
+              ellipsis: true,
+              width: "1.5rem",
+              align: "center",
+              showSorterTooltip: false,
+              render(khyamdral) {
+                return formatNumber(khyamdral);
+              },
+            },
+            {
               title: t("Тайлбар"),
               dataIndex: "tailbar",
               ellipsis: true,
@@ -61,6 +72,7 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
                     tailbar = "Түрээсийн төлбөр";
                     break;
                   case "avlaga":
+                  case "khungulult":
                     tailbar = a;
                   default:
                     break;

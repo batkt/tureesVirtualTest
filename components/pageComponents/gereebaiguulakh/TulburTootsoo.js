@@ -1,13 +1,13 @@
-import { Form, Button, Switch, Divider, InputNumber, notification } from "antd";
-import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
+import { DatePicker, Form, Button, message, Select, Input, Switch, Divider, InputNumber, notification, Table } from "antd";
+import { ArrowLeftOutlined, SaveOutlined, PlusOutlined, DeleteOutlined, SettingOutlined } from "@ant-design/icons";
 import AvlagiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/AvlagaiinKhuvaariUusgekh";
+import KhungulultiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/KhungulultiinKhuvaariUusgekh";
 import formatNumber from "tools/function/formatNumber";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import Aos from "aos";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import { t } from "i18next";
-import { toWords } from "mon_num";
 
 const formItemLayout = {
   labelCol: {
@@ -33,31 +33,23 @@ const Tulbur = ({
     Aos.init({ once: true });
   });
   const [khuvaari, setKhuvaari] = useState();
-
-  const baritsaaChange = (e) => {
-    if (e === true) {
-      value.baritsaaAvakhEsekh = e;
-      value.baritsaaAvakhDun = value.sariinTurees;
-      value.baritsaaAvakhDunUsgeer = toWords(value.sariinTurees);
-    } else {
-      value.baritsaaAvakhDun = 0;
-      value.baritsaaAvakhEsekh = e;
-      value.baritsaaAvakhDunUsgeer = toWords(" ");
-    }
-    onChange({ ...value });
-  };
-  const baritsaaDunChange = (v) => {
-    if (v && value.baritsaaAvakhEsekh === true) {
-      value.baritsaaAvakhDun = v;
-      value.baritsaaAvakhDunUsgeer = toWords(v);
-    }
-    onChange({ ...value });
-  };
+  const [ognoonuud, setOgnoonuud] = useState(value.ognoonuud || []);
+  const [khungulultKhuvaari, setKhungulultKhuvaari] = useState(value.khungulultuud || []);
+  
   useEffect(() => {
     form.getFieldInstance("baritsaaBairshuulakhKhugatsaa")?.focus();
   }, []);
 
   useEffect(() => {
+    if ((!!value.khugatsaa && (!!value.zardluud || !!value.talbainuud) && value.duusakhOgnoo > moment().startOf("month")) || !!value._id)
+      khuvaariUusgey();
+  }, []);
+
+  function onFinish() {
+    next(value);
+  }
+
+  function khuvaariUusgey() {
     const zardluud = value.zardluud?.filter(function (item) {
       return (
         item.turul === "Дурын" ||
@@ -66,37 +58,79 @@ const Tulbur = ({
         item.turul === "Тогтмол"
       );
     });
-    // console.log('000000000', value);
-    if ((!!value.khugatsaa && (!!value.zardluud || !!value.talbainuud) && value.duusakhOgnoo > moment().startOf("month")) || !!value._id)
-      uilchilgee(token)
-        .post(`/khuvaariUusgey`, {
-          dun: value.talbainNiitUne,
-          khugatsaa: value.khugatsaa,
-          tulukhUdruud: value.tulukhUdur,
-          ekhlekhOgnoo: moment(gereeniiZagvar?.turGereeEsekh ? value.gereeniiOgnoo : (!value._id ? moment(value.gereeniiOgnoo).startOf("month") : moment().startOf("month"))).format("YYYY-MM-DD 00:00:00"),
-          duusakhOgnoo: moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00"),
-          zardluud: zardluud,
-          mk: value.talbainKhemjee,
-          metrKube: value.talbainKhemjeeMetrKube,
-          turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
-          shineGereeEsekh: !value._id,
-          guchKhonogOruulakhEsekh: value.guchKhonogOruulakhEsekh,
-          garaasKhonogOruulakhEsekh: value.garaasKhonogOruulakhEsekh,
-          ekhniiSariinKhonog: value.ekhniiSariinKhonog,
-          gereeniiOgnoo: value.gereeniiOgnoo,
-        })
-        .then(({ data }) => {
-          setKhuvaari(data);
-          _.set(value, "avlaga.guilgeenuud", data);
-          onChange({ ...value });
-        })
-        .catch((e) => {
-          aldaaBarigch(e);
-        });
-  }, []);
+    uilchilgee(token)
+      .post(`/khuvaariUusgey`, {
+        dun: value.talbainNiitUne,
+        khugatsaa: value.khugatsaa,
+        tulukhUdruud: value.tulukhUdur,
+        ekhlekhOgnoo: moment(gereeniiZagvar?.turGereeEsekh ? value.gereeniiOgnoo : (!value._id ? moment(value.gereeniiOgnoo).startOf("month") : moment().startOf("month"))).format("YYYY-MM-DD 00:00:00"),
+        duusakhOgnoo: moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00"),
+        zardluud: zardluud,
+        khungulultuud: khungulultKhuvaari,
+        mk: value.talbainKhemjee,
+        metrKube: value.talbainKhemjeeMetrKube,
+        turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
+        shineGereeEsekh: !value._id,
+        guchKhonogOruulakhEsekh: value.guchKhonogOruulakhEsekh,
+        garaasKhonogOruulakhEsekh: value.garaasKhonogOruulakhEsekh,
+        ekhniiSariinKhonog: value.ekhniiSariinKhonog,
+        gereeniiOgnoo: value.gereeniiOgnoo,
+      })
+      .then(({ data }) => {
+        setKhuvaari(data);
+        _.set(value, "avlaga.guilgeenuud", data);
+        onChange({ ...value });
+      })
+      .catch((e) => {
+        aldaaBarigch(e);
+      });
+  }
 
-  function onFinish() {
-    next(value);
+  function khungulultOruulakh(){
+    if(!value.sariinTurees || value.sariinTurees === 0)
+    {
+      notification.warning({ message: "Сарын түрээс оруулна уу!", });
+      return;
+    }
+    if(!value.khungulukhKhuvi || value.khungulukhKhuvi === 0)
+    {
+      notification.warning({ message: "Хөнгөлөлтийн хувь оруулна уу!", });
+      return;
+    }
+    if(ognoonuud?.length === 0)
+    {
+      notification.warning({ message: "Огноо сонгоно уу!", });
+      return;
+    }
+    var key = moment(ognoonuud[0]).format("YYYY-MM") + moment(ognoonuud[1]).format("YYYY-MM") + "turees" + "khuvi" + formatNumber(value.khungulukhKhuvi, 0);
+    var filtered = khungulultKhuvaari?.filter((a) => a.key == key);
+    if(filtered?.length > 0)
+    {
+      notification.warning({ message: "Хөнгөлөлт оруулсан байна!", });
+      return;
+    }
+    var addRow = {
+      key: key,
+      ognoonuud: [moment(ognoonuud[0]).set("date", value.tulukhUdur[0]), moment(ognoonuud[1]).set("date", value.tulukhUdur[0])],
+      turul: "turees",
+      khungulukhTurul: "khuvi",
+      khungulukhKhuvi: value.khungulukhKhuvi,
+      tulukhDun: value.sariinTurees,
+      khungulultiinDun: Math.round((((value.sariinTurees * value.khungulukhKhuvi) / 100) + Number.EPSILON) * 10000)/ 10000, 
+    }
+    setKhungulultKhuvaari((pre) => { return [...pre, addRow]});
+    khungulultKhuvaari.push(addRow);
+    value.khungulultuud = khungulultKhuvaari;
+    onChange({ ...value });
+    khuvaariUusgey();
+  }
+
+  function hungulultUstgakh(e){
+    setKhungulultKhuvaari((pre) => { return pre.filter((a) => a.key !== e)});
+    value.khungulultuud = value.khungulultuud.filter((a) => a.key != e);
+    console.log("log -----> " + JSON.stringify(value.khungulultuud));
+    onChange({ ...value });
+    khuvaariUusgey();
   }
 
   const focuser = useCallback((e) => {
@@ -121,71 +155,76 @@ const Tulbur = ({
       onValuesChange={(values) => onChange({ ...value, ...values })}
       onFinish={onFinish}
     >
+      <div className="flex justify-between">
+        <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
+          <Form.Item
+          labelAlign="left"
+          name="ognoonuud"
+          label={t("Хөнгөлөх сар")}
+          >
+            <DatePicker.RangePicker
+              className="flex-end w-full rounded-md md:w-auto"
+              allowClear={false}
+              style={{ width: "100%" }}
+              picker="month"
+              placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
+              onChange={(v) => {
+                setOgnoonuud(v);
+              }}
+            />
+          </Form.Item>
+        </div>
+        <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
+          <Form.Item
+          name="khungulukhKhuvi"
+          labelAlign="left"
+          >
+            <Input
+              className="flex ml-1 flex-end w-full rounded-md md:w-auto"
+              onKeyDown={focuser}
+              type={"number"}
+              placeholder={"Хөнгөлөх хувь"}
+            />
+          </Form.Item>
+        </div>  
+        <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
+          <Form.Item >
+            <Button
+              className="flex ml-1"
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                khungulultOruulakh();
+              }}
+            >
+            </Button>    
+          </Form.Item>
+        </div>  
+      </div>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
+        {value.khungulultuud?.map((a) => {
+          "dun ---> " + a.khungulultiinDun
+        })}
+        <Form.Item noStyle>
+          <KhungulultiinKhuvaariUusgekh t={t} ugugdul={khungulultKhuvaari} hungulultUstgakh={hungulultUstgakh}/>
+        </Form.Item>
+      </div>
       <div data-aos="fade-right" data-aos-duration="1000">
-        <Form.Item label={t("Түрээсийн төлбөр")} style={{ marginBottom: 10 }}>
+        <Form.Item label={t("Нийт хөнгөлөлт")}>
+          <div className="text-right text-lg font-medium dark:text-gray-100">
+            {formatNumber(value.khungulultuud?.reduce((a, b) => a + b.khungulultiinDun || 0, 0))}
+          </div>
+        </Form.Item>
+      </div>
+      <div>
+        <Form.Item label={t("Түрээсийн төлбөр")}>
           <div className="text-right text-lg font-medium dark:text-gray-100">
             {formatNumber(value.sariinTurees)}
           </div>
         </Form.Item>
-      </div>
-
-      {gereeniiZagvar?.turGereeEsekh !== true ? (
-        <div>
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="100"
-            className="ml-auto"
-          >
-            <Form.Item
-              label={t("Барьцаа хөрөнгө авах эсэх")}
-              name="baritsaaAvakhEsekh"
-            >
-              <Switch
-                checked={value.baritsaaAvakhEsekh}
-                onChange={(e) => {
-                  baritsaaChange(e);
-                }}
-              />
-            </Form.Item>
-          </div>
-          {value.baritsaaAvakhEsekh === true && (
-            <div data-aos="fade-right" data-aos-duration="1000">
-              <Form.Item label={t("Барьцаа дүн")} name="baritsaaAvakhDun">
-                <InputNumber
-                  value={value.baritsaaAvakhDun}
-                  placeholder={t("Барьцаа дүн")}
-                  style={{ width: "100%" }}
-                  onChange={(e) => baritsaaDunChange(e)}
-                  formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                />
-              </Form.Item>
-            </div>
-          )}
-          {value.baritsaaAvakhEsekh === true && (
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="100"
-            >
-              <Form.Item
-                name="baritsaaBairshuulakhKhugatsaa"
-                label={t("Хугацаа")}
-              >
-                <InputNumber
-                  onKeyUp={focuser}
-                  placeholder={t("Барьцаа байршуулах хугацаа")}
-                  style={{ width: "100%" }}
-                  min={0}
-                />
-              </Form.Item>
-            </div>
-          )}
-        </div>
-      ) : null}
+      </div>  
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
-        <Form.Item label={t("Нийт дүн")} style={{ marginBottom: 10 }}>
+        <Form.Item label={t("Нийт дүн")} style={{ marginBottom: 1 }}>
           <div className="text-right text-lg font-medium dark:text-gray-100">
             {formatNumber(
               (value.sariinTurees || 0) * (value.buunTulult || 1) +
@@ -196,9 +235,8 @@ const Tulbur = ({
                 (value.khyamdaral || 0)
             )}
           </div>
-        </Form.Item>
+        </Form.Item>  
       </div>
-
       <Divider />
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
         <Form.Item name="avlaga" noStyle>
