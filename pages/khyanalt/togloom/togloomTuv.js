@@ -1879,35 +1879,56 @@ function togloom1() {
                               },
                             },
                             {
-                              title: t("Хэлбэр"),
-                              align: "center",
-                              dataIndex: "tulbur",
-                              ellipsis: true,
-                              render: (data) => {
-                                const jagsaalt = data?.filter(
-                                  (a) => a.turul !== "khunglukh"
-                                );
-                                var utga = "";
-                                if (jagsaalt?.length > 0) {
-                                  switch (jagsaalt[0].turul) {
-                                    case "belen":
-                                      utga = "Бэлэн";
-                                      break;
-                                    case "khariltsakh":
-                                      utga = "Дансаар";
-                                      break;
-                                    case "ticket":
-                                      utga = "Онлайн тасалбар";
-                                      break;  
-                                    default:
-                                      utga = data?.[0].turul;
-                                      break;
-                                  }
-                                }
-                                return t(utga);
+                              title: t("Бэлэн"),
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
+                              render(v, data) {
+                                return (data.niitTulbur?.filter((e) => e.turul === "belen").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
                               },
                             },
                             {
+                              title: t("Дансаар"),
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
+                              render(v, data) {
+                                return (data.niitTulbur?.filter((e) => e.turul === "khariltsakh").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
+                              },
+                            },
+                            {
+                              title: t("Карт"),
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
+                              render(v, data) {
+                                return (data.niitTulbur?.filter((e) => e.turul === "khaan" ||
+                                                                        e.turul === "tdb" ||
+                                                                        e.turul === "khas" ||
+                                                                        e.turul === "golomt" ||
+                                                                        e.turul === "kapitron" ||
+                                                                        e.turul === "tur").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
+                              },
+                            },
+                            {
+                              title: t("qpay"),
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
+                              render(v, data) {
+                                return (data.niitTulbur?.filter((e) => e.turul === "qpay").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
+                              },
+                            },
+                            {
+                              title: t("ticket"),
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
+                              render(v, data) {
+                                return (data.niitTulbur?.filter((e) => e.turul === "ticket").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
+                              },
+                            },
+							              {
                               title: t("Асран хамгаалагч"),
                               dataIndex: "asragchiinTurul",
                               ellipsis: true,
