@@ -496,6 +496,7 @@ function camera({ token }) {
         let dataObject = res
         if(dataObject && dataObject?.khaalgaTurul === "Гарах" && !!dataObject?.mashiniiDugaar)
         {
+          console.log("-------- qpayMobileSdk -------------->" + JSON.stringify(dataObject?.mashiniiDugaar));
           khaalgaNeey(res.cameraIP);
           onRefresh();
         }

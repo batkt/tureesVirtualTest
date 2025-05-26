@@ -138,6 +138,7 @@ const KioskMobile = ({
     uilchilgee(token)
       .post("/zogsoolMobileSdk", yavuulakhData)
       .then((res) => {
+        console.log("1 --- zogsoolMobileSdk --------->>>");
         if (res.status === 200) {
           console.log("zogsoolMobileSdk --------->>>");
         }
@@ -161,7 +162,10 @@ const KioskMobile = ({
       setCountdown(prev => prev - 1);
       console.log(countdown);
       if(qpayObject?.tulsunEsekh && baiguullagiinId === "6715ef2ca5cefb3e54505428" && !!songogdsonData?.garsanCameraIP && !!songogdsonData.plate_number) // jiguur grand
+      {
+        console.log("2 ---- zogsoolMobileSdk --------->>>");
         zogsoolMobileSdk(songogdsonData);
+      }
     }, 2000);
   }, [countdown, qpayObject]);
 
