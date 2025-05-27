@@ -6,7 +6,7 @@ import _ from "lodash";
 import { t } from "i18next";
 
 function ZuvhunKhunglukhModalContent(
-  { destroy, songogdsonData, barilgiinId, ajiltan, token },
+  { destroy, songogdsonData, barilgiinId, ajiltan, token, zogsool, khungulukhTsag },
   ref
 ) {
   const [aldaa, setAldaa] = React.useState(null);
@@ -39,6 +39,8 @@ function ZuvhunKhunglukhModalContent(
             barilgiinId,
             ajiltniiNer: ajiltan?.ner,
             ajiltniiId: ajiltan?._id,
+            zogsoolUndsenUne: (zogsool?.undsenUne || 2000),
+            khungulukhTsag: (khungulukhTsag || 2),
           })
           .then((res) => {
             if (res.data === "Amjilttai") {

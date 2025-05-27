@@ -101,7 +101,7 @@ const Kiosk = () => {
     });
   };
 
-  function showKhunglult() {
+  function showKhunglult(khungulukhTsag) {
     const footer = [
       <Button onClick={() => khungulultRef.current.khaaya()}>Үгүй</Button>,
       <Button
@@ -121,6 +121,8 @@ const Kiosk = () => {
           ajiltan={ajiltan}
           token={token}
           ref={khungulultRef}
+          zogsool={zogsool}
+          khungulukhTsag={khungulukhTsag}
         />
       ),
       footer,
@@ -214,7 +216,7 @@ const Kiosk = () => {
 
   useEffect(() => {
     if (
-      (ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880" || ajiltan?._id == "67d92062513ec21e26bdb604") &&
+      (ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880" || ajiltan?._id == "67d92062513ec21e26bdb604" || ajiltan?._id == "68357e846653c13643908698") &&
       songogdsonData?.enter_date &&
       !songogdsonData?.fitnessHungulult
     ) {
@@ -233,6 +235,25 @@ const Kiosk = () => {
             pay_amount: prev?.pay_amount - (ajiltan?._id == "67d92062513ec21e26bdb604" ? 7000 : 4000),
           };
         });
+      }
+    }
+    if(ajiltan?._id == "68357e846653c13643908698" && songogdsonData?.enter_date && !songogdsonData?.fitnessHungulult24)
+    {
+       const odooTsag = moment(servereesAvsonOdooTsag);
+
+      const hoyrTsagiinDaraa = moment(songogdsonData.enter_date).add(
+        24,
+        "hours"
+      );
+      const hoyrTsagiinDataaGarsanEsekh = odooTsag.isAfter(hoyrTsagiinDaraa);
+      if(hoyrTsagiinDataaGarsanEsekh) {
+        setSongogdsonData((prev) => {
+            return {
+              ...prev,
+              fitnessHungulult24: (zogsool?.undsenUne || 2000) * 24,
+              pay_amount: prev?.pay_amount - ((zogsool?.undsenUne || 2000) * 24),
+            };
+          });
       }
     }
   }, [songogdsonData?.enter_date, servereesAvsonOdooTsag, ajiltan?._id]);
@@ -756,7 +777,7 @@ const Kiosk = () => {
                     <div>{formatNumber(songogdsonData?.pay_amount, 0)}₮</div>
                   </div>
 
-                  {(ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880" || ajiltan?._id == "67d92062513ec21e26bdb604") && (
+                  {(ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880" || ajiltan?._id == "67d92062513ec21e26bdb604" || ajiltan?._id == "68357e846653c13643908698") && (
                     <>
                       <div className="w-full border border-[#1E1E1E]" />
                       <div className="flex w-full justify-between px-6 ">
@@ -769,6 +790,23 @@ const Kiosk = () => {
                             <MdOutlineDiscount className="text-green-400" />
                           </Button>
                           {formatNumber(songogdsonData?.fitnessHungulult, 0)}₮
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {ajiltan?._id === "68357e846653c13643908698" && (
+                    <>
+                      <div className="w-full border border-[#1E1E1E]" />
+                      <div className="flex w-full justify-between px-6 ">
+                        <div className="text-red-400">Хөнгөлөлт/24</div>
+                        <div className="flex gap-4">
+                          <Button
+                            onClick={() => showKhunglult(24)}
+                            className="cursor-pointer"
+                          >
+                            <MdOutlineDiscount className="text-green-400" />
+                          </Button>
+                          {formatNumber(songogdsonData?.fitnessHungulult24, 0)}₮
                         </div>
                       </div>
                     </>

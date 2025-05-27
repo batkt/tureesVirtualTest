@@ -125,6 +125,22 @@ const Tulbur = ({
     khuvaariUusgey();
   }
 
+  useEffect(() => {
+    if(!!value.sariinTurees && value.talbainIdnuud?.length > 0 && khungulultKhuvaari?.length > 0)
+    {
+      setKhungulultKhuvaari((pre) => {
+        pre.forEach((a) => {
+          a.tulukhDun = value.sariinTurees || 2;
+          a.khungulultiinDun = Math.round((((value.sariinTurees * a.khungulukhKhuvi) / 100) + Number.EPSILON) * 10000)/ 10000;
+        });
+        value.khungulultuud = pre;
+        onChange({ ...value });
+        khuvaariUusgey();
+        return [...pre]
+      });
+    }
+  }, [value.sariinTurees, value.talbainIdnuud]);
+
   function hungulultUstgakh(e){
     setKhungulultKhuvaari((pre) => { return pre.filter((a) => a.key !== e)});
     value.khungulultuud = value.khungulultuud.filter((a) => a.key != e);
