@@ -47,6 +47,13 @@ function KhuviinMedeelel({
     bichiltKhonog: baiguullaga?.tokhirgoo?.bichiltKhonog || 0,
   });
 
+  const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState({
+    jilBurTalbaiTulburNemekhEsekh: barilga?.tokhirgoo?.jilBurTalbaiTulburNemekhEsekh,
+    jilBurTulbur: barilga?.tokhirgoo?.jilBurTulbur,
+    gereeDuusakhTalbaiTulburNemekhEsekh: barilga?.tokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
+    gereeDuusakhTulbur: barilga?.tokhirgoo?.gereeDuusakhTulbur,
+  });
+
   const gereeTokhirgooKhadgalya = () => {
     uilchilgee(token)
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: gereeTokhirgoo })
@@ -58,6 +65,7 @@ function KhuviinMedeelel({
           setSongogdsonTsonkhniiIndex(3);
         }
       });
+    khadgalakh();  
   };
 
   const zuragKhadgalakh = (v, turul) => {
@@ -74,6 +82,13 @@ function KhuviinMedeelel({
     const index = baiguullaga.barilguud.findIndex((a) => a._id === barilgiinId);
     gariinUseg && (baiguullaga.barilguud[index].gariinUseg = gariinUseg);
     tamga && (baiguullaga.barilguud[index].tamga = tamga);
+    if(!!barilgaTokhirgoo)
+    {
+      baiguullaga.barilguud[index].tokhirgoo.jilBurTalbaiTulburNemekhEsekh = barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh
+      baiguullaga.barilguud[index].tokhirgoo.jilBurTulbur = barilgaTokhirgoo?.jilBurTulbur
+      baiguullaga.barilguud[index].tokhirgoo.gereeDuusakhTalbaiTulburNemekhEsekh = barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh
+      baiguullaga.barilguud[index].tokhirgoo.gereeDuusakhTulbur = barilgaTokhirgoo?.gereeDuusakhTulbur
+    }
     _.set(baiguullaga, `barilguud.${index}`, baiguullaga.barilguud[index]);
     updateMethod("baiguullaga", token, baiguullaga).then(({ data }) => {
       if (data === "Amjilttai") {
@@ -159,6 +174,108 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("Гэрээний түрээсийн үнэ тогтмол төлбөр нэмэх эсэх")}
+                </div>
+                <div className="text-gray-600">{t("Урт хугацааны гэрээтэй үед автоматаар жил бүр сарын талбайн төлбөр идэвхжүүлэх эсэх")} </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={
+                    barilga?.tokhirgoo?.jilBurTalbaiTulburNemekhEsekh
+                  }
+                  onChange={(v) =>
+                    setBarilgaTokhirgoo((a) => ({
+                      ...(a || {}),
+                      jilBurTalbaiTulburNemekhEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          {barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh ?
+            (<div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">{t("Урт хугацааны гэрээтэй үед төлбөр оруулах")}</div>
+                <div className="text-gray-600">
+                  {t("")}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <InputNumber
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  style={{ width: "100%", textAlign: "center" }}
+                  min={0}
+                  defaultValue={barilga?.tokhirgoo?.jilBurTulbur}
+                  onChange={(v) =>
+                    setBarilgaTokhirgoo((a) => ({
+                      ...(a || {}),
+                      jilBurTulbur: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>) : ""}
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("Гэрээ дуусах үед түрээсийн үнэ тогтмол төлбөр нэмэх эсэх")}
+                </div>
+                <div className="text-gray-600">{t("Гэрээ дуусах үед автоматаар жил бүр сарын талбайн төлбөр идэвхжүүлэх эсэх")} </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={
+                    barilga?.tokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh
+                  }
+                  onChange={(v) =>
+                    setBarilgaTokhirgoo((a) => ({
+                      ...(a || {}),
+                      gereeDuusakhTalbaiTulburNemekhEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          {barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh ?
+            (<div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">{t("Гэрээ дуусах үед төлбөр оруулах")}</div>
+                <div className="text-gray-600">
+                  {t("")}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <InputNumber
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  style={{ width: "100%", textAlign: "center" }}
+                  min={0}
+                  defaultValue={barilga?.tokhirgoo?.gereeDuusakhTulbur}
+                  onChange={(v) =>
+                    setBarilgaTokhirgoo((a) => ({
+                      ...(a || {}),
+                      gereeDuusakhTulbur: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>) : ""}
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
