@@ -585,7 +585,7 @@ function KhuviinMedeelel({
                     ) : (
                       barilga?.gariinUseg && (
                         <img
-                          src={`${url}/gariinUseg/${barilga.gariinUseg}}`}
+                          src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
                           alt="image"
                           style={{
                             height: "50px",
