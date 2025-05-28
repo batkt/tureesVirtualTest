@@ -134,9 +134,7 @@ const YurunkhiiMedeele = ({
           ekhlekhOgnoo: moment(
             gereeniiZagvar?.turGereeEsekh
               ? value.gereeniiOgnoo
-              : !value._id
-              ? moment(value.gereeniiOgnoo).startOf("month")
-              : moment().startOf("month")
+              : moment(value.gereeniiOgnoo).startOf("month")
           ).format("YYYY-MM-DD 00:00:00"),
           duusakhOgnoo: moment(value.duusakhOgnoo).format(
             "YYYY-MM-DD 00:00:00"

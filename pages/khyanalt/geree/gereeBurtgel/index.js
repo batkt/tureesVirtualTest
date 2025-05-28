@@ -415,12 +415,17 @@ function ZakhialgiinKhyanalt() {
   //#region const
   const { t, i18n } = useTranslation();
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
+  const [gereeOgnoo, setGereeOgnoo] = React.useState();
+  const query = useMemo(() => {
+    return {
+      tuluv: { $nin: [-1] },
+      gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
+      duusakhOgnoo: { $gte: new Date() },
+    };
+  }, [gereeOgnoo]);
   const [shuult, setShuult] = React.useState({
     utga: "Хэвийн",
-    query: {
-      tuluv: { $nin: [-1] },
-      duusakhOgnoo: { $gte: new Date() },
-    },
+    query: query,
   });
   const [neesenEsekh, setNeesenEsekh] = useState(false);
   const { order, onChangeTable, setOrder } = useOrder({ createdAt: -1 });
@@ -614,7 +619,7 @@ function ZakhialgiinKhyanalt() {
         setShuult(khyanaltiinDun.find((e) => e.utga === cardShuult));
       }
     }
-  }, []);
+  }, [gereeOgnoo]);
 
   useEffect(() => {
     if (!!token)
@@ -649,6 +654,7 @@ function ZakhialgiinKhyanalt() {
       query: {
         tuluv: { $nin: [-1] },
         duusakhOgnoo: { $gte: new Date() },
+        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
       },
     },
     {
@@ -661,7 +667,11 @@ function ZakhialgiinKhyanalt() {
       color: "text-blue-500",
       selectedColor: "bg-blue-50 dark:bg-gray-900",
       border: "border-blue-500",
-      query: { turGereeEsekh: { $ne: true }, tuluv: { $ne: -1 } },
+      query: { 
+        turGereeEsekh: { $ne: true }, 
+        tuluv: { $ne: -1 },
+        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
+      },
     },
     {
       too:
@@ -673,7 +683,11 @@ function ZakhialgiinKhyanalt() {
       color: "text-purple-500",
       selectedColor: "bg-purple-50 dark:bg-gray-900",
       border: "border-purple-600",
-      query: { turGereeEsekh: true, tuluv: { $ne: -1 } },
+      query: { 
+        turGereeEsekh: true, 
+        tuluv: { $ne: -1 },
+        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
+      },
     },
     {
       too:
@@ -687,6 +701,7 @@ function ZakhialgiinKhyanalt() {
       border: "border-red-500",
       query: {
         tuluv: { $ne: -1 },
+        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
         duusakhOgnoo: { $lte: new Date() },
       },
     },
@@ -702,6 +717,7 @@ function ZakhialgiinKhyanalt() {
       border: "border-yellow-500",
       query: {
         tuluv: { $ne: -1 },
+        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
         duusakhOgnoo: { $lte: moment(new Date()).add(1, "month") },
       },
     },
@@ -715,7 +731,10 @@ function ZakhialgiinKhyanalt() {
       color: "text-gray-800 dark:text-gray-300",
       selectedColor: "bg-gray-200 dark:bg-gray-900",
       border: "border-gray-800 dark:border-gray-300",
-      query: { tuluv: -1 },
+      query: {
+        tuluv: -1,
+        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
+      },
     },
   ];
   function sortOrderShalgakh(v) {
@@ -1420,6 +1439,8 @@ function ZakhialgiinKhyanalt() {
             <DatePicker.RangePicker
               className="w-full sm:w-auto"
               locale={i18n.language === "mn" && locale}
+              value={gereeOgnoo}
+              onChange={(e) => setGereeOgnoo(e)}
             />
           </div>
           <div
