@@ -535,7 +535,8 @@ function Admin({
                       if (!!onSearch) {
                         clearTimeout(timeout);
                         timeout = setTimeout(function () {
-                          onSearch(target.value);
+                          if(!target.value?.includes("\\") && !target.value?.includes("[") && !target.value?.includes("]"))
+                            onSearch(target.value);
                         }, 300);
                       }
                     }}

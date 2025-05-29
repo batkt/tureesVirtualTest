@@ -345,7 +345,7 @@ function camera({ token }) {
   const query = useMemo(() => {
     let result = {};
     if (!!camerVal[1]) {
-      if (!!khaikh) {
+      if (!!khaikh && !khaikh?.includes("\\") && !khaikh?.includes("[" && !khaikh?.includes("]"))) {
         // use uilchilgee search hiih regex querynd daragdsan uhchir queryn dotor search regex bijiw
         result = {
           $and: [
@@ -410,7 +410,7 @@ function camera({ token }) {
           },
         ],
       };
-    if (!!khaikh) {
+    if (!!khaikh && !khaikh?.includes("\\") && !khaikh?.includes("[" && !khaikh?.includes("]"))) {
       // use uilchilgee search hiih regex querynd daragdsan uhchir queryn dotor search regex bijiw
       result = {
         $and: [
