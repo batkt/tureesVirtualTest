@@ -136,6 +136,7 @@ function ShineTogloomTulbur(
     const toki = tulbur.find((a) => a.turul === "toki")?.dun;
     const khungulult = tulbur.find((a) => a.turul === "khungulult")?.dun;
     const ticket = tulbur.find((a) => a.turul === "ticket")?.dun;
+    const erkhiinBichig = tulbur.find((a) => a.turul === "erkhiinBichig")?.dun;
 
     return {
       belen,
@@ -152,6 +153,7 @@ function ShineTogloomTulbur(
       monpay,
       socialpay,
       ticket,
+      erkhiinBichig,
       // pocket,
       toki,
       khungulult,
@@ -922,14 +924,21 @@ function ShineTogloomTulbur(
                 qpayerTulukhDun={value.qpay}
               />
               <div
-                className={`h-[85px] cursor-not-allowed rounded-3xl hover:scale-110`}
+                className={`${
+                  value.erkhiinBichig > 0 && "rounded-3xl border-[3px] border-green-600"
+                } relative h-[85px] hover:scale-110 p-0`}
+                onClick={() => {
+                  turulruuTooKhiikhFunction("erkhiinBichig");
+                }}
               >
-                <Image
-                  id="SocialPay"
-                  preview={false}
-                  width={100}
-                  src="/Rectangle60.png"
-                />
+                {value.erkhiinBichig > 0 ? (
+                  <div className="absolute right-[0] top-[-15px] z-10 rounded-xl border-[1px] border-green-600 bg-white p-1">
+                    <div className="font-semibold">
+                      {formatNumber(value.erkhiinBichig)}₮
+                    </div>
+                  </div>
+                ) : null}
+                <Image  preview={false} style={{ borderRadius: 35 }} width={100} src="/coupon1.png" />
               </div>
               <div
                 className={`h-[85px] cursor-not-allowed overflow-hidden rounded-3xl hover:scale-110`}

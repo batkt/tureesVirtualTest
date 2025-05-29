@@ -1686,6 +1686,12 @@ function togloom1() {
                                 dun: element.dun,
                               });
                               break;
+                            case "erkhiinBichig":
+                              utga.push({
+                                ner: "Coupon",
+                                dun: element.dun,
+                              });
+                              break;  
                             default:
                               utga.push({
                                 ner: element.turul,
@@ -1926,6 +1932,15 @@ function togloom1() {
                               __cellType__: "TypeNumeric",
                               render(v, data) {
                                 return (data.niitTulbur?.filter((e) => e.turul === "ticket").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
+                              },
+                            },
+                             {
+                              title: t("Coupon"),
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
+                              render(v, data) {
+                                return (data.niitTulbur?.filter((e) => e.turul === "erkhiinBichig").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
                               },
                             },
 							              {
