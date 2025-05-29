@@ -1288,6 +1288,7 @@ function ZakhialgiinKhyanalt() {
                 });
             }
             data.baruunTolgoi = data.baruunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+            data.zuunTolgoi = data.zuunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
             data.zuunKhul = data.zuunKhul?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
             data.baruunKhul = data.baruunKhul?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
           }
