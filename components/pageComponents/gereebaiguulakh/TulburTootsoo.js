@@ -102,12 +102,12 @@ const Tulbur = ({
       notification.warning({ message: "Огноо сонгоно уу!", });
       return;
     }
-    if(moment(ognoonuud[0]) < moment(value.gereeniiOgnoo))
+    if(moment(ognoonuud[0]) < moment(value.gereeniiOgnoo) || (moment(ognoonuud[0]) < moment() && !!value._id))
     {
       notification.warning({ message: "Эхлэх огноог авлага үүсэх хойш огноо сонгоно уу!", });
       return;
     }
-    if(moment(ognoonuud[1]) < moment(value.gereeniiOgnoo))
+    if(moment(ognoonuud[1]) < moment(value.gereeniiOgnoo) || (moment(ognoonuud[0]) < moment() && !!value._id))
     {
       notification.warning({ message: "Дуусах огноог авлага үүсэх хойш огноо сонгоно уу!", });
       return;
