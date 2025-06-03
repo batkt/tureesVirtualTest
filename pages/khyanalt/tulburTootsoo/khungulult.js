@@ -166,7 +166,7 @@ function tulburTootsoo() {
   }, [songogdsonGereenuud]);
 
   function disabledDate(current) {
-    return _.get(ajiltan, `tokhirgoo.umkhunSaraarKhungulultEsekh`)?.find((a) => a === barilgiinId) ? false : current && current < moment().startOf("day");
+    return ajiltan?.erkh == "Admin" || _.get(ajiltan, `tokhirgoo.umkhunSaraarKhungulultEsekh`)?.find((a) => a === barilgiinId) ? false : current && current < moment().startOf("day");
   }
 
   function handleChange(value) {

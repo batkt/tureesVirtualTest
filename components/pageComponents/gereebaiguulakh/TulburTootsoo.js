@@ -102,6 +102,16 @@ const Tulbur = ({
       notification.warning({ message: "Огноо сонгоно уу!", });
       return;
     }
+    if(moment(ognoonuud[0]) < moment(value.gereeniiOgnoo))
+    {
+      notification.warning({ message: "Эхлэх огноог авлага үүсэх хойш огноо сонгоно уу!", });
+      return;
+    }
+    if(moment(ognoonuud[1]) < moment(value.gereeniiOgnoo))
+    {
+      notification.warning({ message: "Дуусах огноог авлага үүсэх хойш огноо сонгоно уу!", });
+      return;
+    }
     var key = moment(ognoonuud[0]).format("YYYY-MM") + moment(ognoonuud[1]).format("YYYY-MM") + "turees" + "khuvi" + formatNumber(value.khungulukhKhuvi, 0);
     var filtered = khungulultKhuvaari?.filter((a) => a.key == key);
     if(filtered?.length > 0)
