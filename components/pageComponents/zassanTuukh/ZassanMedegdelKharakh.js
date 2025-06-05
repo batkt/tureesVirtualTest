@@ -305,8 +305,15 @@ function ZassanMedegdelKharakh(
                                         {formatNumber(b.khungulultiinDun)}
                                       </td>
                                     </tr>
-                                  )
-                              })}
+                                  ))
+                              ) : (
+                                <tr className="flex border-t">
+                                  <td className="w-1/3 overflow-hidden border-r p-1 text-left">
+                                    &nbsp;
+                                  </td>
+                                  <td className="w-2/3 overflow-hidden p-1 text-center"></td>
+                                </tr>
+                              ) })}
                             </tbody>
                           </table>
                         )    
@@ -335,7 +342,6 @@ function ZassanMedegdelKharakh(
                                 </td>
                               </th>
                               <tbody className="overflow-y-scroll" style={{ height: "calc(30vh - 15rem)" }}>
-                                {console.log(zardluudId)}
                                 {zardluudId?.map((z) => {
                                   return JSON.parse(a.shineUtga)?.filter((b) => b._id === z)?.length > 0 ? JSON.parse(a.shineUtga)?.filter(c => c._id === z).map((b) => 
                                     (
