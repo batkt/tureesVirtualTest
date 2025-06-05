@@ -865,6 +865,12 @@ export const khuudasnuud = [
         href: "/khyanalt/tailan/negtgelTailan",
         icon: <TbReportMoney style={{ width: "24", height: "24" }} />,
       },
+          {
+        ner: "Насжилтын тайлан",
+        khuudasniiNer: "nasjiltinTailan",
+        href: "/khyanalt/tailan/nasjiltinTailan",
+        icon: <TbReportMoney style={{ width: "24", height: "24" }} />,
+      },
     ],
   },
   {
