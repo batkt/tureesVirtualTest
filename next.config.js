@@ -8,14 +8,4 @@ module.exports = {
     URL: process.env.URL || "https://turees.zevtabs.mn/api",
     SOCKET: process.env.SOCKET || "https://turees.zevtabs.mn",
   },
-  async rewrites() {
-    return {
-      fallback: [
-        {
-          source: "/hicarapi/:path*",
-          destination: "http://hicar.zevtabs.mn:8080/:path*",
-        },
-      ],
-    };
-  },
 };
