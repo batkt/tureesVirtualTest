@@ -647,7 +647,7 @@ function nasjiltinTailan({ token }) {
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) =>
-              `${range[0]}-${range[1]} из нийт ${total} бичлэг`,
+              `Hийт ${total}`,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {
               setTailanKhuudaslalt((kh) => ({
                 ...kh,
