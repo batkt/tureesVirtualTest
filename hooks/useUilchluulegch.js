@@ -98,7 +98,6 @@ export function useUilchluulegchToololt(token, query) {
     fetcherToololt,
     { revalidateOnFocus: false }
   );
-  // console.log("---------", data);
   return { uilchiluulegchToololt: data, uilchiluulegchToololtMutate: mutate };
 }
 export function useUilchluulegchZogsoolToo(token, query) {

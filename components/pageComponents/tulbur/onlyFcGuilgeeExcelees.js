@@ -131,12 +131,10 @@ function GuilgeeExceleesOruulakhOlnoor(
         ognoo: moment(ognoo).format("YYYY-MM-DD HH:mm:ss"),
       });
 
-      console.log("--- fetched data ---", response.data);
       setData(response.data || []);
       message.success("Өгөгдөл амжилттай татагдлаа!");
     } catch (error) {
-      console.error("Алдаа:", error);
-      message.error("Өгөгдөл татахад алдаа гарлаа!");
+      message.error("Өгөгдөл татахад алдаа гарлаа!" + error);
     } finally {
       setLoading(false);
     }

@@ -133,7 +133,7 @@ function MashinBurtgel(
 
   const dataOrjIrsenEsekh = !!data ? true : false;
 
-  // console.log(ognoo, "ognooognoo");
+  
 
   // function mashiniiFormatSolyo(value) {
   //   const too = value.replace(/[^0-9]/g, "").slice(0, 4);
@@ -144,10 +144,8 @@ function MashinBurtgel(
   //   // const formattedValue = `${too}${useg}`.toUpperCase();
   //   setInputValue(`${too}${useg}`.toUpperCase());
   //   // setInputValue(formattedValue);
-  //   // console.log(inputValue, "formattedValueformattedValue");
   // }
 
-  // console.log(inputValue, "inputValueinputValue");
 
   useImperativeHandle(
     ref,
@@ -212,7 +210,6 @@ function MashinBurtgel(
         destroy();
       }
     });
-    console.log("data: ", data);
   }
 
   useEffect(() => {

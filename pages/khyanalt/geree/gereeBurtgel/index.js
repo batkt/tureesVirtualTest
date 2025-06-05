@@ -1193,7 +1193,6 @@ function ZakhialgiinKhyanalt() {
     );
     readMethod("gereeniiZagvar", token, geree.gereeniiZagvariinId).then(
       ({ data }) => {
-        console.log(data, "data");
         if (!!data) {
           if (geree.gereeniiOgnoo) {
             geree.ekhlekhOn = moment(geree.gereeniiOgnoo).format("YYYY");
@@ -1269,7 +1268,6 @@ function ZakhialgiinKhyanalt() {
               data.dedKhesguud
                 .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
                 .map((b) => {
-                  console.log(value, "--key");
                   return (b.zaalt = b.zaalt.replace(
                     new RegExp(`&lt;${key}&gt;`, "g"),
                     key === "utas"

@@ -176,7 +176,6 @@ function AjiltanBurtgel({ token }) {
         });
     }
   }
-// console.log('-----=-=', ajilchdiinGaralt?.jagsaalt);
   function zasya(data) {
     data.zasakhEsekh = true;
     if (!!data.zurgiinNer) {

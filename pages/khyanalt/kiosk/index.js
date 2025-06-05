@@ -129,8 +129,6 @@ const Kiosk = () => {
     });
   }
 
-  console.log(ajiltan, ":ajiltan"); //"66384a9061eeda747d01a320"
-
   useEffect(() => {
     if (khuleegdejBuiQpay) {
       socket().on(`qpay/${baiguullaga._id}/${khuleegdejBuiQpay}`, (qpay) => {
@@ -187,8 +185,6 @@ const Kiosk = () => {
       setBaiguullagaNer();
     }
   }, [register]);
-
-  console.log(alkham, "test hiij baina");
 
   useEffect(() => {
     if (drawerOngoikh) {
@@ -384,7 +380,7 @@ const Kiosk = () => {
       }
     } catch (err) {
       setUnshijBaina(false);
-      console.log(err);
+      message.error(err);
     }
   };
 
@@ -446,7 +442,6 @@ const Kiosk = () => {
           }
         })
         .catch((e) => {
-          console.log("posaldaa: ", e.message);
           msgNotif(
             <div className="flex items-center justify-center gap-2 font-semibold">
               <div className="text-red-500">

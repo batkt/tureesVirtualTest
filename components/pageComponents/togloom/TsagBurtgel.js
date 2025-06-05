@@ -62,7 +62,6 @@ function TsagBurtgel(
   }
 
   function onFinish(formData) {
-    console.log(formData, "formData");
     setLoading(true);
     const data = formData;
     if (data.utas?.length === 0) {
@@ -91,10 +90,10 @@ function TsagBurtgel(
               duusakhOgnoo: tsag?.duusakhTsag,
             })
             .then(function (response) {
-              console.log(response);
+              message.warning(response);
             })
             .catch(function (error) {
-              console.log(error);
+              message.error(error);
             });
         }
       })
@@ -117,9 +116,7 @@ function TsagBurtgel(
             const hours = nowDate.getHours();
             const minutes = nowDate.getMinutes();
             const seconds = nowDate.getSeconds();
-            console.log('a: ------------ %d %d %d %d %d %d', year, month, day, hours, minutes, seconds);
             const value = ((year-2000)*12*31 + (month -1)*31 + (day-1))*(24*60*60) + hours* 60 *60 + minutes*60 + seconds + i;
-            console.log('value: ------------ %d', value);
             barCodes.push(value);
         }
     setBarCodes(barCodes);   
@@ -188,7 +185,6 @@ function TsagBurtgel(
 
   return (
     <Form
-      onValuesChange={(e) => console.log(e, "ene bol e")}
       form={form}
       onFinish={onFinish}
       initialValues={data}

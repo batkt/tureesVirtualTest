@@ -53,7 +53,6 @@ const TogloomKiosk = () => {
       });
 
     function khaaya() {
-        console.log("khaaya --------------------->");
         khaalgaNeey(barCodes);
         setAlkham(0);
         setDrawerOngoikh(false);
@@ -77,10 +76,10 @@ const TogloomKiosk = () => {
         zogsoolUilchilgee()
         .get("/userKhadgalakh/" + barCodes + "")
         .then(function (response) {
-            if (!!response.message) console.log("/api/userKhadgalakh", response);
+            if (!!response.message) message.error("/api/userKhadgalakh", response);
         })
         .catch(function (error) {
-        console.log("ERROR: /api/userKhadgalakh", error);
+            message.error("ERROR: /api/userKhadgalakh", error);
         });
     };
 
@@ -455,9 +454,7 @@ const TogloomKiosk = () => {
                 const hours = nowDate.getHours();
                 const minutes = nowDate.getMinutes();
                 const seconds = nowDate.getSeconds();
-                console.log('a: ------------ %d %d %d %d %d %d', year, month, day, hours, minutes, seconds);
                 const value = ((year-2000)*12*31 + (month -1)*31 + (day-1))*(24*60*60) + hours* 60 *60 + minutes*60 + seconds + i;
-                console.log('value: ------------ %d', value);
                 barCodes.push(value);
             }
         setBarCodes(barCodes);   

@@ -640,7 +640,7 @@ function togloom1() {
       .then((res) => {
         setKhaalga(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => message.error(err));
   }, []);
 
   const togloomiinDun = useToololt("/togloomiinDunAvya", token, ognoo);
@@ -657,7 +657,7 @@ function togloom1() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        message.error(err);
       });
   }
 
@@ -1239,7 +1239,6 @@ function togloom1() {
         align: "center",
         ellipsis: true,
         render: (data) => {
-          console.log(data, "datadatadatadata");
           return data.tuluv !== -1 &&
             (data?.tulburTulsunEsekh !== true ||
               data?.ebarimtAvsanEsekh !== true) ? (

@@ -296,9 +296,6 @@ const Zardal = ({
   }, []);
 
   const inputChange = (e, a) => {
-    console.log(e, "eeeeeeeeeeeeeeeeeeeeee");
-    console.log(a, "aaaaaaaaaaaaaaaaaaaaaa");
-
     const index = value.zardluud.findIndex((object) => {
       return object._id === a._id;
     });
@@ -306,7 +303,6 @@ const Zardal = ({
     if (index !== -1) {
       value.zardluud[index].dun = e;
     }
-    console.log(value, "valuevalue");
     onChange({ ...value });
   };
   return (

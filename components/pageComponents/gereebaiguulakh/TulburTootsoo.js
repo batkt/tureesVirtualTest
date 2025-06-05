@@ -154,7 +154,6 @@ const Tulbur = ({
   function hungulultUstgakh(e){
     setKhungulultKhuvaari((pre) => { return pre.filter((a) => a.key !== e)});
     value.khungulultuud = value.khungulultuud.filter((a) => a.key != e);
-    console.log("log -----> " + JSON.stringify(value.khungulultuud));
     onChange({ ...value });
     khuvaariUusgey();
   }

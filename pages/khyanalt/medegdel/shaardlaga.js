@@ -94,7 +94,6 @@ function Khyanalt({ token }) {
 
   const [zurag, setZurag] = useState();
   const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState([]);
-  console.log(songogdsonKhariltsagch);
   const query = useMemo(() => {
     return {
       barilgiinId,

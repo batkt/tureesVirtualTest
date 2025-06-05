@@ -8,7 +8,6 @@ function fitBounds(map, path) {
         if (!!map)
             map.fitBounds(bounds)
     } catch (error) {
-        console.trace('fitBounds', error)
     }
 }
 

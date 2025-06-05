@@ -295,13 +295,11 @@ function camera({ token }) {
   );
 
   const zurchilteiMashinMsgilgeekh = (mashiniiDugaar) => {
-    console.log("------------->>" +  mashiniiDugaar);
     let yavuulakhData = {
       baiguullagiinId: baiguullaga?._id,
       barilgiinId: barilgiinId,
       mashiniiDugaar: mashiniiDugaar,
     };
-    console.log("zurchil --->>");
     uilchilgee(token)
       .post("/zurchilteiMashinMsgilgeekh", yavuulakhData)
       .then((res) => {
@@ -496,7 +494,6 @@ function camera({ token }) {
         let dataObject = res
         if(dataObject && dataObject?.khaalgaTurul === "Гарах" && !!dataObject?.mashiniiDugaar)
         {
-          console.log("-------- qpayMobileSdk -------------->" + JSON.stringify(dataObject?.mashiniiDugaar));
           khaalgaNeey(res.cameraIP);
           onRefresh();
         }
@@ -526,8 +523,6 @@ function camera({ token }) {
           uilchluulegch?.khaalgaTurul === "oroh" &&
           !!uilchluulegch?.cameraIP
         ) {
-          console.log("orohKhaalga", uilchluulegch?.cameraIP);
-          console.log("dugaar --->", yanzalsanMashiniiDugaar);
           var url = `/sambar/${
             uilchluulegch?.cameraIP
           }/${yanzalsanMashiniiDugaar}/${moment().format("HH:mm:ss")}`;
@@ -536,12 +531,9 @@ function camera({ token }) {
             zogsoolUilchilgee()
               .get(url)
               .then((res) => {
-                if (res) {
-                  console.log("amjilttai:", res);
-                }
+                
               })
               .catch((err) => {
-                console.log("aldaa:", err);
               });
           if(!uilchluulegch?.oruulakhguiEsekh)   
           {
@@ -592,10 +584,6 @@ function camera({ token }) {
               uilchluulegch?.tuukh?.length > 0 &&
               !!uilchluulegch?.tuukh?.[0]?.garsanKhaalga
             ) {
-              console.log(
-                "garakhHkaalga",
-                uilchluulegch?.tuukh?.[0]?.garsanKhaalga
-              );
               toololtMutate();
               zogsoolTusBuriinTooMutate();
               if (songogdzonZogsool?.garakhKhaalgaGarTokhirgoo !== true) {
@@ -608,11 +596,9 @@ function camera({ token }) {
               .get(url)
               .then((res) => {
                 if (res) {
-                  console.log("amjilttai:", res);
                 }
               })
               .catch((err) => {
-                console.log("aldaa:", err);
               });
 
           onRefresh();
@@ -659,7 +645,6 @@ function camera({ token }) {
       });
   }, [uilchluulegchGaralt, modalNeelttei]);
 
-  // console.log("---------", uilchluulegchGaralt);
 
   useKeyboardTovchlol("F4", f5Darsan);
   useKeyboardTovchlol("F1", f3Darsan);
@@ -739,7 +724,6 @@ function camera({ token }) {
 
   const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } =
     useUilchluulegchZogsoolToo(token, tooQue);
-  // console.log('----zogsoolTusBuriinToo', zogsoolTusBuriinToo);
   const dugaar = !!songogdzonZogsool?.zogsooliinDans ? songogdzonZogsool?.zogsooliinDans : "";
   const dasniiMedeelel = {
     baiguullagiinId: baiguullaga?._id,
@@ -1175,7 +1159,6 @@ function camera({ token }) {
         width: "10rem",
         dataIndex: "tuukh.tulukhDun",
         render(v, p) {
-          // console.log(p.tuukh[0]?.tulukhDun, '======')
           return p && formatNumber(p.niitDun || p.tuukh[0]?.tulukhDun || 0, 0);
         },
         summary: true,
@@ -1807,7 +1790,6 @@ function camera({ token }) {
   const khaalgaNeey = (ip) => {
     const filterData = zogsoolTusBuriinToo?.filter((mur) => mur?._id?.zogsool === songogdzonZogsoolOrokh?._id);
     var sulToo = (songogdzonZogsoolOrokh?.too || 0) - (filterData?.length > 0 ? filterData[0].too : 0);
-    console.log("sulTooff --->", sulToo);
     if(ip === camerVal[0] && songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh && (sulToo === 0 || sulToo <= -1))
     {
       message.warn("Зогсоол дүүрсэн байна");
@@ -1837,19 +1819,15 @@ function camera({ token }) {
       //   axios
       //     .request(config)
       //     .then((response) => {
-      //       console.log(JSON.stringify(response.data));
       //     })
       //     .catch((error) => {
-      //       console.log(error);
       //     });
       // } else
           zogsoolUilchilgee()
           .get("/neeye/" + ip + "")
           .then(function (response) {
-            if (!!response) console.log("/api/neeye", response);
           })
           .catch(function (error) {
-            console.log("ERROR: /api/neeye", error);
           });
     }
   };
@@ -1858,11 +1836,9 @@ function camera({ token }) {
     const val = form.getFieldValue("mashiniiDugaar");
     if (!val || val.length < 7)
       form.setFieldValue("mashiniiDugaar", val ? val + v : v);
-    // console.log(v,' - - ', val)
   };
 
   const dugaarBurtgekh = () => {
-    console.log("dugaarBurtgekh -------------------...");
     const body = form.getFieldsValue();
     if(!!barilgiinId)
       body["barilgiinId"] = barilgiinId;
@@ -1899,7 +1875,6 @@ function camera({ token }) {
           duration: 2,
         });
       }
-      console.log("----------->>" + camerVal[1]);
       const yavuulakhData = {
         mashiniiDugaar: data.mashiniiDugaar,
         CAMERA_IP: camerVal[1],
@@ -1929,7 +1904,6 @@ function camera({ token }) {
   };
 
   const khungulyu = (data, uilchluulegchiinId) => {
-    console.log("tukhainData: ", data);
     const footer = [
       <div className="flex w-full items-center justify-between">
         <Button type="primary" onClick={() => khungulultRef?.current.khaaya()}>
@@ -3325,7 +3299,6 @@ const ZogsooliinToo = ({ zogsoolTusBuriinToo, jagsaalt }) => {
   const too = [];
   for (let i = 0; jagsaalt.length > i; i++) {
     const zog = jagsaalt[i];
-    // console.log('4444444', zog);
     for (let k = 0; zogsoolTusBuriinToo?.length > k; k++) {
       const to = zogsoolTusBuriinToo[k];
       if (zog._id === to._id.zogsool) {

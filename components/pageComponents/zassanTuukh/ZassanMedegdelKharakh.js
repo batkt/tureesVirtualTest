@@ -226,7 +226,6 @@ function ZassanMedegdelKharakh({ token, barilgiinId, baiguullaga, data, ajiltan,
                                 </td>
                               </th>
                               <tbody className="overflow-y-scroll" style={{ height: "calc(30vh - 15rem)" }}>
-                                {console.log(zardluudId)}
                                 {zardluudId?.map((z) => {
                                   return JSON.parse(a.shineUtga)?.filter((b) => b._id === z)?.length > 0 ? JSON.parse(a.shineUtga)?.filter(c => c._id === z).map((b) => 
                                     (

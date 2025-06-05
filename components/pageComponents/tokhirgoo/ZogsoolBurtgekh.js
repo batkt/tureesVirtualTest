@@ -77,7 +77,6 @@ function ZogsoolBurtgekh(
       async khadgalya() {
         try {
           let body = form.getFieldsValue();
-          console.log("from -------save -----------------" + JSON.stringify(body));
           body.barilgiinId = barilgiinId;
 
           await method("parking", token, body)
@@ -565,7 +564,6 @@ function Khaalga({ form, token, refresh, barilgiinId, name, fieldKey, restField,
       values.khaalga[name].camera[index].tokhirgoo = value;
       form.setFieldsValue(values); 
       const a = form.getFieldsValue();
-      console.log("getFieldsValue ------------>>"+JSON.stringify(a));
     }
     
     modal({

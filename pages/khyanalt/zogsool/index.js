@@ -427,7 +427,6 @@ function Zogsool({ token }) {
         baseQuery["tuukh"] = { $elemMatch: { tulbur: { $eq: [] } } };
       }
     }
-    console.log("tootsooKhelber", tootsooKhelber);
     if (tootsooKhelber == 2) {
       delete baseQuery.createdAt;
       baseQuery["tuukh.tulbur.ognoo"] = {

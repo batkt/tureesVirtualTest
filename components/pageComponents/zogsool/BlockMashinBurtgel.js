@@ -71,7 +71,6 @@ function BlockMashinBurtgel(
         destroy();
       }
     });
-    console.log("data: ", data);
   }
 
   useEffect(() => {

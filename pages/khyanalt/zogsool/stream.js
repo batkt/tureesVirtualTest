@@ -14,14 +14,11 @@ function Stream1({ ip }) {
         ws.current = new WebSocket(url);
         ws.current.binaryType = "arraybuffer";
         ws.current.onopen = () => {
-          console.log("WebSocket kholbolt amjilttai");
           setOnOpen(true);
         };
         ws.current.onclose = () => {
-          console.log("WebSocket kholbolt amjiltgui bolloo");
         };
       } catch (e) {
-        console.log(e.message);
       }
     } else {
       if (ws.current) {
@@ -38,7 +35,6 @@ function Stream1({ ip }) {
 
   useEffect(() => {
     if (onOpen) {
-      // console.log('464666545646111111', onOpen);
       ws.current.onmessage = async (event) => {
         const imageData = event.data;
         const canvas = document.getElementById("canvas1");
@@ -50,7 +46,6 @@ function Stream1({ ip }) {
           const imageBitmap = await createImageBitmap(blob);
           ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
         } catch (error) {
-          console.error("Error decoding image:", error);
         }
       };
     } else {
@@ -78,19 +73,15 @@ export function Stream2({ ip }) {
         ip === "192.168.2.56"
           ? `ws://${ip}:9080/ws`
           : "ws://192.168.2.55:9080/ws?token=b6aafed0-35b1-7a98-97b5-e7a797fe9b4a&channel=1";
-      // console.log('url111', url);
       try {
         ws2.current = new WebSocket(url);
         ws2.current.binaryType = "arraybuffer";
         ws2.current.onopen = () => {
-          console.log("WebSocket kholbolt amjilttai");
           setOnOpen(true);
         };
         ws2.current.onclose = () => {
-          console.log("WebSocket kholbolt amjiltgui bolloo");
         };
       } catch (e) {
-        console.log(e.message);
       }
     } else {
       if (ws2.current) {
@@ -118,7 +109,6 @@ export function Stream2({ ip }) {
           const imageBitmap = await createImageBitmap(blob);
           ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
         } catch (error) {
-          console.error("Error decoding image:", error);
         }
       };
     } else {
@@ -147,14 +137,11 @@ export function SocketStream({ ip, PORT, TOKEN, CHANNEL }) {
         ws2.current = new WebSocket(url);
         ws2.current.binaryType = "arraybuffer";
         ws2.current.onopen = () => {
-          console.log("WebSocket kholbolt amjilttai");
           setOnOpen(true);
         };
         ws2.current.onclose = () => {
-          console.log("WebSocket kholbolt amjiltgui bolloo");
         };
       } catch (e) {
-        console.log(e.message);
       }
     } else {
       if (ws2.current) {
@@ -182,7 +169,6 @@ export function SocketStream({ ip, PORT, TOKEN, CHANNEL }) {
           const imageBitmap = await createImageBitmap(blob);
           ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
         } catch (error) {
-          console.error("Error decoding image:", error);
         }
       };
     } else {

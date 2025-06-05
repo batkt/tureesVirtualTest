@@ -54,10 +54,9 @@ function index({ token, data }) {
           }
         });
     } catch (e) {
-      console.log(e);
+      message.error(e);
     }
   };
-  // console.log('------1-----', data);
   const que = useMemo(() => {
     return {
       baiguullagiinId: baiguullaga?._id,

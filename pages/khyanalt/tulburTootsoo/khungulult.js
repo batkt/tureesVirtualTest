@@ -239,7 +239,6 @@ function tulburTootsoo() {
           (e) => e?._id === form.getFieldValue("zardliinId")
         );
 
-        console.log(zardliinData, "zardliinData");
 
         if (turul === "zardal") {
           ugugdul.tailbar = songogdsonZardal.ner;
@@ -249,8 +248,6 @@ function tulburTootsoo() {
               : zardliinData?.turul === "1м2"
               ? x?.talbainKhemjee
               : zardliinData?.turul === "Тогтмол" && 1;
-
-          console.log(urjuulekhData, "urjuulekhData");
 
           var khymdraaguiDun = zardliinData?.turul === "Дурын" ? zardliinData.dun : zardliinData?.tariff * urjuulekhData;
           if(khonogTootsokhEsekh && baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh)
@@ -304,8 +301,6 @@ function tulburTootsoo() {
         });
         return;
       }
-
-      console.log("------------------>>>" + JSON.stringify(ugugdul));
 
       createMethod("khungulultKhadgalya", token, ugugdul)
         .then(({ data }) => {

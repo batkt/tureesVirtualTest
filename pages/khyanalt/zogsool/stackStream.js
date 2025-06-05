@@ -18,16 +18,13 @@ function StackStream({ tuluv }) {
           const ws = new WebSocket(url);
           ws.binaryType = "arraybuffer";
           ws.onopen = () => {
-            console.log(`WebSocket kholbolt amjilttai ${index + 1}`);
           };
           ws.onclose = () => {
-            console.log(`WebSocket kholbolt amjiltgui bolloo ${index + 1} `);
           };
           wsRefs.current.push(ws);
         });
         wsRefs?.current.length === 4 && setOnOpen(true);
       } catch (e) {
-        console.log(e.message);
       }
     } else {
       wsRefs?.current.forEach((ws) => {
@@ -49,7 +46,6 @@ function StackStream({ tuluv }) {
           const imageData = event.data;
           const canvas = document.getElementById(`stack${index}`);
           const ctx = canvas.getContext("2d");
-          // console.log('0-0-',index,' - ', canvas, ' ws ', ws);
           const imgWidth = 600;
           const imgHeight = 400;
           try {
@@ -57,7 +53,6 @@ function StackStream({ tuluv }) {
             const imageBitmap = await createImageBitmap(blob);
             ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
           } catch (error) {
-            console.error("Error decoding image:", error);
           }
         };
       });

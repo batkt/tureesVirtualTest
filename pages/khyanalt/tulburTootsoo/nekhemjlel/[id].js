@@ -183,8 +183,6 @@ function ZakhialgaNemekh({ token }) {
       });
   }, [id]);
 
-  console.log("nekhemjlelZagvar: ", nekhemjlelZagvar);
-
   React.useEffect(() => {
     if (
       nekhemjlelZagvar &&
@@ -208,8 +206,6 @@ function ZakhialgaNemekh({ token }) {
       nekhemjlelZagvar?.chiglel
     );
   }, [nekhemjlelZagvar.khuudasniiKhemjee, nekhemjlelZagvar.chiglel]);
-
-  console.log("nekhemjlelZagvar:", nekhemjlelZagvar);
 
   const custom = React.useMemo(() => {
     if (typeof window === "undefined") return [];

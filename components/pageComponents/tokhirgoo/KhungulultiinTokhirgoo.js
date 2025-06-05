@@ -45,7 +45,6 @@ function KhungulultiinTokhirgoo({
   });
   
   useEffect(() => {
-    console.log("log ---->" + barilgiinId);
     if (barilga) {
       setBarilgaTokhirgoo({
         ...barilga?.tokhirgoo,

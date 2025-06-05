@@ -258,16 +258,10 @@ const KioskMobile = ({
             if (
               !!data?.tuukh[0]?.tulbur?.find((x) => x.turul == ("Хөнгөлөлт/ "+ tsag+ " цаг"))
             ) {
-              console.log("data?.tuukh[0]?.tulbur", data?.tuukh[0]?.tulbur);
               setKhungulukhDun(0);
             }
-            console.log("khungulukhDun before ", khungulukhDun);
-            console.log("une -> ", response.data?.data?.parkingUndsenUne);
-            console.log("tsag -> ", tsag);
             var khungulukhDun = (response.data?.data?.parkingUndsenUne || 0) * (tsag || 0);
-            console.log("khungulukhDun ---------->>>" + khungulukhDun);
             if (khungulukhDun > 0) {
-              console.log("end2");
               if (khungulukhDun < response.data?.data?.pay_amount) {
                 setSongogdsonData({
                   ...response.data?.data,
@@ -291,7 +285,6 @@ const KioskMobile = ({
               }
               setKhungulukhDun(khungulukhDun);
             } else {
-              console.log("end1");
               setSongogdsonData(response.data?.data);
               setAlkham(1);
               setTulburiinKhelber("qpay");
@@ -322,7 +315,7 @@ const KioskMobile = ({
       }
     } catch (err) {
       setUnshijBaina(false);
-      console.log(err);
+      message.error(err);
     }
   };
 

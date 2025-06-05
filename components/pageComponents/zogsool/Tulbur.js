@@ -41,7 +41,6 @@ function Tulbur(
   },
   ref
 ) {
-  // console.log('----data-----', data);
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
     !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
@@ -202,7 +201,6 @@ function Tulbur(
       setLoading(false);
       return notification.warn({ message: "Төлбөр дутуу байна!", duration: 1 });
     }
-    // console.log('3434', tulbur)
     uilchilgee(token)
       .post("/zogsooliinTulburTulye", { tulbur, id: uilchluugchiinId })
       .then(({ data }) => {
@@ -213,10 +211,8 @@ function Tulbur(
               zogsoolUilchilgee()
               .get("/neeye/" + camerVal + "")
               .then(function (response) {
-                if (!!response) console.log("/api/neeye", response);
               })
               .catch(function (error) {
-                console.log("ERROR: /api/neeye", error);
               });
           setLoading(false);
         } else {

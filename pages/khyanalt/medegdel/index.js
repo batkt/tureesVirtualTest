@@ -558,7 +558,6 @@ function Khyanalt({ token }) {
     setSongogdsonKhariltsagch([...songogdsonKhariltsagch]);
   }
 
-  console.log(khariltsagch, "khariltsagch");
   return (
     <Admin
       title="Мэдэгдэл"

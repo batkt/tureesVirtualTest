@@ -84,7 +84,6 @@ function GereeBaiguulakh({ token }) {
     baiguullaga?._id
   );
   const next = (data) => {
-    // console.log('****** data', data);
     if (current === 0 && !gereeniiZagvar) {
       message.warning(t("Гэрээний загвар сонгоно уу!"));
       zagvarRef.current.focus();
@@ -370,8 +369,6 @@ function GereeBaiguulakh({ token }) {
     }
     return butsaakhUtga;
   }, [gereeniiZagvar, khadgalakhGeree, current]);
-
-  console.log(alkhamiinGereeniiZagvar, "alkhamiinGereeniiZagvar");
 
   const alkhamiinAktiinZagvar = React.useMemo(() => {
     if (aktiinZagvar === undefined) return;

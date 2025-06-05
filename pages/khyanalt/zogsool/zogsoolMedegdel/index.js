@@ -157,8 +157,6 @@ function Khyanalt({ token }) {
     undefined
   );
 
-  console.log("medegdelAvya: ", medegdelAvya);
-
   useEffect(() => {
     if (neesenEsekh === true) {
       setTurulZagvar(false);

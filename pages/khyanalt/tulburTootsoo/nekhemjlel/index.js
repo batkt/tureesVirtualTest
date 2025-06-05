@@ -1087,7 +1087,6 @@ function tulburTootsoo({ token }) {
               );
             }
             let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
-            console.log("garaasBodsonNiitDun ", garaasBodsonNiitDun);
             let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
             let garaasBodsonNiitDunNuatgui = formatNumber(
               garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
@@ -1565,7 +1564,6 @@ function tulburTootsoo({ token }) {
         );
       }
       let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
-      console.log("garaasBodsonNiitDun1 ", garaasBodsonNiitDun);
       let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
       let garaasBodsonNiitDunNuatgui = formatNumber(
         garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
@@ -1604,7 +1602,6 @@ function tulburTootsoo({ token }) {
       var tempP = document.createElement("p");
       tempP.innerHTML = text;
       var tempText = tempP.textContent;
-      console.log("text---->innerText ", tempText);
       // tempText = text.replace(/<[^>]+>/g, '');
       if (_.isArray(nekhemjlekh.utas))
         nekhemjlekh.utas.map((to) =>
@@ -1619,7 +1616,6 @@ function tulburTootsoo({ token }) {
           text: t(tempText),
         });
     });
-    console.log("msgnuud ---->>" + JSON.stringify(msgnuud));
     uilchilgee(token)
       .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
       .then(({ data }) => {
@@ -2349,7 +2345,6 @@ function tulburTootsoo({ token }) {
           );
         }
         let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
-        console.log("garaasBodsonNiitDun1 ", garaasBodsonNiitDun);
         let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
         let garaasBodsonNiitDunNuatgui = formatNumber(
           garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
@@ -2830,11 +2825,10 @@ function tulburTootsoo({ token }) {
           await uilchilgee(token)
             .post("/excelZagvarTatya", yavuulakhData, { responseType: "blob" })
             .then((response) => {
-              console.log("response: ", response.blob);
             })
             .catch((err) => {
               setUnshijBaina(false);
-              console.log(err);
+              message.error(err);
             });
         } else {
           notification.warn({
@@ -2850,7 +2844,7 @@ function tulburTootsoo({ token }) {
       }
       return "Amjilttai";
     } catch (err) {
-      console.log(err);
+      message.error(err);
     }
   }
   return (

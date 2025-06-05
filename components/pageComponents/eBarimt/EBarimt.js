@@ -51,8 +51,6 @@ function EBarimt({
         });
   }
 
-  console.log(baiguullagiinMedeelel, "dddsadsa");
-
   useEffect(() => {
     if (register.length > 6)
       registerShalgaya(register);

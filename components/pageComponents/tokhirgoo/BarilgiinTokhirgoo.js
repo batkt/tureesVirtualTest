@@ -32,10 +32,6 @@ function BarilgiinTokhirgoo({
   const [songogdsonHoroo, setSongogdsonHoroo] = useState();
   const [songogdsonHorooKod, setSongogdsonHorooKod] = useState();
 
-  console.log(songogdsonDuureg, "songogdsonDuureg");
-
-  console.log(songogdsonHoroo, "songogdsonDuureg");
-
   const barilga = useMemo(
     () => baiguullaga?.barilguud?.find((a) => a._id === songogdsonBarilga),
     [songogdsonBarilga]
@@ -324,7 +320,6 @@ function BarilgiinTokhirgoo({
                       className="min-w-[150px]"
                       value={songogdsonDuuregKod}
                       onChange={(v) => {
-                        console.log(v, "vvv");
                         setSongogdsonDuureg(
                           duurguud?.jagsaalt?.find((e) => e.kod === v)
                         );

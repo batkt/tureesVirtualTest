@@ -471,11 +471,9 @@ function TalbaiBurtgekh({ token }) {
         talbaiState.sulKhemjee || talbaiState.talbainKhemjee;
     setWaiting(true);
     if (!!talbaiState._id) {
-      console.log(" ----- Sending data to server: -----", talbaiState);
       uilchilgee(token)
         .post("/talbaiZasya", talbaiState)
         .then(({ data }) => {
-          console.log(" ----- Response from server: -----", data);
           if (data === "Amjilttai") {
             setWaiting(false);
             message.success(t("Бүртгэл амжилттай засагдлаа"));
@@ -501,11 +499,6 @@ function TalbaiBurtgekh({ token }) {
           aldaaBarigch(e);
           setWaiting(false);
         });
-    console.log(
-      " ----- Tooluuriin Dugaar: -----",
-      talbaiState.tooluuriinDugaar
-    );
-    console.log(" ----- Final talbaiState: ------", talbaiState);
   }
 
   function onFinish() {

@@ -52,8 +52,6 @@ function EbarimtMedeelel({ token }) {
   const [waiting, setWaiting] = useState(false);
   const [uilchilgeeAvi, setUilchilgeeAvi] = useState();
 
-  console.log(uilchilgeeAvi, "uilchilgeeAviuilchilgeeAvi");
-
   const query = useMemo(() => {
     const yavuulahQuery = {
       ustgasanOgnoo: { $exists: false },

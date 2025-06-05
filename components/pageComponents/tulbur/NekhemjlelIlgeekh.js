@@ -632,7 +632,6 @@ function GuilgeeKhiikh(
           );
         }
         let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
-        console.log("garaasBodsonNiitDun ", garaasBodsonNiitDun);
         let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
         let garaasBodsonNiitDunNuatgui = formatNumber(
           garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0

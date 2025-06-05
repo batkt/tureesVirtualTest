@@ -62,16 +62,6 @@ function ShineTogloomTulbur(
       : data.niitDun
   );
 
-  console.log(data, "datadatadatadatadata");
-  console.log(turulruuKhiikhDun, "turulruuKhiikhDun");
-
-  console.log(
-    parseFloat(data.niitDun) -
-      (parseFloat(turulruuKhiikhDun) +
-        parseFloat(tulbur.reduce((a, b) => a + b.dun, 0) || 0)),
-    "tulbur dotrokh dun"
-  );
-
   const { Canvas } = useQRCode();
 
   const eBarimtRef = React.useRef(null);
@@ -100,10 +90,10 @@ function ShineTogloomTulbur(
     zogsoolUilchilgee()
     .get("/userKhadgalakh/" + barCodes + "")
     .then(function (response) {
-        if (!!response.message) console.log("/api/userKhadgalakh", response);
+        
     })
     .catch(function (error) {
-    console.log("ERROR: /api/userKhadgalakh", error);
+      message.error("ERROR: /api/userKhadgalakh" + error);
     });
   };
 

@@ -184,7 +184,6 @@ const YurunkhiiMedeele = ({
   };
 
   function talbainBurtgelBugulyu(talbainuud) {
-    // console.log('talbainBurtgelBugulyu',talbainuud)
     gereeniiZagvar?.turGereeEsekh !== true
       ? (value.baritsaaAvakhDun = talbainuud.reduce(
           (a, b) => a + Number(b.talbainNiitUne || 0),
@@ -245,7 +244,6 @@ const YurunkhiiMedeele = ({
     if (gereeniiZagvar?.turGereeEsekh) {
       talbaiOruulya();
     } else sulEsekh(v.kod, talbaiOruulya);
-    // console.log(" ---  v.tooluuriinDugaar --- ", v.tooluuriinDugaar);
   }
 
   function talbaiUstgaya(index) {

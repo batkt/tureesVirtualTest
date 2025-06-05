@@ -133,10 +133,7 @@ const KioskMobile = ({
     uilchilgee(token)
       .post("/zogsoolMobileSdk", yavuulakhData)
       .then((res) => {
-        console.log("1 --- zogsoolMobileSdk --------->>>");
-        if (res.status === 200) {
-          console.log("zogsoolMobileSdk --------->>>");
-        }
+        
       })
       .catch(aldaaBarigch);
   };
@@ -155,11 +152,8 @@ const KioskMobile = ({
   useEffect(() => {
     setTimeout(() => {
       setCountdown(prev => prev - 1);
-      console.log(countdown);
-      console.log("2 ---- zogsoolMobileSdk --------->>>" + JSON.stringify(qpayObject));
       if(qpayObject?.tulsunEsekh && !!songogdsonData?.garsanCameraIP && !!songogdsonData.plate_number) // jiguur grand
       {
-        console.log("2 ---- zogsoolMobileSdk --------->>>");
         zogsoolMobileSdk(songogdsonData);
       }
     }, 2000);
@@ -294,12 +288,9 @@ const KioskMobile = ({
             if (
               !!data?.tuukh[0]?.tulbur?.find((x) => x.turul == "qpayKhungulult")
             ) {
-              console.log("data?.tuukh[0]?.tulbur", data?.tuukh[0]?.tulbur);
               setKhungulukhDun(0);
             }
-            console.log("khungulukhDun11", khungulukhDun);
             if (khungulukhDun > 0) {
-              console.log("end2");
               if (khungulukhDun < response.data?.data?.pay_amount) {
                 setSongogdsonData({
                   ...response.data?.data,
@@ -323,7 +314,6 @@ const KioskMobile = ({
                 setUnshijBaina(false);
               }
             } else {
-              console.log("end1");
               setSongogdsonData(response.data?.data);
               setAlkham(1);
               setTulburiinKhelber("qpay");
@@ -355,7 +345,7 @@ const KioskMobile = ({
       }
     } catch (err) {
       setUnshijBaina(false);
-      console.log(err);
+      message.error(err);
     }
   };
 

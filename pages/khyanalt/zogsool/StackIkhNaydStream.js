@@ -12,15 +12,13 @@ function StackIkhNaydStream({ barilgiinId, token }) {
       .then(function (response) {
         if (!!response) setCameraIps(response?.data?.ip);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => { });
   }, []);
 
-  console.log("cameraIps", cameraIps);
 
   return (
     <div className="grid md:grid-cols-2">
       {cameraIps?.map((mur, index) => {
-        console.log("mur", mur);
         return (
           <div key={index} className="border">
             <div className="h-[200px] w-[300px] sm:h-[300px] sm:w-[400px] xl:h-[400px] xl:w-[600px]">

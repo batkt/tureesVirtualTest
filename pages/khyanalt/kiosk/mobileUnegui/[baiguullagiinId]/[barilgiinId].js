@@ -210,7 +210,7 @@ const KioskMobile = ({
       }
     } catch (err) {
       setUnshijBaina(false);
-      console.log(err);
+      message.error(err);
     }
   };
 

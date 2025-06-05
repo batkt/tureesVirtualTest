@@ -16,7 +16,6 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
   const [player, setPlayer] = useState(null);
 
   const conntectionSetlekh = useCallback((state) => {
-    console.log("TEST TULUV:", state);
     setConnectionState(state);
   }, []);
 
@@ -29,7 +28,6 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
       onconnectionstatechange: conntectionSetlekh,
 
       // onconnectionstatechange: (state) => {
-      //   console.log("tuluv:", state);
       //   // if (state === "failed") {
       //   //   setReset(true);
       //   // }

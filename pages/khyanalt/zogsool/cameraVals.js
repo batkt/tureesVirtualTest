@@ -95,19 +95,18 @@ function cameraVals({ token }) {
             axios
             .request(config)
             .then((response) => {
-                console.log(JSON.stringify(response.data));
             })
             .catch((error) => {
-                console.log(error);
+                
             });
         } else
             zogsoolUilchilgee()
             .get("/neeye/" + ip + "")
             .then(function (response) {
-                if (!!response) console.log("/api/neeye", response);
+                
             })
             .catch(function (error) {
-                console.log("ERROR: /api/neeye", error);
+                
             });
     };
 

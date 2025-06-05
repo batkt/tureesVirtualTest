@@ -30,10 +30,6 @@ function TulburiinDelgerenguiTailan({ token}) {
   );
   const { baiguullagaIdgaarAvya, baiguullagaIdgaarAvyaMutate } = useBaiguullagaIdgaarAvya(token)
   
-
-  console.log(togloomiinDun, "33333333333333");
-  console.log(baiguullagaIdgaarAvya?.barilguud, "----baiguullagiinJagsaalt");
-  
   const query = useMemo(() => {
     if (songogdsonAjiltan) {
       return { burtgesenAjiltaniiId: songogdsonAjiltan };
@@ -834,7 +830,6 @@ export const getServerSideProps = async (ctx) => {
       },
     };
   } catch (error) {
-    console.log("error");
     if (error.response.data.aldaa === "Session олдсонгүй") {
       return {
         redirect: {

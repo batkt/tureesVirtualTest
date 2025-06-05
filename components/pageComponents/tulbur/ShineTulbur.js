@@ -320,10 +320,8 @@ function ShineTulbur(
             zogsoolUilchilgee()
             .get("/neeye/" + camerVal + "")
             .then(function (response) {
-              if (!!response) console.log("/api/neeye", response);
             })
             .catch(function (error) {
-              console.log("ERROR: /api/neeye", error);
             });
           setLoading(false);
         } else {
