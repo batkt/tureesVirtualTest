@@ -192,8 +192,8 @@ function tulburTootsoo({ token }) {
                 medeelel,
                 ajiltan,
                 baiguullaga,
+                barilga,
                 barilgiinId,
-                barilga
               );
             else if (
               ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
@@ -287,23 +287,7 @@ function tulburTootsoo({ token }) {
               "мөнгө"
             );
           }
-          if(ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d") // soyolj
-          {
-            medeelel.barilgiinlogo = renderToString(
-              <span>
-                <img
-                  src={`/SoyoljLogo.png`}
-                  style={{
-                    width: 150,
-                    height: 50,
-                    transform: "translate(10%, -30%)",
-                    opacity: 0.65,
-                  }}
-                />
-              </span>
-            );
-          }
-          else if(ajiltan?.baiguullagiinId === "6115f350b35689cdbf1b9da3" && barilgiinId === "622ec99a8e64e5b4f0c3acb6") // ikhnayd zuun undur
+          if(ajiltan?.baiguullagiinId === "6115f350b35689cdbf1b9da3" && barilgiinId === "622ec99a8e64e5b4f0c3acb6") // ikhnayd zuun undur
             medeelel.barilgiinlogo = renderToString(
               <span>
                 <img
@@ -1791,23 +1775,7 @@ function tulburTootsoo({ token }) {
           );
         }
 
-        if(ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d") // soyolj
-        {
-          nekhemjlekh.barilgiinlogo = renderToString(
-            <span>
-              <img
-                src={`/SoyoljLogo.png`}
-                style={{
-                  width: 150,
-                  height: 50,
-                  transform: "translate(10%, -30%)",
-                  opacity: 0.65,
-                }}
-              />
-            </span>
-          );
-        }
-        else if(ajiltan?.baiguullagiinId === "6115f350b35689cdbf1b9da3" && barilgiinId === "622ec99a8e64e5b4f0c3acb6") // ikhnayd zuun undur
+        if(ajiltan?.baiguullagiinId === "6115f350b35689cdbf1b9da3" && barilgiinId === "622ec99a8e64e5b4f0c3acb6") // ikhnayd zuun undur
           nekhemjlekh.barilgiinlogo = renderToString(
             <span>
               <img

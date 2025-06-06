@@ -41,6 +41,7 @@ function ZuvhunKhunglukhModalContent(
             ajiltniiId: ajiltan?._id,
             zogsoolUndsenUne: (zogsool?.undsenUne || 2000),
             khungulukhTsag: (khungulukhTsag || 2),
+            khungulult: songogdsonData?.fitnessHungulult,
           })
           .then((res) => {
             if (res.data === "Amjilttai") {

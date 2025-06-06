@@ -252,6 +252,15 @@ const Kiosk = () => {
           });
       }
     }
+    if(ajiltan?._id === "68425acd7611dd8da7e7a7d2")
+    {
+      setSongogdsonData((prev) => {
+          return {
+            ...prev,
+            fitnessHungulult: prev?.pay_amount,
+          };
+        });
+    }
   }, [songogdsonData?.enter_date, servereesAvsonOdooTsag, ajiltan?._id]);
   function onTimeout() {
     setDrawerOngoikh(false);
@@ -772,7 +781,7 @@ const Kiosk = () => {
                     <div>{formatNumber(songogdsonData?.pay_amount, 0)}₮</div>
                   </div>
 
-                  {(ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880" || ajiltan?._id == "67d92062513ec21e26bdb604" || ajiltan?._id == "68357e846653c13643908698") && (
+                  {(ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880" || ajiltan?._id == "67d92062513ec21e26bdb604" || ajiltan?._id == "68357e846653c13643908698" || ajiltan?._id === "68425acd7611dd8da7e7a7d2") && (
                     <>
                       <div className="w-full border border-[#1E1E1E]" />
                       <div className="flex w-full justify-between px-6 ">
