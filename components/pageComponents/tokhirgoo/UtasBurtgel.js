@@ -127,13 +127,15 @@ function UtasBurtgel(
       form={form}
       onFinish={onFinish}
       initialValues={baiguullaga?.tokhirgoo}
-      autoComplete={"off"}>
+      autoComplete={"off"}
+    >
       <Form.List name="utasnuud">
         {(fields, { add, remove }) => (
           <div className="flex flex-col gap-2">
             <div
               className="!max-h-[300px] !overflow-auto"
-              style={{ width: "100%" }}>
+              style={{ width: "100%" }}
+            >
               {fields.map(({ key, name, ...restField }) => (
                 <Space
                   width={"100%"}
@@ -144,7 +146,8 @@ function UtasBurtgel(
                     justifyContent: "center",
                     marginBottom: 8,
                   }}
-                  align="baseline">
+                  align="baseline"
+                >
                   <Form.Item
                     style={{ minWidth: "293px" }}
                     {...restField}
@@ -154,7 +157,8 @@ function UtasBurtgel(
                         required: true,
                         message: "Утасны дугаар оруулаагүй байна.",
                       },
-                    ]}>
+                    ]}
+                  >
                     <InputNumber
                       maxLength={8}
                       style={{
@@ -169,13 +173,19 @@ function UtasBurtgel(
             </div>
             <Form.Item className="flex justify-center">
               <Button
+                className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
                 // className='!w-[100%]'
                 style={{ minWidth: "320px" }}
                 type="dashed"
                 onClick={() => add()}
                 // block
-                icon={<PlusOutlined className="text-black dark:text-white" />}>
-                <div className="text-black dark:text-white">Дугаар нэмэх</div>
+                icon={
+                  <PlusOutlined className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400" />
+                }
+              >
+                <div className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400">
+                  Дугаар нэмэх
+                </div>
               </Button>
             </Form.Item>
           </div>
@@ -185,7 +195,8 @@ function UtasBurtgel(
         <Form.Item
           style={{ minWidth: "320px" }}
           label={t("Хүлээн авах цаг")}
-          name="msgAvakhTsag">
+          name="msgAvakhTsag"
+        >
           <Select placeholder="Хүлээн авах цаг">
             <Select.Option key={"07:00"}>{"07:00"}</Select.Option>
             <Select.Option key={"09:30"}>{"09:30"}</Select.Option>

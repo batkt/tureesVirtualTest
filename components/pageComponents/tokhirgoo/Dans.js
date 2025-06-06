@@ -128,7 +128,12 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
 
   function dansBurtgeye(data) {
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
+      <Button
+        className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+        onClick={() => ref.current.khaaya()}
+      >
+        {t("Хаах")}
+      </Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
         {t("Хадгалах")}
       </Button>,

@@ -26,8 +26,13 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
 
   function zardalBurtgeye(data, togtmolEsekh) {
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
-      <Button type='primary' onClick={() => ref.current.khadgalya()}>
+      <Button
+        className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+        onClick={() => ref.current.khaaya()}
+      >
+        {t("Хаах")}
+      </Button>,
+      <Button type="primary" onClick={() => ref.current.khadgalya()}>
         {t("Хадгалах")}
       </Button>,
     ];
@@ -61,15 +66,16 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
 
   return (
     <>
-      <div className='xxl:col-span-4 col-span-12 mt-5 lg:col-span-6'>
-        <div className='box mt-5 lg:mt-0 max-h-[80vh] overflow-y-scroll'>
-          <div className='dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5'>
-            <h2 className='mr-auto text-base font-medium dark:text-gray-200'>
+      <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-6">
+        <div className="box mt-5 max-h-[80vh] overflow-y-scroll lg:mt-0">
+          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5">
+            <h2 className="mr-auto text-base font-medium dark:text-gray-200">
               {t("Хувьсах зардал")}
             </h2>
             <div
-              className='flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-green-500 fill-current p-2 text-white'
-              onClick={() => zardalBurtgeye()}>
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-green-500 fill-current p-2 text-white"
+              onClick={() => zardalBurtgeye()}
+            >
               <Tooltip title={t("Нэмэх")}>
                 <PlusOutlined />
               </Tooltip>
@@ -77,30 +83,44 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
           </div>
           {khuvisakhZardal.jagsaalt?.map((mur) => {
             return (
-              <div className='box' key={mur._id}>
-                <div className='flex items-center p-5'>
-                  <div className='border-l-2 border-green-500 pl-4'>
-                    <div className='font-medium'>{mur.ner}</div>
-                    <div className='text-gray-600'>{mur.turul}</div>
+              <div className="box" key={mur._id}>
+                <div className="flex items-center p-5">
+                  <div className="border-l-2 border-green-500 pl-4">
+                    <div className="font-medium">{mur.ner}</div>
+                    <div className="text-gray-600">{mur.turul}</div>
                   </div>
-                  <div className='ml-auto'>{(mur.ner?.includes("Хүйтэн ус") || mur.ner?.includes("Халуун ус") ? ("Цэвэр ус: " + formatNumber(mur.tseverUsDun, 2)) : formatNumber(mur.tariff, 2)) 
-                                              + " "+ (mur.ner?.includes("Хүйтэн ус") || mur.ner?.includes("Халуун ус") ? "Бохир ус: " + formatNumber(mur.bokhirUsDun, 2) : "")
-                                              + " "+ ( mur.ner?.includes("Халуун ус") ? "Ус халаасны: " + formatNumber(mur.usKhalaasniiDun, 2) : "")}</div>
-                  <div className='ml-5 flex space-x-2'>
+                  <div className="ml-auto">
+                    {(mur.ner?.includes("Хүйтэн ус") ||
+                    mur.ner?.includes("Халуун ус")
+                      ? "Цэвэр ус: " + formatNumber(mur.tseverUsDun, 2)
+                      : formatNumber(mur.tariff, 2)) +
+                      " " +
+                      (mur.ner?.includes("Хүйтэн ус") ||
+                      mur.ner?.includes("Халуун ус")
+                        ? "Бохир ус: " + formatNumber(mur.bokhirUsDun, 2)
+                        : "") +
+                      " " +
+                      (mur.ner?.includes("Халуун ус")
+                        ? "Ус халаасны: " + formatNumber(mur.usKhalaasniiDun, 2)
+                        : "")}
+                  </div>
+                  <div className="ml-5 flex space-x-2">
                     <Popconfirm
                       title={t("зардал устгах уу?", { ner: mur.ner })}
                       okText={t("Тийм")}
                       cancelText={t("Үгүй")}
-                      onConfirm={() => ustgaya(mur)}>
-                      <div className='flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white'>
+                      onConfirm={() => ustgaya(mur)}
+                    >
+                      <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white">
                         <Tooltip title={t("Устгах")}>
                           <DeleteOutlined size={20} />
                         </Tooltip>
                       </div>
                     </Popconfirm>
                     <div
-                      className='flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white'
-                      onClick={() => zardalBurtgeye(mur)}>
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white"
+                      onClick={() => zardalBurtgeye(mur)}
+                    >
                       <Tooltip title={t("Засах")}>
                         <EditOutlined />
                       </Tooltip>
@@ -112,15 +132,16 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
           })}
         </div>
       </div>
-      <div className='xxl:col-span-4 col-span-12 mt-5 lg:col-span-6'>
-        <div className='box mt-5 lg:mt-0 max-h-[80vh] overflow-y-scroll'>
-          <div className='dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5'>
-            <h2 className='mr-auto text-base font-medium dark:text-gray-200'>
+      <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-6">
+        <div className="box mt-5 max-h-[80vh] overflow-y-scroll lg:mt-0">
+          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5">
+            <h2 className="mr-auto text-base font-medium dark:text-gray-200">
               {t("Тогтмол зардал")}
             </h2>
             <div
-              className='flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-green-500 fill-current p-2 text-white'
-              onClick={() => zardalBurtgeye(undefined, true)}>
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-green-500 fill-current p-2 text-white"
+              onClick={() => zardalBurtgeye(undefined, true)}
+            >
               <Tooltip title={t("Нэмэх")}>
                 <PlusOutlined />
               </Tooltip>
@@ -128,28 +149,30 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
           </div>
           {togtmolZardal.jagsaalt?.map((mur) => {
             return (
-              <div className='box' key={mur._id}>
-                <div className='flex items-center p-5'>
-                  <div className='border-l-2 border-green-500 pl-4'>
-                    <div className='font-medium'>{mur.ner}</div>
-                    <div className='text-gray-600'>{t(mur.turul)}</div>
+              <div className="box" key={mur._id}>
+                <div className="flex items-center p-5">
+                  <div className="border-l-2 border-green-500 pl-4">
+                    <div className="font-medium">{mur.ner}</div>
+                    <div className="text-gray-600">{t(mur.turul)}</div>
                   </div>
-                  <div className='ml-auto'>{formatNumber(mur.tariff, 2)}</div>
-                  <div className='ml-5 flex space-x-2'>
+                  <div className="ml-auto">{formatNumber(mur.tariff, 2)}</div>
+                  <div className="ml-5 flex space-x-2">
                     <Popconfirm
                       title={t("зардал устгах уу?", { ner: mur.ner })}
                       okText={t("Тийм")}
                       cancelText={t("Үгүй")}
-                      onConfirm={() => ustgaya(mur, true)}>
-                      <div className='flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white'>
-                        <Tooltip title='Устгах'>
+                      onConfirm={() => ustgaya(mur, true)}
+                    >
+                      <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white">
+                        <Tooltip title="Устгах">
                           <DeleteOutlined size={20} />
                         </Tooltip>
                       </div>
                     </Popconfirm>
                     <div
-                      className='flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white'
-                      onClick={() => zardalBurtgeye(mur, true)}>
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white"
+                      onClick={() => zardalBurtgeye(mur, true)}
+                    >
                       <Tooltip title={t("Засах")}>
                         <EditOutlined />
                       </Tooltip>

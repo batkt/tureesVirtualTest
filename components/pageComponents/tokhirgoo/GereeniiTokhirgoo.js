@@ -486,7 +486,7 @@ function KhuviinMedeelel({
           <div className="flex justify-between p-5 ">
             <div>
               <Form form={form} autoComplete="off" className="">
-                <div className="flex w-full flex-col">
+                <div className="flex w-full flex-col ">
                   <Form.Item name="turul">
                     <ImgCrop modalTitle="Зураг засах" rotationSlider>
                       <Upload
@@ -497,14 +497,14 @@ function KhuviinMedeelel({
                         method="POST"
                         onChange={(v) => zuragKhadgalakh(v, "tamga")}
                       >
-                        <div className="flex flex-col space-x-1">
+                        <div className="flex flex-col space-x-1 !text-gray-400 dark:!border-white dark:!bg-gray-900 dark:!text-gray-400 ">
                           {!barilga?.tamga && (
                             <Button icon={<UploadOutlined />}>
                               {t("Тамга зураг оруулах")}
                             </Button>
                           )}  
                           <Button
-                            className="mt-3"
+                            className="mt-3 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
                             icon={<EyeOutlined />}
                             onClick={(e) =>
                               tamgaZuragKharakh(e, `tamga/${barilga.tamga}`)
@@ -513,7 +513,7 @@ function KhuviinMedeelel({
                             {t("Тамга зураг харах")}
                           </Button>
                           {!!barilga?.tamga && (
-                            <Button icon={<EditOutlined />}></Button>
+                            <Button className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400" icon={<EditOutlined />}></Button>
                           )}
                         </div>
                       </Upload>
@@ -563,8 +563,8 @@ function KhuviinMedeelel({
                         method="POST"
                         onChange={(v) => zuragKhadgalakh(v, "gariinUseg")}
                       >
-                        <div className="flex flex-row space-x-1">
-                          <Button icon={<UploadOutlined />}>
+                        <div className="flex flex-row space-x-1 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400">
+                          <Button className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400" icon={<UploadOutlined />}>
                             {t("Гарын үсэг зураг оруулах")}
                           </Button>
                         </div>

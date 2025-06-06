@@ -394,7 +394,9 @@ const YurunkhiiMedeele = ({
           ]}
         >
           <KhariltsagchiinLavlakh
-            khadgalsabRegister={value.register ? value.register : value.customerTin}
+            khadgalsabRegister={
+              value.register ? value.register : value.customerTin
+            }
             focuser={focuser}
             baiguullaga={baiguullaga}
             barilgiinId={barilgiinId}
@@ -404,15 +406,16 @@ const YurunkhiiMedeele = ({
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-delay="800">
-        <Form.Item 
-          name="customerTin" 
+        <Form.Item
+          name="customerTin"
           label={t("Бүртгэлийн дугаар")}
           rules={[
             {
               required: value.customerTin === value.register,
               message: t("Регистр бүртгэнэ үү!"),
             },
-          ]}>
+          ]}
+        >
           <Input
             onKeyUp={focuser}
             allowClear
@@ -721,13 +724,14 @@ const YurunkhiiMedeele = ({
                 headers={{ Authorization: `bearer ${token}` }}
               >
                 <Button
-                  className="dark:text-gray-300"
+                  className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
                   icon={<UploadOutlined />}
                 >
                   {t("Файл сонгох")}
                 </Button>
               </Upload>
             </Form.Item>
+
             <Form.Item
               name="unemlekhniiZurag"
               valuePropName="fileList"
@@ -744,7 +748,7 @@ const YurunkhiiMedeele = ({
                 headers={{ Authorization: `bearer ${token}` }}
               >
                 <Button
-                  className="dark:text-gray-300"
+                  className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
                   icon={<UploadOutlined />}
                 >
                   {t("Файл сонгох")}
