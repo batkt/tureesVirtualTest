@@ -143,7 +143,7 @@ const khatuuZagvarSoyoljMall = (
           <span>Э-шуудан:</span>
           <span style="">&nbsp;${
             barilgiinId === "6731b43bc23730ac1908da2e"
-              ? "finance.sm@soyolj.com"
+              ? "finance@soyoljmall.mn"
               : baiguullaga?.mail?.join(",")
           }</span>
         </div>
