@@ -68,12 +68,17 @@ function Tile({ zasya, token, ...a }) {
 
 function segmentiinTokhirgoo({ token }) {
   const ref = React.useRef(null);
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const segment = useJagsaalt("/segment");
 
   function segmentBurtegye(data) {
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
+      <Button
+        className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+        onClick={() => ref.current.khaaya()}
+      >
+        {t("Хаах")}
+      </Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
         {t("Хадгалах")}
       </Button>,
@@ -97,7 +102,7 @@ function segmentiinTokhirgoo({ token }) {
     <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-6">
       <div className="box mt-5 lg:mt-0">
         <div
-          className="dark:border-dark-5 flex items-center  justify-end border-b border-gray-200 px-5 pt-5 pb-2"
+          className="dark:border-dark-5 flex items-center  justify-end border-b border-gray-200 px-5 pb-2 pt-5"
           onClick={() => segmentBurtegye()}
         >
           <Button type="primary">{t("Ялгаж бүртгэх")}</Button>
