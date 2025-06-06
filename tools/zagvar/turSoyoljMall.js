@@ -2,8 +2,8 @@ const khatuuZagvarSoyoljMall = (
   medeelel,
   ajiltan,
   baiguullaga,
+  barilga,
   barilgiinId,
-  barilga
 ) => {
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
@@ -143,7 +143,7 @@ const khatuuZagvarSoyoljMall = (
           <span>Э-шуудан:</span>
           <span style="">&nbsp;${
             barilgiinId === "6731b43bc23730ac1908da2e"
-              ? "finance@soyoljmall.mn"
+              ? "invoice@soyoljmall.mn"
               : baiguullaga?.mail?.join(",")
           }</span>
         </div>
