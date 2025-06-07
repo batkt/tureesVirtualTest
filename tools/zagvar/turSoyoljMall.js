@@ -135,7 +135,7 @@ const khatuuZagvarSoyoljMall = (
           <span>Утас:</span>
           <span style="">&nbsp;${
             barilgiinId === "6731b43bc23730ac1908da2e"
-              ? "8910-9501"
+              ? "7777-5040"
               : baiguullaga?.utas?.join(",")
           }</span>
         </div>
@@ -171,14 +171,6 @@ const khatuuZagvarSoyoljMall = (
           <span>Талбайн дугаар:</span>
           <span style="">&lt;talbainDugaar&gt;</span>
         </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span>Утас: </span>
-          <span style="">&lt;utas&gt;</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span>Утас: </span>
-          <span style="">&lt;utas&gt;</span>
-        </div>
        <div style="display: flex; justify-content: space-between;">
           <span style="">Нэхэмжилсэн огноо:</span>
           <span style="">&lt;ekhelkhSar&gt;/&lt;ekhlekhUdur&gt;/&lt;ekhlekhOn&gt;</span>
@@ -186,6 +178,14 @@ const khatuuZagvarSoyoljMall = (
         <div style="display: flex; justify-content: space-between;">
           <span style="">Төлбөр хийх хугацаа:</span>
           <span style="">&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <span style="">&nbsp;&nbsp;&nbsp;</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <span style="">&nbsp;&nbsp;&nbsp;</span>
         </div>
       </div>
     </div>
