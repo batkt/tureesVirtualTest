@@ -237,7 +237,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style=" border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
-          <td style="border: none; position: relative; >&lt;tamga&gt;</td>
+          <td style="border: none; position: relative; >${ajiltan?.baiguullagiinId !== "64e855ce37fdc9b105f936e0" ? "&lt;tamga&gt;" : ""}</td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
