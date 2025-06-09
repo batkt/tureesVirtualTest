@@ -188,18 +188,17 @@ function GereeBaiguulakh({ token, data }) {
     if (!!data?.zuvshuurliinZurag)
       data.zuvshuurliinZurag =
         _.get(data, "zuvshuurliinZurag.0.response.id") || null;
-    
-    createMethod("gereeZasya", token, data)  
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
-          setKhagalakhGeree({});
-          router.back();
-          setTimeout(() => {
-            window.location.reload();
-          }, 600);
-          message.success(t("Амжилттай хадгаллаа"));
-        }
-      });
+
+    createMethod("gereeZasya", token, data).then(({ data }) => {
+      if (data === "Amjilttai") {
+        setKhagalakhGeree({});
+        router.back();
+        setTimeout(() => {
+          window.location.reload();
+        }, 600);
+        message.success(t("Амжилттай хадгаллаа"));
+      }
+    });
   }
 
   const onChangeGereeniiZagvar = (_id) => {
@@ -310,16 +309,25 @@ function GereeBaiguulakh({ token, data }) {
         .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
         .map((b) => {
           b.zaalt = b.zaalt.replace(
-            new RegExp(`&lt;${key}&gt;`, "g"), 
-            key === "utas" ? value[0] : (key === "talbainNegjUne" || key === "talbainNiitUne" || key === "baritsaaAvakhDun") ? formatNumber(value) : value
-              // : parseFloat(value) != NaN
-              // ? key != "register"
-              //   ? value
-              //   : formatNumber(value)
-              // : value
+            new RegExp(`&lt;${key}&gt;`, "g"),
+            key === "utas"
+              ? value[0]
+              : key === "talbainNegjUne" ||
+                key === "talbainNiitUne" ||
+                key === "baritsaaAvakhDun"
+              ? formatNumber(value)
+              : value
+            // : parseFloat(value) != NaN
+            // ? key != "register"
+            //   ? value
+            //   : formatNumber(value)
+            // : value
           );
         });
-      butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+      butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
+        new RegExp(`&lt;${key}&gt;`, "g"),
+        value
+      );
     }
     return butsaakhUtga;
   }, [aktiinZagvar, khadgalakhGeree, current]);
@@ -362,25 +370,36 @@ function GereeBaiguulakh({ token, data }) {
               (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1
             )
             .map((b) => {
-              b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"), formatNumber(mur.tariff));
+              b.zaalt = b.zaalt.replace(
+                new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"),
+                formatNumber(mur.tariff)
+              );
             });
         });
         value.map((mur) => {
           butsaakhUtga?.dedKhesguud
             ?.filter(
-              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
+              (a) =>
+                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
             )
             .map((b) => {
-              b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"), formatNumber(mur.tulukhDun));
+              b.zaalt = b.zaalt.replace(
+                new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"),
+                formatNumber(mur.tulukhDun)
+              );
             });
         });
         value.map((mur) => {
           butsaakhUtga?.dedKhesguud
             ?.filter(
-              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariffUsgeer`) !== -1
+              (a) =>
+                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariffUsgeer`) !== -1
             )
             .map((b) => {
-              b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tariffUsgeer&gt;`, "g"), mur.tariffUsgeer);
+              b.zaalt = b.zaalt.replace(
+                new RegExp(`&lt;${mur.ner}.tariffUsgeer&gt;`, "g"),
+                mur.tariffUsgeer
+              );
             });
         });
       } else {
@@ -389,16 +408,25 @@ function GereeBaiguulakh({ token, data }) {
           .map((b) => {
             b.zaalt = b.zaalt.replace(
               new RegExp(`&lt;${key}&gt;`, "g"),
-              key === "utas" ? value[0] : (key === "talbainNegjUne" || key === "talbainNiitUne" || key === "baritsaaAvakhDun") ? formatNumber(value) : value
-                // : parseFloat(value) != NaN
-                // ? key != "register"
-                //   ? value
-                //   : formatNumber(value)
-                // : value
+              key === "utas"
+                ? value[0]
+                : key === "talbainNegjUne" ||
+                  key === "talbainNiitUne" ||
+                  key === "baritsaaAvakhDun"
+                ? formatNumber(value)
+                : value
+              // : parseFloat(value) != NaN
+              // ? key != "register"
+              //   ? value
+              //   : formatNumber(value)
+              // : value
             );
           });
       }
-      butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+      butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
+        new RegExp(`&lt;${key}&gt;`, "g"),
+        value
+      );
     }
 
     return butsaakhUtga;
@@ -555,10 +583,7 @@ function GereeBaiguulakh({ token, data }) {
               </Select>
             )}
             <div className="flex w-full flex-col items-center justify-center gap-10">
-              <div
-                className="flex flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black"
-                style={{ width: "210mm" }}
-              >
+              <div>
                 {current === 0 && gereeniiZagvar?.ner && (
                   <>
                     <div className="grid grid-cols-2 gap-4">
@@ -592,7 +617,7 @@ function GereeBaiguulakh({ token, data }) {
                           : ""
                       }
                       key={`alkhamiinGereeniiZagvar${index}`}
-                      className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-100"
+                      className="group relative flex w-full flex-row rounded-md p-1"
                     >
                       <div
                         className="sun-editor-editable w-full text-center"
@@ -602,14 +627,11 @@ function GereeBaiguulakh({ token, data }) {
                   );
                 })}
               </div>
+
               {khadgalakhGeree?.talbainuud?.length > 0 &&
                 khadgalakhGeree?.talbainuud?.map((a, i) => {
                   return (
-                    <div
-                      key={i}
-                      className="relative flex w-full flex-col justify-center space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black"
-                      style={{ width: "210mm", height: "297mm" }}
-                    >
+                    <div key={i}>
                       <div className="absolute left-5 top-5 flex gap-3 text-lg font-semibold">
                         <div>{t("Код")}:</div>
                         <div>{a?.kod}</div>
@@ -631,7 +653,7 @@ function GereeBaiguulakh({ token, data }) {
                       </div>
                       {a.talbainKhemjeeMetrKube && (
                         <div className="flex gap-3">
-                          <div>{t("Хэмжээ м3")}:</div>talbainNiitUne
+                          <div>{t("Хэмжээ м3")}:</div>
                           <div>
                             {a.talbainKhemjeeMetrKube || 0}м<sup>3</sup>
                           </div>
@@ -648,11 +670,9 @@ function GereeBaiguulakh({ token, data }) {
                     </div>
                   );
                 })}
+
               {baiguullaga?.tokhirgoo?.aktAshiglakhEsekh === true && (
-                <div
-                  className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black"
-                  style={{ width: "210mm" }}
-                >
+                <div>
                   {current === 0 && alkhamiinAktiinZagvar?.ner && (
                     <>
                       <div className="grid grid-cols-2 gap-4">
@@ -686,7 +706,7 @@ function GereeBaiguulakh({ token, data }) {
                             : ""
                         }
                         key={`alkhamiinAktiinZagvar${index}`}
-                        className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-100"
+                        className="group relative flex w-full flex-row rounded-md"
                       >
                         <div
                           className="w-full"

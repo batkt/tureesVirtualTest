@@ -486,7 +486,7 @@ const YurunkhiiMedeele = ({
           <Button
             onClick={prev}
             icon={<ArrowLeftOutlined />}
-            className="dark:text-gray-200 dark:hover:text-gray-800"
+            className="text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
           >
             {t("Гэрээний хугацаа")}
           </Button>

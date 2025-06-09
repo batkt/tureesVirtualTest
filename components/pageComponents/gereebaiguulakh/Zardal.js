@@ -355,7 +355,7 @@ const Zardal = ({
             <Button
               onClick={prev}
               icon={<ArrowLeftOutlined />}
-              className="dark:text-white dark:hover:text-black"
+              className="text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
             >
               {t("Түрээсийн талбай")}
             </Button>

@@ -579,8 +579,6 @@ function GereeBaiguulakh({ token }) {
             )}
             <div className="flex w-full flex-col items-center justify-center gap-10">
               <div
-                className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black"
-                style={{ width: "210mm" }}
               >
                 {current === 0 && alkhamiinGereeniiZagvar?.ner && (
                   <>
@@ -674,8 +672,6 @@ function GereeBaiguulakh({ token }) {
                 })}
               {baiguullaga?.tokhirgoo?.aktAshiglakhEsekh === true && (
                 <div
-                  className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black"
-                  style={{ width: "210mm" }}
                 >
                   {current === 0 && alkhamiinAktiinZagvar?.ner && (
                     <>
