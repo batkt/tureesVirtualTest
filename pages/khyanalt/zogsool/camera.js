@@ -977,12 +977,7 @@ function camera({ token }) {
                     : "bg-green-200"
                 }`}
               >
-                {minToHour(
-                  parents?.tuukh?.reduce(
-                    (a, b) => a + (b.niitKhugatsaa || 0),
-                    0
-                  )
-                )}
+                {minToHour(parents?.niitKhugatsaa)}
               </div>
             ) : (
               <div className="rounded bg-blue-200 px-3 py-1 text-slate-700">
