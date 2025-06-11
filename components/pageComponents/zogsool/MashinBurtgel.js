@@ -19,7 +19,7 @@ import {
 } from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
-import uilchilgee from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import compareFields from "tools/function/compareFields";
 import moment from "moment";
 import { t } from "i18next";
@@ -39,6 +39,7 @@ function MashinBurtgel(
     mashinBurtgekhButtonId,
     baiguullagiinId,
     dotorGadnaTsagEsekh,
+    ajiltan,
   },
   ref
 ) {
@@ -181,35 +182,53 @@ function MashinBurtgel(
   }
 
   function onFinish() {
-    const data = form.getFieldsValue();
-    (data.ekhlekhOgnoo = ognoo[0]?.format("YYYY-MM-DD 00:00:00")),
-      (data.duusakhOgnoo = ognoo[1]?.format("YYYY-MM-DD 23:59:59")),
-      (data.barilgiinId = barilgiinId);
+    const lastData = form.getFieldsValue();
+    (lastData.ekhlekhOgnoo = ognoo[0]?.format("YYYY-MM-DD 00:00:00")),
+      (lastData.duusakhOgnoo = ognoo[1]?.format("YYYY-MM-DD 23:59:59")),
+      (lastData.barilgiinId = barilgiinId);
     if (!!geree) {
-      data.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;
-      data.gereeniiDugaar = geree?.gereeniiDugaar;
+      lastData.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;
+      lastData.gereeniiDugaar = geree?.gereeniiDugaar;
     }
     if (khungulultiinTurul === "togtmolTsag") {
-      data.khungulujEkhlesenOgnoo = new Date();
-      if (dataOrjIrsenEsekh === false || !data?.uldegdelKhungulukhKhugatsaa) {
-        data.uldegdelKhungulukhKhugatsaa = data.khungulukhKhugatsaa;
+      lastData.khungulujEkhlesenOgnoo = new Date();
+      if (dataOrjIrsenEsekh === false || !lastData?.uldegdelKhungulukhKhugatsaa) {
+        lastData.uldegdelKhungulukhKhugatsaa = lastData.khungulukhKhugatsaa;
       }
     }
-    if (data.turul === "Гэрээт") {
-      data.gereetTulburBodokhEsekh = gereetTulburBodokhEsekh;
-      data.tulburBodokhTsagEkhlekh = gereetTulburBodokhEsekh ? tulburBodokhTsag[0].format("HH:mm") : null;
-      data.tulburBodokhTsagDuusakh = gereetTulburBodokhEsekh ? tulburBodokhTsag[1].format("HH:mm") : null;
-      data.tulburBodokhTsagEkhlekhNeg = gereetTulburBodokhEsekhNemelt ? tulburBodokhTsagNemelt[0].format("HH:mm") : null;
-      data.tulburBodokhTsagDuusakhNeg = gereetTulburBodokhEsekhNemelt ? tulburBodokhTsagNemelt[1].format("HH:mm") : null;
+    if (lastData.turul === "Гэрээт") {
+      lastData.gereetTulburBodokhEsekh = gereetTulburBodokhEsekh;
+      lastData.tulburBodokhTsagEkhlekh = gereetTulburBodokhEsekh ? tulburBodokhTsag[0].format("HH:mm") : null;
+      lastData.tulburBodokhTsagDuusakh = gereetTulburBodokhEsekh ? tulburBodokhTsag[1].format("HH:mm") : null;
+      lastData.tulburBodokhTsagEkhlekhNeg = gereetTulburBodokhEsekhNemelt ? tulburBodokhTsagNemelt[0].format("HH:mm") : null;
+      lastData.tulburBodokhTsagDuusakhNeg = gereetTulburBodokhEsekhNemelt ? tulburBodokhTsagNemelt[1].format("HH:mm") : null;
     }
-    const method = data?._id ? updateMethod : createMethod;
-    method("mashin", token, data).then(({ data }) => {
+    const method = lastData?._id ? updateMethod : createMethod;
+    method("mashin", token, lastData).then(({ data }) => {
       if (data === "Amjilttai") {
         message.success(t("Амжилттай хадгаллаа"));
         onRefresh && onRefresh();
         destroy();
       }
     });
+    if(ajiltan?.tokhirgoo?.mashniiDugaarZasakhEsekh)
+    {
+      uilchilgee(token)
+        .post(`/mashiniiDugaarZasakh`, {
+          baiguullagiinId,
+          barilgiinId,
+          mashin: lastData,
+          mashiniiDugaar: lastData.dugaar,
+        })
+        .then(({ data }) => {
+          if (data === "Amjilttai") {
+            message.success(t("Зогсоолд орсон машины мэдээлэл амжилттай өөрчлөгдсөн"));
+          }
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+        });
+    }
   }
 
   useEffect(() => {

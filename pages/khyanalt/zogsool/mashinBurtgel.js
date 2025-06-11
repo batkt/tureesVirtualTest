@@ -801,6 +801,7 @@ function mashinBurtgel({ token }) {
           baiguullagiinId={baiguullaga?._id}
           dotorGadnaTsagEsekh={baiguullaga?.tokhirgoo?.dotorGadnaTsagEsekh}
           data={data}
+          ajiltan={ajiltan}
         />
       ),
       footer,
