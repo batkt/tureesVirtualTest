@@ -171,8 +171,8 @@ function GereeBaiguulakh({ token, data }) {
     }
     setWaiting(true);
     data.turul = data?.baiguullagaEsekh ? "ААН" : "Иргэн";
-    data.baiguullagiinNer = baiguullaga.ner;
-    data.baiguullagiinId = baiguullaga._id;
+    data.baiguullagiinNer = baiguullaga?.ner;
+    data.baiguullagiinId = baiguullaga?._id;
     data.gereeniiZagvariinId = gereeniiZagvar._id;
     data.barilgiinId = barilgiinId;
     data.turGereeEsekh = gereeniiZagvar?.turGereeEsekh;

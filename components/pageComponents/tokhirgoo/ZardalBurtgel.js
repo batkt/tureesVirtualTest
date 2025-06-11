@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useImperativeHandle, useState } from "react";
-import { Form, InputNumber, Select, Input, notification, Modal } from "antd";
+import { Form, InputNumber, Select, Input, notification, Modal, DatePicker} from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 import compareFields from "tools/function/compareFields";
 import { useTranslation } from "react-i18next";
 import numberToWords from "tools/function/numberToWords";
+import moment from "moment";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 function ZardalBurtgel(
   { data, destroy, baiguullagiinId, barilgiinId, token,togtmolEsekh, refresh },
@@ -17,6 +19,7 @@ function ZardalBurtgel(
   const [hideKhaluunus,setHideKhaluunus] = useState(true)
   const [hideKhuitenus,setHideKhuitenus] = useState(true)
   const [hideTogtmol, setHideTogtmol] = useState(true)
+  const [ognoonuud, setOgnoonuud] = useState(data.ognoonuud?.length > 0 ? [moment(data.ognoonuud[0]), moment(data.ognoonuud[1])] : []);
 
   function garya() {
     const values = form.getFieldsValue()
@@ -53,6 +56,7 @@ function ZardalBurtgel(
         ugugdul["barilgiinId"] = barilgiinId;
         ugugdul["baiguullagiinId"] = baiguullagiinId;
         ugugdul["bodokhArga"] = (ugugdul.ner?.includes("Халуун ус") || ugugdul.ner?.includes("Хүйтэн ус") || ugugdul.ner?.includes("Цахилгаан")) ? "Khatuu" : undefined; 
+        ugugdul["ognoonuud"] = ognoonuud?.length > 0 ? [moment(ognoonuud[0]).startOf("month").format("YYYY-MM-DD 00:00:00"), moment(ognoonuud[1]).endOf("month").format("YYYY-MM-DD 23:59:59")] : [];
         method("ashiglaltiinZardluud", token, { ...data, ...ugugdul }).then(
           ({ data }) => {
             if (data === "Amjilttai") {
@@ -62,12 +66,28 @@ function ZardalBurtgel(
             }
           }
         );
+        if(data.ognoonuud?.length > 0 || ognoonuud?.length > 0)
+        {
+          uilchilgee(token)
+            .post(`/gereeAshiglakhguiSaruud`, {
+              barilgiinId,
+              zardal: ugugdul,
+            })
+            .then(({ data }) => {
+              if (data === "Amjilttai") {
+                notification.success({ message: ugugdul.ner + t("-ын зардлын гэрээнүүдэд амжилттай өөрчлөгдсөн") });
+              }
+            })
+            .catch((e) => {
+              aldaaBarigch(e);
+            });  
+        }
       },
       khaaya() {
         garya();
       },
     }),
-    [form]
+    [form, ognoonuud]
   );
 
   const focuser = useCallback((e)=>{
@@ -110,6 +130,10 @@ function ZardalBurtgel(
       "төгрөг",
       "мөнгө"
     ));
+  }
+
+  function disabledDate(current) {
+    return current && current < moment().startOf('month');
   }
 
   return (
@@ -232,6 +256,19 @@ function ZardalBurtgel(
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
+      <Form.Item label={t("Авлага үүсгэхгүй сарууд")}>
+        <DatePicker.RangePicker
+          disabledDate={disabledDate}
+          value={ognoonuud}
+          allowClear={true}
+          style={{ width: "100%" }}
+          picker="month"
+          placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
+          onChange={(v) => {
+          setOgnoonuud(v);
+          }}
+        />
+      </Form.Item>      
     </Form>
   );
 }
