@@ -211,7 +211,7 @@ function MashinBurtgel(
         destroy();
       }
     });
-    if(ajiltan?.tokhirgoo?.mashniiDugaarZasakhEsekh)
+    if(ajiltan?.erkh === "Admin" || ajiltan?.tokhirgoo?.mashniiDugaarZasakhEsekh)
     {
       uilchilgee(token)
         .post(`/mashiniiDugaarZasakh`, {
