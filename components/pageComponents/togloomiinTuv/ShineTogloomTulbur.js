@@ -292,8 +292,11 @@ function ShineTogloomTulbur(
   useEffect(() => {
     if (khuleegdejBuiQpay) {
       socket().on(`qpay/${baiguullaga._id}/${khuleegdejBuiQpay}`, (qpay) => {
-        batalgaajuulaltKhiiya("qpayTulugdsun");
-        message.success("Qpay Амжилттай төлөгдлөө");
+        if(!loading)
+        {
+          batalgaajuulaltKhiiya("qpayTulugdsun");
+          message.success("Qpay Амжилттай төлөгдлөө");
+        }
       });
     }
     return () => {
