@@ -302,7 +302,7 @@ function ShineTogloomTulbur(
     return () => {
       socket().off(`qpay${khuleegdejBuiQpay}`);
     };
-  }, [khuleegdejBuiQpay, baiguullaga]);
+  }, [khuleegdejBuiQpay, baiguullaga, loading]);
 
   function qpayAvakh() {
     var ilgeekhDun = tulbur.find((a) => a.turul === "qpay")?.dun;
