@@ -1105,9 +1105,9 @@ function togloom1() {
         showSorterTooltip: false,
       },
       {
-        title: t("Хугацаа/мин/"),
+        title: (<Popover placement="bottom" content={t("Хугацаа/мин/")}>Хуг/мин/</Popover>),
         align: "center",
-        width: "8rem",
+        width: "6rem",
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "khugatsaa",
@@ -1124,9 +1124,9 @@ function togloom1() {
         },
       },
       {
-        title: t("Сунгасан/мин/"),
+        title: (<Popover placement="bottom" content={t("Сунгасан/мин/")}>Сун/мин/</Popover>),
         align: "center",
-        width: "8.5rem",
+        width: "6rem",
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "sungasanMinut",
@@ -1135,7 +1135,7 @@ function togloom1() {
       {
         title: t("Төлөв"),
         align: "center",
-        width: "10rem",
+        width: "8rem",
         dataIndex: "tuluv",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -1217,8 +1217,19 @@ function togloom1() {
         },
       },
       {
+        title: t("И-Баримт"),
+        align: "center",
+        width: "9rem",
+        dataIndex: "ebarimtAvsanDun",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render: (v) => {
+          return <div className="w-full text-right">{formatNumber(v, 0)}</div>;
+        },
+      },
+      {
         fixed: "right",
-        width: "5rem",
+        width: "3rem",
         title: "QR",
         align: "center",
         render: (a, data) => (
@@ -1234,7 +1245,7 @@ function togloom1() {
       },
       {
         fixed: "right",
-        width: "10rem",
+        width: "8rem",
         title: t("Төлбөр"),
         align: "center",
         ellipsis: true,
@@ -1312,7 +1323,7 @@ function togloom1() {
         title: () => <SettingOutlined />,
         ellipsis: true,
         fixed: "right",
-        width: "3rem",
+        width: "2rem",
         align: "center",
         render: (data, v) => {
           const today = moment(new Date()).format("YYYYMMDD");
@@ -1859,6 +1870,17 @@ function togloom1() {
 
                               render: (data) => {
                                 return moment(data).format("YYYY-MM-DD HH:mm");
+                              },
+                            },
+                            {
+                              title: t("И-Баримт"),
+                              dataIndex: "ebarimtAvsanDun",
+                              ellipsis: true,
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
+                              render: (data) => {
+                                return Number(data || 0);
                               },
                             },
                             {
