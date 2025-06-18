@@ -1200,6 +1200,10 @@ input[type="number"] {
   @apply dark:text-white !important;
 }
 
+.ant-btn-default {
+  @apply dark:text-gray-900 dark:hover:text-gray-800 dark:focus:text-gray-400 !important;
+}
+
 .ant-cascader-menu-item {
   @apply whitespace-pre-wrap dark:hover:bg-gray-700 !important;
 }
