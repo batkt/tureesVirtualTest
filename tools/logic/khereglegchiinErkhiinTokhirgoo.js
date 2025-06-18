@@ -859,17 +859,24 @@ export const khuudasnuud = [
         href: "/khyanalt/tailan/analytic",
         icon: <MdOutlineAnalytics style={{ width: "24", height: "24" }} />,
       },
+
       {
         ner: "Нэгтгэл тайлан",
         khuudasniiNer: "negtgelTailan",
         href: "/khyanalt/tailan/negtgelTailan",
         icon: <TbReportMoney style={{ width: "24", height: "24" }} />,
       },
-          {
+      {
         ner: "Насжилтын тайлан",
         khuudasniiNer: "nasjiltinTailan",
         href: "/khyanalt/tailan/nasjiltinTailan",
-        icon: <TbReportMoney style={{ width: "24", height: "24" }} />,
+        icon: (
+          <img
+            src="/NasjiltLogo.png" // ✅ correct prop is `src`
+            alt="Насжилтын лого" // optional but recommended for accessibility
+            style={{ marginLeft: "2px", width: "24px", height: "24px" }}
+          />
+        ),
       },
     ],
   },
@@ -925,7 +932,9 @@ export const khuudasnuud = [
     ner: "Зассан түүх",
     khuudasniiNer: "zassanTuukh",
     href: "/khyanalt/zassanTuukh",
-    icon: <VscGitPullRequestGoToChanges style={{ width: "24", height: "24" }} />,
+    icon: (
+      <VscGitPullRequestGoToChanges style={{ width: "24", height: "24" }} />
+    ),
   },
   {
     ner: "Киоск",

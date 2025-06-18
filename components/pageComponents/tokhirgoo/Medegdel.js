@@ -86,7 +86,7 @@ function Medegdel({
   function utasBurtgey(data) {
     const footer = [
       <Button
-        className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+        className="dark:!bg-gray-white !text-gray-400 dark:!border-white dark:!text-black"
         onClick={() => ref.current.khaaya()}
       >
         {t("Хаах")}

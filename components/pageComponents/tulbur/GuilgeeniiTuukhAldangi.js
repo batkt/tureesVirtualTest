@@ -1,11 +1,10 @@
-import {
-  Button,
-  DatePicker,
-  Input,
-  message,
-  Popconfirm,
-} from "antd";
-import React, { useEffect, useImperativeHandle, useMemo, useState } from "react";
+import { Button, DatePicker, Input, message, Popconfirm } from "antd";
+import React, {
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
@@ -49,12 +48,8 @@ function GuilgeeniiTuukhAldangi(
   const { t, i18n } = useTranslation();
   const [shineOgnoo, setShineOgnoo] = useState(undefined);
   const [aldangiinUldegdel, setAldangiinUldegdel] = useState(undefined);
-  const { guilgeeniiAldangiTuukh, guilgeeniiAldangiTuukhMutate } = useGereeAldangiGuilgee(
-    token,
-    data?._id,
-    ognoo,
-    shineOgnoo
-  );
+  const { guilgeeniiAldangiTuukh, guilgeeniiAldangiTuukhMutate } =
+    useGereeAldangiGuilgee(token, data?._id, ognoo, shineOgnoo);
   const [sortOrders, setSortOrders] = useState({
     ognoo: null,
     tulukhAldangi: null,
@@ -109,9 +104,7 @@ function GuilgeeniiTuukhAldangi(
       khevlekh() {
         handlePrint();
       },
-      excelTatakh() {
-        
-      },
+      excelTatakh() {},
       refreshData() {
         guilgeeniiAldangiTuukhMutate();
         setAldangiinUldegdel(undefined);
@@ -121,19 +114,19 @@ function GuilgeeniiTuukhAldangi(
   );
 
   useEffect(() => {
-    if(!aldangiinUldegdel)
+    if (!aldangiinUldegdel)
       axios(token)
-          .get("/geree", {
-            params: {
-              query: { _id: data?._id, tuluv: { $ne: -1 } },
-              select: { aldangiinUldegdel: 1 },
-            },
-          })
-          .then(({ data }) => {
-            if (!!data && data.jagsaalt?.length > 0) {
-              setAldangiinUldegdel(data.jagsaalt[0].aldangiinUldegdel)
-            }
-          });
+        .get("/geree", {
+          params: {
+            query: { _id: data?._id, tuluv: { $ne: -1 } },
+            select: { aldangiinUldegdel: 1 },
+          },
+        })
+        .then(({ data }) => {
+          if (!!data && data.jagsaalt?.length > 0) {
+            setAldangiinUldegdel(data.jagsaalt[0].aldangiinUldegdel);
+          }
+        });
   }, [guilgeeniiAldangiTuukh]);
 
   function tulultUstgaya({
@@ -210,7 +203,7 @@ function GuilgeeniiTuukhAldangi(
   return (
     <div className="">
       <div ref={printRef} className="flex flex-col">
-        <div className="flex w-full items-center justify-start gap-8">
+        <div className="flex w-full items-center justify-start gap-8 dark:text-white">
           <div className="">
             <DatePicker.RangePicker
               value={shineOgnoo}
@@ -256,48 +249,59 @@ function GuilgeeniiTuukhAldangi(
           <tr className="flex min-w-[50rem] divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
             <td
               onClick={() => toggleSortOrder("ognoo")}
-              className="min-w-[8rem] overflow-hidden p-1 text-center">
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
               {t("Огноо")}
             </td>
             <td
               onClick={() => toggleSortOrder("ajiltan")}
-              className="min-w-[8rem] overflow-hidden p-1 text-center">
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
               {t("Ажилтан")}
             </td>
             <td
               onClick={() => toggleSortOrder("tulukhAldangi")}
-              className="min-w-[8rem] overflow-hidden p-1 text-center">
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
               {t("Төлөх алданги")}
             </td>
             <td
               onClick={() => toggleSortOrder("tulsunAldangi")}
-              className="min-w-[8rem] overflow-hidden p-1 text-center">
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
               {t("Төлсөн алданги")}
             </td>
             <td
               onClick={() => toggleSortOrder("dansniiDugaar")}
-              className="min-w-[8rem] overflow-hidden p-1 text-center">
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
               {t("Данс")}
             </td>
             <td
               onClick={() => toggleSortOrder("tulsunDans")}
-              className="min-w-[8rem] overflow-hidden p-1 text-center">
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
               {t("Төлсөн данс")}
             </td>
             <td
               onClick={() => toggleSortOrder("tailbar")}
-              className="w-full min-w-[8rem] overflow-hidden p-1 text-center">
+              className="w-full min-w-[8rem] overflow-hidden p-1 text-center"
+            >
               {t("Тайлбар")}
             </td>
             <td
               onClick={() => toggleSortOrder("burtgesenOgnoo")}
-              className="min-w-[10rem] p-1 text-center">
+              className="min-w-[10rem] p-1 text-center"
+            >
               {t("Бүртгэсэн огноо")}
             </td>
             <td className="min-w-[3rem] border-none p-1 text-center"></td>
           </tr>
         </th>
-        <tbody className="min-w-[50rem] overflow-y-scroll" style={{ height: "calc(90vh - 15rem)" }}>
+        <tbody
+          className="min-w-[50rem] overflow-y-scroll"
+          style={{ height: "calc(90vh - 15rem)" }}
+        >
           {sortedData
             ?.map((a, i) => (
               <tr className="flex min-w-[50rem] divide-x border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
@@ -345,7 +349,8 @@ function GuilgeeniiTuukhAldangi(
                         title={t("Төлөлт устгах уу?")}
                         okText={t("Тийм")}
                         cancelText={t("Үгүй")}
-                        onConfirm={() => tulultUstgaya(a)}>
+                        onConfirm={() => tulultUstgaya(a)}
+                      >
                         <div className="hide-on-print flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
                           <DeleteOutlined />
                         </div>

@@ -206,7 +206,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
               data-aos-duration="1000"
               data-aos-delay={1 + i + "00"}
             >
-              <div className="file box zoom-in relative rounded-md px-3 pb-5 pt-8 shadow-lg dark:shadow-lg dark:shadow-white sm:px-5">
+              <div className="file box zoom-in relative rounded-md px-3 pb-5 pt-8 shadow-lg sm:px-5">
                 <div className="absolute left-0 top-0 ml-3 mt-3"></div>
 
                 <div className="file__icon file__icon--file mx-auto w-3/5">

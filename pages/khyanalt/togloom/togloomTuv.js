@@ -1105,7 +1105,11 @@ function togloom1() {
         showSorterTooltip: false,
       },
       {
-        title: (<Popover placement="bottom" content={t("Хугацаа/мин/")}>Хуг/мин/</Popover>),
+        title: (
+          <Popover placement="bottom" content={t("Хугацаа/мин/")}>
+            Хуг/мин/
+          </Popover>
+        ),
         align: "center",
         width: "6rem",
         showSorterTooltip: false,
@@ -1124,7 +1128,11 @@ function togloom1() {
         },
       },
       {
-        title: (<Popover placement="bottom" content={t("Сунгасан/мин/")}>Сун/мин/</Popover>),
+        title: (
+          <Popover placement="bottom" content={t("Сунгасан/мин/")}>
+            Сун/мин/
+          </Popover>
+        ),
         align: "center",
         width: "6rem",
         showSorterTooltip: false,
@@ -1183,6 +1191,7 @@ function togloom1() {
           return <div className="w-full text-right">{formatNumber(v, 0)}</div>;
         },
       },
+
       {
         title: t("Хөнгөлсөн дүн"),
         dataIndex: "khungulsunDun",
@@ -1453,6 +1462,7 @@ function togloom1() {
           {t("Хаах")}
         </Button>
         <Button
+          type="primary"
           icon={<PrinterOutlined />}
           onClick={() => delegrenhuiRef.current.khadgalya()}
         >
@@ -1701,7 +1711,7 @@ function togloom1() {
                                 ner: "Coupon",
                                 dun: element.dun,
                               });
-                              break;  
+                              break;
                             default:
                               utga.push({
                                 ner: element.turul,
@@ -1720,7 +1730,7 @@ function togloom1() {
                           placement="bottom"
                           trigger="hover"
                           content={() => (
-                            <div className="flex w-32 flex-col space-y-2 divide-y">
+                            <div className="flex w-32 flex-col space-y-2 divide-y dark:text-white">
                               {utga.map((a, i) => {
                                 return (
                                   <div key={i} className="flex justify-between">
@@ -1732,7 +1742,7 @@ function togloom1() {
                             </div>
                           )}
                         >
-                          <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
+                          <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700 ">
                             <DollarTwoTone style={{ fontSize: "18px" }} />
                           </a>
                         </Popover>
@@ -1911,7 +1921,14 @@ function togloom1() {
                               __numFmt__: "#,##0.00",
                               __cellType__: "TypeNumeric",
                               render(v, data) {
-                                return (data.niitTulbur?.filter((e) => e.turul === "belen").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
+                                return (
+                                  data.niitTulbur
+                                    ?.filter((e) => e.turul === "belen")
+                                    .reduce(
+                                      (a, b) => a + Number(b.dun || 0),
+                                      0
+                                    ) || 0
+                                );
                               },
                             },
                             {
@@ -1920,7 +1937,14 @@ function togloom1() {
                               __numFmt__: "#,##0.00",
                               __cellType__: "TypeNumeric",
                               render(v, data) {
-                                return (data.niitTulbur?.filter((e) => e.turul === "khariltsakh").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
+                                return (
+                                  data.niitTulbur
+                                    ?.filter((e) => e.turul === "khariltsakh")
+                                    .reduce(
+                                      (a, b) => a + Number(b.dun || 0),
+                                      0
+                                    ) || 0
+                                );
                               },
                             },
                             {
@@ -1929,12 +1953,22 @@ function togloom1() {
                               __numFmt__: "#,##0.00",
                               __cellType__: "TypeNumeric",
                               render(v, data) {
-                                return (data.niitTulbur?.filter((e) => e.turul === "khaan" ||
-                                                                        e.turul === "tdb" ||
-                                                                        e.turul === "khas" ||
-                                                                        e.turul === "golomt" ||
-                                                                        e.turul === "kapitron" ||
-                                                                        e.turul === "tur").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
+                                return (
+                                  data.niitTulbur
+                                    ?.filter(
+                                      (e) =>
+                                        e.turul === "khaan" ||
+                                        e.turul === "tdb" ||
+                                        e.turul === "khas" ||
+                                        e.turul === "golomt" ||
+                                        e.turul === "kapitron" ||
+                                        e.turul === "tur"
+                                    )
+                                    .reduce(
+                                      (a, b) => a + Number(b.dun || 0),
+                                      0
+                                    ) || 0
+                                );
                               },
                             },
                             {
@@ -1943,7 +1977,14 @@ function togloom1() {
                               __numFmt__: "#,##0.00",
                               __cellType__: "TypeNumeric",
                               render(v, data) {
-                                return (data.niitTulbur?.filter((e) => e.turul === "qpay").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
+                                return (
+                                  data.niitTulbur
+                                    ?.filter((e) => e.turul === "qpay")
+                                    .reduce(
+                                      (a, b) => a + Number(b.dun || 0),
+                                      0
+                                    ) || 0
+                                );
                               },
                             },
                             {
@@ -1952,19 +1993,33 @@ function togloom1() {
                               __numFmt__: "#,##0.00",
                               __cellType__: "TypeNumeric",
                               render(v, data) {
-                                return (data.niitTulbur?.filter((e) => e.turul === "ticket").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
+                                return (
+                                  data.niitTulbur
+                                    ?.filter((e) => e.turul === "ticket")
+                                    .reduce(
+                                      (a, b) => a + Number(b.dun || 0),
+                                      0
+                                    ) || 0
+                                );
                               },
                             },
-                             {
+                            {
                               title: t("Coupon"),
                               __style__: { h: "right" },
                               __numFmt__: "#,##0.00",
                               __cellType__: "TypeNumeric",
                               render(v, data) {
-                                return (data.niitTulbur?.filter((e) => e.turul === "erkhiinBichig").reduce((a, b) => a + Number(b.dun || 0), 0) || 0);
+                                return (
+                                  data.niitTulbur
+                                    ?.filter((e) => e.turul === "erkhiinBichig")
+                                    .reduce(
+                                      (a, b) => a + Number(b.dun || 0),
+                                      0
+                                    ) || 0
+                                );
                               },
                             },
-							              {
+                            {
                               title: t("Асран хамгаалагч"),
                               dataIndex: "asragchiinTurul",
                               ellipsis: true,

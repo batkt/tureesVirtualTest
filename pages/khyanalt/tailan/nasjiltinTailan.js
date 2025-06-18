@@ -646,8 +646,7 @@ function nasjiltinTailan({ token }) {
             defaultPageSize: [500],
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total, range) =>
-              `Hийт ${total}`,
+            showTotal: (total, range) => `Hийт ${total}`,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {
               setTailanKhuudaslalt((kh) => ({
                 ...kh,

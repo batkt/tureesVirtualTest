@@ -17,7 +17,7 @@ import {
   Table,
   Tabs,
   Tooltip,
-  Table as AntdTable
+  Table as AntdTable,
 } from "antd";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -122,7 +122,7 @@ function tulburKhurvuulekh(v) {
       utga = "Fitness";
       break;
     case "Соёолж Ц/Д":
-      utga = "Соёолж Ц/Д";  
+      utga = "Соёолж Ц/Д";
       break;
     default:
       utga = v;
@@ -159,22 +159,24 @@ function Zogsool({ token }) {
         $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
       },
     };
-    if(tuluvZurchil === 0)
-      query["tuluv"] = 0;
-    else if(tuluvZurchil === 1)
-      query["tuluv"] = 1;
+    if (tuluvZurchil === 0) query["tuluv"] = 0;
+    else if (tuluvZurchil === 1) query["tuluv"] = 1;
     return query;
   }, [baiguullaga?._id, barilgiinId, tuluvZurchil, ognoo]);
 
   const orderZurchil = { createdAt: -1 };
   const searchKeysZurchil = ["mashiniiDugaar"];
 
-  const { jagsaalt: zurchilteiJagsaalt, mutate: zurchilteiMutate, setKhuudaslalt } = useJagsaalt(
+  const {
+    jagsaalt: zurchilteiJagsaalt,
+    mutate: zurchilteiMutate,
+    setKhuudaslalt,
+  } = useJagsaalt(
     "/zurchilteiMashin",
     streamQuery,
     orderZurchil,
     null,
-    searchKeysZurchil,
+    searchKeysZurchil
   );
 
   const columnsZurchil = useMemo(() => {
@@ -319,14 +321,20 @@ function Zogsool({ token }) {
         showSorterTooltip: false,
         render(v) {
           return (
-            <div className={`${v === 1 ? "bg-green-500 text-white dark:bg-green-700" : "bg-red-500 text-white dark:bg-red-700"} flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}>
+            <div
+              className={`${
+                v === 1
+                  ? "bg-green-500 text-white dark:bg-green-700"
+                  : "bg-red-500 text-white dark:bg-red-700"
+              } flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
+            >
               {v === 1 ? "Төлсөн" : "Төлөөгүй"}
             </div>
           );
         },
       },
     ];
-  }, [tuluvZurchil])
+  }, [tuluvZurchil]);
 
   const [shaltgaan, setShaltgaan] = useState("Цэвэрлэсэн");
   const [tootsooKhelber, setTootsooKhelber] = useState("");
@@ -334,16 +342,17 @@ function Zogsool({ token }) {
     selectedRowKeys: selectedRowkeys,
     onChange: onSelectChange,
     getCheckboxProps: (record) => {
-      if(baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh && tootsooKhelber == 3)
+      if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh && tootsooKhelber == 3)
         return {
           disabled: record?.tuluv === 1,
         };
-      else
-      {
-        const untraakh = !record?.tuukh?.[0]?.uneguiGarsan && !record?.tuukh?.[0]?.garsanKhaalga;
+      else {
+        const untraakh =
+          !record?.tuukh?.[0]?.uneguiGarsan &&
+          !record?.tuukh?.[0]?.garsanKhaalga;
         return {
           disabled: !untraakh,
-        };    
+        };
       }
     },
   };
@@ -497,10 +506,11 @@ function Zogsool({ token }) {
         onOk: () => {
           if (!shaltgaan) {
             notification.warn({ message: "Тайлбар оруулна уу", duration: 2 });
-          } 
-          else 
-          {
-            if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh && tootsooKhelber == 3) {
+          } else {
+            if (
+              baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh &&
+              tootsooKhelber == 3
+            ) {
               uilchilgee(token)
                 .post("/zurchiluudTulsunBolgoy", {
                   utguud: songogdson,
@@ -517,8 +527,7 @@ function Zogsool({ token }) {
                   }
                 })
                 .catch((err) => aldaaBarigch(err));
-            }
-            else
+            } else
               uilchilgee(token)
                 .post("/uilchluulegchTseverliy", {
                   utguud: songogdson,
@@ -725,7 +734,9 @@ function Zogsool({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
         render(v, parents) {
-          const d = parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag || parents?.tuukh[1]?.tsagiinTuukh[0]?.garsanTsag;
+          const d =
+            parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag ||
+            parents?.tuukh[1]?.tsagiinTuukh[0]?.garsanTsag;
           return d && moment(d).format("YYYY-MM-DD HH:mm");
         },
       },
@@ -1143,23 +1154,23 @@ function Zogsool({ token }) {
         width: "2rem",
         align: "center",
         render: (data) => {
-          return (<div className="flex justify-center">
-            <Popover
-              content={() =>
-                data?.tuukh?.map((mur) => (
-                  <div className="dark:text-gray-200">
-                    {mur.orsonKhaalga}
-                  </div>
-                ))
-              }
-              placement="bottom"
-              trigger="click"
-            >
-              <Button
-                icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
-              ></Button>
-            </Popover>
-          </div>)
+          return (
+            <div className="flex justify-center">
+              <Popover
+                content={() =>
+                  data?.tuukh?.map((mur) => (
+                    <div className="dark:text-gray-200">{mur.orsonKhaalga}</div>
+                  ))
+                }
+                placement="bottom"
+                trigger="click"
+              >
+                <Button
+                  icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
+                ></Button>
+              </Popover>
+            </div>
+          );
         },
       },
       {
@@ -1167,23 +1178,25 @@ function Zogsool({ token }) {
         width: "2rem",
         align: "center",
         render: (data) => {
-          return (<div className="flex justify-center">
-            <Popover
-              content={() =>
-                data?.tuukh?.map((mur) => (
-                  <div className="dark:text-gray-200">
-                    {mur.garsanKhaalga}
-                  </div>
-                ))
-              }
-              placement="bottom"
-              trigger="click"
-            >
-              <Button
-                icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
-              ></Button>
-            </Popover>
-          </div>)
+          return (
+            <div className="flex justify-center">
+              <Popover
+                content={() =>
+                  data?.tuukh?.map((mur) => (
+                    <div className="dark:text-gray-200">
+                      {mur.garsanKhaalga}
+                    </div>
+                  ))
+                }
+                placement="bottom"
+                trigger="click"
+              >
+                <Button
+                  icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
+                ></Button>
+              </Popover>
+            </div>
+          );
         },
       },
       /*{
@@ -1232,20 +1245,18 @@ function Zogsool({ token }) {
       title="Зогсоол"
       khuudasniiNer="zogsool"
       className="p-0 md:p-4"
-      onSearch={(search) =>
-        {
-          setUilchluulegchKhuudaslalt((a) => ({
-            ...a,
-            search,
-            khuudasniiDugaar: 1,
-          }));
-          setKhuudaslalt((a) => ({
-            ...a,
-            search,
-            khuudasniiDugaar: 1,
-          }));  
-        }
-      }
+      onSearch={(search) => {
+        setUilchluulegchKhuudaslalt((a) => ({
+          ...a,
+          search,
+          khuudasniiDugaar: 1,
+        }));
+        setKhuudaslalt((a) => ({
+          ...a,
+          search,
+          khuudasniiDugaar: 1,
+        }));
+      }}
       tsonkhniiId="61c2c7481c2830c4e6f90ce1"
       loading={isValidating}
     >
@@ -1405,561 +1416,588 @@ function Zogsool({ token }) {
                     // }}
                     onClick={() => {
                       const excel = new Excel();
-                      if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh && tootsooKhelber == 3) {
+                      if (
+                        baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh &&
+                        tootsooKhelber == 3
+                      ) {
                         uilchilgee(token)
-                        .get("zurchilteiMashin", {
-                          params: {
-                            order: orderZurchil,
-                            query: { ...streamQuery, },
-                            khuudasniiKhemjee: zurchilteiJagsaalt?.niitMur,
-                          },
-                        })
-                        .then(({ data }) => {
-                          excel
-                            .addSheet("Зөрчил сануулах жагсаалт")
-                            .addColumns([
-                              {
-                                title: "Огноо",
-                                __style__: { h: "center" },
-                                dataIndex: "createdAt",
-                                render: (v) => {
-                                  return (v && moment(v).format("YYYY-MM-DD HH:mm"));
+                          .get("zurchilteiMashin", {
+                            params: {
+                              order: orderZurchil,
+                              query: { ...streamQuery },
+                              khuudasniiKhemjee: zurchilteiJagsaalt?.niitMur,
+                            },
+                          })
+                          .then(({ data }) => {
+                            excel
+                              .addSheet("Зөрчил сануулах жагсаалт")
+                              .addColumns([
+                                {
+                                  title: "Огноо",
+                                  __style__: { h: "center" },
+                                  dataIndex: "createdAt",
+                                  render: (v) => {
+                                    return (
+                                      v && moment(v).format("YYYY-MM-DD HH:mm")
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: "Орсон",
-                                __style__: { h: "center" },
-                                dataIndex: "orsonTsag",
-                                render: (v) => {
-                                  return (v && moment(v).format("YYYY-MM-DD HH:mm"));
+                                {
+                                  title: "Орсон",
+                                  __style__: { h: "center" },
+                                  dataIndex: "orsonTsag",
+                                  render: (v) => {
+                                    return (
+                                      v && moment(v).format("YYYY-MM-DD HH:mm")
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: "Гарсан",
-                                dataIndex: "garsanTsag",
-                                __style__: { h: "center" },
-                                render: (v) => {
-                                  return (v && moment(v).format("YYYY-MM-DD HH:mm"));
+                                {
+                                  title: "Гарсан",
+                                  dataIndex: "garsanTsag",
+                                  __style__: { h: "center" },
+                                  render: (v) => {
+                                    return (
+                                      v && moment(v).format("YYYY-MM-DD HH:mm")
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: "Дугаар",
-                                __style__: { h: "center" },
-                                dataIndex: "mashiniiDugaar",
-                                render: (v) => {
-                                  return v && String(v).toUpperCase();
+                                {
+                                  title: "Дугаар",
+                                  __style__: { h: "center" },
+                                  dataIndex: "mashiniiDugaar",
+                                  render: (v) => {
+                                    return v && String(v).toUpperCase();
+                                  },
                                 },
-                              },
-                              {
-                                title: "Хугацаа/мин",
-                                __style__: { h: "center" },
-                                dataIndex: "niitKhugatsaa",
-                              },
-                              {
-                                title: t("Орсон хаалга"),
-                                dataIndex: "orsonKhaalga",
-                                __style__: { h: "center" },
-                              },
-                              {
-                                title: t("Гарсан хаалга"),
-                                dataIndex: "garsanKhaalga",
-                                __style__: { h: "center" },
-                              },
-                              {
-                                title: "Төлбөр",
-                                dataIndex: "niitDun",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                              },
-                              {
-                                title: "Төлөв",
-                                __style__: { h: "center" },
-                                dataIndex: "tuluv",
-                                render: (v) => {
-                                  return v === 1 ? "Төлсөн" : "Төлөөгүй";
+                                {
+                                  title: "Хугацаа/мин",
+                                  __style__: { h: "center" },
+                                  dataIndex: "niitKhugatsaa",
                                 },
-                              }
-                            ])
-                            .addDataSource(data?.jagsaalt)
-                            .saveAs("Зөрчил сануулах жагсаалт.xlsx");
-                        })
-                        .catch((aldaa) => aldaaBarigch(aldaa));    
-                      }
-                      else
+                                {
+                                  title: t("Орсон хаалга"),
+                                  dataIndex: "orsonKhaalga",
+                                  __style__: { h: "center" },
+                                },
+                                {
+                                  title: t("Гарсан хаалга"),
+                                  dataIndex: "garsanKhaalga",
+                                  __style__: { h: "center" },
+                                },
+                                {
+                                  title: "Төлбөр",
+                                  dataIndex: "niitDun",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                },
+                                {
+                                  title: "Төлөв",
+                                  __style__: { h: "center" },
+                                  dataIndex: "tuluv",
+                                  render: (v) => {
+                                    return v === 1 ? "Төлсөн" : "Төлөөгүй";
+                                  },
+                                },
+                              ])
+                              .addDataSource(data?.jagsaalt)
+                              .saveAs("Зөрчил сануулах жагсаалт.xlsx");
+                          })
+                          .catch((aldaa) => aldaaBarigch(aldaa));
+                      } else
                         uilchilgee(token)
-                        .get("zogsoolUilchluulegch", {
-                          params: {
-                            order: order,
-                            query: { ...que, ...query, },
-                            khuudasniiKhemjee: uilchluulegchGaralt?.niitMur,
-                          },
-                        })
-                        .then(({ data }) => {
-                          excel
-                            .addSheet("Жагсаалт")
-                            .addColumns([
-                              {
-                                title: "№",
-                                align: "center",
-                                dataIndex: "dugaar",
-                                width: "2rem",
-                                render: (text, record, index) =>
-                                  (data?.khuudasniiDugaar || 0) *
-                                    (data?.khuudasniiKhemjee || 0) -
-                                  (data?.khuudasniiKhemjee || 0) +
-                                  index +
-                                  1,
-                              },
-                              {
-                                title: "Дугаар",
-                                __style__: { h: "center" },
-                                dataIndex: "mashiniiDugaar",
-                                render: (v) => {
-                                  return v && String(v).toUpperCase();
+                          .get("zogsoolUilchluulegch", {
+                            params: {
+                              order: order,
+                              query: { ...que, ...query },
+                              khuudasniiKhemjee: uilchluulegchGaralt?.niitMur,
+                            },
+                          })
+                          .then(({ data }) => {
+                            excel
+                              .addSheet("Жагсаалт")
+                              .addColumns([
+                                {
+                                  title: "№",
+                                  align: "center",
+                                  dataIndex: "dugaar",
+                                  width: "2rem",
+                                  render: (text, record, index) =>
+                                    (data?.khuudasniiDugaar || 0) *
+                                      (data?.khuudasniiKhemjee || 0) -
+                                    (data?.khuudasniiKhemjee || 0) +
+                                    index +
+                                    1,
                                 },
-                              },
-                              {
-                                title: "Орсон",
-                                __style__: { h: "center" },
-                                dataIndex: "tuukh",
-                                render: (v) => {
-                                  const d =
-                                    v?.length > 0 &&
-                                    v[0]?.tsagiinTuukh[0]?.orsonTsag;
-                                  return (
-                                    d && moment(d).format("YYYY-MM-DD HH:mm")
-                                  );
+                                {
+                                  title: "Дугаар",
+                                  __style__: { h: "center" },
+                                  dataIndex: "mashiniiDugaar",
+                                  render: (v) => {
+                                    return v && String(v).toUpperCase();
+                                  },
                                 },
-                              },
-                              {
-                                title: "Гарсан",
-                                dataIndex: "tuukh",
-                                __style__: { h: "center" },
-                                render: (v) => {
-                                  const d =
-                                    v?.length > 0 &&
-                                    (v[0]?.tsagiinTuukh[0]?.garsanTsag || v[1]?.tsagiinTuukh[0]?.garsanTsag);
-                                  return (
-                                    d && moment(d).format("YYYY-MM-DD HH:mm")
-                                  );
+                                {
+                                  title: "Орсон",
+                                  __style__: { h: "center" },
+                                  dataIndex: "tuukh",
+                                  render: (v) => {
+                                    const d =
+                                      v?.length > 0 &&
+                                      v[0]?.tsagiinTuukh[0]?.orsonTsag;
+                                    return (
+                                      d && moment(d).format("YYYY-MM-DD HH:mm")
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: "Хугацаа/мин",
-                                __style__: { h: "center" },
-                                dataIndex: "tuukh",
-                                render: (v) => {
-                                  const d1 = moment(
-                                    v?.length > 0 &&
-                                      v[0]?.tsagiinTuukh[0]?.orsonTsag
-                                  );
-                                  const d2 = moment(
-                                    v?.length > 0 &&
-                                      v[0]?.tsagiinTuukh[0]?.garsanTsag
-                                  );
-                                  const diff = d2.diff(d1, "minutes");
-                                  return v?.length > 0 && diff && diff;
+                                {
+                                  title: "Гарсан",
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "center" },
+                                  render: (v) => {
+                                    const d =
+                                      v?.length > 0 &&
+                                      (v[0]?.tsagiinTuukh[0]?.garsanTsag ||
+                                        v[1]?.tsagiinTuukh[0]?.garsanTsag);
+                                    return (
+                                      d && moment(d).format("YYYY-MM-DD HH:mm")
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: "Төрөл",
-                                dataIndex: "turul",
-                                __style__: { h: "center" },
-                                render: (v) => (!!v ? v : "Үйлчлүүлэгч"),
-                              },
-                              {
-                                title: "Дүн",
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render: (v) => {
-                                  return v[0]?.tulukhDun || v[1]?.tulukhDun;
+                                {
+                                  title: "Хугацаа/мин",
+                                  __style__: { h: "center" },
+                                  dataIndex: "tuukh",
+                                  render: (v) => {
+                                    const d1 = moment(
+                                      v?.length > 0 &&
+                                        v[0]?.tsagiinTuukh[0]?.orsonTsag
+                                    );
+                                    const d2 = moment(
+                                      v?.length > 0 &&
+                                        v[0]?.tsagiinTuukh[0]?.garsanTsag
+                                    );
+                                    const diff = d2.diff(d1, "minutes");
+                                    return v?.length > 0 && diff && diff;
+                                  },
                                 },
-                              },
-                              {
-                                title: "Бодогдсон",
-                                dataIndex: "niitDun",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render: (v) => {
-                                  return v || 0;
+                                {
+                                  title: "Төрөл",
+                                  dataIndex: "turul",
+                                  __style__: { h: "center" },
+                                  render: (v) => (!!v ? v : "Үйлчлүүлэгч"),
                                 },
-                              },
-                              {
-                                title: "Төлбөр",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render: (v, data) => {
-                                  return data.tuukh[0]?.tulbur?.reduce((a, b) => a + (b.dun || 0), 0);
+                                {
+                                  title: "Дүн",
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render: (v) => {
+                                    return v[0]?.tulukhDun || v[1]?.tulukhDun;
+                                  },
                                 },
-                              },
-                              {
-                                title: "И-Баримт",
-                                dataIndex: "ebarimtAvsanDun",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render: (v, data) => {
-                                  return v || 0;
+                                {
+                                  title: "Бодогдсон",
+                                  dataIndex: "niitDun",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render: (v) => {
+                                    return v || 0;
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Бэлэн"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "belen")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
+                                {
+                                  title: "Төлбөр",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render: (v, data) => {
+                                    return data.tuukh[0]?.tulbur?.reduce(
+                                      (a, b) => a + (b.dun || 0),
+                                      0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Зээл"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return  (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "zeel")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0;
+                                {
+                                  title: "И-Баримт",
+                                  dataIndex: "ebarimtAvsanDun",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render: (v, data) => {
+                                    return v || 0;
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Дансаар"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "khariltsakh"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
+                                {
+                                  title: t("Бэлэн"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter((e) => e.turul === "belen")
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Карт"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) =>
-                                              e.turul === "khaan" ||
-                                              e.turul === "tdb" ||
-                                              e.turul === "khas" ||
-                                              e.turul === "golomt" ||
-                                              e.turul === "kapitron" ||
-                                              e.turul === "tur"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
+                                {
+                                  title: t("Зээл"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter((e) => e.turul === "zeel")
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Токи"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "toki")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0;
+                                {
+                                  title: t("Дансаар"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter(
+                                              (e) => e.turul === "khariltsakh"
+                                            )
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Киоск"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "kiosk")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0;
+                                {
+                                  title: t("Карт"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter(
+                                              (e) =>
+                                                e.turul === "khaan" ||
+                                                e.turul === "tdb" ||
+                                                e.turul === "khas" ||
+                                                e.turul === "golomt" ||
+                                                e.turul === "kapitron" ||
+                                                e.turul === "tur"
+                                            )
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Хөнгөлөлт"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "khungulult"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
+                                {
+                                  title: t("Токи"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter((e) => e.turul === "toki")
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Fitness"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "Fitness"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
+                                {
+                                  title: t("Киоск"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter((e) => e.turul === "kiosk")
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Соёолж Ц/Д"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "Соёолж Ц/Д"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
+                                {
+                                  title: t("Хөнгөлөлт"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter(
+                                              (e) => e.turul === "khungulult"
+                                            )
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("qpay"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "qpay")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
+                                {
+                                  title: t("Fitness"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter(
+                                              (e) => e.turul === "Fitness"
+                                            )
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("QPAY Урьдчилсан"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "qpayUridchilsan"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
+                                {
+                                  title: t("Соёолж Ц/Д"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter(
+                                              (e) => e.turul === "Соёолж Ц/Д"
+                                            )
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Пос бэлэн"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "PosBelen"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
+                                {
+                                  title: t("qpay"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter((e) => e.turul === "qpay")
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Пос карт"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "PosCard")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
+                                {
+                                  title: t("QPAY Урьдчилсан"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter(
+                                              (e) =>
+                                                e.turul === "qpayUridchilsan"
+                                            )
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Пос дансаар"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "PosKhariltsakh"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
+                                {
+                                  title: t("Пос бэлэн"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter(
+                                              (e) => e.turul === "PosBelen"
+                                            )
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: "Төлөв",
-                                dataIndex: "tuukh",
-                                __style__: { h: "center" },
-                                render: (v) => {
-                                  return v[0].tuluv === 1
-                                    ? "Төлсөн"
-                                    : v[0].tuluv === 0
-                                    ? "Төлөөгүй"
-                                    : v[0].tuluv === -2
-                                    ? "Зөрчилтэй"
-                                    : "";
+                                {
+                                  title: t("Пос карт"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter(
+                                              (e) => e.turul === "PosCard"
+                                            )
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: "Шалтгаан",
-                                dataIndex: "tuukh",
-                                render: (v, parent) => {
-                                  return v?.length > 0 && v[0]?.tuluv === -1
-                                    ? v?.length > 0 && v[0]?.uneguiGarsan
-                                    : !!parent.zurchil
-                                    ? parent.zurchil
-                                    : "";
+                                {
+                                  title: t("Пос дансаар"),
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "right" },
+                                  __numFmt__: "#,##0.00",
+                                  __cellType__: "TypeNumeric",
+                                  render(v, p, i) {
+                                    return (
+                                      (v[0]?.tulbur?.length > 0
+                                        ? v[0]?.tulbur
+                                            ?.filter(
+                                              (e) =>
+                                                e.turul === "PosKhariltsakh"
+                                            )
+                                            .reduce(
+                                              (a, b) => a + Number(b.dun || 0),
+                                              0
+                                            )
+                                        : 0) || 0
+                                    );
+                                  },
                                 },
-                              },
-                              {
-                                title: "Бүртгэсэн",
-                                dataIndex: "tuukh",
-                                render: (v) => {
-                                  return (
-                                    v &&
-                                    (String(
-                                      v[0]?.burtgesenAjiltaniiNer
-                                    ).replace(/\D/g, "").length > 9
-                                      ? ajiltniiNers.find(
-                                          (a) =>
-                                            a.id === v[0]?.burtgesenAjiltaniiId
-                                        )?.ner
-                                      : v[0]?.burtgesenAjiltaniiNer)
-                                  );
+                                {
+                                  title: "Төлөв",
+                                  dataIndex: "tuukh",
+                                  __style__: { h: "center" },
+                                  render: (v) => {
+                                    return v[0].tuluv === 1
+                                      ? "Төлсөн"
+                                      : v[0].tuluv === 0
+                                      ? "Төлөөгүй"
+                                      : v[0].tuluv === -2
+                                      ? "Зөрчилтэй"
+                                      : "";
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Орсон хаалга"),
-                                dataIndex: "tuukh",
-                                render: (v) => {
-                                  var khaalguud = "";
-                                  v?.map((a) => 
-                                  {
-                                    khaalguud = khaalguud + (khaalguud ? ", " : "" ) + a.orsonKhaalga;
-                                  })
-                                  return khaalguud;
+                                {
+                                  title: "Шалтгаан",
+                                  dataIndex: "tuukh",
+                                  render: (v, parent) => {
+                                    return v?.length > 0 && v[0]?.tuluv === -1
+                                      ? v?.length > 0 && v[0]?.uneguiGarsan
+                                      : !!parent.zurchil
+                                      ? parent.zurchil
+                                      : "";
+                                  },
                                 },
-                              },
-                              {
-                                title: t("Гарсан хаалга"),
-                                dataIndex: "tuukh",
-                                render: (v) => {
-                                  var khaalguud = "";
-                                  v?.map((a) => 
-                                  {
-                                    khaalguud = khaalguud + (khaalguud ? ", " : "" ) + (a.garsanKhaalga || "");
-                                  })
-                                  return khaalguud;
+                                {
+                                  title: "Бүртгэсэн",
+                                  dataIndex: "tuukh",
+                                  render: (v) => {
+                                    return (
+                                      v &&
+                                      (String(
+                                        v[0]?.burtgesenAjiltaniiNer
+                                      ).replace(/\D/g, "").length > 9
+                                        ? ajiltniiNers.find(
+                                            (a) =>
+                                              a.id ===
+                                              v[0]?.burtgesenAjiltaniiId
+                                          )?.ner
+                                        : v[0]?.burtgesenAjiltaniiNer)
+                                    );
+                                  },
                                 },
-                              },
-                            ])
-                            .addDataSource(data?.jagsaalt)
-                            .saveAs("Жагсаалт.xlsx");
-                        })
-                        .catch((aldaa) => aldaaBarigch(aldaa));
+                                {
+                                  title: t("Орсон хаалга"),
+                                  dataIndex: "tuukh",
+                                  render: (v) => {
+                                    var khaalguud = "";
+                                    v?.map((a) => {
+                                      khaalguud =
+                                        khaalguud +
+                                        (khaalguud ? ", " : "") +
+                                        a.orsonKhaalga;
+                                    });
+                                    return khaalguud;
+                                  },
+                                },
+                                {
+                                  title: t("Гарсан хаалга"),
+                                  dataIndex: "tuukh",
+                                  render: (v) => {
+                                    var khaalguud = "";
+                                    v?.map((a) => {
+                                      khaalguud =
+                                        khaalguud +
+                                        (khaalguud ? ", " : "") +
+                                        (a.garsanKhaalga || "");
+                                    });
+                                    return khaalguud;
+                                  },
+                                },
+                              ])
+                              .addDataSource(data?.jagsaalt)
+                              .saveAs("Жагсаалт.xlsx");
+                          })
+                          .catch((aldaa) => aldaaBarigch(aldaa));
                     }}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
@@ -2044,7 +2082,7 @@ function Zogsool({ token }) {
                         })),
                     }}
                     summary={(e) => (
-                      <AntdTable.Summary className="border " fixed={'bottom'}>
+                      <AntdTable.Summary className="border " fixed={"bottom"}>
                         <AntdTable.Summary.Cell colSpan={7}>
                           <div className="space-x-2 truncate text-base font-bold ">
                             Нийт
@@ -2061,7 +2099,15 @@ function Zogsool({ token }) {
                         <AntdTable.Summary.Cell>
                           <div className="truncate text-right font-bold ">
                             {formatNumber(
-                              e?.reduce((a, b) => a + (b?.tuukh[0]?.tulbur?.reduce((c, d) => c + (d.dun || 0), 0) || 0), 0),
+                              e?.reduce(
+                                (a, b) =>
+                                  a +
+                                  (b?.tuukh[0]?.tulbur?.reduce(
+                                    (c, d) => c + (d.dun || 0),
+                                    0
+                                  ) || 0),
+                                0
+                              ),
                               2
                             )}
                           </div>
@@ -2069,10 +2115,28 @@ function Zogsool({ token }) {
                         <AntdTable.Summary.Cell>
                           <div className="truncate text-right font-bold ">
                             {formatNumber(
-                              e?.reduce((a, b) => a + (b.ebarimtAvsanDun || 0), 0),
+                              e?.reduce(
+                                (a, b) => a + (b.ebarimtAvsanDun || 0),
+                                0
+                              ),
                               2
                             )}
                           </div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold "></div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold "></div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold "></div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold "></div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold "></div>
                         </AntdTable.Summary.Cell>
                       </AntdTable.Summary>
                     )}
@@ -2109,7 +2173,7 @@ function Zogsool({ token }) {
                         })),
                     }}
                     summary={(e) => (
-                      <AntdTable.Summary className="border " fixed={'bottom'}>
+                      <AntdTable.Summary className="border " fixed={"bottom"}>
                         <AntdTable.Summary.Cell colSpan={7}>
                           <div className="space-x-2 truncate text-base font-bold ">
                             Нийт
@@ -2126,7 +2190,15 @@ function Zogsool({ token }) {
                         <AntdTable.Summary.Cell>
                           <div className="truncate text-right font-bold ">
                             {formatNumber(
-                              e?.reduce((a, b) => a + (b?.tuukh[0]?.tulbur?.reduce((c, d) => c + (d.dun || 0), 0) || 0), 0),
+                              e?.reduce(
+                                (a, b) =>
+                                  a +
+                                  (b?.tuukh[0]?.tulbur?.reduce(
+                                    (c, d) => c + (d.dun || 0),
+                                    0
+                                  ) || 0),
+                                0
+                              ),
                               2
                             )}
                           </div>
@@ -2134,7 +2206,10 @@ function Zogsool({ token }) {
                         <AntdTable.Summary.Cell>
                           <div className="truncate text-right font-bold ">
                             {formatNumber(
-                              e?.reduce((a, b) => a + (b.ebarimtAvsanDun || 0), 0),
+                              e?.reduce(
+                                (a, b) => a + (b.ebarimtAvsanDun || 0),
+                                0
+                              ),
                               2
                             )}
                           </div>
@@ -2142,61 +2217,64 @@ function Zogsool({ token }) {
                       </AntdTable.Summary>
                     )}
                   />
-
                 ),
               },
-              baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh ? {
-                key: "3", 
-                label: "Зөрчил сануулах",
-                children: (
-                  <Table
-                    className="mt-8 hidden overflow-auto md:block"
-                    tableLayout="auto"
-                    loading={!zurchilteiJagsaalt}
-                    dataSource={zurchilteiJagsaalt}
-                    scroll={{ y: "calc(100vh - 30rem)" }}
-                    size="small"
-                    bordered
-                    rowSelection={rowSelection}
-                    rowKey={"_id"}
-                    columns={columnsZurchil}
-                    onChange={onChangeTable}
-                    pagination={{
-                      current: zurchilteiJagsaalt?.khuudasniiDugaar,
-                      total: zurchilteiJagsaalt?.niitMur,
-                      pageSizeOptions: [100, 300, 500],
-                      defaultPageSize: [500],
-                      showSizeChanger: true,
-                      onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                        setKhuudaslalt((kh) => ({
-                          ...kh,
-                          khuudasniiDugaar,
-                          khuudasniiKhemjee,
-                        })),
-                    }}
-                    summary={(e) => (
-                      <AntdTable.Summary className="border " fixed={'bottom'}>
-                        <AntdTable.Summary.Cell colSpan={9}>
-                          <div className="space-x-2 truncate text-base font-bold ">
-                            Нийт
-                          </div>
-                        </AntdTable.Summary.Cell>
-                        <AntdTable.Summary.Cell>
-                          <div className="truncate text-right font-bold ">
-                            {formatNumber(
-                              e?.reduce((a, b) => a + (b.niitDun || 0), 0),
-                              2
-                            )}
-                          </div>
-                        </AntdTable.Summary.Cell>
-                      </AntdTable.Summary>
-                    )}
-                  />
-
-                ),
-              } : null
+              baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh
+                ? {
+                    key: "3",
+                    label: "Зөрчил сануулах",
+                    children: (
+                      <Table
+                        className="mt-8 hidden overflow-auto md:block"
+                        tableLayout="auto"
+                        loading={!zurchilteiJagsaalt}
+                        dataSource={zurchilteiJagsaalt}
+                        scroll={{ y: "calc(100vh - 30rem)" }}
+                        size="small"
+                        bordered
+                        rowSelection={rowSelection}
+                        rowKey={"_id"}
+                        columns={columnsZurchil}
+                        onChange={onChangeTable}
+                        pagination={{
+                          current: zurchilteiJagsaalt?.khuudasniiDugaar,
+                          total: zurchilteiJagsaalt?.niitMur,
+                          pageSizeOptions: [100, 300, 500],
+                          defaultPageSize: [500],
+                          showSizeChanger: true,
+                          onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                            setKhuudaslalt((kh) => ({
+                              ...kh,
+                              khuudasniiDugaar,
+                              khuudasniiKhemjee,
+                            })),
+                        }}
+                        summary={(e) => (
+                          <AntdTable.Summary
+                            className="border "
+                            fixed={"bottom"}
+                          >
+                            <AntdTable.Summary.Cell colSpan={9}>
+                              <div className="space-x-2 truncate text-base font-bold ">
+                                Нийт
+                              </div>
+                            </AntdTable.Summary.Cell>
+                            <AntdTable.Summary.Cell>
+                              <div className="truncate text-right font-bold ">
+                                {formatNumber(
+                                  e?.reduce((a, b) => a + (b.niitDun || 0), 0),
+                                  2
+                                )}
+                              </div>
+                            </AntdTable.Summary.Cell>
+                          </AntdTable.Summary>
+                        )}
+                      />
+                    ),
+                  }
+                : null,
             ]}
-            onChange={(v) => setTootsooKhelber(v) }
+            onChange={(v) => setTootsooKhelber(v)}
           />
           <CardList
             cardListTuluv={"utas"}

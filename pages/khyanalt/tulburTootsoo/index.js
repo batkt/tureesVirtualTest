@@ -57,7 +57,7 @@ function iconAvya(a, bank) {
   //   Icon = CheckOutlined;
   //   color = "green";
   //   tailbar = t("Гүйлгээ холбогдсон байна");
-  // } else 
+  // } else
   if (
     (a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
       a?.kholbosonDun > 0) ||
@@ -79,8 +79,8 @@ function iconAvya(a, bank) {
           )} ₮ ${t("дутуу холбогдсон байна")}`
         : "Холбох боломжтой гэрээнүүд байна";
   } else if (
-    a?.kholbosonGereeniiId &&
-    a?.kholbosonDun || 0 === a[`${bank === "tdb" ? "Amt" : "amount"}`]
+    (a?.kholbosonGereeniiId && a?.kholbosonDun) ||
+    0 === a[`${bank === "tdb" ? "Amt" : "amount"}`]
   ) {
     Icon = CheckOutlined;
     color = "green";
@@ -243,24 +243,24 @@ function tulburTootsoo({ token }) {
         message: t("Гүйлгээ холбогдсон байна"),
       });
     } else {
-      if (data?.kholbosonGereeniiId?.length > 0 &&
-        ((data?.kholbosonDun ===
-            data[
-              `${
-                songogdsonDans?.bank === "tdb"
-                  ? "Amt"
-                  : songogdsonDans?.bank === "golomt"
-                  ? "tranAmount"
-                  : "amount"
-              }`
-            ]) ||
-        songogdsonDans?.bank === "tdb"
+      if (
+        data?.kholbosonGereeniiId?.length > 0 &&
+        (data?.kholbosonDun ===
+          data[
+            `${
+              songogdsonDans?.bank === "tdb"
+                ? "Amt"
+                : songogdsonDans?.bank === "golomt"
+                ? "tranAmount"
+                : "amount"
+            }`
+          ] || songogdsonDans?.bank === "tdb"
           ? data?.TxAddInf?.includes("QPAY") || data?.TxAddInf?.includes("qpay")
           : songogdsonDans?.bank === "golomt"
           ? data?.tranDesc?.includes("QPAY") || data?.tranDesc?.includes("qpay")
           : data?.description.includes("QPAY") ||
-            data?.description.includes("qpay")
-      )) {
+            data?.description.includes("qpay"))
+      ) {
         message.info(t("Гүйлгээ гэрээнд холбогдсон байна."));
         return;
       }
@@ -270,7 +270,12 @@ function tulburTootsoo({ token }) {
             {t("Хаах")}
           </Button>
           ,
-          <Button type="primary" onClick={() => !loading && !loadingBaritsaa && refGuilgee.current.khadgalya()}>
+          <Button
+            type="primary"
+            onClick={() =>
+              !loading && !loadingBaritsaa && refGuilgee.current.khadgalya()
+            }
+          >
             {t("Хадгалах")}
           </Button>
         </div>,
@@ -547,7 +552,10 @@ function tulburTootsoo({ token }) {
             },
           },
         ];
-    } else if (songogdsonDans?.bank === "khanbank" || songogdsonDans?.bank === "bogd") {
+    } else if (
+      songogdsonDans?.bank === "khanbank" ||
+      songogdsonDans?.bank === "bogd"
+    ) {
       baganuud = [
         {
           title: t("Огноо"),
@@ -574,12 +582,10 @@ function tulburTootsoo({ token }) {
           ellipsis: true,
           width: "4rem",
           render(a) {
-            if(songogdsonDans?.bank === "bogd")
-              return a;
-            else
-              if (_.isString(a))
-                return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
-              return "";
+            if (songogdsonDans?.bank === "bogd") return a;
+            else if (_.isString(a))
+              return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
+            return "";
           },
         },
         {
@@ -957,7 +963,7 @@ function tulburTootsoo({ token }) {
             )}
           </div>
           <div className="flex w-full md:pt-1">
-            <div className="w-40 md:ml-4 mb-1">
+            <div className="mb-1 w-40 md:ml-4">
               <Select
                 placeholder={t("Данс")}
                 style={{ width: "100%" }}
@@ -973,13 +979,13 @@ function tulburTootsoo({ token }) {
             </div>
 
             {songogdsonDans && (
-              <div className="ml-5 mb-1 flex-row space-x-2 p-1 font-medium md:flex">
+              <div className="mb-1 ml-5 flex-row space-x-2 p-1 font-medium md:flex">
                 {t("Үлдэгдэл")}:{" "}
                 {uldegdel ? (
-                  songogdsonDans?.bank === "tdb" && songogdsonDans?.dugaar?.includes("MN") ? (
+                  songogdsonDans?.bank === "tdb" &&
+                  songogdsonDans?.dugaar?.includes("MN") ? (
                     formatNumber(uldegdel)
-                  ) :
-                  songogdsonDans?.bank === "tdb" ? (
+                  ) : songogdsonDans?.bank === "tdb" ? (
                     uldegdel
                   ) : (
                     formatNumber(uldegdel)
@@ -991,7 +997,7 @@ function tulburTootsoo({ token }) {
               </div>
             )}
           </div>
-          <div className="md:flex w-full md:pt-1">  
+          <div className="w-full md:flex md:pt-1">
             <div className="ml-auto">
               <Popover
                 content={() => (
@@ -1001,7 +1007,7 @@ function tulburTootsoo({ token }) {
                       onClick={() => {
                         const { Excel } = require("antd-table-saveas-excel");
                         const excelExport = new Excel();
-                        var baganuud = [];  
+                        var baganuud = [];
                         if (songogdsonDans?.bank === "tdb") {
                           baganuud = [
                             {
@@ -1045,7 +1051,10 @@ function tulburTootsoo({ token }) {
                               dataIndex: "kholbosonTalbainId",
                             },
                           ];
-                        } else if (songogdsonDans?.bank === "khanbank" || songogdsonDans?.bank === "bogd") {
+                        } else if (
+                          songogdsonDans?.bank === "khanbank" ||
+                          songogdsonDans?.bank === "bogd"
+                        ) {
                           baganuud = [
                             {
                               title: t("Огноо"),
@@ -1059,12 +1068,13 @@ function tulburTootsoo({ token }) {
                               title: t("Цаг"),
                               dataIndex: "time",
                               render(a) {
-                                if(songogdsonDans?.bank === "bogd")
-                                  return a;
-                                else
-                                  if (_.isString(a))
-                                    return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
-                                  return "";
+                                if (songogdsonDans?.bank === "bogd") return a;
+                                else if (_.isString(a))
+                                  return `${a.substring(0, 2)}:${a.substring(
+                                    2,
+                                    4
+                                  )}`;
+                                return "";
                               },
                             },
                             {
@@ -1095,7 +1105,9 @@ function tulburTootsoo({ token }) {
                               title: t("Огноо"),
                               dataIndex: "tranPostedDate",
                               render(date) {
-                                return moment(date).format("YYYY-MM-DD HH:mm:ss");
+                                return moment(date).format(
+                                  "YYYY-MM-DD HH:mm:ss"
+                                );
                               },
                             },
                             {
