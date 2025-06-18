@@ -1199,15 +1199,7 @@ input[type="number"] {
 .ant-drawer-close {
   @apply dark:text-white !important;
 }
-<<<<<<< HEAD
-/* .ant-btn-default {
-  @apply dark:hover:text-gray-700 dark:focus:text-gray-700 dark:text-gray-700 !important;
-} */
-=======
-.ant-btn-default {
-  @apply dark:text-gray-950 dark:hover:text-gray-800 dark:focus:text-gray-400 !important;
-}
->>>>>>> f81f0966a0b95b3a63e64e7e7d2ba79bf0fea594
+
 .ant-cascader-menu-item {
   @apply whitespace-pre-wrap dark:hover:bg-gray-700 !important;
 }
