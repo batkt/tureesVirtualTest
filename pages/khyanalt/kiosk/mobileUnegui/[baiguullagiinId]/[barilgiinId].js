@@ -7,7 +7,11 @@ import {
 import { Drawer, Spin, message } from "antd";
 import useUilchluulegchWithQuery from "hooks/useUilchluulegchWithQuery";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import uilchilgee, { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
+import uilchilgee, {
+  zogsoolUilchilgee,
+  aldaaBarigch,
+  socket,
+} from "services/uilchilgee";
 import { ebarimtKhelberuud } from "tools/logic/tulburiinKhelberuud";
 import moment, { utc } from "moment";
 // import Lottie from "lottie-react";
@@ -16,9 +20,9 @@ import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
 import DugaarKeyboardMobile from "components/pageComponents/kiosk/DugaarKeyboardMobile";
 import useQpayObject from "hooks/useQpayObject";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
-const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 const KioskMobile = ({
   token,
   zogsool,
@@ -47,7 +51,7 @@ const KioskMobile = ({
     if (drawerOngoikh) {
       query["tuukh.0.tuluv"] = 0;
       // query["tuukh.0.garsanKhaalga"] = { $exists: false };
-      query["tuukh.0.tulbur"] = { $eq: []}
+      query["tuukh.0.tulbur"] = { $eq: [] };
       query["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
         $gte: moment().subtract(3, "days").startOf("day"),
         $lte: moment().endOf("day"),
@@ -200,9 +204,7 @@ const KioskMobile = ({
               <div className="text-yellow-500">
                 <WarningOutlined style={{ fontSize: "14px" }} />
               </div>
-              <div className="text-base">
-                {response.data.message}
-              </div>
+              <div className="text-base">{response.data.message}</div>
             </div>
           );
           setUnshijBaina(false);
@@ -596,7 +598,7 @@ const KioskMobile = ({
       </Drawer>
       <div className="flex h-1/3 w-full flex-col items-center justify-center gap-8">
         <div className="mt-24 h-36 w-36 rounded-lg">
-          <img className="h-full w-full" src="/ParkEaseLogoShine2.png" alt="" />
+          <img className="h-full w-full" src="/ParkEaseLogoShine.png" alt="" />
         </div>
         <div className="text-center text-lg font-bold text-zinc-200">
           Зогсоолын төлбөрөө энд төлөн хугацаагаа хэмнээрэй

@@ -7,7 +7,11 @@ import {
 import { Button, Drawer, Spin, message } from "antd";
 import useUilchluulegchWithQuery from "hooks/useUilchluulegchWithQuery";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import uilchilgee, { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
+import uilchilgee, {
+  zogsoolUilchilgee,
+  aldaaBarigch,
+  socket,
+} from "services/uilchilgee";
 import { ebarimtKhelberuud } from "tools/logic/tulburiinKhelberuud";
 import moment, { utc } from "moment";
 //import Lottie from "lottie-react";
@@ -19,9 +23,9 @@ import useQpayObject from "hooks/useQpayObject";
 import ZuvhunKhunglukhModalContent from "../../../ZuvhunKhunglukhModalContent";
 import { MdOutlineDiscount } from "react-icons/md";
 import { modal } from "components/ant/Modal";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
-const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 const KioskMobile = ({
   token,
   zogsool,
@@ -150,7 +154,7 @@ const KioskMobile = ({
 
   useEffect(() => {
     if (
-      (baiguullagiinId === "673d88133987e97992f77c02") &&
+      baiguullagiinId === "673d88133987e97992f77c02" &&
       songogdsonData?.enter_date &&
       !songogdsonData?.fitnessHungulult
     ) {
@@ -162,13 +166,13 @@ const KioskMobile = ({
       // );
       // const guravTsagiinDataaGarsanEsekh = odooTsag.isAfter(guravTsagiinDaraa);
       // if (guravTsagiinDataaGarsanEsekh) {
-        setSongogdsonData((prev) => {
-          return {
-            ...prev,
-            fitnessHungulult: 3000,
-            pay_amount: prev?.pay_amount < 3000 ? 0 : (prev?.pay_amount - 3000),
-          };
-        });
+      setSongogdsonData((prev) => {
+        return {
+          ...prev,
+          fitnessHungulult: 3000,
+          pay_amount: prev?.pay_amount < 3000 ? 0 : prev?.pay_amount - 3000,
+        };
+      });
       // }
     }
   }, [songogdsonData?.enter_date, servereesAvsonOdooTsag, baiguullagiinId]);
@@ -256,11 +260,14 @@ const KioskMobile = ({
         if (response.data.success == true) {
           if (response.data?.data?.pay_amount > 0) {
             if (
-              !!data?.tuukh[0]?.tulbur?.find((x) => x.turul == ("Хөнгөлөлт/ "+ tsag+ " цаг"))
+              !!data?.tuukh[0]?.tulbur?.find(
+                (x) => x.turul == "Хөнгөлөлт/ " + tsag + " цаг"
+              )
             ) {
               setKhungulukhDun(0);
             }
-            var khungulukhDun = (response.data?.data?.parkingUndsenUne || 0) * (tsag || 0);
+            var khungulukhDun =
+              (response.data?.data?.parkingUndsenUne || 0) * (tsag || 0);
             if (khungulukhDun > 0) {
               if (khungulukhDun < response.data?.data?.pay_amount) {
                 setSongogdsonData({
@@ -324,7 +331,7 @@ const KioskMobile = ({
     customer_no,
     individual,
     paid_amount,
-    customerTin,
+    customerTin
   ) => {
     uilchilgee(token)
       .post("/v1/kioskEbarimtAvya", {
@@ -350,7 +357,7 @@ const KioskMobile = ({
     uilchilgee(token)
       .post("/v1/kioskPay", {
         uilchluulegchiinId,
-        turul: "Хөнгөлөлт/ "+ tsag+ " цаг",
+        turul: "Хөнгөлөлт/ " + tsag + " цаг",
         zogsooliinId,
         paid_amount: khungulukhDun,
         barilgiinId,
@@ -379,7 +386,7 @@ const KioskMobile = ({
       register,
       register !== "" ? false : true,
       songogdsonData?.pay_amount,
-      customerTin,
+      customerTin
     );
   };
 
@@ -518,7 +525,7 @@ const KioskMobile = ({
                     <div>{formatNumber(khungulukhDun, 0)}₮</div>
                   </div>
                 )}
-                {(baiguullagiinId === "673d88133987e97992f77c02") && (
+                {baiguullagiinId === "673d88133987e97992f77c02" && (
                   <>
                     <div className="w-full border border-[#1E1E1E]" />
                     <div className="flex w-full justify-between px-6 ">
@@ -723,7 +730,7 @@ const KioskMobile = ({
       </Drawer>
       <div className="flex h-1/3 w-full flex-col items-center justify-center gap-8">
         <div className="mt-24 h-36 w-36 rounded-lg">
-          <img className="h-full w-full" src="/ParkEaseLogoShine2.png" alt="" />
+          <img className="h-full w-full" src="/ParkEaseLogoShine.png" alt="" />
         </div>
         <div className="text-center text-lg font-bold text-zinc-200">
           Зогсоолын төлбөрөө энд төлөн хугацаагаа хэмнээрэй

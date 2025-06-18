@@ -28,9 +28,9 @@ import formatNumber from "tools/function/formatNumber";
 import { modal } from "components/ant/Modal";
 import ZuvhunKhunglukhModalContent from "./ZuvhunKhunglukhModalContent";
 import ShineDugaarKeyboard from "components/pageComponents/kiosk/ShineKeyboard";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
-const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 const Kiosk = () => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
   const [messageApi, contextHolder] = message.useMessage();
@@ -212,7 +212,10 @@ const Kiosk = () => {
 
   useEffect(() => {
     if (
-      (ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880" || ajiltan?._id == "67d92062513ec21e26bdb604" || ajiltan?._id == "68357e846653c13643908698") &&
+      (ajiltan?._id === "66384a9061eeda747d01a320" ||
+        ajiltan?._id === "6746b7b1e3a4bd05bbac6880" ||
+        ajiltan?._id == "67d92062513ec21e26bdb604" ||
+        ajiltan?._id == "68357e846653c13643908698") &&
       songogdsonData?.enter_date &&
       !songogdsonData?.fitnessHungulult
     ) {
@@ -227,39 +230,44 @@ const Kiosk = () => {
         setSongogdsonData((prev) => {
           return {
             ...prev,
-            fitnessHungulult: (ajiltan?._id == "67d92062513ec21e26bdb604" ? 7000 : 4000),
-            pay_amount: prev?.pay_amount - (ajiltan?._id == "67d92062513ec21e26bdb604" ? 7000 : 4000),
+            fitnessHungulult:
+              ajiltan?._id == "67d92062513ec21e26bdb604" ? 7000 : 4000,
+            pay_amount:
+              prev?.pay_amount -
+              (ajiltan?._id == "67d92062513ec21e26bdb604" ? 7000 : 4000),
           };
         });
       }
     }
-    if(ajiltan?._id == "68357e846653c13643908698" && songogdsonData?.enter_date && !songogdsonData?.fitnessHungulult24)
-    {
-       const odooTsag = moment(servereesAvsonOdooTsag);
+    if (
+      ajiltan?._id == "68357e846653c13643908698" &&
+      songogdsonData?.enter_date &&
+      !songogdsonData?.fitnessHungulult24
+    ) {
+      const odooTsag = moment(servereesAvsonOdooTsag);
 
       const hoyrTsagiinDaraa = moment(songogdsonData.enter_date).add(
         24,
         "hours"
       );
       const hoyrTsagiinDataaGarsanEsekh = odooTsag.isAfter(hoyrTsagiinDaraa);
-      if(hoyrTsagiinDataaGarsanEsekh) {
+      if (hoyrTsagiinDataaGarsanEsekh) {
         setSongogdsonData((prev) => {
-            return {
-              ...prev,
-              fitnessHungulult24: (zogsool?.undsenUne || 2000) * 24,
-              pay_amount: prev?.pay_amount - ((zogsool?.undsenUne || 2000) * 24),
-            };
-          });
-      }
-    }
-    if(ajiltan?._id === "68425acd7611dd8da7e7a7d2")
-    {
-      setSongogdsonData((prev) => {
           return {
             ...prev,
-            fitnessHungulult: prev?.pay_amount,
+            fitnessHungulult24: (zogsool?.undsenUne || 2000) * 24,
+            pay_amount: prev?.pay_amount - (zogsool?.undsenUne || 2000) * 24,
           };
         });
+      }
+    }
+    if (ajiltan?._id === "68425acd7611dd8da7e7a7d2") {
+      setSongogdsonData((prev) => {
+        return {
+          ...prev,
+          fitnessHungulult: prev?.pay_amount,
+        };
+      });
     }
   }, [songogdsonData?.enter_date, servereesAvsonOdooTsag, ajiltan?._id]);
   function onTimeout() {
@@ -516,7 +524,7 @@ const Kiosk = () => {
     customer_no,
     individual,
     paid_amount,
-    customerTin,
+    customerTin
   ) => {
     uilchilgee(token)
       .post("/v1/kioskEbarimtAvya", {
@@ -592,7 +600,7 @@ const Kiosk = () => {
           register,
           register !== "" ? false : true,
           songogdsonData?.pay_amount,
-          customerTin,
+          customerTin
         );
       }
     } else {
@@ -601,7 +609,7 @@ const Kiosk = () => {
         register,
         register !== "" ? false : true,
         songogdsonData?.pay_amount,
-        null,
+        null
       );
     }
   };
@@ -719,9 +727,18 @@ const Kiosk = () => {
               {tulburiinKhelber === "pass" &&
                 "Pass апп-аас төлөн үргэлжлүүлэх дарна уу."}
             </div>
-            <div className={`my-16 flex w-full items-center justify-${baiguullaga?._id === "6646fab6ae3f7ecc2ea5ecd9" ? "center": "between"} px-12 md:my-10`}>
+            <div
+              className={`my-16 flex w-full items-center justify-${
+                baiguullaga?._id === "6646fab6ae3f7ecc2ea5ecd9"
+                  ? "center"
+                  : "between"
+              } px-12 md:my-10`}
+            >
               {tulburiinKhelberuud.map((mur) => {
-                return baiguullaga?._id === "6646fab6ae3f7ecc2ea5ecd9" && (mur.key === "card" || mur.key === "pass") ? "" : (
+                return baiguullaga?._id === "6646fab6ae3f7ecc2ea5ecd9" &&
+                  (mur.key === "card" || mur.key === "pass") ? (
+                  ""
+                ) : (
                   <div
                     key={mur.key}
                     onClick={() => {
@@ -781,7 +798,11 @@ const Kiosk = () => {
                     <div>{formatNumber(songogdsonData?.pay_amount, 0)}₮</div>
                   </div>
 
-                  {(ajiltan?._id === "66384a9061eeda747d01a320" || ajiltan?._id === "6746b7b1e3a4bd05bbac6880" || ajiltan?._id == "67d92062513ec21e26bdb604" || ajiltan?._id == "68357e846653c13643908698" || ajiltan?._id === "68425acd7611dd8da7e7a7d2") && (
+                  {(ajiltan?._id === "66384a9061eeda747d01a320" ||
+                    ajiltan?._id === "6746b7b1e3a4bd05bbac6880" ||
+                    ajiltan?._id == "67d92062513ec21e26bdb604" ||
+                    ajiltan?._id == "68357e846653c13643908698" ||
+                    ajiltan?._id === "68425acd7611dd8da7e7a7d2") && (
                     <>
                       <div className="w-full border border-[#1E1E1E]" />
                       <div className="flex w-full justify-between px-6 ">
@@ -1048,9 +1069,13 @@ const Kiosk = () => {
       </Drawer>
       <div className="flex h-1/3 w-full flex-col items-center justify-center gap-8 md:pt-[100px]">
         <div className="">
-          <img className="h-full w-full" src="/parkEaseLogo.png" alt="" />
+          <img
+            className="h-[300px] w-[300px]"
+            src="/ParkEaseLogoShine.png"
+            alt=""
+          />
         </div>
-        <div className="px-12 text-center text-5xl text-[22px] font-bold text-[#1E1E1E]">
+        <div className="px-12 text-center text-5xl text-[22px] font-bold text-[#1E1E1E] dark:text-white">
           Зогсоолын төлбөрөө энд төлөн хугацаагаа хэмнээрэй
         </div>
       </div>

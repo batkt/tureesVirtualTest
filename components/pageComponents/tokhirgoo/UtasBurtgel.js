@@ -167,7 +167,9 @@ function UtasBurtgel(
                       placeholder="Утасны дугаар"
                     />
                   </Form.Item>
-                  <MinusCircleOutlined onClick={() => remove(name)} />
+                  <div className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full fill-current p-2 text-white dark:bg-red-600">
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </div>
                 </Space>
               ))}
             </div>

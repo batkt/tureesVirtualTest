@@ -193,7 +193,7 @@ function tulburTootsoo({ token }) {
                 ajiltan,
                 baiguullaga,
                 barilga,
-                barilgiinId,
+                barilgiinId
               );
             else if (
               ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
@@ -287,7 +287,11 @@ function tulburTootsoo({ token }) {
               "мөнгө"
             );
           }
-          if(ajiltan?.baiguullagiinId === "6115f350b35689cdbf1b9da3" && barilgiinId === "622ec99a8e64e5b4f0c3acb6") // ikhnayd zuun undur
+          if (
+            ajiltan?.baiguullagiinId === "6115f350b35689cdbf1b9da3" &&
+            barilgiinId === "622ec99a8e64e5b4f0c3acb6"
+          )
+            // ikhnayd zuun undur
             medeelel.barilgiinlogo = renderToString(
               <span>
                 <img
@@ -300,8 +304,9 @@ function tulburTootsoo({ token }) {
                   }}
                 />
               </span>
-            );  
-          else // urangan
+            );
+          // urangan
+          else
             medeelel.barilgiinlogo = renderToString(
               <span>
                 <img
@@ -314,7 +319,7 @@ function tulburTootsoo({ token }) {
                   }}
                 />
               </span>
-            ); 
+            );
           if (
             zagvar?.khatuuZagvarEsekh &&
             ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d" &&
@@ -469,8 +474,8 @@ function tulburTootsoo({ token }) {
                   />
                 </span>
               );
-            } 
-            else if(ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d") // soyolj
+            } else if (ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d")
+              // soyolj
               medeelel.tamga = renderToString(
                 <span style={{ position: "absolute", zIndex: 1 }}>
                   <img
@@ -497,7 +502,7 @@ function tulburTootsoo({ token }) {
                     }}
                   />
                 </span>
-              );        
+              );
 
             medeelel.khuviinTamga = renderToString(
               <span style={{ position: "absolute", zIndex: 1 }}>
@@ -793,27 +798,28 @@ function tulburTootsoo({ token }) {
                   );
                 }
 
-                if (a.tailbar?.includes("Халуун ус") || a.tailbar?.includes("Хүйтэн ус")) {
+                if (
+                  a.tailbar?.includes("Халуун ус") ||
+                  a.tailbar?.includes("Хүйтэн ус")
+                ) {
                   a.tseverusTariff = ashiglaltiinZardal?.jagsaalt
                     ?.filter((b) => b.ner === a.tailbar)
                     .map((b) => b.tseverUsDun);
                   a.boxirusTariff = ashiglaltiinZardal?.jagsaalt
                     ?.filter((b) => b.ner === a.tailbar)
                     .map((b) => b.bokhirUsDun);
-                  a.usxalaasniitulburTariff =
-                    a.tailbar?.includes("Хүйтэн ус")
-                      ? 0
-                      : ashiglaltiinZardal?.jagsaalt
-                          ?.filter((b) => b.ner === a.tailbar)
-                          .map((b) => b.usKhalaasniiDun);
+                  a.usxalaasniitulburTariff = a.tailbar?.includes("Хүйтэн ус")
+                    ? 0
+                    : ashiglaltiinZardal?.jagsaalt
+                        ?.filter((b) => b.ner === a.tailbar)
+                        .map((b) => b.usKhalaasniiDun);
 
                   zuruuDun += a.zuruuZaalt;
                   tseverusDun += a.zuruuZaalt * a.tseverusTariff; // Халуун ус + Хүйтэн ус
                   boxirusDun += a.zuruuZaalt * a.boxirusTariff; // Халуун ус + Хүйтэн ус
-                  usxalaasniitulburDun +=
-                    a.tailbar?.includes("Хүйтэн ус")
-                      ? 0
-                      : a.zuruuZaalt * a.usxalaasniitulburTariff; // Халуун ус
+                  usxalaasniitulburDun += a.tailbar?.includes("Хүйтэн ус")
+                    ? 0
+                    : a.zuruuZaalt * a.usxalaasniitulburTariff; // Халуун ус
                   // niilberDun += a.zuruuZaalt * a.tseverusTariff + a.zuruuZaalt * a.boxirusTariff + (a.tailbar?.includes("Хүйтэн ус") ? 0 : (a.zuruuZaalt * a.usxalaasniitulburTariff))
                   niilberDun += a.tulukhDun;
 
@@ -1775,7 +1781,11 @@ function tulburTootsoo({ token }) {
           );
         }
 
-        if(ajiltan?.baiguullagiinId === "6115f350b35689cdbf1b9da3" && barilgiinId === "622ec99a8e64e5b4f0c3acb6") // ikhnayd zuun undur
+        if (
+          ajiltan?.baiguullagiinId === "6115f350b35689cdbf1b9da3" &&
+          barilgiinId === "622ec99a8e64e5b4f0c3acb6"
+        )
+          // ikhnayd zuun undur
           nekhemjlekh.barilgiinlogo = renderToString(
             <span>
               <img
@@ -1788,8 +1798,9 @@ function tulburTootsoo({ token }) {
                 }}
               />
             </span>
-          );  
-        else // urangan
+          );
+        // urangan
+        else
           nekhemjlekh.barilgiinlogo = renderToString(
             <span>
               <img
@@ -1802,7 +1813,7 @@ function tulburTootsoo({ token }) {
                 }}
               />
             </span>
-          ); 
+          );
 
         if (
           songosonZagvar?.khatuuZagvarEsekh &&
@@ -2792,8 +2803,7 @@ function tulburTootsoo({ token }) {
           };
           await uilchilgee(token)
             .post("/excelZagvarTatya", yavuulakhData, { responseType: "blob" })
-            .then((response) => {
-            })
+            .then((response) => {})
             .catch((err) => {
               setUnshijBaina(false);
               message.error(err);
@@ -2965,7 +2975,7 @@ function tulburTootsoo({ token }) {
                   )}
                 </Select>
               </div>
-              <div className="hidden justify-end gap-2 md:flex">
+              <div className="hidden justify-end  gap-2 md:flex">
                 {turul === "Mail" ? (
                   <Button
                     hidden={turul !== "Mail"}
@@ -2978,7 +2988,9 @@ function tulburTootsoo({ token }) {
                 ) : (
                   ""
                 )}
-                <Button onClick={send}>{t("Илгээх")}</Button>
+                <Button onClick={send}>
+                  <div className="dark:text-black">{t("Илгээх")} </div>
+                </Button>
               </div>
             </div>
           </div>

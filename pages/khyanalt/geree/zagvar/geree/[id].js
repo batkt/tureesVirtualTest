@@ -301,7 +301,7 @@ function ZakhialgaNemekh({ token }) {
               <Input placeholder={t("Гэрээний загварын нэр")} />
             </Form.Item>
             <div className="flex justify-end gap-2">
-              <p className="mt-1">{t("Түр гэрээ эсэх")} :</p>
+              <p className="mt-1 dark:text-white">{t("Түр гэрээ эсэх")} :</p>
               <Form.Item name="turGereeEsekh" valuePropName="checked">
                 <Switch />
               </Form.Item>

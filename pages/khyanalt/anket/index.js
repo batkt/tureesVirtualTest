@@ -50,8 +50,9 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
   const [hide, setHide] = React.useState(true);
   return (
     <Form.Item
-      className="block rounded-md border py-4 px-2 shadow-lg "
-      key={fieldKey}>
+      className="block rounded-md border px-2 py-4 shadow-lg "
+      key={fieldKey}
+    >
       <div className="relative space-y-3">
         <Form.Item
           name={[name, "asuult"]}
@@ -73,7 +74,8 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
         <Form.Item
           name={[name, "turul"]}
           fieldKey={[fieldKey, "turul"]}
-          {...restField}>
+          {...restField}
+        >
           <Select
             placeholder={t("Хариултын төрөл")}
             defaultValue={"boglokh"}
@@ -85,7 +87,7 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
           />
         </Form.Item>
         {fields.length > 0 ? (
-          <div className="absolute -top-11 -right-3 rounded-full bg-white dark:bg-gray-900 lg:-top-10 lg:-right-5">
+          <div className="absolute -right-3 -top-11 rounded-full bg-white dark:bg-gray-900 lg:-right-5 lg:-top-10">
             <CloseCircleOutlined
               className="dynamic-delete-button text-2xl text-black text-opacity-60 transition-colors hover:text-red-400 dark:text-white dark:text-opacity-50"
               onClick={() => {
@@ -105,7 +107,8 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
               },
             ]}
             name={[name, "khariultuud"]}
-            fieldKey={[fieldKey, "khariultuud"]}>
+            fieldKey={[fieldKey, "khariultuud"]}
+          >
             {(fields, { add, remove }, { errors }) => (
               <>
                 {fields.map((field, key) => (
@@ -116,7 +119,8 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
                     {...field.restField}
                     rules={[
                       { required: true, message: t("Хариулт оруулна уу!") },
-                    ]}>
+                    ]}
+                  >
                     <div className="relative pr-8">
                       <Input
                         placeholder={`Хариулт ${String.fromCharCode(
@@ -136,7 +140,8 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
                   style={{ width: "100%" }}
                   type={"sideKick"}
                   onClick={() => add()}
-                  icon={<PlusOutlined className="text-xs" />}>
+                  icon={<PlusOutlined className="text-xs" />}
+                >
                   {t("Хариулт оруулах")}
                 </Button>
                 <Form.ErrorList errors={errors} />
@@ -176,10 +181,12 @@ function AnketiinZagvar({
       className="group"
       onClick={() => {
         setKharakh(!kharakh);
-      }}>
+      }}
+    >
       <div
         key={a._id}
-        className="flex w-full cursor-pointer items-center justify-between rounded-xl border border-green-600 bg-green-600 bg-opacity-5 p-2 shadow-lg dark:text-gray-200 md:block lg:flex">
+        className="flex w-full cursor-pointer items-center justify-between rounded-xl border border-green-600 bg-green-600 bg-opacity-5 p-2 shadow-lg dark:text-gray-200 md:block lg:flex"
+      >
         <div>{a.ner}</div>
         <div className="flex justify-end gap-2">
           <Button
@@ -206,7 +213,8 @@ function AnketiinZagvar({
               anketUstgay(a);
             }}
             okText={t("Тийм")}
-            cancelText={t("Үгүй")}>
+            cancelText={t("Үгүй")}
+          >
             <Button
               className="bg-white text-red-400 hover:text-red-600  dark:bg-gray-900 "
               onClick={(e) => {
@@ -219,7 +227,7 @@ function AnketiinZagvar({
       </div>
       <div className="flex w-full items-center justify-between px-5">
         <div
-          className={`flex w-full flex-col items-center justify-end overflow-hidden rounded-b-xl border border-t-0 border-green-600 bg-green-600 bg-opacity-5 p-1 shadow-lg transition-all dark:text-gray-200`}
+          className={`flex w-full flex-col items-center justify-end overflow-hidden rounded-b-xl border border-t-0 border-green-600 bg-green-600 bg-opacity-5 p-1 shadow-lg transition-all dark:text-black `}
           style={{
             height:
               kharakh === false
@@ -231,14 +239,16 @@ function AnketiinZagvar({
                       : 16
                   }rem`
                 : "3.5rem",
-          }}>
+          }}
+        >
           {khariult.jagsaalt.length > 0 ? (
             <div
               className={` ${
                 kharakh === true
                   ? "opacity-200 visible transition-all delay-100"
                   : "invisible opacity-0"
-              } h-full w-full space-y-3 overflow-y-auto py-2 px-5`}>
+              } h-full w-full space-y-3 overflow-y-auto px-5 py-2`}
+            >
               {khariult.jagsaalt.map((b, i) => {
                 return (
                   <div
@@ -254,7 +264,8 @@ function AnketiinZagvar({
                     className={`flex w-full cursor-pointer justify-between rounded-md border p-2 py-1 ${
                       data?._id === b._id ? "bg-blue-200" : "bg-white"
                     }  border-green-600`}
-                    key={i}>
+                    key={i}
+                  >
                     <p>{i + 1}.</p>{" "}
                     <p>{moment(b.ognoo).format("YYYY-MM-DD HH:mm:ss")}</p>
                   </div>
@@ -265,7 +276,8 @@ function AnketiinZagvar({
             <div
               className={`flex h-full w-full items-center justify-center transition-opacity delay-200 ${
                 kharakh === true ? "visible opacity-100" : "invisible opacity-0"
-              }`}>
+              }`}
+            >
               {t("Анкет ирээгүй байна")}
             </div>
           )}
@@ -275,11 +287,12 @@ function AnketiinZagvar({
               style={{ rotate: kharakh === true ? "-90deg" : "90deg" }}
             />
             <div
-              className={`absolute right-2 -bottom-1 transition-all ${
+              className={`absolute -bottom-1 right-2 transition-all ${
                 khariult.jagsaalt.length > 0
                   ? "font-medium text-pink-500"
                   : "text-gray-400"
-              }`}>
+              }`}
+            >
               {khariult.jagsaalt.length}
             </div>
           </div>
@@ -345,14 +358,19 @@ function Anket({ token }) {
   function anketIlgeeye(data) {
     const footer = [
       <Space className="flex justify-end">
-        <Button className="dark:text-gray-200 dark:hover:text-gray-800" type="sideKick" onClick={() => ilgeekhRef.current.khaaya()}>
+        <Button
+          className="dark:text-gray-200 dark:hover:text-gray-800"
+          type="sideKick"
+          onClick={() => ilgeekhRef.current.khaaya()}
+        >
           {t("Хаах")}
         </Button>
         <Button
           id="anketIlgeekhButton"
           type="primary"
           icon={<SendOutlined />}
-          onClick={() => ilgeekhRef.current.ilgeekh()}>
+          onClick={() => ilgeekhRef.current.ilgeekh()}
+        >
           {t("Анкет илгээх")}
         </Button>
       </Space>,
@@ -400,16 +418,18 @@ function Anket({ token }) {
     <Admin
       title="Анкетын асуулга бэлдэх"
       khuudasniiNer="anket"
-      tsonkhniiId={"64472b9428c37d7cdda119d6"}>
+      tsonkhniiId={"64472b9428c37d7cdda119d6"}
+    >
       <div className="col-span-12 p-3 md:p-5 ">
-        <div className="absolute top-3 right-3 z-50 hidden lg:flex"></div>
+        <div className="absolute right-3 top-3 z-50 hidden lg:flex"></div>
         <div className="flex grid-cols-12 flex-col-reverse gap-5 md:grid">
           <div
             className="box relative col-span-12 p-4 py-5 pt-3 md:col-span-4"
             style={{ height: "calc( 100vh - 8rem)" }}
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="300">
+            data-aos-delay="300"
+          >
             <span className="font-medium dark:text-gray-100">
               {t("Анкетын загварууд")}
             </span>
@@ -426,7 +446,8 @@ function Anket({ token }) {
             </div>
             <div
               className="mt-5 flex flex-col gap-5 overflow-y-auto pb-10"
-              style={{ height: "calc( 100vh - 14rem )" }}>
+              style={{ height: "calc( 100vh - 14rem )" }}
+            >
               {asuult?.data?.jagsaalt?.map((a) => {
                 return (
                   <AnketiinZagvar
@@ -445,14 +466,15 @@ function Anket({ token }) {
             className="box col-span-12 overflow-auto p-1 pt-3 md:col-span-3 xl:col-span-3"
             data-aos="fade-left"
             data-aos-duration="1000"
-            data-aos-delay="300">
+            data-aos-delay="300"
+          >
             <span className=" font-medium dark:text-gray-100 lg:px-5">
               {t("Анкетын загвар үүсгэх")}
             </span>
             <Form
               ref={formRef}
               form={form}
-              className="pt-5 pl-5"
+              className="pl-5 pt-5"
               name="dynamic_form_item"
               autoComplete={"off"}
               onFinish={(v) => {
@@ -463,7 +485,8 @@ function Anket({ token }) {
                   ..._.cloneDeep(form.getFieldsValue()),
                   shineAnket: true,
                 });
-              }}>
+              }}
+            >
               <div>
                 <div className="grid-cols-1 gap-3 pr-5 lg:grid">
                   <Form.Item name="_id" hidden></Form.Item>
@@ -476,7 +499,8 @@ function Anket({ token }) {
                         required: true,
                         message: t("Нэр оруулна уу!"),
                       },
-                    ]}>
+                    ]}
+                  >
                     <Input
                       autoFocus={true}
                       onKeyUp={focuser}
@@ -491,10 +515,11 @@ function Anket({ token }) {
                       message: t("Асуулт оруулна уу!"),
                     },
                   ]}
-                  name="asuultuud">
+                  name="asuultuud"
+                >
                   {(fields, { add, remove }, { errors }) => (
                     <>
-                      <Form.Item className="pr-5 pb-3">
+                      <Form.Item className="pb-3 pr-5">
                         <Button
                           type="default"
                           id="asuultNemekhButton"
@@ -508,7 +533,8 @@ function Anket({ token }) {
                           }}
                           className="dark:bg-gray-800 dark:text-white"
                           style={{ width: "100%" }}
-                          icon={<PlusOutlined className="text-xs" />}>
+                          icon={<PlusOutlined className="text-xs" />}
+                        >
                           {t("Асуулт нэмэх")}
                         </Button>
                         <Form.ErrorList errors={errors} />
@@ -516,7 +542,8 @@ function Anket({ token }) {
                       <div
                         className=" -my-8 grid w-full grid-cols-1 gap-2 overflow-y-auto py-5 pr-5"
                         style={{ maxHeight: "calc( 100vh - 20rem)" }}
-                        id={"form-container"}>
+                        id={"form-container"}
+                      >
                         {fields.map(({ key, name, fieldKey, ...restField }) => (
                           <AsuultOruulakh
                             name={name}
@@ -535,7 +562,8 @@ function Anket({ token }) {
                 <Button
                   type="primary"
                   onClick={() => form.submit()}
-                  className="w-full">
+                  className="w-full"
+                >
                   {t("Хадгалах")}
                 </Button>
               </Form.Item>
@@ -543,7 +571,8 @@ function Anket({ token }) {
           </div>
           <div
             className="relative col-span-5 block h-full overflow-y-auto rounded-lg bg-white pt-3 dark:bg-gray-900 "
-            style={{ height: "calc( 100vh - 8rem)" }}>
+            style={{ height: "calc( 100vh - 8rem)" }}
+          >
             <header className="border-b pb-5 font-medium dark:text-gray-100 lg:px-5 ">
               {t("Анкет харах хэсэг")}
             </header>
@@ -556,7 +585,8 @@ function Anket({ token }) {
               name="dynamic_form_nest_item"
               autoComplete={"off"}
               className="block h-5/6 overflow-y-auto pt-5"
-              layout="vertical">
+              layout="vertical"
+            >
               <Form.List name="asuultuud">
                 {(fields) => (
                   <>
@@ -572,13 +602,15 @@ function Anket({ token }) {
                               {...restField}
                               hidden
                               name={[name, "asuult"]}
-                              noStyle>
+                              noStyle
+                            >
                               <Input />
                             </Form.Item>
                             <Form.Item
                               {...restField}
                               name={[name, "khariult"]}
-                              className="w-full ">
+                              className="w-full "
+                            >
                               {!!formPreview.getFieldValue("asuultuud") &&
                               formPreview.getFieldValue("asuultuud")[name]
                                 ?.turul === "songokh" ? (
@@ -588,12 +620,17 @@ function Anket({ token }) {
                                       ? data?.khariultuud[name]?.khariult
                                       : undefined
                                   }
-                                  className="flex flex-col ">
+                                  className="flex flex-col "
+                                >
                                   {!!formPreview.getFieldValue("asuultuud") &&
                                     formPreview
                                       .getFieldValue("asuultuud")
                                       [name].khariultuud?.map((a, i) => (
-                                        <Radio key={i} value={a} className="dark:text-gray-200">
+                                        <Radio
+                                          key={i}
+                                          value={a}
+                                          className="dark:text-gray-200"
+                                        >
                                           {a}
                                         </Radio>
                                       ))}
