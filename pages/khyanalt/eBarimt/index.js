@@ -37,6 +37,8 @@ const searchKeys = [
   "mashiniiDugaar",
   "gereeniiDugaar",
   "talbainDugaar",
+  "togloomNer",
+  "togloomUtas"
 ];
 //#endregion
 
@@ -195,12 +197,72 @@ function EbarimtMedeelel({ token }) {
             },
           ]
         : [];
+    let shineColumn2 =
+      uilchilgeeAvi === "Түрээс"
+        ? [
+             {
+        title: t("Гэрээний дугаар"),
+        dataIndex: "gereeniiDugaar",
+        ellipsis: true,
+        align: "center",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render: (data) => {
+                return data;
+              },
+      },
+      {
+        title: t("Регистр"),
+        dataIndex: "customerNo",
+        ellipsis: true,
+        align: "center",
+        render: (data) => {
+                return data;
+              },
+      },
+      {
+        title: t("Талбайн дугаар"),
+        dataIndex: "talbainDugaar",
+        ellipsis: true,
+        align: "center",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render: (data) => {
+                return data;
+              },
+      },
+          ]
+        : [];
+
+    let shineColumn3 =
+      uilchilgeeAvi === "Тоглоом"
+        ? [
+          {
+        title: t("Нэр"),
+        dataIndex: "togloomNer",
+        align: "center",
+        render: (data) => {
+                return data;
+              },
+      },
+          {
+        title: t("Утас"),
+        dataIndex: "togloomUtas",
+        align: "center",
+        render: (data) => {
+                return data;
+              },
+      },
+          ]
+        : [];
+
     return [
       {
         title: t("№"),
         key: "index",
         align: "center",
         width: "60px",
+        summary:true,
         render: (a, b, index) => {
           return index + 1;
         },
@@ -216,29 +278,10 @@ function EbarimtMedeelel({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
       },
-      {
-        title: t("Гэрээний дугаар"),
-        dataIndex: "gereeniiDugaar",
-        ellipsis: true,
-        align: "center",
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
-      {
-        title: t("Регистр"),
-        dataIndex: "customerNo",
-        ellipsis: true,
-        align: "center",
-      },
-      {
-        title: t("Талбайн дугаар"),
-        dataIndex: "talbainDugaar",
-        ellipsis: true,
-        align: "center",
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
+     
       ...shineColumn,
+      ...shineColumn2,
+      ...shineColumn3,
       {
         title: <div className="text-center font-semibold">Төрөл</div>,
         align: "center",
@@ -351,22 +394,14 @@ function EbarimtMedeelel({ token }) {
     const excel = new Excel();
 
     const excelCol = [
+      
       {
         title: "Огноо",
         dataIndex: "createdAt",
         __style__: { h: "center" },
         render: (date) => moment(date).format("YYYY-MM-DD HH:mm"),
       },
-      {
-        title: "Гэрээний дугаар",
-        __style__: { h: "center" },
-        dataIndex: "gereeniiDugaar",
-      },
-      {
-        title: "Регистр",
-        __style__: { h: "center" },
-        dataIndex: "customerNo",
-      },
+      
       ...(uilchilgeeAvi === "Зогсоол"
         ? [
             {
@@ -376,6 +411,32 @@ function EbarimtMedeelel({ token }) {
             },
           ]
         : []),
+      ...(uilchilgeeAvi === "Тоглоом"
+      ?[
+        {
+          title:"Нэр",
+          dataIndex:"togloomNer",
+          __style__: { h: "center" },
+        },
+        {
+          title:"Утас",
+          dataIndex:"togloomUtas",
+          __style__: { h: "center" },
+        }
+      ]:[]),
+      ...(uilchilgeeAvi === undefined
+      ?[
+        {
+        title: "Гэрээний дугаар",
+        __style__: { h: "center" },
+        dataIndex: "gereeniiDugaar",
+      },
+      {
+        title: "Регистр",
+        __style__: { h: "center" },
+        dataIndex: "customerNo",
+      },
+      ]:[]),
       {
         title: "ДДТД",
         __style__: { h: "center", width: 35 },
@@ -558,19 +619,15 @@ function EbarimtMedeelel({ token }) {
             className="t-head"
             columns={columns}
             summary={(e) => (
-              <AntdTable.Summary className="border " fixed={"bottom"}>
+            <AntdTable.Summary className="border " fixed={"bottom"}>
                 <AntdTable.Summary.Cell>
                   <div className="space-x-2 truncate text-base font-bold ">
                     Нийт
                   </div>
                 </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
                 <AntdTable.Summary.Cell
-                  colSpan={uilchilgeeAvi === "Зогсоол" ? 2 : 1}
+                  colSpan={uilchilgeeAvi === "Зогсоол" ? 5 :  uilchilgeeAvi === "Тоглоом" ? 6 : uilchilgeeAvi === "Түрээс" ? 7 : 4}
+                  
                 >
                   <div className="truncate text-right font-bold ">
                     {formatNumber(
@@ -582,6 +639,9 @@ function EbarimtMedeelel({ token }) {
                     )}
                   </div>
                 </AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
               </AntdTable.Summary>
             )}
           />
