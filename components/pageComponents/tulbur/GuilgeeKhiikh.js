@@ -732,7 +732,7 @@ function GuilgeeKhiikh(
       (khemjikhNegj === "кВт" ||
         khemjikhNegj === "1м3" ||
         khemjikhNegj === "кг") ? (
-        <div className="flex w-full justify-between">
+        <div className="flex w-full justify-between dark:text-[#E5E7EB]">
           <div style={{ width: "49%" }}>
             <div className="dark:text-white">Өмнөх заалт</div>
             <InputNumber
@@ -843,8 +843,8 @@ function GuilgeeKhiikh(
           </div>
         )}
       {turul === "ashiglalt" && (
-        <div className="flex w-full items-start justify-between">
-          <div className="dark:text-white">
+        <div className="flex dark:text-[#E5E7EB] w-full items-start justify-between">
+          <div >
             Суурь хураамж: {formatNumber(suuriKhuraamj || 0, 2)}
           </div>
           {tailbar?.includes("Цахилгаан") ? (
@@ -861,7 +861,7 @@ function GuilgeeKhiikh(
             className={`${nuatBodokhEsekh ? "p-0" : "p-2"}dark:text-gray-100`}
           >
             {nuatBodokhEsekh && negjUne > 0 && (
-              <div className="flex w-full flex-col items-start justify-center gap-2 border-b border-dashed">
+              <div className="dark:text-[#E5E7EB] flex w-full flex-col items-start justify-center gap-2 border-b border-dashed">
                 <div className="flex w-full items-center justify-between gap-2">
                   <div className="dark:text-white">Бодсон үнэ: </div>
                   <div className="dark:text-white">

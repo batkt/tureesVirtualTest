@@ -451,10 +451,10 @@ function Khyanalt({ token }) {
   function smsZagvarNemya(data) {
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>
-        <div className="dark:text-black"> {t("Хаах")}</div>
+        <div className="dark:text-[#E5E7EB]"> {t("Хаах")}</div>
       </Button>,
       <Button
-        style={{ backgroundColor: "#209669", color: "#ffffff" }}
+        type="primary "
         onClick={() => ref.current.khadgalya(setWaiting(true))}
       >
         {t("Хадгалах")}

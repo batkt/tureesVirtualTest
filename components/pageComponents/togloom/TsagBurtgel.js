@@ -448,7 +448,7 @@ function TsagBurtgel(
       <div className="flex justify-end">
         <Space>
           <Button onClick={() => destroy()}>
-            <div className="dark:text-blue-600">{t("Хаах")}</div>
+            <div className="dark:text-[#E5E7EB]">{t("Хаах")}</div>
           </Button>
           <Button
             loading={loading}

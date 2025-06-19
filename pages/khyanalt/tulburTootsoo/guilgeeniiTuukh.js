@@ -778,8 +778,8 @@ function guilgeeniiTuukh({ token }) {
     }
     var khadgalyaButtonId = "khadgalyaButtonId";
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>
-        <div className="dark:text-black">{t("Хаах")}</div>
+      <Button type="default" onClick={() => ref.current.khaaya()}>
+       {t("Хаах")}
       </Button>,
       <Button
         type="primary"

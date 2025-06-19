@@ -2989,7 +2989,7 @@ function tulburTootsoo({ token }) {
                   ""
                 )}
                 <Button onClick={send}>
-                  <div className="dark:text-black">{t("Илгээх")} </div>
+                  <div className="dark:text-[#E5E7EB]">{t("Илгээх")} </div>
                 </Button>
               </div>
             </div>

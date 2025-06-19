@@ -274,14 +274,14 @@ function AnketiinZagvar({
             </div>
           ) : (
             <div
-              className={`flex h-full w-full items-center justify-center transition-opacity delay-200 ${
+              className={`flex dark:text-[#E5E7EB] h-full w-full items-center justify-center transition-opacity delay-200 ${
                 kharakh === true ? "visible opacity-100" : "invisible opacity-0"
               }`}
             >
               {t("Анкет ирээгүй байна")}
             </div>
           )}
-          <div className="relative flex w-full justify-center transition-all group-hover:animate-pulse">
+          <div className="relative dark:text-[#E5E7EB] flex w-full justify-center transition-all group-hover:animate-pulse">
             <DoubleRightOutlined
               className="cursor-pointer transition-all"
               style={{ rotate: kharakh === true ? "-90deg" : "90deg" }}
