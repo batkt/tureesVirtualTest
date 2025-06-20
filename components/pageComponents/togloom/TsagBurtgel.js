@@ -244,7 +244,7 @@ function TsagBurtgel(
             </div>
             <Form.Item>
               <Button
-                type="dashed"
+                type="default"
                 onClick={() => add()}
                 block
                 icon={<PlusOutlined />}
