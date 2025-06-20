@@ -977,7 +977,7 @@ function camera({ token }) {
                     : "bg-green-200"
                 }`}
               >
-                {minToHour(parents?.niitKhugatsaa)}
+                {minToHour(parents?.niitKhugatsaa || 0)}
               </div>
             ) : (
               <div className="rounded bg-blue-200 px-3 py-1 text-slate-700">
@@ -1334,6 +1334,7 @@ function camera({ token }) {
                 )}
               >
                 <Button
+                type="tertiary"
                   style={{
                     display: "flex",
                     justifyContent: "center",

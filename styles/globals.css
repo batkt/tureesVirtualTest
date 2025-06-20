@@ -1127,7 +1127,7 @@ input[type="number"] {
   @apply border-none bg-green-500 text-white after:absolute after:h-3/6 after:w-3/6 after:rounded-md focus:ring-4 focus:ring-green-200 after:focus:animate-ping after:focus:bg-white after:focus:bg-opacity-60 !important;
 }
 .ant-btn-tertiary {
-  @apply border-none bg-yellow-500 text-white after:absolute after:h-3/6 after:w-3/6 after:rounded-md focus:ring-4 focus:ring-yellow-200 after:focus:animate-ping after:focus:bg-white after:focus:bg-opacity-60 !important;
+  @apply border-none  bg-yellow-500 text-white after:absolute after:h-3/6 after:w-3/6 after:rounded-md focus:ring-4 focus:ring-yellow-200 after:focus:animate-ping after:focus:bg-white after:focus:bg-opacity-60 dark:bg-yellow-500 !important;
 }
 
 .ant-tabs-tab-btn:hover {

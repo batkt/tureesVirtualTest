@@ -788,7 +788,7 @@ function GuilgeeKhiikh(
       {turul === "ashiglalt" &&
         tailbar?.includes("Цахилгаан") &&
         baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && (
-          <div className="flex w-full items-start justify-between">
+          <div className="dark:text-[#E5E7EB]  flex w-full items-start justify-between">
             <div style={{ width: "34%" }}>
               <div>Гүйдлийн коэффициент </div>
               <InputNumber
@@ -817,7 +817,7 @@ function GuilgeeKhiikh(
       {turul === "ashiglalt" &&
         tailbar?.includes("Цахилгаан") &&
         baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && (
-          <div className="flex w-full items-start justify-between">
+          <div className="flex w-full items-start dark:text-[#E5E7EB] justify-between">
             <div style={{ width: "48%" }}>
               <div className="flex justify-start">
                 ЦЭХ төлбөр/төг/ {formatNumber(tsekhDun || 0)}
@@ -834,7 +834,7 @@ function GuilgeeKhiikh(
         tailbar?.includes("Цахилгаан") &&
         baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
         baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh && (
-          <div className="flex w-full items-start justify-between">
+          <div className="dark:text-[#E5E7EB] flex w-full items-start justify-between">
             <div style={{ width: "48%" }}>
               <div className="flex justify-start">
                 Сэх дэмжих төлбөр {formatNumber(sekhDemjikhTulburDun || 0)}
