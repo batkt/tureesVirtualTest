@@ -35,11 +35,18 @@ const searchKeys = ["ner"];
 
 const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
   const [valueState, setValueState] = useState(value?.zardluud?.map((a) => a._id));
+
+  useEffect(() => {
+  const currentIds = value?.zardluud?.map((a) => a._id) || [];
+  setValueState(currentIds);
+}, [value?.zardluud]);
+
   const onValueChange = (selectedValues) => {
     onChange(selectedValues);
     setValueState(selectedValues);
-    ashiglaltiinZardal.setKhuudaslalt((a) => ({ ...a, search: "", }))
-  };
+  ashiglaltiinZardal.setKhuudaslalt((a) => ({ ...a, search: "" }));
+};
+
   return (
     <Select
       id={id}
@@ -50,6 +57,7 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
       onChange={onValueChange}
       className="w-full"
       showSearch
+      removeIcon= {null}
       loading={!ashiglaltiinZardal}
       onSearch={(search) =>
         ashiglaltiinZardal.setKhuudaslalt((a) => ({ ...a, search }))
@@ -111,7 +119,7 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
         {value?.zardluud && value?.zardluud[i]?.turul === "Дурын" ? (
           <div className="flex w-full items-center justify-center gap-1">
             <Form.Item
-              className="tariffInput absolute -right-5 top-[3px] w-44"
+              className="tariffInput absolute z-10 -right-5 top-[3px] w-44"
               name={[a.name, "dun"]}
               rules={[
                 {
@@ -160,7 +168,7 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
           cancelText={t("Үгүй")}
           onConfirm={() => zardalUstgaya(value?.zardluud && value?.zardluud[i])}
         >
-          <div className="flex h-8 w-8 cursor-pointer items-center justify-start rounded-full fill-current p-2 text-xl text-black dark:text-red-600">
+          <div className="flex h-8 w-8 cursor-pointer z-20 items-center justify-start rounded-full fill-current p-2 text-xl text-black dark:text-red-600">
             <Tooltip title={t("Устгах")}>
               <CloseCircleOutlined size={20} />
             </Tooltip>
@@ -323,6 +331,7 @@ const Zardal = ({
           <SongokhKheseg
             value={value}
             t={t}
+
             id={"songokhKheseg"}
             ashiglaltiinZardal={ashiglaltiinZardal}
             inputChange={inputChange}
