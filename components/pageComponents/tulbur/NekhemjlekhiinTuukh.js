@@ -169,7 +169,7 @@ function NekhemjlekhiinTuukh(
               </div>
             </div>
           </div>
-          <div className="border-2 bg-gray-50 p-5">
+          <div className="border-2 dark:text-black bg-gray-50 p-5">
             <div className="flex justify-between">
               <div></div>
               <div>
@@ -199,7 +199,7 @@ function NekhemjlekhiinTuukh(
                 key={`khevlekhNekhemjlel${nekhemjlekh}`}
                 className={`block ${
                   nekhemjlekh.khatuuZagvarEsekh
-                    ? "h-[5.845in] text-xs"
+                    ? "h-[6.845in] text-xs"
                     : "a5 sun-editor-editable p-10"
                 } `}
                 dangerouslySetInnerHTML={{ __html: nekhemjlekh.zagvar }}
