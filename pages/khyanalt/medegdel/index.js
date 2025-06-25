@@ -107,7 +107,7 @@ function Khyanalt({ token }) {
   /**Илгээх төрөл
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
    *  */
-  const [tuluv, setTuluv] = useState(null);
+  const [tuluv, setTuluv] = useState(undefined);
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
   const [zurag, setZurag] = useState();
@@ -116,7 +116,8 @@ function Khyanalt({ token }) {
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
-      // talbainDugaar: { $ne: [], $exists: true },
+      
+      
     };
   }, [barilgiinId]);
   const { setKhariltsagchKhuudaslalt, jagsaalt } = useKhariltsagchDavkhraarAvya(
