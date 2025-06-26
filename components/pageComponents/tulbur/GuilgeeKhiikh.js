@@ -60,6 +60,7 @@ function GuilgeeKhiikh(
   const [ashiglaltiinNer, setAshiglaltiinNer] = React.useState(null);
 
   const [busadTurul, setBusadTurul] = useState();
+  const [torguuliinKhuvi, setTorguuliinKhuvi] = useState();
   const [zardliinTurul, setZardliinTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
     useState(false);
@@ -233,6 +234,22 @@ function GuilgeeKhiikh(
               };
             }
             break;
+          case "torguuli":  
+            guilgee = {
+              zardliinNer: torguuliinKhuvi + "% торгууль",
+              nuatBodokhEsekh,
+              torguuliinKhuvi,
+              gereeniiId: data?._id,
+              turul: turul,
+              tulsunDun: 0,
+              tulukhDun: dun,
+              tulukhNUAT: nuatBodokhEsekh ? Math.abs(dun / 1.1 / 10) : 0,
+              tulukhNuatgui: nuatBodokhEsekh ? (dun - Math.abs(dun / 1.1 / 10)) : 0,
+              ognoo: ognoo,
+              tailbar,
+              nekhemjlekhDeerKharagdakh: nekhemjlekhDeerKharagdakh,
+            };
+            break;
           case "ashiglalt":
             {
               if (
@@ -376,6 +393,7 @@ function GuilgeeKhiikh(
       ashiglaltiinNer,
       niitDunGaz,
       togtmolGaz,
+      torguuliinKhuvi,
     ]
   );
   function labelTurul(guilgeeTurul) {
@@ -463,7 +481,7 @@ function GuilgeeKhiikh(
   function handleTurulUurchlult(e) {
     const ankhanOgnoo = ognoo;
     setTurul(e.target.value);
-    if (e.target.value === "ashiglalt") {
+    if (e.target.value === "ashiglalt" || e.target.value === "torguuli") {
       setOgnoo(moment());
     } else {
       setOgnoo(ankhanOgnoo);
@@ -493,12 +511,41 @@ function GuilgeeKhiikh(
         >
           <Radio value={"voucher"}>{t("Ваучераар")}</Radio>
           <Radio value={"avlaga"}>{t("Авлага")}</Radio>
+          <Radio value={"torguuli"}>{t("Торгууль")}</Radio>
           <Radio value={"ashiglalt"}>{t("Ашиглалт")}</Radio>
           <Radio value={"busad"}>{t("Бусад")} </Radio>
         </Radio.Group>
       </div>
       <Divider />
       <label>{t(labelTurul(turul))}</label>
+      {turul === "torguuli" && (
+        <div className="flex w-full items-center justify-between gap-2">
+          <DatePicker
+            className="w-full"
+            id="dataPicker1"
+            locale={i18n.language === "mn" && locale}
+            value={ognoo}
+            onChange={(v) => {
+              setOgnoo(v);
+            }}
+          />  
+          <div className="flex w-full justify-end gap-1">
+            <Select
+              id="select"
+              className="w-full"
+              placeholder={t("Торгуулийн хувь")}
+              onChange={(v) => {
+                setTorguuliinKhuvi(v);
+              }}
+            >
+              <Option value="5">{t("5%")}</Option>
+              <Option value="10">{t("10%")}</Option>
+              <Option value="20">{t("20%")}</Option>
+              <Option value="50">{t("50%")}</Option>
+            </Select>
+          </div>
+        </div>    
+      )}
       {turul === "avlaga" && (
         <div className="flex w-full items-center justify-between gap-2">
           <DatePicker
@@ -1020,7 +1067,7 @@ function GuilgeeKhiikh(
           </div>
         </div>
       )}
-      {(turul === "avlaga" || turul === "busad") && (
+      {(turul === "avlaga" || turul === "busad" || turul === "torguuli") && (
         <Input.TextArea
           onKeyDown={focuser}
           id="textArea"
@@ -1041,7 +1088,7 @@ function GuilgeeKhiikh(
           </div>
         </div>
       )}
-      {(turul === "avlaga" || turul === "ashiglalt") && (
+      {(turul === "avlaga" || turul === "ashiglalt" || turul === "torguuli") && (
         <div className="flex flex-row justify-between">
           <div />
           <div className="space-x-2">
@@ -1053,7 +1100,7 @@ function GuilgeeKhiikh(
           </div>
         </div>
       )}
-      {turul === "ashiglalt" && (
+      {turul === "ashiglalt" || turul === "torguuli" && (
         <div className="flex flex-row justify-between">
           <div />
           <div className="space-x-2">

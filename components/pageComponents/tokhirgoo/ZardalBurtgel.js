@@ -56,7 +56,7 @@ function ZardalBurtgel(
         ugugdul["barilgiinId"] = barilgiinId;
         ugugdul["baiguullagiinId"] = baiguullagiinId;
         ugugdul["bodokhArga"] = (ugugdul.ner?.includes("Халуун ус") || ugugdul.ner?.includes("Хүйтэн ус") || ugugdul.ner?.includes("Цахилгаан")) ? "Khatuu" : undefined; 
-        ugugdul["ognoonuud"] = ognoonuud?.length > 0 ? [moment(ognoonuud[0]).startOf("month").format("YYYY-MM-DD 00:00:00"), moment(ognoonuud[1]).endOf("month").format("YYYY-MM-DD 23:59:59")] : [];
+        ugugdul["ognoonuud"] = ognoonuud?.length > 0 ? [moment(ognoonuud[0]).format("YYYY-MM-DD 00:00:00"), moment(ognoonuud[1]).format("YYYY-MM-DD 23:59:59")] : [];
         method("ashiglaltiinZardluud", token, { ...data, ...ugugdul }).then(
           ({ data }) => {
             if (data === "Amjilttai") {
@@ -262,7 +262,6 @@ function ZardalBurtgel(
           value={ognoonuud}
           allowClear={true}
           style={{ width: "100%" }}
-          picker="month"
           placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
           onChange={(v) => {
           setOgnoonuud(v);
