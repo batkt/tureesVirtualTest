@@ -42,6 +42,7 @@ import useDans from "hooks/useDans";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 import khatuuZagvar from "tools/zagvar/tur";
+import khatuuZagvarKaidu from "tools/zagvar/turKaidu"
 import khatuuZagvarUranGan from "tools/zagvar/turUranGan";
 import khatuuZagvarFoodCity from "tools/zagvar/turFoodCityTemp";
 import khatuuZagvarGotoMPM from "tools/zagvar/turGotoMPM";
@@ -215,12 +216,21 @@ function tulburTootsoo({ token }) {
                 barilga,
                 barilgiinId
               );
-            else
-              zagvar.nekhemjlekh = khatuuZagvar(
+            else if(ajiltan?.barilgiinId === "6544bf602143a024b43f16ab" || ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0")
+              // kaidu
+              zagvar.nekhemjlekh = khatuuZagvarKaidu(
                 medeelel,
                 ajiltan,
                 baiguullaga,
                 barilgiinId
+              );
+            else(
+                zagvar.nekhemjlekh = khatuuZagvar(
+                medeelel,
+                ajiltan,
+                baiguullaga,
+                barilgiinId
+              )
               );
           }
 
@@ -1241,9 +1251,13 @@ function tulburTootsoo({ token }) {
         ? ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" &&
           barilgiinId === "6659717af6cab41f3ec723b5"
           ? khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga)
+          : ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0" ||
+          barilgiinId === "6544bf602143a024b43f16ab"
+          ? khatuuZagvarKaidu(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
           : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
         : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
             ?.nekhemjlekh;
+
 
       nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
         nekhemjlekh.eneSardTulukhDun *
@@ -1679,7 +1693,14 @@ function tulburTootsoo({ token }) {
                 barilga,
                 barilgiinId
               )
-            : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
+            : (ajiltain?.baiguullagiinId === "64e855ce37fdc9b105f936e0" ||
+              barilgiinId === "6544bf602143a024b43f16ab"
+            ) 
+            ? khatuuZagvarKaidu(
+              nekhemjlekh, ajiltan, baiguullaga, barilgiinId
+            )
+            :
+            khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
           : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
               ?.nekhemjlekh;
 
@@ -2984,6 +3005,7 @@ function tulburTootsoo({ token }) {
                     onClick={hevlekh}
                   >
                     {t("Хэвлэх")}
+                    {/*  */}
                   </Button>
                 ) : (
                   ""
