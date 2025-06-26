@@ -60,7 +60,6 @@ function GuilgeeKhiikh(
   const [ashiglaltiinNer, setAshiglaltiinNer] = React.useState(null);
 
   const [busadTurul, setBusadTurul] = useState();
-  const [torguuliinKhuvi, setTorguuliinKhuvi] = useState();
   const [zardliinTurul, setZardliinTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
     useState(false);
@@ -236,9 +235,7 @@ function GuilgeeKhiikh(
             break;
           case "torguuli":  
             guilgee = {
-              zardliinNer: torguuliinKhuvi + "% торгууль",
               nuatBodokhEsekh,
-              torguuliinKhuvi,
               gereeniiId: data?._id,
               turul: turul,
               tulsunDun: 0,
@@ -393,7 +390,6 @@ function GuilgeeKhiikh(
       ashiglaltiinNer,
       niitDunGaz,
       togtmolGaz,
-      torguuliinKhuvi,
     ]
   );
   function labelTurul(guilgeeTurul) {
@@ -521,7 +517,6 @@ function GuilgeeKhiikh(
       {turul === "torguuli" && (
         <div className="flex w-full items-center justify-between gap-2">
           <DatePicker
-            className="w-full"
             id="dataPicker1"
             locale={i18n.language === "mn" && locale}
             value={ognoo}
@@ -529,21 +524,6 @@ function GuilgeeKhiikh(
               setOgnoo(v);
             }}
           />  
-          <div className="flex w-full justify-end gap-1">
-            <Select
-              id="select"
-              className="w-full"
-              placeholder={t("Торгуулийн хувь")}
-              onChange={(v) => {
-                setTorguuliinKhuvi(v);
-              }}
-            >
-              <Option value="5">{t("5%")}</Option>
-              <Option value="10">{t("10%")}</Option>
-              <Option value="20">{t("20%")}</Option>
-              <Option value="50">{t("50%")}</Option>
-            </Select>
-          </div>
         </div>    
       )}
       {turul === "avlaga" && (
