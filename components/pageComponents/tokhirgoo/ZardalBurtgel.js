@@ -262,7 +262,7 @@ function ZardalBurtgel(
           value={ognoonuud}
           allowClear={true}
           style={{ width: "100%" }}
-          placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
+          placeholder={[t("Эхлэх өдөр"), t("Дуусах өдөр")]}
           onChange={(v) => {
           setOgnoonuud(v);
           }}
