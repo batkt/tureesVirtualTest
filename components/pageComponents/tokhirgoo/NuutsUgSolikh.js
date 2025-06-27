@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Button, Input, message } from "antd";
+import { Button, Input, message, notification } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useTranslation } from "react-i18next";
+import uilchilgee, {aldaaBarigch} from "services/uilchilgee";
 
 function NuutsUgSolikh({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
   const [state, setstate] = useState(ajiltan);
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   function onChange({ target }) {
     setstate((s) => ({ ...s, [target.name]: target.value }));
@@ -18,19 +19,31 @@ function NuutsUgSolikh({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
       shineNuutsUgDavtan,
       ...ajiltanObject
     } = state;
-    if (
-      odoogiinNuutsUg === ajiltanObject.nuutsUg &&
-      !!shineNuutsUg &&
-      shineNuutsUg === shineNuutsUgDavtan
-    ) {
-      ajiltanObject.nuutsUg = shineNuutsUg;
+
+    if (!shineNuutsUg || shineNuutsUg !== shineNuutsUgDavtan) {
+      message.warning(t("Шинэ нууц үгүүд таарахгүй байна"));
+      return;
+    }
+      
+      uilchilgee(token).post("/nuutsUgShalgakhAjiltan", {
+        id: ajiltanObject._id,
+        nuutsUg: odoogiinNuutsUg,
+        
+      }).then(({data}) =>{
+
+        if(data.success === true){
+          setstate(odoogiinNuutsUg);
+          ajiltanObject.nuutsUg = shineNuutsUg;
       updateMethod("ajiltan", token, ajiltanObject).then(({ data, status }) => {
         if (status === 200 && "Amjilttai" === data) {
           message.success(t("Амжилттай засагдлаа"));
           ajiltanMutate({ ...ajiltanObject });
         }
       });
-    } else message.warning(t("Мэдээлэл буруу оруулсан байна"));
+        }else{
+          message.warning(t(data.message));
+        }
+      }).catch((e) => aldaaBarigch(e))
   }
 
   return (
@@ -70,13 +83,13 @@ function NuutsUgSolikh({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
             />
           </div>
           <div className="flex w-full justify-end">
-          <Button
-            type="primary"
-            className="btn btn-primary mt-4"
-            onClick={khadgalakh}
-          >
-            {t("Нууц үг солих")}
-          </Button>
+            <Button
+              type="primary"
+              className="btn btn-primary mt-4"
+              onClick={khadgalakh}
+            >
+              {t("Нууц үг солих")}
+            </Button>
           </div>
         </div>
       </div>
