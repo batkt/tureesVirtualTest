@@ -108,7 +108,7 @@ function ZassanMedegdelKharakh(
                 <div> {data.ajiltniiNer} </div>
               </div>
               <div className="flex gap-2">
-                <div className="font-bold"> {t("Зассан онгоо")}:</div>
+                <div className="font-bold"> {t("Зассан огноо")}:</div>
                 <div> {moment(data.createdAt).format("YYYY-MM-DD HH:mm")} </div>
               </div>
             </div>
