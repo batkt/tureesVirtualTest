@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 const { RangePicker } = DatePicker;
 const order = { createdAt: -1 };
 
-const searchKeys = ["className", "ajiltniiNer"];
+const searchKeys = ["className", "ajiltniiNer", "classDugaar"];
 const turluud = [
   {
     turul: "Geree",
@@ -29,6 +29,7 @@ const turluud = [
     text: "Талбай бүртгэл",
   },
 ];
+
 
 function ZassanTuukh() {
   const { t } = useTranslation();
@@ -122,7 +123,7 @@ function ZassanTuukh() {
         sorter: () => 0,
       },
       {
-        title: t("Зассан онгоо"),
+        title: t("Зассан огноо"),
         dataIndex: "createdAt",
         align: "center",
         ellipsis: true,
