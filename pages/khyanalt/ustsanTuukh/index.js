@@ -14,11 +14,11 @@ import { modal } from "components/ant/Modal";
 import DelgerenguiKharakh from "components/pageComponents/ustsanTuukh/MedegdelKharakh";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
-
+import BaganiinSongolt from "components/table/BaganiinSongolt";
 const { RangePicker } = DatePicker;
 const order = { createdAt: -1 };
 
-const searchKeys = ["ajiltniiNer"];
+const searchKeys = ["ajiltniiNer", "tailbar", "object.gereeniiDugaar"];
 const turluud = [
   {
     turul: "gereeniiZagvar",
@@ -109,6 +109,7 @@ function UstsanTuukh() {
   const [ajiltankhaikh, setAjiltankhaikh] = useState();
   const [turul, setTurul] = useState();
   const ref = React.useRef();
+  const [shineBagana, setShineBagana] = useState([]);
   const [shuukhOgnoo, setShuukhOgnoo] = useState([
     moment().subtract(1, "months"),
     moment(),
@@ -118,15 +119,25 @@ function UstsanTuukh() {
       baiguullagiinId: barilgiinId,
       ajiltniiId: ajiltankhaikh,
       "object.turul": turul,
-      createdAt: shuukhOgnoo
+      createdAt:shuukhOgnoo
         ? {
             $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
             $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
           }
         : undefined,
+      
     };
-  }, [ajiltankhaikh, shuukhOgnoo, turul, barilgiinId]);
+  }, [ajiltankhaikh, shuukhOgnoo, turul, barilgiinId, searchKeys]);
 
+  const ustsanBarimt = useJagsaalt(
+    "/ustsanBarimt",
+    query,
+    order,
+    undefined,
+    searchKeys
+  );
+
+  
   const { turulColumns } = React.useMemo(() => {
     let turulColumns = [];
     switch (turul) {
@@ -519,13 +530,6 @@ function UstsanTuukh() {
     return { turulColumns };
   }, [turul]);
 
-  const ustsanBarimt = useJagsaalt(
-    "/ustsanBarimt",
-    query,
-    order,
-    undefined,
-    searchKeys
-  );
   const ajiltan = useJagsaalt("/ajiltan");
 
   function medeelelKharakh(mur) {
@@ -538,32 +542,27 @@ function UstsanTuukh() {
       content: <DelgerenguiKharakh ref={ref} data={mur} />,
       width: "22vw",
       footer,
+       onCancel: () => {
+      ref.current.khaaya();
+    }
     });
   }
 
   const columns = useMemo(() => {
     return [
       {
-        title: t("Огноо"),
+        title: t("Устгасан огноо"),
+        dataIndex: "createdAt",
         align: "center",
         ellipsis: true,
         width: "3rem",
         showSorterTooltip: false,
-        render: (tailbar) => {
-          return (
-            <>
-              <div>
-                {moment(
-                  tailbar?.object?.createdAt ||
-                    tailbar?.object?.guilgeeKhiisenOgnoo ||
-                    tailbar?.object?.ognoo
-                ).format("YYYY-MM-DD")}
-              </div>
-            </>
-          );
+        sorter: () => 0,
+        render: (data) => {
+          return moment(data).format("YYYY-MM-DD HH:mm");
         },
       },
-
+      ...shineBagana,
       {
         title: t("Төрөл"),
         dataIndex: "class",
@@ -666,7 +665,26 @@ function UstsanTuukh() {
           );
         },
       },
-
+{
+        title: t("Огноо"),
+        align: "center",
+        ellipsis: true,
+        width: "3rem",
+        showSorterTooltip: false,
+        render: (tailbar) => {
+          return (
+            <>
+              <div>
+                {moment(
+                  tailbar?.object?.createdAt ||
+                    tailbar?.object?.guilgeeKhiisenOgnoo ||
+                    tailbar?.object?.ognoo
+                ).format("YYYY-MM-DD")}
+              </div>
+            </>
+          );
+        },
+      },
       {
         title: t("Устгасан"),
         dataIndex: "ajiltniiNer",
@@ -675,18 +693,6 @@ function UstsanTuukh() {
         width: "3rem",
         showSorterTooltip: false,
         sorter: () => 0,
-      },
-      {
-        title: t("Устгасан онгоо"),
-        dataIndex: "createdAt",
-        align: "center",
-        ellipsis: true,
-        width: "3rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        render: (data) => {
-          return moment(data).format("YYYY-MM-DD HH:mm");
-        },
       },
       {
         title: t("Тайлбар"),
@@ -718,7 +724,7 @@ function UstsanTuukh() {
       },
     ];
   });
-
+  console.log(shineBagana);
   function ognooShuultOnChange(e) {
     if (e === null) {
       setShuukhOgnoo(undefined);
@@ -755,6 +761,7 @@ function UstsanTuukh() {
             value={shuukhOgnoo}
             onChange={ognooShuultOnChange}
           />
+          
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
@@ -789,6 +796,56 @@ function UstsanTuukh() {
               ))}
             </Select>
           </div>
+          <div className="hidden justify-end ml-auto md:flex">
+              <BaganiinSongolt
+                shineBagana={shineBagana}
+                setShineBagana={setShineBagana}
+                columns={[
+                  {
+                    title: t("Гэрээний дугаар"),
+                    width: "4rem",
+                    dataIndex: ["object" , "gereeniiDugaar"],
+                    summary: true,
+                    align: "center",  
+                    render: (a) => {
+                      return (
+                        <div className="w-full text-center">
+                          {a}
+                        </div>
+                      );
+                    },
+                  },
+                  {
+                    title: t("Талбай"),
+                    width: "8rem",
+                    dataIndex: ["object", "kod"],
+                    summary: true,
+                    align: "center",
+                    render: (a) => {
+                      return (
+                        <div className="w-full text-right">
+                          {a}
+                        </div>
+                      );
+                    },
+                  },
+                  {
+                    title: t("Харилцагч"),
+                    width: "8rem",
+                    dataIndex: ["object", "ner"],
+                    summary: true,
+                    align: "center",
+                    render: (a) => {
+                      return (
+                        <div className="w-full text-right">
+                        {a}
+                        </div>
+                      );
+                    },
+                  },
+                ]}
+              />
+            </div>
         </div>
         <Table
           data-aos="fade-up"

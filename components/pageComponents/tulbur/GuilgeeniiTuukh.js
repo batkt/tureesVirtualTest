@@ -92,6 +92,7 @@ function GuilgeeniiTuukh(
     guilgeeniiId,
     tulsunDun,
     tulukhDun,
+    gereeniiDugaar,
     _id,
     turul,
     khyamdral,
@@ -100,6 +101,7 @@ function GuilgeeniiTuukh(
       axios(token)
         .post("/baritsaaniiGuilgeeUstgaya", {
           gereeniiId: data?._id,
+          gereeniiDugaar: data?.gereeniiDugaar,
           objectiinId: _id,
           zarlaga: tulsunDun || 0,
           orlogo: tulukhDun || 0,
@@ -134,6 +136,7 @@ function GuilgeeniiTuukh(
                   turul,
                   guilgeeniiId,
                   gereeniiId: data?._id,
+                  gereeniiDugaar: data?.gereeniiDugaar,
                   tulsunDun,
                   tulukhDun,
                   khyamdral,

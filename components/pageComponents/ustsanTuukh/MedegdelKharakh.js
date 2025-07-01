@@ -40,30 +40,50 @@ function MedegdelKharakh({ data, destroy }, ref) {
   return (
     <>
       <div className="dark:text-gray-400">
-        <div>
-          {!!data.object.ner ? (
-            <div className="flex w-full justify-between ">
-              <div> {t("Нэр")}:</div>
-              <div> {data.object.ner} </div>
-            </div>
-          ) : (
-            <div className="flex justify-between">
-              <div> {t("Тайлбар")}:</div>
-              <div> {data.object.tailbar}</div>{" "}
-            </div>
-          )}
-        </div>
-
+        {data.class === "gereeniiGuilgee" && (
         <div className="flex justify-between">
           <div>{t("Хийсэн ажилтан")}: </div>
-          <div>{data.object.guilgeeKhiisenAjiltniiNer || data.ajiltniiNer}</div>
+          <div>{data.object.guilgeeKhiisenAjiltniiNer}</div>
         </div>
+        )}
+        {data.class === "gereeniiGuilgee" && (
+        <div className="flex justify-between">
+          <div>{t("Гэрээний дугаар")}: </div>
+          <div>{data.object.gereeniiDugaar}</div>
+        </div>
+        )}
 
+        {data.class === "Khariltsagch" && (
+        <div className="flex justify-between">
+          <div>{t("Харилцагч")}: </div>
+          <div>{data.object.ner}</div>
+        </div>
+        )}
+        {data.class === "Talbai" && (
+        <div className="flex justify-between">
+          <div>{t("Талбай")}: </div>
+          <div>{data.object.kod}</div>
+        </div>
+        )}
+        {data.class === "gereeniiGuilgee" && (
+        <div className="flex justify-between">
+          <div>{t("Гүйлгээний огноо")}: </div>
+          <div>{moment(data.object.guilgeeKhiisenOgnoo).format("YYYY-MM-DD")}</div>
+        </div>
+        )}
+        <div className="flex justify-between">
+          <div>{t("Устгасан ажилтан")}: </div>
+          <div>{data.ajiltniiNer}</div>
+        </div>
+        <div className="flex justify-between">
+          <div>{t("Устгасан огноо")}: </div>
+          <div>{moment(data.object.updatedAt).format("YYYY-MM-DD")}</div>
+        </div>
         <div className="flex justify-between">
           <div>{t("Хийсэн огноо")}:</div>
           <div>
             {moment(
-              data.object.guilgeeKhiisenOgnoo || data.object.createdAt
+              data.object.createdAt 
             ).format("YYYY-MM-DD")}
           </div>
         </div>
