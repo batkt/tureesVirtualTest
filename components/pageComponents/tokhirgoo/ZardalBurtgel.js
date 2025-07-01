@@ -19,7 +19,7 @@ function ZardalBurtgel(
   const [hideKhaluunus,setHideKhaluunus] = useState(true)
   const [hideKhuitenus,setHideKhuitenus] = useState(true)
   const [hideTogtmol, setHideTogtmol] = useState(true)
-  const [ognoonuud, setOgnoonuud] = useState(data.ognoonuud?.length > 0 ? [moment(data.ognoonuud[0]), moment(data.ognoonuud[1])] : []);
+  const [ognoonuud, setOgnoonuud] = useState(data?.ognoonuud?.length > 0 ? [moment(data?.ognoonuud[0]), moment(data?.ognoonuud[1])] : []);
 
   function garya() {
     const values = form.getFieldsValue()
@@ -133,7 +133,7 @@ function ZardalBurtgel(
   }
 
   function disabledDate(current) {
-    return current && current < moment().startOf('month');
+    return current && current < moment((new Date()).getFullYear() + "-04-01").startOf('month');
   }
 
   return (
