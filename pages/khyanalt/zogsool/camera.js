@@ -27,7 +27,6 @@ import {
   WalletOutlined,
   SettingOutlined,
   ExclamationCircleOutlined,
-  CloseCircleOutlined,
   DollarCircleOutlined,
   DownloadOutlined,
   FileExcelOutlined,
@@ -746,6 +745,7 @@ function camera({ token }) {
   );
 
   function onRefresh() {
+    setModalNeelttei(false);
     uilchluulegchMutate();
     toololtMutate();
     zogsoolTusBuriinTooMutate();
@@ -762,20 +762,7 @@ function camera({ token }) {
   };
   function tulburTulyu(data, uilchluugchiinId, mashiniiDugaar, niitDun, index) {
     modal({
-      title: (
-        <div className="flex w-full flex-row justify-between dark:text-gray-200">
-          <div>{t("Тооцоо хийх")}</div>
-          <div className="flex items-center">
-            {mashiniiDugaar}
-            <div
-              className="ml-5 text-xl hover:text-red-400"
-              onClick={() => tulburRef.current.khaaya()}
-            >
-              <CloseCircleOutlined />
-            </div>
-          </div>
-        </div>
-      ),
+      title: false,
       style: { top: 25 },
       content: (
         <ShineTulbur
@@ -797,8 +784,10 @@ function camera({ token }) {
           ajiltan={ajiltan}
           uilchluugchiinId={uilchluugchiinId}
           onRefresh={onRefresh}
+          modalNeelttei={modalNeelttei}
           setModalNeelttei={setModalNeelttei}
           songogdsonZogsool={songogdzonZogsool}
+          mashiniiDugaar={mashiniiDugaar}
         />
       ),
       footer: false,
