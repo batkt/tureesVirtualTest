@@ -32,7 +32,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <span style="font-weight: bold; font-size: 12px;">${
             barilgiinId === "6735c77a7fc60cd66deb290a"
               ? "Мастер Түншлэл ХХК"
-              : baiguullaga.ner
+              : baiguullaga?.ner
           }</span>
         </div>
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
