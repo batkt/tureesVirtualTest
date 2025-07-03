@@ -58,6 +58,7 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy, tulukhUldegdel, ashig
     axios(token)
       .post("/baritsaaniiGuilgeeUstgaya", {
         gereeniiId: data?._id,
+        gereeniiDugaar: data?.gereeniiDugaar,
         objectiinId: _id,
         zarlaga: zarlaga || 0,
         orlogo: orlogo || 0,
