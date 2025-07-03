@@ -268,6 +268,9 @@ function camera({ token }) {
   const [form] = Form.useForm();
   const searchUtga = useRef(null);
 
+  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered2, setIsHovered2] = useState(false);
+
   const que = useMemo(() => {
     return {
       baiguullagiinId: baiguullaga?._id,
@@ -302,7 +305,8 @@ function camera({ token }) {
     uilchilgee(token)
       .post("/zurchilteiMashinMsgilgeekh", yavuulakhData)
       .then((res) => {
-        if (res.status === 200) notification.success({ message: t("Амжилттай илгээгдлээ") });
+        if (res.status === 200)
+          notification.success({ message: t("Амжилттай илгээгдлээ") });
       })
       .catch(aldaaBarigch);
   };
@@ -342,7 +346,11 @@ function camera({ token }) {
   const query = useMemo(() => {
     let result = {};
     if (!!camerVal[1]) {
-      if (!!khaikh && !khaikh?.includes("\\") && !khaikh?.includes("[" && !khaikh?.includes("]"))) {
+      if (
+        !!khaikh &&
+        !khaikh?.includes("\\") &&
+        !khaikh?.includes("[" && !khaikh?.includes("]"))
+      ) {
         // use uilchilgee search hiih regex querynd daragdsan uhchir queryn dotor search regex bijiw
         result = {
           $and: [
@@ -407,7 +415,11 @@ function camera({ token }) {
           },
         ],
       };
-    if (!!khaikh && !khaikh?.includes("\\") && !khaikh?.includes("[" && !khaikh?.includes("]"))) {
+    if (
+      !!khaikh &&
+      !khaikh?.includes("\\") &&
+      !khaikh?.includes("[" && !khaikh?.includes("]"))
+    ) {
       // use uilchilgee search hiih regex querynd daragdsan uhchir queryn dotor search regex bijiw
       result = {
         $and: [
@@ -487,24 +499,31 @@ function camera({ token }) {
   } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
 
   useEffect(() => {
-    if(baiguullaga?.tokhirgoo?.gadaaStickerAshiglakhEsekh) // gadaa sticker ashiglakh esekh
-    {
+    if (baiguullaga?.tokhirgoo?.gadaaStickerAshiglakhEsekh) {
+      // gadaa sticker ashiglakh esekh
       socket().on(`qpayMobileSdk${baiguullaga?._id}`, (res) => {
-        let dataObject = res
-        if(dataObject && dataObject?.khaalgaTurul === "Гарах" && !!dataObject?.mashiniiDugaar)
-        {
+        let dataObject = res;
+        if (
+          dataObject &&
+          dataObject?.khaalgaTurul === "Гарах" &&
+          !!dataObject?.mashiniiDugaar
+        ) {
           khaalgaNeey(res.cameraIP);
           onRefresh();
         }
       });
       return () => {
         socket().off(`qpayMobileSdk${baiguullaga?._id}`);
-      }
+      };
     }
   }, [baiguullaga]);
 
   useEffect(() => {
-    if(!modalOpen?.bool && modalOpen?.type ===  "unegui" && value === "F9 Үнэгүй")
+    if (
+      !modalOpen?.bool &&
+      modalOpen?.type === "unegui" &&
+      value === "F9 Үнэгүй"
+    )
       khadgalakh();
   }, [modalOpen, value]);
 
@@ -529,17 +548,13 @@ function camera({ token }) {
           if (!!yanzalsanMashiniiDugaar)
             zogsoolUilchilgee()
               .get(url)
-              .then((res) => {
-                
-              })
-              .catch((err) => {
-              });
-          if(!uilchluulegch?.oruulakhguiEsekh)   
-          {
+              .then((res) => {})
+              .catch((err) => {});
+          if (!uilchluulegch?.oruulakhguiEsekh) {
             khaalgaNeey(uilchluulegch?.cameraIP);
             onRefresh();
           }
-          if(baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
+          if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
             zurchilteiMashinMsgilgeekh(yanzalsanMashiniiDugaar);
         } else {
           const garsanKhaalga = uilchluulegch?.tuukh?.[0]?.garsanKhaalga;
@@ -597,8 +612,7 @@ function camera({ token }) {
                 if (res) {
                 }
               })
-              .catch((err) => {
-              });
+              .catch((err) => {});
 
           onRefresh();
         }
@@ -644,7 +658,6 @@ function camera({ token }) {
       });
   }, [uilchluulegchGaralt, modalNeelttei]);
 
-
   useKeyboardTovchlol("F4", f5Darsan);
   useKeyboardTovchlol("F1", f3Darsan);
   useKeyboardTovchlol("F2", f4Darsan);
@@ -689,8 +702,8 @@ function camera({ token }) {
     const data = uilchluulegchGaralt?.jagsaalt?.[0];
     if (!data) {
       return notification.error({
-      message: "Мэдээлэл алга",
-      duration: 1,
+        message: "Мэдээлэл алга",
+        duration: 1,
       });
     }
     setValue("F9 Үнэгүй");
@@ -723,7 +736,9 @@ function camera({ token }) {
 
   const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } =
     useUilchluulegchZogsoolToo(token, tooQue);
-  const dugaar = !!songogdzonZogsool?.zogsooliinDans ? songogdzonZogsool?.zogsooliinDans : "";
+  const dugaar = !!songogdzonZogsool?.zogsooliinDans
+    ? songogdzonZogsool?.zogsooliinDans
+    : "";
   const dasniiMedeelel = {
     baiguullagiinId: baiguullaga?._id,
     dugaar,
@@ -1323,7 +1338,7 @@ function camera({ token }) {
                 )}
               >
                 <Button
-                type="tertiary"
+                  type="tertiary"
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -1332,7 +1347,7 @@ function camera({ token }) {
                   }}
                   size="small"
                 >
-                  <div className="flex items-center  justify-center space-x-2 text-white">
+                  <div className="flex items-center justify-center space-x-2 text-white">
                     <div className="flex items-center justify-center">
                       <DollarCircleOutlined />
                     </div>
@@ -1347,20 +1362,19 @@ function camera({ token }) {
                 trigger="click"
                 content={
                   <div className="flex flex-col items-center justify-center gap-2">
-                    {(ajiltan?.tokhirgoo?.zogsooliinKhungulultEsekh ===
-                      true ||
+                    {(ajiltan?.tokhirgoo?.zogsooliinKhungulultEsekh === true ||
                       ajiltan?.erkh === "Admin") && (
-                        <div
-                          onClick={() => khungulyu(parent, parent?._id)}
-                          className="flex w-28 cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
-                        >
-                          <div className="flex items-center justify-center">
-                            <CiDiscount1 />
-                          </div>
-                          <div className="flex items-center justify-center">
-                            Хөнгөлөх
-                          </div>
+                      <div
+                        onClick={() => khungulyu(parent, parent?._id)}
+                        className="flex w-28 cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
+                      >
+                        <div className="flex items-center justify-center">
+                          <CiDiscount1 />
                         </div>
+                        <div className="flex items-center justify-center">
+                          Хөнгөлөх
+                        </div>
+                      </div>
                     )}
                     <div
                       onClick={() => {
@@ -1507,23 +1521,23 @@ function camera({ token }) {
         width: "2rem",
         align: "center",
         render: (data) => {
-          return (<div className="flex justify-center">
-            <Popover
-              content={() =>
-                data?.tuukh?.map((mur) => (
-                  <div className="dark:text-gray-200">
-                    {mur.orsonKhaalga}
-                  </div>
-                ))
-              }
-              placement="bottom"
-              trigger="click"
-            >
-              <Button
-                icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
-              ></Button>
-            </Popover>
-          </div>)
+          return (
+            <div className="flex justify-center">
+              <Popover
+                content={() =>
+                  data?.tuukh?.map((mur) => (
+                    <div className="dark:text-gray-200">{mur.orsonKhaalga}</div>
+                  ))
+                }
+                placement="bottom"
+                trigger="click"
+              >
+                <Button
+                  icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
+                ></Button>
+              </Popover>
+            </div>
+          );
         },
       },
       {
@@ -1531,23 +1545,25 @@ function camera({ token }) {
         width: "2rem",
         align: "center",
         render: (data) => {
-          return (<div className="flex justify-center">
-            <Popover
-              content={() =>
-                data?.tuukh?.map((mur) => (
-                  <div className="dark:text-gray-200">
-                    {mur.garsanKhaalga}
-                  </div>
-                ))
-              }
-              placement="bottom"
-              trigger="click"
-            >
-              <Button
-                icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
-              ></Button>
-            </Popover>
-          </div>)
+          return (
+            <div className="flex justify-center">
+              <Popover
+                content={() =>
+                  data?.tuukh?.map((mur) => (
+                    <div className="dark:text-gray-200">
+                      {mur.garsanKhaalga}
+                    </div>
+                  ))
+                }
+                placement="bottom"
+                trigger="click"
+              >
+                <Button
+                  icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
+                ></Button>
+              </Popover>
+            </div>
+          );
         },
       },
     ];
@@ -1650,8 +1666,7 @@ function camera({ token }) {
       .then(({ data }) => {
         if (!!data) {
           let body = modalOpen.item;
-          if(!!body && body.tuukh?.length > 0)
-          {
+          if (!!body && body.tuukh?.length > 0) {
             body.tuukh[0].burtgesenAjiltaniiId = ajiltan?._id;
             body.tuukh[0].burtgesenAjiltaniiNer = ajiltan?.ner;
           }
@@ -1773,15 +1788,20 @@ function camera({ token }) {
     return aa;
   };
   const khaalgaNeey = (ip) => {
-    const filterData = zogsoolTusBuriinToo?.filter((mur) => mur?._id?.zogsool === songogdzonZogsoolOrokh?._id);
-    var sulToo = (songogdzonZogsoolOrokh?.too || 0) - (filterData?.length > 0 ? filterData[0].too : 0);
-    if(ip === camerVal[0] && songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh && (sulToo === 0 || sulToo <= -1))
-    {
+    const filterData = zogsoolTusBuriinToo?.filter(
+      (mur) => mur?._id?.zogsool === songogdzonZogsoolOrokh?._id
+    );
+    var sulToo =
+      (songogdzonZogsoolOrokh?.too || 0) -
+      (filterData?.length > 0 ? filterData[0].too : 0);
+    if (
+      ip === camerVal[0] &&
+      songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh &&
+      (sulToo === 0 || sulToo <= -1)
+    ) {
       message.warn("Зогсоол дүүрсэн байна");
       return;
-    } 
-    else
-    {
+    } else {
       // if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
       //   let data =
       //     '<?xml version="1.0" encoding="UTF-8"?><BarrierGate><ctrlMode>open</ctrlMode></BarrierGate>';
@@ -1808,12 +1828,10 @@ function camera({ token }) {
       //     .catch((error) => {
       //     });
       // } else
-          zogsoolUilchilgee()
-          .get("/neeye/" + ip + "")
-          .then(function (response) {
-          })
-          .catch(function (error) {
-          });
+      zogsoolUilchilgee()
+        .get("/neeye/" + ip + "")
+        .then(function (response) {})
+        .catch(function (error) {});
     }
   };
 
@@ -1825,8 +1843,7 @@ function camera({ token }) {
 
   const dugaarBurtgekh = () => {
     const body = form.getFieldsValue();
-    if(!!barilgiinId)
-      body["barilgiinId"] = barilgiinId;
+    if (!!barilgiinId) body["barilgiinId"] = barilgiinId;
     uilchilgee(token)
       .post("/zogsoolSdkService", body)
       .then((res) => {
@@ -1843,7 +1860,7 @@ function camera({ token }) {
             }));
             setKhaikh("");
           }
-          if(baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
+          if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
             zurchilteiMashinMsgilgeekh(body?.mashiniiDugaar);
           form.resetFields();
           onRefresh();
@@ -2108,7 +2125,9 @@ function camera({ token }) {
                       PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
                     />
                   )
-                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" && (camerVal[0] === "192.168.1.128" || camerVal[0] === "192.168.1.232") ? (
+                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" &&
+                  (camerVal[0] === "192.168.1.128" ||
+                    camerVal[0] === "192.168.1.232") ? (
                   <R2WPlayerComponent
                     USER={"admin"}
                     ROOT={"live"}
@@ -2147,7 +2166,8 @@ function camera({ token }) {
                       PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
                     />
                   )
-                ) : baiguullaga?._id === "671f0d5d53b82cbedf0f81a3" && barilgiinId === "671f0d5d53b82cbedf0f81a4" ? (
+                ) : baiguullaga?._id === "671f0d5d53b82cbedf0f81a3" &&
+                  barilgiinId === "671f0d5d53b82cbedf0f81a4" ? (
                   camerVal[0] === "192.168.1.155" ||
                   camerVal[0] === "192.168.1.156" ||
                   camerVal[0] === "192.168.1.157" ||
@@ -2158,7 +2178,11 @@ function camera({ token }) {
                     <R2WPlayerComponent
                       USER={"admin"}
                       ROOT={"live"}
-                      PASSWD={camerVal[0] === "192.168.1.206" ? "Admin123@" : "admin123"}
+                      PASSWD={
+                        camerVal[0] === "192.168.1.206"
+                          ? "Admin123@"
+                          : "admin123"
+                      }
                       Camer={camerVal[0]}
                       PORT={554}
                     />
@@ -2171,15 +2195,16 @@ function camera({ token }) {
                       PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
                     />
                   )
-                ) : baiguullaga?._id === "6646fab6ae3f7ecc2ea5ecd9" && barilgiinId === "6646fab6ae3f7ecc2ea5ecda" 
-                        && camerVal[0] === "192.168.1.108" ? (
-                    <R2WPlayerComponent
-                      USER={"admin"}
-                      ROOT={"live"}
-                      PASSWD={"Admin123"}
-                      Camer={camerVal[0]}
-                      PORT={554}
-                    /> 
+                ) : baiguullaga?._id === "6646fab6ae3f7ecc2ea5ecd9" &&
+                  barilgiinId === "6646fab6ae3f7ecc2ea5ecda" &&
+                  camerVal[0] === "192.168.1.108" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    ROOT={"live"}
+                    PASSWD={"Admin123"}
+                    Camer={camerVal[0]}
+                    PORT={554}
+                  />
                 ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
                     <SocketStream
@@ -2219,16 +2244,29 @@ function camera({ token }) {
                 }`}
               >
                 <div className="flex gap-3">
-                  <Button
-                    onClick={(e) => {
-                      khaalgaNeey(camerVal[0]);
-                    }}
-                    className="w-full sm:w-auto"
-                    type="primary"
-                    id="neekhKhaalgaID"
-                  >
-                    {t("Нээх")} [ {t("Орох")} F1 ]
-                  </Button>
+                  <div className="relative inline-block">
+                    <Button
+                      onClick={(e) => {
+                        khaalgaNeey(camerVal[0]);
+                      }}
+                      className="w-full sm:w-auto"
+                      type="primary"
+                      id="neekhKhaalgaID"
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
+                    >
+                      {t("Нээх")} [ {t("Орох")} F1 ]
+                    </Button>
+
+                    <div
+                      className={`pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 transform whitespace-nowrap rounded-md bg-zinc-700 px-3 py-2 text-sm text-white shadow-md transition-opacity duration-200 ease-in-out ${
+                        isHovered ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      Орох хаалт нээх
+                      <div className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-x-transparent border-t-zinc-700"></div>
+                    </div>
+                  </div>
                 </div>
                 <TreeSelect
                   placement={cameraKharakh === 1 ? "topRight" : "bottomLeft"}
@@ -2291,7 +2329,9 @@ function camera({ token }) {
                       USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
                     />
                   )
-                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" && (camerVal[1] === "192.168.1.229" || camerVal[1] === "192.168.1.231") ? (
+                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" &&
+                  (camerVal[1] === "192.168.1.229" ||
+                    camerVal[1] === "192.168.1.231") ? (
                   <R2WPlayerComponent
                     USER={"admin"}
                     ROOT={"live"}
@@ -2312,33 +2352,35 @@ function camera({ token }) {
                     ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
                     USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
                   />
-                ) : baiguullaga?._id === "6698c657c26994f4e0f8de62" && barilgiinId === "67285bb9e212a8d0cb42495f" 
-                        && camerVal[1] === "192.168.8.108" ? (
-                    <R2WPlayerComponent
-                      USER={"admin"}
-                      ROOT={"live"}
-                      PASSWD={"Admin123"}
-                      Camer={camerVal[1]}
-                      PORT={554}
-                    /> 
-                ) : baiguullaga?._id === "669e28beb13f35e669e773a6" && camerVal[1] === "192.168.0.110" ? (
-                    <R2WPlayerComponent
-                      USER={"admin"}
-                      ROOT={"live"}
-                      PASSWD={"Admin123"}
-                      Camer={camerVal[1]}
-                      PORT={554}
-                    /> 
-                ) : baiguullaga?._id === "66d90703344b0b96a65ef1a4" && camerVal[1] === "192.168.4.108" ? (
-                    <R2WPlayerComponent
-                      USER={"admin"}
-                      ROOT={"live"}
-                      PASSWD={"Admin123"}
-                      Camer={camerVal[1]}
-                      PORT={554}
-                    /> 
-                )
-                : parkingJagsaalt?.[0]?.tokhirgoo ? (
+                ) : baiguullaga?._id === "6698c657c26994f4e0f8de62" &&
+                  barilgiinId === "67285bb9e212a8d0cb42495f" &&
+                  camerVal[1] === "192.168.8.108" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    ROOT={"live"}
+                    PASSWD={"Admin123"}
+                    Camer={camerVal[1]}
+                    PORT={554}
+                  />
+                ) : baiguullaga?._id === "669e28beb13f35e669e773a6" &&
+                  camerVal[1] === "192.168.0.110" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    ROOT={"live"}
+                    PASSWD={"Admin123"}
+                    Camer={camerVal[1]}
+                    PORT={554}
+                  />
+                ) : baiguullaga?._id === "66d90703344b0b96a65ef1a4" &&
+                  camerVal[1] === "192.168.4.108" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    ROOT={"live"}
+                    PASSWD={"Admin123"}
+                    Camer={camerVal[1]}
+                    PORT={554}
+                  />
+                ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
                     <SocketStream
                       ip={camerVal[1]}
@@ -2377,16 +2419,29 @@ function camera({ token }) {
                 }`}
               >
                 <div className="flex gap-3">
-                  <Button
-                    onClick={(e) => {
-                      khaalgaNeey(camerVal[1]);
-                    }}
-                    id="khaakhkhaalgaID"
-                    className="w-full sm:w-auto"
-                    type="primary"
-                  >
-                    {t("Нээх")} [ {t("Гарах1")} F2 ]
-                  </Button>
+                  <div className="relative inline-block">
+                    <Button
+                      onClick={(e) => {
+                        khaalgaNeey(camerVal[1]);
+                      }}
+                      id="khaakhkhaalgaID"
+                      className="w-full sm:w-auto"
+                      type="primary"
+                      onMouseEnter={() => setIsHovered2(true)}
+                      onMouseLeave={() => setIsHovered2(false)}
+                    >
+                      {t("Нээх")} [ {t("Гарах1")} F2 ]
+                    </Button>
+
+                    <div
+                      className={`pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 transform whitespace-nowrap rounded-md bg-zinc-700 px-3 py-2 text-sm text-white shadow-md transition-opacity duration-200 ease-in-out ${
+                        isHovered2 ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      Гарах хаалт нээх
+                      <div className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-x-transparent border-t-zinc-700"></div>
+                    </div>
+                  </div>
                 </div>
                 <TreeSelect
                   onClick={(e) => {
@@ -2416,15 +2471,14 @@ function camera({ token }) {
           <div className="col-span-12 mt-1 pt-1 dark:bg-gray-800">
             <div className="mb-5 xl:hidden">
               <Button
-                style={{ width: "100%" }}
-                icon={<EyeOutlined />}
+                onClick={() => khaalgaNeey(camerVal[0])}
+                className="relative w-full sm:w-auto"
                 type="primary"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setGuilgeeKharakh(!guilgeeKharakh);
-                }}
+                id="neekhKhaalgaID"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
               >
-                {t("Гүйлгээ харах")}
+                {t("Орох хаалт нээх")} [ F1 ]
               </Button>
             </div>
             <div className="flex flex-col gap-1 lg:flex-row">
@@ -2460,35 +2514,49 @@ function camera({ token }) {
                   </Button>
                 )}
                 <div className="flex w-full items-center justify-center">
-                  <Button
-                    className="mr-3 w-auto text-ellipsis"
-                    onClick={() => {
-                      setModalOpen({
-                        bool: true,
-                        item: null,
-                        type: "orlogo",
-                      });
-                    }}
-                    type="primary"
-                  >
-                    {t("Орлого")} [ F8 ]
-                  </Button>
-                  <Button
-                    className="mr-3 w-auto text-ellipsis"
-                    onClick={() => {
-                      setModalOpen({
-                        bool: true,
-                        item: null,
-                        type: "dugaarBurtgekh",
-                      });
-                      setTimeout(() => {
-                        mashiniiDugaarRef.current.focus();
-                      }, 200);
-                    }}
-                    type="primary"
-                  >
-                    {t("Машин")} [ + ]
-                  </Button>
+                  <div className="relative inline-block">
+                    <Button
+                      className="group relative mr-3 w-auto text-ellipsis"
+                      onClick={() => {
+                        setModalOpen({
+                          bool: true,
+                          item: null,
+                          type: "orlogo",
+                        });
+                      }}
+                      type="primary"
+                    >
+                      {t("Орлого")} [ F8 ]
+                      <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 transform whitespace-nowrap rounded-md bg-zinc-700 px-3 py-2 text-sm text-white opacity-0 shadow-md transition-opacity duration-200 ease-in-out group-hover:opacity-100">
+                        Орсон цаг тодорхойгүй машинд гараас төлбөр оруулж
+                        бүртгэх
+                        <div className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-x-transparent border-t-zinc-700"></div>
+                      </div>
+                    </Button>
+                  </div>
+                  <div className="relative inline-block">
+                    <Button
+                      className="group mr-3 w-auto text-ellipsis"
+                      onClick={() => {
+                        setModalOpen({
+                          bool: true,
+                          item: null,
+                          type: "dugaarBurtgekh",
+                        });
+                        setTimeout(() => {
+                          mashiniiDugaarRef.current.focus();
+                        }, 200);
+                      }}
+                      type="primary"
+                    >
+                      {t("Машин")} [ + ]
+                      <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 transform whitespace-nowrap rounded-md bg-zinc-700 px-3 py-2 text-sm text-white opacity-0 shadow-md transition-opacity duration-200 ease-in-out group-hover:opacity-100">
+                        Гараас машин шивж бүртгэх
+                        <div className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-x-transparent border-t-zinc-700"></div>
+                      </div>
+                    </Button>
+                  </div>
+
                   <Popover
                     content={() => (
                       <div className="flex flex-col text-ellipsis">
@@ -2584,7 +2652,11 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return v?.[0]?.tulukhDun || v?.[1]?.tulukhDun || 0;
+                                        return (
+                                          v?.[0]?.tulukhDun ||
+                                          v?.[1]?.tulukhDun ||
+                                          0
+                                        );
                                       },
                                     },
                                     {
@@ -2616,7 +2688,8 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) => e.turul === "zeel"
@@ -2626,7 +2699,8 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0;
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2636,7 +2710,8 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) =>
@@ -2647,7 +2722,8 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0;
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2657,7 +2733,8 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) =>
@@ -2673,7 +2750,8 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0;
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2683,7 +2761,8 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) => e.turul === "toki"
@@ -2693,7 +2772,8 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0;
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2703,7 +2783,8 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) => e.turul === "kiosk"
@@ -2713,7 +2794,8 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0;
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2723,7 +2805,8 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) =>
@@ -2734,7 +2817,8 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0;
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2744,7 +2828,8 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) => e.turul === "qpay"
@@ -2754,7 +2839,8 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0;
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2764,7 +2850,8 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) =>
@@ -2776,7 +2863,8 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0;
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2786,7 +2874,8 @@ function camera({ token }) {
                                       __numFmt__: "#,##0.00",
                                       __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
                                                   (e) => e.turul === "PosBelen"
@@ -2796,7 +2885,8 @@ function camera({ token }) {
                                                     a + Number(b.dun || 0),
                                                   0
                                                 )
-                                            : 0) || 0;
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2879,10 +2969,12 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       render: (v) => {
                                         var khaalguud = "";
-                                        v?.map((a) => 
-                                        {
-                                          khaalguud = khaalguud + (khaalguud ? ", " : "" ) + a.orsonKhaalga;
-                                        })
+                                        v?.map((a) => {
+                                          khaalguud =
+                                            khaalguud +
+                                            (khaalguud ? ", " : "") +
+                                            a.orsonKhaalga;
+                                        });
                                         return khaalguud;
                                       },
                                     },
@@ -2891,10 +2983,12 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       render: (v) => {
                                         var khaalguud = "";
-                                        v?.map((a) => 
-                                        {
-                                          khaalguud = khaalguud + (khaalguud ? ", " : "" ) + (a.garsanKhaalga || "");
-                                        })
+                                        v?.map((a) => {
+                                          khaalguud =
+                                            khaalguud +
+                                            (khaalguud ? ", " : "") +
+                                            (a.garsanKhaalga || "");
+                                        });
                                         return khaalguud;
                                       },
                                     },
@@ -3104,7 +3198,9 @@ function camera({ token }) {
                         pattern: new RegExp(
                           "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
                         ),
-                        message: t("Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"),
+                        message: t(
+                          "Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"
+                        ),
                       },
                     ]}
                   >
@@ -3183,8 +3279,12 @@ function camera({ token }) {
                             true,
                           min: 6,
                           max: 7,
-                          pattern: new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"),
-                          message: t("Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"),
+                          pattern: new RegExp(
+                            "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
+                          ),
+                          message: t(
+                            "Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"
+                          ),
                         },
                       ]}
                     >
