@@ -1693,7 +1693,7 @@ function tulburTootsoo({ token }) {
                 barilga,
                 barilgiinId
               )
-            : (ajiltain?.baiguullagiinId === "64e855ce37fdc9b105f936e0" ||
+            : (ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0" ||
               barilgiinId === "6544bf602143a024b43f16ab"
             ) 
             ? khatuuZagvarKaidu(
