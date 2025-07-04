@@ -2426,7 +2426,14 @@ function tulburTootsoo({ token }) {
             .then(({ data }) => {
               if (data === "Amjilttai") {
                 successCount++;
-                notification.success({ message: nekhemjlekh.mail + t(" И-мэйл Амжилттай илгээлээ. Амжилттай илгээгдэж буй мэйлийн тоо: ") + successCount });
+                notification.success({
+                      message: (
+                        <>
+                          {nekhemjlekh.mail + t(" И-мэйл Амжилттай илгээлээ. Амжилттай илгээгдэж буй мэйлийн тоо: ")}
+                          <span className="text-[#11b980] font-semibold">{successCount}</span>
+                        </>
+                      )
+                    });
               }
             })
             .catch((e) => {
