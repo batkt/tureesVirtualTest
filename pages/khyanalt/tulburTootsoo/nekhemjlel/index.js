@@ -3207,6 +3207,12 @@ function tulburTootsoo({ token }) {
                 }}
                 columns={[
                   {
+                    title: "№",
+                    width: "3rem",
+                    align: "center",
+                    render: (text, record, index) => index + 1,
+                  },
+                  {
                     title: t("Түрээслэгч"),
                     dataIndex: "ner",
                     width: "7rem",
