@@ -57,7 +57,10 @@ function mashinBurtgel({ token }) {
   const [turul, setTurul] = useState("Нийт");
   const [tuluv, setTuluv] = useState("");
   const [udurShuult, setUdurShuult] = useState("niit");
-
+  const [songogdsonMashin, setSongogdsonMashin] = useState([]);
+  const [songogdsonBlockMashin, setSongogdsonBlockMashin] = useState([]);
+  const [activeTab, setActiveTab] = useState("1");
+  
   const query = useMemo(() => {
     var query = {};
     if (turul !== "Нийт") {
@@ -617,7 +620,7 @@ function mashinBurtgel({ token }) {
                 title={t("Блок машин устгах уу?")}
                 okText={t("Тийм")}
                 cancelText={t("Үгүй")}
-                onConfirm={() => blockMashinUstgaya(data)}
+                onConfirm={() =>blockMashinUstgaya(data)}
                 >
               <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
                 <DeleteOutlined
@@ -752,25 +755,78 @@ function mashinBurtgel({ token }) {
       ),
       footer,
     });
-  }
+  };
 
   function mashinUstgaya(data) {
-    deleteMethod("mashin", token, data?._id).then(({ data }) => {
-      if (data === "Amjilttai") {
+  let mashinIds = [];
+  if (Array.isArray(data)) {
+    mashinIds = data;
+  } else if (data && data._id) {
+    mashinIds = [data._id];
+  } else {
+    message.error("Машин сонгоно уу");
+    return;
+  }
+  
+  if (mashinIds.length === 0) {
+    message.error("Машин сонгоно уу");
+    return;
+  }
+  const deletePromises = mashinIds.map(mashinId => 
+    deleteMethod("mashin", token, mashinId)
+  );
+  Promise.all(deletePromises)
+    .then((results) => {
+      const allSuccessful = results.every(result => result.data === "Amjilttai");
+      setSongogdsonMashin([]);
+      if (allSuccessful) {
         mashinMutate();
         mashinToololtMutate();
-        message.success("Амжилттай устгагдлаа");
+        message.success(`${mashinIds.length} машин амжилттай устгагдлаа`);
+      } else {
+        message.error("Зарим машин устгаж чадсангүй");
       }
+    })
+    .catch(error => {
+      console.error("Delete error:", error);
+      message.error("Алдаа гарлаа");
     });
   }
 
   function blockMashinUstgaya(data) {
-    deleteMethod("blockMashin", token, data?._id).then(({ data }) => {
-      if (data === "Amjilttai") {
+
+   let mashinIds = [];
+  if (Array.isArray(data)) {
+    mashinIds = data.map(item => item?.jagsaalt?._id || item);
+  } else if (data && data?._id) {
+    mashinIds = [data?._id];
+  } else {
+    message.error("Машин сонгоно уу");
+    return;
+  }
+  
+  if (mashinIds.length === 0) {
+    message.error("Машин сонгоно уу");
+    return;
+  }
+  const deletePromises = mashinIds.map(mashinId => 
+    deleteMethod("blockMashin", token, mashinId)
+  );
+  Promise.all(deletePromises)
+    .then((results) => {
+      const allSuccessful = results.every(result => result.data === "Amjilttai");
+      setSongogdsonBlockMashin([]);
+      if (allSuccessful) {
         blockMashinMutate();
         mashinToololtMutate();
-        message.success("Амжилттай устгагдлаа");
+        message.success(`${mashinIds.length} машин амжилттай устгагдлаа`);
+      } else {
+        message.error("Зарим машин устгаж чадсангүй");
       }
+    })
+    .catch(error => {
+      console.error("Delete error:", error);
+      message.error("Алдаа гарлаа");
     });
   }
 
@@ -910,7 +966,7 @@ function mashinBurtgel({ token }) {
               Мэдэгдэл
             </Button>
           </div>
-          <div className="mb-5 ml-auto space-x-5 md:mb-0">
+          <div className="mb-5 ml-auto flex justify-center items-center space-x-5 md:mb-0">
             {khelber === "1" ? (<Button
               type="primary"
               icon={<PlusOutlined />}
@@ -927,7 +983,7 @@ function mashinBurtgel({ token }) {
             </Button>) : ""}
             <Popover
               content={() => (
-                <div className="flex flex-col items-center justify-center gap-2">
+                <div className="flex flex-col items-center justify-center">
                   <div className="flex w-32 flex-col">
                     <a
                       className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
@@ -1040,15 +1096,29 @@ function mashinBurtgel({ token }) {
                 <DownOutlined width={5} />
               </Button>
             </Popover>
+              <Popconfirm
+                    placement="left"
+                    title={t("Машин устгах уу?")}
+                    okText={t("Тийм")}
+                    cancelText={t("Үгүй")}
+                    onConfirm={() =>{
+                      if(activeTab === "1"){
+                      mashinUstgaya(songogdsonMashin);
+                      }else if(activeTab === "2"){
+                      blockMashinUstgaya(songogdsonBlockMashin);
+                      }
+                    }}>
+                  <Button className="border-red-400 dark:border-red-400 dark:bg-gray-900" icon={<DeleteOutlined />}>Устгах</Button>
+              </Popconfirm>
           </div>
         </div>
         <Tabs
-          defaultActiveKey="1"
-          activeKey={khelber}
+          defaultActiveKey={activeTab}
+          activeKey={activeTab}
           items={[
             {
               key: "1",
-              label: "Машин бүртгэл",
+              label: "Машин бүртгэл",   
               children: (
                 <Table
                   className="hidden overflow-auto md:block"
@@ -1058,6 +1128,14 @@ function mashinBurtgel({ token }) {
                   scroll={{ y: "calc(100vh - 30rem)" }}
                   size="small"
                   bordered
+                  rowKey={(record) => record._id}
+                  rowSelection={{
+                  type: "checkbox",
+                  selectedRowKeys: songogdsonMashin,
+                  onChange: (selectedRowKeys) => {
+                    setSongogdsonMashin(selectedRowKeys);
+                  },
+                }}
                   onChange={onChangeTable}
                   columns={columns}
                   pagination={{
@@ -1088,6 +1166,14 @@ function mashinBurtgel({ token }) {
                     bordered
                     onChange={onChangeTable}
                     columns={blockColumns}
+                    rowKey={(record) => record._id}
+                    rowSelection={{
+                    type: "checkbox",
+                    selectedRowKeys: songogdsonBlockMashin,
+                    onChange: (selectedRowKeys) => {
+                      setSongogdsonBlockMashin(selectedRowKeys);
+                    },
+                  }}
                     pagination={{
                       current: blockMashinGaralt?.khuudasniiDugaar,
                       pageSize: blockMashinGaralt?.khuudasniiKhemjee,
@@ -1103,7 +1189,7 @@ function mashinBurtgel({ token }) {
                   />),
               }
             ]}
-            onChange={(v) => setKhelber(v) }
+            onChange={(v) =>{ setKhelber(v); setActiveTab(v)}}
           />
         <CardList
           cardListTuluv={"utas"}

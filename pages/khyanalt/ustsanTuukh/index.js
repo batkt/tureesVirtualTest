@@ -18,15 +18,15 @@ import BaganiinSongolt from "components/table/BaganiinSongolt";
 const { RangePicker } = DatePicker;
 const order = { createdAt: -1 };
 
-const searchKeys = ["ajiltniiNer", "tailbar", "object.gereeniiDugaar"];
+const searchKeys = ["ajiltniiNer", "tailbar", "object.gereeniiDugaar", ];
 const turluud = [
   {
     turul: "gereeniiZagvar",
     text: "Гэрээний загвар",
   },
   {
-    turul: "talbai",
-    text: "Талбай бүртгэл",
+    turul: "Talbai",
+    text: "Талбай",
   },
   {
     turul: "ajiltan",
@@ -35,10 +35,6 @@ const turluud = [
   {
     turul: "khariltsagch",
     text: "Харилцагч",
-  },
-  {
-    turul: "medegdel",
-    text: "Мэдэгдэл",
   },
   {
     turul: "nekhemjlekhiinZagvar",
@@ -53,7 +49,7 @@ const turluud = [
     text: "E-Barimt",
   },
   {
-    turul: "zogsool",
+    turul: "mashin",
     text: "Зогсоол",
   },
   {
@@ -76,6 +72,10 @@ const turluud = [
   {
     turul: "avlaga",
     text: "Авлага",
+  },
+  {
+    turul: "blockMashin",
+    text: "Блок машин",
   },
   {
     turul: "barter",
@@ -101,6 +101,19 @@ const turluud = [
     turul: "tulultBurtgekh",
     text: "Төлөлт бүртгэх",
   },
+  {
+    turul: "SMS",
+    text: "Мэдэгдэл",
+  },
+  {
+    turul: "App",
+    text: "Мэдэгдэл (App)",
+  },
+  {
+    turul: "Mail",
+    text: "Мэдэгдэл (Mail)",
+  },
+  
 ];
 
 function UstsanTuukh() {
@@ -110,15 +123,69 @@ function UstsanTuukh() {
   const [turul, setTurul] = useState();
   const ref = React.useRef();
   const [shineBagana, setShineBagana] = useState([]);
+  const [cls, setCls] = useState();
   const [shuukhOgnoo, setShuukhOgnoo] = useState([
     moment().subtract(1, "months"),
     moment(),
   ]);
+  console.log(turul);
   const query = useMemo(() => {
+
+    const classValue = turul === "ajiltan" 
+  ? "ajiltan" 
+  : turul === "Talbai" 
+    ? "Talbai" 
+    : turul === "khariltsagch"
+    ? "Khariltsagch"
+    : turul === "gereeniiZagvar"
+    ? "gereeniiZagvar"
+    : turul === "nekhemjlekhiinZagvar"
+    ? "nekhemjlekhiinZagvar"
+    : turul === "zardal"
+    ? "zardal"
+    : turul === "mashin"
+    ? "mashin"
+    : turul === "blockMashin"
+    ? "blockMashin"
+    : cls;
+
+    if(turul === "ajiltan"){
+      classValue === "ajiltan";
+      turul = undefined;
+    }
+    if(turul === "Talbai"){
+      classValue === "Talbai";
+      turul = undefined;
+    }
+    if(turul === "khariltsagch"){
+      classValue === "Khariltsagch";
+      turul = undefined;
+    }
+    if(turul === "gereeniiZagvar"){
+      classValue === "gereeniiZagvar";
+      turul = undefined;
+    }
+    if(turul === "nekhemjlekhiinZagvar"){
+      classValue === "nekhemjlekhiinZagvar";
+      turul = undefined;
+    }
+    if(turul === "zardal"){
+      classValue === "zardal";
+      turul = undefined;
+    }
+    if(turul === "mashin"){
+      classValue === "mashin";
+      turul = undefined;
+    }
+    if(turul === "blockMashin"){
+      classValue === "blockMashin";
+      turul = undefined;
+    }
     return {
       baiguullagiinId: barilgiinId,
       ajiltniiId: ajiltankhaikh,
       "object.turul": turul,
+      class: classValue,
       createdAt:shuukhOgnoo
         ? {
             $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
@@ -129,6 +196,8 @@ function UstsanTuukh() {
     };
   }, [ajiltankhaikh, shuukhOgnoo, turul, barilgiinId, searchKeys]);
 
+
+
   const ustsanBarimt = useJagsaalt(
     "/ustsanBarimt",
     query,
@@ -136,13 +205,26 @@ function UstsanTuukh() {
     undefined,
     searchKeys
   );
-
+  const ajiltanKhariltsagch = useJagsaalt(
+    "/ustsanBarimtTurees",
+    query,
+    order,
+    undefined,
+    searchKeys
+  );
   
+const combinedData = useMemo(() => {
+  if (turul === "ajiltan") {
+    return ajiltanKhariltsagch?.jagsaalt || [];
+  }
+  return ustsanBarimt?.jagsaalt || [];
+}, [turul, ustsanBarimt?.jagsaalt, ajiltanKhariltsagch?.jagsaalt]);
+
   const { turulColumns } = React.useMemo(() => {
     let turulColumns = [];
     switch (turul) {
       case "gereeniiZagvar":
-        turulColumns.push({
+        turulColumns.push({ 
           title: "Нэр",
           width: "5rem",
           align: "center",
@@ -218,27 +300,6 @@ function UstsanTuukh() {
         break;
       case "voucher":
         turulColumns.push({
-          title: "Төлөх дүн",
-          width: "3rem",
-          align: "right",
-          render: (tulukhDun) => {
-            return (
-              <>
-                <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
-                >
-                  {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
-                </div>
-              </>
-            );
-          },
-          sorter: () => 0,
-        });
-        turulColumns.push({
           title: "Төлсөн дүн",
           width: "3rem",
           align: "right",
@@ -260,28 +321,7 @@ function UstsanTuukh() {
           sorter: () => 0,
         });
         break;
-      case "aldangi":
-        turulColumns.push({
-          title: "Төлөх дүн",
-          width: "3rem",
-          align: "right",
-          render: (tulukhDun) => {
-            return (
-              <>
-                <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
-                >
-                  {formatNumber(tulukhDun.object.tulukhDun, 0)}
-                </div>
-              </>
-            );
-          },
-          sorter: () => 0,
-        });
+      case "aldangi": 
         turulColumns.push({
           title: "Төлсөн дүн",
           width: "3rem",
@@ -306,27 +346,6 @@ function UstsanTuukh() {
         break;
       case "baritsaa":
         turulColumns.push({
-          title: "Төлөх дүн",
-          width: "3rem",
-          align: "right",
-          render: (tulukhDun) => {
-            return (
-              <>
-                <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
-                >
-                  {formatNumber(tulukhDun.object.tulukhDun, 0)}
-                </div>
-              </>
-            );
-          },
-          sorter: () => 0,
-        });
-        turulColumns.push({
           title: "Төлсөн дүн",
           width: "3rem",
           align: "right",
@@ -347,29 +366,46 @@ function UstsanTuukh() {
           },
           sorter: () => 0,
         });
-        break;
-      case "ashiglalt":
         turulColumns.push({
-          title: "Төлөх дүн",
+          title: "Орлого",
           width: "3rem",
-          align: "right",
+          align: "center",
           render: (tulukhDun) => {
             return (
               <>
                 <div
                   className={`${
-                    tulukhDun.object.tulukhDun > 0
+                    tulukhDun.object.orlogo > 0
                       ? "text-green-600 "
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulukhDun.object.tulukhDun, 0)}
+                  {formatNumber(tulukhDun.object.orlogo, 0) || 0}
                 </div>
               </>
             );
           },
           sorter: () => 0,
         });
+        turulColumns.push({
+          title: "Тайлбар",
+          width: "3rem",
+          align: "center",
+          render: (tulukhDun) => {
+            return (
+              <>
+                <div
+                  className="text-center"
+                >
+                  {tulukhDun.object.tailbar}
+                </div>
+              </>
+            );
+          },
+          sorter: () => 0,
+        });
+        break;
+      case "ashiglalt":
         turulColumns.push({
           title: "Төлсөн дүн",
           width: "3rem",
@@ -394,27 +430,6 @@ function UstsanTuukh() {
         break;
       case "avlaga":
         turulColumns.push({
-          title: "Төлөх дүн",
-          width: "3rem",
-          align: "right",
-          render: (tulukhDun) => {
-            return (
-              <>
-                <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
-                >
-                  {formatNumber(tulukhDun.object.tulukhDun, 0)}
-                </div>
-              </>
-            );
-          },
-          sorter: () => 0,
-        });
-        turulColumns.push({
           title: "Төлсөн дүн",
           width: "3rem",
           align: "right",
@@ -437,27 +452,6 @@ function UstsanTuukh() {
         });
         break;
       case "zalruulga":
-        turulColumns.push({
-          title: "Төлөх дүн",
-          width: "3rem",
-          align: "right",
-          render: (tulukhDun) => {
-            return (
-              <>
-                <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
-                >
-                  {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
-                </div>
-              </>
-            );
-          },
-          sorter: () => 0,
-        });
         turulColumns.push({
           title: "Төлсөн дүн",
           width: "3rem",
@@ -482,27 +476,6 @@ function UstsanTuukh() {
         break;
       case "barter":
         turulColumns.push({
-          title: "Төлөх дүн",
-          width: "3rem",
-          align: "right",
-          render: (tulukhDun) => {
-            return (
-              <>
-                <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
-                >
-                  {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
-                </div>
-              </>
-            );
-          },
-          sorter: () => 0,
-        });
-        turulColumns.push({
           title: "Төлсөн дүн",
           width: "3rem",
           align: "right",
@@ -517,6 +490,25 @@ function UstsanTuukh() {
                   }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
+                </div>
+              </>
+            );
+          },
+          sorter: () => 0,
+        });
+        break;
+      case "Иргэн":
+        turulColumns.push({
+          title: "Нэр",
+          width: "3rem",
+          align: "right",
+          render: (khariltsagchNer) => {
+            return (
+              <>  
+                <div
+                  className="text-center"
+                >
+                  {khariltsagchNer.object.ner}
                 </div>
               </>
             );
@@ -540,7 +532,7 @@ function UstsanTuukh() {
       title: t("Дэлгэрэнгүй Мэдээлэл"),
       icon: <FileExcelOutlined />,
       content: <DelgerenguiKharakh ref={ref} data={mur} />,
-      width: "22vw",
+      width: "25vw",
       footer,
        onCancel: () => {
       ref.current.khaaya();
@@ -555,7 +547,7 @@ function UstsanTuukh() {
         dataIndex: "createdAt",
         align: "center",
         ellipsis: true,
-        width: "3rem",
+        width: "4rem",
         showSorterTooltip: false,
         sorter: () => 0,
         render: (data) => {
@@ -568,7 +560,7 @@ function UstsanTuukh() {
         dataIndex: "class",
         align: "left",
         ellipsis: true,
-        width: "3rem",
+        width: "4rem",
         showSorterTooltip: false,
         render: (mur) => {
           var text;
@@ -576,22 +568,22 @@ function UstsanTuukh() {
             case "gereeniiZagvar":
               text = "Гэрээний загвар";
               break;
-            case "talbai":
-              text = "Талбай";
-              break;
             case "Talbai":
               text = "Талбай";
+              break;
+            case "baritsaa":
+              text = "Барьцаа";
+              break;
+            case "baritsaaAshiglalt":
+              text = "Барьцаа ашиглалт";
+              break;
+            case "baritsaaGuilgee":
+              text = "Барьцаа гүйлгээ";
               break;
             case "ajiltan":
               text = "Ажилтан бүртгэл";
               break;
             case "Khariltsagch":
-              text = "Харилцагч";
-              break;
-            case "khariltsagch":
-              text = "Харилцагч";
-              break;
-            case "khariltsagch":
               text = "Харилцагч";
               break;
             case "asuult":
@@ -606,8 +598,11 @@ function UstsanTuukh() {
             case "eBarimt":
               text = "И-баримтын бүртгэл";
               break;
-            case "zogsool":
+            case "mashin":
               text = "Зогсоол";
+              break;
+            case "blockMashin":
+              text = "Блок машин";
               break;
             case "anket":
               text = "Анкетын асуулга бэлдэх";
@@ -616,7 +611,7 @@ function UstsanTuukh() {
               text = "Гэрээний гүйлгээ";
               break;
             case "mailiinZagvar":
-              text = "И-мэйл загвар";
+              text = "Мэдэгдэл";
               break;
             case "khungulult":
               text = "Хөнгөлөлт";
@@ -724,7 +719,6 @@ function UstsanTuukh() {
       },
     ];
   });
-  console.log(shineBagana);
   function ognooShuultOnChange(e) {
     if (e === null) {
       setShuukhOgnoo(undefined);
@@ -817,7 +811,7 @@ function UstsanTuukh() {
                   },
                   {
                     title: t("Талбай"),
-                    width: "8rem",
+                    width: "4rem",
                     dataIndex: ["object", "kod"],
                     summary: true,
                     align: "center",
@@ -831,7 +825,7 @@ function UstsanTuukh() {
                   },
                   {
                     title: t("Харилцагч"),
-                    width: "8rem",
+                    width: "4rem",
                     dataIndex: ["object", "ner"],
                     summary: true,
                     align: "center",
@@ -840,6 +834,22 @@ function UstsanTuukh() {
                         <div className="w-full text-right">
                         {a}
                         </div>
+                      );
+                    },
+                  },
+                  {
+                    title: t("Төлөх дүн"),
+                    width: "3rem",
+                    dataIndex: ["object", "tulukhDun"],
+                    summary: true,
+                    align: "center",
+                    render: (a) => {
+                      return (
+                        <div
+                  className="text-right"
+                >
+                  {formatNumber(a) || 0}
+                </div>
                       );
                     },
                   },
@@ -856,7 +866,7 @@ function UstsanTuukh() {
           className="hidden overflow-auto md:block"
           columns={columns}
           scroll={{ y: "calc(100vh - 20rem)" }}
-          dataSource={ustsanBarimt?.jagsaalt}
+          dataSource={combinedData}
           rowKey={(row) => row._id}
           pagination={{
             current: Number(ustsanBarimt?.data?.khuudasniiDugaar),
@@ -874,7 +884,7 @@ function UstsanTuukh() {
         <CardList
           keyValue="ustsanBarimt"
           className="block overflow-auto md:hidden"
-          jagsaalt={ustsanBarimt?.jagsaalt}
+          jagsaalt={combinedData}
           Component={UstsanTuukhTile}
           componentProps={{ router }}
           pagination={{

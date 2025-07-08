@@ -52,10 +52,16 @@ function MedegdelKharakh({ data, destroy }, ref) {
           <div>{data.object.gereeniiDugaar}</div>
         </div>
         )}
+        {data.object.turul === "baritsaa" && (
+        <div className="flex justify-between">
+          <div>{t("Гэрээний дугаар")}: </div>
+          <div>{data.object.gereeniiDugaar}</div>
+        </div>
+        )}
 
         {data.class === "Khariltsagch" && (
         <div className="flex justify-between">
-          <div>{t("Харилцагч")}: </div>
+          <div>{t("Гэрээний дугаар")}: </div>
           <div>{data.object.ner}</div>
         </div>
         )}
@@ -63,6 +69,17 @@ function MedegdelKharakh({ data, destroy }, ref) {
         <div className="flex justify-between">
           <div>{t("Талбай")}: </div>
           <div>{data.object.kod}</div>
+        </div>
+        )}
+        {data.class === "blockMashin" && (
+        <div className="justify-between">
+          <div className="justify-between">{t("Машины дугаар")}: {data.object.dugaar}</div>
+        </div>
+        )}
+        {data.class === "blockMashin" && (
+        <div className="justify-between">
+          <div className="justify-between">{t("Тайлбар")}: {data.object.tailbar}</div>
+         
         </div>
         )}
         {data.class === "gereeniiGuilgee" && (
