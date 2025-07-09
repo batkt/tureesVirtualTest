@@ -83,7 +83,7 @@ function IlgeesenToo({
   }, [msjTuukh]);
   return (
     <div className="ml-6 flex flex-col-reverse text-center xl:flex-col xl:text-center">
-      <span>{text}</span> <span className=" font-medium ">{data || 0}</span>
+      <span>{text}</span> <span className="font-medium ">{data || 0}</span>
     </div>
   );
 }
@@ -107,7 +107,7 @@ function Khyanalt({ token }) {
   /**Илгээх төрөл
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
    *  */
-  const [tuluv, setTuluv] = useState(undefined);
+  const [tuluv, setTuluv] = useState(true);
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
   const [zurag, setZurag] = useState();
@@ -116,8 +116,6 @@ function Khyanalt({ token }) {
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
-      
-      
     };
   }, [barilgiinId]);
   const { setKhariltsagchKhuudaslalt, jagsaalt } = useKhariltsagchDavkhraarAvya(
@@ -569,7 +567,7 @@ function Khyanalt({ token }) {
       setTurulZagvar={setTurulZagvar}
       setNeesenEsekh={setNeesenEsekh}
       fixedZagvarNeegdsenEsekh={turulZagvar}
-      className=" overflow-hidden p-5 pb-12 md:p-4 md:pb-0 lg:h-auto"
+      className="overflow-hidden p-5 pb-12 md:p-4 md:pb-0 lg:h-auto"
       onSearch={(search) =>
         setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
       }
@@ -605,7 +603,6 @@ function Khyanalt({ token }) {
           <div className="col-span-6">
             <Select
               className="w-full"
-              placeholder="Төрөл сонгоно уу"
               value={tuluv}
               onChange={setTuluv}
               style={{ width: "100%" }}
@@ -615,7 +612,7 @@ function Khyanalt({ token }) {
                 { key: false, v: "Идэвхгүй" },
                 { key: undefined, v: "Бүгд" },
               ].map((a) => (
-                <Select.Option key={a.key} value={a.key}>
+                <Select.Option key={String(a.key)} value={a.key}>
                   {t(a.v)}
                 </Select.Option>
               ))}
@@ -781,7 +778,7 @@ function Khyanalt({ token }) {
         data-aos-duration="1000"
       >
         <div className={`box p-5 xl:block`}>
-          <div className="relative w-full text-gray-700   dark:text-gray-300">
+          <div className="relative w-full text-gray-700 dark:text-gray-300">
             <input
               type="text"
               className="block w-full rounded-md border border-slate-300 bg-white  px-3 py-1 text-sm shadow-sm focus:border-[#8aaaef] focus:outline-none focus:ring-1
@@ -813,7 +810,7 @@ function Khyanalt({ token }) {
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </div>
-          <div className=" mt-2  flex cursor-pointer flex-row items-center space-x-4 space-y-2 rounded-md p-2 ">
+          <div className="mt-2 flex cursor-pointer flex-row items-center space-x-4 space-y-2 rounded-md p-2 ">
             <Checkbox
               checked={jagsaalt?.length === songogdsonKhariltsagch.length}
               onChange={(e) => {
@@ -879,9 +876,9 @@ function Khyanalt({ token }) {
                     <div className="flex w-full items-center justify-between">
                       <div className="text-xs">{mur?.ner}</div>
                       <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
-                        {mur?.utas.length > 0 ? (
+                        {Array.isArray(mur?.utas) && mur.utas.length > 0 ? (
                           <div className="flex w-full justify-end gap-1">
-                            {mur?.utas.map((a, i) => (
+                            {mur.utas.map((a, i) => (
                               <div key={i}>
                                 {a}
                                 {i !== mur.utas.length - 1 && ","}
@@ -890,9 +887,12 @@ function Khyanalt({ token }) {
                           </div>
                         ) : (
                           <div className="flex w-full justify-end">
-                            <div>{mur?.utas}</div>
+                            <div>
+                              {typeof mur?.utas === "string" ? mur.utas : ""}
+                            </div>
                           </div>
                         )}
+
                         {mur?.talbainDugaar.length > 0 ? (
                           <div className="flex items-center justify-center gap-1 rounded-lg bg-blue-500 px-2 py-1 text-xs text-gray-200 dark:bg-blue-700 dark:text-white">
                             {mur?.talbainDugaar.map((a, i) => (
@@ -1120,7 +1120,7 @@ function Khyanalt({ token }) {
                 />
               </div>
             ) : (
-              <div className=" space-y-2">
+              <div className="space-y-2 ">
                 <div className="flex items-center space-x-3">
                   <div>
                     <Upload
@@ -1149,7 +1149,7 @@ function Khyanalt({ token }) {
               </div>
             )}
           </div>
-          <div className=" absolute bottom-1 z-50 flex w-full items-center justify-between space-x-2 p-2">
+          <div className="absolute bottom-1 z-50 flex w-full items-center justify-between space-x-2 p-2">
             <div className="text-xs font-semibold">{msj.length}/160</div>
             <div className="flex items-center justify-between space-x-3">
               <label className="font-medium">
