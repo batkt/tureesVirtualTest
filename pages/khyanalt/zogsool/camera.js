@@ -343,6 +343,8 @@ function camera({ token }) {
     return zogsool;
   }, [parkingJagsaalt, camerVal]);
 
+  const [isPaying, setIsPaying] = React.useState(false);
+
   const query = useMemo(() => {
     let result = {};
     if (!!camerVal[1]) {
@@ -522,7 +524,7 @@ function camera({ token }) {
     if (
       !modalOpen?.bool &&
       modalOpen?.type === "unegui" &&
-      value === "F9 Үнэгүй"
+      value === "F7 Үнэгүй"
     )
       khadgalakh();
   }, [modalOpen, value]);
@@ -662,7 +664,7 @@ function camera({ token }) {
   useKeyboardTovchlol("F1", f3Darsan);
   useKeyboardTovchlol("F2", f4Darsan);
   useKeyboardTovchlol("F8", f8Darsan);
-  useKeyboardTovchlol("F9", f9Darsan);
+  useKeyboardTovchlol("F7", f7Darsan);
   useKeyboardTovchlol("+", nemekhDarsan);
   useKeyboardTovchlol("-", khasakhDarsan);
 
@@ -698,21 +700,31 @@ function camera({ token }) {
     }, 200);
   }
 
-  function f9Darsan() {
+  function f7Darsan() {
     const data = uilchluulegchGaralt?.jagsaalt?.[0];
+    const mur = data?.tuukh?.[0];
+
     if (!data) {
       return notification.error({
         message: "Мэдээлэл алга",
         duration: 1,
       });
     }
-    setValue("F9 Үнэгүй");
+
+    if (mur?.tuluv !== 0 || (!mur?.tulukhDun && !data?.niitDun)) {
+      return notification.warning({
+        message: "Үнэгүй горимд тохирох дүн алга",
+        duration: 1,
+      });
+    }
+
     setModalOpen({
-      bool: false,
+      bool: true,
       item: data,
       type: "unegui",
     });
-  }
+  } //Үнэгүй горимд зөвхөн машины дугаар бүртгэлтэй тохиолдолд ажиллана
+
   function khasakhDarsan() {
     setModalOpen({
       bool: true,
@@ -1301,26 +1313,37 @@ function camera({ token }) {
                 placement="bottom"
                 trigger="hover"
                 content={() => (
-                  <div className="flex w-24 flex-col space-y-2">
+                  <div className="flex w-36 flex-col space-y-2">
                     <a
                       className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                       onClick={() => {
-                        parent?.niitDun && parent?.niitDun > 0
-                          ? tulburTulyu(
-                              mur,
-                              parent._id,
-                              parent?.mashiniiDugaar,
-                              parent?.niitDun,
-                              index
-                            )
-                          : notification.warn({
-                              message: t("Дүн бодогдоогүй байна."),
-                            });
+                        if (isPaying) return; // олон даралт блоклоно
+                        if (!parent?.niitDun || parent.niitDun <= 0) {
+                          notification.warn({
+                            message: t("Дүн бодогдоогүй байна."),
+                          });
+                          return;
+                        }
+
+                        setIsPaying(true); // хадгалалт эхэлсэн
+
+                        tulburTulyu(
+                          mur,
+                          parent._id,
+                          parent?.mashiniiDugaar,
+                          parent?.niitDun,
+                          index
+                        );
+
+                        setTimeout(() => {
+                          setIsPaying(false); // 2 секунд дараа дахин төлөх боломж
+                        }, 2000);
                       }}
                     >
                       <WalletOutlined style={{ fontSize: "18px" }} />
-                      <label>{t("Төлөх")}</label>
+                      <label>{t("Төлөх [F4]")}</label>
                     </a>
+
                     <a
                       className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                       onClick={() =>
@@ -1332,7 +1355,7 @@ function camera({ token }) {
                       }
                     >
                       <StarOutlined style={{ fontSize: "18px" }} />
-                      <label>{t("Үнэгүй")}</label>
+                      <label>{t("Үнэгүй [F7]")}</label>
                     </a>
                   </div>
                 )}
@@ -1352,7 +1375,7 @@ function camera({ token }) {
                       <DollarCircleOutlined />
                     </div>
                     <div className="flex items-center justify-center">
-                      {t("Төлбөр")} {index === 0 && "[ F4 ]"}
+                      {t("Төлбөр")} {index === 0 ? t("F4") : ""}
                     </div>
                   </div>
                 </Button>
