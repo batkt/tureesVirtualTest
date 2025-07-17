@@ -192,7 +192,7 @@ function negtgelTailan({ token }) {
             },
         },
         {
-            title: "Харилцагч нэр",
+            title: t("Харилцагч нэр"),
             dataIndex: "_id",
             className: "text-mashJijig",
             width: "12rem",
@@ -204,7 +204,7 @@ function negtgelTailan({ token }) {
             },
         },
         {
-            title: "Талбайн хэмжээ",
+            title: t("Талбайн хэмжээ"),
             className: "text-mashJijig",
             dataIndex: ["_id", "talbainKhemjee"],
             width: "8rem",
@@ -216,7 +216,7 @@ function negtgelTailan({ token }) {
             },
         },
         {
-            title: "Түрээс үнэ",
+            title: t("Түрээс үнэ"),
             className: "text-mashJijig",
             dataIndex: ["_id", "talbainNegjUne"],
             width: "8rem",
@@ -303,7 +303,7 @@ function negtgelTailan({ token }) {
         });
         setNiitDunJagsaalt(niitDunJagsaalt);
         temp.push({
-            title: "Нийт",
+            title: t("Нийт"),
             className: "text-mashJijig",
             dataIndex: "niitTulukhDun",
             width: "8rem",
@@ -351,7 +351,7 @@ function negtgelTailan({ token }) {
               onChange={(v) => {
                 setSongogdsonIds(v);
               }}
-              placeholder="Харилцагч сонгох"
+              placeholder={t("Харилцагч сонгох")}
             >
               {khariltsagchiinGaralt?.jagsaalt?.map((data) => (
                 <Select.Option key={!!data?.register ? data?.register : data?.customerTin} className="dark:text-gray-300">
@@ -541,7 +541,7 @@ function negtgelTailan({ token }) {
                     <AntdTable.Summary className="border " fixed={'bottom'}>
                       <AntdTable.Summary.Cell index={0} colSpan={1}>
                         <div className="space-x-2 truncate text-base font-bold ">
-                          Нийт
+                          {t("Нийт")}
                         </div>
                       </AntdTable.Summary.Cell>
                       <AntdTable.Summary.Cell index={1}></AntdTable.Summary.Cell>
@@ -629,7 +629,7 @@ function negtgelTailan({ token }) {
                                     );
                                 })}
                                 <th className="border border-gray-400 text-mashJijigiinJijig" rowSpan={2}>
-                                    Нийт
+                                    {t("Нийт")}
                                 </th>
                             </tr>
                             <tr className="bg-gray-400 text-white">
@@ -704,7 +704,7 @@ function negtgelTailan({ token }) {
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colSpan="1" className="border border-gray-400 text-mashJijigiinJijig">Нийт</td>
+                                <td colSpan="1" className="border border-gray-400 text-mashJijigiinJijig">{t("Нийт")}</td>
                                 <td></td>
                                 <td></td>
                                 <td className="border border-gray-400 text-mashJijigiinJijig text-center"> {formatNumber(tailanGaralt?.reduce((a, b) => a + (b?._id?.talbainKhemjee || 0), 0), 2)} </td>

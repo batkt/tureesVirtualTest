@@ -612,7 +612,7 @@ function AjiltanBurtgel({ token }) {
 
   return (
     <Admin
-      title="Харилцагч бүртгэл"
+      title={t("Харилцагч бүртгэл")}
       khuudasniiNer="khariltsagchBurtgel"
       className="p-0 md:p-4"
       setNeesenEsekh={setNeesenEsekh}

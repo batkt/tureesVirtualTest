@@ -963,7 +963,7 @@ function mashinBurtgel({ token }) {
               type="primary"
               icon={<BellOutlined />}
             >
-              Мэдэгдэл
+              {t("Мэдэгдэл")}
             </Button>
           </div>
           <div className="mb-5 ml-auto flex justify-center items-center space-x-5 md:mb-0">
@@ -1108,7 +1108,7 @@ function mashinBurtgel({ token }) {
                       blockMashinUstgaya(songogdsonBlockMashin);
                       }
                     }}>
-                  <Button className="border-red-400 dark:border-red-400 dark:bg-gray-900" icon={<DeleteOutlined />}>Устгах</Button>
+                  <Button className="border-red-400 dark:border-red-400 dark:bg-gray-900" icon={<DeleteOutlined />}>{t("Устгах")}</Button>
               </Popconfirm>
           </div>
         </div>
@@ -1118,7 +1118,7 @@ function mashinBurtgel({ token }) {
           items={[
             {
               key: "1",
-              label: "Машин бүртгэл",   
+              label: t("Машин бүртгэл"),   
               children: (
                 <Table
                   className="hidden overflow-auto md:block"
@@ -1154,7 +1154,7 @@ function mashinBurtgel({ token }) {
               },
               {
                 key: "2",
-                label: "Блок жагсаалт",
+                label: t("Блок жагсаалт"),
                 children: (
                   <Table
                     className="hidden overflow-auto md:block"

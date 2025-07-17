@@ -794,7 +794,7 @@ function Zogsool({ token }) {
                     tulbur === "" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  Бүгд
+                  {t("Бүгд")}
                 </div>
                 <div
                   onClick={() => setTulbur("belen")}
@@ -802,7 +802,7 @@ function Zogsool({ token }) {
                     tulbur === "belen" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  Бэлэн
+                  {t("Бэлэн")}
                 </div>
                 <div
                   onClick={() => setTulbur("card")}
@@ -810,7 +810,7 @@ function Zogsool({ token }) {
                     tulbur === "card" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  Карт
+                  {t("Карт")}
                 </div>
                 <div
                   onClick={() => setTulbur("khariltsakh")}
@@ -818,7 +818,7 @@ function Zogsool({ token }) {
                     tulbur === "khariltsakh" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
-                  Данс
+                  {t("Данс")}
                 </div>
                 <div
                   onClick={() => setTulbur("toki")}
@@ -1129,7 +1129,7 @@ function Zogsool({ token }) {
         },
       },
       {
-        title: "Бүртгэсэн",
+        title: t("Бүртгэсэн"),
         align: "center",
         dataIndex: "tuukh",
         width: "7rem",
@@ -1314,10 +1314,10 @@ function Zogsool({ token }) {
             />*/}
           <Select
             className="xl:w-[490px]"
-            defaultValue="Бүгд"
+            defaultValue={t("Бүгд")}
             onChange={setZogsoolId}
           >
-            <Select.Option value={false}>Бүгд</Select.Option>
+            <Select.Option value={false}>{t("Бүгд")}</Select.Option>
             {jagsaalt.map((a) => (
               <Select.Option key={a._id} value={a._id}>
                 {t(a.ner)}
@@ -1948,7 +1948,7 @@ function Zogsool({ token }) {
                                   },
                                 },
                                 {
-                                  title: "Бүртгэсэн",
+                                  title: t("Бүртгэсэн"),
                                   dataIndex: "tuukh",
                                   render: (v) => {
                                     return (
@@ -2029,7 +2029,7 @@ function Zogsool({ token }) {
                 className="dark:bg-gray-800 dark:text-gray-200"
                 onClick={() => tseverliy()}
               >
-                Цэвэрлэх
+                {t("Цэвэрлэх")}
                 {selectedRowkeys &&
                   selectedRowkeys?.length > 0 &&
                   `(${selectedRowkeys?.length})`}
@@ -2053,7 +2053,7 @@ function Zogsool({ token }) {
             items={[
               {
                 key: "1",
-                label: "Машинаар",
+                label: t("Машинаар"),
                 children: (
                   <Table
                     className="t-head"
@@ -2085,7 +2085,7 @@ function Zogsool({ token }) {
                       <AntdTable.Summary className="border " fixed={"bottom"}>
                         <AntdTable.Summary.Cell colSpan={7}>
                           <div className="space-x-2 truncate text-base font-bold ">
-                            Нийт
+                            {t("Нийт")}
                           </div>
                         </AntdTable.Summary.Cell>
                         <AntdTable.Summary.Cell>
@@ -2145,7 +2145,7 @@ function Zogsool({ token }) {
               },
               {
                 key: "2",
-                label: "Мөнгөн дүнгээр",
+                label: t("Мөнгөн дүнгээр"),
                 children: (
                   <Table
                     className="mt-8 hidden overflow-auto md:block"
@@ -2176,7 +2176,7 @@ function Zogsool({ token }) {
                       <AntdTable.Summary className="border " fixed={"bottom"}>
                         <AntdTable.Summary.Cell colSpan={7}>
                           <div className="space-x-2 truncate text-base font-bold ">
-                            Нийт
+                            {t("Нийт")}
                           </div>
                         </AntdTable.Summary.Cell>
                         <AntdTable.Summary.Cell>
@@ -2256,7 +2256,7 @@ function Zogsool({ token }) {
                           >
                             <AntdTable.Summary.Cell colSpan={9}>
                               <div className="space-x-2 truncate text-base font-bold ">
-                                Нийт
+                                {t("Нийт")}
                               </div>
                             </AntdTable.Summary.Cell>
                             <AntdTable.Summary.Cell>

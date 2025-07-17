@@ -411,7 +411,7 @@ function GuilgeeExceleesOruulakhOlnoor(
               }}
               onClick={handleSave}
             >
-              Хадгалах
+              {t("Хадгалах")}
             </Button>
           </div>
         </>

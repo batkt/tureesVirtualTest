@@ -123,19 +123,19 @@ function EbarimtMedeelel({ token }) {
         ebarimtiinToololt !== undefined
           ? formatNumber(ebarimtiinToololt.avakhToo, 0)
           : 0,
-      utga: "Баримт авах тоо",
+      utga: t("Баримт авах тоо"),
     },
     {
       too:
         ebarimtiinToololt !== undefined
           ? formatNumber(ebarimtiinToololt.avakhDun, 0)
           : 0,
-      utga: "Баримт авах дүн",
+      utga: t("Баримт авах дүн"),
     },
 
     {
       too: eBarimtGaralt?.niitMur || 0,
-      utga: "Баримт авсан тоо",
+      utga: t("Баримт авсан тоо"),
     },
 
     {
@@ -143,21 +143,21 @@ function EbarimtMedeelel({ token }) {
         ebarimtiinToololt !== undefined
           ? formatNumber(ebarimtiinToololt.ilgeesenDun, 0)
           : 0,
-      utga: "Баримт авсан дүн",
+      utga: t("Баримт авсан дүн"),
     },
     {
       too:
         ebarimtiinToololt !== undefined
           ? formatNumber(ebarimtiinToololt.butsaasanToo, 0)
           : 0,
-      utga: "Буцаалт хийгдсэн тоо",
+      utga: t("Буцаалт хийгдсэн тоо"),
     },
     {
       too:
         ebarimtiinToololt !== undefined
           ? formatNumber(ebarimtiinToololt.butsaasanDun, 0)
           : 0,
-      utga: "Буцаалт хийгдсэн дүн",
+      utga: t("Буцаалт хийгдсэн дүн"),
     },
   ];
 
@@ -283,7 +283,7 @@ function EbarimtMedeelel({ token }) {
       ...shineColumn2,
       ...shineColumn3,
       {
-        title: <div className="text-center font-semibold">Төрөл</div>,
+        title: <div className="text-center font-semibold">{t("Төрөл")}</div>,
         align: "center",
         width: "12rem",
         render(mur) {
@@ -321,7 +321,7 @@ function EbarimtMedeelel({ token }) {
         sorter: () => 0,
       },
       {
-        title: "Үйлчилгээ",
+        title: t("Үйлчилгээ"),
         dataIndex: "",
         ellipsis: true,
         align: "center",
@@ -539,18 +539,18 @@ function EbarimtMedeelel({ token }) {
             >
               <Select
                 className="w-full sm:w-36"
-                placeholder="Үйлчилгээ"
+                placeholder={t("Үйлчилгээ")}
                 onChange={(v) => setUilchilgeeAvi(v)}
                 allowClear
               >
                 <Select.Option key="Зогсоол" value="Зогсоол">
-                  Зогсоол
+                  {t("Зогсоол")}
                 </Select.Option>
                 <Select.Option key="Тоглоом" value="Тоглоом">
-                  Тоглоом
+                  {t("Тоглоом")}
                 </Select.Option>
                 <Select.Option key="Түрээс" value="Түрээс">
-                  Түрээс
+                  {t("Түрээс")}
                 </Select.Option>
               </Select>
             </div>
@@ -562,7 +562,7 @@ function EbarimtMedeelel({ token }) {
             data-aos-delay="300"
           >
             <Button onClick={exceleerTatya} type="primary">
-              Excel татах
+              {t("Excel татах")}
             </Button>
             <Button
               title={t("Сүүлд илгээгдсэн огноо")}
@@ -622,7 +622,7 @@ function EbarimtMedeelel({ token }) {
             <AntdTable.Summary className="border " fixed={"bottom"}>
                 <AntdTable.Summary.Cell>
                   <div className="space-x-2 truncate text-base font-bold ">
-                    Нийт
+                    {t("Нийт")}
                   </div>
                 </AntdTable.Summary.Cell>
                 <AntdTable.Summary.Cell

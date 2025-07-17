@@ -1464,7 +1464,7 @@ function guilgeeniiTuukh({ token }) {
                 onClick={olnoorGuilgeeOruulakhExcel}
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
-                <span>Заалт оруулах</span>
+                <span>{t("Заалт оруулах")}</span>
                 <DownOutlined width={5} />
               </Button>
             </Popover>
@@ -1474,7 +1474,7 @@ function guilgeeniiTuukh({ token }) {
                 onClick={olnoorGuilgeeOruulakhExcelFc}
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
-                <span>Заалт</span>
+                <span>{t("Заалт")}</span>
                 <DownOutlined width={5} />
               </Button>
             </Popover>
@@ -1484,7 +1484,7 @@ function guilgeeniiTuukh({ token }) {
                 onClick={olnoorEkhniiUldegdelOruulakhExcel}
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
-                <span>Эхний үлдэгдэл оруулах</span>
+                <span>{t("Эхний үлдэгдэл оруулах")}</span>
                 <DownOutlined width={5} />
               </Button>
             </Popover>

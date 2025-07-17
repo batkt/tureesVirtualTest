@@ -345,7 +345,7 @@ function Tailan({ token }) {
               allowClear
               value={selectValue}
               style={{ minWidth: "11rem" }}
-              placeholder="Тайлангийн загвар"
+              placeholder={t("Тайлангийн загвар")}
               onChange={(v) => {
                 setSelectValue(v);
                 setTable(
@@ -461,7 +461,7 @@ function Tailan({ token }) {
                 .addDataSource(data)
                 .saveAs("Аналитик тайлан.xlsx");
             }}>
-            Excel татах
+            {t("Excel татах")}
           </Button>
         </div>
       </div>

@@ -260,7 +260,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "Гэрээний дугаар",
+        title: t("Гэрээний дугаар"),
         dataIndex: "gereeniiDugaar",
         key: "gereeniiDugaar",
         align: "center",
@@ -274,7 +274,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "Харилцагч",
+        title: t("Харилцагч"),
         dataIndex: "ner",
         key: "ner",
         align: "center",
@@ -290,7 +290,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "Талбайн дугаар",
+        title: t("Талбайн дугаар"),
         dataIndex: "talbainDugaar",
         key: "talbainDugaar",
         align: "center",
@@ -306,7 +306,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "Харилцагч РД",
+        title: t("Харилцагч РД"),
         dataIndex: "register",
         key: "register",
         align: "center",
@@ -316,7 +316,7 @@ function nasjiltinTailan({ token }) {
         fixed: "left",
       },
       {
-        title: "Нийт дүн",
+        title: t("Нийт дүн"),
         dataIndex: "niitDun",
         key: "niitDun",
         align: "center",
@@ -333,7 +333,7 @@ function nasjiltinTailan({ token }) {
         ),
       },
       {
-        title: "Xөнгөлөлт",
+        title: t("Xөнгөлөлт"),
         dataIndex: "khungulult",
         key: "khungulult",
         align: "center",
@@ -519,7 +519,7 @@ function nasjiltinTailan({ token }) {
           onChange={(v) => {
             setSongogdsonIds(v);
           }}
-          placeholder="Харилцагч сонгох"
+          placeholder={t("Харилцагч сонгох")}
         >
           {khariltsagchiinGaralt?.jagsaalt?.map((data) => (
             <Select.Option
@@ -664,7 +664,7 @@ function nasjiltinTailan({ token }) {
             <AntdTable.Summary className="border " fixed={"bottom"}>
               <AntdTable.Summary.Cell index={0} colSpan={1}>
                 <div className="space-x-2 truncate text-base font-bold ">
-                  Нийт
+                  {t("Нийт")}
                 </div>
               </AntdTable.Summary.Cell>
               <AntdTable.Summary.Cell index={1}></AntdTable.Summary.Cell>

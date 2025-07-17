@@ -107,7 +107,7 @@ function ZassanTuukh() {
         sorter: () => 0,
       },
       {
-        title: "Дугаар",
+        title: t("Дугаар"),
         width: "5rem",
         dataIndex: "classDugaar",
         align: "center",

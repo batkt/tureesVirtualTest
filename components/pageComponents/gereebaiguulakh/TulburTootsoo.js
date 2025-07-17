@@ -208,7 +208,7 @@ const Tulbur = ({
               className="flex ml-1 flex-end w-full rounded-md md:w-auto"
               onKeyDown={focuser}
               type={"number"}
-              placeholder={"Хөнгөлөх хувь"}
+              placeholder={t("Хөнгөлөх хувь")}
             />
           </Form.Item>
         </div>  
