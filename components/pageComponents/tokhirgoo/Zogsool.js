@@ -98,14 +98,14 @@ function Zogsool({
       },
     },
     {
-      title: "Зогсоолын тоо",
+      title: t("Зогсоолын тоо"),
       width: "8rem",
       dataIndex: "too",
       ellipsis: true,
       align: "center",
     },
     {
-      title: "Үнэ",
+      title: t("Үнэ"),
       width: "7rem",
       dataIndex: "undsenUne",
       ellipsis: true,
