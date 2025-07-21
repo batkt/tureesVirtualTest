@@ -1,7 +1,7 @@
 
-const dugaarlalt = [0];
 
-const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
+
+const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId, dugaarlalt = [0]) => {
   return `
   <div style="height: 100%; width: 100%; font-family: Arial, sans-serif;">
     <div style="display: flex; justify-content: space-between;">
@@ -157,7 +157,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
               sensitivity: "base",
             });
           })
-          .filter(a => a.tailbar?.includes("Менежмент") || a.tailbar === "Менежмент-10,000").map((mur, index) => {
+          .filter(a => a.tailbar?.includes("Менежмент")).map((mur, index) => {
             return `
               <tr key=${index}>
                 <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${
@@ -315,6 +315,48 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             `;
           })
           .join("")} 
+
+        ${medeelel.zardluud
+          .sort((a, b) => {
+            return a.tailbar.localeCompare(b.tailbar, "en", {
+              sensitivity: "base",
+            });
+          })
+          .filter(a => !a.tailbar?.includes("ус") && !a.tailbar?.includes("Менежмент") && !a.tailbar?.includes("Дулаан") && !a.tailbar?.includes("Цахилгаан")).map((mur, index) => {
+            return `
+              <tr key=${index}>
+                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${
+                  ++dugaarlalt[0]
+                }</td>
+                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
+                  mur.tailbar
+                }</td>
+                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
+                  mur.umnukhZaalt === null ? "" : mur.umnukhZaalt
+                }</td>
+                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
+                  mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
+                }</td>
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">${
+                  mur.nuatBodokh === 1
+                    ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;`
+                    : ""
+                }</td>
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">${
+                  mur.nuatBodokh === 1
+                    ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;`
+                    : ""
+                }</td>
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;${
+                  mur.tailbar
+                }.khungulult&gt;</td>
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;${
+                  mur.tailbar
+                }.khungulultKhassanTulukhDun&gt;</td>
+              </tr>
+            `;
+          })
+          .join("")}   
       </tbody>
       <tfoot style="border: none;">
         <tr style="background-color: #d1d5db; font-weight: bold; border: none;">
