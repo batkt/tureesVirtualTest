@@ -321,7 +321,7 @@ function negtgelTailan({ token }) {
     return (
     <Admin
         title="Нэгтгэл тайлан"
-        khuudasniiNer="tailan/negtgelTailan"
+        khuudasniiNer="negtgelTailan"
         className="p-0 md:p-4"
         onSearch={(search) =>
             setTailanKhuudaslalt((a) => ({
@@ -332,7 +332,7 @@ function negtgelTailan({ token }) {
           }
         loading={unshijBaina}
         tsonkhniiId={"671388c72b3e39a4d67b5f30"}>
-        <div className="col-span-12 px-5 md:px-0 lg:flex gap-5 grid grid-cols-2 items-center">
+        <div className="grid items-center grid-cols-2 col-span-12 gap-5 px-5 md:px-0 lg:flex">
             <DatePicker.RangePicker
             className="col-span-2"
             locale={local}
@@ -359,12 +359,12 @@ function negtgelTailan({ token }) {
                 </Select.Option>
               ))}
             </Select>
-            <div className="ml-auto flex gap-2">
+            <div className="flex gap-2 ml-auto">
                 <div className="flex h-8">
                     <button
                         onClick={handlePrint}
                         id="tabulator-print"
-                        className="btn btn-outline-secondary sm:w-auto mr-2 font-normal text-sm"
+                        className="mr-2 text-sm font-normal btn btn-outline-secondary sm:w-auto"
                         >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -378,7 +378,7 @@ function negtgelTailan({ token }) {
                         strokeLinejoin="round"
                         icon-name="printer"
                         data-lucide="printer"
-                        className="lucide lucide-printer w-4 h-4 mr-2"
+                        className="w-4 h-4 mr-2 lucide lucide-printer"
                     >
                         <polyline points="6 9 6 2 18 2 18 9"></polyline>
                         <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path>
@@ -386,7 +386,7 @@ function negtgelTailan({ token }) {
                     </svg>
                     Хэвлэх
                     </button>
-                    <div className="dropdown w-1/2 sm:w-auto h-8">
+                    <div className="w-1/2 h-8 dropdown sm:w-auto">
                     <Dropdown
                         overlay={
                         <Menu disabled={excelUnshijBaina}>
@@ -403,7 +403,7 @@ function negtgelTailan({ token }) {
                         disabled={excelUnshijBaina}
                     >
                         <button
-                        className="dropdown-toggle btn btn-outline-secondary w-full sm:w-auto font-normal text-sm h-8 "
+                        className="w-full h-8 text-sm font-normal dropdown-toggle btn btn-outline-secondary sm:w-auto "
                         aria-expanded="false"
                         data-tw-toggle="dropdown"
                         >
@@ -422,7 +422,7 @@ function negtgelTailan({ token }) {
                             strokeLinejoin="round"
                             icon-name="file-text"
                             data-lucide="file-text"
-                            className="lucide lucide-file-text w-4 h-4 mr-2"
+                            className="w-4 h-4 mr-2 lucide lucide-file-text"
                             >
                             <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path>
                             <polyline points="14 2 14 8 20 8"></polyline>
@@ -444,7 +444,7 @@ function negtgelTailan({ token }) {
                             strokeLinejoin="round"
                             icon-name="chevron-down"
                             data-lucide="chevron-down"
-                            className="lucide lucide-chevron-down w-4 h-4 ml-auto sm:ml-2"
+                            className="w-4 h-4 ml-auto lucide lucide-chevron-down sm:ml-2"
                         >
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
@@ -510,14 +510,14 @@ function negtgelTailan({ token }) {
                 />
             </div>
         </div>
-        <div className="flex col-span-12 mt-12 2xl:mt-0 justify-center items-center text-mashJijig">
+        <div className="flex items-center justify-center col-span-12 mt-12 2xl:mt-0 text-mashJijig">
             <Table
                 sticky={{ offsetHeader: 0 }}
                 scroll={{ y: "calc(100vh - 29rem)", x: "calc(100vw - 25rem)" }}
                 tableLayout="fixed"
                 bordered
                 size="small"
-                className="text-xs overflow-auto"
+                className="overflow-auto text-xs"
                 pagination={{
                     current: tailanGaralt?.khuudasniiDugaar,
                     total: tailanGaralt?.length,
@@ -540,14 +540,14 @@ function negtgelTailan({ token }) {
                 summary={(e) => (
                     <AntdTable.Summary className="border " fixed={'bottom'}>
                       <AntdTable.Summary.Cell index={0} colSpan={1}>
-                        <div className="space-x-2 truncate text-base font-bold ">
+                        <div className="space-x-2 text-base font-bold truncate ">
                           {t("Нийт")}
                         </div>
                       </AntdTable.Summary.Cell>
                       <AntdTable.Summary.Cell index={1}></AntdTable.Summary.Cell>
                       <AntdTable.Summary.Cell index={2}></AntdTable.Summary.Cell>
                       <AntdTable.Summary.Cell index={3}>
-                        <div className="truncate text-center font-bold ">
+                        <div className="font-bold text-center truncate ">
                           {formatNumber(
                             e?.reduce((a, b) => a + (b?._id?.talbainKhemjee || 0), 0),
                             2
@@ -559,14 +559,14 @@ function negtgelTailan({ token }) {
                             var dun = niitDunJagsaalt?.filter((a) => a.key === mur.ognoo + ";" + mur.tailbar).reduce((a, b) => a + (b.dun || 0), 0); 
                             return (
                             <AntdTable.Summary.Cell index={4 + shineBagana?.length + index + 1}>
-                                <div className="truncate text-right font-bold ">
+                                <div className="font-bold text-right truncate ">
                                     {formatNumber(dun)}
                                 </div>
                             </AntdTable.Summary.Cell>
                             );
                         })}
                         <AntdTable.Summary.Cell index={4 + niitDunJagsaalt?.length + shineBagana?.length + 1}>
-                            <div className="truncate text-right font-bold ">
+                            <div className="font-bold text-right truncate ">
                                 {formatNumber(e?.reduce((a, b) => a + (b?.niitTulukhDun || 0), 0), 2)}
                             </div>
                         </AntdTable.Summary.Cell>
@@ -577,8 +577,8 @@ function negtgelTailan({ token }) {
             />
         <div className="hidden">
             <div ref={printRef}>
-                <div className="flex w-full justify-between items-center text-sm">
-                    <div className="w-1/3 text-left text-sm">
+                <div className="flex items-center justify-between w-full text-sm">
+                    <div className="w-1/3 text-sm text-left">
                         {ognoo ? (
                         <div>
                             Огноо: {moment(ognoo[0]).format("YYYY-MM-DD")}-{" "}
@@ -588,13 +588,13 @@ function negtgelTailan({ token }) {
                         <div>{""}</div>
                         )}
                     </div>
-                        <div className="w-1/3 text-center font-bold text-sm">
+                        <div className="w-1/3 text-sm font-bold text-center">
                             Нэгтгэл тайлан
                         </div>
                     </div>
-                    <table className="border-2 border-gray-500 w-full">
+                    <table className="w-full border-2 border-gray-500">
                         <thead>
-                            <tr className="bg-gray-400 text-white">
+                            <tr className="text-white bg-gray-400">
                                 <th className="border border-gray-400 text-mashJijigiinJijig" rowSpan={2}>
                                     №
                                 </th>
@@ -632,7 +632,7 @@ function negtgelTailan({ token }) {
                                     {t("Нийт")}
                                 </th>
                             </tr>
-                            <tr className="bg-gray-400 text-white">
+                            <tr className="text-white bg-gray-400">
                                 {avlaga?.map((murAvlaga, index) => {
                                     return (
                                         <React.Fragment key={index}>
@@ -655,7 +655,7 @@ function negtgelTailan({ token }) {
                                         >
                                         {index + 1}
                                         </td>
-                                        <td className="border border-gray-400 pl-4 text-mashJijigiinJijig">
+                                        <td className="pl-4 border border-gray-400 text-mashJijigiinJijig">
                                         {mur?._id?.register}
                                         </td>
                                         <td className="border border-gray-400 text-mashJijigiinJijig">
@@ -707,7 +707,7 @@ function negtgelTailan({ token }) {
                                 <td colSpan="1" className="border border-gray-400 text-mashJijigiinJijig">{t("Нийт")}</td>
                                 <td></td>
                                 <td></td>
-                                <td className="border border-gray-400 text-mashJijigiinJijig text-center"> {formatNumber(tailanGaralt?.reduce((a, b) => a + (b?._id?.talbainKhemjee || 0), 0), 2)} </td>
+                                <td className="text-center border border-gray-400 text-mashJijigiinJijig"> {formatNumber(tailanGaralt?.reduce((a, b) => a + (b?._id?.talbainKhemjee || 0), 0), 2)} </td>
                                 <td colSpan={shineBagana?.length > 0 ? shineBagana?.length + 1 : 1}></td>
                                 {avlaga?.map((murAvlaga, index) => {
                                     var niitTulukhDun = 0
@@ -724,7 +724,7 @@ function negtgelTailan({ token }) {
                                         </React.Fragment>
                                     );
                                 })}
-                                <td className="border border-gray-400 text-mashJijigiinJijig text-right"> {formatNumber(tailanGaralt?.reduce((a, b) => a + (b?.niitTulukhDun || 0), 0), 2)}</td>
+                                <td className="text-right border border-gray-400 text-mashJijigiinJijig"> {formatNumber(tailanGaralt?.reduce((a, b) => a + (b?.niitTulukhDun || 0), 0), 2)}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -732,7 +732,7 @@ function negtgelTailan({ token }) {
                         <tfoot>
                             <tr>
                             <td colSpan="3"></td>
-                            <td colSpan="3" className="text-right italic">
+                            <td colSpan="3" className="italic text-right">
                                 Тайлан гаргасан:
                             </td>
                             <td>
@@ -744,7 +744,7 @@ function negtgelTailan({ token }) {
                             </tr>
                             <tr>
                             <td colSpan="3"></td>
-                            <td colSpan="3" className="text-right italic">
+                            <td colSpan="3" className="italic text-right">
                                 Хянасан нягтлан бодогч:
                             </td>
                             <td> ................................</td>

@@ -484,7 +484,7 @@ function nasjiltinTailan({ token }) {
   return (
     <Admin
       title="Насжилтын тайлан"
-      khuudasniiNer="tailan/nasjiltinTailan"
+      khuudasniiNer="nasjiltinTailan"
       className="p-0 md:p-4"
       onSearch={(search) =>
         setTailanKhuudaslalt((a) => ({

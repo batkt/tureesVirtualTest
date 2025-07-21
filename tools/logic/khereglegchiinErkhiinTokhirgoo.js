@@ -859,7 +859,6 @@ export const khuudasnuud = [
         href: "/khyanalt/tailan/analytic",
         icon: <MdOutlineAnalytics style={{ width: "24", height: "24" }} />,
       },
-
       {
         ner: "Нэгтгэл тайлан",
         khuudasniiNer: "negtgelTailan",
@@ -872,8 +871,8 @@ export const khuudasnuud = [
         href: "/khyanalt/tailan/nasjiltinTailan",
         icon: (
           <img
-            src="/NasjiltLogo.png" // ✅ correct prop is `src`
-            alt="Насжилтын лого" // optional but recommended for accessibility
+            src="/NasjiltLogo.png"
+            alt="Насжилтын лого"
             style={{ marginLeft: "2px", width: "24px", height: "24px" }}
           />
         ),
