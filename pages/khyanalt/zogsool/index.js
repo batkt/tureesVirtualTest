@@ -2214,6 +2214,21 @@ function Zogsool({ token }) {
                             )}
                           </div>
                         </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold "></div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold "></div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold "></div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold "></div>
+                        </AntdTable.Summary.Cell>
+                        <AntdTable.Summary.Cell>
+                          <div className="truncate text-right font-bold "></div>
+                        </AntdTable.Summary.Cell>
                       </AntdTable.Summary>
                     )}
                   />
