@@ -132,7 +132,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             sensitivity: "base",
           });
           })
-          .filter(a => a.tailbar === "Тавилга түрээс" || a.tailbar === "Худалдааны менежмент")
+          .filter(a => a.tailbar === "Тавилга түрээс" || a.tailbar === "Худалдааны менежмент" || a.tailbar === "Түрээсийн төлбөр нэмэлт")
           .map((mur, index) => {
           return `
             <tr key=${index}>
@@ -149,6 +149,17 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           `;
           })
           .join("")}
+          ${medeelel.zardluud.filter(a => a.tailbar === "Түрээсийн төлбөр нэмэлт").length > 0 ? "" :
+          `
+          <tr>
+            <td style="border: 1px solid #000; text-align: center;">1</td>
+            <td style="border: 1px solid #000; text-align: left;" colspan="4">Түрээсийн төлбөр</td>
+            <td style="border: 1px solid #000; text-align: right;">&lt;talbainKhemjee&gt;</td>
+            <td style="border: 1px solid #000; text-align: right;">&lt;talbainNegjUne&gt;</td>
+            <td style="border: 1px solid #000; text-align: right; width: 16%;">&lt;khungulult&gt;</td>
+            <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
+          </tr>
+          `}
         <tr>
           <td style="border: 1px solid #000; text-align: left; font-weight: 600;">
             Түрээс

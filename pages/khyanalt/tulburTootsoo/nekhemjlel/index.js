@@ -865,7 +865,8 @@ function tulburTootsoo({ token }) {
               if (
                 a.tailbar === "Худалдааны менежмент" ||
                 a.tailbar === "Хөрөнгийн менежмент" ||
-                a.tailbar === "Тавилга түрээс"
+                a.tailbar === "Тавилга түрээс" ||
+                a.tailbar === "Түрээсийн төлбөр нэмэлт"
               ) {
                 menejmentCount++;
                 niilberNekhemjlelDunGoto += khungulultKhassanTulukhDun;
@@ -2186,7 +2187,8 @@ function tulburTootsoo({ token }) {
           if (
             a.tailbar === "Худалдааны менежмент" ||
             a.tailbar === "Хөрөнгийн менежмент" ||
-            a.tailbar === "Тавилга түрээс"
+            a.tailbar === "Тавилга түрээс" ||
+            a.tailbar === "Түрээсийн төлбөр нэмэлт"
           ) {
             menejmentCount++;
             niilberNekhemjlelDunGoto += khungulultKhassanTulukhDun;
