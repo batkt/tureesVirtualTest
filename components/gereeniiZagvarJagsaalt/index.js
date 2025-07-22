@@ -215,13 +215,20 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                 <div className="mt-4 block truncate text-center font-medium">
                   {a?.ner}
                 </div>
-                <div className="mt-0.5 text-center text-xs text-gray-600 dark:text-gray-400">
-                  {zagvaraaBichijUgnu === "geree"
-                    ? t(
-                        a?.turGereeEsekh === true ? "Түр гэрээ" : "Үндсэн гэрээ"
-                      )
-                    : moment(a?.createdAt).format("YYYY-MM-DD HH:mm")}
+                <div className="mt-0.5 text-center text-xs">
+                  {zagvaraaBichijUgnu === "geree" ? (
+                    <span
+                      className={
+                        a?.turGereeEsekh ? "text-purple-500" : "text-blue-500"
+                      }
+                    >
+                      {t(a?.turGereeEsekh ? "Түр гэрээ" : "Үндсэн гэрээ")}
+                    </span>
+                  ) : (
+                    moment(a?.createdAt).format("YYYY-MM-DD HH:mm")
+                  )}
                 </div>
+
                 <div className="dropdown absolute right-0 top-0 ml-auto mr-2 mt-2">
                   <Dropdown
                     trigger="click"
