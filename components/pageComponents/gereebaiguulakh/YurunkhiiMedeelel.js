@@ -349,7 +349,6 @@ const YurunkhiiMedeele = ({
               message: t("Гэрээний дугаар бүртгэнэ үү!"),
             },
           ]}
-          label={t("Гэрээний дугаар")}
         >
           <Input
             onKeyUp={focuser}
@@ -472,6 +471,7 @@ const YurunkhiiMedeele = ({
             rules={[{ required: true, message: t("Овог бүртгэнэ үү!") }]}
             name="ovog"
             label={t("Овог")}
+            normalize={(value) => value?.replace(/\s/g, "")}
           >
             <Input
               onKeyUp={focuser}
@@ -488,6 +488,7 @@ const YurunkhiiMedeele = ({
             name="ner"
             rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}
             label={t("Нэр")}
+            normalize={(value) => value?.replace(/\s/g, "")}
           >
             <Input
               onKeyUp={focuser}
@@ -542,6 +543,7 @@ const YurunkhiiMedeele = ({
               { required: true, message: t("Утасны дугаар оруулна уу !") },
             ]}
             label={t("Утас")}
+            normalize={(value) => value?.replace(/\s/g, "")}
           >
             <Input
               onKeyUp={focuser}
@@ -572,7 +574,11 @@ const YurunkhiiMedeele = ({
       )}
       {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="800">
-          <Form.Item name="mail" label={t("И-мэйл хаяг")}>
+          <Form.Item
+            name="mail"
+            label={t("И-мэйл хаяг")}
+            normalize={(value) => value?.replace(/\s/g, "")}
+          >
             <Input
               onKeyUp={focuser}
               type="email"
@@ -580,6 +586,17 @@ const YurunkhiiMedeele = ({
               allowClear
               prefix={<MailOutlined />}
               normalize={(value) => value?.replace(/\s/g, "")}
+              onKeyDown={(e) => {
+                if (e.key === " ") {
+                  e.preventDefault();
+                }
+              }}
+              onPaste={(e) => {
+                const pasted = e.clipboardData.getData("Text");
+                if (/\s/.test(pasted)) {
+                  e.preventDefault();
+                }
+              }}
             />
           </Form.Item>
         </div>
@@ -590,6 +607,7 @@ const YurunkhiiMedeele = ({
             name="mail"
             rules={[{ required: true, message: t("И-мэйл хаяг бүртгэнэ үү!") }]}
             label={t("И-мэйл хаяг")}
+            normalize={(value) => value?.replace(/\s/g, "")}
           >
             <Input
               onKeyUp={focuser}
@@ -620,7 +638,6 @@ const YurunkhiiMedeele = ({
                     fieldKey={fieldKey}
                     {...restField}
                     remove={remove}
-                    normalize={(value) => value?.replace(/\s/g, "")}
                   />
                 </div>
               ))}
