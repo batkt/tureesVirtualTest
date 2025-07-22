@@ -341,13 +341,14 @@ const YurunkhiiMedeele = ({
       <div data-aos="fade-right" data-aos-delay="200">
         <Form.Item
           name="gereeniiDugaar"
+          label={t("Гэрээний дугаар")}
+          required={false} 
           rules={[
             {
               required: true,
               message: t("Гэрээний дугаар бүртгэнэ үү!"),
             },
           ]}
-          label={t("Гэрээний дугаар")}
         >
           <Input
             onKeyUp={focuser}
@@ -356,6 +357,7 @@ const YurunkhiiMedeele = ({
             prefix={<SolutionOutlined />}
           />
         </Form.Item>
+
       </div>
       <div
         data-aos="fade-right"
@@ -386,10 +388,11 @@ const YurunkhiiMedeele = ({
         <Form.Item
           name="register"
           label={t("Регистр")}
+          required={false}
           rules={[
             {
-              required: value.customerTin !== value.register,
-              message: t("Регистр бүртгэнэ үү!"),
+              required: value.customerTin === value.register,
+              message: t("Регистр дугаар бүртгэнэ үү!"),
             },
           ]}
         >
@@ -408,11 +411,12 @@ const YurunkhiiMedeele = ({
       <div data-aos="fade-right" data-aos-delay="800">
         <Form.Item
           name="customerTin"
+          required={false}
           label={t("Бүртгэлийн дугаар")}
           rules={[
             {
               required: value.customerTin === value.register,
-              message: t("Регистр бүртгэнэ үү!"),
+              message: t("Бүртгэлийн дугаар бүртгэнэ үү!"),
             },
           ]}
         >
@@ -429,6 +433,7 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="ner"
             label={t("Байгууллага нэр")}
+            required={false}
             rules={[
               { required: true, message: t("Байгууллага нэр бүртгэнэ үү!") },
             ]}
@@ -447,8 +452,11 @@ const YurunkhiiMedeele = ({
           <Form.Item
             rules={[{ required: true, message: t("Овог бүртгэнэ үү!") }]}
             name="ovog"
+            
             label={t("Овог")}
+            required={false}
           >
+            
             <Input
               onKeyUp={focuser}
               allowClear
@@ -464,6 +472,7 @@ const YurunkhiiMedeele = ({
             name="ner"
             rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}
             label={t("Нэр")}
+            required={false}
           >
             <Input
               onKeyUp={focuser}
@@ -479,6 +488,7 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="zakhirliinOvog"
             label={t("Захирлын овог")}
+            required={false}
             rules={[{ required: true, message: t("Овог бүртгэнэ үү!") }]}
           >
             <Input
@@ -495,6 +505,7 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="zakhirliinNer"
             label={t("Захирлын нэр")}
+            required={false}
             rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}
           >
             <Input
@@ -514,6 +525,7 @@ const YurunkhiiMedeele = ({
               { required: true, message: t("Утасны дугаар оруулна уу !") },
             ]}
             label={t("Утас")}
+            required={false}
           >
             <Input
               onKeyUp={focuser}
@@ -532,6 +544,7 @@ const YurunkhiiMedeele = ({
               { required: true, message: t("Утасны дугаар оруулна уу !") },
             ]}
             label={t("Утас")}
+            required={false}
           >
             <Input
               onKeyUp={focuser}
@@ -544,7 +557,10 @@ const YurunkhiiMedeele = ({
       )}
       {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="800">
-          <Form.Item name="mail" label={t("И-мэйл хаяг")}>
+          <Form.Item name="mail" label={t("И-мэйл хаяг")} required={false}
+          rules={[
+              { required: true, message: t("И-мэйл хаяг оруулна уу !") },
+            ]}>
             <Input
               onKeyUp={focuser}
               type="email"
@@ -561,6 +577,7 @@ const YurunkhiiMedeele = ({
             name="mail"
             rules={[{ required: true, message: t("И-мэйл хаяг бүртгэнэ үү!") }]}
             label={t("И-мэйл хаяг")}
+            required={false}
           >
             <Input
               onKeyUp={focuser}
@@ -573,7 +590,10 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       <div data-aos="fade-right" data-aos-delay="800">
-        <Form.Item label={t("Нэршил")} name={"khariltsagchiinNershil"}>
+        <Form.Item label={t("Нэршил")} name={"khariltsagchiinNershil"} required={false}
+        rules={[
+              { required: true, message: t("Нэршил оруулна уу !") },
+            ]}>
           <Input placeholder={t("Дэлгүүр, брэнд нэр")} />
         </Form.Item>
       </div>
@@ -650,7 +670,7 @@ const YurunkhiiMedeele = ({
           rules={[
             { required: true, message: t("Төлөлт хийх данс бүртгэнэ үү!") },
           ]}
-          label={t("Төлөлт хийх данс")}
+          label={t("Төлөлт хийх данс")} required={false}
         >
           <FormLavlakh
             selectId={"dans"}
