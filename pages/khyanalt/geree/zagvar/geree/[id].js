@@ -12,6 +12,7 @@ import {
   EditOutlined,
   FileAddOutlined,
   FileExcelOutlined,
+  FileOutlined,
 } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
 import ZaaltZasvar from "components/pageComponents/geree/zagvar/ZaaltZasvar";
@@ -163,6 +164,16 @@ function ZakhialgaNemekh({ token }) {
     return () => document.removeEventListener("keyup", keyUp);
   }, [gereeniiZagvar, defaultUtga]);
 
+  function nemekh() {
+  const newMur = {
+    zaalt: "<b>{t(Шинэ заалт)}</b>"
+  };
+  
+  gereeniiZagvar.dedKhesguud.push(newMur);
+  let value = _.cloneDeep(gereeniiZagvar);
+  setGereeniiZagvar(value);
+}
+
   function docNemekh(key, mur) {
     mur.zaalt = "<b>{t(Шинэ заалт)}</b>";
     gereeniiZagvar.dedKhesguud.splice(key + 1, 0, mur);
@@ -236,7 +247,7 @@ function ZakhialgaNemekh({ token }) {
                     <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
                   </div>
                   <div onClick={() => docUstgaya(index, mur)}>
-                    <DeleteOutlined className="cursor-pointer rounded-full border bg-white fill-current p-1 hover:bg-red-400 dark:bg-black dark:hover:bg-gray-800" />
+                    <DeleteOutlined  className = "rounded-full border bg-white fill-current p-1 hover:bg-red-400 dark:bg-black dark:hover:bg-gray-800"/>
                   </div>
                 </div>
                 <div className="absolute -bottom-2 -right-2 hidden flex-row space-x-2 group-hover:flex">
@@ -314,6 +325,13 @@ function ZakhialgaNemekh({ token }) {
                 loading={towchTuluv}
               >
                 {t("Хадгалах")}
+              </Button>
+              <Button
+                className="w-full mt-4"
+                type="primary"
+                onClick={() => nemekh()}
+              ><FileAddOutlined/>
+                Гэрээний заалт нэмэх
               </Button>
             </Form.Item>
           </Form>
