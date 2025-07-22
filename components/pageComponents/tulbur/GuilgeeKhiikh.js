@@ -158,6 +158,17 @@ function GuilgeeKhiikh(
         destroy();
       },
       khadgalya() {
+        if (
+          turul === "avlaga" &&
+          !tureesEkhniiUldegdelEsekh &&
+          !ashiglaltiinId
+        ) {
+          notification.warning({
+            message: "Алдаа",
+            description: "Ашиглалтын зардлыг сонгоно уу.",
+          });
+          return;
+        }
         if (!dun && !suuriKhuraamj) {
           notification.warning({ message: t("Та дүн оруулна уу") });
           return;
@@ -175,6 +186,7 @@ function GuilgeeKhiikh(
               });
               return;
             }
+           
             guilgee = {
               turul: busadTurul,
               tulsunDun: busadTurul === "aldangi" ? 0 : dun,
