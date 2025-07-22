@@ -152,10 +152,10 @@ function index({ token, data }) {
                   </div>
                 ))}
                 <div className="mt-3"></div>
-                <Divider orientation="left">
+                {/* <Divider orientation="left">
                   {t("Зогсоолын хаалга сонгох")}
-                </Divider>
-                {jagsaalt?.map((a) => (
+                </Divider> */}
+                {/* {jagsaalt?.map((a) => (
                   <div
                     key={a._id}
                     className="my-2 rounded-md bg-gray-100 p-5 py-2 hover:shadow-lg dark:bg-gray-700"
@@ -181,7 +181,7 @@ function index({ token, data }) {
                       </Col>
                     ))}
                   </div>
-                ))}
+                ))} */}
               </div>
             </div>
           </div>

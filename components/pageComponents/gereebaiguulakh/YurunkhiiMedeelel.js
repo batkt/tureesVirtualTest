@@ -349,7 +349,6 @@ const YurunkhiiMedeele = ({
               message: t("Гэрээний дугаар бүртгэнэ үү!"),
             },
           ]}
-          label={t("Гэрээний дугаар")}
         >
           <Input
             onKeyUp={focuser}
