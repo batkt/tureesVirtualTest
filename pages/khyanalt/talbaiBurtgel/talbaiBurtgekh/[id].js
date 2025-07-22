@@ -656,7 +656,13 @@ function TalbaiBurtgekh({ token }) {
               data-aos-duration="1000"
               data-aos-delay="100"
             >
-              <Form.Item label={t("Хэмжээ м3")} name="talbainKhemjeeMetrKube">
+              <Form.Item label={t("Хэмжээ м3")} name="talbainKhemjeeMetrKube"
+              rules={[
+                  {
+                    required: true,
+                    message: t("Талбайн хэмжээ бүртгэнэ үү!"),
+                  },
+                ]}>
                 <InputNumber
                   onKeyUp={focuser}
                   style={{ width: "100%" }}
