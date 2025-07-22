@@ -2060,13 +2060,13 @@ function camera({ token }) {
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
             <div className="fixed left-6 top-24 z-[10000] hidden h-[400px] md:block">
               <Tooltip title="Хуулга шалгах">
-                <div
-                  className="h-12 w-12 cursor-pointer rounded-r-full border-y border-r bg-yellow-500 text-xl flex items-center justify-center"
-                  onClick={guilgeeDrawerOngoilgokh}
-                >
-                  <DollarCircleOutlined />
-                </div>
-              </Tooltip>
+              <div
+                className="h-12 w-12 cursor-pointer rounded-r-full border-y border-r bg-yellow-500 text-xl flex items-center justify-center"
+                onClick={guilgeeDrawerOngoilgokh}
+              >
+                <DollarCircleOutlined />
+              </div>
+            </Tooltip>
 
               <Drawer
                 title={t("Сүүлийн гүйлгээ")}
