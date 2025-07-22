@@ -171,6 +171,7 @@ const YurunkhiiMedeele = ({
           ]}
           name="gereeniiOgnoo"
           label={t("Гэрээ хийх огноо")}
+          required={false}
         >
           <DatePicker
             disabled={!!value._id}
@@ -189,7 +190,8 @@ const YurunkhiiMedeele = ({
           ]}
           name="khugatsaa"
           label={t("Гэрээний хугацаа")}
-          required
+          required={false}
+          
         >
           <InputNumber
             onKeyUp={focuser}
@@ -214,12 +216,13 @@ const YurunkhiiMedeele = ({
             { required: true, message: t("Авлага үүсэх өдөр бүртгэнэ үү!") },
           ]}
           label={t("Авлага үүсэх өдөр")}
+          required={false}
           extra={
             gereeniiZagvar?.turGereeEsekh !== true &&
             t("Авлага үүсэх огноо сар бүрийн / өдөр")
           }
           name="tulukhUdur"
-          required
+          
         >
           {gereeniiZagvar?.turGereeEsekh === true ? (
             <Input
@@ -249,6 +252,7 @@ const YurunkhiiMedeele = ({
         <Form.Item
           name="duusakhOgnoo"
           label={t("Гэрээ дуусах хугацаа")}
+          required={false}
           extra={t("Авлага үүсгэх огноо сар бүрийн / өдөр")}
           rules={[
             { required: true, message: t("Гэрээ дуусах хугацаа бүртгэнэ үү!") },

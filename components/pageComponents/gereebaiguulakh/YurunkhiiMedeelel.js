@@ -341,6 +341,8 @@ const YurunkhiiMedeele = ({
       <div data-aos="fade-right" data-aos-delay="200">
         <Form.Item
           name="gereeniiDugaar"
+          label={t("Гэрээний дугаар")}
+          required={false}
           rules={[
             {
               required: true,
@@ -348,7 +350,6 @@ const YurunkhiiMedeele = ({
             },
           ]}
           label={t("Гэрээний дугаар")}
-          normalize={(value) => value?.replace(/\s/g, "")}
         >
           <Input
             onKeyUp={focuser}
@@ -388,10 +389,11 @@ const YurunkhiiMedeele = ({
         <Form.Item
           name="register"
           label={t("Регистр")}
+          required={false}
           rules={[
             {
-              required: value.customerTin !== value.register,
-              message: t("Регистр бүртгэнэ үү!"),
+              required: value.customerTin === value.register,
+              message: t("Регистр дугаар бүртгэнэ үү!"),
             },
           ]}
           normalize={(value) => value?.replace(/\s/g, "")}
@@ -426,11 +428,12 @@ const YurunkhiiMedeele = ({
       <div data-aos="fade-right" data-aos-delay="800">
         <Form.Item
           name="customerTin"
+          required={false}
           label={t("Бүртгэлийн дугаар")}
           rules={[
             {
               required: value.customerTin === value.register,
-              message: t("Регистр бүртгэнэ үү!"),
+              message: t("Бүртгэлийн дугаар бүртгэнэ үү!"),
             },
           ]}
           normalize={(value) => value?.replace(/\s/g, "")}
@@ -448,6 +451,7 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="ner"
             label={t("Байгууллага нэр")}
+            required={false}
             rules={[
               { required: true, message: t("Байгууллага нэр бүртгэнэ үү!") },
             ]}
@@ -468,7 +472,6 @@ const YurunkhiiMedeele = ({
             rules={[{ required: true, message: t("Овог бүртгэнэ үү!") }]}
             name="ovog"
             label={t("Овог")}
-            normalize={(value) => value?.replace(/\s/g, "")}
           >
             <Input
               onKeyUp={focuser}
@@ -485,7 +488,6 @@ const YurunkhiiMedeele = ({
             name="ner"
             rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}
             label={t("Нэр")}
-            normalize={(value) => value?.replace(/\s/g, "")}
           >
             <Input
               onKeyUp={focuser}
@@ -501,6 +503,7 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="zakhirliinOvog"
             label={t("Захирлын овог")}
+            required={false}
             rules={[{ required: true, message: t("Овог бүртгэнэ үү!") }]}
             normalize={(value) => value?.replace(/\s/g, "")}
           >
@@ -518,6 +521,7 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="zakhirliinNer"
             label={t("Захирлын нэр")}
+            required={false}
             rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}
             normalize={(value) => value?.replace(/\s/g, "")}
           >
@@ -538,7 +542,6 @@ const YurunkhiiMedeele = ({
               { required: true, message: t("Утасны дугаар оруулна уу !") },
             ]}
             label={t("Утас")}
-            normalize={(value) => value?.replace(/\s/g, "")}
           >
             <Input
               onKeyUp={focuser}
@@ -557,7 +560,6 @@ const YurunkhiiMedeele = ({
               { required: true, message: t("Утасны дугаар оруулна уу !") },
             ]}
             label={t("Утас")}
-            normalize={(value) => value?.replace(/\s/g, "")}
           >
             <Input
               onKeyUp={focuser}
@@ -570,11 +572,7 @@ const YurunkhiiMedeele = ({
       )}
       {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="800">
-          <Form.Item
-            name="mail"
-            label={t("И-мэйл хаяг")}
-            normalize={(value) => value?.replace(/\s/g, " ")}
-          >
+          <Form.Item name="mail" label={t("И-мэйл хаяг")}>
             <Input
               onKeyUp={focuser}
               type="email"
@@ -592,7 +590,6 @@ const YurunkhiiMedeele = ({
             name="mail"
             rules={[{ required: true, message: t("И-мэйл хаяг бүртгэнэ үү!") }]}
             label={t("И-мэйл хаяг")}
-            normalize={(value) => value?.replace(/\s/g, "")}
           >
             <Input
               onKeyUp={focuser}
@@ -606,11 +603,7 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       <div data-aos="fade-right" data-aos-delay="800">
-        <Form.Item
-          label={t("Нэршил")}
-          name={"khariltsagchiinNershil"}
-          normalize={(value) => value?.replace(/\s/g, "")}
-        >
+        <Form.Item label={t("Нэршил")} name={"khariltsagchiinNershil"}>
           <Input placeholder={t("Дэлгүүр, брэнд нэр")} />
         </Form.Item>
       </div>
@@ -690,7 +683,6 @@ const YurunkhiiMedeele = ({
             { required: true, message: t("Төлөлт хийх данс бүртгэнэ үү!") },
           ]}
           label={t("Төлөлт хийх данс")}
-          normalize={(value) => value?.replace(/\s/g, "")}
         >
           <FormLavlakh
             selectId={"dans"}

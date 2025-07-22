@@ -602,7 +602,8 @@ function TalbaiBurtgekh({ token }) {
         initialValues={{ ...data, remember: true }}
         className="col-span-12 grid grid-cols-12 gap-6"
       >
-        <div className="box col-span-12 overflow-y-scroll p-5 md:col-span-6  lg:max-h-screen xl:col-span-4">
+        <div className="box col-span-12 md:col-span-6 xl:col-span-4 overflow-y-scroll p-5 max-h-[calc(100vh-100px)]">
+
           <div>
             <div data-aos="fade-right" data-aos-duration="1000">
               <Form.Item
@@ -656,7 +657,13 @@ function TalbaiBurtgekh({ token }) {
               data-aos-duration="1000"
               data-aos-delay="100"
             >
-              <Form.Item label={t("Хэмжээ м3")} name="talbainKhemjeeMetrKube">
+              <Form.Item label={t("Хэмжээ м3")} name="talbainKhemjeeMetrKube"
+              rules={[
+                  {
+                    required: true,
+                    message: t("Талбайн хэмжээ бүртгэнэ үү!"),
+                  },
+                ]}>
                 <InputNumber
                   onKeyUp={focuser}
                   style={{ width: "100%" }}

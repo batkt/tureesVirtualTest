@@ -133,7 +133,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                 : "Актын загвар үүсгэх"
             )}
           </Button>
-          <Dropdown
+          {/* <Dropdown
             overlay={
               <Menu className="p-2">
                 <Menu.Item
@@ -188,7 +188,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                 </span>
               }
             ></Button>
-          </Dropdown>
+          </Dropdown> */}
         </div>
       </div>
       <div className="mt-5 grid grid-cols-12 gap-3 sm:gap-6">
