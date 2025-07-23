@@ -21,6 +21,7 @@ import Barcode from 'react-barcode';
 
 //#endregion
 function ShineTogloomTulbur(
+  
   { destroy, data, token, baiguullaga, ajiltan, barilgiinId, onRefresh, barCodes, setBarCodes },
   ref
 ) {
@@ -31,6 +32,7 @@ function ShineTogloomTulbur(
   const [tulbur, setTulbur] = React.useState(
     (data?.dutuuDun ? [] : data?.tulbur) || []
   );
+  const f4LockRef = React.useRef(false);
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
   const [irgenEsekh, setIrgenEsekh] = React.useState(true);
@@ -75,6 +77,7 @@ function ShineTogloomTulbur(
       setRegister("");
       setTin("");
       setQpayModalTuluv(false);
+      f4LockRef.current = false;
     },
   });
 
@@ -127,6 +130,7 @@ function ShineTogloomTulbur(
     const khungulult = tulbur.find((a) => a.turul === "khungulult")?.dun;
     const ticket = tulbur.find((a) => a.turul === "ticket")?.dun;
     const erkhiinBichig = tulbur.find((a) => a.turul === "erkhiinBichig")?.dun;
+    
 
     return {
       belen,
@@ -155,6 +159,9 @@ function ShineTogloomTulbur(
   useKeyboardTovchlol("F4", f4Darsan);
 
   function f4Darsan() {
+    if (f4LockRef.current) return; // 🔒 prevent re-entry
+  f4LockRef.current = true;
+
     if (tulbur.length === 0) {
       turulruuTooKhiikhFunction("belen");
     }
@@ -175,41 +182,60 @@ function ShineTogloomTulbur(
 
   //Keyboard tovchlol tugsgul
 
-  function ebarimtAvya(id) {
-    setLoading(true);
-    if (!!eBarimt) {
-      handlePrint();
-      khaaya();
-    } else {
-      if (baiguullagaEsekh === true && register?.toString().length !== 7) {
-        message.warning(t("Байгууллагын регистр оруулна уу"));
-        setLoading(false);
-        return;
-      }
-      const body = {
-        id,
-        ebarimtiinTurul: "togloom",
-      };
-      if (baiguullagaEsekh || irgenEsekh) {
-        body.register = register;
-        if (baiguullagaEsekh) body.turul = "3";
-        else if (irgenEsekh) body.turul = "1";
-        if (baiguullagaEsekh) body.customerTin = tin;
-      }
+function ebarimtAvya(id) {
+  setLoading(true);
 
-      uilchilgee(token)
-        .post("/ebarimtShivye", body)
-        .then(({ data }) => {
-          if (data.success === true || data.status == "SUCCESS") {
-            setEBarimt(data);
-            setLoading(false);
-            onRefresh();
-            destroy();
-          }
-        })
-        .catch(aldaaBarigch);
+  if (!!eBarimt) {
+    handlePrint();
+    khaaya();
+    f4LockRef.current = false; // unlock after print
+    return;
+  }
+
+  if (baiguullagaEsekh === true && register?.toString().length !== 7) {
+    message.warning(t("Байгууллагын регистр оруулна уу"));
+    setLoading(false);
+    f4LockRef.current = false;
+    return;
+  }
+
+  const body = {
+    id,
+    ebarimtiinTurul: "togloom",
+    dun: data?.niitDun || 0, // ✅ Prevent .toFixed() backend crash
+  };
+
+  if (baiguullagaEsekh || irgenEsekh) {
+    body.register = register;
+    if (baiguullagaEsekh) {
+      body.turul = "3";
+      body.customerTin = tin;
+    } else if (irgenEsekh) {
+      body.turul = "1";
     }
   }
+
+  uilchilgee(token)
+    .post("/ebarimtShivye", body)
+    .then(({ data }) => {
+      if (data.success === true || data.status === "SUCCESS") {
+        setEBarimt(data);
+        setLoading(false); // let print handle f4LockRef reset
+        onRefresh();
+        destroy();
+      } else {
+        message.error("Баримт үүсгэхэд алдаа гарлаа");
+        setLoading(false);
+        f4LockRef.current = false;
+      }
+    })
+    .catch((err) => {
+      aldaaBarigch(err);
+      setLoading(false);
+      f4LockRef.current = false;
+    });
+}
+
 
   useEffect(() => {
     if (!!eBarimt) {
