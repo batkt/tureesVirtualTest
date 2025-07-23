@@ -576,6 +576,9 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item
             name="mail"
+            rules={[
+              { required: true, message: t("И-мэйл хаяг оруулна уу !")},
+            ]}
             label={t("И-мэйл хаяг")}
             normalize={(value) => value?.replace(/\s/g, "")}
           >
@@ -605,7 +608,7 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item
             name="mail"
-            rules={[{ required: true, message: t("И-мэйл хаяг бүртгэнэ үү!") }]}
+            rules={[{ required: true, message: t("И-мэйл хаяг оруулна уу !") }]}
             label={t("И-мэйл хаяг")}
             normalize={(value) => value?.replace(/\s/g, "")}
           >
@@ -621,8 +624,13 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       <div data-aos="fade-right" data-aos-delay="800">
-        <Form.Item label={t("Нэршил")} name={"khariltsagchiinNershil"}>
+        <Form.Item label={t("Нэршил")} name={"khariltsagchiinNershil"}
+        rules={[
+              { required: true, message: t("Нэр оруулна уу !")},
+            ]}>
+
           <Input placeholder={t("Дэлгүүр, брэнд нэр")} />
+          
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-delay="900">

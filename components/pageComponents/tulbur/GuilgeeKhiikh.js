@@ -591,15 +591,14 @@ function GuilgeeKhiikh(
             >
               {zardalAll?.jagsaalt?.map((a) => (
                 <Select.Option key={a._id} value={a._id}>
-                  <div className="flex w-full justify-between border-b">
-                    <p className="flex border-r bg-green-400 bg-opacity-10 pl-2 pr-2 text-left">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b p-1">
+                    <p className="min-w-[120px] max-w-[200px] truncate border-r bg-green-400 bg-opacity-10 px-2 text-left">
                       {a.ner}
                     </p>
-                    <div className="flex w-full justify-between bg-blue-600 bg-opacity-5 pl-2 pr-2">
-                      <p className={`mr-5 border-r text-right`}>{t(a.turul)}</p>
-                      <p className="text-right">
-                        {a.turul !== "Дурын" ? a.tariff : "Дурын"}
-                        {a.turul !== "Дурын" && "₮"}
+                    <div className="flex flex-1 justify-between gap-2 bg-blue-600 bg-opacity-5 px-2">
+                      <p className="text-right">{t(a.turul)}</p>
+                      <p className="text-right whitespace-nowrap">
+                        {a.turul !== "Дурын" ? `${a.tariff}₮` : "Дурын"}
                       </p>
                     </div>
                   </div>
