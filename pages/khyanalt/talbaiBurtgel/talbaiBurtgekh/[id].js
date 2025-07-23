@@ -602,7 +602,7 @@ function TalbaiBurtgekh({ token }) {
         initialValues={{ ...data, remember: true }}
         className="col-span-12 grid grid-cols-12 gap-6"
       >
-        <div className="box col-span-12 md:col-span-6 xl:col-span-4 overflow-y-scroll p-5 max-h-[calc(100vh-100px)]">
+        <div className="box col-span-12 md:col-span-6 xl:col-span-4 overflow-y-scroll p-5 max-h-screen overscroll-contain">
 
           <div>
             <div data-aos="fade-right" data-aos-duration="1000">

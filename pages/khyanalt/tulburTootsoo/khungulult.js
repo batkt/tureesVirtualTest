@@ -907,9 +907,6 @@ function tulburTootsoo() {
                     <Switch checked={khonogTootsokhEsekh} onChange={(v) => { form.setFieldValue("khungulultKhuvi", 0); form.setFieldValue("khungulultKhonog", 0); setKhonogTootsokhEsekh(v); khungulukhDunTootsoolyo(); }} /> 
                   </Form.Item>) : ""}
                   {khonogTootsokhEsekh ? (<Form.Item
-                      labelCol={{
-                        span: 8,
-                      }}
                       labelAlign="left"
                       name="ognoonuud"
                       label={t("Хөнгөлөх өдөр")}

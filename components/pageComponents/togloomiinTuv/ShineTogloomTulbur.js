@@ -61,7 +61,8 @@ function ShineTogloomTulbur(
           parseFloat(data?.tulbur?.reduce((a, b) => a + b.dun, 0) || 0)
       : data.niitDun
   );
-
+  const [btnDisabled, setBtnDisabled] = React.useState(false);
+  const btnLockRef = React.useRef(false);
   const { Canvas } = useQRCode();
 
   const eBarimtRef = React.useRef(null);
@@ -149,18 +150,37 @@ function ShineTogloomTulbur(
       khungulult,
     };
   }, [tulbur]);
+  
 
   //Keyboard tovchlol ekhlel
 
   useKeyboardTovchlol("F4", f4Darsan);
 
-  function f4Darsan() {
-    if (tulbur.length === 0) {
-      turulruuTooKhiikhFunction("belen");
-    }
-    batalgaajuulaltKhiiya();
-    !loading && ebarimtAvya(data?._id);
+function f4Darsan() {
+  if (tulbur.length === 0) {
+    turulruuTooKhiikhFunction("belen");
   }
+  batalgaajuulaltKhiiya();
+  if (!loading) {
+    ebarimtAvya(data?._id);
+  }
+}
+
+function handleF4Darsan() {
+  if (btnLockRef.current) return; 
+
+  btnLockRef.current = true; 
+
+  setTimeout(() => {
+    btnLockRef.current = false; 
+  }, 10000);
+
+ 
+  setBtnDisabled(true);
+  setTimeout(() => setBtnDisabled(false), 10000);
+
+  f4Darsan();
+}
 
   const minToHour = (m) => {
     let res;
@@ -483,7 +503,7 @@ function ShineTogloomTulbur(
   function handleTseverlekh() {
     setTurulruuKhiikhDun("0");
   }
-
+  
   return (
     <div className="h-full w-full">
       {eBarimt && (
@@ -1202,14 +1222,20 @@ function ShineTogloomTulbur(
                 }
                 trigger={"hover"}
               >
-                <button
-                  style={{ backgroundColor: "rgba(79, 209, 197, 0.2)" }}
-                  type="primary"
-                  onClick={f4Darsan}
-                  className="h-[57px] w-[186px] rounded-[15px] border-[2px] border-green-600 bg-green-600 text-green-600 shadow-xl dark:font-semibold"
-                >
-                  Шууд хадгалах [F4]
-                </button>
+              <button
+                style={{ backgroundColor: "rgba(79, 209, 197, 0.2)" }}
+                type="button"
+                onClick={handleF4Darsan}
+                disabled={btnDisabled}
+                className={`h-[57px] w-[186px] rounded-[15px] border-[2px] border-green-600 shadow-xl dark:font-semibold
+                  ${btnDisabled 
+                    ? "bg-green-300 text-green-300 cursor-not-allowed" 
+                    : "bg-green-600 text-green-600 hover:bg-green-700 hover:text-white cursor-pointer"}`}
+              >
+                Шууд хадгалах [F4]
+              </button>
+
+
               </Popover>
               <button
                 onClick={loading ? null : batalgaajuulaltKhiiya}
