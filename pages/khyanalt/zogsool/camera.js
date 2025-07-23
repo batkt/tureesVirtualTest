@@ -2174,6 +2174,15 @@ function camera({ token }) {
                     Camer={camerVal[0]}
                     PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
                   />
+                ) : baiguullaga?._id === "66b330a4621d4f5d11f09c8e" &&
+                  camerVal[0] === "192.168.1.90" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    ROOT={"live"}
+                    PASSWD={"admin123"}
+                    Camer={camerVal[0]}
+                    PORT={554}
+                  />
                 ) : baiguullaga?._id === "669e28beb13f35e669e773a6" ? (
                   camerVal[0] === "192.168.0.109" ? (
                     <R2WPlayerComponent
