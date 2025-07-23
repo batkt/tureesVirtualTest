@@ -160,7 +160,7 @@ function ShineTogloomTulbur(
 
   function f4Darsan() {
     if (f4LockRef.current) return; // 🔒 prevent re-entry
-  f4LockRef.current = true;
+    f4LockRef.current = true;
 
     if (tulbur.length === 0) {
       turulruuTooKhiikhFunction("belen");
