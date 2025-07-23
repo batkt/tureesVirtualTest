@@ -19,6 +19,13 @@
   }
 }
 
+.ant-btn-primary.upload-button {
+  cursor: pointer !important;
+}
+
+.ant-btn-primary.upload-button:hover {
+  cursor: pointer !important;
+}
 .ring-gradient-45 {
   border-image: linear-gradient(45deg, #3490dc, #6574cd) 1;
 }
@@ -1201,7 +1208,7 @@ input[type="number"] {
 }
 
 .ant-btn-default {
-  @apply dark:text-[#E5E7EB] dark:bg-inherit dark:hover:text-gray-100 dark:focus:text-gray-400 !important;
+  @apply dark:bg-inherit dark:text-[#E5E7EB] dark:hover:text-gray-100 dark:focus:text-gray-400 !important;
 }
 
 .ant-cascader-menu-item {

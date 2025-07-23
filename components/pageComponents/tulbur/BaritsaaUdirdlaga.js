@@ -39,10 +39,14 @@ function BaritsaaUdirdlaga(
   const khuulgaRef = React.useRef(null);
   const [dun, setDun] = useState(0);
   const [ognoo, setOgnoo] = useState(moment());
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation();
   const [turul, setTurul] = useState("tululkh");
-  const [tulukhUldegdel, setTulukhUldegdel] = useState((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0))
-  const [ashiglakhUldegdel, setAshiglakhUldegdel] = useState(data.baritsaaniiUldegdel)
+  const [tulukhUldegdel, setTulukhUldegdel] = useState(
+    (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
+  );
+  const [ashiglakhUldegdel, setAshiglakhUldegdel] = useState(
+    data.baritsaaniiUldegdel
+  );
   const [tailbar, setTailbar] = useState("");
 
   React.useImperativeHandle(
@@ -75,7 +79,9 @@ function BaritsaaUdirdlaga(
           dun > (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
         ) {
           notification.warning({
-            message: t("Барьцаа төлөх дүнгээс их дүнгээр гүйлгээ хийж болохгүй!"),
+            message: t(
+              "Барьцаа төлөх дүнгээс их дүнгээр гүйлгээ хийж болохгүй!"
+            ),
           });
           setDun(
             (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
@@ -188,7 +194,13 @@ function BaritsaaUdirdlaga(
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex justify-center">
-        <Radio.Group onChange={(e) => { setTurul(e.target.value); setOgnoo(moment()) }} value={turul}>
+        <Radio.Group
+          onChange={(e) => {
+            setTurul(e.target.value);
+            setOgnoo(moment());
+          }}
+          value={turul}
+        >
           <Radio value={"tululkh"}>{t("Барьцаа төлөх")}</Radio>
           <Radio value={"ashiglakh"}>{t("Барьцаа ашиглах")}</Radio>
         </Radio.Group>
@@ -198,20 +210,18 @@ function BaritsaaUdirdlaga(
         <div>{t(labelTurul(turul))}</div>
         <div className="ml-auto">
           {formatNumber(
-            turul === "ashiglakh"
-              ? ashiglakhUldegdel
-              : tulukhUldegdel
+            turul === "ashiglakh" ? ashiglakhUldegdel : tulukhUldegdel
           )}
         </div>
       </div>
       <DatePicker
-          locale={i18n.language === "mn" && locale}
-          value={ognoo}
-          onChange={(v) => {
-            setOgnoo(v);
-            document.getElementById("dunInputNumber").focus();
-          }}
-        />
+        locale={i18n.language === "mn" && locale}
+        value={ognoo}
+        onChange={(v) => {
+          setOgnoo(v);
+          document.getElementById("dunInputNumber").focus();
+        }}
+      />
       <InputNumber
         onKeyDown={focuser}
         autoFocus="true"
@@ -237,9 +247,10 @@ function BaritsaaUdirdlaga(
         value={tailbar}
         onChange={(e) => setTailbar(e.target.value)}
       />
-      <div onClick={tuukhKharya}>
-        <a className="dark:text-gray-200">{t("Барьцааны хуулга")}</a>
-      </div>
+
+      <Button type="primary" onClick={tuukhKharya} className="mt-2">
+        {t("Барьцааны хуулга")}
+      </Button>
     </div>
   );
 }

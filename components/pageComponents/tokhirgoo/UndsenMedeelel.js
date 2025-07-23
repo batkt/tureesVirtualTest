@@ -4,11 +4,18 @@ import { url } from "services/uilchilgee";
 import updateMethod from "tools/function/crud/updateMethod";
 import getBase64 from "tools/function/getBase64";
 import { useTranslation } from "react-i18next";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
-function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setSongogdsonTsonkhniiIndex }) {
-  const { t } = useTranslation()
+function KhuviinMedeelel({
+  ajiltan,
+  token,
+  ajiltanMutate,
+  khadgalsniiDaraa,
+  setSongogdsonTsonkhniiIndex,
+}) {
+  const { t } = useTranslation();
   const [state, setstate] = useState(ajiltan);
   const zuragRef = useRef(null);
 
@@ -25,14 +32,30 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
       if (status === 200 && "Amjilttai" === data) {
         message.success(t("Амжилттай засагдлаа"));
         ajiltanMutate({ ...ajiltanObject });
-        setSongogdsonTsonkhniiIndex(1)
+        setSongogdsonTsonkhniiIndex(1);
       }
     });
   }
 
   function zuragSolikh({ target }) {
-    getBase64(target.files[0], (base64) => (zuragRef.current.src = base64));
+    getBase64(target.files[0], (base64) => {
+      if (zuragRef.current) {
+        zuragRef.current.src = base64;
+      }
+    });
     setstate((s) => ({ ...s, [target.name]: target.files[0] }));
+  }
+
+  function zuragUstgakh() {
+    setstate((prev) => {
+      const copy = { ...prev };
+      delete copy.zurag;
+      return copy;
+    });
+
+    if (zuragRef.current) {
+      zuragRef.current.src = "";
+    }
   }
 
   return (
@@ -91,7 +114,9 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                     />
                   </div>
                   <div className="mt-3">
-                    <label className="form-label">{t("Шинэ нууц үг давтан")}</label>
+                    <label className="form-label">
+                      {t("Шинэ нууц үг давтан")}
+                    </label>
                     <Input.Password
                       className="form-control"
                       placeholder={t("Шинэ нууц үг давтан")}
@@ -101,59 +126,76 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                   </div>
                 </div>
               </div>
-              <div className="mt-3 w-full flex justify-end">
+              <div className="mt-3 flex w-full justify-end">
                 <Button type="primary" onClick={khadgalakh}>
                   {t("Хадгалах")}
                 </Button>
               </div>
             </div>
-            <div className="mx-auto w-52 xl:mr-0 xl:ml-6">
+            <div className="mx-auto  w-52 xl:ml-6 xl:mr-0">
               <div className="dark:border-dark-5 rounded-md border-2 border-dashed border-gray-200 p-5 shadow-sm">
-                <div className="image-fit zoom-in relative mx-auto h-40 cursor-pointer">
+                <div className="image-fit  relative mx-auto h-40 cursor-pointer">
                   <img
                     className="h-40 w-40 rounded-md"
                     alt="ProfileZurag"
                     ref={zuragRef}
                     src={
-                      ajiltan?.zurgiinNer
+                      state.zurag
+                        ? URL.createObjectURL(state.zurag)
+                        : ajiltan?.zurgiinNer
                         ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
                         : ((ajiltan?.register?.replace(/^\D+/g, "") % 100) /
-                          10) %
-                          2 <
+                            10) %
+                            2 <
                           1
-                          ? "/profileFemale.svg"
-                          : "/profile.svg"
+                        ? "/profileFemale.svg"
+                        : "/profile.svg"
                     }
                   />
-                  <div className="tooltip bg-theme-6 absolute right-0 top-0 -mr-2 -mt-2 flex h-5 w-5 items-center justify-center rounded-full text-white">
-                    {" "}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="feather feather-x h-4 w-4"
+
+                  {state.zurag && (
+                    <div
+                      className="tooltip bg-theme-6 absolute right-0 top-0 -mr-2 -mt-2 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full text-white"
+                      onClick={zuragUstgakh}
+                      title={t("Зураг устгах")}
                     >
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>{" "}
-                  </div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="feather feather-x h-4 w-4"
+                      >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </div>
+                  )}
                 </div>
-                <div className="relative mx-auto mt-5 cursor-pointer">
-                  <Button type="primary" className="w-full">
-                    {t("Зураг солих")}
-                  </Button>
-                  <input
-                    type="file"
-                    name="zurag"
-                    className="absolute top-0 left-0 h-full w-full opacity-0"
-                    onChange={zuragSolikh}
-                  />
+                <div className="mt-5 flex items-center gap-2">
+                  <label
+                    className="relative mx-auto mt-5 w-full"
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Button
+                      type="primary"
+                      className="upload-button w-full bg-blue-500 font-semibold text-white transition duration-200 hover:bg-blue-600"
+                    >
+                      {t("Зураг солих")}
+                    </Button>
+                    <input
+                      type="file"
+                      name="zurag"
+                      accept="image/*"
+                      className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                      onChange={zuragSolikh}
+                    />
+                  </label>
                 </div>
               </div>
             </div>
