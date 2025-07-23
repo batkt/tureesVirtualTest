@@ -16,6 +16,7 @@ import uilchilgee, { url } from "services/uilchilgee";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import { EditOutlined, EyeOutlined, UploadOutlined } from "@ant-design/icons";
 import updateMethod from "tools/function/crud/updateMethod";
+import { DeleteOutlined } from "@ant-design/icons";
 
 function KhuviinMedeelel({
   ajiltan = {},
@@ -43,14 +44,17 @@ function KhuviinMedeelel({
   const [gariinUsegKharakhZam, setGariinUsegKharakhZam] = useState(false);
   const [gereeTokhirgoo, setGereeTokhirgoo] = useState({
     guidelBuchiltKhonogEsekh: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh,
-    sekhDemjikhTulburAvakhEsekh: baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh,
+    sekhDemjikhTulburAvakhEsekh:
+      baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh,
     bichiltKhonog: baiguullaga?.tokhirgoo?.bichiltKhonog || 0,
   });
 
   const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState({
-    jilBurTalbaiTulburNemekhEsekh: barilga?.tokhirgoo?.jilBurTalbaiTulburNemekhEsekh,
+    jilBurTalbaiTulburNemekhEsekh:
+      barilga?.tokhirgoo?.jilBurTalbaiTulburNemekhEsekh,
     jilBurTulbur: barilga?.tokhirgoo?.jilBurTulbur,
-    gereeDuusakhTalbaiTulburNemekhEsekh: barilga?.tokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
+    gereeDuusakhTalbaiTulburNemekhEsekh:
+      barilga?.tokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
     gereeDuusakhTulbur: barilga?.tokhirgoo?.gereeDuusakhTulbur,
   });
 
@@ -65,7 +69,7 @@ function KhuviinMedeelel({
           setSongogdsonTsonkhniiIndex(3);
         }
       });
-    khadgalakh();  
+    khadgalakh();
   };
 
   const zuragKhadgalakh = (v, turul) => {
@@ -82,12 +86,17 @@ function KhuviinMedeelel({
     const index = baiguullaga.barilguud.findIndex((a) => a._id === barilgiinId);
     gariinUseg && (baiguullaga.barilguud[index].gariinUseg = gariinUseg);
     tamga && (baiguullaga.barilguud[index].tamga = tamga);
-    if(!!barilgaTokhirgoo)
-    {
-      baiguullaga.barilguud[index].tokhirgoo.jilBurTalbaiTulburNemekhEsekh = barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh
-      baiguullaga.barilguud[index].tokhirgoo.jilBurTulbur = barilgaTokhirgoo?.jilBurTulbur
-      baiguullaga.barilguud[index].tokhirgoo.gereeDuusakhTalbaiTulburNemekhEsekh = barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh
-      baiguullaga.barilguud[index].tokhirgoo.gereeDuusakhTulbur = barilgaTokhirgoo?.gereeDuusakhTulbur
+    if (!!barilgaTokhirgoo) {
+      baiguullaga.barilguud[index].tokhirgoo.jilBurTalbaiTulburNemekhEsekh =
+        barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh;
+      baiguullaga.barilguud[index].tokhirgoo.jilBurTulbur =
+        barilgaTokhirgoo?.jilBurTulbur;
+      baiguullaga.barilguud[
+        index
+      ].tokhirgoo.gereeDuusakhTalbaiTulburNemekhEsekh =
+        barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh;
+      baiguullaga.barilguud[index].tokhirgoo.gereeDuusakhTulbur =
+        barilgaTokhirgoo?.gereeDuusakhTulbur;
     }
     _.set(baiguullaga, `barilguud.${index}`, baiguullaga.barilguud[index]);
     updateMethod("baiguullaga", token, baiguullaga).then(({ data }) => {
@@ -180,7 +189,11 @@ function KhuviinMedeelel({
                 <div className="font-medium">
                   {t("Гэрээний түрээсийн үнэ тогтмол төлбөр нэмэх эсэх")}
                 </div>
-                <div className="text-gray-600">{t("Урт хугацааны гэрээтэй үед автоматаар жил бүр сарын талбайн төлбөр идэвхжүүлэх эсэх")} </div>
+                <div className="text-gray-600">
+                  {t(
+                    "Урт хугацааны гэрээтэй үед автоматаар жил бүр сарын талбайн төлбөр идэвхжүүлэх эсэх"
+                  )}{" "}
+                </div>
               </div>
               <div className="ml-auto">
                 <Switch
@@ -197,41 +210,50 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
-          {barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh ?
-            (<div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Урт хугацааны гэрээтэй үед төлбөр оруулах")}</div>
-                <div className="text-gray-600">
-                  {t("")}
+          {barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh ? (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">
+                    {t("Урт хугацааны гэрээтэй үед төлбөр оруулах")}
+                  </div>
+                  <div className="text-gray-600">{t("")}</div>
+                </div>
+                <div className="ml-auto">
+                  <InputNumber
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    style={{ width: "100%", textAlign: "center" }}
+                    min={0}
+                    defaultValue={barilga?.tokhirgoo?.jilBurTulbur}
+                    onChange={(v) =>
+                      setBarilgaTokhirgoo((a) => ({
+                        ...(a || {}),
+                        jilBurTulbur: v,
+                      }))
+                    }
+                  />
                 </div>
               </div>
-              <div className="ml-auto">
-                <InputNumber
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  style={{ width: "100%", textAlign: "center" }}
-                  min={0}
-                  defaultValue={barilga?.tokhirgoo?.jilBurTulbur}
-                  onChange={(v) =>
-                    setBarilgaTokhirgoo((a) => ({
-                      ...(a || {}),
-                      jilBurTulbur: v,
-                    }))
-                  }
-                />
-              </div>
             </div>
-          </div>) : ""}
+          ) : (
+            ""
+          )}
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">
-                  {t("Гэрээ дуусах үед түрээсийн үнэ тогтмол төлбөр нэмэх эсэх")}
+                  {t(
+                    "Гэрээ дуусах үед түрээсийн үнэ тогтмол төлбөр нэмэх эсэх"
+                  )}
                 </div>
-                <div className="text-gray-600">{t("Гэрээ дуусах үед автоматаар жил бүр сарын талбайн төлбөр идэвхжүүлэх эсэх")} </div>
+                <div className="text-gray-600">
+                  {t(
+                    "Гэрээ дуусах үед автоматаар жил бүр сарын талбайн төлбөр идэвхжүүлэх эсэх"
+                  )}{" "}
+                </div>
               </div>
               <div className="ml-auto">
                 <Switch
@@ -248,34 +270,37 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
-          {barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh ?
-            (<div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Гэрээ дуусах үед төлбөр оруулах")}</div>
-                <div className="text-gray-600">
-                  {t("")}
+          {barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh ? (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">
+                    {t("Гэрээ дуусах үед төлбөр оруулах")}
+                  </div>
+                  <div className="text-gray-600">{t("")}</div>
+                </div>
+                <div className="ml-auto">
+                  <InputNumber
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    style={{ width: "100%", textAlign: "center" }}
+                    min={0}
+                    defaultValue={barilga?.tokhirgoo?.gereeDuusakhTulbur}
+                    onChange={(v) =>
+                      setBarilgaTokhirgoo((a) => ({
+                        ...(a || {}),
+                        gereeDuusakhTulbur: v,
+                      }))
+                    }
+                  />
                 </div>
               </div>
-              <div className="ml-auto">
-                <InputNumber
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  style={{ width: "100%", textAlign: "center" }}
-                  min={0}
-                  defaultValue={barilga?.tokhirgoo?.gereeDuusakhTulbur}
-                  onChange={(v) =>
-                    setBarilgaTokhirgoo((a) => ({
-                      ...(a || {}),
-                      gereeDuusakhTulbur: v,
-                    }))
-                  }
-                />
-              </div>
             </div>
-          </div>) : ""}
+          ) : (
+            ""
+          )}
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
@@ -356,7 +381,9 @@ function KhuviinMedeelel({
               </div>
               <div className="ml-auto">
                 <Switch
-                  defaultChecked={baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh}
+                  defaultChecked={
+                    baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh
+                  }
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
@@ -387,7 +414,7 @@ function KhuviinMedeelel({
                     parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                     style={{ width: "100%", textAlign: "center" }}
                     value={gereeTokhirgoo?.bichiltKhonog}
-                    onChange={(v) => 
+                    onChange={(v) =>
                       setGereeTokhirgoo((a) => ({
                         ...(a || {}),
                         bichiltKhonog: v,
@@ -408,7 +435,9 @@ function KhuviinMedeelel({
                 </div>
                 <div className="ml-auto">
                   <Switch
-                    defaultChecked={baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh}
+                    defaultChecked={
+                      baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh
+                    }
                     onChange={(v) =>
                       setGereeTokhirgoo((a) => ({
                         ...(a || {}),
@@ -450,12 +479,16 @@ function KhuviinMedeelel({
                   {t("Талбайн үнэ засах үед барьцаа дүн өөрчлөх эсэх")}
                 </div>
                 <div className="text-gray-600">
-                  {t("Талбайн үнэ засах үед түрээсийн үнэ барьцаа үнэтэй адилтгах идэвхжүүлэх")}
+                  {t(
+                    "Талбайн үнэ засах үед түрээсийн үнэ барьцаа үнэтэй адилтгах идэвхжүүлэх"
+                  )}
                 </div>
               </div>
               <div className="ml-auto">
                 <Switch
-                  defaultChecked={baiguullaga?.tokhirgoo?.baritsaaUneAdiltgakhEsekh}
+                  defaultChecked={
+                    baiguullaga?.tokhirgoo?.baritsaaUneAdiltgakhEsekh
+                  }
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
@@ -488,36 +521,57 @@ function KhuviinMedeelel({
               <Form form={form} autoComplete="off" className="">
                 <div className="flex w-full flex-col ">
                   <Form.Item name="turul">
-                    <ImgCrop modalTitle="Зураг засах" rotationSlider>
-                      <Upload
-                        showUploadList={false}
-                        multiple={false}
-                        name="file"
-                        action={`${url}/upload`}
-                        method="POST"
-                        onChange={(v) => zuragKhadgalakh(v, "tamga")}
-                      >
-                        <div className="flex flex-col space-x-1 !text-gray-400 dark:!border-white dark:!bg-gray-900 dark:!text-gray-400 ">
-                          {!barilga?.tamga && (
-                            <Button icon={<UploadOutlined />}>
-                              {t("Тамга зураг оруулах")}
-                            </Button>
-                          )}  
-                          <Button
-                            className="mt-3 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
-                            icon={<EyeOutlined />}
-                            onClick={(e) =>
-                              tamgaZuragKharakh(e, `tamga/${barilga.tamga}`)
-                            }
-                          >
-                            {t("Тамга зураг харах")}
-                          </Button>
-                          {!!barilga?.tamga && (
-                            <Button className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400" icon={<EditOutlined />}></Button>
-                          )}
-                        </div>
-                      </Upload>
-                    </ImgCrop>
+                    <div className="flex flex-row items-center gap-2">
+                      {!!barilga?.tamga && (
+                        <Button
+                          icon={<EyeOutlined />}
+                          onClick={(e) =>
+                            tamgaZuragKharakh(e, `tamga/${barilga.tamga}`)
+                          }
+                          className="h-9 !text-gray-500 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+                          type="button"
+                        >
+                          {t("Тамга зураг харах")}
+                        </Button>
+                      )}
+
+                      <ImgCrop modalTitle="Зураг засах" rotationSlider>
+                        <Upload
+                          showUploadList={false}
+                          multiple={false}
+                          name="file"
+                          action={`${url}/upload`}
+                          method="POST"
+                          onChange={(v) => zuragKhadgalakh(v, "tamga")}
+                        >
+                          <div className="flex flex-row items-center gap-2">
+                            {!barilga?.tamga && (
+                              <Button icon={<UploadOutlined />} className="h-9">
+                                {t("Тамга зураг оруулах")}
+                              </Button>
+                            )}
+
+                            {!!barilga?.tamga && (
+                              <Button
+                                icon={<EditOutlined />}
+                                className="h-9 !text-gray-500 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+                                type="button"
+                              />
+                            )}
+                          </div>
+                        </Upload>
+                      </ImgCrop>
+
+                      {!!barilga?.tamga && (
+                        <Button
+                          danger
+                          icon={<DeleteOutlined />}
+                          onClick={() => setTamga(undefined)}
+                          className="h-9"
+                          type="button"
+                        />
+                      )}
+                    </div>
                   </Form.Item>
 
                   {(!!tamga || !!barilga.tamga) && (
@@ -552,26 +606,40 @@ function KhuviinMedeelel({
                     </div>
                   )}
                 </div>
-                <div className="flex w-full flex-col mt-3">
+                <div className="mt-3 flex w-full flex-col">
                   <Form.Item name="turul">
-                    <ImgCrop modalTitle="Зураг засах" rotationSlider>
-                      <Upload
-                        showUploadList={false}
-                        multiple={false}
-                        name="file"
-                        action={`${url}/upload`}
-                        method="POST"
-                        onChange={(v) => zuragKhadgalakh(v, "gariinUseg")}
-                      >
-                        <div className="flex flex-row space-x-1 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400">
-                          <Button className="!text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400" icon={<UploadOutlined />}>
+                    <div className="flex flex-row items-center gap-2">
+                      <ImgCrop modalTitle="Зураг засах" rotationSlider>
+                        <Upload
+                          showUploadList={false}
+                          multiple={false}
+                          name="file"
+                          action={`${url}/upload`}
+                          method="POST"
+                          onChange={(v) => zuragKhadgalakh(v, "gariinUseg")}
+                        >
+                          <Button
+                            className="h-9 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+                            icon={<UploadOutlined />}
+                          >
                             {t("Гарын үсэг зураг оруулах")}
                           </Button>
-                        </div>
-                      </Upload>
-                    </ImgCrop>
+                        </Upload>
+                      </ImgCrop>
+
+                      {!!gariinUseg || !!barilga?.gariinUseg ? (
+                        <Button
+                          danger
+                          icon={<DeleteOutlined />}
+                          type="button"
+                          onClick={() => setGariinUseg(undefined)}
+                          className="h-9"
+                        />
+                      ) : null}
+                    </div>
                   </Form.Item>
-                  <div className="h-[54px] w-[115px] border">
+
+                  <div className="flex h-[54px] w-[115px] items-center justify-center border">
                     {!!gariinUseg ? (
                       <img
                         src={`${url}/file?path=tmp/${gariinUseg}`}

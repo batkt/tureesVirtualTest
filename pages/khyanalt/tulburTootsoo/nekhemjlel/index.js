@@ -42,7 +42,7 @@ import useDans from "hooks/useDans";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 import khatuuZagvar from "tools/zagvar/tur";
-import khatuuZagvarKaidu from "tools/zagvar/turKaidu"
+import khatuuZagvarKaidu from "tools/zagvar/turKaidu";
 import khatuuZagvarUranGan from "tools/zagvar/turUranGan";
 import khatuuZagvarFoodCity from "tools/zagvar/turFoodCityTemp";
 import khatuuZagvarGotoMPM from "tools/zagvar/turGotoMPM";
@@ -215,7 +215,10 @@ function tulburTootsoo({ token }) {
                 barilga,
                 barilgiinId
               );
-            else if(ajiltan?.barilgiinId === "6544bf602143a024b43f16ab" || ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0")
+            else if (
+              ajiltan?.barilgiinId === "6544bf602143a024b43f16ab" ||
+              ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0"
+            )
               // kaidu
               zagvar.nekhemjlekh = khatuuZagvarKaidu(
                 medeelel,
@@ -223,13 +226,12 @@ function tulburTootsoo({ token }) {
                 baiguullaga,
                 barilgiinId
               );
-            else(
-                zagvar.nekhemjlekh = khatuuZagvar(
+            else
+              zagvar.nekhemjlekh = khatuuZagvar(
                 medeelel,
                 ajiltan,
                 baiguullaga,
                 barilgiinId
-              )
               );
           }
 
@@ -1252,12 +1254,11 @@ function tulburTootsoo({ token }) {
           barilgiinId === "6659717af6cab41f3ec723b5"
           ? khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga)
           : ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0" ||
-          barilgiinId === "6544bf602143a024b43f16ab"
+            barilgiinId === "6544bf602143a024b43f16ab"
           ? khatuuZagvarKaidu(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
           : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
         : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
             ?.nekhemjlekh;
-
 
       nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
         nekhemjlekh.eneSardTulukhDun *
@@ -1695,14 +1696,10 @@ function tulburTootsoo({ token }) {
                 barilga,
                 barilgiinId
               )
-            : (ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0" ||
+            : ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0" ||
               barilgiinId === "6544bf602143a024b43f16ab"
-            ) 
-            ? khatuuZagvarKaidu(
-              nekhemjlekh, ajiltan, baiguullaga, barilgiinId
-            )
-            :
-            khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
+            ? khatuuZagvarKaidu(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
+            : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
           : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
               ?.nekhemjlekh;
 
@@ -2385,11 +2382,13 @@ function tulburTootsoo({ token }) {
           }
         }
         if (!!nekhemjlekh.mail) {
-          var mail = [{
-            gereeniiDugaar: nekhemjlekh.gereeniiDugaar,
-            mail: nekhemjlekh.mail,
-            content: text,
-          }];
+          var mail = [
+            {
+              gereeniiDugaar: nekhemjlekh.gereeniiDugaar,
+              mail: nekhemjlekh.mail,
+              content: text,
+            },
+          ];
           const gereenuud = [];
           const dans = dansGaralt?.jagsaalt?.find(
             (a) => a.dugaar === songogdsonDans
@@ -2429,13 +2428,18 @@ function tulburTootsoo({ token }) {
               if (data === "Amjilttai") {
                 successCount++;
                 notification.success({
-                      message: (
-                        <>
-                          {nekhemjlekh.mail + t(" И-мэйл Амжилттай илгээлээ. Амжилттай илгээгдэж буй мэйлийн тоо: ")}
-                          <span className="text-[#11b980] font-semibold">{successCount}</span>
-                        </>
-                      )
-                    });
+                  message: (
+                    <>
+                      {nekhemjlekh.mail +
+                        t(
+                          " И-мэйл Амжилттай илгээлээ. Амжилттай илгээгдэж буй мэйлийн тоо: "
+                        )}
+                      <span className="font-semibold text-[#11b980]">
+                        {successCount}
+                      </span>
+                    </>
+                  ),
+                });
               }
             })
             .catch((e) => {
