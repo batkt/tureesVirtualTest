@@ -632,10 +632,6 @@ function GereeBaiguulakh({ token, data }) {
                 khadgalakhGeree?.talbainuud?.map((a, i) => {
                   return (
                     <div key={i}>
-                      <div className="absolute left-5 top-5 flex gap-3 text-lg font-semibold">
-                        <div>{t("Код")}:</div>
-                        <div>{a?.kod}</div>
-                      </div>
                       <Konva
                         talbaiGereendKharakh={true}
                         baiguullaga={baiguullaga}

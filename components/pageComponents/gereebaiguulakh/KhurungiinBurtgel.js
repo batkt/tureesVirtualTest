@@ -7,6 +7,7 @@ import {
   Popconfirm,
   message,
   InputNumber,
+  Switch
 } from "antd";
 import {
   ArrowRightOutlined,
@@ -217,7 +218,20 @@ const YurunkhiiMedeele = ({
     value.talbainDugaar = talbainuud.map((a) => a.kod).join(",");
     form.setFieldsValue(value);
   }
-
+  const focuser = useCallback((e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        switch (e.target.id) {
+          case "validate_other_khugatsaa":
+            if (value?.turGereeEsekh === true) {
+              form.getFieldInstance("duusakhOgnoo").focus();
+            } else form.getFieldInstance("tulukhUdur").focus();
+            break;
+          default:
+            break;
+        }
+      }
+    }, []);
   function onChangeTalbai(v) {
     if (!!value.talbainuud?.find((a) => a.kod === v.kod)) {
       notification.warning({
@@ -291,6 +305,26 @@ const YurunkhiiMedeele = ({
     talbainBurtgelBugulyu(value.talbainuud);
     onChange({ ...value });
   }
+
+  const baritsaaChange = (e) => {
+      if (e === true) {
+        value.baritsaaAvakhEsekh = e;
+        value.baritsaaAvakhDun = value.sariinTurees;
+        value.baritsaaAvakhDunUsgeer = toWords(value.sariinTurees);
+      } else {
+        value.baritsaaAvakhDun = 0;
+        value.baritsaaAvakhEsekh = e;
+        value.baritsaaAvakhDunUsgeer = toWords(" ");
+      }
+      onChange({ ...value });
+    };
+    const baritsaaDunChange = (v) => {
+      if (v && value.baritsaaAvakhEsekh === true) {
+        value.baritsaaAvakhDun = v;
+        value.baritsaaAvakhDunUsgeer = toWords(v);
+      }
+      onChange({ ...value });
+    };
 
   return (
     <Form
@@ -476,6 +510,80 @@ const YurunkhiiMedeele = ({
       >
         <Input placeholder={t("Талбайн нэмэлт нөхцөл")} />
       </Form.Item>
+      {gereeniiZagvar?.turGereeEsekh !== true ? (
+        <div>
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="100"
+            className="ml-auto"
+          >
+            <Form.Item
+              label={t("Барьцаа хөрөнгө авах эсэх")}
+              name="baritsaaAvakhEsekh"
+            >
+              <Switch
+                checked={value.baritsaaAvakhEsekh}
+                onChange={(e) => {
+                  baritsaaChange(e);
+                }}
+              />
+            </Form.Item>
+          </div>
+          {value.baritsaaAvakhEsekh === true && (
+            <div data-aos="fade-right" data-aos-duration="1000">
+              <Form.Item label={t("Барьцаа дүн")} name="baritsaaAvakhDun">
+                <InputNumber
+                  value={value.baritsaaAvakhDun}
+                  placeholder={t("Барьцаа дүн")}
+                  style={{ width: "100%" }}
+                  onChange={(e) => baritsaaDunChange(e)}
+                  formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                />
+              </Form.Item>
+            </div>
+          )}
+          {value.baritsaaAvakhEsekh === true && (
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
+            >
+              <Form.Item
+                name="baritsaaAvakhKhugatsaa"
+                label={t("Барьцаа авах хугацаа")}
+              >
+                <InputNumber
+                  onKeyUp={focuser}
+                  placeholder={t("Барьцаа авах хугацаа")}
+                  style={{ width: "100%" }}
+                  min={0}
+                />
+              </Form.Item>
+            </div>
+          )}
+          {value.baritsaaAvakhEsekh === true && (
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
+            >
+              <Form.Item
+                name="baritsaaBairshuulakhKhugatsaa"
+                label={t("Барьцаа байршуулах хугацаа")}
+              >
+                <InputNumber
+                  onKeyUp={focuser}
+                  placeholder={t("Барьцаа байршуулах хугацаа")}
+                  style={{ width: "100%" }}
+                  min={0}
+                />
+              </Form.Item>
+            </div>
+          )}
+        </div>
+      ) : null}
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
           className="flex w-full flex-col justify-between gap-4 md:flex-row"
