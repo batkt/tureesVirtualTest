@@ -188,7 +188,7 @@ function Khyanalt({ token }) {
               for (const [key, value] of Object.entries(a)) {
                 body = body?.replace(new RegExp(`<${key}>`, "g"), value);
               }
-              uilchilgee(token)
+              uilchilgee(token)     
                 .post(`/sonorduulgaIlgeeye`, {
                   firebaseToken: a?.firebaseToken,
                   khariltsagchiinId: a?._id,
