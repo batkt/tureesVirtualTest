@@ -203,8 +203,11 @@ function GuilgeeExceleesOruulakhOlnoor(
         _.isFunction(onFinish) && onFinish();
         destroy();
       },
+      khadgalya() {
+        handleSave(); 
+      },
     }),
-    []
+    [onFinish, data, selectedRowKeys, baiguullaga, barilgiinId, ognoo, ashiglaltiinId]
   );
 
   function zagvarAvya() {
@@ -400,7 +403,7 @@ function GuilgeeExceleesOruulakhOlnoor(
             pagination={true}
             style={{ marginTop: "20px" }}
           />
-          <div className="flex items-end justify-end">
+          {/* <div className="flex items-end justify-end">
             <Button
               type="primary"
               style={{
@@ -413,7 +416,7 @@ function GuilgeeExceleesOruulakhOlnoor(
             >
               {t("Хадгалах")}
             </Button>
-          </div>
+          </div> */}
         </>
       )}
     </div>
