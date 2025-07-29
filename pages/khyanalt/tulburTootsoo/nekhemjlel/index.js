@@ -1847,7 +1847,7 @@ function tulburTootsoo({ token }) {
         const dans = dansGaralt?.jagsaalt?.find(
           (a) => a.dugaar === songogdsonDans
         );
-        nekhemjlekh.dans = dans?.dugaar;
+        nekhemjlekh.dans = dans?.ibanDugaar ? dans?.ibanDugaar : dans?.dugaar;
         nekhemjlekh.bank =
           dans?.bank === "khanbank"
             ? "Хаан банк"
@@ -2960,7 +2960,7 @@ function tulburTootsoo({ token }) {
                 >
                   {dansGaralt?.jagsaalt?.map((a) => (
                     <Select.Option key={a.dugaar} value={a.dugaar}>
-                      <div>{a.dugaar}</div>
+                      <div>{a.ibanDugaar ? a.ibanDugaar : a.dugaar}</div>
                     </Select.Option>
                   ))}
                 </Select>
