@@ -651,28 +651,45 @@ function TalbaiBurtgekh({ token }) {
                   onChange={(v) => onChange("talbainKhemjee", v)}
                 ></InputNumber>
               </Form.Item>
-            </div>
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="100"
-            >
-              <Form.Item label={t("Хэмжээ м3")} name="talbainKhemjeeMetrKube"
-              rules={[
-                  {
-                    required: true,
-                    message: t("Талбайн хэмжээ бүртгэнэ үү!"),
-                  },
-                ]}>
-                <InputNumber
-                  onKeyUp={focuser}
-                  style={{ width: "100%" }}
-                  allowClear
-                  placeholder={t("Талбайн хэмжээ/м3/")}
-                  value={talbaiState.talbainKhemjeeMetrKube}
-                  onChange={(v) => onChange("talbainKhemjeeMetrKube", v)}
-                ></InputNumber>
-              </Form.Item>
+                </div>
+                <div
+                  data-aos="fade-right"
+                  data-aos-duration="1000"
+                  data-aos-delay="100"
+                >
+                  <Form.Item
+                    label={t("Хэмжээ м3")}
+                    name="talbainKhemjeeMetrKube"
+                    rules={[
+                      {
+                        required: false,
+                        message: t("Талбайн хэмжээ бүртгэнэ үү!"),
+                      },
+                    ]}
+                    normalize={(value) => {
+                      // This ensures the value becomes 0 in the form data when blank
+                      return value === null || value === undefined || value === "" ? 0 : value;
+                    }}
+                  >
+                    <InputNumber
+                      onKeyUp={focuser}
+                      style={{ width: "100%" }}
+                      allowClear
+                      placeholder={t("Талбайн хэмжээ/м3/")}
+                      value={talbaiState.talbainKhemjeeMetrKube}
+                      onChange={(v) => onChange("talbainKhemjeeMetrKube", v)}
+                      onBlur={() => {
+                        // This ensures the UI state also becomes 0 when user leaves field blank
+                        if (
+                          talbaiState.talbainKhemjeeMetrKube === null ||
+                          talbaiState.talbainKhemjeeMetrKube === undefined ||
+                          talbaiState.talbainKhemjeeMetrKube === ""
+                        ) {
+                          onChange("talbainKhemjeeMetrKube", 0);
+                        }
+                      }}
+                    />
+                  </Form.Item>
             </div>
             <div
               data-aos="fade-right"
