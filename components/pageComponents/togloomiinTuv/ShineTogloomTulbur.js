@@ -154,15 +154,31 @@ const value = React.useMemo(() => {
   useKeyboardTovchlol("F4", f4Darsan);
 
   function f4Darsan() {
-    if (f4LockRef.current) return; // 🔒 prevent re-entry
+    if (f4LockRef.current) return; 
     f4LockRef.current = true;
 
     if (tulbur.length === 0) {
       turulruuTooKhiikhFunction("belen");
     }
+
+    const niitTulbur = tulbur.reduce((a, b) => a + parseFloat(b.dun || 0), 0);
+    const shaardlagataiDun = data?.dutuuDun ?? data?.niitDun ?? 0;
+
+    if (niitTulbur < parseFloat(shaardlagataiDun)) {
+      notification.warn({
+        message: "Төлбөр дутуу байна. Гүйцээнэ үү!",
+        duration: 1,
+      });
+      f4LockRef.current = false; 
+      return;
+    }
+
     batalgaajuulaltKhiiya();
-    !loading && ebarimtAvya(data?._id);
+    if (!loading) {
+      ebarimtAvya(data?._id);
+    }
   }
+
 
   const minToHour = (m) => {
     let res;
@@ -357,6 +373,16 @@ function ebarimtAvya(id) {
         duration: 1,
       });
     }
+    const niitTulbur = tulbur.reduce((a, b) => a + parseFloat(b.dun || 0), 0);
+      const shaardlagataiDun = data?.dutuuDun ?? data?.niitDun ?? 0;
+
+      if (niitTulbur < parseFloat(shaardlagataiDun)) {
+        setLoading(false);
+        return notification.warn({
+          message: "Төлбөр дутуу байна. Гүйцээнэ үү!",
+          duration: 1,
+        });
+      }
     const dun = await tulbur.find((a) => a.turul === "khaan")?.dun;
     if (garaasSongosonTurul === "khaan" && dun > 0) {
       await axios
