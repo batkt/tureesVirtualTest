@@ -642,7 +642,7 @@ function GuilgeeKhiikh(
         >
           <Option value="barter">{t("Бартер")}</Option>
           <Option value="zalruulga">{t("Залруулга")}</Option>
-          <Option value="aldangi">{t("Алданги")}</Option>
+          <Option value="aldangi">{t("Алданги төлөлт")}</Option>
           <Option value="tulultBurtgekh">{t("Төлөлт бүртгэх")}</Option>
         </Select>
       )}
