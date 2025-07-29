@@ -978,7 +978,8 @@ function guilgeeniiTuukh({ token }) {
   function olnoorGuilgeeOruulakhExcelFc() {
     const footer = [
       <Space>
-        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>  
+        <Button type="primary" onClick={() => excelref.current.khadgalya()}>{t("Хадгалах")}</Button>  
       </Space>,
     ];
     modal({
