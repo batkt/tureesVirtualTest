@@ -166,7 +166,7 @@ const value = React.useMemo(() => {
 
     if (niitTulbur < parseFloat(shaardlagataiDun)) {
       notification.warn({
-        message: "Төлбөр дутуу байна. Гүйцээнэ үү!",
+        message: "Төлбөр дутуу байна.",
         duration: 1,
       });
       f4LockRef.current = false; 
@@ -379,7 +379,7 @@ function ebarimtAvya(id) {
       if (niitTulbur < parseFloat(shaardlagataiDun)) {
         setLoading(false);
         return notification.warn({
-          message: "Төлбөр дутуу байна. Гүйцээнэ үү!",
+          message: "Төлбөр дутуу байна.",
           duration: 1,
         });
       }
