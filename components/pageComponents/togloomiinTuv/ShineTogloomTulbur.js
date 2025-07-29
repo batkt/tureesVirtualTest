@@ -50,6 +50,8 @@ function ShineTogloomTulbur(
       : undefined
   );
   const [loading, setLoading] = React.useState(false);
+
+
   const [tuluv, setTuluv] = React.useState(2);
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = React.useState();
   const [qpayModalTuluv, setQpayModalTuluv] = React.useState(false);
@@ -57,12 +59,7 @@ function ShineTogloomTulbur(
   // const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
   //   data?.dutuuDun ? data?.dutuuDun : data?.niitDun
   // );
-  const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
-    data?.tulbur.length > 0
-      ? parseFloat(data.niitDun) -
-          parseFloat(data?.tulbur?.reduce((a, b) => a + b.dun, 0) || 0)
-      : data.niitDun
-  );
+const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState("0");
 
   const { Canvas } = useQRCode();
 
@@ -111,48 +108,46 @@ function ShineTogloomTulbur(
     [tulbur, alkham]
   );
 
-  const value = React.useMemo(() => {
-    const belen = tulbur.find((a) => a.turul === "belen")?.dun;
-    const zeel = tulbur.find((a) => a.turul === "zeel")?.dun;
-    const khariltsakh = tulbur.find((a) => a.turul === "khariltsakh")?.dun;
-    const khunglukh = tulbur.find((a) => a.turul === "khunglukh")?.dun;
-    const khaan = tulbur.find((a) => a.turul === "khaan")?.dun;
-    const tdb = tulbur.find((a) => a.turul === "tdb")?.dun;
-    const khas = tulbur.find((a) => a.turul === "khas")?.dun;
-    const golomt = tulbur.find((a) => a.turul === "golomt")?.dun;
-    const kapitron = tulbur.find((a) => a.turul === "kapitron")?.dun;
-    const tur = tulbur.find((a) => a.turul === "tur")?.dun;
-    const qpay = tulbur.find((a) => a.turul === "qpay")?.dun;
-    const monpay = tulbur.find((a) => a.turul === "monpay")?.dun;
-    const socialpay = tulbur.find((a) => a.turul === "socialpay")?.dun;
-    // const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
-    const toki = tulbur.find((a) => a.turul === "toki")?.dun;
-    const khungulult = tulbur.find((a) => a.turul === "khungulult")?.dun;
-    const ticket = tulbur.find((a) => a.turul === "ticket")?.dun;
-    const erkhiinBichig = tulbur.find((a) => a.turul === "erkhiinBichig")?.dun;
-    
+const value = React.useMemo(() => {
+  const belen = tulbur.find((a) => a.turul === "belen")?.dun || 0;
+  const zeel = tulbur.find((a) => a.turul === "zeel")?.dun || 0;
+  const khariltsakh = tulbur.find((a) => a.turul === "khariltsakh")?.dun || 0;
+  const khunglukh = tulbur.find((a) => a.turul === "khunglukh")?.dun || 0;
+  const khaan = tulbur.find((a) => a.turul === "khaan")?.dun || 0;
+  const tdb = tulbur.find((a) => a.turul === "tdb")?.dun || 0;
+  const khas = tulbur.find((a) => a.turul === "khas")?.dun || 0;
+  const golomt = tulbur.find((a) => a.turul === "golomt")?.dun || 0;
+  const kapitron = tulbur.find((a) => a.turul === "kapitron")?.dun || 0;
+  const tur = tulbur.find((a) => a.turul === "tur")?.dun || 0;
+  const qpay = tulbur.find((a) => a.turul === "qpay")?.dun || 0;
+  const monpay = tulbur.find((a) => a.turul === "monpay")?.dun || 0;
+  const socialpay = tulbur.find((a) => a.turul === "socialpay")?.dun || 0;
+  const toki = tulbur.find((a) => a.turul === "toki")?.dun || 0;
+  const khungulult = tulbur.find((a) => a.turul === "khungulult")?.dun || 0;
+  const ticket = tulbur.find((a) => a.turul === "ticket")?.dun || 0;
+  const erkhiinBichig = tulbur.find((a) => a.turul === "erkhiinBichig")?.dun || 0;
 
-    return {
-      belen,
-      zeel,
-      khariltsakh,
-      khunglukh,
-      khaan,
-      tdb,
-      khas,
-      golomt,
-      kapitron,
-      tur,
-      qpay,
-      monpay,
-      socialpay,
-      ticket,
-      erkhiinBichig,
-      // pocket,
-      toki,
-      khungulult,
-    };
-  }, [tulbur]);
+  return {
+    belen,
+    zeel,
+    khariltsakh,
+    khunglukh,
+    khaan,
+    tdb,
+    khas,
+    golomt,
+    kapitron,
+    tur,
+    qpay,
+    monpay,
+    socialpay,
+    toki,
+    khungulult,
+    ticket,
+    erkhiinBichig,
+  };
+}, [tulbur]);
+
 
   //Keyboard tovchlol ekhlel
 
@@ -267,7 +262,7 @@ function ebarimtAvya(id) {
       setLoading(false);
     }
   }
-
+  
   function guilgeeniiTuukhKhadgalya(tulbur, qpayEsekh) {
     if (khungulukhEsekh === true) {
       if (!khunglult.khungulukhDun || khunglult.khungulukhDun === "") {
@@ -439,6 +434,7 @@ function ebarimtAvya(id) {
     const tuljBuiDun = parseInt(turulruuKhiikhDun);
     const index = tulbur.findIndex((a) => a.turul === v);
     const tukhainTulbur = tulbur.find((a) => a.turul === v);
+ 
     if (tulukhDun > 0) {
       const undsenModel = {
         ognoo: new Date(),
@@ -447,6 +443,7 @@ function ebarimtAvya(id) {
         burtgesenAjiltaniiId: ajiltan?._id,
         burtgesenAjiltaniiNer: ajiltan?.ner,
       };
+      
       if (v === "khunglukh") {
         setKhunglult({ ...khunglult, khungulukhDun: tulukhDun });
         setKhungulukhEsekh(true);
@@ -484,27 +481,26 @@ function ebarimtAvya(id) {
   };
 
   useEffect(() => {
-    const handleKeyPress = (event) => {
-      const key = event.key;
-      const validKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-      if (validKeys.includes(key)) {
-        setTurulruuKhiikhDun(
-          (turulruuKhiikhDun?.toString() || "") + key.toString()
-        );
-      }
-      if (event.key === "Backspace") {
-        if (turulruuKhiikhDun.toString().slice(0, -1).length > 0) {
-          setTurulruuKhiikhDun((e) => e.toString().slice(0, -1));
-        } else {
-          setTurulruuKhiikhDun("0");
-        }
-      }
-    };
-    window.addEventListener("keydown", handleKeyPress);
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [turulruuKhiikhDun]);
+  const handleKeyPress = (event) => {
+    const key = event.key;
+    const validKeys = ["0","1","2","3","4","5","6","7","8","9"];
+    if (validKeys.includes(key)) {
+      setTurulruuKhiikhDun((prev) => (prev.toString() === "0" ? key : prev.toString() + key));
+    }
+    if (key === "Backspace") {
+      setTurulruuKhiikhDun((prev) => {
+        const newVal = prev.toString().slice(0, -1);
+        return newVal.length > 0 ? newVal : "0";
+      });
+    }
+  };
+
+  window.addEventListener("keydown", handleKeyPress);
+  return () => {
+    window.removeEventListener("keydown", handleKeyPress);
+  };
+}, []);
+
 
   function handleTseverlekh() {
     setTurulruuKhiikhDun("0");
@@ -1159,60 +1155,55 @@ function ebarimtAvya(id) {
             </div>
           </div>
           <div className="flex h-full w-[246px] flex-col items-center justify-end gap-6">
-            <div className="flex h-[256px] w-[100%] flex-col justify-between rounded-[25px] border-2 border-dotted border-green-600 p-5 dark:text-gray-300">
-              <div className="flex flex-col gap-2 font-semibold">
-                <div className="flex w-full justify-between font-semibold">
-                  <div>Нийт дүн:</div>
-                  <div>
-                    {formatNumber(
-                      data?.dutuuDun ? data?.dutuuDun : data?.niitDun
-                    )}
-                    ₮
-                  </div>
+          <div className="flex h-[256px] w-[100%] flex-col justify-between rounded-[25px] border-2 border-dotted border-green-600 p-5 dark:text-gray-300">
+            <div className="flex flex-col gap-2 font-semibold">
+
+              
+              <div className="flex w-full justify-between font-semibold">
+                <div>Нийт дүн:</div>
+                <div>{formatNumber(parseFloat(data?.niitDun || 0))}₮</div>
+              </div>
+
+          
+              <div className="flex w-full justify-between font-semibold text-green-400">
+                <div>Төлсөн дүн:</div>
+                <div>
+                  {formatNumber(
+                    (tulbur.reduce((a, b) => a + b.dun, 0) + (data?.tulbur?.reduce((a, b) => a + b.dun, 0) || 0))
+                  )}₮
                 </div>
               </div>
+
+             
               <div
-                className={`flex w-full justify-between font-semibold
-                ${
-                  data.niitDun >
-                  parseFloat(turulruuKhiikhDun || 0) +
-                    parseFloat(tulbur.reduce((a, b) => a + b.dun, 0) || 0)
+                className={`flex w-full justify-between font-semibold ${
+                  (data?.niitDun || 0) - tulbur.reduce((a, b) => a + b.dun, 0) > 0
                     ? "text-red-400"
                     : "text-[#00A35E]"
                 }`}
               >
                 <div>
-                  {data.niitDun >
-                  parseFloat(turulruuKhiikhDun || 0) +
-                    parseFloat(tulbur.reduce((a, b) => a + b.dun, 0) || 0)
+                  {(data?.niitDun || 0) - tulbur.reduce((a, b) => a + b.dun, 0) > 0
                     ? "Дутуу:"
-                    : data.niitDun ===
-                      parseFloat(turulruuKhiikhDun || 0) +
-                        parseFloat(tulbur.reduce((a, b) => a + b.dun, 0) || 0)
-                    ? "Нийт"
-                    : "Хариулт:"}
+                    : (data?.niitDun || 0) - tulbur.reduce((a, b) => a + b.dun, 0) < 0
+                    ? "Хариулт:"
+                    : "Нийт"}
                 </div>
-
                 <div>
                   {formatNumber(
-                    data.niitDun >
-                      parseFloat(turulruuKhiikhDun) +
-                        parseFloat(tulbur.reduce((a, b) => a + b.dun, 0) || 0)
-                      ? parseFloat(data.niitDun) -
-                          (parseFloat(turulruuKhiikhDun) +
-                            parseFloat(
-                              tulbur.reduce((a, b) => a + b.dun, 0) || 0
-                            ))
-                      : parseFloat(turulruuKhiikhDun) +
-                          parseFloat(
-                            tulbur.reduce((a, b) => a + b.dun, 0) || 0
-                          ) -
-                          parseFloat(data.niitDun)
+                    Math.abs(
+                      (data?.niitDun || 0) -
+                        (tulbur.reduce((a, b) => a + b.dun, 0) + (data?.tulbur?.reduce((a, b) => a + b.dun, 0) || 0))
+                    )
                   )}
                   ₮
                 </div>
               </div>
+
             </div>
+          </div>
+
+
             <div className="flex h-[120px] w-full flex-col items-center justify-center gap-4">
               <Popover
                 content={

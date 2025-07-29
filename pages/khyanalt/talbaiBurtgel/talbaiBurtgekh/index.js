@@ -782,6 +782,7 @@ function talbaiBurtgekh({ token }) {
                 showSorterTooltip: false,
                 defaultSortOrder: "descend",
                 sorter: () => 0,
+                render: (value) => value ?? 0,
               },
               {
                 title: t("Нийт үнэ/₮/"),
