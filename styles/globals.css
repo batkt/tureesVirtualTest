@@ -19,6 +19,17 @@
   }
 }
 
+.uploaded-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  max-width: 150px; 
+  max-height: 150px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+
 .ant-btn-primary.upload-button {
   cursor: pointer !important;
 }
