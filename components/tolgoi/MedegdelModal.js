@@ -83,82 +83,88 @@ function getDisplayData({ isMessageModal, data, messageDetails }) {
       (url.startsWith("data:image") || url.startsWith("http") || url.startsWith("/"));
 
     return (
-      <Modal
-        aria-labelledby="notification-modal-title"
-        className="notification-modal w-[650px] max-w-full"
-        title={
-          <h3 id="notification-modal-title" className="text-lg font-medium dark:text-white text-center">
+     <Modal
+  aria-labelledby="notification-modal-title"
+  className="notification-modal w-[850px] max-w-full"
+  width={850}
+  title={
+    <div className="text-lg font-bold dark:text-white text-center px-6 pt-4 pb-2  dark:border-gray-600 bg-white dark:bg-gray-800 sticky top-0 z-10">
+      📢 ШИНЭЧЛЭЛТИЙН МЭДЭЭ 📢
+    </div>
+  }
+  open={visible}
+  onCancel={handleClose}
+  centered
+  closable={false}
+  destroyOnClose
+  maskClosable={false}
+  footer={
+    <div className="sticky bottom-0 z-10 bg-white dark:bg-gray-800  dark:border-gray-700 w-full">
+      {!isMessageModal ? (
+        <div className="flex justify-between  items-center w-full px-6 py-4">
+          <Checkbox checked={dontShowAgainChecked} onChange={handleCheckboxChange}>
+             <span className="select-none">Дахин харуулахгүй байх</span>
+          </Checkbox>
+          <Button onClick={handleClose} className="px-6 text-white ">
+            <span className="text-black dark:text-white" >Хаах</span>
+          </Button>
+        </div>
+      ) : (
+        <div className="flex justify-end w-full px-6 py-4">
+          <Button onClick={handleClose} className="px-6">
+            Хаах
+          </Button>
+        </div>
+      )}
+    </div>
+  }
+  zIndex={1000}
+>
+  <Suspense fallback={<NotificationModalLoading />}>
+    <div className="max-h-[65vh] overflow-y-auto p-6">
+      <div className="flex flex-col items-center">
+        {!isMessageModal && (
+          <span className="font-medium text-lg dark:text-white mb-4">
             {displayData.title}
-          </h3>
-        }
-        open={visible}
-        onCancel={handleClose}
-        centered
-        destroyOnClose
-        maskClosable={false}
-        footer={
-          !isMessageModal ? (
-            <div className="flex justify-between items-center w-full px-6 pb-4">
-              <Checkbox checked={dontShowAgainChecked} onChange={handleCheckboxChange}>
-                Дахин харуулахгүй байх
-              </Checkbox>
-              <Button onClick={handleClose} className="px-6">
-                Хаах
-              </Button>
-            </div>
-          ) : (
-            <div className="flex justify-end w-full px-6 pb-4">
-              <Button onClick={handleClose} className="px-6">
-                Хаах
-              </Button>
-            </div>
-          )
-        }
-        zIndex={1000}
-      >
-        <Suspense fallback={<NotificationModalLoading />}>
-          <div className="p-6">
-            <div className="flex flex-col items-center">
-              {!isMessageModal && (
-                <span className="font-medium text-lg dark:text-white mb-4">
-                  {displayData.title}
-                </span>
-              )}
+          </span>
+        )}
 
-              {isValidImageUrl(displayData.image) && (
-                <div className="mb-4 w-full">
-                  <img
-                    src={
-                      displayData.image.startsWith("data:image") || displayData.image.startsWith("http")
-                        ? displayData.image
-                        : `${url}/notificationImage/${displayData.image}`
-                    }
-                    alt={`Notification image for ${displayData.title}`}
-                    className="w-full h-auto max-h-[16rem] object-cover rounded-lg"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                    }}
-                  />
-                </div>
-              )}
-
-              <div className="w-full text-center">
-                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mb-4">
-                  <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
-                    {displayData.content}
-                  </p>
-                </div>
-
-                {!isMessageModal && (
-                  <div className="flex justify-center items-center text-gray-500 dark:text-gray-400">
-                    <span>{displayData.date}</span>
-                  </div>
-                )}
-              </div>
-            </div>
+        {isValidImageUrl(displayData.image) && (
+          <div className="mb-4 w-full">
+            <img
+              src={
+                displayData.image.startsWith("data:image") || displayData.image.startsWith("http")
+                  ? displayData.image
+                  : `${url}/notificationImage/${displayData.image}`
+              }
+              alt={`Notification image for ${displayData.title}`}
+              className="w-full h-auto max-h-[16rem] object-cover rounded-lg"
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
+            />
           </div>
-        </Suspense>
-      </Modal>
+        )}
+
+        <div className="w-full">
+          <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mb-4">
+            <div
+              className="text-gray-800 dark:text-gray-200 whitespace-pre-line"
+              dangerouslySetInnerHTML={{ __html: displayData.content }}
+            />
+          </div>
+
+          {!isMessageModal && (
+            <div className="flex justify-center items-center text-gray-500 dark:text-gray-400">
+              <span>{displayData.date}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </Suspense>
+</Modal>
+
     );
   }
 );

@@ -147,10 +147,6 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
     });
   }, []);
 
-  const handleTestButtonClick = useCallback(() => {
-    handleMessageClick("This is a test message");
-  }, [handleMessageClick]);
-
   const showLatestNotificationOnLogin = useCallback(() => {
     const adminNotifications = [
       ...realTimeNotifications,
