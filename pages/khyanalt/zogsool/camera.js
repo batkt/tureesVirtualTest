@@ -2132,26 +2132,7 @@ function camera({ token }) {
                     : "sm:h-[450px]"
                 }`}
               >
-                {/*baiguullagiin id ni FoodCity.iin id */}
-                {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
-                  camerVal[0] === "192.168.2.75" ? (
-                    <R2WPlayerComponent
-                      USER={"admin"}
-                      ROOT={"stream"}
-                      PASSWD={"123456"}
-                      Camer={camerVal[0]}
-                      PORT={554}
-                    />
-                  ) : (
-                    <R2WPlayerComponent
-                      USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
-                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
-                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
-                      Camer={camerVal[0]}
-                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
-                    />
-                  )
-                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" &&
+                {baiguullaga?._id === "6115f350b35689cdbf1b9da3" &&
                   (camerVal[0] === "192.168.1.128" ||
                     camerVal[0] === "192.168.1.232") ? (
                   <R2WPlayerComponent
