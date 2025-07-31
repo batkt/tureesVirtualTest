@@ -1,7 +1,6 @@
 import React, { useState, useCallback, Suspense } from "react";
 import { Modal, Button, Checkbox, Spin } from "antd";
 import { format } from "date-fns";
-import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 import { url } from "services/uilchilgee";
 
@@ -19,6 +18,16 @@ const NotificationModal = React.memo(
     const [dontShowAgainChecked, setDontShowAgainChecked] = useState(false);
 
     const displayData = getDisplayData({ isMessageModal, data, messageDetails });
+
+    const uuidv4 = generateUUID;
+
+    function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (char) {
+    const rand = (Math.random() * 16) | 0;
+    const value = char === 'x' ? rand : (rand & 0x3) | 0x8;
+    return value.toString(16);
+  });
+}
 
 
     const handleCheckboxChange = useCallback((e) => {
