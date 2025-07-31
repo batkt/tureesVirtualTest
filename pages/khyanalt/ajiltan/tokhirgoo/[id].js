@@ -484,6 +484,11 @@ function index({ token, data }) {
               value: "guilgeeKhiikhEsekh",
             },
             {
+              ner: "Алданги засах эрх өгөх эсэх",
+              tailbar: "Тухайн барилгын хувьд алдангийн үлдэгдэл засах эсэх",
+              value: "aldangiinUldegdelZasakhEsekh",
+            },
+            {
               ner: "Гүйлгээ устгах эсэх",
               tailbar: "Тухайн барилгын хувьд бүх гэрээг гүйлгээ устгах эсэх",
               value: "guilgeeUstgakhErkh",
@@ -655,6 +660,7 @@ function index({ token, data }) {
   );
 }
 
+
 const ugudulAvchirya = async (ctx, session) => {
   const { data } = await readMethod(
     "ajiltan",
@@ -663,6 +669,7 @@ const ugudulAvchirya = async (ctx, session) => {
   );
   return data;
 };
+
 
 export const getServerSideProps = (ctx) => shalgaltKhiikh(ctx, ugudulAvchirya);
 
