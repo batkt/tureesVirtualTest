@@ -1048,6 +1048,55 @@ input:-webkit-autofill {
   @apply bg-green-500 p-1 !important;
 }
 
+@keyframes mailFly {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  25% { 
+    transform: translateY(-3px) rotate(5deg); 
+  }
+  50% { 
+    transform: translateY(-6px); 
+  }
+  75% { 
+    transform: translateY(-3px) rotate(-5deg); 
+  }
+}
+
+.mail-dropdown-overlay {
+  border-radius: 8px;
+}
+
+.mail-dropdown-overlay .ant-dropdown {
+  padding: 0;
+}
+
+.mail-dropdown-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.notification-modal .ant-modal-content {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.notification-modal .ant-modal-header {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.notification-modal .ant-modal-footer {
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.dark .mail-dropdown-container {
+  background: #1f2937;
+}
+
 .profile > .ant-dropdown-menu {
   @apply rounded-md p-2 transition duration-300 ease-in-out !important;
 }

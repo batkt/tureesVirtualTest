@@ -260,20 +260,23 @@ function Tailan({ token }) {
         }
 
         let mur = {};
-        Object.entries(murutga).map((v) => {
-          if (_.isObject(v[1]) || _.isArray(v[1])) murutga[v[0]] = "";
-          else if (_.isNumber(v[1])) murutga[v[0]] = v[1];
-          else if (
-            moment(v[1], moment.ISO_8601, true).isValid() &&
-            murutga[v[0]].length > 10
-          ) {
-            murutga[v[0]] = moment(v[1]).format("YYYY-MM-DD");
-          }
-          let key = t(converter(v[0]));
-          if (key) {
-            mur[key] = murutga[v[0]];
-          }
-        });
+     Object.entries(murutga).forEach(([key, value]) => {
+  const label = t(converter(key));
+  if (label) {
+    if (typeof value === "string" || typeof value === "number") {
+      mur[label] = value;
+    } else if (
+      moment(value, moment.ISO_8601, true).isValid() &&
+      typeof value === "string" &&
+      value.length > 10
+    ) {
+      mur[label] = moment(value).format("YYYY-MM-DD");
+    } else {
+      mur[label] = "";
+    }
+  }
+});
+
         array.push(mur);
       });
     }
@@ -468,14 +471,15 @@ function Tailan({ token }) {
       <div
         className="ag-theme-alpine col-span-12 overflow-auto"
         style={{ height: "calc( 100vh - 12rem )" }}>
-        {!SSR && !!PlotlyRenderers && (
-          <PivotTableUI
-            data={data}
-            onChange={setTable}
-            renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
-            {...table}
-          />
-        )}
+        {!SSR && !!PlotlyRenderers && Array.isArray(data) && data.length > 0 && (
+  <PivotTableUI
+    data={data}
+    onChange={setTable}
+    renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
+    {...table}
+  />
+)}
+
       </div>
     </Admin>
   );
