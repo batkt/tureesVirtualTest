@@ -260,7 +260,7 @@ const Tailbar = React.forwardRef(
     }
 
     return (
-      <div className="w-full space-y-2">
+      <div className="w-full space-y-2 dark:text-gray-200">
         <div className="w-full space-y-1">
           <div className="flex w-full flex-row justify-between">
             <div className="text-right">

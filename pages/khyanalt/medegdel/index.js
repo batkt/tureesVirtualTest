@@ -2,6 +2,7 @@
 import Admin from "components/Admin";
 import { useEffect, useState, useRef, useMemo } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
+import { Tooltip,Tag } from "antd";
 import { useAuth } from "services/auth";
 import useMailiinZagvar from "hooks/useMailiinZagvar";
 import {
@@ -103,6 +104,8 @@ function Khyanalt({ token }) {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState();
 
+  
+
   const [turulZagvar, setTurulZagvar] = useState(false);
   /**Илгээх төрөл
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
@@ -188,7 +191,7 @@ function Khyanalt({ token }) {
               for (const [key, value] of Object.entries(a)) {
                 body = body?.replace(new RegExp(`<${key}>`, "g"), value);
               }
-              uilchilgee(token)     
+              uilchilgee(token)
                 .post(`/sonorduulgaIlgeeye`, {
                   firebaseToken: a?.firebaseToken,
                   khariltsagchiinId: a?._id,
@@ -544,7 +547,6 @@ function Khyanalt({ token }) {
     }, 300);
   }
 
-  //#endregion
   function zagvarSongokh(a) {
     setTitle(a.ner);
     setContent(a.mail);
@@ -559,7 +561,6 @@ function Khyanalt({ token }) {
       : songogdsonKhariltsagch.push(mur);
     setSongogdsonKhariltsagch([...songogdsonKhariltsagch]);
   }
-
   return (
     <Admin
       title="Мэдэгдэл"
@@ -636,7 +637,6 @@ function Khyanalt({ token }) {
             </Select>
           </div>
         </div>
-
         {turul === "SMS" ? (
           <div
             className="mx-2 my-4 flex flex-row items-center justify-between rounded-md border p-2 px-10 shadow-md"
@@ -894,14 +894,29 @@ function Khyanalt({ token }) {
                         )}
 
                         {mur?.talbainDugaar.length > 0 ? (
-                          <div className="flex items-center justify-center gap-1 rounded-lg bg-blue-500 px-2 py-1 text-xs text-gray-200 dark:bg-blue-700 dark:text-white">
-                            {mur?.talbainDugaar.map((a, i) => (
-                              <div key={i}>
-                                {a}
-                                {i !== mur.talbainDugaar.length - 1 && ","}
-                              </div>
-                            ))}
-                          </div>
+ <Tooltip 
+   title={
+    <div className="flex flex-wrap gap-2">
+      {mur?.talbainDugaar?.map((dugaar, index) => (
+        <Tag key={index} color="transparent" className="m-0">
+          {dugaar}
+        </Tag>
+      ))}
+    </div>
+  }
+  overlayClassName="max-w-[300px]"
+>
+  <div className="w-full rounded-md bg-green-100 dark:bg-green-900 px-3 py-2 flex items-center justify-between gap-3 text-xs sm:text-sm cursor-pointer hover:bg-green-200 dark:hover:bg-green-800 transition">
+    <div className="text-gray-800 dark:text-white truncate max-w-[120px]">
+      {mur?.talbainDugaar?.[0] ?? "—"}
+    </div>
+    <div className="text-gray-600 dark:text-gray-300 truncate max-w-[140px]">
+      {mur?.talbainDugaar?.length > 1 ? `+${mur.talbainDugaar.length - 1}` : ""}
+    </div>
+  </div>
+</Tooltip>
+
+
                         ) : (
                           <div className="flex items-center justify-center rounded-lg bg-blue-500 px-2 py-1 text-xs text-gray-200 dark:bg-blue-700 dark:text-white">
                             <div>{mur?.talbainDugaar}</div>
