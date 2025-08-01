@@ -193,7 +193,6 @@ function tulburTootsoo({ token }) {
 
     return query;
   }, [songogdsonTurul, khuulgaTurul, songogdsonDans]);
-
   useEffect(() => {
     setSongogdsonDans(null);
   }, [barilgiinId]);
@@ -1004,7 +1003,32 @@ function tulburTootsoo({ token }) {
                   <div className="flex w-32 flex-col">
                     <a
                       className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
-                      onClick={() => {
+                      onClick={async () => {
+                       try {
+                        const response = await uilchilgee(token).get("/bankniiGuilgee",{
+                          params: {
+                            order: order, 
+                            query: {
+                              baiguullagiinId: baiguullaga?._id,
+                              dansniiDugaar: songogdsonDans?.dugaar,
+                              barilgiinId,
+                              [`${
+                                songogdsonDans?.bank === "tdb"
+                                  ? "Amt"
+                                  : songogdsonDans?.bank === "golomt"
+                                  ? "tranAmount"
+                                  : "amount"
+                              }`]: { $gt: 0 },
+                              [`${songogdsonDans?.bank === "tdb" ? "TxDt" : "tranDate"}`]: {
+                                $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+                                $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+                              },
+                              ...query,
+                            },
+                            khuudasniiKhemjee: dansniiKhuulgaGaralt?.niitMur,
+                          },
+                        });
+                        const data = response.data?.jagsaalt;
                         const { Excel } = require("antd-table-saveas-excel");
                         const excelExport = new Excel();
                         var baganuud = [];
@@ -1137,9 +1161,13 @@ function tulburTootsoo({ token }) {
                         excelExport
                           .addSheet("Дансны хуулга")
                           .addColumns(baganuud)
-                          .addDataSource(dansniiKhuulgaGaralt?.jagsaalt)
+                          .addDataSource(data)
                           .saveAs("Дансны хуулга.xlsx");
-                      }}
+                      } catch (error) {
+                        aldaaBarigch(error);
+                      }
+                    }}
+
                     >
                       <DownloadOutlined style={{ fontSize: "18px" }} />
                       <label>{t("Татах")}</label>
