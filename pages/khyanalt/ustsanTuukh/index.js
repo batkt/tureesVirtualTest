@@ -638,7 +638,7 @@ const combinedData = useMemo(() => {
           return (
             <>
               <div>{tailbar?.tailbar}</div>
-            </>
+            </> 
           );
         },
       },

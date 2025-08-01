@@ -74,6 +74,22 @@ function GuilgeeniiTuukhAldangi(
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
   });
+  const fetchAldangiinUldegdel = () => {
+  axios(token)
+    .get("/geree", {
+      params: {
+        query: { _id: data?._id, tuluv: { $ne: -1 } },
+        select: { aldangiinUldegdel: 1 },
+      },
+    })
+    .then(({ data }) => {
+      if (data?.jagsaalt?.length > 0) {
+        setAldangiinUldegdel(data.jagsaalt[0].aldangiinUldegdel);
+      }
+    })
+    .catch(aldaaBarigch);
+};
+
 
   // Check if user has permission to edit aldalgi
   const canEditAldalgi = useMemo(() => {
@@ -91,25 +107,82 @@ function GuilgeeniiTuukhAldangi(
     // Check if current building ID is in the permission array
     return permissionArray.includes(barilgiinId);
   }, [ajiltan, barilgiinId]);
-
-  const hadgalakhHandler = () => {
-    axios(token)
-      .post("/gereeniiAldangiZasya", {
-        aldangiDun: Number(aldangiDun),
-        tailbar: zasahTailbar,
-        gereeniiId: data?._id,
-        barilgiinId: data?.barilgiinId,
-        gereeniiDugaar: data?.gereeniiDugaar
-      })
-      .then(() => {
+const hadgalakhHandler = () => {
+  const aldangiValue = Number(aldangiDun);
+  
+  // Always save the aldangi adjustment first
+  axios(token)
+    .post("/gereeniiAldangiZasya", {
+      aldangiDun: aldangiValue,
+      tailbar: zasahTailbar,
+      gereeniiId: data?._id,
+      barilgiinId: data?.barilgiinId,
+      gereeniiDugaar: data?.gereeniiDugaar
+    })
+    .then(() => {
+      // If aldangi is 0, also save to deleted history using the exact same structure as tulultUstgaya
+      if (aldangiValue === 0) {
+        return axios(token)
+          .post("/ustsanBarimt", {
+            turul: "aldangi",
+            guilgeeniiId: data?._id,
+            gereeniiId: data?._id,
+            tulsunDun: aldangiValue,
+            tulukhDun: 0,
+            khyamdral: false,
+            objectiinId: data?._id,
+            tailbar: `Алданги 0-р тохируулсан: ${zasahTailbar}`,
+            talbainDugaar: data?.talbainDugaar,
+            barilgiinId: data?.barilgiinId,
+            // Add these properties that might be expected by the server
+            avlaga: {
+              tulsunDun: aldangiValue,
+              tulukhDun: 0,
+              gereeniiId: data?._id,
+              barilgiinId: data?.barilgiinId
+            },
+            // Add other potential required fields
+            ognoo: new Date(),
+            createdAt: new Date(),
+            guilgeeKhiisenAjiltniiNer: ajiltan?.ner,
+            guilgeeKhiisenOgnoo: new Date()
+          });
+      }
+      return Promise.resolve();
+    })
+    .then(() => {
+      if (aldangiValue === 0) {
+        message.success(t("Алданги 0-р тохируулагдаж, устгасан түүхэнд хадгалагдлаа"));
+      } else {
         message.success(t("Амжилттай хадгалагдлаа"));
-        closeModal();
-        setAldangiDun("");
-        setZasahTailbar("");
-        guilgeeniiAldangiTuukhMutate(); 
-      })
-      .catch(aldaaBarigch);
-  };
+      }
+      closeModal();
+      setAldangiDun("");
+      setZasahTailbar("");
+      guilgeeniiAldangiTuukhMutate();
+      fetchAldangiinUldegdel(); 
+    })
+    .catch((error) => {
+      console.error("Error in hadgalakhHandler:", error);
+      // For debugging - log the full error
+      if (error.response) {
+        console.error("Error response:", error.response.data);
+        console.error("Error status:", error.response.status);
+      }
+      
+      if (aldangiValue === 0) {
+        message.warning(t("Алданги тохируулагдсан боловч устгасан түүхэнд хадгалагдсангүй"));
+      } else {
+        message.error(t("Алдаа гарлаа"));
+      }
+      closeModal();
+      setAldangiDun("");
+      setZasahTailbar("");
+      guilgeeniiAldangiTuukhMutate();
+      fetchAldangiinUldegdel();
+    });
+};
+
 
   const toggleSortOrder = (column) => {
     const newSortOrders = { ...sortOrders };
@@ -158,20 +231,9 @@ function GuilgeeniiTuukhAldangi(
   );
 
   useEffect(() => {
-    if (!aldangiinUldegdel)
-      axios(token)
-        .get("/geree", {
-          params: {
-            query: { _id: data?._id, tuluv: { $ne: -1 } },
-            select: { aldangiinUldegdel: 1 },
-          },
-        })
-        .then(({ data }) => {
-          if (!!data && data.jagsaalt?.length > 0) {
-            setAldangiinUldegdel(data.jagsaalt[0].aldangiinUldegdel);
-          }
-        });
-  }, [guilgeeniiAldangiTuukh]);
+  fetchAldangiinUldegdel(); 
+  }, []);
+
 
   function tulultUstgaya({
     guilgeeniiId,

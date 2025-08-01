@@ -404,7 +404,9 @@ function Zogsool({ token }) {
       baseQuery["tuukh.tulbur.turul"] =
         !!tulbur && tulbur === "card"
           ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
-          : tulbur;
+          : tulbur?.toLowerCase() === "qpay"
+            ? { $in: ["qpay", "qpayUridchilsan", "Qpay"] }
+            : tulbur;
     }
     if (tuluv !== "") {
       if (tuluv === -2) {
@@ -860,6 +862,15 @@ function Zogsool({ token }) {
                 >
                   Соёолж Ц/Д
                 </div>
+                <div
+                  onClick={() => setTulbur("qpay")}
+                  className={`relative ${
+                    tulbur?.toLowerCase() === "qpay" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Qpay")}
+                </div>
+
               </div>
             }
           >

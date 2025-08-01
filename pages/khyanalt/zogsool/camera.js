@@ -1236,6 +1236,14 @@ function camera({ token }) {
                 >
                   {t("Хөнгөлөлт")}
                 </div>
+                <div
+                  onClick={() => setKhelber("qpay")}
+                  className={`relative ${
+                    khelber === "qpay" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                >
+                  {t("qpay")}
+                </div>
               </div>
             }
           >
