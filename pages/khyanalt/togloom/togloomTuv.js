@@ -2108,6 +2108,9 @@ function togloom1() {
                   <Table.Summary.Cell index={9} className="font-bold text-right">
                     {formatNumber(totalEbarimt, 0)}
                   </Table.Summary.Cell>
+                  <Table.Summary.Cell></Table.Summary.Cell>
+                  <Table.Summary.Cell></Table.Summary.Cell>
+                  <Table.Summary.Cell></Table.Summary.Cell>
                 </Table.Summary.Row>
               );
             }}
