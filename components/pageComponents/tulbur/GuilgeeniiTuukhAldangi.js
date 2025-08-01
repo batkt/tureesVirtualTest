@@ -1,4 +1,5 @@
-import { Button, DatePicker, Input, message, Popconfirm } from "antd";
+import { Button, DatePicker, Input, InputNumber, message, Popconfirm } from "antd";
+
 import React, {
   useEffect,
   useImperativeHandle,
@@ -107,80 +108,26 @@ function GuilgeeniiTuukhAldangi(
     // Check if current building ID is in the permission array
     return permissionArray.includes(barilgiinId);
   }, [ajiltan, barilgiinId]);
+
 const hadgalakhHandler = () => {
-  const aldangiValue = Number(aldangiDun);
-  
-  // Always save the aldangi adjustment first
   axios(token)
     .post("/gereeniiAldangiZasya", {
-      aldangiDun: aldangiValue,
+      khuuchinAldangiDun: data?.aldangiinUldegdel,
+      aldangiDun: Number(aldangiDun),
       tailbar: zasahTailbar,
       gereeniiId: data?._id,
       barilgiinId: data?.barilgiinId,
       gereeniiDugaar: data?.gereeniiDugaar
     })
     .then(() => {
-      // If aldangi is 0, also save to deleted history using the exact same structure as tulultUstgaya
-      if (aldangiValue === 0) {
-        return axios(token)
-          .post("/ustsanBarimt", {
-            turul: "aldangi",
-            guilgeeniiId: data?._id,
-            gereeniiId: data?._id,
-            tulsunDun: aldangiValue,
-            tulukhDun: 0,
-            khyamdral: false,
-            objectiinId: data?._id,
-            tailbar: `Алданги 0-р тохируулсан: ${zasahTailbar}`,
-            talbainDugaar: data?.talbainDugaar,
-            barilgiinId: data?.barilgiinId,
-            // Add these properties that might be expected by the server
-            avlaga: {
-              tulsunDun: aldangiValue,
-              tulukhDun: 0,
-              gereeniiId: data?._id,
-              barilgiinId: data?.barilgiinId
-            },
-            // Add other potential required fields
-            ognoo: new Date(),
-            createdAt: new Date(),
-            guilgeeKhiisenAjiltniiNer: ajiltan?.ner,
-            guilgeeKhiisenOgnoo: new Date()
-          });
-      }
-      return Promise.resolve();
-    })
-    .then(() => {
-      if (aldangiValue === 0) {
-        message.success(t("Алданги 0-р тохируулагдаж, устгасан түүхэнд хадгалагдлаа"));
-      } else {
-        message.success(t("Амжилттай хадгалагдлаа"));
-      }
+      message.success(t("Амжилттай хадгалагдлаа"));
       closeModal();
       setAldangiDun("");
       setZasahTailbar("");
       guilgeeniiAldangiTuukhMutate();
       fetchAldangiinUldegdel(); 
     })
-    .catch((error) => {
-      console.error("Error in hadgalakhHandler:", error);
-      // For debugging - log the full error
-      if (error.response) {
-        console.error("Error response:", error.response.data);
-        console.error("Error status:", error.response.status);
-      }
-      
-      if (aldangiValue === 0) {
-        message.warning(t("Алданги тохируулагдсан боловч устгасан түүхэнд хадгалагдсангүй"));
-      } else {
-        message.error(t("Алдаа гарлаа"));
-      }
-      closeModal();
-      setAldangiDun("");
-      setZasahTailbar("");
-      guilgeeniiAldangiTuukhMutate();
-      fetchAldangiinUldegdel();
-    });
+    .catch(aldaaBarigch);
 };
 
 
@@ -499,6 +446,7 @@ const hadgalakhHandler = () => {
                 {t("Алданги засах")}
               </h2>
             </div>
+            
 
             {/* Body */}
             <div className="px-6 py-4 space-y-4">
@@ -506,12 +454,16 @@ const hadgalakhHandler = () => {
                 <label className="block text-xs font-medium text-gray-700 mb-1">
                   {t("Алданги засах дүнг оруулна уу.")}
                 </label>
-                <input
-                  type="number"
-                  value={aldangiDun}
-                  onChange={(e) => setAldangiDun(e.target.value)}
-                  className="w-full px-3 py-2 border rounded text-sm focus:outline-none focus:ring focus:ring-green-200"
+                <InputNumber
+                  style={{ width: "100%" }}
+                  formatter={(value) =>
+                    value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ""
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  value={aldangiDun === "" ? undefined : Number(aldangiDun)}
+                  onChange={(value) => setAldangiDun(value === undefined ? "" : value.toString())}
                 />
+
               </div>
               <div>
                 <textarea

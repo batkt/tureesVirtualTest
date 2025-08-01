@@ -28,6 +28,10 @@ const turluud = [
     turul: "Talbai",
     text: "Талбай бүртгэл",
   },
+  {
+    turul: "Aldangi",
+    text:"Алданги",
+  }
 ];
 
 

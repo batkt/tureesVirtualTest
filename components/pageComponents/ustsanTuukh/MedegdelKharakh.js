@@ -97,6 +97,13 @@ function MedegdelKharakh({ data, destroy }, ref) {
           <div>{moment(data.object.updatedAt).format("YYYY-MM-DD")}</div>
         </div>
         <div className="flex justify-between">
+          <div>{t("Устгасан дүн")}: </div>
+          <div>{formatNumber(data?.khuuchinAldangiDun)}</div>
+        </div>
+
+
+
+        <div className="flex justify-between">
           <div>{t("Хийсэн огноо")}:</div>
           <div>
             {moment(
