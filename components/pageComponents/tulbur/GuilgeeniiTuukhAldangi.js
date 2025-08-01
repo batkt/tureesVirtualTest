@@ -105,9 +105,10 @@ function GuilgeeniiTuukhAldangi(
       return false;
     }
     
-    // Check if current building ID is in the permission array
+  
     return permissionArray.includes(barilgiinId);
   }, [ajiltan, barilgiinId]);
+
 
 const hadgalakhHandler = () => {
   axios(token)
@@ -125,11 +126,13 @@ const hadgalakhHandler = () => {
       setAldangiDun("");
       setZasahTailbar("");
       guilgeeniiAldangiTuukhMutate();
-      fetchAldangiinUldegdel(); 
+      fetchAldangiinUldegdel();
+      
+  
+      refreshData(); 
     })
     .catch(aldaaBarigch);
 };
-
 
   const toggleSortOrder = (column) => {
     const newSortOrders = { ...sortOrders };

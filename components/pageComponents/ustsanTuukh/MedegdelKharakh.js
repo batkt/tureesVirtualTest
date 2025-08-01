@@ -98,7 +98,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
         </div>
         <div className="flex justify-between">
           <div>{t("Устгасан дүн")}: </div>
-          <div>{formatNumber(data?.khuuchinAldangiDun)}</div>
+          <div>{formatNumber(data.object.khuuchinAldangiDun)}</div>
         </div>
 
 
