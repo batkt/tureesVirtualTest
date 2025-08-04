@@ -194,7 +194,7 @@ function ZakhialgaNemekh({ token }) {
     >
       <div className="col-span-12 flex justify-center p-4 lg:col-span-9 xl:col-span-8">
         <div
-          className="flex flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm]"
+          className="flex flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] dark:bg-gray-700 text-white border-white"
           style={{ width: width, height: height }}
         >
           <div className="grid grid-cols-2 gap-4">
@@ -241,7 +241,7 @@ function ZakhialgaNemekh({ token }) {
                 className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <div
-                  className="sun-editor-editable w-full"
+                  className="sun-editor-editable w-full dark:bg-gray-700 border-white text-white"
                   dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                 />
                 <div className="absolute -right-2 -top-2 hidden flex-row space-x-2 group-hover:flex">

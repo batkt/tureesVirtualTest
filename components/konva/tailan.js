@@ -71,7 +71,7 @@ function tailan({ token, points }) {
       });
   }
   return (
-    <div className="wrap grid  grid-cols-3 gap-3 bg-gray-50 p-8">
+    <div className="wrap grid  grid-cols-3 gap-3 bg-gray-50 p-8 dark:bg-gray-700 text-white">
       {planzuragiinId?.davkharuud.map((a) => (
         <div className="col-span-1  space-y-2 p-2 hover:scale-105 hover:border-2 hover:border-green-300 hover:shadow-2xl">
           <div className="flex justify-center font-bold">

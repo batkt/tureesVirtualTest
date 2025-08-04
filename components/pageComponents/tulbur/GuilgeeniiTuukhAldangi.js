@@ -304,14 +304,16 @@ const hadgalakhHandler = () => {
           {/* Conditionally rendered Modal Button */}
           {canEditAldalgi && (
             <div className="ml-auto">
-              <button
+              <Button
+                type="primary"
                 onClick={openModal}
-                className="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-green-600 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 transition duration-200 whitespace-nowrap"
+                className="whitespace-nowrap"
               >
                 {t("Алданги засах")}
-              </button>
+              </Button>
             </div>
           )}
+
         </div>
 
         {/* Table */}
