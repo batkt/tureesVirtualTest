@@ -482,7 +482,7 @@ const hadgalakhHandler = () => {
                   }
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                   style={{ width: "100%", textAlign: "center" }}
-                  value={aldangiDun === "" ? 0 : Number(aldangiDun)}
+                  value={aldangiDun === "" ? undefined : Number(aldangiDun)}
                   onChange={(value) => setAldangiDun(value === undefined ? "" : value?.toString())}
                 />
 
