@@ -6,7 +6,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
 
   return `
 
-  <div style="height: 100%; width: 100%; font-family: 'Times New Roman', serif; font-size: 10pt; line-height: 1.2;">
+  <div style="height: 100%; width: 100%; font-family: 'Times New Roman', serif; padding: 3cm 2cm 2cm 3cm; font-size: 10pt; line-height: 1.2;">
   <style>
     p {
       margin: 0;
