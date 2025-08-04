@@ -119,7 +119,7 @@ const khatuuZagvarIkhNayd = (
   ) {
     rows.push(`
       <tr>
-        <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
+        <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${dugaarlalt[0]}</td>
         <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Барьцаа үлдэгдэл</td>
         <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
         <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
@@ -340,11 +340,15 @@ const khatuuZagvarIkhNayd = (
             <tr style; border: none;">
               <td style="border: none; border: 1px solid #000; font-size:12px" >НӨАТ</td>
               <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuat&gt;</td>
-            </tr>`}
+            </tr>
             <tr style; border: none;">
               <td style="border: none; border: 1px solid #000; font-size:12px" >Нийт үнэ</td>
               <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDun&gt;</td>
-            </tr>            
+            </tr>
+            <tr style; border: none;">
+              <td style="border: none; border: 1px solid #000; font-size:12px" >Барьцаа</td>
+              <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;baritsaaniiUldegdel&gt;</td>
+            </tr> `}     
         <tr>
             <td colspan="6" style="border: none; text-align: left; ">
                 <p style="font-size: 12px;">Жич: Гүйлгээний утга дээр талбайн тоот, регистерийн дугаараа заавал бичнэ үү!</p>
