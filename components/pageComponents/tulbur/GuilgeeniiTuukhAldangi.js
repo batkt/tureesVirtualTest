@@ -460,19 +460,19 @@ const hadgalakhHandler = () => {
           ></div>
 
           {/* Modal Container */}
-          <div className="relative bg-white rounded-md shadow-xl w-[500px] max-w-full bg-gray-800 dark:text-gray-400">
+          <div className="relative bg-white rounded-md shadow-xl w-[500px] max-w-full text-black dark:bg-gray-800 dark:text-gray-400">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-3 border-b dbg-gray-800 dark:text-gray-400">
-              <h2 className="text-base font-semibold text-gray-800 dark: text-gray-100">
+            <div className="flex items-center justify-between px-6 py-3 border-b text-black dark:bg-gray-800 dark:text-gray-400">
+              <h2 className="text-md text-black dark:text-gray-100">
                 {t("Алданги засах")}
               </h2>
             </div>
             
 
             {/* Body */}
-            <div className="px-6 py-4 space-y-4 bg-gray-800 dark:text-gray-400">
+            <div className="px-6 py-4 space-y-4 text-black dark:bg-gray-800 dark:text-gray-400">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1 dark:bg-gray-800 dark:text-gray-400">
+                <label className="block text-md font-medium text-gray-700 mb-1 dark:bg-gray-800 dark:text-gray-400">
                   {t("Алданги засах дүнг оруулна уу")}
                 </label>
                 <InputNumber
@@ -483,7 +483,7 @@ const hadgalakhHandler = () => {
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                   style={{ width: "100%", textAlign: "center" }}
                   value={aldangiDun === "" ? 0 : Number(aldangiDun)}
-                  onChange={(value) => setAldangiDun(value === undefined ? "" : value.toString())}
+                  onChange={(value) => setAldangiDun(value === undefined ? "" : value?.toString())}
                 />
 
               </div>
@@ -498,7 +498,7 @@ const hadgalakhHandler = () => {
             </div>
 
             {/* Footer */}
-            <div className="flex justify-end gap-2 px-6 py-3 border-t dark: bg-gray-800 dark:text-gray-400">
+            <div className="flex justify-end gap-2 px-6 py-3 border-t dark:bg-gray-800 dark:text-gray-400">
               <Button type="default" onClick={closeModal}>
                      {t("Хаах")}
                     </Button>
