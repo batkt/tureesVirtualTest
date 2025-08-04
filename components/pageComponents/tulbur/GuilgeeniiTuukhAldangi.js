@@ -460,57 +460,54 @@ const hadgalakhHandler = () => {
           ></div>
 
           {/* Modal Container */}
-          <div className="relative bg-white rounded-md shadow-xl w-[500px] max-w-full">
+          <div className="relative bg-white rounded-md shadow-xl w-[500px] max-w-full bg-gray-800 dark:text-gray-400">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-3 border-b">
-              <h2 className="text-base font-semibold text-gray-800">
+            <div className="flex items-center justify-between px-6 py-3 border-b dbg-gray-800 dark:text-gray-400">
+              <h2 className="text-base font-semibold text-gray-800 dark: text-gray-100">
                 {t("Алданги засах")}
               </h2>
             </div>
             
 
             {/* Body */}
-            <div className="px-6 py-4 space-y-4">
+            <div className="px-6 py-4 space-y-4 bg-gray-800 dark:text-gray-400">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  {t("Алданги засах дүнг оруулна уу.")}
+                <label className="block text-xs font-medium text-gray-700 mb-1 dark:bg-gray-800 dark:text-gray-400">
+                  {t("Алданги засах дүнг оруулна уу")}
                 </label>
                 <InputNumber
-                  style={{ width: "100%" }}
+                  placeholder="Дүнгээ оруулна уу..."
                   formatter={(value) =>
-                    value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ""
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   }
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  value={aldangiDun === "" ? undefined : Number(aldangiDun)}
+                  style={{ width: "100%", textAlign: "center" }}
+                  value={aldangiDun === "" ? 0 : Number(aldangiDun)}
                   onChange={(value) => setAldangiDun(value === undefined ? "" : value.toString())}
                 />
 
               </div>
               <div>
-                <textarea
-                    rows={3}
-                    value={zasahTailbar}
-                    onChange={(e) => setZasahTailbar(e.target.value)}
-                    placeholder={t("Тайлбар")}
-                    className="w-full px-3 py-2 border rounded text-sm focus:outline-none focus:ring focus:ring-green-200"
+                <Input.TextArea
+                          id="textArea"
+                          placeholder={t("Тайлбар")}
+                          value={zasahTailbar}
+                          onChange={(e) => setZasahTailbar(e.target.value)}
                   />
               </div>
             </div>
 
             {/* Footer */}
-            <div className="flex justify-end gap-2 px-6 py-3 border-t">
-              <button
-                onClick={closeModal}
-                className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-100"
-              >
-                {t("Хаах")}
-              </button>
-              <button
-                onClick={hadgalakhHandler}
-                className="px-4 py-2 text-sm text-white bg-green-600 rounded hover:bg-green-700"
-              >
-                {t("Хадгалах")}
-              </button>
+            <div className="flex justify-end gap-2 px-6 py-3 border-t dark: bg-gray-800 dark:text-gray-400">
+              <Button type="default" onClick={closeModal}>
+                     {t("Хаах")}
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={hadgalakhHandler}
+                    >
+                      {t("Хадгалах")}
+                    </Button>
             </div>
           </div>
         </div>
