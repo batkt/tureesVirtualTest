@@ -1,13 +1,13 @@
 import Aos from "aos";
 import _ from "lodash";
 import Link from "next/link";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { url } from "services/uilchilgee";
 import moment from "moment";
 
 function MenuItem({ mur, selected, khuudasniiNer }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [open, setOpen] = React.useState(
     !!mur?.sub?.find((a) => a.khuudasniiNer === khuudasniiNer)
   );
@@ -79,7 +79,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
         </ul>
       </div>
     );
-  } else
+  } else {
     return (
       <Link href={mur.href}>
         <a>
@@ -94,6 +94,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
         </a>
       </Link>
     );
+  }
 }
 
 function NTses({
@@ -105,11 +106,14 @@ function NTses({
   onChangeBarilga,
   barilgiinId,
 }) {
+  const scrollRef = useRef(null);
+
   const barilguud = baiguullaga?.barilguud?.filter(
     (a) =>
       !!ajiltan?.barilguud?.find((b) => b === a._id) ||
       ajiltan?.erkh === "Admin"
   );
+
   if (
     Array.isArray(ajiltan?.salbaruud) &&
     ajiltan?.salbaruud?.length > 0 &&
@@ -125,6 +129,29 @@ function NTses({
         ) < new Date();
     });
   }
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const handleWheel = (e) => {
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      const delta = e.deltaY;
+      const atTop = scrollTop === 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      if ((atTop && delta < 0) || (atBottom && delta > 0)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    el.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      el.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
 
   return (
     <nav className="hidden h-full w-44 md:block">
@@ -163,14 +190,10 @@ function NTses({
                     {barilguud?.map((a) => (
                       <option
                         key={a?._id}
-                        className=""
                         value={a?._id}
                         disabled={a.disabled}
                       >
-                        <div>
-                          <div>{a?.ner}</div>
-                          {a.disabled && <div> хугацаа дууссан!</div>}
-                        </div>
+                        {a?.ner}
                       </option>
                     ))}
                   </select>
@@ -190,8 +213,10 @@ function NTses({
             </div>
           </div>
         </li>
+
         <div
-          style={{ height: "calc( 100vh - 12rem )" }}
+          ref={scrollRef}
+          style={{ height: "calc(100vh - 12rem)" }}
           className="menuScrollbar group overflow-y-auto"
         >
           {khuudasnuud.map((mur) => (
