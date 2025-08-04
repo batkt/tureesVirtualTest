@@ -59,7 +59,12 @@ function ShineTogloomTulbur(
   // const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
   //   data?.dutuuDun ? data?.dutuuDun : data?.niitDun
   // );
-const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState("0");
+const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(() => {
+  const totalAmount = data?.dutuuDun ?? data?.niitDun ?? 0;
+  const paidAmount = tulbur.reduce((a, b) => a + (b.dun || 0), 0);
+  const remainingAmount = totalAmount - paidAmount;
+  return remainingAmount > 0 ? remainingAmount.toString() : "0";
+});
 
   const { Canvas } = useQRCode();
 
@@ -1194,9 +1199,8 @@ function ebarimtAvya(id) {
               <div className="flex w-full justify-between font-semibold text-green-400">
                 <div>Төлсөн дүн:</div>
                 <div>
-                  {formatNumber(
-                    (tulbur.reduce((a, b) => a + b.dun, 0) + (data?.tulbur?.reduce((a, b) => a + b.dun, 0) || 0))
-                  )}₮
+                  {formatNumber(tulbur.reduce((a, b) => a + b.dun, 0))}₮
+
                 </div>
               </div>
 
