@@ -51,7 +51,7 @@ function GuilgeeniiTuukhAldangi(
   const [zasahTailbar, setZasahTailbar] = useState("");
   const [shineOgnoo, setShineOgnoo] = useState(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const [aldangiinUldegdel, setAldangiinUldegdel] = useState(undefined);
@@ -111,6 +111,20 @@ function GuilgeeniiTuukhAldangi(
 
 
 const hadgalakhHandler = () => {
+  if (isSubmitting) return;
+    
+    
+    if (aldangiDun === "" || aldangiDun === null || aldangiDun === undefined) {
+      message.error(t("Алданги дүнг оруулна уу"));
+      return;
+    }
+    const newValue = Number(aldangiDun);
+    if (newValue === aldangiinUldegdel) {
+      message.warning(t("Алданги өөрчлөгдөөгүй байна"));
+      return;
+    }
+    
+    setIsSubmitting(true);
   axios(token)
     .post("/gereeniiAldangiZasya", {
       khuuchinAldangiDun: data?.aldangiinUldegdel,
