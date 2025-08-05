@@ -325,6 +325,9 @@ audio::-webkit-media-controls-volume-control-container {
   .login-input {
     min-width: 350px !important;
   }
+  .mail-dropdown-container {
+    z-index: 1000 !important; /* Ensure this is lower than the modal */
+  }
 }
 
 .link-style {
@@ -558,9 +561,67 @@ audio::-webkit-media-controls-volume-control-container {
   @apply dark:text-gray-500;
 }
 
-.ant-modal-close-x {
-  @apply dark:text-white;
+
+/* In your CSS file */
+.truncate {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
 }
+
+.break-words {
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* Modal wrapper - already responsive */
+.ant-modal {
+  @apply w-[90vw] max-w-[90vw] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px];
+  @apply h-[90vh] sm:h-auto;
+  
+}
+
+/* Modal content */
+.ant-modal-content {
+  @apply dark:bg-gray-800 dark:text-gray-300 !important;
+  @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;
+  @apply p-0 !important; /* Remove padding from container, move to children */
+  z-index: 1000 !important;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+/* Title (frozen) */
+.ant-modal-header {
+    @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;
+
+  @apply p-4 sm:p-6 md:p-6 border-b dark:border-gray-700 !important;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: inherit;
+}
+
+/* Scrollable content */
+.ant-modal-body {
+  @apply px-4 sm:px-6 md:px-8 py-4 overflow-y-auto !important;
+  flex: 1 1 auto;
+  max-height: calc(90vh - 130px); /* Adjust based on header/footer height */
+}
+
+/* Footer (frozen) */
+.ant-modal-footer {
+    @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;
+
+  @apply p-4 sm:p-6 border-t dark:border-gray-700 !important;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background-color: inherit;
+}
+
 
 .ant-picker-calendar .ant-picker-panel {
   @apply bg-white dark:bg-gray-800;
@@ -976,6 +1037,10 @@ input:-webkit-autofill {
   .ant-picker-header-super-prev-btn {
     visibility: visible !important;
   }
+
+  .mail-dropdown-container {
+    z-index: 1000 !important; /* Ensure this is lower than the modal */
+  }
 }
 
 .ant-input-suffix > .anticon {
@@ -1044,9 +1109,9 @@ input:-webkit-autofill {
   word-break: break-word;
 }
 
-.profile > .ant-dropdown-menu {
+/* .profile > .ant-dropdown-menu {
   @apply bg-green-500 p-1 !important;
-}
+} */
 
 @keyframes mailFly {
   0%, 100% { 
@@ -1063,7 +1128,11 @@ input:-webkit-autofill {
   }
 }
 
-.mail-dropdown-overlay {
+.ant-modal-content {
+  z-index: 3000 !important; /* Higher than MailDropdown’s z-index (1000) */
+}
+
+/* .mail-dropdown-overlay {
   border-radius: 8px;
 }
 
@@ -1077,6 +1146,8 @@ input:-webkit-autofill {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
+
+
 
 .notification-modal .ant-modal-content {
   border-radius: 20px;
@@ -1095,7 +1166,7 @@ input:-webkit-autofill {
 
 .dark .mail-dropdown-container {
   background: #1f2937;
-}
+} */
 
 .profile > .ant-dropdown-menu {
   @apply rounded-md p-2 transition duration-300 ease-in-out !important;
