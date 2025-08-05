@@ -129,19 +129,24 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
     });
   }, [notificationModal.data, notificationModal.isMessageModal]);
 
-  const handleDontShowAgain = useCallback((notifId, dontShowAgain) => {
-    if (notifId && dontShowAgain) {
-      setSessionDismissedNotifications((prev) => new Set([...prev, notifId]));
-    }
-    setNotificationModal({
-      visible: false,
-      data: null,
-      isMessageModal: false,
-      messageDetails: null,
-      messageTitle: null,
-      messageDate: null,
+ const handleDontShowAgain = useCallback((notifId, dontShowAgain) => {
+  if (notifId && dontShowAgain) {
+    setSessionDismissedNotifications((prev) => new Set([...prev, notifId]));
+    setPermanentlyDismissed((prev) => {
+      const updated = new Set([...prev, notifId]);
+      localStorage.setItem("permanentlyDismissedNotifications", JSON.stringify([...updated]));
+      return updated;
     });
-  }, []);
+  }
+  setNotificationModal({
+    visible: false,
+    data: null,
+    isMessageModal: false,
+    messageDetails: null,
+    messageTitle: null,
+    messageDate: null,
+  });
+}, []);
 
   const handleMessageClick = useCallback((title, message, createdAt, e, _id) => {
     e?.stopPropagation();
@@ -269,15 +274,21 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
     };
   }, [baiguullaga?._id, handleAdminNotification]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (baiguullaga?._id && (jagsaalt.length > 0 || sonorduulga?.jagsaalt?.length > 0)) {
-        showLatestNotificationOnLogin();
-      }
-    }, 1500);
+ useEffect(() => {
+  let hasShown = false;
+  const timer = setTimeout(() => {
+    if (
+      baiguullaga?._id &&
+      (jagsaalt.length > 0 || sonorduulga?.jagsaalt?.length > 0) &&
+      !hasShown
+    ) {
+      showLatestNotificationOnLogin();
+      hasShown = true;
+    }
+  }, 1500);
 
-    return () => clearTimeout(timer);
-  }, [baiguullaga?._id, jagsaalt, sonorduulga?.jagsaalt, showLatestNotificationOnLogin]);
+  return () => clearTimeout(timer);
+}, [baiguullaga?._id, jagsaalt, sonorduulga?.jagsaalt, showLatestNotificationOnLogin]);
 
   const sonorduulgaKharlaa = useCallback(
     (id, sonorduulgaId) => {
@@ -592,6 +603,7 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
           messageDetails={notificationModal.messageDetails}
           messageTitle={notificationModal.messageTitle}
           messageDate={notificationModal.messageDate}
+          token={token}
         />
       </div>
     </Suspense>

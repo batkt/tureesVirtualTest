@@ -1,9 +1,10 @@
-import React, { useState, useCallback, Suspense } from "react";
-import { Modal, Button, Checkbox, Spin } from "antd";
-import { format, isValid } from "date-fns"; // Add isValid
+import React, { useState, useCallback, useEffect, Suspense } from "react";
+import { Modal, Button, Checkbox, Spin, message } from "antd";
+import { format, isValid } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 import { url } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
 
 const NotificationModal = React.memo(
@@ -18,13 +19,17 @@ const NotificationModal = React.memo(
     messageDetails,
     messageDate,
     isMessageModal = false,
+    token,
   }) => {
     const [dontShowAgainChecked, setDontShowAgainChecked] = useState(
       data?._id ? permanentlyDismissed.has(data._id) : false
     );
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const { t } = useTranslation();
 
-    const displayData = getDisplayData({ isMessageModal, data, messageTitle, messageDetails, messageDate });
+    useEffect(() => {
+      setDontShowAgainChecked(data?._id ? permanentlyDismissed.has(data._id) : false);
+    }, [data, permanentlyDismissed]);
 
     const handleCheckboxChange = useCallback((e) => {
       e.stopPropagation();
@@ -37,31 +42,71 @@ const NotificationModal = React.memo(
       </div>
     );
 
+    const saveDontShowAgainToServer = useCallback(
+      async (sonorduulgaId, dakhijKharikhEsekh) => {
+        if (!token || !sonorduulgaId) return false;
+
+        try {
+          setIsSubmitting(true);
+          await uilchilgee(token).post("/adminMedegdelZasakh", {
+            sonorduulgaId,
+            dakhijKharikhEsekh,
+          });
+          return true;
+        } catch (error) {
+          console.error("Error saving dont show again preference:", error);
+          message.error(t("Тохиргоо хадгалахад алдаа гарлаа"));
+          aldaaBarigch(error);
+          return false;
+        } finally {
+          setIsSubmitting(false);
+        }
+      },
+      [token, t]
+    );
+
     const handleClose = useCallback(
-      (e) => {
+      async (e) => {
         e?.stopPropagation();
-        if (data && !isMessageModal) {
-          const notifId = data._id || uuidv4();
-          if (dontShowAgainChecked) {
-            const newDismissed = new Set(permanentlyDismissed);
+
+        if (!data) {
+          onClose?.();
+          return;
+        }
+
+        const notifId = data._id || uuidv4();
+        const sonorduulgaId = data._id;
+
+        const newDismissed = new Set(permanentlyDismissed);
+
+        if (dontShowAgainChecked && sonorduulgaId) {
+          const serverSaveSuccess = await saveDontShowAgainToServer(sonorduulgaId, true);
+          if (serverSaveSuccess) {
             newDismissed.add(notifId);
             setPermanentlyDismissed(newDismissed);
             localStorage.setItem(
               "permanentlyDismissedNotifications",
               JSON.stringify([...newDismissed])
             );
+            message.success(t("Тохиргоо хадгалагдлаа"));
             onDontShowAgain?.(notifId, dontShowAgainChecked);
-          } else if (permanentlyDismissed.has(notifId)) {
-            const newDismissed = new Set(permanentlyDismissed);
+          } else {
+            setDontShowAgainChecked(false);
+            return;
+          }
+        } else if (!dontShowAgainChecked && permanentlyDismissed.has(notifId) && sonorduulgaId) {
+          const serverSaveSuccess = await saveDontShowAgainToServer(sonorduulgaId, false);
+          if (serverSaveSuccess) {
             newDismissed.delete(notifId);
             setPermanentlyDismissed(newDismissed);
             localStorage.setItem(
               "permanentlyDismissedNotifications",
               JSON.stringify([...newDismissed])
             );
-            onDontShowAgain?.(notifId, dontShowAgainChecked);
+            message.success(t("Тохиргоо хадгалагдлаа"));
           }
         }
+
         setDontShowAgainChecked(false);
         onClose?.();
       },
@@ -72,76 +117,66 @@ const NotificationModal = React.memo(
         setPermanentlyDismissed,
         onDontShowAgain,
         onClose,
-        isMessageModal,
+        saveDontShowAgainToServer,
+        t,
       ]
     );
 
-    if (!visible || !displayData) return null;
+    if (!visible || !data) return null;
+
+    const displayData = getDisplayData({ isMessageModal, data, messageTitle, messageDetails, messageDate });
 
     const cleanedContent =
       typeof displayData?.content === "string"
         ? displayData.content.replace(/<p>(<br\s*\/?>|\s|&nbsp;)+/i, "<p>")
         : "";
 
-  function getDisplayData({ isMessageModal, data, messageTitle, messageDetails, messageDate }) {
-  const formatDate = (dateInput) => {
-    if (!dateInput) return "N/A";
-    
-    // If it's already a formatted string (contains "оны"), return as is
-    if (typeof dateInput === 'string' && dateInput.includes('оны')) {
-      return dateInput;
-    }
-    
-    const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
-    if (!isValid(date)) return "N/A";
-    return format(date, "yyyy-MM-dd HH:mm");
-  };
+    function getDisplayData({ isMessageModal, data, messageTitle, messageDetails, messageDate }) {
+      const formatDate = (dateInput) => {
+        if (!dateInput) return "N/A";
+        if (typeof dateInput === "string" && dateInput.includes("оны")) return dateInput;
+        const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+        if (!isValid(date)) return "N/A";
+        return format(date, "yyyy-MM-dd HH:mm");
+      };
 
-  const formatTitleDate = (dateInput) => {
-    if (!dateInput) return "Мэдэгдлийн гарчиг байхгүй байна";
-    
-    // If it's already a formatted string (contains "оны"), return as is
-    if (typeof dateInput === 'string' && dateInput.includes('оны')) {
-      return dateInput;
-    }
-    
-    const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
-    if (!isValid(date)) return "Мэдэгдлийн гарчиг байхгүй байна";
-    const year = format(date, "yyyy");
-    const month = format(date, "M");
-    const day = format(date, "d");
-    return `${year} оны ${month} сарын ${day}-ны өдөр`; 
-  };
+      const formatTitleDate = (dateInput) => {
+        if (!dateInput) return "Мэдэгдлийн гарчиг байхгүй байна";
+        if (typeof dateInput === "string" && dateInput.includes("оны")) return dateInput;
+        const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+        if (!isValid(date)) return "Мэдэгдлийн гарчиг байхгүй байна";
+        const year = format(date, "yyyy");
+        const month = format(date, "M");
+        const day = format(date, "d");
+        return `${year} оны ${month} сарын ${day}-ны өдөр`;
+      };
 
-  if (isMessageModal) {
-    // Use messageTitle directly if it's provided (it's already formatted)
-    // Otherwise, try to format messageDate, or fall back to data.title
-    const titleSource = messageTitle || (messageDate ? formatTitleDate(messageDate) : data?.title);
-    
-    return {
-      title: titleSource,
-      content: messageDetails || data?.message || "Мэдэгдлийн агуулга байхгүй байна",
-      date: formatDate(messageDate),
-      image: data?.zurag || null,
-      system: "Систем",
-      isSuccess: false,
-      register: "Тодорхойгүй",
-    };
-  } else if (data) {
-    const titleSource = messageTitle || (messageDate ? formatTitleDate(data) : data?.title);
-    
-    return {
-      title: titleSource,
-      content: data.message || "Мэдэгдлийн агуулга байхгүй байна",
-      date: formatDate(data.createdAt),
-      image: data.zurag || null,
-      system: data.system || "Систем",
-      isSuccess: data.success || false,
-      register: data.baiguullagaRegister || "Тодорхойгүй",
-    };
-  }
-  return null;
-}
+      if (isMessageModal) {
+        const titleSource = messageTitle || (messageDate ? formatTitleDate(messageDate) : data?.title);
+        return {
+          title: titleSource,
+          content: messageDetails || data?.message || "Мэдэгдлийн агуулга байхгүй байна",
+          date: formatDate(messageDate),
+          image: data?.zurag || null,
+          system: "Систем",
+          isSuccess: false,
+          register: "Тодорхойгүй",
+        };
+      } else if (data) {
+        const titleSource = messageTitle || (messageDate ? formatTitleDate(data) : data?.title);
+        return {
+          title: titleSource,
+          content: data.message || "Мэдэгдлийн агуулга байхгүй байна",
+          date: formatDate(data.createdAt),
+          image: data.zurag || null,
+          system: data.system || "Систем",
+          isSuccess: data.success || false,
+          register: data.baiguullagaRegister || "Тодорхойгүй",
+        };
+      }
+      return null;
+    }
+
     const isValidImageUrl = (url) =>
       !isMessageModal &&
       typeof url === "string" &&
@@ -175,7 +210,11 @@ const NotificationModal = React.memo(
           <div className="flex items-center p-2 sm:p-4">
             {!isMessageModal ? (
               <div className="flex items-center justify-between w-full flex-col sm:flex-row gap-2 sm:gap-0">
-                <Checkbox checked={dontShowAgainChecked} onChange={handleCheckboxChange}>
+                <Checkbox
+                  checked={dontShowAgainChecked}
+                  onChange={handleCheckboxChange}
+                  disabled={isSubmitting}
+                >
                   <span className="select-none text-gray-800 dark:text-gray-200 text-xs sm:text-sm">
                     {t("Дахин харуулахгүй")}
                   </span>
@@ -183,15 +222,16 @@ const NotificationModal = React.memo(
                 <Button
                   type="primary"
                   onClick={handleClose}
+                  loading={isSubmitting}
                   className="w-full sm:w-auto px-4 py-1 sm:px-6 sm:py-2 text-xs sm:text-sm"
                 >
-                  {t("Хаах")}
+                  {isSubmitting ? t("Хадгалж байна...") : t("Хаах")}
                 </Button>
               </div>
             ) : (
               <div className="flex justify-end w-full">
                 <Button
-                type="primary"
+                  type="primary"
                   onClick={handleClose}
                   className="bg-gray-100 text-black dark:bg-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 w-full sm:w-auto px-4 py-1 sm:px-6 sm:py-2 text-xs sm:text-sm"
                 >
@@ -210,21 +250,22 @@ const NotificationModal = React.memo(
         <Suspense fallback={<NotificationModalLoading />}>
           <div className="mb-1 sm:mb-2 space-y-3">
             <div className="space-y-5 sm:space-y-4">
-             <div className="w-full">
-              <div className="flex flex-row items-center justify-between w-full">
-                <div className="text-left text-sm sm:text-base text-gray-800 dark:text-gray-200">
-                  {t("Нийтэлсэн")}
-                </div>
-                <div className="text-right text-sm sm:text-base text-gray-800 dark:text-gray-200">
-                  {displayData.date}
+              <div className="w-full">
+                <div className="flex flex-row items-center justify-between w-full">
+                  <div className="text-left text-sm sm:text-base text-gray-800 dark:text-gray-200">
+                    {t("Нийтэлсэн")}
+                  </div>
+                  <div className="text-right text-sm sm:text-base text-gray-800 dark:text-gray-200">
+                    {displayData.date}
+                  </div>
                 </div>
               </div>
-            </div>
               {isValidImageUrl(displayData.image) && (
                 <div className="flex justify-center">
                   <img
                     src={
-                      displayData.image.startsWith("data:image") || displayData.image.startsWith("http")
+                      displayData.image.startsWith("data:image") ||
+                      displayData.image.startsWith("http")
                         ? displayData.image
                         : `${url}/notificationImage/${displayData.image}`
                     }
@@ -263,6 +304,7 @@ NotificationModal.propTypes = {
   messageTitle: PropTypes.string,
   messageDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   isMessageModal: PropTypes.bool,
+  token: PropTypes.string.isRequired,
 };
 
 export default NotificationModal;

@@ -5,10 +5,11 @@ import Sonorduulga from "components/sonorduulga";
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "services/auth";
 
-const filterDismissedNotifications = (notifications) => {
-  return notifications.filter((notification) => {
-    return !notification.dakhijKharikhEsekh;
-  });
+const filterDismissedNotifications = (notifications, keepDismissed = false) => {
+  if (keepDismissed) {
+    return notifications; // Keep all notifications, including dismissed ones
+  }
+  return notifications.filter((notification) => !notification.dakhijKharikhEsekh);
 };
 
 const fetcher = (
@@ -48,7 +49,7 @@ const fetcher = (
     .then((res) => {
       const filtered = {
         ...res.data,
-        jagsaalt: filterDismissedNotifications(res.data.jagsaalt || []),
+        jagsaalt: filterDismissedNotifications(res.data.jagsaalt || [], true), // Keep dismissed in fetcher
       };
       return filtered;
     })
@@ -100,18 +101,13 @@ const paginationFetcher = (
           baiguullagiinId,
           barilgiinId,
           turul: { $ne: "medegdelAdmin" },
-          dakhijKharikhEsekh: { $ne: true },
+          // Remove dakhijKharikhEsekh filter to fetch all notifications
           $or: [
             { baiguullagiinId, barilgiinId },
             {
               $and: [
                 {
                   khuleenAvagchiinId: ajiltniiId,
-                },
-                {
-                  turul: {
-                    $in: ["daalgavar", "setgegdel"],
-                  },
                 },
               ],
             },
@@ -123,7 +119,7 @@ const paginationFetcher = (
     .then((res) => {
       return {
         ...res.data,
-        jagsaalt: filterDismissedNotifications(res.data.jagsaalt || []),
+        jagsaalt: filterDismissedNotifications(res.data.jagsaalt || [], true), // Keep dismissed in pagination
       };
     })
     .catch(aldaaBarigch);
@@ -203,7 +199,6 @@ function useSonorduulga(token) {
             const uniqueNew = newNotifications.filter(
               (item) => !existingIds.has(item._id)
             );
-
             return [...prev, ...uniqueNew];
           });
         } else {
@@ -233,12 +228,6 @@ function useSonorduulga(token) {
     }
   }, [currentPage, isLoadingMore, hasMore, fetchNotifications]);
 
-  useEffect(() => {
-    if (token && baiguullaga?._id) {
-      fetchNotifications(1, false);
-    }
-  }, [token, baiguullaga?._id, fetchNotifications]);
-
   const refreshNotifications = useCallback(() => {
     setCurrentPage(1);
     setHasMore(true);
@@ -246,16 +235,75 @@ function useSonorduulga(token) {
     fetchNotifications(1, false);
   }, [fetchNotifications]);
 
+  const dismissNotification = useCallback(
+    async (sonorduulgaId) => {
+      if (!token || !sonorduulgaId) {
+        return;
+      }
+
+      try {
+        // Make API call to update the notification
+        await axios(token).post("/adminMedegdelZasakh", {
+          sonorduulgaId,
+          dakhijKharikhEsekh: true,
+        });
+
+        // Update local state to mark notification as dismissed but keep it
+        setAllNotifications((prev) =>
+          prev.map((notification) =>
+            notification._id === sonorduulgaId
+              ? { ...notification, dakhijKharikhEsekh: true }
+              : notification
+          )
+        );
+
+        // Update SWR cache
+        mutate(
+          (currentData) => {
+            if (!currentData) return currentData;
+            return {
+              ...currentData,
+              jagsaalt: currentData.jagsaalt.map((notification) =>
+                notification._id === sonorduulgaId
+                  ? { ...notification, dakhijKharikhEsekh: true }
+                  : notification
+              ),
+            };
+          },
+          { revalidate: false }
+        );
+
+        // Refresh notifications to ensure consistency
+        refreshNotifications();
+      } catch (error) {
+        aldaaBarigch(error);
+        // Revert on error
+        fetchNotifications(currentPage, true);
+      }
+    },
+    [token, mutate, refreshNotifications, fetchNotifications, currentPage]
+  );
+
+  useEffect(() => {
+    if (token && baiguullaga?._id) {
+      fetchNotifications(1, false);
+    }
+  }, [token, baiguullaga?._id, fetchNotifications]);
+
   useEffect(() => {
     if (baiguullaga?._id) {
       socket().on(`baiguullaga${baiguullaga?._id}`, (sonorduulga) => {
+        // Skip dismissed notifications
+        if (sonorduulga?.dakhijKharikhEsekh) {
+          return;
+        }
+
         const key = `${Math.floor(Math.random() * 100)}+${Date.now()}`;
         mutate();
         too.mutate();
-
         refreshNotifications();
 
-        if (!!sonorduulga && sonorduulgaId !== sonorduulga?._id) {
+        if (sonorduulga && sonorduulgaId !== sonorduulga?._id) {
           function onClose() {
             notification.close(key);
           }
@@ -273,6 +321,7 @@ function useSonorduulga(token) {
                     ajiltan={ajiltan}
                     {...sonorduulga}
                     onClose={onClose}
+                    onDismiss={() => dismissNotification(sonorduulga._id)} // Pass dismiss handler
                   />
                 ),
                 closeIcon: () => null,
@@ -283,7 +332,12 @@ function useSonorduulga(token) {
             notification.open({
               key: key,
               message: (
-                <Sonorduulga token={token} {...sonorduulga} onClose={onClose} />
+                <Sonorduulga
+                  token={token}
+                  {...sonorduulga}
+                  onClose={onClose}
+                  onDismiss={() => dismissNotification(sonorduulga._id)} // Pass dismiss handler
+                />
               ),
               closeIcon: () => null,
               duration: 100000,
@@ -295,10 +349,10 @@ function useSonorduulga(token) {
     return () => {
       socket().off(`baiguullaga${baiguullaga?._id}`);
     };
-  }, [baiguullaga, ajiltan, mutate, too.mutate, refreshNotifications]);
+  }, [baiguullaga, ajiltan, mutate, too.mutate, refreshNotifications, dismissNotification]);
 
   useEffect(() => {
-    if (ajiltan?._id)
+    if (ajiltan?._id) {
       socket().on(`ajiltan${ajiltan?._id}`, (res) => {
         if (res.type === "logout" && res?.ip) {
           message.warn(
@@ -312,6 +366,7 @@ function useSonorduulga(token) {
           }, 4000);
         }
       });
+    }
     return () => {
       socket().off(`ajiltan${ajiltan?._id}`);
     };
@@ -323,7 +378,6 @@ function useSonorduulga(token) {
     kharaaguiToo: too?.data?.niitMur,
     sonorduulgaMutate: mutate,
     jagsaalt: data?.jagsaalt || [],
-
     allNotifications,
     currentPage,
     isLoadingMore,
@@ -332,24 +386,8 @@ function useSonorduulga(token) {
     loadMore,
     fetchNotifications,
     refreshNotifications,
+    dismissNotification,
   };
 }
-
-export const markNotificationDismissed = async (
-  token,
-  sonorduulgaId,
-  dakhijKharikhEsekh = true
-) => {
-  try {
-    await axios(token).post("/adminMedegdelZasakh", {
-      sonorduulgaId,
-      dakhijKharikhEsekh,
-    });
-    return true;
-  } catch (error) {
-    console.error("Error marking notification as dismissed:", error);
-    return false;
-  }
-};
 
 export default useSonorduulga;
