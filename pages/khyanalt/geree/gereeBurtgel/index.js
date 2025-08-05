@@ -1199,10 +1199,11 @@ function ZakhialgiinKhyanalt() {
             geree.ekhelkhSar = moment(geree.gereeniiOgnoo).format("MM");
             geree.ekhlekhUdur = moment(geree.gereeniiOgnoo).format("DD");
             if (geree.khugatsaa > 0) {
-              let duusakhOgnoo = moment(geree.gereeniiOgnoo).add(
-                geree.khugatsaa,
-                "M"
-              );
+              // let duusakhOgnoo = moment(geree.gereeniiOgnoo).add(
+              //   geree.khugatsaa,
+              //   "M"
+              // );
+              let duusakhOgnoo = moment(geree.duusakhOgnoo);
               geree.duusakhOn = duusakhOgnoo.format("YYYY");
               geree.duusakhSar = duusakhOgnoo.format("MM");
               geree.duusakhUdur = duusakhOgnoo.format("DD");
