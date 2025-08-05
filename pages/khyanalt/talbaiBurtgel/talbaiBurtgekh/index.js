@@ -811,7 +811,7 @@ function talbaiBurtgekh({ token }) {
               },
               {
                 title: t("Төлбөр"),
-                dataIndex: "tureesiinTulbur",
+                dataIndex: "talbainNiitUne",
                 align: "center",
                 render: (data) => {
                   return formatNumber(data, 0) + "₮";

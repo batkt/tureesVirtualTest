@@ -617,10 +617,10 @@ function GereeBaiguulakh({ token, data }) {
                           : ""
                       }
                       key={`alkhamiinGereeniiZagvar${index}`}
-                      className="group relative flex w-full flex-row rounded-md p-1"
+                      className="group relative flex w-full flex-row rounded-md p-1 dark:text-white"
                     >
                       <div
-                        className="sun-editor-editable w-full text-center"
+                        className="sun-editor-editable w-full text-center dark:bg-gray-700 text-white"
                         dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                       />
                     </div>

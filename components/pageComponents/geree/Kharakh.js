@@ -192,7 +192,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               Гэрээ
             </div>
             <div
-              className=" flex w-full flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg print:min-h-0 print:shadow-none"
+              className=" flex w-full dark:dark:bg-gray-800 hover:bg-gray-900 text-white flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg print:min-h-0 print:shadow-none"
               style={{ width: "210mm" }}
             >
               {gereeniiZagvar?.ner && (
@@ -213,7 +213,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                 return (
                   <div
                     key={`alkhamiinGereeniiZagvar${index}`}
-                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-100 "
+                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-900 "
                   >
                     <div
                       className="w-full"
@@ -248,7 +248,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               return (
                 <div
                   key={i}
-                  className="flex w-full break-before-page flex-col justify-center space-y-1 bg-white pl-[24mm] pr-[14mm] text-black shadow-lg print:shadow-none"
+                  className="flex w-full break-before-page flex-col justify-center space-y-1 bg-white pl-[24mm] pr-[14mm] dark:text-white text-black shadow-lg print:shadow-none"
                   style={{ width: "210mm", height: "200mm" }}
                 >
                   <div className="font flex gap-3 text-lg">
@@ -288,7 +288,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
             </div>
 
             <div
-              className=" flex w-full break-before-page flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg print:shadow-none"
+              className=" flex w-full break-before-page flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] dark:text-white text-black shadow-lg print:shadow-none"
               style={{ width: "210mm" }}
             >
               {akt?.ner && (
