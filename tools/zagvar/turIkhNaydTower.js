@@ -8,6 +8,7 @@ const khatuuZagvarIkhNayd = (
   dugaarlalt = [0],
   ashiglaltDugaarlalt = [0],    
 ) => {
+  
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
       (a) =>
@@ -19,21 +20,23 @@ const khatuuZagvarIkhNayd = (
     .sort((a, b) =>
       a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
     );
-    const rows = [0];
+    const murNemekh = [];
 
   const ashiglaltTable =
     ashiglaltZardluud.length > 0
       ? `
     <table style="width:100%; border-collapse:collapse;">
-    <tr>Тоолуурын заалтын мэдээлэл:</tr>
+    <tr>
+        <td style="font-size:12px; font-weight:bold; " colspan="4">Тоолуурын заалтын мэдээлэл:</td>
+    </tr>
       <thead">
         <tr>
-          <td style="border: 1px solid #000; text-align: center; font-size:12px">№</td>
-          <td style="border:1px solid #000; text-align: center; font-size:12px">Утга</td>
-          <td style="border:1px solid #000;text-align: center"; font-size:12px>Өмнөх заалт</td>
-          <td style="border:1px solid #000;text-align: center"; font-size:12px>Одоогийн заалт</td>
-          <td style="border:1px solid #000;text-align: center"; font-size:12px>Хэрэглээ</td>
-          <td style="border:1px solid #000; text-align: center; font-size:12px">Нэгж үнэ</td>
+          <td style="border:1px solid #000; text-align: center; font-size:12px; width: 5%;">№</td>
+          <td style="border:1px solid #000; text-align: center; font-size:12px; width: 20%;">Утга</td>
+          <td style="border:1px solid #000; text-align: center; font-size:12px;">Өмнөх заалт</td>
+          <td style="border:1px solid #000; text-align: center; font-size:12px;">Одоогийн заалт</td>
+          <td style="border:1px solid #000; text-align: center; font-size:12px;">Хэрэглээ</td>
+          <td style="border:1px solid #000; text-align: center; font-size:12px;">Нэгж үнэ</td>
         </tr>
       </thead>
       <tbody>
@@ -41,10 +44,10 @@ const khatuuZagvarIkhNayd = (
           .map((mur, index) => {
             return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center; font-size:12px">${
+                <td style="border: 1px solid #000; text-align: center; font-size:12px; width: 5%;">${
                   ++ashiglaltDugaarlalt[0]
                 }</td>
-                <td style="border: 1px solid #000; text-align: left; font-size:12px">${
+                <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">${
                   mur.tailbar
                 }</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">&lt;${
@@ -66,10 +69,10 @@ const khatuuZagvarIkhNayd = (
           .map((mur, index) => {
             return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;">${
+                <td style="border: 1px solid #000; text-align: center;font-size:12px">${
                   ++ashiglaltDugaarlalt[0]
                 }</td>
-                <td style="border: 1px solid #000; text-align: left; font-size:12px">ЦЕХ</td>
+                <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">ЦЕХ</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
                 <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${mur.tailbar}.tsekhDun&gt;</td>
@@ -81,10 +84,10 @@ const khatuuZagvarIkhNayd = (
           .map((mur, index) => {
             return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;">${
+                <td style="border: 1px solid #000; text-align: center;font-size:12px; width: 5%;">${
                   ++ashiglaltDugaarlalt[0]
                 }</td>
-                <td style="border: 1px solid #000; text-align: left; font-size:12px">Чадал</td>
+                <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">Чадал</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
                 <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${mur.tailbar}.chadalDun&gt;</td>
@@ -96,10 +99,10 @@ const khatuuZagvarIkhNayd = (
           .map((mur, index) => {
             return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;">${
+                <td style="border: 1px solid #000; text-align: center;font-size:12px; width: 5%;">${
                   ++ashiglaltDugaarlalt[0]
                 }</td>
-                <td style="border: 1px solid #000; text-align: left; font-size:12px">ЦЕХ дэмжих</td>
+                <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">ЦЕХ дэмжих</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
                 <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${mur.tailbar}.sekhDemjikhTulburDun&gt;</td>
@@ -110,27 +113,8 @@ const khatuuZagvarIkhNayd = (
       </tbody>
     </table>`
       : "";
-  
-
-  if (
-    Number(medeelel.baritsaaAvakhDun || 0) -
-      Number(medeelel.baritsaaniiUldegdel || 0) >
-    0
-  ) {
-    rows.push(`
-      <tr>
-        <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${dugaarlalt[0]}</td>
-        <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Барьцаа үлдэгдэл</td>
-        <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
-        <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
-        <td style="border: 1px solid #000; text-align: right; font-size: 12px;"></td>
-        <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaUldegdel&gt;</td>
-      </tr>
-    `);
-  }
-
   if (Number(medeelel.aldangiinUldegdel) > 0) {
-    rows.push(`
+    murNemekh.push(`
       <tr>
         <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
         <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Алданги</td>
@@ -235,7 +219,7 @@ const khatuuZagvarIkhNayd = (
       <thead>
       <tr>
           <th style="border: none; " colspan="2">
-          <span style= "font-weight: normal;">
+          <span style= "font-size:12px">
           Хамрах хугацаа: &lt;ekhlekhOn&gt; оны &lt;ekhelkhSar&gt;-р сар
           </span>
           </th>
@@ -257,7 +241,7 @@ const khatuuZagvarIkhNayd = (
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr">
           <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
           <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Түрээсийн төлбөр</td>
           <td style="border: 1px solid #000; text-align: center; font-size: 12px;">&lt;talbainKhemjee&gt;</td>
@@ -265,6 +249,15 @@ const khatuuZagvarIkhNayd = (
           <td style="border: 1px solid #000; text-align: right; font-size: 12px; width: 15%;">&lt;khungulult&gt;</td>
           <td style="border: 1px solid #000; text-align: right; font-size: 12px; width: 25%;">&lt;khungulsunTalbainNiitUne&gt;</td>
         </tr>
+        <tr>
+        <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
+        <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Барьцаа үлдэгдэл</td>
+        <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
+        <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
+        <td style="border: 1px solid #000; text-align: right; font-size: 12px;"></td>
+        <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaniiUldegdelDun&gt;</td>
+      </tr>
+      ${murNemekh}
          ${medeelel.zardluud
            .sort((a, b) => {
              return a.tailbar.localeCompare(b.tailbar, "en", {
@@ -276,7 +269,7 @@ const khatuuZagvarIkhNayd = (
              return `
               <tr key=${index}>
                 <td style="border: 1px solid #000; font-size:12px; text-align: center;">${
-                  index + 1
+                  ++dugaarlalt[0]
                 }</td>
                 <td style="border: 1px solid #000; font-size:12px; text-align: left;">
                   ${mur.tailbar}
@@ -308,7 +301,7 @@ const khatuuZagvarIkhNayd = (
             (mur, index) => `
           <tr>
             <td style="border: 1px solid #000; font-size:12px; text-align:center;">${
-              index + 2
+              ++dugaarlalt[0]
             }</td>
             <td style="border: 1px solid #000; font-size:12px;">${mur.tailbar || ""}</td>
             <td style="border: 1px solid #000; font-size:12px; text-align:center;">${mur.tailbar.includes("Дулаан"
@@ -330,10 +323,10 @@ const khatuuZagvarIkhNayd = (
        <tfoot style="border: none;">
           ${ajiltan?.baiguullagiinId === "622ec99a8e64e5b4f0c3acb6" ? 
             `<tr style; border: none;">
-              <td style="border: none; text-align: center; justify-content: center; font-weight: normal;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
+             <td style="border: none; text-align: center; justify-content: center; font-weight: normal; font-size:12px; " colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
             </tr>` : 
             `<tr style=; border: none;">
-              <td style="border: none; text-align: center; justify-content: center; font-weight: normal;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
+              <td style="border: none; text-align: center; justify-content: center; font-weight: normal; font-size:12px;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
               <td style="border: 1px solid #000; font-size:12px">Дүн</td>
               <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuatgui&gt;</td> 
             </tr>
@@ -344,11 +337,7 @@ const khatuuZagvarIkhNayd = (
             <tr style; border: none;">
               <td style="border: none; border: 1px solid #000; font-size:12px" >Нийт үнэ</td>
               <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDun&gt;</td>
-            </tr>
-            <tr style; border: none;">
-              <td style="border: none; border: 1px solid #000; font-size:12px" >Барьцаа</td>
-              <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;baritsaaniiUldegdel&gt;</td>
-            </tr> `}     
+            </tr>`}     
         <tr>
             <td colspan="6" style="border: none; text-align: left; ">
                 <p style="font-size: 12px;">Жич: Гүйлгээний утга дээр талбайн тоот, регистерийн дугаараа заавал бичнэ үү!</p>

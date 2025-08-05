@@ -301,11 +301,11 @@ function tulburTootsoo({ token }) {
             : 0;
 
           var kaidudZoriulsanNiitTulburiinNiilber = 0;
-          // ikh nayd tulbur zoloo
-          var ikhNaydNiitTulburiinNiilber = medeelel?.eneSardTulukhDun;
-          var ikhNaydNiitTulburiinNiilberNuat = ikhNaydNiitTulburiinNiilber / 10;
+          // ikh nayd tulbur 
+          var baritsaaniiAwakhDunIkhNayd = medeelel?.baritsaaAvakhDun - medeelel?.baritsaaniiUldegdel;
+          var ikhNaydNiitTulburiinNiilber = medeelel?.eneSardTulukhDun + baritsaaniiAwakhDunIkhNayd;
+          var ikhNaydNiitTulburiinNiilberNuat = (ikhNaydNiitTulburiinNiilber * 10) / 110 ;
           var ikhNaydNiitTulburNuatguiDun = ikhNaydNiitTulburiinNiilber - ikhNaydNiitTulburiinNiilberNuat;
-          var baritsaaniiUldegdelIkhNayd = medeelel?.baritsaaniiUldegdel;
           var zardluud = medeelel.zardluud.filter(
             (a) => a.tailbar === "Менежмент төлбөр хуучин"
           );
@@ -366,23 +366,23 @@ function tulburTootsoo({ token }) {
                 />
               </span>
             );
-          // ihk nayd tower zoloo
+          // ihk nayd tower
           else  if (barilgiinId === "622ec99a8e64e5b4f0c3acb6"){
             medeelel.barilgiinlogo = renderToString(
               <span>
-                <img
-                  src={`https://turees.zevtabs.mn/logo_ikhnayd.jpg`}
-                  style={{
-                    width: 150,
-                    height: 100,
-                    transform: "translate(15%, 15%)",
-                    opacity: 0.65,
-                  }}
-                />
-              </span>
-            );
+              <img
+                src={`https://turees.zevtabs.mn/logo_ikhnayd.jpg`}
+                style={{
+                  width: 150,
+                  height: 100,
+                  transform: "translate(15%, 15%)",
+                  opacity: 0.65,
+                }}
+              />
+            </span>
+            )
           // urangan
-          }
+          } else {
             medeelel.barilgiinlogo = renderToString(
               <span>
                 <img
@@ -396,6 +396,7 @@ function tulburTootsoo({ token }) {
                 />
               </span>
             );
+          }
           if (
             zagvar?.khatuuZagvarEsekh &&
             ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d" &&
@@ -840,7 +841,7 @@ function tulburTootsoo({ token }) {
                 new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
                 formatNumber(a.khungulult || 0) || ""
               );
-
+              
               // { tailbar : "Халуун ус", umnukhzaalt, suuliin zaalt, dun, nuat, boxirus, tseverus, usxalaasniitulbur }
               // { tailbar : "Хүйтэн ус", umnukhzaalt, suuliin zaalt, dun, nuat, boxirus, tseverus, usxalaasniitulbur }
               if (
@@ -1158,6 +1159,7 @@ function tulburTootsoo({ token }) {
                 formatNumber(niitZardliinNoutiinDun || 0)
               );
             }
+            // Ikh nayd
             if(barilgiinId === "622ec99a8e64e5b4f0c3acb6"){
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
               new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
@@ -1172,10 +1174,9 @@ function tulburTootsoo({ token }) {
               formatNumber(ikhNaydNiitTulburNuatguiDun || 0)
             ); 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;baritsaaniiUldegdel&gt;`, "g"),
-              formatNumber(baritsaaniiUldegdelIkhNayd || 0)
+              new RegExp(`&lt;baritsaaniiUldegdelDun&gt;`, "g"),
+              formatNumber(baritsaaniiAwakhDunIkhNayd || 0)
             ); 
-
             }
             let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
             let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
@@ -1922,18 +1923,6 @@ function tulburTootsoo({ token }) {
           );
           // Ikh nayd tower
         if (barilgiinId === "622ec99a8e64e5b4f0c3acb6"){
-          nekhemjlekh.gariinUseg = renderToString(
-            <span style={{ position: "relative", zIndex: 9999 }}>
-              <img
-                src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
-                style={{
-                  width: 80,
-                  height: 40,
-                  transform: "translate(100%, -65%)",
-                }}
-              />
-            </span>
-          );
           nekhemjlekh.barilgiinlogo = renderToString(
             <span>
               <img
@@ -1956,7 +1945,7 @@ function tulburTootsoo({ token }) {
                 style={{
                   width: 200,
                   height: 50,
-                  transform: "translate(5%, -80%)",
+                  transform: "translate(5%, -30%)",
                   opacity: 0.65,
                 }}
               />
@@ -2034,7 +2023,20 @@ function tulburTootsoo({ token }) {
               </span>
             );
         }
-        if (ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909") {
+        if(barilgiinId === "622ec99a8e64e5b4f0c3acb6"){
+           nekhemjlekh.gariinUseg = renderToString(
+            <span style={{ position: "relative", zIndex: 9999 }}>
+              <img
+                src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                style={{
+                  width: 80,
+                  height: 40,
+                  transform: "translate(10%, 30%)",
+                }}
+              />
+            </span>
+          );
+        } else if (ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909") {
           // goto
           nekhemjlekh.gariinUseg = renderToString(
             <span style={{ position: "relative", zIndex: 9999 }}>
@@ -2109,13 +2111,13 @@ function tulburTootsoo({ token }) {
                 style={{
                   width: 115,
                   height: 100,
-                  transform: "translate(-10%, -50%)",
+                  transform: "translate(-10%, 20%)",
                   opacity: 0.65,
                 }}
               />
             </span>
           );
-
+          
         nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
         nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
         nekhemjlekh.zakhirliinNer = nekhemjlekh.zakhirliinNer || "";
@@ -2615,10 +2617,31 @@ function tulburTootsoo({ token }) {
             )
           )
         );
-
+        var baritsaaniiAwakhDunIkhNayd = nekhemjlekh?.baritsaaAvakhDun - nekhemjlekh?.baritsaaniiUldegdel;
+        var ikhNaydNiitTulburiinNiilber = nekhemjlekh?.eneSardTulukhDun + baritsaaniiAwakhDunIkhNayd;
+        var ikhNaydNiitTulburiinNiilberNuat = (ikhNaydNiitTulburiinNiilber * 10) / 110 ;
+        var ikhNaydNiitTulburNuatguiDun = ikhNaydNiitTulburiinNiilber - ikhNaydNiitTulburiinNiilberNuat;
+        if(barilgiinId === "622ec99a8e64e5b4f0c3acb6"){
+         text = text?.replace(
+          new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
+          formatNumber(ikhNaydNiitTulburiinNiilberNuat || 0)
+        );
+        text = text?.replace(
+          new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
+          formatNumber(ikhNaydNiitTulburiinNiilber || 0)
+        );
+        text = text?.replace(
+          new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),
+          formatNumber(ikhNaydNiitTulburNuatguiDun || 0)
+        );
+           text = text?.replace(
+          new RegExp(`&lt;baritsaaniiUldegdelDun&gt;`, "g"),
+          formatNumber(baritsaaniiAwakhDunIkhNayd || 0)
+        );   
+          }
         text = text?.replace(
           new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
-          formatNumber(garaasBodsonNiitDunNuat || 0)
+          formatNumber(ikhNaydNiitTulburiinNiilberNuat || 0)
         );
 
         for (const [key, value] of Object.entries(nekhemjlekh)) {
