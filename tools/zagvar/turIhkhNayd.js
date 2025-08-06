@@ -4,7 +4,7 @@ const khatuuZagvarIkhNayd = (
   baiguullaga,
   barilga,
   baiguullagiinId,
-  barilgiinId,
+  barilgiinId
 ) => {
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
@@ -17,7 +17,7 @@ const khatuuZagvarIkhNayd = (
     .sort((a, b) =>
       a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
     );
-    
+
   const ashiglaltTable =
     ashiglaltZardluud.length > 0
       ? `
@@ -261,9 +261,7 @@ const khatuuZagvarIkhNayd = (
 
         ${medeelel.zardluud
           .filter(
-            (a) =>
-              !a.tailbar?.includes("менежмент") &&
-              a.tailbar != "Хөнгөлөлт"
+            (a) => !a.tailbar?.includes("менежмент") && a.tailbar != "Хөнгөлөлт"
           )
           .map(
             (mur, index) => `
@@ -288,11 +286,12 @@ const khatuuZagvarIkhNayd = (
           .join("")}
       </tbody>
        <tfoot style="border: none;">
-          ${ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d" ? 
-            `<tr style="background-color: #d1d5db; font-weight: bold; border: none;">
+          ${
+            ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d"
+              ? `<tr style="background-color: #d1d5db; font-weight: bold; border: none;">
               <td style="border: none; text-align: center; justify-content: center; font-weight: normal;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
-            </tr>` : 
-            `<tr style="background-color: #d1d5db; font-weight: bold; border: none;">
+            </tr>`
+              : `<tr style="background-color: #d1d5db; font-weight: bold; border: none;">
               <td style="border: none; text-align: center; justify-content: center; font-weight: normal;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
               <td style="border: 1px solid #000;">Дүн</td>
               <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuatgui&gt;</td> 
@@ -300,7 +299,8 @@ const khatuuZagvarIkhNayd = (
             <tr style="background-color: #d1d5db; font-weight: bold; border: none;">
               <td style="border: none; border: 1px solid #000;" >НӨАТ</td>
               <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuat&gt;</td>
-            </tr>`}
+            </tr>`
+          }
             <tr style="background-color: #d1d5db; font-weight: bold; border: none;">
               <td style="border: none; border: 1px solid #000;" >Нийт үнэ</td>
               <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDun&gt;</td>

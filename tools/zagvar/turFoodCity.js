@@ -122,7 +122,12 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 sensitivity: "base",
               });
             })
-            .filter(a => a.tailbar?.includes("Менежментийн төлбөр") || a.tailbar === "Менежментийн зардал" || a.tailbar === "Менежмент")
+            .filter(
+              (a) =>
+                a.tailbar?.includes("Менежментийн төлбөр") ||
+                a.tailbar === "Менежментийн зардал" ||
+                a.tailbar === "Менежмент"
+            )
             .map((mur, index) => {
               return `
                 <tr key=${index}>
@@ -162,7 +167,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   sensitivity: "base",
                 });
               })
-              .filter(a => a.tailbar?.includes("Цахилгаан"))
+              .filter((a) => a.tailbar?.includes("Цахилгаан"))
               .map((mur, index) => {
                 return `
                   <tr>
@@ -201,7 +206,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                     sensitivity: "base",
                   });
                 })
-                .filter(a => a.tailbar?.includes("Халуун ус")) //  a.tailbar?.includes("Халуун ус")
+                .filter((a) => a.tailbar?.includes("Халуун ус")) //  a.tailbar?.includes("Халуун ус")
                 .map((mur, index) => {
                   return `
                     <tr>
@@ -250,7 +255,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                       sensitivity: "base",
                     });
                   })
-                  .filter(a => a.tailbar?.includes("Хүйтэн ус")) //  a.tailbar?.includes("Хүйтэн ус")
+                  .filter((a) => a.tailbar?.includes("Хүйтэн ус")) //  a.tailbar?.includes("Хүйтэн ус")
                   .map((mur, index) => {
                     return `
                       <tr key=${index}>

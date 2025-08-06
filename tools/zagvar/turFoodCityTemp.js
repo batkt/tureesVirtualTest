@@ -101,7 +101,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;"><b>Төлбөр хийх хугацаа:</b></p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            <b>&nbsp;${String(duusakhSar).padStart(2, '0')}/${String(duusakhUdur).padStart(2, '0')}/${duusakhOn}</b>
+            <b>&nbsp;${String(duusakhSar).padStart(2, "0")}/${String(
+    duusakhUdur
+  ).padStart(2, "0")}/${duusakhOn}</b>
           </p>
 
         </div>
@@ -126,14 +128,18 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
         </thead>  
         <tbody>
           ${medeelel.zardluud
-          .sort((a, b) => {
-            return a.tailbar.localeCompare(b.tailbar, "en", {
-              sensitivity: "base",
-            });
-          })
-          .filter(a => a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" || a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд")
-          .map((mur, index) => {
-            return `
+            .sort((a, b) => {
+              return a.tailbar.localeCompare(b.tailbar, "en", {
+                sensitivity: "base",
+              });
+            })
+            .filter(
+              (a) =>
+                a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" ||
+                a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд"
+            )
+            .map((mur, index) => {
+              return `
               <tr key=${index}>
                 <td style="border: 1px solid #000; text-align: center;">${
                   index + 1
@@ -155,10 +161,17 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 </td>
               </tr>
             `;
-          })
-          .join("")}
-        ${medeelel.zardluud.filter(a => a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" || a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд" || a.tailbar === "Түрээсийн төлбөр нэмэлт").length > 0 ? "" :
-          `
+            })
+            .join("")}
+        ${
+          medeelel.zardluud.filter(
+            (a) =>
+              a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" ||
+              a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд" ||
+              a.tailbar === "Түрээсийн төлбөр нэмэлт"
+          ).length > 0
+            ? ""
+            : `
           <tr>
             <td style="border: 1px solid #000; text-align: center;">1</td>
             <td style="border: 1px solid #000; text-align: left;" colspan="4">Түрээсийн төлбөр</td>
@@ -175,14 +188,22 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
             <td style="border: 1px solid #000; text-align: right; width: 16%;">&lt;aldangiinUldegdelNuatgui&gt;</td>
             <td style="border: 1px solid #000; text-align: right;">&lt;aldangiinUldegdel&gt;</td>
           </tr>
-          `}
+          `
+        }
           ${medeelel.zardluud
             .sort((a, b) => {
               return a.tailbar.localeCompare(b.tailbar, "en", {
                 sensitivity: "base",
               });
             })
-            .filter(a => a.tailbar?.includes("Менежментийн төлбөр") || a.tailbar === "Менежментийн зардал" || a.tailbar === "Менежмент" || a.tailbar === "Менежментийн төлбөр нэмэлт" || a.tailbar == "Түрээсийн төлбөр нэмэлт")
+            .filter(
+              (a) =>
+                a.tailbar?.includes("Менежментийн төлбөр") ||
+                a.tailbar === "Менежментийн зардал" ||
+                a.tailbar === "Менежмент" ||
+                a.tailbar === "Менежментийн төлбөр нэмэлт" ||
+                a.tailbar == "Түрээсийн төлбөр нэмэлт"
+            )
             .map((mur, index) => {
               return `
                 <tr key=${index}>
@@ -196,7 +217,12 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                     &lt;talbainKhemjee&gt;
                   </td>
                   <td style="border: 1px solid #000; text-align: right;">
-                    ${mur.tailbar.toLowerCase().includes("11к") || mur.tailbar.toLowerCase().includes("11k") ? "11,000.00" : `&lt;${mur.tailbar}.negj&gt;`}
+                    ${
+                      mur.tailbar.toLowerCase().includes("11к") ||
+                      mur.tailbar.toLowerCase().includes("11k")
+                        ? "11,000.00"
+                        : `&lt;${mur.tailbar}.negj&gt;`
+                    }
                   </td>
 
                   <td style="border: 1px solid #000; text-align: right; width: 16%;">
@@ -215,7 +241,15 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 sensitivity: "base",
               });
             })
-            .filter(a => a.tailbar === "Менежмент төлбөр хуучин" || a.tailbar === "Менежмент төлбөр шинэ" || a.tailbar === "Дулааны төлбөр" || a.tailbar === "Дулаан" || a.tailbar === "Дулаан нэмэлт" || a.tailbar?.includes("торгууль"))
+            .filter(
+              (a) =>
+                a.tailbar === "Менежмент төлбөр хуучин" ||
+                a.tailbar === "Менежмент төлбөр шинэ" ||
+                a.tailbar === "Дулааны төлбөр" ||
+                a.tailbar === "Дулаан" ||
+                a.tailbar === "Дулаан нэмэлт" ||
+                a.tailbar?.includes("торгууль")
+            )
             .map((mur, index) => {
               return `
                 <tr key=${index}>
@@ -255,7 +289,11 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   sensitivity: "base",
                 });
               })
-              .filter(a => a.tailbar?.includes("Цахилгаан") || a.tailbar === "Цахилгаан нэмэлт")
+              .filter(
+                (a) =>
+                  a.tailbar?.includes("Цахилгаан") ||
+                  a.tailbar === "Цахилгаан нэмэлт"
+              )
               .map((mur, index) => {
                 return `
                   <tr key=${index}>
@@ -278,8 +316,15 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 `;
               })
               .join("")}
-              ${medeelel.zardluud.filter(a => a.tailbar?.includes("Хүйтэн ус") || a.tailbar === "Хүйтэн ус нэмэлт" || a.tailbar?.includes("Халуун ус") || a.tailbar === "Халуун ус нэмэлт").length > 0 ?
-              `
+              ${
+                medeelel.zardluud.filter(
+                  (a) =>
+                    a.tailbar?.includes("Хүйтэн ус") ||
+                    a.tailbar === "Хүйтэн ус нэмэлт" ||
+                    a.tailbar?.includes("Халуун ус") ||
+                    a.tailbar === "Халуун ус нэмэлт"
+                ).length > 0
+                  ? `
               <tr>
                 <td style="border: 1px solid #000; text-align: center;" rowspan="4">5</td>
                 <td style="border: 1px solid #000; text-align: center;">Усны төлбөр</td>
@@ -291,14 +336,20 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 <td style="border: 1px solid #000; text-align: center;">Ус халаасны тариф</td>
                 <td style="border: 1px solid #000; text-align: center;">Нийт дүн</td>
               </tr>
-              ` : ``}
+              `
+                  : ``
+              }
               ${medeelel.zardluud
                 .sort((a, b) => {
                   return a.tailbar.localeCompare(b.tailbar, "en", {
                     sensitivity: "base",
                   });
                 })
-                .filter(a => a.tailbar?.includes("Халуун ус") || a.tailbar === "Халуун ус нэмэлт") //  a.tailbar?.includes("Халуун ус")
+                .filter(
+                  (a) =>
+                    a.tailbar?.includes("Халуун ус") ||
+                    a.tailbar === "Халуун ус нэмэлт"
+                ) //  a.tailbar?.includes("Халуун ус")
                 .map((mur, index) => {
                   return `
                     <tr key=${index}>
@@ -336,7 +387,11 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                       sensitivity: "base",
                     });
                   })
-                  .filter(a => a.tailbar?.includes("Хүйтэн ус") || a.tailbar === "Хүйтэн ус нэмэлт") //  a.tailbar?.includes("Хүйтэн ус")
+                  .filter(
+                    (a) =>
+                      a.tailbar?.includes("Хүйтэн ус") ||
+                      a.tailbar === "Хүйтэн ус нэмэлт"
+                  ) //  a.tailbar?.includes("Хүйтэн ус")
                   .map((mur, index) => {
                     return `
                       <tr key=${index}>
@@ -368,8 +423,15 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                     `;
                   })
                   .join("")}   
-                  ${medeelel.zardluud.filter(a => a.tailbar?.includes("Хүйтэн ус") || a.tailbar === "Хүйтэн ус нэмэлт" || a.tailbar?.includes("Халуун ус") || a.tailbar === "Халуун ус нэмэлт").length > 0 ?
-                  `
+                  ${
+                    medeelel.zardluud.filter(
+                      (a) =>
+                        a.tailbar?.includes("Хүйтэн ус") ||
+                        a.tailbar === "Хүйтэн ус нэмэлт" ||
+                        a.tailbar?.includes("Халуун ус") ||
+                        a.tailbar === "Халуун ус нэмэлт"
+                    ).length > 0
+                      ? `
                   <tr>
                     <td style="border: 1px solid #000; text-align: right;">
                       
@@ -396,7 +458,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                       &lt;niilberDun&gt;
                     </td>
                   </tr>
-                  ` : ``}
+                  `
+                      : ``
+                  }
           </tbody>
         <tfoot>
           <tr style="font-weight: 600;">

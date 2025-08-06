@@ -114,8 +114,14 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         </tr>
       </thead>
       <tbody>
-        ${medeelel.zardluud.filter(a => a.tailbar === "Хөрөнгийн менежмент" || a.tailbar === "Худалдааны менежмент").length > 0 ? "" :
-        `
+        ${
+          medeelel.zardluud.filter(
+            (a) =>
+              a.tailbar === "Хөрөнгийн менежмент" ||
+              a.tailbar === "Худалдааны менежмент"
+          ).length > 0
+            ? ""
+            : `
         <tr>
           <td style="border: 1px solid #000; text-align: left;">&nbsp;</td>
           <td style="border: 1px solid #000; text-align: left;">&nbsp;</td>
@@ -136,16 +142,21 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             </div>
           </td>
         </tr>
-        `}
+        `
+        }
         ${medeelel.zardluud
           .sort((a, b) => {
-          return a.tailbar.localeCompare(b.tailbar, "en", {
-            sensitivity: "base",
-          });
+            return a.tailbar.localeCompare(b.tailbar, "en", {
+              sensitivity: "base",
+            });
           })
-          .filter(a => a.tailbar === "Хөрөнгийн менежмент" || a.tailbar === "Худалдааны менежмент")
+          .filter(
+            (a) =>
+              a.tailbar === "Хөрөнгийн менежмент" ||
+              a.tailbar === "Худалдааны менежмент"
+          )
           .map((mur, index) => {
-          return `
+            return `
             <tr key=${index}>
               <td style="border: 1px solid #000; text-align: left;">
                 ${mur.tailbar}
@@ -158,7 +169,9 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
               <td style="border: 1px solid #000; text-align: right;">&lt;${
                 mur.tailbar
               }.khungulultKhassanTulukhDun&gt;</td>
-              ${index === 0 ? `<td style="border: 1px solid #000; text-align: center;" rowspan=&lt;gotoMPMCount&gt;>
+              ${
+                index === 0
+                  ? `<td style="border: 1px solid #000; text-align: center;" rowspan=&lt;gotoMPMCount&gt;>
                 <div style="display: block;">
                   Мастер проперти
                 </div>
@@ -171,7 +184,9 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
                 <div style="display: block;">
                   IBAN: &lt;ibanDugaar&gt; 
                 </div>
-              </td>` : ""}
+              </td>`
+                  : ""
+              }
             </tr>
           `;
           })
@@ -188,13 +203,20 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         </tr>
         ${medeelel.zardluud
           .sort((a, b) => {
-          return a.tailbar.localeCompare(b.tailbar, "en", {
-            sensitivity: "base",
-          });
+            return a.tailbar.localeCompare(b.tailbar, "en", {
+              sensitivity: "base",
+            });
           })
-          .filter(a => a.tailbar?.includes("Цахилгаан") || a.tailbar === "Эрүүл ахуйч" || a.tailbar === "Харуул хамгаалалт, ОБЕГ, ХАБ" || a.tailbar === "Дулаан" || a.tailbar === "Ус")
+          .filter(
+            (a) =>
+              a.tailbar?.includes("Цахилгаан") ||
+              a.tailbar === "Эрүүл ахуйч" ||
+              a.tailbar === "Харуул хамгаалалт, ОБЕГ, ХАБ" ||
+              a.tailbar === "Дулаан" ||
+              a.tailbar === "Ус"
+          )
           .map((mur, index) => {
-          return `
+            return `
             <tr key=${index}>
               <td style="border: 1px solid #000; text-align: right;">
                 ${mur.tailbar}
@@ -205,7 +227,11 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
               <td style="border: 1px solid #000; text-align: right;">&lt;${
                 mur.tailbar
               }.khungulultKhassanTulukhDun&gt;</td>
-              ${index === 0 ? `<td style="border: 1px solid #000; text-align: left;" rowspan=&lt;ashiglaltCount&gt;>` : ""}
+              ${
+                index === 0
+                  ? `<td style="border: 1px solid #000; text-align: left;" rowspan=&lt;ashiglaltCount&gt;>`
+                  : ""
+              }
             </tr>
           `;
           })

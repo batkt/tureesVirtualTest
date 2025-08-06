@@ -1,7 +1,10 @@
-
-
-
-const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId, dugaarlalt = [0]) => {
+const khatuuZagvar = (
+  medeelel,
+  ajiltan,
+  baiguullaga,
+  barilgiinId,
+  dugaarlalt = [0]
+) => {
   return `
   <div style="height: 100%; width: 100%; font-family: Arial, sans-serif;">
     <div style="display: flex; justify-content: space-between;">
@@ -157,12 +160,11 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId, dugaarlalt = 
               sensitivity: "base",
             });
           })
-          .filter(a => a.tailbar?.includes("Менежмент")).map((mur, index) => {
+          .filter((a) => a.tailbar?.includes("Менежмент"))
+          .map((mur, index) => {
             return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${
-                  ++dugaarlalt[0]
-                }</td>
+                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
                 <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
                   mur.tailbar
                 }</td>
@@ -198,12 +200,11 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId, dugaarlalt = 
               sensitivity: "base",
             });
           })
-          .filter(a => a.tailbar?.includes("Дулаан")).map((mur, index) => {
+          .filter((a) => a.tailbar?.includes("Дулаан"))
+          .map((mur, index) => {
             return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${
-                  ++dugaarlalt[0]
-                }</td>
+                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
                 <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
                   mur.tailbar
                 }</td>
@@ -239,12 +240,11 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId, dugaarlalt = 
               sensitivity: "base",
             });
           })
-          .filter(a => a.tailbar?.includes("Цахилгаан")).map((mur, index) => {
+          .filter((a) => a.tailbar?.includes("Цахилгаан"))
+          .map((mur, index) => {
             return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${
-                  ++dugaarlalt[0]
-                }</td>
+                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
                 <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
                   mur.tailbar
                 }</td>
@@ -280,12 +280,11 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId, dugaarlalt = 
               sensitivity: "base",
             });
           })
-          .filter(a => a.tailbar?.includes("ус")).map((mur, index) => {
+          .filter((a) => a.tailbar?.includes("ус"))
+          .map((mur, index) => {
             return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${
-                  ++dugaarlalt[0]
-                }</td>
+                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
                 <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
                   mur.tailbar
                 }</td>
@@ -322,12 +321,17 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId, dugaarlalt = 
               sensitivity: "base",
             });
           })
-          .filter(a => !a.tailbar?.includes("ус") && !a.tailbar?.includes("Менежмент") && !a.tailbar?.includes("Дулаан") && !a.tailbar?.includes("Цахилгаан")).map((mur, index) => {
+          .filter(
+            (a) =>
+              !a.tailbar?.includes("ус") &&
+              !a.tailbar?.includes("Менежмент") &&
+              !a.tailbar?.includes("Дулаан") &&
+              !a.tailbar?.includes("Цахилгаан")
+          )
+          .map((mur, index) => {
             return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${
-                  ++dugaarlalt[0]
-                }</td>
+                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
                 <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
                   mur.tailbar
                 }</td>
@@ -404,7 +408,11 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId, dugaarlalt = 
           <td style=" border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
-          <td style="border: none; position: relative; >${ajiltan?.baiguullagiinId !== "64e855ce37fdc9b105f936e0" ? "&lt;tamga&gt;" : ""}</td>
+          <td style="border: none; position: relative; >${
+            ajiltan?.baiguullagiinId !== "64e855ce37fdc9b105f936e0"
+              ? "&lt;tamga&gt;"
+              : ""
+          }</td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>

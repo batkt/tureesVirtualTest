@@ -6,21 +6,20 @@ const khatuuZagvarIkhNayd = (
   baiguullagiinId,
   barilgiinId,
   dugaarlalt = [0],
-  ashiglaltDugaarlalt = [0],    
+  ashiglaltDugaarlalt = [0]
 ) => {
-  
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
       (a) =>
         a.tailbar?.includes("Цахилгаан") ||
         a.tailbar?.includes("Халуун ус") ||
         a.tailbar?.includes("Хүйтэн ус") ||
-        a.tailbar?.includes("Газ") 
+        a.tailbar?.includes("Газ")
     )
     .sort((a, b) =>
       a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
     );
-    const murNemekh = [];
+  const murNemekh = [];
 
   const ashiglaltTable =
     ashiglaltZardluud.length > 0
@@ -44,9 +43,7 @@ const khatuuZagvarIkhNayd = (
           .map((mur, index) => {
             return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center; font-size:12px; width: 5%;">${
-                  ++ashiglaltDugaarlalt[0]
-                }</td>
+                <td style="border: 1px solid #000; text-align: center; font-size:12px; width: 5%;">${++ashiglaltDugaarlalt[0]}</td>
                 <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">${
                   mur.tailbar
                 }</td>
@@ -65,51 +62,54 @@ const khatuuZagvarIkhNayd = (
               </tr>`;
           })
           .join("")}
-          ${ashiglaltZardluud.filter((a) => a.tailbar === "Цахилгаан")
-          .map((mur, index) => {
-            return `
+          ${ashiglaltZardluud
+            .filter((a) => a.tailbar === "Цахилгаан")
+            .map((mur, index) => {
+              return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;font-size:12px">${
-                  ++ashiglaltDugaarlalt[0]
-                }</td>
+                <td style="border: 1px solid #000; text-align: center;font-size:12px">${++ashiglaltDugaarlalt[0]}</td>
                 <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">ЦЕХ</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${mur.tailbar}.tsekhDun&gt;</td>
+                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${
+                  mur.tailbar
+                }.tsekhDun&gt;</td>
                 <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">0</td>
               </tr>`;
-          })
-          .join("")}
-          ${ashiglaltZardluud.filter((a) => a.tailbar === "Цахилгаан")
-          .map((mur, index) => {
-            return `
+            })
+            .join("")}
+          ${ashiglaltZardluud
+            .filter((a) => a.tailbar === "Цахилгаан")
+            .map((mur, index) => {
+              return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;font-size:12px; width: 5%;">${
-                  ++ashiglaltDugaarlalt[0]
-                }</td>
+                <td style="border: 1px solid #000; text-align: center;font-size:12px; width: 5%;">${++ashiglaltDugaarlalt[0]}</td>
                 <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">Чадал</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${mur.tailbar}.chadalDun&gt;</td>
+                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${
+                  mur.tailbar
+                }.chadalDun&gt;</td>
                 <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">0</td>
               </tr>`;
-          })
-          .join("")}
-          ${ashiglaltZardluud.filter((a) => a.tailbar === "Цахилгаан")
-          .map((mur, index) => {
-            return `
+            })
+            .join("")}
+          ${ashiglaltZardluud
+            .filter((a) => a.tailbar === "Цахилгаан")
+            .map((mur, index) => {
+              return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;font-size:12px; width: 5%;">${
-                  ++ashiglaltDugaarlalt[0]
-                }</td>
+                <td style="border: 1px solid #000; text-align: center;font-size:12px; width: 5%;">${++ashiglaltDugaarlalt[0]}</td>
                 <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">ЦЕХ дэмжих</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${mur.tailbar}.sekhDemjikhTulburDun&gt;</td>
+                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${
+                  mur.tailbar
+                }.sekhDemjikhTulburDun&gt;</td>
                 <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">0</td>
               </tr>`;
-          })
-          .join("")}
+            })
+            .join("")}
       </tbody>
     </table>`
       : "";
@@ -268,9 +268,7 @@ const khatuuZagvarIkhNayd = (
            .map((mur, index) => {
              return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; font-size:12px; text-align: center;">${
-                  ++dugaarlalt[0]
-                }</td>
+                <td style="border: 1px solid #000; font-size:12px; text-align: center;">${++dugaarlalt[0]}</td>
                 <td style="border: 1px solid #000; font-size:12px; text-align: left;">
                   ${mur.tailbar}
                 </td>
@@ -293,19 +291,20 @@ const khatuuZagvarIkhNayd = (
 
         ${medeelel.zardluud
           .filter(
-            (a) =>
-              !a.tailbar?.includes("менежмент") &&
-              a.tailbar != "Хөнгөлөлт"
+            (a) => !a.tailbar?.includes("менежмент") && a.tailbar != "Хөнгөлөлт"
           )
           .map(
             (mur, index) => `
           <tr>
-            <td style="border: 1px solid #000; font-size:12px; text-align:center;">${
-              ++dugaarlalt[0]
+            <td style="border: 1px solid #000; font-size:12px; text-align:center;">${++dugaarlalt[0]}</td>
+            <td style="border: 1px solid #000; font-size:12px;">${
+              mur.tailbar || ""
             }</td>
-            <td style="border: 1px solid #000; font-size:12px;">${mur.tailbar || ""}</td>
-            <td style="border: 1px solid #000; font-size:12px; text-align:center;">${mur.tailbar.includes("Дулаан"
-            ) ? ` &lt;talbainKhemjeeMetrKube&gt;` : `1`}</td>
+            <td style="border: 1px solid #000; font-size:12px; text-align:center;">${
+              mur.tailbar.includes("Дулаан")
+                ? ` &lt;talbainKhemjeeMetrKube&gt;`
+                : `1`
+            }</td>
             <td style="border: 1px solid #000; font-size:12px; text-align: center;">
                   &lt;${mur.tailbar}.tariff&gt;
             </td>
@@ -321,11 +320,12 @@ const khatuuZagvarIkhNayd = (
           .join("")}
       </tbody>
        <tfoot style="border: none;">
-          ${ajiltan?.baiguullagiinId === "622ec99a8e64e5b4f0c3acb6" ? 
-            `<tr style; border: none;">
+          ${
+            ajiltan?.baiguullagiinId === "622ec99a8e64e5b4f0c3acb6"
+              ? `<tr style; border: none;">
              <td style="border: none; text-align: center; justify-content: center; font-weight: normal; font-size:12px; " colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
-            </tr>` : 
-            `<tr style=; border: none;">
+            </tr>`
+              : `<tr style=; border: none;">
               <td style="border: none; text-align: center; justify-content: center; font-weight: normal; font-size:12px;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
               <td style="border: 1px solid #000; font-size:12px">Дүн</td>
               <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuatgui&gt;</td> 
@@ -337,7 +337,8 @@ const khatuuZagvarIkhNayd = (
             <tr style; border: none;">
               <td style="border: none; border: 1px solid #000; font-size:12px" >Нийт үнэ</td>
               <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDun&gt;</td>
-            </tr>`}     
+            </tr>`
+          }     
         <tr>
             <td colspan="6" style="border: none; text-align: left; ">
                 <p style="font-size: 12px;">Жич: Гүйлгээний утга дээр талбайн тоот, регистерийн дугаараа заавал бичнэ үү!</p>

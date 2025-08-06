@@ -128,13 +128,18 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         </tr>
         ${medeelel.zardluud
           .sort((a, b) => {
-          return a.tailbar.localeCompare(b.tailbar, "en", {
-            sensitivity: "base",
-          });
+            return a.tailbar.localeCompare(b.tailbar, "en", {
+              sensitivity: "base",
+            });
           })
-          .filter(a => a.tailbar === "Тавилга түрээс" || a.tailbar === "Худалдааны менежмент" || a.tailbar === "Түрээсийн төлбөр нэмэлт")
+          .filter(
+            (a) =>
+              a.tailbar === "Тавилга түрээс" ||
+              a.tailbar === "Худалдааны менежмент" ||
+              a.tailbar === "Түрээсийн төлбөр нэмэлт"
+          )
           .map((mur, index) => {
-          return `
+            return `
             <tr key=${index}>
               <td style="border: 1px solid #000; text-align: left; font-weight: 600;">
                 ${mur.tailbar}
@@ -142,9 +147,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
               <td style="border: 1px solid #000; text-align: center;">
                 &lt;tureesEkhlehUdur&gt;-&lt;tureesDuusakhUdur&gt;
               </td>
-              <td style="border: 1px solid #000; text-align: right;">&lt;${
-                mur.tailbar
-              }.khungulultKhassanTulukhDun&gt;</td>
+              <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDun&gt;</td>
             </tr>
           `;
           })

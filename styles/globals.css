@@ -23,12 +23,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  max-width: 150px; 
+  max-width: 150px;
   max-height: 150px;
   border-radius: 4px;
   border: 1px solid #ccc;
 }
-
 
 .ant-btn-primary.upload-button {
   cursor: pointer !important;
@@ -561,7 +560,6 @@ audio::-webkit-media-controls-volume-control-container {
   @apply dark:text-gray-500;
 }
 
-
 /* In your CSS file */
 .truncate {
   text-overflow: ellipsis;
@@ -579,7 +577,6 @@ audio::-webkit-media-controls-volume-control-container {
 .ant-modal {
   @apply w-[90vw] max-w-[90vw] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px];
   @apply h-[90vh] sm:h-auto;
-  
 }
 
 /* Modal content */
@@ -595,9 +592,9 @@ audio::-webkit-media-controls-volume-control-container {
 
 /* Title (frozen) */
 .ant-modal-header {
-    @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;
+  @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;
 
-  @apply p-4 sm:p-6 md:p-6 border-b dark:border-gray-700 !important;
+  @apply border-b p-4 dark:border-gray-700 sm:p-6 md:p-6 !important;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -606,22 +603,21 @@ audio::-webkit-media-controls-volume-control-container {
 
 /* Scrollable content */
 .ant-modal-body {
-  @apply px-4 sm:px-6 md:px-8 py-4 overflow-y-auto !important;
+  @apply overflow-y-auto px-4 py-4 sm:px-6 md:px-8 !important;
   flex: 1 1 auto;
   max-height: calc(90vh - 130px); /* Adjust based on header/footer height */
 }
 
 /* Footer (frozen) */
 .ant-modal-footer {
-    @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;
+  @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;
 
-  @apply p-4 sm:p-6 border-t dark:border-gray-700 !important;
+  @apply border-t p-4 dark:border-gray-700 sm:p-6 !important;
   position: sticky;
   bottom: 0;
   z-index: 10;
   background-color: inherit;
 }
-
 
 .ant-picker-calendar .ant-picker-panel {
   @apply bg-white dark:bg-gray-800;
@@ -1114,17 +1110,18 @@ input:-webkit-autofill {
 } */
 
 @keyframes mailFly {
-  0%, 100% { 
-    transform: translateY(0px); 
+  0%,
+  100% {
+    transform: translateY(0px);
   }
-  25% { 
-    transform: translateY(-3px) rotate(5deg); 
+  25% {
+    transform: translateY(-3px) rotate(5deg);
   }
-  50% { 
-    transform: translateY(-6px); 
+  50% {
+    transform: translateY(-6px);
   }
-  75% { 
-    transform: translateY(-3px) rotate(-5deg); 
+  75% {
+    transform: translateY(-3px) rotate(-5deg);
   }
 }
 

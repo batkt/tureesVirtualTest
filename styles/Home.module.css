@@ -1,5 +1,5 @@
 .container {
-  @apply min-h-screen flex flex-col justify-center items-center;
+  @apply flex min-h-screen flex-col items-center justify-center;
   min-height: 100vh;
   padding: 0 0.5rem;
 }
@@ -7,11 +7,11 @@
 .main {
   padding: 5rem 0;
   flex: 1;
-  @apply flex flex-col justify-center items-center;
+  @apply flex flex-col items-center justify-center;
 }
 
 .footer {
-  @apply w-full h-24 flex justify-center items-center;
+  @apply flex h-24 w-full items-center justify-center;
   border-top: 1px solid #eaeaea;
 }
 
@@ -20,7 +20,7 @@
 }
 
 .footer a {
-  @apply  flex justify-center items-center;
+  @apply flex items-center justify-center;
 }
 
 .title a {
