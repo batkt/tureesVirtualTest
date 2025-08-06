@@ -937,6 +937,7 @@ function tulburTootsoo({ token }) {
 
               kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
               niilberDunUrangan += khungulultKhassanTulukhDun;
+
               if (
                 a.tailbar?.includes("Цахилгаан") ||
                 a.tailbar === "Эрүүл ахуйч" ||
@@ -1171,25 +1172,25 @@ function tulburTootsoo({ token }) {
                 formatNumber(niitZardliinNoutiinDun || 0)
               );
             }
-            // Ikh nayd
-            if (barilgiinId === "622ec99a8e64e5b4f0c3acb6") {
-              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
-                formatNumber(ikhNaydNiitTulburiinNiilberNuat || 0)
-              );
-              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
-                formatNumber(ikhNaydNiitTulburiinNiilber || 0)
-              );
-              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),
-                formatNumber(ikhNaydNiitTulburNuatguiDun || 0)
-              );
-              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;baritsaaniiUldegdelDun&gt;`, "g"),
-                formatNumber(baritsaaniiAwakhDunIkhNayd || 0)
-              );
-            }
+            // // Ikh nayd
+            // if (barilgiinId === "622ec99a8e64e5b4f0c3acb6") {
+            //   zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+            //     new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
+            //     formatNumber(ikhNaydNiitTulburiinNiilberNuat || 0)
+            //   );
+            //   zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+            //     new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
+            //     formatNumber(ikhNaydNiitTulburiinNiilber || 0)
+            //   );
+            //   zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+            //     new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),
+            //     formatNumber(ikhNaydNiitTulburNuatguiDun || 0)
+            //   );
+            //   zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+            //     new RegExp(`&lt;baritsaaniiUldegdelDun&gt;`, "g"),
+            //     formatNumber(baritsaaniiAwakhDunIkhNayd || 0)
+            //   );
+            // }
             let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
             let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
             let garaasBodsonNiitDunNuatgui = formatNumber(
@@ -2682,7 +2683,7 @@ function tulburTootsoo({ token }) {
           );
           text = text?.replace(
             new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
-            formatNumber(ikhNaydNiitTulburiinNiilber || 0)
+            formatNumber(kaidudZoriulsanNiitTulburiinNiilber || 0)
           );
           text = text?.replace(
             new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),

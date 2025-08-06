@@ -250,13 +250,13 @@ const khatuuZagvarIkhNayd = (
           <td style="border: 1px solid #000; text-align: right; font-size: 12px; width: 25%;">&lt;khungulsunTalbainNiitUne&gt;</td>
         </tr>
         <tr>
-        <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
-        <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Барьцаа үлдэгдэл</td>
-        <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
-        <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
-        <td style="border: 1px solid #000; text-align: right; font-size: 12px;"></td>
-        <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaniiUldegdelDun&gt;</td>
-      </tr>
+          <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Барьцаа үлдэгдэл</td>
+          <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
+          <td style="border: 1px solid #000; text-align: center; font-size: 12px;">&lt;baritsaaUldegdelNuat&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaUldegdelNuatgui&gt;</td>
+          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaUldegdel&gt;</td>
+        </tr>
       ${murNemekh}
          ${medeelel.zardluud
            .sort((a, b) => {
