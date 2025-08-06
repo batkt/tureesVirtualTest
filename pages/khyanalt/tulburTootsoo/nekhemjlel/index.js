@@ -309,10 +309,14 @@ function tulburTootsoo({ token }) {
 
           var kaidudZoriulsanNiitTulburiinNiilber = 0;
           // ikh nayd tulbur
+
           var baritsaaniiAwakhDunIkhNayd =
             medeelel?.baritsaaAvakhDun - medeelel?.baritsaaniiUldegdel;
           var ikhNaydNiitTulburiinNiilber =
-            medeelel?.eneSardTulukhDun + baritsaaniiAwakhDunIkhNayd;
+            (medeelel.umnukhSariinUrTulbur || 0) +
+            (medeelel?.aldangiinUldegdel || 0) +
+            medeelel?.eneSardTulukhDun +
+            baritsaaniiAwakhDunIkhNayd;
           var ikhNaydNiitTulburiinNiilberNuat =
             (ikhNaydNiitTulburiinNiilber * 10) / 110;
           var ikhNaydNiitTulburNuatguiDun =
