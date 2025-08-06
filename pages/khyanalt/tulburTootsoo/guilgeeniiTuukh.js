@@ -541,7 +541,7 @@ function guilgeeniiTuukh({ token }) {
             <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
               <a
                 onClick={() => nekhemjleliinTuukhKharakh(row)}
-                className="text-green-500  hover:scale-110"
+                className="text-green-500 hover:scale-110"
               >
                 <Tooltip
                   title={t("Нэхэмжлэлийн түүх харах")}
@@ -638,7 +638,7 @@ function guilgeeniiTuukh({ token }) {
                 </Tooltip>
               </a>
               <div
-                className="text-red-500  hover:scale-110"
+                className="text-red-500 hover:scale-110"
                 onClick={() => baritsaaUdirdya(row)}
               >
                 <Tooltip
@@ -880,6 +880,9 @@ function guilgeeniiTuukh({ token }) {
       ),
       icon: <FileExcelOutlined />,
       width: "90vw",
+      bodyStyle: {
+        height: "80vh",
+      },
       style: { top: 20 },
       content: (
         <Khuulga
