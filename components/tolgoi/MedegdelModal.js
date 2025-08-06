@@ -219,112 +219,114 @@ const NotificationModal = React.memo(
         url.startsWith("/"));
 
     return (
-      <Modal
-        title={
-          <div className="flex flex-col items-center py-1">
-            <div className="h-1" />
-            <div className="text-center text-base font-medium text-gray-800 dark:text-gray-200 sm:text-sm">
-              {t("📢 ШИНЭЧЛЭЛТИЙН МЭДЭЭ 📢")}
-            </div>
-            <div className="h-3" />
-            <div className="text-center text-sm text-gray-700 dark:text-gray-300 sm:text-base">
-              {displayData?.title}
-            </div>
-            <div className="h-1" />
-          </div>
-        }
-        open={visible}
-        onCancel={handleClose}
-        centered
-        closable={false}
-        destroyOnClose
-        maskClosable={false}
-        zIndex={3000}
-        width={900}
-        getPopupContainer={() => document.body}
-        footer={
-          <div className="flex items-center p-2 sm:p-4">
-            {!isMessageModal ? (
-              <div className="flex w-full flex-col items-center justify-between gap-2 sm:flex-row sm:gap-0">
-                <Checkbox
-                  checked={dontShowAgainChecked}
-                  onChange={handleCheckboxChange}
-                  disabled={isSubmitting}
-                >
-                  <span className="select-none text-xs text-gray-800 dark:text-gray-200 sm:text-sm">
-                    {t("Дахин харуулахгүй")}
-                  </span>
-                </Checkbox>
-                <Button
-                  type="primary"
-                  onClick={handleClose}
-                  loading={isSubmitting}
-                  className="w-full px-4 py-1 text-xs sm:w-auto sm:px-6 sm:py-2 sm:text-sm"
-                >
-                  {isSubmitting ? t("Хадгалж байна...") : t("Хаах")}
-                </Button>
+      <div className="update-modal">
+        <Modal
+          title={
+            <div className="flex flex-col items-center py-1">
+              <div className="h-1" />
+              <div className="text-center text-base font-medium text-gray-800 dark:text-gray-200 sm:text-sm">
+                {t("📢 ШИНЭЧЛЭЛТИЙН МЭДЭЭ 📢")}
               </div>
-            ) : (
-              <div className="flex w-full justify-end">
-                <Button
-                  type="primary"
-                  onClick={handleClose}
-                  className="w-full bg-gray-100 px-4 py-1 text-xs text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 sm:w-auto sm:px-6 sm:py-2 sm:text-sm"
-                >
-                  {t("Хаах")}
-                </Button>
+              <div className="h-3" />
+              <div className="text-center text-sm text-gray-700 dark:text-gray-300 sm:text-base">
+                {displayData?.title}
               </div>
-            )}
-          </div>
-        }
-        bodyStyle={{
-          maxHeight: "60vh",
-          overflowY: "auto",
-          padding: "1rem",
-        }}
-      >
-        <Suspense fallback={<NotificationModalLoading />}>
-          <div className="mb-1 space-y-3 sm:mb-2">
-            <div className="space-y-5 sm:space-y-4">
-              <div className="w-full">
-                <div className="flex w-full flex-row items-center justify-between">
-                  <div className="text-left text-sm text-gray-800 dark:text-gray-200 sm:text-base">
-                    {t("Нийтэлсэн")}
-                  </div>
-                  <div className="text-right text-sm text-gray-800 dark:text-gray-200 sm:text-base">
-                    {displayData.date}
-                  </div>
+              <div className="h-1" />
+            </div>
+          }
+          open={visible}
+          onCancel={handleClose}
+          centered
+          closable={false}
+          destroyOnClose
+          maskClosable={false}
+          zIndex={3000}
+          width={900}
+          getPopupContainer={() => document.body}
+          footer={
+            <div className="flex items-center p-2 sm:p-4">
+              {!isMessageModal ? (
+                <div className="flex w-full flex-col items-center justify-between gap-2 sm:flex-row sm:gap-0">
+                  <Checkbox
+                    checked={dontShowAgainChecked}
+                    onChange={handleCheckboxChange}
+                    disabled={isSubmitting}
+                  >
+                    <span className="select-none text-xs text-gray-800 dark:text-gray-200 sm:text-sm">
+                      {t("Дахин харуулахгүй")}
+                    </span>
+                  </Checkbox>
+                  <Button
+                    type="primary"
+                    onClick={handleClose}
+                    loading={isSubmitting}
+                    className="w-full px-4 py-1 text-xs sm:w-auto sm:px-6 sm:py-2 sm:text-sm"
+                  >
+                    {isSubmitting ? t("Хадгалж байна...") : t("Хаах")}
+                  </Button>
                 </div>
-              </div>
-              {isValidImageUrl(displayData.image) && (
-                <div className="flex justify-center">
-                  <img
-                    src={
-                      displayData.image.startsWith("data:image") ||
-                      displayData.image.startsWith("http")
-                        ? displayData.image
-                        : `${url}/notificationImage/${displayData.image}`
-                    }
-                    alt={`Notification image for ${displayData.title}`}
-                    className="h-auto max-w-full rounded-lg"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                    }}
-                  />
+              ) : (
+                <div className="flex w-full justify-end">
+                  <Button
+                    type="primary"
+                    onClick={handleClose}
+                    className="w-full bg-gray-100 px-4 py-1 text-xs text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 sm:w-auto sm:px-6 sm:py-2 sm:text-sm"
+                  >
+                    {t("Хаах")}
+                  </Button>
                 </div>
               )}
-              <div className="sm:space-y-2">
-                <div className="overflow-y-auto rounded-lg bg-gray-100 p-2 dark:bg-gray-700 sm:p-4">
-                  <div dangerouslySetInnerHTML={{ __html: cleanedContent }} />
+            </div>
+          }
+          bodyStyle={{
+            maxHeight: "60vh",
+            overflowY: "auto",
+            padding: "1rem",
+          }}
+        >
+          <Suspense fallback={<NotificationModalLoading />}>
+            <div className="mb-1 space-y-3 sm:mb-2">
+              <div className="space-y-5 sm:space-y-4">
+                <div className="w-full">
+                  <div className="flex w-full flex-row items-center justify-between">
+                    <div className="text-left text-sm text-gray-800 dark:text-gray-200 sm:text-base">
+                      {t("Нийтэлсэн")}
+                    </div>
+                    <div className="text-right text-sm text-gray-800 dark:text-gray-200 sm:text-base">
+                      {displayData.date}
+                    </div>
+                  </div>
                 </div>
-                {!isMessageModal && (
-                  <div className="text-xs text-gray-500 dark:text-gray-400 sm:text-sm"></div>
+                {isValidImageUrl(displayData.image) && (
+                  <div className="flex justify-center">
+                    <img
+                      src={
+                        displayData.image.startsWith("data:image") ||
+                        displayData.image.startsWith("http")
+                          ? displayData.image
+                          : `${url}/notificationImage/${displayData.image}`
+                      }
+                      alt={`Notification image for ${displayData.title}`}
+                      className="h-auto max-w-full rounded-lg"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
+                    />
+                  </div>
                 )}
+                <div className="sm:space-y-2">
+                  <div className="overflow-y-auto rounded-lg bg-gray-100 p-2 dark:bg-gray-700 sm:p-4">
+                    <div dangerouslySetInnerHTML={{ __html: cleanedContent }} />
+                  </div>
+                  {!isMessageModal && (
+                    <div className="text-xs text-gray-500 dark:text-gray-400 sm:text-sm"></div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </Suspense>
-      </Modal>
+          </Suspense>
+        </Modal>
+      </div>
     );
   }
 );
