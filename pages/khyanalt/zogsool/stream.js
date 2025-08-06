@@ -16,10 +16,8 @@ function Stream1({ ip }) {
         ws.current.onopen = () => {
           setOnOpen(true);
         };
-        ws.current.onclose = () => {
-        };
-      } catch (e) {
-      }
+        ws.current.onclose = () => {};
+      } catch (e) {}
     } else {
       if (ws.current) {
         ws.current.close();
@@ -45,8 +43,7 @@ function Stream1({ ip }) {
           const blob = new Blob([imageData]);
           const imageBitmap = await createImageBitmap(blob);
           ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
-        } catch (error) {
-        }
+        } catch (error) {}
       };
     } else {
       if (!!ws.current?.onmessage) ws.current.onmessage = null;
@@ -79,10 +76,8 @@ export function Stream2({ ip }) {
         ws2.current.onopen = () => {
           setOnOpen(true);
         };
-        ws2.current.onclose = () => {
-        };
-      } catch (e) {
-      }
+        ws2.current.onclose = () => {};
+      } catch (e) {}
     } else {
       if (ws2.current) {
         ws2.current.close();
@@ -108,8 +103,7 @@ export function Stream2({ ip }) {
           const blob = new Blob([imageData]);
           const imageBitmap = await createImageBitmap(blob);
           ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
-        } catch (error) {
-        }
+        } catch (error) {}
       };
     } else {
       if (!!ws2.current?.onmessage) ws2.current.onmessage = null;
@@ -139,10 +133,8 @@ export function SocketStream({ ip, PORT, TOKEN, CHANNEL }) {
         ws2.current.onopen = () => {
           setOnOpen(true);
         };
-        ws2.current.onclose = () => {
-        };
-      } catch (e) {
-      }
+        ws2.current.onclose = () => {};
+      } catch (e) {}
     } else {
       if (ws2.current) {
         ws2.current.close();
@@ -168,8 +160,7 @@ export function SocketStream({ ip, PORT, TOKEN, CHANNEL }) {
           const blob = new Blob([imageData]);
           const imageBitmap = await createImageBitmap(blob);
           ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
-        } catch (error) {
-        }
+        } catch (error) {}
       };
     } else {
       if (!!ws2.current?.onmessage) ws2.current.onmessage = null;

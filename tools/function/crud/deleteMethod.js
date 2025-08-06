@@ -1,6 +1,6 @@
-import uilchilgee from 'services/uilchilgee'
+import uilchilgee from "services/uilchilgee";
 function deleteMethod(modelName, token, id) {
-    return uilchilgee(token).delete(`/${modelName}/${id}`)
+  return uilchilgee(token).delete(`/${modelName}/${id}`);
 }
 
-export default deleteMethod
+export default deleteMethod;

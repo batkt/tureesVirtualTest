@@ -17,15 +17,12 @@ function StackStream({ tuluv }) {
         urls.forEach((url, index) => {
           const ws = new WebSocket(url);
           ws.binaryType = "arraybuffer";
-          ws.onopen = () => {
-          };
-          ws.onclose = () => {
-          };
+          ws.onopen = () => {};
+          ws.onclose = () => {};
           wsRefs.current.push(ws);
         });
         wsRefs?.current.length === 4 && setOnOpen(true);
-      } catch (e) {
-      }
+      } catch (e) {}
     } else {
       wsRefs?.current.forEach((ws) => {
         ws.close();
@@ -52,8 +49,7 @@ function StackStream({ tuluv }) {
             const blob = new Blob([imageData]);
             const imageBitmap = await createImageBitmap(blob);
             ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
-          } catch (error) {
-          }
+          } catch (error) {}
         };
       });
     } else {

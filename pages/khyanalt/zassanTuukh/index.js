@@ -30,10 +30,9 @@ const turluud = [
   },
   {
     turul: "Aldangi",
-    text:"Алданги",
-  }
+    text: "Алданги",
+  },
 ];
-
 
 function ZassanTuukh() {
   const { t } = useTranslation();
@@ -76,7 +75,16 @@ function ZassanTuukh() {
     modal({
       title: t("Дэлгэрэнгүй Мэдээлэл"),
       icon: <FileExcelOutlined />,
-      content: <ZassanDelgerenguiKharakh ref={ref} data={mur} token={token} barilgiinId={barilgiinId} baiguullaga={baiguullaga} ajiltan={ajiltan} />,
+      content: (
+        <ZassanDelgerenguiKharakh
+          ref={ref}
+          data={mur}
+          token={token}
+          barilgiinId={barilgiinId}
+          baiguullaga={baiguullaga}
+          ajiltan={ajiltan}
+        />
+      ),
       width: "80vw",
       footer,
     });
@@ -94,9 +102,7 @@ function ZassanTuukh() {
         render: (a) => {
           return (
             <>
-              <div>
-                {moment(a).format("YYYY-MM-DD")}
-              </div>
+              <div>{moment(a).format("YYYY-MM-DD")}</div>
             </>
           );
         },
@@ -152,7 +158,8 @@ function ZassanTuukh() {
                 icon={
                   <div
                     className={`flex items-center justify-center  dark:bg-gray-700 `}
-                    onClick={() => medeelelKharakh(record, index)}>
+                    onClick={() => medeelelKharakh(record, index)}
+                  >
                     <EyeOutlined
                       style={{ fontSize: "16px" }}
                       className=" dark:bg-gray-700 "
@@ -188,13 +195,15 @@ function ZassanTuukh() {
         }))
       }
       loading={zassanBarimt.isValidating}
-      className="p-0 md:p-4">
+      className="p-0 md:p-4"
+    >
       <Card className="col-span-12 rounded-md bg-white dark:bg-gray-900">
         <div
           className="flex flex-col-reverse gap-3 sm:flex-row"
           data-aos="fade-right"
           data-aos-duration="1000"
-          data-aos-delay="300">
+          data-aos-delay="300"
+        >
           <RangePicker
             style={{ marginBottom: "20px" }}
             size="middle"
@@ -204,12 +213,14 @@ function ZassanTuukh() {
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="600">
+            data-aos-delay="600"
+          >
             <Select
               className="w-full sm:w-36"
               placeholder={t("Ажилтан")}
               onChange={(v) => setAjiltankhaikh(v)}
-              allowClear>
+              allowClear
+            >
               {ajiltanJagsaalt?.jagsaalt.map((a) => (
                 <Select.Option key={a._id} value={a._id}>
                   {a.ner}
@@ -220,12 +231,14 @@ function ZassanTuukh() {
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="900">
+            data-aos-delay="900"
+          >
             <Select
               className="w-full sm:w-36"
               placeholder={t("Төрөл")}
               onChange={(v) => setTurul(v)}
-              allowClear>
+              allowClear
+            >
               {turluud.map((a) => (
                 <Select.Option value={a.turul}>{t(a.text)}</Select.Option>
               ))}

@@ -35,7 +35,7 @@ export const complex = [
   ["font", "fontSize", "formatBlock"],
   ["bold", "underline", "italic", "strike", "subscript", "superscript"],
   ["removeFormat"],
-  
+
   ["fontColor", "hiliteColor"],
   ["outdent", "indent"],
   ["align", "horizontalRule", "list", "table"],

@@ -26,7 +26,7 @@ function Aldaa() {
             </div>
             <br />
             <button
-              className="intro-x btn dark:border-dark-5 mt-10 border border-white py-3 px-4 text-white dark:text-gray-300"
+              className="intro-x btn dark:border-dark-5 mt-10 border border-white px-4 py-3 text-white dark:text-gray-300"
               onClick={butsakh}
             >
               Нүүр хуудас руу буцах

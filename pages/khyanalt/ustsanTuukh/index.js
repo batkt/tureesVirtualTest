@@ -18,7 +18,7 @@ import BaganiinSongolt from "components/table/BaganiinSongolt";
 const { RangePicker } = DatePicker;
 const order = { createdAt: -1 };
 
-const searchKeys = ["ajiltniiNer", "tailbar", "object.gereeniiDugaar", ];
+const searchKeys = ["ajiltniiNer", "tailbar", "object.gereeniiDugaar"];
 const turluud = [
   {
     turul: "gereeniiZagvar",
@@ -113,7 +113,6 @@ const turluud = [
     turul: "Mail",
     text: "Мэдэгдэл (Mail)",
   },
-  
 ];
 
 function UstsanTuukh() {
@@ -130,54 +129,54 @@ function UstsanTuukh() {
   ]);
   console.log(turul);
   const query = useMemo(() => {
+    const classValue =
+      turul === "ajiltan"
+        ? "ajiltan"
+        : turul === "Talbai"
+        ? "Talbai"
+        : turul === "khariltsagch"
+        ? "Khariltsagch"
+        : turul === "gereeniiZagvar"
+        ? "gereeniiZagvar"
+        : turul === "nekhemjlekhiinZagvar"
+        ? "nekhemjlekhiinZagvar"
+        : turul === "zardal"
+        ? "zardal"
+        : turul === "mashin"
+        ? "mashin"
+        : turul === "blockMashin"
+        ? "blockMashin"
+        : cls;
 
-    const classValue = turul === "ajiltan" 
-  ? "ajiltan" 
-  : turul === "Talbai" 
-    ? "Talbai" 
-    : turul === "khariltsagch"
-    ? "Khariltsagch"
-    : turul === "gereeniiZagvar"
-    ? "gereeniiZagvar"
-    : turul === "nekhemjlekhiinZagvar"
-    ? "nekhemjlekhiinZagvar"
-    : turul === "zardal"
-    ? "zardal"
-    : turul === "mashin"
-    ? "mashin"
-    : turul === "blockMashin"
-    ? "blockMashin"
-    : cls;
-
-    if(turul === "ajiltan"){
+    if (turul === "ajiltan") {
       classValue === "ajiltan";
       turul = undefined;
     }
-    if(turul === "Talbai"){
+    if (turul === "Talbai") {
       classValue === "Talbai";
       turul = undefined;
     }
-    if(turul === "khariltsagch"){
+    if (turul === "khariltsagch") {
       classValue === "Khariltsagch";
       turul = undefined;
     }
-    if(turul === "gereeniiZagvar"){
+    if (turul === "gereeniiZagvar") {
       classValue === "gereeniiZagvar";
       turul = undefined;
     }
-    if(turul === "nekhemjlekhiinZagvar"){
+    if (turul === "nekhemjlekhiinZagvar") {
       classValue === "nekhemjlekhiinZagvar";
       turul = undefined;
     }
-    if(turul === "zardal"){
+    if (turul === "zardal") {
       classValue === "zardal";
       turul = undefined;
     }
-    if(turul === "mashin"){
+    if (turul === "mashin") {
       classValue === "mashin";
       turul = undefined;
     }
-    if(turul === "blockMashin"){
+    if (turul === "blockMashin") {
       classValue === "blockMashin";
       turul = undefined;
     }
@@ -186,17 +185,14 @@ function UstsanTuukh() {
       ajiltniiId: ajiltankhaikh,
       "object.turul": turul,
       class: classValue,
-      createdAt:shuukhOgnoo
+      createdAt: shuukhOgnoo
         ? {
             $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
             $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
           }
         : undefined,
-      
     };
   }, [ajiltankhaikh, shuukhOgnoo, turul, barilgiinId, searchKeys]);
-
-
 
   const ustsanBarimt = useJagsaalt(
     "/ustsanBarimt",
@@ -212,19 +208,19 @@ function UstsanTuukh() {
     undefined,
     searchKeys
   );
-  
-const combinedData = useMemo(() => {
-  if (turul === "ajiltan") {
-    return ajiltanKhariltsagch?.jagsaalt || [];
-  }
-  return ustsanBarimt?.jagsaalt || [];
-}, [turul, ustsanBarimt?.jagsaalt, ajiltanKhariltsagch?.jagsaalt]);
+
+  const combinedData = useMemo(() => {
+    if (turul === "ajiltan") {
+      return ajiltanKhariltsagch?.jagsaalt || [];
+    }
+    return ustsanBarimt?.jagsaalt || [];
+  }, [turul, ustsanBarimt?.jagsaalt, ajiltanKhariltsagch?.jagsaalt]);
 
   const { turulColumns } = React.useMemo(() => {
     let turulColumns = [];
     switch (turul) {
       case "gereeniiZagvar":
-        turulColumns.push({ 
+        turulColumns.push({
           title: "Нэр",
           width: "5rem",
           align: "center",
@@ -321,7 +317,7 @@ const combinedData = useMemo(() => {
           sorter: () => 0,
         });
         break;
-      case "aldangi": 
+      case "aldangi":
         turulColumns.push({
           title: "Төлсөн дүн",
           width: "3rem",
@@ -394,11 +390,7 @@ const combinedData = useMemo(() => {
           render: (tulukhDun) => {
             return (
               <>
-                <div
-                  className="text-center"
-                >
-                  {tulukhDun.object.tailbar}
-                </div>
+                <div className="text-center">{tulukhDun.object.tailbar}</div>
               </>
             );
           },
@@ -504,12 +496,8 @@ const combinedData = useMemo(() => {
           align: "right",
           render: (khariltsagchNer) => {
             return (
-              <>  
-                <div
-                  className="text-center"
-                >
-                  {khariltsagchNer.object.ner}
-                </div>
+              <>
+                <div className="text-center">{khariltsagchNer.object.ner}</div>
               </>
             );
           },
@@ -534,9 +522,9 @@ const combinedData = useMemo(() => {
       content: <DelgerenguiKharakh ref={ref} data={mur} />,
       width: "25vw",
       footer,
-       onCancel: () => {
-      ref.current.khaaya();
-    }
+      onCancel: () => {
+        ref.current.khaaya();
+      },
     });
   }
 
@@ -638,7 +626,7 @@ const combinedData = useMemo(() => {
           return (
             <>
               <div>{tailbar?.tailbar}</div>
-            </> 
+            </>
           );
         },
       },
@@ -660,7 +648,7 @@ const combinedData = useMemo(() => {
           );
         },
       },
-{
+      {
         title: t("Огноо"),
         align: "center",
         ellipsis: true,
@@ -755,7 +743,7 @@ const combinedData = useMemo(() => {
             value={shuukhOgnoo}
             onChange={ognooShuultOnChange}
           />
-          
+
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
@@ -790,72 +778,56 @@ const combinedData = useMemo(() => {
               ))}
             </Select>
           </div>
-          <div className="hidden justify-end ml-auto md:flex">
-              <BaganiinSongolt
-                shineBagana={shineBagana}
-                setShineBagana={setShineBagana}
-                columns={[
-                  {
-                    title: t("Гэрээний дугаар"),
-                    width: "4rem",
-                    dataIndex: ["object" , "gereeniiDugaar"],
-                    summary: true,
-                    align: "center",  
-                    render: (a) => {
-                      return (
-                        <div className="w-full text-center">
-                          {a}
-                        </div>
-                      );
-                    },
+          <div className="ml-auto hidden justify-end md:flex">
+            <BaganiinSongolt
+              shineBagana={shineBagana}
+              setShineBagana={setShineBagana}
+              columns={[
+                {
+                  title: t("Гэрээний дугаар"),
+                  width: "4rem",
+                  dataIndex: ["object", "gereeniiDugaar"],
+                  summary: true,
+                  align: "center",
+                  render: (a) => {
+                    return <div className="w-full text-center">{a}</div>;
                   },
-                  {
-                    title: t("Талбай"),
-                    width: "4rem",
-                    dataIndex: ["object", "kod"],
-                    summary: true,
-                    align: "center",
-                    render: (a) => {
-                      return (
-                        <div className="w-full text-right">
-                          {a}
-                        </div>
-                      );
-                    },
+                },
+                {
+                  title: t("Талбай"),
+                  width: "4rem",
+                  dataIndex: ["object", "kod"],
+                  summary: true,
+                  align: "center",
+                  render: (a) => {
+                    return <div className="w-full text-right">{a}</div>;
                   },
-                  {
-                    title: t("Харилцагч"),
-                    width: "4rem",
-                    dataIndex: ["object", "ner"],
-                    summary: true,
-                    align: "center",
-                    render: (a) => {
-                      return (
-                        <div className="w-full text-right">
-                        {a}
-                        </div>
-                      );
-                    },
+                },
+                {
+                  title: t("Харилцагч"),
+                  width: "4rem",
+                  dataIndex: ["object", "ner"],
+                  summary: true,
+                  align: "center",
+                  render: (a) => {
+                    return <div className="w-full text-right">{a}</div>;
                   },
-                  {
-                    title: t("Төлөх дүн"),
-                    width: "3rem",
-                    dataIndex: ["object", "tulukhDun"],
-                    summary: true,
-                    align: "center",
-                    render: (a) => {
-                      return (
-                        <div
-                  className="text-right"
-                >
-                  {formatNumber(a) || 0}
-                </div>
-                      );
-                    },
+                },
+                {
+                  title: t("Төлөх дүн"),
+                  width: "3rem",
+                  dataIndex: ["object", "tulukhDun"],
+                  summary: true,
+                  align: "center",
+                  render: (a) => {
+                    return (
+                      <div className="text-right">{formatNumber(a) || 0}</div>
+                    );
                   },
-                ]}
-              />
-            </div>
+                },
+              ]}
+            />
+          </div>
         </div>
         <Table
           data-aos="fade-up"

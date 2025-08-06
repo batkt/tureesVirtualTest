@@ -2068,13 +2068,13 @@ function camera({ token }) {
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
             <div className="fixed left-6 top-24 z-[10000] hidden h-[400px] md:block">
               <Tooltip title="Хуулга шалгах">
-              <div
-                className="h-12 w-12 cursor-pointer rounded-r-full border-y border-r bg-yellow-500 text-xl flex items-center justify-center"
-                onClick={guilgeeDrawerOngoilgokh}
-              >
-                <DollarCircleOutlined />
-              </div>
-            </Tooltip>
+                <div
+                  className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-r-full border-y border-r bg-yellow-500 text-xl"
+                  onClick={guilgeeDrawerOngoilgokh}
+                >
+                  <DollarCircleOutlined />
+                </div>
+              </Tooltip>
 
               <Drawer
                 title={t("Сүүлийн гүйлгээ")}
@@ -2141,8 +2141,8 @@ function camera({ token }) {
                 }`}
               >
                 {baiguullaga?._id === "6115f350b35689cdbf1b9da3" &&
-                  (camerVal[0] === "192.168.1.128" ||
-                    camerVal[0] === "192.168.1.232") ? (
+                (camerVal[0] === "192.168.1.128" ||
+                  camerVal[0] === "192.168.1.232") ? (
                   <R2WPlayerComponent
                     USER={"admin"}
                     ROOT={"live"}

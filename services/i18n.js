@@ -4,18 +4,14 @@ import { initReactI18next } from "react-i18next";
 
 i18next
 
-    .use(initReactI18next)
-    .use(I18NextHttpBackend)
+  .use(initReactI18next)
+  .use(I18NextHttpBackend)
 
-    .init({
-
-        lng: "mn",
-        interpolation: {
-
-            escapeValue: false,
-
-        },
-        
-    });
+  .init({
+    lng: "mn",
+    interpolation: {
+      escapeValue: false,
+    },
+  });
 
 export default i18next;

@@ -39,7 +39,7 @@ function Chart({
   defaultTailan = "guitsetgeliinTailanAvya",
   setWaiting,
 }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const [ognoo, setOgnoo] = useState([
     moment().startOf("month"),
     moment().endOf("month"),
@@ -110,14 +110,16 @@ function Chart({
           </Select>
         </div>
         <DatePicker.RangePicker
-        placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]}
+          placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]}
           locale={local}
           value={ognoo}
           onChange={setOgnoo}
         />
       </div>
       {tailanTurul === "line" && <LineChart t={t} data={tailanGaralt || {}} />}
-      {tailanTurul === "bar" && <VerticarlBarChart t={t} data={tailanGaralt || {}} />}
+      {tailanTurul === "bar" && (
+        <VerticarlBarChart t={t} data={tailanGaralt || {}} />
+      )}
       {tailanTurul === "barHorizontal" && (
         <HorizontalBarChart t={t} data={tailanGaralt || {}} />
       )}
@@ -178,59 +180,62 @@ function AjiltanBurtgel({ token }) {
       tsonkhniiId={"61c2c75d1c2830c4e6f90ce9"}
       loading={waiting}
     >
-      <div className="grid col-span-12 grid-cols-12 gap-5 overflow-y-auto md:p-2" style={{height: "calc( 100vh - 7rem )"}}>
       <div
-        className="box col-span-12 p-2 md:col-span-6"        
-        data-aos="fade-down-right"
-        data-aos-duration="1000"
+        className="col-span-12 grid grid-cols-12 gap-5 overflow-y-auto md:p-2"
+        style={{ height: "calc( 100vh - 7rem )" }}
       >
-        <Chart
-          barilgiinId={barilgiinId}
-          setWaiting={setWaiting}
-          token={token}
-          defaultTurul="line"
-          defaultTailan="borluulaltiinTailanAvya"
-        />
-      </div>
-      <div
-        className="box col-span-12 divide-y p-2 md:col-span-6"
-        data-aos="fade-down-left"
-        data-aos-duration="1000"
-      >
-        <Chart
-          barilgiinId={barilgiinId}
-          setWaiting={setWaiting}
-          token={token}
-          defaultTurul="bar"
-          defaultTailan="avlagiinTailanAvya"
-        />
-      </div>
-      <div
-        className="box col-span-12 divide-y p-2 md:col-span-6"
-        data-aos="fade-up-right"
-        data-aos-duration="1000"
-      >
-        <Chart
-          barilgiinId={barilgiinId}
-          setWaiting={setWaiting}
-          token={token}
-          defaultTurul="barHorizontal"
-          defaultTailan="zardaliinTailanAvya"
-        />
-      </div>
-      <div
-        className="box col-span-12 divide-y p-2 md:col-span-6"
-        data-aos="fade-down-right"
-        data-aos-duration="1000"
-      >
-        <Chart
-          barilgiinId={barilgiinId}
-          setWaiting={setWaiting}
-          token={token}
-          defaultTurul="line"
-          defaultTailan="ashigiinTailanAvya"
-        />
-      </div>
+        <div
+          className="box col-span-12 p-2 md:col-span-6"
+          data-aos="fade-down-right"
+          data-aos-duration="1000"
+        >
+          <Chart
+            barilgiinId={barilgiinId}
+            setWaiting={setWaiting}
+            token={token}
+            defaultTurul="line"
+            defaultTailan="borluulaltiinTailanAvya"
+          />
+        </div>
+        <div
+          className="box col-span-12 divide-y p-2 md:col-span-6"
+          data-aos="fade-down-left"
+          data-aos-duration="1000"
+        >
+          <Chart
+            barilgiinId={barilgiinId}
+            setWaiting={setWaiting}
+            token={token}
+            defaultTurul="bar"
+            defaultTailan="avlagiinTailanAvya"
+          />
+        </div>
+        <div
+          className="box col-span-12 divide-y p-2 md:col-span-6"
+          data-aos="fade-up-right"
+          data-aos-duration="1000"
+        >
+          <Chart
+            barilgiinId={barilgiinId}
+            setWaiting={setWaiting}
+            token={token}
+            defaultTurul="barHorizontal"
+            defaultTailan="zardaliinTailanAvya"
+          />
+        </div>
+        <div
+          className="box col-span-12 divide-y p-2 md:col-span-6"
+          data-aos="fade-down-right"
+          data-aos-duration="1000"
+        >
+          <Chart
+            barilgiinId={barilgiinId}
+            setWaiting={setWaiting}
+            token={token}
+            defaultTurul="line"
+            defaultTailan="ashigiinTailanAvya"
+          />
+        </div>
       </div>
     </Admin>
   );
