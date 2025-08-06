@@ -458,12 +458,7 @@ function guilgeeniiTuukh({ token }) {
         excelHeader: t("Төлөх огноо"),
         title: () => (
           <div className="flex justify-center">
-            <div
-              className=" flex w-full
-             justify-end"
-            >
-              {t("Төлөх огноо")}
-            </div>
+            <div className="flex w-full justify-end ">{t("Төлөх огноо")}</div>
             <div className="flex h-full w-[50%] items-center justify-end">
               <Popover
                 placement="bottom"
@@ -543,10 +538,10 @@ function guilgeeniiTuukh({ token }) {
           if (khuviAldangi < 0) strokeColorAldangi = "rgba(245, 158, 18,1)";
 
           return (
-            <div className="flex w-full flex-row items-center justify-center  divide-x-2 ">
+            <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
               <a
                 onClick={() => nekhemjleliinTuukhKharakh(row)}
-                className=" text-green-500 hover:scale-110"
+                className="text-green-500  hover:scale-110"
               >
                 <Tooltip
                   title={t("Нэхэмжлэлийн түүх харах")}
@@ -570,7 +565,7 @@ function guilgeeniiTuukh({ token }) {
               </a>
               <a
                 onClick={() => khuulgaKharya(row)}
-                className="fill-current  text-green-500 hover:scale-110"
+                className="fill-current text-green-500 hover:scale-110"
               >
                 <Tooltip
                   title={t("Хуулга")}
@@ -594,7 +589,7 @@ function guilgeeniiTuukh({ token }) {
               </a>
               <a
                 onClick={() => aldangiinKhuulgaKharya(row)}
-                className="fill-current  text-green-500 hover:scale-110"
+                className="fill-current text-green-500 hover:scale-110"
               >
                 <Tooltip
                   title={t("Алдангийн хуулга")}
@@ -605,7 +600,7 @@ function guilgeeniiTuukh({ token }) {
               </a>
               <a
                 onClick={() => guilgeeKhiiya(row)}
-                className="fill-current  text-green-500  hover:scale-125"
+                className="fill-current text-green-500 hover:scale-125"
               >
                 <Tooltip
                   title={t("Гүйлгээ хийх")}
@@ -618,7 +613,7 @@ function guilgeeniiTuukh({ token }) {
                     height="24"
                     viewBox="0 0 440.000000 377.000000"
                     preserveAspectRatio="xMidYMid meet"
-                    className="h-6 w-8 fill-current  text-green-500"
+                    className="h-6 w-8 fill-current text-green-500"
                   >
                     <g transform="translate(0.000000,377.000000) scale(0.100000,-0.100000)">
                       <path
@@ -643,7 +638,7 @@ function guilgeeniiTuukh({ token }) {
                 </Tooltip>
               </a>
               <div
-                className=" text-red-500  hover:scale-110"
+                className="text-red-500  hover:scale-110"
                 onClick={() => baritsaaUdirdya(row)}
               >
                 <Tooltip
@@ -814,7 +809,7 @@ function guilgeeniiTuukh({ token }) {
     ];
     modal({
       title: (
-        <div className=" flex w-full justify-between">
+        <div className="flex w-full justify-between ">
           {t("Нэхэмжлэлийн түүх")}
         </div>
       ),
@@ -1432,7 +1427,7 @@ function guilgeeniiTuukh({ token }) {
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg  hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
                     onClick={() => {
                       const { Excel } = require("antd-table-saveas-excel");
                       const excelExport = new Excel();
