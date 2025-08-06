@@ -325,7 +325,7 @@ audio::-webkit-media-controls-volume-control-container {
     min-width: 350px !important;
   }
   .mail-dropdown-container {
-    z-index: 1000 !important; /* Ensure this is lower than the modal */
+    z-index: 1000 !important;
   }
 }
 
@@ -597,11 +597,11 @@ audio::-webkit-media-controls-volume-control-container {
   background-color: inherit;
 }
 
-.ant-modal-body {
+/* .ant-modal-body {
   @apply px-4 py-4 sm:px-6 md:px-8 !important;
-  /* flex: 1 1 auto; */
+  flex: 1 1 auto;
   max-height: calc(90vh - 130px);
-}
+} */
 
 .ant-modal-footer {
   @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;
@@ -1119,9 +1119,9 @@ input:-webkit-autofill {
   }
 }
 
-.ant-modal-content {
-  z-index: 3000 !important; /* Higher than MailDropdown’s z-index (1000) */
-}
+/* .ant-modal-content {
+  z-index: 3000 !important; 
+} */
 
 /* .mail-dropdown-overlay {
   border-radius: 8px;

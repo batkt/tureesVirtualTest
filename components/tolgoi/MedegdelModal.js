@@ -93,7 +93,7 @@ const NotificationModal = React.memo(
               "permanentlyDismissedNotifications",
               JSON.stringify([...newDismissed])
             );
-            message.success(t("Тохиргоо хадгалагдлаа"));
+            message.success(t("Тохиргоо хадгаллаа"));
             onDontShowAgain?.(notifId, dontShowAgainChecked);
           } else {
             setDontShowAgainChecked(false);
@@ -115,7 +115,7 @@ const NotificationModal = React.memo(
               "permanentlyDismissedNotifications",
               JSON.stringify([...newDismissed])
             );
-            message.success(t("Тохиргоо хадгалагдлаа"));
+            message.success(t("Тохиргоо хадгаллаа"));
           }
         }
 
