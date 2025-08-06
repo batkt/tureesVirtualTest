@@ -21,7 +21,7 @@ import {
 import { MdOutlineDiscount } from "react-icons/md";
 import moment, { utc } from "moment";
 import axios from "axios";
-//import Lottie from "lottie-react";
+//import Lottie from "lottie-react";w
 import amjilttaiAnimation from "./amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";

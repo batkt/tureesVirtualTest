@@ -100,13 +100,19 @@ const Tailbar = React.forwardRef(
     const [shaltgaan, setTailbar] = React.useState("");
     const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment());
     const [sergeekhOgnoo, setSergeekhOgnoo] = React.useState(moment());
-    const [tsutslakhOgnoo, setTsutslakhOgnoo] = React.useState([moment(), moment()]);
+    const [tsutslakhOgnoo, setTsutslakhOgnoo] = React.useState([
+      moment(),
+      moment(),
+    ]);
     const [odoogiinUldegdel, setOdoogiinUldegdel] = React.useState(0);
     const [ekhniiUldegdel, setEkhniiUldegdel] = React.useState(0);
     const [avlagaUldegdel, setAvlagaUldegdel] = React.useState(0);
     const [niilberAvlaga, setNiilberAvlaga] = React.useState(0);
-    const [garaasAvlagaOruulakh, setGaraasAvlagaOruulakh] = React.useState(false);
-    const [suuliinSariinAvlaguud, setSuuliinSariinAvlaguud] = React.useState([]);
+    const [garaasAvlagaOruulakh, setGaraasAvlagaOruulakh] =
+      React.useState(false);
+    const [suuliinSariinAvlaguud, setSuuliinSariinAvlaguud] = React.useState(
+      []
+    );
 
     React.useImperativeHandle(
       ref,
@@ -120,9 +126,19 @@ const Tailbar = React.forwardRef(
             return;
           }
           var tempAvlaguud = [];
-          if(baiguullaga?.tokhirgoo?.udruurBodokhEsekh)
-            tempAvlaguud = garaasAvlagaOruulakh && niilberAvlaga > 0 ? [{ turul: "avlaga", tailbar: shaltgaan, ognoo: tsutslakhOgnoo[0], tulukhDun: niilberAvlaga, }] : suuliinSariinAvlaguud;
-          
+          if (baiguullaga?.tokhirgoo?.udruurBodokhEsekh)
+            tempAvlaguud =
+              garaasAvlagaOruulakh && niilberAvlaga > 0
+                ? [
+                    {
+                      turul: "avlaga",
+                      tailbar: shaltgaan,
+                      ognoo: tsutslakhOgnoo[0],
+                      tulukhDun: niilberAvlaga,
+                    },
+                  ]
+                : suuliinSariinAvlaguud;
+
           uilchilgee(token)
             .post(service, {
               gereeniiId: data?._id,
@@ -132,7 +148,9 @@ const Tailbar = React.forwardRef(
               sergeekhOgnoo,
               suuliinSariinAvlaguud: tempAvlaguud,
               udruurBodokhEsekh: baiguullaga?.tokhirgoo?.udruurBodokhEsekh,
-              tsutslakhOgnoo: baiguullaga?.tokhirgoo?.udruurBodokhEsekh ? tsutslakhOgnoo[0] : moment(),
+              tsutslakhOgnoo: baiguullaga?.tokhirgoo?.udruurBodokhEsekh
+                ? tsutslakhOgnoo[0]
+                : moment(),
             })
             .then(({ data }) => {
               if (data === "Amjilttai") {
@@ -148,7 +166,15 @@ const Tailbar = React.forwardRef(
           destroy();
         },
       }),
-      [shaltgaan, duusakhOgnoo, sergeekhOgnoo, suuliinSariinAvlaguud, garaasAvlagaOruulakh, niilberAvlaga, tsutslakhOgnoo]
+      [
+        shaltgaan,
+        duusakhOgnoo,
+        sergeekhOgnoo,
+        suuliinSariinAvlaguud,
+        garaasAvlagaOruulakh,
+        niilberAvlaga,
+        tsutslakhOgnoo,
+      ]
     );
     function garya() {
       if (shaltgaan !== "")
@@ -176,13 +202,18 @@ const Tailbar = React.forwardRef(
           }
         })
         .catch(aldaaBarigch);
-    }, [data.gereeniiDugaar])
+    }, [data.gereeniiDugaar]);
 
     useEffect(() => {
-      if(service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh)
-      {
+      if (
+        service === "/gereeTsutslaya" &&
+        baiguullaga?.tokhirgoo?.udruurBodokhEsekh
+      ) {
         setEkhniiUldegdel(0);
-        var ognoo = [data?.gereeniiOgnoo, moment(tsutslakhOgnoo[0]).subtract(1, "month")];
+        var ognoo = [
+          data?.gereeniiOgnoo,
+          moment(tsutslakhOgnoo[0]).subtract(1, "month"),
+        ];
         uilchilgee(token)
           .post("/uldegdelBodyo", {
             baiguullagiinId: data.baiguullagiinId,
@@ -197,7 +228,7 @@ const Tailbar = React.forwardRef(
           })
           .catch(aldaaBarigch);
       }
-    }, [data.gereeniiDugaar, tsutslakhOgnoo])
+    }, [data.gereeniiDugaar, tsutslakhOgnoo]);
 
     useEffect(() => {
       function keyUp(e) {
@@ -216,47 +247,47 @@ const Tailbar = React.forwardRef(
     }, []);
 
     function disabledDate(current) {
-      let minDate = moment().subtract(1, "month").startOf("month").format("YYYY-MM-DD");
+      let minDate = moment()
+        .subtract(1, "month")
+        .startOf("month")
+        .format("YYYY-MM-DD");
       let maxDate = moment().endOf("month").format("YYYY-MM-DD");
-      return (current <= moment(maxDate, "YYYY-MM-DD") && current >= moment(minDate, "YYYY-MM-DD")) === false;
+      return (
+        (current <= moment(maxDate, "YYYY-MM-DD") &&
+          current >= moment(minDate, "YYYY-MM-DD")) === false
+      );
     }
 
-    function changeOgnoo(e)
-    {
+    function changeOgnoo(e) {
       setTsutslakhOgnoo(e);
       setAvlagaUldegdel(0);
       setSuuliinSariinAvlaguud([]);
       var diffDay = moment(e[1]).diff(moment(e[0]), "day") + 1;
-      if(diffDay > 0)
-      {
+      if (diffDay > 0) {
         uilchilgee(token)
-        .post("/ashiglakhKhonogTootsoolokh", {
-          ashiglakhEkhlekhOgnoo: e[0],
-          ashiglakhDuuskhOgnoo: e[1],
-          gereeniiId: data?._id,
-          diffDay: diffDay,
-          ekhniiUldegdel: ekhniiUldegdel,
-        })
-        .then(({ data }) => {
-          if (!!data) {
-            setAvlagaUldegdel(data.uldegdelAvlaga);
-            setSuuliinSariinAvlaguud(data.avlagas);
-          }
-        })
-        .catch(aldaaBarigch);  
+          .post("/ashiglakhKhonogTootsoolokh", {
+            ashiglakhEkhlekhOgnoo: e[0],
+            ashiglakhDuuskhOgnoo: e[1],
+            gereeniiId: data?._id,
+            diffDay: diffDay,
+            ekhniiUldegdel: ekhniiUldegdel,
+          })
+          .then(({ data }) => {
+            if (!!data) {
+              setAvlagaUldegdel(data.uldegdelAvlaga);
+              setSuuliinSariinAvlaguud(data.avlagas);
+            }
+          })
+          .catch(aldaaBarigch);
       }
     }
 
-    function garaasAvlagaUusgekh(e)
-    {
+    function garaasAvlagaUusgekh(e) {
       setGaraasAvlagaOruulakh(e);
-      if(e)
-      {
+      if (e) {
         setNiilberAvlaga(0);
         setSuuliinSariinAvlaguud([]);
-      }
-      else
-        changeOgnoo(tsutslakhOgnoo);
+      } else changeOgnoo(tsutslakhOgnoo);
     }
 
     return (
@@ -272,7 +303,9 @@ const Tailbar = React.forwardRef(
             {service === "/gereeSergeeye" ? (
               <DatePicker value={sergeekhOgnoo} onChange={setSergeekhOgnoo} />
             ) : (
-              <div className="font-medium">{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
+              <div className="font-medium">
+                {moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}
+              </div>
             )}
           </div>
           <div className="flex w-full flex-row justify-between">
@@ -280,7 +313,9 @@ const Tailbar = React.forwardRef(
             {service === "/gereeSergeeye" ? (
               <DatePicker value={duusakhOgnoo} onChange={setDuusakhOgnoo} />
             ) : (
-              <div className="font-medium">{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
+              <div className="font-medium">
+                {moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}
+              </div>
             )}
           </div>
           {service !== "/gereeSergeeye" && (
@@ -294,60 +329,92 @@ const Tailbar = React.forwardRef(
           {service !== "/gereeSergeeye" && (
             <div className="flex w-full flex-row justify-between">
               <div className="text-right">{t("Авлагын дүн")}:</div>
-              <div className="font-medium">{formatNumber(odoogiinUldegdel)}</div>
-            </div>
-          )}
-          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
-            <div className="flex w-full flex-row justify-between">
-              <div className="text-right">{t("Авлагын эхний үлдэгдэл")}:</div>
-              <div className="font-medium">{formatNumber(ekhniiUldegdel)}</div>
-            </div>
-          )}
-          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
-            <div className="flex w-full flex-row justify-between">
-              <div className="text-right">{t("Авлагын эцсийн үлдэгдэл")}:</div>
-              <div className="font-medium">{formatNumber(avlagaUldegdel)}</div>
-            </div>
-          )}
-          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
-            <div className="flex w-full flex-row justify-between">
-              <div className="text-right"> Ашиглах огноо </div>
-              <DatePicker.RangePicker className="font-medium" placeholder={["Эхлэх огноо", "Дуусах огноо"]} disabledDate={disabledDate} value={tsutslakhOgnoo} onChange={(e) => changeOgnoo(e)} />
-            </div>
-          )}
-          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
-            <div className="flex w-full flex-row justify-between">
-              <div className="text-right">{t("Тухайн цуцалсан сарын ашигласан хоног")}:</div>
               <div className="font-medium">
-                {moment(tsutslakhOgnoo[1]).diff(moment(tsutslakhOgnoo[0]), "day") + 1}
+                {formatNumber(odoogiinUldegdel)}
               </div>
             </div>
           )}
-          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
-            <div className="flex w-full flex-row justify-between">
-              <div className="text-right">{t("Гараас нийлбэр авлага оруулах эсэх")}:</div>
-              <div className="font-medium">
-                <Switch
-                  defaultChecked={garaasAvlagaOruulakh}
-                  onChange={(v) => garaasAvlagaUusgekh(v) }
+          {service === "/gereeTsutslaya" &&
+            baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
+              <div className="flex w-full flex-row justify-between">
+                <div className="text-right">{t("Авлагын эхний үлдэгдэл")}:</div>
+                <div className="font-medium">
+                  {formatNumber(ekhniiUldegdel)}
+                </div>
+              </div>
+            )}
+          {service === "/gereeTsutslaya" &&
+            baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
+              <div className="flex w-full flex-row justify-between">
+                <div className="text-right">
+                  {t("Авлагын эцсийн үлдэгдэл")}:
+                </div>
+                <div className="font-medium">
+                  {formatNumber(avlagaUldegdel)}
+                </div>
+              </div>
+            )}
+          {service === "/gereeTsutslaya" &&
+            baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
+              <div className="flex w-full flex-row justify-between">
+                <div className="text-right"> Ашиглах огноо </div>
+                <DatePicker.RangePicker
+                  className="font-medium"
+                  placeholder={["Эхлэх огноо", "Дуусах огноо"]}
+                  disabledDate={disabledDate}
+                  value={tsutslakhOgnoo}
+                  onChange={(e) => changeOgnoo(e)}
                 />
               </div>
-            </div>
-          )}
-          {service === "/gereeTsutslaya" && baiguullaga?.tokhirgoo?.udruurBodokhEsekh && garaasAvlagaOruulakh && (
-            <div className="flex w-full flex-row justify-between">
-              <div className="text-right">{t("Нийлбэр авлага үүсгэх дүн")}:</div>
-              <div className="flex w-1/2 font-medium">
-                <InputNumber 
-                  value={niilberAvlaga} 
-                  onChange={(v) => setNiilberAvlaga(v)} 
-                  formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} 
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  style={{ width: "100%" }}
-                  />
+            )}
+          {service === "/gereeTsutslaya" &&
+            baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
+              <div className="flex w-full flex-row justify-between">
+                <div className="text-right">
+                  {t("Тухайн цуцалсан сарын ашигласан хоног")}:
+                </div>
+                <div className="font-medium">
+                  {moment(tsutslakhOgnoo[1]).diff(
+                    moment(tsutslakhOgnoo[0]),
+                    "day"
+                  ) + 1}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          {service === "/gereeTsutslaya" &&
+            baiguullaga?.tokhirgoo?.udruurBodokhEsekh && (
+              <div className="flex w-full flex-row justify-between">
+                <div className="text-right">
+                  {t("Гараас нийлбэр авлага оруулах эсэх")}:
+                </div>
+                <div className="font-medium">
+                  <Switch
+                    defaultChecked={garaasAvlagaOruulakh}
+                    onChange={(v) => garaasAvlagaUusgekh(v)}
+                  />
+                </div>
+              </div>
+            )}
+          {service === "/gereeTsutslaya" &&
+            baiguullaga?.tokhirgoo?.udruurBodokhEsekh &&
+            garaasAvlagaOruulakh && (
+              <div className="flex w-full flex-row justify-between">
+                <div className="text-right">
+                  {t("Нийлбэр авлага үүсгэх дүн")}:
+                </div>
+                <div className="flex w-1/2 font-medium">
+                  <InputNumber
+                    value={niilberAvlaga}
+                    onChange={(v) => setNiilberAvlaga(v)}
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    style={{ width: "100%" }}
+                  />
+                </div>
+              </div>
+            )}
         </div>
 
         <Input.TextArea
@@ -419,7 +486,13 @@ function ZakhialgiinKhyanalt() {
   const query = useMemo(() => {
     return {
       tuluv: { $nin: [-1] },
-      gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
+      gereeniiOgnoo:
+        gereeOgnoo?.length > 0
+          ? {
+              $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+            }
+          : { $exists: true },
       duusakhOgnoo: { $gte: new Date() },
     };
   }, [gereeOgnoo]);
@@ -654,7 +727,13 @@ function ZakhialgiinKhyanalt() {
       query: {
         tuluv: { $nin: [-1] },
         duusakhOgnoo: { $gte: new Date() },
-        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
+        gereeniiOgnoo:
+          gereeOgnoo?.length > 0
+            ? {
+                $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+              }
+            : { $exists: true },
       },
     },
     {
@@ -667,10 +746,16 @@ function ZakhialgiinKhyanalt() {
       color: "text-blue-500",
       selectedColor: "bg-blue-50 dark:bg-gray-900",
       border: "border-blue-500",
-      query: { 
-        turGereeEsekh: { $ne: true }, 
+      query: {
+        turGereeEsekh: { $ne: true },
         tuluv: { $ne: -1 },
-        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
+        gereeniiOgnoo:
+          gereeOgnoo?.length > 0
+            ? {
+                $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+              }
+            : { $exists: true },
       },
     },
     {
@@ -683,10 +768,16 @@ function ZakhialgiinKhyanalt() {
       color: "text-purple-500",
       selectedColor: "bg-purple-50 dark:bg-gray-900",
       border: "border-purple-600",
-      query: { 
-        turGereeEsekh: true, 
+      query: {
+        turGereeEsekh: true,
         tuluv: { $ne: -1 },
-        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
+        gereeniiOgnoo:
+          gereeOgnoo?.length > 0
+            ? {
+                $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+              }
+            : { $exists: true },
       },
     },
     {
@@ -701,7 +792,13 @@ function ZakhialgiinKhyanalt() {
       border: "border-red-500",
       query: {
         tuluv: { $ne: -1 },
-        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
+        gereeniiOgnoo:
+          gereeOgnoo?.length > 0
+            ? {
+                $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+              }
+            : { $exists: true },
         duusakhOgnoo: { $lte: new Date() },
       },
     },
@@ -717,7 +814,13 @@ function ZakhialgiinKhyanalt() {
       border: "border-yellow-500",
       query: {
         tuluv: { $ne: -1 },
-        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
+        gereeniiOgnoo:
+          gereeOgnoo?.length > 0
+            ? {
+                $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+              }
+            : { $exists: true },
         duusakhOgnoo: { $lte: moment(new Date()).add(1, "month") },
       },
     },
@@ -733,7 +836,13 @@ function ZakhialgiinKhyanalt() {
       border: "border-gray-800 dark:border-gray-300",
       query: {
         tuluv: -1,
-        gereeniiOgnoo: gereeOgnoo?.length > 0 ? { $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"), $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59") } : { $exists: true},
+        gereeniiOgnoo:
+          gereeOgnoo?.length > 0
+            ? {
+                $gte: moment(gereeOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(gereeOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+              }
+            : { $exists: true },
       },
     },
   ];
@@ -804,7 +913,7 @@ function ZakhialgiinKhyanalt() {
         showSorterTooltip: false,
         sorter: () => 0,
       },
-      
+
       {
         title: t("Регистр"),
         fixed: "left",
@@ -1098,9 +1207,15 @@ function ZakhialgiinKhyanalt() {
   }
   //#region dialogs
   function gereeTsutsalya(data) {
-    if (ajiltan?.erkh !== "Admin" && !_.get(ajiltan, `tokhirgoo.gereeTsutslakhErkh`)?.find((a) => a === data.barilgiinId))
-    {
-      notification.warning({ message: t("Таньд гэрээ цуцлах эрх байхгүй байна."), });
+    if (
+      ajiltan?.erkh !== "Admin" &&
+      !_.get(ajiltan, `tokhirgoo.gereeTsutslakhErkh`)?.find(
+        (a) => a === data.barilgiinId
+      )
+    ) {
+      notification.warning({
+        message: t("Таньд гэрээ цуцлах эрх байхгүй байна."),
+      });
       return;
     }
     setGereeniiTokhirgoo(null);
@@ -1128,9 +1243,15 @@ function ZakhialgiinKhyanalt() {
   }
 
   function gereeSergeeye(data) {
-    if (ajiltan?.erkh !== "Admin" && !_.get(ajiltan, `tokhirgoo.gereeSergeekhErkh`)?.find((a) => a === data.barilgiinId))
-    {
-      notification.warning({ message: t("Таньд гэрээ сэргээх эрх байхгүй байна."), });
+    if (
+      ajiltan?.erkh !== "Admin" &&
+      !_.get(ajiltan, `tokhirgoo.gereeSergeekhErkh`)?.find(
+        (a) => a === data.barilgiinId
+      )
+    ) {
+      notification.warning({
+        message: t("Таньд гэрээ сэргээх эрх байхгүй байна."),
+      });
       return;
     }
     setGereeniiTokhirgoo(null);
@@ -1158,9 +1279,15 @@ function ZakhialgiinKhyanalt() {
   }
 
   function gereeSungaya(data) {
-    if (ajiltan?.erkh !== "Admin" && !_.get(ajiltan, `tokhirgoo.gereeSungakhErkh`)?.find((a) => a === data.barilgiinId))
-    {
-      notification.warning({ message: t("Таньд гэрээ сунгах эрх байхгүй байна."), });
+    if (
+      ajiltan?.erkh !== "Admin" &&
+      !_.get(ajiltan, `tokhirgoo.gereeSungakhErkh`)?.find(
+        (a) => a === data.barilgiinId
+      )
+    ) {
+      notification.warning({
+        message: t("Таньд гэрээ сунгах эрх байхгүй байна."),
+      });
       return;
     }
     setGereeniiTokhirgoo(null);
@@ -1251,7 +1378,8 @@ function ZakhialgiinKhyanalt() {
                   )
                   .map((b) => {
                     return (b.zaalt = b.zaalt.replace(
-                      new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"), formatNumber(mur.tariff || mur.dun)
+                      new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"),
+                      formatNumber(mur.tariff || mur.dun)
                     ));
                   });
               });
@@ -1259,10 +1387,15 @@ function ZakhialgiinKhyanalt() {
               value.map((mur) => {
                 data?.dedKhesguud
                   ?.filter(
-                    (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
+                    (a) =>
+                      !!a.zaalt &&
+                      a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
                   )
                   .map((b) => {
-                    b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"), formatNumber(mur.tulukhDun));
+                    b.zaalt = b.zaalt.replace(
+                      new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"),
+                      formatNumber(mur.tulukhDun)
+                    );
                   });
               });
             } else {
@@ -1272,8 +1405,10 @@ function ZakhialgiinKhyanalt() {
                   return (b.zaalt = b.zaalt.replace(
                     new RegExp(`&lt;${key}&gt;`, "g"),
                     key === "utas"
-                      ? value[0] :
-                    (key === "talbainNegjUne" || key === "talbainNiitUne" || key === "baritsaaAvakhDun")
+                      ? value[0]
+                      : key === "talbainNegjUne" ||
+                        key === "talbainNiitUne" ||
+                        key === "baritsaaAvakhDun"
                       ? formatNumber(value)
                       : value
                     // key === "register"
@@ -1286,10 +1421,22 @@ function ZakhialgiinKhyanalt() {
                   ));
                 });
             }
-            data.baruunTolgoi = data.baruunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-            data.zuunTolgoi = data.zuunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-            data.zuunKhul = data.zuunKhul?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-            data.baruunKhul = data.baruunKhul?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+            data.baruunTolgoi = data.baruunTolgoi?.replace(
+              new RegExp(`&lt;${key}&gt;`, "g"),
+              value
+            );
+            data.zuunTolgoi = data.zuunTolgoi?.replace(
+              new RegExp(`&lt;${key}&gt;`, "g"),
+              value
+            );
+            data.zuunKhul = data.zuunKhul?.replace(
+              new RegExp(`&lt;${key}&gt;`, "g"),
+              value
+            );
+            data.baruunKhul = data.baruunKhul?.replace(
+              new RegExp(`&lt;${key}&gt;`, "g"),
+              value
+            );
           }
           data.geree = geree;
           setKharuulakhGeree(data);

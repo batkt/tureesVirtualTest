@@ -331,7 +331,6 @@ function guilgeeniiTuukh({ token }) {
       query
     );
 
-
   const { gereeniiMedeelel, onSearch } = useMemo(() => {
     return {
       gereeniiMedeelel:
@@ -545,7 +544,6 @@ function guilgeeniiTuukh({ token }) {
 
           return (
             <div className="flex w-full flex-row items-center justify-center  divide-x-2 ">
-              
               <a
                 onClick={() => nekhemjleliinTuukhKharakh(row)}
                 className=" text-green-500 hover:scale-110"
@@ -748,7 +746,7 @@ function guilgeeniiTuukh({ token }) {
     var khadgalyaButtonId = "khadgalyaButtonId";
     const footer = [
       <Button type="default" onClick={() => ref.current.khaaya()}>
-       {t("Хаах")}
+        {t("Хаах")}
       </Button>,
       <Button
         type="primary"
@@ -978,8 +976,10 @@ function guilgeeniiTuukh({ token }) {
   function olnoorGuilgeeOruulakhExcelFc() {
     const footer = [
       <Space>
-        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>  
-        <Button type="primary" onClick={() => excelref.current.khadgalya()}>{t("Хадгалах")}</Button>  
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
+        <Button type="primary" onClick={() => excelref.current.khadgalya()}>
+          {t("Хадгалах")}
+        </Button>
       </Space>,
     ];
     modal({

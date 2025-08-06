@@ -220,11 +220,13 @@ function index({ token }) {
       title="Даалгавар"
       tsonkhniiId={"64472be628c37d7cdda11a24"}
       className={"gap-5 p-2 pb-10 sm:p-6 md:pb-0"}
-      onSearch={task.onSearch}>
+      onSearch={task.onSearch}
+    >
       <div
         style={{ height: "calc(100vh - 8rem)" }}
-        className="col-span-12 flex flex-col space-y-5 rounded-2xl bg-white p-2 dark:bg-gray-900 md:rounded-none md:rounded-l-2xl md:p-8 xl:col-span-5">
-        <div className="flex w-full items-center justify-between rounded-xl bg-green-500 py-1 px-3 font-medium text-white dark:bg-green-700">
+        className="col-span-12 flex flex-col space-y-5 rounded-2xl bg-white p-2 dark:bg-gray-900 md:rounded-none md:rounded-l-2xl md:p-8 xl:col-span-5"
+      >
+        <div className="flex w-full items-center justify-between rounded-xl bg-green-500 px-3 py-1 font-medium text-white dark:bg-green-700">
           <div>
             <div className="text-2xl ">{t("Өнөөдөр")}</div>
             <div>
@@ -236,7 +238,8 @@ function index({ token }) {
           </div>
           <div
             onClick={Nemekh}
-            className="flex h-5/6 cursor-pointer items-center rounded-xl bg-white px-5 font-bold  text-green-500 transition-colors duration-500 hover:bg-gray-200 hover:text-black dark:text-green-700">
+            className="flex h-5/6 cursor-pointer items-center rounded-xl bg-white px-5 font-bold  text-green-500 transition-colors duration-500 hover:bg-gray-200 hover:text-black dark:text-green-700"
+          >
             {t("Нэмэх")}
           </div>
         </div>
@@ -297,7 +300,8 @@ function index({ token }) {
                 tuluv === status
                   ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
                   : "text-gray-50"
-              }`}>
+              }`}
+            >
               {t(status)}
             </div>
           ))}
@@ -312,7 +316,8 @@ function index({ token }) {
               !!task.data
             )
               task.next();
-          }}>
+          }}
+        >
           {task?.jagsaalt?.map((mur, index) => (
             <div
               className={`my-1 flex w-full cursor-pointer flex-row items-center space-x-2 rounded-lg p-2 pl-0 dark:bg-gray-800 ${
@@ -325,14 +330,16 @@ function index({ token }) {
                 khaakh(), setDaalgavar(mur);
                 daalgavriinSetgegdel.refresh();
                 setTimeout(scrollTogsgolruu, 500);
-              }}>
+              }}
+            >
               <div className="-ml-1 flex w-10 items-center justify-end text-left text-base">
                 {1 + index}.
               </div>
               <div
                 className={`h-10 w-10 rounded-lg  bg-${
                   mur.started ? "green" : "green"
-                }-600 text-2xl text-white`}>
+                }-600 text-2xl text-white`}
+              >
                 {mur.tuluv === 1 ? (
                   <HistoryOutlined />
                 ) : (
@@ -358,7 +365,8 @@ function index({ token }) {
                           : mur.tuluv === 2
                           ? "green"
                           : "red"
-                      }-500`}>
+                      }-500`}
+                    >
                       {mur.tuluv === 1
                         ? t("Хүлээн авсан")
                         : mur.tuluv === 2
@@ -398,11 +406,13 @@ function index({ token }) {
         style={{ height: "calc(100vh - 8rem)" }}
         data-aos-delay="200"
         data-aos-anchor-placement="top-bottom"
-        ref={ChatRef}>
+        ref={ChatRef}
+      >
         <div
-          className={`absolute top-0 left-0 z-50 h-full w-full flex-col items-center justify-center rounded-2xl bg-black bg-opacity-30 text-white dark:bg-white dark:bg-opacity-20 ${
+          className={`absolute left-0 top-0 z-50 h-full w-full flex-col items-center justify-center rounded-2xl bg-black bg-opacity-30 text-white dark:bg-white dark:bg-opacity-20 ${
             daalgavar?.tuluv === -1 ? "flex" : "hidden"
-          }`}>
+          }`}
+        >
           {!!daalgavar?.tsutsalsanOgnoo && (
             <p className="z-50 text-xl font-medium">
               {moment(daalgavar?.tsutsalsanOgnoo).format("YYYY-MM-DD HH:mm-нд")}
@@ -434,13 +444,15 @@ function index({ token }) {
                 <div
                   className={`ml-5 ${
                     daalgavar?.tuluv === -1 ? "hidden" : "flex"
-                  }`}>
+                  }`}
+                >
                   <Popconfirm
                     disabled={daalgavar?.tuluv === 2}
                     title={`Та даалгавар цуцлах уу?`}
                     okText={t("Тийм")}
                     cancelText={t("Үгүй")}
-                    onConfirm={() => daalgavarTsutslakh()}>
+                    onConfirm={() => daalgavarTsutslakh()}
+                  >
                     <div
                       className={`text-md cursor-pointer rounded-full bg-${
                         0 === daalgavar?.tuluv
@@ -448,7 +460,8 @@ function index({ token }) {
                           : 1 === daalgavar?.tuluv
                           ? "yellow"
                           : "green"
-                      }-500 py-1 px-3 font-medium text-gray-50`}>
+                      }-500 px-3 py-1 font-medium text-gray-50`}
+                    >
                       {2 === daalgavar?.tuluv ? t("Дууссан") : t("Цуцлах")}
                     </div>
                   </Popconfirm>
@@ -456,7 +469,8 @@ function index({ token }) {
                 <div
                   className={`rounded-2xl bg-red-500 px-3 py-1 text-white ${
                     daalgavar?.tuluv === -1 ? "flex" : "hidden"
-                  }`}>
+                  }`}
+                >
                   {t("Цуцлагдсан")}
                 </div>
               </div>
@@ -505,7 +519,8 @@ function index({ token }) {
           onScroll={(e) => {
             if (e.currentTarget.scrollTop === 0 && !!daalgavriinSetgegdel.data)
               daalgavriinSetgegdel.next();
-          }}>
+          }}
+        >
           <div className="flex flex-row">
             <div className="w-full p-0 sm:p-2">
               <div className="flex w-full flex-col">
@@ -517,7 +532,8 @@ function index({ token }) {
                         ajiltan?._id === mur?.ajiltniiId
                           ? "flex-row-reverse"
                           : ""
-                      } items-center gap-2`}>
+                      } items-center gap-2`}
+                    >
                       <div className="flex h-11 w-11 items-start justify-center rounded-full border-2 border-gray-600 bg-white dark:bg-gray-800">
                         <img
                           src={
@@ -534,7 +550,8 @@ function index({ token }) {
                           ajiltan?._id === mur?.ajiltniiId
                             ? "bg-gray-400 dark:bg-gray-600"
                             : "bg-green-500 dark:bg-green-600"
-                        }  p-5 pt-1 text-white `}>
+                        }  p-5 pt-1 text-white `}
+                      >
                         <div className="pb-1 font-medium  ">
                           {mur.ajiltniiNer}
                         </div>
@@ -556,7 +573,8 @@ function index({ token }) {
           <div
             className={`flex w-full flex-row px-5 py-2 ${
               daalgavar?.tuluv === -1 && "hidden"
-            }`}>
+            }`}
+          >
             <div className="w-full px-2">
               <TextArea
                 autoSize={{
@@ -585,7 +603,8 @@ function index({ token }) {
                 onClick={() => {
                   setgegdelBichie();
                   scrollTogsgolruu();
-                }}>
+                }}
+              >
                 <SendOutlined />
               </div>
             </div>

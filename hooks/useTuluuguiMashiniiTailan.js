@@ -9,7 +9,7 @@ const fetcher = (
   barilgiinId,
   ognoo,
   searchUtga,
-  baiguullagiinId,
+  baiguullagiinId
 ) => {
   return axios(token)
     .post(url, {
@@ -27,7 +27,7 @@ function useTuluuguiMashiniiTailan(
   barilgiinId,
   ognoo,
   searchUtga,
-  baiguullagiinId,
+  baiguullagiinId
 ) {
   const { data, mutate, isValidating } = useSWR(
     !!token

@@ -27,12 +27,17 @@ const fetcherGuilgeeAldangi = (url, token, gereeniiId, ognoo, shineOgnoo) => {
     .catch(aldaaBarigch);
 };
 
-export default function useGereeAldangiGuilgee(token, gereeniiId, ognoo, shineOgnoo) {
+export default function useGereeAldangiGuilgee(
+  token,
+  gereeniiId,
+  ognoo,
+  shineOgnoo
+) {
   const { data, mutate } = useSWR(
     !!token
       ? ["/gereeniiAldangiTulultAvya", token, gereeniiId, ognoo, shineOgnoo]
       : null,
-      fetcherGuilgeeAldangi,
+    fetcherGuilgeeAldangi,
     { revalidateOnFocus: false }
   );
   return {
@@ -40,4 +45,3 @@ export default function useGereeAldangiGuilgee(token, gereeniiId, ognoo, shineOg
     guilgeeniiAldangiTuukhMutate: mutate,
   };
 }
-

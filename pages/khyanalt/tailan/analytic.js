@@ -103,7 +103,7 @@ function converter(key) {
       break;
     case "customerTin":
       ret = "Бүртгэлийн дугаар";
-      break;  
+      break;
     case "sariinTurees":
       ret = "Сарын түрээс";
       break;
@@ -151,16 +151,16 @@ function converter(key) {
       break;
     case "avlagiinUndsenDun":
       ret = "Авлагын үндсэн дүн";
-      break;  
+      break;
     case "avlagiinTulukhDun":
       ret = "Авлагын төлөх дүн";
       break;
     case "avlagiinTurul":
       ret = "Авлагын төрөл";
-      break;  
+      break;
     case "avlagiinTailbar":
       ret = "Авлагын тайлбар";
-      break;    
+      break;
     default:
       break;
   }
@@ -240,16 +240,17 @@ function Tailan({ token }) {
         murutga.turul = tmur.turul || "";
         murutga.uldegdel = formatNumber(tmur.uldegdel) || 0;
         murutga.utas = tmur.utas[0] || 0;
-        if(!!tmur.zardluud && tmur.zardluud.length > 0)
-        {
+        if (!!tmur.zardluud && tmur.zardluud.length > 0) {
           tmur.zardluud.forEach((zardalmur) => {
             murutga.zardliinNer = zardalmur.ner || "";
             murutga.zardliinTurul = zardalmur.turul || "";
             murutga.zardliinTariff = formatNumber(zardalmur.tariff) || "";
           });
         }
-        if(!!tmur.avlaga?.guilgeenuud && tmur?.avlaga?.guilgeenuud.length > 0)
-        {
+        if (
+          !!tmur.avlaga?.guilgeenuud &&
+          tmur?.avlaga?.guilgeenuud.length > 0
+        ) {
           tmur?.avlaga?.guilgeenuud.forEach((avlaga) => {
             murutga.avlagiinOgnoo = avlaga.ognoo || "";
             murutga.avlagiinUndsenDun = formatNumber(avlaga.undsenDun) || "";
@@ -260,22 +261,22 @@ function Tailan({ token }) {
         }
 
         let mur = {};
-     Object.entries(murutga).forEach(([key, value]) => {
-  const label = t(converter(key));
-  if (label) {
-    if (typeof value === "string" || typeof value === "number") {
-      mur[label] = value;
-    } else if (
-      moment(value, moment.ISO_8601, true).isValid() &&
-      typeof value === "string" &&
-      value.length > 10
-    ) {
-      mur[label] = moment(value).format("YYYY-MM-DD");
-    } else {
-      mur[label] = "";
-    }
-  }
-});
+        Object.entries(murutga).forEach(([key, value]) => {
+          const label = t(converter(key));
+          if (label) {
+            if (typeof value === "string" || typeof value === "number") {
+              mur[label] = value;
+            } else if (
+              moment(value, moment.ISO_8601, true).isValid() &&
+              typeof value === "string" &&
+              value.length > 10
+            ) {
+              mur[label] = moment(value).format("YYYY-MM-DD");
+            } else {
+              mur[label] = "";
+            }
+          }
+        });
 
         array.push(mur);
       });
@@ -331,7 +332,8 @@ function Tailan({ token }) {
       title="Тайлан"
       khuudasniiNer="analytictailan"
       className="p-0 md:p-4"
-      tsonkhniiId={"645db432d0ec3ffb20a4eb88"}>
+      tsonkhniiId={"645db432d0ec3ffb20a4eb88"}
+    >
       <div className="col-span-12 flex flex-col items-center justify-between gap-3 md:flex-row">
         <div className=" flex gap-3">
           <DatePicker.RangePicker
@@ -356,7 +358,8 @@ function Tailan({ token }) {
                     ? {}
                     : { ...zagvar.jagsaalt.find((a) => a._id === v)?.object }
                 );
-              }}>
+              }}
+            >
               {zagvar.jagsaalt.map((mur) => (
                 <Select.Option value={mur._id} key={mur._id}>
                   <div className="flex flex-row justify-between">
@@ -374,7 +377,8 @@ function Tailan({ token }) {
               className="bg-white dark:bg-gray-900"
               onClick={() =>
                 zagvarBurtgeye({ object: table, turul: "analytik" })
-              }>
+              }
+            >
               {t("Загвар бүртгэх")}
             </Button>
           ) : (
@@ -401,14 +405,16 @@ function Tailan({ token }) {
                       setTable({});
                     }
                   });
-                }}>
+                }}
+              >
                 <Button
                   className="group bg-white hover:bg-red-400 hover:text-white dark:bg-gray-900"
                   icon={
                     <div className="rounded-md pr-1 text-red-500 group-hover:text-white">
                       <DeleteOutlined />
                     </div>
-                  }>
+                  }
+                >
                   Устгах
                 </Button>
               </Popconfirm>
@@ -436,7 +442,8 @@ function Tailan({ token }) {
                     ...zagvar.jagsaalt.find((a) => a._id === selectValue),
                     object: table,
                   })
-                }>
+                }
+              >
                 {zagvar.jagsaalt.find((a) => a._id === selectValue)?.object
                   ?.rows !== table?.rows ||
                 zagvar.jagsaalt.find((a) => a._id === selectValue)?.object
@@ -463,23 +470,27 @@ function Tailan({ token }) {
                 )
                 .addDataSource(data)
                 .saveAs("Аналитик тайлан.xlsx");
-            }}>
+            }}
+          >
             {t("Excel татах")}
           </Button>
         </div>
       </div>
       <div
         className="ag-theme-alpine col-span-12 overflow-auto"
-        style={{ height: "calc( 100vh - 12rem )" }}>
-        {!SSR && !!PlotlyRenderers && Array.isArray(data) && data.length > 0 && (
-  <PivotTableUI
-    data={data}
-    onChange={setTable}
-    renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
-    {...table}
-  />
-)}
-
+        style={{ height: "calc( 100vh - 12rem )" }}
+      >
+        {!SSR &&
+          !!PlotlyRenderers &&
+          Array.isArray(data) &&
+          data.length > 0 && (
+            <PivotTableUI
+              data={data}
+              onChange={setTable}
+              renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
+              {...table}
+            />
+          )}
       </div>
     </Admin>
   );

@@ -165,14 +165,14 @@ function ZakhialgaNemekh({ token }) {
   }, [gereeniiZagvar, defaultUtga]);
 
   function nemekh() {
-  const newMur = {
-    zaalt: "<b>{t(Шинэ заалт)}</b>"
-  };
-  
-  gereeniiZagvar.dedKhesguud.push(newMur);
-  let value = _.cloneDeep(gereeniiZagvar);
-  setGereeniiZagvar(value);
-}
+    const newMur = {
+      zaalt: "<b>{t(Шинэ заалт)}</b>",
+    };
+
+    gereeniiZagvar.dedKhesguud.push(newMur);
+    let value = _.cloneDeep(gereeniiZagvar);
+    setGereeniiZagvar(value);
+  }
 
   function docNemekh(key, mur) {
     mur.zaalt = "<b>{t(Шинэ заалт)}</b>";
@@ -191,13 +191,13 @@ function ZakhialgaNemekh({ token }) {
     >
       <div className="col-span-12 flex justify-center p-4 lg:col-span-9 xl:col-span-10">
         <div
-          className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] dark:bg-gray-700 text-white"
+          className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-white dark:bg-gray-700"
           style={{ width: "300mm" }}
         >
           <div className="grid grid-cols-2 gap-4">
             <div className="group relative">
               <div
-                className="rounded-md border border-dashed border-gray-600 p-2 dark:bg-gray-700 text-whihte border-white"
+                className="text-whihte rounded-md border border-dashed border-gray-600 border-white p-2 dark:bg-gray-700"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.zuunTolgoi ||
@@ -215,7 +215,7 @@ function ZakhialgaNemekh({ token }) {
             </div>
             <div className="group relative">
               <div
-                className="rounded-md border border-dashed border-gray-600 p-2 dark:bg-gray-700 text-white border-white"
+                className="rounded-md border border-dashed border-gray-600 border-white p-2 text-white dark:bg-gray-700"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.baruunTolgoi ||
@@ -236,10 +236,10 @@ function ZakhialgaNemekh({ token }) {
             return (
               <div
                 key={mur._id}
-                className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700 text-white bg-gray-700"
+                className="group relative flex w-full flex-row rounded-md bg-gray-700 p-1 text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <div
-                  className="sun-editor-editable w-full dark:bg-gray-700 text-white"
+                  className="sun-editor-editable w-full text-white dark:bg-gray-700"
                   dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                 />
                 <div className="absolute -right-2 -top-2 hidden flex-row space-x-2 group-hover:flex">
@@ -247,7 +247,7 @@ function ZakhialgaNemekh({ token }) {
                     <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
                   </div>
                   <div onClick={() => docUstgaya(index, mur)}>
-                    <DeleteOutlined  className = "rounded-full border bg-white fill-current p-1 hover:bg-red-400 dark:bg-black dark:hover:bg-gray-800"/>
+                    <DeleteOutlined className="rounded-full border bg-white fill-current p-1 hover:bg-red-400 dark:bg-black dark:hover:bg-gray-800" />
                   </div>
                 </div>
                 <div className="absolute -bottom-2 -right-2 hidden flex-row space-x-2 group-hover:flex">
@@ -327,10 +327,11 @@ function ZakhialgaNemekh({ token }) {
                 {t("Хадгалах")}
               </Button>
               <Button
-                className="w-full mt-4"
+                className="mt-4 w-full"
                 type="primary"
                 onClick={() => nemekh()}
-              ><FileAddOutlined/>
+              >
+                <FileAddOutlined />
                 Гэрээний заалт нэмэх
               </Button>
             </Form.Item>

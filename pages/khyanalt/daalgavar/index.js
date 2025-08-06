@@ -248,7 +248,7 @@ function index({ token }) {
         ref={ChatRef}
       >
         <div
-          className={`absolute top-0 left-0 z-50 h-full w-full cursor-default flex-col items-center justify-center rounded-2xl bg-black bg-opacity-30 text-white dark:bg-white dark:bg-opacity-20 ${
+          className={`absolute left-0 top-0 z-50 h-full w-full cursor-default flex-col items-center justify-center rounded-2xl bg-black bg-opacity-30 text-white dark:bg-white dark:bg-opacity-20 ${
             daalgavar?.tuluv === -1 ? "flex" : "hidden"
           }`}
         >
@@ -308,7 +308,7 @@ function index({ token }) {
                           : 1 === daalgavar?.tuluv
                           ? "yellow"
                           : "green"
-                      }-500 py-1 px-3 font-medium text-gray-50`}
+                      }-500 px-3 py-1 font-medium text-gray-50`}
                     >
                       {0 === daalgavar?.tuluv
                         ? t("Хүлээж авах")

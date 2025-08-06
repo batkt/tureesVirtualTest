@@ -1,7 +1,7 @@
-import axios, { aldaaBarigch } from "services/uilchilgee"
-import useSWR from "swr"
-import moment from "moment"
-import { useAuth } from "services/auth"
+import axios, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
+import moment from "moment";
+import { useAuth } from "services/auth";
 
 const fetcher = (url, token, ognoo, barilgiinId) => {
   return axios(token)
@@ -15,27 +15,27 @@ const fetcher = (url, token, ognoo, barilgiinId) => {
         .format("YYYY-MM-DD 23:59:59"),
     })
     .then((res) => res.data)
-    .catch(aldaaBarigch)
-}
+    .catch(aldaaBarigch);
+};
 
 function useGuilgeeniiToololtAvya(token, ognoo, barilgiinId) {
   const { data, mutate } = useSWR(
     !!token ? ["/guilgeeniiToololtAvya", token, ognoo, barilgiinId] : null,
     fetcher,
     { revalidateOnFocus: false }
-  )
-  return { guilgeeniiToololt: data, guilgeeniiToololtMutate: mutate }
+  );
+  return { guilgeeniiToololt: data, guilgeeniiToololtMutate: mutate };
 }
 export function useTuluugiiGereeniiToololtAvya(token, ognoo) {
-  const { barilgiinId } = useAuth()
+  const { barilgiinId } = useAuth();
   const { data, mutate } = useSWR(
     !!token
       ? ["/eneSardTuluuguiGereeniiTooAvya", token, ognoo, barilgiinId]
       : null,
     fetcher,
     { revalidateOnFocus: false }
-  )
-  return { tolooguiGereeniiToo: data, tolooguiGereeniiTooMutate: mutate }
+  );
+  return { tolooguiGereeniiToo: data, tolooguiGereeniiTooMutate: mutate };
 }
 
-export default useGuilgeeniiToololtAvya
+export default useGuilgeeniiToololtAvya;

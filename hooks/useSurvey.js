@@ -1,8 +1,8 @@
-import { useState } from "react"
-import axios, { aldaaBarigch } from "services/uilchilgee"
-import useSWR from "swr"
-import moment from "moment"
-import { useAuth } from "services/auth"
+import { useState } from "react";
+import axios, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
+import moment from "moment";
+import { useAuth } from "services/auth";
 
 const fetcher = (
   url,
@@ -22,25 +22,25 @@ const fetcher = (
       },
     })
     .then((res) => res.data)
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 
 function useSurveyJagsaalt(token, baiguullagiinId, query, order) {
-  const { barilgiinId } = useAuth()
+  const { barilgiinId } = useAuth();
   const [khuudaslalt, setSurveyKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
-  })
+  });
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
       ? ["/survey", token, khuudaslalt, query, order]
       : null,
     fetcher,
     { revalidateOnFocus: false }
-  )
+  );
   return {
     setSurveyKhuudaslalt,
     surveyGaralt: data,
     surveyMutate: mutate,
-  }
+  };
 }
-export default useSurveyJagsaalt
+export default useSurveyJagsaalt;

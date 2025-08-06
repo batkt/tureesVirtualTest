@@ -1,19 +1,21 @@
-import axios, { aldaaBarigch } from "services/uilchilgee"
-import useSWR from "swr"
+import axios, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
 
-const fetcher = (url, token,dansniiDugaar) =>
+const fetcher = (url, token, dansniiDugaar) =>
   axios(token)
-    .post(url,{dansniiDugaar})
+    .post(url, { dansniiDugaar })
     .then((res) => res.data?.uldegdel || 0)
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 
-function useUldegdel(token,dansniiDugaar) {
-  const { data,  mutate } = useSWR(
-    !!token && !!dansniiDugaar ? [`/dansniiUldegdelAvya`, token,dansniiDugaar] : null,
+function useUldegdel(token, dansniiDugaar) {
+  const { data, mutate } = useSWR(
+    !!token && !!dansniiDugaar
+      ? [`/dansniiUldegdelAvya`, token, dansniiDugaar]
+      : null,
     fetcher
-  )
+  );
 
-  return { uldegdel: data,uldegdelMutate: mutate }
+  return { uldegdel: data, uldegdelMutate: mutate };
 }
 
-export default useUldegdel
+export default useUldegdel;

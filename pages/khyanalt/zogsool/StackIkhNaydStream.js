@@ -12,9 +12,8 @@ function StackIkhNaydStream({ barilgiinId, token }) {
       .then(function (response) {
         if (!!response) setCameraIps(response?.data?.ip);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }, []);
-
 
   return (
     <div className="grid md:grid-cols-2">

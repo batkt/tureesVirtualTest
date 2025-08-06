@@ -8,14 +8,20 @@ function searchGenerator(keys, search) {
   return undefined;
 }
 
-const fetcher = (url, token, query, searchKeys, { search = "", ...khuudaslalt },) =>
+const fetcher = (
+  url,
+  token,
+  query,
+  searchKeys,
+  { search = "", ...khuudaslalt }
+) =>
   axios(token)
     .post(url, {
       ...khuudaslalt,
       ...query,
       query: {
         $or: searchGenerator(searchKeys, search),
-      }
+      },
     })
     .then((res) => res.data)
     .catch(aldaaBarigch);

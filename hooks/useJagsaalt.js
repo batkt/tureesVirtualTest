@@ -36,12 +36,21 @@ function fetcher(
 
 var timeout = null;
 
-function useJagsaalt(url, query, order, select, searchKeys, supToken, khuudasniiKhemjee) {
+function useJagsaalt(
+  url,
+  query,
+  order,
+  select,
+  searchKeys,
+  supToken,
+  khuudasniiKhemjee
+) {
   const { token } = useAuth();
 
   const [khuudaslalt, setKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: !!khuudasniiKhemjee && khuudasniiKhemjee > 0 ? khuudasniiKhemjee : 100,
+    khuudasniiKhemjee:
+      !!khuudasniiKhemjee && khuudasniiKhemjee > 0 ? khuudasniiKhemjee : 100,
     search: "",
     jagsaalt: [],
   });

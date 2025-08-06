@@ -166,7 +166,12 @@ function tulburTootsoo() {
   }, [songogdsonGereenuud]);
 
   function disabledDate(current) {
-    return ajiltan?.erkh == "Admin" || _.get(ajiltan, `tokhirgoo.umkhunSaraarKhungulultEsekh`)?.find((a) => a === barilgiinId) ? false : current && current < moment().startOf("day");
+    return ajiltan?.erkh == "Admin" ||
+      _.get(ajiltan, `tokhirgoo.umkhunSaraarKhungulultEsekh`)?.find(
+        (a) => a === barilgiinId
+      )
+      ? false
+      : current && current < moment().startOf("day");
   }
 
   function handleChange(value) {
@@ -228,7 +233,7 @@ function tulburTootsoo() {
     }
     if (songogdsonGereenuud.length > 0) {
       var ugugdul = form.getFieldsValue();
-      if(!ugugdul.khonogTootsokhEsekh)
+      if (!ugugdul.khonogTootsokhEsekh)
         ugugdul.ognoonuud = dundakhSaruudAvya(ognoonuud[0], ognoonuud[1]);
       ugugdul.barilgiinId = barilgiinId;
       ugugdul.tulukhDun = tootsoolol.niitSariinTurees;
@@ -239,7 +244,6 @@ function tulburTootsoo() {
           (e) => e?._id === form.getFieldValue("zardliinId")
         );
 
-
         if (turul === "zardal") {
           ugugdul.tailbar = songogdsonZardal.ner;
           var urjuulekhData =
@@ -249,38 +253,51 @@ function tulburTootsoo() {
               ? x?.talbainKhemjee
               : zardliinData?.turul === "Тогтмол" && 1;
 
-          var khymdraaguiDun = zardliinData?.turul === "Дурын" ? zardliinData.dun : zardliinData?.tariff * urjuulekhData;
-          if(khonogTootsokhEsekh && baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh)
-          {
-            if(!!ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0)
-              var khymdarsanDun = ugugdul.khungulultKhonog * ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100);
-            else
-              var khymdarsanDun = (ugugdul.khungulultKhonog * khymdraaguiDun) / (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1)
-          }
-          else 
-            if (khungulukh === "khuvi") {
+          var khymdraaguiDun =
+            zardliinData?.turul === "Дурын"
+              ? zardliinData.dun
+              : zardliinData?.tariff * urjuulekhData;
+          if (
+            khonogTootsokhEsekh &&
+            baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh
+          ) {
+            if (!!ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0)
               var khymdarsanDun =
-                khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
-            } else {
-              var khymdarsanDun = parseFloat(tootsoolol?.khunglugdsunDun);
-            }
+                ugugdul.khungulultKhonog *
+                ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100);
+            else
+              var khymdarsanDun =
+                (ugugdul.khungulultKhonog * khymdraaguiDun) /
+                (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) ||
+                  1);
+          } else if (khungulukh === "khuvi") {
+            var khymdarsanDun =
+              khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
+          } else {
+            var khymdarsanDun = parseFloat(tootsoolol?.khunglugdsunDun);
+          }
         } else {
           ugugdul.tailbar = "Хөнгөлөлт";
           var khymdraaguiDun = x.sariinTurees;
-          if(khonogTootsokhEsekh && baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh)
-          {
-            if(!!ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0)
-              var khymdarsanDun = ugugdul.khungulultKhonog * ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100);
-            else
-              var khymdarsanDun = (ugugdul.khungulultKhonog * khymdraaguiDun) / (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1)
-          }
-          else
-            if (khungulukh === "khuvi") {
+          if (
+            khonogTootsokhEsekh &&
+            baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh
+          ) {
+            if (!!ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0)
               var khymdarsanDun =
-                khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
-            } else {
-              var khymdarsanDun = parseFloat(tootsoolol?.khunglugdsunDun);
-            }
+                ugugdul.khungulultKhonog *
+                ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100);
+            else
+              var khymdarsanDun =
+                (ugugdul.khungulultKhonog * khymdraaguiDun) /
+                (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) ||
+                  1);
+          } else if (khungulukh === "khuvi") {
+            var khymdarsanDun =
+              khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
+          } else {
+            var khymdarsanDun = parseFloat(tootsoolol?.khunglugdsunDun);
+          }
         }
 
         return {
@@ -405,24 +422,23 @@ function tulburTootsoo() {
           var zardliinData = data?.zardluud?.find(
             (e) => e?._id === form.getFieldValue("zardliinId")
           );
-          if(zardliinData)
-          {
+          if (zardliinData) {
             var urjuulekhData =
-            zardliinData?.turul === "1м3/талбай"
-              ? data.talbainKhemjeeMetrKube || 1
-              : zardliinData?.turul === "1м2"
-              ? data?.talbainKhemjee
-              : zardliinData?.turul === "Тогтмол" && 1;
+              zardliinData?.turul === "1м3/талбай"
+                ? data.talbainKhemjeeMetrKube || 1
+                : zardliinData?.turul === "1м2"
+                ? data?.talbainKhemjee
+                : zardliinData?.turul === "Тогтмол" && 1;
 
             var kharuulakhData = formatNumber(
               zardliinData?.tariff * urjuulekhData,
               2
             );
 
-            return zardliinData?.turul === "Дурын" ? (zardliinData?.dun || 0) : (kharuulakhData || 0);
-          }
-          else
-            return 0;
+            return zardliinData?.turul === "Дурын"
+              ? zardliinData?.dun || 0
+              : kharuulakhData || 0;
+          } else return 0;
         },
       });
     }
@@ -734,7 +750,8 @@ function tulburTootsoo() {
               tootsoolol.niitSariinTurees +
               e.talbainKhemjeeMetrKube * zardal.tariff;
           else if (zardal.turul === "Дурын")
-            tootsoolol.niitSariinTurees = tootsoolol.niitSariinTurees + zardal.dun;
+            tootsoolol.niitSariinTurees =
+              tootsoolol.niitSariinTurees + zardal.dun;
           else
             tootsoolol.niitSariinTurees =
               zardal.tariff + tootsoolol.niitSariinTurees;
@@ -746,18 +763,27 @@ function tulburTootsoo() {
       dun = 100;
     }
     tootsoolol.niitTalbai = songogdsonGereenuud?.length;
-    if(khonogTootsokhEsekh && baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh)
-    {
-      
-      var khungulultKhuvi = form.getFieldValue("khungulultKhuvi")
-      if(!!khungulultKhuvi && khungulultKhuvi > 0)
-        tootsoolol.khunglugdsunDun = form.getFieldValue("khungulultKhonog") * ((khungulultKhuvi * tootsoolol.niitSariinTurees) / 100);
+    if (
+      khonogTootsokhEsekh &&
+      baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh
+    ) {
+      var khungulultKhuvi = form.getFieldValue("khungulultKhuvi");
+      if (!!khungulultKhuvi && khungulultKhuvi > 0)
+        tootsoolol.khunglugdsunDun =
+          form.getFieldValue("khungulultKhonog") *
+          ((khungulultKhuvi * tootsoolol.niitSariinTurees) / 100);
       else
-        tootsoolol.khunglugdsunDun = (form.getFieldValue("khungulultKhonog") * tootsoolol.niitSariinTurees) / (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1)
-    }
-    else
-      tootsoolol.khunglugdsunDun = khungulukh === "khuvi" ? (Number(tootsoolol.niitSariinTurees) * dun) / 100 : dun;
-    tootsoolol.niitTulukhDun = Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
+        tootsoolol.khunglugdsunDun =
+          (form.getFieldValue("khungulultKhonog") *
+            tootsoolol.niitSariinTurees) /
+          (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1);
+    } else
+      tootsoolol.khunglugdsunDun =
+        khungulukh === "khuvi"
+          ? (Number(tootsoolol.niitSariinTurees) * dun) / 100
+          : dun;
+    tootsoolol.niitTulukhDun =
+      Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
 
     if (khungulukh === "khuvi") {
       tootsoolol.khungulukhKhuvi = form.getFieldValue("khungulukhKhuvi");
@@ -806,7 +832,11 @@ function tulburTootsoo() {
                   }}
                   layout="horizontal"
                 >
-                  <Form.Item name="khungulukhTurul" label={t("Төрөл")} labelAlign="left">
+                  <Form.Item
+                    name="khungulukhTurul"
+                    label={t("Төрөл")}
+                    labelAlign="left"
+                  >
                     <Select
                       className="ml-1 mr-3 flex-1"
                       defaultValue="turees"
@@ -899,14 +929,27 @@ function tulburTootsoo() {
                       </div>
                     </>
                   )} */}
-                  {baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh ? (<Form.Item
-                    name="khonogTootsokhEsekh"
-                    label={t("Хоногийн хөнгөлөлт эсэх")}
-                    labelAlign="left"
-                  >
-                    <Switch checked={khonogTootsokhEsekh} onChange={(v) => { form.setFieldValue("khungulultKhuvi", 0); form.setFieldValue("khungulultKhonog", 0); setKhonogTootsokhEsekh(v); khungulukhDunTootsoolyo(); }} /> 
-                  </Form.Item>) : ""}
-                  {khonogTootsokhEsekh ? (<Form.Item
+                  {baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh ? (
+                    <Form.Item
+                      name="khonogTootsokhEsekh"
+                      label={t("Хоногийн хөнгөлөлт эсэх")}
+                      labelAlign="left"
+                    >
+                      <Switch
+                        checked={khonogTootsokhEsekh}
+                        onChange={(v) => {
+                          form.setFieldValue("khungulultKhuvi", 0);
+                          form.setFieldValue("khungulultKhonog", 0);
+                          setKhonogTootsokhEsekh(v);
+                          khungulukhDunTootsoolyo();
+                        }}
+                      />
+                    </Form.Item>
+                  ) : (
+                    ""
+                  )}
+                  {khonogTootsokhEsekh ? (
+                    <Form.Item
                       labelAlign="left"
                       name="ognoonuud"
                       label={t("Хөнгөлөх өдөр")}
@@ -923,11 +966,15 @@ function tulburTootsoo() {
                         placeholder={[t("Эхлэх өдөр"), t("Дуусах өдөр")]}
                         onChange={(v) => {
                           setOgnoonuud(v);
-                          form.setFieldValue("khungulultKhonog", moment(v[1]).diff(v[0], "d") + 1);
+                          form.setFieldValue(
+                            "khungulultKhonog",
+                            moment(v[1]).diff(v[0], "d") + 1
+                          );
                           khungulukhDunTootsoolyo();
                         }}
                       />
-                    </Form.Item>) : (
+                    </Form.Item>
+                  ) : (
                     <Form.Item
                       labelAlign="left"
                       name="ognoonuud"
@@ -949,31 +996,39 @@ function tulburTootsoo() {
                           setOgnoonuud(v);
                         }}
                       />
-                    </Form.Item>  
+                    </Form.Item>
                   )}
-                  {khonogTootsokhEsekh ? (<Form.Item
-                    label={t("Хөнгөлөх хоног")}
-                    name="khungulultKhonog"
-                    labelAlign="left"
-                  >
-                    <Input
-                      type={"number"}
-                      placeholder={t("Хөнгөлөх хоног")}
-                      onChange={khungulukhDunTootsoolyo}
-                    />
-                  </Form.Item>) : ""}
-                  {khonogTootsokhEsekh ? (<Form.Item
-                    label={"Хөнгөлөх хувь" }
-                    name="khungulultKhuvi"
-                    labelAlign="left"
-                  >
-                    <Input
-                      min={0}
-                      type={"number"}
-                      placeholder={"Хөнгөлөх хувь"}
-                      onChange={khungulukhDunTootsoolyo}
-                    />
-                  </Form.Item>) : ""}
+                  {khonogTootsokhEsekh ? (
+                    <Form.Item
+                      label={t("Хөнгөлөх хоног")}
+                      name="khungulultKhonog"
+                      labelAlign="left"
+                    >
+                      <Input
+                        type={"number"}
+                        placeholder={t("Хөнгөлөх хоног")}
+                        onChange={khungulukhDunTootsoolyo}
+                      />
+                    </Form.Item>
+                  ) : (
+                    ""
+                  )}
+                  {khonogTootsokhEsekh ? (
+                    <Form.Item
+                      label={"Хөнгөлөх хувь"}
+                      name="khungulultKhuvi"
+                      labelAlign="left"
+                    >
+                      <Input
+                        min={0}
+                        type={"number"}
+                        placeholder={"Хөнгөлөх хувь"}
+                        onChange={khungulukhDunTootsoolyo}
+                      />
+                    </Form.Item>
+                  ) : (
+                    ""
+                  )}
                   <Form.Item name="turul" label={t("Нөхцөл")} labelAlign="left">
                     <Select
                       placeholder={t("Нөхцөл")}
@@ -986,7 +1041,11 @@ function tulburTootsoo() {
                       <Option value="Бүгд">{t("Бүгд")}</Option>
                     </Select>
                   </Form.Item>
-                  <Form.Item name="davkhar" label={t("Давхар")} labelAlign="left">
+                  <Form.Item
+                    name="davkhar"
+                    label={t("Давхар")}
+                    labelAlign="left"
+                  >
                     <Select
                       mode="multiple"
                       placeholder={t("Давхар")}
@@ -1005,49 +1064,61 @@ function tulburTootsoo() {
                     </Select>
                   </Form.Item>
                   {!khonogTootsokhEsekh ? (
-                  <Form.Item label={t("Хөнгөлөх төрөл")} labelAlign="left">
-                    <Select
-                      placeholder="Хөнгөлөх төрөл"
-                      className="w-32"
-                      value={khungulukh}
-                      onChange={(v) => {
-                        setKhungulukh(v);
-                        form.setFieldsValue({ khungulukhKhuvi: null });
-                        if (v === "khuvi") {
-                          setTootsoolol((prev) => ({
-                            ...prev,
-                            khungulukhKhuvi: 0,
-                          }));
-                        }
-                      }}
-                    >
-                      <Select.Option key={"khuvi"}>Хувь</Select.Option>
-                      <Select.Option key={"mungunDun"}>
-                        Мөнгөн дүн
-                      </Select.Option>
-                    </Select>
-                  </Form.Item>) : ""}
+                    <Form.Item label={t("Хөнгөлөх төрөл")} labelAlign="left">
+                      <Select
+                        placeholder="Хөнгөлөх төрөл"
+                        className="w-32"
+                        value={khungulukh}
+                        onChange={(v) => {
+                          setKhungulukh(v);
+                          form.setFieldsValue({ khungulukhKhuvi: null });
+                          if (v === "khuvi") {
+                            setTootsoolol((prev) => ({
+                              ...prev,
+                              khungulukhKhuvi: 0,
+                            }));
+                          }
+                        }}
+                      >
+                        <Select.Option key={"khuvi"}>Хувь</Select.Option>
+                        <Select.Option key={"mungunDun"}>
+                          Мөнгөн дүн
+                        </Select.Option>
+                      </Select>
+                    </Form.Item>
+                  ) : (
+                    ""
+                  )}
                   {!khonogTootsokhEsekh ? (
-                  <Form.Item
-                    label={
-                      khungulukh === "khuvi" ? "Хөнгөлөх хувь" : "Хөнгөлөх дүн"
-                    }
-                    name="khungulukhKhuvi"
-                    labelAlign="left"
-                  >
-                    <Input
-                      // formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                      onKeyDown={focuser}
-                      type={"number"}
-                      placeholder={
+                    <Form.Item
+                      label={
                         khungulukh === "khuvi"
                           ? "Хөнгөлөх хувь"
                           : "Хөнгөлөх дүн"
                       }
-                      onChange={khungulukhDunTootsoolyo}
-                    />
-                  </Form.Item>) : ""}
-                  <Form.Item label={t("Шалтгаан")} name="shaltgaan" labelAlign="left">
+                      name="khungulukhKhuvi"
+                      labelAlign="left"
+                    >
+                      <Input
+                        // formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        onKeyDown={focuser}
+                        type={"number"}
+                        placeholder={
+                          khungulukh === "khuvi"
+                            ? "Хөнгөлөх хувь"
+                            : "Хөнгөлөх дүн"
+                        }
+                        onChange={khungulukhDunTootsoolyo}
+                      />
+                    </Form.Item>
+                  ) : (
+                    ""
+                  )}
+                  <Form.Item
+                    label={t("Шалтгаан")}
+                    name="shaltgaan"
+                    labelAlign="left"
+                  >
                     <Input.TextArea
                       onKeyDown={focuser}
                       placeholder={t("Шалтгаан")}

@@ -2,7 +2,7 @@
 import Admin from "components/Admin";
 import { useEffect, useState, useRef, useMemo } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { Tooltip,Tag } from "antd";
+import { Tooltip, Tag } from "antd";
 import { useAuth } from "services/auth";
 import useMailiinZagvar from "hooks/useMailiinZagvar";
 import {
@@ -103,8 +103,6 @@ function Khyanalt({ token }) {
   const [msj, onTextChange] = useState("");
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState();
-
-  
 
   const [turulZagvar, setTurulZagvar] = useState(false);
   /**Илгээх төрөл
@@ -894,29 +892,33 @@ function Khyanalt({ token }) {
                         )}
 
                         {mur?.talbainDugaar.length > 0 ? (
- <Tooltip 
-   title={
-    <div className="flex flex-wrap gap-2">
-      {mur?.talbainDugaar?.map((dugaar, index) => (
-        <Tag key={index} color="transparent" className="m-0">
-          {dugaar}
-        </Tag>
-      ))}
-    </div>
-  }
-  overlayClassName="max-w-[300px]"
->
-  <div className="w-full rounded-md bg-green-100 dark:bg-green-900 px-3 py-2 flex items-center justify-between gap-3 text-xs sm:text-sm cursor-pointer hover:bg-green-200 dark:hover:bg-green-800 transition">
-    <div className="text-gray-800 dark:text-white truncate max-w-[120px]">
-      {mur?.talbainDugaar?.[0] ?? "—"}
-    </div>
-    <div className="text-gray-600 dark:text-gray-300 truncate max-w-[140px]">
-      {mur?.talbainDugaar?.length > 1 ? `+${mur.talbainDugaar.length - 1}` : ""}
-    </div>
-  </div>
-</Tooltip>
-
-
+                          <Tooltip
+                            title={
+                              <div className="flex flex-wrap gap-2">
+                                {mur?.talbainDugaar?.map((dugaar, index) => (
+                                  <Tag
+                                    key={index}
+                                    color="transparent"
+                                    className="m-0"
+                                  >
+                                    {dugaar}
+                                  </Tag>
+                                ))}
+                              </div>
+                            }
+                            overlayClassName="max-w-[300px]"
+                          >
+                            <div className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-md bg-green-100 px-3 py-2 text-xs transition hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 sm:text-sm">
+                              <div className="max-w-[120px] truncate text-gray-800 dark:text-white">
+                                {mur?.talbainDugaar?.[0] ?? "—"}
+                              </div>
+                              <div className="max-w-[140px] truncate text-gray-600 dark:text-gray-300">
+                                {mur?.talbainDugaar?.length > 1
+                                  ? `+${mur.talbainDugaar.length - 1}`
+                                  : ""}
+                              </div>
+                            </div>
+                          </Tooltip>
                         ) : (
                           <div className="flex items-center justify-center rounded-lg bg-blue-500 px-2 py-1 text-xs text-gray-200 dark:bg-blue-700 dark:text-white">
                             <div>{mur?.talbainDugaar}</div>

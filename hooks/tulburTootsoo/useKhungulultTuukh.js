@@ -20,7 +20,12 @@ const fetcher = (
           $or: [
             { guilgeeKhiisenAjiltniiNer: { $regex: search, $options: "i" } },
             { shaltgaan: { $regex: search, $options: "i" } },
-            { "khamaataiGereenuud.gereeniiDugaar": { $regex: search, $options: "i" } },
+            {
+              "khamaataiGereenuud.gereeniiDugaar": {
+                $regex: search,
+                $options: "i",
+              },
+            },
           ],
           ...query,
         },

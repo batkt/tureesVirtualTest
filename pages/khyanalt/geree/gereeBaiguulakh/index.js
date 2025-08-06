@@ -148,7 +148,7 @@ function GereeBaiguulakh({ token }) {
       data.gereeniiZagvariinId = gereeniiZagvar._id;
       data.barilgiinId = barilgiinId;
       data.turGereeEsekh = gereeniiZagvar?.turGereeEsekh;
-      if(!!data.customerTin && data.register === data.customerTin)
+      if (!!data.customerTin && data.register === data.customerTin)
         data.register = undefined;
 
       const guilgeenuud = [...(data.avlaga.guilgeenuud || [])];
@@ -320,7 +320,8 @@ function GereeBaiguulakh({ token }) {
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
       if (key === "zardluud") {
         value.map((mur) => {
-          butsaakhUtga.dedKhesguud?.filter(
+          butsaakhUtga.dedKhesguud
+            ?.filter(
               (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1
             )
             .map((b) => {
@@ -340,24 +341,33 @@ function GereeBaiguulakh({ token }) {
         value.map((mur) => {
           butsaakhUtga?.dedKhesguud
             ?.filter(
-              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
+              (a) =>
+                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
             )
             .map((b) => {
-              b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"), formatNumber(mur.tulukhDun));
+              b.zaalt = b.zaalt.replace(
+                new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"),
+                formatNumber(mur.tulukhDun)
+              );
             });
         });
-        
+
         value.map((mur) => {
           butsaakhUtga?.dedKhesguud
             ?.filter(
-              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariffUsgeer`) !== -1
+              (a) =>
+                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariffUsgeer`) !== -1
             )
             .map((b) => {
-              b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tariffUsgeer&gt;`, "g"), mur.tariffUsgeer);
+              b.zaalt = b.zaalt.replace(
+                new RegExp(`&lt;${mur.ner}.tariffUsgeer&gt;`, "g"),
+                mur.tariffUsgeer
+              );
             });
         });
       } else {
-        butsaakhUtga.dedKhesguud?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+        butsaakhUtga.dedKhesguud
+          ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
           .map((b) => {
             b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
           });
@@ -578,8 +588,7 @@ function GereeBaiguulakh({ token }) {
               </Select>
             )}
             <div className="flex w-full flex-col items-center justify-center gap-10">
-              <div
-              >
+              <div>
                 {current === 0 && alkhamiinGereeniiZagvar?.ner && (
                   <>
                     <div className="grid grid-cols-2 gap-4">
@@ -671,8 +680,7 @@ function GereeBaiguulakh({ token }) {
                   );
                 })}
               {baiguullaga?.tokhirgoo?.aktAshiglakhEsekh === true && (
-                <div
-                >
+                <div>
                   {current === 0 && alkhamiinAktiinZagvar?.ner && (
                     <>
                       <div className="grid grid-cols-2 gap-4">

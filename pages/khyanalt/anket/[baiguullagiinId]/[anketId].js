@@ -58,11 +58,8 @@ function AnketBuglukh({ data }) {
               {(fields) => (
                 <>
                   <div className="flex flex-col">
-                    {fields.map(({key, name, fieldKey, ...restField}) => (
-                      <div
-                        className="px-6 pb-3 dark:text-gray-300"
-                        key={key}
-                      >
+                    {fields.map(({ key, name, fieldKey, ...restField }) => (
+                      <div className="px-6 pb-3 dark:text-gray-300" key={key}>
                         <div className="flex gap-1 text-base">
                           <p className="font-medium">{name + 1}.</p>
                           {data.asuultuud[name].asuult}
@@ -89,11 +86,13 @@ function AnketBuglukh({ data }) {
                           >
                             {data.asuultuud[name].turul === "songokh" ? (
                               <Radio.Group className="flex flex-col">
-                                {data.asuultuud[name].khariultuud?.map((a, i) => (
-                                  <Radio key={i} value={a}>
-                                    {a}
-                                  </Radio>
-                                ))}
+                                {data.asuultuud[name].khariultuud?.map(
+                                  (a, i) => (
+                                    <Radio key={i} value={a}>
+                                      {a}
+                                    </Radio>
+                                  )
+                                )}
                               </Radio.Group>
                             ) : (
                               <Input
@@ -109,7 +108,7 @@ function AnketBuglukh({ data }) {
                 </>
               )}
             </Form.List>
-            <footer className="absolute bottom-0 right-0 flex w-full justify-end border-t-2 px-3 pt-2 pb-5">
+            <footer className="absolute bottom-0 right-0 flex w-full justify-end border-t-2 px-3 pb-5 pt-2">
               <Button
                 type="primary"
                 htmlType="submit"
@@ -140,7 +139,6 @@ function AnketBuglukh({ data }) {
 
 export const getServerSideProps = async (ctx, ugudulAvchirya) => {
   try {
-
     let data = null;
     if (!!ctx?.query?.anketId && ctx.query.baiguullagiinId)
       data = await uilchilgee()

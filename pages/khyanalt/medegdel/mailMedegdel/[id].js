@@ -8,9 +8,7 @@ import { useAuth } from "services/auth";
 import readMethod from "tools/function/crud/readMethod";
 import { customPlugin } from "components/pageComponents/geree/zagvar/ZaaltOruulakh";
 import { renderToString } from "react-dom/server";
-import {
-  SolutionOutlined,
-} from "@ant-design/icons";
+import { SolutionOutlined } from "@ant-design/icons";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import { aldaaBarigch } from "services/uilchilgee";

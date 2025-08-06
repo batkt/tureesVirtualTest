@@ -95,7 +95,7 @@ function GereeBaiguulakh() {
 
   return (
     <div
-      className="flex w-full flex-col space-y-1 bg-white p-[15mm] pr-[14mm] pl-[24mm] text-black"
+      className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black"
       style={{ width: "210mm" }}
     >
       {gereeniiZagvar?.ner && (

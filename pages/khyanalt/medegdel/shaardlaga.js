@@ -325,11 +325,13 @@ function Khyanalt({ token }) {
       onSearch={(search) =>
         khariltsagchiinMedeelel.setKhuudaslalt((a) => ({ ...a, search }))
       }
-      tsonkhniiId="644f12dc9bef08f8ba701057">
+      tsonkhniiId="644f12dc9bef08f8ba701057"
+    >
       <div
         className="col-span-12 lg:col-span-6 xl:col-span-3 "
         data-aos="fade-up"
-        data-aos-duration="1000">
+        data-aos-duration="1000"
+      >
         <div className="box p-5 xl:block xl:h-H7HalfRem">
           <div className="relative w-full text-gray-700   dark:text-gray-300">
             <input
@@ -356,7 +358,8 @@ function Khyanalt({ token }) {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4">
+              className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
+            >
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
@@ -374,7 +377,8 @@ function Khyanalt({ token }) {
                     ...khariltsagchiinMedeelel?.jagsaalt,
                   ]);
                 else setSongogdsonKhariltsagch([]);
-              }}>
+              }}
+            >
               <p className="pl-3">{t("Бүгдийг сонгох")}</p>
             </Checkbox>
           </div>
@@ -387,7 +391,8 @@ function Khyanalt({ token }) {
                     ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500 "
                     : ""
                 } `}
-                onClick={() => khariltsagchSongokh(mur)}>
+                onClick={() => khariltsagchSongokh(mur)}
+              >
                 <div>
                   <Checkbox
                     checked={
@@ -490,13 +495,15 @@ function Khyanalt({ token }) {
             {songogdsonKhariltsagch.length > 1 ? (
               <div
                 className="col-span-12 space-y-10 overflow-auto rounded-r-xl  bg-white pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
-                style={{ height: "calc(100vh - 27rem)" }}>
+                style={{ height: "calc(100vh - 27rem)" }}
+              >
                 <div
                   className={`box flex h-full items-center ${
                     turulZagvar ? "hidden" : "lg:flex"
                   }`}
                   data-aos="fade-left"
-                  data-aos-duration="1000">
+                  data-aos-duration="1000"
+                >
                   <div className="mx-auto text-center">
                     <div className="flex justify-center">
                       <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
@@ -532,7 +539,8 @@ function Khyanalt({ token }) {
                   ) {
                     nextSonorduulga();
                   }
-                }}>
+                }}
+              >
                 {jagsaalt?.map((mur) =>
                   mur.khariltsagchiinId === khariltsagch?._id ? (
                     <div className="my-5 flex w-full items-center ">
@@ -589,7 +597,8 @@ function Khyanalt({ token }) {
           <div
             className="w-full  space-y-3 px-3"
             data-aos="fade-right"
-            data-aos-duration="1000">
+            data-aos-duration="1000"
+          >
             <Input
               rules={[
                 { required: true, message: t("Гарчиг заавал оруулна уу!") },
@@ -614,7 +623,8 @@ function Khyanalt({ token }) {
                     ref.current.classList.remove("hidden");
                   }
                   return beforeUpload(file, handleChange);
-                }}>
+                }}
+              >
                 <div className="flex flex-row space-x-1">
                   <div className="flex flex-row space-x-1">
                     {!zurag && (
@@ -644,7 +654,8 @@ function Khyanalt({ token }) {
                 onClick={send}
                 className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
                   loading ? "200" : "600"
-                } flex flex-none items-center justify-center rounded-full text-white`}>
+                } flex flex-none items-center justify-center rounded-full text-white`}
+              >
                 {loading ? (
                   <Spin size="small" />
                 ) : (
@@ -658,7 +669,8 @@ function Khyanalt({ token }) {
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="h-4 w-4">
+                    className="h-4 w-4"
+                  >
                     <line x1="22" y1="2" x2="11" y2="13"></line>
                     <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                   </svg>
@@ -671,7 +683,8 @@ function Khyanalt({ token }) {
         <div
           className={`box col-span-12 flex h-[40vh] items-center lg:col-span-6 lg:h-full xl:col-span-9`}
           data-aos="fade-left"
-          data-aos-duration="1000">
+          data-aos-duration="1000"
+        >
           <div className="mx-auto text-center">
             <div className="flex justify-center">
               <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">

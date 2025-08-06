@@ -38,7 +38,7 @@ const searchKeys = [
   "gereeniiDugaar",
   "talbainDugaar",
   "togloomNer",
-  "togloomUtas"
+  "togloomUtas",
 ];
 //#endregion
 
@@ -200,59 +200,59 @@ function EbarimtMedeelel({ token }) {
     let shineColumn2 =
       uilchilgeeAvi === "Түрээс"
         ? [
-             {
-        title: t("Гэрээний дугаар"),
-        dataIndex: "gereeniiDugaar",
-        ellipsis: true,
-        align: "center",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        render: (data) => {
+            {
+              title: t("Гэрээний дугаар"),
+              dataIndex: "gereeniiDugaar",
+              ellipsis: true,
+              align: "center",
+              showSorterTooltip: false,
+              sorter: () => 0,
+              render: (data) => {
                 return data;
               },
-      },
-      {
-        title: t("Регистр"),
-        dataIndex: "customerNo",
-        ellipsis: true,
-        align: "center",
-        render: (data) => {
+            },
+            {
+              title: t("Регистр"),
+              dataIndex: "customerNo",
+              ellipsis: true,
+              align: "center",
+              render: (data) => {
                 return data;
               },
-      },
-      {
-        title: t("Талбайн дугаар"),
-        dataIndex: "talbainDugaar",
-        ellipsis: true,
-        align: "center",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        render: (data) => {
+            },
+            {
+              title: t("Талбайн дугаар"),
+              dataIndex: "talbainDugaar",
+              ellipsis: true,
+              align: "center",
+              showSorterTooltip: false,
+              sorter: () => 0,
+              render: (data) => {
                 return data;
               },
-      },
+            },
           ]
         : [];
 
     let shineColumn3 =
       uilchilgeeAvi === "Тоглоом"
         ? [
-          {
-        title: t("Нэр"),
-        dataIndex: "togloomNer",
-        align: "center",
-        render: (data) => {
+            {
+              title: t("Нэр"),
+              dataIndex: "togloomNer",
+              align: "center",
+              render: (data) => {
                 return data;
               },
-      },
-          {
-        title: t("Утас"),
-        dataIndex: "togloomUtas",
-        align: "center",
-        render: (data) => {
+            },
+            {
+              title: t("Утас"),
+              dataIndex: "togloomUtas",
+              align: "center",
+              render: (data) => {
                 return data;
               },
-      },
+            },
           ]
         : [];
 
@@ -262,7 +262,7 @@ function EbarimtMedeelel({ token }) {
         key: "index",
         align: "center",
         width: "60px",
-        summary:true,
+        summary: true,
         render: (a, b, index) => {
           return index + 1;
         },
@@ -278,7 +278,7 @@ function EbarimtMedeelel({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
       },
-     
+
       ...shineColumn,
       ...shineColumn2,
       ...shineColumn3,
@@ -394,14 +394,13 @@ function EbarimtMedeelel({ token }) {
     const excel = new Excel();
 
     const excelCol = [
-      
       {
         title: "Огноо",
         dataIndex: "createdAt",
         __style__: { h: "center" },
         render: (date) => moment(date).format("YYYY-MM-DD HH:mm"),
       },
-      
+
       ...(uilchilgeeAvi === "Зогсоол"
         ? [
             {
@@ -412,31 +411,33 @@ function EbarimtMedeelel({ token }) {
           ]
         : []),
       ...(uilchilgeeAvi === "Тоглоом"
-      ?[
-        {
-          title:"Нэр",
-          dataIndex:"togloomNer",
-          __style__: { h: "center" },
-        },
-        {
-          title:"Утас",
-          dataIndex:"togloomUtas",
-          __style__: { h: "center" },
-        }
-      ]:[]),
+        ? [
+            {
+              title: "Нэр",
+              dataIndex: "togloomNer",
+              __style__: { h: "center" },
+            },
+            {
+              title: "Утас",
+              dataIndex: "togloomUtas",
+              __style__: { h: "center" },
+            },
+          ]
+        : []),
       ...(uilchilgeeAvi === undefined
-      ?[
-        {
-        title: "Гэрээний дугаар",
-        __style__: { h: "center" },
-        dataIndex: "gereeniiDugaar",
-      },
-      {
-        title: "Регистр",
-        __style__: { h: "center" },
-        dataIndex: "customerNo",
-      },
-      ]:[]),
+        ? [
+            {
+              title: "Гэрээний дугаар",
+              __style__: { h: "center" },
+              dataIndex: "gereeniiDugaar",
+            },
+            {
+              title: "Регистр",
+              __style__: { h: "center" },
+              dataIndex: "customerNo",
+            },
+          ]
+        : []),
       {
         title: "ДДТД",
         __style__: { h: "center", width: 35 },
@@ -619,15 +620,22 @@ function EbarimtMedeelel({ token }) {
             className="t-head"
             columns={columns}
             summary={(e) => (
-            <AntdTable.Summary className="border " fixed={"bottom"}>
+              <AntdTable.Summary className="border " fixed={"bottom"}>
                 <AntdTable.Summary.Cell>
                   <div className="space-x-2 truncate text-base font-bold ">
                     {t("Нийт")}
                   </div>
                 </AntdTable.Summary.Cell>
                 <AntdTable.Summary.Cell
-                  colSpan={uilchilgeeAvi === "Зогсоол" ? 5 :  uilchilgeeAvi === "Тоглоом" ? 6 : uilchilgeeAvi === "Түрээс" ? 7 : 4}
-                  
+                  colSpan={
+                    uilchilgeeAvi === "Зогсоол"
+                      ? 5
+                      : uilchilgeeAvi === "Тоглоом"
+                      ? 6
+                      : uilchilgeeAvi === "Түрээс"
+                      ? 7
+                      : 4
+                  }
                 >
                   <div className="truncate text-right font-bold ">
                     {formatNumber(

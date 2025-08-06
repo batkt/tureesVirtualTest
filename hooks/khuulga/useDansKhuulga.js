@@ -69,11 +69,7 @@ const fetcher = (
               ? "tranAmount"
               : "amount"
           }`]: { $gt: 0 },
-          [`${
-            dans?.bank === "tdb"
-              ? "TxDt"
-              : "tranDate"
-          }`]: {
+          [`${dans?.bank === "tdb" ? "TxDt" : "tranDate"}`]: {
             $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
             $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
           },

@@ -155,7 +155,7 @@ function YalgakhUtga({
 function Tile({ zasya, token, ...a }) {
   return (
     <div className="box dark:text-white">
-      <div className="flex items-center py-2 px-5 shadow-none">
+      <div className="flex items-center px-5 py-2 shadow-none">
         <div className="flex gap-2 border-l-2 border-green-500 pl-4">
           <div className="font-medium">{a.ner}</div>
           <div className="font-medium text-gray-600 dark:text-gray-300">
@@ -468,8 +468,8 @@ function AjiltanBurtgel({ token }) {
           formRef.current.getFieldInstance("ner").focus();
           break;
         case "control-ref_ner":
-            formRef.current.getFieldInstance("register").focus();
-            break;  
+          formRef.current.getFieldInstance("register").focus();
+          break;
         case "control-ref_register":
           formRef.current.getFieldInstance("customerTin").focus();
           break;
@@ -760,22 +760,21 @@ function AjiltanBurtgel({ token }) {
             data-aos-duration="1000"
             data-aos-delay="500"
           >
-            <Form.Item 
+            <Form.Item
               name="customerTin"
               rules={[
                 {
                   required: !khariltsagchState.register,
                   message: t("Бүртгэлийн дугаар бүртгэнэ үү!"),
                 },
-              ]}>
+              ]}
+            >
               <Input
                 onKeyUp={focuser}
                 allowClear
                 placeholder={t("Бүртгэлийн дугаар")}
                 value={khariltsagchState.customerTin}
-                onChange={(e) =>
-                  onChange("customerTin", e.target.value)
-                }
+                onChange={(e) => onChange("customerTin", e.target.value)}
                 prefix={<SolutionOutlined style={iconColor} />}
               ></Input>
             </Form.Item>
@@ -948,7 +947,7 @@ function AjiltanBurtgel({ token }) {
                       </Form.Item>
 
                       <MinusCircleOutlined
-                        className="mr-3 -ml-1"
+                        className="-ml-1 mr-3"
                         onClick={() => {
                           remove(field.name);
                           setkhariltsagchState((a) => {

@@ -12,13 +12,14 @@ function index({ token }) {
   });
   return (
     <Admin
-      khuudasniiNer='gereeniiZagvar'
-      title='Гэрээний загвар'
-      className='p-4'
-      tsonkhniiId={"61c2c6101c2830c4e6f90c7d"}>
-      <div className='col-span-12 flex flex-col gap-[250px]'>
-        <GereeniiZagvarJagsaalt token={token} zagvaraaBichijUgnu='geree' />
-        <GereeniiZagvarJagsaalt token={token} zagvaraaBichijUgnu='act' />
+      khuudasniiNer="gereeniiZagvar"
+      title="Гэрээний загвар"
+      className="p-4"
+      tsonkhniiId={"61c2c6101c2830c4e6f90c7d"}
+    >
+      <div className="col-span-12 flex flex-col gap-[250px]">
+        <GereeniiZagvarJagsaalt token={token} zagvaraaBichijUgnu="geree" />
+        <GereeniiZagvarJagsaalt token={token} zagvaraaBichijUgnu="act" />
         {/* <div className='flex flex-col-reverse items-center sm:flex-row'>
           <Drawer
             title={kharuulakhGeree?.gereeniiDugaar}

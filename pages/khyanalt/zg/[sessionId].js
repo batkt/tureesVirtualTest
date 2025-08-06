@@ -11,7 +11,7 @@ import _ from "lodash";
 import useTalbainToololt from "hooks/useTalbainToololt";
 import useBaiguullagaIdgaarAvya from "hooks/useBaiguullagaIdgaarAvya";
 
-function TulburiinDelgerenguiTailan({ token}) {
+function TulburiinDelgerenguiTailan({ token }) {
   const [barilgiinId, setBarilgiinId] = useState("All");
   const [songogdsonAjiltan, setSongogdsonAjiltan] = useState(null);
   const [turul, setTurul] = useState("Zogsool");
@@ -20,16 +20,25 @@ function TulburiinDelgerenguiTailan({ token}) {
     moment().subtract(1, "days").endOf("day"),
   ]);
 
-  const { guilgeeniiToololt, guilgeeniiToololtMutate } = useGuilgeeniiToololtAvya(turul === "Turees" &&  token, ognoo, barilgiinId === "All" ? undefined : barilgiinId);
-  const { talbainToololt } = useTalbainToololt(turul === "Turees" && token, barilgiinId === "All" ? undefined : barilgiinId);
+  const { guilgeeniiToololt, guilgeeniiToololtMutate } =
+    useGuilgeeniiToololtAvya(
+      turul === "Turees" && token,
+      ognoo,
+      barilgiinId === "All" ? undefined : barilgiinId
+    );
+  const { talbainToololt } = useTalbainToololt(
+    turul === "Turees" && token,
+    barilgiinId === "All" ? undefined : barilgiinId
+  );
 
   const togloomiinDun = useToololt(
     "/togloomiinDunAvya",
     turul === "Togloomiin tuv" && token,
     ognoo
   );
-  const { baiguullagaIdgaarAvya, baiguullagaIdgaarAvyaMutate } = useBaiguullagaIdgaarAvya(token)
-  
+  const { baiguullagaIdgaarAvya, baiguullagaIdgaarAvyaMutate } =
+    useBaiguullagaIdgaarAvya(token);
+
   const query = useMemo(() => {
     if (songogdsonAjiltan) {
       return { burtgesenAjiltaniiId: songogdsonAjiltan };
@@ -273,15 +282,15 @@ function TulburiinDelgerenguiTailan({ token}) {
               });
               break;
             case "Авлага":
-                ugugdul.push({
-                  ner: "Авлага",
-                  icon: "/budgeting.png",
-                  // icon: "/eWalletIcon.png",
-                  dun: element.niitDun,
-                  too: element.niitToo,
-                  khuvi: 100,
-                });
-                break;  
+              ugugdul.push({
+                ner: "Авлага",
+                icon: "/budgeting.png",
+                // icon: "/eWalletIcon.png",
+                dun: element.niitDun,
+                too: element.niitToo,
+                khuvi: 100,
+              });
+              break;
             case "Үнэгүй":
               ugugdul.push({
                 ner: "Үнэгүй",
@@ -435,8 +444,7 @@ function TulburiinDelgerenguiTailan({ token}) {
           }
         });
       }
-    } else if(turul === "Turees" && !!guilgeeniiToololt)
-    {
+    } else if (turul === "Turees" && !!guilgeeniiToololt) {
       ugugdul.push({
         icon: "/plan.png",
         ner: "Төлөвлөгөө / сар",
@@ -483,7 +491,10 @@ function TulburiinDelgerenguiTailan({ token}) {
         ner: "Нийт идэвхтэй",
         dun: talbainToololt?.find((a) => a._id === true)?.too || 0,
         khemjee: talbainToololt?.find((a) => a._id === true)?.khemjee || 0,
-        khuvi: (Number(talbainToololt?.find((a) => a._id === true)?.khemjee || 0) / Number(niitHhemjee)) * 100,
+        khuvi:
+          (Number(talbainToololt?.find((a) => a._id === true)?.khemjee || 0) /
+            Number(niitHhemjee)) *
+          100,
       });
       ugugdul.push({
         icon: "/niitTurees.png",
@@ -491,19 +502,34 @@ function TulburiinDelgerenguiTailan({ token}) {
         ner: "Нийт идэвхгүй",
         dun: talbainToololt?.find((a) => a._id === false)?.too || 0,
         khemjee: talbainToololt?.find((a) => a._id === false)?.khemjee || 0,
-        khuvi: (Number(talbainToololt?.find((a) => a._id === false)?.khemjee || 0) / Number(niitHhemjee)) * 100,
+        khuvi:
+          (Number(talbainToololt?.find((a) => a._id === false)?.khemjee || 0) /
+            Number(niitHhemjee)) *
+          100,
       });
       ugugdul.push({
         icon: "/niitTurees.png",
         checkToo: true,
         ner: "Нийтийн талбай",
         dun: talbainToololt?.find((a) => a._id === "niitiinTalbai")?.too || 0,
-        khemjee: talbainToololt?.find((a) => a._id === "niitiinTalbai")?.khemjee || 0,
-        khuvi: (Number(talbainToololt?.find((a) => a._id === "niitiinTalbai")?.khemjee || 0) / Number(niitHhemjee)) * 100,
+        khemjee:
+          talbainToololt?.find((a) => a._id === "niitiinTalbai")?.khemjee || 0,
+        khuvi:
+          (Number(
+            talbainToololt?.find((a) => a._id === "niitiinTalbai")?.khemjee || 0
+          ) /
+            Number(niitHhemjee)) *
+          100,
       });
     }
     return ugugdul;
-  }, [zogsoolTulburMedeelel, turul, togloomiinDun, guilgeeniiToololt, talbainToololt]);
+  }, [
+    zogsoolTulburMedeelel,
+    turul,
+    togloomiinDun,
+    guilgeeniiToololt,
+    talbainToololt,
+  ]);
 
   return (
     <div className="mx-2">
@@ -569,17 +595,11 @@ function TulburiinDelgerenguiTailan({ token}) {
           style={{ width: "100%" }}
           placeholder={"Барилга"}
         >
-          <option
-              key={"All"}
-              value={"All"}
-            >
-              Бүгд
+          <option key={"All"} value={"All"}>
+            Бүгд
           </option>
           {baiguullagaIdgaarAvya?.barilguud?.map((a) => (
-            <option
-              key={a?._id}
-              value={a?._id}
-            >
+            <option key={a?._id} value={a?._id}>
               {a?.ner}
             </option>
           ))}
@@ -680,7 +700,11 @@ function TulburiinDelgerenguiTailan({ token}) {
                 <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
                   <div className="flex ">Зөрчилтэй авлага:</div>
                   <div>
-                    {formatNumber(zogsoolTulburMedeelel?.filter((c) => c._id === "Авлага").reduce((a, b) => a + b.niitDun, 0) || 0) + "₮"}
+                    {formatNumber(
+                      zogsoolTulburMedeelel
+                        ?.filter((c) => c._id === "Авлага")
+                        .reduce((a, b) => a + b.niitDun, 0) || 0
+                    ) + "₮"}
                   </div>
                 </div>
               )}
@@ -692,60 +716,70 @@ function TulburiinDelgerenguiTailan({ token}) {
               </div>
             </div>
           )
-        ) :
-          turul === "Turees" ? 
-          (tulburiinMedeelel?.length > 0 ? (
+        ) : turul === "Turees" ? (
+          tulburiinMedeelel?.length > 0 ? (
             <div className="mt-5 space-y-3">
               {tulburiinMedeelel
                 .sort(function (a, b) {
                   return b.khuvi - a.khuvi;
                 })
                 .map((a, i) => {
-                return (
-                  <div className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2" key={i}>
-                    {a.checkToo === true ? (<div
-                      style={{ width: `${String(Math.round(a.khuvi))}%` }}
-                      className={
-                        a.ner == "Зөрчил"
-                          ? `absolute left-0 top-0 z-0 flex h-full items-center bg-red-200 dark:bg-red-500 `
-                          : `absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `
-                      }
+                  return (
+                    <div
+                      className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2"
+                      key={i}
                     >
-                      <div
-                        className={
-                          a.ner == "Зөрчил"
-                            ? "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-red-200 dark:bg-red-500 "
-                            : "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 "
-                        }
+                      {a.checkToo === true ? (
+                        <div
+                          style={{ width: `${String(Math.round(a.khuvi))}%` }}
+                          className={
+                            a.ner == "Зөрчил"
+                              ? `absolute left-0 top-0 z-0 flex h-full items-center bg-red-200 dark:bg-red-500 `
+                              : `absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `
+                          }
+                        >
+                          <div
+                            className={
+                              a.ner == "Зөрчил"
+                                ? "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-red-200 dark:bg-red-500 "
+                                : "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 "
+                            }
+                          />
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                      <img
+                        src={a.icon}
+                        className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
                       />
-                    </div>) : "" }
-                    <img
-                      src={a.icon}
-                      className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
-                    />
-                    <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
-                      {a.ner}:
-                      <div className="flex font-normal">
-                        {formatNumber(a.dun, 0) || 0}{a.checkToo === true ? "" : "₮"}
-                        { a.checkToo === true ? 
-                          (<span className="border-l border-green-600 ml-2 pl-2"> {formatNumber(a.khemjee, 0) + "м²"}</span>
-                          ) : ""
-                        }
+                      <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
+                        {a.ner}:
+                        <div className="flex font-normal">
+                          {formatNumber(a.dun, 0) || 0}
+                          {a.checkToo === true ? "" : "₮"}
+                          {a.checkToo === true ? (
+                            <span className="ml-2 border-l border-green-600 pl-2">
+                              {" "}
+                              {formatNumber(a.khemjee, 0) + "м²"}
+                            </span>
+                          ) : (
+                            ""
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-                
-              })}  
+                  );
+                })}
             </div>
-          ) : 
-          (<div className="flex h-52 w-full items-center justify-center">
-            <div className="text-lg font-semibold text-black text-opacity-30 dark:text-gray-400">
-              Гүйлгээний тоололтын мэдээлэл байхгүй байна.
+          ) : (
+            <div className="flex h-52 w-full items-center justify-center">
+              <div className="text-lg font-semibold text-black text-opacity-30 dark:text-gray-400">
+                Гүйлгээний тоололтын мэдээлэл байхгүй байна.
+              </div>
             </div>
-          </div>))
-        
-          : tulburiinMedeelel?.length > 0 ? (
+          )
+        ) : tulburiinMedeelel?.length > 0 ? (
           <div className="mt-5 space-y-3">
             {tulburiinMedeelel.map((a, i) => {
               return (

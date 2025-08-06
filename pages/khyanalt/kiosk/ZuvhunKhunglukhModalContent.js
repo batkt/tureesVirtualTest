@@ -6,7 +6,15 @@ import _ from "lodash";
 import { t } from "i18next";
 
 function ZuvhunKhunglukhModalContent(
-  { destroy, songogdsonData, barilgiinId, ajiltan, token, zogsool, khungulukhTsag },
+  {
+    destroy,
+    songogdsonData,
+    barilgiinId,
+    ajiltan,
+    token,
+    zogsool,
+    khungulukhTsag,
+  },
   ref
 ) {
   const [aldaa, setAldaa] = React.useState(null);
@@ -39,8 +47,8 @@ function ZuvhunKhunglukhModalContent(
             barilgiinId,
             ajiltniiNer: ajiltan?.ner,
             ajiltniiId: ajiltan?._id,
-            zogsoolUndsenUne: (zogsool?.undsenUne || 2000),
-            khungulukhTsag: (khungulukhTsag || 2),
+            zogsoolUndsenUne: zogsool?.undsenUne || 2000,
+            khungulukhTsag: khungulukhTsag || 2,
             khungulult: songogdsonData?.fitnessHungulult,
           })
           .then((res) => {
@@ -60,7 +68,11 @@ function ZuvhunKhunglukhModalContent(
     []
   );
 
-  return <div className="dark:text-white">Та уг машины дугаараар хөнгөлөлт оруулах гэж байна, Зөв уу?</div>;
+  return (
+    <div className="dark:text-white">
+      Та уг машины дугаараар хөнгөлөлт оруулах гэж байна, Зөв уу?
+    </div>
+  );
 }
 
 export default React.forwardRef(ZuvhunKhunglukhModalContent);

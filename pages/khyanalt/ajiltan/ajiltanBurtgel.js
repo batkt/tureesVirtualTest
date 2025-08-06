@@ -49,7 +49,7 @@ function AjiltanBurtgel({ token }) {
   const formRef = useRef();
   const zurag = useRef();
   const empty = useRef();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const router = useRouter();
   const { ajiltan, barilgiinId } = useAuth();
   const {
@@ -187,7 +187,7 @@ function AjiltanBurtgel({ token }) {
     formRef.current.setFieldsValue({ ...data });
     setAjiltanState(data);
   }
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
 
   function ajiltanUstgay(mur) {
     if (ajiltan._id === mur._id) {
@@ -457,11 +457,11 @@ function AjiltanBurtgel({ token }) {
                 !!ajiltanState._id
                   ? undefined
                   : [
-                    {
-                      required: true,
-                      message: t("Нэвтрэх нууц үг бүртгэнэ үү!"),
-                    },
-                  ]
+                      {
+                        required: true,
+                        message: t("Нэвтрэх нууц үг бүртгэнэ үү!"),
+                      },
+                    ]
               }
             >
               <Input.Password
@@ -518,19 +518,35 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (ajilchdiinGaralt?.khuudasniiDugaar || 0) *
-                  (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
+                    (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
                   (ajilchdiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
               },
-              { title: t("Нэр"), align: "center", dataIndex: "ner", ellipsis: true, render(a) { return <div className="w-full text-left">{a}</div> } },
+              {
+                title: t("Нэр"),
+                align: "center",
+                dataIndex: "ner",
+                ellipsis: true,
+                render(a) {
+                  return <div className="w-full text-left">{a}</div>;
+                },
+              },
               {
                 title: t("Регистр"),
                 dataIndex: "register",
                 ellipsis: true,
                 align: "center",
               },
-              { title: t("Хаяг"), dataIndex: "khayag", ellipsis: true, align: "center", render(a) { return <div className="w-full text-left">{a}</div> } },
+              {
+                title: t("Хаяг"),
+                dataIndex: "khayag",
+                ellipsis: true,
+                align: "center",
+                render(a) {
+                  return <div className="w-full text-left">{a}</div>;
+                },
+              },
               {
                 title: t("Утас"),
                 dataIndex: "utas",

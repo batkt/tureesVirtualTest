@@ -937,7 +937,6 @@ function togloom1() {
   // }
 
   function tulburTulyu(data) {
-    
     modal({
       title: (
         <div className="flex w-full flex-row justify-between">
@@ -1778,7 +1777,7 @@ function togloom1() {
                   },
                 ]}
               />
-              
+
               <Popover
                 content={() => (
                   <div className="flex w-32 flex-col">
@@ -1868,15 +1867,13 @@ function togloom1() {
                                 return moment(data).format("YYYY-MM-DD HH:mm");
                               },
                             },
-                           {
+                            {
                               title: t("Сунгасан/мин/"),
                               __style__: { h: "center" },
                               align: "center",
-                              render: (_, record) => Number(record?.sungasanMinut || 0),
-                            }
-                            ,
-
-
+                              render: (_, record) =>
+                                Number(record?.sungasanMinut || 0),
+                            },
                             {
                               title: t("Дуусах цаг"),
                               dataIndex: "duusakhTsag",
@@ -2064,11 +2061,8 @@ function togloom1() {
           data-aos-duration="1000"
           data-aos-delay="300"
           data-aos-anchor-placement="top-bottom"
-          
         >
-          
-
-         <Table
+          <Table
             className="mt-8 hidden overflow-auto md:block"
             dataSource={togloominTuviinGaralt?.jagsaalt}
             scroll={{ y: "calc(100vh - 30rem)" }}
@@ -2090,7 +2084,9 @@ function togloom1() {
                 })),
             }}
             summary={() => {
-              const totalEbarimt = Array.isArray(togloominTuviinGaralt?.jagsaalt)
+              const totalEbarimt = Array.isArray(
+                togloominTuviinGaralt?.jagsaalt
+              )
                 ? togloominTuviinGaralt.jagsaalt.reduce(
                     (sum, row) => sum + (Number(row?.ebarimtAvsanDun) || 0),
                     0
@@ -2099,13 +2095,14 @@ function togloom1() {
 
               return (
                 <Table.Summary.Row>
-               
                   {[...Array(9)].map((_, i) => (
                     <Table.Summary.Cell key={i} />
                   ))}
 
-                
-                  <Table.Summary.Cell index={9} className="font-bold text-right">
+                  <Table.Summary.Cell
+                    index={9}
+                    className="text-right font-bold"
+                  >
                     {formatNumber(totalEbarimt, 0)}
                   </Table.Summary.Cell>
                   <Table.Summary.Cell></Table.Summary.Cell>
@@ -2115,8 +2112,6 @@ function togloom1() {
               );
             }}
           />
-
-
 
           {/* <div className="sticky bottom-12 z-10 bg-white dark:bg-gray-900 border-t px-4 py-2 flex justify-between text-sm font-semibold">
             <span>И-Баримт Нийт:</span>

@@ -9,7 +9,9 @@ const filterDismissedNotifications = (notifications, keepDismissed = false) => {
   if (keepDismissed) {
     return notifications; // Keep all notifications, including dismissed ones
   }
-  return notifications.filter((notification) => !notification.dakhijKharikhEsekh);
+  return notifications.filter(
+    (notification) => !notification.dakhijKharikhEsekh
+  );
 };
 
 const fetcher = (
@@ -349,7 +351,14 @@ function useSonorduulga(token) {
     return () => {
       socket().off(`baiguullaga${baiguullaga?._id}`);
     };
-  }, [baiguullaga, ajiltan, mutate, too.mutate, refreshNotifications, dismissNotification]);
+  }, [
+    baiguullaga,
+    ajiltan,
+    mutate,
+    too.mutate,
+    refreshNotifications,
+    dismissNotification,
+  ]);
 
   useEffect(() => {
     if (ajiltan?._id) {

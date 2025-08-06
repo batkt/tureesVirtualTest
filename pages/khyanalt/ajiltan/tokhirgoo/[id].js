@@ -480,7 +480,8 @@ function index({ token, data }) {
             },
             {
               ner: "Гүйлгээ хийх эсэх",
-              tailbar: "Тухайн барилгын хувьд гүйлгээний түүх цонхонд дахь бүх гэрээний гүйлгээ хийх эсэх",
+              tailbar:
+                "Тухайн барилгын хувьд гүйлгээний түүх цонхонд дахь бүх гэрээний гүйлгээ хийх эсэх",
               value: "guilgeeKhiikhEsekh",
             },
             {
@@ -522,133 +523,133 @@ function index({ token, data }) {
               </div>
             </div>
           ))}
-        {!!targetKeys.find((a) => a === "/khyanalt/zogsool/camera") && (
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Нэгтгэл дүн харах эсэх")}</div>
-                <div className="text-gray-600 dark:text-gray-300">
-                  {t(
-                    "Зогсоолын нэгтгэл дүн буюу системд бүртгэгдсэн нийт гүйлгээний задаргаа дүнг харах эсэх."
-                  )}
+          {!!targetKeys.find((a) => a === "/khyanalt/zogsool/camera") && (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">
+                    {t("Нэгтгэл дүн харах эсэх")}
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-300">
+                    {t(
+                      "Зогсоолын нэгтгэл дүн буюу системд бүртгэгдсэн нийт гүйлгээний задаргаа дүнг харах эсэх."
+                    )}
+                  </div>
+                </div>
+                <div className="ml-auto">
+                  <Switch
+                    checked={_.get(tokhirgoo, `zogsoolNegtgelDunKharakhEsekh`)}
+                    onChange={(checked) => {
+                      setTokhirgoo((a) => {
+                        if (!checked) {
+                          _.set(a, `zogsoolNegtgelDunKharakhEsekh`, false);
+                        } else _.set(a, `zogsoolNegtgelDunKharakhEsekh`, true);
+                        return { ...a };
+                      });
+                    }}
+                  />
                 </div>
               </div>
-              <div className="ml-auto">
-                <Switch
-                  checked={_.get(tokhirgoo, `zogsoolNegtgelDunKharakhEsekh`)}
-                  onChange={(checked) => {
-                    setTokhirgoo((a) => {
-                      if (!checked) {
-                        _.set(a, `zogsoolNegtgelDunKharakhEsekh`, false);
-                      } else _.set(a, `zogsoolNegtgelDunKharakhEsekh`, true);
-                      return { ...a };
-                    });
-                  }}
-                />
-              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {!!targetKeys.find((a) => a === "/khyanalt/togloom/togloomTuv") && (
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">
-                  {t("Тоглоомын төвийн нэгтгэл дүн харах эсэх")}
+          {!!targetKeys.find((a) => a === "/khyanalt/togloom/togloomTuv") && (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">
+                    {t("Тоглоомын төвийн нэгтгэл дүн харах эсэх")}
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-300">
+                    {t(
+                      "Тоглоомын төвийн нэгтгэл дүн буюу системд бүртгэгдсэн нийт гүйлгээний задаргаа дүнг харах эсэх."
+                    )}
+                  </div>
                 </div>
-                <div className="text-gray-600 dark:text-gray-300">
-                  {t(
-                    "Тоглоомын төвийн нэгтгэл дүн буюу системд бүртгэгдсэн нийт гүйлгээний задаргаа дүнг харах эсэх."
-                  )}
+                <div className="ml-auto">
+                  <Switch
+                    checked={_.get(
+                      tokhirgoo,
+                      `togloomiinTuvNegtgelDunKharakhEsekh`
+                    )}
+                    onChange={(checked) => {
+                      setTokhirgoo((a) => {
+                        if (!checked) {
+                          _.set(
+                            a,
+                            `togloomiinTuvNegtgelDunKharakhEsekh`,
+                            false
+                          );
+                        } else
+                          _.set(a, `togloomiinTuvNegtgelDunKharakhEsekh`, true);
+                        return { ...a };
+                      });
+                    }}
+                  />
                 </div>
-              </div>
-              <div className="ml-auto">
-                <Switch
-                  checked={_.get(
-                    tokhirgoo,
-                    `togloomiinTuvNegtgelDunKharakhEsekh`
-                  )}
-                  onChange={(checked) => {
-                    setTokhirgoo((a) => {
-                      if (!checked) {
-                        _.set(a, `togloomiinTuvNegtgelDunKharakhEsekh`, false);
-                      } else
-                        _.set(a, `togloomiinTuvNegtgelDunKharakhEsekh`, true);
-                      return { ...a };
-                    });
-                  }}
-                />
               </div>
             </div>
-          </div>
-        )}
-        {!!targetKeys.find((a) => a === "/khyanalt/zogsool/camera") && (
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">
-                  {t("Зогсоолын хөнгөлөлт үзүүлэх эсэх")}
+          )}
+          {!!targetKeys.find((a) => a === "/khyanalt/zogsool/camera") && (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">
+                    {t("Зогсоолын хөнгөлөлт үзүүлэх эсэх")}
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-300">
+                    {t(
+                      "Тухайн ажилтан зогсоолд зогссон машиныг хөнгөлөлт үзүүлэх эсэх."
+                    )}
+                  </div>
                 </div>
-                <div className="text-gray-600 dark:text-gray-300">
-                  {t(
-                    "Тухайн ажилтан зогсоолд зогссон машиныг хөнгөлөлт үзүүлэх эсэх."
-                  )}
+                <div className="ml-auto">
+                  <Switch
+                    checked={_.get(tokhirgoo, `zogsooliinKhungulultEsekh`)}
+                    onChange={(checked) => {
+                      setTokhirgoo((a) => {
+                        if (!checked) {
+                          _.set(a, `zogsooliinKhungulultEsekh`, false);
+                        } else _.set(a, `zogsooliinKhungulultEsekh`, true);
+                        return { ...a };
+                      });
+                    }}
+                  />
                 </div>
-              </div>
-              <div className="ml-auto">
-                <Switch
-                  checked={_.get(
-                    tokhirgoo,
-                    `zogsooliinKhungulultEsekh`
-                  )}
-                  onChange={(checked) => {
-                    setTokhirgoo((a) => {
-                      if (!checked) {
-                        _.set(a, `zogsooliinKhungulultEsekh`, false);
-                      } else
-                        _.set(a, `zogsooliinKhungulultEsekh`, true);
-                      return { ...a };
-                    });
-                  }}
-                />
               </div>
             </div>
-          </div>
-        )}
-        {!!targetKeys.find((a) => a === "/khyanalt/zogsool/mashinBurtgel") && (
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">
-                  {t("Машины дугаар өөрчлөх эсэх")}
+          )}
+          {!!targetKeys.find(
+            (a) => a === "/khyanalt/zogsool/mashinBurtgel"
+          ) && (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">
+                    {t("Машины дугаар өөрчлөх эсэх")}
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-300">
+                    {t(
+                      "Тухайн машин зогсоол орсны дараа дугаар өөрчлөх боломж идэвхжүүлэх эсэх."
+                    )}
+                  </div>
                 </div>
-                <div className="text-gray-600 dark:text-gray-300">
-                  {t(
-                    "Тухайн машин зогсоол орсны дараа дугаар өөрчлөх боломж идэвхжүүлэх эсэх."
-                  )}
+                <div className="ml-auto">
+                  <Switch
+                    checked={_.get(tokhirgoo, `mashniiDugaarZasakhEsekh`)}
+                    onChange={(checked) => {
+                      setTokhirgoo((a) => {
+                        if (!checked) {
+                          _.set(a, `mashniiDugaarZasakhEsekh`, false);
+                        } else _.set(a, `mashniiDugaarZasakhEsekh`, true);
+                        return { ...a };
+                      });
+                    }}
+                  />
                 </div>
-              </div>
-              <div className="ml-auto">
-                <Switch
-                  checked={_.get(
-                    tokhirgoo,
-                    `mashniiDugaarZasakhEsekh`
-                  )}
-                  onChange={(checked) => {
-                    setTokhirgoo((a) => {
-                      if (!checked) {
-                        _.set(a, `mashniiDugaarZasakhEsekh`, false);
-                      } else
-                        _.set(a, `mashniiDugaarZasakhEsekh`, true);
-                      return { ...a };
-                    });
-                  }}
-                />
               </div>
             </div>
-          </div>
-        )}
+          )}
         </div>
         <div className="bottom-5 right-3 col-span-12 ml-auto mr-2 flex w-full py-3 lg:absolute lg:w-36">
           <Button className="w-full" type="primary" onClick={khadgalya}>
@@ -660,7 +661,6 @@ function index({ token, data }) {
   );
 }
 
-
 const ugudulAvchirya = async (ctx, session) => {
   const { data } = await readMethod(
     "ajiltan",
@@ -669,7 +669,6 @@ const ugudulAvchirya = async (ctx, session) => {
   );
   return data;
 };
-
 
 export const getServerSideProps = (ctx) => shalgaltKhiikh(ctx, ugudulAvchirya);
 
