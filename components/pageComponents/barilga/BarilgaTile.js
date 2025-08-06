@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 function BarilgaTile({ ner, khayag, register }) {
   return (
@@ -13,7 +13,7 @@ function BarilgaTile({ ner, khayag, register }) {
         <div>{khayag}</div>
       </div>
     </div>
-  )
+  );
 }
 
-export default BarilgaTile
+export default BarilgaTile;

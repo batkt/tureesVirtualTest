@@ -7,15 +7,30 @@ import ZagvarUusgekh from "components/pageComponents/nekhemjlel/ZagvarUusgekh";
 import { t } from "i18next";
 
 function ZagvarForm({ ashiglaltiinZardal, value, onChange }) {
-  return <ZagvarUusgekh value={value} ashiglaltiinZardal={ashiglaltiinZardal} change={onChange}/>;
+  return (
+    <ZagvarUusgekh
+      value={value}
+      ashiglaltiinZardal={ashiglaltiinZardal}
+      change={onChange}
+    />
+  );
 }
 
 function AppSmsZagvar(
-  { barilgiinId, ashiglaltiinZardal, destroy, data, token, setWaiting, turul, onRefresh },
+  {
+    barilgiinId,
+    ashiglaltiinZardal,
+    destroy,
+    data,
+    token,
+    setWaiting,
+    turul,
+    onRefresh,
+  },
   ref
 ) {
   const [form] = Form.useForm();
- 
+
   useImperativeHandle(
     ref,
     () => ({

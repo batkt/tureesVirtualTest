@@ -103,7 +103,10 @@ function ZogsoolBurtgekh(
 
   function cameraTokhirgooOruulya() {
     const footer = [
-      <Button type="primary" onClick={() => streamTokhirgooRef.current.khaaya()}>
+      <Button
+        type="primary"
+        onClick={() => streamTokhirgooRef.current.khaaya()}
+      >
         {t("Хаах")}
       </Button>,
       <Button
@@ -355,7 +358,9 @@ function ZogsoolBurtgekh(
                 {t("Зогсоолын тоо хязгаарлах")}
               </div>
               <div className="text-xs text-gray-400">
-                Зогсоолд идэвхтэй байгаа машин зогсоолын даацтай тэнцсэн тохиолдолд орох самбар дээр "Дүүрсэн" гэсэн текст харуулаад хаалга онгойхгүй болно 
+                Зогсоолд идэвхтэй байгаа машин зогсоолын даацтай тэнцсэн
+                тохиолдолд орох самбар дээр "Дүүрсэн" гэсэн текст харуулаад
+                хаалга онгойхгүй болно
               </div>
             </div>
             <div className="col-span-2">
@@ -444,9 +449,9 @@ function ZogsoolBurtgekh(
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <div
                       key={fieldKey}
-                      className=" relative mb-5 rounded-md border bg-green-50 px-10 py-4 shadow-md dark:bg-gray-700 2xl:pr-20"
+                      className="relative px-10 py-4 mb-5 border rounded-md shadow-md  bg-green-50 dark:bg-gray-700 2xl:pr-20"
                     >
-                      <div className="grid w-full grid-cols-4 items-center gap-5">
+                      <div className="grid items-center w-full grid-cols-4 gap-5">
                         <div
                           onClick={() => remove(name)}
                           className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
@@ -535,16 +540,28 @@ function ZogsoolBurtgekh(
   );
 }
 
-function Khaalga({ form, token, refresh, barilgiinId, name, fieldKey, restField, remove }) {
+function Khaalga({
+  form,
+  token,
+  refresh,
+  barilgiinId,
+  name,
+  fieldKey,
+  restField,
+  remove,
+}) {
   const { t } = useTranslation();
   const streamTokhirgooRefIP = useRef(null);
   const [unshijBaina, setUnshijBaina] = useState(false);
-  
+
   function cameraTokhirgooOruulyaIp(data, index) {
     const values = form.getFieldsValue();
     const cameraIP = values?.khaalga[name]?.camera[index]?.cameraIP;
     const footer = [
-      <Button type="primary" onClick={() => streamTokhirgooRefIP.current.khaaya()}>
+      <Button
+        type="primary"
+        onClick={() => streamTokhirgooRefIP.current.khaaya()}
+      >
         {t("Хаах")}
       </Button>,
       <Button
@@ -562,10 +579,10 @@ function Khaalga({ form, token, refresh, barilgiinId, name, fieldKey, restField,
     function saveTokhirgoo(value) {
       const values = form.getFieldsValue();
       values.khaalga[name].camera[index].tokhirgoo = value;
-      form.setFieldsValue(values); 
+      form.setFieldsValue(values);
       const a = form.getFieldsValue();
     }
-    
+
     modal({
       title: cameraIP + " " + t("камерын stream тохиргоо"),
       icon: <PlusOutlined />,
@@ -629,7 +646,7 @@ function Khaalga({ form, token, refresh, barilgiinId, name, fieldKey, restField,
         {(talbaruud, { add, remove }) => (
           <>
             <Button
-              className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+              className="mt-5 h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
               type="dashed"
               onClick={() => add()}
               block
@@ -650,9 +667,10 @@ function Khaalga({ form, token, refresh, barilgiinId, name, fieldKey, restField,
                     placeholder="Камер IP оруулна уу..."
                   />
                 </Form.Item>
-                <SettingOutlined 
+                <SettingOutlined
                   className="ml-2 mt-2"
-                  onClick={() => cameraTokhirgooOruulyaIp(talbar, talbar.name)}/>
+                  onClick={() => cameraTokhirgooOruulyaIp(talbar, talbar.name)}
+                />
                 <MinusCircleOutlined
                   className="ml-2 mt-2"
                   onClick={() => remove(talbar.name)}
@@ -702,7 +720,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
         {(muruud, { add, remove }) => (
           <>
             <Button
-              className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+              className="mt-5 h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
               type="dashed"
               onClick={() => add()}
               // id={"tariff"}

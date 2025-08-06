@@ -250,10 +250,9 @@ function ZassanMedegdelKharakh(
                           </tbody>
                         </table>
                       ) : a.utganiiTurul === "object" &&
-                        a.talbar === "khungulultuud" ?  (
+                        a.talbar === "khungulultuud" ? (
                         <table className="w-full">
                           <th className="flex">
-                            
                             <td className="w-1/4 overflow-hidden p-1 text-center">
                               {t("Эхлэх огноо")}
                             </td>
@@ -313,133 +312,160 @@ function ZassanMedegdelKharakh(
                                   </td>
                                   <td className="w-2/3 overflow-hidden p-1 text-center"></td>
                                 </tr>
-                              ) })}
-                            </tbody>
-                          </table>
-                        )    
-                      : a.umnukhUtga}
-                  </td>
-                  <td className="w-5/12 border-r overflow-hidden p-1 text-right">
-                    {a.utganiiTurul === "number" && a.talbar !== "khugatsaa" && a.talbar !== "baritsaaBairshuulakhKhugatsaa" ? formatNumber(a.shineUtga, 2) 
-                          : a.talbar === "gereeniiZagvariinId" ? filterZagvarNer(a.shineUtga)
-                          : a.talbar === "aktiinZagvariinId" ? aktFilterZagvarNer(a.shineUtga)
-                          : a.utganiiTurul === "date" ? moment(a.shineUtga).format("YYYY-MM-DD")
-                          : a.utganiiTurul === "object" && a.talbar === "zardluud" ? 
-                          (
-                            <table className="w-full" style={{emptyCells: "show"}}>
-                              <th className="flex">
-                                <td className="w-1/3 overflow-hidden p-1 text-center">
-                                  {t("Нэр")}
-                                </td>
-                                <td className="w-1/6 overflow-hidden p-1 text-center">
-                                  {t("Төрөл")}
-                                </td>
-                                <td className="w-1/4 overflow-hidden p-1 text-center">
-                                  {t("Үнэ")}
-                                </td>
-                                <td className="w-1/4 overflow-hidden p-1 text-center">
-                                  {t("Төлөх дүн")}
-                                </td>
-                              </th>
-                              <tbody className="overflow-y-scroll" style={{ height: "calc(30vh - 15rem)" }}>
-                                {zardluudId?.map((z) => {
-                                  return JSON.parse(a.shineUtga)?.filter((b) => b._id === z)?.length > 0 ? JSON.parse(a.shineUtga)?.filter(c => c._id === z).map((b) => 
-                                    (
-                                      <tr className="flex border-t">
-                                        <td className="w-1/3 border-r overflow-hidden p-1 text-left">
-                                          {b.ner}
-                                        </td>
-                                        <td className="w-1/6 border-r overflow-hidden p-1 text-center">
-                                          {b.turul}
-                                        </td>
-                                        <td className="w-1/4 border-r overflow-hidden p-1 text-right">
-                                          {formatNumber(b.turul === "Дурын" ? b.dun : b.tariff)}
-                                        </td>
-                                        <td className="w-1/4 overflow-hidden p-1 text-right">
-                                          {formatNumber(b.tulukhDun)}
-                                        </td>
-                                      </tr>
-                                    )) : (
-                                      <tr className="flex border-t">
-                                        <td className="w-1/3 border-r overflow-hidden p-1 text-left">
-                                          &nbsp;
-                                        </td>
-                                        <td className="w-1/6 border-r overflow-hidden p-1 text-center">
-                                        </td>
-                                        <td className="w-1/4 border-r overflow-hidden p-1 text-right">
-                                        </td>
-                                        <td className="w-1/4 overflow-hidden p-1 text-right">
-                                        </td>
-                                      </tr>
-                                    )
-                                })}
-                              </tbody>
-                            </table>
-                          )
-                          : a.utganiiTurul === "object" && a.talbar === "segmentuud" ? 
-                          (
-                            <table className="w-full">
-                              <th className="flex">
-                                <td className="w-1/3 overflow-hidden p-1 text-center">
-                                  {t("Нэр")}
-                                </td>
-                                <td className="w-2/3 overflow-hidden p-1 text-center">
-                                  {t("Утга")}
-                                </td>
-                              </th>
-                              <tbody className="overflow-y-scroll" style={{ height: "calc(30vh - 15rem)" }}>
-                                {segmentuudId?.map((z) => {
-                                  return JSON.parse(a.shineUtga)?.filter((b) => b._id === z)?.length > 0 ? JSON.parse(a.shineUtga)?.filter(c => c._id === z).map((b) => 
-                                    (
-                                      <tr className="flex border-t">
-                                        <td className="w-1/3 border-r overflow-hidden p-1 text-left">
-                                          {b.ner}
-                                        </td>
-                                        <td className="w-2/3 overflow-hidden p-1 text-center">
-                                          {b.utga}
-                                        </td>
-                                      </tr>
-                                    )) : (
-                                      <tr className="flex border-t">
-                                        <td className="w-1/3 border-r overflow-hidden p-1 text-left">
-                                          &nbsp;
-                                        </td>
-                                        <td className="w-2/3 overflow-hidden p-1 text-center">
-                                        </td>
-                                      </tr>
-                                    )
-                                })}
-                              </tbody>
-                            </table>
-                          ) 
-                          : a.utganiiTurul === "object" && a.talbar === "avlaga" ?
-                          (
-                            <div className="w-full">
-                              <th>
-                                <td className="w-[10rem] overflow-hidden p-1 text-center">
-                                  {t("№")}
-                                </td>
-                                <td className="w-[8rem] overflow-hidden p-1 text-center">
-                                  {t("Огноо")}
-                                </td>
-                                <td className="w-[8rem] overflow-hidden p-1 text-center">
-                                  {t("Төлөх дүн")}
-                                </td>
-                                <td className="w-[8rem] overflow-hidden p-1 text-center">
-                                  {t("Тайлбар")}
-                                </td>
-                              </th>
-                              <tbody className="overflow-y-scroll" style={{ height: "calc(30vh - 15rem)" }}>
-                                {JSON.parse(JSON.stringify(a?.shineUtga))}
-                              </tbody>
-                            </div>
-                          )
-                          : a.shineUtga}
-                  </td>
-                </tr>
-              ))}
-            </tbody>  
-          </table>  
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      ) : (
+                        a.umnukhUtga
+                      )}
+                    </td>
+                    <td className="w-5/12 overflow-hidden border-r p-1 text-right">
+                      {a.utganiiTurul === "number" &&
+                      a.talbar !== "khugatsaa" &&
+                      a.talbar !== "baritsaaBairshuulakhKhugatsaa" ? (
+                        formatNumber(a.shineUtga, 2)
+                      ) : a.talbar === "gereeniiZagvariinId" ? (
+                        filterZagvarNer(a.shineUtga)
+                      ) : a.talbar === "aktiinZagvariinId" ? (
+                        aktFilterZagvarNer(a.shineUtga)
+                      ) : a.utganiiTurul === "date" ? (
+                        moment(a.shineUtga).format("YYYY-MM-DD")
+                      ) : a.utganiiTurul === "object" &&
+                        a.talbar === "zardluud" ? (
+                        <table
+                          className="w-full"
+                          style={{ emptyCells: "show" }}
+                        >
+                          <th className="flex">
+                            <td className="w-1/3 overflow-hidden p-1 text-center">
+                              {t("Нэр")}
+                            </td>
+                            <td className="w-1/6 overflow-hidden p-1 text-center">
+                              {t("Төрөл")}
+                            </td>
+                            <td className="w-1/4 overflow-hidden p-1 text-center">
+                              {t("Үнэ")}
+                            </td>
+                            <td className="w-1/4 overflow-hidden p-1 text-center">
+                              {t("Төлөх дүн")}
+                            </td>
+                          </th>
+                          <tbody
+                            className="overflow-y-scroll"
+                            style={{ height: "calc(30vh - 15rem)" }}
+                          >
+                            {zardluudId?.map((z) => {
+                              return JSON.parse(a.shineUtga)?.filter(
+                                (b) => b._id === z
+                              )?.length > 0 ? (
+                                JSON.parse(a.shineUtga)
+                                  ?.filter((c) => c._id === z)
+                                  .map((b) => (
+                                    <tr className="flex border-t">
+                                      <td className="w-1/3 overflow-hidden border-r p-1 text-left">
+                                        {b.ner}
+                                      </td>
+                                      <td className="w-1/6 overflow-hidden border-r p-1 text-center">
+                                        {b.turul}
+                                      </td>
+                                      <td className="w-1/4 overflow-hidden border-r p-1 text-right">
+                                        {formatNumber(
+                                          b.turul === "Дурын" ? b.dun : b.tariff
+                                        )}
+                                      </td>
+                                      <td className="w-1/4 overflow-hidden p-1 text-right">
+                                        {formatNumber(b.tulukhDun)}
+                                      </td>
+                                    </tr>
+                                  ))
+                              ) : (
+                                <tr className="flex border-t">
+                                  <td className="w-1/3 overflow-hidden border-r p-1 text-left">
+                                    &nbsp;
+                                  </td>
+                                  <td className="w-1/6 overflow-hidden border-r p-1 text-center"></td>
+                                  <td className="w-1/4 overflow-hidden border-r p-1 text-right"></td>
+                                  <td className="w-1/4 overflow-hidden p-1 text-right"></td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      ) : a.utganiiTurul === "object" &&
+                        a.talbar === "segmentuud" ? (
+                        <table className="w-full">
+                          <th className="flex">
+                            <td className="w-1/3 overflow-hidden p-1 text-center">
+                              {t("Нэр")}
+                            </td>
+                            <td className="w-2/3 overflow-hidden p-1 text-center">
+                              {t("Утга")}
+                            </td>
+                          </th>
+                          <tbody
+                            className="overflow-y-scroll"
+                            style={{ height: "calc(30vh - 15rem)" }}
+                          >
+                            {segmentuudId?.map((z) => {
+                              return JSON.parse(a.shineUtga)?.filter(
+                                (b) => b._id === z
+                              )?.length > 0 ? (
+                                JSON.parse(a.shineUtga)
+                                  ?.filter((c) => c._id === z)
+                                  .map((b) => (
+                                    <tr className="flex border-t">
+                                      <td className="w-1/3 overflow-hidden border-r p-1 text-left">
+                                        {b.ner}
+                                      </td>
+                                      <td className="w-2/3 overflow-hidden p-1 text-center">
+                                        {b.utga}
+                                      </td>
+                                    </tr>
+                                  ))
+                              ) : (
+                                <tr className="flex border-t">
+                                  <td className="w-1/3 overflow-hidden border-r p-1 text-left">
+                                    &nbsp;
+                                  </td>
+                                  <td className="w-2/3 overflow-hidden p-1 text-center"></td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      ) : a.utganiiTurul === "object" &&
+                        a.talbar === "avlaga" ? (
+                        <div className="w-full">
+                          <th>
+                            <td className="w-[10rem] overflow-hidden p-1 text-center">
+                              {t("№")}
+                            </td>
+                            <td className="w-[8rem] overflow-hidden p-1 text-center">
+                              {t("Огноо")}
+                            </td>
+                            <td className="w-[8rem] overflow-hidden p-1 text-center">
+                              {t("Төлөх дүн")}
+                            </td>
+                            <td className="w-[8rem] overflow-hidden p-1 text-center">
+                              {t("Тайлбар")}
+                            </td>
+                          </th>
+                          <tbody
+                            className="overflow-y-scroll"
+                            style={{ height: "calc(30vh - 15rem)" }}
+                          >
+                            {JSON.parse(JSON.stringify(a?.shineUtga))}
+                          </tbody>
+                        </div>
+                      ) : (
+                        a.shineUtga
+                      )}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </>

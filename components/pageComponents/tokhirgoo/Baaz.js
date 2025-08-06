@@ -15,7 +15,7 @@ function Baaz({ token }) {
     moment().endOf("month"),
   ]);
 
-  const backAwsanTuukh = useJagsaalt("/backTuukh")
+  const backAwsanTuukh = useJagsaalt("/backTuukh");
 
   function backTatya() {
     setLoading(true);
@@ -41,7 +41,8 @@ function Baaz({ token }) {
       width: "3rem",
       align: "center",
       render: (text, record, index) =>
-        (backAwsanTuukh?.khuudasniiDugaar || 0) * (backAwsanTuukh?.khuudasniiKhemjee || 0) -
+        (backAwsanTuukh?.khuudasniiDugaar || 0) *
+          (backAwsanTuukh?.khuudasniiKhemjee || 0) -
         (backAwsanTuukh?.khuudasniiKhemjee || 0) +
         index +
         1,
@@ -51,7 +52,9 @@ function Baaz({ token }) {
       dataIndex: "ognoo",
       ellipsis: true,
       align: "center",
-      render(a) { return moment(a).format("YYYY-MM-DD, HH:mm") }
+      render(a) {
+        return moment(a).format("YYYY-MM-DD, HH:mm");
+      },
     },
     {
       title: t("Ажилтан"),
@@ -64,15 +67,17 @@ function Baaz({ token }) {
       dataIndex: "khemjee",
       ellipsis: true,
       align: "center",
-      render(a) { return <div>{formatNumber(a)} /mb/</div> }
+      render(a) {
+        return <div>{formatNumber(a)} /mb/</div>;
+      },
     },
   ]);
 
   return (
     <>
-      <div className="xl:col-span-4 col-span-12 mt-5 lg:col-span-5">
+      <div className="col-span-12 mt-5 lg:col-span-5 xl:col-span-4">
         <div className="intro-y box mt-5 lg:mt-0">
-          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
+          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
               {t("Мэдээллийн сан")}
             </h2>
@@ -97,9 +102,9 @@ function Baaz({ token }) {
           </div>
         </div>
       </div>
-      <div className="xl:col-span-8 col-span-12 mt-5 lg:col-span-7">
+      <div className="col-span-12 mt-5 lg:col-span-7 xl:col-span-8">
         <div className="intro-y box mt-5 lg:mt-0">
-          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
+          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
               {t("Татсан түүх")}
             </h2>
@@ -111,7 +116,13 @@ function Baaz({ token }) {
             />
           </div>
           <div className="box p-5">
-            <Table bordered size="small" dataSource={backAwsanTuukh?.jagsaalt} scroll={{ y: "calc( 100vh - 21rem )" }} columns={columns} />
+            <Table
+              bordered
+              size="small"
+              dataSource={backAwsanTuukh?.jagsaalt}
+              scroll={{ y: "calc( 100vh - 21rem )" }}
+              columns={columns}
+            />
           </div>
         </div>
       </div>

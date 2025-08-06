@@ -1,14 +1,5 @@
-import React, {
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-} from "react";
-import {
-  Form,
-  Input,
-  message,
-  Modal,
-} from "antd";
+import React, { useCallback, useEffect, useImperativeHandle } from "react";
+import { Form, Input, message, Modal } from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import compareFields from "tools/function/compareFields";
@@ -43,12 +34,7 @@ function BlockMashinBurtgel(
 
   function garya() {
     const values = form.getFieldsValue();
-    if (
-      compareFields(values, data, [
-        "dugaar",
-        "tailbar",
-      ])
-    )
+    if (compareFields(values, data, ["dugaar", "tailbar"]))
       Modal.confirm({
         content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
         okText: t("Тийм"),
@@ -128,7 +114,9 @@ function BlockMashinBurtgel(
             required: form.getFieldValue("dugaar")?.length > 0 && true,
             min: 6,
             max: 7,
-            pattern: new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"),
+            pattern: new RegExp(
+              "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
+            ),
             message: t("Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"),
           },
         ]}

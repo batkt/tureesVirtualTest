@@ -576,9 +576,7 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item
             name="mail"
-            rules={[
-              { required: true, message: t("И-мэйл хаяг оруулна уу !")},
-            ]}
+            rules={[{ required: true, message: t("И-мэйл хаяг оруулна уу !") }]}
             label={t("И-мэйл хаяг")}
             normalize={(value) => value?.replace(/\s/g, "")}
           >
@@ -624,17 +622,16 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       <div data-aos="fade-right" data-aos-delay="800">
-        <Form.Item label={t("Нэршил")} name={"khariltsagchiinNershil"}
-        rules={[
-              { required: true, message: t("Нэр оруулна уу !")},
-            ]}>
-
+        <Form.Item
+          label={t("Нэршил")}
+          name={"khariltsagchiinNershil"}
+          rules={[{ required: true, message: t("Нэр оруулна уу !") }]}
+        >
           <Input placeholder={t("Дэлгүүр, брэнд нэр")} />
-          
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-delay="900">
-        <Form.List name="segmentuud" className=" ">
+        <Form.List name="segmentuud" className="">
           {(fields, { add, remove }) => (
             <>
               {fields.map(({ key, name, fieldKey, ...restField }) => (
@@ -652,7 +649,7 @@ const YurunkhiiMedeele = ({
               <Form.Item className="" wrapperCol={{ offset: 10 }}>
                 <Button
                   icon={<PlusOutlined />}
-                  className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                  className="h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
                   type="dashed"
                   onClick={() => add()}
                   block

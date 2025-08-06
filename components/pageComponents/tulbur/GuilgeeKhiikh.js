@@ -186,7 +186,7 @@ function GuilgeeKhiikh(
               });
               return;
             }
-           
+
             guilgee = {
               turul: busadTurul,
               tulsunDun: busadTurul === "aldangi" ? 0 : dun,
@@ -245,7 +245,7 @@ function GuilgeeKhiikh(
               };
             }
             break;
-          case "torguuli":  
+          case "torguuli":
             guilgee = {
               nuatBodokhEsekh,
               gereeniiId: data?._id,
@@ -253,7 +253,9 @@ function GuilgeeKhiikh(
               tulsunDun: 0,
               tulukhDun: dun,
               tulukhNUAT: nuatBodokhEsekh ? Math.abs(dun / 1.1 / 10) : 0,
-              tulukhNuatgui: nuatBodokhEsekh ? (dun - Math.abs(dun / 1.1 / 10)) : 0,
+              tulukhNuatgui: nuatBodokhEsekh
+                ? dun - Math.abs(dun / 1.1 / 10)
+                : 0,
               ognoo: ognoo,
               tailbar,
               nekhemjlekhDeerKharagdakh: nekhemjlekhDeerKharagdakh,
@@ -535,8 +537,8 @@ function GuilgeeKhiikh(
             onChange={(v) => {
               setOgnoo(v);
             }}
-          />  
-        </div>    
+          />
+        </div>
       )}
       {turul === "avlaga" && (
         <div className="flex w-full items-center justify-between gap-2">
@@ -597,7 +599,7 @@ function GuilgeeKhiikh(
                     </p>
                     <div className="flex flex-1 justify-between gap-2 bg-blue-600 bg-opacity-5 px-2">
                       <p className="text-right">{t(a.turul)}</p>
-                      <p className="text-right whitespace-nowrap">
+                      <p className="whitespace-nowrap text-right">
                         {a.turul !== "Дурын" ? `${a.tariff}₮` : "Дурын"}
                       </p>
                     </div>
@@ -826,7 +828,7 @@ function GuilgeeKhiikh(
       {turul === "ashiglalt" &&
         tailbar?.includes("Цахилгаан") &&
         baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && (
-          <div className="dark:text-[#E5E7EB]  flex w-full items-start justify-between">
+          <div className="flex  w-full items-start justify-between dark:text-[#E5E7EB]">
             <div style={{ width: "34%" }}>
               <div>Гүйдлийн коэффициент </div>
               <InputNumber
@@ -855,7 +857,7 @@ function GuilgeeKhiikh(
       {turul === "ashiglalt" &&
         tailbar?.includes("Цахилгаан") &&
         baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh && (
-          <div className="flex w-full items-start dark:text-[#E5E7EB] justify-between">
+          <div className="flex w-full items-start justify-between dark:text-[#E5E7EB]">
             <div style={{ width: "48%" }}>
               <div className="flex justify-start">
                 ЦЭХ төлбөр/төг/ {formatNumber(tsekhDun || 0)}
@@ -872,7 +874,7 @@ function GuilgeeKhiikh(
         tailbar?.includes("Цахилгаан") &&
         baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
         baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh && (
-          <div className="dark:text-[#E5E7EB] flex w-full items-start justify-between">
+          <div className="flex w-full items-start justify-between dark:text-[#E5E7EB]">
             <div style={{ width: "48%" }}>
               <div className="flex justify-start">
                 Сэх дэмжих төлбөр {formatNumber(sekhDemjikhTulburDun || 0)}
@@ -881,10 +883,8 @@ function GuilgeeKhiikh(
           </div>
         )}
       {turul === "ashiglalt" && (
-        <div className="flex dark:text-[#E5E7EB] w-full items-start justify-between">
-          <div >
-            Суурь хураамж: {formatNumber(suuriKhuraamj || 0, 2)}
-          </div>
+        <div className="flex w-full items-start justify-between dark:text-[#E5E7EB]">
+          <div>Суурь хураамж: {formatNumber(suuriKhuraamj || 0, 2)}</div>
           {tailbar?.includes("Цахилгаан") ? (
             <div>КВЦТ: {formatNumber(tsakhilgaanUrjver || 1, 4)}</div>
           ) : (
@@ -899,7 +899,7 @@ function GuilgeeKhiikh(
             className={`${nuatBodokhEsekh ? "p-0" : "p-2"}dark:text-gray-100`}
           >
             {nuatBodokhEsekh && negjUne > 0 && (
-              <div className="dark:text-[#E5E7EB] flex w-full flex-col items-start justify-center gap-2 border-b border-dashed">
+              <div className="flex w-full flex-col items-start justify-center gap-2 border-b border-dashed dark:text-[#E5E7EB]">
                 <div className="flex w-full items-center justify-between gap-2">
                   <div className="dark:text-white">Бодсон үнэ: </div>
                   <div className="dark:text-white">
@@ -1079,7 +1079,9 @@ function GuilgeeKhiikh(
           </div>
         </div>
       )}
-      {(turul === "avlaga" || turul === "ashiglalt" || turul === "torguuli") && (
+      {(turul === "avlaga" ||
+        turul === "ashiglalt" ||
+        turul === "torguuli") && (
         <div className="flex flex-row justify-between">
           <div />
           <div className="space-x-2">
@@ -1091,15 +1093,16 @@ function GuilgeeKhiikh(
           </div>
         </div>
       )}
-      {turul === "ashiglalt" || turul === "torguuli" && (
-        <div className="flex flex-row justify-between">
-          <div />
-          <div className="space-x-2">
-            <label>{t("НӨАТ бодох эсэх")}:</label>
-            <Switch checked={nuatBodokhEsekh} onChange={setNuatBodokhEsekh} />
+      {turul === "ashiglalt" ||
+        (turul === "torguuli" && (
+          <div className="flex flex-row justify-between">
+            <div />
+            <div className="space-x-2">
+              <label>{t("НӨАТ бодох эсэх")}:</label>
+              <Switch checked={nuatBodokhEsekh} onChange={setNuatBodokhEsekh} />
+            </div>
           </div>
-        </div>
-      )}
+        ))}
     </div>
   );
 }

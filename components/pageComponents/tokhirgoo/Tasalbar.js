@@ -10,7 +10,7 @@ function Tasalbar({ token, baiguullaga, barilgiinId }) {
     khemjee: undefined,
     tasalbarTariff: undefined,
   });
-  
+
   const [tasalbarTariff, setTasalbarTariff] = useState();
 
   function khadgalakh() {
@@ -33,14 +33,16 @@ function Tasalbar({ token, baiguullaga, barilgiinId }) {
         .then(({ data }) => {
           if (data === "Amjilttai") {
             uilchilgee(token)
-            .get("/tasalbar", { baiguullagiinId: baiguullaga._id, barilgiinId: barilgiinId  })
-            .then(({ data }) => {
-              if (!!data?.jagsaalt && data.jagsaalt.length > 0)
-              {
-                setTasalbarTariff(data?.jagsaalt[0].tasalbarTariff);
-                setTasalbar(data?.jagsaalt[0]);
-              }
-            });
+              .get("/tasalbar", {
+                baiguullagiinId: baiguullaga._id,
+                barilgiinId: barilgiinId,
+              })
+              .then(({ data }) => {
+                if (!!data?.jagsaalt && data.jagsaalt.length > 0) {
+                  setTasalbarTariff(data?.jagsaalt[0].tasalbarTariff);
+                  setTasalbar(data?.jagsaalt[0]);
+                }
+              });
             message.success(t("Амжилттай хадгаллаа"));
           } else {
             return;
@@ -52,10 +54,12 @@ function Tasalbar({ token, baiguullaga, barilgiinId }) {
   useEffect(() => {
     if (!tasalbar._id) {
       uilchilgee(token)
-        .get("/tasalbar", { baiguullagiinId: baiguullaga._id, barilgiinId: barilgiinId  })
+        .get("/tasalbar", {
+          baiguullagiinId: baiguullaga._id,
+          barilgiinId: barilgiinId,
+        })
         .then(({ data }) => {
-          if (!!data?.jagsaalt && data.jagsaalt.length > 0)
-          {
+          if (!!data?.jagsaalt && data.jagsaalt.length > 0) {
             setTasalbarTariff(data?.jagsaalt[0].tasalbarTariff);
             setTasalbar(data?.jagsaalt[0]);
           }
@@ -69,7 +73,7 @@ function Tasalbar({ token, baiguullaga, barilgiinId }) {
           <div className="flex items-center justify-between py-2">
             {t("Тасалбарын тариф")}:{" "}
             <InputNumber
-              controls = {false}
+              controls={false}
               placeholder="Тасалбарын тариф"
               formatter={(value) =>
                 `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -77,7 +81,7 @@ function Tasalbar({ token, baiguullaga, barilgiinId }) {
               parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
               value={tasalbarTariff}
               onChange={(v) => setTasalbarTariff(v)}
-              className="w-[45%] antdInputTextRight"
+              className="antdInputTextRight w-[45%]"
             />
           </div>
         </div>

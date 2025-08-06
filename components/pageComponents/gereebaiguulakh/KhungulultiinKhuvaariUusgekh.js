@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Input, InputNumber, Button, Table } from "antd";
 import moment from "moment";
 import { SettingOutlined, DeleteOutlined } from "@ant-design/icons";
 import formatNumber from "tools/function/formatNumber";
 
-function KhungulultiinKhuvaariUusgekh({ ugugdul, t, hungulultUstgakh}) {
+function KhungulultiinKhuvaariUusgekh({ ugugdul, t, hungulultUstgakh }) {
   return (
     <div className="w-full">
       <div className="space-y-2 divide-y-2">
@@ -43,7 +43,9 @@ function KhungulultiinKhuvaariUusgekh({ ugugdul, t, hungulultUstgakh}) {
               ellipsis: true,
               align: "center",
               render: (data) => {
-                return moment(data && data[data?.length - 1]).format("YYYY-MM-DD");
+                return moment(data && data[data?.length - 1]).format(
+                  "YYYY-MM-DD"
+                );
               },
             },
             {
@@ -61,7 +63,7 @@ function KhungulultiinKhuvaariUusgekh({ ugugdul, t, hungulultUstgakh}) {
               align: "center",
               render: (data) => {
                 return formatNumber(data);
-              }
+              },
             },
             {
               title: () => <SettingOutlined />,
@@ -69,8 +71,17 @@ function KhungulultiinKhuvaariUusgekh({ ugugdul, t, hungulultUstgakh}) {
               align: "center",
               render: (data) => (
                 <div className="flex flex-row justify-center">
-                  <Button  onClick={() => { hungulultUstgakh(data.key); }} className="ml-1" icon={<DeleteOutlined style={{ fontSize: "12px", color: "red" }} />}>
-                  </Button>
+                  <Button
+                    onClick={() => {
+                      hungulultUstgakh(data.key);
+                    }}
+                    className="ml-1"
+                    icon={
+                      <DeleteOutlined
+                        style={{ fontSize: "12px", color: "red" }}
+                      />
+                    }
+                  ></Button>
                 </div>
               ),
             },

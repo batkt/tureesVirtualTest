@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Input, message, notification } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useTranslation } from "react-i18next";
-import uilchilgee, {aldaaBarigch} from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 function NuutsUgSolikh({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
   const [state, setstate] = useState(ajiltan);
@@ -24,39 +24,44 @@ function NuutsUgSolikh({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
       message.warning(t("Шинэ нууц үгүүд таарахгүй байна"));
       return;
     }
-      
-      uilchilgee(token).post("/nuutsUgShalgakhAjiltan", {
+
+    uilchilgee(token)
+      .post("/nuutsUgShalgakhAjiltan", {
         id: ajiltanObject._id,
         nuutsUg: odoogiinNuutsUg,
-        
-      }).then(({data}) =>{
-
-        if(data.success === true){
+      })
+      .then(({ data }) => {
+        if (data.success === true) {
           setstate(odoogiinNuutsUg);
           ajiltanObject.nuutsUg = shineNuutsUg;
-      updateMethod("ajiltan", token, ajiltanObject).then(({ data, status }) => {
-        if (status === 200 && "Amjilttai" === data) {
-          message.success(t("Амжилттай засагдлаа"));
-          ajiltanMutate({ ...ajiltanObject });
-        }
-      });
-        }else{
+          updateMethod("ajiltan", token, ajiltanObject).then(
+            ({ data, status }) => {
+              if (status === 200 && "Amjilttai" === data) {
+                message.success(t("Амжилттай засагдлаа"));
+                ajiltanMutate({ ...ajiltanObject });
+              }
+            }
+          );
+        } else {
           message.warning(t(data.message));
         }
-      }).catch((e) => aldaaBarigch(e))
+      })
+      .catch((e) => aldaaBarigch(e));
   }
 
   return (
-    <div className="col-span-12 lg:col-span-8 xxl:col-span-6">
+    <div className="xxl:col-span-6 col-span-12 lg:col-span-8">
       <div className="box lg:mt-5">
-        <div className="flex items-center p-5 border-b border-gray-200 dark:border-dark-5">
-          <h2 className="font-medium text-base mr-auto dark:text-gray-200">
+        <div className="dark:border-dark-5 flex items-center border-b border-gray-200 p-5">
+          <h2 className="mr-auto text-base font-medium dark:text-gray-200">
             {t("Нууц үг солих")}
           </h2>
         </div>
         <div className="p-5">
           <div>
-            <label className="form-label">{t("Одоо ашиглаж буй нууц үг")}</label>
+            <label className="form-label">
+              {t("Одоо ашиглаж буй нууц үг")}
+            </label>
             <Input.Password
               className="form-control"
               placeholder={t("Одоо ашиглаж буй нууц үг")}

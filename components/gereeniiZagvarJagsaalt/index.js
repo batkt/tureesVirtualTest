@@ -122,7 +122,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
           data-aos-delay="300"
         >
           <Button
-            className=" font-medium dark:text-gray-200"
+            className="font-medium dark:text-gray-200"
             onClick={() =>
               router.push(`/khyanalt/geree/zagvar/${zagvaraaBichijUgnu}/new`)
             }
@@ -138,7 +138,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
               <Menu className="p-2">
                 <Menu.Item
                   key="Заалт нэмэх"
-                  className="dark:hover:bg-dark-2 flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
+                  className="flex items-center p-2 space-x-2 transition duration-300 ease-in-out bg-white rounded-md dark:hover:bg-dark-2 hover:bg-gray-200 dark:bg-gray-700"
                   onClick={zaaltOruulakh}
                 >
                   <UserAddOutlined />
@@ -146,7 +146,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                 </Menu.Item>
                 <Menu.Item
                   key="Заалт Excel-ээс оруулах"
-                  className="dark:hover:bg-dark-2 flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
+                  className="flex items-center p-2 space-x-2 transition duration-300 ease-in-out bg-white rounded-md dark:hover:bg-dark-2 hover:bg-gray-200 dark:bg-gray-700"
                   onClick={zaaltOruulakhExcel}
                 >
                   <UserAddOutlined />
@@ -154,7 +154,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                 </Menu.Item>
                 <Menu.Item
                   key="Заалт Excel-ээс оруулах"
-                  className="dark:hover:bg-dark-2 flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
+                  className="flex items-center p-2 space-x-2 transition duration-300 ease-in-out bg-white rounded-md dark:hover:bg-dark-2 hover:bg-gray-200 dark:bg-gray-700"
                   onClick={zagvarOruulakhExcel}
                 >
                   <UserAddOutlined />
@@ -166,10 +166,10 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
             className="cursor-pointer"
           >
             <Button
-              className="dropdown-toggle btn w-full px-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-gray-300 md:mt-0 md:w-auto"
+              className="w-full px-2 text-gray-700 dropdown-toggle btn focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-gray-300 md:mt-0 md:w-auto"
               aria-expanded="false"
               icon={
-                <span className="flex h-5 w-5 items-center justify-center">
+                <span className="flex items-center justify-center w-5 h-5">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -180,7 +180,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="feather feather-plus h-4 w-4"
+                    className="w-4 h-4 feather feather-plus"
                   >
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -199,8 +199,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
           return (
             <div
               key={a?._id}
-              className="sm:col-span -6
-              col-span-12 md:col-span-4 xl:col-span-2"
+              className="sm:col-span -6 col-span-12 md:col-span-4 xl:col-span-2"
               onClick={() => setKharuulakhGeree(a)}
               data-aos="zoom-in-up"
               data-aos-duration="1000"
@@ -269,7 +268,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                               title={t("Загвар устгах уу?")}
                               okText={t("Тийм")}
                               cancelText={t("Үгүй")}
-                              className=" dark:bg-dark-1 dark:hover: bg-dark-2 hover: flex cursor-pointer items-center rounded-md bg-white p-2 text-white transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800"
+                              className="dark:bg-dark-1 dark:hover: bg-dark-2 hover: flex cursor-pointer items-center rounded-md bg-white p-2 text-white transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800"
                               onConfirm={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();

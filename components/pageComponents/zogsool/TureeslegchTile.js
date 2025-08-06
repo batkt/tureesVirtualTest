@@ -1,6 +1,6 @@
-import moment from "moment"
-import React from "react"
-import formatNumber from "tools/function/formatNumber"
+import moment from "moment";
+import React from "react";
+import formatNumber from "tools/function/formatNumber";
 
 function TureeslegchTile({
   car_number,
@@ -33,7 +33,7 @@ function TureeslegchTile({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default TureeslegchTile
+export default TureeslegchTile;

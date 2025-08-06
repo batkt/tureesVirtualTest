@@ -26,14 +26,12 @@ function StreamTokhirgooIp(
     cameraObject?.tokhirgoo?.dotorDulaanKamerEsekh || false
   );
 
-  
-
   useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
         setUnshijBaina(true);
-        saveTokhirgoo(form.getFieldsValue())
+        saveTokhirgoo(form.getFieldsValue());
         destroy();
         refresh();
         setUnshijBaina(false);
@@ -128,17 +126,17 @@ function StreamTokhirgooIp(
           </Form.Item>
         </div>
       )}
-      <Form.Item
-        name={"dotorKamerEsekh"}
-        label={"Дотор"}
-      >
-        <Switch checked={dotorKamerEsekh} onChange={(v) => setDotorKamerEsekh(v)} />
+      <Form.Item name={"dotorKamerEsekh"} label={"Дотор"}>
+        <Switch
+          checked={dotorKamerEsekh}
+          onChange={(v) => setDotorKamerEsekh(v)}
+        />
       </Form.Item>
-      <Form.Item
-        name={"dotorDulaanKamerEsekh"}
-        label={"Дотор дулаан"}
-      >
-        <Switch checked={dotorDulaanKamerEsekh} onChange={(v) => setDotorDulaanKamerEsekh(v)} />
+      <Form.Item name={"dotorDulaanKamerEsekh"} label={"Дотор дулаан"}>
+        <Switch
+          checked={dotorDulaanKamerEsekh}
+          onChange={(v) => setDotorDulaanKamerEsekh(v)}
+        />
       </Form.Item>
     </Form>
   );

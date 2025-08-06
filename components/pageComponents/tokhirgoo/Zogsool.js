@@ -156,7 +156,7 @@ function Zogsool({
               </div>
             )}
           >
-            <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
+            <a className="flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
               <MoreOutlined style={{ fontSize: "18px" }} />
             </a>
           </Popover>
@@ -244,7 +244,7 @@ function Zogsool({
   function zogsoolBurtegye(data, p) {
     const d = p === "zasah" ? data : null;
     const footer = [
-      <Button  type="primary" onClick={() => ref.current.khaaya()}>
+      <Button type="primary" onClick={() => ref.current.khaaya()}>
         {t("Хаах")}
       </Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
@@ -408,8 +408,8 @@ const isChanged = useMemo(() => {
       );
     }, [zogsoolTokhirgoo, baiguullaga]);
 
-<div className="box mt-5 lg:mt-0">
-  <div className="w-full flex py-8 px-5 2xl:flex-row flex-col justify-between items-center 2xl:gap-20 gap-8">
+<div className="mt-5 box lg:mt-0">
+  <div className="flex flex-col items-center justify-between w-full gap-8 px-5 py-8 2xl:flex-row 2xl:gap-20">
     <div className="flex flex-col items-center justify-center w-full gap-4">
       <h2 className="text-xl">Орох Камер</h2>
       <div className="border aspect-[3/2] w-full flex justify-center items-center bg-gray-400"><p>cameraOroh</p></div>
@@ -420,10 +420,10 @@ const isChanged = useMemo(() => {
     </div>
   </div>
 </div>
-<div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-6">
-    <div className="box w-full p-5 flex flex-col 2xl:gap-10 gap-5">
+<div className="col-span-12 mt-5 xxl:col-span-4 lg:col-span-6">
+    <div className="flex flex-col w-full gap-5 p-5 box 2xl:gap-10">
     <div className="border 2xl:aspect-[3/2] aspect-square flex justify-center items-center bg-gray-400"><p>Camera1</p></div>
-<div className="grid 2xl:grid-cols-2 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-2 sm:grid-cols-2 grid-cols-1 gap-5 2xl:gap-20">
+<div className="grid grid-cols-1 gap-5 2xl:grid-cols-2 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-2 sm:grid-cols-2 2xl:gap-20">
     <div className="border 2xl:aspect-[3/2] xl:aspect-[3/2] lg:aspect-[3/2] aspect-square bg-gray-400"><p>Camera2</p></div>
 <div className="border 2xl:aspect-[3/2] xl:aspect-[3/2] lg:aspect-[3/2] aspect-square bg-gray-400"><p>Camera3</p></div>
 <div className="border 2xl:aspect-[3/2] xl:aspect-[3/2] lg:aspect-[3/2] aspect-square bg-gray-400"><p>Camera4</p></div>

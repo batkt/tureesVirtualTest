@@ -18,18 +18,18 @@ function SanalKhuseltIlgeekh({ destroy, ajiltan }, ref) {
     [form]
   );
   function sanalYwuulya() {
-    const ilgeekhOgogdol = form.getFieldsValue()
-    ilgeekhOgogdol.ajiltniiNer = ajiltan?.ner
-    ilgeekhOgogdol.ajiltniiId = ajiltan?._id
-    ilgeekhOgogdol.baiguullagiinId = ajiltan?.baiguullagiinId
-    ilgeekhOgogdol.baiguullagiinNer = ajiltan?.baiguullagiinNer
-    ilgeekhOgogdol.utas = ajiltan?.utas
-    ilgeekhOgogdol.turul = "DotoodSystemes"
-        uilchilgee()
-        .post("https://zevtabs.mn/api/kholbooBarikhKhadgalya", ilgeekhOgogdol)
+    const ilgeekhOgogdol = form.getFieldsValue();
+    ilgeekhOgogdol.ajiltniiNer = ajiltan?.ner;
+    ilgeekhOgogdol.ajiltniiId = ajiltan?._id;
+    ilgeekhOgogdol.baiguullagiinId = ajiltan?.baiguullagiinId;
+    ilgeekhOgogdol.baiguullagiinNer = ajiltan?.baiguullagiinNer;
+    ilgeekhOgogdol.utas = ajiltan?.utas;
+    ilgeekhOgogdol.turul = "DotoodSystemes";
+    uilchilgee()
+      .post("https://zevtabs.mn/api/kholbooBarikhKhadgalya", ilgeekhOgogdol)
       .then((response) => {
         if (response.data === "Amjilttai") {
-          destroy();          
+          destroy();
           message.success("Амжилттай илгээлээ");
         }
       })
@@ -39,15 +39,17 @@ function SanalKhuseltIlgeekh({ destroy, ajiltan }, ref) {
   }
 
   return (
-    <Form
-      autoComplete={"off"}
-      form={form}
-      onFinish={()=>sanalYwuulya()}
-    >
-      <Form.Item rules={[{required: true, message: t("Гарчиг бичнэ үү.")}]} name={"garchig"}>
+    <Form autoComplete={"off"} form={form} onFinish={() => sanalYwuulya()}>
+      <Form.Item
+        rules={[{ required: true, message: t("Гарчиг бичнэ үү.") }]}
+        name={"garchig"}
+      >
         <Input placeholder={t("Гарчиг")} />
       </Form.Item>
-      <Form.Item rules={[{required: true, message: t("Санал хүсэлтээ энд бичнэ үү.")}]} name={"tailbar"}>
+      <Form.Item
+        rules={[{ required: true, message: t("Санал хүсэлтээ энд бичнэ үү.") }]}
+        name={"tailbar"}
+      >
         <TextArea placeholder={t("Санал хүсэлтээ бичнэ үү.")} />
       </Form.Item>
     </Form>

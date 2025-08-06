@@ -28,7 +28,19 @@ function useBaritsaa(token, gereeniiId) {
   };
 }
 
-function BaritsaaKhuulga({ data, token, onFinish, destroy, tulukhUldegdel, ashiglakhUldegdel, setAshiglakhUldegdel, setTulukhUldegdel }, ref) {
+function BaritsaaKhuulga(
+  {
+    data,
+    token,
+    onFinish,
+    destroy,
+    tulukhUldegdel,
+    ashiglakhUldegdel,
+    setAshiglakhUldegdel,
+    setTulukhUldegdel,
+  },
+  ref
+) {
   const { baritsaaKhuulga, baritsaaKhuulgaMutate } = useBaritsaa(
     token,
     data?._id
@@ -47,12 +59,12 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy, tulukhUldegdel, ashig
 
   function baritsaaniiGuilgeeUstgaya({ _id, orlogo, zarlaga, guilgeeniiId }) {
     if (orlogo !== 0) {
-      setTulukhUldegdel(tulukhUldegdel + orlogo)
-      setAshiglakhUldegdel(ashiglakhUldegdel - orlogo)
+      setTulukhUldegdel(tulukhUldegdel + orlogo);
+      setAshiglakhUldegdel(ashiglakhUldegdel - orlogo);
     }
     if (zarlaga !== 0) {
-      setTulukhUldegdel(tulukhUldegdel - zarlaga)
-      setAshiglakhUldegdel(ashiglakhUldegdel + zarlaga)
+      setTulukhUldegdel(tulukhUldegdel - zarlaga);
+      setAshiglakhUldegdel(ashiglakhUldegdel + zarlaga);
     }
 
     axios(token)
@@ -86,8 +98,8 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy, tulukhUldegdel, ashig
   }, []);
 
   return (
-    <div className="flex overflow-auto flex-col space-y-2">
-      <div className="grid grid-cols-5 min-w-[700px] border-b border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
+    <div className="flex flex-col space-y-2 overflow-auto">
+      <div className="grid min-w-[700px] grid-cols-5 border-b border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
         <div className="p-1">№</div>
         <div className="p-1">{t("Огноо")}</div>
         <div className="p-1">{t("Орлого")}</div>
@@ -96,7 +108,7 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy, tulukhUldegdel, ashig
       </div>
       {baritsaaKhuulga
         ?.map((a, i) => (
-          <div className="grid grid-cols-5 border-b min-w-[700px] border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+          <div className="grid min-w-[700px] grid-cols-5 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
             <div className="p-1">{i + 1}</div>
             <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
             <div className="p-1">{formatNumber(a.orlogo, 0)}</div>

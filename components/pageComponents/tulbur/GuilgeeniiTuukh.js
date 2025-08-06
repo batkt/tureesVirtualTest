@@ -327,7 +327,7 @@ function GuilgeeniiTuukh(
               disabledDate={(e) => e && e > moment().endOf("day")}
             />
           </div>
-          <div className=" flex flex-col">
+          <div className="flex flex-col ">
             <div className="flex gap-2">
               <div className="font-bold dark:text-white">
                 {t("Гэрээний дугаар")}:

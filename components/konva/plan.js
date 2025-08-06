@@ -211,7 +211,7 @@ class App extends Component {
     return (
       <div>
         <div className="flex space-x-3">
-          <div className=" flex h-8 w-full  items-end justify-end space-x-10 pb-1 ">
+          <div className="flex h-8 w-full items-end justify-end space-x-10 pb-1 ">
             <div className="flex">
               <div className="w-5 border-2 bg-green-300 " />
               <div className="pl-2 pr-10">{t("Идэвхтэй")}</div>

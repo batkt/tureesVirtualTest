@@ -22,20 +22,16 @@ function KhungulultTuukh({ token }) {
   const { ajiltan } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
 
-
-
   const query = useMemo(() => {
     return {
       createdAt: ekhlekhOgnoo
         ? {
-          $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-          $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-        }
+            $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+            $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+          }
         : undefined,
     };
   }, [ekhlekhOgnoo]);
-
-
 
   const { khungulultTuukh, khungulultTuukhMutate, setKhuudaslalt } =
     useKhungulultTuukh(token, ajiltan?.baiguullagiinId, query);
@@ -77,7 +73,6 @@ function KhungulultTuukh({ token }) {
         size="small"
         rowClassName="hover:bg-blue-100"
         dataSource={khungulultTuukh?.jagsaalt}
-
         pagination={{
           current: khungulultTuukh?.khuudasniiDugaar,
           pageSize: 100,

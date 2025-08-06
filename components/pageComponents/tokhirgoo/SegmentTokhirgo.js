@@ -50,7 +50,7 @@ function Tile({ zasya, token, ...a }) {
                 >
                   <div className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100">
                     <DeleteOutlined className="text-lg text-red-500" />
-                    <label className=" text-red-500">{t("Устгах")}</label>
+                    <label className="text-red-500 ">{t("Устгах")}</label>
                   </div>
                 </Popconfirm>
               </div>
@@ -102,7 +102,7 @@ function segmentiinTokhirgoo({ token }) {
     <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-6">
       <div className="box mt-5 lg:mt-0">
         <div
-          className="dark:border-dark-5 flex items-center  justify-end border-b border-gray-200 px-5 pb-2 pt-5"
+          className="dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pb-2 pt-5"
           onClick={() => segmentBurtegye()}
         >
           <Button type="primary">{t("Ялгаж бүртгэх")}</Button>

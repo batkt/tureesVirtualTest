@@ -41,7 +41,9 @@ function TulburiinDelgerenguiTailan(
     setCamerVal([camerVal[0], e]);
   };
   const zogsooAjiltanQuery = useMemo(() => {
-    return { tsonkhniiErkhuud: {$in : [window.location.pathname, "/khyanalt/kiosk"]} };
+    return {
+      tsonkhniiErkhuud: { $in: [window.location.pathname, "/khyanalt/kiosk"] },
+    };
   }, [baiguullagiinId, barilgiinId]);
 
   const query = useMemo(() => {
@@ -456,7 +458,7 @@ function TulburiinDelgerenguiTailan(
           allowClear
           showSearch
           clearIcon={() => (
-            <div className="dark:bg-gray-800 dark:text-gray-200  hover:dark:text-gray-400">
+            <div className="dark:bg-gray-800 dark:text-gray-200 hover:dark:text-gray-400">
               <CloseCircleOutlined />
             </div>
           )}
@@ -513,7 +515,7 @@ function TulburiinDelgerenguiTailan(
                     {a.ner}:
                     <div className="flex font-normal">
                       {formatNumber(a.dun) || 0}₮
-                      <div className=" ml-3 mr-3 flex w-10 items-center justify-center border-x border-green-600 text-center">
+                      <div className="ml-3 mr-3 flex w-10 items-center justify-center border-x border-green-600  text-center">
                         <div className="ml-5 mr-5">{a.too}</div>
                       </div>
                       <div className="ml-5 flex w-10 items-center justify-center border-green-600 pr-5 text-center">

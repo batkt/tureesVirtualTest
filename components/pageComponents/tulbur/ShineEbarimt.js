@@ -29,7 +29,6 @@ function ShineEbarimt({
   useEffect(() => {
     Aos.init();
   });
-  
 
   function registerShalgaya(register) {
     setRegister(register);
@@ -40,7 +39,7 @@ function ShineEbarimt({
       uilchilgee()
         .get(`/tatvaraasBaiguullagaAvya/${register}`)
         .then(({ data }) => {
-          setBaiguullaga(data); 
+          setBaiguullaga(data);
           setTin(data?.tin);
         });
   }

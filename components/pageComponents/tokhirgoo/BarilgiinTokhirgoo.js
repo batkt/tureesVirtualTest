@@ -66,7 +66,7 @@ function BarilgiinTokhirgoo({
           : undefined,
         eBarimtBugdShivikh: barilga?.tokhirgoo?.eBarimtBugdShivikh
           ? barilga?.tokhirgoo?.eBarimtBugdShivikh
-          : undefined,  
+          : undefined,
       });
       setSongogdsonDuuregKod(barilga?.tokhirgoo?.districtCode?.substring(0, 2));
 
@@ -381,7 +381,9 @@ function BarilgiinTokhirgoo({
             <div className="box">
               <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">
-                  <div className="font-medium">{t("Бүх баримт татвар руу илгээх")}</div>
+                  <div className="font-medium">
+                    {t("Бүх баримт татвар руу илгээх")}
+                  </div>
                   <div className="text-gray-600"></div>
                 </div>
                 <div className="ml-auto">
@@ -439,11 +441,11 @@ function BarilgiinTokhirgoo({
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">
-                  {t("Corporate ашиглах үед")}
-                </div>
+                <div className="font-medium">{t("Corporate ашиглах үед")}</div>
                 <div className="text-gray-600">
-                  {t("И Баримтын сугалааны дугаар болон төлсөн дүнг хэрэглэгч руу мессежээр илгээх эсэх")}
+                  {t(
+                    "И Баримтын сугалааны дугаар болон төлсөн дүнг хэрэглэгч руу мессежээр илгээх эсэх"
+                  )}
                 </div>
               </div>
               <div className="ml-auto">

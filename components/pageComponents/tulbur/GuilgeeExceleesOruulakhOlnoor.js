@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect } from "react";
-import { DatePicker, message, Select, Upload, Switch, Tooltip,} from "antd";
+import { DatePicker, message, Select, Upload, Switch, Tooltip } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import uilchilgee, { url } from "services/uilchilgee";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
@@ -46,7 +46,7 @@ function GuilgeeExceleesOruulakhOlnoor(
     undefined,
     token
   );
-  
+
   React.useImperativeHandle(
     ref,
     () => ({
@@ -88,7 +88,7 @@ function GuilgeeExceleesOruulakhOlnoor(
   return (
     <div>
       <div className="grid w-full grid-cols-2 gap-4">
-      <DatePicker
+        <DatePicker
           value={ognoo}
           onChange={setOgnoo}
           allowClear={false}
@@ -102,12 +102,12 @@ function GuilgeeExceleesOruulakhOlnoor(
         >
           {zardal?.jagsaalt?.map((a) => (
             <Select.Option key={a._id} value={a._id}>
-              <div className="w-full flex justify-between border-b">
+              <div className="flex w-full justify-between border-b">
                 <p className="flex border-r bg-green-400 bg-opacity-10 pl-2 pr-2 text-left">
                   {a.ner}
                 </p>
-                <div className="w-full justify-between flex bg-blue-600 bg-opacity-5 pl-2 pr-2">
-                  <p className={`border-r text-right mr-5`}>{t(a.turul)}</p>
+                <div className="flex w-full justify-between bg-blue-600 bg-opacity-5 pl-2 pr-2">
+                  <p className={`mr-5 border-r text-right`}>{t(a.turul)}</p>
                   <p className="text-right">
                     {a.turul !== "Дурын" ? a.tariff : "Дурын"}
                     {a.turul !== "Дурын" && "₮"}

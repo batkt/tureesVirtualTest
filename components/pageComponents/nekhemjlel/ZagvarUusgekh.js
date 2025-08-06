@@ -103,7 +103,6 @@ function NekhemjlekhZasvar({
   buttonListCustom = [],
   otherProps,
 }) {
-
   useEffect(() => {
     // onTextChange && onTextChange(instance?.getText());
   }, [value]);
@@ -158,31 +157,31 @@ function NekhemjlekhZasvar({
     });
     var songokhTalbaruud = [];
     ashiglaltiinZardal?.jagsaalt?.map((a) => {
-        songokhTalbaruud.push({
-          ner: `${a.ner}.Дүн`,
-          talbar: `${a.ner}.tulukhDun`,
-        });
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Дүн`,
+        talbar: `${a.ner}.tulukhDun`,
+      });
 
-        songokhTalbaruud.push({
-          ner: `${a.ner}.Хэмжих нэгж`,
-          talbar: `${a.ner}.khemjikhNegj`,
-        });
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Хэмжих нэгж`,
+        talbar: `${a.ner}.khemjikhNegj`,
+      });
 
-        songokhTalbaruud.push({
-          ner: `${a.ner}.Тариф`,
-          talbar: `${a.ner}.tariff`,
-        });
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Тариф`,
+        talbar: `${a.ner}.tariff`,
+      });
 
-        songokhTalbaruud.push({
-          ner: `${a.ner}.Тариф үсгээр`,
-          talbar: `${a.ner}.tariffUsgeer`,
-        });
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Тариф үсгээр`,
+        talbar: `${a.ner}.tariffUsgeer`,
+      });
 
-        songokhTalbaruud.push({
-          ner: `${a.ner}.Нэгж`,
-          talbar: `${a.ner}.negj`,
-        });
-        if (a.turul == "кВт" || a.turul == "1м3") {
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Нэгж`,
+        talbar: `${a.ner}.negj`,
+      });
+      if (a.turul == "кВт" || a.turul == "1м3") {
         songokhTalbaruud.push({
           ner: `${a.ner}.Өмнөх заалт`,
           talbar: `${a.ner}.umnukhZaalt`,
@@ -191,10 +190,10 @@ function NekhemjlekhZasvar({
           ner: `${a.ner}.Сүүлийн заалт`,
           talbar: `${a.ner}.suuliinZaalt`,
         });
-        } else {
+      } else {
         songokhTalbaruud.push({
-            ner: `${a.ner}.Хөнгөлөлт`,
-            talbar: `${a.ner}.khungulult`,
+          ner: `${a.ner}.Хөнгөлөлт`,
+          talbar: `${a.ner}.khungulult`,
         });
       }
     });

@@ -21,13 +21,17 @@ function tugeemelAsuult() {
           defaultActiveKey={["0"]}
           expandIcon={({ isActive }) => (
             <PlusOutlined
-              className="pt-1 pr-4 text-green-600 "
+              className="pr-4 pt-1 text-green-600 "
               rotate={isActive ? 45 : 0}
             />
           )}
           ghost
         >
-          <Panel header={i18n.language === "mn" ? mur?.asuult : mur?.asuultEN} className="font-semibold" key="1">
+          <Panel
+            header={i18n.language === "mn" ? mur?.asuult : mur?.asuultEN}
+            className="font-semibold"
+            key="1"
+          >
             <div className="px-16 pb-2 font-normal dark:text-gray-200">
               {i18n.language === "mn" ? mur?.khariult : mur?.khariultEN}
             </div>

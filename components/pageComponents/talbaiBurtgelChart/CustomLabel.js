@@ -8,7 +8,7 @@ import * as am5percent from "@amcharts/amcharts5/percent";
 
 function CustomLabel(props) {
   const chartID = props.chartID;
-  
+
   useLayoutEffect(() => {
     var root = am5.Root.new(chartID);
 

@@ -17,7 +17,11 @@ import KhuvaajTulukh from "./KhuvaajTulukh";
 import EBarimt from "../togloomiinTuv/EBarimt";
 import QRCode from "react-qr-code";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import uilchilgee, { aldaaBarigch, socket, zogsoolUilchilgee } from "services/uilchilgee";
+import uilchilgee, {
+  aldaaBarigch,
+  socket,
+  zogsoolUilchilgee,
+} from "services/uilchilgee";
 import { useEffect } from "react";
 import { t } from "i18next";
 import { useQRCode } from "next-qrcode";
@@ -208,12 +212,10 @@ function Tulbur(
           setAlkham(2);
           onRefresh();
           suuliikhEsekh === true &&
-              zogsoolUilchilgee()
+            zogsoolUilchilgee()
               .get("/neeye/" + camerVal + "")
-              .then(function (response) {
-              })
-              .catch(function (error) {
-              });
+              .then(function (response) {})
+              .catch(function (error) {});
           setLoading(false);
         } else {
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);

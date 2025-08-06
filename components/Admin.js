@@ -13,7 +13,7 @@ import { useAuth } from "../services/auth";
 import NTses from "./tolgoi/Tses";
 import MTses from "./tolgoi/MTses";
 import _ from "lodash";
-import {socket} from "../services/uilchilgee";
+import { socket } from "../services/uilchilgee";
 import ProfileTovch from "./tolgoi/ProfileTovch";
 import useErkh from "../tools/logic/khereglegchiinErkhiinTokhirgoo";
 import { useThemeValue } from "pages";
@@ -182,27 +182,26 @@ function Admin({
   const [showNotificationModal, setShowNotificationModal] = useState(false);
 
   useEffect(() => {
+    const handleNewNotification = (newNotif) => {
+      console.log("🔔 Received new notification:", newNotif);
+      setCurrentNotification({
+        title: newNotif.object?.title || "New Notification",
+        message: newNotif.object?.message || "You have a new notification",
+        image: newNotif.object?.image,
+        date: newNotif.createdAt || new Date(),
+      });
+      setShowNotificationModal(true);
 
-  const handleNewNotification = (newNotif) => {
-    console.log("🔔 Received new notification:", newNotif);
-    setCurrentNotification({
-      title: newNotif.object?.title || 'New Notification',
-      message: newNotif.object?.message || 'You have a new notification',
-      image: newNotif.object?.image,
-      date: newNotif.createdAt || new Date()
-    });
-    setShowNotificationModal(true);
-    
-    setTimeout(() => setShowNotificationModal(false), 8000);
-  };
+      setTimeout(() => setShowNotificationModal(false), 8000);
+    };
 
-  socket().on("newMedegdelAdmin", handleNewNotification);
-  console.log("🔥 EVENT RECEIVED: newMedegdelAdmin", handleNewNotification);
+    socket().on("newMedegdelAdmin", handleNewNotification);
+    console.log("🔥 EVENT RECEIVED: newMedegdelAdmin", handleNewNotification);
 
-  return () => {
-    socket().off("newMedegdelAdmin", handleNewNotification);
-  };
-}, []);
+    return () => {
+      socket().off("newMedegdelAdmin", handleNewNotification);
+    };
+  }, []);
 
   return (
     <div
@@ -346,7 +345,7 @@ function Admin({
       <div className="flex items-center justify-between py-4">
         {dedKhuudas && (
           <button
-            className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600  focus:ring-opacity-50 md:hidden"
+            className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:hidden"
             onClick={() =>
               _.isFunction(onBack) ? onBack(router.back) : router.back()
             }
@@ -451,7 +450,7 @@ function Admin({
       )}
       <h2
         id="garchig"
-        className=" -mt-4 ml-3 flex text-base font-semibold text-white md:hidden "
+        className="-mt-4 ml-3 flex text-base font-semibold text-white  md:hidden"
       >
         {t(title)}
       </h2>
@@ -464,7 +463,7 @@ function Admin({
           <div className="flex">
             {dedKhuudas && (
               <button
-                className="hidden h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600  focus:ring-opacity-50 md:flex"
+                className="hidden h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:flex"
                 onClick={() =>
                   _.isFunction(onBack) ? onBack(router.back) : router.back()
                 }
@@ -477,7 +476,7 @@ function Admin({
             )}
             <h2
               id="garchig"
-              className=" ml-3 hidden items-center justify-center text-base  font-semibold text-green-800  dark:text-gray-200 md:flex "
+              className="ml-3 hidden items-center justify-center text-base font-semibold text-green-800  dark:text-gray-200 md:flex"
             >
               {t(title)}
             </h2>
@@ -485,7 +484,12 @@ function Admin({
           <div className="flex w-full flex-row justify-between md:w-auto md:space-x-3 lg:space-x-6">
             {token && baiguullaga?._id && barilgiinId && (
               <div className="hidden h-8 items-center justify-center md:flex ">
-                <MsgToololt token={token} baiguullagiinId={baiguullaga?._id} barilgiinId={barilgiinId} msgNegjUne={baiguullaga?.tokhirgoo?.msgNegjUne || 100}/>
+                <MsgToololt
+                  token={token}
+                  baiguullagiinId={baiguullaga?._id}
+                  barilgiinId={barilgiinId}
+                  msgNegjUne={baiguullaga?.tokhirgoo?.msgNegjUne || 100}
+                />
               </div>
             )}
             {tsonkhniiId && (
@@ -561,7 +565,11 @@ function Admin({
                       if (!!onSearch) {
                         clearTimeout(timeout);
                         timeout = setTimeout(function () {
-                          if(!target.value?.includes("\\") && !target.value?.includes("[") && !target.value?.includes("]"))
+                          if (
+                            !target.value?.includes("\\") &&
+                            !target.value?.includes("[") &&
+                            !target.value?.includes("]")
+                          )
                             onSearch(target.value);
                         }, 300);
                       }
@@ -695,47 +703,57 @@ function Admin({
           onClick={() => setTheme(themeValue ? "light" : "dark")}
         />
       </div>
-{showNotificationModal && currentNotification && (
-  <div className="fixed inset-0 flex items-end justify-center px-4 py-6 pointer-events-none sm:p-6 sm:items-start sm:justify-end ">
-    <div className="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
-      <div className="p-4">
-        <div className="flex items-start">
-          {currentNotification.image && (
-            <div className="flex-shrink-0 mr-3">
-              <img 
-                className="h-10 w-10 rounded-full" 
-                src={currentNotification.image} 
-                alt="Notification"
-              />
+      {showNotificationModal && currentNotification && (
+        <div className="pointer-events-none fixed inset-0 flex items-end justify-center px-4 py-6 sm:items-start sm:justify-end sm:p-6 ">
+          <div className="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+            <div className="p-4">
+              <div className="flex items-start">
+                {currentNotification.image && (
+                  <div className="mr-3 flex-shrink-0">
+                    <img
+                      className="h-10 w-10 rounded-full"
+                      src={currentNotification.image}
+                      alt="Notification"
+                    />
+                  </div>
+                )}
+                <div className="flex-1 pt-0.5">
+                  <p className="text-sm font-medium text-gray-900">
+                    {currentNotification.title}
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    {currentNotification.message}
+                  </p>
+                  <p className="mt-1 text-xs text-gray-400">
+                    {moment(currentNotification.date).format(
+                      "YYYY-MM-DD HH:mm"
+                    )}
+                  </p>
+                </div>
+                <div className="ml-4 flex flex-shrink-0">
+                  <button
+                    onClick={() => setShowNotificationModal(false)}
+                    className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
+                  >
+                    <span className="sr-only">Close</span>
+                    <svg
+                      className="h-5 w-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
-          )}
-          <div className="flex-1 pt-0.5">
-            <p className="text-sm font-medium text-gray-900">
-              {currentNotification.title}
-            </p>
-            <p className="mt-1 text-sm text-gray-500">
-              {currentNotification.message}
-            </p>
-            <p className="mt-1 text-xs text-gray-400">
-              {moment(currentNotification.date).format("YYYY-MM-DD HH:mm")}
-            </p>
-          </div>
-          <div className="ml-4 flex-shrink-0 flex">
-            <button
-              onClick={() => setShowNotificationModal(false)}
-              className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none"
-            >
-              <span className="sr-only">Close</span>
-              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 }

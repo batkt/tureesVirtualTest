@@ -16,7 +16,9 @@ const BaganiinSongolt = ({
       setShineBagana(
         columns.filter((a) => {
           let parsedBaganuud = JSON.parse(baganuud);
-          return parsedBaganuud.find((b) => JSON.stringify(b) === JSON.stringify(a.dataIndex));
+          return parsedBaganuud.find(
+            (b) => JSON.stringify(b) === JSON.stringify(a.dataIndex)
+          );
         })
       );
   }, []);
@@ -53,9 +55,14 @@ const BaganiinSongolt = ({
                 <Menu.Item key={"bagana-" + i}>
                   <Checkbox
                     checked={
-                      !!shineBagana.find((a) => JSON.stringify(a.dataIndex) === JSON.stringify(mur.dataIndex))
+                      !!shineBagana.find(
+                        (a) =>
+                          JSON.stringify(a.dataIndex) ===
+                          JSON.stringify(mur.dataIndex)
+                      )
                     }
-                    onClick={(e) => baganaNemekh(e, mur)}>
+                    onClick={(e) => baganaNemekh(e, mur)}
+                  >
                     {mur.title}
                   </Checkbox>
                 </Menu.Item>
@@ -65,11 +72,13 @@ const BaganiinSongolt = ({
         )}
         style={{ padding: 0 }}
         placement="bottom"
-        trigger="click">
+        trigger="click"
+      >
         <Button
           className={ButtonStyle}
           type="primary"
-          icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}>
+          icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}
+        >
           <span>{t("Багана")}</span>
         </Button>
       </Popover>

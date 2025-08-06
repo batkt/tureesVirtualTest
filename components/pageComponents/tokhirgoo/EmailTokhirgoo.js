@@ -5,8 +5,13 @@ import uilchilgee, { url } from "services/uilchilgee";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import { useTranslation } from "react-i18next";
 
-function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiIndex }) {
-  const { t } = useTranslation()
+function EmailTokhirgoo({
+  token,
+  baiguullaga,
+  baiguullagaMutate,
+  setSongogdsonTsonkhniiIndex,
+}) {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [emailTokhirgoo, setEmailTokhirgoo] = useState(null);
 
@@ -17,7 +22,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTs
         if (data === "Amjilttai") {
           notification.success({ message: t("Амжилттай засагдлаа") });
           baiguullagaMutate();
-          setSongogdsonTsonkhniiIndex(6)
+          setSongogdsonTsonkhniiIndex(6);
         }
       });
   }
@@ -35,16 +40,16 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTs
 
   return (
     <>
-      <div className="xl:col-span-4 col-span-12 mt-5 lg:col-span-6">
+      <div className="col-span-12 mt-5 lg:col-span-6 xl:col-span-4">
         <div className="box mt-5 lg:mt-0">
-          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
+          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
               {t("Нэхэмжлэл и-мэйлээр илгээх тохиргоо")}
             </h2>
           </div>
 
           <div className="box">
-            <div className="flex p-5  ">
+            <div className="flex p-5 ">
               <Form
                 form={form}
                 name="basic"

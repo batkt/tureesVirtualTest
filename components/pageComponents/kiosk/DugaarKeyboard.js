@@ -128,7 +128,8 @@ const DugaarKeyboard = ({
                   ? "row-span-2 h-full w-[130px] bg-[#EB3223] bg-opacity-20 text-red-500  md:w-[90px]"
                   : "h-[130px] w-[130px] bg-[#414143] md:h-[90px] md:w-[90px]"
               }`}
-              onClick={() => handleButtonClick(num, shineTurul)}>
+              onClick={() => handleButtonClick(num, shineTurul)}
+            >
               {num === "Butsakh" ? <BsBackspaceFill /> : num}
             </div>
           ))}
@@ -136,7 +137,8 @@ const DugaarKeyboard = ({
       )}
       <button
         onClick={handleUrgeljluulekh}
-        className="flex h-[90px] w-[490px] items-center justify-center gap-4 rounded-xl border-4 border-green-400 bg-green-800 bg-opacity-70 px-4 py-2 text-4xl font-bold text-green-400 focus:outline-none md:h-[70px] md:w-[400px] md:text-2xl">
+        className="flex h-[90px] w-[490px] items-center justify-center gap-4 rounded-xl border-4 border-green-400 bg-green-800 bg-opacity-70 px-4 py-2 text-4xl font-bold text-green-400 focus:outline-none md:h-[70px] md:w-[400px] md:text-2xl"
+      >
         <div>Үргэлжлүүлэх</div>
         <div className="mt-2 font-[800]">
           <img src="/rightCadet.png" />

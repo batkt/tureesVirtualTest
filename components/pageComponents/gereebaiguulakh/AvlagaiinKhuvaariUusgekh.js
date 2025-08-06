@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Input, InputNumber, Table } from "antd";
 import moment from "moment";
 import Aos from "aos";
@@ -37,7 +37,7 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
               },
             },
             {
-              title: [t("Төлөх дүн") ,"(₮)"],
+              title: [t("Төлөх дүн"), "(₮)"],
               dataIndex: "tulukhDun",
               ellipsis: true,
               width: "1.5rem",

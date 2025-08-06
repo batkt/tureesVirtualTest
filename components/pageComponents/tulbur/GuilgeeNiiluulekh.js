@@ -55,7 +55,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         case "golomt":
           guilgeeniiMur.ognoo = guilgee.tranDate;
           guilgeeniiMur.tulsunDans = guilgee.accNum;
-          break;  
+          break;
         default:
           aldaa.push(
             `${mur.talbainDugaar} талбайн холбох гүйлгээний данс тодорхоогүй байна`
@@ -82,21 +82,37 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         default:
           break;
       }
-      var baritsaaDun = Math.round((((mur?.baritsaaAvakhDun || 0) - (mur?.baritsaaniiUldegdel || 0)) + Number.EPSILON) * 10000)/ 10000
+      var baritsaaDun =
+        Math.round(
+          ((mur?.baritsaaAvakhDun || 0) -
+            (mur?.baritsaaniiUldegdel || 0) +
+            Number.EPSILON) *
+            10000
+        ) / 10000;
       if (baritsaaDun < mur.baritsaaTulbur)
         aldaa.push(
           `${mur.talbainDugaar} талбайн холбох гүйлгээний барьцааны дүн хэтэрсэн байна`
         );
       baritsaa.push(baritsaaniiMur);
     }
-    var aldangiDun = Math.round(((dans.bank === "tdb" ? guilgee.Amt : (guilgee.amount || guilgee.tranAmount)) + Number.EPSILON) * 10000)/ 10000;
-    var aldangiinUldegdel = Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000)/ 10000;
+    var aldangiDun =
+      Math.round(
+        ((dans.bank === "tdb"
+          ? guilgee.Amt
+          : guilgee.amount || guilgee.tranAmount) +
+          Number.EPSILON) *
+          10000
+      ) / 10000;
+    var aldangiinUldegdel =
+      Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
     if (
       aldangiinUldegdel > (mur.tulsunAldangi || 0) &&
       (mur.tulsunAldangi || 0) < aldangiDun - guilgee.kholbosonDun
     ) {
       aldaa.push(
-        t("талбайн холбох гүйлгээний алдангийн дүнг түрүүлж төлнө үү", {too: mur.talbainDugaar}) 
+        t("талбайн холбох гүйлгээний алдангийн дүнг түрүүлж төлнө үү", {
+          too: mur.talbainDugaar,
+        })
       );
     }
   });
@@ -124,7 +140,17 @@ async function baritsaaniiGuilgeeKhiiya(token, guilgeenuud) {
 }
 
 function GuilgeeNiiluulekh(
-  { data, dans, token, baiguullagiinId, destroy, onFinish, barilgiinId , setLoading, setLoadingBaritsaa },
+  {
+    data,
+    dans,
+    token,
+    baiguullagiinId,
+    destroy,
+    onFinish,
+    barilgiinId,
+    setLoading,
+    setLoadingBaritsaa,
+  },
   ref
 ) {
   const [gereenuud, setGereenuud] = useState([]);
@@ -302,8 +328,7 @@ function GuilgeeNiiluulekh(
             <div className="px-2">{mur.register}</div>
             <div className="px-2">{mur.ner}</div>
           </div>
-        ))
-      }
+        ))}
       </div>
     ),
     [gereeniiMedeelel, gereenuud, magadlaltaiGereenuud]
@@ -336,7 +361,7 @@ function GuilgeeNiiluulekh(
   }
 
   const guilgeeniiDun = useMemo(() => {
-    return dans.bank === "tdb" ? data.Amt : (data.amount || data.tranAmount);
+    return dans.bank === "tdb" ? data.Amt : data.amount || data.tranAmount;
   }, [dans, data]);
 
   function onChangeKholbokhDun(target, index, talbar) {
@@ -396,18 +421,22 @@ function GuilgeeNiiluulekh(
   return (
     <div className="flex w-full flex-col space-y-2">
       {magadlaltaiGereenuud?.length > 0 && (
-        <div >
+        <div>
           <div className="py-2 text-lg font-medium">
             {t("Магадлалтай гэрээ")}
           </div>
           {magadlaltaiGereenuud?.map((mur, i) => (
-          <div className="grid grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700" key={`gereeniisongolt${i}`}>
-            <div className="truncate px-2">{mur.talbainDugaar}</div>
-            <div className="px-2">{mur.register}</div>
-            <div className="px-2">{mur.ner}</div>
-          </div>
+            <div
+              className="grid grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
+              key={`gereeniisongolt${i}`}
+            >
+              <div className="truncate px-2">{mur.talbainDugaar}</div>
+              <div className="px-2">{mur.register}</div>
+              <div className="px-2">{mur.ner}</div>
+            </div>
           ))}
-        </div>)}
+        </div>
+      )}
       <div className="space-y-2 ">
         <div className="flex justify-between">
           <span className="text-sm font-medium dark:text-gray-100 lg:text-xl">
@@ -421,7 +450,9 @@ function GuilgeeNiiluulekh(
           <div className="col-span-4 lg:col-span-1">
             {data.CtAcct || data.relatedAccount || data.accNum}
           </div>
-          <div className="col-span-4 lg:col-span-1">{data.CtActnName || data.accName}</div>
+          <div className="col-span-4 lg:col-span-1">
+            {data.CtActnName || data.accName}
+          </div>
           <div className="col-span-2 text-center lg:col-span-1">
             {moment(data.TxDt || data.tranDate).format("YYYY-MM-DD")}
           </div>
@@ -434,7 +465,9 @@ function GuilgeeNiiluulekh(
               className="rounded-md pr-7"
               value={
                 guilgeeniiTailbar === undefined
-                  ? data.TxAddInf?.split("-&gt;")[0] || data.description || data.tranDesc
+                  ? data.TxAddInf?.split("-&gt;")[0] ||
+                    data.description ||
+                    data.tranDesc
                   : guilgeeniiTailbar
               }
               onChange={inputChange}
@@ -463,7 +496,9 @@ function GuilgeeNiiluulekh(
                 {data.kholbosonTalbainId &&
                   [...new Set(data.kholbosonTalbainId)].join(",")}
               </span>
-              <span>{t("Холбогдсон дүн")}:{formatNumber(data.kholbosonDun || 0)}</span>
+              <span>
+                {t("Холбогдсон дүн")}:{formatNumber(data.kholbosonDun || 0)}
+              </span>
             </div>
           )}
         </div>

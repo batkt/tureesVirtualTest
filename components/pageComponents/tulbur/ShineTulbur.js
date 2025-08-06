@@ -13,7 +13,11 @@ import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import moment from "moment";
 import QRCode from "react-qr-code";
-import uilchilgee, { aldaaBarigch, socket, zogsoolUilchilgee } from "services/uilchilgee";
+import uilchilgee, {
+  aldaaBarigch,
+  socket,
+  zogsoolUilchilgee,
+} from "services/uilchilgee";
 import { useEffect } from "react";
 import { t } from "i18next";
 import { useQRCode } from "next-qrcode";
@@ -94,7 +98,10 @@ function ShineTulbur(
 
   const [refreshdekhEsekh, setRefreshdekhEsekh] = React.useState(true);
   const ajiltanKhungulultEsekh = useMemo(() => {
-    return ajiltan?.tokhirgoo?.zogsooliinKhungulultEsekh === true || ajiltan?.erkh === "Admin";
+    return (
+      ajiltan?.tokhirgoo?.zogsooliinKhungulultEsekh === true ||
+      ajiltan?.erkh === "Admin"
+    );
   }, [ajiltan]);
 
   const eBarimtRef = React.useRef(null);
@@ -167,8 +174,7 @@ function ShineTulbur(
   useKeyboardTovchlol("F3", f3darsan);
 
   function f4Darsan() {
-    if(alkham === 1)
-    {
+    if (alkham === 1) {
       if (tulbur.length === 0) {
         turulruuTooKhiikhFunction("belen");
       }
@@ -180,9 +186,12 @@ function ShineTulbur(
   }
   function f3darsan() {
     turulruuTooKhiikhFunction("khaan");
-    if(alkham === 1)
-      batalgaajuulaltKhiiya(null, null, true);
-    if (alkham === 1 && eBarimtAshiglakhEsekh === true && !eBarimtAutomataarShivikh) {
+    if (alkham === 1) batalgaajuulaltKhiiya(null, null, true);
+    if (
+      alkham === 1 &&
+      eBarimtAshiglakhEsekh === true &&
+      !eBarimtAutomataarShivikh
+    ) {
       setAlkham(2);
     }
   }
@@ -308,7 +317,9 @@ function ShineTulbur(
       a.zogsooliinId = data?.zogsooliinId;
     });
     const tulukhGejBuiNiitDun = tulbur.reduce((a, b) => a + b?.dun, 0);
-    const khungulultDun = tulbur.filter((a) => a.dun && a.dun > 0 && a.turul == "khungulult").reduce((a, b) => a + b?.dun, 0);
+    const khungulultDun = tulbur
+      .filter((a) => a.dun && a.dun > 0 && a.turul == "khungulult")
+      .reduce((a, b) => a + b?.dun, 0);
     if (tulukhGejBuiNiitDun !== niitDun) {
       setLoading(false);
       return notification.warn({
@@ -325,16 +336,16 @@ function ShineTulbur(
       })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          eBarimtAshiglakhEsekh && niitDun > khungulultDun ? setAlkham(ebarimtShuud ? 3 : 2) : ebarimtguiTulburDuusgakh();
+          eBarimtAshiglakhEsekh && niitDun > khungulultDun
+            ? setAlkham(ebarimtShuud ? 3 : 2)
+            : ebarimtguiTulburDuusgakh();
           onRefresh();
           suuliikhEsekh === true &&
             !songogdsonZogsool?.garakhKhaalgaGarTokhirgoo;
-            zogsoolUilchilgee()
+          zogsoolUilchilgee()
             .get("/neeye/" + camerVal + "")
-            .then(function (response) {
-            })
-            .catch(function (error) {
-            });
+            .then(function (response) {})
+            .catch(function (error) {});
           setLoading(false);
         } else {
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
@@ -385,7 +396,11 @@ function ShineTulbur(
       });
   }
 
-  async function batalgaajuulaltKhiiya(qpayTulugdsun, garaasSongosonTurul, ebarimtShuud = false) {
+  async function batalgaajuulaltKhiiya(
+    qpayTulugdsun,
+    garaasSongosonTurul,
+    ebarimtShuud = false
+  ) {
     setLoading(true);
     if (!tulbur || tulbur.length <= 0) {
       return notification.warn({
@@ -586,18 +601,20 @@ function ShineTulbur(
   if (alkham !== 3 || eBarimt)
     return (
       <div className="h-full w-full">
-        {alkham === 1 && (<div className="flex w-full flex-row justify-between dark:text-gray-200 font-semibold text-lg border-b border-gray-300 p-4">
-          <div>{t("Тооцоо хийх")}</div>
-          <div className="flex items-center">
-            {mashiniiDugaar}
-            <div
-              className="ml-5 text-xl hover:text-red-400"
-              onClick={() => ref.current.khaaya()}
-            >
-              <CloseCircleOutlined />
+        {alkham === 1 && (
+          <div className="flex w-full flex-row justify-between border-b border-gray-300 p-4 text-lg font-semibold dark:text-gray-200">
+            <div>{t("Тооцоо хийх")}</div>
+            <div className="flex items-center">
+              {mashiniiDugaar}
+              <div
+                className="ml-5 text-xl hover:text-red-400"
+                onClick={() => ref.current.khaaya()}
+              >
+                <CloseCircleOutlined />
+              </div>
             </div>
           </div>
-        </div>)}
+        )}
         {eBarimt && (
           <div className="hidden">
             <div
@@ -835,7 +852,9 @@ function ShineTulbur(
                 <div
                   onClick={() => turulruuTooKhiikhFunction("khariltsakh")}
                   className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 dark:bg-gray-700 ${
-                    value.khariltsakh > 0 ? "border-[3px] border-green-600" : null
+                    value.khariltsakh > 0
+                      ? "border-[3px] border-green-600"
+                      : null
                   } `}
                 >
                   {value.khariltsakh > 0 ? (
@@ -846,7 +865,9 @@ function ShineTulbur(
                     </div>
                   ) : null}
                   <FaArrowRight className="text-[30px] text-green-600" />
-                  <div className=" text-lg font-bold text-green-600">Дансаар</div>
+                  <div className="text-lg font-bold text-green-600 ">
+                    Дансаар
+                  </div>
                 </div>
                 <div
                   onClick={() => {
@@ -859,7 +880,9 @@ function ShineTulbur(
                       ? "cursor-not-allowed"
                       : "cursor-pointer"
                   } items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 dark:bg-gray-700 ${
-                    value.khungulult > 0 ? "border-[3px] border-green-600" : null
+                    value.khungulult > 0
+                      ? "border-[3px] border-green-600"
+                      : null
                   } `}
                 >
                   {value.khungulult > 0 ? (
@@ -881,7 +904,8 @@ function ShineTulbur(
               <div className="flex gap-[48px]">
                 <div
                   className={`${
-                    value.qpay > 0 && "rounded-3xl border-[3px] border-green-600"
+                    value.qpay > 0 &&
+                    "rounded-3xl border-[3px] border-green-600"
                   } relative h-[85px] hover:scale-110`}
                   onClick={() => {
                     turulruuTooKhiikhFunction("qpay");
@@ -1151,8 +1175,8 @@ function ShineTulbur(
                         1. Бэлнээр хадгалан, хувь хүнээр баримт хэвлэнэ.
                       </div>
                       <div className="dark:text-gray-200">
-                        2. Төлбөрийн өөр хэлбэр сонгогдсон бол хувь хүнээр баримт
-                        хэвлэнэ.
+                        2. Төлбөрийн өөр хэлбэр сонгогдсон бол хувь хүнээр
+                        баримт хэвлэнэ.
                       </div>
                     </div>
                   }

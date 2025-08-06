@@ -41,7 +41,7 @@ function tailan({ token, points }) {
             width: "100%",
             height: "100%",
             title: [
-              <div className=" flex justify-between">
+              <div className="flex justify-between ">
                 <div className="flex items-center justify-start bg-gray-50">
                   {t("Дэлгэрэнгүй Мэдээлэл")}
                 </div>
@@ -71,11 +71,11 @@ function tailan({ token, points }) {
       });
   }
   return (
-    <div className="wrap grid  grid-cols-3 gap-3 bg-gray-50 p-8 dark:bg-gray-700 text-white">
+    <div className="wrap grid grid-cols-3 gap-3 bg-gray-50 p-8 text-white dark:bg-gray-700">
       {planzuragiinId?.davkharuud.map((a) => (
-        <div className="col-span-1  space-y-2 p-2 hover:scale-105 hover:border-2 hover:border-green-300 hover:shadow-2xl">
+        <div className="col-span-1 space-y-2 p-2 hover:scale-105 hover:border-2 hover:border-green-300 hover:shadow-2xl">
           <div className="flex justify-center font-bold">
-            {t("-р давхар", {too: a.davkhar})}
+            {t("-р давхар", { too: a.davkhar })}
           </div>
           <hr />
           <img

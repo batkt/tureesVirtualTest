@@ -43,8 +43,7 @@ function EBarimt({
       uilchilgee()
         .get(`/tatvaraasBaiguullagaAvya/${register}`)
         .then(({ data }) => {
-          if (data?.found === true)
-          {
+          if (data?.found === true) {
             setBaiguullaga(data);
             setCustomerTin(data?.tin);
           }
@@ -52,8 +51,7 @@ function EBarimt({
   }
 
   useEffect(() => {
-    if (register.length > 6)
-      registerShalgaya(register);
+    if (register.length > 6) registerShalgaya(register);
   }, [irgenEsekh, register]);
 
   return (

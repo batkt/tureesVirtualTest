@@ -92,7 +92,9 @@ function GuilgeeKholbokh(
         }
         if (niitDun > data[`${dans?.bank === "tdb" ? "Amt" : "amount"}`]) {
           notification.warning({
-            message: t("Таны оруулсан дүн гүйлгээний дүнгээс илүү гарсан байна"),
+            message: t(
+              "Таны оруулсан дүн гүйлгээний дүнгээс илүү гарсан байна"
+            ),
           });
           return;
         }
@@ -315,13 +317,19 @@ function GuilgeeKholbokh(
             <div className="col-span-2"></div>
             <div className="col-span-3"></div>
             <div className="col-span-2"></div>
-            <div className="col-span-1 text-center font-bold">{t("Талбай")}</div>
-            <div className="col-span-2 text-right font-bold">{t("Үлдэгдэл")}</div>
-            <div className="col-span-2 text-right font-bold">{t("Барьцаа")}</div>
+            <div className="col-span-1 text-center font-bold">
+              {t("Талбай")}
+            </div>
+            <div className="col-span-2 text-right font-bold">
+              {t("Үлдэгдэл")}
+            </div>
+            <div className="col-span-2 text-right font-bold">
+              {t("Барьцаа")}
+            </div>
           </div>
           {magadlaltaiGereenuud.map((a, i) => (
             <div
-              className={`zoom-in grid grid-cols-12 gap-1 border-l border-r border-b p-2 ${
+              className={`zoom-in grid grid-cols-12 gap-1 border-b border-l border-r p-2 ${
                 i === 0 ? "border-t" : ""
               } ${a?._id === geree ? "bg-green-100" : ""}`}
               key={a?._id}
@@ -353,7 +361,9 @@ function GuilgeeKholbokh(
       )}
 
       <div className="flex flex-row items-center justify-between">
-        <label className="text-lg font-medium">{t("Гүйлгээнд талбай холбох")}</label>
+        <label className="text-lg font-medium">
+          {t("Гүйлгээнд талбай холбох")}
+        </label>
         <Tooltip title="Олон гэрээнд холбох эсэх?">
           <Switch
             checked={olnoorKholbokhEsekh}

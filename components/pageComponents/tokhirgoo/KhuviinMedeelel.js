@@ -8,8 +8,14 @@ import { useTranslation } from "react-i18next";
 
 const { TextArea } = Input;
 
-function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setSongogdsonTsonkhniiIndex }) {
-  const { t } = useTranslation()
+function KhuviinMedeelel({
+  ajiltan,
+  token,
+  ajiltanMutate,
+  khadgalsniiDaraa,
+  setSongogdsonTsonkhniiIndex,
+}) {
+  const { t } = useTranslation();
   const [state, setstate] = useState(ajiltan);
   const zuragRef = useRef(null);
 
@@ -67,7 +73,9 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                 </div>
                 <div className="col-span-12 xl:col-span-6">
                   <div className="mt-3">
-                    <label className="form-label">{t("Ажилд орсон огноо")}</label>
+                    <label className="form-label">
+                      {t("Ажилд орсон огноо")}
+                    </label>
                     <Input
                       defaultValue={moment(ajiltan.ajildOrsonOgnoo).format(
                         "YYYY-MM-DD"
@@ -100,7 +108,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                 </div>
               </div>
             </div>
-            <div className="mx-auto w-52 xl:mr-0 xl:ml-6">
+            <div className="mx-auto w-52 xl:ml-6 xl:mr-0">
               <div className="dark:border-dark-5 rounded-md border-2 border-dashed border-gray-200 p-5 shadow-sm">
                 <div className="image-fit zoom-in relative mx-auto h-40 cursor-pointer">
                   <img
@@ -111,11 +119,11 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                       ajiltan?.zurgiinNer
                         ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
                         : ((ajiltan?.register?.replace(/^\D+/g, "") % 100) /
-                          10) %
-                          2 <
+                            10) %
+                            2 <
                           1
-                          ? "/profileFemale.svg"
-                          : "/profile.svg"
+                        ? "/profileFemale.svg"
+                        : "/profile.svg"
                     }
                   />
                   <div className="tooltip bg-theme-6 absolute right-0 top-0 -mr-2 -mt-2 flex h-5 w-5 items-center justify-center rounded-full text-white">
@@ -137,23 +145,23 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                     </svg>{" "}
                   </div>
                 </div>
-                <div className="relative mx-auto flex justify-center mt-5 cursor-pointer">
+                <div className="relative mx-auto mt-5 flex cursor-pointer justify-center">
                   <Button type="primary">{t("Зураг солих")}</Button>
                   <input
                     type="file"
                     name="zurag"
-                    className="absolute top-0 left-0 h-full w-full opacity-0"
+                    className="absolute left-0 top-0 h-full w-full opacity-0"
                     onChange={zuragSolikh}
                   />
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-full bg-gray-50 py-2 px-1 rounded-md flex justify-end mt-3">
-                <Button type="primary" onClick={khadgalakh}>
-                  {t("Хадгалах")}
-                </Button>
-              </div>
+          <div className="mt-3 flex w-full justify-end rounded-md bg-gray-50 px-1 py-2">
+            <Button type="primary" onClick={khadgalakh}>
+              {t("Хадгалах")}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,11 @@
-import { Button, DatePicker, Input, InputNumber, message, Popconfirm } from "antd";
+import {
+  Button,
+  DatePicker,
+  Input,
+  InputNumber,
+  message,
+  Popconfirm,
+} from "antd";
 
 import React, {
   useEffect,
@@ -55,10 +62,10 @@ function GuilgeeniiTuukhAldangi(
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const [aldangiinUldegdel, setAldangiinUldegdel] = useState(undefined);
-  
+
   const { guilgeeniiAldangiTuukh, guilgeeniiAldangiTuukhMutate } =
     useGereeAldangiGuilgee(token, data?._id, ognoo, shineOgnoo);
-  
+
   const [sortOrders, setSortOrders] = useState({
     ognoo: null,
     tulukhAldangi: null,
@@ -76,44 +83,43 @@ function GuilgeeniiTuukhAldangi(
     content: () => printRef.current,
   });
   const fetchAldangiinUldegdel = () => {
-  axios(token)
-    .get("/geree", {
-      params: {
-        query: { _id: data?._id, tuluv: { $ne: -1 } },
-        select: { aldangiinUldegdel: 1 },
-      },
-    })
-    .then(({ data }) => {
-      if (data?.jagsaalt?.length > 0) {
-        setAldangiinUldegdel(data.jagsaalt[0].aldangiinUldegdel);
-      }
-    })
-    .catch(aldaaBarigch);
-};
-
+    axios(token)
+      .get("/geree", {
+        params: {
+          query: { _id: data?._id, tuluv: { $ne: -1 } },
+          select: { aldangiinUldegdel: 1 },
+        },
+      })
+      .then(({ data }) => {
+        if (data?.jagsaalt?.length > 0) {
+          setAldangiinUldegdel(data.jagsaalt[0].aldangiinUldegdel);
+        }
+      })
+      .catch(aldaaBarigch);
+  };
 
   // Check if user has permission to edit aldalgi
   const canEditAldalgi = useMemo(() => {
     // Admin always has permission
     if (ajiltan?.erkh === "Admin") return true;
-    
+
     // Get the permission array for aldangiinUldegdelZasakhEsekh
-    const permissionArray = _.get(ajiltan, `tokhirgoo.aldangiinUldegdelZasakhEsekh`);
-    
+    const permissionArray = _.get(
+      ajiltan,
+      `tokhirgoo.aldangiinUldegdelZasakhEsekh`
+    );
+
     // If permission array doesn't exist or is undefined, no permission
     if (!permissionArray || !Array.isArray(permissionArray)) {
       return false;
     }
-    
-  
+
     return permissionArray.includes(barilgiinId);
   }, [ajiltan, barilgiinId]);
 
+  const hadgalakhHandler = () => {
+    if (isSubmitting) return;
 
-const hadgalakhHandler = () => {
-  if (isSubmitting) return;
-    
-    
     if (aldangiDun === "" || aldangiDun === null || aldangiDun === undefined) {
       message.error(t("Алданги дүнг оруулна уу"));
       return;
@@ -123,30 +129,29 @@ const hadgalakhHandler = () => {
       message.warning(t("Алданги өөрчлөгдөөгүй байна"));
       return;
     }
-    
+
     setIsSubmitting(true);
-  axios(token)
-    .post("/gereeniiAldangiZasya", {
-      khuuchinAldangiDun: data?.aldangiinUldegdel,
-      aldangiDun: Number(aldangiDun),
-      tailbar: zasahTailbar,
-      gereeniiId: data?._id,
-      barilgiinId: data?.barilgiinId,
-      gereeniiDugaar: data?.gereeniiDugaar
-    })
-    .then(() => {
-      message.success(t("Амжилттай хадгалагдлаа"));
-      closeModal();
-      setAldangiDun("");
-      setZasahTailbar("");
-      guilgeeniiAldangiTuukhMutate();
-      fetchAldangiinUldegdel();
-      
-  
-      refreshData(); 
-    })
-    .catch(aldaaBarigch);
-};
+    axios(token)
+      .post("/gereeniiAldangiZasya", {
+        khuuchinAldangiDun: data?.aldangiinUldegdel,
+        aldangiDun: Number(aldangiDun),
+        tailbar: zasahTailbar,
+        gereeniiId: data?._id,
+        barilgiinId: data?.barilgiinId,
+        gereeniiDugaar: data?.gereeniiDugaar,
+      })
+      .then(() => {
+        message.success(t("Амжилттай хадгалагдлаа"));
+        closeModal();
+        setAldangiDun("");
+        setZasahTailbar("");
+        guilgeeniiAldangiTuukhMutate();
+        fetchAldangiinUldegdel();
+
+        refreshData();
+      })
+      .catch(aldaaBarigch);
+  };
 
   const toggleSortOrder = (column) => {
     const newSortOrders = { ...sortOrders };
@@ -195,9 +200,8 @@ const hadgalakhHandler = () => {
   );
 
   useEffect(() => {
-  fetchAldangiinUldegdel(); 
+    fetchAldangiinUldegdel();
   }, []);
-
 
   function tulultUstgaya({
     guilgeeniiId,
@@ -314,7 +318,7 @@ const hadgalakhHandler = () => {
               <div>{formatNumber(aldangiinUldegdel, 2)}</div>
             </div>
           </div>
-          
+
           {/* Conditionally rendered Modal Button */}
           {canEditAldalgi && (
             <div className="ml-auto">
@@ -327,58 +331,57 @@ const hadgalakhHandler = () => {
               </Button>
             </div>
           )}
-
         </div>
 
         {/* Table */}
-        <table className="w-full mt-4">
+        <table className="mt-4 w-full">
           <thead className="w-full">
             <tr className="flex min-w-[50rem] divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
               <td
                 onClick={() => toggleSortOrder("ognoo")}
-                className="min-w-[8rem] overflow-hidden p-1 text-center cursor-pointer"
+                className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
               >
                 {t("Огноо")}
               </td>
               <td
                 onClick={() => toggleSortOrder("ajiltan")}
-                className="min-w-[8rem] overflow-hidden p-1 text-center cursor-pointer"
+                className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
               >
                 {t("Ажилтан")}
               </td>
               <td
                 onClick={() => toggleSortOrder("tulukhAldangi")}
-                className="min-w-[8rem] overflow-hidden p-1 text-center cursor-pointer"
+                className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
               >
                 {t("Төлөх алданги")}
               </td>
               <td
                 onClick={() => toggleSortOrder("tulsunAldangi")}
-                className="min-w-[8rem] overflow-hidden p-1 text-center cursor-pointer"
+                className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
               >
                 {t("Төлсөн алданги")}
               </td>
               <td
                 onClick={() => toggleSortOrder("dansniiDugaar")}
-                className="min-w-[8rem] overflow-hidden p-1 text-center cursor-pointer"
+                className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
               >
                 {t("Данс")}
               </td>
               <td
                 onClick={() => toggleSortOrder("tulsunDans")}
-                className="min-w-[8rem] overflow-hidden p-1 text-center cursor-pointer"
+                className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
               >
                 {t("Төлсөн данс")}
               </td>
               <td
                 onClick={() => toggleSortOrder("tailbar")}
-                className="w-full min-w-[8rem] overflow-hidden p-1 text-center cursor-pointer"
+                className="w-full min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
               >
                 {t("Тайлбар")}
               </td>
               <td
                 onClick={() => toggleSortOrder("burtgesenOgnoo")}
-                className="min-w-[7rem] p-1 text-center cursor-pointer"
+                className="min-w-[7rem] cursor-pointer p-1 text-center"
               >
                 {t("Бүртгэсэн огноо")}
               </td>
@@ -390,7 +393,10 @@ const hadgalakhHandler = () => {
           >
             {sortedData
               ?.map((a, i) => (
-                <tr key={i} className="flex min-w-[50rem] divide-x border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+                <tr
+                  key={i}
+                  className="flex min-w-[50rem] divide-x border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400"
+                >
                   <td className="min-w-[8rem] overflow-hidden p-1 text-center">
                     {moment(a.ognoo).format("YYYY-MM-DD")}
                   </td>
@@ -414,7 +420,9 @@ const hadgalakhHandler = () => {
                   </td>
                   <td className="flex min-w-[10rem] justify-center p-1 text-center ">
                     {a.guilgeeKhiisenOgnoo &&
-                      moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")}
+                      moment(a.guilgeeKhiisenOgnoo).format(
+                        "YYYY-MM-DD HH:mm:ss"
+                      )}
                   </td>
                   <td className="flex min-w-[3rem] justify-center border-none">
                     {(ajiltan?.erkh === "Admin" ||
@@ -454,25 +462,24 @@ const hadgalakhHandler = () => {
       {canEditAldalgi && isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Backdrop */}
-          <div 
+          <div
             className="absolute inset-0 bg-black bg-opacity-30"
             onClick={closeModal}
           ></div>
 
           {/* Modal Container */}
-          <div className="relative bg-white rounded-md shadow-xl w-[500px] max-w-full text-black dark:bg-gray-800 dark:text-gray-400">
+          <div className="relative w-[500px] max-w-full rounded-md bg-white text-black shadow-xl dark:bg-gray-800 dark:text-gray-400">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-3 border-b text-black dark:bg-gray-800 dark:text-gray-400">
+            <div className="flex items-center justify-between border-b px-6 py-3 text-black dark:bg-gray-800 dark:text-gray-400">
               <h2 className="text-md text-black dark:text-gray-100">
                 {t("Алданги засах")}
               </h2>
             </div>
-            
 
             {/* Body */}
-            <div className="px-6 py-4 space-y-4 text-black dark:bg-gray-800 dark:text-gray-400">
+            <div className="space-y-4 px-6 py-4 text-black dark:bg-gray-800 dark:text-gray-400">
               <div>
-                <label className="block text-md font-medium text-gray-700 mb-1 dark:bg-gray-800 dark:text-gray-400">
+                <label className="text-md mb-1 block font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-400">
                   {t("Алданги засах дүнг оруулна уу")}
                 </label>
                 <InputNumber
@@ -483,31 +490,29 @@ const hadgalakhHandler = () => {
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                   style={{ width: "100%", textAlign: "center" }}
                   value={aldangiDun === "" ? undefined : Number(aldangiDun)}
-                  onChange={(value) => setAldangiDun(value === undefined ? "" : value?.toString())}
+                  onChange={(value) =>
+                    setAldangiDun(value === undefined ? "" : value?.toString())
+                  }
                 />
-
               </div>
               <div>
                 <Input.TextArea
-                          id="textArea"
-                          placeholder={t("Тайлбар")}
-                          value={zasahTailbar}
-                          onChange={(e) => setZasahTailbar(e.target.value)}
-                  />
+                  id="textArea"
+                  placeholder={t("Тайлбар")}
+                  value={zasahTailbar}
+                  onChange={(e) => setZasahTailbar(e.target.value)}
+                />
               </div>
             </div>
 
             {/* Footer */}
-            <div className="flex justify-end gap-2 px-6 py-3 border-t dark:bg-gray-800 dark:text-gray-400">
+            <div className="flex justify-end gap-2 border-t px-6 py-3 dark:bg-gray-800 dark:text-gray-400">
               <Button type="default" onClick={closeModal}>
-                     {t("Хаах")}
-                    </Button>
-                    <Button
-                      type="primary"
-                      onClick={hadgalakhHandler}
-                    >
-                      {t("Хадгалах")}
-                    </Button>
+                {t("Хаах")}
+              </Button>
+              <Button type="primary" onClick={hadgalakhHandler}>
+                {t("Хадгалах")}
+              </Button>
             </div>
           </div>
         </div>

@@ -17,13 +17,7 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 const order = { createdAt: -1 };
 
 function TogloomTulburiinDelgerenguiTailan(
-  {
-    defualtOgnoo,
-    token,
-    baiguullagiinId,
-    barilgiinId,
-    destroy,
-  },
+  { defualtOgnoo, token, baiguullagiinId, barilgiinId, destroy },
   ref
 ) {
   const [songogdsonAjiltan, setSongogdsonAjiltan] = useState(null);
@@ -34,7 +28,7 @@ function TogloomTulburiinDelgerenguiTailan(
   ]);
 
   const togloomAjiltanQuery = useMemo(() => {
-    return {tsonkhniiErkhuud: window.location.pathname};;
+    return { tsonkhniiErkhuud: window.location.pathname };
   }, [baiguullagiinId, barilgiinId]);
 
   const query = useMemo(() => {
@@ -44,9 +38,8 @@ function TogloomTulburiinDelgerenguiTailan(
     return undefined;
   }, [songogdsonAjiltan]);
 
-  
   const { togloomTulburMedeelel, tolgoomTulburMedeelelMutate } =
-  useTogloomiinUdriinTailan(
+    useTogloomiinUdriinTailan(
       token,
       barilgiinId,
       ognoo[1],
@@ -79,7 +72,8 @@ function TogloomTulburiinDelgerenguiTailan(
 
   const tulburiinMedeelel = useMemo(() => {
     var ugugdul = [];
-    var niitDun = togloomTulburMedeelel?.reduce((a, b) => a + b.niitDun, 0) || 0;
+    var niitDun =
+      togloomTulburMedeelel?.reduce((a, b) => a + b.niitDun, 0) || 0;
 
     togloomTulburMedeelel?.forEach((element) => {
       switch (element?._id) {
@@ -204,7 +198,7 @@ function TogloomTulburiinDelgerenguiTailan(
             dun: element.niitDun,
             khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
           });
-          break;  
+          break;
         case "erkhiinBichig":
           ugugdul.push({
             ner: "Coupon",
@@ -212,7 +206,7 @@ function TogloomTulburiinDelgerenguiTailan(
             dun: element.niitDun,
             khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
           });
-          break;    
+          break;
         case "khungulult":
           ugugdul.push({
             ner: "Хөнгөлөлт",
@@ -324,7 +318,7 @@ function TogloomTulburiinDelgerenguiTailan(
           placeholder={t("Ажилтан")}
           allowClear
           clearIcon={() => (
-            <div className="dark:bg-gray-800 dark:text-gray-200  hover:dark:text-gray-400">
+            <div className="dark:bg-gray-800 dark:text-gray-200 hover:dark:text-gray-400">
               <CloseCircleOutlined />
             </div>
           )}
@@ -394,7 +388,9 @@ function TogloomTulburiinDelgerenguiTailan(
             <div className="flex ">Нийт дүн:</div>
             <div>
               {formatNumber(
-                tulburiinMedeelel?.filter((a) => a.ner !== "Хөнгөлөлт") .reduce((a, b) => a + b?.dun, 0) || 0
+                tulburiinMedeelel
+                  ?.filter((a) => a.ner !== "Хөнгөлөлт")
+                  .reduce((a, b) => a + b?.dun, 0) || 0
               ) + "₮"}
             </div>
           </div>

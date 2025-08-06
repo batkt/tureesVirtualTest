@@ -8,15 +8,24 @@ const moment = require("moment");
 const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
   const [sar, setSar] = React.useState(1);
   const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(
-    moment(data?.duusakhOgnoo).add(1, data?.turGereeEsekh === true ? "day" : "month")
+    moment(data?.duusakhOgnoo).add(
+      1,
+      data?.turGereeEsekh === true ? "day" : "month"
+    )
   );
   React.useEffect(() => {
-    setDuusakhOgnoo(moment(data?.duusakhOgnoo).add(sar, data?.turGereeEsekh === true ? "day" : "month"));
+    setDuusakhOgnoo(
+      moment(data?.duusakhOgnoo).add(
+        sar,
+        data?.turGereeEsekh === true ? "day" : "month"
+      )
+    );
   }, [sar]);
   function garya() {
     if (
-      moment(data?.duusakhOgnoo).add(1, data?.turGereeEsekh === true ? "day" : "month").format("YYYY-MM-DD") !=
-      moment(duusakhOgnoo).format("YYYY-MM-DD")
+      moment(data?.duusakhOgnoo)
+        .add(1, data?.turGereeEsekh === true ? "day" : "month")
+        .format("YYYY-MM-DD") != moment(duusakhOgnoo).format("YYYY-MM-DD")
     )
       Modal.confirm({
         content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
@@ -82,25 +91,41 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
     <div className="w-full space-y-2">
       <div className="w-full space-y-2">
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right dark: text-gray-200">{t("Эхлэх огноо")}:</div>
-          <div className="font-medium dark: text-gray-200">{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
+          <div className="dark: text-right text-gray-200">
+            {t("Эхлэх огноо")}:
+          </div>
+          <div className="dark: font-medium text-gray-200">
+            {moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}
+          </div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right dark: text-gray-200">{t("Дуусах огноо")}:</div>
-          <div className="font-medium dark: text-gray-200">{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
+          <div className="dark: text-right text-gray-200">
+            {t("Дуусах огноо")}:
+          </div>
+          <div className="dark: font-medium text-gray-200">
+            {moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}
+          </div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right dark: text-gray-200">{t("Ашигласан хоног")}:</div>
-          <div className="font-medium dark: text-gray-200">
+          <div className="dark: text-right text-gray-200">
+            {t("Ашигласан хоног")}:
+          </div>
+          <div className="dark: font-medium text-gray-200">
             {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
           </div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right dark: text-gray-200">{t("Авлагын дүн")}:</div>
-          <div className="font-medium dark: text-gray-200">{formatNumber(data?.uldegdel)}</div>
+          <div className="dark: text-right text-gray-200">
+            {t("Авлагын дүн")}:
+          </div>
+          <div className="dark: font-medium text-gray-200">
+            {formatNumber(data?.uldegdel)}
+          </div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right dark: text-gray-200">{data?.turGereeEsekh === true ? "Сунгах өдөр:" : "Сунгах сар:"}</div>
+          <div className="dark: text-right text-gray-200">
+            {data?.turGereeEsekh === true ? "Сунгах өдөр:" : "Сунгах сар:"}
+          </div>
           <InputNumber
             id="sungakhSar"
             onKeyUp={focuser}
@@ -111,7 +136,9 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
           />
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right dark: text-gray-200">{t("Дуусгах огноо")}:</div>
+          <div className="dark: text-right text-gray-200">
+            {t("Дуусгах огноо")}:
+          </div>
           <DatePicker
             id="ognoo"
             className="font-medium"
@@ -120,10 +147,17 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
             value={duusakhOgnoo}
             onChange={setDuusakhOgnoo}
             disabledDate={(current) => {
-              let minDate = moment(duusakhOgnoo).startOf("month").format("YYYY-MM-DD");
-              let maxDate = moment(duusakhOgnoo).endOf("month").format("YYYY-MM-DD");
-              return (current <= moment(maxDate, "YYYY-MM-DD") && current >= moment(minDate, "YYYY-MM-DD")) === false;
-            }} 
+              let minDate = moment(duusakhOgnoo)
+                .startOf("month")
+                .format("YYYY-MM-DD");
+              let maxDate = moment(duusakhOgnoo)
+                .endOf("month")
+                .format("YYYY-MM-DD");
+              return (
+                (current <= moment(maxDate, "YYYY-MM-DD") &&
+                  current >= moment(minDate, "YYYY-MM-DD")) === false
+              );
+            }}
           />
         </div>
       </div>

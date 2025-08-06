@@ -19,7 +19,7 @@ function hrefAvya(turul, _id, ajiltan, object) {
 
 function Daalgavar({ onClose, token, ajiltan, ...object }) {
   const { turul, tailbar, duusakhOgnoo, _id } = object || {};
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   function sonorduulgaKharlaa() {
     const href = hrefAvya(turul, _id, ajiltan, object);
     window.location.href = href;
@@ -42,18 +42,18 @@ function Daalgavar({ onClose, token, ajiltan, ...object }) {
       <div className="mr-2 flex"></div>
       <div className="md:mr-40">
         <div className="font-medium">
-          <div className="text-center rounded-md w-36 bg-red-400 px-2 text-white">
+          <div className="w-36 rounded-md bg-red-400 px-2 text-center text-white">
             {t("Даалгавар")}
           </div>
         </div>
         <div className="mt-1 text-gray-600">
           {moment(duusakhOgnoo).format("YYYY-MM-DD")}
         </div>
-        <div className="mt-1 truncate max-h-24 max-w-xs space-x-10 text-gray-600">
+        <div className="mt-1 max-h-24 max-w-xs space-x-10 truncate text-gray-600">
           {tailbar}
         </div>
       </div>
-      <div className="dark:border-dark-5 absolute top-0 bottom-0 right-0 hidden flex-col border-l border-gray-200 md:flex">
+      <div className="dark:border-dark-5 absolute bottom-0 right-0 top-0 hidden flex-col border-l border-gray-200 md:flex">
         <a
           className="text-theme-1 dark:border-dark-5 flex flex-1 items-center justify-center border-b border-gray-200 px-6 font-medium dark:text-gray-500"
           onClick={(event) => {

@@ -13,21 +13,23 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
-const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) => {
-  const { t } = useTranslation()
+const AnketIlgeekh = (
+  { data, token, barilgiinId, baiguullaga, destroy },
+  ref
+) => {
+  const { t } = useTranslation();
   const [utasniiDugaar, setUtasniiDugaar] = useState();
   const [email, setEmail] = useState();
   const [value, setValue] = useState(1);
   React.useImperativeHandle(
     ref,
     () => ({
-      ilgeekh(){
-        if (
-          value === 2 &&
-          utasniiDugaar !== undefined
-        ) {
+      ilgeekh() {
+        if (value === 2 && utasniiDugaar !== undefined) {
           if (utasniiDugaar.length < 8) {
-            notification.warning({ message: t("Утасны дугаараа бүрэн оруулна уу!") });
+            notification.warning({
+              message: t("Утасны дугаараа бүрэн оруулна уу!"),
+            });
             return;
           }
           uilchilgee(token)
@@ -37,8 +39,7 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
               msgnuud: [
                 {
                   to: utasniiDugaar,
-                  text: `Ta daraakh kholboosoor orj anket bogolnuu: https://turees.zevtabs.mn/khyanalt/anket/${baiguullaga?._id
-                    }/${data._id}`,
+                  text: `Ta daraakh kholboosoor orj anket bogolnuu: https://turees.zevtabs.mn/khyanalt/anket/${baiguullaga?._id}/${data._id}`,
                 },
               ],
             })
@@ -53,13 +54,10 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
             .catch((e) => {
               aldaaBarigch(e);
             });
-        } else if (
-          value === 1 &&
-          email !== undefined
-        ) {
+        } else if (value === 1 && email !== undefined) {
           var filter =
             /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    
+
           if (!filter.test(email)) {
             notification.warning({
               message: t("email хаягаа шалгаад дахин оролдоно уу!"),
@@ -79,7 +77,9 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
             })
             .then(({ data }) => {
               if (data === "Amjilttai") {
-                notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
+                notification.success({
+                  message: t("И-мэйл Амжилттай илгээлээ"),
+                });
                 setEmail("");
                 setUtasniiDugaar("");
                 destroy();
@@ -88,13 +88,14 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
             .catch((e) => {
               aldaaBarigch(e);
             });
-        } else notification.warning({ message: t("Мэдээллээ бүрэн оруулна уу!") });
+        } else
+          notification.warning({ message: t("Мэдээллээ бүрэн оруулна уу!") });
       },
       khaaya() {
         destroy();
       },
     }),
-    [value, utasniiDugaar, baiguullaga, data, email,]
+    [value, utasniiDugaar, baiguullaga, data, email]
   );
   useEffect(() => {
     function keyUp(e) {
@@ -106,7 +107,6 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
   }, []);
-
 
   function onchangeDugaar(e) {
     setUtasniiDugaar(e.target.value);
@@ -137,7 +137,7 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
       <div className="flex w-full gap-5 py-3 ">
         <div className="dark:text-white">{t("Илгээх төрөл")}:</div>
         <div>
-          <Radio.Group onChange={(v)=> setValue(v.target.value)} value={value}>
+          <Radio.Group onChange={(v) => setValue(v.target.value)} value={value}>
             <Radio value={1}>{t("И-мэйл")}</Radio>
 
             <Radio value={2}>{t("Утас")}</Radio>
@@ -152,12 +152,14 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
           placeholder="Анкетын загвар сонгoно уу"
           disabled={true}
           value={data._id}
-        options={[{ label: data.ner, value: data._id }]}
+          options={[{ label: data.ner, value: data._id }]}
         ></Select>
       </div>
       {value === 2 ? (
         <div className="flex w-full flex-col gap-1 py-3">
-          <div className="dark:text-white">{t("Анкет илгээх утасны дугаар")}:</div>
+          <div className="dark:text-white">
+            {t("Анкет илгээх утасны дугаар")}:
+          </div>
           <Input
             id="input2"
             value={utasniiDugaar}

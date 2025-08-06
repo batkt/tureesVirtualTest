@@ -204,10 +204,18 @@ function GuilgeeExceleesOruulakhOlnoor(
         destroy();
       },
       khadgalya() {
-        handleSave(); 
+        handleSave();
       },
     }),
-    [onFinish, data, selectedRowKeys, baiguullaga, barilgiinId, ognoo, ashiglaltiinId]
+    [
+      onFinish,
+      data,
+      selectedRowKeys,
+      baiguullaga,
+      barilgiinId,
+      ognoo,
+      ashiglaltiinId,
+    ]
   );
 
   function zagvarAvya() {

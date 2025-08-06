@@ -7,7 +7,7 @@ import {
   Popconfirm,
   message,
   InputNumber,
-  Switch
+  Switch,
 } from "antd";
 import {
   ArrowRightOutlined,
@@ -219,19 +219,19 @@ const YurunkhiiMedeele = ({
     form.setFieldsValue(value);
   }
   const focuser = useCallback((e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        switch (e.target.id) {
-          case "validate_other_khugatsaa":
-            if (value?.turGereeEsekh === true) {
-              form.getFieldInstance("duusakhOgnoo").focus();
-            } else form.getFieldInstance("tulukhUdur").focus();
-            break;
-          default:
-            break;
-        }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "validate_other_khugatsaa":
+          if (value?.turGereeEsekh === true) {
+            form.getFieldInstance("duusakhOgnoo").focus();
+          } else form.getFieldInstance("tulukhUdur").focus();
+          break;
+        default:
+          break;
       }
-    }, []);
+    }
+  }, []);
   function onChangeTalbai(v) {
     if (!!value.talbainuud?.find((a) => a.kod === v.kod)) {
       notification.warning({
@@ -307,24 +307,24 @@ const YurunkhiiMedeele = ({
   }
 
   const baritsaaChange = (e) => {
-      if (e === true) {
-        value.baritsaaAvakhEsekh = e;
-        value.baritsaaAvakhDun = value.sariinTurees;
-        value.baritsaaAvakhDunUsgeer = toWords(value.sariinTurees);
-      } else {
-        value.baritsaaAvakhDun = 0;
-        value.baritsaaAvakhEsekh = e;
-        value.baritsaaAvakhDunUsgeer = toWords(" ");
-      }
-      onChange({ ...value });
-    };
-    const baritsaaDunChange = (v) => {
-      if (v && value.baritsaaAvakhEsekh === true) {
-        value.baritsaaAvakhDun = v;
-        value.baritsaaAvakhDunUsgeer = toWords(v);
-      }
-      onChange({ ...value });
-    };
+    if (e === true) {
+      value.baritsaaAvakhEsekh = e;
+      value.baritsaaAvakhDun = value.sariinTurees;
+      value.baritsaaAvakhDunUsgeer = toWords(value.sariinTurees);
+    } else {
+      value.baritsaaAvakhDun = 0;
+      value.baritsaaAvakhEsekh = e;
+      value.baritsaaAvakhDunUsgeer = toWords(" ");
+    }
+    onChange({ ...value });
+  };
+  const baritsaaDunChange = (v) => {
+    if (v && value.baritsaaAvakhEsekh === true) {
+      value.baritsaaAvakhDun = v;
+      value.baritsaaAvakhDunUsgeer = toWords(v);
+    }
+    onChange({ ...value });
+  };
 
   return (
     <Form
@@ -356,7 +356,7 @@ const YurunkhiiMedeele = ({
         data-aos="fade-right"
         data-aos-duration="1000"
         data-aos-delay="100"
-        className="space-y-2 pb-4 max-h-[60vh] overflow-y-scroll"
+        className="max-h-[60vh] space-y-2 overflow-y-scroll pb-4"
       >
         {value.talbainuud?.map((talbai, index) => {
           return (
@@ -454,7 +454,7 @@ const YurunkhiiMedeele = ({
                   </div>
                 </div>
               </div>
-              <div className="absolute right-2  top-0 flex items-center justify-center rounded-full bg-gray-100  text-lg dark:bg-gray-800">
+              <div className="absolute right-2 top-0 flex items-center justify-center rounded-full bg-gray-100 text-lg dark:bg-gray-800">
                 <Popconfirm
                   title={`${talbai.kod} талбай устгах уу?`}
                   okText={t("Тийм")}
@@ -538,7 +538,9 @@ const YurunkhiiMedeele = ({
                   placeholder={t("Барьцаа дүн")}
                   style={{ width: "100%" }}
                   onChange={(e) => baritsaaDunChange(e)}
-                  formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                 />
               </Form.Item>

@@ -188,11 +188,7 @@ function NTses({
                     className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800"
                   >
                     {barilguud?.map((a) => (
-                      <option
-                        key={a?._id}
-                        value={a?._id}
-                        disabled={a.disabled}
-                      >
+                      <option key={a?._id} value={a?._id} disabled={a.disabled}>
                         {a?.ner}
                       </option>
                     ))}

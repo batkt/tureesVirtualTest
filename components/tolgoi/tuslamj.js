@@ -9,15 +9,12 @@ import Faq from "./faq";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 
-
 function Tuslamj() {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation();
   const [songogdsonAlkham, setSongogdsonAlkham] = useState(0);
   const [daragdsanTokhirgooMedeelel, setDaragdsanTokhirgooMedeelel] =
     useState(0);
-  const tuslamj = useJagsaalt(
-    "https://zevtabs.mn/api/tuslamjAvya/rent",
-  );
+  const tuslamj = useJagsaalt("https://zevtabs.mn/api/tuslamjAvya/rent");
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -30,21 +27,26 @@ function Tuslamj() {
         <Tabs.TabPane
           className="h-[100vh]"
           tab={
-            <span className="text-base font-medium">{t("Нэвтрүүлэлтийн алхам")}</span>
+            <span className="text-base font-medium">
+              {t("Нэвтрүүлэлтийн алхам")}
+            </span>
           }
           key="1"
         >
           <div
-            className={`relative h-[90%] space-y-3  px-5  pb-10 ${songogdsonAlkham === 0 ? "overflow-y-auto overflow-x-hidden" : ""
-              }`}
+            className={`relative h-[90%] space-y-3  px-5  pb-10 ${
+              songogdsonAlkham === 0 ? "overflow-y-auto overflow-x-hidden" : ""
+            }`}
           >
             <div
-              className={`absolute z-30 text-lg transition-all duration-500 ${songogdsonAlkham === 0 ? "left-full" : "left-0 "
-                }`}
+              className={`absolute z-30 text-lg transition-all duration-500 ${
+                songogdsonAlkham === 0 ? "left-full" : "left-0 "
+              }`}
             >
               <LeftOutlined
-                className={`mt-2 ml-2 rounded-full border-2 p-1 transition-all duration-500 hover:bg-green-600 hover:bg-opacity-30 dark:text-gray-200 ${songogdsonAlkham === 0 ? "invisible opacity-0" : "opacity-100"
-                  }`}
+                className={`ml-2 mt-2 rounded-full border-2 p-1 transition-all duration-500 hover:bg-green-600 hover:bg-opacity-30 dark:text-gray-200 ${
+                  songogdsonAlkham === 0 ? "invisible opacity-0" : "opacity-100"
+                }`}
                 onClick={() => setSongogdsonAlkham(0)}
               />
             </div>
@@ -52,12 +54,13 @@ function Tuslamj() {
               return (
                 <div
                   key={index}
-                  className={`group flex h-[120px] w-full scale-95 cursor-pointer items-center rounded-full bg-green-600 p-1 transition-all duration-500 hover:scale-100 hover:bg-green-800 ${songogdsonAlkham === 0
-                    ? "relative top-0 right-0 opacity-100"
-                    : songogdsonAlkham === index + 1
+                  className={`group flex h-[120px] w-full scale-95 cursor-pointer items-center rounded-full bg-green-600 p-1 transition-all duration-500 hover:scale-100 hover:bg-green-800 ${
+                    songogdsonAlkham === 0
+                      ? "relative right-0 top-0 opacity-100"
+                      : songogdsonAlkham === index + 1
                       ? `absolute -right-3/4 -top-14 z-50 opacity-100`
                       : "invisible relative -top-96 opacity-0"
-                    }`}
+                  }`}
                   onClick={
                     songogdsonAlkham === index + 1
                       ? () => setSongogdsonAlkham(0)
@@ -70,27 +73,29 @@ function Tuslamj() {
                         mur.zurgiinId &&
                         `https://zevtabs.mn/api/file?path=tuslamj/${mur.zurgiinId}`
                       }
-                      className=" animate-css-deer h-20"
+                      className="animate-css-deer  h-20"
                     />
                   </div>
                   <div
-                    className={` w-full py-2 pr-6 pl-3 transition-opacity duration-700`}
+                    className={` w-full py-2 pl-3 pr-6 transition-opacity duration-700`}
                   >
                     <h1
-                      className={`pl-12 text-2xl font-semibold text-white transition-all duration-500 ${songogdsonAlkham === index + 1
-                        ? "absolute -left-[60%] top-6 -z-50 w-full rounded-l-full bg-green-600 py-6 px-10 pr-20 group-hover:bg-green-800"
-                        : "left-0 top-10 rounded-sm p-0 px-0 py-0 pr-0"
-                        }`}
+                      className={`pl-12 text-2xl font-semibold text-white transition-all duration-500 ${
+                        songogdsonAlkham === index + 1
+                          ? "absolute -left-[60%] top-6 -z-50 w-full rounded-l-full bg-green-600 px-10 py-6 pr-20 group-hover:bg-green-800"
+                          : "left-0 top-10 rounded-sm p-0 px-0 py-0 pr-0"
+                      }`}
                     >
                       {i18n.language === "mn" ? mur?.garchig : mur.garchigEN}
                     </h1>
                     <p
-                      className={`text-white ${songogdsonAlkham === index + 1
-                        ? "opacity-0"
-                        : "opacity-100"
-                        }`}
+                      className={`text-white ${
+                        songogdsonAlkham === index + 1
+                          ? "opacity-0"
+                          : "opacity-100"
+                      }`}
                     >
-                      {i18n.language === "mn" ? mur?.tailbar: mur?.tailbarEN }
+                      {i18n.language === "mn" ? mur?.tailbar : mur?.tailbarEN}
                     </p>
                   </div>
                   {index + 1 !== tuslamj?.data?.length && index % 2 === 0 && (
@@ -100,10 +105,11 @@ function Tuslamj() {
                   )}
                   {index + 1 !== tuslamj?.data?.length && index % 2 !== 0 && (
                     <div
-                      className={`absolute -bottom-7 -left-3 text-5xl text-green-600 transition-all duration-500 group-hover:text-green-800 ${songogdsonAlkham === index + 1
-                        ? "opacity-0"
-                        : "opacity-100"
-                        }`}
+                      className={`absolute -bottom-7 -left-3 text-5xl text-green-600 transition-all duration-500 group-hover:text-green-800 ${
+                        songogdsonAlkham === index + 1
+                          ? "opacity-0"
+                          : "opacity-100"
+                      }`}
                     >
                       <GiArrowDunk className="-rotate-[80deg] -scale-x-100" />
                     </div>
@@ -117,8 +123,9 @@ function Tuslamj() {
                   key={i}
                   data-aos="fade-right"
                   data-aos-delay="200"
-                  className={`absolute top-20 z-10 h-scrollH w-full overflow-y-auto py-5 px-3 pr-16 ${data?.turul === "dropdown" ? "" : "space-y-10"
-                    }`}
+                  className={`absolute top-20 z-10 h-scrollH w-full overflow-y-auto px-3 py-5 pr-16 ${
+                    data?.turul === "dropdown" ? "" : "space-y-10"
+                  }`}
                 >
                   {data?.alkhamuud?.map((a, i) => {
                     if (data?.turul === "dropdown") {
@@ -143,17 +150,19 @@ function Tuslamj() {
                               }
                             />
                             <LeftOutlined
-                              className={`transition-all duration-300 dark:text-gray-200 ${daragdsanTokhirgooMedeelel === i + 1
-                                ? "-rotate-90"
-                                : "rotate-0"
-                                }`}
+                              className={`transition-all duration-300 dark:text-gray-200 ${
+                                daragdsanTokhirgooMedeelel === i + 1
+                                  ? "-rotate-90"
+                                  : "rotate-0"
+                              }`}
                             />
                           </div>
                           <div
-                            className={`px-5 text-opacity-80 transition-all duration-300 dark:text-gray-200 ${daragdsanTokhirgooMedeelel === i + 1
-                              ? "h-32 overflow-y-auto  py-5 opacity-100 "
-                              : "invisible h-0 opacity-0"
-                              }`}
+                            className={`px-5 text-opacity-80 transition-all duration-300 dark:text-gray-200 ${
+                              daragdsanTokhirgooMedeelel === i + 1
+                                ? "h-32 overflow-y-auto  py-5 opacity-100 "
+                                : "invisible h-0 opacity-0"
+                            }`}
                           >
                             {i18n.language === "mn" ? a?.tailbar : a?.tailbarEN}
                           </div>
@@ -163,7 +172,7 @@ function Tuslamj() {
                       return (
                         <div
                           key={i}
-                          className="w-full space-y-3 rounded-md border py-2 px-5 shadow-xl dark:bg-gray-900 dark:shadow-lg dark:shadow-white"
+                          className="w-full space-y-3 rounded-md border px-5 py-2 shadow-xl dark:bg-gray-900 dark:shadow-lg dark:shadow-white"
                         >
                           <div className="w-full text-center font-medium dark:text-gray-200">
                             {i18n.language === "mn" ? a?.garchig : a?.garchigEN}
@@ -203,7 +212,11 @@ function Tuslamj() {
           </div>
         </Tabs.TabPane>
         <Tabs.TabPane
-          tab={<span className="text-base font-medium">{t("Түгээмэл асуулт")}</span>}
+          tab={
+            <span className="text-base font-medium">
+              {t("Түгээмэл асуулт")}
+            </span>
+          }
           className="h-[100vh]"
           key="2"
         >

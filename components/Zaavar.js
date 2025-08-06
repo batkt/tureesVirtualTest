@@ -30,11 +30,11 @@ function Zaavar({ token, id }) {
     return (
       <div className="cursor-pointer" style={{ lineHeight: 0 }}>
         <Tooltip title={t("Цонхны заавар")} onClick={zaavarKharya}>
-          {id === "66ab276bd5a5012b78e05f9e" ?
-            (<img className="h-16 color-black" src="/infoRently.png" />)
-            :
+          {id === "66ab276bd5a5012b78e05f9e" ? (
+            <img className="color-black h-16" src="/infoRently.png" />
+          ) : (
             <img className="h-5" src="/infoRently.png" />
-          }
+          )}
         </Tooltip>
       </div>
     );

@@ -35,7 +35,7 @@ function anketBurtgel({ token, destroy, data, id }, ref) {
           <p className="font-medium">{t("Төрөл")}:</p> {data.turul}
         </div>
       </div>
-      <div className="py-2 px-4 pb-5">
+      <div className="px-4 py-2 pb-5">
         <div>
           <p className="font-medium dark:text-gray-200">{t("Асуултууд")}:</p>{" "}
           <div className="overflow-auto">

@@ -5,7 +5,16 @@ import createMethod from "tools/function/crud/createMethod";
 import { t } from "i18next";
 
 function TailanZagvar(
-  { data, destroy, baiguullagiinId, barilgiinId, token, refresh, setTable, setSelectValue },
+  {
+    data,
+    destroy,
+    baiguullagiinId,
+    barilgiinId,
+    token,
+    refresh,
+    setTable,
+    setSelectValue,
+  },
   ref
 ) {
   const [form] = Form.useForm();
@@ -49,7 +58,7 @@ function TailanZagvar(
       wrapperCol={{ span: 14 }}
     >
       <Form.Item label="Нэр" name="ner">
-        <Input autoComplete="off"/>
+        <Input autoComplete="off" />
       </Form.Item>
     </Form>
   );

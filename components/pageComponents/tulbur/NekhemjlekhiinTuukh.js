@@ -169,7 +169,7 @@ function NekhemjlekhiinTuukh(
               </div>
             </div>
           </div>
-          <div className="border-2 dark:text-black bg-gray-50 p-5">
+          <div className="border-2 bg-gray-50 p-5 dark:text-black">
             <div className="flex justify-between">
               <div></div>
               <div>

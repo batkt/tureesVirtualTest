@@ -469,27 +469,28 @@ function GuilgeeKhiikh(
               );
             }
 
-            if (a.tailbar?.includes("Халуун ус") || a.tailbar?.includes("Хүйтэн ус")) {
+            if (
+              a.tailbar?.includes("Халуун ус") ||
+              a.tailbar?.includes("Хүйтэн ус")
+            ) {
               a.tseverusTariff = ashiglaltiinZardal?.jagsaalt
                 ?.filter((b) => b.ner === a.tailbar)
                 .map((b) => b.tseverUsDun);
               a.boxirusTariff = ashiglaltiinZardal?.jagsaalt
                 ?.filter((b) => b.ner === a.tailbar)
                 .map((b) => b.bokhirUsDun);
-              a.usxalaasniitulburTariff =
-                a.tailbar?.includes("Хүйтэн ус")
-                  ? 0
-                  : ashiglaltiinZardal?.jagsaalt
-                      ?.filter((b) => b.ner === a.tailbar)
-                      .map((b) => b.usKhalaasniiDun);
+              a.usxalaasniitulburTariff = a.tailbar?.includes("Хүйтэн ус")
+                ? 0
+                : ashiglaltiinZardal?.jagsaalt
+                    ?.filter((b) => b.ner === a.tailbar)
+                    .map((b) => b.usKhalaasniiDun);
 
               zuruuDun += a.zuruuZaalt;
               tseverusDun += a.zuruuZaalt * a.tseverusTariff; // Халуун ус + Хүйтэн ус
               boxirusDun += a.zuruuZaalt * a.boxirusTariff; // Халуун ус + Хүйтэн ус
-              usxalaasniitulburDun +=
-                a.tailbar?.includes("Хүйтэн ус")
-                  ? 0
-                  : a.zuruuZaalt * a.usxalaasniitulburTariff; // Халуун ус
+              usxalaasniitulburDun += a.tailbar?.includes("Хүйтэн ус")
+                ? 0
+                : a.zuruuZaalt * a.usxalaasniitulburTariff; // Халуун ус
               // niilberDun += a.zuruuZaalt * a.tseverusTariff + a.zuruuZaalt * a.boxirusTariff + (a.tailbar?.includes("Хүйтэн ус") ? 0 : (a.zuruuZaalt * a.usxalaasniitulburTariff))
               niilberDun += a.tulukhDun;
 
@@ -799,7 +800,7 @@ function GuilgeeKhiikh(
   );
 
   return (
-    <div className=" flex flex-col space-y-3">
+    <div className="flex flex-col space-y-3 ">
       <div className="grid w-full grid-cols-2" ref={printRef}>
         <div
           key={`khevlekhNekhemjlel${nekhemjlekh}`}

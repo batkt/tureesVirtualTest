@@ -28,7 +28,6 @@ function DansBurtgel(
   const [bank, setBank] = useState(data?.bank);
   const { dansGaralt } = useDans(token, baiguullagiinId);
 
-
   function garya() {
     const values = form.getFieldsValue();
     if (compareFields(values, data, ["bank", "dugaar", "dansniiNer", "valyut"]))
@@ -89,7 +88,7 @@ function DansBurtgel(
           form.getFieldInstance("dansniiNer").focus();
           form.getFieldInstance("dansniiNer").select();
           break;
-       case "dansniiNer":
+        case "dansniiNer":
           form.getFieldInstance("valyut").focus();
           break;
         default:

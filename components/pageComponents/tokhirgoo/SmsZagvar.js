@@ -93,7 +93,8 @@ function SmsZagvar(
         zogsoolMsgZagvar: baiguullaga?.tokhirgoo?.zogsoolMsgZagvar,
       }}
       form={form}
-      autoComplete="off">
+      autoComplete="off"
+    >
       <Form.Item name="zogsoolMsgZagvar">
         <Input.TextArea placeholder="Загвар" />
       </Form.Item>

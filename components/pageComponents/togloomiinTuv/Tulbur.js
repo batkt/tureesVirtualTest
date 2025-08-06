@@ -448,7 +448,7 @@ function Tulbur(
             {baiguullaga?._id === "63c0f31efe522048bf02086d" && (
               <div>
                 <div className="mt-3 flex h-full w-full flex-col items-center justify-center border-t-2 border-dashed border-black pt-5">
-                  <div className=" text-justify text-base">
+                  <div className="text-justify text-base ">
                     Эхлэх хугацаа:{" "}
                     <div>
                       {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}

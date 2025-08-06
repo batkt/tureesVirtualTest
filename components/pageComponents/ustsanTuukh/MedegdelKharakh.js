@@ -4,7 +4,7 @@ import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useTranslation } from "react-i18next";
 function MedegdelKharakh({ data, destroy }, ref) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const [form] = Form.useForm();
 
   useImperativeHandle(
@@ -41,52 +41,57 @@ function MedegdelKharakh({ data, destroy }, ref) {
     <>
       <div className="dark:text-gray-400">
         {data.class === "gereeniiGuilgee" && (
-        <div className="flex justify-between">
-          <div>{t("Хийсэн ажилтан")}: </div>
-          <div>{data.object.guilgeeKhiisenAjiltniiNer}</div>
-        </div>
+          <div className="flex justify-between">
+            <div>{t("Хийсэн ажилтан")}: </div>
+            <div>{data.object.guilgeeKhiisenAjiltniiNer}</div>
+          </div>
         )}
         {data.class === "gereeniiGuilgee" && (
-        <div className="flex justify-between">
-          <div>{t("Гэрээний дугаар")}: </div>
-          <div>{data.object.gereeniiDugaar}</div>
-        </div>
+          <div className="flex justify-between">
+            <div>{t("Гэрээний дугаар")}: </div>
+            <div>{data.object.gereeniiDugaar}</div>
+          </div>
         )}
         {data.object.turul === "baritsaa" && (
-        <div className="flex justify-between">
-          <div>{t("Гэрээний дугаар")}: </div>
-          <div>{data.object.gereeniiDugaar}</div>
-        </div>
+          <div className="flex justify-between">
+            <div>{t("Гэрээний дугаар")}: </div>
+            <div>{data.object.gereeniiDugaar}</div>
+          </div>
         )}
 
         {data.class === "Khariltsagch" && (
-        <div className="flex justify-between">
-          <div>{t("Гэрээний дугаар")}: </div>
-          <div>{data.object.ner}</div>
-        </div>
+          <div className="flex justify-between">
+            <div>{t("Гэрээний дугаар")}: </div>
+            <div>{data.object.ner}</div>
+          </div>
         )}
         {data.class === "Talbai" && (
-        <div className="flex justify-between">
-          <div>{t("Талбай")}: </div>
-          <div>{data.object.kod}</div>
-        </div>
+          <div className="flex justify-between">
+            <div>{t("Талбай")}: </div>
+            <div>{data.object.kod}</div>
+          </div>
         )}
         {data.class === "blockMashin" && (
-        <div className="justify-between">
-          <div className="justify-between">{t("Машины дугаар")}: {data.object.dugaar}</div>
-        </div>
+          <div className="justify-between">
+            <div className="justify-between">
+              {t("Машины дугаар")}: {data.object.dugaar}
+            </div>
+          </div>
         )}
         {data.class === "blockMashin" && (
-        <div className="justify-between">
-          <div className="justify-between">{t("Тайлбар")}: {data.object.tailbar}</div>
-         
-        </div>
+          <div className="justify-between">
+            <div className="justify-between">
+              {t("Тайлбар")}: {data.object.tailbar}
+            </div>
+          </div>
         )}
         {data.class === "gereeniiGuilgee" && (
-        <div className="flex justify-between">
-          <div>{t("Гүйлгээний огноо")}: </div>
-          <div>{moment(data.object.guilgeeKhiisenOgnoo).format("YYYY-MM-DD")}</div>
-        </div>
+          <div className="flex justify-between">
+            <div>{t("Гүйлгээний огноо")}: </div>
+            <div>
+              {moment(data.object.guilgeeKhiisenOgnoo).format("YYYY-MM-DD")}
+            </div>
+          </div>
         )}
         <div className="flex justify-between">
           <div>{t("Устгасан ажилтан")}: </div>
@@ -101,15 +106,9 @@ function MedegdelKharakh({ data, destroy }, ref) {
           <div>{formatNumber(data.object.khuuchinAldangiDun)}</div>
         </div>
 
-
-
         <div className="flex justify-between">
           <div>{t("Хийсэн огноо")}:</div>
-          <div>
-            {moment(
-              data.object.createdAt 
-            ).format("YYYY-MM-DD")}
-          </div>
+          <div>{moment(data.object.createdAt).format("YYYY-MM-DD")}</div>
         </div>
         {data.object.tulsunAldangi ? (
           <div className="flex justify-between">

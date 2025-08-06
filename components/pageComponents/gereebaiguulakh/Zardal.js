@@ -34,18 +34,20 @@ const query = {};
 const searchKeys = ["ner"];
 
 const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
-  const [valueState, setValueState] = useState(value?.zardluud?.map((a) => a._id));
+  const [valueState, setValueState] = useState(
+    value?.zardluud?.map((a) => a._id)
+  );
 
   useEffect(() => {
-  const currentIds = value?.zardluud?.map((a) => a._id) || [];
-  setValueState(currentIds);
-}, [value?.zardluud]);
+    const currentIds = value?.zardluud?.map((a) => a._id) || [];
+    setValueState(currentIds);
+  }, [value?.zardluud]);
 
   const onValueChange = (selectedValues) => {
     onChange(selectedValues);
     setValueState(selectedValues);
-  ashiglaltiinZardal.setKhuudaslalt((a) => ({ ...a, search: "" }));
-};
+    ashiglaltiinZardal.setKhuudaslalt((a) => ({ ...a, search: "" }));
+  };
 
   return (
     <Select
@@ -57,7 +59,7 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
       onChange={onValueChange}
       className="w-full"
       showSearch
-      removeIcon= {null}
+      removeIcon={null}
       loading={!ashiglaltiinZardal}
       onSearch={(search) =>
         ashiglaltiinZardal.setKhuudaslalt((a) => ({ ...a, search }))
@@ -76,18 +78,27 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
       {ashiglaltiinZardal?.jagsaalt.map((a, i) => {
         return (
           <Select.Option key={a._id}>
-            <div className="w-full flex justify-between border-b">
+            <div className="flex w-full justify-between border-b">
               <p className="flex border-r bg-green-400 bg-opacity-10 pl-2 pr-2 text-left">
                 {a.ner}
               </p>
-              <div className="w-full justify-between flex bg-blue-600 bg-opacity-5 pl-2 pr-2">
-                <p className={`border-r text-right mr-5`}>{t(a.turul)}</p>
-                <div className='ml-auto'>{(a.ner?.includes("Хүйтэн ус") || a.ner?.includes("Халуун ус") ? ("Цэвэр ус: " + formatNumber(a.tseverUsDun, 2)) : formatNumber(a.tariff, 2)) 
-                                              + " "+ (a.ner?.includes("Хүйтэн ус") || a.ner?.includes("Халуун ус") ? "Бохир ус: " + formatNumber(a.bokhirUsDun, 2) : "")
-                                              + " "+ ( a.ner?.includes("Халуун ус") ? "Ус халаасны: " + formatNumber(a.usKhalaasniiDun, 2) : "")}</div>
-                <p className="text-right">
-                  {a.turul !== "Дурын" && "₮"}
-                </p>
+              <div className="flex w-full justify-between bg-blue-600 bg-opacity-5 pl-2 pr-2">
+                <p className={`mr-5 border-r text-right`}>{t(a.turul)}</p>
+                <div className="ml-auto">
+                  {(a.ner?.includes("Хүйтэн ус") || a.ner?.includes("Халуун ус")
+                    ? "Цэвэр ус: " + formatNumber(a.tseverUsDun, 2)
+                    : formatNumber(a.tariff, 2)) +
+                    " " +
+                    (a.ner?.includes("Хүйтэн ус") ||
+                    a.ner?.includes("Халуун ус")
+                      ? "Бохир ус: " + formatNumber(a.bokhirUsDun, 2)
+                      : "") +
+                    " " +
+                    (a.ner?.includes("Халуун ус")
+                      ? "Ус халаасны: " + formatNumber(a.usKhalaasniiDun, 2)
+                      : "")}
+                </div>
+                <p className="text-right">{a.turul !== "Дурын" && "₮"}</p>
               </div>
             </div>
           </Select.Option>
@@ -108,7 +119,13 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
       `}
     >
       <div
-        className={`absolute ${value?.zardluud && (value?.zardluud[i]?.ner?.includes("Халуун ус") || value?.zardluud[i]?.ner?.includes("Халуун ус")) ? "-left-2/3": "-left-2/4"} top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
+        className={`absolute ${
+          value?.zardluud &&
+          (value?.zardluud[i]?.ner?.includes("Халуун ус") ||
+            value?.zardluud[i]?.ner?.includes("Халуун ус"))
+            ? "-left-2/3"
+            : "-left-2/4"
+        } top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
            dark:bg-green-600`}
       />
       <div className="z-10 flex gap-1">
@@ -119,7 +136,7 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
         {value?.zardluud && value?.zardluud[i]?.turul === "Дурын" ? (
           <div className="flex w-full items-center justify-center gap-1">
             <Form.Item
-              className="tariffInput absolute z-10 -right-5 top-[3px] w-44"
+              className="tariffInput absolute -right-5 top-[3px] z-10 w-44"
               name={[a.name, "dun"]}
               rules={[
                 {
@@ -144,12 +161,27 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
             </Form.Item>
             <div>₮</div>
           </div>
-        ) : value?.zardluud && (value?.zardluud[i].ner?.includes("Халуун ус") || value?.zardluud && value?.zardluud[i]?.ner?.includes("Хүйтэн ус")) ? (
-          <div className='ml-auto'>{(value?.zardluud[i].ner?.includes("Хүйтэн ус") || value?.zardluud[i].ner?.includes("Халуун ус") ? ("Цэвэр ус: " + formatNumber(value?.zardluud[i].tseverUsDun, 2)) : formatNumber(value?.zardluud[i].tariff, 2)) 
-            + " "+ (value?.zardluud[i].ner?.includes("Хүйтэн ус") || value?.zardluud[i].ner?.includes("Халуун ус") ? "Бохир ус: " + formatNumber(value?.zardluud[i].bokhirUsDun, 2) : "")
-            + " "+ ( value?.zardluud[i].ner?.includes("Халуун ус") ? "Ус халаасны: " + formatNumber(value?.zardluud[i].usKhalaasniiDun, 2) : "")}</div>
-        )
-        : (
+        ) : value?.zardluud &&
+          (value?.zardluud[i].ner?.includes("Халуун ус") ||
+            (value?.zardluud &&
+              value?.zardluud[i]?.ner?.includes("Хүйтэн ус"))) ? (
+          <div className="ml-auto">
+            {(value?.zardluud[i].ner?.includes("Хүйтэн ус") ||
+            value?.zardluud[i].ner?.includes("Халуун ус")
+              ? "Цэвэр ус: " + formatNumber(value?.zardluud[i].tseverUsDun, 2)
+              : formatNumber(value?.zardluud[i].tariff, 2)) +
+              " " +
+              (value?.zardluud[i].ner?.includes("Хүйтэн ус") ||
+              value?.zardluud[i].ner?.includes("Халуун ус")
+                ? "Бохир ус: " + formatNumber(value?.zardluud[i].bokhirUsDun, 2)
+                : "") +
+              " " +
+              (value?.zardluud[i].ner?.includes("Халуун ус")
+                ? "Ус халаасны: " +
+                  formatNumber(value?.zardluud[i].usKhalaasniiDun, 2)
+                : "")}
+          </div>
+        ) : (
           <div className="z-10">
             {value?.zardluud && value?.zardluud[i]?.turul}{" "}
             {value?.zardluud &&
@@ -168,7 +200,7 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
           cancelText={t("Үгүй")}
           onConfirm={() => zardalUstgaya(value?.zardluud && value?.zardluud[i])}
         >
-          <div className="flex h-8 w-8 cursor-pointer z-20 items-center justify-start rounded-full fill-current p-2 text-xl text-black dark:text-red-600">
+          <div className="z-20 flex h-8 w-8 cursor-pointer items-center justify-start rounded-full fill-current p-2 text-xl text-black dark:text-red-600">
             <Tooltip title={t("Устгах")}>
               <CloseCircleOutlined size={20} />
             </Tooltip>
@@ -196,14 +228,25 @@ const Zardal = ({
   });
 
   useEffect(() => {
-    if ((!!value.khugatsaa && !!value.zardluud && value.duusakhOgnoo > moment().startOf("month")) || !!value._id)
+    if (
+      (!!value.khugatsaa &&
+        !!value.zardluud &&
+        value.duusakhOgnoo > moment().startOf("month")) ||
+      !!value._id
+    )
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
           dun: value.talbainNiitUne,
           khugatsaa: value.khugatsaa,
           tulukhUdruud: value.tulukhUdur,
-          ekhlekhOgnoo: moment(gereeniiZagvar?.turGereeEsekh ? value.gereeniiOgnoo : moment(value.gereeniiOgnoo).startOf("month")).format("YYYY-MM-DD 00:00:00"),
-          duusakhOgnoo: moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00"),
+          ekhlekhOgnoo: moment(
+            gereeniiZagvar?.turGereeEsekh
+              ? value.gereeniiOgnoo
+              : moment(value.gereeniiOgnoo).startOf("month")
+          ).format("YYYY-MM-DD 00:00:00"),
+          duusakhOgnoo: moment(value.duusakhOgnoo).format(
+            "YYYY-MM-DD 00:00:00"
+          ),
           zardluud: value.zardluud,
           mk: value.talbainKhemjee,
           metrKube: value.talbainKhemjeeMetrKube,
@@ -256,21 +299,27 @@ const Zardal = ({
     //   return;
     // }
     function zardalOruulya() {
-      var zardluud = zardluudiinJagsaalt.jagsaalt?.filter((a) => v.includes(a._id));
+      var zardluud = zardluudiinJagsaalt.jagsaalt?.filter((a) =>
+        v.includes(a._id)
+      );
       var oldZardluud = value.zardluud?.filter((a) => v.includes(a._id));
-      var ustgakhJagsaalt = []; 
+      var ustgakhJagsaalt = [];
       oldZardluud?.map((a) => {
         var filteredZardal = zardluud?.filter((b) => b._id === a._id);
-        if(filteredZardal?.length > 0)
-          ustgakhJagsaalt.push(filteredZardal[0]);
-      })
+        if (filteredZardal?.length > 0) ustgakhJagsaalt.push(filteredZardal[0]);
+      });
       value.zardluud = oldZardluud || [];
-      value.zardluud.push(...zardluud?.filter((el) => !ustgakhJagsaalt.includes(el)));
+      value.zardluud.push(
+        ...zardluud?.filter((el) => !ustgakhJagsaalt.includes(el))
+      );
       value.zardluud.map((el) => {
         if (el.turul === "Дурын") {
           el.dun = el.dun ? el.dun : "";
         }
-        var urjuulekhData = el?.turul === "1м2" ? value.talbainKhemjee : el?.turul === "Тогтмол" && 1;
+        var urjuulekhData =
+          el?.turul === "1м2"
+            ? value.talbainKhemjee
+            : el?.turul === "Тогтмол" && 1;
         el.tulukhDun = el.tariff * urjuulekhData;
       });
       form.setFieldsValue({ ...value });
@@ -331,7 +380,6 @@ const Zardal = ({
           <SongokhKheseg
             value={value}
             t={t}
-
             id={"songokhKheseg"}
             ashiglaltiinZardal={ashiglaltiinZardal}
             inputChange={inputChange}

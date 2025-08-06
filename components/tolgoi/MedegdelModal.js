@@ -28,7 +28,9 @@ const NotificationModal = React.memo(
     const { t } = useTranslation();
 
     useEffect(() => {
-      setDontShowAgainChecked(data?._id ? permanentlyDismissed.has(data._id) : false);
+      setDontShowAgainChecked(
+        data?._id ? permanentlyDismissed.has(data._id) : false
+      );
     }, [data, permanentlyDismissed]);
 
     const handleCheckboxChange = useCallback((e) => {
@@ -37,7 +39,7 @@ const NotificationModal = React.memo(
     }, []);
 
     const NotificationModalLoading = () => (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex h-64 items-center justify-center">
         <Spin size="large" />
       </div>
     );
@@ -80,7 +82,10 @@ const NotificationModal = React.memo(
         const newDismissed = new Set(permanentlyDismissed);
 
         if (dontShowAgainChecked && sonorduulgaId) {
-          const serverSaveSuccess = await saveDontShowAgainToServer(sonorduulgaId, true);
+          const serverSaveSuccess = await saveDontShowAgainToServer(
+            sonorduulgaId,
+            true
+          );
           if (serverSaveSuccess) {
             newDismissed.add(notifId);
             setPermanentlyDismissed(newDismissed);
@@ -94,8 +99,15 @@ const NotificationModal = React.memo(
             setDontShowAgainChecked(false);
             return;
           }
-        } else if (!dontShowAgainChecked && permanentlyDismissed.has(notifId) && sonorduulgaId) {
-          const serverSaveSuccess = await saveDontShowAgainToServer(sonorduulgaId, false);
+        } else if (
+          !dontShowAgainChecked &&
+          permanentlyDismissed.has(notifId) &&
+          sonorduulgaId
+        ) {
+          const serverSaveSuccess = await saveDontShowAgainToServer(
+            sonorduulgaId,
+            false
+          );
           if (serverSaveSuccess) {
             newDismissed.delete(notifId);
             setPermanentlyDismissed(newDismissed);
@@ -124,26 +136,42 @@ const NotificationModal = React.memo(
 
     if (!visible || !data) return null;
 
-    const displayData = getDisplayData({ isMessageModal, data, messageTitle, messageDetails, messageDate });
+    const displayData = getDisplayData({
+      isMessageModal,
+      data,
+      messageTitle,
+      messageDetails,
+      messageDate,
+    });
 
     const cleanedContent =
       typeof displayData?.content === "string"
         ? displayData.content.replace(/<p>(<br\s*\/?>|\s|&nbsp;)+/i, "<p>")
         : "";
 
-    function getDisplayData({ isMessageModal, data, messageTitle, messageDetails, messageDate }) {
+    function getDisplayData({
+      isMessageModal,
+      data,
+      messageTitle,
+      messageDetails,
+      messageDate,
+    }) {
       const formatDate = (dateInput) => {
         if (!dateInput) return "N/A";
-        if (typeof dateInput === "string" && dateInput.includes("оны")) return dateInput;
-        const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+        if (typeof dateInput === "string" && dateInput.includes("оны"))
+          return dateInput;
+        const date =
+          dateInput instanceof Date ? dateInput : new Date(dateInput);
         if (!isValid(date)) return "N/A";
         return format(date, "yyyy-MM-dd HH:mm");
       };
 
       const formatTitleDate = (dateInput) => {
         if (!dateInput) return "Мэдэгдлийн гарчиг байхгүй байна";
-        if (typeof dateInput === "string" && dateInput.includes("оны")) return dateInput;
-        const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+        if (typeof dateInput === "string" && dateInput.includes("оны"))
+          return dateInput;
+        const date =
+          dateInput instanceof Date ? dateInput : new Date(dateInput);
         if (!isValid(date)) return "Мэдэгдлийн гарчиг байхгүй байна";
         const year = format(date, "yyyy");
         const month = format(date, "M");
@@ -152,10 +180,15 @@ const NotificationModal = React.memo(
       };
 
       if (isMessageModal) {
-        const titleSource = messageTitle || (messageDate ? formatTitleDate(messageDate) : data?.title);
+        const titleSource =
+          messageTitle ||
+          (messageDate ? formatTitleDate(messageDate) : data?.title);
         return {
           title: titleSource,
-          content: messageDetails || data?.message || "Мэдэгдлийн агуулга байхгүй байна",
+          content:
+            messageDetails ||
+            data?.message ||
+            "Мэдэгдлийн агуулга байхгүй байна",
           date: formatDate(messageDate),
           image: data?.zurag || null,
           system: "Систем",
@@ -163,7 +196,8 @@ const NotificationModal = React.memo(
           register: "Тодорхойгүй",
         };
       } else if (data) {
-        const titleSource = messageTitle || (messageDate ? formatTitleDate(data) : data?.title);
+        const titleSource =
+          messageTitle || (messageDate ? formatTitleDate(data) : data?.title);
         return {
           title: titleSource,
           content: data.message || "Мэдэгдлийн агуулга байхгүй байна",
@@ -180,18 +214,20 @@ const NotificationModal = React.memo(
     const isValidImageUrl = (url) =>
       !isMessageModal &&
       typeof url === "string" &&
-      (url.startsWith("data:image") || url.startsWith("http") || url.startsWith("/"));
+      (url.startsWith("data:image") ||
+        url.startsWith("http") ||
+        url.startsWith("/"));
 
     return (
       <Modal
         title={
           <div className="flex flex-col items-center py-1">
             <div className="h-1" />
-            <div className="sm:text-sm text-base font-medium text-center text-gray-800 dark:text-gray-200">
+            <div className="text-center text-base font-medium text-gray-800 dark:text-gray-200 sm:text-sm">
               {t("📢 ШИНЭЧЛЭЛТИЙН МЭДЭЭ 📢")}
             </div>
             <div className="h-3" />
-            <div className="text-sm sm:text-base text-center text-gray-700 dark:text-gray-300">
+            <div className="text-center text-sm text-gray-700 dark:text-gray-300 sm:text-base">
               {displayData?.title}
             </div>
             <div className="h-1" />
@@ -209,13 +245,13 @@ const NotificationModal = React.memo(
         footer={
           <div className="flex items-center p-2 sm:p-4">
             {!isMessageModal ? (
-              <div className="flex items-center justify-between w-full flex-col sm:flex-row gap-2 sm:gap-0">
+              <div className="flex w-full flex-col items-center justify-between gap-2 sm:flex-row sm:gap-0">
                 <Checkbox
                   checked={dontShowAgainChecked}
                   onChange={handleCheckboxChange}
                   disabled={isSubmitting}
                 >
-                  <span className="select-none text-gray-800 dark:text-gray-200 text-xs sm:text-sm">
+                  <span className="select-none text-xs text-gray-800 dark:text-gray-200 sm:text-sm">
                     {t("Дахин харуулахгүй")}
                   </span>
                 </Checkbox>
@@ -223,17 +259,17 @@ const NotificationModal = React.memo(
                   type="primary"
                   onClick={handleClose}
                   loading={isSubmitting}
-                  className="w-full sm:w-auto px-4 py-1 sm:px-6 sm:py-2 text-xs sm:text-sm"
+                  className="w-full px-4 py-1 text-xs sm:w-auto sm:px-6 sm:py-2 sm:text-sm"
                 >
                   {isSubmitting ? t("Хадгалж байна...") : t("Хаах")}
                 </Button>
               </div>
             ) : (
-              <div className="flex justify-end w-full">
+              <div className="flex w-full justify-end">
                 <Button
                   type="primary"
                   onClick={handleClose}
-                  className="bg-gray-100 text-black dark:bg-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 w-full sm:w-auto px-4 py-1 sm:px-6 sm:py-2 text-xs sm:text-sm"
+                  className="w-full bg-gray-100 px-4 py-1 text-xs text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 sm:w-auto sm:px-6 sm:py-2 sm:text-sm"
                 >
                   {t("Хаах")}
                 </Button>
@@ -248,14 +284,14 @@ const NotificationModal = React.memo(
         }}
       >
         <Suspense fallback={<NotificationModalLoading />}>
-          <div className="mb-1 sm:mb-2 space-y-3">
+          <div className="mb-1 space-y-3 sm:mb-2">
             <div className="space-y-5 sm:space-y-4">
               <div className="w-full">
-                <div className="flex flex-row items-center justify-between w-full">
-                  <div className="text-left text-sm sm:text-base text-gray-800 dark:text-gray-200">
+                <div className="flex w-full flex-row items-center justify-between">
+                  <div className="text-left text-sm text-gray-800 dark:text-gray-200 sm:text-base">
                     {t("Нийтэлсэн")}
                   </div>
-                  <div className="text-right text-sm sm:text-base text-gray-800 dark:text-gray-200">
+                  <div className="text-right text-sm text-gray-800 dark:text-gray-200 sm:text-base">
                     {displayData.date}
                   </div>
                 </div>
@@ -270,7 +306,7 @@ const NotificationModal = React.memo(
                         : `${url}/notificationImage/${displayData.image}`
                     }
                     alt={`Notification image for ${displayData.title}`}
-                    className="max-w-full h-auto rounded-lg"
+                    className="h-auto max-w-full rounded-lg"
                     onError={(e) => {
                       e.target.style.display = "none";
                     }}
@@ -278,11 +314,11 @@ const NotificationModal = React.memo(
                 </div>
               )}
               <div className="sm:space-y-2">
-                <div className="bg-gray-100 dark:bg-gray-700 p-2 sm:p-4 rounded-lg overflow-y-auto">
+                <div className="overflow-y-auto rounded-lg bg-gray-100 p-2 dark:bg-gray-700 sm:p-4">
                   <div dangerouslySetInnerHTML={{ __html: cleanedContent }} />
                 </div>
                 {!isMessageModal && (
-                  <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400"></div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 sm:text-sm"></div>
                 )}
               </div>
             </div>
@@ -302,7 +338,10 @@ NotificationModal.propTypes = {
   setPermanentlyDismissed: PropTypes.func.isRequired,
   messageDetails: PropTypes.string,
   messageTitle: PropTypes.string,
-  messageDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+  messageDate: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.instanceOf(Date),
+  ]),
   isMessageModal: PropTypes.bool,
   token: PropTypes.string.isRequired,
 };

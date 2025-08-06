@@ -32,8 +32,6 @@ function KhuviinMedeelel({
     ajiltan?.baiguullagiinId
   );
 
-  
-
   const [form] = Form.useForm();
   const [tamga, setTamga] = useState();
   const [gariinUseg, setGariinUseg] = useState();
@@ -44,76 +42,87 @@ function KhuviinMedeelel({
   );
   const [kharakhZurgiinZam, setKharakhZurgiinZam] = useState(false);
   const [gariinUsegKharakhZam, setGariinUsegKharakhZam] = useState(false);
-const [gereeTokhirgoo, setGereeTokhirgoo] = useState({
-  gereeAvtomataarSungakhEsekh: baiguullaga?.tokhirgoo?.gereeAvtomataarSungakhEsekh,
-  bukhAjiltanGereendZasvarOruulakhEsekh: baiguullaga?.tokhirgoo?.bukhAjiltanGereendZasvarOruulakhEsekh,
-  
-  baritsaaAvakhSar: baiguullaga?.tokhirgoo?.baritsaaAvakhSar,
-  baritsaaAvakhEsekh: baiguullaga?.tokhirgoo?.baritsaaAvakhEsekh,
-  
-  baritsaaUneAdiltgakhEsekh: baiguullaga?.tokhirgoo?.baritsaaUneAdiltgakhEsekh,
-  
-  aktAshiglakhEsekh: baiguullaga?.tokhirgoo?.aktAshiglakhEsekh,
-  
-  guidelBuchiltKhonogEsekh: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh,
-  sekhDemjikhTulburAvakhEsekh: baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh,
-  bichiltKhonog: baiguullaga?.tokhirgoo?.bichiltKhonog || 0,
-  
-  udruurBodokhEsekh: baiguullaga?.tokhirgoo?.udruurBodokhEsekh
-});
+  const [gereeTokhirgoo, setGereeTokhirgoo] = useState({
+    gereeAvtomataarSungakhEsekh:
+      baiguullaga?.tokhirgoo?.gereeAvtomataarSungakhEsekh,
+    bukhAjiltanGereendZasvarOruulakhEsekh:
+      baiguullaga?.tokhirgoo?.bukhAjiltanGereendZasvarOruulakhEsekh,
 
-const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState({
-  jilBurTalbaiTulburNemekhEsekh: barilga?.tokhirgoo?.jilBurTalbaiTulburNemekhEsekh,
-  jilBurTulbur: barilga?.tokhirgoo?.jilBurTulbur,
-  gereeDuusakhTalbaiTulburNemekhEsekh: barilga?.tokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
-  gereeDuusakhTulbur: barilga?.tokhirgoo?.gereeDuusakhTulbur
-});
+    baritsaaAvakhSar: baiguullaga?.tokhirgoo?.baritsaaAvakhSar,
+    baritsaaAvakhEsekh: baiguullaga?.tokhirgoo?.baritsaaAvakhEsekh,
 
-const gereeTokhirgooKhadgalya = () => {
-  const payload = {
-    tokhirgoo: {
-      gereeAvtomataarSungakhEsekh: gereeTokhirgoo?.gereeAvtomataarSungakhEsekh,
-      bukhAjiltanGereendZasvarOruulakhEsekh: gereeTokhirgoo?.bukhAjiltanGereendZasvarOruulakhEsekh,
-      
-      baritsaaAvakhSar: gereeTokhirgoo?.baritsaaAvakhSar,
-      baritsaaAvakhEsekh: gereeTokhirgoo?.baritsaaAvakhEsekh,
-      baritsaaUneAdiltgakhEsekh: gereeTokhirgoo?.baritsaaUneAdiltgakhEsekh,
-      
-      aktAshiglakhEsekh: gereeTokhirgoo?.aktAshiglakhEsekh,
-      
-      guidelBuchiltKhonogEsekh: gereeTokhirgoo?.guidelBuchiltKhonogEsekh,
-      sekhDemjikhTulburAvakhEsekh: gereeTokhirgoo?.sekhDemjikhTulburAvakhEsekh,
-      bichiltKhonog: gereeTokhirgoo?.bichiltKhonog,
-      
-      udruurBodokhEsekh: gereeTokhirgoo?.udruurBodokhEsekh,
-      
-      jilBurTalbaiTulburNemekhEsekh: barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh,
-      jilBurTulbur: barilgaTokhirgoo?.jilBurTulbur,
-      gereeDuusakhTalbaiTulburNemekhEsekh: barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
-      gereeDuusakhTulbur: barilgaTokhirgoo?.gereeDuusakhTulbur
-    }
-  };
+    baritsaaUneAdiltgakhEsekh:
+      baiguullaga?.tokhirgoo?.baritsaaUneAdiltgakhEsekh,
+
+    aktAshiglakhEsekh: baiguullaga?.tokhirgoo?.aktAshiglakhEsekh,
+
+    guidelBuchiltKhonogEsekh: baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh,
+    sekhDemjikhTulburAvakhEsekh:
+      baiguullaga?.tokhirgoo?.sekhDemjikhTulburAvakhEsekh,
+    bichiltKhonog: baiguullaga?.tokhirgoo?.bichiltKhonog || 0,
+
+    udruurBodokhEsekh: baiguullaga?.tokhirgoo?.udruurBodokhEsekh,
+  });
+
+  const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState({
+    jilBurTalbaiTulburNemekhEsekh:
+      barilga?.tokhirgoo?.jilBurTalbaiTulburNemekhEsekh,
+    jilBurTulbur: barilga?.tokhirgoo?.jilBurTulbur,
+    gereeDuusakhTalbaiTulburNemekhEsekh:
+      barilga?.tokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
+    gereeDuusakhTulbur: barilga?.tokhirgoo?.gereeDuusakhTulbur,
+  });
+
+  const gereeTokhirgooKhadgalya = () => {
+    const payload = {
+      tokhirgoo: {
+        gereeAvtomataarSungakhEsekh:
+          gereeTokhirgoo?.gereeAvtomataarSungakhEsekh,
+        bukhAjiltanGereendZasvarOruulakhEsekh:
+          gereeTokhirgoo?.bukhAjiltanGereendZasvarOruulakhEsekh,
+
+        baritsaaAvakhSar: gereeTokhirgoo?.baritsaaAvakhSar,
+        baritsaaAvakhEsekh: gereeTokhirgoo?.baritsaaAvakhEsekh,
+        baritsaaUneAdiltgakhEsekh: gereeTokhirgoo?.baritsaaUneAdiltgakhEsekh,
+
+        aktAshiglakhEsekh: gereeTokhirgoo?.aktAshiglakhEsekh,
+
+        guidelBuchiltKhonogEsekh: gereeTokhirgoo?.guidelBuchiltKhonogEsekh,
+        sekhDemjikhTulburAvakhEsekh:
+          gereeTokhirgoo?.sekhDemjikhTulburAvakhEsekh,
+        bichiltKhonog: gereeTokhirgoo?.bichiltKhonog,
+
+        udruurBodokhEsekh: gereeTokhirgoo?.udruurBodokhEsekh,
+
+        jilBurTalbaiTulburNemekhEsekh:
+          barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh,
+        jilBurTulbur: barilgaTokhirgoo?.jilBurTulbur,
+        gereeDuusakhTalbaiTulburNemekhEsekh:
+          barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
+        gereeDuusakhTulbur: barilgaTokhirgoo?.gereeDuusakhTulbur,
+      },
+    };
 
     const zuragKhadgalakh = (v, turul) => {
-    if (v.file.status === "done") {
-      if (turul === "tamga") {
-        setTamga(v.file.response);
-      } else if (turul === "gariinUseg") {
-        setGariinUseg(v.file.response);
+      if (v.file.status === "done") {
+        if (turul === "tamga") {
+          setTamga(v.file.response);
+        } else if (turul === "gariinUseg") {
+          setGariinUseg(v.file.response);
+        }
       }
-    }
-  };
+    };
 
-  uilchilgee(token)
-    .post("/baiguullagaTokhirgooZasya", payload)
-    .then(({ data }) => {
-      if (data === "Amjilttai") {
-        notification.success({ message: t("Амжилттай засагдлаа") });
-        baiguullagaMutate();
-        setSongogdsonTsonkhniiIndex(3);
-      }
-    });
-};
+    uilchilgee(token)
+      .post("/baiguullagaTokhirgooZasya", payload)
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          notification.success({ message: t("Амжилттай засагдлаа") });
+          baiguullagaMutate();
+          setSongogdsonTsonkhniiIndex(3);
+        }
+      });
+  };
 
   function khadgalakh() {
     const index = baiguullaga.barilguud.findIndex((a) => a._id === barilgiinId);
@@ -537,11 +546,11 @@ const gereeTokhirgooKhadgalya = () => {
               !!gereeTokhirgoo ? "flex" : "hidden"
             }`}
           >
-           <div className="dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2">
-  <Button onClick={gereeTokhirgooKhadgalya} type="primary">
-    {t("Хадгалах")}
-  </Button>
-</div>
+            <div className="dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2">
+              <Button onClick={gereeTokhirgooKhadgalya} type="primary">
+                {t("Хадгалах")}
+              </Button>
+            </div>
           </div>
         </div>
 

@@ -10,11 +10,14 @@ function ajiltanNemekh(
   const { ajilchdiinGaralt } = useAjiltniiJagsaalt(token, baiguullaga?._id);
 
   const [songogdsonAjiltan, setSongogdsonAjiltan] = useState();
-useEffect(()=> {
-  if (!!daalgavar?.ajiltniiNer && !!daalgavar?.ajiltniiId) {
-    setSongogdsonAjiltan({_id: daalgavar.ajiltniiId, ner: daalgavar?.ajiltniiNer})
-  }
-},[daalgavar])
+  useEffect(() => {
+    if (!!daalgavar?.ajiltniiNer && !!daalgavar?.ajiltniiId) {
+      setSongogdsonAjiltan({
+        _id: daalgavar.ajiltniiId,
+        ner: daalgavar?.ajiltniiNer,
+      });
+    }
+  }, [daalgavar]);
   React.useImperativeHandle(
     ref,
     () => ({

@@ -1,4 +1,12 @@
-import { Form, Button, DatePicker, InputNumber, Select, Input, Switch } from "antd";
+import {
+  Form,
+  Button,
+  DatePicker,
+  InputNumber,
+  Select,
+  Input,
+  Switch,
+} from "antd";
 import {
   SolutionOutlined,
   ArrowRightOutlined,
@@ -32,17 +40,26 @@ const YurunkhiiMedeele = ({
 }) => {
   const [form] = Form.useForm();
 
-  
-
   useEffect(() => {
-    if ((!!value.khugatsaa && (!!value.zardluud || !!value.talbainuud) && value.duusakhOgnoo > moment().startOf("month")) || !!value._id)
+    if (
+      (!!value.khugatsaa &&
+        (!!value.zardluud || !!value.talbainuud) &&
+        value.duusakhOgnoo > moment().startOf("month")) ||
+      !!value._id
+    )
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
           dun: value.talbainNiitUne,
           khugatsaa: value.khugatsaa,
           tulukhUdruud: value.tulukhUdur,
-          ekhlekhOgnoo: moment(gereeniiZagvar?.turGereeEsekh ? value.gereeniiOgnoo : moment(value.gereeniiOgnoo).startOf("month")).format("YYYY-MM-DD 00:00:00"),
-          duusakhOgnoo: moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00"),
+          ekhlekhOgnoo: moment(
+            gereeniiZagvar?.turGereeEsekh
+              ? value.gereeniiOgnoo
+              : moment(value.gereeniiOgnoo).startOf("month")
+          ).format("YYYY-MM-DD 00:00:00"),
+          duusakhOgnoo: moment(value.duusakhOgnoo).format(
+            "YYYY-MM-DD 00:00:00"
+          ),
           zardluud: value.zardluud,
           mk: value.talbainKhemjee,
           metrKube: value.talbainKhemjeeMetrKube,
@@ -60,7 +77,14 @@ const YurunkhiiMedeele = ({
         .catch((e) => {
           aldaaBarigch(e);
         });
-  }, [form.getFieldValue("khugatsaa"), form.getFieldValue("tulukhUdur"), form.getFieldValue("duusakhOgnoo"), form.getFieldValue("guchKhonogOruulakhEsekh"), form.getFieldValue("garaasKhonogOruulakhEsekh"), form.getFieldValue("ekhniiSariinKhonog")]);
+  }, [
+    form.getFieldValue("khugatsaa"),
+    form.getFieldValue("tulukhUdur"),
+    form.getFieldValue("duusakhOgnoo"),
+    form.getFieldValue("guchKhonogOruulakhEsekh"),
+    form.getFieldValue("garaasKhonogOruulakhEsekh"),
+    form.getFieldValue("ekhniiSariinKhonog"),
+  ]);
 
   const onValuesChange = (values, v) => {
     if (!!values?.gereeniiOgnoo && !!value?.khugatsaa) {
@@ -133,7 +157,7 @@ const YurunkhiiMedeele = ({
   }
 
   function disabledDate(current) {
-    return value._id && current && current < moment().startOf('day');
+    return value._id && current && current < moment().startOf("day");
   }
 
   return (
@@ -173,7 +197,6 @@ const YurunkhiiMedeele = ({
           name="khugatsaa"
           label={t("Гэрээний хугацаа")}
           required={false}
-          
         >
           <InputNumber
             onKeyUp={focuser}
@@ -182,7 +205,13 @@ const YurunkhiiMedeele = ({
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
             max={480}
-            min={!value._id ? 1 : moment(value?.duusakhOgnoo).diff(moment(value?.gereeniiOgnoo), "month", true).toFixed()}
+            min={
+              !value._id
+                ? 1
+                : moment(value?.duusakhOgnoo)
+                    .diff(moment(value?.gereeniiOgnoo), "month", true)
+                    .toFixed()
+            }
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             placeholder={t(
               `Гэрээний хугацаа ${
@@ -204,7 +233,6 @@ const YurunkhiiMedeele = ({
             t("Авлага үүсэх огноо сар бүрийн / өдөр")
           }
           name="tulukhUdur"
-          
         >
           {gereeniiZagvar?.turGereeEsekh === true ? (
             <Input
@@ -253,23 +281,41 @@ const YurunkhiiMedeele = ({
         </Form.Item>
       </div>
       {
-        <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400" className="flex w-full justify-end gap-2 ">
-          <p className="mt-1 dark:text-gray-200">{t("30 хоногоор оруулах эсэх")}:</p>
+        <div
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="400"
+          className="flex w-full justify-end gap-2 "
+        >
+          <p className="mt-1 dark:text-gray-200">
+            {t("30 хоногоор оруулах эсэх")}:
+          </p>
           <Form.Item name="guchKhonogOruulakhEsekh" valuePropName="checked">
-            <Switch/>
+            <Switch />
           </Form.Item>
-        </div>  
+        </div>
       }
       {
-        <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400" className="flex w-full justify-end gap-2 ">
-          <p className="mt-1 dark:text-gray-200">{t("Гараас ашиглах хоног оруулах эсэх")}:</p>
+        <div
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="400"
+          className="flex w-full justify-end gap-2 "
+        >
+          <p className="mt-1 dark:text-gray-200">
+            {t("Гараас ашиглах хоног оруулах эсэх")}:
+          </p>
           <Form.Item name="garaasKhonogOruulakhEsekh" valuePropName="checked">
             <Switch />
           </Form.Item>
-        </div>  
+        </div>
       }
       {value.garaasKhonogOruulakhEsekh && (
-        <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
+        <div
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="400"
+        >
           <Form.Item
             name="ekhniiSariinKhonog"
             label={t("Эхний сарын ашиглах хоног")}
@@ -285,8 +331,8 @@ const YurunkhiiMedeele = ({
               parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
               placeholder="Гэрээний эхний сарын ашиглах хоног оруулах"
             />
-          </Form.Item> 
-        </div>  
+          </Form.Item>
+        </div>
       )}
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
         <Form.Item wrapperCol={{ span: 24 }}>

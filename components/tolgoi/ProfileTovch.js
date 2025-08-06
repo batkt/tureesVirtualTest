@@ -7,7 +7,14 @@ import {
 } from "@ant-design/icons";
 import { Badge, Dropdown, Menu, Empty, Spin } from "antd";
 import Link from "next/link";
-import React, { useState, useEffect, Suspense, lazy, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  Suspense,
+  lazy,
+  useCallback,
+  useMemo,
+} from "react";
 import { format, isValid } from "date-fns";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import useSonorduulga from "hooks/useSonorduulga";
@@ -25,7 +32,13 @@ const LoadingSpinner = () => (
   </div>
 );
 
-function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt }) {
+function ProfileTovch({
+  ajiltan,
+  garya,
+  token,
+  setShowTuslamj,
+  showSanalKhuselt,
+}) {
   const {
     sonorduulga,
     sonorduulgaMutate,
@@ -52,9 +65,11 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
     messageDetails: null,
     messageDate: null,
   });
-  const [sessionDismissedNotifications, setSessionDismissedNotifications] = useState(new Set());
+  const [sessionDismissedNotifications, setSessionDismissedNotifications] =
+    useState(new Set());
   const [expandedNotifications, setExpandedNotifications] = useState(null);
-  const [sonorduulgaDropdownVisible, setSonorduulgaDropdownVisible] = useState(false);
+  const [sonorduulgaDropdownVisible, setSonorduulgaDropdownVisible] =
+    useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [animateMail, setAnimateMail] = useState(false);
 
@@ -75,7 +90,11 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
   }, []);
 
   const allNotifications = useMemo(() => {
-    const combined = [...realTimeNotifications, ...jagsaalt, ...(sonorduulga?.jagsaalt || [])]
+    const combined = [
+      ...realTimeNotifications,
+      ...jagsaalt,
+      ...(sonorduulga?.jagsaalt || []),
+    ]
       .filter((mur) => mur?.turul === "medegdelAdmin")
       .map((mur) => ({
         ...mur,
@@ -96,11 +115,10 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
   }, [allNotifications]);
 
   const allSonorduulga = useMemo(() => {
-    return [...jagsaalt, ...(sonorduulga?.jagsaalt || [])]
-      .map((mur) => ({
-        ...mur,
-        object: { ...mur.object, zurag: undefined },
-      }));
+    return [...jagsaalt, ...(sonorduulga?.jagsaalt || [])].map((mur) => ({
+      ...mur,
+      object: { ...mur.object, zurag: undefined },
+    }));
   }, [jagsaalt, sonorduulga?.jagsaalt]);
 
   useEffect(() => {
@@ -129,38 +147,44 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
     });
   }, [notificationModal.data, notificationModal.isMessageModal]);
 
- const handleDontShowAgain = useCallback((notifId, dontShowAgain) => {
-  if (notifId && dontShowAgain) {
-    setSessionDismissedNotifications((prev) => new Set([...prev, notifId]));
-    setPermanentlyDismissed((prev) => {
-      const updated = new Set([...prev, notifId]);
-      localStorage.setItem("permanentlyDismissedNotifications", JSON.stringify([...updated]));
-      return updated;
-    });
-  }
-  setNotificationModal({
-    visible: false,
-    data: null,
-    isMessageModal: false,
-    messageDetails: null,
-    messageTitle: null,
-    messageDate: null,
-  });
-}, []);
-
-  const handleMessageClick = useCallback((title, message, createdAt, e, _id) => {
-    e?.stopPropagation();
-    requestAnimationFrame(() => {
-      setNotificationModal({
-        visible: true,
-        isMessageModal: true,
-        messageTitle: title,
-        messageDetails: message,
-        messageDate: formatDate(createdAt), // Validate and format date
-        data: { title, message, _id, createdAt },
+  const handleDontShowAgain = useCallback((notifId, dontShowAgain) => {
+    if (notifId && dontShowAgain) {
+      setSessionDismissedNotifications((prev) => new Set([...prev, notifId]));
+      setPermanentlyDismissed((prev) => {
+        const updated = new Set([...prev, notifId]);
+        localStorage.setItem(
+          "permanentlyDismissedNotifications",
+          JSON.stringify([...updated])
+        );
+        return updated;
       });
+    }
+    setNotificationModal({
+      visible: false,
+      data: null,
+      isMessageModal: false,
+      messageDetails: null,
+      messageTitle: null,
+      messageDate: null,
     });
-  }, [formatDate]);
+  }, []);
+
+  const handleMessageClick = useCallback(
+    (title, message, createdAt, e, _id) => {
+      e?.stopPropagation();
+      requestAnimationFrame(() => {
+        setNotificationModal({
+          visible: true,
+          isMessageModal: true,
+          messageTitle: title,
+          messageDetails: message,
+          messageDate: formatDate(createdAt), // Validate and format date
+          data: { title, message, _id, createdAt },
+        });
+      });
+    },
+    [formatDate]
+  );
 
   const showLatestNotificationOnLogin = useCallback(() => {
     const adminNotifications = allNotifications;
@@ -180,86 +204,117 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
     ) {
       setNotificationModal({
         visible: true,
-        data: { ...latestNotification, _id: latestNotifId, createdAt: formatDate(latestNotification.createdAt) },
+        data: {
+          ...latestNotification,
+          _id: latestNotifId,
+          createdAt: formatDate(latestNotification.createdAt),
+        },
         isMessageModal: false,
         messageTitle: null,
         messageDetails: null,
         messageDate: null,
       });
     }
-  }, [allNotifications, permanentlyDismissed, sessionDismissedNotifications, formatDate]);
+  }, [
+    allNotifications,
+    permanentlyDismissed,
+    sessionDismissedNotifications,
+    formatDate,
+  ]);
 
-  const handleAdminNotification = useCallback((data) => {
-    const notifications = Array.isArray(data) ? data : [data];
-    const validNotifications = notifications.filter((notif) => {
-      const notifId = notif._id || notif.id || "default-notification";
-      return (
-        notif &&
-        (notif.message || notif.title || notif.tailbar) &&
-        !sessionDismissedNotifications.has(notifId) &&
-        !permanentlyDismissed.has(notifId)
-      );
-    });
+  const handleAdminNotification = useCallback(
+    (data) => {
+      const notifications = Array.isArray(data) ? data : [data];
+      const validNotifications = notifications.filter((notif) => {
+        const notifId = notif._id || notif.id || "default-notification";
+        return (
+          notif &&
+          (notif.message || notif.title || notif.tailbar) &&
+          !sessionDismissedNotifications.has(notifId) &&
+          !permanentlyDismissed.has(notifId)
+        );
+      });
 
-    if (validNotifications.length === 0) return;
+      if (validNotifications.length === 0) return;
 
-    requestAnimationFrame(() => {
-      setRealTimeNotifications((prev) => {
+      requestAnimationFrame(() => {
+        setRealTimeNotifications((prev) => {
+          const allExistingIds = new Set([
+            ...prev.map((n) => n._id),
+            ...jagsaalt.map((n) => n._id),
+            ...(sonorduulga?.jagsaalt || []).map((n) => n._id),
+          ]);
+
+          const newUnique = validNotifications
+            .map((notif) => ({
+              ...notif,
+              object: { ...notif.object, zurag: undefined },
+              createdAt: formatDate(notif.createdAt), // Validate and format date
+            }))
+            .filter((n) => !allExistingIds.has(n._id));
+
+          return [...newUnique, ...prev].slice(0, 50);
+        });
+
+        const latestNotification = validNotifications[0];
+        const latestNotifId =
+          latestNotification._id ||
+          latestNotification.id ||
+          "default-notification";
+
         const allExistingIds = new Set([
-          ...prev.map((n) => n._id),
           ...jagsaalt.map((n) => n._id),
           ...(sonorduulga?.jagsaalt || []).map((n) => n._id),
         ]);
 
-        const newUnique = validNotifications
-          .map((notif) => ({
-            ...notif,
-            object: { ...notif.object, zurag: undefined },
-            createdAt: formatDate(notif.createdAt), // Validate and format date
-          }))
-          .filter((n) => !allExistingIds.has(n._id));
+        if (
+          !sessionDismissedNotifications.has(latestNotifId) &&
+          !permanentlyDismissed.has(latestNotifId) &&
+          !allExistingIds.has(latestNotifId)
+        ) {
+          setNotificationModal({
+            visible: true,
+            data: {
+              ...latestNotification,
+              _id: latestNotifId,
+              title:
+                latestNotification.title ||
+                latestNotification.garchig ||
+                "Шинэ мэдэгдэл",
+              message:
+                latestNotification.message ||
+                latestNotification.tailbar ||
+                "Мэдэгдлийн агуулга байхгүй байна.",
+              system: latestNotification.system || "Систем",
+              success:
+                latestNotification.success !== undefined
+                  ? latestNotification.success
+                  : latestNotification.kharsanEsekh === true,
+              createdAt: formatDate(latestNotification.createdAt), // Validate and format date
+              baiguullagaRegister:
+                latestNotification.baiguullagaRegister ||
+                latestNotification.baiguullagiinId ||
+                "Тодорхойгүй",
+            },
+            isMessageModal: false,
+            messageTitle: null,
+            messageDetails: null,
+            messageDate: null,
+          });
+        }
 
-        return [...newUnique, ...prev].slice(0, 50);
+        sonorduulgaMutate();
       });
-
-      const latestNotification = validNotifications[0];
-      const latestNotifId = latestNotification._id || latestNotification.id || "default-notification";
-
-      const allExistingIds = new Set([
-        ...jagsaalt.map((n) => n._id),
-        ...(sonorduulga?.jagsaalt || []).map((n) => n._id),
-      ]);
-
-      if (
-        !sessionDismissedNotifications.has(latestNotifId) &&
-        !permanentlyDismissed.has(latestNotifId) &&
-        !allExistingIds.has(latestNotifId)
-      ) {
-        setNotificationModal({
-          visible: true,
-          data: {
-            ...latestNotification,
-            _id: latestNotifId,
-            title: latestNotification.title || latestNotification.garchig || "Шинэ мэдэгдэл",
-            message: latestNotification.message || latestNotification.tailbar || "Мэдэгдлийн агуулга байхгүй байна.",
-            system: latestNotification.system || "Систем",
-            success:
-              latestNotification.success !== undefined
-                ? latestNotification.success
-                : latestNotification.kharsanEsekh === true,
-            createdAt: formatDate(latestNotification.createdAt), // Validate and format date
-            baiguullagaRegister: latestNotification.baiguullagaRegister || latestNotification.baiguullagiinId || "Тодорхойгүй",
-          },
-          isMessageModal: false,
-          messageTitle: null,
-          messageDetails: null,
-          messageDate: null,
-        });
-      }
-
-      sonorduulgaMutate();
-    });
-  }, [sessionDismissedNotifications, permanentlyDismissed, sonorduulgaMutate, jagsaalt, sonorduulga?.jagsaalt, formatDate]);
+    },
+    [
+      sessionDismissedNotifications,
+      permanentlyDismissed,
+      sonorduulgaMutate,
+      jagsaalt,
+      sonorduulga?.jagsaalt,
+      formatDate,
+    ]
+  );
 
   useEffect(() => {
     if (!baiguullaga?._id) return;
@@ -274,21 +329,26 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
     };
   }, [baiguullaga?._id, handleAdminNotification]);
 
- useEffect(() => {
-  let hasShown = false;
-  const timer = setTimeout(() => {
-    if (
-      baiguullaga?._id &&
-      (jagsaalt.length > 0 || sonorduulga?.jagsaalt?.length > 0) &&
-      !hasShown
-    ) {
-      showLatestNotificationOnLogin();
-      hasShown = true;
-    }
-  }, 1500);
+  useEffect(() => {
+    let hasShown = false;
+    const timer = setTimeout(() => {
+      if (
+        baiguullaga?._id &&
+        (jagsaalt.length > 0 || sonorduulga?.jagsaalt?.length > 0) &&
+        !hasShown
+      ) {
+        showLatestNotificationOnLogin();
+        hasShown = true;
+      }
+    }, 1500);
 
-  return () => clearTimeout(timer);
-}, [baiguullaga?._id, jagsaalt, sonorduulga?.jagsaalt, showLatestNotificationOnLogin]);
+    return () => clearTimeout(timer);
+  }, [
+    baiguullaga?._id,
+    jagsaalt,
+    sonorduulga?.jagsaalt,
+    showLatestNotificationOnLogin,
+  ]);
 
   const sonorduulgaKharlaa = useCallback(
     (id, sonorduulgaId) => {
@@ -318,7 +378,7 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
     () => (
       <Suspense fallback={<LoadingSpinner />}>
         <div
-          className="mail-dropdown-container w-full max-w-sm sm:w-[400px] h-[60vh] overflow-y-auto z-[1000]"
+          className="mail-dropdown-container z-[1000] h-[60vh] w-full max-w-sm overflow-y-auto sm:w-[400px]"
           style={{
             width: "400px",
             height: "60vh",
@@ -326,24 +386,41 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
             zIndex: 1000,
           }}
         >
-          <div className="sticky top-0 z-10 mail-dropdown-header bg-gradient-to-r from-green-400 to-green-500 text-white p-3 rounded-t-lg">
+          <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-400 to-green-500 p-3 text-white">
             <div className="flex items-center justify-between">
-              <span className="font-medium text-md">{t("Шинэчлэлтийн мэдээ")}</span>
+              <span className="text-md font-medium">
+                {t("Шинэчлэлтийн мэдээ")}
+              </span>
             </div>
           </div>
-          <div className="overflow-y-auto rounded-md bg-white dark:bg-gray-800 p-3 space-y-2 no-transition-initial">
+          <div className="no-transition-initial space-y-2 overflow-y-auto rounded-md bg-white p-3 dark:bg-gray-800">
             {allNotifications.length > 0 ? (
               allNotifications.map((mur, index) => {
-                const { turul, message, khariltsagchiinNer, _id, tailbar, ajiltniiNer, title, date } =
-                  mur?.object || {};
+                const {
+                  turul,
+                  message,
+                  khariltsagchiinNer,
+                  _id,
+                  tailbar,
+                  ajiltniiNer,
+                  title,
+                  date,
+                } = mur?.object || {};
                 const isExpanded = expandedNotifications === index;
-                const displayTitle = (mur?.title || title || khariltsagchiinNer || ajiltniiNer || "").replace(
-                  /<[^>]+>/g,
+                const displayTitle = (
+                  mur?.title ||
+                  title ||
+                  khariltsagchiinNer ||
+                  ajiltniiNer ||
                   ""
-                );
+                ).replace(/<[^>]+>/g, "");
                 const displayMessage =
-                message || (title ? `${title}-ны өдөр` : null) || tailbar || mur?.message || t("Мэдэгдлийн агуулга байхгүй байна.");
-                const displayDate = formatDate(mur.createdAt); 
+                  message ||
+                  (title ? `${title}-ны өдөр` : null) ||
+                  tailbar ||
+                  mur?.message ||
+                  t("Мэдэгдлийн агуулга байхгүй байна.");
+                const displayDate = formatDate(mur.createdAt);
 
                 const cleanedContent = displayMessage
                   ?.replace(/<p>(<br\s*\/?>|\s|&nbsp;)+/gi, "<p>")
@@ -360,42 +437,54 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
                     }`}
                   >
                     <div
-                      onClick={() => handleExpansionToggle(index, _id, mur?._id)}
+                      onClick={() =>
+                        handleExpansionToggle(index, _id, mur?._id)
+                      }
                       className="flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700"
                     >
-                      <div className="flex items-center space-x-3 flex-1">
+                      <div className="flex flex-1 items-center space-x-3">
                         <div className="relative">
                           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
-                            <MailOutlined className="text-green-500 dark:text-green-300 text-sm" />
+                            <MailOutlined className="text-sm text-green-500 dark:text-green-300" />
                           </div>
                           {!mur.kharsanEsekh && (
-                            <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-500 border-2 border-white"></div>
+                            <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-white bg-red-500"></div>
                           )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-gray-800 dark:text-gray-200 text-xs">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-xs font-medium text-gray-800 dark:text-gray-200">
                             {displayTitle}
                           </h3>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <div className="text-white px-2 py-1 rounded-full text-xs">
-                          <p className="text-xs text-black dark:text-white truncate">{displayDate}</p>
+                        <div className="rounded-full px-2 py-1 text-xs text-white">
+                          <p className="truncate text-xs text-black dark:text-white">
+                            {displayDate}
+                          </p>
                         </div>
                         <LeftOutlined
-                          className={`transition-transform text-gray-400 dark:text-gray-500 ${
+                          className={`text-gray-400 transition-transform dark:text-gray-500 ${
                             isExpanded ? "-rotate-90" : "rotate-0"
                           }`}
                         />
                       </div>
                     </div>
                     {isExpanded && (
-                      <div className="relative z-1000 px-4 pb-4 text-gray-600 dark:text-gray-300">
+                      <div className="z-1000 relative px-4 pb-4 text-gray-600 dark:text-gray-300">
                         <div className="border-t pt-3 dark:border-gray-600">
                           <div
                             dangerouslySetInnerHTML={{ __html: cleanedContent }}
-                            onClick={(e) => handleMessageClick(displayTitle, displayMessage, mur.createdAt, e, _id)}
-                            className="text-sm leading-relaxed max-h-[100px] overflow-y-auto mb-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 p-2 rounded"
+                            onClick={(e) =>
+                              handleMessageClick(
+                                displayTitle,
+                                displayMessage,
+                                mur.createdAt,
+                                e,
+                                _id
+                              )
+                            }
+                            className="mb-3 max-h-[100px] cursor-pointer overflow-y-auto rounded p-2 text-sm leading-relaxed hover:bg-gray-100 dark:hover:bg-gray-600"
                           />
                         </div>
                       </div>
@@ -404,7 +493,7 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
                 );
               })
             ) : (
-              <div className="flex items-center justify-center h-full">
+              <div className="flex h-full items-center justify-center">
                 <Empty description={t("Хоосон байна")} />
               </div>
             )}
@@ -412,7 +501,14 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
         </div>
       </Suspense>
     ),
-    [allNotifications, expandedNotifications, t, handleMessageClick, handleExpansionToggle, formatDate]
+    [
+      allNotifications,
+      expandedNotifications,
+      t,
+      handleMessageClick,
+      handleExpansionToggle,
+      formatDate,
+    ]
   );
 
   const ProfileDropdown = useMemo(
@@ -420,10 +516,12 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
       <Suspense fallback={<LoadingSpinner />}>
         <Menu className="bg-green-500">
           <Menu.Item className="profileMenuItem">
-            <div className="text-lg font-medium text-white">{`${(ajiltan?.ovog && ajiltan?.ovog[0]) || ""}.${
-              ajiltan?.ner
-            }`}</div>
-            <div className="text-sm font-medium text-gray-200">{ajiltan?.albanTushaal}</div>
+            <div className="text-lg font-medium text-white">{`${
+              (ajiltan?.ovog && ajiltan?.ovog[0]) || ""
+            }.${ajiltan?.ner}`}</div>
+            <div className="text-sm font-medium text-gray-200">
+              {ajiltan?.albanTushaal}
+            </div>
           </Menu.Item>
           <Menu.Divider />
           <Menu.Item key="0" className="profileMenuItem">
@@ -436,13 +534,21 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
               </a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="1" className="profileMenuItem" onClick={() => setShowTuslamj(true)}>
+          <Menu.Item
+            key="1"
+            className="profileMenuItem"
+            onClick={() => setShowTuslamj(true)}
+          >
             <div className="flex w-44 items-center space-x-2 text-white">
               <QuestionOutlined />
               <span>{t("Тусламж")}</span>
             </div>
           </Menu.Item>
-          <Menu.Item key="2" className="profileMenuItem" onClick={() => showSanalKhuselt(ajiltan)}>
+          <Menu.Item
+            key="2"
+            className="profileMenuItem"
+            onClick={() => showSanalKhuselt(ajiltan)}
+          >
             <div className="flex w-44 items-center space-x-2 text-white">
               <FiSend />
               <span>{t("Санал хүсэлт")}</span>
@@ -504,13 +610,13 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
           getPopupContainer={(trigger) => trigger.parentNode}
         >
           <button
-            className={`relative flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 dark:text-white ${
+            className={`relative flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 dark:text-white dark:hover:bg-gray-700 ${
               animateMail && medegdelAdminCount > 0 ? "buzz-animation" : ""
             }`}
           >
             <Badge count={medegdelAdminCount} dot>
               <MailOutlined
-                className="h-5 w-5 text-gray-600 dark:text-white hover:text-green-600"
+                className="h-5 w-5 text-gray-600 hover:text-green-600 dark:text-white"
                 style={{ fontSize: "18px" }}
               />
             </Badge>
@@ -545,9 +651,7 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
           overlayClassName="sonorduulga-dropdown-overlay"
           getPopupContainer={(trigger) => trigger.parentNode}
         >
-          <button
-            className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
+          <button className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 dark:text-white dark:hover:bg-gray-700">
             <Badge count={kharaaguiToo} dot>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -573,17 +677,15 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
           trigger={["click"]}
           className="cursor-pointer"
         >
-          <button
-            className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
+          <button className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 dark:hover:bg-gray-700">
             <img
               alt={ajiltan?.ner}
               src={
                 ajiltan?.zurgiinNer
                   ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
                   : (ajiltan?.register?.replace(/^\D+/g, "") % 100) / 10 < 1
-                    ? "/profileFemale.svg"
-                    : "/profile.svg"
+                  ? "/profileFemale.svg"
+                  : "/profile.svg"
               }
               className="h-8 w-8 rounded-full bg-gray-200 p-1 shadow-xl"
               loading="lazy"

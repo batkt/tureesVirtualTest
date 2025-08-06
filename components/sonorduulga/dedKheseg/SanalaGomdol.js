@@ -23,7 +23,7 @@ function Zakhialga({ onClose, token, ...object }) {
   const { turul, message, khariltsagchiinNer, createdAt, _id, daalgavriinId } =
     object || {};
   const { ajiltan } = useAjiltan(token);
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   function sonorduulgaKharlaa() {
     const href = hrefAvya(turul, _id, daalgavriinId, ajiltan, object);
@@ -51,9 +51,11 @@ function Zakhialga({ onClose, token, ...object }) {
         <div className="mt-1 text-gray-600">
           {moment(createdAt).format("YYYY-MM-DD")}
         </div>
-        <div className="mt-1 text-gray-600 truncate max-h-24 max-w-xs">{message}</div>
+        <div className="mt-1 max-h-24 max-w-xs truncate text-gray-600">
+          {message}
+        </div>
       </div>
-      <div className="dark:border-dark-5 absolute top-0 bottom-0 right-0 hidden flex-col border-l border-gray-200 md:flex">
+      <div className="dark:border-dark-5 absolute bottom-0 right-0 top-0 hidden flex-col border-l border-gray-200 md:flex">
         <a
           className="text-theme-1 dark:border-dark-5 flex flex-1 items-center justify-center border-b border-gray-200 px-6 font-medium dark:text-gray-500"
           onClick={sonorduulgaKharlaa}

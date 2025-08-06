@@ -1,6 +1,6 @@
-import React from "react"
-import { Bar } from "react-chartjs-2"
-import formatNumberNershil from "tools/function/formatNumberNershil"
+import React from "react";
+import { Bar } from "react-chartjs-2";
+import formatNumberNershil from "tools/function/formatNumberNershil";
 
 export const options = {
   responsive: true,
@@ -31,8 +31,8 @@ export const options = {
         },
         ticks: {
           callback: function (label, index, labels) {
-            if (_.isNumber(label)) return formatNumberNershil(label)
-            return label
+            if (_.isNumber(label)) return formatNumberNershil(label);
+            return label;
           },
         },
       },
@@ -42,8 +42,8 @@ export const options = {
     duration: 1500,
     easing: "easeInQuad",
   },
-}
+};
 
 export default function App({ data }) {
-  return <Bar options={options} data={data} />
+  return <Bar options={options} data={data} />;
 }

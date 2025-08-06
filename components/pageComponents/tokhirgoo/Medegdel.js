@@ -196,7 +196,7 @@ function Medegdel({
           />
         </div>
       </div>
-      {/* <div className='xxl:col-span-4 col-span-12 mt-5 lg:col-span-5'></div> */}
+      {/* <div className='col-span-12 mt-5 xxl:col-span-4 lg:col-span-5'></div> */}
     </>
   );
 }

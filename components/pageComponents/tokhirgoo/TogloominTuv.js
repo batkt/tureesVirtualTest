@@ -117,7 +117,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
       <div className="col-span-8 space-y-5 py-5">
         <div className="box w-full rounded-md border p-5 py-2">
           <div className="pb-4 font-medium">{t("Ажлын өдөр")}</div>
-          <div className=" grid grid-cols-7 gap-2">
+          <div className="grid grid-cols-7 gap-2 ">
             {dolooKhonog.map((a, i) => {
               return (
                 <button
@@ -167,7 +167,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
             {ajliinUdur.tariffuud?.map((a, i) => {
               return (
                 <div
-                  className="relative dark:bg-gray-700 grid w-full grid-cols-4 items-center justify-between  gap-5 rounded-md border bg-green-50 px-10 py-2 shadow-md 2xl:pr-20"
+                  className="relative grid w-full grid-cols-4 items-center justify-between gap-5 rounded-md border bg-green-50 px-10 py-2 shadow-md dark:bg-gray-700 2xl:pr-20"
                   key={i}
                 >
                   <div
@@ -215,7 +215,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
         </div>
         <div className="box w-full rounded-md border p-5 py-2">
           <div className="pb-4 font-medium">{t("Амралтын өдөр")}</div>
-          <div className=" grid grid-cols-7 gap-2">
+          <div className="grid grid-cols-7 gap-2 ">
             {dolooKhonog.map((a, i) => {
               return (
                 <button
@@ -249,7 +249,6 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
             icon={<PlusOutlined />}
             type="dashed"
             className="mt-5 w-full dark:bg-gray-700 dark:text-white"
-
             onClick={() => {
               setAmraltiinUdur({
                 ...amraltiinUdur,
@@ -266,7 +265,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
             {amraltiinUdur.tariffuud.map((a, i) => {
               return (
                 <div
-                  className="relative grid w-full grid-cols-4 items-center justify-between dark:bg-gray-700 gap-5 rounded-md border bg-green-50 px-10 py-2 shadow-md 2xl:pr-20"
+                  className="relative grid w-full grid-cols-4 items-center justify-between gap-5 rounded-md border bg-green-50 px-10 py-2 shadow-md dark:bg-gray-700 2xl:pr-20"
                   key={i}
                 >
                   <div
@@ -316,7 +315,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
         <div className="box divide-y p-5 py-2">
           <div className="flex items-center justify-between py-2">
             {t("Ажлын өдөр үндсэн Тариф/₮/")}:{" "}
-            <InputNumber 
+            <InputNumber
               placeholder="Ажлын өдөр"
               formatter={(value) =>
                 `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")

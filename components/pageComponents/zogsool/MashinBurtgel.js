@@ -65,9 +65,8 @@ function MashinBurtgel(
   const [gereetTulburBodokhEsekh, setGereetTulburBodokhEsekh] = useState(
     data?.gereetTulburBodokhEsekh || false
   );
-  const [gereetTulburBodokhEsekhNemelt, setGereetTulburBodokhEsekhNemelt] = useState(
-    !!data?.tulburBodokhTsagEkhlekhNeg || false
-  );
+  const [gereetTulburBodokhEsekhNemelt, setGereetTulburBodokhEsekhNemelt] =
+    useState(!!data?.tulburBodokhTsagEkhlekhNeg || false);
   const [tulburBodokhTsag, setTulburBodokhTsag] = useState(
     data?.tulburBodokhTsagEkhlekh
       ? [
@@ -134,8 +133,6 @@ function MashinBurtgel(
 
   const dataOrjIrsenEsekh = !!data ? true : false;
 
-  
-
   // function mashiniiFormatSolyo(value) {
   //   const too = value.replace(/[^0-9]/g, "").slice(0, 4);
   //   const useg = Array.from(value)
@@ -146,7 +143,6 @@ function MashinBurtgel(
   //   setInputValue(`${too}${useg}`.toUpperCase());
   //   // setInputValue(formattedValue);
   // }
-
 
   useImperativeHandle(
     ref,
@@ -192,16 +188,27 @@ function MashinBurtgel(
     }
     if (khungulultiinTurul === "togtmolTsag") {
       lastData.khungulujEkhlesenOgnoo = new Date();
-      if (dataOrjIrsenEsekh === false || !lastData?.uldegdelKhungulukhKhugatsaa) {
+      if (
+        dataOrjIrsenEsekh === false ||
+        !lastData?.uldegdelKhungulukhKhugatsaa
+      ) {
         lastData.uldegdelKhungulukhKhugatsaa = lastData.khungulukhKhugatsaa;
       }
     }
     if (lastData.turul === "Гэрээт") {
       lastData.gereetTulburBodokhEsekh = gereetTulburBodokhEsekh;
-      lastData.tulburBodokhTsagEkhlekh = gereetTulburBodokhEsekh ? tulburBodokhTsag[0].format("HH:mm") : null;
-      lastData.tulburBodokhTsagDuusakh = gereetTulburBodokhEsekh ? tulburBodokhTsag[1].format("HH:mm") : null;
-      lastData.tulburBodokhTsagEkhlekhNeg = gereetTulburBodokhEsekhNemelt ? tulburBodokhTsagNemelt[0].format("HH:mm") : null;
-      lastData.tulburBodokhTsagDuusakhNeg = gereetTulburBodokhEsekhNemelt ? tulburBodokhTsagNemelt[1].format("HH:mm") : null;
+      lastData.tulburBodokhTsagEkhlekh = gereetTulburBodokhEsekh
+        ? tulburBodokhTsag[0].format("HH:mm")
+        : null;
+      lastData.tulburBodokhTsagDuusakh = gereetTulburBodokhEsekh
+        ? tulburBodokhTsag[1].format("HH:mm")
+        : null;
+      lastData.tulburBodokhTsagEkhlekhNeg = gereetTulburBodokhEsekhNemelt
+        ? tulburBodokhTsagNemelt[0].format("HH:mm")
+        : null;
+      lastData.tulburBodokhTsagDuusakhNeg = gereetTulburBodokhEsekhNemelt
+        ? tulburBodokhTsagNemelt[1].format("HH:mm")
+        : null;
     }
     const method = lastData?._id ? updateMethod : createMethod;
     method("mashin", token, lastData).then(({ data }) => {
@@ -211,8 +218,10 @@ function MashinBurtgel(
         destroy();
       }
     });
-    if(ajiltan?.erkh === "Admin" || ajiltan?.tokhirgoo?.mashniiDugaarZasakhEsekh)
-    {
+    if (
+      ajiltan?.erkh === "Admin" ||
+      ajiltan?.tokhirgoo?.mashniiDugaarZasakhEsekh
+    ) {
       uilchilgee(token)
         .post(`/mashiniiDugaarZasakh`, {
           baiguullagiinId,
@@ -222,7 +231,9 @@ function MashinBurtgel(
         })
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Зогсоолд орсон машины мэдээлэл амжилттай өөрчлөгдсөн"));
+            message.success(
+              t("Зогсоолд орсон машины мэдээлэл амжилттай өөрчлөгдсөн")
+            );
           }
         })
         .catch((e) => {
@@ -352,10 +363,7 @@ function MashinBurtgel(
               ))}
             </Select>
           </Form.Item>
-          <Form.Item
-            label={t("Камер")}
-            name="cameraIP"
-          >
+          <Form.Item label={t("Камер")} name="cameraIP">
             <Input
               style={{ width: "100%" }}
               placeholder="Камер IP оруулна уу..."
@@ -529,20 +537,17 @@ function MashinBurtgel(
                   />
                 </Form.Item>
               )}
-              {dotorGadnaTsagEsekh && (<Form.Item
-                label={t("Зогсоолын төрөл")}
-                name="zogsooliinTurul"
-              >
-                <Select
-                  placeholder={t("Зогсоолын төрөл сонгоно уу!")}
-                >
-                  {["Бүгд", "Гадна", "Дотор", ""].map((a) => (
-                    <Select.Option key={a} value={a}>
-                      {t(a)}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>)}
+              {dotorGadnaTsagEsekh && (
+                <Form.Item label={t("Зогсоолын төрөл")} name="zogsooliinTurul">
+                  <Select placeholder={t("Зогсоолын төрөл сонгоно уу!")}>
+                    {["Бүгд", "Гадна", "Дотор", ""].map((a) => (
+                      <Select.Option key={a} value={a}>
+                        {t(a)}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
             </React.Fragment>
           ) : null}
         </React.Fragment>
@@ -599,7 +604,9 @@ function MashinBurtgel(
             required: form.getFieldValue("mashiniiDugaar")?.length > 0 && true,
             min: 6,
             max: 7,
-            pattern: new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"),
+            pattern: new RegExp(
+              "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
+            ),
             message: t("Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"),
           },
         ]}
@@ -636,7 +643,7 @@ function MashinBurtgel(
         >
           <DatePicker.RangePicker
             onClick={(e) => e.stopPropagation()}
-            className="flex w-full  rounded-md md:w-auto"
+            className="flex w-full rounded-md md:w-auto"
             size="middle"
             allowClear={true}
             placeholder={["Эхлэх огноо", "Дуусах огноо"]}
@@ -673,7 +680,7 @@ function MashinBurtgel(
         >
           <TimePicker.RangePicker
             onClick={(e) => e.stopPropagation()}
-            className="flex-end w-full  rounded-md md:w-auto"
+            className="flex-end w-full rounded-md md:w-auto"
             size="middle"
             format="HH:mm"
             allowClear={true}
@@ -682,39 +689,44 @@ function MashinBurtgel(
             onChange={setTulburBodokhTsag}
           />
           <Button
-              className="flex ml-1"
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => setGereetTulburBodokhEsekhNemelt(true)}
-            >
-          </Button>
+            className="ml-1 flex"
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => setGereetTulburBodokhEsekhNemelt(true)}
+          ></Button>
         </Form.Item>
       )}
-      {turulShalgah === "Гэрээт" && gereetTulburBodokhEsekh && gereetTulburBodokhEsekhNemelt && (
-        <Form.Item
-          rules={[
-            {
-              required: true,
-              message: t("Нэмэлт төлбөр бодох цаг бүртгэнэ үү!"),
-            },
-          ]}
-          label={t("Нэмэлт цаг")}
-        >
-          <TimePicker.RangePicker
-            onClick={(e) => e.stopPropagation()}
-            className="flex-end w-full  rounded-md md:w-auto"
-            size="middle"
-            format="HH:mm"
-            allowClear={true}
-            placeholder={["Эхлэх цаг", "Дуусах цаг"]}
-            value={tulburBodokhTsagNemelt}
-            onChange={setTulburBodokhTsagNemelt}
-          />
-          <Button className="ml-1" icon={<DeleteOutlined style={{ fontSize: "18px", color: "red" }} />} 
-            onClick={() => setGereetTulburBodokhEsekhNemelt(false)}>
-          </Button>
-        </Form.Item>
-      )}
+      {turulShalgah === "Гэрээт" &&
+        gereetTulburBodokhEsekh &&
+        gereetTulburBodokhEsekhNemelt && (
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: t("Нэмэлт төлбөр бодох цаг бүртгэнэ үү!"),
+              },
+            ]}
+            label={t("Нэмэлт цаг")}
+          >
+            <TimePicker.RangePicker
+              onClick={(e) => e.stopPropagation()}
+              className="flex-end w-full rounded-md md:w-auto"
+              size="middle"
+              format="HH:mm"
+              allowClear={true}
+              placeholder={["Эхлэх цаг", "Дуусах цаг"]}
+              value={tulburBodokhTsagNemelt}
+              onChange={setTulburBodokhTsagNemelt}
+            />
+            <Button
+              className="ml-1"
+              icon={
+                <DeleteOutlined style={{ fontSize: "18px", color: "red" }} />
+              }
+              onClick={() => setGereetTulburBodokhEsekhNemelt(false)}
+            ></Button>
+          </Form.Item>
+        )}
     </Form>
   );
 }

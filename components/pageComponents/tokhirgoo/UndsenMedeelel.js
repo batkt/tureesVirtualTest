@@ -132,9 +132,9 @@ function KhuviinMedeelel({
                 </Button>
               </div>
             </div>
-            <div className="mx-auto  w-52 xl:ml-6 xl:mr-0">
+            <div className="mx-auto w-52 xl:ml-6 xl:mr-0">
               <div className="dark:border-dark-5 rounded-md border-2 border-dashed border-gray-200 p-5 shadow-sm">
-                <div className="image-fit  relative mx-auto h-40 cursor-pointer">
+                <div className="image-fit relative mx-auto h-40 cursor-pointer">
                   <img
                     className="h-40 w-40 rounded-md"
                     alt="ProfileZurag"
