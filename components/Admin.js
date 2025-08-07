@@ -181,27 +181,27 @@ function Admin({
   const [currentNotification, setCurrentNotification] = useState(null);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
 
-  useEffect(() => {
-    const handleNewNotification = (newNotif) => {
-      console.log("🔔 Received new notification:", newNotif);
-      setCurrentNotification({
-        title: newNotif.object?.title || "New Notification",
-        message: newNotif.object?.message || "You have a new notification",
-        image: newNotif.object?.image,
-        date: newNotif.createdAt || new Date(),
-      });
-      setShowNotificationModal(true);
+  // useEffect(() => {
+  //   const handleNewNotification = (newNotif) => {
+  //     console.log("🔔 Received new notification:", newNotif);
+  //     setCurrentNotification({
+  //       title: newNotif.object?.title || "New Notification",
+  //       message: newNotif.object?.message || "You have a new notification",
+  //       image: newNotif.object?.image,
+  //       date: newNotif.createdAt || new Date(),
+  //     });
+  //     setShowNotificationModal(true);
 
-      setTimeout(() => setShowNotificationModal(false), 8000);
-    };
+  //     setTimeout(() => setShowNotificationModal(false), 8000);
+  //   };
 
-    socket().on("newMedegdelAdmin", handleNewNotification);
-    console.log("🔥 EVENT RECEIVED: newMedegdelAdmin", handleNewNotification);
+  //   socket().on("newMedegdelAdmin", handleNewNotification);
+  //   console.log("🔥 EVENT RECEIVED: newMedegdelAdmin", handleNewNotification);
 
-    return () => {
-      socket().off("newMedegdelAdmin", handleNewNotification);
-    };
-  }, []);
+  //   return () => {
+  //     socket().off("newMedegdelAdmin", handleNewNotification);
+  //   };
+  // }, []);
 
   return (
     <div
@@ -450,7 +450,7 @@ function Admin({
       )}
       <h2
         id="garchig"
-        className="-mt-4 ml-3 flex text-base font-semibold text-white  md:hidden"
+        className="-mt-4 ml-3 flex text-base font-semibold text-white md:hidden"
       >
         {t(title)}
       </h2>
@@ -476,7 +476,7 @@ function Admin({
             )}
             <h2
               id="garchig"
-              className="ml-3 hidden items-center justify-center text-base font-semibold text-green-800  dark:text-gray-200 md:flex"
+              className="ml-3 hidden items-center justify-center text-base font-semibold text-green-800 dark:text-gray-200 md:flex"
             >
               {t(title)}
             </h2>

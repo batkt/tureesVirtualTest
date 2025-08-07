@@ -1,13 +1,11 @@
-import { message, notification } from "antd";
-import axios, { socket, aldaaBarigch } from "services/uilchilgee";
+import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
-import Sonorduulga from "components/sonorduulga";
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "services/auth";
 
 const filterDismissedNotifications = (notifications, keepDismissed = false) => {
   if (keepDismissed) {
-    return notifications; // Keep all notifications, including dismissed ones
+    return notifications;
   }
   return notifications.filter(
     (notification) => !notification.dakhijKharikhEsekh
@@ -51,7 +49,6 @@ const fetcher = (
     .then((res) => {
       const filtered = {
         ...res.data,
-        jagsaalt: filterDismissedNotifications(res.data.jagsaalt || [], true), // Keep dismissed in fetcher
       };
       return filtered;
     })
@@ -103,7 +100,6 @@ const paginationFetcher = (
           baiguullagiinId,
           barilgiinId,
           turul: { $ne: "medegdelAdmin" },
-          // Remove dakhijKharikhEsekh filter to fetch all notifications
           $or: [
             { baiguullagiinId, barilgiinId },
             {
@@ -121,12 +117,9 @@ const paginationFetcher = (
     .then((res) => {
       return {
         ...res.data,
-        jagsaalt: filterDismissedNotifications(res.data.jagsaalt || [], true), // Keep dismissed in pagination
       };
     })
     .catch(aldaaBarigch);
-
-var sonorduulgaId = null;
 
 function useSonorduulga(token) {
   const { baiguullaga, barilgiinId, ajiltan } = useAuth();
@@ -230,156 +223,32 @@ function useSonorduulga(token) {
     }
   }, [currentPage, isLoadingMore, hasMore, fetchNotifications]);
 
-  const refreshNotifications = useCallback(() => {
-    setCurrentPage(1);
-    setHasMore(true);
-    setIsInitialLoading(true);
-    fetchNotifications(1, false);
-  }, [fetchNotifications]);
-
-  const dismissNotification = useCallback(
-    async (sonorduulgaId) => {
-      if (!token || !sonorduulgaId) {
-        return;
-      }
-
-      try {
-        // Make API call to update the notification
-        await axios(token).post("/adminMedegdelZasakh", {
-          sonorduulgaId,
-          dakhijKharikhEsekh: true,
-        });
-
-        // Update local state to mark notification as dismissed but keep it
-        setAllNotifications((prev) =>
-          prev.map((notification) =>
-            notification._id === sonorduulgaId
-              ? { ...notification, dakhijKharikhEsekh: true }
-              : notification
-          )
-        );
-
-        // Update SWR cache
-        mutate(
-          (currentData) => {
-            if (!currentData) return currentData;
-            return {
-              ...currentData,
-              jagsaalt: currentData.jagsaalt.map((notification) =>
-                notification._id === sonorduulgaId
-                  ? { ...notification, dakhijKharikhEsekh: true }
-                  : notification
-              ),
-            };
-          },
-          { revalidate: false }
-        );
-
-        // Refresh notifications to ensure consistency
-        refreshNotifications();
-      } catch (error) {
-        aldaaBarigch(error);
-        // Revert on error
-        fetchNotifications(currentPage, true);
-      }
-    },
-    [token, mutate, refreshNotifications, fetchNotifications, currentPage]
-  );
-
   useEffect(() => {
     if (token && baiguullaga?._id) {
       fetchNotifications(1, false);
     }
   }, [token, baiguullaga?._id, fetchNotifications]);
 
-  useEffect(() => {
-    if (baiguullaga?._id) {
-      socket().on(`baiguullaga${baiguullaga?._id}`, (sonorduulga) => {
-        // Skip dismissed notifications
-        if (sonorduulga?.dakhijKharikhEsekh) {
-          return;
-        }
-
-        const key = `${Math.floor(Math.random() * 100)}+${Date.now()}`;
-        mutate();
-        too.mutate();
-        refreshNotifications();
-
-        if (sonorduulga && sonorduulgaId !== sonorduulga?._id) {
-          function onClose() {
-            notification.close(key);
-          }
-          sonorduulgaId = sonorduulga?._id;
-          if (
-            sonorduulga?.turul === "daalgavar" ||
-            sonorduulga?.turul === "setgegdel"
-          ) {
-            if (ajiltan._id === sonorduulga.khuleenAvagchiinId) {
-              notification.open({
-                key: key,
-                message: (
-                  <Sonorduulga
-                    token={token}
-                    ajiltan={ajiltan}
-                    {...sonorduulga}
-                    onClose={onClose}
-                    onDismiss={() => dismissNotification(sonorduulga._id)} // Pass dismiss handler
-                  />
-                ),
-                closeIcon: () => null,
-                duration: 100000,
-              });
-            }
-          } else {
-            notification.open({
-              key: key,
-              message: (
-                <Sonorduulga
-                  token={token}
-                  {...sonorduulga}
-                  onClose={onClose}
-                  onDismiss={() => dismissNotification(sonorduulga._id)} // Pass dismiss handler
-                />
-              ),
-              closeIcon: () => null,
-              duration: 100000,
-            });
-          }
-        }
-      });
-    }
-    return () => {
-      socket().off(`baiguullaga${baiguullaga?._id}`);
-    };
-  }, [
-    baiguullaga,
-    ajiltan,
-    mutate,
-    too.mutate,
-    refreshNotifications,
-    dismissNotification,
-  ]);
-
-  useEffect(() => {
-    if (ajiltan?._id) {
-      socket().on(`ajiltan${ajiltan?._id}`, (res) => {
-        if (res.type === "logout" && res?.ip) {
-          message.warn(
-            "" +
-              res.ip +
-              " IP-тай төхөөрөмжөөс давхар нэвтэрсэн тул таны холболт саллаа.",
-            5
-          );
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 4000);
-        }
-      });
-    }
-    return () => {
-      socket().off(`ajiltan${ajiltan?._id}`);
-    };
-  }, [ajiltan]);
+  // useEffect(() => {
+  //   if (ajiltan?._id) {
+  //     socket().on(`ajiltan${ajiltan?._id}`, (res) => {
+  //       if (res.type === "logout" && res?.ip) {
+  //         message.warn(
+  //           "" +
+  //             res.ip +
+  //             " IP-тай төхөөрөмжөөс давхар нэвтэрсэн тул таны холболт саллаа.",
+  //           5
+  //         );
+  //         setTimeout(() => {
+  //           window.location.href = "/";
+  //         }, 4000);
+  //       }
+  //     });
+  //   }
+  //   return () => {
+  //     socket().off(`ajiltan${ajiltan?._id}`);
+  //   };
+  // }, [ajiltan]);
 
   return {
     setKhuudaslalt,
@@ -394,8 +263,6 @@ function useSonorduulga(token) {
     isInitialLoading,
     loadMore,
     fetchNotifications,
-    refreshNotifications,
-    dismissNotification,
   };
 }
 

@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useEffect, Suspense } from "react";
-import { Modal, Button, Checkbox, Spin, message } from "antd";
+import { Modal, Button, Checkbox, Spin } from "antd";
 import { format, isValid } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 import { url } from "services/uilchilgee";
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
 
 const NotificationModal = React.memo(
@@ -22,14 +21,18 @@ const NotificationModal = React.memo(
     token,
   }) => {
     const [dontShowAgainChecked, setDontShowAgainChecked] = useState(
-      data?._id ? permanentlyDismissed.has(data._id) : false
+      data?.adminMedegdelId
+        ? permanentlyDismissed.has(data.adminMedegdelId)
+        : false
     );
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { t } = useTranslation();
 
     useEffect(() => {
       setDontShowAgainChecked(
-        data?._id ? permanentlyDismissed.has(data._id) : false
+        data?.adminMedegdelId
+          ? permanentlyDismissed.has(data.adminMedegdelId)
+          : false
       );
     }, [data, permanentlyDismissed]);
 
@@ -44,29 +47,6 @@ const NotificationModal = React.memo(
       </div>
     );
 
-    const saveDontShowAgainToServer = useCallback(
-      async (sonorduulgaId, dakhijKharikhEsekh) => {
-        if (!token || !sonorduulgaId) return false;
-
-        try {
-          setIsSubmitting(true);
-          await uilchilgee(token).post("/adminMedegdelZasakh", {
-            sonorduulgaId,
-            dakhijKharikhEsekh,
-          });
-          return true;
-        } catch (error) {
-          console.error("Error saving dont show again preference:", error);
-          message.error(t("Тохиргоо хадгалахад алдаа гарлаа"));
-          aldaaBarigch(error);
-          return false;
-        } finally {
-          setIsSubmitting(false);
-        }
-      },
-      [token, t]
-    );
-
     const handleClose = useCallback(
       async (e) => {
         e?.stopPropagation();
@@ -76,62 +56,29 @@ const NotificationModal = React.memo(
           return;
         }
 
-        const notifId = data._id || uuidv4();
-        const sonorduulgaId = data._id;
+        setIsSubmitting(true);
 
-        const newDismissed = new Set(permanentlyDismissed);
+        try {
+          const success = await onClose(dontShowAgainChecked);
 
-        if (dontShowAgainChecked && sonorduulgaId) {
-          const serverSaveSuccess = await saveDontShowAgainToServer(
-            sonorduulgaId,
-            true
-          );
-          if (serverSaveSuccess) {
-            newDismissed.add(notifId);
-            setPermanentlyDismissed(newDismissed);
-            localStorage.setItem(
-              "permanentlyDismissedNotifications",
-              JSON.stringify([...newDismissed])
-            );
-            message.success(t("Тохиргоо хадгаллаа"));
-            onDontShowAgain?.(notifId, dontShowAgainChecked);
+          if (success !== false) {
+            setDontShowAgainChecked(false);
+
+            if (dontShowAgainChecked) {
+              const notifId = data._id || uuidv4();
+              onDontShowAgain?.(notifId, dontShowAgainChecked);
+            }
           } else {
             setDontShowAgainChecked(false);
-            return;
           }
-        } else if (
-          !dontShowAgainChecked &&
-          permanentlyDismissed.has(notifId) &&
-          sonorduulgaId
-        ) {
-          const serverSaveSuccess = await saveDontShowAgainToServer(
-            sonorduulgaId,
-            false
-          );
-          if (serverSaveSuccess) {
-            newDismissed.delete(notifId);
-            setPermanentlyDismissed(newDismissed);
-            localStorage.setItem(
-              "permanentlyDismissedNotifications",
-              JSON.stringify([...newDismissed])
-            );
-            message.success(t("Тохиргоо хадгаллаа"));
-          }
+        } catch (error) {
+          console.error("Error in handleClose:", error);
+          setDontShowAgainChecked(false);
+        } finally {
+          setIsSubmitting(false);
         }
-
-        setDontShowAgainChecked(false);
-        onClose?.();
       },
-      [
-        data,
-        dontShowAgainChecked,
-        permanentlyDismissed,
-        setPermanentlyDismissed,
-        onDontShowAgain,
-        onClose,
-        saveDontShowAgainToServer,
-        t,
-      ]
+      [data, dontShowAgainChecked, onClose, onDontShowAgain]
     );
 
     if (!visible || !data) return null;

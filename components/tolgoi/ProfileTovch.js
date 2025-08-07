@@ -15,13 +15,11 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { format, isValid } from "date-fns";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import useSonorduulga from "hooks/useSonorduulga";
+import useAdminMedegdel from "hooks/useAdminMedegdel";
 import { FiSend } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
-import { socket } from "../../services/uilchilgee";
-import { useAuth } from "services/auth";
 import NotificationModal from "./MedegdelModal";
 
 const SonorduulgaDropdown = lazy(() => import("./SonorduulgaDropdown"));
@@ -54,301 +52,26 @@ function ProfileTovch({
     fetchNotifications,
     refreshNotifications,
   } = useSonorduulga(token, ajiltan?._id);
+
+  const {
+    allNotifications,
+    medegdelAdminCount,
+    notificationModal,
+    permanentlyDismissed,
+    animateMail,
+    setPermanentlyDismissed,
+    handleNotificationClose,
+    handleDontShowAgain,
+    handleMessageClick,
+    formatDate,
+  } = useAdminMedegdel(token, ajiltan?._id);
+
   const { t } = useTranslation();
-  const { baiguullaga } = useAuth();
-  const [realTimeNotifications, setRealTimeNotifications] = useState([]);
-  const [notificationModal, setNotificationModal] = useState({
-    visible: false,
-    data: null,
-    isMessageModal: false,
-    messageTitle: null,
-    messageDetails: null,
-    messageDate: null,
-  });
-  const [sessionDismissedNotifications, setSessionDismissedNotifications] =
-    useState(new Set());
+
   const [expandedNotifications, setExpandedNotifications] = useState(null);
   const [sonorduulgaDropdownVisible, setSonorduulgaDropdownVisible] =
     useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [animateMail, setAnimateMail] = useState(false);
-
-  const [permanentlyDismissed, setPermanentlyDismissed] = useState(() => {
-    if (typeof window === "undefined") return new Set();
-    try {
-      const saved = localStorage.getItem("permanentlyDismissedNotifications");
-      return new Set(saved ? JSON.parse(saved) : []);
-    } catch {
-      return new Set();
-    }
-  });
-
-  const formatDate = useCallback((dateInput) => {
-    if (!dateInput) return "N/A";
-    const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
-    return isValid(date) ? format(date, "yyyy-MM-dd HH:mm") : "N/A";
-  }, []);
-
-  const allNotifications = useMemo(() => {
-    const combined = [
-      ...realTimeNotifications,
-      ...jagsaalt,
-      ...(sonorduulga?.jagsaalt || []),
-    ]
-      .filter((mur) => mur?.turul === "medegdelAdmin")
-      .map((mur) => ({
-        ...mur,
-        object: { ...mur.object, zurag: undefined },
-      }));
-
-    const seen = new Set();
-    return combined.filter((notification) => {
-      const id = notification._id;
-      if (seen.has(id)) return false;
-      seen.add(id);
-      return true;
-    });
-  }, [realTimeNotifications, jagsaalt, sonorduulga?.jagsaalt]);
-
-  const medegdelAdminCount = useMemo(() => {
-    return allNotifications.filter((mur) => !mur.kharsanEsekh).length;
-  }, [allNotifications]);
-
-  const allSonorduulga = useMemo(() => {
-    return [...jagsaalt, ...(sonorduulga?.jagsaalt || [])].map((mur) => ({
-      ...mur,
-      object: { ...mur.object, zurag: undefined },
-    }));
-  }, [jagsaalt, sonorduulga?.jagsaalt]);
-
-  useEffect(() => {
-    if (medegdelAdminCount > 0) {
-      const interval = setInterval(() => {
-        setAnimateMail(true);
-        setTimeout(() => setAnimateMail(false), 3000);
-      }, 5000);
-
-      return () => clearInterval(interval);
-    }
-  }, [medegdelAdminCount]);
-
-  const handleNotificationClose = useCallback(() => {
-    if (notificationModal.data && !notificationModal.isMessageModal) {
-      const notifId = notificationModal.data._id || Date.now().toString();
-      setSessionDismissedNotifications((prev) => new Set([...prev, notifId]));
-    }
-    setNotificationModal({
-      visible: false,
-      data: null,
-      isMessageModal: false,
-      messageDetails: null,
-      messageTitle: null,
-      messageDate: null,
-    });
-  }, [notificationModal.data, notificationModal.isMessageModal]);
-
-  const handleDontShowAgain = useCallback((notifId, dontShowAgain) => {
-    if (notifId && dontShowAgain) {
-      setSessionDismissedNotifications((prev) => new Set([...prev, notifId]));
-      setPermanentlyDismissed((prev) => {
-        const updated = new Set([...prev, notifId]);
-        localStorage.setItem(
-          "permanentlyDismissedNotifications",
-          JSON.stringify([...updated])
-        );
-        return updated;
-      });
-    }
-    setNotificationModal({
-      visible: false,
-      data: null,
-      isMessageModal: false,
-      messageDetails: null,
-      messageTitle: null,
-      messageDate: null,
-    });
-  }, []);
-
-  const handleMessageClick = useCallback(
-    (title, message, createdAt, e, _id) => {
-      e?.stopPropagation();
-      requestAnimationFrame(() => {
-        setNotificationModal({
-          visible: true,
-          isMessageModal: true,
-          messageTitle: title,
-          messageDetails: message,
-          messageDate: formatDate(createdAt), // Validate and format date
-          data: { title, message, _id, createdAt },
-        });
-      });
-    },
-    [formatDate]
-  );
-
-  const showLatestNotificationOnLogin = useCallback(() => {
-    const adminNotifications = allNotifications;
-
-    if (adminNotifications.length === 0) return;
-
-    const sortedNotifications = adminNotifications.sort(
-      (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
-    );
-
-    const latestNotification = sortedNotifications[0];
-    const latestNotifId = latestNotification._id || "latest-notification";
-
-    if (
-      !permanentlyDismissed.has(latestNotifId) &&
-      !sessionDismissedNotifications.has(latestNotifId)
-    ) {
-      setNotificationModal({
-        visible: true,
-        data: {
-          ...latestNotification,
-          _id: latestNotifId,
-          createdAt: formatDate(latestNotification.createdAt),
-        },
-        isMessageModal: false,
-        messageTitle: null,
-        messageDetails: null,
-        messageDate: null,
-      });
-    }
-  }, [
-    allNotifications,
-    permanentlyDismissed,
-    sessionDismissedNotifications,
-    formatDate,
-  ]);
-
-  const handleAdminNotification = useCallback(
-    (data) => {
-      const notifications = Array.isArray(data) ? data : [data];
-      const validNotifications = notifications.filter((notif) => {
-        const notifId = notif._id || notif.id || "default-notification";
-        return (
-          notif &&
-          (notif.message || notif.title || notif.tailbar) &&
-          !sessionDismissedNotifications.has(notifId) &&
-          !permanentlyDismissed.has(notifId)
-        );
-      });
-
-      if (validNotifications.length === 0) return;
-
-      requestAnimationFrame(() => {
-        setRealTimeNotifications((prev) => {
-          const allExistingIds = new Set([
-            ...prev.map((n) => n._id),
-            ...jagsaalt.map((n) => n._id),
-            ...(sonorduulga?.jagsaalt || []).map((n) => n._id),
-          ]);
-
-          const newUnique = validNotifications
-            .map((notif) => ({
-              ...notif,
-              object: { ...notif.object, zurag: undefined },
-              createdAt: formatDate(notif.createdAt), // Validate and format date
-            }))
-            .filter((n) => !allExistingIds.has(n._id));
-
-          return [...newUnique, ...prev].slice(0, 50);
-        });
-
-        const latestNotification = validNotifications[0];
-        const latestNotifId =
-          latestNotification._id ||
-          latestNotification.id ||
-          "default-notification";
-
-        const allExistingIds = new Set([
-          ...jagsaalt.map((n) => n._id),
-          ...(sonorduulga?.jagsaalt || []).map((n) => n._id),
-        ]);
-
-        if (
-          !sessionDismissedNotifications.has(latestNotifId) &&
-          !permanentlyDismissed.has(latestNotifId) &&
-          !allExistingIds.has(latestNotifId)
-        ) {
-          setNotificationModal({
-            visible: true,
-            data: {
-              ...latestNotification,
-              _id: latestNotifId,
-              title:
-                latestNotification.title ||
-                latestNotification.garchig ||
-                "Шинэ мэдэгдэл",
-              message:
-                latestNotification.message ||
-                latestNotification.tailbar ||
-                "Мэдэгдлийн агуулга байхгүй байна.",
-              system: latestNotification.system || "Систем",
-              success:
-                latestNotification.success !== undefined
-                  ? latestNotification.success
-                  : latestNotification.kharsanEsekh === true,
-              createdAt: formatDate(latestNotification.createdAt), // Validate and format date
-              baiguullagaRegister:
-                latestNotification.baiguullagaRegister ||
-                latestNotification.baiguullagiinId ||
-                "Тодорхойгүй",
-            },
-            isMessageModal: false,
-            messageTitle: null,
-            messageDetails: null,
-            messageDate: null,
-          });
-        }
-
-        sonorduulgaMutate();
-      });
-    },
-    [
-      sessionDismissedNotifications,
-      permanentlyDismissed,
-      sonorduulgaMutate,
-      jagsaalt,
-      sonorduulga?.jagsaalt,
-      formatDate,
-    ]
-  );
-
-  useEffect(() => {
-    if (!baiguullaga?._id) return;
-
-    const eventName = `adminMedegdelilgeeyeSocket${baiguullaga._id}`;
-    const socketInstance = socket();
-
-    socketInstance.on(eventName, handleAdminNotification);
-
-    return () => {
-      socketInstance.off(eventName, handleAdminNotification);
-    };
-  }, [baiguullaga?._id, handleAdminNotification]);
-
-  useEffect(() => {
-    let hasShown = false;
-    const timer = setTimeout(() => {
-      if (
-        baiguullaga?._id &&
-        (jagsaalt.length > 0 || sonorduulga?.jagsaalt?.length > 0) &&
-        !hasShown
-      ) {
-        showLatestNotificationOnLogin();
-        hasShown = true;
-      }
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, [
-    baiguullaga?._id,
-    jagsaalt,
-    sonorduulga?.jagsaalt,
-    showLatestNotificationOnLogin,
-  ]);
 
   const sonorduulgaKharlaa = useCallback(
     (id, sonorduulgaId) => {
@@ -372,6 +95,17 @@ function ProfileTovch({
       });
     },
     [sonorduulgaKharlaa]
+  );
+
+  const handleModalClose = useCallback(
+    async (dontShowAgainChecked = false) => {
+      const success = await handleNotificationClose(
+        notificationModal.data,
+        dontShowAgainChecked
+      );
+      return success;
+    },
+    [handleNotificationClose, notificationModal.data]
   );
 
   const MailDropdown = useMemo(
@@ -622,6 +356,7 @@ function ProfileTovch({
             </Badge>
           </button>
         </Dropdown>
+
         <Dropdown
           trigger={["click"]}
           overlay={
@@ -671,6 +406,7 @@ function ProfileTovch({
             </Badge>
           </button>
         </Dropdown>
+
         <Dropdown
           overlayClassName="profile"
           overlay={ProfileDropdown}
@@ -697,7 +433,7 @@ function ProfileTovch({
         <NotificationModal
           visible={notificationModal.visible}
           data={notificationModal.data}
-          onClose={handleNotificationClose}
+          onClose={handleModalClose}
           onDontShowAgain={handleDontShowAgain}
           permanentlyDismissed={permanentlyDismissed}
           setPermanentlyDismissed={setPermanentlyDismissed}

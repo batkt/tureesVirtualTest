@@ -76,14 +76,14 @@ const SonorduulgaDropdown = React.memo(
     }, [isVisible, isInitialLoading, allNotifications?.length]);
 
     const handleScroll = useCallback(
-      (e) => {
+      _.debounce((e) => {
         const { scrollTop, scrollHeight, clientHeight } = e.target;
         const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
         if (distanceFromBottom <= 50 && !isLoadingMore && hasMore && loadMore) {
           loadMore();
         }
-      },
-      [isLoadingMore, hasMore, loadMore, allNotifications?.length]
+      }, 300),
+      [isLoadingMore, hasMore, loadMore]
     );
 
     const handleCheckboxChange = useCallback((notificationId, checked) => {
@@ -148,7 +148,7 @@ const SonorduulgaDropdown = React.memo(
         >
           <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-400 to-green-500 p-3 text-white">
             <div className="flex items-center justify-between">
-              <span className="text-md font-medium">{t("Сонородуулга")}</span>
+              <span className="text-md font-medium">{t("Сонордуулга")}</span>
             </div>
           </div>
           <SonorduulgaLoading />
