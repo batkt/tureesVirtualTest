@@ -6,7 +6,8 @@ const khatuuZagvarIkhNayd = (
   baiguullagiinId,
   barilgiinId,
   dugaarlalt = [0],
-  ashiglaltDugaarlalt = [0]
+  ashiglaltDugaarlalt = [0],
+  baritsaaDugaarlalt = [0]
 ) => {
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
@@ -241,21 +242,13 @@ const khatuuZagvarIkhNayd = (
         </tr>
       </thead>
       <tbody>
-        <tr">
+        <tr>
           <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
           <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Түрээсийн төлбөр</td>
           <td style="border: 1px solid #000; text-align: center; font-size: 12px;">&lt;talbainKhemjee&gt;</td>
           <td style="border: 1px solid #000; text-align: center; font-size: 12px; width: 15%;">&lt;talbainNegjUne&gt;</td>
           <td style="border: 1px solid #000; text-align: right; font-size: 12px; width: 15%;">&lt;khungulult&gt;</td>
           <td style="border: 1px solid #000; text-align: right; font-size: 12px; width: 25%;">&lt;khungulsunTalbainNiitUne&gt;</td>
-        </tr>
-        <tr>
-          <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++dugaarlalt[0]}</td>
-          <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Барьцаа үлдэгдэл</td>
-          <td style="border: 1px solid #000; text-align: left; font-size: 12px;"></td>
-          <td style="border: 1px solid #000; text-align: center; font-size: 12px;">&lt;baritsaaUldegdelNuat&gt;</td>
-          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaUldegdelNuatgui&gt;</td>
-          <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;baritsaaUldegdel&gt;</td>
         </tr>
       ${murNemekh}
          ${medeelel.zardluud
@@ -367,6 +360,34 @@ const khatuuZagvarIkhNayd = (
             </tr>
       </tfoot>
     </table>
+        <p style="font-size: 12px; font-weight: bold;">Барьцааны мэдээлэл</p>
+    <table style="width: 30%; border-collapse: collapse; margin-top: 10px; margin-bottom: 20px;">
+          <thead>
+            <tr>
+              <th style="border: 1px solid #000; font-size:12px">№</th>
+              <th style="border: 1px solid #000; font-size:12px">Барьцаа</th>
+              <th style="border: 1px solid #000; font-size:12px">Нийт</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++baritsaaDugaarlalt[0]}</td>
+              <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Нийт төлөх дүн</td>
+              <td style="border: 1px solid #000; text-align: center; font-size: 12px;">&lt;baritsaaAvakhDun&gt;</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++baritsaaDugaarlalt[0]}</td>
+              <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Төлсөн дүн</td>
+              <td style="border: 1px solid #000; text-align: center; font-size: 12px;">&lt;baritsaaniiUldegdel&gt;</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++baritsaaDugaarlalt[0]}</td>
+              <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Үлдэгдэл</td>
+              <td style="border: 1px solid #000; text-align: center; font-size: 12px;">&lt;baritsaaUldegdel&gt;</td>
+            </tr>
+          </tbody>
+      </table>
+    
     ${ashiglaltTable}
   </div>`;
 };
