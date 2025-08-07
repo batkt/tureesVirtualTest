@@ -1117,6 +1117,24 @@ input:-webkit-autofill {
   }
 }
 
+.ant-checkbox-input {
+  accent-color: rgb(74 222 128);
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: rgb(74 222 128); /* Tailwind's green-400 */
+  border-color: rgb(74 222 128);
+}
+
+.ant-checkbox-inner {
+  background-color: #f5f5f5; /* light gray or any color */
+  border-color: #a3e635; /* Tailwind green-300 for border */
+}
+
+/* Optional: add hover effect */
+.ant-checkbox:hover .ant-checkbox-inner {
+  border-color: rgb(74 222 128); /* green-400 */
+}
 /* .ant-modal-content {
   z-index: 3000 !important; 
 } */

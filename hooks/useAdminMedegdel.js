@@ -152,7 +152,12 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
         if (serverUpdateResult.success) {
           const newDismissed = new Set(permanentlyDismissed);
           newDismissed.add(notifId);
+
           setPermanentlyDismissed(newDismissed);
+          setRealTimeNotifications((prev) =>
+            prev.filter((notif) => notif._id !== notifId)
+          );
+          await sonorduulgaMutate();
 
           message.success(t("Тохиргоо хадгаллаа"));
 
