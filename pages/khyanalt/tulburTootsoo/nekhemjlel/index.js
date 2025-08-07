@@ -12,6 +12,7 @@ import {
   Spin,
   notification,
   Switch,
+  Modal,
 } from "antd";
 import {
   EditOutlined,
@@ -110,6 +111,42 @@ function tulburTootsoo({ token }) {
   useEffect(() => {
     setSongogdsonGereenuud([]);
   }, [ognoo]);
+
+  const columns = useMemo(() => [
+    {
+      title: "№",
+      width: "3rem",
+      align: "center",
+      render: (text, record, index) => index + 1,
+    },
+    {
+      title: t("Огноо"),
+      dataIndex: "ognoo",
+      ellipsis: true,
+      align: "center",
+      render(a) {
+        return moment(a).format("YYYY-MM-DD HH:mm");
+      },
+    },
+    {
+      title: t("Гэрээний дугаар"),
+      dataIndex: "gereeniiDugaar",
+      ellipsis: true,
+      align: "center",
+    },
+    {
+      title: t("Хариу"),
+      dataIndex: "message",
+      ellipsis: true,
+      align: "center",
+    },
+    {
+      title: t("И-Мэйл"),
+      dataIndex: "mailKhayag",
+      ellipsis: true,
+      align: "center",
+    },
+  ]);
 
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -2717,80 +2754,82 @@ function tulburTootsoo({ token }) {
           }
         }
         if (!!nekhemjlekh.mail) {
-          var mail = [
-            {
-              gereeniiDugaar: nekhemjlekh.gereeniiDugaar,
-              mail: nekhemjlekh.mail,
-              content: text,
-            },
-          ];
-          const gereenuud = [];
-          const dans = dansGaralt?.jagsaalt?.find(
-            (a) => a.dugaar === songogdsonDans
-          );
-          const tempData = _.cloneDeep(
-            nekhemjleliinJagsaalt.find((a) => a._id === mur)
-          );
-          tempData.medeelel = _.cloneDeep(tempData);
-          tempData.nekhemjlekh = nekhemjlekh.zagvar;
-          tempData.zagvariinNer = nekhemjlekh.zagvariinNer;
-          tempData.maililgeesenAjiltniiId = ajiltan.id;
-          tempData.maililgeesenAjiltniiNer = ajiltan.ner;
-          tempData.nekhemjlekhiinZagvarId = barimt;
-          tempData.tsonkhniiNer = "Нэхэмжлэл";
-          tempData.nekhemjlekhiinDans = dans?.dugaar;
-          tempData.nekhemjlekhiinDansniiNer = dans?.dansniiNer;
-          tempData.nekhemjlekhiinIbanDugaar = dans?.ibanDugaar;
-          tempData.nekhemjlekhiinDugaar = nekhemjlekh.nekhemjlekhiinDugaar;
-          tempData.dugaalaltDugaar = parseInt(
-            nekhemjlekh.nekhemjlekhiinDugaar?.slice(-3)
-          );
-          tempData.nekhemjlekhiinBank =
-            dans?.bank === "khanbank"
-              ? "Хаан банк"
-              : dans?.bank === "golomt"
-              ? "Голомт банк"
-              : dans?.bank === "bogd"
-              ? "Богд банк"
-              : dans?.bank === "tdb"
-              ? "Худалдаа хөгжлийн банк"
-              : "";
-          gereenuud.push(tempData);
-          uilchilgee(token)
-            .post(`/mailOlnoorIlgeeye`, {
-              mailuud: mail,
-              subject: "Түрээсийн төлбөр",
-              gereenuud: gereenuud,
-              ognoo: ognoo,
-            })
-            .then(({ data }) => {
-              if (data === "Amjilttai") {
-                successCount++;
-                notification.success({
-                  message: (
-                    <>
-                      {nekhemjlekh.mail +
-                        t(
-                          " И-мэйл Амжилттай илгээлээ. Амжилттай илгээгдэж буй мэйлийн тоо: "
-                        )}
-                      <span className="font-semibold text-[#11b980]">
-                        {successCount}
-                      </span>
-                    </>
-                  ),
-                });
-              }
-            })
-            .catch((e) => {
-              aldaaBarigch(e);
-            })
-            .finally(() => {
-              if (index === songogdsonGereenuud.length - 1) {
-                setLoading(false);
-              }
-            });
+          mailuud.push({
+            gereeniiDugaar: nekhemjlekh.gereeniiDugaar,
+            barilgiinId: nekhemjlekh?.barilgiinId,
+            baiguullagiinId: ajiltan?.baiguullagiinId,
+            mail: nekhemjlekh.mail,
+            content: text,
+          });
         }
       });
+      const gereenuud = [];
+      const dans = dansGaralt?.jagsaalt?.find(
+        (a) => a.dugaar === songogdsonDans
+      );
+      nekhemjlekhuud.map((mur, index) => {
+        const tempData = _.cloneDeep(
+          nekhemjleliinJagsaalt.find((a) => a._id === mur.medeelel?._id)
+        );
+        tempData.medeelel = _.cloneDeep(tempData);
+        tempData.nekhemjlekh = mur.zagvar;
+        tempData.zagvariinNer = mur.zagvariinNer;
+        tempData.maililgeesenAjiltniiId = ajiltan.id;
+        tempData.maililgeesenAjiltniiNer = ajiltan.ner;
+        tempData.nekhemjlekhiinZagvarId = barimt;
+        tempData.tsonkhniiNer = "Нэхэмжлэл";
+        tempData.nekhemjlekhiinDans = dans?.dugaar;
+        tempData.nekhemjlekhiinDansniiNer = dans?.dansniiNer;
+        tempData.nekhemjlekhiinIbanDugaar = dans?.ibanDugaar;
+        tempData.nekhemjlekhiinDugaar = nekhemjlekh.nekhemjlekhiinDugaar;
+        tempData.dugaalaltDugaar = parseInt(
+          nekhemjlekh.nekhemjlekhiinDugaar?.slice(-3)
+        );
+        tempData.nekhemjlekhiinBank =
+          dans?.bank === "khanbank"
+            ? "Хаан банк"
+            : dans?.bank === "golomt"
+            ? "Голомт банк"
+            : dans?.bank === "bogd"
+            ? "Богд банк"
+            : dans?.bank === "tdb"
+            ? "Худалдаа хөгжлийн банк"
+            : "";
+        gereenuud.push(tempData);
+      });
+      setLoading(true);
+      uilchilgee(token)
+        .post(`/mailOlnoorIlgeeye`, {
+          mailuud,
+          subject: "Түрээсийн төлбөр",
+          gereenuud: gereenuud,
+          ognoo: ognoo,
+        })
+        .then(({ data }) => {
+          Modal.info({
+            className: "p-0",
+            title: "Мэйл илгээсэн хариу",
+            content: (
+              <div className="box p-5">
+                <Table
+                  bordered
+                  size="small"
+                  dataSource={data}
+                  scroll={{ y: "calc( 100vh - 21rem )" }}
+                  columns={columns}
+                />
+              </div>
+            ),
+            okText: t("Хаах"),
+            style: { minWidth: "50vw" },
+          });
+          notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
+          setLoading(false);
+        })
+        .catch((e) => {
+          setLoading(false);
+          aldaaBarigch(e);
+        });
     } else {
       const mailuud = [];
       nekhemjlekhuud.map((mur, index) => {
