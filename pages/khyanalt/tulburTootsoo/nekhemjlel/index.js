@@ -2209,9 +2209,9 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.eneSardTulukhDun = formatNumber(
           nekhemjlekh.eneSardTulukhDun
         );
-        nekhemjlekh.niitUldegdelNuat = (medeelel.niitUldegdel / 1.1) * 0.1;
+        nekhemjlekh.niitUldegdelNuat = (nekhemjlekh.niitUldegdel / 1.1) * 0.1;
         nekhemjlekh.niitUldegdelNuatgui = formatNumber(
-          medeelel.niitUldegdel - medeelel.niitUldegdelNuat
+          nekhemjlekh.niitUldegdel - nekhemjlekh.niitUldegdelNuat
         );
         nekhemjlekh.niitUldegdel = formatNumber(nekhemjlekh.niitUldegdel);
         nekhemjlekh.talbainNegjUne = formatNumber(nekhemjlekh.talbainNegjUne);
@@ -2781,9 +2781,8 @@ function tulburTootsoo({ token }) {
         tempData.nekhemjlekhiinDans = dans?.dugaar;
         tempData.nekhemjlekhiinDansniiNer = dans?.dansniiNer;
         tempData.nekhemjlekhiinIbanDugaar = dans?.ibanDugaar;
-        tempData.nekhemjlekhiinDugaar = nekhemjlekh.nekhemjlekhiinDugaar;
         tempData.dugaalaltDugaar = parseInt(
-          nekhemjlekh.nekhemjlekhiinDugaar?.slice(-3)
+          tempData.nekhemjlekhiinDugaar?.slice(-3)
         );
         tempData.nekhemjlekhiinBank =
           dans?.bank === "khanbank"
