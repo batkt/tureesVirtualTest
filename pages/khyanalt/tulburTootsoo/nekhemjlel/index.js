@@ -2172,6 +2172,10 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.eneSardTulukhDun = formatNumber(
           nekhemjlekh.eneSardTulukhDun
         );
+        nekhemjlekh.niitUldegdelNuat = (medeelel.niitUldegdel / 1.1) * 0.1;
+        nekhemjlekh.niitUldegdelNuatgui = formatNumber(
+          medeelel.niitUldegdel - medeelel.niitUldegdelNuat
+        );
         nekhemjlekh.niitUldegdel = formatNumber(nekhemjlekh.niitUldegdel);
         nekhemjlekh.talbainNegjUne = formatNumber(nekhemjlekh.talbainNegjUne);
         nekhemjlekh.talbainNiitUneNuat =

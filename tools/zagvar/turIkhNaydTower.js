@@ -321,15 +321,15 @@ const khatuuZagvarIkhNayd = (
               : `<tr style=; border: none;">
               <td style="border: none; text-align: center; justify-content: center; font-weight: normal; font-size:12px;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
               <td style="border: 1px solid #000; font-size:12px">Дүн</td>
-              <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuatgui&gt;</td> 
+              <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;niitUldegdelNuatgui&gt;</td> 
             </tr>
             <tr style; border: none;">
               <td style="border: none; border: 1px solid #000; font-size:12px" >НӨАТ</td>
-              <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDunNuat&gt;</td>
+              <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;niitUldegdelNuat&gt;</td>
             </tr>
             <tr style; border: none;">
               <td style="border: none; border: 1px solid #000; font-size:12px" >Нийт үнэ</td>
-              <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;garaasBodsonNiitDun&gt;</td>
+              <td style="text-align: right; font-size: 12px; border: 1px solid #000;">&lt;eneSardTulukhDun&gt;</td>
             </tr>`
           }     
         <tr>
