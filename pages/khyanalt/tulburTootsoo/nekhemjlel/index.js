@@ -19,6 +19,8 @@ import {
   FileExcelOutlined,
   DeleteOutlined,
   EyeOutlined,
+  CheckCircleFilled,
+  CloseCircleFilled,
 } from "@ant-design/icons";
 import Image from "next/image";
 import router from "next/router";
@@ -27,6 +29,7 @@ import formatNumber from "tools/function/formatNumber";
 import useNekhemjlekh from "hooks/tulburTootsoo/useNekhemjlekh";
 import useNekhemjlekhiinZagvar from "hooks/tulburTootsoo/useNekhemjlekhiinZagvar";
 import useNekhemjlekhDugaarlalt from "hooks/tulburTootsoo/useNekhemjlekhDugaarlalt";
+import { mailtuukh } from "hooks/useMailTuukh"; // Your mailtuukh hook import
 import _, { template, update } from "lodash";
 import { useReactToPrint } from "react-to-print";
 import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar";
@@ -54,16 +57,20 @@ import khatuuZagvarIkhNaydTower from "tools/zagvar/turIkhNaydTower";
 const ilgeekhTurul = "davkharaar";
 
 function tulburTootsoo({ token }) {
+  // Initialize AOS once
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
+
   const printRef = React.useRef(null);
   const printExcelRef = React.useRef(null);
   const dunZasvarRef = React.useRef(null);
+
   const { baiguullaga, barilgiinId, ajiltan } = useAuth();
-  const ref = useRef(null);
+
   const [ognoo, setOgnoo] = React.useState(moment());
   const { t } = useTranslation();
+
   const [davkhar, setDavkhar] = React.useState();
   const [turul, setTurul] = useState("Mail");
   const [barimt, setBarimt] = useState();
@@ -75,6 +82,39 @@ function tulburTootsoo({ token }) {
   const [olnoorSaraarEsekh, setOlnoorSaraarEsekh] = useState(false);
   const [updatedMedeelelList, setUpdatedMedeelelList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Change your state initialization
+
+  // Modal visible state for mailtuukh table
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Modal open/close handlers
+  const openMailtuukhModal = () => {
+    setIsModalVisible(true);
+  };
+  const closeMailtuukhModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const { mailtuukhmailtuukhJagsaalt } = mailtuukh(token, null, null, null);
+
+  const filteredMailTuukh = (mailtuukhmailtuukhJagsaalt || []).filter(
+    (item) => {
+      if (!ognoo) return true; // no filter if no date selected
+      return moment(item.ognoo).isSame(ognoo, "day");
+    }
+  );
+
+  const dataSource = filteredMailTuukh.map((item, index) => ({
+    key: index,
+    date: item.ognoo ? moment(item.ognoo).format("YYYY-MM-DD") : "",
+    contractNo: item.gereeniiDugaar,
+    message: item.message,
+    email: item.mailKhayag,
+    status: item.success,
+  }));
+
+  // Your other hooks and state
   const { nekhemjlel, setNekhemjlelKhuudaslalt, isValidating } = useNekhemjlekh(
     token,
     ognoo,
@@ -89,7 +129,6 @@ function tulburTootsoo({ token }) {
   const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", {
     barilgiinId: barilgiinId,
   });
-
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token);
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([]);
@@ -97,12 +136,13 @@ function tulburTootsoo({ token }) {
     React.useState(false);
   const [songogdsonZagvar, setSongogdsonZagvar] = React.useState();
   const [unshijBaina, setUnshijBaina] = React.useState(false);
+
+  // Update nekhemjleliinJagsaalt when nekhemjlel changes
   useEffect(() => {
-    if (!!nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt]);
+    if (nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt]);
   }, [nekhemjlel]);
 
   useEffect(() => {
-    barilgiinId;
     setBarimt(undefined);
     setDans(undefined);
     setSongogdsonGereenuud([]);
@@ -112,6 +152,54 @@ function tulburTootsoo({ token }) {
     setSongogdsonGereenuud([]);
   }, [ognoo]);
 
+  const mailtuukhColumn = [
+    {
+      title: "№",
+      dataIndex: "key",
+      key: "key",
+      width: 40,
+      align: "center",
+      render: (text, record, index) => index + 1,
+    },
+    {
+      title: "Огноо",
+      dataIndex: "date",
+      key: "date",
+      width: 130,
+    },
+    {
+      title: "Гэрээний дугаар",
+      dataIndex: "contractNo",
+      key: "contractNo",
+      width: 100,
+    },
+    {
+      title: "Тайлбар",
+      dataIndex: "message",
+      key: "message",
+      ellipsis: true,
+      width: 280,
+    },
+    {
+      title: "И-Мэйл",
+      dataIndex: "email",
+      key: "email",
+      width: 140,
+    },
+    {
+      title: "Төлөв",
+      dataIndex: "status",
+      key: "status",
+      width: 60,
+      align: "center",
+      render: (status) =>
+        status ? (
+          <CheckCircleFilled className="text-green-500" />
+        ) : (
+          <CloseCircleFilled className="text-red-500" />
+        ),
+    },
+  ];
   const columns = useMemo(() => [
     {
       title: "№",
@@ -3388,6 +3476,36 @@ function tulburTootsoo({ token }) {
                   )}
                 </Select>
               </div>
+              <div>
+                <Button onClick={openMailtuukhModal} type="primary">
+                  <div className="dark:text-[#E5E7EB]">{t("И-мэйл түүх")}</div>
+                </Button>
+              </div>
+
+              <Modal
+                title={t("И-мэйл түүх")}
+                open={isModalVisible}
+                onCancel={closeMailtuukhModal}
+                width={1200}
+              >
+                <div className="mb-4 flex items-center justify-between gap-2">
+                  <DatePicker
+                    className="w-1/2 lg:w-auto"
+                    clearIcon
+                    placeholder={t("Огноо сонгох")}
+                    value={ognoo}
+                    onChange={setOgnoo}
+                  />
+                </div>
+
+                <Table
+                  columns={mailtuukhColumn}
+                  dataSource={dataSource}
+                  pagination={false}
+                  bordered
+                  size="middle"
+                />
+              </Modal>
               <div className="hidden justify-end  gap-2 md:flex">
                 {turul === "Mail" ? (
                   <Button
@@ -3435,6 +3553,12 @@ function tulburTootsoo({ token }) {
                   ))}
                 </div>
               </div>
+              <div>
+                <Button onClick={openMailtuukhModal} type="primary">
+                  <div className="dark:text-[#E5E7EB]">{t("И-мэйл түүх")}</div>
+                </Button>
+              </div>
+
               <div className="flex w-full justify-between gap-1 lg:justify-end">
                 {turul === "Mail" ? (
                   <div className="w-1/3 lg:hidden">
