@@ -73,7 +73,7 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
   }, [allNotifications]);
 
   const saveDontShowAgainToServer = useCallback(
-    async (adminMedegdelId, dakhijKharakhguiAjiltniiIdnuud) => {
+    async (adminMedegdelId) => {
       if (!token || !adminMedegdelId) return { success: false };
 
       setServerSyncStatus(
@@ -109,7 +109,7 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
         return { success: false, error };
       }
     },
-    [token, t, sonorduulgaMutate]
+    [token, t, ajiltanId, sonorduulgaMutate]
   );
 
   const handleNotificationClose = useCallback(
@@ -146,7 +146,7 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
       if (adminMedegdelId && dontShowAgainChecked) {
         serverUpdateResult = await saveDontShowAgainToServer(
           adminMedegdelId,
-          false
+          true // Add ajiltniiId to dakhijKharakhguiAjiltniiIdnuud
         );
 
         if (serverUpdateResult.success) {
@@ -167,7 +167,7 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
       ) {
         serverUpdateResult = await saveDontShowAgainToServer(
           adminMedegdelId,
-          true
+          false // Remove ajiltniiId from dakhijKharakhguiAjiltniiIdnuud
         );
 
         if (serverUpdateResult.success) {
@@ -201,6 +201,7 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
       permanentlyDismissed,
       saveDontShowAgainToServer,
       t,
+      sonorduulgaMutate,
     ]
   );
 
