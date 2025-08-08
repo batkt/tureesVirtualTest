@@ -1650,7 +1650,12 @@ function tulburTootsoo({ token }) {
         (nekhemjlekh.baritsaaAvakhDun || 0) -
           (nekhemjlekh.baritsaaniiUldegdel || 0)
       );
+      nekhemjlekh.baritsaaUldegdel = formatNumber(nekhemjlekh.baritsaaUldegdel);
 
+      nekhemjlekh.baritsaaniiUldegdel = formatNumber(
+        nekhemjlekh.baritsaaniiUldegdel
+      );
+      nekhemjlekh.baritsaaAvakhDun = formatNumber(nekhemjlekh.baritsaaAvakhDun);
       nekhemjlekh.baritsaaUldegdelNuat = formatNumber(
         (nekhemjlekh.baritsaaUldegdel / 1.1) * 0.1
       );
@@ -1954,13 +1959,6 @@ function tulburTootsoo({ token }) {
             : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
           : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
               ?.nekhemjlekh;
-        nekhemjlekh.baritsaaniiUldegdel = formatNumber(
-          nekhemjlekh.baritsaaniiUldegdel
-        );
-        nekhemjlekh.baritsaaAvakhDun = formatNumber(
-          nekhemjlekh.baritsaaAvakhDun
-        );
-
         nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
           nekhemjlekh.eneSardTulukhDun *
             (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
@@ -2275,6 +2273,19 @@ function tulburTootsoo({ token }) {
             </span>
           );
 
+        nekhemjlekh.baritsaaUldegdel =
+          nekhemjlekh.baritsaaAvakhDun - nekhemjlekh.baritsaaniiUldegdel;
+        nekhemjlekh.baritsaaUldegdel = formatNumber(
+          nekhemjlekh.baritsaaUldegdel
+        );
+
+        nekhemjlekh.baritsaaAvakhDun = formatNumber(
+          nekhemjlekh.baritsaaAvakhDun
+        );
+
+        nekhemjlekh.baritsaaniiUldegdel = formatNumber(
+          nekhemjlekh.baritsaaniiUldegdel
+        );
         nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
         nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
         nekhemjlekh.zakhirliinNer = nekhemjlekh.zakhirliinNer || "";
@@ -2300,6 +2311,9 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.niitUldegdelNuat = (nekhemjlekh.niitUldegdel / 1.1) * 0.1;
         nekhemjlekh.niitUldegdelNuatgui = formatNumber(
           nekhemjlekh.niitUldegdel - nekhemjlekh.niitUldegdelNuat
+        );
+        nekhemjlekh.niitUldegdelNuat = formatNumber(
+          nekhemjlekh.niitUldegdelNuat
         );
         nekhemjlekh.niitUldegdel = formatNumber(nekhemjlekh.niitUldegdel);
         nekhemjlekh.talbainNegjUne = formatNumber(nekhemjlekh.talbainNegjUne);
@@ -2339,23 +2353,9 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.umnukhSariinUrTulbur
         );
 
-        nekhemjlekh.baritsaaUldegdel =
-          (nekhemjlekh.baritsaaAvakhDun || 0) -
-          (nekhemjlekh.baritsaaniiUldegdel || 0);
-        nekhemjlekh.baritsaaUldegdelNuat =
-          ((nekhemjlekh.baritsaaUldegdel || 0) / 1.1) * 0.1;
-        nekhemjlekh.baritsaaUldegdelNuatgui = formatNumber(
-          nekhemjlekh.baritsaaUldegdel - nekhemjlekh.baritsaaUldegdelNuat || 0
-        );
-
         nekhemjlekh.baritsaaUldegdelNuat = formatNumber(
           nekhemjlekh.baritsaaUldegdelNuat
         );
-
-        nekhemjlekh.baritsaaUldegdel = formatNumber(
-          nekhemjlekh.baritsaaUldegdel
-        );
-
         nekhemjlekh.khevlesenOgnoo = moment().format("YYYY-MM-DD");
 
         nekhemjlekh.niitAshiglaltiinZardal =
@@ -2869,6 +2869,8 @@ function tulburTootsoo({ token }) {
         tempData.nekhemjlekhiinDans = dans?.dugaar;
         tempData.nekhemjlekhiinDansniiNer = dans?.dansniiNer;
         tempData.nekhemjlekhiinIbanDugaar = dans?.ibanDugaar;
+        tempData.nekhemjlekhiinDugaar =
+          nekhemjlekhiinDugaarData.dugaarList[index];
         tempData.dugaalaltDugaar = parseInt(
           tempData.nekhemjlekhiinDugaar?.slice(-3)
         );
