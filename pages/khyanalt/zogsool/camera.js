@@ -2198,7 +2198,8 @@ function camera({ token }) {
                   camerVal[0] === "192.168.1.158" ||
                   camerVal[0] === "192.168.1.159" ||
                   camerVal[0] === "192.168.1.160" ||
-                  camerVal[0] === "192.168.1.206" ? (
+                  camerVal[0] === "192.168.1.206" ||
+                  camerVal[0] === "192.168.1.242" ? (
                     <R2WPlayerComponent
                       USER={"admin"}
                       ROOT={"live"}
