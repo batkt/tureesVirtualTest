@@ -3483,12 +3483,18 @@ function tulburTootsoo({ token }) {
                   <div className="dark:text-[#E5E7EB]">{t("И-мэйл түүх")}</div>
                 </Button>
               </div>
+              
 
               <Modal
                 title={t("И-мэйл түүх")}
                 open={isModalVisible}
                 onCancel={closeMailtuukhModal}
                 width={1200}
+                footer={[
+                    <Button key="cancel" type="primary" onClick={closeMailtuukhModal}>
+                      Хаах
+                    </Button>,
+                  ]}
               >
                 <div className="mb-4 flex items-center justify-between gap-2">
                   <DatePicker
