@@ -47,30 +47,72 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
     [ajiltanId]
   );
 
+  // Improved deduplication logic
   const allNotifications = useMemo(() => {
-    const combined = [
-      ...realTimeNotifications,
-      ...jagsaalt,
+    // Combine all sources
+    const allSources = [
+      ...(jagsaalt || []),
       ...(sonorduulga?.jagsaalt || []),
-    ]
-      .filter((mur) => mur?.turul === "medegdelAdmin")
+      ...realTimeNotifications,
+    ];
+
+    // Filter for admin messages and clean up
+    const adminNotifications = allSources
+      .filter((mur) => mur?.turul === "medegdelAdmin" && mur?._id)
       .map((mur) => ({
         ...mur,
         object: { ...mur.object, zurag: undefined },
       }));
 
-    const seen = new Set();
-    return combined.filter((notification) => {
+    // More robust deduplication using Map to preserve latest version
+    const uniqueNotifications = new Map();
+
+    adminNotifications.forEach((notification) => {
       const id = notification._id;
-      if (seen.has(id)) return false;
-      seen.add(id);
-      return true;
+      if (!uniqueNotifications.has(id)) {
+        uniqueNotifications.set(id, notification);
+      } else {
+        // Keep the most recent version based on createdAt or updatedAt
+        const existing = uniqueNotifications.get(id);
+        const existingDate = new Date(
+          existing.updatedAt || existing.createdAt || 0
+        );
+        const newDate = new Date(
+          notification.updatedAt || notification.createdAt || 0
+        );
+
+        if (newDate >= existingDate) {
+          uniqueNotifications.set(id, notification);
+        }
+      }
     });
+
+    // Convert back to array and sort by creation date (newest first)
+    return Array.from(uniqueNotifications.values()).sort(
+      (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+    );
   }, [realTimeNotifications, jagsaalt, sonorduulga?.jagsaalt]);
 
   const medegdelAdminCount = useMemo(() => {
     return allNotifications.filter((mur) => !mur.kharsanEsekh).length;
   }, [allNotifications]);
+
+  // Clear real-time notifications when main data updates to prevent duplicates
+  useEffect(() => {
+    if (
+      (jagsaalt?.length > 0 || sonorduulga?.jagsaalt?.length > 0) &&
+      realTimeNotifications.length > 0
+    ) {
+      const existingIds = new Set([
+        ...(jagsaalt || []).map((n) => n._id),
+        ...(sonorduulga?.jagsaalt || []).map((n) => n._id),
+      ]);
+
+      setRealTimeNotifications((prev) =>
+        prev.filter((n) => !existingIds.has(n._id))
+      );
+    }
+  }, [jagsaalt, sonorduulga?.jagsaalt]);
 
   const saveDontShowAgainToServer = useCallback(
     async (adminMedegdelId) => {
@@ -90,10 +132,10 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
           (prev) => new Map(prev.set(adminMedegdelId, "synced"))
         );
 
+        // Single mutate call with delay
         setTimeout(() => {
           sonorduulgaMutate();
         }, 300);
-        sonorduulgaMutate();
 
         return {
           success: true,
@@ -146,7 +188,7 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
       if (adminMedegdelId && dontShowAgainChecked) {
         serverUpdateResult = await saveDontShowAgainToServer(
           adminMedegdelId,
-          true // Add ajiltniiId to dakhijKharakhguiAjiltniiIdnuud
+          true
         );
 
         if (serverUpdateResult.success) {
@@ -157,13 +199,8 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
           setRealTimeNotifications((prev) =>
             prev.filter((notif) => notif._id !== notifId)
           );
-          await sonorduulgaMutate();
 
           message.success(t("Тохиргоо хадгаллаа"));
-
-          setTimeout(() => {
-            sonorduulgaMutate();
-          }, 500);
         } else return false;
       } else if (
         adminMedegdelId &&
@@ -172,7 +209,7 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
       ) {
         serverUpdateResult = await saveDontShowAgainToServer(
           adminMedegdelId,
-          false // Remove ajiltniiId from dakhijKharakhguiAjiltniiIdnuud
+          false
         );
 
         if (serverUpdateResult.success) {
@@ -181,10 +218,6 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
           setPermanentlyDismissed(newDismissed);
 
           message.success(t("Тохиргоо цуцаллаа"));
-
-          setTimeout(() => {
-            sonorduulgaMutate();
-          }, 500);
         }
       }
 
@@ -206,7 +239,6 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
       permanentlyDismissed,
       saveDontShowAgainToServer,
       t,
-      sonorduulgaMutate,
     ]
   );
 
@@ -253,7 +285,9 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
 
     const latestNotification = sortedNotifications[0];
     const latestNotifId =
-      latestNotification.adminMedegdelId || "latest-notification";
+      latestNotification.adminMedegdelId ||
+      latestNotification._id ||
+      "latest-notification";
 
     if (
       shouldShowNotification(latestNotification) &&
@@ -287,6 +321,7 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
       const validNotifications = notifications.filter((notif) => {
         const notifId = notif._id || notif.id || "default-notification";
         return (
+          notif?.turul === "medegdelAdmin" &&
           shouldShowNotification(notif) &&
           !sessionDismissedNotifications.has(notifId) &&
           !permanentlyDismissed.has(notifId)
@@ -297,39 +332,46 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
 
       requestAnimationFrame(() => {
         setRealTimeNotifications((prev) => {
+          // Get all existing IDs from all sources
           const allExistingIds = new Set([
             ...prev.map((n) => n._id),
-            ...jagsaalt.map((n) => n._id),
+            ...(jagsaalt || []).map((n) => n._id),
             ...(sonorduulga?.jagsaalt || []).map((n) => n._id),
           ]);
 
+          // Only add truly new notifications
           const newUnique = validNotifications
             .map((notif) => ({
               ...notif,
               object: { ...notif.object, zurag: undefined },
-              createdAt: formatDate(notif.createdAt),
             }))
-            .filter((n) => !allExistingIds.has(n._id));
+            .filter((n) => n._id && !allExistingIds.has(n._id));
 
+          if (newUnique.length === 0) return prev;
+
+          // Add to beginning and limit to 50
           return [...newUnique, ...prev].slice(0, 50);
         });
 
+        // Show modal for the latest new notification
         const latestNotification = validNotifications[0];
         const latestNotifId =
           latestNotification._id ||
           latestNotification.id ||
           "default-notification";
 
+        // Check if this is truly a new notification
         const allExistingIds = new Set([
-          ...jagsaalt.map((n) => n._id),
+          ...(jagsaalt || []).map((n) => n._id),
           ...(sonorduulga?.jagsaalt || []).map((n) => n._id),
         ]);
 
         if (
+          latestNotification._id &&
+          !allExistingIds.has(latestNotifId) &&
           shouldShowNotification(latestNotification) &&
           !sessionDismissedNotifications.has(latestNotifId) &&
-          !permanentlyDismissed.has(latestNotifId) &&
-          !allExistingIds.has(latestNotifId)
+          !permanentlyDismissed.has(latestNotifId)
         ) {
           setNotificationModal({
             visible: true,
@@ -364,7 +406,10 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
           });
         }
 
-        sonorduulgaMutate();
+        // Refresh data after handling real-time notification
+        setTimeout(() => {
+          sonorduulgaMutate();
+        }, 1000);
       });
     },
     [
@@ -397,7 +442,7 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
     const timer = setTimeout(() => {
       if (
         baiguullaga?._id &&
-        (jagsaalt.length > 0 || sonorduulga?.jagsaalt?.length > 0)
+        (jagsaalt?.length > 0 || sonorduulga?.jagsaalt?.length > 0)
       ) {
         showLatestNotificationOnLogin();
         setHasShownNotificationThisSession(true);

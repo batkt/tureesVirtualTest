@@ -585,7 +585,6 @@ audio::-webkit-media-controls-volume-control-container {
   z-index: 1000 !important;
   display: flex;
   flex-direction: column;
-  max-height: 90vh;
 }
 
 .ant-modal-header {

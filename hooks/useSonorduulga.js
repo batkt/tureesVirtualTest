@@ -256,6 +256,7 @@ function useSonorduulga(token) {
     kharaaguiToo: too?.data?.niitMur,
     sonorduulgaMutate: mutate,
     jagsaalt: data?.jagsaalt || [],
+    tooMutate: too.mutate,
     allNotifications,
     currentPage,
     isLoadingMore,

@@ -61,14 +61,16 @@ function tulburTootsoo({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   }, []);
-
   const printRef = React.useRef(null);
   const printExcelRef = React.useRef(null);
   const dunZasvarRef = React.useRef(null);
 
   const { baiguullaga, barilgiinId, ajiltan } = useAuth();
 
-  const [ognoo, setOgnoo] = React.useState(moment());
+  const today = moment().startOf("day");
+  const [ognooRange, setOgnooRange] = useState([today, today]);
+  const [ognoo, setOgnoo] = useState(moment());
+
   const { t } = useTranslation();
 
   const [davkhar, setDavkhar] = React.useState();
@@ -88,22 +90,27 @@ function tulburTootsoo({ token }) {
   // Modal visible state for mailtuukh table
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Modal open/close handlers
-  const openMailtuukhModal = () => {
-    setIsModalVisible(true);
-  };
-  const closeMailtuukhModal = () => {
-    setIsModalVisible(false);
-  };
-
   const { mailtuukhmailtuukhJagsaalt } = mailtuukh(token, null, null, null);
+  const filteredMailTuukh = useMemo(() => {
+    return (mailtuukhmailtuukhJagsaalt || []).filter((item) => {
+      if (
+        !ognooRange ||
+        ognooRange.length !== 2 ||
+        !ognooRange[0] ||
+        !ognooRange[1]
+      )
+        return true;
 
-  const filteredMailTuukh = (mailtuukhmailtuukhJagsaalt || []).filter(
-    (item) => {
-      if (!ognoo) return true; // no filter if no date selected
-      return moment(item.ognoo).isSame(ognoo, "day");
-    }
-  );
+      const date = moment(item.ognoo);
+
+      return date.isBetween(
+        moment(ognooRange[0]).startOf("day"),
+        moment(ognooRange[1]).endOf("day"),
+        null,
+        "[]"
+      );
+    });
+  }, [mailtuukhmailtuukhJagsaalt, ognooRange]);
 
   const dataSource = filteredMailTuukh.map((item, index) => ({
     key: index,
@@ -114,7 +121,32 @@ function tulburTootsoo({ token }) {
     status: item.success,
   }));
 
-  // Your other hooks and state
+  const handleDateRangeChange = (dates) => {
+    setOgnooRange(dates);
+  };
+
+  useEffect(() => {
+    if (isModalVisible) {
+      if (!mailtuukhmailtuukhJagsaalt) {
+        setLoading(true);
+      } else {
+        setLoading(false);
+      }
+    }
+  }, [isModalVisible, mailtuukhmailtuukhJagsaalt]);
+
+  const openMailtuukhModal = () => {
+    setIsModalVisible(true);
+    setLoading(true);
+  };
+  const closeMailtuukhModal = () => {
+    setIsModalVisible(false);
+    setLoading(false);
+  };
+
+  const successCount = filteredMailTuukh.filter((item) => item.success).length;
+  const failedCount = filteredMailTuukh.filter((item) => !item.success).length;
+
   const { nekhemjlel, setNekhemjlelKhuudaslalt, isValidating } = useNekhemjlekh(
     token,
     ognoo,
@@ -165,12 +197,15 @@ function tulburTootsoo({ token }) {
       title: "Огноо",
       dataIndex: "date",
       key: "date",
-      width: 130,
+      width: 80,
+      align: "center",
+      render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
     },
     {
       title: "Гэрээний дугаар",
       dataIndex: "contractNo",
       key: "contractNo",
+      align: "center",
       width: 100,
     },
     {
@@ -178,13 +213,17 @@ function tulburTootsoo({ token }) {
       dataIndex: "message",
       key: "message",
       ellipsis: true,
-      width: 280,
+      width: 200,
+      align: "center",
+      render: (text) => <div style={{ textAlign: "left" }}>{text}</div>,
     },
     {
       title: "И-Мэйл",
       dataIndex: "email",
       key: "email",
       width: 140,
+      align: "center",
+      render: (text) => <div style={{ textAlign: "left" }}>{text}</div>,
     },
     {
       title: "Төлөв",
@@ -200,6 +239,7 @@ function tulburTootsoo({ token }) {
         ),
     },
   ];
+
   const columns = useMemo(() => [
     {
       title: "№",
@@ -538,7 +578,8 @@ function tulburTootsoo({ token }) {
           if (
             zagvar?.khatuuZagvarEsekh &&
             ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d" &&
-            ajiltan?.baiguullagiinId !== "679aea9032299b7ba8462a77"
+            ajiltan?.baiguullagiinId !== "679aea9032299b7ba8462a77" &&
+            barilgiinId !== "622ec99a8e64e5b4f0c3acb6"
           )
             // foodctiy and urangan
             kaidudZoriulsanNiitTulburiinNiilber +=
@@ -2869,11 +2910,14 @@ function tulburTootsoo({ token }) {
         tempData.nekhemjlekhiinDans = dans?.dugaar;
         tempData.nekhemjlekhiinDansniiNer = dans?.dansniiNer;
         tempData.nekhemjlekhiinIbanDugaar = dans?.ibanDugaar;
-        tempData.nekhemjlekhiinDugaar =
-          nekhemjlekhiinDugaarData.dugaarList[index];
-        tempData.dugaalaltDugaar = parseInt(
-          tempData.nekhemjlekhiinDugaar?.slice(-3)
-        );
+        if (nekhemjlekhiinDugaarData?.dugaarList?.length > 0) {
+          tempData.nekhemjlekhiinDugaar =
+            nekhemjlekhiinDugaarData.dugaarList[index];
+          tempData.dugaalaltDugaar = parseInt(
+            tempData.nekhemjlekhiinDugaar?.slice(-3)
+          );
+        }
+
         tempData.nekhemjlekhiinBank =
           dans?.bank === "khanbank"
             ? "Хаан банк"
@@ -3399,7 +3443,7 @@ function tulburTootsoo({ token }) {
             })}
           </div> */}
           <div
-            className=" flex w-full flex-row"
+            className="flex w-full flex-row "
             data-aos="zoom-in-left"
             data-aos-duration="1000"
           >
@@ -3483,27 +3527,43 @@ function tulburTootsoo({ token }) {
                   <div className="dark:text-[#E5E7EB]">{t("И-мэйл түүх")}</div>
                 </Button>
               </div>
-              
 
               <Modal
                 title={t("И-мэйл түүх")}
                 open={isModalVisible}
                 onCancel={closeMailtuukhModal}
                 width={1200}
+                style={{ top: 60 }}
                 footer={[
-                    <Button key="cancel" type="primary" onClick={closeMailtuukhModal}>
-                      Хаах
-                    </Button>,
-                  ]}
+                  <Button
+                    key="cancel"
+                    type="primary"
+                    onClick={closeMailtuukhModal}
+                  >
+                    Хаах
+                  </Button>,
+                ]}
+                bodyStyle={{ paddingTop: 0 }}
               >
-                <div className="mb-4 flex items-center justify-between gap-2">
-                  <DatePicker
-                    className="w-1/2 lg:w-auto"
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+                  <DatePicker.RangePicker
+                    className="w-full sm:w-auto"
                     clearIcon
-                    placeholder={t("Огноо сонгох")}
-                    value={ognoo}
-                    onChange={setOgnoo}
+                    placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]}
+                    value={ognooRange}
+                    onChange={handleDateRangeChange}
+                    format="YYYY-MM-DD"
                   />
+                  <div className="flex select-none items-center gap-6 text-sm">
+                    <div className="flex items-center gap-1 text-green-600">
+                      <CheckCircleFilled />
+                      <span>{successCount}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-red-600">
+                      <CloseCircleFilled />
+                      <span>{failedCount}</span>
+                    </div>
+                  </div>
                 </div>
 
                 <Table
@@ -3512,9 +3572,12 @@ function tulburTootsoo({ token }) {
                   pagination={false}
                   bordered
                   size="middle"
+                  scroll={{ y: 550 }}
+                  sticky
                 />
               </Modal>
-              <div className="hidden justify-end  gap-2 md:flex">
+
+              <div className="hidden justify-end gap-2 md:flex">
                 {turul === "Mail" ? (
                   <Button
                     hidden={turul !== "Mail"}
@@ -3543,7 +3606,7 @@ function tulburTootsoo({ token }) {
             >
               <div className="mb-3 rounded-md border p-2 shadow-md">
                 <div
-                  className="grid grid-cols-3 gap-1  font-medium"
+                  className="grid grid-cols-3 gap-1 font-medium"
                   role="tablist"
                 >
                   {["Mail", "SMS", "App"].map((mur) => (
@@ -3624,7 +3687,7 @@ function tulburTootsoo({ token }) {
                             cancelText={t("Үгүй")}
                             onConfirm={() => zagvarUstgaya(a)}
                           >
-                            <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  p-2  text-white dark:bg-gray-700">
+                            <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-700">
                               <DeleteOutlined
                                 style={{ color: "red", display: "flex" }}
                               />
@@ -3634,7 +3697,7 @@ function tulburTootsoo({ token }) {
                       )}
                       {!a.khatuuZagvarEsekh && (
                         <div
-                          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   fill-current  p-2 text-white dark:bg-gray-700"
+                          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-700"
                           onClick={() =>
                             turul === "SMS" || turul === "App"
                               ? smsZagvarNemya(a)
@@ -3671,7 +3734,7 @@ function tulburTootsoo({ token }) {
                               cancelText={t("Үгүй")}
                               onConfirm={() => zagvarUstgaya(a)}
                             >
-                              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  p-2  text-white dark:bg-gray-700">
+                              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-700">
                                 <DeleteOutlined
                                   style={{ color: "red", display: "flex" }}
                                 />
@@ -3680,7 +3743,7 @@ function tulburTootsoo({ token }) {
                           </div>
                         )}
                         <div
-                          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   fill-current  p-2 text-white dark:bg-gray-700"
+                          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-700"
                           onClick={() =>
                             router.push(
                               `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
@@ -3821,7 +3884,7 @@ function tulburTootsoo({ token }) {
                       return (
                         <div className="flex items-center justify-center">
                           <Button
-                            className=" dark:bg-gray-700 "
+                            className=" dark:bg-gray-700"
                             shape="circle"
                             size="small"
                             icon={
@@ -3831,7 +3894,7 @@ function tulburTootsoo({ token }) {
                               >
                                 <EditOutlined
                                   style={{ fontSize: "18px", color: "#85C1E9" }}
-                                  className=" dark:bg-gray-700 "
+                                  className=" dark:bg-gray-700"
                                 />
                               </div>
                             }

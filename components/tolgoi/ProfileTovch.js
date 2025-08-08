@@ -40,6 +40,7 @@ function ProfileTovch({
   const {
     sonorduulga,
     sonorduulgaMutate,
+    tooMutate,
     jagsaalt,
     setKhuudaslalt,
     kharaaguiToo,
@@ -74,13 +75,16 @@ function ProfileTovch({
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const sonorduulgaKharlaa = useCallback(
-    (id, sonorduulgaId) => {
-      uilchilgee(token)
-        .post("/sanalKharlaa", { id, sonorduulgaId })
-        .then(() => sonorduulgaMutate())
-        .catch(aldaaBarigch);
+    async (id, sonorduulgaId) => {
+      try {
+        await uilchilgee(token).post("/sanalKharlaa", { id, sonorduulgaId });
+        sonorduulgaMutate();
+        tooMutate();
+      } catch (error) {
+        aldaaBarigch(error);
+      }
     },
-    [token, sonorduulgaMutate]
+    [token, sonorduulgaMutate, tooMutate]
   );
 
   const handleExpansionToggle = useCallback(

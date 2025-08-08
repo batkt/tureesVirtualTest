@@ -93,7 +93,11 @@ const NotificationModal = React.memo(
 
     const cleanedContent =
       typeof displayData?.content === "string"
-        ? displayData.content.replace(/<p>(<br\s*\/?>|\s|&nbsp;)+/i, "<p>")
+        ? displayData.content
+            .replace(/<br\s*\/?>/gi, "")
+            .replace(/<p>(?:\s|&nbsp;)+/gi, "<p>")
+            .replace(/<p([^>]*)>/g, '<p$1 style="text-align:justify;">')
+            .replace(/<div([^>]*)>/g, '<div$1 style="text-align:justify;">')
         : "";
 
     function getDisplayData({
