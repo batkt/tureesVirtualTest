@@ -2199,7 +2199,7 @@ function camera({ token }) {
                   camerVal[0] === "192.168.1.159" ||
                   camerVal[0] === "192.168.1.160" ||
                   camerVal[0] === "192.168.1.206" ||
-                  camerVal[0] === "192.168.1.242" ? (
+                  camerVal[0] === "192.168.1.108" ? (
                     <R2WPlayerComponent
                       USER={"admin"}
                       ROOT={"live"}
@@ -2222,7 +2222,7 @@ function camera({ token }) {
                   )
                 ) : baiguullaga?._id === "6646fab6ae3f7ecc2ea5ecd9" &&
                   barilgiinId === "6646fab6ae3f7ecc2ea5ecda" &&
-                  camerVal[0] === "192.168.1.108" ? (
+                  camerVal[0] === "192.168.1.242" ? (
                   <R2WPlayerComponent
                     USER={"admin"}
                     ROOT={"live"}
