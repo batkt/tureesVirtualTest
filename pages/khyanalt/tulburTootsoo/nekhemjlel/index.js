@@ -538,7 +538,8 @@ function tulburTootsoo({ token }) {
           if (
             zagvar?.khatuuZagvarEsekh &&
             ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d" &&
-            ajiltan?.baiguullagiinId !== "679aea9032299b7ba8462a77"
+            ajiltan?.baiguullagiinId !== "679aea9032299b7ba8462a77" &&
+            barilgiinId !== "622ec99a8e64e5b4f0c3acb6"
           )
             // foodctiy and urangan
             kaidudZoriulsanNiitTulburiinNiilber +=
@@ -3483,7 +3484,6 @@ function tulburTootsoo({ token }) {
                   <div className="dark:text-[#E5E7EB]">{t("И-мэйл түүх")}</div>
                 </Button>
               </div>
-              
 
               <Modal
                 title={t("И-мэйл түүх")}
@@ -3491,10 +3491,14 @@ function tulburTootsoo({ token }) {
                 onCancel={closeMailtuukhModal}
                 width={1200}
                 footer={[
-                    <Button key="cancel" type="primary" onClick={closeMailtuukhModal}>
-                      Хаах
-                    </Button>,
-                  ]}
+                  <Button
+                    key="cancel"
+                    type="primary"
+                    onClick={closeMailtuukhModal}
+                  >
+                    Хаах
+                  </Button>,
+                ]}
               >
                 <div className="mb-4 flex items-center justify-between gap-2">
                   <DatePicker
