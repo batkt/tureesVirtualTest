@@ -2503,7 +2503,11 @@ function tulburTootsoo({ token }) {
         } else {
           console.error("zagvar.nekhemjlekh is not available:", zagvar);
         }
-
+        var zuruuDun = 0;
+        var tseverusDun = 0;
+        var boxirusDun = 0;
+        var usxalaasniitulburDun = 0;
+        var niilberDun = 0;
         var niilberAshiglaltDunGoTo = 0;
         var niilberNekhemjlelDunGoto = 0;
         var ashiglaltCount = 0;
@@ -2518,7 +2522,9 @@ function tulburTootsoo({ token }) {
           );
           if (
             a.tailbar?.includes("Цахилгаан") ||
-            a.tailbar === "Цахилгаан нэмэлт"
+            a.tailbar === "Цахилгаан нэмэлт" ||
+            a.tailbar?.includes("Халуун ус") ||
+            a.tailbar?.includes("Хүйтэн ус")
           ) {
             text = text?.replace(
               new RegExp(`&lt;${a.tailbar}.chadalDun&gt;`, "g"),
@@ -2537,6 +2543,49 @@ function tulburTootsoo({ token }) {
               formatNumber(a.sekhDemjikhTulburDun || 0) || ""
             );
           }
+          if (
+                  a.tailbar?.includes("Халуун ус") ||
+                  a.tailbar?.includes("Хүйтэн ус")
+                ) {
+
+                  a.tseverusTariff = ashiglaltiinZardal?.jagsaalt
+                    ?.filter((b) => b.ner === a.tailbar)
+                    .map((b) => b.tseverUsDun);
+                  a.boxirusTariff = ashiglaltiinZardal?.jagsaalt
+                    ?.filter((b) => b.ner === a.tailbar)
+                    .map((b) => b.bokhirUsDun);
+                  a.usxalaasniitulburTariff = a.tailbar?.includes("Хүйтэн ус")
+                    ? 0
+                    : ashiglaltiinZardal?.jagsaalt
+                        ?.filter((b) => b.ner === a.tailbar)
+                        .map((b) => b.usKhalaasniiDun);
+
+                  zuruuDun += a.zuruuZaalt;
+                  tseverusDun += a.zuruuZaalt * a.tseverusTariff; // Халуун ус + Хүйтэн ус
+                  boxirusDun += a.zuruuZaalt * a.boxirusTariff; // Халуун ус + Хүйтэн ус
+                  usxalaasniitulburDun += a.tailbar?.includes("Хүйтэн ус")
+                    ? 0
+                    : a.zuruuZaalt * a.usxalaasniitulburTariff; // Халуун ус
+                  // niilberDun += a.zuruuZaalt * a.tseverusTariff + a.zuruuZaalt * a.boxirusTariff + (a.tailbar?.includes("Хүйтэн ус") ? 0 : (a.zuruuZaalt * a.usxalaasniitulburTariff))
+                  niilberDun += a.tulukhDun;
+
+                  text = text?.replace(
+                    new RegExp(`&lt;${a.tailbar}.tseverusTariff&gt;`, "g"),
+                    formatNumber(a.tseverusTariff || 0) || ""
+                  );
+                  text = text?.replace(
+                    new RegExp(`&lt;${a.tailbar}.boxirusTariff&gt;`, "g"),
+                    formatNumber(a.boxirusTariff || 0) || ""
+                  );
+                  text = text?.replace(
+                    new RegExp(
+                      `&lt;${a.tailbar}.usxalaasniitulburTariff&gt;`,
+                      "g"
+                    ),
+                    formatNumber(a.usxalaasniitulburTariff || 0) || ""
+                  );
+                }
+
 
           text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.tulukhDun&gt;`, "g"),
@@ -2656,7 +2705,11 @@ function tulburTootsoo({ token }) {
             niilberNekhemjlelDunGoto += khungulultKhassanTulukhDun;
           }
         });
-
+        nekhemjlekh.zuruuDun = zuruuDun;
+        nekhemjlekh.tseverusDun = tseverusDun;
+        nekhemjlekh.boxirusDun = boxirusDun;
+        nekhemjlekh.usxalaasniitulburDun = usxalaasniitulburDun;
+        nekhemjlekh.niilberDun = niilberDun;
         nekhemjlekh.niilberAshiglaltDunGoTo = niilberAshiglaltDunGoTo;
         nekhemjlekh.niilberNekhemjlelDunGoto =
           niilberNekhemjlelDunGoto + niilberAshiglaltDunGoTo;
@@ -2699,10 +2752,36 @@ function tulburTootsoo({ token }) {
           formatNumber(nekhemjlekh.niilberDunUranganNUATgui || 0)
         );
 
+
         text = text?.replace(
           new RegExp(`&lt;niilberAshiglaltDunGoTo&gt;`, "g"),
           formatNumber(nekhemjlekh.niilberAshiglaltDunGoTo || 0)
         );
+        text = text?.replace(
+          
+              new RegExp(`&lt;zuruuDun&gt;`, "g"),
+              formatNumber(nekhemjlekh.zuruuDun || 0)
+            );
+
+            text = text?.replace(
+              new RegExp(`&lt;tseverusDun&gt;`, "g"),
+              formatNumber(nekhemjlekh.tseverusDun || 0)
+            );
+
+           text = text?.replace(
+              new RegExp(`&lt;boxirusDun&gt;`, "g"),
+              formatNumber(nekhemjlekh.boxirusDun || 0)
+            );
+
+            text = text?.replace(
+              new RegExp(`&lt;usxalaasniitulburDun&gt;`, "g"),
+              formatNumber(nekhemjlekh.usxalaasniitulburDun || 0)
+            );
+
+            text = text?.replace(
+              new RegExp(`&lt;niilberDun&gt;`, "g"),
+              formatNumber(nekhemjlekh.niilberDun || 0)
+            );
 
         text = text?.replace(
           new RegExp(`&lt;niilberNekhemjlelDunGoto&gt;`, "g"),
