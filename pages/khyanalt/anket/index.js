@@ -136,7 +136,7 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
                   </Form.Item>
                 ))}
                 <Button
-                  className=" dark:bg-gray-800 dark:text-white "
+                  className=" dark:bg-gray-800 dark:text-white"
                   style={{ width: "100%" }}
                   type={"sideKick"}
                   onClick={() => add()}
@@ -190,7 +190,7 @@ function AnketiinZagvar({
         <div>{a.ner}</div>
         <div className="flex justify-end gap-2">
           <Button
-            className="bg-white text-green-400 hover:text-green-600  dark:bg-gray-900 "
+            className="bg-white text-green-400 hover:text-green-600 dark:bg-gray-900 "
             onClick={(e) => {
               e.stopPropagation();
               anketIlgeeye(a);
@@ -198,7 +198,7 @@ function AnketiinZagvar({
             icon={<SendOutlined className="dark:text-green-400" />}
           />
           <Button
-            className="bg-white text-blue-400 hover:text-blue-600  dark:bg-gray-900 "
+            className="bg-white text-blue-400 hover:text-blue-600 dark:bg-gray-900 "
             onClick={(e) => {
               e.stopPropagation();
               setData({ ...a, khariultuud: undefined });
@@ -216,7 +216,7 @@ function AnketiinZagvar({
             cancelText={t("Үгүй")}
           >
             <Button
-              className="bg-white text-red-400 hover:text-red-600  dark:bg-gray-900 "
+              className="bg-white text-red-400 hover:text-red-600 dark:bg-gray-900 "
               onClick={(e) => {
                 e.stopPropagation();
               }}
@@ -360,7 +360,7 @@ function Anket({ token }) {
       <Space className="flex justify-end">
         <Button
           className="dark:text-gray-200 dark:hover:text-gray-800"
-          type="sideKick"
+          type="primary"
           onClick={() => ilgeekhRef.current.khaaya()}
         >
           {t("Хаах")}
@@ -436,7 +436,7 @@ function Anket({ token }) {
             <div className="mt-5 w-full px-5">
               <DatePicker.RangePicker
                 onClick={(e) => e.stopPropagation()}
-                className="flex w-full  rounded-md md:w-auto"
+                className="flex w-full rounded-md md:w-auto"
                 size="middle"
                 allowClear={true}
                 placeholder={["Эхлэх огноо", "Дуусах огноо"]}
@@ -468,7 +468,7 @@ function Anket({ token }) {
             data-aos-duration="1000"
             data-aos-delay="300"
           >
-            <span className=" font-medium dark:text-gray-100 lg:px-5">
+            <span className="font-medium dark:text-gray-100 lg:px-5">
               {t("Анкетын загвар үүсгэх")}
             </span>
             <Form
@@ -540,7 +540,7 @@ function Anket({ token }) {
                         <Form.ErrorList errors={errors} />
                       </Form.Item>
                       <div
-                        className=" -my-8 grid w-full grid-cols-1 gap-2 overflow-y-auto py-5 pr-5"
+                        className="-my-8 grid w-full grid-cols-1 gap-2 overflow-y-auto py-5 pr-5 "
                         style={{ maxHeight: "calc( 100vh - 20rem)" }}
                         id={"form-container"}
                       >

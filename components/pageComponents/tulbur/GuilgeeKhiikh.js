@@ -10,7 +10,13 @@ import {
   Modal,
 } from "antd";
 import _ from "lodash";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+} from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
@@ -406,6 +412,15 @@ function GuilgeeKhiikh(
       togtmolGaz,
     ]
   );
+
+  const ankhniiUtga = useRef({
+    dun,
+    tailbar,
+    negjUne,
+    nekhemjlekhDeerKharagdakh,
+    busadTurul,
+  });
+
   function labelTurul(guilgeeTurul) {
     var text;
     switch (guilgeeTurul) {
@@ -425,20 +440,24 @@ function GuilgeeKhiikh(
   }
 
   function garya() {
-    if (
-      dun !== "" ||
-      tailbar !== "" ||
-      negjUne !== "" ||
-      nekhemjlekhDeerKharagdakh !== false ||
-      busadTurul !== undefined
-    )
+    const uurchlugdsunUtga =
+      dun !== ankhniiUtga.current.dun ||
+      tailbar !== ankhniiUtga.current.tailbar ||
+      negjUne !== ankhniiUtga.current.negjUne ||
+      nekhemjlekhDeerKharagdakh !==
+        ankhniiUtga.current.nekhemjlekhDeerKharagdakh ||
+      busadTurul !== ankhniiUtga.current.busadTurul;
+
+    if (uurchlugdsunUtga) {
       Modal.confirm({
         content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
         okText: t("Тийм"),
         cancelText: t("Үгүй"),
         onOk: destroy,
       });
-    else destroy();
+    } else {
+      destroy();
+    }
   }
 
   useEffect(() => {

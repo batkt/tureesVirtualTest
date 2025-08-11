@@ -596,7 +596,7 @@ function negtgelTailan({ token }) {
       <div className="text-mashJijig col-span-12 mt-12 flex items-center justify-center 2xl:mt-0">
         <Table
           sticky={{ offsetHeader: 0 }}
-          scroll={{ y: "calc(100vh - 29rem)", x: "calc(100vw - 25rem)" }}
+          scroll={{ y: "calc(100vh - 22rem)", x: "calc(100vw - 25rem)" }}
           tableLayout="fixed"
           bordered
           size="small"
