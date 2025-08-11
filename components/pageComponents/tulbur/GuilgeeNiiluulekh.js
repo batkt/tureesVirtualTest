@@ -446,7 +446,7 @@ function GuilgeeNiiluulekh(
             {moment().format("YYYY-MM-DD")}
           </span>
         </div>
-        <div className="grid w-full grid-cols-4 rounded-md border border-gray-400 bg-gray-100 p-2">
+        <div className="box grid w-full grid-cols-4 rounded-md border border-gray-400 bg-gray-100 p-2 ">
           <div className="col-span-4 lg:col-span-1">
             {data.CtAcct || data.relatedAccount || data.accNum}
           </div>
@@ -618,7 +618,7 @@ function GuilgeeNiiluulekh(
               </div>
             )}
             {geree && (
-              <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
+              <div className="box grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
                 <div className="col-span-4">{t("Түрээсийн үлдэгдэл")}</div>
                 <div
                   className={`text-${geree.uldegdel > 0 ? "red" : "green"}-500`}
@@ -628,7 +628,7 @@ function GuilgeeNiiluulekh(
                 <div>{geree.talbainDugaar}</div>
                 <div className="text-right text-green-600">
                   <input
-                    className="w-full rounded-md border bg-gray-200 px-2 text-right"
+                    className="w-full rounded-md border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700 "
                     placeholder={t("Төлөх дүн")}
                     value={formatter(geree.tureesiinTulbur)}
                     onDoubleClick={({ target }) =>

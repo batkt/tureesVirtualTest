@@ -360,7 +360,6 @@ function Anket({ token }) {
       <Space className="flex justify-end">
         <Button
           className="dark:text-gray-200 dark:hover:text-gray-800"
-          type="primary"
           onClick={() => ilgeekhRef.current.khaaya()}
         >
           {t("Хаах")}
