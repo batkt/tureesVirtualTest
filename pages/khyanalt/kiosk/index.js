@@ -29,6 +29,7 @@ import { modal } from "components/ant/Modal";
 import ZuvhunKhunglukhModalContent from "./ZuvhunKhunglukhModalContent";
 import ShineDugaarKeyboard from "components/pageComponents/kiosk/ShineKeyboard";
 import dynamic from "next/dynamic";
+import useJagsaalt from "../../../hooks/useJagsaalt";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 const Kiosk = () => {
@@ -53,9 +54,22 @@ const Kiosk = () => {
   const [eBarimt, setEbarimt] = useState();
   const [minutes, setMinutes] = useState(3);
   const [seconds, setSeconds] = useState(30);
-  const [zogsool, setZogsool] = useState();
+
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const khungulultRef = React.useRef(null);
+
+  const streamQuery = useMemo(() => {
+    return {
+      baiguullagiinId: baiguullaga?._id,
+      barilgiinId: barilgiinId,
+      zogsooliinDans: { $exists: true },
+    };
+  }, [baiguullaga?._id, barilgiinId]);
+
+  const { jagsaalt: parkingJagsaalt, mutate: parkingMutate } = useJagsaalt(
+    "/parking",
+    streamQuery
+  );
 
   const query = useMemo(() => {
     var query = {};
@@ -121,7 +135,7 @@ const Kiosk = () => {
           ajiltan={ajiltan}
           token={token}
           ref={khungulultRef}
-          zogsool={zogsool}
+          zogsool={parkingJagsaalt?.[0]}
           khungulukhTsag={khungulukhTsag}
         />
       ),
@@ -255,8 +269,9 @@ const Kiosk = () => {
         setSongogdsonData((prev) => {
           return {
             ...prev,
-            fitnessHungulult24: (zogsool?.undsenUne || 2000) * 24,
-            pay_amount: prev?.pay_amount - (zogsool?.undsenUne || 2000) * 24,
+            fitnessHungulult24: (parkingJagsaalt?.[0]?.undsenUne || 2000) * 24,
+            pay_amount:
+              prev?.pay_amount - (parkingJagsaalt?.[0]?.undsenUne || 2000) * 24,
           };
         });
       }
@@ -297,9 +312,8 @@ const Kiosk = () => {
         zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
         mashiniiDugaar: songogdsonData?.plate_number + " kiosk",
       };
-
-      if (zogsool?.zogsooliinDans) {
-        yavuulakhBody["dansniiDugaar"] = zogsool?.zogsooliinDans;
+      if (parkingJagsaalt?.[0]?.zogsooliinDans) {
+        yavuulakhBody["dansniiDugaar"] = parkingJagsaalt?.[0]?.zogsooliinDans;
       }
 
       uilchilgee(token)
@@ -556,26 +570,6 @@ const Kiosk = () => {
     }, 1000);
   };
 
-  useEffect(() => {
-    uilchilgee(token)
-      .get("/zogsoolJagsaalt", {
-        params: {
-          query: {
-            baiguullagiinId: baiguullaga?._id,
-            barilgiinId: barilgiinId,
-          },
-        },
-      })
-      .then((a) => {
-        if (a.data && a.data?.jagsaalt?.length > 0) {
-          setZogsool(a.data?.jagsaalt);
-        }
-      })
-      .catch((e) => {
-        aldaaBarigch(e);
-      });
-  }, [baiguullaga, token]);
-
   const eBarimtTsonkhruuShiljye = () => {
     setAlkham(2);
     setTimeout(() => {
@@ -619,8 +613,8 @@ const Kiosk = () => {
       {contextHolder}
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] px-[100px] text-center text-2xl text-[#00D987]">
         Төлбөр төлснөөс хойш{" "}
-        {zogsool?.find((e) => e?.garakhTsag)?.garakhTsag || 30} минут дотор та
-        зогсоолоос гараагүй бол төлбөр нэмэгдэж бодогдохыг анхаарна уу!
+        {parkingJagsaalt?.find((e) => e?.garakhTsag)?.garakhTsag || 30} минут
+        дотор та зогсоолоос гараагүй бол төлбөр нэмэгдэж бодогдохыг анхаарна уу!
       </div>
       {unshijBaina && (
         <div className="fixed left-0 top-0 z-[9999] flex h-full w-full items-center justify-center bg-white bg-opacity-40">
