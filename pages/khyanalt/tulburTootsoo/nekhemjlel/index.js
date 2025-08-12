@@ -2479,30 +2479,23 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.KhhurunguDuusakhSar = moment(ognoo)
           .endOf("month")
           .format("MM");
-        if (
-          zagvar &&
-          zagvar.nekhemjlekh &&
-          typeof zagvar.nekhemjlekh === "string"
-        ) {
-          zagvar.nekhemjlekh = zagvar.nekhemjlekh.replace(
+        
+          text = text?.replace(
             /<eneEkhlehUdur>/g,
             nekhemjlekh.eneEkhlehUdur || ""
           );
-          zagvar.nekhemjlekh = zagvar.nekhemjlekh.replace(
+          text = text?.replace(
             /<eneDuusakhUdur>/g,
             nekhemjlekh.eneDuusakhUdur || ""
           );
-          zagvar.nekhemjlekh = zagvar.nekhemjlekh.replace(
+          text = text?.replace(
             /&lt;eneEkhlehUdur&gt;/g,
             nekhemjlekh.eneEkhlehUdur || ""
           );
-          zagvar.nekhemjlekh = zagvar.nekhemjlekh.replace(
+          text = text?.replace(
             /&lt;eneDuusakhUdur&gt;/g,
             nekhemjlekh.eneDuusakhUdur || ""
           );
-        } else {
-          console.error("zagvar.nekhemjlekh is not available:", zagvar);
-        }
         var zuruuDun = 0;
         var tseverusDun = 0;
         var boxirusDun = 0;

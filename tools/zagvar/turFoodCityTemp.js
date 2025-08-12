@@ -6,7 +6,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
 
   return `
 
-  <div style="height: 100%; width: 100%; font-family: 'Times New Roman', serif; font-size: 10pt; line-height: 1.2;">
+  <div style="height: 100%; width: 100%; font-family: 'Arial', serif; font-size: 10pt; line-height: 1.2;">
   <style>
     p {
       margin: 0;
@@ -499,9 +499,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
     <div style="margin-left: 2rem;">
       <b>
         Санамж: Хугацаандаа төлөөгүй бол Гэрээний дагуу хоногийн 0.5% алданги төлөхийг анхааруулъя. <br/>
-        Төлбөрөө хугацаандаа төлсөнд баярлалаа. Гүйлгээний утга дээр регистрийн дугаар болон тайлбайн дугаар бичнэ үү. <br/>
+        Төлбөрөө хугацаандаа төлсөнд баярлалаа. <br/>
         <span style="color: red;">
-          Гүйлгээний утга дээр регистрийн дугаар болон тайлбайн дугаар бичнэ үү.
+          Гүйлгээний утга дээр регистрийн дугаар болон талбайн дугаар бичнэ үү.
         </span>
       </b>
     </div>
