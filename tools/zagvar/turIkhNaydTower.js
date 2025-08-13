@@ -149,7 +149,15 @@ const khatuuZagvarIkhNayd = (
         <p style="">Нэхэмжлэгч:</p>
         <div style="display: flex; font-size:12px; justify-content: space-between;">
           <span>Байгууллагын нэр:</span>
-          <span style="font-size:12px;">Их наяд Плаза ХХК
+          <span style="font-size:12px;">&nbsp;${
+            medeelel?.barilgiinId === "61e13558ccf0f605a3f09d3c"
+              ? "Шинэ тэрэг плаза"
+              : medeelel?.barilgiinId === "61d54c5748d9fcf140298137"
+              ? "Цэцэг төв"
+              : medeelel?.barilgiinId === "657955ac70280a9ebe8f11ef"
+              ? "Шинэст"
+              : "Их наяд Плаза ХХК"
+          }
           </span> 
         </div>
 
@@ -389,6 +397,7 @@ const khatuuZagvarIkhNayd = (
       </table>
     
     ${ashiglaltTable}
+    <p style="font-size:12px; margin-top: 20px; font-weight: bold;">Жич: Энэхүү нэхэмжлэх нь тооцоо нийлсэн акт биш төлбөр төлөгчийн эцсийн үлдэгдэл биш байж болно.</p>
   </div>`;
 };
 
