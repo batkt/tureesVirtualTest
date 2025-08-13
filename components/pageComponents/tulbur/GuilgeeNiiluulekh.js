@@ -570,13 +570,13 @@ function GuilgeeNiiluulekh(
               </Popconfirm>
             </div>
             {(geree?.aldangiinUldegdel || 0) > 0 && (
-              <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
+              <div className="box grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
                 <div className="col-span-4">{t("Алдангийн үлдэгдэл")}</div>
                 <div>{formatNumber(geree?.aldangiinUldegdel || 0, 2)}</div>
                 <div>{geree.talbainDugaar}</div>
-                <div className="text-right">
+                <div className="text-right text-green-600">
                   <input
-                    className="w-full rounded-md border bg-gray-200 px-2 text-right"
+                    className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700"
                     placeholder="Барьцаа дүн"
                     value={formatter(geree.tulsunAldangi)}
                     onDoubleClick={({ target }) =>
@@ -592,7 +592,7 @@ function GuilgeeNiiluulekh(
             {(geree?.baritsaaAvakhDun || 0) -
               (geree?.baritsaaniiUldegdel || 0) >
               0 && (
-              <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
+              <div className="box grid w-full grid-cols-3 rounded-md border bg-gray-100 p-1">
                 <div className="col-span-4">{t("Барьцааны үлдэгдэл")}</div>
                 <div>
                   {formatNumber(
@@ -602,9 +602,9 @@ function GuilgeeNiiluulekh(
                   )}
                 </div>
                 <div>{geree.talbainDugaar}</div>
-                <div className="text-right">
+                <div className="text-right text-green-600">
                   <input
-                    className="w-full rounded-md border bg-gray-200 px-2 text-right"
+                    className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700"
                     placeholder={t("Барьцаа дүн")}
                     value={formatter(geree.baritsaaTulbur)}
                     onDoubleClick={({ target }) =>
@@ -628,7 +628,7 @@ function GuilgeeNiiluulekh(
                 <div>{geree.talbainDugaar}</div>
                 <div className="text-right text-green-600">
                   <input
-                    className="w-full rounded-md border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700 "
+                    className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700 "
                     placeholder={t("Төлөх дүн")}
                     value={formatter(geree.tureesiinTulbur)}
                     onDoubleClick={({ target }) =>

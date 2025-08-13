@@ -464,7 +464,7 @@ function GereeBaiguulakh({ token, data }) {
       loading={waiting}
       fixedZagvarNeegdsenEsekh={gereekharakhTovch}
     >
-      <div className="box col-span-12 p-5">
+      <div className="col-span-12 p-5 box">
         <div className="px-10">
           <Steps onChange={onChange} current={current}>
             {steps.map((item, index) => (
@@ -479,8 +479,8 @@ function GereeBaiguulakh({ token, data }) {
             ))}
           </Steps>
         </div>
-        <div className="mt-3 grid grid-cols-12 gap-6">
-          <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
+        <div className="grid grid-cols-12 gap-6 mt-3">
+          <div className="col-span-12 p-2 mt-3 bg-gray-50 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
             <currentItem.content
               t={t}
               next={next}
@@ -582,11 +582,11 @@ function GereeBaiguulakh({ token, data }) {
                 })}
               </Select>
             )}
-            <div className="flex w-full flex-col items-center justify-center gap-10">
+            <div className="flex flex-col items-center justify-center w-full gap-10 dark:bg-white">
               <div>
                 {current === 0 && gereeniiZagvar?.ner && (
                   <>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 ">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: gereeniiZagvar?.zuunTolgoi,
@@ -617,11 +617,11 @@ function GereeBaiguulakh({ token, data }) {
                           : ""
                       }
                       key={`alkhamiinGereeniiZagvar${index}`}
-                      className="group relative flex w-full flex-row rounded-md p-1 dark:text-white"
+                      className="relative flex flex-row w-full p-1 rounded-md group "
                     >
                       <div
-                        className="sun-editor-editable w-full text-center text-white dark:bg-gray-700"
-                        dangerouslySetInnerHTML={{ __html: mur.zaalt }}
+                        className="w-full text-center text-white sun-editor-editable "
+                        dangerouslySetInnerHTML={{ __html: mur.zaalt }} 
                       />
                     </div>
                   );
@@ -702,7 +702,7 @@ function GereeBaiguulakh({ token, data }) {
                             : ""
                         }
                         key={`alkhamiinAktiinZagvar${index}`}
-                        className="group relative flex w-full flex-row rounded-md"
+                        className="relative flex flex-row w-full rounded-md group"
                       >
                         <div
                           className="w-full"
