@@ -2,7 +2,15 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Loader from "./loader";
-import { Button, Drawer, Switch, Tooltip, Alert, message, notification } from "antd";
+import {
+  Button,
+  Drawer,
+  Switch,
+  Tooltip,
+  Alert,
+  message,
+  notification,
+} from "antd";
 import {
   CalendarOutlined,
   CloseOutlined,
@@ -33,51 +41,54 @@ import SanalKhuseltIlgeekh from "./tolgoi/SanalKhuseltIlgeekh";
 import { useTranslation } from "react-i18next";
 import Snowfall from "react-snowfall";
 
-
 const saveOfflinePayment = async (paymentData) => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('turees-db', 2);
-    
+    const request = indexedDB.open("turees-db", 2);
+
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      if (!db.objectStoreNames.contains('offline-payments')) {
-        db.createObjectStore('offline-payments', { keyPath: 'id', autoIncrement: true });
+      if (!db.objectStoreNames.contains("offline-payments")) {
+        db.createObjectStore("offline-payments", {
+          keyPath: "id",
+          autoIncrement: true,
+        });
       }
     };
-    
+
     request.onsuccess = (event) => {
       const db = event.target.result;
-      const tx = db.transaction('offline-payments', 'readwrite');
-      const store = tx.objectStore('offline-payments');
-      
+      const tx = db.transaction("offline-payments", "readwrite");
+      const store = tx.objectStore("offline-payments");
+
       const addRequest = store.add({
         ...paymentData,
         timestamp: Date.now(),
-        synced: false
+        synced: false,
       });
-      
+
       addRequest.onsuccess = () => resolve(addRequest.result);
       addRequest.onerror = () => reject(addRequest.error);
     };
-    
+
     request.onerror = () => reject(request.error);
   });
 };
 
 const getPendingPayments = async () => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('turees-db', 2);
-    
+    const request = indexedDB.open("turees-db", 2);
+
     request.onsuccess = (event) => {
       const db = event.target.result;
-      const tx = db.transaction('offline-payments', 'readonly');
-      const store = tx.objectStore('offline-payments');
-      
+      const tx = db.transaction("offline-payments", "readonly");
+      const store = tx.objectStore("offline-payments");
+
       const getAllRequest = store.getAll();
-      getAllRequest.onsuccess = () => resolve(getAllRequest.result.filter(p => !p.synced));
+      getAllRequest.onsuccess = () =>
+        resolve(getAllRequest.result.filter((p) => !p.synced));
       getAllRequest.onerror = () => reject(getAllRequest.error);
     };
-    
+
     request.onerror = () => reject(request.error);
   });
 };
@@ -126,151 +137,176 @@ function Admin({
   const [showSidehelpBar, setShowSidehelpBar] = useState(false);
   const { i18n, t } = useTranslation();
 
-const [isOnline, setIsOnline] = useState(navigator.onLine); // Initialize with actual status
-const [focusaasGarsan, setFocusaasGarsan] = useState(false);
-const [isOffline, setIsOffline] = useState(!navigator.onLine);
-const [pendingPayments, setPendingPayments] = useState([]);
-const [syncStatus, setSyncStatus] = useState('idle');
-const [offlinePayments, setOfflinePayments] = useState([]);
-
-useEffect(() => {
-  const handleOnline = async () => {
-    setIsOffline(false);
-    setIsOnline(true);
-    setSyncStatus('syncing');
-
-    if ('serviceWorker' in navigator) {
-      try {
-        const registration = await navigator.serviceWorker.ready;
-        if ('sync' in window.ServiceWorkerRegistration.prototype) {
-          await registration.sync.register('sync-payments');
-          await registration.sync.register('sync-cars');
-        } else {
-          navigator.serviceWorker.controller?.postMessage({ type: 'TRIGGER_SYNC', tag: 'sync-payments' });
-          navigator.serviceWorker.controller?.postMessage({ type: 'TRIGGER_SYNC', tag: 'sync-cars' });
-        }
-      } catch (error) {
-        console.error('Failed to register background sync:', error);
-      }
-    }
-  };
-
-  const handleOffline = () => {
-    setIsOffline(true);
-    setIsOnline(false);
-    setSyncStatus('idle');
-  };
-
-  setIsOffline(!navigator.onLine);
-  setIsOnline(navigator.onLine);
-
-  window.addEventListener('online', handleOnline);
-  window.addEventListener('offline', handleOffline);
-
-  return () => {
-    window.removeEventListener('online', handleOnline);
-    window.removeEventListener('offline', handleOffline);
-  };
-}, []);
+  const [isOnline, setIsOnline] = useState(navigator.onLine); // Initialize with actual status
+  const [focusaasGarsan, setFocusaasGarsan] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [pendingPayments, setPendingPayments] = useState([]);
+  const [syncStatus, setSyncStatus] = useState("idle");
+  const [offlinePayments, setOfflinePayments] = useState([]);
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
+    const handleOnline = async () => {
+      setIsOffline(false);
+      setIsOnline(true);
+      setSyncStatus("syncing");
+
+      if ("serviceWorker" in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.ready;
+          if ("sync" in window.ServiceWorkerRegistration.prototype) {
+            await registration.sync.register("sync-payments");
+            await registration.sync.register("sync-cars");
+          } else {
+            navigator.serviceWorker.controller?.postMessage({
+              type: "TRIGGER_SYNC",
+              tag: "sync-payments",
+            });
+            navigator.serviceWorker.controller?.postMessage({
+              type: "TRIGGER_SYNC",
+              tag: "sync-cars",
+            });
+          }
+        } catch (error) {
+          console.error("Failed to register background sync:", error);
+        }
+      }
+    };
+
+    const handleOffline = () => {
+      setIsOffline(true);
+      setIsOnline(false);
+      setSyncStatus("idle");
+    };
+
+    setIsOffline(!navigator.onLine);
+    setIsOnline(navigator.onLine);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
       const handler = (event) => {
         const { data } = event;
 
-        if (data?.type === 'PAYMENT_SAVED_OFFLINE') {
-          console.log('Payment saved offline:', data.payment);
+        if (data?.type === "PAYMENT_SAVED_OFFLINE") {
+          console.log("Payment saved offline:", data.payment);
 
           // Update React state
-          setOfflinePayments(prev => [...prev, data.payment]);
+          setOfflinePayments((prev) => [...prev, data.payment]);
 
-          message.info(t("Төлбөр offline-д хадгалагдлаа, Интернет холбогдох үед төлөв өөрчлөгдөх болно. Төлбөрийн цонхийг хаахад болно."), 10);
+          message.info(
+            t(
+              "Төлбөр offline-д хадгалагдлаа, Интернет холбогдох үед төлөв өөрчлөгдөх болно. Төлбөрийн цонхийг хаахад болно."
+            ),
+            10
+          );
         }
       };
 
-      navigator.serviceWorker.addEventListener('message', handler);
+      navigator.serviceWorker.addEventListener("message", handler);
       return () => {
-        navigator.serviceWorker.removeEventListener('message', handler);
+        navigator.serviceWorker.removeEventListener("message", handler);
       };
     }
   }, []);
 
+  useEffect(() => {
+    loadPendingPayments();
+  }, []);
 
-useEffect(() => {
-  loadPendingPayments();
-}, []);
+  // Fetch pending payments from service worker
+  async function getPendingPayments() {
+    return new Promise((resolve) => {
+      if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+        const messageChannel = new MessageChannel();
+        messageChannel.port1.onmessage = (event) => {
+          resolve(event.data.payments || []);
+        };
+        navigator.serviceWorker.controller.postMessage(
+          { type: "GET_PENDING_PAYMENTS" },
+          [messageChannel.port2]
+        );
+      } else {
+        resolve([]);
+      }
+    });
+  }
 
-// Fetch pending payments from service worker
-async function getPendingPayments() {
-  return new Promise((resolve) => {
-    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-      const messageChannel = new MessageChannel();
-      messageChannel.port1.onmessage = (event) => {
-        resolve(event.data.payments || []);
-      };
-      navigator.serviceWorker.controller.postMessage(
-        { type: 'GET_PENDING_PAYMENTS' }, 
-        [messageChannel.port2]
-      );
-    } else {
-      resolve([]);
+  async function loadPendingPayments() {
+    try {
+      const pending = await getPendingPayments();
+      setPendingPayments(pending);
+    } catch (error) {
+      console.error("Failed to load pending payments:", error);
     }
-  });
-}
-
-async function loadPendingPayments() {
-  try {
-    const pending = await getPendingPayments();
-    setPendingPayments(pending);
-  } catch (error) {
-    console.error('Failed to load pending payments:', error);
   }
-}
 
-async function triggerManualSync() {
-  if ('serviceWorker' in navigator && navigator.onLine) {
-    setSyncStatus('syncing');
-    navigator.serviceWorker.controller?.postMessage({ type: 'TRIGGER_SYNC' });
-  } else {
-    message.warning('Интернет холболт байхгүй байна');
+  async function triggerManualSync() {
+    if ("serviceWorker" in navigator && navigator.onLine) {
+      setSyncStatus("syncing");
+      navigator.serviceWorker.controller?.postMessage({ type: "TRIGGER_SYNC" });
+    } else {
+      message.warning("Интернет холболт байхгүй байна");
+    }
   }
-}
 
-const getPaymentStatus = (payment) => {
-  if (payment?.synced) {
+  const getPaymentStatus = (payment) => {
+    if (payment?.synced) {
+      return (
+        <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+          Төлөгдсөн
+        </span>
+      );
+    }
+
+    if (payment?.retryCount >= 5) {
+      return (
+        <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">
+          <svg className="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+              clipRule="evenodd"
+            ></path>
+          </svg>
+          Алдаа гарлаа
+        </span>
+      );
+    }
+
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-        Төлөгдсөн
-      </span>
-    );
-  }
-
-  if (payment?.retryCount >= 5) {
-    return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-        <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+      <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
+        <svg
+          className="mr-1 h-3 w-3 animate-spin"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          ></path>
         </svg>
-        Алдаа гарлаа
+        Шинэчлэлт хүлээгдэж байна ({payment.retryCount || 0}/5)
       </span>
     );
-  }
-
-  return (
-    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-      <svg className="w-3 h-3 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-      </svg>
-      Шинэчлэлт хүлээгдэж байна ({payment.retryCount || 0}/5)
-    </span>
-  );
-};
+  };
 
   function getOS() {
-    if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+    if (typeof window === "undefined" || typeof navigator === "undefined") {
       return null;
     }
-    var userAgent = navigator.userAgent,
+    var userAgent =
+        typeof navigator !== "undefined" ? navigator.userAgent : undefined,
       platform = navigator.platform,
       macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"],
       windowsPlatforms = ["Win32", "Win64", "Windows", "WinCE"],
@@ -283,14 +319,15 @@ const getPaymentStatus = (payment) => {
     } else if (windowsPlatforms.indexOf(platform) !== -1) {
       os = "/AnyDeskWindows.exe";
     } else if (/Android/.test(userAgent)) {
-      os = "https://play.google.com/store/apps/details?id=com.anydesk.anydeskandroid";
+      os =
+        "https://play.google.com/store/apps/details?id=com.anydesk.anydeskandroid";
     } else if (!os && /Linux/.test(platform)) {
       os = "https://anydesk.com/en/downloads/linux";
     }
     return os;
   }
   function onClickSearch() {
-    if (typeof document === 'undefined') return; // Safety check
+    if (typeof document === "undefined") return; // Safety check
     if (mSearch) {
       const search = document.getElementById("search");
       document.getElementById("mobileSearch").classList.remove("hidden");
@@ -367,11 +404,21 @@ const getPaymentStatus = (payment) => {
       }}
       className="relative min-h-screen w-screen overflow-hidden bg-green-600 px-3 pb-5 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4"
     >
-      {syncStatus === 'syncing' && (
-        <div className="fixed top-16 left-0 right-0 z-50 bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded">
+      {syncStatus === "syncing" && (
+        <div className="fixed left-0 right-0 top-16 z-50 mb-4 rounded border-l-4 border-blue-500 bg-blue-100 p-4 text-blue-700">
           <div className="flex items-center">
-            <svg className="animate-spin h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            <svg
+              className="mr-2 h-5 w-5 animate-spin"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              ></path>
             </svg>
             <p className="text-sm font-medium">Шинэчлэл хийгдэж байна...</p>
           </div>
@@ -386,7 +433,7 @@ const getPaymentStatus = (payment) => {
           showIcon
         />
       )}
-      
+
       <Drawer
         placement={"right"}
         closable={false}
@@ -398,11 +445,11 @@ const getPaymentStatus = (payment) => {
       >
         <Tuslamj />
       </Drawer>
-      
+
       {moment(new Date()).format("MM") === "12" ? (
         <Snowfall images={images} radius={[5, 30]} snowflakeCount={250} />
       ) : null}
-      
+
       <div
         onClick={(e) => e.stopPropagation()}
         className={`fixed top-1/3 z-50 flex h-48 items-center transition-all ${
@@ -484,7 +531,7 @@ const getPaymentStatus = (payment) => {
               }`}
               onClick={() => {
                 const osUrl = getOS();
-                if (osUrl && typeof window !== 'undefined') {
+                if (osUrl && typeof window !== "undefined") {
                   window.location.assign(osUrl);
                 }
                 setShowSidehelpBar(false);
@@ -506,14 +553,14 @@ const getPaymentStatus = (payment) => {
           </div>
         </div>
       </div>
-      
+
       <Head>
         <title>{t(title)}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
+
       <Updater />
-      
+
       <div className="flex items-center justify-between py-4">
         {dedKhuudas && (
           <button
@@ -598,7 +645,7 @@ const getPaymentStatus = (payment) => {
           </button>
         )}
       </div>
-      
+
       {!dedKhuudas && (
         <NTses
           khuudasnuud={khuudasnuud}
@@ -614,7 +661,7 @@ const getPaymentStatus = (payment) => {
           barilgiinId={barilgiinId}
         />
       )}
-      
+
       {!dedKhuudas && (
         <MTses
           visible={visible}
@@ -622,14 +669,14 @@ const getPaymentStatus = (payment) => {
           khuudasniiNer={khuudasniiNer}
         />
       )}
-      
+
       <h2
         id="garchig"
         className="-mt-4 ml-3 flex text-base font-semibold text-white md:hidden"
       >
         {t(title)}
       </h2>
-      
+
       <div
         className={`rounded-3xl bg-gray-100 dark:bg-gray-800 md:px-2 ${
           dedKhuudas ? "w-full" : "main"
@@ -925,14 +972,12 @@ const getPaymentStatus = (payment) => {
                     </svg>
                   </button>
                 </div>
-                
               </div>
             </div>
           </div>
         </div>
       )}
     </div>
-    
   );
 }
 export default Admin;
