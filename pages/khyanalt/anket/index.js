@@ -391,7 +391,10 @@ function Anket({ token }) {
   }
 
   useEffect(() => {
-    form.getFieldInstance("ner").focus();
+    const field = form.getFieldInstance?.("ner");
+    if (field) {
+      field.focus();
+    }
   }, []);
 
   const focuser = useCallback((e) => {
