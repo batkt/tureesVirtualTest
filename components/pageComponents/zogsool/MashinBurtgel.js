@@ -188,13 +188,12 @@ function MashinBurtgel(
     }
     if (khungulultiinTurul === "togtmolTsag") {
       lastData.khungulujEkhlesenOgnoo = new Date();
-      if (
-        dataOrjIrsenEsekh === false ||
-        !lastData?.uldegdelKhungulukhKhugatsaa
-      ) {
+
+      if (!lastData?.uldegdelKhungulukhKhugatsaa) {
         lastData.uldegdelKhungulukhKhugatsaa = lastData.khungulukhKhugatsaa;
       }
     }
+
     if (lastData.turul === "Гэрээт") {
       lastData.gereetTulburBodokhEsekh = gereetTulburBodokhEsekh;
       lastData.tulburBodokhTsagEkhlekh = gereetTulburBodokhEsekh
@@ -286,6 +285,15 @@ function MashinBurtgel(
   }
 
   const tsagValue = Form.useWatch("tsagiinTurul", form);
+
+  useEffect(() => {
+    if (data) {
+      form.setFieldsValue({
+        khungulukhKhugatsaa:
+          data.uldegdelKhungulukhKhugatsaa ?? data.khungulukhKhugatsaa ?? 0,
+      });
+    }
+  }, [data, form]);
 
   return (
     <Form
@@ -504,12 +512,7 @@ function MashinBurtgel(
                   },
                 ]}
               >
-                <Select
-                  onChange={() => {
-                    form.setFieldValue("khungulukhKhugatsaa", undefined);
-                  }}
-                  placeholder={t("Цагийн төрөл сонгоно уу")}
-                >
+                <Select placeholder={t("Цагийн төрөл сонгоно уу")}>
                   {["Сараар", "Өдрөөр"].map((a) => (
                     <Select.Option key={a} value={a}>
                       {t(a)}
@@ -537,6 +540,7 @@ function MashinBurtgel(
                   />
                 </Form.Item>
               )}
+
               {dotorGadnaTsagEsekh && (
                 <Form.Item label={t("Зогсоолын төрөл")} name="zogsooliinTurul">
                   <Select placeholder={t("Зогсоолын төрөл сонгоно уу!")}>
