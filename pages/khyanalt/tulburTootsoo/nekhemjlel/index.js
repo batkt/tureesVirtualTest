@@ -2377,7 +2377,10 @@ function tulburTootsoo({ token }) {
         );
 
         nekhemjlekh.baritsaaUldegdelNuat = formatNumber(
-          nekhemjlekh.baritsaaUldegdelNuat
+          (nekhemjlekh.baritsaaUldegdel / 1.1) * 0.1
+        );
+        nekhemjlekh.baritsaaUldegdelNuatgui = formatNumber(
+          nekhemjlekh.baritsaaUldegdel - nekhemjlekh.baritsaaUldegdelNuat || 0
         );
         nekhemjlekh.khevlesenOgnoo = moment().format("YYYY-MM-DD");
 
