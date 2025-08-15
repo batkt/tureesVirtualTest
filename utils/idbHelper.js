@@ -1,7 +1,7 @@
 import { openDB as idbOpen } from 'idb';
 
 const DB_NAME = 'OfflineAuthDB';
-const DB_VERSION = 7;
+const DB_VERSION = 8;
 
 export const STORES = {
   AUTH: 'authStore',

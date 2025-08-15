@@ -13,12 +13,12 @@ async function getDB() {
   if (dbInstance) return dbInstance;
 
   try {
-    let currentVersion = 7;
+    let currentVersion = 8;
 
     try {
       const existingDBs = await indexedDB.databases?.();
       const existingDB = existingDBs?.find(db => db.name === DB_NAME);
-      currentVersion = existingDB?.version || 7;
+      currentVersion = existingDB?.version || 8;
     } catch (e) {
       console.log('Could not check existing databases, using default version');
     }

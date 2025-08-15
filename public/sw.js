@@ -1,24 +1,24 @@
 const DB_NAME = 'turees-db';
-const DB_VERSION = 8; // Increment version to force upgrade
+const DB_VERSION = 8;
 const STORES = {
   USER: 'user',
   PAYMENTS: 'offline-payments',
 };
 
-function upgradeDB(db, oldVersion, newVersion) {
-  console.log(`DB upgrade from version ${oldVersion} to ${newVersion}`);
-  
-  if (!db.objectStoreNames.contains(STORES.USER)) {
+function upgradeDB(db) {
+  const stores = db.objectStoreNames;
+
+  if (!stores.contains(STORES.USER)) {
     console.log('Creating USER store');
     db.createObjectStore(STORES.USER);
   }
-  
-  if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
+
+  if (!stores.contains(STORES.PAYMENTS)) {
     console.log('Creating PAYMENTS store');
     db.createObjectStore(STORES.PAYMENTS, { keyPath: 'id', autoIncrement: true });
   }
-  
-  console.log('Available stores after upgrade:', Array.from(db.objectStoreNames));
+
+  console.log('Stores after upgrade:', Array.from(db.objectStoreNames));
 }
 
 function openIndexedDB() {
@@ -27,30 +27,20 @@ function openIndexedDB() {
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      const oldVersion = event.oldVersion;
-      const newVersion = event.newVersion;
-      
-      console.log(`DB upgrade needed from version ${oldVersion} to ${newVersion}`);
-      console.log('Existing stores before upgrade:', Array.from(db.objectStoreNames));
-      
-      upgradeDB(db, oldVersion, newVersion);
+      console.log(`Upgrading DB from version ${event.oldVersion} to ${event.newVersion}`);
+      upgradeDB(db);
     };
 
     request.onsuccess = (event) => {
       const db = event.target.result;
-      console.log('DB opened successfully', { 
-        stores: Array.from(db.objectStoreNames), 
-        version: db.version 
-      });
-      
-      // Validate that both stores exist
-      if (!db.objectStoreNames.contains(STORES.USER)) {
-        console.error('USER store missing after DB open!');
-      }
-      if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-        console.error('PAYMENTS store missing after DB open!');
-      }
-      
+
+      // Close connections when the page/tab is closed to prevent blocking future upgrades
+      db.onversionchange = () => {
+        console.warn('DB version change detected, closing old connection');
+        db.close();
+      };
+
+      console.log('DB opened successfully:', { version: db.version, stores: Array.from(db.objectStoreNames) });
       resolve(db);
     };
 
@@ -59,18 +49,12 @@ function openIndexedDB() {
       reject(event.target.error);
     };
 
-    request.onblocked = (event) => {
-      console.warn('DB open blocked - another connection is preventing upgrade');
-      // Try to resolve anyway after a delay
-      setTimeout(() => {
-        console.log('Attempting to resolve blocked DB connection');
-        const retryRequest = indexedDB.open(DB_NAME, DB_VERSION);
-        retryRequest.onsuccess = (e) => resolve(e.target.result);
-        retryRequest.onerror = (e) => reject(e.target.error);
-      }, 1000);
+    request.onblocked = () => {
+      console.warn('DB upgrade blocked by another connection. Close other tabs or windows using this DB.');
     };
   });
 }
+
 
 const CACHE_NAME = 'offline-login-v1';
 const API_CACHE_NAME = 'api-cache-v1';
