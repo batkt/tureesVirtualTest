@@ -61,6 +61,7 @@ function tulburTootsoo({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   }, []);
+  const ref = useRef(null);
   const printRef = React.useRef(null);
   const printExcelRef = React.useRef(null);
   const dunZasvarRef = React.useRef(null);
