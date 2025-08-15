@@ -1629,22 +1629,22 @@ function togloom1() {
                 placement="bottom"
                 content={
                   <div className="flex flex-col gap-2">
-                    {khaalga.map((a, index) => {
-                      return (
-                        <div
-                          onClick={() => {
-                            khaaltNeey(a);
-                            setKhaaltPopoverNeegdsen(false);
-                          }}
-                          className="cursor-pointer select-none rounded-lg bg-green-300 p-2 dark:bg-gray-600 dark:text-gray-200"
-                        >
-                          {t("Хаалт") + (index + 1)}
-                        </div>
-                      );
-                    })}
+                    {(Array.isArray(khaalga) ? khaalga : []).map((a, index) => (
+                      <div
+                        key={index} // add key here
+                        onClick={() => {
+                          khaaltNeey(a);
+                          setKhaaltPopoverNeegdsen(false);
+                        }}
+                        className="cursor-pointer select-none rounded-lg bg-green-300 p-2 dark:bg-gray-600 dark:text-gray-200"
+                      >
+                        {t("Хаалт") + (index + 1)}
+                      </div>
+                    ))}
                   </div>
                 }
               >
+
                 <Button type="primary">
                   <span>{t("Хаалт нээх")}</span>
                 </Button>

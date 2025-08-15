@@ -121,9 +121,8 @@ function index({ token }) {
     Aos.init({ duration: 1000 }, { once: true });
   });
 
-  useEffect(() => {
+   useEffect(() => {
     setSetgegdel("");
-    inputRef.current.focus();
   }, [daalgavar?._id]);
 
   function scrollTogsgolruu() {

@@ -204,16 +204,23 @@ function AjiltanBurtgel({ token }) {
     baiguullagiinId: ajiltan?.baiguullagiinId,
   });
   const [neesenEsekh, setNeesenEsekh] = useState(false);
-  useEffect(() => {
-    barilgiinId;
-    setKhariltsagchKhuudaslalt((a) => ({
-      ...a,
-      khuudasniiDugaar: 1,
-    }));
-  }, [barilgiinId]);
-  useEffect(() => {
-    formRef.current.resetFields();
-  }, [isValidating]);
+
+    // Update page number when barilgiinId changes
+    useEffect(() => {
+      if (!barilgiinId) return; // only run if barilgiinId exists
+      setKhariltsagchKhuudaslalt((prev) => ({
+        ...prev,
+        khuudasniiDugaar: 1,
+      }));
+    }, [barilgiinId]);
+
+    // Reset form fields safely when isValidating changes
+    useEffect(() => {
+      if (formRef.current) {
+        formRef.current.resetFields(); // only call if ref exists
+      }
+    }, [isValidating]);
+
 
   const khyanaltiinDun = [
     {
