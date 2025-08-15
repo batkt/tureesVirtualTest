@@ -1,13 +1,14 @@
 import { openDB as idbOpen } from 'idb';
 
 const DB_NAME = 'OfflineAuthDB';
-const DB_VERSION = 8;
+const DB_VERSION = 9;
 
-export const STORES = {
-  AUTH: 'authStore',
-  USER: 'userStore',
+const STORES = {
+  USER: 'user',
+  PAYMENTS: 'offline-payments',
+  AUTH: 'auth', // Add missing AUTH store
+  CACHE: 'cache' // Add missing CACHE store
 };
-
 export async function openDB() {
   return idbOpen(DB_NAME, DB_VERSION, {
     upgrade(db) {

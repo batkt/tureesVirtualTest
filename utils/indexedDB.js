@@ -1,18 +1,20 @@
 import { openDB as idbOpen } from 'idb';
 
-const DB_NAME = 'turees-db';
-const DB_VERSION = 8;
+const DB_NAME = 'OfflineAuthDB';
+const DB_VERSION = 9; // Increment version to force upgrade
 
-export const STORES = {
+const STORES = {
   USER: 'user',
   PAYMENTS: 'offline-payments',
+  AUTH: 'auth', // Add missing AUTH store
+  CACHE: 'cache' // Add missing CACHE store
 };
 
 export async function openDB() {
   try {
     const db = await idbOpen(DB_NAME, DB_VERSION, {
       upgrade(db, oldVersion, newVersion, transaction) {
-        console.log(`DB upgrade from ${oldVersion} to ${newVersion}`);
+        console.log(`Upgrading database from version ${oldVersion} to ${newVersion}`);
         
         // Create USER store if it doesn't exist
         if (!db.objectStoreNames.contains(STORES.USER)) {
@@ -23,21 +25,35 @@ export async function openDB() {
         // Create PAYMENTS store if it doesn't exist
         if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
           console.log('Creating PAYMENTS store');
-          db.createObjectStore(STORES.PAYMENTS, {
-            keyPath: 'id',
-            autoIncrement: true,
+          db.createObjectStore(STORES.PAYMENTS, { 
+            keyPath: 'id', 
+            autoIncrement: true 
           });
         }
+        
+        // Create AUTH store if it doesn't exist
+        if (!db.objectStoreNames.contains(STORES.AUTH)) {
+          console.log('Creating AUTH store');
+          db.createObjectStore(STORES.AUTH);
+        }
+        
+        // Create CACHE store if it doesn't exist
+        if (!db.objectStoreNames.contains(STORES.CACHE)) {
+          console.log('Creating CACHE store');
+          db.createObjectStore(STORES.CACHE);
+        }
+        
+        console.log('Available stores after upgrade:', [...db.objectStoreNames]);
       },
       blocked() {
-        console.warn('Database upgrade blocked by another connection');
+        console.warn('Database upgrade blocked - close other tabs using this database');
       },
       blocking() {
         console.warn('This connection is blocking a database upgrade');
       },
     });
     
-    console.log('Database opened successfully', {
+    console.log('Database opened successfully:', {
       name: db.name,
       version: db.version,
       stores: [...db.objectStoreNames]
@@ -45,12 +61,12 @@ export async function openDB() {
     
     return db;
   } catch (error) {
-    console.error('Failed to open database:', error);
+    console.error('Failed to open IndexedDB:', error);
     throw error;
   }
 }
 
-// Debug function to check database state
+// Debug function to verify database state
 export async function debugDatabase() {
   try {
     const db = await openDB();
@@ -59,24 +75,11 @@ export async function debugDatabase() {
     console.log('Database version:', db.version);
     console.log('Object stores:', [...db.objectStoreNames]);
     
-    // Check if stores exist
-    console.log('USER store exists:', db.objectStoreNames.contains(STORES.USER));
-    console.log('PAYMENTS store exists:', db.objectStoreNames.contains(STORES.PAYMENTS));
-    
-    // Try to access each store
-    try {
-      const tx = db.transaction([STORES.USER], 'readonly');
-      console.log('USER store accessible: true');
-    } catch (e) {
-      console.error('USER store not accessible:', e.message);
-    }
-    
-    try {
-      const tx = db.transaction([STORES.PAYMENTS], 'readonly');
-      console.log('PAYMENTS store accessible: true');
-    } catch (e) {
-      console.error('PAYMENTS store not accessible:', e.message);
-    }
+    // Check each store
+    Object.entries(STORES).forEach(([key, storeName]) => {
+      const exists = db.objectStoreNames.contains(storeName);
+      console.log(`${key} store (${storeName}) exists:`, exists);
+    });
     
     db.close();
   } catch (error) {
@@ -84,7 +87,41 @@ export async function debugDatabase() {
   }
 }
 
-// Enhanced save user function with error handling
+// Force database recreation if needed
+export async function recreateDatabase() {
+  try {
+    console.log('Deleting existing database...');
+    
+    // Delete the database
+    await new Promise((resolve, reject) => {
+      const deleteReq = indexedDB.deleteDatabase(DB_NAME);
+      deleteReq.onsuccess = () => {
+        console.log('Database deleted successfully');
+        resolve();
+      };
+      deleteReq.onerror = () => {
+        console.error('Failed to delete database:', deleteReq.error);
+        reject(deleteReq.error);
+      };
+      deleteReq.onblocked = () => {
+        console.warn('Database deletion blocked - close all tabs and try again');
+        reject(new Error('Database deletion blocked'));
+      };
+    });
+    
+    // Recreate the database
+    const newDb = await openDB();
+    console.log('Database recreated successfully');
+    newDb.close();
+    
+    return true;
+  } catch (error) {
+    console.error('Failed to recreate database:', error);
+    return false;
+  }
+}
+
+// Save token and user info object to USER store
 export async function saveUser(token, info) {
   try {
     const db = await openDB();
@@ -97,6 +134,7 @@ export async function saveUser(token, info) {
   }
 }
 
+// Get token and user info from USER store
 export async function getUser() {
   try {
     const db = await openDB();
@@ -105,7 +143,7 @@ export async function getUser() {
     return { token, info };
   } catch (error) {
     console.error('Failed to get user:', error);
-    throw error;
+    return { token: null, info: null };
   }
 }
 
@@ -121,61 +159,30 @@ export async function clearUser() {
   }
 }
 
-export async function getAuthData() {
-  try {
-    const { info } = await getUser();
-    if (!info) return null;
-
-    return {
-      username: info.username ?? null,
-      password: info.password ?? null,
-      timestamp: info.timestamp ?? null,
-      remember: info.remember ?? false,
-    };
-  } catch (error) {
-    console.error('Failed to get auth data:', error);
-    return null;
-  }
-}
-
-export async function getUserData() {
-  try {
-    const { token, info } = await getUser();
-    if (!info) return null;
-
-    return {
-      userData: info,
-      token,
-    };
-  } catch (error) {
-    console.error('Failed to get user data:', error);
-    return null;
-  }
-}
-
-// Enhanced offline payment functions with better error handling
-export async function saveOfflinePayment({ token = null, data = {} } = {}) {
+// Enhanced offline payment functions
+export async function saveOfflinePayment({ token = null, data = {}, synced = false } = {}) {
   try {
     const db = await openDB();
-    const createdAt = new Date().toISOString();
-    const result = await db.add(STORES.PAYMENTS, {
-      token,
-      data,
-      createdAt,
-      synced: false,
-    });
-    console.log('Offline payment saved with ID:', result);
-    return result;
-  } catch (error) {
-    console.error('Failed to save offline payment:', error);
     
-    // Check if the store exists
-    const db = await openDB();
+    // Verify the PAYMENTS store exists
     if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
       console.error('PAYMENTS store does not exist!');
       throw new Error('PAYMENTS object store not found');
     }
     
+    const paymentData = {
+      token,
+      data,
+      createdAt: new Date().toISOString(),
+      synced,
+      retryCount: 0
+    };
+    
+    const result = await db.add(STORES.PAYMENTS, paymentData);
+    console.log('Offline payment saved with ID:', result);
+    return result;
+  } catch (error) {
+    console.error('Failed to save offline payment:', error);
     throw error;
   }
 }
@@ -184,7 +191,7 @@ export async function getOfflinePayments() {
   try {
     const db = await openDB();
     
-    // Check if store exists before trying to access it
+    // Check if store exists before accessing
     if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
       console.warn('PAYMENTS store does not exist, returning empty array');
       return [];
@@ -211,38 +218,5 @@ export async function deleteOfflinePayment(id) {
   }
 }
 
-// Utility function to force database recreation (use with caution)
-export async function recreateDatabase() {
-  try {
-    // Close any existing connections
-    const db = await idbOpen(DB_NAME, DB_VERSION);
-    db.close();
-    
-    // Delete the database
-    await new Promise((resolve, reject) => {
-      const deleteReq = indexedDB.deleteDatabase(DB_NAME);
-      deleteReq.onsuccess = () => {
-        console.log('Database deleted successfully');
-        resolve();
-      };
-      deleteReq.onerror = () => {
-        console.error('Failed to delete database');
-        reject(deleteReq.error);
-      };
-      deleteReq.onblocked = () => {
-        console.warn('Database deletion blocked');
-        reject(new Error('Database deletion blocked'));
-      };
-    });
-    
-    // Recreate the database
-    const newDb = await openDB();
-    console.log('Database recreated successfully');
-    newDb.close();
-    
-    return true;
-  } catch (error) {
-    console.error('Failed to recreate database:', error);
-    return false;
-  }
-}
+// Export STORES for use in other files
+export { STORES };

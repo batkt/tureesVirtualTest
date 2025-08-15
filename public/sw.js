@@ -1,5 +1,5 @@
 const DB_NAME = 'turees-db';
-const DB_VERSION = 8;
+const DB_VERSION = 9;
 const STORES = {
   USER: 'user',
   PAYMENTS: 'offline-payments',
