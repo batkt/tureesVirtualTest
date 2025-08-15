@@ -112,6 +112,11 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const initializeServiceWorker = async () => {
+    if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
+      console.warn("Service Worker not supported or not on client side");
+      return;
+    }
+
     try {
       await registerServiceWorker();
       console.log("Service Worker initialized");
@@ -119,6 +124,7 @@ export const AuthProvider = ({ children }) => {
       console.warn("Service Worker initialization failed:", error);
     }
   };
+
 
   const initializeAuthState = async () => {
     if (typeof window === "undefined") return; // prevent SSR crash

@@ -10,7 +10,6 @@ import "../services/i18n";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-   
     registerServiceWorker();
   }, []);
 

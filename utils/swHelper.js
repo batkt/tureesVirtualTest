@@ -1,4 +1,4 @@
-// utils/registerServiceWorker.js
+
 class ServiceWorkerHelper {
   constructor() {
     this.swRegistration = null;
