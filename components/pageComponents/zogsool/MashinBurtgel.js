@@ -132,6 +132,7 @@ function MashinBurtgel(
   );
 
   const dataOrjIrsenEsekh = !!data ? true : false;
+  const isEditMode = !!data; // Define isEditMode at component level
 
   // function mashiniiFormatSolyo(value) {
   //   const too = value.replace(/[^0-9]/g, "").slice(0, 4);
@@ -159,38 +160,49 @@ function MashinBurtgel(
 
   function garya() {
     const values = form.getFieldsValue();
-    if (
-      compareFields(values, data, [
-        "turul",
-        "ezemshigchiinUtas",
-        "dugaar",
-        "ezemshigchiinNer",
-        "ezemshigchiinRegister",
-      ])
-    )
-      Modal.confirm({
-        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
-        okText: t("Тийм"),
-        cancelText: t("Үгүй"),
-        onOk: destroy,
-      });
-    else destroy();
+
+    if (isEditMode) {
+      values.uldegdelKhungulukhKhugatsaa = data.uldegdelKhungulukhKhugatsaa;
+
+      const updatedFields = getChangedFields(values, data);
+      save(updatedFields);
+    } else {
+      save(values);
+    }
+
+    destroy();
   }
 
   function onFinish() {
     const lastData = form.getFieldsValue();
-    (lastData.ekhlekhOgnoo = ognoo[0]?.format("YYYY-MM-DD 00:00:00")),
-      (lastData.duusakhOgnoo = ognoo[1]?.format("YYYY-MM-DD 23:59:59")),
-      (lastData.barilgiinId = barilgiinId);
+
+    lastData.ekhlekhOgnoo = ognoo[0]?.format("YYYY-MM-DD 00:00:00");
+    lastData.duusakhOgnoo = ognoo[1]?.format("YYYY-MM-DD 23:59:59");
+    lastData.barilgiinId = barilgiinId;
+
     if (!!geree) {
       lastData.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;
       lastData.gereeniiDugaar = geree?.gereeniiDugaar;
     }
+
     if (khungulultiinTurul === "togtmolTsag") {
       lastData.khungulujEkhlesenOgnoo = new Date();
 
-      if (!lastData?.uldegdelKhungulukhKhugatsaa) {
+      // Only set uldegdelKhungulukhKhugatsaa for NEW records
+      // For existing records, preserve the current uldegdelKhungulukhKhugatsaa value
+      if (!isEditMode && !lastData?.uldegdelKhungulukhKhugatsaa) {
         lastData.uldegdelKhungulukhKhugatsaa = lastData.khungulukhKhugatsaa;
+      } else if (isEditMode) {
+        // For edit mode, preserve the original uldegdelKhungulukhKhugatsaa
+        // but make sure it doesn't exceed the new khungulukhKhugatsaa
+        const originalRemaining = data.uldegdelKhungulukhKhugatsaa || 0;
+        const newTotal = lastData.khungulukhKhugatsaa || 0;
+
+        // If remaining time is greater than new total time, set remaining to new total
+        lastData.uldegdelKhungulukhKhugatsaa = Math.min(
+          originalRemaining,
+          newTotal
+        );
       }
     }
 
@@ -209,6 +221,7 @@ function MashinBurtgel(
         ? tulburBodokhTsagNemelt[1].format("HH:mm")
         : null;
     }
+
     const method = lastData?._id ? updateMethod : createMethod;
     method("mashin", token, lastData).then(({ data }) => {
       if (data === "Amjilttai") {
@@ -217,6 +230,7 @@ function MashinBurtgel(
         destroy();
       }
     });
+
     if (
       ajiltan?.erkh === "Admin" ||
       ajiltan?.tokhirgoo?.mashniiDugaarZasakhEsekh
@@ -289,8 +303,8 @@ function MashinBurtgel(
   useEffect(() => {
     if (data) {
       form.setFieldsValue({
-        khungulukhKhugatsaa:
-          data.uldegdelKhungulukhKhugatsaa ?? data.khungulukhKhugatsaa ?? 0,
+        khungulukhKhugatsaa: data.khungulukhKhugatsaa ?? 0, // always full time
+        uldegdelKhungulukhKhugatsaa: data.uldegdelKhungulukhKhugatsaa ?? 0, // leftover
       });
     }
   }, [data, form]);
@@ -512,7 +526,12 @@ function MashinBurtgel(
                   },
                 ]}
               >
-                <Select placeholder={t("Цагийн төрөл сонгоно уу")}>
+                <Select
+                  onChange={() => {
+                    form.setFieldValue("khungulukhKhugatsaa", undefined);
+                  }}
+                  placeholder={t("Цагийн төрөл сонгоно уу")}
+                >
                   {["Сараар", "Өдрөөр"].map((a) => (
                     <Select.Option key={a} value={a}>
                       {t(a)}
