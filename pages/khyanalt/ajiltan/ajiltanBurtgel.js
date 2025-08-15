@@ -46,9 +46,23 @@ function AjiltanBurtgel({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
+  
   const formRef = useRef();
   const zurag = useRef();
   const empty = useRef();
+  
+
+  const input1Ref = useRef();
+  const input2Ref = useRef();
+  const input3Ref = useRef();
+  const input4Ref = useRef();
+  const input5Ref = useRef();
+  const input6Ref = useRef();
+  const input7Ref = useRef();
+  const input8Ref = useRef();
+  const input9Ref = useRef();
+  const khadgalyaButtonRef = useRef();
+  
   const { t } = useTranslation();
   const router = useRouter();
   const { ajiltan, barilgiinId } = useAuth();
@@ -73,39 +87,47 @@ function AjiltanBurtgel({ token }) {
   const [neesenEsekh, setNeesenEsekh] = useState(false);
 
   useEffect(() => {
-    document.getElementById("input1").focus();
+    if (input1Ref.current) {
+      input1Ref.current.focus();
+    }
   }, []);
 
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
       e.preventDefault();
+      let nextElement;
+      
       switch (e.target.id) {
         case "input1":
-          document.getElementById("input2").focus();
+          nextElement = input2Ref.current;
           break;
         case "input2":
-          document.getElementById("input3").focus();
+          nextElement = input3Ref.current;
           break;
         case "input3":
-          document.getElementById("input4").focus();
+          nextElement = input4Ref.current;
           break;
         case "input4":
-          document.getElementById("input5").focus();
+          nextElement = input5Ref.current;
           break;
         case "input5":
-          document.getElementById("input6").focus();
+          nextElement = input6Ref.current;
           break;
         case "input7":
-          document.getElementById("input8").focus();
+          nextElement = input8Ref.current;
           break;
         case "input8":
-          document.getElementById("input9").focus();
+          nextElement = input9Ref.current;
           break;
         case "input9":
-          document.getElementById("khadgalyaButton").focus();
+          nextElement = khadgalyaButtonRef.current;
           break;
         default:
           break;
+      }
+      
+      if (nextElement) {
+        nextElement.focus();
       }
     }
   }, []);

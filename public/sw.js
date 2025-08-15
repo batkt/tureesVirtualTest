@@ -1,11 +1,12 @@
 const DB_NAME = 'turees-db';
-const DB_VERSION = 7;
+const DB_VERSION = 8; // Increment version to force upgrade
 const STORES = {
   USER: 'user',
   PAYMENTS: 'offline-payments',
 };
+
 function upgradeDB(db, oldVersion, newVersion) {
-  console.log(`Upgrading DB from version ${oldVersion} to ${newVersion}`);
+  console.log(`DB upgrade from version ${oldVersion} to ${newVersion}`);
   
   if (!db.objectStoreNames.contains(STORES.USER)) {
     console.log('Creating USER store');
@@ -16,61 +17,61 @@ function upgradeDB(db, oldVersion, newVersion) {
     console.log('Creating PAYMENTS store');
     db.createObjectStore(STORES.PAYMENTS, { keyPath: 'id', autoIncrement: true });
   }
+  
+  console.log('Available stores after upgrade:', Array.from(db.objectStoreNames));
 }
 
 function openIndexedDB() {
   return new Promise((resolve, reject) => {
-    console.log(`Opening IndexedDB: ${DB_NAME} version ${DB_VERSION}`);
-    
     const request = indexedDB.open(DB_NAME, DB_VERSION);
-    
+
     request.onupgradeneeded = (event) => {
-      console.log('DB upgrade needed');
-      upgradeDB(event.target.result, event.oldVersion, event.newVersion);
+      const db = event.target.result;
+      const oldVersion = event.oldVersion;
+      const newVersion = event.newVersion;
+      
+      console.log(`DB upgrade needed from version ${oldVersion} to ${newVersion}`);
+      console.log('Existing stores before upgrade:', Array.from(db.objectStoreNames));
+      
+      upgradeDB(db, oldVersion, newVersion);
     };
-    
+
     request.onsuccess = (event) => {
       const db = event.target.result;
       console.log('DB opened successfully', { 
-        stores: Array.from(db.objectStoreNames),
+        stores: Array.from(db.objectStoreNames), 
         version: db.version 
       });
       
-      const hasUser = db.objectStoreNames.contains(STORES.USER);
-      const hasPayments = db.objectStoreNames.contains(STORES.PAYMENTS);
-      
-      if (!hasUser || !hasPayments) {
-        console.warn('Missing stores detected', { hasUser, hasPayments });
-        db.close();
-        
-        const newVersion = db.version + 1;
-        console.log(`Forcing upgrade to version ${newVersion}`);
-        
-        const fixRequest = indexedDB.open(DB_NAME, newVersion);
-        fixRequest.onupgradeneeded = (e) => {
-          upgradeDB(e.target.result, e.oldVersion, e.newVersion);
-        };
-        fixRequest.onsuccess = (e) => {
-          console.log('DB fixed and opened successfully');
-          resolve(e.target.result);
-        };
-        fixRequest.onerror = (e) => {
-          console.error('Failed to fix DB:', e.target.error);
-          reject(e.target.error);
-        };
-      } else {
-        resolve(db);
+      // Validate that both stores exist
+      if (!db.objectStoreNames.contains(STORES.USER)) {
+        console.error('USER store missing after DB open!');
       }
+      if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
+        console.error('PAYMENTS store missing after DB open!');
+      }
+      
+      resolve(db);
     };
+
     request.onerror = (event) => {
       console.error('Failed to open DB:', event.target.error);
       reject(event.target.error);
-    };    
-    request.onblocked = () => {
+    };
+
+    request.onblocked = (event) => {
       console.warn('DB open blocked - another connection is preventing upgrade');
+      // Try to resolve anyway after a delay
+      setTimeout(() => {
+        console.log('Attempting to resolve blocked DB connection');
+        const retryRequest = indexedDB.open(DB_NAME, DB_VERSION);
+        retryRequest.onsuccess = (e) => resolve(e.target.result);
+        retryRequest.onerror = (e) => reject(e.target.error);
+      }, 1000);
     };
   });
 }
+
 const CACHE_NAME = 'offline-login-v1';
 const API_CACHE_NAME = 'api-cache-v1';
 const AUTH_CACHE_NAME = 'auth-cache-v1';
@@ -85,16 +86,27 @@ const urlsToCache = [
   '/MN.png',
   '/UK.png',
 ];
+
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing');
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('Caching offline assets');
-      return cache.addAll(urlsToCache);
-    })
+    Promise.all([
+      caches.open(CACHE_NAME).then((cache) => {
+        console.log('Caching offline assets');
+        return cache.addAll(urlsToCache);
+      }),
+      // Initialize database during install to ensure it's ready
+      openIndexedDB().then((db) => {
+        console.log('Database initialized during install');
+        db.close();
+      }).catch((error) => {
+        console.error('Failed to initialize database during install:', error);
+      })
+    ])
   );
   self.skipWaiting();
 });
+
 self.addEventListener('activate', (event) => {
   console.log('Service Worker activating');
   event.waitUntil(
@@ -109,16 +121,19 @@ self.addEventListener('activate', (event) => {
             })
         )
       ),
+      // Ensure database is properly initialized
       openIndexedDB().then((db) => {
-        console.log('Database initialized in service worker');
+        console.log('Database verified in activate event');
+        console.log('Available stores:', Array.from(db.objectStoreNames));
         db.close();
       }).catch((error) => {
-        console.error('Failed to initialize database in service worker:', error);
+        console.error('Failed to verify database in activate event:', error);
       })
     ])
   );
   self.clients.claim();
 });
+
 function serializeHeaders(headers) {
   const headerObj = {};
   for (const [key, value] of headers.entries()) {
@@ -126,6 +141,7 @@ function serializeHeaders(headers) {
   }
   return headerObj;
 }
+
 function deserializeHeaders(headerObj) {
   const headers = new Headers();
   for (const [key, value] of Object.entries(headerObj)) {
@@ -133,6 +149,7 @@ function deserializeHeaders(headerObj) {
   }
   return headers;
 }
+
 self.addEventListener('fetch', (event) => {
   const requestUrl = new URL(event.request.url);
   let responsePromise;
@@ -163,6 +180,14 @@ self.addEventListener('fetch', (event) => {
           
           try {
             const db = await openIndexedDB();
+            
+            // Verify store exists before attempting transaction
+            if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
+              console.error('PAYMENTS store not found! Available stores:', Array.from(db.objectStoreNames));
+              db.close();
+              throw new Error('PAYMENTS store not available');
+            }
+            
             const tx = db.transaction(STORES.PAYMENTS, 'readwrite');
             const store = tx.objectStore(STORES.PAYMENTS); 
             
@@ -215,7 +240,7 @@ self.addEventListener('fetch', (event) => {
               offline: true, 
               message: 'Request saved for background sync',
               timestamp: new Date().toISOString(),
-              success: true // Add this flag for UI to recognize success
+              success: true
             }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
           );
@@ -257,17 +282,14 @@ self.addEventListener('fetch', (event) => {
   
   event.respondWith(responsePromise);
 });
+
 self.addEventListener('sync', (event) => {
   console.log('Background sync triggered:', event.tag);
   if (event.tag === 'sync-payments') {
     event.waitUntil(syncPaymentsFromSW());
   }
 });
-self.clients.matchAll().then(clients => {
-  clients.forEach(client => {
-    client.postMessage({ type: 'CACHE_UPDATED' });
-  });
-});
+
 self.addEventListener('message', (event) => {
   console.log('Service worker received message:', event.data);
   if (event.data?.type === 'TRIGGER_SYNC') {
@@ -275,30 +297,54 @@ self.addEventListener('message', (event) => {
   } else if (event.data?.type === 'GET_PENDING_PAYMENTS') {
     getPendingPayments().then(payments => {
       event.ports[0].postMessage({ payments });
+    }).catch(error => {
+      console.error('Error in GET_PENDING_PAYMENTS message handler:', error);
+      event.ports[0].postMessage({ payments: [], error: error.message });
     });
   }
 });
+
 async function getPendingPayments() {
   try {
     const db = await openIndexedDB();
+    
+    // Check if the store exists
+    if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
+      console.warn('PAYMENTS store does not exist, returning empty array');
+      db.close();
+      return [];
+    }
+    
     const tx = db.transaction(STORES.PAYMENTS, 'readonly');
     const store = tx.objectStore(STORES.PAYMENTS);
+    
     const allPayments = await new Promise((resolve, reject) => {
       const getAllRequest = store.getAll();
       getAllRequest.onsuccess = () => resolve(getAllRequest.result);
       getAllRequest.onerror = () => reject(getAllRequest.error);
     });
+    
     db.close();
+    console.log('Retrieved pending payments:', allPayments.length);
     return allPayments;
   } catch (error) {
     console.error('Error getting pending payments:', error);
     return [];
   }
 }
+
 async function syncPaymentsFromSW() {
   console.log('Starting payment sync...');
   try {
     const db = await openIndexedDB();
+    
+    // Check if store exists
+    if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
+      console.warn('PAYMENTS store does not exist, cannot sync');
+      db.close();
+      return;
+    }
+    
     const tx = db.transaction(STORES.PAYMENTS, 'readwrite');
     const store = tx.objectStore(STORES.PAYMENTS);
     
