@@ -4,9 +4,14 @@ class ServiceWorkerHelper {
     this.isSupported = false; 
     this.onPaymentSavedOffline = null;
 
-    if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+    // Only check for service worker support on client side
+    if (this.isClientSide()) {
       this.isSupported = "serviceWorker" in navigator;
     }
+  }
+
+  isClientSide() {
+    return typeof window !== "undefined" && typeof navigator !== "undefined";
   }
 
   setPaymentSavedOfflineHandler(callback) {
@@ -14,8 +19,9 @@ class ServiceWorkerHelper {
   }
 
   async registerServiceWorker() {
-    if (!this.isSupported) {
-      console.warn("Service Worker is not supported in this browser");
+    // Early return if not on client side or not supported
+    if (!this.isClientSide() || !this.isSupported) {
+      console.warn("Service Worker is not supported or not on client side");
       return false;
     }
 
@@ -29,22 +35,11 @@ class ServiceWorkerHelper {
         this.swRegistration
       );
 
-      this.swRegistration.addEventListener("updatefound", () => {
-        const newWorker = this.swRegistration.installing;
-        newWorker.addEventListener("statechange", () => {
-          if (
-            newWorker.state === "installed" &&
-            navigator.serviceWorker.controller
-          ) {
-            this.onServiceWorkerUpdate();
-          }
-        });
-      });
+      // Set up update listener
+      this.setupUpdateListener();
 
-      navigator.serviceWorker.addEventListener(
-        "message",
-        this.handleServiceWorkerMessage
-      );
+      // Set up message listener
+      this.setupMessageListener();
 
       return true;
     } catch (error) {
@@ -53,8 +48,41 @@ class ServiceWorkerHelper {
     }
   }
 
+  setupUpdateListener() {
+    if (!this.swRegistration) return;
+
+    this.swRegistration.addEventListener("updatefound", () => {
+      const newWorker = this.swRegistration.installing;
+      if (newWorker) {
+        newWorker.addEventListener("statechange", () => {
+          if (
+            newWorker.state === "installed" &&
+            navigator.serviceWorker.controller
+          ) {
+            this.onServiceWorkerUpdate();
+          }
+        });
+      }
+    });
+  }
+
+  setupMessageListener() {
+    if (!this.isClientSide()) return;
+
+    navigator.serviceWorker.addEventListener(
+      "message",
+      this.handleServiceWorkerMessage
+    );
+  }
+
   handleServiceWorkerMessage = (event) => {
-    const { type, payment, data } = event.data || {};
+    // Ensure event and event.data exist
+    if (!event || !event.data) {
+      console.warn("Received invalid service worker message:", event);
+      return;
+    }
+
+    const { type, payment, data } = event.data;
 
     switch (type) {
       case "OFFLINE_LOGIN_SUCCESS":
@@ -63,17 +91,21 @@ class ServiceWorkerHelper {
 
       case "CACHE_UPDATED":
         console.log("Cache updated, refreshing page...");
-        window.location.reload();
+        if (this.isClientSide()) {
+          window.location.reload();
+        }
         break;
 
       case "SYNC_COMPLETED":
         console.log("Sync completed, refreshing page...");
-        window.location.reload();
+        if (this.isClientSide()) {
+          window.location.reload();
+        }
         break;
 
       case "PAYMENT_SAVED_OFFLINE":
         console.log("Payment saved offline:", payment);
-        if (this.onPaymentSavedOffline) {
+        if (this.onPaymentSavedOffline && typeof this.onPaymentSavedOffline === 'function') {
           this.onPaymentSavedOffline(payment);
         }
         break;
@@ -84,15 +116,31 @@ class ServiceWorkerHelper {
   };
 
   onServiceWorkerUpdate() {
-    if (confirm("A new version is available. Reload to update?")) {
+    if (!this.isClientSide()) return;
+    
+    // Use a more user-friendly approach
+    try {
+      if (confirm("A new version is available. Reload to update?")) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error showing update prompt:", error);
+      // Fallback to direct reload
       window.location.reload();
     }
   }
 
   async sendMessage(message) {
-    if (!this.isSupported || !navigator.serviceWorker.controller) {
+    if (!this.isClientSide() || !this.isSupported) {
+      console.warn("Cannot send message: not on client side or not supported");
       return false;
     }
+
+    if (!navigator.serviceWorker.controller) {
+      console.warn("No active service worker controller");
+      return false;
+    }
+
     try {
       navigator.serviceWorker.controller.postMessage(message);
       return true;
@@ -108,13 +156,18 @@ class ServiceWorkerHelper {
 
   isServiceWorkerActive() {
     return (
-      this.isSupported && typeof navigator !== "undefined" &&
-      navigator.serviceWorker.controller
+      this.isClientSide() &&
+      this.isSupported && 
+      navigator.serviceWorker.controller !== null
     );
   }
 
   async waitForServiceWorker() {
-    if (!this.isSupported) return false;
+    if (!this.isClientSide() || !this.isSupported) {
+      console.warn("Cannot wait for service worker: not supported or not on client side");
+      return false;
+    }
+
     try {
       await navigator.serviceWorker.ready;
       return true;
@@ -125,10 +178,15 @@ class ServiceWorkerHelper {
   }
 
   async unregisterServiceWorker() {
-    if (!this.swRegistration) return false;
+    if (!this.isClientSide() || !this.swRegistration) {
+      console.warn("Cannot unregister: not on client side or no registration");
+      return false;
+    }
+
     try {
       const result = await this.swRegistration.unregister();
       console.log("Service Worker unregistered:", result);
+      this.swRegistration = null; // Clear the registration
       return result;
     } catch (error) {
       console.error("Service Worker unregistration failed:", error);
@@ -137,7 +195,11 @@ class ServiceWorkerHelper {
   }
 
   async updateServiceWorker() {
-    if (!this.swRegistration) return false;
+    if (!this.isClientSide() || !this.swRegistration) {
+      console.warn("Cannot update: not on client side or no registration");
+      return false;
+    }
+
     try {
       await this.swRegistration.update();
       return true;
@@ -146,25 +208,100 @@ class ServiceWorkerHelper {
       return false;
     }
   }
+
+  // Method to safely get registration status
+  getRegistrationStatus() {
+    if (!this.isClientSide()) {
+      return { supported: false, registered: false, active: false };
+    }
+
+    return {
+      supported: this.isSupported,
+      registered: !!this.swRegistration,
+      active: this.isServiceWorkerActive(),
+    };
+  }
+
+  // Cleanup method for removing event listeners
+  cleanup() {
+    if (!this.isClientSide()) return;
+
+    try {
+      if (navigator.serviceWorker) {
+        navigator.serviceWorker.removeEventListener(
+          "message",
+          this.handleServiceWorkerMessage
+        );
+      }
+    } catch (error) {
+      console.error("Error during cleanup:", error);
+    }
+  }
 }
 
+// Create instance only on client side
 export const swHelper =
-  typeof window !== "undefined" ? new ServiceWorkerHelper() : null;
+  typeof window !== "undefined" && typeof navigator !== "undefined"
+    ? new ServiceWorkerHelper()
+    : null;
 
-export const registerServiceWorker = () =>
-  swHelper?.registerServiceWorker();
+// Export safe wrapper functions
+export const registerServiceWorker = async () => {
+  if (!swHelper) {
+    console.warn("Service Worker helper not available (likely SSR)");
+    return false;
+  }
+  return await swHelper.registerServiceWorker();
+};
 
-export const sendMessageToSW = (message) =>
-  swHelper?.sendMessage(message);
+export const sendMessageToSW = (message) => {
+  if (!swHelper) {
+    console.warn("Service Worker helper not available (likely SSR)");
+    return false;
+  }
+  return swHelper.sendMessage(message);
+};
 
-export const clearOfflineDataViaSW = () =>
-  swHelper?.clearOfflineData();
+export const clearOfflineDataViaSW = async () => {
+  if (!swHelper) {
+    console.warn("Service Worker helper not available (likely SSR)");
+    return false;
+  }
+  return await swHelper.clearOfflineData();
+};
 
-export const isServiceWorkerActive = () =>
-  swHelper?.isServiceWorkerActive();
+export const isServiceWorkerActive = () => {
+  if (!swHelper) {
+    return false;
+  }
+  return swHelper.isServiceWorkerActive();
+};
 
-export const waitForServiceWorker = () =>
-  swHelper?.waitForServiceWorker();
+export const waitForServiceWorker = async () => {
+  if (!swHelper) {
+    console.warn("Service Worker helper not available (likely SSR)");
+    return false;
+  }
+  return await swHelper.waitForServiceWorker();
+};
 
-export const updateServiceWorker = () =>
-  swHelper?.updateServiceWorker();
+export const updateServiceWorker = async () => {
+  if (!swHelper) {
+    console.warn("Service Worker helper not available (likely SSR)");
+    return false;
+  }
+  return await swHelper.updateServiceWorker();
+};
+
+export const getServiceWorkerStatus = () => {
+  if (!swHelper) {
+    return { supported: false, registered: false, active: false };
+  }
+  return swHelper.getRegistrationStatus();
+};
+
+export const cleanupServiceWorker = () => {
+  if (swHelper) {
+    swHelper.cleanup();
+  }
+};

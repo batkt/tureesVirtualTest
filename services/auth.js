@@ -20,7 +20,7 @@ import {
   attemptLogin,
   storeLoginData,
   clearOfflineData,
-  isOnline,
+  isOnline as utilsIsOnline,
   getCachedUserData,
   getCachedToken,
   hasValidOfflineAuth,
@@ -28,9 +28,14 @@ import {
 
 // Service worker helper
 import { registerServiceWorker } from "../utils/swHelper";
-if (typeof window !== "undefined") {
-  getCachedPermissionsData().then(console.log);
-}
+
+// Safe isOnline function that works in both client and server environments
+const isOnline = () => {
+  if (typeof window === "undefined" || typeof navigator === "undefined") {
+    return true; // Assume online during SSR
+  }
+  return navigator.onLine;
+};
 
 const AuthContext = createContext({});
 
@@ -86,14 +91,24 @@ export const AuthProvider = ({ children }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    initializeServiceWorker();
-    initializeAuthState();
-    setupNetworkListeners();
+    // Only run on client-side
+    if (typeof window !== "undefined") {
+      initializeServiceWorker();
+      initializeAuthState();
+      setupNetworkListeners();
+      
+      // Initialize cached permissions data
+      getCachedPermissionsData().then((data) => {
+        console.log("Cached permissions data:", data);
+      }).catch((error) => {
+        console.warn("Failed to get cached permissions data:", error);
+      });
 
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
+      return () => {
+        window.removeEventListener("online", handleOnline);
+        window.removeEventListener("offline", handleOffline);
+      };
+    }
   }, []);
 
   const initializeServiceWorker = async () => {
@@ -106,6 +121,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const initializeAuthState = async () => {
+    if (typeof window === "undefined") return; // prevent SSR crash
+    
     try {
       const d = parseCookies();
       const storedToken = d?.tureestoken;
@@ -127,8 +144,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const setupNetworkListeners = () => {
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
+    if (typeof window !== "undefined") {
+      window.addEventListener("online", handleOnline);
+      window.addEventListener("offline", handleOffline);
+    }
   };
 
   const handleOnline = () => {
