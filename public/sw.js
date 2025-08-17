@@ -193,14 +193,13 @@ self.addEventListener('fetch', (event) => {
               addRequest.onsuccess = () => {
                 console.log('Offline payment saved successfully');
                 
-                // Notify all clients about the saved payment
+                
                 self.clients.matchAll().then(clients => {
                   clients.forEach(client => {
                     client.postMessage({ 
                       type: 'PAYMENT_SAVED_OFFLINE',
                       payment: { ...paymentData, id: addRequest.result },
                       timestamp: new Date().toISOString(),
-                      reloadPage: true
                     });
                   });
                 });
@@ -422,7 +421,7 @@ async function syncPaymentsFromSW() {
     db.close();
     console.log(`Payment sync completed: ${successCount} successful, ${failureCount} failed`);
     
-    // Enhanced client notification with sync results
+    
     const clients = await self.clients.matchAll();
     clients.forEach(client => {
       client.postMessage({ 

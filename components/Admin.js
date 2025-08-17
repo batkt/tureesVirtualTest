@@ -194,33 +194,68 @@ function Admin({
   }, [isClient]);
 
   useEffect(() => {
-    if (!isClient) return;
-    
-    if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
-      const handler = (event) => {
-        const { data } = event;
+  if (!isClient) return;
 
-        if (data?.type === "PAYMENT_SAVED_OFFLINE") {
-          console.log("Payment saved offline:", data.payment);
+  let hasReloadedThisSession = false; // ✅ guard flag
 
-          // Update React state
-          setOfflinePayments((prev) => [...prev, data.payment]);
+  if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+    const handler = (event) => {
+      const { data } = event;
 
-          message.info(
-            t(
-              "Төлбөр offline-д хадгалагдлаа, Интернет холбогдох үед төлөв өөрчлөгдөх болно. Төлбөрийн цонхийг хаахад болно."
-            ),
-            10
+      if (data?.type === "PAYMENT_SAVED_OFFLINE") {
+        console.log("Payment saved offline:", data.payment);
+
+        setOfflinePayments((prev) => [...prev, data.payment]);
+
+        message.info(
+          t(
+            "Төлбөр offline-д хадгалагдлаа, Интернет холбогдох үед төлөв өөрчлөгдөх болно. Төлбөрийн цонхийг хаахад болно."
+          ),
+          10
+        );
+      }
+
+      if (data?.type === "SYNC_COMPLETED") {
+        console.log("Sync completed:", data.results);
+
+     
+        if (
+          navigator.onLine &&
+          data.results?.successful > 0 &&
+          !hasReloadedThisSession
+        ) {
+          hasReloadedThisSession = true; 
+          message.success(
+            `Төлбөрийн синк амжилттай (${data.results.successful})`,
+            5
           );
-        }
-      };
 
-      navigator.serviceWorker.addEventListener("message", handler);
-      return () => {
-        navigator.serviceWorker.removeEventListener("message", handler);
-      };
-    }
-  }, [isClient]);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } else if (data.results?.successful === 0) {
+          message.info("Синк хийх зүйл олдсонгүй", 5);
+        }
+
+        setSyncStatus("idle");
+        loadPendingPayments();
+      }
+    };
+
+    navigator.serviceWorker.addEventListener("message", handler);
+
+    const resetReloadGuard = () => {
+      hasReloadedThisSession = false;
+    };
+    window.addEventListener("offline", resetReloadGuard);
+
+    return () => {
+      navigator.serviceWorker.removeEventListener("message", handler);
+      window.removeEventListener("offline", resetReloadGuard);
+    };
+  }
+}, [isClient]);
+
 
   useEffect(() => {
     if (!isClient) return;
