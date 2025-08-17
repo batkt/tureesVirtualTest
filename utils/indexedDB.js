@@ -1,7 +1,7 @@
 import { openDB as idbOpen } from 'idb';
 
-const DB_NAME = 'OfflineAuthDB';
-const DB_VERSION = 9; // Increment version to force upgrade
+const DB_NAME = 'turees-db';
+const DB_VERSION = 9; 
 
 const STORES = {
   USER: 'user',
