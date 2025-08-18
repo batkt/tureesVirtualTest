@@ -7,7 +7,7 @@ import {
   Image,
   Popover,
 } from "antd";
-import React, { useMemo } from "react";
+import React, { useMemo, useState} from "react";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
@@ -57,6 +57,7 @@ function ShineTulbur(
   const [alkham, setAlkham] = React.useState(
     !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
   );
+  const [isProcessing, setIsProcessing] = useState(false);
   const [khaanbank, setTerminal] = React.useState(false);
   const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
   const [eBarimt, setEBarimt] = React.useState(null);
@@ -832,21 +833,32 @@ function ShineTulbur(
                   </div>
                 </div>
                 <div
-                  onClick={() => turulruuTooKhiikhFunction("khaan")}
+                  onClick={async () => {
+                    if (loading) return; 
+                    try {
+                      setLoading(true);
+                      await Promise.resolve(turulruuTooKhiikhFunction("khaan"));
+                    } catch (err) {
+                      console.error(err);
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
                   className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 dark:bg-gray-700 ${
-                    value.khaan > 0 ? "border-[3px] border-green-600" : null
-                  } `}
+                    value.khaan > 0 ? "border-[3px] border-green-600" : ""
+                  }`}
                 >
-                  {value.khaan > 0 ? (
-                    <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1">
-                      <div className="font-semibold">
-                        {formatNumber(value.khaan)}₮
-                      </div>
+                  {value.khaan > 0 && (
+                    <div className="absolute right-0 top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1">
+                      <div className="font-semibold">{formatNumber(value.khaan)}₮</div>
                     </div>
-                  ) : null}
-                  <BsFillCreditCardFill className="text-[30px] text-green-600" />
-                  <div className="text-lg font-bold text-green-600">Карт</div>
+                  )}
+                    <>
+                      <BsFillCreditCardFill className="text-[30px] text-green-600" />
+                      <div className="text-lg font-bold text-green-600">Карт</div>
+                    </>                  
                 </div>
+
               </div>
               <div className="flex gap-8">
                 <div
