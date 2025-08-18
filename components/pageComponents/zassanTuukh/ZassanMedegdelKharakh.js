@@ -87,7 +87,7 @@ function ZassanMedegdelKharakh(
       .filter((data) => data._id === id)
       .map((b) => b.ner);
   }
-  return (
+return (
     <>
       <div className="flex dark:text-gray-400">
         <div className="h-[600px] w-full overflow-y-scroll pr-3">
@@ -114,17 +114,19 @@ function ZassanMedegdelKharakh(
             </div>
           </div>
           <table className="w-full font-semibold">
-            <th className="flex border-b">
-              <td className="w-2/12 overflow-hidden p-1 text-center">
-                {t("Талбарын нэр")}
-              </td>
-              <td className="w-5/12 overflow-hidden p-1 text-center">
-                {t("Өмнөх утга")}
-              </td>
-              <td className="w-5/12 overflow-hidden p-1 text-center">
-                {t("Шинэ утга")}
-              </td>
-            </th>
+            <thead>
+              <tr className="flex border-b">
+                <th className="w-2/12 overflow-hidden p-1 text-center border-r">
+                  {t("Талбарын нэр")}
+                </th>
+                <th className="w-5/12 overflow-hidden p-1 text-center border-r">
+                  {t("Өмнөх утга")}
+                </th>
+                <th className="w-5/12 overflow-hidden p-1 text-center">
+                  {t("Шинэ утга")}
+                </th>
+              </tr>
+            </thead>
             <tbody>
               {data?.uurchlult
                 ?.filter(
@@ -152,20 +154,22 @@ function ZassanMedegdelKharakh(
                       ) : a.utganiiTurul === "object" &&
                         a.talbar === "zardluud" ? (
                         <table className="w-full">
-                          <th className="flex">
-                            <td className="w-1/3 overflow-hidden p-1 text-center">
-                              {t("Нэр")}
-                            </td>
-                            <td className="w-1/6 overflow-hidden p-1 text-center">
-                              {t("Төрөл")}
-                            </td>
-                            <td className="w-1/4 overflow-hidden p-1 text-center">
-                              {t("Үнэ")}
-                            </td>
-                            <td className="w-1/4 overflow-hidden p-1 text-center">
-                              {t("Төлөх дүн")}
-                            </td>
-                          </th>
+                          <thead>
+                            <tr className="flex">
+                              <th className="w-1/3 overflow-hidden p-1 text-center border-r">
+                                {t("Нэр")}
+                              </th>
+                              <th className="w-1/6 overflow-hidden p-1 text-center border-r">
+                                {t("Төрөл")}
+                              </th>
+                              <th className="w-1/4 overflow-hidden p-1 text-center border-r">
+                                {t("Үнэ")}
+                              </th>
+                              <th className="w-1/4 overflow-hidden p-1 text-center">
+                                {t("Төлөх дүн")}
+                              </th>
+                            </tr>
+                          </thead>
                           <tbody
                             className="overflow-y-scroll"
                             style={{ height: "calc(30vh - 15rem)" }}
@@ -186,11 +190,12 @@ function ZassanMedegdelKharakh(
                                       </td>
                                       <td className="w-1/4 overflow-hidden border-r p-1 text-right">
                                         {formatNumber(
-                                          b.turul === "Дурын" ? b.dun : b.tariff
+                                          b.turul === "Дурын" ? b.dun : b.tariff,
+                                          2
                                         )}
                                       </td>
                                       <td className="w-1/4 overflow-hidden p-1 text-right">
-                                        {formatNumber(b.tulukhDun)}
+                                        {formatNumber(b.tulukhDun, 2)}
                                       </td>
                                     </tr>
                                   ))
@@ -234,7 +239,8 @@ function ZassanMedegdelKharakh(
                                         {b.ner}
                                       </td>
                                       <td className="w-2/3 overflow-hidden p-1 text-center">
-                                        {b.utga}
+                                        {!isNaN(parseFloat(b.utga)) && isFinite(b.utga) ? 
+                                         formatNumber(b.utga, 2) : b.utga}
                                       </td>
                                     </tr>
                                   ))
@@ -292,16 +298,15 @@ function ZassanMedegdelKharakh(
                                         )}
                                       </td>
                                       <td className="w-1/6 overflow-hidden border-r p-1 text-center">
-                                        {b.khungulukhKhuvi}%
+                                        {formatNumber(b.khungulukhKhuvi, 2)}%
                                       </td>
                                       <td className="w-1/6 overflow-hidden border-r p-1 text-center">
                                         {b.turul === "turees"
                                           ? "Tүрээс"
                                           : b.turul}
                                       </td>
-
                                       <td className="w-1/6 overflow-hidden p-1 text-right">
-                                        {formatNumber(b.khungulultiinDun)}
+                                        {formatNumber(b.khungulultiinDun, 2)}
                                       </td>
                                     </tr>
                                   ))
@@ -317,7 +322,9 @@ function ZassanMedegdelKharakh(
                           </tbody>
                         </table>
                       ) : (
-                        a.umnukhUtga
+             
+                        !isNaN(parseFloat(a.umnukhUtga)) && isFinite(a.umnukhUtga) ? 
+                        formatNumber(a.umnukhUtga, 2) : a.umnukhUtga
                       )}
                     </td>
                     <td className="w-5/12 overflow-hidden border-r p-1 text-right">
@@ -371,11 +378,12 @@ function ZassanMedegdelKharakh(
                                       </td>
                                       <td className="w-1/4 overflow-hidden border-r p-1 text-right">
                                         {formatNumber(
-                                          b.turul === "Дурын" ? b.dun : b.tariff
+                                          b.turul === "Дурын" ? b.dun : b.tariff,
+                                          2
                                         )}
                                       </td>
                                       <td className="w-1/4 overflow-hidden p-1 text-right">
-                                        {formatNumber(b.tulukhDun)}
+                                        {formatNumber(b.tulukhDun, 2)}
                                       </td>
                                     </tr>
                                   ))
@@ -419,7 +427,7 @@ function ZassanMedegdelKharakh(
                                         {b.ner}
                                       </td>
                                       <td className="w-2/3 overflow-hidden p-1 text-center">
-                                        {b.utga}
+                                        {typeof b.utga === 'number' ? formatNumber(b.utga, 2) : b.utga}
                                       </td>
                                     </tr>
                                   ))
@@ -459,7 +467,9 @@ function ZassanMedegdelKharakh(
                           </tbody>
                         </div>
                       ) : (
-                        a.shineUtga
+                    
+                        !isNaN(parseFloat(a.shineUtga)) && isFinite(a.shineUtga) ? 
+                        formatNumber(a.shineUtga, 2) : a.shineUtga
                       )}
                     </td>
                   </tr>
