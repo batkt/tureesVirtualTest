@@ -544,17 +544,25 @@ function TalbaiBurtgekh({ token }) {
     else router.back();
   }
 
-  useEffect(() => {
-    function keyUp(e) {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        garya();
-      }
+useEffect(() => {
+  function keyUp(e) {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      garya();
     }
-    formRef.current.getFieldInstance("kod").focus();
-    document.addEventListener("keyup", keyUp);
-    return () => document.removeEventListener("keyup", keyUp);
-  }, []);
+  }
+
+
+  if (formRef.current) {
+    const fieldInstance = formRef.current.getFieldInstance("kod");
+    if (fieldInstance) {
+      fieldInstance.focus();
+    }
+  }
+  
+  document.addEventListener("keyup", keyUp);
+  return () => document.removeEventListener("keyup", keyUp);
+}, []);
 
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {

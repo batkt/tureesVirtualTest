@@ -3705,9 +3705,9 @@ function tulburTootsoo({ token }) {
                   className="w-1/3 lg:w-auto"
                   type="primary"
                   onClick={() =>
-                    turul === "SMS"
+                    turul === ""
                       ? smsZagvarNemya()
-                      : turul === "App"
+                      : turul === ""
                       ? smsZagvarNemya()
                       : router.push("/khyanalt/tulburTootsoo/nekhemjlel/new")
                   }
