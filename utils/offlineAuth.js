@@ -178,7 +178,7 @@ export async function storeLoginData(credentials, loginResult) {
     };
     await db.put(STORE_USER, info, "info");
 
-    // Store permissions if available
+
     if (loginResult.permissionsData) {
       await db.put(STORE_USER, loginResult.permissionsData, "permissionsData");
     }
@@ -187,7 +187,7 @@ export async function storeLoginData(credentials, loginResult) {
   });
 }
 
-// Get offline saved user info
+
 export async function getCachedUserData() {
   return withErrorHandling(async () => {
     const db = await getDB();
@@ -196,7 +196,7 @@ export async function getCachedUserData() {
   });
 }
 
-// Get offline saved token
+
 export async function getCachedToken() {
   return withErrorHandling(async () => {
     const db = await getDB();
@@ -204,7 +204,7 @@ export async function getCachedToken() {
   });
 }
 
-// Get cached permissions data
+
 export async function getCachedPermissionsData() {
   return withErrorHandling(async () => {
     const db = await getDB();
@@ -212,7 +212,7 @@ export async function getCachedPermissionsData() {
   });
 }
 
-// Check if offline auth data is valid (exists with username & password)
+
 export async function hasValidOfflineAuth() {
   try {
     const data = await getCachedUserData();
@@ -227,7 +227,7 @@ export async function clearOfflineData() {
   return withErrorHandling(async () => {
     const db = await getDB();
     
-    // Clear all user data
+
     const transaction = db.transaction([STORE_USER], 'readwrite');
     const store = transaction.objectStore(STORE_USER);
     
@@ -277,14 +277,13 @@ export async function attemptOfflineLogin({ nevtrekhNer, nuutsUg }) {
   };
 }
 
-// Utility to check if currently online (simple)
+
 export function isOnline() {
   return typeof navigator !== "undefined" && navigator.onLine;
 }
 
 export async function attemptLogin(credentials, onlineLoginFunc) {
   try {
-    // Try online login first
     const onlineResult = await onlineLoginFunc(credentials);
     return { success: true, mode: "online", data: onlineResult };
   } catch (onlineError) {
@@ -313,19 +312,15 @@ export async function attemptLogin(credentials, onlineLoginFunc) {
     }
   }
 }
-
-// Emergency cleanup function for development/debugging
 export async function emergencyCleanup() {
   try {
     console.log('Starting emergency cleanup...');
     
-    // Close database connection
+    
     if (dbInstance) {
       dbInstance.close();
       dbInstance = null;
     }
-    
-    // Clear localStorage if available
     if (typeof localStorage !== 'undefined') {
       const keys = Object.keys(localStorage);
       keys.forEach(key => {
@@ -335,8 +330,6 @@ export async function emergencyCleanup() {
         }
       });
     }
-    
-    // Clear sessionStorage if available
     if (typeof sessionStorage !== 'undefined') {
       const keys = Object.keys(sessionStorage);
       keys.forEach(key => {
@@ -346,8 +339,6 @@ export async function emergencyCleanup() {
         }
       });
     }
-    
-    // Delete database
     await deleteDB(DB_NAME);
     
     console.log('Emergency cleanup completed successfully');
@@ -357,17 +348,11 @@ export async function emergencyCleanup() {
     return false;
   }
 }
-
-// Health check function
 export async function healthCheck() {
   try {
     console.log('Running database health check...');
-    
-    // Test database connection
     const db = await getDB();
     console.log('✓ Database connection successful');
-    
-    // Test basic operations
     await db.put(STORE_USER, 'test', 'healthcheck');
     const result = await db.get(STORE_USER, 'healthcheck');
     await db.delete(STORE_USER, 'healthcheck');

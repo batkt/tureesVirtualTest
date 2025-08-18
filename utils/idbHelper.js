@@ -6,8 +6,8 @@ const DB_VERSION = 9;
 const STORES = {
   USER: 'user',
   PAYMENTS: 'offline-payments',
-  AUTH: 'auth', // Add missing AUTH store
-  CACHE: 'cache' // Add missing CACHE store
+  AUTH: 'auth', 
+  CACHE: 'cache'
 };
 export async function openDB() {
   return idbOpen(DB_NAME, DB_VERSION, {
@@ -28,14 +28,13 @@ export async function openDB() {
   });
 }
 
-// Save token and user info object to USER store
 export async function saveUser(token, info) {
   const db = await openDB();
   await db.put(STORES.USER, token, 'token');
   await db.put(STORES.USER, info, 'info');
 }
 
-// Get token and user info from USER store
+
 export async function getUser() {
   const db = await openDB();
   const token = await db.get(STORES.USER, 'token');
@@ -49,9 +48,7 @@ export async function clearUser() {
   await db.delete(STORES.USER, 'info');
 }
 
-// Payments helpers
 
-// Save payment offline; you can set synced true/false
 export async function saveOfflinePayment({ token = null, data = {}, synced = false } = {}) {
   const db = await openDB();
   const createdAt = new Date().toISOString();

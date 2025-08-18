@@ -34,7 +34,6 @@ function openIndexedDB() {
     request.onsuccess = (event) => {
       const db = event.target.result;
 
-      // Close connections when the page/tab is closed to prevent blocking future upgrades
       db.onversionchange = () => {
         console.warn('DB version change detected, closing old connection');
         db.close();
@@ -79,7 +78,7 @@ self.addEventListener('install', (event) => {
         console.log('Caching offline assets');
         return cache.addAll(urlsToCache);
       }),
-      // Initialize database during install to ensure it's ready
+     
       openIndexedDB().then((db) => {
         console.log('Database initialized during install');
         db.close();
@@ -105,7 +104,7 @@ self.addEventListener('activate', (event) => {
             })
         )
       ),
-      // Ensure database is properly initialized
+   
       openIndexedDB().then((db) => {
         console.log('Database verified in activate event');
         console.log('Available stores:', Array.from(db.objectStoreNames));
@@ -165,7 +164,7 @@ self.addEventListener('fetch', (event) => {
           try {
             const db = await openIndexedDB();
             
-            // Verify store exists before attempting transaction
+        
             if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
               console.error('PAYMENTS store not found! Available stores:', Array.from(db.objectStoreNames));
               db.close();
@@ -230,7 +229,7 @@ self.addEventListener('fetch', (event) => {
         }
       })();
     } else {
-      // GET requests handling remains the same
+   
       responsePromise = fetch(event.request)
         .then((response) => {
           if (response.ok) {
@@ -250,7 +249,7 @@ self.addEventListener('fetch', (event) => {
         });
     }
   } else {
-    // Static assets handling remains the same
+  
     responsePromise = caches.match(event.request).then((response) => {
       if (response) {
         console.log('Serving from cache:', event.request.url);
@@ -291,7 +290,7 @@ async function getPendingPayments() {
   try {
     const db = await openIndexedDB();
     
-    // Check if the store exists
+  
     if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
       console.warn('PAYMENTS store does not exist, returning empty array');
       db.close();

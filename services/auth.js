@@ -4,6 +4,7 @@ import React, {
   createContext,
   useMemo,
   useEffect,
+  useRef,
 } from "react";
 import { message } from "antd";
 import { setCookie, parseCookies } from "nookies";
@@ -15,7 +16,7 @@ import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { getCachedPermissionsData } from "../utils/offlineAuth";
-// Offline auth utilities
+
 import {
   attemptLogin,
   storeLoginData,
@@ -26,13 +27,11 @@ import {
   hasValidOfflineAuth,
 } from "../utils/offlineAuth";
 
-// Service worker helper
 import { registerServiceWorker } from "../utils/swHelper";
 
-// Safe isOnline function that works in both client and server environments
 const isOnline = () => {
   if (typeof window === "undefined" || typeof navigator === "undefined") {
-    return true; // Assume online during SSR
+    return true;
   }
   return navigator.onLine;
 };
@@ -78,57 +77,71 @@ export const useBarilga = () => {
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [isOfflineMode, setIsOfflineMode] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const [baiguulgiinErkhiinJagsaalt, setBaiguulgiinErkhiinJagsaalt] = useState([]);
+  
   const { ajiltan, ajiltanMutate } = useAjiltan(token);
-  const [baiguulgiinErkhiinJagsaalt, setBaiguulgiinErkhiinJagsaalt] = useState(
-    []
-  );
   const { baiguullaga, baiguullagaMutate } = useBaiguullaga(
     token,
     ajiltan?.baiguullagiinId
   );
   const { barilgaSoliyo, barilgiinId } = useBarilga();
-
   const { t } = useTranslation();
 
+  // Refs to prevent multiple initializations
+  const hasInitialized = useRef(false);
+  const networkListenersAttached = useRef(false);
+
+  // Set client flag on mount
   useEffect(() => {
-    // Only run on client-side
-    if (typeof window !== "undefined") {
-      initializeServiceWorker();
-      initializeAuthState();
+    setIsClient(true);
+  }, []);
+
+  // Initialize everything once on client side
+  useEffect(() => {
+    if (!isClient || hasInitialized.current) return;
+    
+    hasInitialized.current = true;
+    
+    const initializeApp = async () => {
+      await initializeServiceWorker();
+      await initializeAuthState();
       setupNetworkListeners();
       
-      // Initialize cached permissions data
-      getCachedPermissionsData().then((data) => {
-        console.log("Cached permissions data:", data);
-      }).catch((error) => {
-        console.warn("Failed to get cached permissions data:", error);
-      });
+      try {
+        const data = await getCachedPermissionsData();
+        console.log("Кэшинээс уншсан эрхийн өгөгдөл:", data);
+      } catch (error) {
+        console.warn("Кэшинээс эрхийн өгөгдөл авахад алдаа гарлаа:", error);
+      }
+    };
 
-      return () => {
+    initializeApp();
+
+    return () => {
+      if (networkListenersAttached.current) {
         window.removeEventListener("online", handleOnline);
         window.removeEventListener("offline", handleOffline);
-      };
-    }
-  }, []);
+        networkListenersAttached.current = false;
+      }
+    };
+  }, [isClient]);
 
   const initializeServiceWorker = async () => {
     if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
-      console.warn("Service Worker not supported or not on client side");
+      console.warn("Сервис воркер дэмжигдэхгүй байна");
       return;
     }
 
     try {
       await registerServiceWorker();
-      console.log("Service Worker initialized");
+      console.log("Сервис воркер амжилттай ажиллалаа");
     } catch (error) {
-      console.warn("Service Worker initialization failed:", error);
+      console.warn("Сервис воркерийн эхлэлт амжилтгүй:", error);
     }
   };
 
-
   const initializeAuthState = async () => {
-    if (typeof window === "undefined") return; // prevent SSR crash
-    
     try {
       const d = parseCookies();
       const storedToken = d?.tureestoken;
@@ -136,7 +149,7 @@ export const AuthProvider = ({ children }) => {
       if (!storedToken && !isOnline()) {
         const hasOfflineAuth = await hasValidOfflineAuth();
         if (hasOfflineAuth) {
-          message.info(t("Офлайн горимд нэвтрэх боломжтой"));
+          message.info(t("Оффлайн горимд нэвтрэх боломжтой"));
         }
       } else if (storedToken) {
         setToken(storedToken);
@@ -145,22 +158,24 @@ export const AuthProvider = ({ children }) => {
       const erkh = localStorage.getItem("baiguulgiinErkhiinJagsaalt");
       setBaiguulgiinErkhiinJagsaalt(JSON.parse(erkh) || []);
     } catch (error) {
-      console.error("Error initializing auth state:", error);
+      console.error("Нэвтрэх төлөв эхлүүлэхэд алдаа гарлаа:", error);
     }
   };
 
   const setupNetworkListeners = () => {
-    if (typeof window !== "undefined") {
-      window.addEventListener("online", handleOnline);
-      window.addEventListener("offline", handleOffline);
-    }
+    if (networkListenersAttached.current || typeof window === "undefined") return;
+    
+    networkListenersAttached.current = true;
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
   };
 
   const handleOnline = () => {
+    const wasOffline = isOfflineMode;
     setIsOfflineMode(false);
-    message.success(t("Интернэтэд холбогдлоо"));
+    message.success(t("Интернэт холбогдлоо"));
 
-    if (isOfflineMode) {
+    if (wasOffline) {
       syncOfflineData();
     }
   };
@@ -174,13 +189,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const syncOfflineData = async () => {
-    console.log("Syncing offline data...");
+    console.log("Оффлайн өгөгдөл синк хийж байна...");
     if (token) {
       try {
         ajiltanMutate();
         baiguullagaMutate();
       } catch (error) {
-        console.warn("Failed to sync data:", error);
+        console.warn("Өгөгдөл синк хийхэд алдаа гарлаа:", error);
       }
     }
   };
@@ -199,9 +214,7 @@ export const AuthProvider = ({ children }) => {
               );
               permissionsData = res.data;
             } catch (error) {
-              console.warn(
-                "Failed to fetch permissions, storing minimal offline permissions"
-              );
+              console.warn("Эрхийн мэдээлэл татахад алдаа гарлаа, оффлайн горимын эрх хадгалж байна");
               permissionsData = { moduluud: [], offlineFallback: true };
             }
 
@@ -218,9 +231,9 @@ export const AuthProvider = ({ children }) => {
 
               try {
                 await storeLoginData(khereglech, loginResult);
-                console.log("Offline login data stored successfully");
+                console.log("Оффлайн нэвтрэлтийн өгөгдөл амжилттай хадгалагдлаа");
               } catch (e) {
-                console.warn("Failed to store offline login data", e);
+                console.warn("Оффлайн нэвтрэлтийн өгөгдөл хадгалахад алдаа гарлаа", e);
               }
 
               resolve(loginResult);
@@ -288,7 +301,6 @@ export const AuthProvider = ({ children }) => {
     if (!isOffline && permissionsData) {
       ekhniiTsonkhruuOchyo(result, loginToken, setBaiguulgiinErkhiinJagsaalt);
     } else if (isOffline) {
-      // Offline: use cached permissions data from offlineAuth.js
       const offlinePermissions = permissionsData;
       if (offlinePermissions) {
         ekhniiTsonkhruuOchyo(
@@ -301,21 +313,22 @@ export const AuthProvider = ({ children }) => {
     }
 
     if (isOffline) {
-      message.success(t("Офлайн горимд амжилттай нэвтэрлээ"));
+      message.success(t("Оффлайн горимд амжилттай нэвтэрлээ"));
     } else {
       message.success(t("Амжилттай нэвтэрлээ"));
     }
   };
 
+  // Memoize the auth object with stable dependencies
   const auth = useMemo(
     () => ({
       newterya: async (khereglech) => {
         if (!khereglech.nevtrekhNer) {
-          message.warning(t("Нэвтрэх нэр талбарыг бөглөнө үү"));
+          message.warning(t("Нэвтрэх нэрийг бөглөнө үү"));
           return;
         }
         if (!khereglech.nuutsUg) {
-          message.warning(t("Нууц үг талбарыг бөглөнө үү"));
+          message.warning(t("Нууц үгийг бөглөнө үү"));
           return;
         }
 
@@ -338,10 +351,10 @@ export const AuthProvider = ({ children }) => {
               processSuccessfulLogin(loginResult.data, false);
             }
           } else {
-            message.error(loginResult.error || t("Нэвтрэх амжилтгүй"));
+            message.error(loginResult.error || t("Нэвтрэлт амжилтгүй боллоо"));
           }
         } catch (error) {
-          console.error("Login error:", error);
+          console.error("Нэвтрэх явцад алдаа гарлаа:", error);
           message.error(t("Нэвтрэх үед алдаа гарлаа"));
         }
       },
@@ -358,7 +371,7 @@ export const AuthProvider = ({ children }) => {
 
           window.location.href = "/";
         } catch (error) {
-          console.error("Logout error:", error);
+          console.error("Гарах үед алдаа гарлаа:", error);
           window.location.href = "/";
         }
       },
@@ -378,10 +391,10 @@ export const AuthProvider = ({ children }) => {
       clearOfflineDataOnly: async () => {
         try {
           await clearOfflineData();
-          message.success(t("Офлайн өгөгдөл устгагдлаа"));
+          message.success(t("Оффлайн өгөгдөл устгагдлаа"));
         } catch (error) {
-          console.error("Error clearing offline data:", error);
-          message.error(t("Офлайн өгөгдөл устгахад алдаа гарлаа"));
+          console.error("Оффлайн өгөгдөл устгахад алдаа гарлаа:", error);
+          message.error(t("Оффлайн өгөгдөл устгахад алдаа гарлаа"));
         }
       },
 
@@ -391,7 +404,7 @@ export const AuthProvider = ({ children }) => {
             await syncOfflineData();
             message.success(t("Өгөгдөл амжилттай синк хийгдлээ"));
           } catch (error) {
-            console.error("Sync error:", error);
+            console.error("Синк хийхэд алдаа гарлаа:", error);
             message.error(t("Синк хийхэд алдаа гарлаа"));
           }
         } else {
@@ -400,9 +413,7 @@ export const AuthProvider = ({ children }) => {
       },
 
       isOfflineMode,
-
       isOnline: isOnline(),
-
       token,
       ajiltan,
       baiguullaga,

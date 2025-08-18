@@ -6,8 +6,8 @@ const DB_VERSION = 9;
 const STORES = {
   USER: 'user',
   PAYMENTS: 'offline-payments',
-  AUTH: 'auth', // Add missing AUTH store
-  CACHE: 'cache' // Add missing CACHE store
+  AUTH: 'auth', 
+  CACHE: 'cache' 
 };
 
 export async function openDB() {
@@ -16,13 +16,13 @@ export async function openDB() {
       upgrade(db, oldVersion, newVersion, transaction) {
         console.log(`Upgrading database from version ${oldVersion} to ${newVersion}`);
         
-        // Create USER store if it doesn't exist
+        
         if (!db.objectStoreNames.contains(STORES.USER)) {
           console.log('Creating USER store');
           db.createObjectStore(STORES.USER);
         }
         
-        // Create PAYMENTS store if it doesn't exist
+        
         if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
           console.log('Creating PAYMENTS store');
           db.createObjectStore(STORES.PAYMENTS, { 
@@ -31,13 +31,13 @@ export async function openDB() {
           });
         }
         
-        // Create AUTH store if it doesn't exist
+      
         if (!db.objectStoreNames.contains(STORES.AUTH)) {
           console.log('Creating AUTH store');
           db.createObjectStore(STORES.AUTH);
         }
         
-        // Create CACHE store if it doesn't exist
+        
         if (!db.objectStoreNames.contains(STORES.CACHE)) {
           console.log('Creating CACHE store');
           db.createObjectStore(STORES.CACHE);
@@ -66,7 +66,7 @@ export async function openDB() {
   }
 }
 
-// Debug function to verify database state
+
 export async function debugDatabase() {
   try {
     const db = await openDB();
@@ -75,7 +75,7 @@ export async function debugDatabase() {
     console.log('Database version:', db.version);
     console.log('Object stores:', [...db.objectStoreNames]);
     
-    // Check each store
+    
     Object.entries(STORES).forEach(([key, storeName]) => {
       const exists = db.objectStoreNames.contains(storeName);
       console.log(`${key} store (${storeName}) exists:`, exists);
@@ -87,12 +87,12 @@ export async function debugDatabase() {
   }
 }
 
-// Force database recreation if needed
+
 export async function recreateDatabase() {
   try {
     console.log('Deleting existing database...');
     
-    // Delete the database
+    
     await new Promise((resolve, reject) => {
       const deleteReq = indexedDB.deleteDatabase(DB_NAME);
       deleteReq.onsuccess = () => {
@@ -109,7 +109,7 @@ export async function recreateDatabase() {
       };
     });
     
-    // Recreate the database
+    
     const newDb = await openDB();
     console.log('Database recreated successfully');
     newDb.close();
@@ -121,7 +121,7 @@ export async function recreateDatabase() {
   }
 }
 
-// Save token and user info object to USER store
+
 export async function saveUser(token, info) {
   try {
     const db = await openDB();
@@ -134,7 +134,7 @@ export async function saveUser(token, info) {
   }
 }
 
-// Get token and user info from USER store
+
 export async function getUser() {
   try {
     const db = await openDB();
@@ -159,12 +159,12 @@ export async function clearUser() {
   }
 }
 
-// Enhanced offline payment functions
+
 export async function saveOfflinePayment({ token = null, data = {}, synced = false } = {}) {
   try {
     const db = await openDB();
     
-    // Verify the PAYMENTS store exists
+    
     if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
       console.error('PAYMENTS store does not exist!');
       throw new Error('PAYMENTS object store not found');
@@ -191,7 +191,7 @@ export async function getOfflinePayments() {
   try {
     const db = await openDB();
     
-    // Check if store exists before accessing
+
     if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
       console.warn('PAYMENTS store does not exist, returning empty array');
       return [];
@@ -218,5 +218,5 @@ export async function deleteOfflinePayment(id) {
   }
 }
 
-// Export STORES for use in other files
+
 export { STORES };

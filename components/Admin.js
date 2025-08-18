@@ -135,106 +135,88 @@ function Admin({
   const [showSidehelpBar, setShowSidehelpBar] = useState(false);
   const { i18n, t } = useTranslation();
   
-  // Initialize with false and update on client
   const [isOnline, setIsOnline] = useState(false);
-  const [focusaasGarsan, setFocusaasGarsan] = useState(false);
-  const [isOffline, setIsOffline] = useState(false);
-  const [pendingPayments, setPendingPayments] = useState([]);
-  const [syncStatus, setSyncStatus] = useState("idle");
-  const [offlinePayments, setOfflinePayments] = useState([]);
-  const [isClient, setIsClient] = useState(false);
+const [focusaasGarsan, setFocusaasGarsan] = useState(false);
+const [isOffline, setIsOffline] = useState(false);
+const [pendingPayments, setPendingPayments] = useState([]);
+const [syncStatus, setSyncStatus] = useState("idle");
+const [offlinePayments, setOfflinePayments] = useState([]);
+const [isClient, setIsClient] = useState(false);
 
-  // Set client-side flag
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+const hasReloadedThisSession = useRef(false);
 
-  useEffect(() => {
-    if (!isClient) return;
-    
-    if (typeof navigator !== "undefined") {
-      setIsOnline(navigator.onLine);
-      setIsOffline(!navigator.onLine);
+useEffect(() => {
+  setIsClient(true);
+}, []);
 
-      const handleOnline = async () => {
-        setIsOffline(false);
-        setIsOnline(true);
-        setSyncStatus("syncing");
-
-        if ("serviceWorker" in navigator) {
-          try {
-            const registration = await navigator.serviceWorker.ready;
-            if ("sync" in window.ServiceWorkerRegistration.prototype) {
-              await registration.sync.register("sync-payments");
-              await registration.sync.register("sync-cars");
-            } else {
-              navigator.serviceWorker.controller?.postMessage({ type: "TRIGGER_SYNC", tag: "sync-payments" });
-              navigator.serviceWorker.controller?.postMessage({ type: "TRIGGER_SYNC", tag: "sync-cars" });
-            }
-          } catch (error) {
-            console.error("Failed to register background sync:", error);
-          }
-        }
-      };
-
-      const handleOffline = () => {
-        setIsOffline(true);
-        setIsOnline(false);
-        setSyncStatus("idle");
-      };
-
-      window.addEventListener("online", handleOnline);
-      window.addEventListener("offline", handleOffline);
-
-      return () => {
-        window.removeEventListener("online", handleOnline);
-        window.removeEventListener("offline", handleOffline);
-      };
-    }
-  }, [isClient]);
-
-  useEffect(() => {
+useEffect(() => {
   if (!isClient) return;
+  
+  if (typeof navigator !== "undefined") {
+    setIsOnline(navigator.onLine);
+    setIsOffline(!navigator.onLine);
 
-  let hasReloadedThisSession = false; // ✅ guard flag
+    const handleOnline = async () => {
+      setIsOffline(false);
+      setIsOnline(true);
+      setSyncStatus("syncing");
+
+      if ("serviceWorker" in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.ready;
+          if ("sync" in window.ServiceWorkerRegistration.prototype) {
+            await registration.sync.register("sync-payments");
+            await registration.sync.register("sync-cars");
+          } else {
+            navigator.serviceWorker.controller?.postMessage({ type: "TRIGGER_SYNC", tag: "sync-payments" });
+            navigator.serviceWorker.controller?.postMessage({ type: "TRIGGER_SYNC", tag: "sync-cars" });
+          }
+        } catch (error) {
+          console.error("Failed to register background sync:", error);
+        }
+      }
+    };
+
+    const handleOffline = () => {
+      setIsOffline(true);
+      setIsOnline(false);
+      setSyncStatus("idle");
+    };
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }
+}, [isClient]);
+
+useEffect(() => {
+  if (!isClient) return;
 
   if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
     const handler = (event) => {
       const { data } = event;
 
       if (data?.type === "PAYMENT_SAVED_OFFLINE") {
-        console.log("Payment saved offline:", data.payment);
-
         setOfflinePayments((prev) => [...prev, data.payment]);
-
         message.info(
-          t(
-            "Төлбөр offline-д хадгалагдлаа, Интернет холбогдох үед төлөв өөрчлөгдөх болно. Төлбөрийн цонхийг хаахад болно."
-          ),
+          t("Төлбөр offline-д хадгалагдлаа, Интернет холбогдох үед төлөв өөрчлөгдөх болно."),
           10
         );
       }
 
       if (data?.type === "SYNC_COMPLETED") {
-        console.log("Sync completed:", data.results);
-
-     
-        if (
-          navigator.onLine &&
-          data.results?.successful > 0 &&
-          !hasReloadedThisSession
-        ) {
-          hasReloadedThisSession = true; 
+        if (data.results?.successful > 0 && !hasReloadedThisSession.current) {
+          hasReloadedThisSession.current = true;
           message.success(
             `Төлбөрийн синк амжилттай (${data.results.successful})`,
-            5
+            3
           );
-
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
         } else if (data.results?.successful === 0) {
-          message.info("Синк хийх зүйл олдсонгүй", 5);
+          message.info("Синк хийх зүйл олдсонгүй", 3);
         }
 
         setSyncStatus("idle");
@@ -245,7 +227,7 @@ function Admin({
     navigator.serviceWorker.addEventListener("message", handler);
 
     const resetReloadGuard = () => {
-      hasReloadedThisSession = false;
+      hasReloadedThisSession.current = false;
     };
     window.addEventListener("offline", resetReloadGuard);
 
@@ -256,86 +238,83 @@ function Admin({
   }
 }, [isClient]);
 
+useEffect(() => {
+  if (!isClient) return;
+  loadPendingPayments();
+}, [isClient]);
 
-  useEffect(() => {
-    if (!isClient) return;
-    loadPendingPayments();
-  }, [isClient]);
-
-  // Fetch pending payments from service worker
-  async function getPendingPaymentsFromSW() {
-    return new Promise((resolve) => {
-      if (
-        typeof navigator !== "undefined" &&
-        "serviceWorker" in navigator &&
-        navigator.serviceWorker.controller
-      ) {
-        const messageChannel = new MessageChannel();
-        messageChannel.port1.onmessage = (event) => {
-          resolve(event.data.payments || []);
-        };
-        navigator.serviceWorker.controller.postMessage(
-          { type: "GET_PENDING_PAYMENTS" },
-          [messageChannel.port2]
-        );
-      } else {
-        resolve([]);
-      }
-    });
-  }
-
-  async function loadPendingPayments() {
-    try {
-      const pending = await getPendingPaymentsFromSW();
-      setPendingPayments(pending);
-    } catch (error) {
-      console.error("Failed to load pending payments:", error);
-    }
-  }
-
-  async function triggerManualSync() {
+async function getPendingPaymentsFromSW() {
+  return new Promise((resolve) => {
     if (
       typeof navigator !== "undefined" &&
       "serviceWorker" in navigator &&
-      navigator.onLine
+      navigator.serviceWorker.controller
     ) {
-      setSyncStatus("syncing");
-      navigator.serviceWorker.controller?.postMessage({ type: "TRIGGER_SYNC" });
+      const messageChannel = new MessageChannel();
+      messageChannel.port1.onmessage = (event) => {
+        resolve(event.data.payments || []);
+      };
+      navigator.serviceWorker.controller.postMessage(
+        { type: "GET_PENDING_PAYMENTS" },
+        [messageChannel.port2]
+      );
     } else {
-      message.warning("Интернет холболт байхгүй байна");
+      resolve([]);
     }
+  });
+}
+
+async function loadPendingPayments() {
+  try {
+    const pending = await getPendingPaymentsFromSW();
+    setPendingPayments(pending);
+  } catch (error) {
+    console.error("Failed to load pending payments:", error);
   }
+}
 
-  const getPaymentStatus = (payment) => {
-    if (payment?.synced) {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-          Төлөгдсөн
-        </span>
-      );
-    }
+async function triggerManualSync() {
+  if (
+    typeof navigator !== "undefined" &&
+    "serviceWorker" in navigator &&
+    navigator.onLine
+  ) {
+    setSyncStatus("syncing");
+    navigator.serviceWorker.controller?.postMessage({ type: "TRIGGER_SYNC" });
+  } else {
+    message.warning("Интернет холболт байхгүй байна");
+  }
+}
 
-    if (payment?.retryCount >= 5) {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-          <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
-          </svg>
-          Алдаа гарлаа
-        </span>
-      );
-    }
-
+const getPaymentStatus = (payment) => {
+  if (payment?.synced) {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-        <svg className="w-3 h-3 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-        </svg>
-        Шинэчлэлт хүлээгдэж байна ({payment.retryCount || 0}/5)
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+        Төлөгдсөн
       </span>
     );
-  };
+  }
 
+  if (payment?.retryCount >= 5) {
+    return (
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+        <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+        </svg>
+        Алдаа гарлаа
+      </span>
+    );
+  }
+
+  return (
+    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+      <svg className="w-3 h-3 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+      </svg>
+      Шинэчлэлт хүлээгдэж байна ({payment.retryCount || 0}/5)
+    </span>
+  );
+};
   function getOS() {
     if (typeof window === 'undefined' || typeof navigator === 'undefined') {
       return null;
