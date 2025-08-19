@@ -46,11 +46,10 @@ function AjiltanBurtgel({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
-  
+
   const formRef = useRef();
   const zurag = useRef();
   const empty = useRef();
-  
 
   const input1Ref = useRef();
   const input2Ref = useRef();
@@ -62,7 +61,7 @@ function AjiltanBurtgel({ token }) {
   const input8Ref = useRef();
   const input9Ref = useRef();
   const khadgalyaButtonRef = useRef();
-  
+
   const { t } = useTranslation();
   const router = useRouter();
   const { ajiltan, barilgiinId } = useAuth();
@@ -96,7 +95,7 @@ function AjiltanBurtgel({ token }) {
     if (e.key === "Enter") {
       e.preventDefault();
       let nextElement;
-      
+
       switch (e.target.id) {
         case "input1":
           nextElement = input2Ref.current;
@@ -125,7 +124,7 @@ function AjiltanBurtgel({ token }) {
         default:
           break;
       }
-      
+
       if (nextElement) {
         nextElement.focus();
       }

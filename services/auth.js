@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useEffect,
   useRef,
+  useCallback,
 } from "react";
 import { message } from "antd";
 import { setCookie, parseCookies } from "nookies";
@@ -19,7 +20,7 @@ import {
   saveOfflineAuth,
   clearOfflineAuth,
   hasOfflineAuth,
-  getCachedPermissionsData
+  getCachedPermissionsData,
 } from "../utils/offlineAuth";
 import { registerServiceWorker } from "../utils/swHelper";
 
@@ -34,16 +35,9 @@ const AuthContext = createContext({});
 
 export const useBarilga = () => {
   const [barilgiinId, setBarilgiinId] = useState(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      const { barilgiinId } = await parseCookies();
-      if (barilgiinId && barilgiinId !== "undefined")
-        setBarilgiinId(barilgiinId);
-    })();
-  }, []);
-
-  const barilgaSoliyo = (id, ajiltan) => {
+  const barilgaSoliyo = useCallback((id, ajiltan) => {
     const tukhainBarilga = ajiltan?.salbaruud?.find(
       (salbar) => salbar?.salbariinId === id
     );
@@ -63,7 +57,28 @@ export const useBarilga = () => {
       maxAge: 30 * 24 * 60 * 60,
       path: "/",
     });
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isInitialized) return;
+
+    const initializeBarilga = async () => {
+      try {
+        const cookies = parseCookies();
+        const { barilgiinId: cookieBarilgiinId } = cookies;
+
+        if (cookieBarilgiinId && cookieBarilgiinId !== "undefined") {
+          setBarilgiinId(cookieBarilgiinId);
+        }
+        setIsInitialized(true);
+      } catch (error) {
+        console.error("Барилга эхлүүлэхэд алдаа гарлаа:", error);
+        setIsInitialized(true);
+      }
+    };
+
+    initializeBarilga();
+  }, [isInitialized]);
 
   return { barilgiinId, barilgaSoliyo };
 };
@@ -72,8 +87,10 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [isOfflineMode, setIsOfflineMode] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [baiguulgiinErkhiinJagsaalt, setBaiguulgiinErkhiinJagsaalt] = useState([]);
-  
+  const [baiguulgiinErkhiinJagsaalt, setBaiguulgiinErkhiinJagsaalt] = useState(
+    []
+  );
+
   const { ajiltan, ajiltanMutate } = useAjiltan(token);
   const { baiguullaga, baiguullagaMutate } = useBaiguullaga(
     token,
@@ -82,31 +99,38 @@ export const AuthProvider = ({ children }) => {
   const { barilgaSoliyo, barilgiinId } = useBarilga();
   const { t } = useTranslation();
 
- 
   const hasInitialized = useRef(false);
   const networkListenersAttached = useRef(false);
-
+  const isInitializing = useRef(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-
   useEffect(() => {
-    if (!isClient || hasInitialized.current) return;
-    
-    hasInitialized.current = true;
-    
+    if (!isClient || hasInitialized.current || isInitializing.current) return;
+
+    isInitializing.current = true;
+
     const initializeApp = async () => {
-      await initializeServiceWorker();
-      await initializeAuthState();
-      setupNetworkListeners();
-      
       try {
-        const data = await getCachedPermissionsData();
-        console.log("Кэшээс уншсан эрхийн өгөгдөл:", data);
+        await initializeServiceWorker();
+        await initializeAuthState();
+        setupNetworkListeners();
+
+        try {
+          const data = await getCachedPermissionsData();
+          console.log("Кэшээс уншсан эрхийн өгөгдөл:", data);
+        } catch (error) {
+          console.warn("Кэшээс эрхийн өгөгдөл авахад алдаа гарлаа:", error);
+        }
+
+        hasInitialized.current = true;
       } catch (error) {
-        console.warn("Кэшээс эрхийн өгөгдөл авахад алдаа гарлаа:", error);
+        console.error("App initialization failed:", error);
+        hasInitialized.current = true;
+      } finally {
+        isInitializing.current = false;
       }
     };
 
@@ -157,14 +181,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   const setupNetworkListeners = () => {
-    if (networkListenersAttached.current || typeof window === "undefined") return;
-    
+    if (networkListenersAttached.current || typeof window === "undefined")
+      return;
+
     networkListenersAttached.current = true;
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
   };
 
-  const handleOnline = () => {
+  const handleOnline = useCallback(() => {
     const wasOffline = isOfflineMode;
     setIsOfflineMode(false);
     message.success("Интернэт холбогдлоо");
@@ -172,14 +197,17 @@ export const AuthProvider = ({ children }) => {
     if (wasOffline) {
       syncOfflineData();
     }
-  };
+  }, [isOfflineMode]);
 
-  const handleOffline = () => {
+  const handleOffline = useCallback(() => {
     setIsOfflineMode(true);
-    message.warning("Таны интернэт тасарсан байна. Оффлайн горимд ажиллаж байна.", 0);
-  };
+    message.warning(
+      "Таны интернэт тасарсан байна. Оффлайн горимд ажиллаж байна.",
+      0
+    );
+  }, []);
 
-  const syncOfflineData = async () => {
+  const syncOfflineData = useCallback(async () => {
     console.log("Оффлайн өгөгдөл синк хийж байна...");
     if (token) {
       try {
@@ -190,7 +218,7 @@ export const AuthProvider = ({ children }) => {
         console.warn("Өгөгдөл синк хийхэд алдаа гарлаа:", error);
       }
     }
-  };
+  }, [token, ajiltanMutate, baiguullagaMutate]);
 
   const performOnlineLogin = async (khereglech) => {
     return new Promise((resolve, reject) => {
@@ -201,14 +229,22 @@ export const AuthProvider = ({ children }) => {
             let permissionsData = null;
 
             try {
-              const res = await uilchilgee(data.token).post("/erkhiinMedeelelAvya");
+              const res = await uilchilgee(data.token).post(
+                "/erkhiinMedeelelAvya"
+              );
               permissionsData = res.data;
             } catch (error) {
-              console.warn("Эрхийн мэдээлэл татахад алдаа гарлаа, оффлайн горимын эрх хадгалж байна");
+              console.warn(
+                "Эрхийн мэдээлэл татахад алдаа гарлаа, оффлайн горимын эрх хадгалж байна"
+              );
               permissionsData = { moduluud: [], offlineFallback: true };
             }
 
-            if (permissionsData && (permissionsData.moduluud?.length > 0 || permissionsData.offlineFallback)) {
+            if (
+              permissionsData &&
+              (permissionsData.moduluud?.length > 0 ||
+                permissionsData.offlineFallback)
+            ) {
               const loginResult = {
                 token: data.token,
                 result: data.result,
@@ -217,14 +253,21 @@ export const AuthProvider = ({ children }) => {
 
               try {
                 await saveOfflineAuth(khereglech, loginResult);
-                console.log("Оффлайн нэвтрэлтийн өгөгдөл амжилттай хадгалагдлаа");
+                console.log(
+                  "Оффлайн нэвтрэлтийн өгөгдөл амжилттай хадгалагдлаа"
+                );
               } catch (e) {
-                console.warn("Оффлайн нэвтрэлтийн өгөгдөл хадгалахад алдаа гарлаа", e);
+                console.warn(
+                  "Оффлайн нэвтрэлтийн өгөгдөл хадгалахад алдаа гарлаа",
+                  e
+                );
               }
 
               resolve(loginResult);
             } else {
-              reject(new Error("Байгууллагын эрхийн тохиргоо хийгдээгүй байна"));
+              reject(
+                new Error("Байгууллагын эрхийн тохиргоо хийгдээгүй байна")
+              );
             }
           } else {
             reject(new Error("Хэрэглэгчийн мэдээлэл буруу байна"));
@@ -234,63 +277,78 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
-  const processSuccessfulLogin = async (loginData, isOffline = false) => {
-    const { token: loginToken, result, permissionsData } = loginData;
+  const processSuccessfulLogin = useCallback(
+    async (loginData, isOffline = false) => {
+      const { token: loginToken, result, permissionsData } = loginData;
 
-    setCookie(null, "tureestoken", loginToken, {
-      maxAge: 30 * 24 * 60 * 60,
-      path: "/",
-    });
-    setToken(loginToken);
-    ajiltanMutate(result);
+      setCookie(null, "tureestoken", loginToken, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: "/",
+      });
+      setToken(loginToken);
+      ajiltanMutate(result);
 
-    if (result?.barilguud?.length > 0 || result.erkh === "Admin") {
-      let solikhBarilgaOldsonEsekh = false;
-      if (Array.isArray(result?.salbaruud)) {
-        for (const salbar of result.salbaruud) {
-          if (result.erkh !== "Admin") {
-            for (const barilga of result.barilguud) {
-              if (salbar?.salbariinId === barilga) {
-                if (moment(salbar?.duusakhOgnoo).startOf("day").isAfter(moment().startOf("day"))) {
-                  solikhBarilgaOldsonEsekh = true;
-                  barilgaSoliyo(salbar?.salbariinId, result);
-                  break;
+      if (result?.barilguud?.length > 0 || result.erkh === "Admin") {
+        let solikhBarilgaOldsonEsekh = false;
+        if (Array.isArray(result?.salbaruud)) {
+          for (const salbar of result.salbaruud) {
+            if (result.erkh !== "Admin") {
+              for (const barilga of result.barilguud) {
+                if (salbar?.salbariinId === barilga) {
+                  if (
+                    moment(salbar?.duusakhOgnoo)
+                      .startOf("day")
+                      .isAfter(moment().startOf("day"))
+                  ) {
+                    solikhBarilgaOldsonEsekh = true;
+                    barilgaSoliyo(salbar?.salbariinId, result);
+                    break;
+                  }
                 }
               }
+            } else if (
+              moment(salbar?.duusakhOgnoo)
+                .startOf("day")
+                .isAfter(moment().startOf("day"))
+            ) {
+              solikhBarilgaOldsonEsekh = true;
+              barilgaSoliyo(salbar?.salbariinId, result);
+              break;
             }
-          } else if (moment(salbar?.duusakhOgnoo).startOf("day").isAfter(moment().startOf("day"))) {
-            solikhBarilgaOldsonEsekh = true;
-            barilgaSoliyo(salbar?.salbariinId, result);
-            break;
           }
-        }
-        if (!solikhBarilgaOldsonEsekh) {
+          if (!solikhBarilgaOldsonEsekh) {
+            message.warn("Лицензийн хугацаа дууссан байна!");
+            return;
+          }
+        } else {
           message.warn("Лицензийн хугацаа дууссан байна!");
           return;
         }
+      }
+
+      if (!isOffline && permissionsData) {
+        ekhniiTsonkhruuOchyo(result, loginToken, setBaiguulgiinErkhiinJagsaalt);
+      } else if (isOffline) {
+        const offlinePermissions = permissionsData;
+        if (offlinePermissions) {
+          ekhniiTsonkhruuOchyo(
+            result,
+            loginToken,
+            setBaiguulgiinErkhiinJagsaalt,
+            offlinePermissions
+          );
+        }
+      }
+
+      if (isOffline) {
+        message.success("Оффлайн горимд амжилттай нэвтэрлээ");
       } else {
-        message.warn("Лицензийн хугацаа дууссан байна!");
-        return;
+        message.success("Амжилттай нэвтэрлээ");
       }
-    }
+    },
+    [ajiltanMutate, barilgaSoliyo]
+  );
 
-    if (!isOffline && permissionsData) {
-      ekhniiTsonkhruuOchyo(result, loginToken, setBaiguulgiinErkhiinJagsaalt);
-    } else if (isOffline) {
-      const offlinePermissions = permissionsData;
-      if (offlinePermissions) {
-        ekhniiTsonkhruuOchyo(result, loginToken, setBaiguulgiinErkhiinJagsaalt, offlinePermissions);
-      }
-    }
-
-    if (isOffline) {
-      message.success("Оффлайн горимд амжилттай нэвтэрлээ");
-    } else {
-      message.success("Амжилттай нэвтэрлээ");
-    }
-  };
-
-  
   const auth = useMemo(
     () => ({
       newterya: async (khereglech) => {
@@ -308,7 +366,10 @@ export const AuthProvider = ({ children }) => {
         }
 
         try {
-          const loginResult = await attemptLogin(khereglech, performOnlineLogin);
+          const loginResult = await attemptLogin(
+            khereglech,
+            performOnlineLogin
+          );
 
           if (loginResult.success) {
             if (loginResult.mode === "offline") {
@@ -391,6 +452,11 @@ export const AuthProvider = ({ children }) => {
       barilgiinId,
       baiguulgiinErkhiinJagsaalt,
       isOfflineMode,
+      barilgaSoliyo,
+      processSuccessfulLogin,
+      syncOfflineData,
+      ajiltanMutate,
+      baiguullagaMutate,
     ]
   );
 

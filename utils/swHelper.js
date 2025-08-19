@@ -1,30 +1,32 @@
 export async function registerServiceWorker() {
-  if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
-    console.warn('Service Worker дэмжигдэхгүй байна');
+  if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
+    console.warn("Service Worker дэмжигдэхгүй байна");
     return;
   }
 
   try {
-    const registration = await navigator.serviceWorker.register('/sw.js');
-    
-    console.log('Service Worker амжилттай бүртгэгдлээ:', registration.scope);
+    const registration = await navigator.serviceWorker.register("/sw.js");
+
+    console.log("Service Worker амжилттай бүртгэгдлээ:", registration.scope);
 
     // Шинэчлэлтийг автомат шинэчлэлтгүйгээр зохицуулах
-    registration.addEventListener('updatefound', () => {
+    registration.addEventListener("updatefound", () => {
       const newWorker = registration.installing;
-      console.log('Шинэ service worker олдлоо, суулгаж байна...');
-      
-      newWorker.addEventListener('statechange', () => {
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-          console.log('Шинэ service worker суулгагдлаа');
+      console.log("Шинэ service worker олдлоо, суулгаж байна...");
 
+      newWorker.addEventListener("statechange", () => {
+        if (
+          newWorker.state === "installed" &&
+          navigator.serviceWorker.controller
+        ) {
+          console.log("Шинэ service worker суулгагдлаа");
         }
       });
     });
 
     return registration;
   } catch (error) {
-    console.error('Service Worker бүртгэхэд алдаа гарлаа:', error);
+    console.error("Service Worker бүртгэхэд алдаа гарлаа:", error);
     throw error;
   }
 }
@@ -37,13 +39,13 @@ export function triggerSync() {
   if (syncTimeout) {
     clearTimeout(syncTimeout);
   }
-  
+
   syncTimeout = setTimeout(() => {
-    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
-        type: 'TRIGGER_SYNC'
+        type: "TRIGGER_SYNC",
       });
-      console.log('Синк асаалт илгээгдлээ');
+      console.log("Синк асаалт илгээгдлээ");
     }
     syncTimeout = null;
   }, SYNC_DEBOUNCE_TIME);
