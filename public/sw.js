@@ -5,20 +5,23 @@ const STORES = {
   PAYMENTS: 'offline-payments',
 };
 
+let lastSyncTime = 0;
+let syncInProgress = false;
+
 function upgradeDB(db) {
   const stores = db.objectStoreNames;
 
   if (!stores.contains(STORES.USER)) {
-    console.log('Creating USER store');
+    console.log('Хэрэглэгчийн сан үүсгэж байна');
     db.createObjectStore(STORES.USER);
   }
 
   if (!stores.contains(STORES.PAYMENTS)) {
-    console.log('Creating PAYMENTS store');
+    console.log('Төлбөрийн сан үүсгэж байна');
     db.createObjectStore(STORES.PAYMENTS, { keyPath: 'id', autoIncrement: true });
   }
 
-  console.log('Stores after upgrade:', Array.from(db.objectStoreNames));
+  console.log('Шинэчлэлт дууссаны дараах сангууд:', Array.from(db.objectStoreNames));
 }
 
 function openIndexedDB() {
@@ -27,94 +30,70 @@ function openIndexedDB() {
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      console.log(`Upgrading DB from version ${event.oldVersion} to ${event.newVersion}`);
+      console.log(`ӨС-г ${event.oldVersion}-ээс ${event.newVersion} рүү шинэчилж байна`);
       upgradeDB(db);
     };
 
     request.onsuccess = (event) => {
       const db = event.target.result;
-
       db.onversionchange = () => {
-        console.warn('DB version change detected, closing old connection');
+        console.warn('ӨС-ийн хувилбар солигдлоо, хуучин холболтыг хаагаад байна');
         db.close();
       };
-
-      console.log('DB opened successfully:', { version: db.version, stores: Array.from(db.objectStoreNames) });
+      console.log('ӨС амжилттай нээгдлээ:', { version: db.version, stores: Array.from(db.objectStoreNames) });
       resolve(db);
     };
 
     request.onerror = (event) => {
-      console.error('Failed to open DB:', event.target.error);
+      console.error('ӨС нээхэд алдаа гарлаа:', event.target.error);
       reject(event.target.error);
     };
 
     request.onblocked = () => {
-      console.warn('DB upgrade blocked by another connection. Close other tabs or windows using this DB.');
+      console.warn('ӨС-ийн шинэчлэлт хориглогдсон. Энэ ӨС-ийг ашиглаж буй бусад таб эсвэл цонхыг хаана уу.');
     };
   });
 }
 
-
-const CACHE_NAME = 'offline-login-v1';
 const API_CACHE_NAME = 'api-cache-v1';
-const AUTH_CACHE_NAME = 'auth-cache-v1';
-const urlsToCache = [
-  '/',
-  '/offline.html',
-  '/favicon.ico',
-  '/snowflake.png',
-  '/snowflake1.png',
-  '/copyPasteLogo.png',
-  '/illustration.svg',
-  '/MN.png',
-  '/UK.png',
-];
 
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing');
+  console.log('Service Worker суулгагдаж байна');
   event.waitUntil(
     Promise.all([
-      caches.open(CACHE_NAME).then((cache) => {
-        console.log('Caching offline assets');
-        return cache.addAll(urlsToCache);
-      }),
-     
       openIndexedDB().then((db) => {
-        console.log('Database initialized during install');
+        console.log('Өгөгдлийн сан суулгалтын үед эхлүүлэгдлээ');
         db.close();
       }).catch((error) => {
-        console.error('Failed to initialize database during install:', error);
+        console.error('Суулгалтын үед өгөгдлийн сан эхлүүлэхэд алдаа гарлаа:', error);
       })
     ])
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating');
+  console.log('Service Worker идэвхжиж байна');
   event.waitUntil(
     Promise.all([
       caches.keys().then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key !== CACHE_NAME && key !== API_CACHE_NAME && key !== AUTH_CACHE_NAME)
+            .filter((key) => key !== API_CACHE_NAME)
             .map((key) => {
-              console.log('Deleting old cache:', key);
+              console.log('Хуучин кэш устгаж байна:', key);
               return caches.delete(key);
             })
         )
       ),
-   
       openIndexedDB().then((db) => {
-        console.log('Database verified in activate event');
-        console.log('Available stores:', Array.from(db.objectStoreNames));
+        console.log('Идэвхжүүлэх үеийн өгөгдлийн сан баталгаажлаа');
+        console.log('Боломжтой сангууд:', Array.from(db.objectStoreNames));
         db.close();
       }).catch((error) => {
-        console.error('Failed to verify database in activate event:', error);
+        console.error('Идэвхжүүлэх үеийн өгөгдлийн сан баталгаажуулахад алдаа гарлаа:', error);
       })
     ])
   );
-  self.clients.claim();
 });
 
 function serializeHeaders(headers) {
@@ -142,10 +121,10 @@ self.addEventListener('fetch', (event) => {
       responsePromise = (async () => {
         try {
           const response = await fetch(event.request.clone());
-          console.log('POST request successful:', requestUrl.pathname);
+          console.log('POST хүсэлт амжилттай боллоо:', requestUrl.pathname);
           return response;
         } catch (err) {
-          console.log('POST request failed, saving for sync:', requestUrl.pathname, err.message);
+          console.log('POST хүсэлт амжилтгүй, синкэд хадгалж байна:', requestUrl.pathname, err.message);
           const reqClone = event.request.clone();
           let body;
           let contentType = event.request.headers.get('content-type') || '';
@@ -157,18 +136,17 @@ self.addEventListener('fetch', (event) => {
               body = await reqClone.text();
             }
           } catch (bodyErr) {
-            console.warn('Failed to parse request body:', bodyErr);
+            console.warn('Хүсэлтийн өгөгдлийг задлахад алдаа гарлаа:', bodyErr);
             body = null;
           }
           
           try {
             const db = await openIndexedDB();
             
-        
             if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-              console.error('PAYMENTS store not found! Available stores:', Array.from(db.objectStoreNames));
+              console.error('PAYMENTS сан олдсонгүй! Боломжтой сангууд:', Array.from(db.objectStoreNames));
               db.close();
-              throw new Error('PAYMENTS store not available');
+              throw new Error('PAYMENTS сан байхгүй байна');
             }
             
             const tx = db.transaction(STORES.PAYMENTS, 'readwrite');
@@ -190,8 +168,7 @@ self.addEventListener('fetch', (event) => {
               const addRequest = store.add(paymentData);
               
               addRequest.onsuccess = () => {
-                console.log('Offline payment saved successfully');
-                
+                console.log('Оффлайн төлбөр амжилттай хадгалагдлаа');
                 
                 self.clients.matchAll().then(clients => {
                   clients.forEach(client => {
@@ -207,20 +184,20 @@ self.addEventListener('fetch', (event) => {
               };
               
               addRequest.onerror = () => {
-                console.error('Failed to save offline payment:', addRequest.error);
+                console.error('Оффлайн төлбөр хадгалахад алдаа гарлаа:', addRequest.error);
                 reject(addRequest.error);
               };
             });
             
             db.close();
           } catch (dbError) {
-            console.error('Database error when saving offline payment:', dbError);
+            console.error('Оффлайн төлбөр хадгалахад өгөгдлийн сангийн алдаа гарлаа:', dbError);
           }
           
           return new Response(
             JSON.stringify({ 
               offline: true, 
-              message: 'Request saved for background sync',
+              message: 'Хүсэлт арын синкэд хадгалагдлаа',
               timestamp: new Date().toISOString(),
               success: true
             }),
@@ -229,7 +206,6 @@ self.addEventListener('fetch', (event) => {
         }
       })();
     } else {
-   
       responsePromise = fetch(event.request)
         .then((response) => {
           if (response.ok) {
@@ -239,25 +215,24 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(async (err) => {
-          console.error('GET request failed:', err.message, 'URL:', event.request.url);
+          console.error('GET хүсэлт амжилтгүй боллоо:', err.message, 'URL:', event.request.url);
           const cachedResponse = await caches.match(event.request);
           if (cachedResponse) {
-            console.log('Serving from cache:', event.request.url);
+            console.log('Кэшээс үйлчилж байна:', event.request.url);
             return cachedResponse;
           }
-          return caches.match('/offline.html') || new Response('Offline', { status: 503 });
+          return new Response('Оффлайн байна', { status: 503 });
         });
     }
   } else {
-  
     responsePromise = caches.match(event.request).then((response) => {
       if (response) {
-        console.log('Serving from cache:', event.request.url);
+        console.log('Кэшээс үйлчилж байна:', event.request.url);
         return response;
       }
       return fetch(event.request).catch(() => {
-        console.log('Falling back to offline page for:', event.request.url);
-        return caches.match('/offline.html');
+        console.log('Оффлайн хуудас руу шилжиж байна:', event.request.url);
+        return new Response('Оффлайн байна', { status: 503 });
       });
     });
   }
@@ -266,21 +241,26 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('sync', (event) => {
-  console.log('Background sync triggered:', event.tag);
+  console.log('Арын синк асаалт авлаа:', event.tag);
   if (event.tag === 'sync-payments') {
     event.waitUntil(syncPaymentsFromSW());
   }
 });
 
 self.addEventListener('message', (event) => {
-  console.log('Service worker received message:', event.data);
+  console.log('Service worker мессеж хүлээн авлаа:', event.data);
   if (event.data?.type === 'TRIGGER_SYNC') {
+    const now = Date.now();
+    if (now - lastSyncTime < 5000) { // 5 секундын хүлээлэг
+      console.log('Синк хүсэлт үл хэрэгслэгдлээ - дэндүү удалгүй синк хийсэн байна');
+      return;
+    }
     syncPaymentsFromSW();
   } else if (event.data?.type === 'GET_PENDING_PAYMENTS') {
     getPendingPayments().then(payments => {
       event.ports[0].postMessage({ payments });
     }).catch(error => {
-      console.error('Error in GET_PENDING_PAYMENTS message handler:', error);
+      console.error('GET_PENDING_PAYMENTS мессежийн зохицуулагчид алдаа гарлаа:', error);
       event.ports[0].postMessage({ payments: [], error: error.message });
     });
   }
@@ -290,9 +270,8 @@ async function getPendingPayments() {
   try {
     const db = await openIndexedDB();
     
-  
     if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-      console.warn('PAYMENTS store does not exist, returning empty array');
+      console.warn('PAYMENTS сан байхгүй байна, хоосон жагсаалт буцааж байна');
       db.close();
       return [];
     }
@@ -307,22 +286,36 @@ async function getPendingPayments() {
     });
     
     db.close();
-    console.log('Retrieved pending payments:', allPayments.length);
+    console.log('Хүлээгдэж буй төлбөрүүд авлаа:', allPayments.length);
     return allPayments;
   } catch (error) {
-    console.error('Error getting pending payments:', error);
+    console.error('Хүлээгдэж буй төлбөрүүд авахад алдаа гарлаа:', error);
     return [];
   }
 }
 
 async function syncPaymentsFromSW() {
-  console.log('Starting payment sync...');
+  const now = Date.now();
+  
+  if (syncInProgress) {
+    console.log('Синк хийгдэж байгаа тул алгасаж байна...');
+    return;
+  }
+  
+  if (now - lastSyncTime < 10000) { 
+    console.log('Синк хүсэлт үл хэрэгслэгдлээ - дэндүү удалгүй синк хийсэн байна');
+    return;
+  }
+  
+  syncInProgress = true;
+  lastSyncTime = now;
+  
+  console.log('Төлбөрийн синк эхлэж байна...');
   try {
     const db = await openIndexedDB();
     
-    // Check if store exists
     if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-      console.warn('PAYMENTS store does not exist, cannot sync');
+      console.warn('PAYMENTS сан байхгүй байна, синк хийх боломжгүй');
       db.close();
       return;
     }
@@ -336,17 +329,17 @@ async function syncPaymentsFromSW() {
       getAllRequest.onerror = () => reject(getAllRequest.error);
     });
     
-    console.log(`Found ${allPayments.length} payments to sync`);
+    console.log(`${allPayments.length} төлбөр синк хийхэд бэлэн байна`);
     
     let successCount = 0;
     let failureCount = 0;
     
     for (const payment of allPayments) {
       try {
-        console.log('Syncing payment:', payment.id, 'Retry count:', payment.retryCount || 0);
+        console.log('Төлбөр синк хийж байна:', payment.id, 'Давтан оролдсон:', payment.retryCount || 0);
         
         if (payment.retryCount >= 5) {
-          console.warn('Payment exceeded retry limit:', payment.id);
+          console.warn('Төлбөр давтан оролдох хязгаар давсан байна:', payment.id);
           failureCount++;
           continue;
         }
@@ -370,7 +363,7 @@ async function syncPaymentsFromSW() {
         });
         
         if (response.ok) {
-          console.log('Payment synced successfully:', payment.id); 
+          console.log('Төлбөр амжилттай синк хийгдлээ:', payment.id); 
           successCount++;
           
           const deleteTx = db.transaction(STORES.PAYMENTS, 'readwrite');
@@ -380,7 +373,7 @@ async function syncPaymentsFromSW() {
             deleteRequest.onerror = () => reject(deleteRequest.error);
           });
         } else {
-          console.error('Server rejected sync request:', response.status, payment.id);      
+          console.error('Сервер синк хүсэлтийг татгалзлаа:', response.status, payment.id);      
           failureCount++;
           
           const updateTx = db.transaction(STORES.PAYMENTS, 'readwrite');
@@ -396,7 +389,7 @@ async function syncPaymentsFromSW() {
           });
         }
       } catch (err) {
-        console.error('Sync failed for payment:', payment.id, err.message);
+        console.error('Төлбөрийн синк амжилтгүй боллоо:', payment.id, err.message);
         failureCount++;
         
         try {
@@ -412,30 +405,34 @@ async function syncPaymentsFromSW() {
             putRequest.onerror = () => reject(putRequest.error);
           });
         } catch (updateErr) {
-          console.error('Failed to update retry count:', updateErr);
+          console.error('Давтан оролдсон тоо шинэчлэхэд алдаа гарлаа:', updateErr);
         }
       }
     }
     
     db.close();
-    console.log(`Payment sync completed: ${successCount} successful, ${failureCount} failed`);
+    console.log(`Төлбөрийн синк дууслаа: ${successCount} амжилттай, ${failureCount} амжилтгүй`);
     
-    
-    const clients = await self.clients.matchAll();
-    clients.forEach(client => {
-      client.postMessage({ 
-        type: 'SYNC_COMPLETED',
-        tag: 'sync-payments',
-        timestamp: new Date().toISOString(),
-        results: {
-          total: allPayments.length,
-          successful: successCount,
-          failed: failureCount
-        }
+    // Клиентэд мэдэгдэл илгээх - ШИНЭЧЛЭХГҮЙ
+    if (allPayments.length > 0) {
+      const clients = await self.clients.matchAll();
+      clients.forEach(client => {
+        client.postMessage({ 
+          type: 'SYNC_COMPLETED',
+          tag: 'sync-payments',
+          timestamp: new Date().toISOString(),
+          results: {
+            total: allPayments.length,
+            successful: successCount,
+            failed: failureCount
+          }
+        });
       });
-    });
+    }
     
   } catch (error) {
-    console.error('Error during payment sync:', error);
+    console.error('Төлбөрийн синк хийхэд алдаа гарлаа:', error);
+  } finally {
+    syncInProgress = false;
   }
 }

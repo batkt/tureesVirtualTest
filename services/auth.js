@@ -12,21 +12,15 @@ import uilchilgee from "./uilchilgee";
 import { ekhniiTsonkhruuOchyo } from "tools/logic/khereglegchiinErkhiinTokhirgoo";
 import useAjiltan from "hooks/useAjiltan";
 import useBaiguullaga from "hooks/useBaiguullaga";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { getCachedPermissionsData } from "../utils/offlineAuth";
-
 import {
   attemptLogin,
-  storeLoginData,
-  clearOfflineData,
-  isOnline as utilsIsOnline,
-  getCachedUserData,
-  getCachedToken,
-  hasValidOfflineAuth,
+  saveOfflineAuth,
+  clearOfflineAuth,
+  hasOfflineAuth,
+  getCachedPermissionsData
 } from "../utils/offlineAuth";
-
 import { registerServiceWorker } from "../utils/swHelper";
 
 const isOnline = () => {
@@ -88,16 +82,16 @@ export const AuthProvider = ({ children }) => {
   const { barilgaSoliyo, barilgiinId } = useBarilga();
   const { t } = useTranslation();
 
-  // Refs to prevent multiple initializations
+ 
   const hasInitialized = useRef(false);
   const networkListenersAttached = useRef(false);
 
-  // Set client flag on mount
+
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Initialize everything once on client side
+
   useEffect(() => {
     if (!isClient || hasInitialized.current) return;
     
@@ -110,9 +104,9 @@ export const AuthProvider = ({ children }) => {
       
       try {
         const data = await getCachedPermissionsData();
-        console.log("Кэшинээс уншсан эрхийн өгөгдөл:", data);
+        console.log("Кэшээс уншсан эрхийн өгөгдөл:", data);
       } catch (error) {
-        console.warn("Кэшинээс эрхийн өгөгдөл авахад алдаа гарлаа:", error);
+        console.warn("Кэшээс эрхийн өгөгдөл авахад алдаа гарлаа:", error);
       }
     };
 
@@ -135,7 +129,7 @@ export const AuthProvider = ({ children }) => {
 
     try {
       await registerServiceWorker();
-      console.log("Сервис воркер амжилттай ажиллалаа");
+      console.log("Сервис воркер амжилттай ажиллаж байна");
     } catch (error) {
       console.warn("Сервис воркерийн эхлэлт амжилтгүй:", error);
     }
@@ -147,9 +141,9 @@ export const AuthProvider = ({ children }) => {
       const storedToken = d?.tureestoken;
 
       if (!storedToken && !isOnline()) {
-        const hasOfflineAuth = await hasValidOfflineAuth();
-        if (hasOfflineAuth) {
-          message.info(t("Оффлайн горимд нэвтрэх боломжтой"));
+        const hasOfflineCredentials = await hasOfflineAuth();
+        if (hasOfflineCredentials) {
+          message.info("Оффлайн горимд нэвтрэх боломжтой байна");
         }
       } else if (storedToken) {
         setToken(storedToken);
@@ -173,7 +167,7 @@ export const AuthProvider = ({ children }) => {
   const handleOnline = () => {
     const wasOffline = isOfflineMode;
     setIsOfflineMode(false);
-    message.success(t("Интернэт холбогдлоо"));
+    message.success("Интернэт холбогдлоо");
 
     if (wasOffline) {
       syncOfflineData();
@@ -182,10 +176,7 @@ export const AuthProvider = ({ children }) => {
 
   const handleOffline = () => {
     setIsOfflineMode(true);
-    message.warning(
-      t("Таны интернэт тасарсан байна. Оффлайн горимд ажиллаж байна."),
-      0
-    );
+    message.warning("Таны интернэт тасарсан байна. Оффлайн горимд ажиллаж байна.", 0);
   };
 
   const syncOfflineData = async () => {
@@ -194,6 +185,7 @@ export const AuthProvider = ({ children }) => {
       try {
         ajiltanMutate();
         baiguullagaMutate();
+        message.success("Өгөгдөл шинэчлэгдлээ");
       } catch (error) {
         console.warn("Өгөгдөл синк хийхэд алдаа гарлаа:", error);
       }
@@ -209,20 +201,14 @@ export const AuthProvider = ({ children }) => {
             let permissionsData = null;
 
             try {
-              const res = await uilchilgee(data.token).post(
-                "/erkhiinMedeelelAvya"
-              );
+              const res = await uilchilgee(data.token).post("/erkhiinMedeelelAvya");
               permissionsData = res.data;
             } catch (error) {
               console.warn("Эрхийн мэдээлэл татахад алдаа гарлаа, оффлайн горимын эрх хадгалж байна");
               permissionsData = { moduluud: [], offlineFallback: true };
             }
 
-            if (
-              permissionsData &&
-              (permissionsData.moduluud?.length > 0 ||
-                permissionsData.offlineFallback)
-            ) {
+            if (permissionsData && (permissionsData.moduluud?.length > 0 || permissionsData.offlineFallback)) {
               const loginResult = {
                 token: data.token,
                 result: data.result,
@@ -230,7 +216,7 @@ export const AuthProvider = ({ children }) => {
               };
 
               try {
-                await storeLoginData(khereglech, loginResult);
+                await saveOfflineAuth(khereglech, loginResult);
                 console.log("Оффлайн нэвтрэлтийн өгөгдөл амжилттай хадгалагдлаа");
               } catch (e) {
                 console.warn("Оффлайн нэвтрэлтийн өгөгдөл хадгалахад алдаа гарлаа", e);
@@ -238,9 +224,7 @@ export const AuthProvider = ({ children }) => {
 
               resolve(loginResult);
             } else {
-              reject(
-                new Error("Байгууллагын эрхийн тохиргоо хийгдээгүй байна")
-              );
+              reject(new Error("Байгууллагын эрхийн тохиргоо хийгдээгүй байна"));
             }
           } else {
             reject(new Error("Хэрэглэгчийн мэдээлэл буруу байна"));
@@ -267,33 +251,25 @@ export const AuthProvider = ({ children }) => {
           if (result.erkh !== "Admin") {
             for (const barilga of result.barilguud) {
               if (salbar?.salbariinId === barilga) {
-                if (
-                  moment(salbar?.duusakhOgnoo)
-                    .startOf("day")
-                    .isAfter(moment().startOf("day"))
-                ) {
+                if (moment(salbar?.duusakhOgnoo).startOf("day").isAfter(moment().startOf("day"))) {
                   solikhBarilgaOldsonEsekh = true;
                   barilgaSoliyo(salbar?.salbariinId, result);
                   break;
                 }
               }
             }
-          } else if (
-            moment(salbar?.duusakhOgnoo)
-              .startOf("day")
-              .isAfter(moment().startOf("day"))
-          ) {
+          } else if (moment(salbar?.duusakhOgnoo).startOf("day").isAfter(moment().startOf("day"))) {
             solikhBarilgaOldsonEsekh = true;
             barilgaSoliyo(salbar?.salbariinId, result);
             break;
           }
         }
         if (!solikhBarilgaOldsonEsekh) {
-          message.warn(t("Лицензийн хугацаа дууссан байна!"));
+          message.warn("Лицензийн хугацаа дууссан байна!");
           return;
         }
       } else {
-        message.warn(t("Лицензийн хугацаа дууссан байна!"));
+        message.warn("Лицензийн хугацаа дууссан байна!");
         return;
       }
     }
@@ -303,32 +279,27 @@ export const AuthProvider = ({ children }) => {
     } else if (isOffline) {
       const offlinePermissions = permissionsData;
       if (offlinePermissions) {
-        ekhniiTsonkhruuOchyo(
-          result,
-          loginToken,
-          setBaiguulgiinErkhiinJagsaalt,
-          offlinePermissions
-        );
+        ekhniiTsonkhruuOchyo(result, loginToken, setBaiguulgiinErkhiinJagsaalt, offlinePermissions);
       }
     }
 
     if (isOffline) {
-      message.success(t("Оффлайн горимд амжилттай нэвтэрлээ"));
+      message.success("Оффлайн горимд амжилттай нэвтэрлээ");
     } else {
-      message.success(t("Амжилттай нэвтэрлээ"));
+      message.success("Амжилттай нэвтэрлээ");
     }
   };
 
-  // Memoize the auth object with stable dependencies
+  
   const auth = useMemo(
     () => ({
       newterya: async (khereglech) => {
         if (!khereglech.nevtrekhNer) {
-          message.warning(t("Нэвтрэх нэрийг бөглөнө үү"));
+          message.warning("Нэвтрэх нэрийг бөглөнө үү");
           return;
         }
         if (!khereglech.nuutsUg) {
-          message.warning(t("Нууц үгийг бөглөнө үү"));
+          message.warning("Нууц үгийг бөглөнө үү");
           return;
         }
 
@@ -337,10 +308,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         try {
-          const loginResult = await attemptLogin(
-            khereglech,
-            performOnlineLogin
-          );
+          const loginResult = await attemptLogin(khereglech, performOnlineLogin);
 
           if (loginResult.success) {
             if (loginResult.mode === "offline") {
@@ -351,11 +319,11 @@ export const AuthProvider = ({ children }) => {
               processSuccessfulLogin(loginResult.data, false);
             }
           } else {
-            message.error(loginResult.error || t("Нэвтрэлт амжилтгүй боллоо"));
+            message.error(loginResult.error || "Нэвтрэлт амжилтгүй боллоо");
           }
         } catch (error) {
           console.error("Нэвтрэх явцад алдаа гарлаа:", error);
-          message.error(t("Нэвтрэх үед алдаа гарлаа"));
+          message.error("Нэвтрэх үед алдаа гарлаа");
         }
       },
 
@@ -377,24 +345,16 @@ export const AuthProvider = ({ children }) => {
       },
 
       hasOfflineAccess: async () => {
-        return await hasValidOfflineAuth();
-      },
-
-      getCachedUserData: async () => {
-        return await getCachedUserData();
-      },
-
-      getCachedToken: async () => {
-        return await getCachedToken();
+        return await hasOfflineAuth();
       },
 
       clearOfflineDataOnly: async () => {
         try {
-          await clearOfflineData();
-          message.success(t("Оффлайн өгөгдөл устгагдлаа"));
+          await clearOfflineAuth();
+          message.success("Оффлайн өгөгдөл устгагдлаа");
         } catch (error) {
           console.error("Оффлайн өгөгдөл устгахад алдаа гарлаа:", error);
-          message.error(t("Оффлайн өгөгдөл устгахад алдаа гарлаа"));
+          message.error("Оффлайн өгөгдөл устгахад алдаа гарлаа");
         }
       },
 
@@ -402,13 +362,13 @@ export const AuthProvider = ({ children }) => {
         if (isOnline() && token) {
           try {
             await syncOfflineData();
-            message.success(t("Өгөгдөл амжилттай синк хийгдлээ"));
+            message.success("Өгөгдөл амжилттай синк хийгдлээ");
           } catch (error) {
             console.error("Синк хийхэд алдаа гарлаа:", error);
-            message.error(t("Синк хийхэд алдаа гарлаа"));
+            message.error("Синк хийхэд алдаа гарлаа");
           }
         } else {
-          message.warning(t("Интернэт холболт шаардлагатай"));
+          message.warning("Интернэт холболт шаардлагатай");
         }
       },
 

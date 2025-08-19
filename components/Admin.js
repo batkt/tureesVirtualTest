@@ -135,7 +135,9 @@ function Admin({
   const [showSidehelpBar, setShowSidehelpBar] = useState(false);
   const { i18n, t } = useTranslation();
   
-  const [isOnline, setIsOnline] = useState(false);
+
+
+const [isOnline, setIsOnline] = useState(true); // Default to online
 const [focusaasGarsan, setFocusaasGarsan] = useState(false);
 const [isOffline, setIsOffline] = useState(false);
 const [pendingPayments, setPendingPayments] = useState([]);
@@ -143,7 +145,10 @@ const [syncStatus, setSyncStatus] = useState("idle");
 const [offlinePayments, setOfflinePayments] = useState([]);
 const [isClient, setIsClient] = useState(false);
 
+
 const hasReloadedThisSession = useRef(false);
+const lastSyncTime = useRef(0);
+const syncTimeoutRef = useRef(null);
 
 useEffect(() => {
   setIsClient(true);
@@ -157,30 +162,66 @@ useEffect(() => {
     setIsOffline(!navigator.onLine);
 
     const handleOnline = async () => {
+      console.log('🟢 Network online - managing sync carefully');
       setIsOffline(false);
       setIsOnline(true);
+      
+  
+      const now = Date.now();
+      const timeSinceLastSync = now - lastSyncTime.current;
+      
+      if (timeSinceLastSync < 10000) {
+        console.log('❌ Skipping sync - too soon since last sync');
+        return;
+      }
+      
       setSyncStatus("syncing");
+      lastSyncTime.current = now;
 
       if ("serviceWorker" in navigator) {
         try {
           const registration = await navigator.serviceWorker.ready;
-          if ("sync" in window.ServiceWorkerRegistration.prototype) {
-            await registration.sync.register("sync-payments");
-            await registration.sync.register("sync-cars");
-          } else {
-            navigator.serviceWorker.controller?.postMessage({ type: "TRIGGER_SYNC", tag: "sync-payments" });
-            navigator.serviceWorker.controller?.postMessage({ type: "TRIGGER_SYNC", tag: "sync-cars" });
+          
+  
+          if (syncTimeoutRef.current) {
+            clearTimeout(syncTimeoutRef.current);
+            syncTimeoutRef.current = null;
           }
+          
+  
+          syncTimeoutRef.current = setTimeout(async () => {
+            try {
+              if ("sync" in window.ServiceWorkerRegistration.prototype) {
+                await registration.sync.register("sync-payments");
+              } else {
+                navigator.serviceWorker.controller?.postMessage({ 
+                  type: "TRIGGER_SYNC", 
+                  tag: "sync-payments" 
+                });
+              }
+            } catch (syncError) {
+              console.error("Sync registration failed:", syncError);
+              setSyncStatus("idle");
+            }
+          }, 2000); // 2 second delay
+          
         } catch (error) {
           console.error("Failed to register background sync:", error);
+          setSyncStatus("idle");
         }
       }
     };
 
     const handleOffline = () => {
+      console.log('🔴 Network offline');
       setIsOffline(true);
       setIsOnline(false);
       setSyncStatus("idle");
+
+      if (syncTimeoutRef.current) {
+        clearTimeout(syncTimeoutRef.current);
+        syncTimeoutRef.current = null;
+      }
     };
 
     window.addEventListener("online", handleOnline);
@@ -189,6 +230,9 @@ useEffect(() => {
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
+      if (syncTimeoutRef.current) {
+        clearTimeout(syncTimeoutRef.current);
+      }
     };
   }
 }, [isClient]);
@@ -200,43 +244,60 @@ useEffect(() => {
     const handler = (event) => {
       const { data } = event;
 
-      if (data?.type === "PAYMENT_SAVED_OFFLINE") {
-        setOfflinePayments((prev) => [...prev, data.payment]);
-        message.info(
-          t("Төлбөр offline-д хадгалагдлаа, Интернет холбогдох үед төлөв өөрчлөгдөх болно."),
-          10
-        );
-      }
+      if (!data?.type) return;
 
-      if (data?.type === "SYNC_COMPLETED") {
-        if (data.results?.successful > 0 && !hasReloadedThisSession.current) {
-          hasReloadedThisSession.current = true;
-          message.success(
-            `Төлбөрийн синк амжилттай (${data.results.successful})`,
-            3
+      console.log('📨 Admin SW Message:', data.type);
+
+      switch (data.type) {
+        case "PAYMENT_SAVED_OFFLINE":
+          setOfflinePayments((prev) => [...prev, data.payment]);
+          message.info(
+            t("Төлбөр offline-д хадгалагдлаа, Интернет холбогдох үед төлөв өөрчлөгдөх болно."),
+            10
           );
-        } else if (data.results?.successful === 0) {
-          message.info("Синк хийх зүйл олдсонгүй", 3);
-        }
+          break;
 
-        setSyncStatus("idle");
-        loadPendingPayments();
+        case "SYNC_COMPLETED":
+          const now = Date.now();
+          const timeSinceLastMessage = now - lastSyncTime.current;
+          
+          console.log('🔄 Sync completed:', {
+            successful: data.results?.successful,
+            hasReloaded: hasReloadedThisSession.current,
+            timeSinceLastMessage
+          });
+          
+    
+          if (data.results?.successful > 0) {
+         
+            if (timeSinceLastMessage > 5000) {
+              message.success(
+                `Төлбөрийн синк амжилттай (${data.results.successful})`,
+                3
+              );
+            }
+          } else if (data.results?.successful === 0 && timeSinceLastMessage > 5000) {
+            message.info("Синк хийх зүйл олдсонгүй", 3);
+          }
+
+          setSyncStatus("idle");
+          loadPendingPayments();
+          break;
+          
+        default:
+          break;
       }
     };
 
     navigator.serviceWorker.addEventListener("message", handler);
 
-    const resetReloadGuard = () => {
-      hasReloadedThisSession.current = false;
-    };
-    window.addEventListener("offline", resetReloadGuard);
-
+  
     return () => {
       navigator.serviceWorker.removeEventListener("message", handler);
-      window.removeEventListener("offline", resetReloadGuard);
     };
   }
-}, [isClient]);
+}, [isClient, t]);
+
 
 useEffect(() => {
   if (!isClient) return;

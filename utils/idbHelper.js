@@ -6,8 +6,6 @@ const DB_VERSION = 9;
 const STORES = {
   USER: 'user',
   PAYMENTS: 'offline-payments',
-  AUTH: 'auth', 
-  CACHE: 'cache'
 };
 export async function openDB() {
   return idbOpen(DB_NAME, DB_VERSION, {
@@ -17,12 +15,6 @@ export async function openDB() {
       }
       if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
         db.createObjectStore(STORES.PAYMENTS, { keyPath: 'id', autoIncrement: true });
-      }
-      if (!db.objectStoreNames.contains(STORES.AUTH)) {
-        db.createObjectStore(STORES.AUTH);
-      }
-      if (!db.objectStoreNames.contains(STORES.CACHE)) {
-        db.createObjectStore(STORES.CACHE);
       }
     },
   });

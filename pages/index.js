@@ -161,7 +161,7 @@ function Ajiltan() {
                 </button>
                 <div className="mt-24 text-center xl:hidden">
                   © Zev-TABS LLC © {moment(new Date()).format("YYYY")}.{" "}
-                  {t("Бүх эрх хуулиар баталгаажсан")}
+                  {t("Бүх эрх хуулиар баталгаажсан.")}
                 </div>
               </div>
               <div className="fixed right-10 top-6 flex w-10 gap-2 transition-all hover:scale-105">
@@ -196,7 +196,7 @@ function Ajiltan() {
               </div>
               <div className="fixed bottom-0 hidden xl:block">
                 © Zev-TABS LLC © {moment(new Date()).format("YYYY")}.{" "}
-                {t("Бүх эрх хуулиар баталгаажсан")}
+                {t("Бүх эрх хуулиар баталгаажсан.")}
               </div>
             </div>
           </div>

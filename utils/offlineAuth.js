@@ -1,370 +1,189 @@
-import { openDB, deleteDB } from "idb";
+import { openDB as idbOpen } from 'idb';
 
-const DB_NAME = "turees-db";
-const DB_VERSION = 9; // Fixed version number
-const STORE_USER = "user";
-const STORE_PAYMENTS = "offline-payments"; // Add back payments store if needed
+const DB_NAME = 'turees-db';
+const DB_VERSION = 9;
+const STORES = {
+  USER: 'user',
+  PAYMENTS: 'offline-payments',
+  AUTH: 'auth',
+  CACHE: 'cache'
+};
 
-let dbInstance = null;
-
-async function getDB() {
-  if (typeof window === 'undefined' || !('indexedDB' in window)) {
-    throw new Error('IndexedDB is only available in the browser');
-  }
-  
-  if (dbInstance) return dbInstance;
-
+export async function openDB() {
   try {
-    dbInstance = await openDB(DB_NAME, DB_VERSION, {
+    const db = await idbOpen(DB_NAME, DB_VERSION, {
       upgrade(db, oldVersion, newVersion, transaction) {
-        console.log(`Upgrading DB from version ${oldVersion} to ${newVersion}`);
+        console.log(`Өгөгдлийн санг ${oldVersion}-ээс ${newVersion} рүү шинэчилж байна`);
         
-        // Create USER store if it doesn't exist
-        if (!db.objectStoreNames.contains(STORE_USER)) {
-          console.log('Creating USER store');
-          db.createObjectStore(STORE_USER);
+        if (!db.objectStoreNames.contains(STORES.USER)) {
+          console.log('Хэрэглэгчийн сан үүсгэж байна');
+          db.createObjectStore(STORES.USER);
         }
         
-        // Create PAYMENTS store if it doesn't exist (optional - remove if not needed)
-        if (!db.objectStoreNames.contains(STORE_PAYMENTS)) {
-          console.log('Creating PAYMENTS store');
-          db.createObjectStore(STORE_PAYMENTS, { 
+        if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
+          console.log('Төлбөрийн сан үүсгэж байна');
+          db.createObjectStore(STORES.PAYMENTS, { 
             keyPath: 'id', 
             autoIncrement: true 
           });
         }
         
-        console.log('Available stores after upgrade:', [...db.objectStoreNames]);
+        console.log('Шинэчлэлт дууссаны дараах сангууд:', [...db.objectStoreNames]);
       },
       blocked() {
-        console.warn('Database upgrade blocked - close other tabs');
-        // Notify user to close other tabs
-        if (typeof window !== 'undefined') {
-          alert('Please close other tabs using this application to continue');
-        }
+        console.warn('Өгөгдлийн сангийн шинэчлэлт хориглогдсон - бусад табуудыг хаана уу');
       },
       blocking() {
-        console.warn('Database blocking another connection');
-        // Close the current connection to allow upgrade
-        if (dbInstance) {
-          dbInstance.close();
-          dbInstance = null;
-        }
+        console.warn('Энэ холболт өгөгдлийн сангийн шинэчлэлтийг хориглож байна');
       },
     });
-
-    console.log('Database opened successfully:', {
-      name: dbInstance.name,
-      version: dbInstance.version,
-      stores: [...dbInstance.objectStoreNames]
-    });
-
-    return dbInstance;
-  } catch (error) {
-    console.error('Database opening failed:', error);
     
-    if (error.name === 'VersionError' || error.name === 'InvalidStateError') {
-      console.log('Version error detected, attempting database reset...');
-      await resetDatabase();
-      
-      // Retry with a clean database
-      dbInstance = await openDB(DB_NAME, DB_VERSION, {
-        upgrade(db) {
-          console.log('Creating stores in fresh database');
-          if (!db.objectStoreNames.contains(STORE_USER)) {
-            db.createObjectStore(STORE_USER);
-          }
-          if (!db.objectStoreNames.contains(STORE_PAYMENTS)) {
-            db.createObjectStore(STORE_PAYMENTS, { 
-              keyPath: 'id', 
-              autoIncrement: true 
-            });
-          }
-        },
-      });
-      return dbInstance;
-    }
+    return db;
+  } catch (error) {
+    console.error('IndexedDB нээхэд алдаа гарлаа:', error);
     throw error;
   }
 }
 
-export async function resetDatabase() {
+export async function saveOfflineAuth(credentials, serverResponse) {
   try {
-    console.log('Resetting database...');
+    console.log('💾 Оффлайн нэвтрэлтийн өгөгдөл хадгалж байна');
+    const db = await openDB();
     
-    // Close existing connection
-    if (dbInstance) {
-      dbInstance.close();
-      dbInstance = null;
-    }
-    
-    // Wait a bit for connections to close
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
-    // Delete the database
-    await deleteDB(DB_NAME);
-    console.log('Database reset successfully');
-    return true;
-  } catch (error) {
-    console.error('Failed to reset database:', error);
-    return false;
-  }
-}
-
-// Debug function to check database state
-export async function debugDatabase() {
-  try {
-    const db = await getDB();
-    console.log('=== DATABASE DEBUG INFO ===');
-    console.log('Database name:', db.name);
-    console.log('Database version:', db.version);
-    console.log('Object stores:', [...db.objectStoreNames]);
-    console.log('USER store exists:', db.objectStoreNames.contains(STORE_USER));
-    console.log('PAYMENTS store exists:', db.objectStoreNames.contains(STORE_PAYMENTS));
-    return true;
-  } catch (error) {
-    console.error('Database debug failed:', error);
-    return false;
-  }
-}
-
-// Enhanced error wrapper for database operations
-async function withErrorHandling(operation, retryCount = 0) {
-  try {
-    return await operation();
-  } catch (error) {
-    console.error(`Database operation failed (attempt ${retryCount + 1}):`, error);
-    
-    if (retryCount < 2 && (
-      error.name === 'VersionError' || 
-      error.name === 'InvalidStateError' ||
-      error.name === 'TransactionInactiveError'
-    )) {
-      console.log('Attempting database recovery...');
-      
-      // Reset database instance
-      if (dbInstance) {
-        dbInstance.close();
-        dbInstance = null;
-      }
-      
-      // Wait and retry
-      await new Promise(resolve => setTimeout(resolve, 100));
-      return withErrorHandling(operation, retryCount + 1);
-    }
-    
-    throw error;
-  }
-}
-
-export async function storeLoginData(credentials, loginResult) {
-  return withErrorHandling(async () => {
-    const db = await getDB();
-    
-    // Verify store exists
-    if (!db.objectStoreNames.contains(STORE_USER)) {
-      throw new Error('USER store not found in database');
-    }
-
-    // Store token
-    await db.put(STORE_USER, loginResult.token || '', "token");
-
-    // Store user info
-    const info = {
-      ...loginResult.result,
-      username: credentials.nevtrekhNer || "",
-      password: credentials.nuutsUg || "",
-      timestamp: new Date().toISOString(),
+    const authData = {
+      username: credentials.nevtrekhNer || credentials.username,
+      password: credentials.nuutsUg || credentials.password,
+      token: serverResponse.token,
+      userInfo: serverResponse.result || serverResponse.data,
+      permissionsData: serverResponse.permissionsData,
+      savedAt: new Date().toISOString(),
     };
-    await db.put(STORE_USER, info, "info");
+    
+    await db.put(STORES.USER, authData, 'credentials');
+    console.log('✅ Оффлайн нэвтрэлтийн өгөгдөл амжилттай хадгалагдлаа');
+  } catch (error) {
+    console.error('❌ Оффлайн нэвтрэлтийн өгөгдөл хадгалахад алдаа гарлаа:', error);
+    throw error;
+  }
+}
 
-
-    if (loginResult.permissionsData) {
-      await db.put(STORE_USER, loginResult.permissionsData, "permissionsData");
+export async function performOfflineLogin(credentials) {
+  try {
+    console.log('🔐 Оффлайн нэвтрэлт оролдож байна');
+    
+    if (typeof navigator !== 'undefined' && navigator.onLine) {
+      console.log('❌ Сүлжээ холбогдсон байна - оффлайн нэвтрэлт хийх шаардлагагүй');
+      throw new Error('Сүлжээ байгаа тул онлайн нэвтрэлт хэрэглэнэ үү');
     }
     
-    console.log('Login data stored successfully');
-  });
+    const db = await openDB();
+    const storedAuth = await db.get(STORES.USER, 'credentials');
+    
+    if (!storedAuth) {
+      console.log('❌ Оффлайн нэвтрэлтийн мэдээлэл олдсонгүй');
+      throw new Error('Оффлайн нэвтрэлтийн мэдээлэл байхгүй байна');
+    }
+    
+    const inputUsername = credentials.nevtrekhNer || credentials.username;
+    const inputPassword = credentials.nuutsUg || credentials.password;
+    
+    if (storedAuth.username !== inputUsername || storedAuth.password !== inputPassword) {
+      console.log('❌ Оффлайн нэвтрэлтийн мэдээлэл тохирохгүй байна');
+      throw new Error('Нэвтрэх нэр эсвэл нууц үг буруу байна');
+    }
+    
+    console.log('✅ Оффлайн нэвтрэлт амжилттай боллоо');
+    return {
+      success: true,
+      token: storedAuth.token,
+      result: storedAuth.userInfo,
+      permissionsData: storedAuth.permissionsData,
+      offline: true,
+    };
+    
+  } catch (error) {
+    console.error('❌ Оффлайн нэвтрэлт амжилтгүй боллоо:', error);
+    throw error;
+  }
 }
 
-
-export async function getCachedUserData() {
-  return withErrorHandling(async () => {
-    const db = await getDB();
-    const info = await db.get(STORE_USER, "info");
-    return info || null;
-  });
+export async function hasOfflineAuth() {
+  try {
+    if (typeof navigator !== 'undefined' && navigator.onLine) {
+      return false;
+    }
+    
+    const db = await openDB();
+    const storedAuth = await db.get(STORES.USER, 'credentials');
+    return !!(storedAuth && storedAuth.username && storedAuth.password);
+  } catch (error) {
+    console.error('Оффлайн нэвтрэлтийн боломж шалгахад алдаа гарлаа:', error);
+    return false;
+  }
 }
 
-
-export async function getCachedToken() {
-  return withErrorHandling(async () => {
-    const db = await getDB();
-    return await db.get(STORE_USER, "token");
-  });
+export async function clearOfflineAuth() {
+  try {
+    const db = await openDB();
+    await db.delete(STORES.USER, 'credentials');
+    console.log('✅ Оффлайн нэвтрэлтийн мэдээлэл устгагдлаа');
+  } catch (error) {
+    console.error('❌ Оффлайн нэвтрэлтийн мэдээлэл устгахад алдаа гарлаа:', error);
+    throw error;
+  }
 }
-
 
 export async function getCachedPermissionsData() {
-  return withErrorHandling(async () => {
-    const db = await getDB();
-    return await db.get(STORE_USER, "permissionsData");
-  });
-}
-
-
-export async function hasValidOfflineAuth() {
   try {
-    const data = await getCachedUserData();
-    return !!(data && data.username && data.password);
+    const db = await openDB();
+    const storedAuth = await db.get(STORES.USER, 'credentials');
+    return storedAuth ? storedAuth.permissionsData : null;
   } catch (error) {
-    console.warn('Error checking offline auth:', error);
-    return false;
+    console.error('❌ Кэшээс эрхийн мэдээлэл авахад алдаа гарлаа:', error);
+    throw error;
   }
 }
 
-export async function clearOfflineData() {
-  return withErrorHandling(async () => {
-    const db = await getDB();
-    
-
-    const transaction = db.transaction([STORE_USER], 'readwrite');
-    const store = transaction.objectStore(STORE_USER);
-    
-    await store.delete("token");
-    await store.delete("info");
-    await store.delete("permissionsData");
-    
-    await transaction.done;
-    console.log('Offline data cleared successfully');
-  });
-}
-
-export async function attemptOfflineLogin({ nevtrekhNer, nuutsUg }) {
-  if (!nevtrekhNer || !nuutsUg) {
-    throw new Error("Нэвтрэх нэр болон нууц үг шаардлагатай.");
+export async function attemptLogin(credentials, onlineLoginFunction) {
+  const inputUsername = credentials.nevtrekhNer || credentials.username;
+  const inputPassword = credentials.nuutsUg || credentials.password;
+  
+  if (!inputUsername || !inputPassword) {
+    throw new Error('Нэвтрэх нэр болон нууц үг шаардлагатай');
   }
 
-  const stored = await getCachedUserData();
-
-  if (
-    !stored ||
-    stored.username.trim() !== nevtrekhNer.trim() ||
-    stored.password.trim() !== nuutsUg.trim()
-  ) {
-    throw new Error("Offline credentials mismatch");
-  }
-
-  const token = await getCachedToken();
-  if (!token) {
-    throw new Error("Offline token not found");
-  }
-
-  const permissionsData = await getCachedPermissionsData();
-
-  if (!permissionsData || !permissionsData.moduluud) {
-    console.warn("Offline login: No permissions found, continuing with fallback mode");
-  }
-
-  return {
-    success: true,
-    data: {
-      token,
-      result: stored,
-      permissionsData: permissionsData || { moduluud: [], offlineFallback: true },
-      offline: true,
-    },
-  };
-}
-
-
-export function isOnline() {
-  return typeof navigator !== "undefined" && navigator.onLine;
-}
-
-export async function attemptLogin(credentials, onlineLoginFunc) {
-  try {
-    const onlineResult = await onlineLoginFunc(credentials);
-    return { success: true, mode: "online", data: onlineResult };
-  } catch (onlineError) {
-    console.log('Online login failed, checking offline availability...');
-    
+  if (typeof navigator !== 'undefined' && navigator.onLine) {
+    console.log('🌐 Сүлжээ байгаа - онлайн нэвтрэлт хийж байна');
     try {
-      const offlineAvailable = await hasValidOfflineAuth();
-      if (offlineAvailable) {
-        try {
-          const offlineResult = await attemptOfflineLogin(credentials);
-          return { success: true, mode: "offline", data: offlineResult.data };
-        } catch (offlineError) {
-          console.error('Offline login failed:', offlineError);
-          return { 
-            success: false, 
-            error: `Online: ${onlineError.message}, Offline: ${offlineError.message}` 
-          };
-        }
-      } else {
-        console.log('No offline credentials available');
-        return { success: false, error: onlineError.message };
+      const onlineResult = await onlineLoginFunction(credentials);
+      
+      try {
+        await saveOfflineAuth(credentials, onlineResult);
+      } catch (saveError) {
+        console.warn('⚠️ Оффлайн мэдээлэл хадгалахад алдаа гарсан ч онлайн нэвтрэлт амжилттай боллоо:', saveError);
       }
-    } catch (offlineCheckError) {
-      console.error('Error checking offline availability:', offlineCheckError);
-      return { success: false, error: onlineError.message };
+      
+      return {
+        success: true,
+        mode: 'online',
+        data: onlineResult
+      };
+    } catch (onlineError) {
+      console.error('❌ Онлайн нэвтрэлт амжилтгүй боллоо:', onlineError);
+      throw new Error(onlineError.message || 'Нэвтрэлт амжилтгүй боллоо');
     }
-  }
-}
-export async function emergencyCleanup() {
-  try {
-    console.log('Starting emergency cleanup...');
-    
-    
-    if (dbInstance) {
-      dbInstance.close();
-      dbInstance = null;
+  } else {
+    console.log('📴 Сүлжээ тасарсан - оффлайн нэвтрэлт оролдож байна');
+    try {
+      const offlineResult = await performOfflineLogin(credentials);
+      return {
+        success: true,
+        mode: 'offline',
+        data: offlineResult
+      };
+    } catch (offlineError) {
+      console.error('❌ Оффлайн нэвтрэлт амжилтгүй боллоо:', offlineError);
+      throw new Error('Оффлайн нэвтрэлт амжилтгүй: ' + offlineError.message);
     }
-    if (typeof localStorage !== 'undefined') {
-      const keys = Object.keys(localStorage);
-      keys.forEach(key => {
-        if (key.includes('turees') || key.includes('auth')) {
-          localStorage.removeItem(key);
-          console.log('Removed localStorage key:', key);
-        }
-      });
-    }
-    if (typeof sessionStorage !== 'undefined') {
-      const keys = Object.keys(sessionStorage);
-      keys.forEach(key => {
-        if (key.includes('turees') || key.includes('auth')) {
-          sessionStorage.removeItem(key);
-          console.log('Removed sessionStorage key:', key);
-        }
-      });
-    }
-    await deleteDB(DB_NAME);
-    
-    console.log('Emergency cleanup completed successfully');
-    return true;
-  } catch (error) {
-    console.error('Emergency cleanup failed:', error);
-    return false;
-  }
-}
-export async function healthCheck() {
-  try {
-    console.log('Running database health check...');
-    const db = await getDB();
-    console.log('✓ Database connection successful');
-    await db.put(STORE_USER, 'test', 'healthcheck');
-    const result = await db.get(STORE_USER, 'healthcheck');
-    await db.delete(STORE_USER, 'healthcheck');
-    
-    if (result === 'test') {
-      console.log('✓ Database read/write operations successful');
-      return { success: true, message: 'Database is healthy' };
-    } else {
-      throw new Error('Read/write test failed');
-    }
-  } catch (error) {
-    console.error('✗ Database health check failed:', error);
-    return { success: false, error: error.message };
   }
 }
