@@ -89,41 +89,33 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
 
   return (
     <div className="w-full space-y-2">
-      <div className="w-full space-y-2">
-        <div className="flex w-full flex-row justify-between">
-          <div className="dark: text-right text-gray-200">
-            {t("Эхлэх огноо")}:
-          </div>
-          <div className="dark: font-medium text-gray-200">
+      <div className="w-full space-y-2 ">
+        <div className="flex w-full flex-row justify-between ">
+          <div className="text-right ">{t("Эхлэх огноо")}:</div>
+          <div className="dark: 0 font-medium">
             {moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}
           </div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="dark: text-right text-gray-200">
-            {t("Дуусах огноо")}:
-          </div>
-          <div className="dark: font-medium text-gray-200">
+          <div className="dark: text-right ">{t("Дуусах огноо")}:</div>
+          <div className="dark: 0 font-medium">
             {moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}
           </div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="dark: text-right text-gray-200">
-            {t("Ашигласан хоног")}:
-          </div>
-          <div className="dark: font-medium text-gray-200">
+          <div className="dark: text-right ">{t("Ашигласан хоног")}:</div>
+          <div className="dark: font-medium ">
             {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
           </div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="dark: text-right text-gray-200">
-            {t("Авлагын дүн")}:
-          </div>
-          <div className="dark: font-medium text-gray-200">
+          <div className="dark: text-right ">{t("Авлагын дүн")}:</div>
+          <div className="dark: font-medium ">
             {formatNumber(data?.uldegdel)}
           </div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="dark: text-right text-gray-200">
+          <div className="dark: text-right ">
             {data?.turGereeEsekh === true ? "Сунгах өдөр:" : "Сунгах сар:"}
           </div>
           <InputNumber
@@ -136,9 +128,7 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
           />
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="dark: text-right text-gray-200">
-            {t("Дуусгах огноо")}:
-          </div>
+          <div className="dark: text-right">{t("Дуусгах огноо")}:</div>
           <DatePicker
             id="ognoo"
             className="font-medium"
