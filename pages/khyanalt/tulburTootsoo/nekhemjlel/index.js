@@ -2246,7 +2246,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature1 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={"/fcSig2.png"}
+              src={"https://turees.zevtabs.mn/signature1.png"}
               style={{
                 width: 280,
                 height: "105",
@@ -2258,10 +2258,10 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature2 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={"https://turees.zevtabs.mn/fcSig1.png"}
+              src={"https://turees.zevtabs.mn/signature2.png"}
               style={{
                 width: 280,
-                height: 105,
+                height: 135,
                 transform: "translate(-28%, -44%)",
               }}
             />
