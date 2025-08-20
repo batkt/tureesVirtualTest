@@ -758,7 +758,7 @@ function tulburTootsoo({ token }) {
                 <img
                   src={"/fcSig2.png"}
                   style={{
-                    width: 280,
+                    width: 180,
                     height: 105,
                     transform: "translate(-45%, -35%)",
                   }}
@@ -771,9 +771,9 @@ function tulburTootsoo({ token }) {
                 <img
                   src={"/fcSig1.png"}
                   style={{
-                    width: 280,
+                    width: 180,
                     height: 115,
-                    transform: "translate(-35%, -44%)",
+                    transform: "translate(-30%, -44%)",
                   }}
                 />
               </span>
@@ -2261,7 +2261,7 @@ function tulburTootsoo({ token }) {
               src={"https://turees.zevtabs.mn/signature2.png"}
               style={{
                 width: 280,
-                height: 135,
+                height: 155,
                 transform: "translate(-28%, -44%)",
               }}
             />
