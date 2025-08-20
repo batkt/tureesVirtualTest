@@ -769,11 +769,11 @@ function tulburTootsoo({ token }) {
             medeelel.signature2 = renderToString(
               <span style={{ position: "absolute" }}>
                 <img
-                  src={"/fcSig1.png"}
+                  src={"/gariinUseg2.png"}
                   style={{
-                    width: 180,
-                    height: 115,
-                    transform: "translate(-30%, -44%)",
+                    width: 330,
+                    height: 215,
+                    transform: "translate(-50%, -44%)",
                   }}
                 />
               </span>
@@ -2246,10 +2246,10 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature1 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={"https://turees.zevtabs.mn/signature1.png"}
+              src={"https://turees.zevtabs.mn/fcSig2.png"}
               style={{
                 width: 280,
-                height: "105",
+                height: "155",
                 transform: "translate(-40%, -50%)",
               }}
             />
@@ -2258,7 +2258,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature2 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={"https://turees.zevtabs.mn/signature2.png"}
+              src={"https://turees.zevtabs.mn/gariinUseg2.png"}
               style={{
                 width: 280,
                 height: 155,
