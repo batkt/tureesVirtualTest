@@ -418,7 +418,7 @@ function GuilgeeniiTuukh(
           </tr>
         </th>
         <tbody
-          className=" overflownone min-w-[93.4rem] overflow-y-scroll"
+          className=" overflownone min-w-[93.4rem]"
           style={{ height: "calc(100vh - 15rem)" }}
         >
           {sortedData

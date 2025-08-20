@@ -2191,7 +2191,7 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.khuviinTamga = renderToString(
             <span style={{ position: "absolute", zIndex: 1 }}>
               <img
-                src={`${url}/file?path=khuviinTamga/${barilga.khuviinTamga}`}
+                src={"https://turees.zevtabs.mn/Tamga1.png"}
                 style={{
                   width: 250,
                   height: 150,
@@ -2246,7 +2246,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature1 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+              src={"https://turees.zevtabs.mn/signature1.png"}
               style={{
                 width: 330,
                 height: "125",
