@@ -192,7 +192,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               Гэрээ
             </div>
             <div
-              className=" flex w-full flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black dark:text-white shadow-lg dark:hover:bg-gray-900 dark:dark:bg-gray-800 print:min-h-0 print:shadow-none"
+              className=" flex w-full flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black dark:text-white shadow-lg  dark:bg-gray-800 print:min-h-0 print:shadow-none"
               style={{ width: "210mm" }}
             >
               {gereeniiZagvar?.ner && (
@@ -213,7 +213,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                 return (
                   <div
                     key={`alkhamiinGereeniiZagvar${index}`}
-                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-900 "
+                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:text-gray-200 dark:bg-gray-800"
                   >
                     <div
                       className="w-full"
