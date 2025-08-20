@@ -756,11 +756,11 @@ function tulburTootsoo({ token }) {
             medeelel.signature1 = renderToString(
               <span style={{ position: "absolute" }}>
                 <img
-                  src={"/signature1.png"}
+                  src={"/fcSig2.png"}
                   style={{
-                    width: 320,
-                    height: 85,
-                    transform: "translate(-45%, -45%)",
+                    width: 280,
+                    height: 105,
+                    transform: "translate(-45%, -35%)",
                   }}
                 />
               </span>
@@ -769,11 +769,11 @@ function tulburTootsoo({ token }) {
             medeelel.signature2 = renderToString(
               <span style={{ position: "absolute" }}>
                 <img
-                  src={"/signature2.png"}
+                  src={"/fcSig1.png"}
                   style={{
-                    width: 330,
-                    height: 135,
-                    transform: "translate(-28%, -44%)",
+                    width: 280,
+                    height: 115,
+                    transform: "translate(-35%, -44%)",
                   }}
                 />
               </span>
@@ -2246,10 +2246,10 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature1 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={"https://turees.zevtabs.mn/signature1.png"}
+              src={"/fcSig2.png"}
               style={{
-                width: 330,
-                height: "125",
+                width: 280,
+                height: "105",
                 transform: "translate(-40%, -50%)",
               }}
             />
@@ -2258,10 +2258,10 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature2 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={"https://turees.zevtabs.mn/signature2.png"}
+              src={"https://turees.zevtabs.mn/fcSig1.png"}
               style={{
-                width: 330,
-                height: 145,
+                width: 280,
+                height: 105,
                 transform: "translate(-28%, -44%)",
               }}
             />

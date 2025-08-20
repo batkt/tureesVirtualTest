@@ -171,9 +171,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   <td style="border: 1px solid #000; text-align: center;">2</td>
                   <td colspan="4" style="border: 1px solid #000; text-align: left;">Алданги</td>
                   <td></td>
-                  <td style="border: 1px solid #000; text-align: right;">&lt;aldangiinUldegdelNuat&gt;</td>
-                  <td style="border: 1px solid #000; text-align: right;">&lt;aldangiinUldegdelNuatgui&gt;</td>
-                  <td style="border: 1px solid #000; text-align: right;">&lt;aldangiinUldegdel&gt;</td>
+                  <td style="border: 1px solid #000; text-align: right;"></td> 
+                  <td style="border: 1px solid #000; text-align: right;"></td>   
+                  <td style="border: 1px solid #000; text-align: right;">&lt;aldangiinUldegdel&gt;</td>              
                 </tr>
               `
           }
@@ -192,17 +192,14 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
             .map((mur, index) => `
               <tr>
                 <td style="border: 1px solid #000; text-align: center;">${index + 3}</td>
-                <td colspan="4" style="border: 1px solid #000; text-align: left;">${mur.tailbar.replace(/11к|11k/gi, "").trim()}</td>
+                <td colspan="4" style="border: 1px solid #000; text-align: left;">Менежментийн төлбөр</td>
                 <td style="border: 1px solid #000; text-align: center;">&lt;talbainKhemjee&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">${
-                  mur.tailbar.toLowerCase().includes("11к") || mur.tailbar.toLowerCase().includes("11k")
-                    ? "11,000.00"
-                    : `&lt;${mur.tailbar}.negj&gt;`
-                }</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tariff&gt;</td>
                 <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulult&gt;</td>
                 <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDun&gt;</td>
               </tr>
             `).join("")}
+
 
           <!-- Дулаан / торгууль -->
           ${medeelel.zardluud
@@ -245,7 +242,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 <td colspan="2" style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.umnukhZaalt&gt;</td>
                 <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.suuliinZaalt&gt;</td>
                 <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.zuruuZaalt&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tariff&gt;/&lt;${mur.tailbar}.tsakhilgaanUrjver&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">${mur.tariff}/1.02</td>
                 <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tulukhDun&gt;</td>
               </tr>
             `).join("")}
