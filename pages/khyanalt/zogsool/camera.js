@@ -253,6 +253,7 @@ function camera({ token }) {
     type: "",
   });
   const [value, setValue] = useState(null);
+  const [ajiltniiNers, setAjiltniiNers] = useState([]);
   const [camerVal, setCamerVal] = useState([null, null]);
   const [cameraData, setCameraData] = useState([null, null]);
   const [cameraKharakh, setCamerKharakh] = useState(false);
@@ -821,6 +822,31 @@ function camera({ token }) {
       className: "!w-fit",
     });
   }
+  useEffect(() => {
+      var ajiltnuud = [];
+      uilchluulegchGaralt?.jagsaalt?.forEach((element) => {
+        element.tuukh[0]?.burtgesenAjiltaniiId &&
+          !ajiltnuud.find(
+            (a) =>
+              a.burtgesenAjiltaniiId === element.tuukh[0]?.burtgesenAjiltaniiId
+          ) &&
+          ajiltnuud.push(element.tuukh[0]?.burtgesenAjiltaniiId);
+      });
+      ajiltnuud.length > 0 &&
+        uilchilgee(token)
+          .get("/ajiltan", {
+            params: { query: { _id: ajiltnuud.map((a) => a) } },
+          })
+          .then(({ data }) => {
+            if (!!data && data?.jagsaalt?.length > 0) {
+              setAjiltniiNers(
+                data?.jagsaalt?.map((a) => {
+                  return { ner: a?.ner, id: a?._id };
+                })
+              );
+            }
+          });
+    }, [uilchluulegchGaralt?.jagsaalt]);
   const columns = useMemo(() => {
     const col = [
       {
@@ -2988,6 +3014,24 @@ function camera({ token }) {
                                               v?.[0]?.niitKhugatsaa <= 30
                                             ? t("30 мин")
                                             : t(parent.zurchil);
+                                      },
+                                    },
+                                    {
+                                      title: t("Бүртгэсэн"),
+                                      dataIndex: "tuukh",
+                                      render: (v) => {
+                                        return (
+                                          v &&
+                                          (String(
+                                            v[0]?.burtgesenAjiltaniiNer
+                                          ).replace(/\D/g, "").length > 9
+                                            ? ajiltniiNers.find(
+                                                (a) =>
+                                                  a.id ===
+                                                  v[0]?.burtgesenAjiltaniiId
+                                              )?.ner
+                                            : v[0]?.burtgesenAjiltaniiNer)
+                                        );
                                       },
                                     },
                                     {
