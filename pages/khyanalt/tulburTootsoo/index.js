@@ -383,9 +383,9 @@ function tulburTootsoo({ token }) {
     } else barimtShivya();
   }
 
-  const columns = useMemo(() => {
-    let baganuud = [];
-    if (songogdsonDans?.bank === "tdb") {
+      const columns = useMemo(() => {
+        let baganuud = [];
+        if (songogdsonDans?.bank === "tdb") {
       baganuud = [
         {
           title: t("Огноо"),
@@ -395,22 +395,11 @@ function tulburTootsoo({ token }) {
           render(date) {
             return moment(date).format("YYYY-MM-DD");
           },
-          showSorterTooltip: false,
-          sorter: {
-            compare: () => 0,
-            multiple: 1,
-          },
         },
         {
           title: t("Цаг"),
-          align: "center",
-          showSorterTooltip: false,
-          sorter: {
-            compare: () => 0,
-            multiple: 2,
-          },
           dataIndex: "TxTime",
-          ellipsis: true,
+          align: "center",
           width: "4rem",
           render(a) {
             if (_.isString(a)) return `${a}`;
@@ -419,9 +408,9 @@ function tulburTootsoo({ token }) {
         },
         {
           title: t("Гүйлгээний утга"),
+          dataIndex: "TxAddInf",
           width: "20rem",
           align: "center",
-          dataIndex: "TxAddInf",
           render(a) {
             return (
               <Tooltip title={<div>{a}</div>}>
@@ -432,24 +421,30 @@ function tulburTootsoo({ token }) {
         },
         {
           title: t("Гүйлгээний дүн"),
-          sorter: () => 0,
           dataIndex: "Amt",
-          ellipsis: true,
+          align: "right",
           width: "9rem",
-          className: "text-right",
-          showSorterTooltip: false,
           render(a) {
             return `${formatNumber(a, 2)}₮`;
           },
         },
         {
           title: t("Шилжүүлсэн данс"),
-          align: "center",
           dataIndex: "CtAcntOrg",
-          ellipsis: true,
+          align: "center",
           width: "10rem",
         },
+        {
+          title: t("Холбосон огноо"),
+          dataIndex: "updatedAt", 
+          align: "center",
+          width: "8rem",
+          render(date) {
+            return date ? moment(date).format("YYYY-MM-DD HH:mm") : "-";
+          },
+        },
       ];
+
       if (khuulgaTurul === "orlogo")
         baganuud = [
           ...baganuud,
@@ -619,6 +614,15 @@ function tulburTootsoo({ token }) {
           ellipsis: true,
           width: "10rem",
         },
+        {
+          title: t("Холбосон огноо"),
+          dataIndex: "updatedAt", 
+          align: "center",
+          width: "8rem",
+          render(date) {
+            return date ? moment(date).format("YYYY-MM-DD HH:mm") : "-";
+          },
+        },
       ];
       if (khuulgaTurul === "orlogo")
         baganuud = [
@@ -729,6 +733,15 @@ function tulburTootsoo({ token }) {
           dataIndex: "accNum",
           ellipsis: true,
           width: "10rem",
+        },
+        {
+          title: t("Холбосон огноо"),
+          dataIndex: "updatedAt", 
+          align: "center",
+          width: "8rem",
+          render(date) {
+            return date ? moment(date).format("YYYY-MM-DD HH:mm") : "-";
+          },
         },
       ];
       if (khuulgaTurul === "orlogo")

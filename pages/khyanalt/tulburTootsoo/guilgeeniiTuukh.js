@@ -108,33 +108,58 @@ function TableGuilgee({
 
     return (
       <Table.Summary.Row>
-        {columns.map((mur, index) => (
-          <Table.Summary.Cell
-            className={`${mur.summary !== true ? "border-none" : "font-bold"}`}
-            index={index}
-            align="right"
-          >
-            {mur.summary
-              ? mur.dataIndex === "avlagiinUldegdel"
-                ? formatNumber(
-                    garalt?.jagsaalt?.reduce(
-                      (a, b) =>
-                        a +
-                        (parseFloat(b["uldegdel"]) || 0) +
-                        (parseFloat(b["aldangiinUldegdel"]) || 0),
-                      0
-                    )
-                  )
-                : formatNumber(
-                    garalt?.jagsaalt?.reduce(
-                      (a, b) => a + (parseFloat(b[mur.dataIndex]) || 0),
-                      0
-                    )
-                  )
-              : ""}
-          </Table.Summary.Cell>
-        ))}
-      </Table.Summary.Row>
+      {columns.map((mur, index) => (
+        <Table.Summary.Cell
+          key={mur.dataIndex}
+          className={`${mur.summary !== true ? "border-none" : "font-bold"}`}
+          index={index}
+          align="right"
+        >
+          {mur.summary ? (
+            mur.dataIndex === "baritsaaAvakhDun" ? (
+              
+              formatNumber(
+                (garalt?.jagsaalt?.reduce(
+                  (a, b) => a + (parseFloat(b.baritsaaAvakhDun) || 0),
+                  0
+                ) || 0) -
+                  (garalt?.jagsaalt?.reduce(
+                    (a, b) => a + (parseFloat(b.baritsaaniiUldegdel) || 0),
+                    0
+                  ) || 0)
+              )
+            ) : mur.dataIndex === "baritsaaniiUldegdel" ? (
+              formatNumber(
+                garalt?.jagsaalt?.reduce(
+                  (a, b) => a + (parseFloat(b.baritsaaniiUldegdel) || 0),
+                  0
+                )
+              )
+            ) : mur.dataIndex === "avlagiinUldegdel" ? (
+              formatNumber(
+                garalt?.jagsaalt?.reduce(
+                  (a, b) =>
+                    a +
+                    (parseFloat(b["uldegdel"]) || 0) +
+                    (parseFloat(b["aldangiinUldegdel"]) || 0),
+                  0
+                )
+              )
+            ) : (
+              formatNumber(
+                garalt?.jagsaalt?.reduce(
+                  (a, b) => a + (parseFloat(b[mur.dataIndex]) || 0),
+                  0
+                )
+              )
+            )
+          ) : (
+            ""
+          )}
+        </Table.Summary.Cell>
+      ))}
+    </Table.Summary.Row>
+
     );
   }
   return (
@@ -156,7 +181,7 @@ function TableGuilgee({
       pagination={{
         current: garalt?.khuudasniiDugaar,
         total: garalt?.niitMur,
-        pageSizeOptions: [100, 300, 500],
+        pageSizeOptions: [10, 20, 100, 300, 500],
         defaultPageSize: [500],
         showSizeChanger: true,
         onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {

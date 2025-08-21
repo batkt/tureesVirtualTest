@@ -705,7 +705,7 @@ function nasjiltinTailan({ token }) {
         <div className="hidden">
           <div ref={printRef}>
             <div className="flex w-full items-center justify-between text-sm">
-              <div className="w-1/3 text-left text-sm">
+              <div className="w-1/4 text-left text-sm">
                 {ognoo ? (
                   <div>
                     Огноо: {moment(ognoo[0]).format("YYYY-MM-DD")}-{" "}
@@ -719,9 +719,9 @@ function nasjiltinTailan({ token }) {
                 Насжилтын тайлан
               </div>
             </div>
-
+        
             <table className="w-full border-2 border-gray-500">
-              <thead className="bg-gray-400 text-white">
+              <thead className="bg-gray-400 text-black">
                 <tr>
                   {columns.map((col, idx) => (
                     <th
@@ -744,16 +744,22 @@ function nasjiltinTailan({ token }) {
                       <td
                         key={idx}
                         className={`border border-gray-400 px-2 py-1 text-mashJijigiinJijig ${
-                          isNumberColumn(col.dataIndex)
-                            ? "text-right"
-                            : "text-center"
+                          isNumberColumn(col.dataIndex) ? "text-right" : "text-center"
                         }`}
-                        style={{ whiteSpace: "nowrap" }}
+                        style={{
+                          whiteSpace: col.dataIndex === "talbainDugaar" ? "normal" : "nowrap",
+                          maxWidth: col.dataIndex === "talbainDugaar" ? "120px" : "auto",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
                       >
                         {isNumberColumn(col.dataIndex)
-                          ? formatNumber(item[col.dataIndex], 2)
-                          : item[col.dataIndex]}
+                          ? item[col.dataIndex]
+                            ? formatNumber(item[col.dataIndex], 2)
+                            : "\u00A0"
+                          : item[col.dataIndex] || "\u00A0"}
                       </td>
+
                     ))}
                   </tr>
                 ))}
