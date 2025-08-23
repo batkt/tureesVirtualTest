@@ -384,7 +384,7 @@ export const AuthProvider = ({ children }) => {
           }
         } catch (error) {
           console.error("Нэвтрэх явцад алдаа гарлаа:", error);
-          message.error("Нэвтрэх үед алдаа гарлаа");
+          message.error("Нэвтрэх нэр нууц үг буруу байна.");
         }
       },
 
