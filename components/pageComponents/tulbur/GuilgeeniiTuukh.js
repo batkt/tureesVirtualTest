@@ -431,16 +431,16 @@ function GuilgeeniiTuukh(
                   {a.guilgeeKhiisenAjiltniiNer}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.undsenDun, 0)}
+                  {formatNumber(a.undsenDun)}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.tulukhDun, 0)}
+                  {formatNumber(a.tulukhDun)}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.khyamdral, 0)}
+                  {formatNumber(a.khyamdral)}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.tulsunDun, 0)}
+                  {formatNumber(a.tulsunDun)}
                 </td>
                 <td
                   className={`min-w-[8rem] overflow-hidden p-1 text-end ${
@@ -448,8 +448,7 @@ function GuilgeeniiTuukh(
                   }`}
                 >
                   {formatNumber(
-                    a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
-                    0
+                    a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel
                   )}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-center">
