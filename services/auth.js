@@ -202,20 +202,20 @@ export const AuthProvider = ({ children }) => {
   const handleOffline = useCallback(() => {
     setIsOfflineMode(true);
     message.warning(
-      "Таны интернэт тасарсан байна. Оффлайн горимд ажиллаж байна.",
+      "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
       0
     );
   }, []);
 
   const syncOfflineData = useCallback(async () => {
-    console.log("Оффлайн өгөгдөл синк хийж байна...");
+    console.log("Өгөгдөл шинэчлэлт хийж байна...");
     if (token) {
       try {
         ajiltanMutate();
         baiguullagaMutate();
         message.success("Өгөгдөл шинэчлэгдлээ");
       } catch (error) {
-        console.warn("Өгөгдөл синк хийхэд алдаа гарлаа:", error);
+        console.warn("Өгөгдөл шинэчлэлт хийхэд алдаа гарлаа:", error);
       }
     }
   }, [token, ajiltanMutate, baiguullagaMutate]);
@@ -235,7 +235,7 @@ export const AuthProvider = ({ children }) => {
               permissionsData = res.data;
             } catch (error) {
               console.warn(
-                "Эрхийн мэдээлэл татахад алдаа гарлаа, оффлайн горимын эрх хадгалж байна"
+                "Эрхийн мэдээлэл татахад алдаа гарлаа, Интернетгүй үеийн эрх хадгалж байна"
               );
               permissionsData = { moduluud: [], offlineFallback: true };
             }
@@ -254,11 +254,11 @@ export const AuthProvider = ({ children }) => {
               try {
                 await saveOfflineAuth(khereglech, loginResult);
                 console.log(
-                  "Оффлайн нэвтрэлтийн өгөгдөл амжилттай хадгалагдлаа"
+                  "Интернетгүй үед нэвтрэлтийн мэдээлэл амжилттай хадгалагдлаа"
                 );
               } catch (e) {
                 console.warn(
-                  "Оффлайн нэвтрэлтийн өгөгдөл хадгалахад алдаа гарлаа",
+                  "Интернетгүй үед мэдээлэл хадгалахад алдаа гарлаа",
                   e
                 );
               }
@@ -266,7 +266,7 @@ export const AuthProvider = ({ children }) => {
               resolve(loginResult);
             } else {
               reject(
-                new Error("Байгууллагын эрхийн тохиргоо хийгдээгүй байна")
+                new Error("Хуудсыг дахин ачаалална уу")
               );
             }
           } else {
@@ -341,7 +341,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       if (isOffline) {
-        message.success("Оффлайн горимд амжилттай нэвтэрлээ");
+        message.success("Интернетгүй үед амжилттай нэвтэрлээ");
       } else {
         message.success("Амжилттай нэвтэрлээ");
       }
@@ -412,10 +412,10 @@ export const AuthProvider = ({ children }) => {
       clearOfflineDataOnly: async () => {
         try {
           await clearOfflineAuth();
-          message.success("Оффлайн өгөгдөл устгагдлаа");
+          message.success("Интернетгүй үеийн мэдээлэл устгагдлаа");
         } catch (error) {
-          console.error("Оффлайн өгөгдөл устгахад алдаа гарлаа:", error);
-          message.error("Оффлайн өгөгдөл устгахад алдаа гарлаа");
+          console.error("Интернетгүй үеийн мэдээлэл устгахад алдаа гарлаа:", error);
+          message.error("Интернетгүй үеийн мэдээлэл устгахад алдаа гарлаа");
         }
       },
 
@@ -423,10 +423,10 @@ export const AuthProvider = ({ children }) => {
         if (isOnline() && token) {
           try {
             await syncOfflineData();
-            message.success("Өгөгдөл амжилттай синк хийгдлээ");
+            message.success("Мэдээлэл амжилттай шинэчлэгдлээ хийгдлээ");
           } catch (error) {
-            console.error("Синк хийхэд алдаа гарлаа:", error);
-            message.error("Синк хийхэд алдаа гарлаа");
+            console.error("Шинэчлэл хийхэд алдаа гарлаа:", error);
+            message.error("Шинэчлэл хийхэд алдаа гарлаа");
           }
         } else {
           message.warning("Интернэт холболт шаардлагатай");

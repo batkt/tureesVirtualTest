@@ -224,6 +224,10 @@ export const tsonknuud = [
     key: "/khyanalt/togloomKiosk",
   },
   {
+    ner: "Дуудлага үйлчилгээ",
+    key: "/khyanalt/duudlaga/duudlaga",
+  },
+  {
     key: "/khyanalt/tailan",
     ner: "Тайлан",
     tailbar:
@@ -966,6 +970,12 @@ export const khuudasnuud = [
     //     icon: <TbLego style={{ width: "24", height: "24" }} />,
     //   },
     // ],
+  },
+  {
+    ner: "Дуудлага",
+    khuudasniiNer: "duudlaga",
+    href: "/khyanalt/duudlaga/duudlaga",
+    icon: <MobileOutlined className="text-2xl" />,
   },
 ];
 

@@ -1,7 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Modal } from "antd";
-export function modal({ content, ...config }) {
+import { Modal as AntModal } from "antd";
+
+export function modal({ content, onOk, onCancel, ...config }) {
   const div = document.createElement("div");
   document.body.appendChild(div);
 
@@ -12,10 +13,35 @@ export function modal({ content, ...config }) {
     }
   }
 
+  const handleOk = async () => {
+    if (onOk) await onOk(); 
+    destroy(); 
+  };
+
+  const handleCancel = () => {
+    if (onCancel) onCancel(); 
+    destroy(); 
+  };
+
+  const contentNode = React.isValidElement(content) ? (
+    React.cloneElement(content, { destroy })
+  ) : (
+    <div>{content}</div>
+  );
+
   ReactDOM.render(
-    <Modal visible closable={false} {...config}>
-      {React.cloneElement(content, { destroy })}
-    </Modal>,
+    <AntModal
+      open
+      closable={false}
+      destroyOnClose
+      {...config}
+      onOk={handleOk}
+      onCancel={handleCancel}
+    >
+      {contentNode}
+    </AntModal>,
     div
   );
 }
+
+export default modal;

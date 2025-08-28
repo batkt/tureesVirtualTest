@@ -105,9 +105,7 @@ function Khyanalt({ token }) {
   const [title, setTitle] = useState();
 
   const [turulZagvar, setTurulZagvar] = useState(false);
-  /**Илгээх төрөл
-   * enum {buunuur | davkharaar | avlagaar | gantsaar}
-   *  */
+
   const [tuluv, setTuluv] = useState(true);
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
@@ -166,9 +164,6 @@ function Khyanalt({ token }) {
 
     return utga;
   }, [khariltsagch, msj]);
-
-  //#endregion
-  //#region method
 
   async function appIlgeeye() {
     if (!!title) {
