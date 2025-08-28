@@ -12,6 +12,7 @@ import {
   notification,
   Modal,
   DatePicker,
+  Switch,
 } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
@@ -37,6 +38,9 @@ function ZardalBurtgel(
       ? [moment(data?.ognoonuud[0]), moment(data?.ognoonuud[1])]
       : []
   );
+  const [nuatBodokhEsekh, setNuatBodokhEsekh] = useState(
+    data?.nuatBodokhEsekh || false
+  );
 
   function garya() {
     const values = form.getFieldsValue();
@@ -52,7 +56,7 @@ function ZardalBurtgel(
 
   useEffect(() => {
     function keyUp(e) {
-      if (e.key === "Escape") {
+      if (e.key === "Escape") { 
         e.preventDefault();
         garya();
       }
@@ -63,15 +67,21 @@ function ZardalBurtgel(
     return () => document.removeEventListener("keyup", keyUp);
   }, []);
 
+  useEffect(() => {
+    if (data?.nuatBodokhEsekh !== undefined) {
+      setNuatBodokhEsekh(data.nuatBodokhEsekh);
+    }
+  }, [data?.nuatBodokhEsekh]);
+
   useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
         const ugugdul = form.getFieldsValue();
-
         const method = ugugdul?._id ? updateMethod : createMethod;
         ugugdul["barilgiinId"] = barilgiinId;
         ugugdul["baiguullagiinId"] = baiguullagiinId;
+        ugugdul["nuatBodokhEsekh"] = nuatBodokhEsekh;
         ugugdul["bodokhArga"] =
           ugugdul.ner?.includes("Халуун ус") ||
           ugugdul.ner?.includes("Хүйтэн ус") ||
@@ -118,9 +128,9 @@ function ZardalBurtgel(
         garya();
       },
     }),
-    [form, ognoonuud]
+    [form, ognoonuud, nuatBodokhEsekh]
   );
-
+  console.log({ nuatBodokhEsekh });
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -174,7 +184,10 @@ function ZardalBurtgel(
     <Form
       form={form}
       autoComplete={"off"}
-      initialValues={data}
+      initialValues={{
+        ...data,
+        nuatBodokhEsekh: data?.nuatBodokhEsekh || false,
+      }}
       labelCol={{ span: 10 }}
       wrapperCol={{ span: 14 }}
     >
@@ -336,6 +349,15 @@ function ZardalBurtgel(
             setOgnoonuud(v);
           }}
         />
+      </Form.Item>
+      <Form.Item>
+        <div className="flex flex-row justify-between">
+          <div />
+          <div className="space-x-2">
+            <label>{t("НӨАТ бодох эсэх")}:</label>
+            <Switch checked={nuatBodokhEsekh} onChange={setNuatBodokhEsekh} />
+          </div>
+        </div>
       </Form.Item>
     </Form>
   );

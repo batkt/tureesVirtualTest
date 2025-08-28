@@ -1053,39 +1053,58 @@ function ZakhialgiinKhyanalt() {
       },
     ];
     if (shuult.utga == "Цуцласан") {
-      jagsaalt.push({
-        title: "Цуцалсан шалтгаан",
-        dataIndex: "gereeniiTuukhuud",
-        align: "center",
-        ellipsis: true,
-        width: "6rem",
-        render: (gereeniiTuukhuud) => {
-          return (
-            <div>
-              <Popover
-                trigger="hover"
-                content={
-                  <div className="dark:text-gray-200">
-                    {gereeniiTuukhuud.map((a) => a.tsutslasanShaltgaan)}
-                  </div>
-                }
-              >
-                <a className=" flex items-center justify-center hover:scale-150 dark:invert ">
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png"
-                    data-src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png"
-                    alt="Cancel"
-                    width={23}
-                  ></img>
-                </a>
-              </Popover>
-            </div>
-          );
+      jagsaalt.push(
+        {
+          title: "Цуцалсан шалтгаан",
+          dataIndex: "gereeniiTuukhuud",
+          align: "center",
+          ellipsis: true,
+          width: "6rem",
+          render: (gereeniiTuukhuud) => {
+            return (
+              <div>
+                <Popover
+                  trigger="hover"
+                  content={
+                    <div className="dark:text-gray-200">
+                      {gereeniiTuukhuud.map((a) => a.tsutslasanShaltgaan)}
+                    </div>
+                  }
+                >
+                  <a className=" flex items-center justify-center hover:scale-150 dark:invert ">
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png"
+                      data-src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png"
+                      alt="Cancel"
+                      width={23}
+                    ></img>
+                  </a>
+                </Popover>
+              </div>
+            );
+          },
+          showSorterTooltip: false,
+          sortOrder: sortOrderShalgakh(order.gereeniiTuukhuud),
+          sorter: () => 0,
         },
-        showSorterTooltip: false,
-        sortOrder: sortOrderShalgakh(order.gereeniiTuukhuud),
-        sorter: () => 0,
-      });
+        {
+          title: "Цуцалсан ажилтан",
+          dataIndex: "gereeniiTuukhuud",
+          align: "center",
+          ellipsis: true,
+          width: "6rem",
+          render: (gereeniiTuukhuud) => {
+            return (
+              <div className="dark:text-gray-200">
+                {gereeniiTuukhuud.map((a) => a.ajiltniiNer)}
+              </div>
+            );
+          },
+          showSorterTooltip: false,
+          sortOrder: sortOrderShalgakh(order.gereeniiTuukhuud),
+          sorter: () => 0,
+        }
+      );
     }
     return [
       ...jagsaalt,
