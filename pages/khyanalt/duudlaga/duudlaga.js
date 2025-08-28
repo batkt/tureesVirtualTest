@@ -8,8 +8,6 @@ import {
   SnippetsOutlined,
   UploadOutlined,
   StarOutlined,
-  RightOutlined,
-  DownOutlined,
   SendOutlined,
 } from "@ant-design/icons";
 import { Checkbox, Tooltip, Tag, Spin, Select } from "antd";
@@ -481,7 +479,23 @@ function TaskManagementSystem({ token }) {
         );
       }
 
-      return statusMatch && typeMatch && searchMatch && dateMatch;
+      const result = statusMatch && typeMatch && searchMatch && dateMatch;
+
+      if (!result) {
+        console.log("Item filtered out:", {
+          item: item._id,
+          statusMatch,
+          typeMatch,
+          searchMatch,
+          dateMatch,
+          itemTuluv: item.tuluv,
+          expectedTuluv: tuluv,
+          itemType: item.duudlagiinTurul,
+          expectedType: turulFilter,
+        });
+      }
+
+      return result;
     });
   }, [task?.jagsaalt, jagsaalt, tuluv, turulFilter, searchTerm, ekhlekhOgnoo]);
 
@@ -567,6 +581,7 @@ function TaskManagementSystem({ token }) {
         <div key={mur?._id} className="mb-2">
           {!!mur._id ? (
             <>
+              {/* Main call entry */}
               <div
                 className={`grid cursor-pointer grid-cols-4 items-center gap-4 rounded-md p-2 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 ${
                   khariltsagch?._id === mur?._id
@@ -598,21 +613,27 @@ function TaskManagementSystem({ token }) {
                   </div>
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium">
+                        {mur.khariltsagchiinNer}{" "}
+                        <span className="ml-2 text-xs text-gray-400">
+                          ({mur.callCount} даалгавар)
+                        </span>
+                      </span>
+
                       {hasMultipleCalls && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             toggleNameExpansion(mur.khariltsagchiinNer);
                           }}
-                          className="flex items-center gap-1 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800"
+                          className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800"
                         >
-                          {mur.callCount} дуудлага{" "}
-                          {isExpanded ? <DownOutlined /> : <RightOutlined />}
+                          {mur.callCount} дуудлага {isExpanded ? "▼" : "▶"}
                         </button>
                       )}
                     </div>
                     <span className="text-xs text-gray-500">
-                      {mur.khariltsagchiinNer}
+                      {mur.khariltsagchiinRegister}
                     </span>
                   </div>
                 </div>
@@ -855,7 +876,72 @@ function TaskManagementSystem({ token }) {
               </div>
             )}
 
-            {renderCallList()}
+            {filteredJagsaalt?.map((mur) => {
+              const statusInfo = getStatusInfo(mur.tuluv);
+
+              return (
+                <div key={mur?._id}>
+                  {!!mur._id ? (
+                    <div
+                      className={`grid cursor-pointer grid-cols-4 items-center gap-4 rounded-md p-2 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 ${
+                        khariltsagch?._id === mur?._id
+                          ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        setDuudlaga(mur);
+                        setKhariltsagch(mur);
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="image-fit relative h-10 w-10 flex-none rounded-full">
+                          <div
+                            className={`absolute -right-1 -top-1 h-4 w-4 rounded-full border-2 border-white bg-${statusInfo.color}-500`}
+                            title={statusInfo.text}
+                          />
+                          <img
+                            alt="profileZurag"
+                            className="rounded-full"
+                            src="/profile.svg"
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium">
+                            {mur.khariltsagchiinNer}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {mur.khariltsagchiinRegister}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-center">
+                        <Tag color={statusInfo.color} size="small">
+                          {t(statusInfo.text)}
+                        </Tag>
+                      </div>
+
+                      <div className="flex justify-center">
+                        {mur.duudlagiinTurul && (
+                          <Tag size="small" color="processing">
+                            {mur.duudlagiinTurul}
+                          </Tag>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col items-end">
+                        <span className="text-xs text-gray-500">
+                          {moment(mur.createdAt).format("MM-DD HH:mm")}
+                        </span>
+                        <div className="flex cursor-pointer text-yellow-500 hover:text-yellow-600">
+                          <StarOutlined />
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
 
             <div className="mb-4 flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
               <div className="flex items-center space-x-4 text-sm">
@@ -885,8 +971,7 @@ function TaskManagementSystem({ token }) {
                 </div>
               </div>
               <div className="text-sm font-medium">
-                {t("Нийт")}: {groupCallsByName(filteredJagsaalt)?.length || 0}{" "}
-                харилцагч
+                {t("Нийт")}: {filteredJagsaalt?.length || 0}
               </div>
             </div>
           </div>
@@ -988,7 +1073,7 @@ function TaskManagementSystem({ token }) {
           </div>
         </div>
       ) : (
-        <div className="relative hidden gap-5 rounded-2xl bg-green-50 p-1 dark:bg-gray-900 md:rounded-none md:rounded-r-2xl xl:col-span-7 xl:flex xl:items-center xl:justify-center">
+        <div className="relative hidden gap-5 rounded-2xl bg-green-50 p-1 dark:bg-gray-900 md:rounded-none md:rounded-r-2xl xl:col-span-7">
           <div className="mx-auto text-center">
             <div className="flex justify-center">
               <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
