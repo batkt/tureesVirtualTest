@@ -351,6 +351,7 @@ function tulburTootsoo({ token }) {
 
     fetchDugaar();
   }, [barilgiinId, token, barimt, songogdsonGereenuud, nekhemjleliinJagsaalt]);
+
   const nekhemjlekhuud = useMemo(() => {
     if (barimt && songogdsonGereenuud)
       return songogdsonGereenuud
@@ -934,17 +935,24 @@ function tulburTootsoo({ token }) {
                   ? formatNumber(a?.tulukhDun - a.tulukhDun / 10 || 0)
                   : " "
               );
+              const nuatBodokhEsekh = ashiglaltiinZardal?.jagsaalt?.find(
+                (b) => b.ner === a.tailbar
+              )?.nuatBodokhEsekh;
+
               let khungulultKhassanTulukhDun = a.tulukhDun
                 ? a.khungulult
                   ? a.tulukhDun - a.khungulult
                   : a.tulukhDun
                 : 0;
-              let khungulultKhassanTulukhDunNuat = a.tulukhDun
-                ? khungulultKhassanTulukhDun / 11
-                : 0;
-              let khungulultKhassanTulukhDunNuatgui = a.tulukhDun
-                ? khungulultKhassanTulukhDun - khungulultKhassanTulukhDunNuat
-                : 0;
+              // zollll
+              let khungulultKhassanTulukhDunNuat =
+                nuatBodokhEsekh && a.tulukhDun
+                  ? khungulultKhassanTulukhDun
+                  : khungulultKhassanTulukhDun / 11;
+              let khungulultKhassanTulukhDunNuatgui =
+                nuatBodokhEsekh && a.tulukhDun
+                  ? khungulultKhassanTulukhDun
+                  : khungulultKhassanTulukhDun - khungulultKhassanTulukhDunNuat;
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(
@@ -2599,17 +2607,22 @@ function tulburTootsoo({ token }) {
             new RegExp(`<${a.tailbar}.khungulult>`, "g"),
             formatNumber(a.khungulult || 0) || ""
           );
+          const nuatBodokhEsekh = ashiglaltiinZardal?.jagsaalt?.find(
+            (b) => b.ner === a.tailbar
+          )?.nuatBodokhEsekh;
           let khungulultKhassanTulukhDun = a.tulukhDun
             ? a.khungulult
               ? a.tulukhDun - a.khungulult
               : a.tulukhDun
             : 0;
-          let khungulultKhassanTulukhDunNuat = a.tulukhDun
-            ? khungulultKhassanTulukhDun / 11
-            : 0;
-          let khungulultKhassanTulukhDunNuatgui = a.tulukhDun
-            ? khungulultKhassanTulukhDun - khungulultKhassanTulukhDunNuat
-            : 0;
+          let khungulultKhassanTulukhDunNuat =
+            nuatBodokhEsekh && a.tulukhDun
+              ? khungulultKhassanTulukhDun
+              : khungulultKhassanTulukhDun / 10;
+          let khungulultKhassanTulukhDunNuatgui =
+            nuatBodokhEsekh && a.tulukhDun
+              ? khungulultKhassanTulukhDun
+              : khungulultKhassanTulukhDun - khungulultKhassanTulukhDunNuat;
           text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.khungulultKhassanTulukhDun&gt;`, "g"),
             formatNumber(khungulultKhassanTulukhDun || 0)
