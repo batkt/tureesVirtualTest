@@ -1,5 +1,4 @@
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import { BiCommentError } from "react-icons/bi";
 import { BiBellPlus, BiDesktop, BiCommentError, BiUser } from "react-icons/bi";
 import { BsGraphUp, BsPcDisplay } from "react-icons/bs";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
