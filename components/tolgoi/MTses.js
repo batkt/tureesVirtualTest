@@ -112,6 +112,7 @@ function MTses({ khuudasnuud, khuudasniiNer, visible }) {
               t={t}
               key={mur.href}
               mur={mur}
+              khuudasnuud
               selected={mur.khuudasniiNer === khuudasniiNer}
               khuudasniiNer={khuudasniiNer}
             />

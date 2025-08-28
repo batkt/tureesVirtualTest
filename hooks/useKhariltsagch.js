@@ -15,7 +15,7 @@ const fetcher = (
   axios(token)
     .get(url, {
       params: {
-        order: order,
+        order,
         query: {
           baiguullagiinId,
           barilgiinId,
@@ -30,7 +30,12 @@ const fetcher = (
         ...khuudaslalt,
       },
     })
-    .then((res) => res.data)
+    .then((res) => {
+      let list = res.data?.jagsaalt || [];
+      list = list.filter((item) => !item.zochinUrikhEsekh);
+
+      return { ...res.data, jagsaalt: list };
+    })
     .catch(aldaaBarigch);
 
 const fetcherToololt = (url, token, barilgiinId) =>
@@ -74,6 +79,7 @@ function useKhariltsagch(
     isValidating,
   };
 }
+
 export function useKhariltsagchToololt(token) {
   const { barilgiinId } = useAuth();
   const { data, mutate, isValidating } = useSWR(

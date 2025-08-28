@@ -1,6 +1,6 @@
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { BiCommentError } from "react-icons/bi";
-import { BiBellPlus, BiDesktop } from "react-icons/bi";
+import { BiBellPlus, BiDesktop, BiCommentError, BiUser } from "react-icons/bi";
 import { BsGraphUp, BsPcDisplay } from "react-icons/bs";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
 import { MdOutlineAnalytics } from "react-icons/md";
@@ -191,6 +191,10 @@ export const tsonknuud = [
   {
     ner: "Камерын хяналт",
     key: "/khyanalt/zogsool/cameraVals",
+  },
+  {
+    ner: "Оршин суугч",
+    key: "/khyanalt/zogsool/orshinSuugch",
   },
   {
     key: "/khyanalt/anket",
@@ -777,6 +781,12 @@ export const khuudasnuud = [
             <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
           </svg>
         ),
+      },
+      {
+        ner: "Оршин суугч",
+        khuudasniiNer: "orshinSuugch",
+        href: "/khyanalt/zogsool/orshinSuugch",
+        icon: <BiUser style={{ width: "24", height: "24" }} />,
       },
     ],
   },

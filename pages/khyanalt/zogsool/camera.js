@@ -823,30 +823,30 @@ function camera({ token }) {
     });
   }
   useEffect(() => {
-      var ajiltnuud = [];
-      uilchluulegchGaralt?.jagsaalt?.forEach((element) => {
-        element.tuukh[0]?.burtgesenAjiltaniiId &&
-          !ajiltnuud.find(
-            (a) =>
-              a.burtgesenAjiltaniiId === element.tuukh[0]?.burtgesenAjiltaniiId
-          ) &&
-          ajiltnuud.push(element.tuukh[0]?.burtgesenAjiltaniiId);
-      });
-      ajiltnuud.length > 0 &&
-        uilchilgee(token)
-          .get("/ajiltan", {
-            params: { query: { _id: ajiltnuud.map((a) => a) } },
-          })
-          .then(({ data }) => {
-            if (!!data && data?.jagsaalt?.length > 0) {
-              setAjiltniiNers(
-                data?.jagsaalt?.map((a) => {
-                  return { ner: a?.ner, id: a?._id };
-                })
-              );
-            }
-          });
-    }, [uilchluulegchGaralt?.jagsaalt]);
+    var ajiltnuud = [];
+    uilchluulegchGaralt?.jagsaalt?.forEach((element) => {
+      element.tuukh[0]?.burtgesenAjiltaniiId &&
+        !ajiltnuud.find(
+          (a) =>
+            a.burtgesenAjiltaniiId === element.tuukh[0]?.burtgesenAjiltaniiId
+        ) &&
+        ajiltnuud.push(element.tuukh[0]?.burtgesenAjiltaniiId);
+    });
+    ajiltnuud.length > 0 &&
+      uilchilgee(token)
+        .get("/ajiltan", {
+          params: { query: { _id: ajiltnuud.map((a) => a) } },
+        })
+        .then(({ data }) => {
+          if (!!data && data?.jagsaalt?.length > 0) {
+            setAjiltniiNers(
+              data?.jagsaalt?.map((a) => {
+                return { ner: a?.ner, id: a?._id };
+              })
+            );
+          }
+        });
+  }, [uilchluulegchGaralt?.jagsaalt]);
   const columns = useMemo(() => {
     const col = [
       {
@@ -1091,7 +1091,9 @@ function camera({ token }) {
         width: "10rem",
         dataIndex: "mashin",
         showSorterTooltip: false,
-        render: (a) => {
+        render: (a, record) => {
+          console.log("Discount render - mashin object:", a);
+          console.log("Discount render - full record:", record);
           if (a?.khungulultTurul === "togtmolTsag") {
             return (
               <div className="flex items-center justify-center">
@@ -1105,7 +1107,6 @@ function camera({ token }) {
                   >
                     {a?.uldegdelKhungulukhKhugatsaa}
                     {"/"}
-                    {""}
                     {a?.khungulukhKhugatsaa}
                     {t("мин")}
                   </div>
@@ -1113,6 +1114,31 @@ function camera({ token }) {
               </div>
             );
           }
+
+          if (a?.khungulultTurul === "khuviKhungulult") {
+            return (
+              <div className="flex items-center justify-center">
+                {a?.khungulultTurul && (
+                  <div className="flex w-[8rem] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
+                    {a?.khungulult}
+                    {"%"}
+                  </div>
+                )}
+              </div>
+            );
+          }
+
+          if (record?.turul === "Зочин") {
+            return (
+              <div className="flex items-center justify-center">
+                <div className="flex w-[8rem] items-center justify-center rounded-lg bg-green-400 px-2 py-1 font-[600] text-white dark:bg-green-700">
+                  {record?.urisanMashin?.tusBurAshiglasanUneguiMinut || 0}
+                  {t("мин")}
+                </div>
+              </div>
+            );
+          }
+
           if (a?.khungulultTurul === "khuviKhungulult") {
             return (
               <div className="flex items-center justify-center">
