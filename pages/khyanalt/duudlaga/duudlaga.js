@@ -8,6 +8,8 @@ import {
   SnippetsOutlined,
   UploadOutlined,
   StarOutlined,
+  RightOutlined,
+  DownOutlined,
   SendOutlined,
 } from "@ant-design/icons";
 import { Checkbox, Tooltip, Tag, Spin, Select } from "antd";
@@ -128,6 +130,8 @@ function TaskManagementSystem({ token }) {
   const [turulFilter, setTurulFilter] = useState("Бүгд");
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [expandedNames, setExpandedNames] = useState(new Set());
+
   const duudlagiinTurul = ["Сантехник", "Ус", "Цахилгаан"];
 
   const getStatusInfo = (tuluv) => {
@@ -143,6 +147,18 @@ function TaskManagementSystem({ token }) {
     }
   };
 
+  const toggleNameExpansion = (name) => {
+    setExpandedNames((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(name)) {
+        newSet.delete(name);
+      } else {
+        newSet.add(name);
+      }
+      return newSet;
+    });
+  };
+
   const turul = useMemo(() => {
     switch (tuluv) {
       case "Идэвхтэй":
@@ -155,6 +171,35 @@ function TaskManagementSystem({ token }) {
         return 0;
     }
   }, [tuluv]);
+
+  const groupCallsByName = (jagsaalt) => {
+    if (!jagsaalt) return [];
+
+    const grouped = jagsaalt.reduce((acc, mur) => {
+      const key = mur.khariltsagchiinNer;
+      if (!acc[key]) {
+        acc[key] = {
+          ...mur,
+          callCount: 1,
+          allCalls: [mur],
+        };
+      } else {
+        acc[key].callCount += 1;
+        acc[key].allCalls.push(mur);
+
+        if (new Date(mur.createdAt) > new Date(acc[key].createdAt)) {
+          acc[key] = {
+            ...mur,
+            callCount: acc[key].callCount,
+            allCalls: acc[key].allCalls,
+          };
+        }
+      }
+      return acc;
+    }, {});
+
+    return Object.values(grouped);
+  };
 
   const query = useMemo(
     () => ({
@@ -436,23 +481,7 @@ function TaskManagementSystem({ token }) {
         );
       }
 
-      const result = statusMatch && typeMatch && searchMatch && dateMatch;
-
-      if (!result) {
-        console.log("Item filtered out:", {
-          item: item._id,
-          statusMatch,
-          typeMatch,
-          searchMatch,
-          dateMatch,
-          itemTuluv: item.tuluv,
-          expectedTuluv: tuluv,
-          itemType: item.duudlagiinTurul,
-          expectedType: turulFilter,
-        });
-      }
-
-      return result;
+      return statusMatch && typeMatch && searchMatch && dateMatch;
     });
   }, [task?.jagsaalt, jagsaalt, tuluv, turulFilter, searchTerm, ekhlekhOgnoo]);
 
@@ -525,6 +554,177 @@ function TaskManagementSystem({ token }) {
   }, [id, task?.jagsaalt]);
 
   const medegdelAvya = useJagsaalt("/sonorduulga", query, order, undefined);
+
+  const renderCallList = () => {
+    const groupedCalls = groupCallsByName(filteredJagsaalt);
+
+    return groupedCalls?.map((mur) => {
+      const statusInfo = getStatusInfo(mur.tuluv);
+      const isExpanded = expandedNames.has(mur.khariltsagchiinNer);
+      const hasMultipleCalls = mur.callCount > 1;
+
+      return (
+        <div key={mur?._id} className="mb-2">
+          {!!mur._id ? (
+            <>
+              <div
+                className={`grid cursor-pointer grid-cols-4 items-center gap-4 rounded-md p-2 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 ${
+                  khariltsagch?._id === mur?._id
+                    ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500"
+                    : ""
+                }`}
+                onClick={() => {
+                  setDuudlaga(mur);
+                  setKhariltsagch(mur);
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="image-fit relative h-10 w-10 flex-none rounded-full">
+                    <div
+                      className={`absolute -right-1 -top-1 h-4 w-4 rounded-full border-2 border-white bg-${statusInfo.color}-500`}
+                      title={statusInfo.text}
+                    />
+
+                    {mur.callCount > 1 && (
+                      <div className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                        {mur.callCount}
+                      </div>
+                    )}
+                    <img
+                      alt="profileZurag"
+                      className="rounded-full"
+                      src="/profile.svg"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                      {hasMultipleCalls && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleNameExpansion(mur.khariltsagchiinNer);
+                          }}
+                          className="flex items-center gap-1 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800"
+                        >
+                          {mur.callCount} дуудлага{" "}
+                          {isExpanded ? <DownOutlined /> : <RightOutlined />}
+                        </button>
+                      )}
+                    </div>
+                    <span className="text-xs text-gray-500">
+                      {mur.khariltsagchiinNer}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex justify-center">
+                  <Tag color={statusInfo.color} size="small">
+                    {t(statusInfo.text)}
+                  </Tag>
+                </div>
+
+                <div className="flex justify-center">
+                  {mur.duudlagiinTurul && (
+                    <Tag size="small" color="processing">
+                      {mur.duudlagiinTurul}
+                    </Tag>
+                  )}
+                </div>
+
+                <div className="flex flex-col items-end">
+                  <span className="text-xs text-gray-500">
+                    {moment(mur.createdAt).format("MM-DD HH:mm")}
+                  </span>
+                  {hasMultipleCalls && (
+                    <span className="text-xs text-blue-500">
+                      Сүүлийн дуудлага
+                    </span>
+                  )}
+                  <div className="flex cursor-pointer text-yellow-500 hover:text-yellow-600">
+                    <StarOutlined />
+                  </div>
+                </div>
+              </div>
+
+              {hasMultipleCalls && isExpanded && (
+                <div className="ml-6 mt-2 space-y-1 rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
+                  <div className="mb-2 text-xs font-semibold text-gray-600 dark:text-gray-400">
+                    Бүх дуудлагууд ({mur.allCalls.length}):
+                  </div>
+                  {mur.allCalls
+                    .sort(
+                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                    )
+                    .map((call, index) => {
+                      const callStatusInfo = getStatusInfo(call.tuluv);
+                      return (
+                        <div
+                          key={call._id}
+                          className={`cursor-pointer rounded-md border-l-2 p-2 transition-all duration-200 hover:bg-white dark:hover:bg-gray-700 ${
+                            call.tuluv === 0
+                              ? "border-green-500"
+                              : call.tuluv === 1
+                              ? "border-blue-500"
+                              : "border-red-500"
+                          } ${
+                            khariltsagch?._id === call._id
+                              ? "bg-green-50 shadow-md dark:bg-green-900"
+                              : ""
+                          }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDuudlaga(call);
+                            setKhariltsagch(call);
+                          }}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2">
+                                <Tag color={callStatusInfo.color} size="small">
+                                  {t(callStatusInfo.text)}
+                                </Tag>
+                                {call.duudlagiinTurul && (
+                                  <Tag size="small" color="processing">
+                                    {call.duudlagiinTurul}
+                                  </Tag>
+                                )}
+                                {index === 0 && (
+                                  <span className="rounded bg-blue-100 px-1 py-0.5 text-xs text-blue-600">
+                                    Сүүлийн
+                                  </span>
+                                )}
+                              </div>
+                              <div className="mt-1 text-xs text-gray-600 dark:text-gray-400">
+                                {call.title && (
+                                  <div className="truncate">{call.title}</div>
+                                )}
+                                {call.message && (
+                                  <div className="mt-1 max-w-xs truncate text-gray-500">
+                                    {call.message}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-xs text-gray-500">
+                                {moment(call.createdAt).format("MM-DD HH:mm")}
+                              </div>
+                              <div className="mt-1 text-xs text-gray-400">
+                                {moment(call.createdAt).fromNow()}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              )}
+            </>
+          ) : null}
+        </div>
+      );
+    });
+  };
 
   return (
     <Admin
@@ -655,72 +855,7 @@ function TaskManagementSystem({ token }) {
               </div>
             )}
 
-            {filteredJagsaalt?.map((mur) => {
-              const statusInfo = getStatusInfo(mur.tuluv);
-
-              return (
-                <div key={mur?._id}>
-                  {!!mur._id ? (
-                    <div
-                      className={`grid cursor-pointer grid-cols-4 items-center gap-4 rounded-md p-2 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 ${
-                        khariltsagch?._id === mur?._id
-                          ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500"
-                          : ""
-                      }`}
-                      onClick={() => {
-                        setDuudlaga(mur);
-                        setKhariltsagch(mur);
-                      }}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="image-fit relative h-10 w-10 flex-none rounded-full">
-                          <div
-                            className={`absolute -right-1 -top-1 h-4 w-4 rounded-full border-2 border-white bg-${statusInfo.color}-500`}
-                            title={statusInfo.text}
-                          />
-                          <img
-                            alt="profileZurag"
-                            className="rounded-full"
-                            src="/profile.svg"
-                          />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-medium">
-                            {mur.khariltsagchiinNer}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            {mur.khariltsagchiinRegister}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex justify-center">
-                        <Tag color={statusInfo.color} size="small">
-                          {t(statusInfo.text)}
-                        </Tag>
-                      </div>
-
-                      <div className="flex justify-center">
-                        {mur.duudlagiinTurul && (
-                          <Tag size="small" color="processing">
-                            {mur.duudlagiinTurul}
-                          </Tag>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col items-end">
-                        <span className="text-xs text-gray-500">
-                          {moment(mur.createdAt).format("MM-DD HH:mm")}
-                        </span>
-                        <div className="flex cursor-pointer text-yellow-500 hover:text-yellow-600">
-                          <StarOutlined />
-                        </div>
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
+            {renderCallList()}
 
             <div className="mb-4 flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
               <div className="flex items-center space-x-4 text-sm">
@@ -750,7 +885,8 @@ function TaskManagementSystem({ token }) {
                 </div>
               </div>
               <div className="text-sm font-medium">
-                {t("Нийт")}: {filteredJagsaalt?.length || 0}
+                {t("Нийт")}: {groupCallsByName(filteredJagsaalt)?.length || 0}{" "}
+                харилцагч
               </div>
             </div>
           </div>
@@ -799,8 +935,12 @@ function TaskManagementSystem({ token }) {
           </div>
 
           <div className="flex items-end justify-end space-x-4 p-4">
-            <div className="items-start rounded-lg border border-blue-500  text-black px-2 py-1 font-medium  dark:text-gray-200">
-              Үйлчилгээ: {duudlaga?.duudlagiinTurul}
+            <div className="flex justify-start">
+              {duudlaga?.duudlagiinTurul && (
+                <Tag size="small" color="processing">
+                  Үйлчилгээ: {duudlaga.duudlagiinTurul}
+                </Tag>
+              )}
             </div>
 
             <div
@@ -848,7 +988,7 @@ function TaskManagementSystem({ token }) {
           </div>
         </div>
       ) : (
-        <div className="relative hidden gap-5 rounded-2xl bg-green-50 p-1 dark:bg-gray-900 md:rounded-none md:rounded-r-2xl xl:col-span-7">
+        <div className="relative hidden gap-5 rounded-2xl bg-green-50 p-1 dark:bg-gray-900 md:rounded-none md:rounded-r-2xl xl:col-span-7 xl:flex xl:items-center xl:justify-center">
           <div className="mx-auto text-center">
             <div className="flex justify-center">
               <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">

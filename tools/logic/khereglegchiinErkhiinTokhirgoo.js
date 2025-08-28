@@ -13,7 +13,7 @@ import useKhuudasniiJagsaalt from "hooks/useKhuudasniiJagsaalt";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { message } from "antd";
 import { t } from "i18next";
-import { MobileFilled, MobileOutlined } from "@ant-design/icons";
+import { MobileFilled, MobileOutlined, PhoneOutlined } from "@ant-design/icons";
 
 export const tsonknuud = [
   {
@@ -975,7 +975,7 @@ export const khuudasnuud = [
     ner: "Дуудлага",
     khuudasniiNer: "duudlaga",
     href: "/khyanalt/duudlaga/duudlaga",
-    icon: <MobileOutlined className="text-2xl" />,
+    icon: <PhoneOutlined className="text-2xl" />,
   },
 ];
 
