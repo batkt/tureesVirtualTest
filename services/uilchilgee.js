@@ -4,59 +4,77 @@ import socketIOClient from "socket.io-client";
 import _ from "lodash";
 import getConfig from "next/config";
 import { t } from "i18next";
+
 const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
 
-export const url =
-  //  "http://192.168.1.13:8081";
-  publicRuntimeConfig.URL || "https://turees.zevtabs.mn/api";
+export const url = publicRuntimeConfig.URL || "https://turees.zevtabs.mn/api";
 
-export const socket = () =>
-  socketIOClient(publicRuntimeConfig.SOCKET || "https://turees.zevtabs.mn", {
-    transports: ["websocket"],
-  });
+// Singleton socket instance
+let socketInstance = null;
+
+// Enhanced socket function with singleton pattern
+export const socket = () => {
+  if (!socketInstance) {
+    socketInstance = socketIOClient(
+      publicRuntimeConfig.SOCKET || "https://turees.zevtabs.mn",
+      {
+        transports: ["websocket", "polling"],
+        upgrade: true,
+        rememberUpgrade: true,
+        timeout: 20000,
+        autoConnect: true,
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 10, // Increased
+        reconnectionDelayMax: 3000, // Reduced
+        maxReconnectionAttempts: 15, // Increased
+        forceNew: false, // Important: reuse connection
+      }
+    );
+
+    // Global socket event handlers
+    socketInstance.on("connect", () => {
+      console.log("Socket connected globally:", socketInstance.id);
+    });
+
+    socketInstance.on("disconnect", (reason) => {
+      console.log("Socket disconnected globally:", reason);
+    });
+
+    socketInstance.on("connect_error", (error) => {
+      console.error("Socket connection error:", error);
+    });
+
+    socketInstance.on("reconnect", (attemptNumber) => {
+      console.log("Socket reconnected after", attemptNumber, "attempts");
+    });
+  }
+
+  return socketInstance;
+};
+
+// Function to reset socket (use if needed for debugging)
+export const resetSocket = () => {
+  if (socketInstance) {
+    socketInstance.disconnect();
+    socketInstance = null;
+  }
+};
 
 export const aldaaBarigch = (e) => {
   if (
     e?.response?.data?.aldaa === "jwt expired" ||
     e?.response?.data?.aldaa === "jwt malformed"
-  )
-    window.location.href = "/";
-  else if (!!e?.response?.data?.aldaa)
+  ) {
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
+  } else if (!!e?.response?.data?.aldaa) {
     notification.warning({
       description: t(e?.response?.data?.aldaa),
       message: t("Анхааруулга"),
     });
-};
-
-/*axios.interceptors.response.use(function (response) {
-    // Do something with response data
-    return response;
-  }, function (error) {
-    // Do something with response error
-    return Promise.reject(error);
-});*/
-
-export const togloomUilchilgee = (token) => {
-  const headers = {
-    "Content-type": "application/json",
-  };
-  if (!!token) headers["Authorization"] = `bearer ${token}`;
-  return axios.create({
-    baseURL: "http://localhost:5000/api",
-    headers,
-  });
-};
-
-export const zogsoolUilchilgee = (token) => {
-  const headers = {
-    "Content-type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-  };
-  if (!!token) headers["Authorization"] = `bearer ${token}`;
-  return axios.create({
-    baseURL: "http://localhost:5000/api",
-    headers,
-  });
+  }
 };
 
 const uilchilgee = (token) => {

@@ -5,6 +5,7 @@ const khatuuZagvarSoyoljMall = (
   barilga,
   barilgiinId
 ) => {
+  console.log("test");
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
       (a) =>

@@ -91,7 +91,10 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
     }),
     [tailbar]
   );
-
+  const handleOk = async () => {
+    if (onOk) await onOk();
+    destroy();
+  };
   return (
     <div>
       <Input.TextArea
@@ -249,17 +252,9 @@ function TaskManagementSystem({ token }) {
       });
     }
   };
-
   const duudlagaDuusya = () => {
     if (!duudlaga?._id) return;
-
-    modal({
-      title: "Дуудлага дуусгах",
-      content: "Та энэ дуудлагыг дуусгах гэж байна уу?",
-      onOk: () => updateTaskStatus(duudlaga._id, 1),
-      okText: t("Тийм"),
-      cancelText: t("Үгүй"),
-    });
+    updateTaskStatus(duudlaga._id, 1);
   };
 
   function duudlagaTsutslakh() {
@@ -521,20 +516,25 @@ function TaskManagementSystem({ token }) {
       allData.filter((item) => item.tuluv === 1).length || 0;
     const cancelledCount =
       allData.filter((item) => item.tuluv === -1).length || 0;
-    const totalCount = activeCount + completedCount + cancelledCount;
 
     return [
       {
-        too: formatNumber(totalCount, 0),
-        utga: t("Нийт дуудлага"),
+        too: formatNumber(activeCount, 0),
+        utga: t("Идэвхтэй"),
+        status: "Идэвхтэй", // Use string to match tuluv state
+        onClick: () => setTuluv("Идэвхтэй"),
       },
       {
         too: formatNumber(completedCount, 0),
         utga: t("Дууссан"),
+        status: "Дууссан", // Use string to match tuluv state
+        onClick: () => setTuluv("Дууссан"),
       },
       {
         too: formatNumber(cancelledCount, 0),
         utga: t("Цуцлагдсан"),
+        status: "Цуцлагдсан", // Use string to match tuluv state
+        onClick: () => setTuluv("Цуцлагдсан"),
       },
     ];
   }, [allDataTask?.jagsaalt, t]);
@@ -764,10 +764,12 @@ function TaskManagementSystem({ token }) {
             {khyanaltiinDun.map((mur, index) => (
               <div
                 key={index}
-                className="zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-1 lg:col-span-1"
-                data-aos="zoom-out-down"
-                data-aos-duration="1000"
-                data-aos-delay={600 - index * 100}
+                className={`col-span-12 h-20 cursor-pointer rounded-xl border-2 transition-all duration-200 hover:shadow-lg sm:col-span-1 lg:col-span-1 ${
+                  mur.status === tuluv
+                    ? "border-green-600 bg-green-50 shadow-md dark:bg-green-900/20"
+                    : "border-green-600 hover:border-green-500 hover:bg-gray-50 dark:hover:bg-gray-800"
+                }`}
+                onClick={mur.onClick}
               >
                 <div className="h-full w-[67vw] rounded-xl md:w-auto">
                   <div className="rounded-xl p-3">
@@ -776,9 +778,7 @@ function TaskManagementSystem({ token }) {
                         <div className="text-2xl font-bold text-green-600">
                           {mur.too}
                         </div>
-                        <div className="text-sm text-gray-500">
-                          {t(mur.utga)}
-                        </div>
+                        <div className="text-sm text-gray-500">{mur.utga}</div>
                       </div>
                     </div>
                   </div>
@@ -804,10 +804,37 @@ function TaskManagementSystem({ token }) {
             onChange={setTurulFilter}
             size="middle"
           >
-            <Option value="Бүгд">{t("Бүгд")}</Option>
-            <Option value="us">{t("Ус")}</Option>
-            <Option value="Сантехник">{t("Сантехник")}</Option>
-            <Option value="Цахилгаан">{t("Цахилгаан")}</Option>
+            <option value="Сантехник" />
+            <option value="Цахилгаан" />
+            <option value="Халаалтын систем" />
+            <option value="Агааржуулалт" />
+            <option value="Лифт засвар" />
+            <option value="Ус" />
+            <option value="Усны даралт" />
+            <option value="Усны чанар" />
+            <option value="Усны хоолой" />
+            <option value="Бохир ус" />
+            <option value="Ханын засвар" />
+            <option value="Шалны засвар" />
+            <option value="Тааз засвар" />
+            <option value="Цонх засвар" />
+            <option value="Хаалганы засвар" />
+            <option value="Галын аюулгүй байдал" />
+            <option value="Аюулгүй байдлын систем" />
+            <option value="Дуу чимээ" />
+            <option value="Гэрэлтүүлэг" />
+            <option value="Цэвэрлэгээ" />
+            <option value="Хогийн менежмент" />
+            <option value="Халдвар хамгаалалт" />
+            <option value="Интернет" />
+            <option value="Кабелийн ТВ" />
+            <option value="Утасны холбоо" />
+            <option value="Лифт" />
+            <option value="Паркинг" />
+            <option value="Хамгаалалт" />
+            <option value="Удирдлагын асуудал" />
+            <option value="Санхүүгийн асуудал" />
+            <option value="Бусад" />
           </Select>
         </div>
 
@@ -984,23 +1011,23 @@ function TaskManagementSystem({ token }) {
           className="relative col-span-12 flex h-full flex-col rounded-2xl bg-white p-1 dark:bg-gray-900 md:rounded-none md:rounded-r-2xl xl:col-span-7"
         >
           <div className="w-10/12 rounded-lg p-3 dark:bg-gray-900 sm:w-full">
-            <div className="grid grid-cols-3 gap-3 rounded-lg border p-4 dark:bg-gray-900">
+            <div className="grid grid-cols-2 gap-3 rounded-lg border p-4 dark:bg-gray-900">
               <span className="col-span-1 text-xs text-gray-500">
                 Огноо: {moment(khariltsagch.createdAt).format("MM-DD HH:mm")}
               </span>
               <div className="font-medium">
                 Нэр: {duudlaga.khariltsagchiinNer}
               </div>
-              <div className="font-medium">
+              {/* <div className="font-medium">
                 Гэрээ: {duudlaga.khariltsagchiinGereeniiDugaar}
-              </div>
+              </div> */}
               <div className="font-medium">Гарчиг: {duudlaga.title}</div>
               <div className="font-medium">
                 Утас: {duudlaga.khariltsagchiinUtas}
               </div>
-              <div className="font-medium">
+              {/* <div className="font-medium">
                 Талбай: {duudlaga?.khariltsagchiinTalbainDugaar}
-              </div>
+              </div> */}
             </div>
           </div>
 

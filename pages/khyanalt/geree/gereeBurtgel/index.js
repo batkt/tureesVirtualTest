@@ -470,6 +470,8 @@ const select = {
   turGereeEsekh: 1,
   talbainIdnuud: 1,
   zardluud: 1,
+  zoriulalt: 1,
+  tusgaiZoriulalt: 1,
 };
 
 function setURLSearchParam(key, value) {
@@ -1355,6 +1357,7 @@ function ZakhialgiinKhyanalt() {
               geree.duusakhUdur = duusakhOgnoo.format("DD");
             }
           }
+
           geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne);
           geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne);
           geree.gariinUseg = renderToString(
