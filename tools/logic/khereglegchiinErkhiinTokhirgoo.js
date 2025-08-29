@@ -1,6 +1,5 @@
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import { BiCommentError } from "react-icons/bi";
-import { BiBellPlus, BiDesktop } from "react-icons/bi";
+import { BiBellPlus, BiDesktop, BiCommentError, BiUser } from "react-icons/bi";
 import { BsGraphUp, BsPcDisplay } from "react-icons/bs";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
 import { MdOutlineAnalytics } from "react-icons/md";
@@ -13,7 +12,7 @@ import useKhuudasniiJagsaalt from "hooks/useKhuudasniiJagsaalt";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { message } from "antd";
 import { t } from "i18next";
-import { MobileFilled, MobileOutlined } from "@ant-design/icons";
+import { MobileFilled, MobileOutlined, PhoneOutlined } from "@ant-design/icons";
 
 export const tsonknuud = [
   {
@@ -193,6 +192,10 @@ export const tsonknuud = [
     key: "/khyanalt/zogsool/cameraVals",
   },
   {
+    ner: "Оршин суугч",
+    key: "/khyanalt/zogsool/orshinSuugch",
+  },
+  {
     key: "/khyanalt/anket",
     ner: "Анкет",
     tokhirgoo: [],
@@ -222,6 +225,10 @@ export const tsonknuud = [
   {
     ner: "Тоглоомын киоск",
     key: "/khyanalt/togloomKiosk",
+  },
+  {
+    ner: "Дуудлага үйлчилгээ",
+    key: "/khyanalt/duudlaga/duudlaga",
   },
   {
     key: "/khyanalt/tailan",
@@ -774,6 +781,12 @@ export const khuudasnuud = [
           </svg>
         ),
       },
+      {
+        ner: "Оршин суугч",
+        khuudasniiNer: "orshinSuugch",
+        href: "/khyanalt/zogsool/orshinSuugch",
+        icon: <BiUser style={{ width: "24", height: "24" }} />,
+      },
     ],
   },
   {
@@ -966,6 +979,12 @@ export const khuudasnuud = [
     //     icon: <TbLego style={{ width: "24", height: "24" }} />,
     //   },
     // ],
+  },
+  {
+    ner: "Дуудлага",
+    khuudasniiNer: "duudlaga",
+    href: "/khyanalt/duudlaga/duudlaga",
+    icon: <PhoneOutlined className="text-2xl" />,
   },
 ];
 

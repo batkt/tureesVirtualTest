@@ -194,7 +194,7 @@ export async function attemptLogin(credentials, onlineLoginFunction) {
       throw new Error(onlineError.message || "Нэвтрэлт амжилтгүй боллоо");
     }
   } else {
-    console.log("📴 Сүлжээ тасарсан - оффлайн нэвтрэлт оролдож байна");
+    console.log("📴 Сүлжээ тасарсан - Интернетгүй үеийн нэвтрэлт оролдож байна");
     try {
       const offlineResult = await performOfflineLogin(credentials);
       return {
@@ -204,7 +204,7 @@ export async function attemptLogin(credentials, onlineLoginFunction) {
       };
     } catch (offlineError) {
       console.error("❌ Оффлайн нэвтрэлт амжилтгүй боллоо:", offlineError);
-      throw new Error("Оффлайн нэвтрэлт амжилтгүй: " + offlineError.message);
+      throw new Error("Интернетгүй үеийн нэвтрэлт амжилтгүй: " + offlineError.message);
     }
   }
 }

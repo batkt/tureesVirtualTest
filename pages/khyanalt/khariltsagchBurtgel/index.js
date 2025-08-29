@@ -115,7 +115,7 @@ function YalgakhUtga({
         >
           <Select
             style={{ width: "100%" }}
-            className=" "
+            className=""
             placeholder={t("Нэр")}
             name="ner"
             onChange={solikh}
@@ -205,22 +205,21 @@ function AjiltanBurtgel({ token }) {
   });
   const [neesenEsekh, setNeesenEsekh] = useState(false);
 
-    // Update page number when barilgiinId changes
-    useEffect(() => {
-      if (!barilgiinId) return; // only run if barilgiinId exists
-      setKhariltsagchKhuudaslalt((prev) => ({
-        ...prev,
-        khuudasniiDugaar: 1,
-      }));
-    }, [barilgiinId]);
+  // Update page number when barilgiinId changes
+  useEffect(() => {
+    if (!barilgiinId) return; // only run if barilgiinId exists
+    setKhariltsagchKhuudaslalt((prev) => ({
+      ...prev,
+      khuudasniiDugaar: 1,
+    }));
+  }, [barilgiinId]);
 
-    // Reset form fields safely when isValidating changes
-    useEffect(() => {
-      if (formRef.current) {
-        formRef.current.resetFields(); // only call if ref exists
-      }
-    }, [isValidating]);
-
+  // Reset form fields safely when isValidating changes
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.resetFields(); // only call if ref exists
+    }
+  }, [isValidating]);
 
   const khyanaltiinDun = [
     {
@@ -638,7 +637,7 @@ function AjiltanBurtgel({ token }) {
           <Button
             type="primary"
             onClick={() => setUtasKhariltsagchNmekh(!utasKhariltsagchNmekh)}
-            className="w-full  "
+            className="w-full "
           >
             <EyeInvisibleOutlined className="text-xl" />
           </Button>
@@ -869,7 +868,7 @@ function AjiltanBurtgel({ token }) {
             data-aos-duration="1000"
             data-aos-delay="700"
           >
-            <Form.List name="segmentuud" className=" ">
+            <Form.List name="segmentuud" className="">
               {(fields, { add, remove }) => (
                 <>
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
@@ -888,7 +887,7 @@ function AjiltanBurtgel({ token }) {
                   <Form.Item>
                     <Button
                       icon={<PlusOutlined />}
-                      className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                      className="h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
                       type="dashed"
                       onClick={() => add()}
                       block
@@ -966,10 +965,10 @@ function AjiltanBurtgel({ token }) {
                     </Space>
                   ))}
 
-                  <Form.Item className="w-full  ">
+                  <Form.Item className="w-full ">
                     <Button
                       icon={<PlusOutlined />}
-                      className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                      className="h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
                       type="dashed"
                       onClick={() => add()}
                       block
@@ -1087,7 +1086,7 @@ function AjiltanBurtgel({ token }) {
           data-aos-delay="300"
         >
           <div className="flex w-full items-center justify-between md:ml-auto md:justify-end">
-            <div className=" md:hidden ">
+            <div className=" md:hidden">
               <Button
                 type="primary"
                 style={{ marginTop: "10px" }}
@@ -1100,7 +1099,7 @@ function AjiltanBurtgel({ token }) {
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700  "
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                     onClick={talbaiOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
@@ -1344,14 +1343,14 @@ function AjiltanBurtgel({ token }) {
                           </div>
                         }
                       >
-                        <a className=" flex items-center justify-center  hover:scale-150 ">
+                        <a className="flex items-center justify-center hover:scale-150">
                           <ImFileText2 className="text-xl" />
                         </a>
                       </Popover>
                     );
                   } else
                     return (
-                      <div className=" flex items-center justify-center">
+                      <div className="flex items-center justify-center ">
                         <ImFileEmpty className="text-xl text-gray-500" />
                       </div>
                     );
@@ -1368,7 +1367,7 @@ function AjiltanBurtgel({ token }) {
                       trigger="hover"
                       content={<div className="dark:text-white">{email}</div>}
                     >
-                      <a className=" flex items-center justify-center  hover:scale-150">
+                      <a className="flex items-center justify-center hover:scale-150">
                         <MailOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>
@@ -1386,7 +1385,7 @@ function AjiltanBurtgel({ token }) {
                       trigger="hover"
                       content={<div className="dark:text-white">{khayag}</div>}
                     >
-                      <a className=" flex items-center justify-center  hover:scale-150">
+                      <a className="flex items-center justify-center hover:scale-150">
                         <EnvironmentOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>
@@ -1480,7 +1479,7 @@ function AjiltanBurtgel({ token }) {
                       }
                     >
                       <a
-                        className=" flex items-center justify-center  hover:scale-150"
+                        className="flex items-center justify-center hover:scale-150"
                         onClick={() => tuukh(data)}
                       >
                         <GiBackwardTime className="text-xl" />
@@ -1542,7 +1541,7 @@ function AjiltanBurtgel({ token }) {
                         </div>
                       )}
                     >
-                      <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
+                      <a className="flex items-center justify-center hover:scale-150 dark:hover:bg-gray-700">
                         <MoreOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>

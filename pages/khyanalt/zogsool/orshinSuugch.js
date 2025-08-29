@@ -13,6 +13,9 @@ import {
   Tooltip,
   message,
   notification,
+  Modal,
+  Form,
+  Input,
 } from "antd";
 import {
   BellOutlined,
@@ -27,16 +30,14 @@ import {
   PlusOutlined,
   SettingOutlined,
   UploadOutlined,
+  RedoOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import formatNumber from "tools/function/formatNumber";
 import { useRef, useEffect } from "react";
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
 import { modal } from "components/ant/Modal";
-import useMashin, { useMashinToololt } from "hooks/useMashin";
-import useBlockMashin from "hooks/useBlockMashin";
-import MashinBurtgel from "components/pageComponents/zogsool/MashinBurtgel";
-import BlockMashinBurtgel from "components/pageComponents/zogsool/BlockMashinBurtgel";
+import { useZochin, useZochinToololt } from "hooks/useZochin";
 import useOrder from "tools/function/useOrder";
 import moment from "moment";
 import Aos from "aos";
@@ -46,11 +47,12 @@ import TogloomTile from "components/pageComponents/togloom/TogloomTile";
 import uilchilgee from "services/uilchilgee";
 import { useRouter } from "next/router";
 import Tseneglekh from "components/pageComponents/zogsool/Tseneglekh";
+import ZochinBurtgel from "components/pageComponents/zogsool/ZochinBurtgel";
 
-function mashinBurtgel({ token }) {
+function orshinSuugch({ token }) {
   const { t } = useTranslation();
   const router = useRouter();
-  const { baiguullaga, barilgiinId, ajiltan } = useAuth();
+  const { baiguullaga, barilgiinId, ajiltan, baiguullagiinId } = useAuth();
   const excelref = useRef(null);
   const tseneglekhRef = useRef(null);
   const mashinref = useRef(null);
@@ -58,8 +60,13 @@ function mashinBurtgel({ token }) {
   const [tuluv, setTuluv] = useState("");
   const [udurShuult, setUdurShuult] = useState("niit");
   const [songogdsonMashin, setSongogdsonMashin] = useState([]);
-  const [songogdsonBlockMashin, setSongogdsonBlockMashin] = useState([]);
   const [activeTab, setActiveTab] = useState("1");
+  const [butsaakh, setButsaakh] = useState(false);
+  const [khelber, setKhelber] = useState("1");
+  const [nuutsUgKhariltsagch, setNuutsUgKhariltsagch] = useState();
+  const [resetForm] = Form.useForm();
+
+  const formRef = useRef();
 
   const query = useMemo(() => {
     var query = {};
@@ -91,50 +98,29 @@ function mashinBurtgel({ token }) {
     }
   }, [turul, tuluv, udurShuult]);
 
-  // const [shineCol, setShineCol] = useState(() => {
-  //   if (turul?.name === "Гэрээт") {
-  //     return [
-  //       {
-  //         title: t("Хугацаа"),
-  //         dataIndex: "createdAt",
-  //         ellipsis: true,
-  //         align: "center",
-  //         render(date) {
-  //           return "";
-  //         },
-  //         showSorterTooltip: false,
-  //       },
-  //     ];
-  //   } else {
-  //     return [];
-  //   }
-  // });
-
-  const { mashinToololt, mashinToololtMutate } = useMashinToololt(
-    token,
-    barilgiinId
-  );
-
   const { order, onChangeTable } = useOrder({
     createdAt: -1,
   });
 
-  const { mashinGaralt, setMashinKhuudaslalt, mashinMutate, isValidating } =
-    useMashin(token, baiguullaga?._id, query, order);
+  const {
+    setZochinKhuudaslalt,
+    zochinGaralt,
+    zochinMutate,
+    isValidating,
+    zochinHadgalya,
+    isLoading: zochinSaveLoading,
+  } = useZochin(token, baiguullaga?._id, 10, query, order);
 
-  const { blockMashinGaralt, setBlockMashinKhuudaslalt, blockMashinMutate } =
-    useBlockMashin(token, baiguullaga?._id, null, order);
-
-  const [butsaakh, setButsaakh] = useState(false);
-  const [khelber, setKhelber] = useState("1");
+  const { khariltsagchToololt, khariltsagchToololtMutate } =
+    useZochinToololt(token);
 
   useEffect(() => {
-    if (mashinGaralt && !butsaakh) {
+    if (zochinGaralt && !butsaakh) {
       const fetchData = async () => {
         try {
           const response = await uilchilgee(token).get("mashin/tooAvya", {
             params: {
-              khuudasniiKhemjee: mashinGaralt.niitMur,
+              khuudasniiKhemjee: zochinGaralt.niitMur,
               query: {
                 turul: "Гэрээт",
                 duusakhOgnoo: {
@@ -158,7 +144,7 @@ function mashinBurtgel({ token }) {
       };
       fetchData();
     }
-  }, [mashinGaralt, butsaakh]);
+  }, [zochinGaralt, butsaakh]);
 
   const tsenegliy = (data) => {
     const footer = [
@@ -181,12 +167,52 @@ function mashinBurtgel({ token }) {
           token={token}
           data={data}
           barilgiinId={barilgiinId}
-          mutate={mashinMutate}
+          mutate={zochinMutate}
         />
       ),
       footer,
     });
   };
+
+  const nuutsUgModalKhaah = () => {
+    setNuutsUgKhariltsagch(false);
+  };
+
+  function shineNuutsUgSolikh(talbar, utga) {
+    setNuutsUgKhariltsagch((a) => ({ ...a, [talbar]: utga }));
+  }
+
+  function nuutsUgSolikh() {
+    let { errors } = resetForm.getFieldsError();
+    if (!!errors) {
+      return;
+    }
+    if (nuutsUgKhariltsagch.nuutsUg === nuutsUgKhariltsagch.davtanNuutsUg) {
+      uilchilgee(token)
+        .put(`/khariltsagch/${nuutsUgKhariltsagch._id}`, {
+          _id: nuutsUgKhariltsagch._id,
+          nuutsUg: nuutsUgKhariltsagch.nuutsUg,
+        })
+        .then(({ data }) => {
+          if (data !== undefined) {
+            notification.success({
+              message: t("Мэдэгдэл"),
+              description: t("Нууц үг амжилттай шинэчлэгдлээ"),
+            });
+            setNuutsUgKhariltsagch(false);
+            resetForm.resetFields();
+          }
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+          setWaiting(false);
+        });
+    } else
+      notification.warning({
+        message: t("Мэдэгдэл"),
+        description: t("Нууц үг таарсангүй"),
+      });
+  }
 
   const columns = useMemo(() => {
     const shinecol =
@@ -381,9 +407,9 @@ function mashinBurtgel({ token }) {
         dataIndex: "dugaar",
         width: "2rem",
         render: (text, record, index) =>
-          (mashinGaralt?.khuudasniiDugaar || 0) *
-            (mashinGaralt?.khuudasniiKhemjee || 0) -
-          (mashinGaralt?.khuudasniiKhemjee || 0) +
+          (zochinGaralt?.khuudasniiDugaar || 0) *
+            (zochinGaralt?.khuudasniiKhemjee || 0) -
+          (zochinGaralt?.khuudasniiKhemjee || 0) +
           index +
           1,
       },
@@ -403,7 +429,7 @@ function mashinBurtgel({ token }) {
         title: t("Нэр"),
         align: "left",
         width: "8rem",
-        dataIndex: "ezemshigchiinNer",
+        dataIndex: "ner",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -411,13 +437,13 @@ function mashinBurtgel({ token }) {
         title: t("Утас"),
         width: "7rem",
         align: "center",
-        dataIndex: "ezemshigchiinUtas",
+        dataIndex: "utas",
       },
       {
         title: t("Дугаар"),
         width: "6rem",
         align: "center",
-        dataIndex: "dugaar",
+        dataIndex: "mashiniiDugaar",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -425,56 +451,25 @@ function mashinBurtgel({ token }) {
         title: t("Төрөл"),
         align: "center",
         width: "10rem",
-        dataIndex: "turul",
+        dataIndex: "zochinTurul",
         showSorterTooltip: false,
         sorter: () => 0,
       },
-      {
-        title: t("Камер"),
-        align: "center",
-        dataIndex: "cameraIP",
-        width: "7rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
+
       ...shinecol,
       {
         title: t("Тайлбар"),
         width: "12rem",
         align: "center",
-        dataIndex: "temdeglel",
+        dataIndex: "zochinTailbar",
         showSorterTooltip: false,
         render: (v) => (
           <Tooltip title={v}>
-            <div className="w-full cursor-help truncate break-words text-left">
+            <div className="w-full text-left break-words truncate cursor-help">
               {v}
             </div>
           </Tooltip>
         ),
-      },
-      {
-        title: t("Цэнэглэх"),
-        width: "6rem",
-        align: "center",
-        dataIndex: "tsenegleltUldegdel",
-        render: (v, data) => {
-          if (data?.turul === "Дотоод") return "";
-          {
-            if (!!v) {
-              return (
-                <div className="w-full truncate rounded-lg bg-green-500 px-2 py-1 text-white">
-                  {formatNumber(v, 0)}
-                </div>
-              );
-            } else {
-              return (
-                <div className="w-full truncate rounded-lg bg-green-500 px-2 py-1 text-white">
-                  0
-                </div>
-              );
-            }
-          }
-        },
       },
       {
         title: () => <SettingOutlined />,
@@ -487,10 +482,10 @@ function mashinBurtgel({ token }) {
               placement="bottom"
               trigger="hover"
               content={() => (
-                <div className="flex w-24 flex-col space-y-2">
+                <div className="flex flex-col w-24 space-y-2">
                   {data?.turul !== "Дотоод" && (
                     <a
-                      className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                      className="flex items-center justify-between w-full p-2 rounded-lg ant-dropdown-link hover:bg-green-100 dark:hover:bg-gray-700"
                       onClick={() => {
                         tsenegliy(data);
                       }}
@@ -500,14 +495,28 @@ function mashinBurtgel({ token }) {
                     </a>
                   )}
                   <a
-                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                    className="flex items-center justify-between w-full p-2 rounded-lg ant-dropdown-link hover:bg-green-100 dark:hover:bg-gray-700"
                     onClick={() => {
-                      mashinBurtgekh(data);
+                      zochinBurtgekh(data);
                     }}
                   >
                     <EditOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Засах")}</label>
                   </a>
+                  <Popconfirm
+                    title={t("Нууц үг сэргээх үү?")}
+                    okText={t("Тийм")}
+                    cancelText={t("Үгүй")}
+                    onConfirm={() => setNuutsUgKhariltsagch(data)}
+                  >
+                    <a className="flex items-center justify-between w-full p-2 rounded-lg ant-dropdown-link hover:bg-green-100 dark:hover:bg-gray-700">
+                      <RedoOutlined
+                        className="text-green-600"
+                        style={{ fontSize: "18px" }}
+                      />
+                      <label className="text-green-600">{t("Нууц үг")}</label>
+                    </a>
+                  </Popconfirm>
                   <Popconfirm
                     placement="left"
                     title={t("Машин устгах уу?")}
@@ -515,7 +524,7 @@ function mashinBurtgel({ token }) {
                     cancelText={t("Үгүй")}
                     onConfirm={() => mashinUstgaya(data)}
                   >
-                    <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
+                    <a className="flex items-center justify-between w-full p-2 rounded-lg ant-dropdown-link hover:bg-green-100 dark:hover:bg-gray-700">
                       <DeleteOutlined
                         className="text-red-600"
                         style={{ fontSize: "18px" }}
@@ -534,157 +543,12 @@ function mashinBurtgel({ token }) {
         ),
       },
     ];
-  }, [turul, baiguullaga, barilgiinId, tuluv, udurShuult]);
-
-  const blockColumns = useMemo(() => {
-    return [
-      {
-        title: "№",
-        align: "center",
-        dataIndex: "dugaar",
-        width: "2rem",
-        render: (text, record, index) =>
-          (blockMashinGaralt?.khuudasniiDugaar || 0) *
-            (blockMashinGaralt?.khuudasniiKhemjee || 0) -
-          (blockMashinGaralt?.khuudasniiKhemjee || 0) +
-          index +
-          1,
-      },
-      {
-        title: t("Дугаар"),
-        width: "6rem",
-        align: "center",
-        dataIndex: "dugaar",
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
-      {
-        title: t("Тайлбар"),
-        width: "12rem",
-        align: "center",
-        dataIndex: "tailbar",
-        showSorterTooltip: false,
-        render: (v) => (
-          <Tooltip title={v}>
-            <div className="w-full cursor-help truncate break-words text-left">
-              {v}
-            </div>
-          </Tooltip>
-        ),
-      },
-      {
-        title: t("Бүртгэсэн"),
-        dataIndex: "createdAt",
-        width: "8rem",
-        ellipsis: true,
-        align: "center",
-        render(date) {
-          return moment(date).format("YYYY-MM-DD HH:mm");
-        },
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
-      {
-        title: t("Бүртгэсэн ажилтан"),
-        dataIndex: "burtgesenAjiltaniiNer",
-        width: "8rem",
-        ellipsis: true,
-        align: "center",
-        showSorterTooltip: false,
-      },
-      {
-        title: () => <SettingOutlined />,
-        width: "2rem",
-        align: "center",
-        render: (data) => (
-          <div className="flex flex-row justify-center">
-            <Popover
-              zIndex={99}
-              placement="bottom"
-              trigger="hover"
-              content={() => (
-                <div className="flex w-24 flex-col space-y-2">
-                  <a
-                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                    onClick={() => {
-                      blockMashinBurtgekh(data);
-                    }}
-                  >
-                    <EditOutlined style={{ fontSize: "18px" }} />
-                    <label>{t("Засах")}</label>
-                  </a>
-                  <Popconfirm
-                    placement="left"
-                    title={t("Блок машин устгах уу?")}
-                    okText={t("Тийм")}
-                    cancelText={t("Үгүй")}
-                    onConfirm={() => blockMashinUstgaya(data)}
-                  >
-                    <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
-                      <DeleteOutlined
-                        className="text-red-600"
-                        style={{ fontSize: "18px" }}
-                      />
-                      <label className="text-red-600">{t("Устгах")}</label>
-                    </a>
-                  </Popconfirm>
-                </div>
-              )}
-            >
-              <a className="flex items-center justify-center hover:scale-150 dark:hover:bg-gray-700">
-                <MoreOutlined style={{ fontSize: "18px" }} />
-              </a>
-            </Popover>
-          </div>
-        ),
-      },
-    ];
-  }, []);
-
-  const toololt = useMemo(() => {
-    return [
-      {
-        name: "Нийт",
-        too: formatNumber(
-          mashinToololt?.reduce((a, b) => a + b.too, 0) +
-            (mashinToololt?.find((a) => a._id === "Block")?.too || 0),
-          0
-        ),
-      },
-      {
-        name: "Гэрээт",
-        too: formatNumber(
-          mashinToololt?.find((a) => a._id === "Гэрээт")?.too,
-          0
-        ),
-      },
-      {
-        name: "Түрээслэгч",
-        too: formatNumber(
-          mashinToololt?.find((a) => a._id === "Түрээслэгч")?.too,
-          0
-        ),
-      },
-      {
-        name: "Дотоод",
-        too: formatNumber(
-          mashinToololt?.find((a) => a._id === "Дотоод")?.too,
-          0
-        ),
-      },
-      {
-        name: "Блок",
-        too: formatNumber(
-          mashinToololt?.find((a) => a._id === "Block")?.too,
-          0
-        ),
-      },
-    ];
-  }, [mashinToololt, mashinGaralt]);
+  }, [turul, baiguullaga, barilgiinId, tuluv, udurShuult, zochinGaralt]);
+  console.log("zochinGaralt.jagsaalt:", zochinGaralt?.jagsaalt);
 
   function onRefresh() {
-    mashinMutate();
-    mashinToololtMutate();
+    zochinMutate();
+    khariltsagchToololtMutate();
   }
 
   function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
@@ -731,130 +595,117 @@ function mashinBurtgel({ token }) {
     });
   }
 
-  function blockMashinOruulakhExcel() {
-    const footer = [
-      <Space>
-        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
-        <Button style={{ backgroundColor: "#209669", color: "#ffffff" }}>
-          {t("Хадгалах")}
-        </Button>
-      </Space>,
-    ];
-    modal({
-      title: "",
-      icon: <FileExcelOutlined />,
-      content: (
-        <ExceleesOruulakh
-          ref={excelref}
-          token={token}
-          onFinish={onRefreshBlock}
-          barilgiinId={barilgiinId}
-          zam="blockMashiniiExcelTatya"
-          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
-          tailbar="Блок машины мэдээлэл оруулах excel файл"
-          zagvariinZam="blockMashiniiExcelAvya"
-        />
-      ),
-      footer,
-    });
-  }
-
-  function mashinUstgaya(data) {
-    let mashinIds = [];
+  async function mashinUstgaya(data) {
+    let khariltsagchIds = [];
     if (Array.isArray(data)) {
-      mashinIds = data;
+      khariltsagchIds = data.map((item) => item._id).filter((id) => id);
     } else if (data && data._id) {
-      mashinIds = [data._id];
+      khariltsagchIds = [data._id];
     } else {
-      message.error("Машин сонгоно уу");
+      message.error(t("Машин сонгоно уу"));
       return;
     }
 
-    if (mashinIds.length === 0) {
-      message.error("Машин сонгоно уу");
+    if (khariltsagchIds.length === 0) {
+      message.error(t("Машин сонгоно уу"));
       return;
     }
-    const deletePromises = mashinIds.map((mashinId) =>
-      deleteMethod("mashin", token, mashinId)
-    );
-    Promise.all(deletePromises)
-      .then((results) => {
-        const allSuccessful = results.every(
-          (result) => result.data === "Amjilttai"
+
+    try {
+      // Fetch khariltsagch records to get mashiniiDugaar
+      const khariltsagchPromises = khariltsagchIds.map((khariltsagchId) =>
+        uilchilgee(token).get(`khariltsagch/${khariltsagchId}`)
+      );
+      const khariltsagchResponses = await Promise.all(khariltsagchPromises);
+
+      // Collect mashiniiDugaar values
+      const mashiniiDugaarList = khariltsagchResponses
+        .filter((response) => response.data?.mashiniiDugaar)
+        .map((response) => response.data.mashiniiDugaar);
+
+      // Fetch mashin records by matching dugaar
+      const mashinPromises = mashiniiDugaarList.map((dugaar) =>
+        uilchilgee(token).get("mashin", {
+          params: {
+            query: {
+              baiguullagiinId,
+              barilgiinId,
+              dugaar,
+            },
+          },
+        })
+      );
+      const mashinResponses = await Promise.all(mashinPromises);
+
+      // Collect mashin IDs
+      const mashinIds = mashinResponses
+        .flatMap((response) => response.data?.jagsaalt || [])
+        .map((record) => record._id)
+        .filter((id) => id);
+
+      // Delete from khariltsagch
+      const khariltsagchDeletePromises = khariltsagchIds.map((khariltsagchId) =>
+        deleteMethod("khariltsagch", token, khariltsagchId)
+      );
+
+      // Delete from mashin
+      const mashinDeletePromises = mashinIds.map((mashinId) =>
+        deleteMethod("mashin", token, mashinId)
+      );
+
+      // Combine and execute all delete promises
+      const results = await Promise.all([
+        ...khariltsagchDeletePromises,
+        ...mashinDeletePromises,
+      ]);
+
+      const allSuccessful = results.every(
+        (result) => result.data === "Amjilttai" || result.data?.success
+      );
+
+      setSongogdsonMashin([]);
+      if (allSuccessful) {
+        zochinMutate();
+        khariltsagchToololtMutate();
+        message.success(
+          t(`${khariltsagchIds.length} машин амжилттай устгагдлаа`)
         );
-        setSongogdsonMashin([]);
-        if (allSuccessful) {
-          mashinMutate();
-          mashinToololtMutate();
-          message.success(`${mashinIds.length} машин амжилттай устгагдлаа`);
-        } else {
-          message.error("Зарим машин устгаж чадсангүй");
-        }
-      })
-      .catch((error) => {
-        console.error("Delete error:", error);
-        message.error("Алдаа гарлаа");
-      });
-  }
-
-  function blockMashinUstgaya(data) {
-    let mashinIds = [];
-    if (Array.isArray(data)) {
-      mashinIds = data.map((item) => item?.jagsaalt?._id || item);
-    } else if (data && data?._id) {
-      mashinIds = [data?._id];
-    } else {
-      message.error("Машин сонгоно уу");
-      return;
+      } else {
+        message.error(t("Зарим машин устгаж чадсангүй"));
+      }
+    } catch (error) {
+      console.error("Delete error:", error.response || error);
+      message.error(
+        t("Алдаа гарлаа: ") + (error.response?.data?.message || error.message)
+      );
     }
-
-    if (mashinIds.length === 0) {
-      message.error("Машин сонгоно уу");
-      return;
-    }
-    const deletePromises = mashinIds.map((mashinId) =>
-      deleteMethod("blockMashin", token, mashinId)
-    );
-    Promise.all(deletePromises)
-      .then((results) => {
-        const allSuccessful = results.every(
-          (result) => result.data === "Amjilttai"
-        );
-        setSongogdsonBlockMashin([]);
-        if (allSuccessful) {
-          blockMashinMutate();
-          mashinToololtMutate();
-          message.success(`${mashinIds.length} машин амжилттай устгагдлаа`);
-        } else {
-          message.error("Зарим машин устгаж чадсангүй");
-        }
-      })
-      .catch((error) => {
-        console.error("Delete error:", error);
-        message.error("Алдаа гарлаа");
-      });
   }
-
-  function mashinBurtgekh(data) {
-    let mashinBurtgekhButtonId = "mashinBurtgekhButtonId";
+  function zochinBurtgekh(data) {
+    let zochinBurtgekhButtonId = "zochinBurtgekhButtonId";
     const footer = [
-      <Space>
-        <Button onClick={() => mashinref.current.khaaya()}>{t("Хаах")}</Button>
+      <Space key="footer">
+        <Button
+          onClick={() => mashinref.current.khaaya()}
+          disabled={zochinSaveLoading}
+        >
+          {t("Хаах")}
+        </Button>
         <Button
           type="primary"
-          id={mashinBurtgekhButtonId}
+          id={zochinBurtgekhButtonId}
           onClick={() => mashinref.current.khadgalya()}
+          loading={zochinSaveLoading}
         >
           {t("Хадгалах")}
         </Button>
       </Space>,
     ];
     modal({
-      title: "",
-      icon: <FileExcelOutlined />,
+      title: data ? t("Зочин засах") : t("Зочин нэмэх"),
+      icon: <PlusOutlined />,
       content: (
-        <MashinBurtgel
-          mashinBurtgekhButtonId={mashinBurtgekhButtonId}
+        <ZochinBurtgel
+          zochinBurtgekhButtonId={zochinBurtgekhButtonId}
           ref={mashinref}
           token={token}
           onRefresh={onRefresh}
@@ -866,101 +717,26 @@ function mashinBurtgel({ token }) {
         />
       ),
       footer,
+      maskClosable: !zochinSaveLoading,
+      closable: !zochinSaveLoading,
     });
-  }
-
-  function blockMashinBurtgekh(data) {
-    let mashinBurtgekhButtonId = "mashinBurtgekhButtonId";
-    const footer = [
-      <Space>
-        <Button onClick={() => mashinref.current.khaaya()}>{t("Хаах")}</Button>
-        <Button
-          type="primary"
-          id={mashinBurtgekhButtonId}
-          onClick={() => mashinref.current.khadgalya()}
-        >
-          {t("Хадгалах")}
-        </Button>
-      </Space>,
-    ];
-    modal({
-      title: "",
-      icon: <FileExcelOutlined />,
-      content: (
-        <BlockMashinBurtgel
-          mashinBurtgekhButtonId={mashinBurtgekhButtonId}
-          ajiltan={ajiltan}
-          ref={mashinref}
-          token={token}
-          onRefreshBlock={onRefreshBlock}
-          barilgiinId={barilgiinId}
-          baiguullagiinId={baiguullaga?._id}
-          data={data}
-        />
-      ),
-      footer,
-    });
-  }
-
-  function onRefreshBlock() {
-    blockMashinMutate();
-    mashinToololtMutate();
   }
 
   useEffect(() => {
     Aos.init({ once: true });
   });
 
-  function medegdelKhuudasruuOchiy() {
-    router.push("/khyanalt/zogsool/zogsoolMedegdel");
-  }
-
   return (
     <Admin
-      title="Машин бүртгэл"
-      khuudasniiNer="mashinBurtgel"
+      title="Оршин суугч"
+      khuudasniiNer="orshinSuugch"
       className="p-0 md:p-4"
       tsonkhniiId={"64546d9caf55fc853dd6812c"}
       onSearch={(search) => {
-        setMashinKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }));
-        setBlockMashinKhuudaslalt((a) => ({
-          ...a,
-          search,
-          khuudasniiDugaar: 1,
-        }));
+        setZochinKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }));
       }}
-      // loading={isValidating}
+      loading={isValidating}
     >
-      <Card size="small" className="col-span-12 overflow-auto">
-        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
-          {toololt.map((a, i) => (
-            <div
-              key={i}
-              className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-2 ${
-                a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
-              }`}
-              onClick={() => {
-                setTurul(a.name);
-                setKhelber(a.name == "Блок" ? "2" : "1");
-              }}
-              data-aos="zoom-out-down"
-              data-aos-duration="1000"
-              data-aos-delay={4 - i + "00"}
-            >
-              <div className="h-full w-[67vw] rounded-xl md:w-auto">
-                <div className="rounded-xl p-3">
-                  <div className="flex flex-row items-center space-x-2">
-                    <div className="text-3xl font-bold text-green-600">
-                      {a.too || 0}
-                    </div>
-                    <div className="text-base text-gray-500">{t(a.name)}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Card>
       <Card className="col-span-12">
         <div
           className="flex flex-row"
@@ -968,63 +744,41 @@ function mashinBurtgel({ token }) {
           data-aos-duration="1000"
           data-aos-delay="100"
         >
-          <div>
-            <Button
-              onClick={medegdelKhuudasruuOchiy}
-              type="primary"
-              icon={<BellOutlined />}
-            >
-              {t("Мэдэгдэл")}
-            </Button>
-          </div>
-          <div className="mb-5 ml-auto flex items-center justify-center space-x-5 md:mb-0">
+          <div className="flex items-center justify-center mb-5 ml-auto space-x-5 md:mb-0">
             {khelber === "1" ? (
               <Button
                 type="primary"
                 icon={<PlusOutlined />}
-                onClick={() => mashinBurtgekh()}
+                onClick={() => zochinBurtgekh()}
+                loading={zochinSaveLoading}
               >
                 {t("Машин нэмэх")}
               </Button>
             ) : (
               ""
             )}
-            {khelber === "2" ? (
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={() => blockMashinBurtgekh()}
-              >
-                {t("Блоклох машин нэмэх")}
-              </Button>
-            ) : (
-              ""
-            )}
+
             <Popover
               content={() => (
                 <div className="flex flex-col items-center justify-center">
-                  <div className="flex w-32 flex-col">
+                  <div className="flex flex-col w-32">
                     <a
-                      className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                      onClick={
-                        khelber === "1"
-                          ? mashinOruulakhExcel
-                          : blockMashinOruulakhExcel
-                      }
+                      className="flex items-center p-1 space-x-2 rounded-lg cursor-pointer hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                      onClick={mashinOruulakhExcel}
                     >
                       <UploadOutlined style={{ fontSize: "18px" }} />
                       <label>{t("Оруулах")}</label>
                     </a>
                   </div>
-                  <div className="flex w-32 flex-col">
+                  <div className="flex flex-col w-32">
                     <a
-                      className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                      className="flex items-center p-1 space-x-2 rounded-lg cursor-pointer hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                       onClick={() =>
                         khelber === "1"
                           ? excelTatajAvya(
                               token,
-                              "/mashin",
-                              mashinGaralt?.niitMur,
+                              "/khariltsagch",
+                              zochinGaralt?.niitMur,
                               [
                                 {
                                   title: t("Бүртгэсэн"),
@@ -1037,19 +791,19 @@ function mashinBurtgel({ token }) {
                                 },
                                 {
                                   title: t("Нэр"),
-                                  dataIndex: "ezemshigchiinNer",
+                                  dataIndex: "ner",
                                 },
                                 {
                                   title: t("Утас"),
-                                  dataIndex: "ezemshigchiinUtas",
+                                  dataIndex: "utas",
                                 },
                                 {
                                   title: t("Дугаар"),
-                                  dataIndex: "dugaar",
+                                  dataIndex: "mashiniiDugaar",
                                 },
                                 {
                                   title: t("Төрөл"),
-                                  dataIndex: "turul",
+                                  dataIndex: "zochinTurul",
                                 },
 
                                 {
@@ -1067,44 +821,14 @@ function mashinBurtgel({ token }) {
                                 },
                                 {
                                   title: t("Тайлбар"),
-                                  dataIndex: "temdeglel",
+                                  dataIndex: "zochinTailbar",
                                 },
                               ],
-                              undefined,
-                              undefined,
-                              "Машин бүртгэл"
+                              query,
+                              order,
+                              "Оршин суугчийн машины бүртгэл"
                             )
-                          : excelTatajAvya(
-                              token,
-                              "/blockMashin",
-                              blockMashinGaralt?.niitMur,
-                              [
-                                {
-                                  title: t("Дугаар"),
-                                  dataIndex: "dugaar",
-                                },
-                                {
-                                  title: t("Тайлбар"),
-                                  dataIndex: "tailbar",
-                                },
-                                {
-                                  title: t("Бүртгэсэн"),
-                                  dataIndex: "createdAt",
-                                  render(date) {
-                                    return moment(date).format(
-                                      "YYYY-MM-DD HH:mm"
-                                    );
-                                  },
-                                },
-                                {
-                                  title: t("Бүртгэсэн ажилтан"),
-                                  dataIndex: "burtgesenAjiltaniiNer",
-                                },
-                              ],
-                              undefined,
-                              undefined,
-                              "Блок машины бүртгэл"
-                            )
+                          : excelTatajAvya(token, undefined, undefined)
                       }
                     >
                       <DownloadOutlined style={{ fontSize: "18px" }} />
@@ -1132,14 +856,13 @@ function mashinBurtgel({ token }) {
               onConfirm={() => {
                 if (activeTab === "1") {
                   mashinUstgaya(songogdsonMashin);
-                } else if (activeTab === "2") {
-                  blockMashinUstgaya(songogdsonBlockMashin);
                 }
               }}
             >
               <Button
                 className="border-red-400 dark:border-red-400 dark:bg-gray-900"
                 icon={<DeleteOutlined />}
+                disabled={zochinSaveLoading}
               >
                 {t("Устгах")}
               </Button>
@@ -1152,13 +875,13 @@ function mashinBurtgel({ token }) {
           items={[
             {
               key: "1",
-              label: t("Машин бүртгэл"),
+              label: t("Оршин суугч бүртгэх"),
               children: (
                 <Table
                   className="hidden overflow-auto md:block"
                   tableLayout="fixed"
-                  loading={!mashinGaralt}
-                  dataSource={mashinGaralt?.jagsaalt}
+                  loading={!zochinGaralt || zochinSaveLoading}
+                  dataSource={zochinGaralt?.jagsaalt}
                   scroll={{ y: "calc(100vh - 30rem)" }}
                   size="small"
                   bordered
@@ -1169,57 +892,24 @@ function mashinBurtgel({ token }) {
                     onChange: (selectedRowKeys) => {
                       setSongogdsonMashin(selectedRowKeys);
                     },
+                    getCheckboxProps: () => ({
+                      disabled: zochinSaveLoading,
+                    }),
                   }}
                   onChange={onChangeTable}
                   columns={columns}
                   pagination={{
-                    current: mashinGaralt?.khuudasniiDugaar,
-                    pageSize: mashinGaralt?.khuudasniiKhemjee,
-                    total: mashinGaralt?.niitMur,
+                    current: zochinGaralt?.khuudasniiDugaar,
+                    pageSize: zochinGaralt?.khuudasniiKhemjee,
+                    total: zochinGaralt?.niitMur,
                     showSizeChanger: true,
                     onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                      setMashinKhuudaslalt((kh) => ({
+                      setZochinKhuudaslalt((kh) => ({
                         ...kh,
                         khuudasniiDugaar,
                         khuudasniiKhemjee,
                       })),
-                  }}
-                />
-              ),
-            },
-            {
-              key: "2",
-              label: t("Блок жагсаалт"),
-              children: (
-                <Table
-                  className="hidden overflow-auto md:block"
-                  tableLayout="fixed"
-                  loading={!blockMashinGaralt}
-                  dataSource={blockMashinGaralt?.jagsaalt}
-                  scroll={{ y: "calc(100vh - 30rem)" }}
-                  size="small"
-                  bordered
-                  onChange={onChangeTable}
-                  columns={blockColumns}
-                  rowKey={(record) => record._id}
-                  rowSelection={{
-                    type: "checkbox",
-                    selectedRowKeys: songogdsonBlockMashin,
-                    onChange: (selectedRowKeys) => {
-                      setSongogdsonBlockMashin(selectedRowKeys);
-                    },
-                  }}
-                  pagination={{
-                    current: blockMashinGaralt?.khuudasniiDugaar,
-                    pageSize: blockMashinGaralt?.khuudasniiKhemjee,
-                    total: blockMashinGaralt?.niitMur,
-                    showSizeChanger: true,
-                    onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                      setBlockMashinKhuudaslalt((kh) => ({
-                        ...kh,
-                        khuudasniiDugaar,
-                        khuudasniiKhemjee,
-                      })),
+                    disabled: zochinSaveLoading,
                   }}
                 />
               ),
@@ -1229,19 +919,70 @@ function mashinBurtgel({ token }) {
             setKhelber(v);
             setActiveTab(v);
           }}
+          disabled={zochinSaveLoading}
         />
+        <Modal
+          title={t("Нууц үг сэргээх")}
+          open={!!nuutsUgKhariltsagch}
+          onOk={() => nuutsUgSolikh(nuutsUgKhariltsagch)}
+          onCancel={nuutsUgModalKhaah}
+          okText={t("Сэргээх")}
+          cancelText={t("Цуцлах")}
+        >
+          <Form
+            autoComplete={"off"}
+            labelCol={{ span: 10 }}
+            wrapperCol={{ span: 14 }}
+            ref={formRef}
+          >
+            <Form.Item
+              label={t("Нууц үг сэргээх")}
+              name="sergesenNuutsUg"
+              onChange={(e) => shineNuutsUgSolikh("nuutsUg", e.target.value)}
+              rules={[
+                {
+                  required: true,
+                  message: t("Нууц үг оруулна уу"),
+                },
+              ]}
+            >
+              <Input.Password style={{ width: "100%" }} />
+            </Form.Item>
+            <Form.Item label={t("Нууц үг давтан оруулах")} name="davtanNuutsUg">
+              <Input.Password
+                onChange={(e) =>
+                  shineNuutsUgSolikh("davtanNuutsUg", e.target.value)
+                }
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
         <CardList
           cardListTuluv={"utas"}
           keyValue="uilchluulegch"
           className="block overflow-auto md:hidden"
-          jagsaalt={mashinGaralt?.jagsaalt}
+          jagsaalt={zochinGaralt?.jagsaalt}
           Component={TogloomTile}
         />
       </Card>
+
+      {/* Loading overlay for save operations */}
+      {zochinSaveLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
+          <div className="p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+            <div className="flex items-center space-x-3">
+              <div className="w-5 h-5 border-2 border-blue-600 rounded-full animate-spin border-t-transparent"></div>
+              <span className="text-gray-700 dark:text-gray-300">
+                {t("Хадгалж байна...")}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </Admin>
   );
 }
 
 export const getServerSideProps = shalgaltKhiikh;
 
-export default mashinBurtgel;
+export default orshinSuugch;

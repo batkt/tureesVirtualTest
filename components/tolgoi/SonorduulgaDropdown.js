@@ -342,6 +342,10 @@ const SonorduulgaDropdown = React.memo(
                           <div className="flex justify-center rounded-md bg-blue-500 px-2 py-1 text-xs text-white transition-all duration-150">
                             {t("Мэдэгдэл")}
                           </div>
+                        ) : mur.turul === "duudlaga" ? (
+                          <div className="flex justify-center rounded-md bg-blue-500 px-2 py-1 text-xs text-white transition-all duration-150">
+                            {t("Дуудлага")}
+                          </div>
                         ) : mur.turul === "shaardlaga" ? (
                           <div className="flex justify-center rounded-md bg-blue-500 px-2 py-1 text-xs text-white transition-all duration-150">
                             {t("Шаардлага")}
@@ -364,9 +368,15 @@ const SonorduulgaDropdown = React.memo(
                           />
 
                           <a
-                            href={`${hrefAvya(mur, ajiltan)}?id=${idAwyaa(
-                              mur
-                            )}&notificationTurul=${mur?.turul}`}
+                            href={
+                              mur.turul === "duudlaga"
+                                ? `/khyanalt/duudlaga/duudlaga?id=${idAwyaa(
+                                    mur
+                                  )}&notificationTurul=${mur?.turul}`
+                                : `${hrefAvya(mur, ajiltan)}?id=${idAwyaa(
+                                    mur
+                                  )}&notificationTurul=${mur?.turul}`
+                            }
                             onClick={(e) => handleNotificationClick(e, mur)}
                             className="block text-sm text-blue-600 transition-colors duration-150 hover:text-blue-800 hover:underline"
                           >
