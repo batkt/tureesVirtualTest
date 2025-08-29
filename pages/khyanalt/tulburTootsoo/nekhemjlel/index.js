@@ -389,11 +389,10 @@ function tulburTootsoo({ token }) {
                 barilgiinId
               );
             else if (
-              barilgiinId === "622ca3938e64e5b4f0c36bed"
-              // (ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d" &&
-              //   barilgiinId === "6731b43bc23730ac1908da2e") ||
-              // (ajiltan?.baiguullagiinId === "612f457d185280db676d0b51" &&
-              //   barilgiinId === "633e52ba9e57e626978b7c47")
+              (ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d" &&
+                barilgiinId === "6731b43bc23730ac1908da2e") ||
+              (ajiltan?.baiguullagiinId === "612f457d185280db676d0b51" &&
+                barilgiinId === "633e52ba9e57e626978b7c47")
             )
               // soyoljMall
               zagvar.nekhemjlekh = khatuuZagvarSoyoljMall(

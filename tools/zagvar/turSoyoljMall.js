@@ -109,7 +109,7 @@ const khatuuZagvarSoyoljMall = (
         
         
     <div style="text-align: center; margin-top: 10px; font-size: 16px; font-weight: bold;">
-      НЭХЭМЖЛЭХ №........SOYOLJ shuuuuuuuu!!!!!!!!!!!!!!!!!!!!!!!
+      НЭХЭМЖЛЭХ №........
     </div>
 
     <div style="display: flex; justify-content: space-between; margin-top: 20px;">
@@ -287,7 +287,7 @@ const khatuuZagvarSoyoljMall = (
       </tbody>
        <tfoot style="border: none;">
           ${
-            ajiltan?.baiguullagiinId === "612f457d185280db676d0b51"
+            ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d"
               ? `<tr style="background-color: #d1d5db; font-weight: bold; border: none;">
               <td style="border: none; text-align: center; justify-content: center; font-weight: normal;" colspan="4" rowspan="3" >&lt;garaasBodsonNiitDunUsgeer&gt; болно</td>
             </tr>`
