@@ -1461,10 +1461,6 @@ function ZakhialgiinKhyanalt() {
             );
           }
           data.geree = geree;
-          console.log(
-            "-- zoriulalt  ---------------->>>" +
-              JSON.stringify(geree.zoriulalt)
-          );
           setKharuulakhGeree(data);
           setGereeniiTokhirgoo(null);
         }
