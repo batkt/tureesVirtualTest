@@ -1355,6 +1355,7 @@ function ZakhialgiinKhyanalt() {
               geree.duusakhUdur = duusakhOgnoo.format("DD");
             }
           }
+
           geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne);
           geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne);
           geree.gariinUseg = renderToString(
