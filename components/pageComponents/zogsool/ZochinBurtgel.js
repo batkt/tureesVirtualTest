@@ -152,6 +152,7 @@ function ZochinBurtgel(
         "davtamjiinTurul",
         "zochinUrikhEsekh",
         "register",
+        "ezenToot",
       ])
     )
       Modal.confirm({
@@ -183,6 +184,10 @@ function ZochinBurtgel(
         } else {
           processedData.utas = [processedData.utas.toString()];
         }
+      }
+
+      if (processedData.ezenToot) {
+        processedData.ezenToot = String(processedData.ezenToot);
       }
 
       if (processedData.zochinErkhiinToo) {
@@ -264,6 +269,7 @@ function ZochinBurtgel(
         davtamjiinTurul: processedData.davtamjiinTurul,
         zochinUrikhEsekh: processedData.zochinUrikhEsekh,
         mashiniiDugaar: processedData.mashiniiDugaar,
+        ezenToot: processedData.ezenToot,
         barilgiinId,
         baiguullagiinId,
       };
@@ -387,6 +393,9 @@ function ZochinBurtgel(
         case "davtamjiinTurul":
           form.getFieldInstance("zochinTailbar").focus();
           break;
+        case "ezenToot":
+          form.getFieldInstance("ezenToot").focus();
+          break;
         default:
           break;
       }
@@ -426,7 +435,7 @@ function ZochinBurtgel(
       <Form.Item
         label={t("Зочны төрөл")}
         name="zochinTurul"
-        requiredMark={"optional"}
+        requiredMark={"required"}
         rules={[
           {
             required: true,
@@ -451,7 +460,7 @@ function ZochinBurtgel(
       </Form.Item>
 
       <Form.Item
-        requiredMark={"optional"}
+        requiredMark={"required"}
         normalize={(input) => {
           const too = input.replace(/[^0-9]+/g, "").slice(0, 8);
           return too;
@@ -482,6 +491,7 @@ function ZochinBurtgel(
           placeholder={t("Утас")}
           onChange={gereeAvya}
           disabled={isLoading}
+          requiredMark={"required"}
         />
       </Form.Item>
 
@@ -522,8 +532,16 @@ function ZochinBurtgel(
         /> */}
       </Form.Item>
 
+      <Form.Item label={t("Овог")} name="ovog">
+        <Input
+          onKeyUp={focuser}
+          placeholder={t("Овог (сонголттой)")}
+          disabled={isLoading}
+        />
+      </Form.Item>
+
       <Form.Item
-        requiredMark={"optional"}
+        requiredMark={"required"}
         rules={[
           {
             required: true,
@@ -536,13 +554,6 @@ function ZochinBurtgel(
         <Input onKeyUp={focuser} placeholder={t("Нэр")} disabled={isLoading} />
       </Form.Item>
 
-      <Form.Item label={t("Овог")} name="ovog">
-        <Input
-          onKeyUp={focuser}
-          placeholder={t("Овог (сонголттой)")}
-          disabled={isLoading}
-        />
-      </Form.Item>
       <Form.Item
         label={t("Давтамжийн хугацаа")}
         name="davtamjiinTurul"
@@ -555,8 +566,8 @@ function ZochinBurtgel(
         ]}
       >
         <Select placeholder={t("Давтамжийн хугацаа")} disabled={isLoading}>
-          <Select.Option key={"udruur"} value={"udruur"}>
-            {t("Өдрөөр")}
+          <Select.Option key={"dolooKhonogoor"} value={"dolooKhonogoor"}>
+            {t("7 хоногоор")}
           </Select.Option>
           <Select.Option key={"saraar"} value={"saraar"}>
             {" "}
@@ -566,7 +577,7 @@ function ZochinBurtgel(
       </Form.Item>
 
       <Form.Item
-        requiredMark={"optional"}
+        requiredMark={"required"}
         rules={[
           {
             required: true,
@@ -586,7 +597,7 @@ function ZochinBurtgel(
       </Form.Item>
 
       <Form.Item
-        requiredMark={"optional"}
+        requiredMark={"required"}
         rules={[
           {
             required: true,
@@ -601,6 +612,26 @@ function ZochinBurtgel(
           style={{ width: "100%" }}
           onKeyUp={focuser}
           placeholder={t("Үнэгүй минут")}
+          disabled={isLoading}
+        />
+      </Form.Item>
+
+      <Form.Item
+        requiredMark={"required"}
+        rules={[
+          {
+            required: true,
+            message: t("Оршин суугчийн тоот оруулна уу!"),
+          },
+        ]}
+        label={t("Тоот")}
+        name="ezenToot"
+      >
+        <InputNumber
+          min={0}
+          style={{ width: "100%" }}
+          onKeyUp={focuser}
+          placeholder={t("Тоот")}
           disabled={isLoading}
         />
       </Form.Item>

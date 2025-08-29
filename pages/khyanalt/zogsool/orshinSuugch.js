@@ -215,191 +215,6 @@ function orshinSuugch({ token }) {
   }
 
   const columns = useMemo(() => {
-    const shinecol =
-      turul === "Гэрээт"
-        ? [
-            {
-              title: (
-                <Popover
-                  placement="bottom"
-                  content={
-                    <div className="space-y-2">
-                      <div
-                        onClick={() => setUdurShuult("niit")}
-                        className={`relative flex ${
-                          udurShuult === "niit" ? "bg-green-500 text-white" : ""
-                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                      >
-                        {t("Нийт")}
-                      </div>
-                      <div
-                        onClick={() => setUdurShuult("idevkhitei")}
-                        className={`relative flex ${
-                          udurShuult === "idevkhitei"
-                            ? "bg-green-500 text-white"
-                            : ""
-                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                      >
-                        {t("Идэвхтэй")}
-                      </div>
-                      <div
-                        onClick={() => setUdurShuult("idevkhigui")}
-                        className={`relative flex ${
-                          udurShuult === "idevkhigui"
-                            ? "bg-green-500 text-white"
-                            : ""
-                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                      >
-                        {t("Идэвхгүй")}
-                      </div>
-                    </div>
-                  }
-                >
-                  <div
-                    className={`flex cursor-pointer items-center justify-center gap-3`}
-                  >
-                    <FilterOutlined className="text-lg text-green-600" />
-                    {t("Өдөр")}
-                  </div>
-                </Popover>
-              ),
-              align: "center",
-              dataIndex: "duusakhOgnoo",
-              width: "7rem",
-              render: (duusakhOgnoo) =>
-                moment(duusakhOgnoo)?.diff(moment(new Date()), "days"),
-            },
-            {
-              title: "Цаг",
-              align: "center",
-              width: "7rem",
-              render: (data) => {
-                return (
-                  <div>
-                    {data?.tulburBodokhTsagEkhlekh} -{" "}
-                    {data?.tulburBodokhTsagDuusakh}
-                  </div>
-                );
-              },
-            },
-          ]
-        : turul === "Түрээслэгч"
-        ? [
-            {
-              title: t("Талбайн дугаар"),
-              align: "center",
-              dataIndex: "ezemshigchiinTalbainDugaar",
-              width: "7rem",
-            },
-
-            {
-              title: (
-                <Popover
-                  placement="bottom"
-                  content={
-                    <div className="space-y-2">
-                      <div
-                        onClick={() => setTuluv("")}
-                        className={`relative flex ${
-                          tuluv === "" ? "bg-green-500 text-white" : ""
-                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                      >
-                        {t("Нийт")}
-                      </div>
-                      <div
-                        onClick={() => setTuluv("togtmolTsag")}
-                        className={`relative flex ${
-                          tuluv === "togtmolTsag"
-                            ? "bg-green-500 text-white"
-                            : ""
-                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                      >
-                        {t("Тогтмол цаг")}
-                      </div>
-                      <div
-                        onClick={() => setTuluv("khuviKhungulult")}
-                        className={`relative ${
-                          tuluv == "khuviKhungulult"
-                            ? "bg-green-500 text-white"
-                            : ""
-                        } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                      >
-                        {t("Хувь хөнгөлөлт")}
-                      </div>
-                      <div
-                        onClick={() => setTuluv("Үнэгүй")}
-                        className={`relative ${
-                          tuluv == "Үнэгүй" ? "bg-green-500 text-white" : ""
-                        } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                      >
-                        {t("Үнэгүй")}
-                      </div>
-                    </div>
-                  }
-                >
-                  <div
-                    className={`flex cursor-pointer items-center justify-center gap-3`}
-                  >
-                    <FilterOutlined className="text-lg text-green-600" />
-                    {t("Хөнгөлөлт")}
-                  </div>
-                </Popover>
-              ),
-              align: "center",
-              width: "10rem",
-              dataIndex: "khungulultTurul",
-              showSorterTooltip: false,
-              render: (a, b) => {
-                if (b.tuluv !== "Үнэгүй") {
-                  if (a === "togtmolTsag") {
-                    return (
-                      <div className="flex items-center justify-center">
-                        {a && (
-                          <div
-                            className={`flex w-[6rem] items-center justify-center rounded-lg px-2 py-1 font-[600] text-white ${
-                              b.uldegdelKhungulukhKhugatsaa ===
-                              b.khungulukhKhugatsaa
-                                ? "bg-green-400 dark:bg-green-700"
-                                : b.uldegdelKhungulukhKhugatsaa > 0
-                                ? "bg-yellow-400 dark:bg-yellow-700"
-                                : "bg-red-400 dark:bg-red-700"
-                            }`}
-                          >
-                            {b.khungulukhKhugatsaa}
-                            {"/"}
-                            {""}
-                            {b.uldegdelKhungulukhKhugatsaa}
-                            {t("мин")}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  }
-                  if (a === "khuviKhungulult") {
-                    return (
-                      <div className="flex items-center justify-center">
-                        {a && (
-                          <div className="flex w-[6rem] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
-                            {b.khungulult}
-                            {"%"}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  }
-                } else {
-                  return (
-                    <div className="flex items-center justify-center">
-                      <div className="flex w-[6rem] items-center justify-center rounded-lg bg-gray-400 px-2 py-1 font-[600] text-white dark:bg-gray-700">
-                        {b.tuluv}
-                      </div>
-                    </div>
-                  );
-                }
-              },
-            },
-          ]
-        : [];
     return [
       {
         title: "№",
@@ -455,8 +270,6 @@ function orshinSuugch({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
       },
-
-      ...shinecol,
       {
         title: t("Тайлбар"),
         width: "12rem",
@@ -465,7 +278,21 @@ function orshinSuugch({ token }) {
         showSorterTooltip: false,
         render: (v) => (
           <Tooltip title={v}>
-            <div className="w-full text-left break-words truncate cursor-help">
+            <div className="w-full cursor-help truncate break-words text-left">
+              {v}
+            </div>
+          </Tooltip>
+        ),
+      },
+      {
+        title: t("Тоот"),
+        width: "12rem",
+        align: "center",
+        dataIndex: "ezenToot",
+        showSorterTooltip: false,
+        render: (v) => (
+          <Tooltip title={v}>
+            <div className="w-full cursor-help truncate break-words text-left">
               {v}
             </div>
           </Tooltip>
@@ -482,10 +309,10 @@ function orshinSuugch({ token }) {
               placement="bottom"
               trigger="hover"
               content={() => (
-                <div className="flex flex-col w-24 space-y-2">
+                <div className="flex w-24 flex-col space-y-2">
                   {data?.turul !== "Дотоод" && (
                     <a
-                      className="flex items-center justify-between w-full p-2 rounded-lg ant-dropdown-link hover:bg-green-100 dark:hover:bg-gray-700"
+                      className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                       onClick={() => {
                         tsenegliy(data);
                       }}
@@ -495,7 +322,7 @@ function orshinSuugch({ token }) {
                     </a>
                   )}
                   <a
-                    className="flex items-center justify-between w-full p-2 rounded-lg ant-dropdown-link hover:bg-green-100 dark:hover:bg-gray-700"
+                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                     onClick={() => {
                       zochinBurtgekh(data);
                     }}
@@ -509,7 +336,7 @@ function orshinSuugch({ token }) {
                     cancelText={t("Үгүй")}
                     onConfirm={() => setNuutsUgKhariltsagch(data)}
                   >
-                    <a className="flex items-center justify-between w-full p-2 rounded-lg ant-dropdown-link hover:bg-green-100 dark:hover:bg-gray-700">
+                    <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
                       <RedoOutlined
                         className="text-green-600"
                         style={{ fontSize: "18px" }}
@@ -524,7 +351,7 @@ function orshinSuugch({ token }) {
                     cancelText={t("Үгүй")}
                     onConfirm={() => mashinUstgaya(data)}
                   >
-                    <a className="flex items-center justify-between w-full p-2 rounded-lg ant-dropdown-link hover:bg-green-100 dark:hover:bg-gray-700">
+                    <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
                       <DeleteOutlined
                         className="text-red-600"
                         style={{ fontSize: "18px" }}
@@ -744,7 +571,7 @@ function orshinSuugch({ token }) {
           data-aos-duration="1000"
           data-aos-delay="100"
         >
-          <div className="flex items-center justify-center mb-5 ml-auto space-x-5 md:mb-0">
+          <div className="mb-5 ml-auto flex items-center justify-center space-x-5 md:mb-0">
             {khelber === "1" ? (
               <Button
                 type="primary"
@@ -761,18 +588,18 @@ function orshinSuugch({ token }) {
             <Popover
               content={() => (
                 <div className="flex flex-col items-center justify-center">
-                  <div className="flex flex-col w-32">
+                  <div className="flex w-32 flex-col">
                     <a
-                      className="flex items-center p-1 space-x-2 rounded-lg cursor-pointer hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                      className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                       onClick={mashinOruulakhExcel}
                     >
                       <UploadOutlined style={{ fontSize: "18px" }} />
                       <label>{t("Оруулах")}</label>
                     </a>
                   </div>
-                  <div className="flex flex-col w-32">
+                  <div className="flex w-32 flex-col">
                     <a
-                      className="flex items-center p-1 space-x-2 rounded-lg cursor-pointer hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                      className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                       onClick={() =>
                         khelber === "1"
                           ? excelTatajAvya(
@@ -969,9 +796,9 @@ function orshinSuugch({ token }) {
       {/* Loading overlay for save operations */}
       {zochinSaveLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
-          <div className="p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+          <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
             <div className="flex items-center space-x-3">
-              <div className="w-5 h-5 border-2 border-blue-600 rounded-full animate-spin border-t-transparent"></div>
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
               <span className="text-gray-700 dark:text-gray-300">
                 {t("Хадгалж байна...")}
               </span>
