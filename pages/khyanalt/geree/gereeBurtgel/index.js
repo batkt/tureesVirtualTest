@@ -470,6 +470,8 @@ const select = {
   turGereeEsekh: 1,
   talbainIdnuud: 1,
   zardluud: 1,
+  zoriulalt: 1,
+  tusgaiZoriulalt: 1,
 };
 
 function setURLSearchParam(key, value) {
@@ -1459,6 +1461,10 @@ function ZakhialgiinKhyanalt() {
             );
           }
           data.geree = geree;
+          console.log(
+            "-- zoriulalt  ---------------->>>" +
+              JSON.stringify(geree.zoriulalt)
+          );
           setKharuulakhGeree(data);
           setGereeniiTokhirgoo(null);
         }
