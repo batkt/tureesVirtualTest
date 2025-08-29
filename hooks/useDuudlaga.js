@@ -1,20 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import useSWR from "swr";
 import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
-import { useAuth } from "services/auth";
-
-let globalSocket = null;
-const activeRooms = new Set();
-const socketRefCount = new Map();
-
-function searchGenerator(keys, search) {
-  if (keys.length > 0 && search.trim()) {
-    return keys.map((key) => ({ [key]: { $regex: search, $options: "i" } }));
-  }
-  return undefined;
-}
+import { parseCookies } from "nookies";
+import updateMethod from "tools/function/crud/updateMethod";
 
 const fetcher = async (url, token, params) => {
   try {
@@ -26,16 +16,11 @@ const fetcher = async (url, token, params) => {
   }
 };
 
-function useDuudlaga(
-  token,
-  baiguullagiinId,
-  query = {},
-  order = {},
-  searchKeys = []
-) {
-  const { barilgiinId } = useAuth();
-  const socketInitialized = useRef(false);
-  const currentRoomName = useRef(null);
+function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
+  const cookieData = parseCookies();
+  const token = cookieData.tureestoken;
+  const socketRef = useRef(null);
+  const roomNameRef = useRef(null);
 
   const [khuudaslalt, setDuudlagaKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -47,97 +32,91 @@ function useDuudlaga(
 
   const requestBody = {
     baiguullagiinId,
-    barilgiinId,
     ...query,
     tailbar: "",
-    $or: searchGenerator(searchKeys, khuudaslalt.search),
+    ...(searchKeys.length > 0 &&
+      khuudaslalt.search.trim() && {
+        $or: searchKeys.map((key) => ({
+          [key]: { $regex: khuudaslalt.search, $options: "i" },
+        })),
+      }),
   };
 
   const shouldFetch = token && baiguullagiinId;
 
   const { data, mutate, isValidating } = useSWR(
-    shouldFetch ? ["/appWebDuudlaga" + baiguullagiinId] : null,
-    (url) => fetcher(url, token, { ...requestBody, ...khuudaslalt, order }),
+    shouldFetch
+      ? ["/appWebDuudlaga", baiguullagiinId, khuudaslalt, order]
+      : null,
+    ([url, id, khuudaslalt, order]) =>
+      fetcher(url + id, token, { ...requestBody, ...khuudaslalt, order }),
     {
       revalidateOnFocus: false,
-      revalidateOnReconnect: false,
+      revalidateOnReconnect: true,
       refreshInterval: 0,
+      errorRetryCount: 3,
+      errorRetryInterval: 5000,
+      dedupingInterval: 1000, // Reduced from 2000ms
     }
   );
 
-  const initializeSocket = useCallback(() => {
-    if (!globalSocket) {
-      console.log("Initializing new socket connection");
-      globalSocket = socket();
-
-      globalSocket.on("connect", () => {
-        console.log("Socket connected");
-
-        activeRooms.forEach((room) => {
-          globalSocket.emit("join", room);
-          console.log(`Rejoined room: ${room}`);
-        });
-      });
-
-      globalSocket.on("disconnect", (reason) => {
-        console.log("Socket disconnected:", reason);
-      });
-
-      globalSocket.on("reconnect", () => {
-        console.log("Socket reconnected");
-
-        activeRooms.forEach((room) => {
-          globalSocket.emit("join", room);
-          console.log(`Rejoined room: ${room}`);
-        });
-      });
-
-      globalSocket.on("connect_error", (error) => {
-        console.error("Socket connection error:", error);
-      });
-    }
-    return globalSocket;
-  }, []);
-
-  const handleSocketEvent = useCallback(
-    (eventType, payload) => {
-      console.log(`Socket event received [${eventType}]:`, payload);
-      mutate();
-    },
-    [mutate]
-  );
-
+  // Socket setup with proper cleanup
   useEffect(() => {
-    if (!shouldFetch || socketInitialized.current) return;
+    if (!shouldFetch || !baiguullagiinId) return;
 
     const roomName = "appWebDuudlaga" + baiguullagiinId;
-    currentRoomName.current = roomName;
+    roomNameRef.current = roomName;
 
-    console.log("=== SOCKET DEBUG INFO ===");
+    // Use singleton socket instance
+    if (!socketRef.current) {
+      socketRef.current = socket();
+    }
+
+    const socketInstance = socketRef.current;
+
+    console.log("=== DUUDLAGA SOCKET SETUP ===");
     console.log("baiguullagiinId:", baiguullagiinId);
     console.log("roomName:", roomName);
-    console.log("========================");
+    console.log("Socket ID:", socketInstance.id);
+    console.log("==============================");
 
-    const socketInstance = initializeSocket();
+    const handleDuudlagaUpdate = (data) => {
+      console.log("Socket event received:", data);
 
-    socketRefCount.set(roomName, (socketRefCount.get(roomName) || 0) + 1);
+      // More lenient condition for updates
+      if (
+        !data ||
+        !data.baiguullagiinId ||
+        data.baiguullagiinId === baiguullagiinId
+      ) {
+        console.log("Triggering data refresh...");
 
-    const joinRoom = () => {
-      if (!activeRooms.has(roomName)) {
-        socketInstance.emit("join", roomName);
-        activeRooms.add(roomName);
-        console.log(`Joined room: ${roomName}`);
+        // Use bound mutate with revalidate: true
+        mutate(undefined, { revalidate: true });
       }
     };
 
+    const handleSocketConnect = () => {
+      console.log("Socket connected, joining room:", roomName);
+      socketInstance.emit("join", roomName);
+    };
+
+    const handleSocketDisconnect = (reason) => {
+      console.log("Socket disconnected:", reason);
+    };
+
+    const handleConnectError = (err) => {
+      console.error("Socket connection error:", err);
+    };
+
+    // Join room immediately if already connected
     if (socketInstance.connected) {
-      joinRoom();
-    } else {
-      socketInstance.once("connect", joinRoom);
+      socketInstance.emit("join", roomName);
+      console.log("Immediately joined room:", roomName);
     }
 
+    // Set up event listeners
     const events = [
-      roomName,
       "newDuudlaga",
       "duudlagaStatusChanged",
       "duudlagaUpdated",
@@ -145,57 +124,147 @@ function useDuudlaga(
       "duudlagaCreated",
     ];
 
-    const eventHandlers = events.map((event) => ({
-      event,
-      handler: (payload) => handleSocketEvent(event, payload),
-    }));
-
-    eventHandlers.forEach(({ event, handler }) => {
-      socketInstance.on(event, handler);
+    events.forEach((event) => {
+      socketInstance.on(event, handleDuudlagaUpdate);
     });
 
-    socketInitialized.current = true;
+    // Connection management listeners
+    socketInstance.on("connect", handleSocketConnect);
+    socketInstance.on("disconnect", handleSocketDisconnect);
+    socketInstance.on("connect_error", handleConnectError);
 
+    // Cleanup function
     return () => {
-      if (socketInstance && currentRoomName.current) {
-        const room = currentRoomName.current;
+      console.log("Cleaning up socket listeners for room:", roomName);
 
-        eventHandlers.forEach(({ event, handler }) => {
-          socketInstance.off(event, handler);
-        });
+      // Remove event listeners
+      events.forEach((event) => {
+        socketInstance.off(event, handleDuudlagaUpdate);
+      });
 
-        const refCount = socketRefCount.get(room) || 0;
-        if (refCount <= 1) {
-          socketRefCount.delete(room);
-          activeRooms.delete(room);
-          if (socketInstance.connected) {
-            socketInstance.emit("leave", room);
-            console.log(`Left room: ${room}`);
-          }
-        } else {
-          socketRefCount.set(room, refCount - 1);
-        }
+      socketInstance.off("connect", handleSocketConnect);
+      socketInstance.off("disconnect", handleSocketDisconnect);
+      socketInstance.off("connect_error", handleConnectError);
 
-        if (activeRooms.size === 0 && globalSocket) {
-          console.log("Disconnecting global socket - no active rooms");
-          globalSocket.disconnect();
-          globalSocket = null;
-        }
+      // Leave room
+      if (socketInstance.connected) {
+        socketInstance.emit("leave", roomName);
+        console.log("Left room:", roomName);
       }
     };
-  }, [shouldFetch, baiguullagiinId, handleSocketEvent, initializeSocket]);
+  }, [shouldFetch, baiguullagiinId, mutate]);
 
+  // Separate effect for search/pagination changes
   useEffect(() => {
     if (shouldFetch) {
-      mutate();
+      // Debounce the mutation for search
+      const timeoutId = setTimeout(() => {
+        mutate();
+      }, 300);
+
+      return () => clearTimeout(timeoutId);
     }
-  }, [khuudaslalt, shouldFetch, mutate]);
+  }, [khuudaslalt.search, khuudaslalt.khuudasniiDugaar, shouldFetch, mutate]);
+
+  const sendDuudlaga = useCallback(
+    async (duudlagaData) => {
+      if (
+        !duudlagaData.khariltsagchiinNer ||
+        !duudlagaData.khariltsagchiinUtas
+      ) {
+        throw new Error("User information (name, phone) is required");
+      }
+
+      const payload = {
+        baiguullagiinId: duudlagaData.baiguullagiinId,
+        khariltsagchiinId: duudlagaData.khariltsagchiinId,
+        barilgiinId: duudlagaData.barilgiinId || "",
+        title: duudlagaData.title,
+        message: duudlagaData.message,
+        duudlagiinTurul: duudlagaData.duudlagiinTurul,
+        khariltsagchiinNer: duudlagaData.khariltsagchiinNer,
+        khariltsagchiinUtas: duudlagaData.khariltsagchiinUtas,
+        khariltsagchiinGereeniiDugaar:
+          duudlagaData.khariltsagchiinGereeniiDugaar,
+        khariltsagchiinTalbainDugaar: duudlagaData.khariltsagchiinTalbainDugaar,
+        khariltsagchiinRegister: duudlagaData.khariltsagchiinRegister || "",
+        tukhainBaaziinKholbolt:
+          duudlagaData.tukhainBaaziinKholbolt || "default",
+      };
+
+      try {
+        const result = await uilchilgee(token).post("/sonorduulga", payload);
+
+        // Force immediate refresh without debounce
+        await mutate(undefined, { revalidate: true });
+
+        return result.data;
+      } catch (error) {
+        console.error("Error sending duudlaga:", error);
+        aldaaBarigch(error);
+        throw error;
+      }
+    },
+    [token, mutate]
+  );
+
+  const updateDuudlaga = useCallback(
+    async (duudlagaId, updateData) => {
+      try {
+        const result = await updateMethod("sonorduulga", token, {
+          _id: duudlagaId,
+          ...updateData,
+        });
+
+        // Force refresh
+        await mutate(undefined, { revalidate: true });
+        return result.data;
+      } catch (error) {
+        console.error("Error updating duudlaga:", error);
+        throw error;
+      }
+    },
+    [token, mutate]
+  );
+
+  const updateDuudlagaStatus = useCallback(
+    async (duudlagaId, newStatus, reason) => {
+      try {
+        const updateData = {
+          tuluv: newStatus,
+          updatedAt: new Date().toISOString(),
+          ...(reason && { tailbar: reason }),
+        };
+
+        const result = await updateMethod("sonorduulga", token, {
+          _id: duudlagaId,
+          ...updateData,
+        });
+
+        // Remove optimistic update and just force refresh
+        await mutate(undefined, { revalidate: true });
+
+        return result.data;
+      } catch (err) {
+        console.error("Error updating duudlaga status:", err);
+        aldaaBarigch(err);
+        // Still refresh on error to ensure consistency
+        mutate(undefined, { revalidate: true });
+        throw err;
+      }
+    },
+    [token, mutate]
+  );
 
   return {
     setDuudlagaKhuudaslalt,
     duudlagaGaralt: data,
     duudlagaMutate: mutate,
     isValidating,
+    isLoading: !data && shouldFetch,
+    sendDuudlaga,
+    updateDuudlaga,
+    updateDuudlagaStatus,
   };
 }
 
