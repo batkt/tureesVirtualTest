@@ -330,6 +330,23 @@ function TaskManagementSystem({ token }) {
     order,
     searchKeys
   );
+  const { duudlagiinToololt } = useDuudlagaToollolt(token, query);
+
+  const task = useJagsaalt(ajiltan && "/sonorduulga", query, order);
+
+  const setgegdeliinQuery = useMemo(
+    () => ({
+      duudlagaId: duudlaga?._id,
+    }),
+    [duudlaga]
+  );
+
+  const duudlagaSetgegdel = useJagsaalt(
+    duudlaga && "/setgegdel",
+    setgegdeliinQuery,
+    order
+  );
+
   useEffect(() => {
     if (ajiltan?.baiguullagiinId) {
       const eventName = `appWebDuudlaga${ajiltan.baiguullagiinId}`;
@@ -358,22 +375,6 @@ function TaskManagementSystem({ token }) {
       };
     }
   }, [ajiltan?.baiguullagiinId, duudlagaMutate, task?.mutate]);
-  const { duudlagiinToololt } = useDuudlagaToollolt(token, query);
-
-  const task = useJagsaalt(ajiltan && "/sonorduulga", query, order);
-
-  const setgegdeliinQuery = useMemo(
-    () => ({
-      duudlagaId: duudlaga?._id,
-    }),
-    [duudlaga]
-  );
-
-  const duudlagaSetgegdel = useJagsaalt(
-    duudlaga && "/setgegdel",
-    setgegdeliinQuery,
-    order
-  );
 
   const handleSearch = useCallback(
     (value) => {
