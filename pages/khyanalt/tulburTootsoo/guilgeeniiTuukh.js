@@ -923,6 +923,13 @@ function guilgeeniiTuukh({ token }) {
     const footer = [
       <Button
         type="primary"
+        onClick={() => ref.current.excelTatakh()}
+        icon={<FileExcelOutlined />}
+      >
+        {t("Татах")}
+      </Button>,
+      <Button
+        type="primary"
         onClick={() => ref.current.khevlekh()}
         icon={<PrinterOutlined />}
       >
