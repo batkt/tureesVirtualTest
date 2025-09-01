@@ -585,29 +585,68 @@ audio::-webkit-media-controls-volume-control-container {
   z-index: 1000 !important;
   display: flex;
   flex-direction: column;
+  max-height: 90vh; /* optional: avoid modal growing off-screen */
+}
+
+/* Modal styles with proper spacing */
+.ant-modal-content {
+  @apply dark:bg-gray-800 dark:text-gray-300 !important;
+  @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;
+  @apply p-0 !important;
+  z-index: 1000 !important;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
 }
 
 .ant-modal-header {
-  @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;
+  @apply rounded-t-md sm:rounded-t-lg md:rounded-t-xl lg:rounded-t-2xl !important;
   @apply border-b p-4 dark:border-gray-700 sm:p-6 md:p-6 !important;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  position: relative;
   background-color: inherit;
+  flex-shrink: 0;
 }
 
 .ant-modal-body {
-  @apply px-4 py-4 sm:px-6 md:px-8 !important;
+  @apply px-1 py-1 sm:px-6 md:px-8 !important;
+  overflow: hidden !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .ant-modal-footer {
-  @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;
-
+  @apply rounded-b-md sm:rounded-b-lg md:rounded-b-xl lg:rounded-b-2xl !important;
   @apply border-t p-4 dark:border-gray-700 sm:p-6 !important;
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
+  position: relative;
   background-color: inherit;
+  flex-shrink: 0;
+}
+
+.guilgee-table-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.guilgee-table-header {
+  flex-shrink: 0;
+}
+
+.guilgee-table-body {
+  flex: 1;
+  overflow-y: auto !important;
+  min-height: 0;
+  padding-bottom: 1rem;
+}
+
+tbody.overflownone {
+  height: auto !important;
+  max-height: calc(70vh - 8rem) !important;
+  overflow-y: auto !important;
+  display: block;
+  margin-bottom: 1rem;
 }
 
 .ant-picker-calendar .ant-picker-panel {

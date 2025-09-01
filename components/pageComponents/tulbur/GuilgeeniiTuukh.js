@@ -204,13 +204,22 @@ function GuilgeeniiTuukh(
         handlePrint();
       },
       excelTatakh() {
-        exceleerTatya();
+        if (guilgeeniiTuukh && guilgeeniiTuukh.length > 0) {
+          exceleerTatya();
+        } else {
+          message.info(t("Өгөгдөл ачаалж байна..."));
+          setTimeout(() => {
+            if (guilgeeniiTuukh && guilgeeniiTuukh.length > 0) {
+              exceleerTatya();
+            }
+          }, 1000);
+        }
       },
       refreshData() {
         guilgeeniiTuukhMutate();
       },
     }),
-    [printRef]
+    [printRef, guilgeeniiTuukh]
   );
 
   const exceleerTatya = async () => {
