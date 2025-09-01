@@ -30,12 +30,14 @@ const hrefAvya = (mur, ajiltan) => {
       sanal: "/khyanalt/medegdel/sanalKhuselt",
       gomdol: "/khyanalt/medegdel/sanalKhuselt",
       medegdel: "/khyanalt/medegdel",
+      sonorduulga: "/khyanalt/duudlaga/duudlaga",
     },
     user: {
       daalgavar: "/khyanalt/daalgavar",
       sanal: "/khyanalt/medegdel/sanalKhuselt",
       gomdol: "/khyanalt/medegdel/sanalKhuselt",
       medegdel: "/khyanalt/medegdel",
+      sonorduulga: "/khyanalt/duudlaga/duudlaga",
     },
   };
 

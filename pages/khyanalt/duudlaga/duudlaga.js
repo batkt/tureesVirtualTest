@@ -13,6 +13,7 @@ import {
 import { Checkbox, Tooltip, Tag, Spin, Select } from "antd";
 import moment from "moment";
 import Admin from "components/Admin";
+import { socket } from "services/uilchilgee";
 import React, {
   useEffect,
   useState,
@@ -329,7 +330,34 @@ function TaskManagementSystem({ token }) {
     order,
     searchKeys
   );
+  useEffect(() => {
+    if (ajiltan?.baiguullagiinId) {
+      const eventName = `appWebDuudlaga${ajiltan.baiguullagiinId}`;
 
+      const handleSonorduulga = (sonorduulga) => {
+        console.log("sonorduulga received:", sonorduulga);
+
+        notification.success({
+          message: "Шинэ дуудлага",
+          description: "Шинэ дуудлага ирлээ",
+        });
+
+        if (duudlagaMutate) {
+          duudlagaMutate();
+        }
+
+        if (task?.mutate) {
+          task.mutate();
+        }
+      };
+
+      socket().on(eventName, handleSonorduulga);
+
+      return () => {
+        socket().off(eventName, handleSonorduulga);
+      };
+    }
+  }, [ajiltan?.baiguullagiinId, duudlagaMutate, task?.mutate]);
   const { duudlagiinToololt } = useDuudlagaToollolt(token, query);
 
   const task = useJagsaalt(ajiltan && "/sonorduulga", query, order);
@@ -1015,16 +1043,12 @@ function TaskManagementSystem({ token }) {
               <span className="col-span-1 text-xs text-gray-500">
                 Огноо: {moment(khariltsagch.createdAt).format("MM-DD HH:mm")}
               </span>
-              <div className="font-medium">
-                Нэр: {duudlaga.khariltsagchiinNer}
-              </div>
+              <div className="">Нэр: {duudlaga.khariltsagchiinNer}</div>
               {/* <div className="font-medium">
                 Гэрээ: {duudlaga.khariltsagchiinGereeniiDugaar}
               </div> */}
               <div className="font-medium">Гарчиг: {duudlaga.title}</div>
-              <div className="font-medium">
-                Утас: {duudlaga.khariltsagchiinUtas}
-              </div>
+              <div className="">Утас: {duudlaga.khariltsagchiinUtas}</div>
               {/* <div className="font-medium">
                 Талбай: {duudlaga?.khariltsagchiinTalbainDugaar}
               </div> */}
@@ -1037,7 +1061,7 @@ function TaskManagementSystem({ token }) {
             </div>
 
             {duudlaga?.tailbar && (
-              <div className="mt-2 rounded-lg bg-red-50 p-2 dark:bg-red-900/20">
+              <div className="mt-2 rounded-lg   p-2  ">
                 <div className="text-sm font-medium text-red-600">
                   {t("Цуцалсан шалтгаан")}:
                 </div>
@@ -1046,8 +1070,8 @@ function TaskManagementSystem({ token }) {
             )}
           </div>
 
-          <div className="flex items-end justify-end space-x-4 p-4">
-            <div className="flex justify-start">
+          <div className="flex items-end justify-between p-4">
+            <div className="flex">
               {duudlaga?.duudlagiinTurul && (
                 <Tag size="small" color="processing">
                   Үйлчилгээ: {duudlaga.duudlagiinTurul}
@@ -1055,48 +1079,50 @@ function TaskManagementSystem({ token }) {
               )}
             </div>
 
-            <div
-              className={`${
-                duudlaga?.tuluv === -1 ? "hidden" : "flex"
-              } space-x-2`}
-            >
-              {duudlaga?.tuluv === 0 && (
-                <Popconfirm
-                  title="Дуудлагыг дуусгах уу?"
-                  okText={t("Тийм")}
-                  cancelText={t("Үгүй")}
-                  onConfirm={duudlagaDuusya}
-                >
-                  <div className="cursor-pointer rounded-full bg-blue-500 px-3 py-1 text-sm font-medium text-white hover:bg-blue-600">
-                    {t("Дуусгах")}
-                  </div>
-                </Popconfirm>
-              )}
+            <div className="flex items-center space-x-4">
+              <div
+                className={`${
+                  duudlaga?.tuluv === -1 ? "hidden" : "flex"
+                } space-x-2`}
+              >
+                {duudlaga?.tuluv === 0 && (
+                  <Popconfirm
+                    title="Дуудлагыг дуусгах уу?"
+                    okText={t("Тийм")}
+                    cancelText={t("Үгүй")}
+                    onConfirm={duudlagaDuusya}
+                  >
+                    <div className="cursor-pointer rounded-full bg-blue-500 px-3 py-1 text-sm font-medium text-white hover:bg-blue-600">
+                      {t("Дуусгах")}
+                    </div>
+                  </Popconfirm>
+                )}
 
-              {duudlaga?.tuluv !== 1 && (
-                <Popconfirm
-                  title="Дуудлагыг цуцлах уу?"
-                  okText={t("Тийм")}
-                  cancelText={t("Үгүй")}
-                  onConfirm={duudlagaTsutslakh}
-                >
-                  <div className="cursor-pointer rounded-full bg-red-500 px-3 py-1 text-sm font-medium text-white hover:bg-red-600">
-                    {t("Цуцлах")}
-                  </div>
-                </Popconfirm>
+                {duudlaga?.tuluv !== 1 && (
+                  <Popconfirm
+                    title="Дуудлагыг цуцлах уу?"
+                    okText={t("Тийм")}
+                    cancelText={t("Үгүй")}
+                    onConfirm={duudlagaTsutslakh}
+                  >
+                    <div className="cursor-pointer rounded-full bg-red-500 px-3 py-1 text-sm font-medium text-white hover:bg-red-600">
+                      {t("Цуцлах")}
+                    </div>
+                  </Popconfirm>
+                )}
+              </div>
+
+              {duudlaga?.tuluv === 1 && (
+                <div className="rounded-2xl bg-blue-500 px-3 py-1 text-white">
+                  {t("Дууссан")}
+                </div>
+              )}
+              {duudlaga?.tuluv === -1 && (
+                <div className="rounded-2xl bg-red-500 px-3 py-1 text-white">
+                  {t("Цуцлагдсан")}
+                </div>
               )}
             </div>
-
-            {duudlaga?.tuluv === 1 && (
-              <div className="rounded-2xl bg-blue-500 px-3 py-1 text-white">
-                {t("Дууссан")}
-              </div>
-            )}
-            {duudlaga?.tuluv === -1 && (
-              <div className="rounded-2xl bg-red-500 px-3 py-1 text-white">
-                {t("Цуцлагдсан")}
-              </div>
-            )}
           </div>
         </div>
       ) : (
