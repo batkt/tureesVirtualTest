@@ -312,10 +312,14 @@ function GuilgeeniiTuukh(
         };
         XLSX?.utils.book_append_sheet(wb, ws, "гүйлгээ");
         wb.Custprops;
-        XLSX?.writeFile(wb, "Гүйлгээний_Түүх.xlsx", {
-          WTF: true,
-          cellStyles: true,
-        });
+        XLSX?.writeFile(
+          wb,
+          data?.gereeniiDugaar + " гэрээний гүйлгээний түүх.xlsx",
+          {
+            WTF: true,
+            cellStyles: true,
+          }
+        );
       }
     } catch (e) {
       aldaaBarigch(e.message);

@@ -1117,6 +1117,7 @@ function guilgeeniiTuukh({ token }) {
             a.dataIndex === "sariinTurees" ||
             a.dataIndex === "talbainNiitUne" ||
             a.dataIndex === "aldangiinUldegdel" ||
+            a.dataIndex === "niitTulsunAldangi" ||
             a.dataIndex === "baritsaaAvakhDun" ||
             a.dataIndex === "baritsaaniiUldegdel"
           ? forExcel.push({
@@ -1384,6 +1385,22 @@ function guilgeeniiTuukh({ token }) {
                       return (
                         <div className="w-full text-right">
                           {formatNumber(aldangiinUldegdel || 0)}
+                        </div>
+                      );
+                    },
+                  },
+                  {
+                    title: t("Төлсөн алданги"),
+                    dataIndex: "niitTulsunAldangi",
+                    className: "text-center",
+                    align: "center",
+                    ellipsis: true,
+                    width: "7rem",
+                    summary: true,
+                    render: (niitTulsunAldangi) => {
+                      return (
+                        <div className="w-full text-right">
+                          {formatNumber(niitTulsunAldangi || 0)}
                         </div>
                       );
                     },
