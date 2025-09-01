@@ -225,19 +225,19 @@ function GuilgeeniiTuukh(
   const exceleerTatya = async () => {
     try {
       const wb = XLSX?.utils.book_new();
-      const dataSubset = guilgeeniiTuukh?.map((item) => {
+      const dataSubset = guilgeeniiTuukh?.reverse().map((item) => {
         return {
           Огноо: moment(item.ognoo).format("YYYY/MM/DD"),
-          Түрээс: item.undsenDun,
-          "Төлөх дүн": item.tulukhDun,
-          Хямдрал: item.khyamdral,
-          "Төлсөн алданги": item.tulsunAldangi,
-          "Төлсөн дүн": item.tulsunDun,
-          Үлдэгдэл: item.uldegdel,
-          Ажилтан: item.guilgeeKhiisenAjiltniiNer,
-          Хэлбэр: item.turul,
-          Тайлбар: item.tailbar,
-          "Нэмэлт тайлбар": item.nemeltTailbar,
+          Түрээс: item.undsenDun || 0,
+          "Төлөх дүн": item.tulukhDun || 0,
+          Хямдрал: item.khyamdral || 0,
+          "Төлсөн алданги": item.tulsunAldangi || 0,
+          "Төлсөн дүн": item.tulsunDun || 0,
+          Үлдэгдэл: item.uldegdel || 0,
+          Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
+          Хэлбэр: item.turul || "",
+          Тайлбар: item.tailbar || "",
+          "Нэмэлт тайлбар": item.nemeltTailbar || "",
           "Бүртгэсэн огноо": moment(item.burtgesenOgnoo).format("YYYY/MM/DD"),
         };
       });
