@@ -541,6 +541,29 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("QPAY шимтгэл 300₮ нэмж нэхэмжлэх эсэх")}
+                </div>
+                <div className="text-gray-600">
+                  {t("QPAY шимтгэл 300₮ -г үндсэн дүн дээр нэмж нэхэмжилнэ.")}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={baiguullaga.tokhirgoo?.qpayShimtgelTusdaa}
+                  onChange={(v) =>
+                    setGereeTokhirgoo((a) => ({
+                      ...(a || {}),
+                      qpayShimtgelTusdaa: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
           <div
             className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
               !!gereeTokhirgoo ? "flex" : "hidden"

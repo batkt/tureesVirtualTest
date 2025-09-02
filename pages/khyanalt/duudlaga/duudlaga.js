@@ -52,12 +52,6 @@ const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 const searchKeys = [
-  "customerNo",
-  "cashAmount",
-  "billId",
-  "id",
-  "customerTin",
-  "mashiniiDugaar",
   "gereeniiDugaar",
   "talbainDugaar",
   "togloomNer",
@@ -376,15 +370,21 @@ function TaskManagementSystem({ token }) {
     }
   }, [ajiltan?.baiguullagiinId, duudlagaMutate, task?.mutate]);
 
+  // Enhanced search handler with proper debouncing
   const handleSearch = useCallback(
     (value) => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
+        console.log("Search term set to:", value);
         setSearchTerm(value);
-        setKhariltsagchKhuudaslalt((a) => ({
-          ...a,
-          search: value,
-        }));
+
+        // Update the khariltsagch search if needed
+        if (setKhariltsagchKhuudaslalt) {
+          setKhariltsagchKhuudaslalt((prev) => ({
+            ...prev,
+            search: value,
+          }));
+        }
       }, 300);
     },
     [setKhariltsagchKhuudaslalt]
@@ -484,13 +484,36 @@ function TaskManagementSystem({ token }) {
         turulFilter === "Бүгд" ||
         item.duudlagiinTurul?.toLowerCase() === turulFilter.toLowerCase();
 
-      const searchMatch =
-        !searchTerm ||
-        item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.message?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.khariltsagchiinId
-          ?.toLowerCase()
-          .includes(searchTerm.toLowerCase());
+      let searchMatch = true;
+      if (searchTerm && searchTerm.trim()) {
+        const searchTermLower = searchTerm.toLowerCase().trim();
+
+        searchMatch = searchKeys.some((key) => {
+          const value = item[key];
+          if (value && typeof value === "string") {
+            return value.toLowerCase().includes(searchTermLower);
+          }
+          return false;
+        });
+
+        if (!searchMatch) {
+          const additionalFields = [
+            item.khariltsagchiinNer,
+            item.khariltsagchiinRegister,
+            item.khariltsagchiinUtas,
+            item.title,
+            item.message,
+            item.duudlagiinTurul,
+          ];
+
+          searchMatch = additionalFields.some((field) => {
+            if (field && typeof field === "string") {
+              return field.toLowerCase().includes(searchTermLower);
+            }
+            return false;
+          });
+        }
+      }
 
       let dateMatch = true;
       if (ekhlekhOgnoo && ekhlekhOgnoo.length === 2) {
@@ -503,23 +526,7 @@ function TaskManagementSystem({ token }) {
         );
       }
 
-      const result = statusMatch && typeMatch && searchMatch && dateMatch;
-
-      if (!result) {
-        console.log("Item filtered out:", {
-          item: item._id,
-          statusMatch,
-          typeMatch,
-          searchMatch,
-          dateMatch,
-          itemTuluv: item.tuluv,
-          expectedTuluv: tuluv,
-          itemType: item.duudlagiinTurul,
-          expectedType: turulFilter,
-        });
-      }
-
-      return result;
+      return statusMatch && typeMatch && searchMatch && dateMatch;
     });
   }, [task?.jagsaalt, jagsaalt, tuluv, turulFilter, searchTerm, ekhlekhOgnoo]);
 
@@ -550,19 +557,19 @@ function TaskManagementSystem({ token }) {
       {
         too: formatNumber(activeCount, 0),
         utga: t("Идэвхтэй"),
-        status: "Идэвхтэй", // Use string to match tuluv state
+        status: "Идэвхтэй",
         onClick: () => setTuluv("Идэвхтэй"),
       },
       {
         too: formatNumber(completedCount, 0),
         utga: t("Дууссан"),
-        status: "Дууссан", // Use string to match tuluv state
+        status: "Дууссан",
         onClick: () => setTuluv("Дууссан"),
       },
       {
         too: formatNumber(cancelledCount, 0),
         utga: t("Цуцлагдсан"),
-        status: "Цуцлагдсан", // Use string to match tuluv state
+        status: "Цуцлагдсан",
         onClick: () => setTuluv("Цуцлагдсан"),
       },
     ];
@@ -833,6 +840,7 @@ function TaskManagementSystem({ token }) {
             onChange={setTurulFilter}
             size="middle"
           >
+            <Option value="Бүгд">Бүгд</Option>
             <option value="Сантехник" />
             <option value="Цахилгаан" />
             <option value="Халаалтын систем" />
