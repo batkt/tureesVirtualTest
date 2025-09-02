@@ -23,6 +23,7 @@ import locale from "antd/lib/date-picker/locale/mn_MN";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import { DeleteOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
+import * as XLSX from "xlsx-js-style";
 
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   const [tailbar, setTailbar] = useState("");
@@ -190,14 +191,99 @@ function GuilgeeniiTuukhAldangi(
       khevlekh() {
         handlePrint();
       },
-      excelTatakh() {},
+      excelTatakh() {
+        exceleerTatya();
+      },
       refreshData() {
         guilgeeniiAldangiTuukhMutate();
         setAldangiinUldegdel(undefined);
       },
     }),
-    [printRef]
+    [printRef, guilgeeniiAldangiTuukh]
   );
+
+  const exceleerTatya = async () => {
+    try {
+      const wb = XLSX?.utils.book_new();
+      const dataSubset = guilgeeniiAldangiTuukh?.reverse().map((item) => {
+        return {
+          Огноо: moment(item.ognoo).format("YYYY/MM/DD"),
+          Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
+          "Төлөх алданги": item.tulukhAldangi || 0,
+          "Төлсөн алданги": item.tulsunAldangi || item.tulsunDun || 0,
+          Данс: item.dansniiDugaar || "",
+          "Төлсөн данс": item.tulsunDans || "",
+          Тайлбар: item.tailbar || "",
+          "Бүртгэсэн огноо": moment(item.guilgeeKhiisenOgnoo).format(
+            "YYYY/MM/DD"
+          ),
+        };
+      });
+      const ws = XLSX?.utils.json_to_sheet(dataSubset);
+      if (ws) {
+        const range = XLSX.utils.decode_range(ws["!ref"]);
+        for (let R = range.s.r; R <= range.e.r; ++R) {
+          for (let C = range.s.c; C <= range.e.c; ++C) {
+            const cellAddress = { r: R, c: C };
+            const cell = ws[XLSX.utils.encode_cell(cellAddress)];
+            if (!cell.s) {
+              cell.s = {};
+            }
+            cell.s.border = {
+              top: { style: "thin", color: { auto: 1 } },
+              bottom: { style: "thin", color: { auto: 1 } },
+              left: { style: "thin", color: { auto: 1 } },
+              right: { style: "thin", color: { auto: 1 } },
+            };
+          }
+        }
+        var wscols = [
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+        ];
+
+        ws["!cols"] = wscols;
+        const headerStyle = {
+          fill: {
+            patternType: "solid",
+            fgColor: { rgb: "88C849" },
+          },
+          border: {
+            top: { style: "thin", color: { auto: 1 } },
+            bottom: { style: "thin", color: { auto: 1 } },
+            left: { style: "thin", color: { auto: 1 } },
+            right: { style: "thin", color: { auto: 1 } },
+          },
+        };
+        ws["A1"].s = headerStyle;
+        ws["B1"].s = headerStyle;
+        ws["C1"].s = headerStyle;
+        ws["D1"].s = headerStyle;
+        ws["E1"].s = headerStyle;
+        ws["F1"].s = headerStyle;
+        ws["G1"].s = headerStyle;
+        ws["H1"].s = headerStyle;
+        XLSX?.utils.book_append_sheet(wb, ws, "гүйлгээ");
+        wb.Custprops;
+        XLSX?.writeFile(
+          wb,
+          data?.gereeniiDugaar + " гэрээний алдангийн хуулга.xlsx",
+          {
+            WTF: true,
+            cellStyles: true,
+          }
+        );
+      }
+    } catch (e) {
+      aldaaBarigch(e.message);
+    }
+  };
 
   useEffect(() => {
     fetchAldangiinUldegdel();

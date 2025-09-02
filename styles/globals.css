@@ -615,6 +615,29 @@ audio::-webkit-media-controls-volume-control-container {
   flex-direction: column;
 }
 
+/* Add this to your CSS file */
+.guilgee-modal .ant-modal-body {
+  @apply px-1 py-1 sm:px-6 md:px-8 !important;
+  overflow: auto !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.guilgee-modal .ant-modal-content {
+  display: flex !important;
+  flex-direction: column !important;
+  max-height: 90vh !important;
+}
+
+.guilgee-modal .ant-modal-header {
+  flex-shrink: 0 !important;
+}
+
+.guilgee-modal .ant-modal-footer {
+  flex-shrink: 0 !important;
+}
+
 .ant-modal-footer {
   @apply rounded-b-md sm:rounded-b-lg md:rounded-b-xl lg:rounded-b-2xl !important;
   @apply border-t p-4 dark:border-gray-700 sm:p-6 !important;

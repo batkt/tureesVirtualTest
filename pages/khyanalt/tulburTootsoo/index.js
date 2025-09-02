@@ -280,6 +280,7 @@ function tulburTootsoo({ token }) {
         </div>,
       ];
       modal({
+        wrapClassName: "guilgee-modal",
         title: "",
         width: "50rem",
         icon: <FileExcelOutlined />,
@@ -383,9 +384,9 @@ function tulburTootsoo({ token }) {
     } else barimtShivya();
   }
 
-      const columns = useMemo(() => {
-        let baganuud = [];
-        if (songogdsonDans?.bank === "tdb") {
+  const columns = useMemo(() => {
+    let baganuud = [];
+    if (songogdsonDans?.bank === "tdb") {
       baganuud = [
         {
           title: t("Огноо"),
@@ -436,7 +437,7 @@ function tulburTootsoo({ token }) {
         },
         {
           title: t("Холбосон огноо"),
-          dataIndex: "updatedAt", 
+          dataIndex: "updatedAt",
           align: "center",
           width: "8rem",
           render(date) {
@@ -616,7 +617,7 @@ function tulburTootsoo({ token }) {
         },
         {
           title: t("Холбосон огноо"),
-          dataIndex: "updatedAt", 
+          dataIndex: "updatedAt",
           align: "center",
           width: "8rem",
           render(date) {
@@ -736,7 +737,7 @@ function tulburTootsoo({ token }) {
         },
         {
           title: t("Холбосон огноо"),
-          dataIndex: "updatedAt", 
+          dataIndex: "updatedAt",
           align: "center",
           width: "8rem",
           render(date) {
