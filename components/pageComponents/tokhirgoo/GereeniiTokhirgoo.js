@@ -81,6 +81,7 @@ function KhuviinMedeelel({
           gereeTokhirgoo?.gereeAvtomataarSungakhEsekh,
         bukhAjiltanGereendZasvarOruulakhEsekh:
           gereeTokhirgoo?.bukhAjiltanGereendZasvarOruulakhEsekh,
+        qpayShimtgelTusdaa: baiguullaga.tokhirgoo?.qpayShimtgelTusdaa,
 
         baritsaaAvakhSar: gereeTokhirgoo?.baritsaaAvakhSar,
         baritsaaAvakhEsekh: gereeTokhirgoo?.baritsaaAvakhEsekh,
