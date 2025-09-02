@@ -188,17 +188,12 @@ function MashinBurtgel(
     if (khungulultiinTurul === "togtmolTsag") {
       lastData.khungulujEkhlesenOgnoo = new Date();
 
-      // Only set uldegdelKhungulukhKhugatsaa for NEW records
-      // For existing records, preserve the current uldegdelKhungulukhKhugatsaa value
       if (!isEditMode && !lastData?.uldegdelKhungulukhKhugatsaa) {
         lastData.uldegdelKhungulukhKhugatsaa = lastData.khungulukhKhugatsaa;
       } else if (isEditMode) {
-        // For edit mode, preserve the original uldegdelKhungulukhKhugatsaa
-        // but make sure it doesn't exceed the new khungulukhKhugatsaa
         const originalRemaining = data.uldegdelKhungulukhKhugatsaa || 0;
         const newTotal = lastData.khungulukhKhugatsaa || 0;
 
-        // If remaining time is greater than new total time, set remaining to new total
         lastData.uldegdelKhungulukhKhugatsaa = Math.min(
           originalRemaining,
           newTotal
@@ -559,6 +554,17 @@ function MashinBurtgel(
                   />
                 </Form.Item>
               )}
+              <Form.Item
+                name={"uldegdelKhungulukhKhugatsaa"}
+                label={t("Үлдэгдэл хугацаа/мин")}
+              >
+                <InputNumber
+                  disabled="true"
+                  type="number"
+                  className="w-full"
+                  min={0}
+                />
+              </Form.Item>
 
               {dotorGadnaTsagEsekh && (
                 <Form.Item label={t("Зогсоолын төрөл")} name="zogsooliinTurul">

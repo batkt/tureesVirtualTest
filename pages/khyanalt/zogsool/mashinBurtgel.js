@@ -850,7 +850,7 @@ function mashinBurtgel({ token }) {
       </Space>,
     ];
     modal({
-      title: "",
+      title: "Машин бүртгэл",
       icon: <FileExcelOutlined />,
       content: (
         <MashinBurtgel

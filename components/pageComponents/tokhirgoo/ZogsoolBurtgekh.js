@@ -395,11 +395,9 @@ function ZogsoolBurtgekh(
 
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
-                {t("Гадаа зогсоол QR Sticker ашиглах эсэх")}
+                {t("Гадаа sticker QR ашиглах эсэх")}
               </div>
-              <div className="text-xs text-gray-400">
-                Гадаа зогсоол QR Sticker ашиглах тохиргоо{" "}
-              </div>
+              <div className="text-xs text-gray-400"> </div>
             </div>
             <div className="col-span-2">
               <Form.Item className="m-0" name="gadaaStickerAshiglakhEsekh">
