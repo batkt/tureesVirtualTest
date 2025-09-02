@@ -90,6 +90,7 @@ function KhuviinMedeelel({
         guidelBuchiltKhonogEsekh: gereeTokhirgoo?.guidelBuchiltKhonogEsekh,
         sekhDemjikhTulburAvakhEsekh:
           gereeTokhirgoo?.sekhDemjikhTulburAvakhEsekh,
+        guidliinKoepEsekh: gereeTokhirgoo?.guidliinKoepEsekh,
         bichiltKhonog: gereeTokhirgoo?.bichiltKhonog,
 
         udruurBodokhEsekh: gereeTokhirgoo?.udruurBodokhEsekh,
