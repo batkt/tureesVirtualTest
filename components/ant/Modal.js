@@ -14,13 +14,13 @@ export function modal({ content, onOk, onCancel, ...config }) {
   }
 
   const handleOk = async () => {
-    if (onOk) await onOk(); 
-    destroy(); 
+    if (onOk) await onOk();
+    destroy();
   };
 
   const handleCancel = () => {
-    if (onCancel) onCancel(); 
-    destroy(); 
+    if (onCancel) onCancel();
+    destroy();
   };
 
   const contentNode = React.isValidElement(content) ? (

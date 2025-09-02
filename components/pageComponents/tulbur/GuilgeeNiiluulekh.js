@@ -542,7 +542,10 @@ function GuilgeeNiiluulekh(
           </div>
         </div>
       </div>
-      <div className="space-y-2 overflow-auto px-2" style={{ height: "25rem" }}>
+      <div
+        className="space-y-2 overflow-y-auto px-2"
+        style={{ height: "25rem" }}
+      >
         {gereenuud.map((geree, index) => (
           <div
             key={`${index}geree-kholbolt`}
