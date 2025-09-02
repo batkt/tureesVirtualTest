@@ -47,6 +47,7 @@ function KhuviinMedeelel({
       baiguullaga?.tokhirgoo?.gereeAvtomataarSungakhEsekh,
     bukhAjiltanGereendZasvarOruulakhEsekh:
       baiguullaga?.tokhirgoo?.bukhAjiltanGereendZasvarOruulakhEsekh,
+    qpayShimtgelTusdaa: baiguullaga.tokhirgoo?.qpayShimtgelTusdaa,
 
     baritsaaAvakhSar: baiguullaga?.tokhirgoo?.baritsaaAvakhSar,
     baritsaaAvakhEsekh: baiguullaga?.tokhirgoo?.baritsaaAvakhEsekh,
@@ -100,6 +101,7 @@ function KhuviinMedeelel({
         gereeDuusakhTalbaiTulburNemekhEsekh:
           barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
         gereeDuusakhTulbur: barilgaTokhirgoo?.gereeDuusakhTulbur,
+        qpayShimtgelTusdaa: gereeTokhirgoo?.qpayShimtgelTusdaa,
       },
     };
 
