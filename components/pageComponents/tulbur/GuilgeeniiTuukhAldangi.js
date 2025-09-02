@@ -238,40 +238,37 @@ function GuilgeeniiTuukhAldangi(
           }
         }
         var wscols = [
-          { wch: 10 },
-          { wch: 10 },
-          { wch: 10 },
-          { wch: 10 },
-          { wch: 10 },
-          { wch: 10 },
-          { wch: 12 },
-          { wch: 10 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
         ];
+
         ws["!cols"] = wscols;
-        ws["A1"].s = {
-          font: { bold: true, color: { rgb: "FF0000" } },
+        const headerStyle = {
+          fill: {
+            patternType: "solid",
+            fgColor: { rgb: "88C849" },
+          },
+          border: {
+            top: { style: "thin", color: { auto: 1 } },
+            bottom: { style: "thin", color: { auto: 1 } },
+            left: { style: "thin", color: { auto: 1 } },
+            right: { style: "thin", color: { auto: 1 } },
+          },
         };
-        ws["B1"].s = {
-          font: { bold: true, color: { rgb: "FF0000" } },
-        };
-        ws["C1"].s = {
-          font: { bold: true, color: { rgb: "FF0000" } },
-        };
-        ws["D1"].s = {
-          font: { bold: true, color: { rgb: "FF0000" } },
-        };
-        ws["E1"].s = {
-          font: { bold: true, color: { rgb: "FF0000" } },
-        };
-        ws["F1"].s = {
-          font: { bold: true, color: { rgb: "FF0000" } },
-        };
-        ws["G1"].s = {
-          font: { bold: true, color: { rgb: "FF0000" } },
-        };
-        ws["H1"].s = {
-          font: { bold: true, color: { rgb: "FF0000" } },
-        };
+        ws["A1"].s = headerStyle;
+        ws["B1"].s = headerStyle;
+        ws["C1"].s = headerStyle;
+        ws["D1"].s = headerStyle;
+        ws["E1"].s = headerStyle;
+        ws["F1"].s = headerStyle;
+        ws["G1"].s = headerStyle;
+        ws["H1"].s = headerStyle;
         XLSX?.utils.book_append_sheet(wb, ws, "гүйлгээ");
         wb.Custprops;
         XLSX?.writeFile(
