@@ -500,7 +500,6 @@ function camera({ token }) {
     uilchluulegchMutate,
     isValidating,
   } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
-
   useEffect(() => {
     if (
       baiguullaga?.tokhirgoo?.gadaaStickerAshiglakhEsekh ||
@@ -522,7 +521,7 @@ function camera({ token }) {
         socket().off(`qpayMobileSdk${baiguullaga?._id}`);
       };
     }
-  }, [baiguullaga]);
+  }, [baiguullaga, parkingJagsaalt?.[0]?.gadaaStickerAshiglakhEsekh]);
 
   useEffect(() => {
     if (
