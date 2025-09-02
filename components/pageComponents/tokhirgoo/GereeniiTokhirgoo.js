@@ -47,6 +47,7 @@ function KhuviinMedeelel({
       baiguullaga?.tokhirgoo?.gereeAvtomataarSungakhEsekh,
     bukhAjiltanGereendZasvarOruulakhEsekh:
       baiguullaga?.tokhirgoo?.bukhAjiltanGereendZasvarOruulakhEsekh,
+    qpayShimtgelTusdaa: baiguullaga.tokhirgoo?.qpayShimtgelTusdaa,
 
     baritsaaAvakhSar: baiguullaga?.tokhirgoo?.baritsaaAvakhSar,
     baritsaaAvakhEsekh: baiguullaga?.tokhirgoo?.baritsaaAvakhEsekh,
@@ -101,6 +102,7 @@ function KhuviinMedeelel({
         gereeDuusakhTalbaiTulburNemekhEsekh:
           barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
         gereeDuusakhTulbur: barilgaTokhirgoo?.gereeDuusakhTulbur,
+        qpayShimtgelTusdaa: gereeTokhirgoo?.qpayShimtgelTusdaa,
       },
     };
 
@@ -557,6 +559,29 @@ function KhuviinMedeelel({
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
                       baritsaaUneAdiltgakhEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("QPAY шимтгэл 300₮ нэмж нэхэмжлэх эсэх")}
+                </div>
+                <div className="text-gray-600">
+                  {t("QPAY шимтгэл 300₮ -г үндсэн дүн дээр нэмж нэхэмжилнэ.")}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={baiguullaga.tokhirgoo?.qpayShimtgelTusdaa}
+                  onChange={(v) =>
+                    setGereeTokhirgoo((a) => ({
+                      ...(a || {}),
+                      qpayShimtgelTusdaa: v,
                     }))
                   }
                 />
