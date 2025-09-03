@@ -501,9 +501,10 @@ function nasjiltinTailan({ token }) {
           className="col-span-2"
           locale={local}
           value={ognoo}
+          picker="month"
           onChange={handleDateChange}
           placeholder={"Дуусах огноо"}
-          format="YYYY-MM-DD"
+          format="YYYY-MM"
         />
         <Select
           bordered={false}
@@ -719,7 +720,7 @@ function nasjiltinTailan({ token }) {
                 Насжилтын тайлан
               </div>
             </div>
-        
+
             <table className="w-full border-2 border-gray-500">
               <thead className="bg-gray-400 text-black">
                 <tr>
@@ -744,11 +745,19 @@ function nasjiltinTailan({ token }) {
                       <td
                         key={idx}
                         className={`border border-gray-400 px-2 py-1 text-mashJijigiinJijig ${
-                          isNumberColumn(col.dataIndex) ? "text-right" : "text-center"
+                          isNumberColumn(col.dataIndex)
+                            ? "text-right"
+                            : "text-center"
                         }`}
                         style={{
-                          whiteSpace: col.dataIndex === "talbainDugaar" ? "normal" : "nowrap",
-                          maxWidth: col.dataIndex === "talbainDugaar" ? "120px" : "auto",
+                          whiteSpace:
+                            col.dataIndex === "talbainDugaar"
+                              ? "normal"
+                              : "nowrap",
+                          maxWidth:
+                            col.dataIndex === "talbainDugaar"
+                              ? "120px"
+                              : "auto",
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                         }}
@@ -759,7 +768,6 @@ function nasjiltinTailan({ token }) {
                             : "\u00A0"
                           : item[col.dataIndex] || "\u00A0"}
                       </td>
-
                     ))}
                   </tr>
                 ))}
