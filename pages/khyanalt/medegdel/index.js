@@ -112,22 +112,29 @@ function Khyanalt({ token }) {
   const [zurag, setZurag] = useState();
   const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState([]);
   const [turul, setTurul] = useState("SMS");
+
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
     };
-  }, [barilgiinId]);
+  }, [barilgiinId, tuluv]);
+
   const { setKhariltsagchKhuudaslalt, jagsaalt } = useKhariltsagchDavkhraarAvya(
     token,
     khariltsagchiinQuery,
     davkhar,
     tuluv
   );
+
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
     token,
     turul
   );
   const [neesenEsekh, setNeesenEsekh] = useState(false);
+
+  useEffect(() => {
+    setSongogdsonKhariltsagch([]);
+  }, [tuluv]);
 
   const query = useMemo(() => {
     return {
@@ -602,8 +609,8 @@ function Khyanalt({ token }) {
               style={{ width: "100%" }}
             >
               {[
-                { key: true, v: "Идэвхтэй" },
-                { key: false, v: "Идэвхгүй" },
+                { key: 1, v: "Идэвхтэй" },
+                { key: 0, v: "Идэвхгүй" },
                 { key: undefined, v: "Бүгд" },
               ].map((a) => (
                 <Select.Option key={String(a.key)} value={a.key}>
@@ -803,7 +810,7 @@ function Khyanalt({ token }) {
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </div>
-          <div className="mt-2 flex cursor-pointer flex-row items-center space-x-4 space-y-2 rounded-md p-2 ">
+          <div className="mt-2 flex cursor-pointer flex-row items-center justify-between space-x-4 space-y-2 rounded-md p-2 ">
             <Checkbox
               checked={jagsaalt?.length === songogdsonKhariltsagch.length}
               onChange={(e) => {
@@ -814,6 +821,9 @@ function Khyanalt({ token }) {
             >
               <p className="pl-3">{t("Бүгдийг сонгох")}</p>
             </Checkbox>
+            <div>
+              {songogdsonKhariltsagch.length}/{jagsaalt?.length}
+            </div>
           </div>
           <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
             {jagsaalt?.map((mur) => (
@@ -886,7 +896,7 @@ function Khyanalt({ token }) {
                           </div>
                         )}
 
-                        {mur?.talbainDugaar.length > 0 ? (
+                        {!!mur?.talbainDugaar ? (
                           <Tooltip
                             title={
                               <div className="flex flex-wrap gap-2">

@@ -3,47 +3,46 @@ import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
-const fetcher = (
+const fetcher = async (
   url,
   token,
   query,
   barilgiinId,
   davkhar,
-  { search, ...khuudaslalt },
+  khuudaslalt,
   tuluv
-) =>
-  axios(token)
-    .post(url, {
-      barilgiinId,
-      davkhar,
-      query: {
-        $and: [
-          {
-            $or: [
-              { ner: { $regex: search, $options: "i" } },
-              { register: { $regex: search, $options: "i" } },
-              { utas: { $regex: search, $options: "i" } },
-              // { "geree.gereeniiDugaar": { $regex: search, $options: "i" } },
-              // { "geree.talbainDugaar": { $regex: search, $options: "i" } },
-            ],
-          },
-          tuluv !== null
-            ? {
-                $or: !!tuluv
-                  ? [{ idevkhiteiEsekh: true }]
-                  : [
-                      { idevkhiteiEsekh: { $exists: false } },
-                      { idevkhiteiEsekh: false },
-                    ],
-              }
-            : {},
-        ],
-        ...query,
-      },
-      ...khuudaslalt,
-    })
-    .then((res) => res.data)
-    .catch(aldaaBarigch);
+) => {
+  const { search, ...rest } = khuudaslalt;
+
+  const body = {
+    barilgiinId,
+    davkhar,
+    idevkhiteiEsekh: tuluv,
+    ...rest,
+  };
+
+  // only add search filter when not empty
+  if (search && search.trim() !== "") {
+    body.query = {
+      $or: [
+        { ner: { $regex: search, $options: "i" } },
+        { register: { $regex: search, $options: "i" } },
+        { utas: { $regex: search, $options: "i" } },
+      ],
+      ...query,
+    };
+  } else if (query) {
+    body.query = query;
+  }
+
+  try {
+    const res = await axios(token).post(url, body);
+    return res.data;
+  } catch (err) {
+    aldaaBarigch(err);
+    return null;
+  }
+};
 
 function useKhariltsagchDavkhraarAvya(token, query, davkhar, tuluv) {
   const { barilgiinId } = useAuth();
