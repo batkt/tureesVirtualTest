@@ -227,7 +227,10 @@ function GuilgeeniiTuukh(
       const wb = XLSX?.utils.book_new();
       const dataSubset = guilgeeniiTuukh?.reverse().map((item) => {
         return {
-          Огноо: moment(item.ognoo).format("YYYY/MM/DD"),
+          Огноо:
+            item.ognoo && moment(item.ognoo).isValid()
+              ? moment(item.ognoo).format("YYYY/MM/DD")
+              : "",
           Түрээс: item.undsenDun || 0,
           "Төлөх дүн": item.tulukhDun || 0,
           Хямдрал: item.khyamdral || 0,
@@ -235,13 +238,24 @@ function GuilgeeniiTuukh(
           "Төлсөн дүн": item.tulsunDun || 0,
           Үлдэгдэл: item.uldegdel || 0,
           Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
-          Хэлбэр: item.turul || "",
+          Хэлбэр:
+            item.turul === "bank"
+              ? item.tulsunDans !== " "
+                ? item.tulsunDans
+                : "Банк"
+              : turulAvya(item.turul) || "",
           Тайлбар: item.tailbar || "",
           "Нэмэлт тайлбар": item.nemeltTailbar || "",
-          "Бүртгэсэн огноо": moment(item.burtgesenOgnoo).format("YYYY/MM/DD"),
+          "Бүртгэсэн огноо":
+            item.guilgeeKhiisenOgnoo &&
+            moment(item.guilgeeKhiisenOgnoo).isValid()
+              ? moment(item.guilgeeKhiisenOgnoo).format("YYYY/MM/DD")
+              : "",
         };
       });
+
       const ws = XLSX?.utils.json_to_sheet(dataSubset);
+
       if (ws) {
         const range = XLSX.utils.decode_range(ws["!ref"]);
         for (let R = range.s.r; R <= range.e.r; ++R) {
@@ -259,6 +273,7 @@ function GuilgeeniiTuukh(
             };
           }
         }
+
         var wscols = [
           { wch: 20 },
           { wch: 20 },
@@ -274,6 +289,7 @@ function GuilgeeniiTuukh(
           { wch: 20 },
         ];
         ws["!cols"] = wscols;
+
         const headerStyle = {
           fill: {
             patternType: "solid",
@@ -301,13 +317,15 @@ function GuilgeeniiTuukh(
         ws["L1"].s = headerStyle;
 
         XLSX?.utils.book_append_sheet(wb, ws, "гүйлгээ");
-        wb.Custprops;
+
         XLSX?.writeFile(
           wb,
           data?.gereeniiDugaar + " гэрээний гүйлгээний түүх.xlsx",
           {
             WTF: true,
             cellStyles: true,
+            bookType: "xlsx",
+            type: "binary",
           }
         );
       }
@@ -412,7 +430,7 @@ function GuilgeeniiTuukh(
               {t("Тайлбар")}
             </td>
             <td
-              onClick={() => toggleSortOrder("burtgesenOgnoo")}
+              onClick={() => toggleSortOrder("guilgeeKhiisenOgnoo")}
               className="min-w-[10rem] p-1 text-center"
             >
               {t("Бүртгэсэн огноо")}
