@@ -3732,11 +3732,11 @@ function tulburTootsoo({ token }) {
                   className="w-1/3 lg:w-auto"
                   type="primary"
                   onClick={() =>
-                    turul === ""
+                    turul === "SMS" || turul == "App"
                       ? smsZagvarNemya()
-                      : turul === ""
-                      ? smsZagvarNemya()
-                      : router.push("/khyanalt/tulburTootsoo/nekhemjlel/new")
+                      : router.push(
+                          "/khyanalt/tulburTootsoo/nekhemjlel/${a._id}"
+                        )
                   }
                 >
                   {t("Загвар үүсгэх")}
