@@ -503,9 +503,10 @@ function guilgeeniiTuukh({ token }) {
             </div>
           </div>
         ),
-        dataIndex: "daraagiinTulukhOgnoo",
+        dataIndex: "tulukhUdur",
         render(a) {
-          return moment(a).format("YYYY-MM-DD");
+          const today = moment();
+          return today.format("YYYY-MM") + "-" + String(a).padStart(2, "0");
         },
         sorter: false,
       },
