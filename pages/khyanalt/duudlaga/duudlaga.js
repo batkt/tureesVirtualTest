@@ -997,9 +997,6 @@ function TaskManagementSystem({ token }) {
                         <span className="text-xs text-gray-500">
                           {moment(mur.createdAt).format("MM-DD HH:mm")}
                         </span>
-                        <div className="flex cursor-pointer text-yellow-500 hover:text-yellow-600">
-                          <StarOutlined />
-                        </div>
                       </div>
                     </div>
                   ) : null}

@@ -169,11 +169,14 @@ function GereeBaiguulakh({ token }) {
   const [logo, setLogo] = useState();
 
   const logoMedeelel = _.get(baiguullaga, `barilguud.${barilga}`) || [];
-
   useEffect(() => {
-    form.getFieldInstance("ner").focus();
-  }, []);
-
+    if (baiguullaga) {
+      const fieldInstance = form.getFieldInstance("ner");
+      if (fieldInstance) {
+        fieldInstance.focus();
+      }
+    }
+  }, [baiguullaga]);
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
       e.preventDefault();
