@@ -281,7 +281,12 @@ function tulburTootsoo({ token }) {
       ];
       modal({
         wrapClassName: "guilgee-modal",
-        title: "",
+        title: (
+          <div className="flex items-center justify-between">
+            <span className="text-black dark:text-white">Гүйлгээ холбох</span>
+          </div>
+        ),
+
         width: "50rem",
         icon: <FileExcelOutlined />,
         content: (

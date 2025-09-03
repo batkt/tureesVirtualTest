@@ -425,16 +425,19 @@ function GuilgeeNiiluulekh(
           <div className="py-2 text-lg font-medium">
             {t("Магадлалтай гэрээ")}
           </div>
-          {magadlaltaiGereenuud?.map((mur, i) => (
-            <div
-              className="grid grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
-              key={`gereeniisongolt${i}`}
-            >
-              <div className="truncate px-2">{mur.talbainDugaar}</div>
-              <div className="px-2">{mur.register}</div>
-              <div className="px-2">{mur.ner}</div>
-            </div>
-          ))}
+
+          <div className="max-h-[calc(5*2.5rem)] overflow-y-auto">
+            {magadlaltaiGereenuud?.map((mur, i) => (
+              <div
+                className="grid grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
+                key={`gereeniisongolt${i}`}
+              >
+                <div className="truncate px-2">{mur.talbainDugaar}</div>
+                <div className="px-2">{mur.register}</div>
+                <div className="px-2">{mur.ner}</div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
       <div className="space-y-2 ">
@@ -542,10 +545,7 @@ function GuilgeeNiiluulekh(
           </div>
         </div>
       </div>
-      <div
-        className="space-y-2 overflow-y-auto px-2"
-        style={{ height: "25rem" }}
-      >
+      <div className="space-y-2 px-2" style={{ height: "25rem" }}>
         {gereenuud.map((geree, index) => (
           <div
             key={`${index}geree-kholbolt`}
@@ -646,21 +646,23 @@ function GuilgeeNiiluulekh(
             )}
           </div>
         ))}
-      </div>
-      <Divider />
-      <div className="grid w-full grid-cols-2 divide-x-2 px-2">
-        <div className="flex flex-col justify-between pr-2 lg:flex-row">
-          <div className="dark:text-gray-200">{t("Холбосон дүн")}:</div>
-          <div className="text-right text-xl text-green-600">
-            {formatNumber(guilgeeniiDun - zuruuDun)}
+        <Divider />
+
+        <div className="grid w-full grid-cols-2 divide-x-2 px-2">
+          <div className="flex flex-col justify-between pr-2 lg:flex-row">
+            <div className="dark:text-gray-200">{t("Холбосон дүн")}:</div>
+            <div className="text-right text-xl text-green-600">
+              {formatNumber(guilgeeniiDun - zuruuDun)}
+            </div>
+          </div>
+          <div className="flex flex-col justify-between pl-2 lg:flex-row">
+            <div className="dark:text-gray-200">{t("Холбоогүй дүн")}:</div>
+            <div className="text-right text-xl text-red-600">
+              {formatNumber(zuruuDun)}
+            </div>
           </div>
         </div>
-        <div className="flex flex-col justify-between pl-2 lg:flex-row">
-          <div className="dark:text-gray-200">{t("Холбоогүй дүн")}:</div>
-          <div className="text-right text-xl text-red-600">
-            {formatNumber(zuruuDun)}
-          </div>
-        </div>
+        <Divider />
       </div>
     </div>
   );
