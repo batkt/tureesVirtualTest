@@ -3702,11 +3702,6 @@ function tulburTootsoo({ token }) {
                   ))}
                 </div>
               </div>
-              <div>
-                <Button onClick={openMailtuukhModal} type="primary">
-                  <div className="dark:text-[#E5E7EB]">{t("И-мэйл түүх")}</div>
-                </Button>
-              </div>
 
               <div className="flex w-full justify-between gap-1 lg:justify-end">
                 {turul === "Mail" ? (
