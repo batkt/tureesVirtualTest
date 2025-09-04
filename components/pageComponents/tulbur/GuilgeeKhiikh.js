@@ -43,7 +43,7 @@ function GuilgeeKhiikh(
   const [shineOgnoo, setShineOgnoo] = useState(moment());
   const [turul, setTurul] = useState("voucher");
   const [tailbar, setTailbar] = useState("");
-  const [negjUne, setNegjUne] = useState("");
+  const [negjUne, setNegjUne] = useState(undefined);
   const [tseverUsDun, setTseverUsDun] = useState("");
   const [bokhirUsDun, setBokhirUsDun] = useState("");
   const [usKhalaasniiDun, setUsKhalaasniiDun] = useState("");
@@ -61,9 +61,9 @@ function GuilgeeKhiikh(
   const [ekhniiUldegdelEsekh, setEkhniiUldegdelEsekh] = useState(false);
   const [m2argaarBodokhEsekh, setM2argaarBodokhEsekh] = useState(false);
   const [tureesEkhniiUldegdelEsekh, setTureesEkhniiUldegdelEsekh] =
-    React.useState(true);
-  const [ashiglaltiinId, setAshiglaltiinId] = React.useState(null);
-  const [ashiglaltiinNer, setAshiglaltiinNer] = React.useState(null);
+    React.useState(false);
+  const [ashiglaltiinId, setAshiglaltiinId] = React.useState(undefined);
+  const [ashiglaltiinNer, setAshiglaltiinNer] = React.useState(undefined);
 
   const [busadTurul, setBusadTurul] = useState();
   const [zardliinTurul, setZardliinTurul] = useState();
@@ -166,6 +166,7 @@ function GuilgeeKhiikh(
       khadgalya() {
         if (
           turul === "avlaga" &&
+          busadTurul === "ashiglalt" &&
           !tureesEkhniiUldegdelEsekh &&
           !ashiglaltiinId
         ) {
@@ -510,6 +511,8 @@ function GuilgeeKhiikh(
   function handleTurulUurchlult(e) {
     const ankhanOgnoo = ognoo;
     setTurul(e.target.value);
+    setTureesEkhniiUldegdelEsekh(false);
+
     if (e.target.value === "ashiglalt" || e.target.value === "torguuli") {
       setOgnoo(moment());
     } else {
@@ -560,75 +563,97 @@ function GuilgeeKhiikh(
         </div>
       )}
       {turul === "avlaga" && (
-        <div className="flex w-full items-center justify-between gap-2">
-          <DatePicker
-            className="w-full"
-            id="dataPicker1"
-            locale={i18n.language === "mn" && locale}
-            value={ognoo}
-            onChange={(v) => {
-              setOgnoo(v);
-              // document.getElementById("guilgeeDunInputNumber").focus();
-            }}
-          />
-          <div className="flex w-full justify-end gap-1">
-            <label>{t("Түрээс эсэх")}: </label>
-            <Switch
-              checked={tureesEkhniiUldegdelEsekh}
-              onChange={setTureesEkhniiUldegdelEsekh}
+        <div className="flex w-full flex-col gap-3">
+          <div className="flex w-full items-center gap-2">
+            <DatePicker
+              className="flex-1"
+              id="dataPicker1"
+              locale={i18n.language === "mn" && locale}
+              value={ognoo}
+              onChange={(v) => setOgnoo(v)}
             />
-          </div>
-          {!tureesEkhniiUldegdelEsekh && (
+
             <Select
-              placeholder={t("Ашиглалтын зардал")}
+              id="select"
+              placeholder={t("Гүйлгээ хийх төрөл")}
+              defaultValue={"avlaga"}
               onChange={(v) => {
-                const tukhainZardal = zardalAll.jagsaalt.find(
-                  (a) => a._id === v
-                );
-                var tempTurul = tukhainZardal?.ner?.includes(
-                  "Менежментийн төлбөр"
-                )
-                  ? "management"
-                  : tukhainZardal?.ner === "Дулаан"
-                  ? "dulaan"
-                  : tukhainZardal?.ner?.includes("Цахилгаан")
-                  ? "tsakhilgaan"
-                  : tukhainZardal?.ner?.includes("Халуун ус")
-                  ? "khulaanUs"
-                  : tukhainZardal?.ner === "Ус"
-                  ? "us"
-                  : tukhainZardal?.ner?.includes("Хүйтэн ус")
-                  ? "khuitenUs"
-                  : tukhainZardal?.ner === "Хөрөнгийн менежмент" ||
-                    tukhainZardal?.ner === "Худалдааны менежмент"
-                  ? "managementGoto"
-                  : "busad";
-                setAshiglaltiinId(v);
-                setNegjUne(tukhainZardal.tariff);
-                setAshiglaltiinNer(tukhainZardal.ner);
-                setZardliinTurul(tempTurul);
+                setBusadTurul(v);
+                if (v === "ashiglalt") {
+                  setZardliinTurul(undefined);
+                  setTureesEkhniiUldegdelEsekh(false);
+                } else if (v === "turees") {
+                  setTureesEkhniiUldegdelEsekh(true);
+                  setZardliinTurul(undefined);
+                } else {
+                  setTureesEkhniiUldegdelEsekh(false);
+                  setZardliinTurul(undefined);
+                }
               }}
-              style={{ width: "100%" }}
+              className="flex-1"
             >
-              {zardalAll?.jagsaalt?.map((a) => (
-                <Select.Option key={a._id} value={a._id}>
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b p-1">
-                    <p className="min-w-[120px] max-w-[200px] truncate border-r bg-green-400 bg-opacity-10 px-2 text-left">
-                      {a.ner}
-                    </p>
-                    <div className="flex flex-1 justify-between gap-2 bg-blue-600 bg-opacity-5 px-2">
-                      <p className="text-right">{t(a.turul)}</p>
-                      <p className="whitespace-nowrap text-right">
-                        {a.turul !== "Дурын" ? `${a.tariff}₮` : "Дурын"}
-                      </p>
-                    </div>
-                  </div>
-                </Select.Option>
-              ))}
+              <Option value="avlaga">{t("Авлага")}</Option>
+              <Option value="turees">{t("Түрээс")}</Option>
+              <Option value="ashiglalt">{t("Ашиглалтын зардал")}</Option>
             </Select>
+          </div>
+
+          {busadTurul === "ashiglalt" && (
+            <>
+              {!tureesEkhniiUldegdelEsekh && (
+                <Select
+                  placeholder={t("Ашиглалтын зардал")}
+                  onChange={(v) => {
+                    const tukhainZardal = zardalAll.jagsaalt.find(
+                      (a) => a._id === v
+                    );
+                    var tempTurul = tukhainZardal?.ner?.includes(
+                      "Менежментийн төлбөр"
+                    )
+                      ? "management"
+                      : tukhainZardal?.ner === "Дулаан"
+                      ? "dulaan"
+                      : tukhainZardal?.ner?.includes("Цахилгаан")
+                      ? "tsakhilgaan"
+                      : tukhainZardal?.ner?.includes("Халуун ус")
+                      ? "khulaanUs"
+                      : tukhainZardal?.ner === "Ус"
+                      ? "us"
+                      : tukhainZardal?.ner?.includes("Хүйтэн ус")
+                      ? "khuitenUs"
+                      : tukhainZardal?.ner === "Хөрөнгийн менежмент" ||
+                        tukhainZardal?.ner === "Худалдааны менежмент"
+                      ? "managementGoto"
+                      : "busad";
+                    setAshiglaltiinId(v);
+                    setNegjUne(tukhainZardal.tariff);
+                    setAshiglaltiinNer(tukhainZardal.ner);
+                    setZardliinTurul(tempTurul);
+                  }}
+                  className="w-full"
+                >
+                  {zardalAll?.jagsaalt?.map((a) => (
+                    <Select.Option key={a._id} value={a._id}>
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b p-1">
+                        <p className="min-w-[120px] max-w-[200px] truncate border-r bg-green-400 bg-opacity-10 px-2 text-left">
+                          {a.ner}
+                        </p>
+                        <div className="flex flex-1 justify-between gap-2 bg-blue-600 bg-opacity-5 px-2">
+                          <p className="text-right">{t(a.turul)}</p>
+                          <p className="whitespace-nowrap text-right">
+                            {a.turul !== "Дурын" ? `${a.tariff}₮` : "Дурын"}
+                          </p>
+                        </div>
+                      </div>
+                    </Select.Option>
+                  ))}
+                </Select>
+              )}
+            </>
           )}
         </div>
       )}
+
       {turul === "ashiglalt" && (
         <div className="flex w-full items-center justify-between gap-2">
           <DatePicker
@@ -671,6 +696,34 @@ function GuilgeeKhiikh(
         <div className="dark:text-white">
           {t("Алдангийн үлдэгдэл")}: {formatNumber(data?.aldangiinUldegdel, 2)}
         </div>
+      )}
+      {busadTurul === "tulultBurtgekh" && (
+        <DatePicker
+          locale={i18n.language === "mn" && locale}
+          value={shineOgnoo}
+          onChange={(v) => setShineOgnoo(v ? v.startOf("day") : null)}
+        />
+      )}
+      {busadTurul === "aldangi" && (
+        <DatePicker
+          locale={i18n.language === "mn" && locale}
+          value={shineOgnoo}
+          onChange={(v) => setShineOgnoo(v ? v.startOf("day") : null)}
+        />
+      )}
+      {busadTurul === "barter" && (
+        <DatePicker
+          locale={i18n.language === "mn" && locale}
+          value={shineOgnoo}
+          onChange={(v) => setShineOgnoo(v ? v.startOf("day") : null)}
+        />
+      )}
+      {busadTurul === "zalruulga" && (
+        <DatePicker
+          locale={i18n.language === "mn" && locale}
+          value={shineOgnoo}
+          onChange={(v) => setShineOgnoo(v ? v.startOf("day") : null)}
+        />
       )}
       <div className="flex w-full items-center justify-between">
         {turul === "ashiglalt" && (
@@ -833,15 +886,6 @@ function GuilgeeKhiikh(
           style={{ width: "100%", textAlign: "center" }}
           value={dun}
           onChange={(v) => setDun(v)}
-        />
-      )}
-      {busadTurul === "tulultBurtgekh" && (
-        <DatePicker
-          locale={i18n.language === "mn" && locale}
-          value={shineOgnoo}
-          onChange={(v) => {
-            setShineOgnoo(v);
-          }}
         />
       )}
       {turul === "ashiglalt" &&

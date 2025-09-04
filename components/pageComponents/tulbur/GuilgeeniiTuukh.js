@@ -54,7 +54,9 @@ const turulAvya = (turul) => {
   else if (turul === "barter") return "Бартер";
   else if (turul === "baritsaa") return "Барьцаа";
   else if (turul === "zalruulga") return "Залруулга";
+  else if (turul === "tulultBurtgekh") return "Төлөлт бүртгэх";
   else if (turul === "qpay") return "QPay";
+  else if (turul === "avlaga") return "Авлага";
 };
 
 function GuilgeeniiTuukh(
