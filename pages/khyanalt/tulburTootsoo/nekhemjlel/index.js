@@ -29,7 +29,7 @@ import formatNumber from "tools/function/formatNumber";
 import useNekhemjlekh from "hooks/tulburTootsoo/useNekhemjlekh";
 import useNekhemjlekhiinZagvar from "hooks/tulburTootsoo/useNekhemjlekhiinZagvar";
 import useNekhemjlekhDugaarlalt from "hooks/tulburTootsoo/useNekhemjlekhDugaarlalt";
-import { mailtuukh } from "hooks/useMailTuukh"; // Your mailtuukh hook import
+import { mailtuukh } from "hooks/useMailTuukh";  
 import _, { template, update } from "lodash";
 import { useReactToPrint } from "react-to-print";
 import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar";

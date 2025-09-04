@@ -24,6 +24,7 @@ import {
 } from "@ant-design/icons";
 import { TbEqualNot } from "react-icons/tb";
 import moment from "moment";
+import { t } from "i18next";
 import useDans from "hooks/useDans";
 import formatNumber from "tools/function/formatNumber";
 import sorterCompare from "tools/function/sorterCompare";
@@ -40,7 +41,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
-import { t } from "i18next";
+
 const { RangePicker } = DatePicker;
 
 function iconAvya(a, bank) {
