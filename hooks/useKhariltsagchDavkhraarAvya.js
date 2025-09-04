@@ -21,7 +21,6 @@ const fetcher = async (
     ...rest,
   };
 
-  // only add search filter when not empty
   if (search && search.trim() !== "") {
     body.query = {
       $or: [
