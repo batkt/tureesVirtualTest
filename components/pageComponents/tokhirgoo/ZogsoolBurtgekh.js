@@ -77,7 +77,12 @@ function ZogsoolBurtgekh(
       async khadgalya() {
         try {
           let body = form.getFieldsValue();
+          body.tokiNer = body?.tokiBolonStickerAshiglakhEsekh
+            ? body?.ner
+            : undefined;
           body.barilgiinId = barilgiinId;
+          console.log("eseh", body?.tokiBolonStickerAshiglakhEsekh);
+          console.log("toki", body?.tokiNer);
 
           await method("parking", token, body)
             .then(({ data }) => {
@@ -404,6 +409,22 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.gadaaStickerAshiglakhEsekh}
+                  checkedChildren="Тийм"
+                  unCheckedChildren="Үгүй"
+                />
+              </Form.Item>
+            </div>
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
+                {t("Toki болон гадаа sticker QR ашиглах эсэх")}
+              </div>
+              <div className="text-xs text-gray-400"> </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item className="m-0" name="tokiBolonStickerAshiglakhEsekh">
+                <Switch
+                  className="bg-gray-400"
+                  defaultChecked={data?.tokiBolonStickerAshiglakhEsekh}
                   checkedChildren="Тийм"
                   unCheckedChildren="Үгүй"
                 />
