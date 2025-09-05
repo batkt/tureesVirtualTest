@@ -37,7 +37,7 @@ function NekhemjlekhiinTuukhTsonkh(
   return (
     <div
       className="flex flex-col space-y-2 "
-      style={{ height: "calc(100vh - 12rem)", overflowY: "auto" }}
+      style={{ height: "calc(90vh - 12rem)", overflowY: "auto" }}
     >
       <NekhemjlekhiinTuukh
         baiguullaga={baiguullaga}
