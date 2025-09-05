@@ -12,10 +12,12 @@ const Konva = dynamic(() => import("components/konva"), { ssr: false });
 
 function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
   const { geree, ...gereeniiZagvar } = data;
+  console.log(geree.zurguud);
   const barilga = baiguullaga?.barilguud.find(
     (a) => a._id === geree?.barilgiinId
   );
   const [akt, setAkt] = useState();
+  const [zurguud, setZurguud] = useState();
   const [KharakhKhesguud, setKharakhKhesguud] = useState([1]);
   const [talbainuud, setTalbainuud] = useState();
 
@@ -113,8 +115,23 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
           }
         });
     }
+    if (geree?.zurguud?.length > 0) {
+      KharakhKhesguud.push(4);
+      setZurguud(geree.zurguud);
+    } else if (geree?._id) {
+      uilchilgee(token)
+        .get(`/gereeniiZurguud/${geree._id}`)
+        .then(({ data }) => {
+          if (data?.length) {
+            setZurguud(data);
+            KharakhKhesguud.push(4);
+            setKharakhKhesguud([...KharakhKhesguud]);
+          }
+        });
+    }
+
     setKharakhKhesguud([...KharakhKhesguud]);
-  }, [geree, barilga]);
+  }, [geree, barilga, token]);
 
   React.useEffect(() => {
     const keydown = (e) => {
@@ -180,6 +197,23 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
             Акт
           </div>
         )}
+        {geree?.zurguud && (
+          <div
+            onClick={() =>
+              KharakhKhesguud.find((a) => a === 4)
+                ? setKharakhKhesguud(KharakhKhesguud.filter((a) => a !== 4))
+                : setKharakhKhesguud([...KharakhKhesguud, 4])
+            }
+            className={`flex w-28 cursor-pointer select-none items-center justify-center gap-2 rounded-md border-2 bg-opacity-5 ${
+              KharakhKhesguud.find((a) => a === 4)
+                ? "border-green-500 bg-green-500 text-green-600"
+                : "border-gray-300 bg-black text-gray-400"
+            }`}
+          >
+            <EyeOutlined className="" />
+            PDF
+          </div>
+        )}
       </div>
       <div
         ref={ref}
@@ -192,7 +226,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               Гэрээ
             </div>
             <div
-              className=" flex w-full flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black dark:text-white shadow-lg  dark:bg-gray-800 print:min-h-0 print:shadow-none"
+              className=" flex w-full flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg dark:bg-gray-800  dark:text-white print:min-h-0 print:shadow-none"
               style={{ width: "210mm" }}
             >
               {gereeniiZagvar?.ner && (
@@ -213,7 +247,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                 return (
                   <div
                     key={`alkhamiinGereeniiZagvar${index}`}
-                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:text-gray-200 dark:bg-gray-800"
+                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
                   >
                     <div
                       className="w-full"
@@ -281,6 +315,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
             })}
           </div>
         )}
+
         {KharakhKhesguud.find((a) => a === 3) && akt && (
           <div>
             <div className="sticky left-0 top-0 text-2xl font-semibold opacity-30 print:hidden">
@@ -332,6 +367,25 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                   />
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {geree?.zurguud?.length > 0 && (
+          <div>
+            <div className="sticky left-0 top-0 text-2xl font-semibold opacity-30 print:hidden">
+              PDF
+            </div>
+
+            <div className="flex w-full flex-col space-y-4 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg dark:text-white print:shadow-none">
+              {geree.zurguud.map((mur) => (
+                <img
+                  key={mur}
+                  src={`${url}/zuragAvya/jpg/${baiguullaga?._id}/${mur}`}
+                  alt="zurag"
+                  className="max-w-full rounded-lg border"
+                />
+              ))}
             </div>
           </div>
         )}
