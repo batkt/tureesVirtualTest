@@ -29,7 +29,7 @@ import formatNumber from "tools/function/formatNumber";
 import useNekhemjlekh from "hooks/tulburTootsoo/useNekhemjlekh";
 import useNekhemjlekhiinZagvar from "hooks/tulburTootsoo/useNekhemjlekhiinZagvar";
 import useNekhemjlekhDugaarlalt from "hooks/tulburTootsoo/useNekhemjlekhDugaarlalt";
-import { mailtuukh } from "hooks/useMailTuukh";  
+import { mailtuukh } from "hooks/useMailTuukh";
 import _, { template, update } from "lodash";
 import { useReactToPrint } from "react-to-print";
 import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar";
@@ -2954,12 +2954,18 @@ function tulburTootsoo({ token }) {
         );
 
         for (const [key, value] of Object.entries(nekhemjlekh)) {
-          if (value !== undefined && value !== null) {
-            text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-          } else {
-            text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), "");
-          }
+          const safeValue =
+            value === undefined || value === null || isNaN(value)
+              ? ""
+              : String(value);
+
+          // <key>
+          text = text?.replace(new RegExp(`<${key}>`, "g"), safeValue);
+
+          // &lt;key&gt;
+          text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), safeValue);
         }
+
         if (!!nekhemjlekh.mail) {
           mailuud.push({
             gereeniiDugaar: nekhemjlekh.gereeniiDugaar,
