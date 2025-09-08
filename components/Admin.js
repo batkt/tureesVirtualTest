@@ -535,7 +535,9 @@ function Admin({
                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
               ></path>
             </svg>
-            <p className="text-sm font-medium">Шинэчлэл хийгдэж байна...Хуудсыг дахин ачаалална уу</p>
+            <p className="text-sm font-medium">
+              Шинэчлэл хийгдэж байна...Хуудсыг дахин ачаалална уу
+            </p>
           </div>
         </div>
       )}
@@ -883,7 +885,7 @@ function Admin({
               <>
                 <div
                   id="search"
-                  className="relative hidden w-40 text-gray-700 dark:text-gray-300 md:block xl:w-56"
+                  className="relative ml-2 w-40 text-gray-700 dark:text-gray-300 xl:w-56"
                 >
                   <input
                     onFocus={() => setFocusaasGarsan(false)}
@@ -973,39 +975,30 @@ function Admin({
                       </div>
                     )}
                 </div>
-                <MSearch
-                  className="relative block text-gray-700 dark:text-gray-300 md:hidden"
-                  onClick={onClickSearch}
-                />
               </>
             ) : (
               <div></div>
             )}
-            <div className="flex gap-[5px]">
+            <div className="right-5 flex gap-1 sm:gap-5">
               <Tooltip
                 placement="bottom"
                 title={
-                  <div>
-                    {
-                      ("Лицензийн хугацаа дуусахад хоног үлдлээ",
-                      { khonog: license })
-                    }
-                  </div>
+                  <div>Лицензийн хугацаа дуусахад хоног үлдлээ: {license}</div>
                 }
               >
-                <div className="ml-1 flex items-center gap-1 text-base md:hidden">
-                  {license}:
+                <div className="ml-1 mr-2 flex items-center gap-1 text-base md:hidden">
+                  {license} :{" "}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
+                    width="24"
+                    height="24"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="feather feather-clock d-block mx-auto"
+                    className="feather feather-clock h-5 w-5"
                   >
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
