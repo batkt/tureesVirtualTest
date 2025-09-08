@@ -74,6 +74,16 @@ function KhuviinMedeelel({
     gereeDuusakhTulbur: barilga?.tokhirgoo?.gereeDuusakhTulbur,
   });
 
+  const zuragKhadgalakh = (v, turul) => {
+    if (v.file.status === "done") {
+      if (turul === "tamga") {
+        setTamga(v.file.response);
+      } else if (turul === "gariinUseg") {
+        setGariinUseg(v.file.response);
+      }
+    }
+  };
+
   const gereeTokhirgooKhadgalya = () => {
     const payload = {
       tokhirgoo: {
@@ -105,16 +115,6 @@ function KhuviinMedeelel({
         gereeDuusakhTulbur: barilgaTokhirgoo?.gereeDuusakhTulbur,
         qpayShimtgelTusdaa: gereeTokhirgoo?.qpayShimtgelTusdaa,
       },
-    };
-
-    const zuragKhadgalakh = (v, turul) => {
-      if (v.file.status === "done") {
-        if (turul === "tamga") {
-          setTamga(v.file.response);
-        } else if (turul === "gariinUseg") {
-          setGariinUseg(v.file.response);
-        }
-      }
     };
 
     uilchilgee(token)

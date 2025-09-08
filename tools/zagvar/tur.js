@@ -233,20 +233,41 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: none;"></td>
           <td style="border: none;"></td>
         </tr>
-        <tr style="margin-top: 2rem; ">
-          <td style=" border: none;"></td>
+        <tr>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
-          <td style="border: none; position: relative; >${
-            ajiltan?.baiguullagiinId !== "64e855ce37fdc9b105f936e0"
-              ? "&lt;tamga&gt;"
-              : ""
-          }</td>
+          <td style="border: none;"></td>
+          <td style="border: none; position: relative;">
+            ${
+              ajiltan?.baiguullagiinId !== "64e855ce37fdc9b105f936e0"
+                ? "&lt;gariinUseg&gt;"
+                : ""
+            }
+          </td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
         </tr>
+        <tr>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none; position: relative;">
+            ${
+              ajiltan?.baiguullagiinId !== "64e855ce37fdc9b105f936e0"
+                ? "&lt;tamga&gt;"
+                : ""
+            }
+          </td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+          <td style="border: none;"></td>
+        </tr>
+
+        
+
       </tfoot>
     </table>
   </div>`;

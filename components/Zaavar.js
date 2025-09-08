@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import useZaavar from "../hooks/useZaavar";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Modal, Tooltip } from "antd";
@@ -15,6 +15,7 @@ function Zaavar({ token, id }) {
       content: (
         <div
           className="sun-editor-editable"
+          style={{ maxHeight: "60vh", overflowY: "auto", padding: "1rem" }}
           dangerouslySetInnerHTML={
             i18n.language === "mn"
               ? { __html: tsonkh?.zaavar }
@@ -26,6 +27,7 @@ function Zaavar({ token, id }) {
       style: { minWidth: "50vw" },
     });
   };
+
   if (!!tsonkh?.zaavar)
     return (
       <div className="cursor-pointer" style={{ lineHeight: 0 }}>

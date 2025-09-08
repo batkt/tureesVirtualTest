@@ -49,6 +49,7 @@ import router from "next/router";
 import { useReactToPrint } from "react-to-print";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import GereeExceleesOruulakh from "components/pageComponents/geree/GereeExceleesOruulakh";
+import GereeZuragOruulakh from "components/pageComponents/geree/GereeZuragOruulakh";
 import Sungakh from "components/pageComponents/geree/Sungakh";
 import { modal } from "components/ant/Modal";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
@@ -104,10 +105,12 @@ const Tailbar = React.forwardRef(
       moment(),
       moment(),
     ]);
+
     const [odoogiinUldegdel, setOdoogiinUldegdel] = React.useState(0);
     const [ekhniiUldegdel, setEkhniiUldegdel] = React.useState(0);
     const [avlagaUldegdel, setAvlagaUldegdel] = React.useState(0);
     const [niilberAvlaga, setNiilberAvlaga] = React.useState(0);
+
     const [garaasAvlagaOruulakh, setGaraasAvlagaOruulakh] =
       React.useState(false);
     const [suuliinSariinAvlaguud, setSuuliinSariinAvlaguud] = React.useState(
@@ -471,6 +474,7 @@ const select = {
   talbainIdnuud: 1,
   zardluud: 1,
   zoriulalt: 1,
+  zurguud:1,
   tusgaiZoriulalt: 1,
 };
 
@@ -483,7 +487,7 @@ function setURLSearchParam(key, value) {
 function ZakhialgiinKhyanalt() {
   //#region const
   const { t, i18n } = useTranslation();
-  const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
+  const { token, baiguullaga, barilgiinId, ajiltan, gereeniiId } = useAuth();
   const [gereeOgnoo, setGereeOgnoo] = React.useState();
   const query = useMemo(() => {
     return {
@@ -519,6 +523,9 @@ function ZakhialgiinKhyanalt() {
     order,
     select
   );
+  function onChange(k, v) {
+    setDaalgavar((a) => ({ ...a, [k]: v }));
+  }
   const { gereeToollolt, gereeToolloltMutate } =
     useGereeniiJagsaaltToollolt(token);
   const [kharuulakhGeree, setKharuulakhGeree] = React.useState(null);
@@ -526,6 +533,7 @@ function ZakhialgiinKhyanalt() {
 
   const componentRef = React.useRef();
   const excelref = React.useRef();
+  const zuragref = React.useRef();
   const tailbarRef = React.useRef();
   const sungaltRef = React.useRef();
 
@@ -1134,6 +1142,13 @@ function ZakhialgiinKhyanalt() {
                     <EyeOutlined style={{ fontSize: "18px" }} />{" "}
                     <label> {t("Харах")}</label>
                   </a>
+                  <a
+                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                    onClick={() => zuragOruulakh(data)}
+                  >
+                    <UploadOutlined style={{ fontSize: "18px" }} />{" "}
+                    <label>{t("Зураг")}</label>
+                  </a>
                   {shuult.utga !== "Цуцласан" && (
                     <a
                       className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
@@ -1226,7 +1241,7 @@ function ZakhialgiinKhyanalt() {
     gereeniiMedeelelMutate();
     gereeToolloltMutate();
   }
-  //#region dialogs
+
   function gereeTsutsalya(data) {
     if (
       ajiltan?.erkh !== "Admin" &&
@@ -1467,7 +1482,36 @@ function ZakhialgiinKhyanalt() {
       }
     );
   }
+  function zuragOruulakh(data) {
+    const footer = [
+      <Space key="footer" size={4}>
+        <Button onClick={() => zuragref.current?.khaaya()}>{t("Хаах")}</Button>
+        <Button type="primary" onClick={() => zuragref.current?.khadgalya()}>
+          {t("Хадгалах")}
+        </Button>
+      </Space>,
+    ];
 
+    modal({
+      title: t("Зураг оруулах"),
+      icon: <UploadOutlined />,
+      width: "60vw",
+      content: (
+        <GereeZuragOruulakh
+          ref={zuragref}
+          token={token}
+          gereeniiId={data?._id}
+          onFinish={refresh}
+          garchig={t("Зураг файл аа чирч оруулах эсвэл сонгоно уу")}
+          tailbar={t("Зөвхөн JPG, PNG, GIF файл дэмжигдэнэ")}
+          destroy={() => {
+            Modal.destroyAll();
+          }}
+        />
+      ),
+      footer,
+    });
+  }
   function gereeOruulakhExcel() {
     const footer = [
       <Space>

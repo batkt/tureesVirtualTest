@@ -37,7 +37,7 @@ function Khuulga(
   return (
     <div
       className="flex flex-col space-y-2 overflow-x-auto"
-      style={{ height: "calc(100vh - 12rem)" }}
+      style={{ height: "calc(90vh - 12rem)" }}
     >
       <GuilgeeniiTuukh
         ajiltan={ajiltan}
