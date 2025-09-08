@@ -12,7 +12,12 @@ import useKhuudasniiJagsaalt from "hooks/useKhuudasniiJagsaalt";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { message } from "antd";
 import { t } from "i18next";
-import { MobileFilled, MobileOutlined, PhoneOutlined } from "@ant-design/icons";
+import {
+  MobileFilled,
+  MobileOutlined,
+  PhoneOutlined,
+  HourglassOutlined,
+} from "@ant-design/icons";
 
 export const tsonknuud = [
   {
@@ -883,10 +888,13 @@ export const khuudasnuud = [
         khuudasniiNer: "nasjiltinTailan",
         href: "/khyanalt/tailan/nasjiltinTailan",
         icon: (
-          <img
-            src="/NasjiltLogo.png"
-            alt="Насжилтын лого"
-            style={{ marginLeft: "2px", width: "24px", height: "24px" }}
+          <HourglassOutlined
+            style={{
+              width: "30",
+              height: "30",
+              marginLeft: "5px",
+              marginRight: "5px",
+            }}
           />
         ),
       },
