@@ -558,7 +558,7 @@ function orshinSuugch({ token }) {
       title="Оршин суугч"
       khuudasniiNer="orshinSuugch"
       className="p-0 md:p-4"
-      tsonkhniiId={"64546d9caf55fc853dd6812c"}
+      tsonkhniiId={"68999410a7176eab66165f1b"}
       onSearch={(search) => {
         setZochinKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }));
       }}
