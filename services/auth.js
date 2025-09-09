@@ -384,7 +384,7 @@ export const AuthProvider = ({ children }) => {
           console.error("Нэвтрэх явцад алдаа гарлаа:", error);
           const errorMessage =
             error.message || error.toString() || "Нэвтрэх явцад алдаа гарлаа";
-          message.error(errorMessage);
+          message.warning(errorMessage);
         }
       },
 
