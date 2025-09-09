@@ -275,7 +275,7 @@ function MashinBurtgel(
   useEffect(() => {
     if (!data?.khungulukhKhugatsaa) {
       form.setFieldsValue({
-        khungulukhKhugatsaa: data.khungulukhKhugatsaa ?? 0, // always full time
+        khungulukhKhugatsaa: data?.khungulukhKhugatsaa ?? 0, // always full time
         uldegdelKhungulukhKhugatsaa: form.getFieldValue(
           "uldegdelKhungulukhKhugatsaa"
         ), // leftover

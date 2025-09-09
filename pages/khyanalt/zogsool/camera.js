@@ -774,6 +774,18 @@ function camera({ token }) {
     { createdAt: -1 }
   );
 
+  const gereeniiUldsenUdur = (endDate) => {
+    const today = new Date();
+    const end = new Date(endDate);
+
+    today.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
+
+    const diffTime = end - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
   function onRefresh() {
     setModalNeelttei(false);
     uilchluulegchMutate();
@@ -1117,15 +1129,16 @@ function camera({ token }) {
             );
           }
 
-          if (a?.khungulultTurul === "khuviKhungulult") {
+          if (record?.turul === "Гэрээт") {
+            const remainingDays = gereeniiUldsenUdur(
+              record.mashin.duusakhOgnoo
+            );
+
             return (
-              <div className="flex items-center justify-center">
-                {a?.khungulultTurul && (
-                  <div className="flex w-[8rem] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
-                    {a?.khungulult}
-                    {"%"}
-                  </div>
-                )}
+              <div className="flex flex-row items-center justify-center">
+                <span className="text-lg font-semibold">
+                  {remainingDays > 0 ? `${remainingDays}` : "Дууссан"}
+                </span>
               </div>
             );
           }
