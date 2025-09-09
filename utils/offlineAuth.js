@@ -191,10 +191,15 @@ export async function attemptLogin(credentials, onlineLoginFunction) {
       };
     } catch (onlineError) {
       console.error("❌ Онлайн нэвтрэлт амжилтгүй боллоо:", onlineError);
-      throw new Error(onlineError.message || "Нэвтрэлт амжилтгүй боллоо");
+      const aldaaMessage =
+        onlineError.response?.data?.aldaa || "Нэвтрэлт амжилтгүй боллоо";
+
+      throw new Error(aldaaMessage);
     }
   } else {
-    console.log("📴 Сүлжээ тасарсан - Интернетгүй үеийн нэвтрэлт оролдож байна");
+    console.log(
+      "📴 Сүлжээ тасарсан - Интернетгүй үеийн нэвтрэлт оролдож байна"
+    );
     try {
       const offlineResult = await performOfflineLogin(credentials);
       return {
@@ -204,7 +209,9 @@ export async function attemptLogin(credentials, onlineLoginFunction) {
       };
     } catch (offlineError) {
       console.error("❌ Оффлайн нэвтрэлт амжилтгүй боллоо:", offlineError);
-      throw new Error("Интернетгүй үеийн нэвтрэлт амжилтгүй: " + offlineError.message);
+      throw new Error(
+        "Интернетгүй үеийн нэвтрэлт амжилтгүй: " + offlineError.message
+      );
     }
   }
 }

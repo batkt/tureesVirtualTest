@@ -159,22 +159,12 @@ function MashinBurtgel(
   );
 
   function garya() {
-    const values = form.getFieldsValue();
-
-    if (isEditMode) {
-      values.uldegdelKhungulukhKhugatsaa = data.uldegdelKhungulukhKhugatsaa;
-
-      const updatedFields = getChangedFields(values, data);
-      save(updatedFields);
-    } else {
-      save(values);
-    }
-
     destroy();
   }
 
   function onFinish() {
     const lastData = form.getFieldsValue();
+    console.log(lastData);
 
     lastData.ekhlekhOgnoo = ognoo[0]?.format("YYYY-MM-DD 00:00:00");
     lastData.duusakhOgnoo = ognoo[1]?.format("YYYY-MM-DD 23:59:59");
@@ -183,22 +173,6 @@ function MashinBurtgel(
     if (!!geree) {
       lastData.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;
       lastData.gereeniiDugaar = geree?.gereeniiDugaar;
-    }
-
-    if (khungulultiinTurul === "togtmolTsag") {
-      lastData.khungulujEkhlesenOgnoo = new Date();
-
-      if (!isEditMode && !lastData?.uldegdelKhungulukhKhugatsaa) {
-        lastData.uldegdelKhungulukhKhugatsaa = lastData.khungulukhKhugatsaa;
-      } else if (isEditMode) {
-        const originalRemaining = data.uldegdelKhungulukhKhugatsaa || 0;
-        const newTotal = lastData.khungulukhKhugatsaa || 0;
-
-        lastData.uldegdelKhungulukhKhugatsaa = Math.min(
-          originalRemaining,
-          newTotal
-        );
-      }
     }
 
     if (lastData.turul === "Гэрээт") {
@@ -294,12 +268,17 @@ function MashinBurtgel(
   }
 
   const tsagValue = Form.useWatch("tsagiinTurul", form);
+  const khungulukhKhugatsaaValue = Form.useWatch("khungulukhKhugatsaa", form);
+  console.log(khungulukhKhugatsaaValue);
+  console.log(data);
 
   useEffect(() => {
-    if (data) {
+    if (!data?.khungulukhKhugatsaa) {
       form.setFieldsValue({
-        khungulukhKhugatsaa: data.khungulukhKhugatsaa ?? 0, // always full time
-        uldegdelKhungulukhKhugatsaa: data.uldegdelKhungulukhKhugatsaa ?? 0, // leftover
+        khungulukhKhugatsaa: data?.khungulukhKhugatsaa ?? 0, // always full time
+        uldegdelKhungulukhKhugatsaa: form.getFieldValue(
+          "uldegdelKhungulukhKhugatsaa"
+        ), // leftover
       });
     }
   }, [data, form]);
@@ -551,18 +530,31 @@ function MashinBurtgel(
                     className="w-full"
                     min={0}
                     placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
+                    onChange={(value) => {
+                      if (
+                        !data?.khungulukhKhugatsaa ||
+                        data?.uldegdelKhungulukhKhugatsaa === 0
+                      ) {
+                        form.setFieldValue(
+                          "uldegdelKhungulukhKhugatsaa",
+                          value || 0
+                        );
+                      }
+                    }}
                   />
                 </Form.Item>
               )}
+
               <Form.Item
                 name={"uldegdelKhungulukhKhugatsaa"}
                 label={t("Үлдэгдэл хугацаа/мин")}
               >
                 <InputNumber
-                  disabled="true"
+                  disabled={true}
                   type="number"
                   className="w-full"
                   min={0}
+                  value={10}
                 />
               </Form.Item>
 

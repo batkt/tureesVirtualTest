@@ -265,9 +265,7 @@ export const AuthProvider = ({ children }) => {
 
               resolve(loginResult);
             } else {
-              reject(
-                new Error("Хуудсыг дахин ачаалална уу")
-              );
+              reject(new Error("Хуудсыг дахин ачаалална уу"));
             }
           } else {
             reject(new Error("Хэрэглэгчийн мэдээлэл буруу байна"));
@@ -384,7 +382,9 @@ export const AuthProvider = ({ children }) => {
           }
         } catch (error) {
           console.error("Нэвтрэх явцад алдаа гарлаа:", error);
-          message.error("Network error");
+          const errorMessage =
+            error.message || error.toString() || "Нэвтрэх явцад алдаа гарлаа";
+          message.warning(errorMessage);
         }
       },
 
@@ -414,7 +414,10 @@ export const AuthProvider = ({ children }) => {
           await clearOfflineAuth();
           message.success("Интернетгүй үеийн мэдээлэл устгагдлаа");
         } catch (error) {
-          console.error("Интернетгүй үеийн мэдээлэл устгахад алдаа гарлаа:", error);
+          console.error(
+            "Интернетгүй үеийн мэдээлэл устгахад алдаа гарлаа:",
+            error
+          );
           message.error("Интернетгүй үеийн мэдээлэл устгахад алдаа гарлаа");
         }
       },
