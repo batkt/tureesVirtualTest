@@ -278,6 +278,17 @@ function EbarimtMedeelel({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
       },
+      {
+        title: t("Тайлант сар"),
+        dataIndex: "reportMonth",
+        ellipsis: true,
+        align: "center",
+        render: (reportMonth, data) => {
+          return reportMonth ? reportMonth : data.date;
+        },
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
 
       ...shineColumn,
       ...shineColumn2,
@@ -399,6 +410,12 @@ function EbarimtMedeelel({ token }) {
         dataIndex: "createdAt",
         __style__: { h: "center" },
         render: (date) => moment(date).format("YYYY-MM-DD HH:mm"),
+      },
+      {
+        title: "Тайлант сар",
+        dataIndex: "reportMonth",
+        __style__: { h: "center" },
+        render: (date, row) => date ? date : row.date,
       },
 
       ...(uilchilgeeAvi === "Зогсоол"
@@ -629,12 +646,12 @@ function EbarimtMedeelel({ token }) {
                 <AntdTable.Summary.Cell
                   colSpan={
                     uilchilgeeAvi === "Зогсоол"
-                      ? 5
-                      : uilchilgeeAvi === "Тоглоом"
                       ? 6
-                      : uilchilgeeAvi === "Түрээс"
+                      : uilchilgeeAvi === "Тоглоом"
                       ? 7
-                      : 4
+                      : uilchilgeeAvi === "Түрээс"
+                      ? 8
+                      : 5
                   }
                 >
                   <div className="truncate text-right font-bold ">
