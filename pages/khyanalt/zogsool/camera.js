@@ -1135,10 +1135,8 @@ function camera({ token }) {
             );
 
             return (
-              <div className="flex flex-row items-center justify-center">
-                <span className="text-lg font-semibold">
-                  {remainingDays > 0 ? `${remainingDays}` : "Дууссан"}
-                </span>
+              <div className="flex items-center justify-center font-[600]">
+                {remainingDays > 0 ? `${remainingDays}` : "Дууссан"}
               </div>
             );
           }
