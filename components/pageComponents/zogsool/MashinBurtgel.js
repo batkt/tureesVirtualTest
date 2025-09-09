@@ -531,7 +531,6 @@ function MashinBurtgel(
                     min={0}
                     placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
                     onChange={(value) => {
-                      // Update the uldegdelKhungulukhKhugatsaa field when khungulukhKhugatsaa changes
                       if (
                         !data?.khungulukhKhugatsaa ||
                         data?.uldegdelKhungulukhKhugatsaa === 0
