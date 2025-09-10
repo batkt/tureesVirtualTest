@@ -27,6 +27,7 @@ import {
   PlusOutlined,
   SettingOutlined,
   UploadOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import formatNumber from "tools/function/formatNumber";
@@ -420,6 +421,47 @@ function mashinBurtgel({ token }) {
         dataIndex: "dugaar",
         showSorterTooltip: false,
         sorter: () => 0,
+        render: (value, record) => {
+          if (record?.turul === "Байгууллага") {
+            return (
+              <Popover
+                content={
+                  <div style={{ minWidth: "200px", width: "100%" }}>
+                    {record.mashinuud && record.mashinuud.length > 0 ? (
+                      record.mashinuud.map((mashiin, index) => (
+                        <div
+                          className="px-2 py-1 text-black dark:text-gray-200"
+                          key={index}
+                          style={{
+                            width: "100%",
+                            backgroundColor:
+                              index % 2 === 1
+                                ? "rgba(128, 128, 128, 0.3)"
+                                : "transparent",
+                          }}
+                        >
+                          {mashiin}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-black dark:text-gray-200">
+                        Бүртгэлтэй машин алга
+                      </div>
+                    )}
+                  </div>
+                }
+                title="Машин дугаарууд"
+                trigger="hover"
+              >
+                <span className="cursor-pointer ">
+                  <EyeOutlined className="mr-1 h-5 text-black dark:text-gray-200" />
+                </span>
+              </Popover>
+            );
+          } else {
+            return record.dugaar || "-";
+          }
+        },
       },
       {
         title: t("Төрөл"),

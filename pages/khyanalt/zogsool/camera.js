@@ -1108,7 +1108,11 @@ function camera({ token }) {
         render: (a, record) => {
           console.log("Discount render - mashin object:", a);
           console.log("Discount render - full record:", record);
-          if (a?.khungulultTurul === "togtmolTsag") {
+          if (
+            a?.khungulultTurul === "togtmolTsag" ||
+            a?.khungulultTurul === "saraar" ||
+            a?.khungulultTurul === "dolooKhonog"
+          ) {
             return (
               <div className="flex items-center justify-center">
                 {a && (
