@@ -73,6 +73,28 @@ import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
 import KhungulukhTsonkh from "components/pageComponents/zogsool/KhungulukhTsonkh";
 import { CiDiscount1 } from "react-icons/ci";
 
+const shunuRefresh = () => {
+  const refreshKhiikhTsag = 0;
+  const refreshKhiikhMinute = 1;
+
+  const now = new Date();
+  const tootsootTsag = new Date();
+
+  tootsootTsag.setHours(refreshKhiikhTsag, refreshKhiikhMinute, 0, 0);
+
+  if (tootsootTsag <= now) {
+    tootsootTsag.setDate(tootsootTsag.getDate() + 1);
+  }
+
+  const msRefreshTsag = tootsootTsag - now;
+
+  setTimeout(() => {
+    window.location.reload();
+  }, msRefreshTsag);
+};
+
+shunuRefresh();
+
 export function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
 
@@ -1760,7 +1782,12 @@ function camera({ token }) {
     }
   };
 
+  const [isSaving, setIsSaving] = useState(false);
+
   const khadgalakh = () => {
+    if (isSaving) return;
+    setIsSaving(true);
+
     uilchilgee(token)
       .get("ognooAvya")
       .then(({ data }) => {
@@ -1770,9 +1797,11 @@ function camera({ token }) {
             body.tuukh[0].burtgesenAjiltaniiId = ajiltan?._id;
             body.tuukh[0].burtgesenAjiltaniiNer = ajiltan?.ner;
           }
+
           if (modalOpen.type === "zurchil") {
             if (!value || value === "" || value === undefined) {
               message.warn("Зөрчлийн шалтгаан оруулна уу!");
+              setIsSaving(false);
               return;
             }
             body.zurchil = value;
@@ -1795,12 +1824,15 @@ function camera({ token }) {
               body.tuukh[0].uneguiGarsan = value;
               body.tuukh[0].tuluv = -1;
             } else if (songogdzonZogsool?.zurchilZaavalBurtgekhEsekh) {
-              return notification.warn({
+              notification.warn({
                 message: "Шалтгаан оруулна уу",
                 duration: 2,
               });
+              setIsSaving(false);
+              return;
             }
           }
+
           if (modalOpen.type !== "dugaarBurtgekh") {
             updateMethod("zogsoolUilchluulegch", token, body).then(
               ({ data }) => {
@@ -1824,13 +1856,19 @@ function camera({ token }) {
                   }
                   onRefresh();
                 }
+
+                setTimeout(() => setIsSaving(false), 2000);
               }
             );
             setModalOpen({ bool: false, item: null, type: "" });
             setValue(null);
           }
-        } else message.warn("Уучлаарай дахин оролдоно уу");
-      });
+        } else {
+          message.warn("Уучлаарай дахин оролдоно уу");
+          setIsSaving(false);
+        }
+      })
+      .catch(() => setIsSaving(false));
   };
 
   function tulburiinDelgerengui() {
@@ -3199,7 +3237,7 @@ function camera({ token }) {
               <Button type="primary" key="back" onClick={() => modalKhaakh()}>
                 {t("Хаах")}
               </Button>,
-              <Button type="primary" onClick={khadgalakh}>
+              <Button type="primary" onClick={khadgalakh} disabled={isSaving}>
                 {t("Хадгалах")}
               </Button>,
             ]}

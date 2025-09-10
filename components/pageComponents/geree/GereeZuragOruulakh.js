@@ -65,14 +65,15 @@ const GereeZuragOruulakh = (
   }, [destroy]);
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col items-center space-y-4">
       <div className="text-center">
-        <h3 className="text-lg font-medium">{garchig}</h3>
+        <h3 className="text-lg font-medium dark:text-gray-200">{garchig}</h3>
         <p className="text-sm text-gray-500">{tailbar}</p>
       </div>
 
       <Upload
         multiple
+        accept="image/*"
         name="file"
         listType="picture"
         action={`${url}/zuragKhadgalya`}
@@ -81,9 +82,8 @@ const GereeZuragOruulakh = (
         data={{ turul: "jpg" }}
         headers={{ Authorization: `Bearer ${token}` }}
         onChange={({ fileList }) => setZurguud(fileList)}
-        className="flex w-2/3 flex-col rounded-full"
       >
-        <div className="flex w-full cursor-pointer justify-between rounded-xl bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-400 hover:text-white dark:bg-gray-800 dark:hover:bg-green-600">
+        <div className="flex w-full cursor-pointer justify-between rounded-xl  bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-400 hover:text-white dark:bg-gray-600 dark:hover:bg-green-800">
           <div className="flex gap-5">
             <FileImageOutlined className="text-xl" />
             <div>
