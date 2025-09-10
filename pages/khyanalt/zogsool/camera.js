@@ -73,6 +73,28 @@ import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
 import KhungulukhTsonkh from "components/pageComponents/zogsool/KhungulukhTsonkh";
 import { CiDiscount1 } from "react-icons/ci";
 
+const shunuRefresh = () => {
+  const refreshKhiikhTsag = 0;
+  const refreshKhiikhMinute = 1;
+
+  const now = new Date();
+  const tootsootTsag = new Date();
+
+  tootsootTsag.setHours(refreshKhiikhTsag, refreshKhiikhMinute, 0, 0);
+
+  if (tootsootTsag <= now) {
+    tootsootTsag.setDate(tootsootTsag.getDate() + 1);
+  }
+
+  const msRefreshTsag = tootsootTsag - now;
+
+  setTimeout(() => {
+    window.location.reload();
+  }, msRefreshTsag);
+};
+
+shunuRefresh();
+
 export function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
 
