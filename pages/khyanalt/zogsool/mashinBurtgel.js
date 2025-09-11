@@ -472,6 +472,24 @@ function mashinBurtgel({ token }) {
         sorter: () => 0,
       },
       {
+        title: t("Үлдэгдэл хугацаа"),
+        align: "center",
+        width: "6rem",
+        dataIndex: "uldegdelKhungulukhKhugatsaa",
+        showSorterTooltip: false,
+        render: (value, record, index) => {
+          if (record?.khungulukhKhugatsaa > 0) {
+            return (
+              <div className="flex justify-center">
+                <div className="flex h-[1.5rem] w-[4rem] items-center justify-center rounded-lg bg-green-400 px-2 py-1 font-[600] text-white">
+                  {record?.uldegdelKhungulukhKhugatsaa}
+                </div>
+              </div>
+            );
+          }
+        },
+      },
+      {
         title: t("Камер"),
         align: "center",
         dataIndex: "cameraIP",
@@ -1026,7 +1044,7 @@ function mashinBurtgel({ token }) {
                 icon={<PlusOutlined />}
                 onClick={() => mashinBurtgekh()}
               >
-                {t("Машин нэмэх")}
+                {t("Машин")}
               </Button>
             ) : (
               ""
@@ -1037,7 +1055,7 @@ function mashinBurtgel({ token }) {
                 icon={<PlusOutlined />}
                 onClick={() => blockMashinBurtgekh()}
               >
-                {t("Блоклох машин нэмэх")}
+                {t("Блоклох машин")}
               </Button>
             ) : (
               ""
