@@ -4,6 +4,7 @@ import {
   SettingOutlined,
   MailOutlined,
   LeftOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import { Badge, Dropdown, Menu, Empty, Spin } from "antd";
 import Link from "next/link";
@@ -112,6 +113,16 @@ function ProfileTovch({
     [handleNotificationClose, notificationModal.data]
   );
 
+  const handleMailDropdownClose = useCallback(() => {
+    setDropdownVisible(false);
+    setExpandedNotifications(null);
+  }, []);
+
+  const handleSonorduulgaDropdownClose = useCallback(() => {
+    setSonorduulgaDropdownVisible(false);
+    setExpandedNotifications(null);
+  }, []);
+
   const MailDropdown = useMemo(
     () => (
       <Suspense fallback={<LoadingSpinner />}>
@@ -129,6 +140,12 @@ function ProfileTovch({
               <span className="text-md font-medium">
                 {t("Шинэчлэлтийн мэдээ")}
               </span>
+              <button
+                onClick={handleMailDropdownClose}
+                className="flex h-6 w-6 items-center justify-center rounded-full hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50"
+              >
+                <CloseOutlined className="text-sm text-white" />
+              </button>
             </div>
           </div>
           <div className="no-transition-initial space-y-2 overflow-y-auto rounded-md bg-white p-3 dark:bg-gray-800">
@@ -246,6 +263,7 @@ function ProfileTovch({
       handleMessageClick,
       handleExpansionToggle,
       formatDate,
+      handleMailDropdownClose,
     ]
   );
 
@@ -337,6 +355,7 @@ function ProfileTovch({
           trigger={["click"]}
           overlay={MailDropdown}
           placement="bottomRight"
+          visible={dropdownVisible}
           onVisibleChange={(visible) => {
             setDropdownVisible(visible);
             if (!visible) {
@@ -377,9 +396,11 @@ function ProfileTovch({
                 isInitialLoading={isInitialLoading}
                 loadMore={loadMore}
                 isVisible={sonorduulgaDropdownVisible}
+                onClose={handleSonorduulgaDropdownClose}
               />
             </Suspense>
           }
+          visible={sonorduulgaDropdownVisible}
           onVisibleChange={(visible) => {
             setSonorduulgaDropdownVisible(visible);
             if (!visible) {

@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 import { url } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
+import LinkPreview from "./LinkPreview";
+import { extractUrls } from "../../utils/linkUtils";
 
 const NotificationModal = React.memo(
   ({
@@ -99,6 +101,49 @@ const NotificationModal = React.memo(
             .replace(/<p([^>]*)>/g, '<p$1 style="text-align:justify;">')
             .replace(/<div([^>]*)>/g, '<div$1 style="text-align:justify;">')
         : "";
+
+    // Component to render content with link previews
+    const ContentWithLinkPreviews = ({ content }) => {
+      if (!content) return null;
+
+      // Extract URLs from the content
+      const urls = extractUrls(content);
+
+      if (urls.length === 0) {
+        // No URLs found, render as HTML
+        return <div dangerouslySetInnerHTML={{ __html: content }} />;
+      }
+
+      // Get the first URL for preview (show only one preview)
+      const firstUrl = urls[0];
+
+      // Remove URLs from content to avoid duplication
+      let cleanContent = content;
+      urls.forEach((urlObj) => {
+        cleanContent = cleanContent.replace(urlObj.url, "");
+      });
+
+      // Clean up extra spaces and HTML artifacts
+      cleanContent = cleanContent
+        .replace(/\s+/g, " ")
+        .replace(/<p>\s*<\/p>/g, "")
+        .replace(/<div>\s*<\/div>/g, "")
+        .trim();
+
+      return (
+        <div className="space-y-3">
+          {/* Render clean content */}
+          {cleanContent && (
+            <div dangerouslySetInnerHTML={{ __html: cleanContent }} />
+          )}
+
+          {/* Show only one link preview */}
+          <div className="mt-4">
+            <LinkPreview url={firstUrl.url} className="w-full" height={300} />
+          </div>
+        </div>
+      );
+    };
 
     function getDisplayData({
       isMessageModal,
@@ -266,8 +311,8 @@ const NotificationModal = React.memo(
                   </div>
                 )}
                 <div className="sm:space-y-2">
-                  <div className="overflow-y-auto rounded-lg bg-gray-100 p-2 dark:bg-gray-700 sm:p-4">
-                    <div dangerouslySetInnerHTML={{ __html: cleanedContent }} />
+                  <div className="max-h-96 overflow-y-auto rounded-lg bg-gray-100 p-2 dark:bg-gray-700 sm:p-4">
+                    <ContentWithLinkPreviews content={cleanedContent} />
                   </div>
                   {!isMessageModal && (
                     <div className="text-xs text-gray-500 dark:text-gray-400 sm:text-sm"></div>

@@ -423,34 +423,81 @@ function orshinSuugch({ token }) {
   }
 
   async function mashinUstgaya(data) {
+    console.log("mashinUstgaya called with data:", data);
+    console.log("Data type:", typeof data);
+    console.log("Is array:", Array.isArray(data));
+
     let khariltsagchIds = [];
+
+    // Handle different data structures
     if (Array.isArray(data)) {
-      khariltsagchIds = data.map((item) => item._id).filter((id) => id);
-    } else if (data && data._id) {
-      khariltsagchIds = [data._id];
+      // Check if array contains strings (IDs) or objects
+      if (data.length > 0 && typeof data[0] === "string") {
+        // Direct array of ID strings
+        khariltsagchIds = data.filter((id) => id && typeof id === "string");
+        console.log(
+          "Case 1a - Direct array of ID strings, extracted IDs:",
+          khariltsagchIds
+        );
+      } else {
+        // Array of objects with _id property
+        khariltsagchIds = data
+          .map((item) => item._id || item.id)
+          .filter((id) => id);
+        console.log(
+          "Case 1b - Direct array of objects, extracted IDs:",
+          khariltsagchIds
+        );
+      }
+    } else if (data && data.jagsaalt && Array.isArray(data.jagsaalt)) {
+      // Data has jagsaalt property (like zochinGaralt.jagsaalt)
+      khariltsagchIds = data.jagsaalt
+        .map((item) => item._id || item.id)
+        .filter((id) => id);
+      console.log("Case 2 - jagsaalt array, extracted IDs:", khariltsagchIds);
+    } else if (data && (data._id || data.id)) {
+      // Single item
+      khariltsagchIds = [data._id || data.id];
+      console.log("Case 3 - Single item, extracted ID:", khariltsagchIds);
+    } else if (
+      data &&
+      data.selectedItems &&
+      Array.isArray(data.selectedItems)
+    ) {
+      // Nested selectedItems
+      khariltsagchIds = data.selectedItems
+        .map((item) => item._id || item.id)
+        .filter((id) => id);
+      console.log("Case 4 - selectedItems, extracted IDs:", khariltsagchIds);
     } else {
+      console.log("No valid data structure found. Data:", data);
+      console.log(
+        "Data keys:",
+        data ? Object.keys(data) : "data is null/undefined"
+      );
       message.error(t("Машин сонгоно уу"));
       return;
     }
 
     if (khariltsagchIds.length === 0) {
+      console.log("No valid IDs found after extraction");
+      console.log("Original data structure:", JSON.stringify(data, null, 2));
       message.error(t("Машин сонгоно уу"));
       return;
     }
 
+    console.log("Proceeding with IDs:", khariltsagchIds);
+
     try {
-      // Fetch khariltsagch records to get mashiniiDugaar
       const khariltsagchPromises = khariltsagchIds.map((khariltsagchId) =>
         uilchilgee(token).get(`khariltsagch/${khariltsagchId}`)
       );
       const khariltsagchResponses = await Promise.all(khariltsagchPromises);
 
-      // Collect mashiniiDugaar values
       const mashiniiDugaarList = khariltsagchResponses
         .filter((response) => response.data?.mashiniiDugaar)
         .map((response) => response.data.mashiniiDugaar);
 
-      // Fetch mashin records by matching dugaar
       const mashinPromises = mashiniiDugaarList.map((dugaar) =>
         uilchilgee(token).get("mashin", {
           params: {
@@ -464,23 +511,19 @@ function orshinSuugch({ token }) {
       );
       const mashinResponses = await Promise.all(mashinPromises);
 
-      // Collect mashin IDs
       const mashinIds = mashinResponses
         .flatMap((response) => response.data?.jagsaalt || [])
         .map((record) => record._id)
         .filter((id) => id);
 
-      // Delete from khariltsagch
       const khariltsagchDeletePromises = khariltsagchIds.map((khariltsagchId) =>
         deleteMethod("khariltsagch", token, khariltsagchId)
       );
 
-      // Delete from mashin
       const mashinDeletePromises = mashinIds.map((mashinId) =>
         deleteMethod("mashin", token, mashinId)
       );
 
-      // Combine and execute all delete promises
       const results = await Promise.all([
         ...khariltsagchDeletePromises,
         ...mashinDeletePromises,
@@ -506,6 +549,45 @@ function orshinSuugch({ token }) {
         t("Алдаа гарлаа: ") + (error.response?.data?.message || error.message)
       );
     }
+  }
+
+  // Alternative function if you want to wait for data to be ready
+  async function mashinUstgayaSafe(data) {
+    // Wait for data to be ready if it's still loading
+    const maxRetries = 10;
+    let retries = 0;
+    let processedData = data;
+
+    while (retries < maxRetries) {
+      if (
+        processedData &&
+        processedData.jagsaalt &&
+        Array.isArray(processedData.jagsaalt) &&
+        processedData.jagsaalt.length > 0
+      ) {
+        break; // Data is ready
+      }
+
+      if (Array.isArray(processedData) && processedData.length > 0) {
+        break; // Data is ready
+      }
+
+      // Wait a bit and retry
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      retries++;
+      console.log(
+        `Waiting for data to be ready, retry ${retries}/${maxRetries}`
+      );
+    }
+
+    if (retries >= maxRetries) {
+      console.log("Data did not become ready within timeout");
+      message.error(t("Машин сонгоно уу"));
+      return;
+    }
+
+    // Now call the main function
+    return mashinUstgaya(processedData);
   }
   function zochinBurtgekh(data) {
     let zochinBurtgekhButtonId = "zochinBurtgekhButtonId";

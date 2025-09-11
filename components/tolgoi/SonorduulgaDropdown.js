@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { Empty, Spin, Checkbox, Button } from "antd";
-import { BellOutlined, LeftOutlined } from "@ant-design/icons";
+import { BellOutlined, LeftOutlined, CloseOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
@@ -61,6 +61,7 @@ const SonorduulgaDropdown = React.memo(
     permanentlyDismissed = new Set(),
     setPermanentlyDismissed,
     onDontShowAgain,
+    onClose,
   }) => {
     const { t } = useTranslation();
     const scrollRef = useRef(null);
@@ -159,6 +160,11 @@ const SonorduulgaDropdown = React.memo(
       [handleExpansionToggle, markAsReadLocally, sonorduulgaKharlaa]
     );
 
+    const handleSonorduulgaDropdownClose = useCallback(() => {
+      setSonorduulgaDropdownVisible(false);
+      setExpandedNotifications(null);
+    }, []);
+
     const handleNotificationClick = useCallback(
       async (e, mur) => {
         e.preventDefault();
@@ -235,6 +241,12 @@ const SonorduulgaDropdown = React.memo(
           <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-400 to-green-500 p-3 text-white">
             <div className="flex items-center justify-between">
               <span className="text-md font-medium">{t("Сонордуулга")}</span>
+              <button
+                onClick={onClose}
+                className="flex h-6 w-6 items-center justify-center rounded-full hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50"
+              >
+                <CloseOutlined className="text-sm text-white" />
+              </button>
             </div>
           </div>
           <SonorduulgaLoading />
@@ -255,18 +267,15 @@ const SonorduulgaDropdown = React.memo(
         <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-400 to-green-500 p-3 text-white">
           <div className="flex items-center justify-between">
             <span className="text-md font-medium">{t("Сонордуулга")}</span>
+            <button
+              onClick={onClose}
+              className="flex h-6 w-6 items-center justify-center rounded-full hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50"
+            >
+              <CloseOutlined className="text-sm text-white" />
+            </button>
           </div>
         </div>
-
-        <div
-          ref={scrollRef}
-          className="space-y-2 overflow-y-auto rounded-md bg-white p-3 transition-all duration-200 ease-in-out dark:bg-gray-800"
-          onScroll={handleScroll}
-          style={{
-            maxHeight: "calc(60vh - 60px)",
-            scrollBehavior: "smooth",
-          }}
-        >
+        <div className="no-transition-initial space-y-2 overflow-y-auto rounded-md bg-white p-3 dark:bg-gray-800">
           {optimizedSonorduulga.length > 0 ? (
             <>
               {optimizedSonorduulga.map((mur, index) => {
@@ -288,9 +297,9 @@ const SonorduulgaDropdown = React.memo(
                 return (
                   <div
                     key={`sonorduulga${mur._id || index}`}
-                    className={`w-full overflow-hidden rounded-xl border-2 transition-all duration-200 ease-in-out ${
+                    className={`w-full overflow-hidden rounded-xl border-2 ${
                       !isRead
-                        ? "border-green-300 bg-white dark:bg-gray-800"
+                        ? "border-green-300 bg-white dark:bg-gray-800 "
                         : "border-gray-200 dark:border-gray-600"
                     }`}
                   >
@@ -302,88 +311,56 @@ const SonorduulgaDropdown = React.memo(
                           mur?._id
                         )
                       }
-                      className="flex cursor-pointer items-center justify-between p-4 transition-colors duration-150 ease-in-out hover:bg-gray-50 dark:hover:bg-gray-700"
+                      className="flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700"
                     >
                       <div className="flex flex-1 items-center space-x-3">
                         <div className="relative">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 transition-colors duration-150 dark:bg-green-900">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
                             <BellOutlined className="text-sm text-green-500 dark:text-green-300" />
                           </div>
                           {!isRead && (
-                            <div className="absolute -right-1 -top-1 h-3 w-3 animate-pulse rounded-full border-2 border-white bg-red-500"></div>
+                            <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-white bg-red-500"></div>
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <h3 className="text-xs font-medium text-gray-800 transition-colors duration-150 dark:text-gray-200">
+                          <h3 className="text-xs font-medium text-gray-800 dark:text-gray-200">
                             {displayData.title}
                           </h3>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
                         <div className="rounded-full px-2 py-1 text-xs text-white">
-                          <p className="truncate text-xs text-black transition-colors duration-150 dark:text-white">
+                          <p className="truncate text-xs text-black dark:text-white">
                             {format(
                               new Date(mur.createdAt),
                               "yyyy-MM-dd HH:mm"
                             )}
                           </p>
                         </div>
-                        {mur.turul === "daalgavar" ? (
-                          <div className="flex justify-center rounded-md bg-green-500 px-2 py-1 text-xs text-white transition-all duration-150">
-                            {t("Даалгавар")}
-                          </div>
-                        ) : mur.turul === "sanal" ? (
-                          <div className="flex justify-center rounded-md bg-yellow-500 px-2 py-1 text-xs text-white transition-all duration-150">
-                            {t("Санал")}
-                          </div>
-                        ) : mur.turul === "gomdol" ? (
-                          <div className="flex justify-center rounded-md bg-red-500 px-2 py-1 text-xs text-white transition-all duration-150">
-                            {t("Гомдол")}
-                          </div>
-                        ) : mur.turul === "medegdel" ? (
-                          <div className="flex justify-center rounded-md bg-blue-500 px-2 py-1 text-xs text-white transition-all duration-150">
-                            {t("Мэдэгдэл")}
-                          </div>
-                        ) : mur.turul === "duudlaga" ? (
-                          <div className="flex justify-center rounded-md bg-blue-500 px-2 py-1 text-xs text-white transition-all duration-150">
-                            {t("Дуудлага")}
-                          </div>
-                        ) : mur.turul === "shaardlaga" ? (
-                          <div className="flex justify-center rounded-md bg-blue-500 px-2 py-1 text-xs text-white transition-all duration-150">
-                            {t("Шаардлага")}
-                          </div>
-                        ) : null}
                         <LeftOutlined
-                          className={`text-gray-400 transition-all duration-200 ease-in-out dark:text-gray-500 ${
+                          className={`text-gray-400 transition-transform dark:text-gray-500 ${
                             isExpanded ? "-rotate-90" : "rotate-0"
                           }`}
                         />
                       </div>
                     </div>
-
                     {isExpanded && (
-                      <div className="animate-in slide-in-from-top relative px-4 pb-4 text-gray-600 duration-200 dark:text-gray-300">
+                      <div className="z-1000 relative px-4 pb-4 text-gray-600 dark:text-gray-300">
                         <div className="border-t pt-3 dark:border-gray-600">
                           <div
-                            dangerouslySetInnerHTML={{ __html: cleanedContent }}
-                            className="mb-3 rounded p-2 text-sm leading-relaxed transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-gray-600"
-                          />
-
-                          <a
-                            href={
-                              mur.turul === "duudlaga"
-                                ? `/khyanalt/duudlaga/duudlaga?id=${idAwyaa(
-                                    mur
-                                  )}&notificationTurul=${mur?.turul}`
-                                : `${hrefAvya(mur, ajiltan)}?id=${idAwyaa(
-                                    mur
-                                  )}&notificationTurul=${mur?.turul}`
+                            onClick={(e) =>
+                              handleMessageClick(
+                                displayData.title,
+                                displayData.content,
+                                mur.createdAt,
+                                e,
+                                mur._id
+                              )
                             }
-                            onClick={(e) => handleNotificationClick(e, mur)}
-                            className="block text-sm text-blue-600 transition-colors duration-150 hover:text-blue-800 hover:underline"
+                            className="mb-3 max-h-[100px] cursor-pointer overflow-y-auto rounded p-2 text-sm leading-relaxed hover:bg-gray-100 dark:hover:bg-gray-600"
                           >
-                            {t("Дэлгэрэнгүй харах")}
-                          </a>
+                            <div dangerouslySetInnerHTML={{ __html: cleanedContent }} />
+                          </div>
                         </div>
                       </div>
                     )}
