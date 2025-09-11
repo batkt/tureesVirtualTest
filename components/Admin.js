@@ -141,13 +141,16 @@ function Admin({
     barilgiinId,
     baiguulgiinErkhiinJagsaalt,
   } = useAuth();
+
+  console.log("aaaaa:", baiguullaga);
+
   const khuudasnuud = useErkh(ajiltan, baiguulgiinErkhiinJagsaalt);
   const sanalKhuseltRef = React.useRef(null);
   const [visible, setVisible] = useState(false);
   const [showSidehelpBar, setShowSidehelpBar] = useState(false);
   const { i18n, t } = useTranslation();
 
-  const [isOnline, setIsOnline] = useState(true); // Default to online
+  const [isOnline, setIsOnline] = useState(true);
   const [focusaasGarsan, setFocusaasGarsan] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [pendingPayments, setPendingPayments] = useState([]);

@@ -73,28 +73,6 @@ import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
 import KhungulukhTsonkh from "components/pageComponents/zogsool/KhungulukhTsonkh";
 import { CiDiscount1 } from "react-icons/ci";
 
-const shunuRefresh = () => {
-  const refreshKhiikhTsag = 0;
-  const refreshKhiikhMinute = 1;
-
-  const now = new Date();
-  const tootsootTsag = new Date();
-
-  tootsootTsag.setHours(refreshKhiikhTsag, refreshKhiikhMinute, 0, 0);
-
-  if (tootsootTsag <= now) {
-    tootsootTsag.setDate(tootsootTsag.getDate() + 1);
-  }
-
-  const msRefreshTsag = tootsootTsag - now;
-
-  setTimeout(() => {
-    window.location.reload();
-  }, msRefreshTsag);
-};
-
-shunuRefresh();
-
 export function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
 
@@ -796,18 +774,6 @@ function camera({ token }) {
     { createdAt: -1 }
   );
 
-  const gereeniiUldsenUdur = (endDate) => {
-    const today = new Date();
-    const end = new Date(endDate);
-
-    today.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
-
-    const diffTime = end - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
-
   function onRefresh() {
     setModalNeelttei(false);
     uilchluulegchMutate();
@@ -1130,11 +1096,7 @@ function camera({ token }) {
         render: (a, record) => {
           console.log("Discount render - mashin object:", a);
           console.log("Discount render - full record:", record);
-          if (
-            a?.khungulultTurul === "togtmolTsag" ||
-            a?.khungulultTurul === "saraar" ||
-            a?.khungulultTurul === "dolooKhonog"
-          ) {
+          if (a?.khungulultTurul === "togtmolTsag") {
             return (
               <div className="flex items-center justify-center">
                 {a && (
@@ -1155,14 +1117,15 @@ function camera({ token }) {
             );
           }
 
-          if (record?.turul === "Гэрээт") {
-            const remainingDays = gereeniiUldsenUdur(
-              record.mashin.duusakhOgnoo
-            );
-
+          if (a?.khungulultTurul === "khuviKhungulult") {
             return (
-              <div className="flex items-center justify-center font-[600]">
-                {remainingDays > 0 ? `${remainingDays}` : "Дууссан"}
+              <div className="flex items-center justify-center">
+                {a?.khungulultTurul && (
+                  <div className="flex w-[8rem] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
+                    {a?.khungulult}
+                    {"%"}
+                  </div>
+                )}
               </div>
             );
           }
@@ -1782,12 +1745,7 @@ function camera({ token }) {
     }
   };
 
-  const [isSaving, setIsSaving] = useState(false);
-
   const khadgalakh = () => {
-    if (isSaving) return;
-    setIsSaving(true);
-
     uilchilgee(token)
       .get("ognooAvya")
       .then(({ data }) => {
@@ -1797,11 +1755,9 @@ function camera({ token }) {
             body.tuukh[0].burtgesenAjiltaniiId = ajiltan?._id;
             body.tuukh[0].burtgesenAjiltaniiNer = ajiltan?.ner;
           }
-
           if (modalOpen.type === "zurchil") {
             if (!value || value === "" || value === undefined) {
               message.warn("Зөрчлийн шалтгаан оруулна уу!");
-              setIsSaving(false);
               return;
             }
             body.zurchil = value;
@@ -1824,15 +1780,12 @@ function camera({ token }) {
               body.tuukh[0].uneguiGarsan = value;
               body.tuukh[0].tuluv = -1;
             } else if (songogdzonZogsool?.zurchilZaavalBurtgekhEsekh) {
-              notification.warn({
+              return notification.warn({
                 message: "Шалтгаан оруулна уу",
                 duration: 2,
               });
-              setIsSaving(false);
-              return;
             }
           }
-
           if (modalOpen.type !== "dugaarBurtgekh") {
             updateMethod("zogsoolUilchluulegch", token, body).then(
               ({ data }) => {
@@ -1856,19 +1809,13 @@ function camera({ token }) {
                   }
                   onRefresh();
                 }
-
-                setTimeout(() => setIsSaving(false), 2000);
               }
             );
             setModalOpen({ bool: false, item: null, type: "" });
             setValue(null);
           }
-        } else {
-          message.warn("Уучлаарай дахин оролдоно уу");
-          setIsSaving(false);
-        }
-      })
-      .catch(() => setIsSaving(false));
+        } else message.warn("Уучлаарай дахин оролдоно уу");
+      });
   };
 
   function tulburiinDelgerengui() {
@@ -3237,7 +3184,7 @@ function camera({ token }) {
               <Button type="primary" key="back" onClick={() => modalKhaakh()}>
                 {t("Хаах")}
               </Button>,
-              <Button type="primary" onClick={khadgalakh} disabled={isSaving}>
+              <Button type="primary" onClick={khadgalakh}>
                 {t("Хадгалах")}
               </Button>,
             ]}
