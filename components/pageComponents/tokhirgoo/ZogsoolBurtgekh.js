@@ -446,10 +446,58 @@ function ZogsoolBurtgekh(
                 />
               </Form.Item>
             </div>
-            <div className="text-xs text-gray-400"> </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
-              <div className="font-medium dark:text-white"></div>
-              <div className="text-xs text-gray-400"></div>
+              <div className="font-medium dark:text-white">
+                {t("Дурын төрөлтэй машинд тогтмол төлбөр бодогдох эсэх")}
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item className="m-0" name="togtmolTulburEsekh">
+                <Switch
+                  className="bg-gray-400"
+                  defaultChecked={data?.togtmolTulburEsekh}
+                  checkedChildren="Тийм"
+                  unCheckedChildren="Үгүй"
+                  onChange={(checked) => {
+                    if (!checked) {
+                      form.setFieldsValue({ togtmolTulburiinDun: null });
+                    }
+                  }}
+                />
+              </Form.Item>
+            </div>
+            <div className="col-span-4">
+              <Form.Item
+                noStyle
+                shouldUpdate={(prevValues, currentValues) =>
+                  prevValues.togtmolTulburEsekh !==
+                  currentValues.togtmolTulburEsekh
+                }
+              >
+                {({ getFieldValue }) => (
+                  <div
+                    className={`flex flex-row justify-between overflow-hidden transition-all duration-300 ease-in-out ${
+                      getFieldValue("togtmolTulburEsekh")
+                        ? "max-h-20 translate-y-0 transform opacity-100"
+                        : "max-h-0 -translate-y-2 transform opacity-0"
+                    }`}
+                  >
+                    <div className="col-span-2 border-l-2 border-green-500 pl-4">
+                      <div className="font-medium dark:text-white">
+                        {t("Тогтмол төлбөрийн дүн")}
+                      </div>
+                    </div>
+                    <div className="col-span-2">
+                      <Form.Item className="mr-5" name="togtmolTulburiinDun">
+                        <InputNumber
+                          style={{ width: "110%" }}
+                          placeholder="Тогтмол төлбөрийн дүн"
+                        />
+                      </Form.Item>
+                    </div>
+                  </div>
+                )}
+              </Form.Item>
             </div>
 
             <div className="col-span-2 border-l-2 border-green-500 pl-4">

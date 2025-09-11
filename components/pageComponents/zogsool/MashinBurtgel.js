@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useState,
+  useRef,
 } from "react";
 import {
   Form,
@@ -25,7 +26,11 @@ import moment from "moment";
 import { t } from "i18next";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import formatNumber from "tools/function/formatNumber";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  DeleteOutlined,
+  MinusCircleOutlined,
+} from "@ant-design/icons";
 
 const order = { createdAt: -1 };
 
@@ -44,6 +49,7 @@ function MashinBurtgel(
   ref
 ) {
   const [form] = Form.useForm();
+  const inputRefs = useRef([]);
   const [geree, setGeree] = useState(null);
   const [turulShalgah, setTurulShalgah] = useState(
     data?.turul ? data?.turul : undefined
@@ -224,6 +230,16 @@ function MashinBurtgel(
     }
   }
 
+  const normalizeCarNumber = (input) => {
+    const too = input.replace(/[^0-9]/g, "").slice(0, 4);
+    const useg = Array.from(input)
+      .filter((a) => /[А-Яа-яөӨүҮ]/.test(a))
+      .slice(0, 3)
+      .join("");
+    return `${too}${useg}`.toUpperCase();
+  };
+  const t = (text) => text;
+
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
@@ -239,6 +255,7 @@ function MashinBurtgel(
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
       e.preventDefault();
+
       switch (e.target.id) {
         case "ezemshigchiinUtas":
           form.getFieldInstance("dugaar").focus();
@@ -252,6 +269,7 @@ function MashinBurtgel(
         case "ezemshigchiinRegister":
           document.getElementById(mashinBurtgekhButtonId).focus();
           break;
+
         default:
           break;
       }
@@ -275,7 +293,7 @@ function MashinBurtgel(
   useEffect(() => {
     if (!data?.khungulukhKhugatsaa) {
       form.setFieldsValue({
-        khungulukhKhugatsaa: data.khungulukhKhugatsaa ?? 0, // always full time
+        khungulukhKhugatsaa: data?.khungulukhKhugatsaa ?? 0, // always full time
         uldegdelKhungulukhKhugatsaa: form.getFieldValue(
           "uldegdelKhungulukhKhugatsaa"
         ), // leftover
@@ -312,14 +330,21 @@ function MashinBurtgel(
             form.setFieldValue("khungulult", undefined);
             form.setFieldValue("tsagiinTurul", undefined);
             form.setFieldValue("khungulukhKhugatsaa", undefined);
-            form.getFieldInstance("ezemshigchiinUtas").focus();
+            form.getFieldInstance("ezemshigchiinUtas", undefined);
             setTurulShalgah(e);
             setKhungulultiinTurul(undefined);
             setNemeltTurulShalgah(undefined);
           }}
           placeholder={t("Төрөл")}
         >
-          {["Гэрээт", "Түрээслэгч", "Дотоод", "Дурын", "СӨХ"].map((a) => (
+          {[
+            "Гэрээт",
+            "Түрээслэгч",
+            "Дотоод",
+            "Дурын",
+            "СӨХ",
+            "Байгууллага",
+          ].map((a) => (
             <Select.Option key={a} value={a}>
               {t(a)}
             </Select.Option>
@@ -573,69 +598,144 @@ function MashinBurtgel(
           ) : null}
         </React.Fragment>
       )}
-      <Form.Item
-        requiredMark={"optional"}
-        normalize={(input) => {
-          const too = input.replace(/[^0-9]+/g, "").slice(0, 8);
-          return too;
-        }}
-        rules={[
-          {
-            required: true,
-            message: t("Утасны дугаар бүртгэнэ үү!"),
-          },
-          {
-            required: true,
-            len: 8,
-            validator: async (_, names) => {
-              if (names?.length < 8 && names?.length > 0) {
-                return Promise.reject(
-                  new Error("Утасны дугаар аа шалгана уу!")
-                );
-              }
+      {turulShalgah === "Байгууллага" && (
+        <Form.Item
+          label={t("Хөнгөлөлт төрөл")}
+          name="khungulultTurul"
+          requiredMark={"optional"}
+          rules={[
+            {
+              required: true,
+              message: t("Хөнгөлөлтийн төрөл сонгоно уу!"),
             },
-          },
-        ]}
-        label={t("Утас")}
-        name="ezemshigchiinUtas"
+          ]}
+        >
+          <Select
+            onChange={(e) => {
+              setKhungulultiinTurul(e);
+            }}
+            placeholder={t("Төрөл сонгох")}
+          >
+            {[
+              { label: "Сараар", key: 1, value: "saraar" },
+              { label: "Долоо хоногоор", key: 2, value: "dolooKhonog" },
+            ].map((a) => (
+              <Select.Option key={a.key} value={a.value}>
+                {t(a.label)}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+      )}
+      {!!khungulultiinTurul && (
+        <Form.Item
+          name={"khungulukhKhugatsaa"}
+          requiredMark="optional"
+          rules={[
+            {
+              required: true,
+              message: t("Хөнгөлөх Хугацаа оруулна уу!"),
+            },
+          ]}
+          label={t("Хугацаа/мин")}
+        >
+          <InputNumber
+            type="number"
+            className="w-full"
+            min={0}
+            placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
+            onChange={(value) => {
+              if (
+                !data?.khungulukhKhugatsaa ||
+                data?.uldegdelKhungulukhKhugatsaa === 0
+              ) {
+                form.setFieldValue("uldegdelKhungulukhKhugatsaa", value || 0);
+              }
+            }}
+          />
+        </Form.Item>
+      )}
+      <Form.Item
+        name={"uldegdelKhungulukhKhugatsaa"}
+        label={t("Үлдэгдэл хугацаа/мин")}
       >
-        <Input
-          maxLength={8}
-          onKeyUp={focuser}
-          placeholder={t("Утас")}
-          onChange={gereeAvya}
+        <InputNumber
+          disabled={true}
+          type="number"
+          className="w-full"
+          min={0}
+          value={10}
         />
       </Form.Item>
-      <Form.Item
-        normalize={(input) => {
-          const too = input.replace(/[^0-9]/g, "").slice(0, 4);
-          const useg = Array.from(input)
-            .filter((a) => /[А-Яа-яөӨүҮ]/.test(a))
-            .slice(0, 3)
-            .join("");
-          return `${too}${useg}`.toUpperCase();
-        }}
-        requiredMark={"optional"}
-        rules={[
-          {
-            required: true,
-            message: t("Машины дугаар бүртгэнэ үү!"),
-          },
-          {
-            required: form.getFieldValue("mashiniiDugaar")?.length > 0 && true,
-            min: 6,
-            max: 7,
-            pattern: new RegExp(
-              "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
-            ),
-            message: t("Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"),
-          },
-        ]}
-        label={t("Машины дугаар")}
-        name="dugaar"
-      >
-        <Input onKeyUp={focuser} placeholder={t("Машины дугаар")} />
-      </Form.Item>
+      {turulShalgah !== "Байгууллага" && (
+        <Form.Item
+          requiredMark={"optional"}
+          normalize={(input) => {
+            const too = input.replace(/[^0-9]+/g, "").slice(0, 8);
+            return too;
+          }}
+          rules={[
+            {
+              required: true,
+              message: t("Утасны дугаар бүртгэнэ үү!"),
+            },
+            {
+              required: true,
+              len: 8,
+              validator: async (_, names) => {
+                if (names?.length < 8 && names?.length > 0) {
+                  return Promise.reject(
+                    new Error("Утасны дугаар аа шалгана уу!")
+                  );
+                }
+              },
+            },
+          ]}
+          label={t("Утас")}
+          name="ezemshigchiinUtas"
+        >
+          <Input
+            maxLength={8}
+            onKeyUp={focuser}
+            placeholder={t("Утас")}
+            onChange={gereeAvya}
+          />
+        </Form.Item>
+      )}
+
+      {turulShalgah !== "Байгууллага" && (
+        <Form.Item
+          normalize={(input) => {
+            const too = input.replace(/[^0-9]/g, "").slice(0, 4);
+            const useg = Array.from(input)
+              .filter((a) => /[А-Яа-яөӨүҮ]/.test(a))
+              .slice(0, 3)
+              .join("");
+            return `${too}${useg}`.toUpperCase();
+          }}
+          requiredMark={"optional"}
+          rules={[
+            {
+              required: true,
+              message: t("Машины дугаар бүртгэнэ үү!"),
+            },
+            {
+              required:
+                form.getFieldValue("mashiniiDugaar")?.length > 0 && true,
+              min: 6,
+              max: 7,
+              pattern: new RegExp(
+                "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
+              ),
+              message: t("Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"),
+            },
+          ]}
+          label={t("Машины дугаар")}
+          name="dugaar"
+        >
+          <Input onKeyUp={focuser} placeholder={t("Машины дугаар")} />
+        </Form.Item>
+      )}
       <Form.Item
         requiredMark={"optional"}
         rules={[
@@ -748,6 +848,106 @@ function MashinBurtgel(
             ></Button>
           </Form.Item>
         )}
+      {turulShalgah === "Байгууллага" && (
+        <React.Fragment>
+          <Form.List
+            name="mashinuud"
+            rules={[
+              {
+                validator: async (_, names) => {
+                  if (!names || names.length < 1) {
+                    return Promise.reject(
+                      new Error(t("Машины дугаар оруулна уу !"))
+                    );
+                  }
+                },
+              },
+            ]}
+          >
+            {(fields, { add, remove }, { errors }) => (
+              <>
+                <Form.Item
+                  wrapperCol={{ span: 16, offset: 8 }}
+                  className="space-y-2"
+                >
+                  <Button
+                    icon={<PlusOutlined />}
+                    className="flex h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
+                    type="dashed"
+                    onClick={() => {
+                      add(undefined, 0);
+                      setTimeout(() => {
+                        inputRefs.current[0]?.focus();
+                      }, 0);
+                    }}
+                    block
+                  >
+                    {t("Машин нэмэх")}
+                  </Button>
+                  <Form.ErrorList errors={errors} />
+                </Form.Item>
+
+                {fields.map((field, index) => (
+                  <Form.Item
+                    key={field.key}
+                    labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 24 }}
+                    className="flex  w-full justify-end pr-10"
+                    style={{ marginBottom: "16px" }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        width: "100%",
+                      }}
+                    >
+                      <Form.Item
+                        {...field}
+                        normalize={normalizeCarNumber}
+                        style={{ width: "200px", marginBottom: 0 }}
+                        rules={[
+                          {
+                            required: true,
+                            message: t("Машины дугаар бүртгэнэ үү!"),
+                          },
+                          {
+                            min: 6,
+                            max: 7,
+                            pattern: new RegExp(
+                              "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
+                            ),
+                            message: t(
+                              "Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"
+                            ),
+                          },
+                        ]}
+                      >
+                        <Input
+                          ref={(el) => (inputRefs.current[index] = el)}
+                          onKeyUp={focuser}
+                          placeholder={t("Машины дугаар")}
+                        />
+                      </Form.Item>
+
+                      <MinusCircleOutlined
+                        className="text-red-500 hover:text-red-700"
+                        onClick={() => remove(field.name)}
+                        style={{
+                          fontSize: "16px",
+                          cursor: "pointer",
+                          minWidth: "16px",
+                        }}
+                      />
+                    </div>
+                  </Form.Item>
+                ))}
+              </>
+            )}
+          </Form.List>
+        </React.Fragment>
+      )}
     </Form>
   );
 }

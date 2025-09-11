@@ -27,6 +27,7 @@ import {
   PlusOutlined,
   SettingOutlined,
   UploadOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import formatNumber from "tools/function/formatNumber";
@@ -420,6 +421,47 @@ function mashinBurtgel({ token }) {
         dataIndex: "dugaar",
         showSorterTooltip: false,
         sorter: () => 0,
+        render: (value, record) => {
+          if (record?.turul === "Байгууллага") {
+            return (
+              <Popover
+                content={
+                  <div style={{ minWidth: "200px", width: "100%" }}>
+                    {record.mashinuud && record.mashinuud.length > 0 ? (
+                      record.mashinuud.map((mashiin, index) => (
+                        <div
+                          className="px-2 py-1 text-black dark:text-gray-200"
+                          key={index}
+                          style={{
+                            width: "100%",
+                            backgroundColor:
+                              index % 2 === 1
+                                ? "rgba(128, 128, 128, 0.3)"
+                                : "transparent",
+                          }}
+                        >
+                          {mashiin}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-black dark:text-gray-200">
+                        Бүртгэлтэй машин алга
+                      </div>
+                    )}
+                  </div>
+                }
+                title="Машин дугаарууд"
+                trigger="hover"
+              >
+                <span className="cursor-pointer ">
+                  <EyeOutlined className="mr-1 h-5 text-black dark:text-gray-200" />
+                </span>
+              </Popover>
+            );
+          } else {
+            return record.dugaar || "-";
+          }
+        },
       },
       {
         title: t("Төрөл"),
@@ -428,6 +470,24 @@ function mashinBurtgel({ token }) {
         dataIndex: "turul",
         showSorterTooltip: false,
         sorter: () => 0,
+      },
+      {
+        title: t("Үлдэгдэл хугацаа"),
+        align: "center",
+        width: "6rem",
+        dataIndex: "uldegdelKhungulukhKhugatsaa",
+        showSorterTooltip: false,
+        render: (value, record, index) => {
+          if (record?.khungulukhKhugatsaa > 0) {
+            return (
+              <div className="flex justify-center">
+                <div className="flex h-[1.5rem] w-[4rem] items-center justify-center rounded-lg bg-green-400 px-2 py-1 font-[600] text-white">
+                  {record?.uldegdelKhungulukhKhugatsaa}
+                </div>
+              </div>
+            );
+          }
+        },
       },
       {
         title: t("Камер"),
@@ -984,7 +1044,7 @@ function mashinBurtgel({ token }) {
                 icon={<PlusOutlined />}
                 onClick={() => mashinBurtgekh()}
               >
-                {t("Машин нэмэх")}
+                {t("Машин")}
               </Button>
             ) : (
               ""
@@ -995,7 +1055,7 @@ function mashinBurtgel({ token }) {
                 icon={<PlusOutlined />}
                 onClick={() => blockMashinBurtgekh()}
               >
-                {t("Блоклох машин нэмэх")}
+                {t("Блоклох машин")}
               </Button>
             ) : (
               ""

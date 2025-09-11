@@ -384,7 +384,7 @@ export const AuthProvider = ({ children }) => {
           console.error("Нэвтрэх явцад алдаа гарлаа:", error);
           const errorMessage =
             error.message || error.toString() || "Нэвтрэх явцад алдаа гарлаа";
-          message.error(errorMessage);
+          message.warning(errorMessage);
         }
       },
 
@@ -466,4 +466,8 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const 
+
+
+
+useAuth = () => useContext(AuthContext);

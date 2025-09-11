@@ -506,7 +506,18 @@ function guilgeeniiTuukh({ token }) {
         dataIndex: "tulukhUdur",
         render(a) {
           const today = moment();
-          return today.format("YYYY-MM") + "-" + String(a).padStart(2, "0");
+          const responseDay = parseInt(a);
+          const todayDay = today.date();
+          let targetDate = today.clone();
+          if (responseDay < todayDay) {
+            targetDate = targetDate.add(1, "month");
+          }
+
+          return (
+            targetDate.format("YYYY-MM") +
+            "-" +
+            String(responseDay).padStart(2, "0")
+          );
         },
         sorter: false,
       },
