@@ -896,7 +896,7 @@ function TaskManagementSystem({ token }) {
             <input
               type="text"
               className="block w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700"
-              placeholder={t("Хайх /Нэр, Регистр, Утас, Гарчиг, Мессеж/")}
+              placeholder={t("Хайх /Нэр, Регистр, Утас, Гэрээ, Талбай/")}
               onChange={({ target }) => handleSearch(target.value)}
             />
             <svg
