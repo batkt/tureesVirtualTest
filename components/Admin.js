@@ -165,6 +165,17 @@ function Admin({
   }, []);
 
   useEffect(() => {
+    socket().on(`autoLogout${baiguullaga?._id}`, (khariu) => {
+      console.log("kkkkk:",khariu);
+      garya();
+    });
+
+    return () => {
+      socket().off(`autoLogout${baiguullaga?._id}`);
+    };
+  }, [baiguullaga?._id]);
+
+  useEffect(() => {
     if (!isClient) return;
 
     if (typeof navigator !== "undefined") {
