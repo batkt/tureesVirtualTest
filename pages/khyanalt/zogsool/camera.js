@@ -296,6 +296,15 @@ function camera({ token }) {
     "/parking",
     streamQuery
   );
+  useEffect(() => {
+    socket().on(`autoLogout${baiguullaga?._id}`, (khariu) => {
+      console.log("kkkkk:",khariu);
+    });
+
+    return () => {
+      socket().off(`autoLogout${baiguullaga?._id}`);
+    };
+  }, [baiguullaga]);
 
   const zurchilteiMashinMsgilgeekh = (mashiniiDugaar) => {
     let yavuulakhData = {

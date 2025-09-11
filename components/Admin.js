@@ -142,8 +142,6 @@ function Admin({
     baiguulgiinErkhiinJagsaalt,
   } = useAuth();
 
-  console.log("aaaaa:", baiguullaga);
-
   const khuudasnuud = useErkh(ajiltan, baiguulgiinErkhiinJagsaalt);
   const sanalKhuseltRef = React.useRef(null);
   const [visible, setVisible] = useState(false);
