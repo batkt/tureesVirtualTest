@@ -884,11 +884,6 @@ function TaskManagementSystem({ token }) {
                                 call.duudlagiinTurul}
                           </Tag>
                         )}
-                        {index === 0 && (
-                          <span className="rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-600">
-                            {t("Сүүлийн дуудлага")}
-                          </span>
-                        )}
                       </div>
 
                       {call.title && (
