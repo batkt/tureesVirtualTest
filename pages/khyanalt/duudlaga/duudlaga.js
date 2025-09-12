@@ -468,32 +468,30 @@ function TaskManagementSystem({ token }) {
   }, [msj, songogdsonKhariltsagch, barilgiinId, token, t]);
 
   const filteredJagsaalt = useMemo(() => {
-    const dataSource = task?.jagsaalt || [];
+    const dataSource = task?.jagsaalt || jagsaalt || [];
+
     if (!dataSource || dataSource.length === 0) return [];
 
     return dataSource.filter((item) => {
-      // Status filter
       let statusMatch = true;
       if (tuluv === "Идэвхтэй") statusMatch = item.tuluv === 0;
       else if (tuluv === "Дууссан") statusMatch = item.tuluv === 1;
       else if (tuluv === "Цуцлагдсан") statusMatch = item.tuluv === -1;
 
-      // Type filter
       const typeMatch =
         turulFilter === "Бүгд" ||
         item.duudlagiinTurul?.toLowerCase() === turulFilter.toLowerCase();
 
-      // Search filter
       let searchMatch = true;
       if (searchTerm && searchTerm.trim()) {
         const searchTermLower = searchTerm.toLowerCase().trim();
+
         searchMatch = searchKeys.some((key) => {
           const value = item[key];
-          return (
-            value &&
-            typeof value === "string" &&
-            value.toLowerCase().includes(searchTermLower)
-          );
+          if (value && typeof value === "string") {
+            return value.toLowerCase().includes(searchTermLower);
+          }
+          return false;
         });
 
         if (!searchMatch) {
@@ -505,16 +503,16 @@ function TaskManagementSystem({ token }) {
             item.message,
             item.duudlagiinTurul,
           ];
-          searchMatch = additionalFields.some(
-            (field) =>
-              field &&
-              typeof field === "string" &&
-              field.toLowerCase().includes(searchTermLower)
-          );
+
+          searchMatch = additionalFields.some((field) => {
+            if (field && typeof field === "string") {
+              return field.toLowerCase().includes(searchTermLower);
+            }
+            return false;
+          });
         }
       }
 
-      // Date filter
       let dateMatch = true;
       if (ekhlekhOgnoo && ekhlekhOgnoo.length === 2) {
         const itemDate = moment(item.createdAt);
@@ -886,6 +884,11 @@ function TaskManagementSystem({ token }) {
                                 call.duudlagiinTurul}
                           </Tag>
                         )}
+                        {index === 0 && (
+                          <span className="rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-600">
+                            {t("Сүүлийн дуудлага")}
+                          </span>
+                        )}
                       </div>
 
                       {call.title && (
@@ -1002,7 +1005,7 @@ function TaskManagementSystem({ token }) {
         className="col-span-12 flex h-auto flex-col space-y-5 rounded-2xl bg-white p-2 dark:bg-gray-900 md:rounded-none md:rounded-l-2xl md:p-8 xl:col-span-5"
       >
         <Card className="cardgrid col-span-12">
-          <div className="hideScroll flex w-full gap-6 overflow-hidden  border-solid py-3 sm:grid sm:grid-cols-3 sm:p-0 md:gap-3 2xl:grid-cols-3">
+          <div className="hideScroll flex w-full gap-6 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-3 sm:p-0 md:gap-3 2xl:grid-cols-3">
             {khyanaltiinDun.map((mur, index) => (
               <div
                 key={index}
