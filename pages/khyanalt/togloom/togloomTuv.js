@@ -1047,15 +1047,15 @@ function togloom1() {
                   {
                     <div>
                       <div className="flex w-full justify-between bg-green-50 p-1 px-2">
-                        <div className="font-medium">Овог:</div>{" "}
+                        <div className="font-medium">{t("Овог")}:</div>{" "}
                         <div>{data?.ovog}</div>
                       </div>
                       <div className="flex w-full justify-between border-y p-1 px-2 dark:bg-gray-200">
-                        <div className="font-medium ">Нэр:</div>{" "}
+                        <div className="font-medium ">{t("Нэр")}:</div>{" "}
                         <div>{data?.ner}</div>
                       </div>
                       <div className="flex w-full justify-between bg-green-50 p-1 px-2">
-                        <div className="font-medium">Нас:</div>{" "}
+                        <div className="font-medium">{t("Нас")}:</div>{" "}
                         <div>{data?.nas}</div>
                       </div>
                     </div>
@@ -1107,7 +1107,7 @@ function togloom1() {
       {
         title: (
           <Popover placement="bottom" content={t("Хугацаа/мин/")}>
-            Хуг/мин/
+            {t("Хугацаа/мин/")}
           </Popover>
         ),
         align: "center",
@@ -1130,7 +1130,7 @@ function togloom1() {
       {
         title: (
           <Popover placement="bottom" content={t("Сунгасан/мин/")}>
-            Сун/мин/
+            {t("Сунгасан/мин/")}
           </Popover>
         ),
         align: "center",

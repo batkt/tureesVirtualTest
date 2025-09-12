@@ -491,7 +491,7 @@ function guilgeeniiTuukh({ token }) {
                         setTulukhOgnoo(v);
                         setLoadingIndex(0);
                       }}
-                      placeholder="Төлөх Огноо Хайх"
+                      placeholder={t("Төлөх Огноо Хайх")}
                     />
                   </div>
                 )}
@@ -683,7 +683,7 @@ function guilgeeniiTuukh({ token }) {
                           ),
                         })
                       : `${formatNumber(row.baritsaaniiUldegdel)} ${t(
-                          "барьцаа төлөгдсөн байна"
+                          t("барьцаа төлөгдсөн байна")
                         )}`
                   }
                 >

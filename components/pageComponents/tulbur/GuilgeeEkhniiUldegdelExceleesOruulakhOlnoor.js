@@ -94,6 +94,7 @@ function GuilgeeEkhniiUldegdelExceleesOruulakhOlnoor(
           allowClear={false}
           locale={locale}
           style={{ width: "49%" }}
+          placeholder={t("Огноо сонгох")}
         />
         <div className="flex justify-end gap-1">
           <label>{t("Түрээс эсэх")}: </label>

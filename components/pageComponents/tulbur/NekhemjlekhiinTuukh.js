@@ -111,11 +111,12 @@ function NekhemjlekhiinTuukh(
                 locale={locale}
                 value={shineOgnoo}
                 onChange={setShineOgnoo}
+                placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]} 
               />
             </div>
             <div>
               <Input
-                placeholder={t("Хайх /Ажилтан/")}
+                placeholder={[t("Хайх /Ажилтан/")]}
                 type="text"
                 onChange={({ target }) => {
                   setSearch(target.value);

@@ -94,6 +94,7 @@ function GuilgeeExceleesOruulakhOlnoor(
           allowClear={false}
           locale={locale}
           style={{ width: "49%" }}
+          placeholder={t("Огноо сонгох")}
         />
         <Select
           placeholder={t("Ашиглалтын зардал")}

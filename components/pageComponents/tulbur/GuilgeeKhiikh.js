@@ -669,7 +669,10 @@ function GuilgeeKhiikh(
           <div className="bflex w-full flex-row justify-between">
             <div />
             <div className="flex justify-end space-x-2">
-              <label>{data.talbainKhemjee + t(" м² аргаар бодох эсэх")}:</label>
+              <label>
+                {data.talbainKhemjee} {t("м² аргаар бодох эсэх")}
+              </label>
+
               <Switch
                 checked={m2argaarBodokhEsekh}
                 onChange={(e) => changedArgaar(e)}
@@ -947,7 +950,9 @@ function GuilgeeKhiikh(
         )}
       {turul === "ashiglalt" && (
         <div className="flex w-full items-start justify-between dark:text-[#E5E7EB]">
-          <div>Суурь хураамж: {formatNumber(suuriKhuraamj || 0, 2)}</div>
+          <div>
+            {t("Суурь хураамж")}: {formatNumber(suuriKhuraamj || 0, 2)}
+          </div>
           {tailbar?.includes("Цахилгаан") ? (
             <div>КВЦТ: {formatNumber(tsakhilgaanUrjver || 1, 4)}</div>
           ) : (
