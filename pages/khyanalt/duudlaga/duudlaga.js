@@ -133,9 +133,9 @@ function TaskManagementSystem({ token }) {
   const getStatusInfo = (tuluv) => {
     switch (tuluv) {
       case 0:
-        return { text: "Идэвхтэй", color: "green" };
+        return { text: "Идэвхтэй", color: "blue" };
       case 1:
-        return { text: "Дууссан", color: "blue" };
+        return { text: "Дууссан", color: "green" };
       case -1:
         return { text: "Цуцлагдсан", color: "red" };
       default:
