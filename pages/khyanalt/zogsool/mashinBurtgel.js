@@ -1198,7 +1198,7 @@ function mashinBurtgel({ token }) {
               }}
             >
               <Button
-                className="border-red-400 dark:border-red-400 dark:bg-gray-900"
+                className="bg-red-400 text-white dark:bg-red-400"
                 icon={<DeleteOutlined />}
               >
                 {t("Устгах")}
