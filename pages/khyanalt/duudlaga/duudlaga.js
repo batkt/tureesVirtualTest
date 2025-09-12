@@ -901,7 +901,7 @@ function TaskManagementSystem({ token }) {
                       {call.tailbar && (
                         <div className="mt-2 rounded-md bg-red-50 p-2 dark:bg-red-900/20">
                           <div className="text-xs font-medium text-red-600 dark:text-red-400">
-                            {t("Цуцлах шалтгаан")}:
+                            {t("Цуцалсан шалтгаан")}:
                           </div>
                           <div className="text-xs text-red-500 dark:text-red-300">
                             {call.tailbar}
