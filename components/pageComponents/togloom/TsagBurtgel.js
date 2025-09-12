@@ -264,7 +264,7 @@ function TsagBurtgel(
                 block
                 icon={<PlusOutlined />}
               >
-                Дугаар нэмэх
+                {t("Дугаар нэмэх")}
               </Button>
             </Form.Item>
           </>

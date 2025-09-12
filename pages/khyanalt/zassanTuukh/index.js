@@ -184,7 +184,7 @@ function ZassanTuukh() {
   });
   return (
     <Admin
-      title="Зассан түүх"
+      title={t("Зассан түүх")}
       tsonkhniiId={"67069bc4bc5cedcb985779e9"}
       khuudasniiNer="zassanTuukh"
       onSearch={(search) =>

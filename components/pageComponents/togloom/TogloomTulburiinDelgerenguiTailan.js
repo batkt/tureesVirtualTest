@@ -385,7 +385,7 @@ function TogloomTulburiinDelgerenguiTailan(
           })}
           <div className="border border-dashed bg-gray-600" />
           <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
-            <div className="flex ">Нийт дүн:</div>
+            <div className="flex ">{t("Нийт дүн")}:</div>
             <div>
               {formatNumber(
                 tulburiinMedeelel
@@ -398,7 +398,7 @@ function TogloomTulburiinDelgerenguiTailan(
       ) : (
         <div className="flex h-52 w-full items-center justify-center">
           <div className="text-lg font-semibold text-black text-opacity-30 dark:text-gray-400">
-            Орлогын мэдээлэл байхгүй байна.
+            {t("Орлогын мэдээлэл байхгүй байна")}.
           </div>
         </div>
       )}

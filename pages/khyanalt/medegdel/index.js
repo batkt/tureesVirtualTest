@@ -784,7 +784,7 @@ function Khyanalt({ token }) {
               type="text"
               className="block w-full rounded-md border border-slate-300 bg-white  px-3 py-1 text-sm shadow-sm focus:border-[#8aaaef] focus:outline-none focus:ring-1
               focus:ring-[#8aaaef] dark:bg-gray-500 "
-              placeholder={t("Хайх /Нэр, Регистр, Утас/")}
+              placeholder={t("Хайх /Нэр, Регистр, Утас, Гэрээ, Талбай/")}
               onChange={({ target }) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {

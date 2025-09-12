@@ -402,15 +402,31 @@ function GuilgeeExceleesOruulakhOlnoor(
           </div>
 
           <div className="mt-5" />
-          <Table
-            columns={columns}
-            dataSource={filteredData}
-            loading={loading}
-            rowKey="tooluuriinDugaar"
-            rowSelection={rowSelection}
-            pagination={true}
-            style={{ marginTop: "20px" }}
-          />
+          <div
+            style={{
+              paddingBottom: "40px",
+              position: "relative",
+              minHeight: "500px",
+            }}
+          >
+            <Table
+              columns={columns}
+              dataSource={filteredData}
+              loading={loading}
+              rowKey="tooluuriinDugaar"
+              rowSelection={rowSelection}
+              pagination={{
+                pageSize: 10,
+                style: {
+                  position: "sticky",
+                  padding: "1px 0",
+                },
+                
+              }}
+              scroll={{ y: 400 }}
+              style={{ marginTop: "20px" }}
+            />
+          </div>
           {/* <div className="flex items-end justify-end">
             <Button
               type="primary"
