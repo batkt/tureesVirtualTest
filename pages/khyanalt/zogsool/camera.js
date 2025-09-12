@@ -232,7 +232,7 @@ function tulburKhurvuulekh(v) {
 
 function camera({ token }) {
   const { t, i18n } = useTranslation();
-  const { baiguullaga, ajiltan, barilgiinId, garya } = useAuth();
+  const { baiguullaga, ajiltan, barilgiinId } = useAuth();
   const [ognoo, setOgnoo] = useState([
     moment().startOf("day"),
     moment().endOf("day"),
@@ -296,17 +296,7 @@ function camera({ token }) {
     "/parking",
     streamQuery
   );
-  useEffect(() => {
-    socket().on(`autoLogout${baiguullaga?._id}`, (khariu) => {
-      console.log("kkkkk:",khariu);
-      garya();
-    });
-
-    return () => {
-      socket().off(`autoLogout${baiguullaga?._id}`);
-    };
-  }, [baiguullaga?._id]);
-
+  
   const zurchilteiMashinMsgilgeekh = (mashiniiDugaar) => {
     let yavuulakhData = {
       baiguullagiinId: baiguullaga?._id,
