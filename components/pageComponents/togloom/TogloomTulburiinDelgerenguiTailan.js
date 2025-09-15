@@ -79,7 +79,7 @@ function TogloomTulburiinDelgerenguiTailan(
       switch (element?._id) {
         case "khariltsakh":
           ugugdul.push({
-            ner: "Данс",
+            ner: t("Данс"),
             icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
             dun: element.niitDun,
             khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -87,7 +87,7 @@ function TogloomTulburiinDelgerenguiTailan(
           break;
         case "belen":
           ugugdul.push({
-            ner: "Бэлэн",
+            ner: t("Бэлэн"),
             icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
             dun: element.niitDun,
             khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -95,7 +95,7 @@ function TogloomTulburiinDelgerenguiTailan(
           break;
         case "khunglukh":
           ugugdul.push({
-            ner: "Хөнгөлөх",
+            ner: t("Хөнгөлөх"),
             icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
             dun: element.niitDun,
             khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -103,7 +103,7 @@ function TogloomTulburiinDelgerenguiTailan(
           break;
         case "khaan":
           ugugdul.push({
-            ner: "Карт", //tur cart bolgiy Хаан банк
+            ner: t("Карт"), //tur cart bolgiy Хаан банк
             icon: "/cartniiZurag.png", // "https://play-lh.googleusercontent.com/Aw4bwCDJgAzu6AFAbbcfCFpheVMB6ZKiEM3JlrJ3cAM65fK-1QaTZZs_Vk4UFBzykQ=s480-rw",
             dun: element.niitDun,
             too: element.niitToo,
@@ -193,7 +193,7 @@ function TogloomTulburiinDelgerenguiTailan(
           break;
         case "ticket":
           ugugdul.push({
-            ner: "Онлайн тасалбар",
+            ner: t("Онлайн тасалбар"),
             icon: "/Rectangle85.png",
             dun: element.niitDun,
             khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -209,7 +209,7 @@ function TogloomTulburiinDelgerenguiTailan(
           break;
         case "khungulult":
           ugugdul.push({
-            ner: "Хөнгөлөлт",
+            ner: t("Хөнгөлөлт"),
             icon: "/discount.png",
             dun: element.niitDun,
             too: element.niitToo,
@@ -385,7 +385,7 @@ function TogloomTulburiinDelgerenguiTailan(
           })}
           <div className="border border-dashed bg-gray-600" />
           <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
-            <div className="flex ">Нийт дүн:</div>
+            <div className="flex ">{t("Нийт дүн")}:</div>
             <div>
               {formatNumber(
                 tulburiinMedeelel
@@ -398,7 +398,7 @@ function TogloomTulburiinDelgerenguiTailan(
       ) : (
         <div className="flex h-52 w-full items-center justify-center">
           <div className="text-lg font-semibold text-black text-opacity-30 dark:text-gray-400">
-            Орлогын мэдээлэл байхгүй байна.
+            {t("Орлогын мэдээлэл байхгүй байна")}.
           </div>
         </div>
       )}

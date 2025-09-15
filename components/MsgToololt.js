@@ -68,7 +68,7 @@ function MsgToololt({ token, baiguullagiinId, barilgiinId, msgNegjUne }) {
   if (!!msjTuukh)
     return (
       <div className="cursor-pointer" style={{ lineHeight: 0 }}>
-        Мессеж:
+        {t("Мессеж")}:
         <Tooltip
           title={t("Мессеж")}
           className="p-1 font-bold text-green-500"
@@ -107,17 +107,17 @@ function MsgToololt({ token, baiguullagiinId, barilgiinId, msgNegjUne }) {
                 <tr className="bg-gray-400 text-center text-white">
                   <td className="border border-gray-400 text-mashJijigiinJijig"></td>
                   <td className="border border-gray-400 text-mashJijigiinJijig">
-                    Тоо
+                    {t("Тоо")}
                   </td>
                   <td className="border border-gray-400 text-mashJijigiinJijig">
-                    Нэгж
+                    {t("Нэгж")}
                   </td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td className="border border-gray-400 text-mashJijigiinJijig">
-                    Гэрээ
+                    {t("Гэрээ")}
                   </td>
                   <td className="border border-gray-400 text-center text-mashJijigiinJijig">
                     {geree}
@@ -131,7 +131,7 @@ function MsgToololt({ token, baiguullagiinId, barilgiinId, msgNegjUne }) {
                 </tr>
                 <tr>
                   <td className="border border-gray-400 text-mashJijigiinJijig">
-                    Зогсоол
+                    {t("Зогсоол")}
                   </td>
                   <td className="border border-gray-400 text-center text-mashJijigiinJijig">
                     {zogsool}
@@ -139,7 +139,7 @@ function MsgToololt({ token, baiguullagiinId, barilgiinId, msgNegjUne }) {
                 </tr>
                 <tr>
                   <td className="border border-gray-400 text-mashJijigiinJijig">
-                    Зогсоолын Авлага
+                    {t("Зогсоолын Авлага")}
                   </td>
                   <td className="border border-gray-400 text-center text-mashJijigiinJijig">
                     {zogsoolAvlaga}
@@ -147,7 +147,7 @@ function MsgToololt({ token, baiguullagiinId, barilgiinId, msgNegjUne }) {
                 </tr>
                 <tr>
                   <td className="border border-gray-400 text-mashJijigiinJijig">
-                    Гараас
+                    {t("Гараас")}
                   </td>
                   <td className="border border-gray-400 text-center text-mashJijigiinJijig">
                     {busad}
@@ -155,7 +155,7 @@ function MsgToololt({ token, baiguullagiinId, barilgiinId, msgNegjUne }) {
                 </tr>
                 <tr>
                   <td className="border border-gray-400 text-mashJijigiinJijig">
-                    Нийт
+                    {t("Нийт")}
                   </td>
                   <td className="border border-gray-400 text-center text-mashJijigiinJijig">
                     {niitToo}

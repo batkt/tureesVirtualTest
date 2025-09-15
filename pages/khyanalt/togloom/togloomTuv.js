@@ -1047,15 +1047,15 @@ function togloom1() {
                   {
                     <div>
                       <div className="flex w-full justify-between bg-green-50 p-1 px-2">
-                        <div className="font-medium">Овог:</div>{" "}
+                        <div className="font-medium">{t("Овог")}:</div>{" "}
                         <div>{data?.ovog}</div>
                       </div>
                       <div className="flex w-full justify-between border-y p-1 px-2 dark:bg-gray-200">
-                        <div className="font-medium ">Нэр:</div>{" "}
+                        <div className="font-medium ">{t("Нэр")}:</div>{" "}
                         <div>{data?.ner}</div>
                       </div>
                       <div className="flex w-full justify-between bg-green-50 p-1 px-2">
-                        <div className="font-medium">Нас:</div>{" "}
+                        <div className="font-medium">{t("Нас")}:</div>{" "}
                         <div>{data?.nas}</div>
                       </div>
                     </div>
@@ -1107,7 +1107,7 @@ function togloom1() {
       {
         title: (
           <Popover placement="bottom" content={t("Хугацаа/мин/")}>
-            Хуг/мин/
+            {t("Хугацаа/мин/")}
           </Popover>
         ),
         align: "center",
@@ -1130,7 +1130,7 @@ function togloom1() {
       {
         title: (
           <Popover placement="bottom" content={t("Сунгасан/мин/")}>
-            Сун/мин/
+            {t("Сунгасан/мин/")}
           </Popover>
         ),
         align: "center",
@@ -1369,8 +1369,8 @@ function togloom1() {
                           disabled={data?.tuluv === 3}
                           title={
                             <div>
-                              Та үйлчлүүлэгчийн цаг сунгах гэж байна
-                              <div>үргэлжлүүлэх бол тийм товчийг дарна уу</div>
+                              {t("Та үйлчлүүлэгчийн цаг сунгах гэж байна")}
+                              <div>{t("үргэлжлүүлэх бол тийм товчийг дарна уу")}</div>
                             </div>
                           }
                           okText={t("Тийм")}
@@ -1388,7 +1388,7 @@ function togloom1() {
                         difference > 0 &&
                         data?.tulburTulsunEsekh !== true && (
                           <Popconfirm
-                            title={`Та цуцлахдаа итгэлтэй байна уу?`}
+                            title={t(`Та цуцлахдаа итгэлтэй байна уу?`)}
                             okText={t("Тийм")}
                             cancelText={t("Үгүй")}
                             onConfirm={() => {
@@ -1405,7 +1405,7 @@ function togloom1() {
                       {data.tulburTulsunEsekh === true && (
                         <Popconfirm
                           disabled={data?.tuluv === 3}
-                          title={`Та үйлчлүүлэгчийг гаргахдаа итгэлтэй байна уу?`}
+                          title={t(`Та үйлчлүүлэгчийг гаргахдаа итгэлтэй байна уу?`)}
                           okText={t("Тийм")}
                           cancelText={t("Үгүй")}
                           onConfirm={() =>

@@ -846,7 +846,7 @@ function mashinBurtgel({ token }) {
         if (allSuccessful) {
           mashinMutate();
           mashinToololtMutate();
-          message.success(`${mashinIds.length} машин амжилттай устгагдлаа`);
+          message.success("Машин амжилттай устгагдлаа");
         } else {
           message.error("Зарим машин устгаж чадсангүй");
         }
@@ -1198,7 +1198,7 @@ function mashinBurtgel({ token }) {
               }}
             >
               <Button
-                className="border-red-400 dark:border-red-400 dark:bg-gray-900"
+                className="bg-red-400 text-white dark:bg-red-400"
                 icon={<DeleteOutlined />}
               >
                 {t("Устгах")}

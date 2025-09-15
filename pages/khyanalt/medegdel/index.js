@@ -106,7 +106,7 @@ function Khyanalt({ token }) {
 
   const [turulZagvar, setTurulZagvar] = useState(false);
 
-  const [tuluv, setTuluv] = useState(true);
+  const [tuluv, setTuluv] = useState("Бүгд");
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
   const [zurag, setZurag] = useState();
@@ -606,6 +606,7 @@ function Khyanalt({ token }) {
               className="w-full"
               value={tuluv}
               onChange={setTuluv}
+              defaultValue={undefined}
               style={{ width: "100%" }}
             >
               {[

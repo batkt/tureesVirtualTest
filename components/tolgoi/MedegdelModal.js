@@ -102,28 +102,22 @@ const NotificationModal = React.memo(
             .replace(/<div([^>]*)>/g, '<div$1 style="text-align:justify;">')
         : "";
 
-    // Component to render content with link previews
     const ContentWithLinkPreviews = ({ content }) => {
       if (!content) return null;
 
-      // Extract URLs from the content
       const urls = extractUrls(content);
 
       if (urls.length === 0) {
-        // No URLs found, render as HTML
         return <div dangerouslySetInnerHTML={{ __html: content }} />;
       }
 
-      // Get the first URL for preview (show only one preview)
       const firstUrl = urls[0];
 
-      // Remove URLs from content to avoid duplication
       let cleanContent = content;
       urls.forEach((urlObj) => {
         cleanContent = cleanContent.replace(urlObj.url, "");
       });
 
-      // Clean up extra spaces and HTML artifacts
       cleanContent = cleanContent
         .replace(/\s+/g, " ")
         .replace(/<p>\s*<\/p>/g, "")
@@ -132,14 +126,16 @@ const NotificationModal = React.memo(
 
       return (
         <div className="space-y-3">
-          {/* Render clean content */}
           {cleanContent && (
             <div dangerouslySetInnerHTML={{ __html: cleanContent }} />
           )}
 
-          {/* Show only one link preview */}
-          <div className="mt-4">
-            <LinkPreview url={firstUrl.url} className="w-full" height={300} />
+          <div className="flex items-center justify-center">
+            <LinkPreview
+              url={firstUrl.url}
+              className="sm:w-10/12 lg:w-11/12"
+              height={300}
+            />
           </div>
         </div>
       );

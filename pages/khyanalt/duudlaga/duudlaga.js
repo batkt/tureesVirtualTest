@@ -70,38 +70,6 @@ const formatNumber = (num, decimals = 0) => {
   });
 };
 
-const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
-  const [tailbar, setTailbar] = useState("");
-
-  React.useImperativeHandle(
-    ref,
-    () => ({
-      khadgalya() {
-        confirm(tailbar);
-        destroy();
-      },
-      khaaya() {
-        destroy();
-      },
-    }),
-    [tailbar]
-  );
-  const handleOk = async () => {
-    if (onOk) await onOk();
-    destroy();
-  };
-  return (
-    <div>
-      <Input.TextArea
-        value={tailbar}
-        onChange={({ target }) => setTailbar(target?.value)}
-        placeholder="Цуцлах шалтгааныг бичнэ үү..."
-        rows={4}
-      />
-    </div>
-  );
-});
-
 const order = { updatedAt: -1 };
 
 function TaskManagementSystem({ token }) {
@@ -128,14 +96,46 @@ function TaskManagementSystem({ token }) {
 
   const [expandedNames, setExpandedNames] = useState(new Set());
 
+  const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
+    const [tailbar, setTailbar] = useState("");
+
+    React.useImperativeHandle(
+      ref,
+      () => ({
+        khadgalya() {
+          confirm(tailbar);
+          destroy();
+        },
+        khaaya() {
+          destroy();
+        },
+      }),
+      [tailbar]
+    );
+    const handleOk = async () => {
+      if (onOk) await onOk();
+      destroy();
+    };
+    return (
+      <div>
+        <Input.TextArea
+          value={tailbar}
+          onChange={({ target }) => setTailbar(target?.value)}
+          placeholder={t("Цуцлах шалтгааныг бичнэ үү...")}
+          rows={4}
+        />
+      </div>
+    );
+  });
+
   const duudlagiinTurul = ["Сантехник", "Ус", "Цахилгаан"];
 
   const getStatusInfo = (tuluv) => {
     switch (tuluv) {
       case 0:
-        return { text: "Идэвхтэй", color: "green" };
+        return { text: "Идэвхтэй", color: "blue" };
       case 1:
-        return { text: "Дууссан", color: "blue" };
+        return { text: "Дууссан", color: "green" };
       case -1:
         return { text: "Цуцлагдсан", color: "red" };
       default:
@@ -202,7 +202,7 @@ function TaskManagementSystem({ token }) {
       barilgiinId: barilgiinId,
       ajiltniiId: ajiltan?.erkh === "Admin" ? undefined : ajiltan?._id,
       baiguullagiinId: ajiltan?.baiguullagiinId,
-      tuluv: turul,
+
       ...(ekhlekhOgnoo &&
         ekhlekhOgnoo.length === 2 && {
           startDate: ekhlekhOgnoo[0]?.startOf("day"),
@@ -211,9 +211,8 @@ function TaskManagementSystem({ token }) {
       ...(turulFilter !== "Бүгд" && { duudlagiinTurul: turulFilter }),
       ...(searchTerm && { search: searchTerm }),
     }),
-    [ajiltan, turul, barilgiinId, ekhlekhOgnoo, turulFilter, searchTerm]
+    [ajiltan, barilgiinId, ekhlekhOgnoo, turulFilter, searchTerm]
   );
-
   const updateTaskStatus = async (taskId, newStatus, reason = null) => {
     try {
       const updateData = {
@@ -247,6 +246,7 @@ function TaskManagementSystem({ token }) {
       });
     }
   };
+
   const duudlagaDuusya = () => {
     if (!duudlaga?._id) return;
     updateTaskStatus(duudlaga._id, 1);
@@ -270,7 +270,7 @@ function TaskManagementSystem({ token }) {
     ];
 
     modal({
-      title: "Дуудлага цуцлах шалтгаан",
+      title: t("Дуудлага цуцлах шалтгаан"),
       content: (
         <Tailbar
           ref={tailbarRef}
@@ -370,7 +370,6 @@ function TaskManagementSystem({ token }) {
     }
   }, [ajiltan?.baiguullagiinId, duudlagaMutate, task?.mutate]);
 
-  // Enhanced search handler with proper debouncing
   const handleSearch = useCallback(
     (value) => {
       clearTimeout(timeout);
@@ -378,7 +377,6 @@ function TaskManagementSystem({ token }) {
         console.log("Search term set to:", value);
         setSearchTerm(value);
 
-        // Update the khariltsagch search if needed
         if (setKhariltsagchKhuudaslalt) {
           setKhariltsagchKhuudaslalt((prev) => ({
             ...prev,
@@ -528,7 +526,7 @@ function TaskManagementSystem({ token }) {
 
       return statusMatch && typeMatch && searchMatch && dateMatch;
     });
-  }, [task?.jagsaalt, jagsaalt, tuluv, turulFilter, searchTerm, ekhlekhOgnoo]);
+  }, [task?.jagsaalt, tuluv, turulFilter, searchTerm, ekhlekhOgnoo]);
 
   const allDataQuery = useMemo(
     () => ({
@@ -545,8 +543,43 @@ function TaskManagementSystem({ token }) {
     order
   );
 
+  const turulTranslations = {
+    Бүгд: "All",
+    Сантехник: "Plumbing",
+    Цахилгаан: "Electricity",
+    "Халаалтын систем": "Heating system",
+    Агааржуулалт: "Ventilation",
+    "Лифт засвар": "Elevator repair",
+    Ус: "Water",
+    "Усны даралт": "Water pressure",
+    "Усны чанар": "Water quality",
+    "Усны хоолой": "Water pipe",
+    "Бохир ус": "Wastewater",
+    "Ханын засвар": "Wall repair",
+    "Шалны засвар": "Floor repair",
+    "Тааз засвар": "Ceiling repair",
+    "Цонх засвар": "Window repair",
+    "Хаалганы засвар": "Door repair",
+    "Галын аюулгүй байдал": "Fire safety",
+    "Аюулгүй байдлын систем": "Security system",
+    "Дуу чимээ": "Noise",
+    Гэрэлтүүлэг: "Lighting",
+    Цэвэрлэгээ: "Cleaning",
+    "Хогийн менежмент": "Waste management",
+    "Халдвар хамгаалалт": "Infection control",
+    Интернет: "Internet",
+    "Кабелийн ТВ": "Cable TV",
+    "Утасны холбоо": "Telephone connection",
+    Лифт: "Elevator",
+    Паркинг: "Parking",
+    Хамгаалалт: "Security",
+    "Удирдлагын асуудал": "Management issue",
+    "Санхүүгийн асуудал": "Financial issue",
+    Бусад: "Other",
+  };
+
   const khyanaltiinDun = useMemo(() => {
-    const allData = allDataTask?.jagsaalt || [];
+    const allData = task?.jagsaalt || [];
     const activeCount = allData.filter((item) => item.tuluv === 0).length || 0;
     const completedCount =
       allData.filter((item) => item.tuluv === 1).length || 0;
@@ -573,7 +606,7 @@ function TaskManagementSystem({ token }) {
         onClick: () => setTuluv("Цуцлагдсан"),
       },
     ];
-  }, [allDataTask?.jagsaalt, t]);
+  }, [task?.jagsaalt, t]);
 
   const [showResults, setShowResults] = useState(false);
   const Nemekh = () => {
@@ -608,25 +641,24 @@ function TaskManagementSystem({ token }) {
   const renderCallList = () => {
     const groupedCalls = groupCallsByName(filteredJagsaalt);
 
-    return groupedCalls?.map((mur) => {
-      const statusInfo = getStatusInfo(mur.tuluv);
-      const isExpanded = expandedNames.has(mur.khariltsagchiinNer);
-      const hasMultipleCalls = mur.callCount > 1;
+    return groupedCalls?.map((customerGroup) => {
+      const statusInfo = getStatusInfo(customerGroup.tuluv);
+      const isExpanded = expandedNames.has(customerGroup.khariltsagchiinNer);
+      const hasMultipleCalls = customerGroup.callCount > 1;
 
       return (
-        <div key={mur?._id} className="mb-2">
-          {!!mur._id ? (
+        <div key={customerGroup?._id} className="mb-2">
+          {!!customerGroup._id ? (
             <>
-              {/* Main call entry */}
               <div
                 className={`grid cursor-pointer grid-cols-4 items-center gap-4 rounded-md p-2 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 ${
-                  khariltsagch?._id === mur?._id
+                  khariltsagch?._id === customerGroup?._id
                     ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500"
                     : ""
                 }`}
                 onClick={() => {
-                  setDuudlaga(mur);
-                  setKhariltsagch(mur);
+                  setDuudlaga(customerGroup);
+                  setKhariltsagch(customerGroup);
                 }}
               >
                 <div className="flex items-center gap-3">
@@ -636,9 +668,9 @@ function TaskManagementSystem({ token }) {
                       title={statusInfo.text}
                     />
 
-                    {mur.callCount > 1 && (
+                    {customerGroup.callCount > 1 && (
                       <div className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-                        {mur.callCount}
+                        {customerGroup.callCount}
                       </div>
                     )}
                     <img
@@ -650,26 +682,11 @@ function TaskManagementSystem({ token }) {
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">
-                        {mur.khariltsagchiinNer}{" "}
-                        <span className="ml-2 text-xs text-gray-400">
-                          ({mur.callCount} даалгавар)
-                        </span>
+                        {customerGroup.khariltsagchiinNer}
                       </span>
-
-                      {hasMultipleCalls && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleNameExpansion(mur.khariltsagchiinNer);
-                          }}
-                          className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800"
-                        >
-                          {mur.callCount} дуудлага {isExpanded ? "▼" : "▶"}
-                        </button>
-                      )}
                     </div>
                     <span className="text-xs text-gray-500">
-                      {mur.khariltsagchiinRegister}
+                      {customerGroup.khariltsagchiinRegister}
                     </span>
                   </div>
                 </div>
@@ -681,34 +698,29 @@ function TaskManagementSystem({ token }) {
                 </div>
 
                 <div className="flex justify-center">
-                  {mur.duudlagiinTurul && (
+                  {customerGroup.duudlagiinTurul && (
                     <Tag size="small" color="processing">
-                      {mur.duudlagiinTurul}
+                      {i18n.language === "mn"
+                        ? customerGroup.duudlagiinTurul
+                        : turulTranslations[customerGroup.duudlagiinTurul] ||
+                          customerGroup.duudlagiinTurul}
                     </Tag>
                   )}
                 </div>
 
                 <div className="flex flex-col items-end">
                   <span className="text-xs text-gray-500">
-                    {moment(mur.createdAt).format("MM-DD HH:mm")}
+                    {moment(customerGroup.createdAt).format("MM-DD HH:mm")}
                   </span>
-                  {hasMultipleCalls && (
-                    <span className="text-xs text-blue-500">
-                      Сүүлийн дуудлага
-                    </span>
-                  )}
-                  <div className="flex cursor-pointer text-yellow-500 hover:text-yellow-600">
-                    <StarOutlined />
-                  </div>
                 </div>
               </div>
 
               {hasMultipleCalls && isExpanded && (
                 <div className="ml-6 mt-2 space-y-1 rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
                   <div className="mb-2 text-xs font-semibold text-gray-600 dark:text-gray-400">
-                    Бүх дуудлагууд ({mur.allCalls.length}):
+                    {t("Бүх дуудлагууд")} ({customerGroup.allCalls.length}):
                   </div>
-                  {mur.allCalls
+                  {customerGroup.allCalls
                     .sort(
                       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                     )
@@ -747,7 +759,7 @@ function TaskManagementSystem({ token }) {
                                 )}
                                 {index === 0 && (
                                   <span className="rounded bg-blue-100 px-1 py-0.5 text-xs text-blue-600">
-                                    Сүүлийн
+                                    {t("Сүүлийн")}
                                   </span>
                                 )}
                               </div>
@@ -783,10 +795,202 @@ function TaskManagementSystem({ token }) {
     });
   };
 
+  const renderRightPanel = () => {
+    if (!duudlaga) {
+      return (
+        <div className="relative hidden gap-5 rounded-2xl bg-green-50 p-1 dark:bg-gray-900 md:rounded-none md:rounded-r-2xl xl:col-span-7 xl:flex xl:items-center xl:justify-center">
+          <div className="mx-auto text-center">
+            <div className="flex justify-center">
+              <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
+                <img alt="ProfileZurag" src="/profile.svg" />
+              </div>
+              <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
+                <img alt="ProfileZurag" src="/profileFemale.svg" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="font-medium">{t("Өдрийн мэнд")}</div>
+              <div className="mt-1 text-gray-600 dark:text-gray-300">
+                {t("Та харилцагч сонгож дэлгэрэнгүй мэдээлэл үзнэ үү.")}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const customerCalls = filteredJagsaalt
+      ?.filter(
+        (call) => call.khariltsagchiinNer === duudlaga.khariltsagchiinNer
+      )
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) || [
+      duudlaga,
+    ];
+
+    return (
+      <div
+        style={{ height: "calc(100vh - 8rem)" }}
+        className="relative col-span-12 flex h-full flex-col rounded-2xl bg-white p-1 dark:bg-gray-900 md:rounded-none md:rounded-r-2xl xl:col-span-7"
+      >
+        <div className="w-full rounded-lg p-3 dark:bg-gray-900">
+          <div className="grid grid-cols-2 gap-3 rounded-lg border bg-green-300 p-4 dark:bg-green-800">
+            <div className="col-span-2 mb-2 flex items-center justify-between">
+              <div className="text-lg font-semibold">
+                {t("Нэр")}: {duudlaga.khariltsagchiinNer}
+              </div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {t("Нийт дуудлага")}: {customerCalls.length}
+              </div>
+            </div>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              {t("Утас")}: {duudlaga.khariltsagchiinUtas}
+            </span>
+            {/* <span className="text-sm text-gray-600">
+              {t("Регистр")}: {duudlaga.khariltsagchiinRegister}
+            </span> */}
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-4">
+          <div className="space-y-3">
+            {customerCalls.map((call, index) => {
+              const callStatusInfo = getStatusInfo(call.tuluv);
+              const isSelectedCall = call._id === duudlaga._id;
+
+              return (
+                <div
+                  key={call._id}
+                  className={`cursor-pointer rounded-lg border p-4 transition-all duration-200 hover:shadow-md ${
+                    isSelectedCall
+                      ? "border-green-500 bg-green-50 shadow-md dark:bg-green-900/20"
+                      : "border-gray-200 hover:border-gray-300 dark:border-gray-700"
+                  }`}
+                  onClick={() => {
+                    setDuudlaga(call);
+                    setKhariltsagch(call);
+                  }}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="mb-2 flex items-center gap-2">
+                        <Tag color={callStatusInfo.color} size="small">
+                          {t(callStatusInfo.text)}
+                        </Tag>
+                        {call.duudlagiinTurul && (
+                          <Tag size="small" color="processing">
+                            {i18n.language === "mn"
+                              ? call.duudlagiinTurul
+                              : turulTranslations[call.duudlagiinTurul] ||
+                                call.duudlagiinTurul}
+                          </Tag>
+                        )}
+                      </div>
+
+                      {call.title && (
+                        <div className="mb-1 font-medium text-gray-900 dark:text-gray-100">
+                          {call.title}
+                        </div>
+                      )}
+
+                      {call.message && (
+                        <div className="line-clamp-3 w-full overflow-hidden break-words text-sm text-gray-600 dark:text-gray-400">
+                          {call.message}
+                        </div>
+                      )}
+
+                      {call.tailbar && (
+                        <div className="mt-2 rounded-md bg-red-50 p-2 dark:bg-red-900/20">
+                          <div className="text-xs font-medium text-red-600 dark:text-red-400">
+                            {t("Цуцалсан шалтгаан")}:
+                          </div>
+                          <div className="text-xs text-red-500 dark:text-red-300">
+                            {call.tailbar}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="ml-4 text-right">
+                      <div className="text-xs text-gray-500">
+                        {moment(call.createdAt).format("MM-DD HH:mm")}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {moment(call.createdAt).fromNow()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="flex items-end justify-between border-t p-4">
+          <div className="flex">
+            {duudlaga?.duudlagiinTurul && (
+              <Tag size="small" color="processing">
+                {t("Үйлчилгээ")}:{" "}
+                {i18n.language === "mn"
+                  ? duudlaga.duudlagiinTurul
+                  : turulTranslations[duudlaga.duudlagiinTurul] ||
+                    duudlaga.duudlagiinTurul}
+              </Tag>
+            )}
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <div
+              className={`${
+                duudlaga?.tuluv === -1 ? "hidden" : "flex"
+              } space-x-2`}
+            >
+              {duudlaga?.tuluv === 0 && (
+                <Popconfirm
+                  title={t("Дуудлагыг дуусгах уу?")}
+                  okText={t("Тийм")}
+                  cancelText={t("Үгүй")}
+                  onConfirm={duudlagaDuusya}
+                >
+                  <div className="cursor-pointer rounded-full bg-blue-500 px-3 py-1 text-sm font-medium text-white hover:bg-blue-600">
+                    {t("Дуусгах")}
+                  </div>
+                </Popconfirm>
+              )}
+
+              {duudlaga?.tuluv !== 1 && (
+                <Popconfirm
+                  title={t("Дуудлагыг цуцлах уу?")}
+                  okText={t("Тийм")}
+                  cancelText={t("Үгүй")}
+                  onConfirm={duudlagaTsutslakh}
+                >
+                  <div className="cursor-pointer rounded-full bg-red-500 px-3 py-1 text-sm font-medium text-white hover:bg-red-600">
+                    {t("Цуцлах")}
+                  </div>
+                </Popconfirm>
+              )}
+            </div>
+
+            {duudlaga?.tuluv === 1 && (
+              <div className="rounded-2xl bg-blue-500 px-3 py-1 text-white">
+                {t("Дууссан")}
+              </div>
+            )}
+            {duudlaga?.tuluv === -1 && (
+              <div className="rounded-2xl bg-red-500 px-3 py-1 text-white">
+                {t("Цуцлагдсан")}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Admin
       khuudasniiNer="duudlaga"
-      title="Дуудлага үйлчилгээ"
+      title={t("Дуудлага үйлчилгээ")}
       tsonkhniiId={"68a8185ed4ae20c5e822a580"}
       className={"gap-5 p-2 pb-10 sm:p-6 md:pb-0"}
       onSearch={task.onSearch}
@@ -840,38 +1044,11 @@ function TaskManagementSystem({ token }) {
             onChange={setTurulFilter}
             size="middle"
           >
-            <Option value="Бүгд">Бүгд</Option>
-            <option value="Сантехник" />
-            <option value="Цахилгаан" />
-            <option value="Халаалтын систем" />
-            <option value="Агааржуулалт" />
-            <option value="Лифт засвар" />
-            <option value="Ус" />
-            <option value="Усны даралт" />
-            <option value="Усны чанар" />
-            <option value="Усны хоолой" />
-            <option value="Бохир ус" />
-            <option value="Ханын засвар" />
-            <option value="Шалны засвар" />
-            <option value="Тааз засвар" />
-            <option value="Цонх засвар" />
-            <option value="Хаалганы засвар" />
-            <option value="Галын аюулгүй байдал" />
-            <option value="Аюулгүй байдлын систем" />
-            <option value="Дуу чимээ" />
-            <option value="Гэрэлтүүлэг" />
-            <option value="Цэвэрлэгээ" />
-            <option value="Хогийн менежмент" />
-            <option value="Халдвар хамгаалалт" />
-            <option value="Интернет" />
-            <option value="Кабелийн ТВ" />
-            <option value="Утасны холбоо" />
-            <option value="Лифт" />
-            <option value="Паркинг" />
-            <option value="Хамгаалалт" />
-            <option value="Удирдлагын асуудал" />
-            <option value="Санхүүгийн асуудал" />
-            <option value="Бусад" />
+            {Object.keys(t("turul", { returnObjects: true })).map((key) => (
+              <Option key={key} value={key}>
+                {t(`turul.${key}`)}
+              </Option>
+            ))}
           </Select>
         </div>
 
@@ -933,224 +1110,19 @@ function TaskManagementSystem({ token }) {
                     {t("Шүүлтүүрийг өөрчилж үзнэ үү")}
                   </div>
                   <div className="mt-2 text-xs text-gray-400">
-                    Нийт: {task?.jagsaalt?.length || 0}, Шүүгдсэн:{" "}
+                    {t("Нийт")}: {task?.jagsaalt?.length || 0}, {t("Шүүгдсэн")}:{" "}
                     {filteredJagsaalt?.length || 0}
                   </div>
                 </div>
               </div>
             )}
 
-            {filteredJagsaalt?.map((mur) => {
-              const statusInfo = getStatusInfo(mur.tuluv);
-
-              return (
-                <div key={mur?._id}>
-                  {!!mur._id ? (
-                    <div
-                      className={`grid cursor-pointer grid-cols-4 items-center gap-4 rounded-md p-2 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 ${
-                        khariltsagch?._id === mur?._id
-                          ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500"
-                          : ""
-                      }`}
-                      onClick={() => {
-                        setDuudlaga(mur);
-                        setKhariltsagch(mur);
-                      }}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="image-fit relative h-10 w-10 flex-none rounded-full">
-                          <div
-                            className={`absolute -right-1 -top-1 h-4 w-4 rounded-full border-2 border-white bg-${statusInfo.color}-500`}
-                            title={statusInfo.text}
-                          />
-                          <img
-                            alt="profileZurag"
-                            className="rounded-full"
-                            src="/profile.svg"
-                          />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-medium">
-                            {mur.khariltsagchiinNer}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            {mur.khariltsagchiinRegister}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex justify-center">
-                        <Tag color={statusInfo.color} size="small">
-                          {t(statusInfo.text)}
-                        </Tag>
-                      </div>
-
-                      <div className="flex justify-center">
-                        {mur.duudlagiinTurul && (
-                          <Tag size="small" color="processing">
-                            {mur.duudlagiinTurul}
-                          </Tag>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col items-end">
-                        <span className="text-xs text-gray-500">
-                          {moment(mur.createdAt).format("MM-DD HH:mm")}
-                        </span>
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
-
-            <div className="mb-4 flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
-              <div className="flex items-center space-x-4 text-sm">
-                <div className="flex items-center space-x-1">
-                  <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                  <span>
-                    {filteredJagsaalt?.filter((user) => user.tuluv === 0)
-                      .length || 0}{" "}
-                    {t("Идэвхтэй")}
-                  </span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <div className="h-3 w-3 rounded-full bg-blue-500"></div>
-                  <span>
-                    {filteredJagsaalt?.filter((user) => user.tuluv === 1)
-                      .length || 0}{" "}
-                    {t("Дууссан")}
-                  </span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                  <span>
-                    {filteredJagsaalt?.filter((user) => user.tuluv === -1)
-                      .length || 0}{" "}
-                    {t("Цуцлагдсан")}
-                  </span>
-                </div>
-              </div>
-              <div className="text-sm font-medium">
-                {t("Нийт")}: {filteredJagsaalt?.length || 0}
-              </div>
-            </div>
+            {renderCallList()}
           </div>
         </div>
       </div>
 
-      {duudlaga ? (
-        <div
-          style={{ height: "calc(100vh - 8rem)" }}
-          className="relative col-span-12 flex h-full flex-col rounded-2xl bg-white p-1 dark:bg-gray-900 md:rounded-none md:rounded-r-2xl xl:col-span-7"
-        >
-          <div className="w-10/12 rounded-lg p-3 dark:bg-gray-900 sm:w-full">
-            <div className="grid grid-cols-2 gap-3 rounded-lg border p-4 dark:bg-gray-900">
-              <span className="col-span-1 text-xs text-gray-500">
-                Огноо: {moment(khariltsagch.createdAt).format("MM-DD HH:mm")}
-              </span>
-              <div className="">Нэр: {duudlaga.khariltsagchiinNer}</div>
-              {/* <div className="font-medium">
-                Гэрээ: {duudlaga.khariltsagchiinGereeniiDugaar}
-              </div> */}
-              <div className="font-medium">Гарчиг: {duudlaga.title}</div>
-              <div className="">Утас: {duudlaga.khariltsagchiinUtas}</div>
-              {/* <div className="font-medium">
-                Талбай: {duudlaga?.khariltsagchiinTalbainDugaar}
-              </div> */}
-            </div>
-          </div>
-
-          <div className="flex-1 overflow-y-auto px-4">
-            <div className="h-auto w-full break-words rounded-lg p-6 py-2">
-              {duudlaga?.message || duudlaga?.tailbar}
-            </div>
-
-            {duudlaga?.tailbar && (
-              <div className="mt-2 rounded-lg   p-2  ">
-                <div className="text-sm font-medium text-red-600">
-                  {t("Цуцалсан шалтгаан")}:
-                </div>
-                <div className="text-sm text-red-500">{duudlaga.tailbar}</div>
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-end justify-between p-4">
-            <div className="flex">
-              {duudlaga?.duudlagiinTurul && (
-                <Tag size="small" color="processing">
-                  Үйлчилгээ: {duudlaga.duudlagiinTurul}
-                </Tag>
-              )}
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <div
-                className={`${
-                  duudlaga?.tuluv === -1 ? "hidden" : "flex"
-                } space-x-2`}
-              >
-                {duudlaga?.tuluv === 0 && (
-                  <Popconfirm
-                    title="Дуудлагыг дуусгах уу?"
-                    okText={t("Тийм")}
-                    cancelText={t("Үгүй")}
-                    onConfirm={duudlagaDuusya}
-                  >
-                    <div className="cursor-pointer rounded-full bg-blue-500 px-3 py-1 text-sm font-medium text-white hover:bg-blue-600">
-                      {t("Дуусгах")}
-                    </div>
-                  </Popconfirm>
-                )}
-
-                {duudlaga?.tuluv !== 1 && (
-                  <Popconfirm
-                    title="Дуудлагыг цуцлах уу?"
-                    okText={t("Тийм")}
-                    cancelText={t("Үгүй")}
-                    onConfirm={duudlagaTsutslakh}
-                  >
-                    <div className="cursor-pointer rounded-full bg-red-500 px-3 py-1 text-sm font-medium text-white hover:bg-red-600">
-                      {t("Цуцлах")}
-                    </div>
-                  </Popconfirm>
-                )}
-              </div>
-
-              {duudlaga?.tuluv === 1 && (
-                <div className="rounded-2xl bg-blue-500 px-3 py-1 text-white">
-                  {t("Дууссан")}
-                </div>
-              )}
-              {duudlaga?.tuluv === -1 && (
-                <div className="rounded-2xl bg-red-500 px-3 py-1 text-white">
-                  {t("Цуцлагдсан")}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="relative hidden gap-5 rounded-2xl bg-green-50 p-1 dark:bg-gray-900 md:rounded-none md:rounded-r-2xl xl:col-span-7">
-          <div className="mx-auto text-center">
-            <div className="flex justify-center">
-              <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
-                <img alt="ProfileZurag" src="/profile.svg" />
-              </div>
-              <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
-                <img alt="ProfileZurag" src="/profileFemale.svg" />
-              </div>
-            </div>
-            <div className="mt-3">
-              <div className="font-medium">{t("Өдрийн мэнд")}</div>
-              <div className="mt-1 text-gray-600 dark:text-gray-300">
-                {t("Та дуудлага сонгож дэлгэрэнгүй мэдээлэл үзнэ үү.")}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {renderRightPanel()}
     </Admin>
   );
 }

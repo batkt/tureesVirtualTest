@@ -421,6 +421,7 @@ function GuilgeeExceleesOruulakhOlnoor(
                   position: "sticky",
                   padding: "1px 0",
                 },
+                
               }}
               scroll={{ y: 400 }}
               style={{ marginTop: "20px" }}
