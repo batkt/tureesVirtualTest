@@ -578,6 +578,14 @@ audio::-webkit-media-controls-volume-control-container {
   @apply h-[90vh] sm:h-auto;
 }
 
+.update-modal .ant-modal-body {
+  @apply rounded-xl  !important;
+  overflow: hidden !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .ant-modal-content {
   @apply dark:bg-gray-800 dark:text-gray-300 !important;
   @apply rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl !important;

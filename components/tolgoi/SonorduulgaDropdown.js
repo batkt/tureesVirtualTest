@@ -47,7 +47,6 @@ const hrefAvya = (mur, ajiltan) => {
 
 const SonorduulgaDropdown = React.memo(
   ({
-    ajiltan,
     handleMessageClick,
     expandedNotifications,
     handleExpansionToggle,
@@ -56,11 +55,8 @@ const SonorduulgaDropdown = React.memo(
     isLoadingMore,
     hasMore,
     isInitialLoading,
-    loadMore,
     isVisible,
     permanentlyDismissed = new Set(),
-    setPermanentlyDismissed,
-    onDontShowAgain,
     onClose,
   }) => {
     const { t } = useTranslation();
@@ -108,28 +104,6 @@ const SonorduulgaDropdown = React.memo(
       }
     }, [isLoadingMore, previousScrollTop]);
 
-    const handleScroll = useCallback(
-      _.debounce((e) => {
-        const { scrollTop, scrollHeight, clientHeight } = e.target;
-        const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-
-        setPreviousScrollTop(scrollTop);
-
-        if (distanceFromBottom <= 50 && !isLoadingMore && hasMore && loadMore) {
-          loadMore();
-        }
-      }, 200),
-      [isLoadingMore, hasMore, loadMore]
-    );
-
-    const handleCheckboxChange = useCallback((notificationId, checked) => {
-      setDontShowAgainStates((prev) => {
-        const newMap = new Map(prev);
-        newMap.set(notificationId, checked);
-        return newMap;
-      });
-    }, []);
-
     const markAsReadLocally = useCallback((notificationId) => {
       setLocalReadNotifications((prev) => new Set([...prev, notificationId]));
     }, []);
@@ -158,32 +132,6 @@ const SonorduulgaDropdown = React.memo(
         }
       },
       [handleExpansionToggle, markAsReadLocally, sonorduulgaKharlaa]
-    );
-
-    const handleSonorduulgaDropdownClose = useCallback(() => {
-      setSonorduulgaDropdownVisible(false);
-      setExpandedNotifications(null);
-    }, []);
-
-    const handleNotificationClick = useCallback(
-      async (e, mur) => {
-        e.preventDefault();
-
-        if (mur._id) {
-          markAsReadLocally(mur._id);
-        }
-
-        if (sonorduulgaKharlaa) {
-          try {
-            await sonorduulgaKharlaa(mur?.object?._id, mur?._id);
-          } catch (error) {
-            console.error("Failed to mark notification as read:", error);
-          }
-        }
-
-        window.location.href = e.target.href;
-      },
-      [sonorduulgaKharlaa, markAsReadLocally]
     );
 
     const optimizedSonorduulga = useMemo(() => {
@@ -359,7 +307,11 @@ const SonorduulgaDropdown = React.memo(
                             }
                             className="mb-3 max-h-[100px] cursor-pointer overflow-y-auto rounded p-2 text-sm leading-relaxed hover:bg-gray-100 dark:hover:bg-gray-600"
                           >
-                            <div dangerouslySetInnerHTML={{ __html: cleanedContent }} />
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: cleanedContent,
+                              }}
+                            />
                           </div>
                         </div>
                       </div>
@@ -372,7 +324,7 @@ const SonorduulgaDropdown = React.memo(
                 <div className="flex items-center justify-center p-4 transition-opacity duration-200">
                   <Spin size="small" />
                   <span className="ml-2 animate-pulse text-sm text-gray-500">
-                    {t("Ачааллаж байна")}...
+                    {t("Ачаалж байна")}...
                   </span>
                 </div>
               )}

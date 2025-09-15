@@ -5,8 +5,9 @@ import {
   MailOutlined,
   LeftOutlined,
   CloseOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
-import { Badge, Dropdown, Menu, Empty, Spin } from "antd";
+import { Badge, Dropdown, Menu, Empty, Spin, Input } from "antd";
 import Link from "next/link";
 import React, {
   useState,
@@ -74,6 +75,7 @@ function ProfileTovch({
   const [sonorduulgaDropdownVisible, setSonorduulgaDropdownVisible] =
     useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [mailSearchQuery, setMailSearchQuery] = useState("");
 
   const sonorduulgaKharlaa = useCallback(
     async (id, sonorduulgaId) => {
@@ -116,10 +118,68 @@ function ProfileTovch({
   const handleMailDropdownClose = useCallback(() => {
     setDropdownVisible(false);
     setExpandedNotifications(null);
+    setMailSearchQuery(""); // Reset search when closing
   }, []);
 
   const handleSonorduulgaDropdownClose = useCallback(() => {
     setSonorduulgaDropdownVisible(false);
+    setExpandedNotifications(null);
+  }, []);
+
+  // Filter notifications based on search query
+  const filteredNotifications = useMemo(() => {
+    if (!mailSearchQuery.trim()) {
+      return allNotifications;
+    }
+
+    const searchTerm = mailSearchQuery.toLowerCase().trim();
+
+    return allNotifications.filter((mur) => {
+      const {
+        turul,
+        message,
+        khariltsagchiinNer,
+        _id,
+        tailbar,
+        ajiltniiNer,
+        title,
+      } = mur?.object || {};
+
+      const displayTitle = (
+        mur?.title ||
+        title ||
+        khariltsagchiinNer ||
+        ajiltniiNer ||
+        ""
+      )
+        .replace(/<[^>]+>/g, "")
+        .toLowerCase();
+
+      const displayMessage = (
+        message ||
+        (title ? `${title}-ны өдөр` : null) ||
+        tailbar ||
+        mur?.message ||
+        ""
+      ).toLowerCase();
+
+      // Search in title, message, and notification type
+      return (
+        displayTitle.includes(searchTerm) ||
+        displayMessage.includes(searchTerm) ||
+        (turul && turul.toLowerCase().includes(searchTerm))
+      );
+    });
+  }, [allNotifications, mailSearchQuery]);
+
+  const handleSearchChange = useCallback((e) => {
+    setMailSearchQuery(e.target.value);
+    // Reset expanded notifications when searching
+    setExpandedNotifications(null);
+  }, []);
+
+  const clearSearch = useCallback(() => {
+    setMailSearchQuery("");
     setExpandedNotifications(null);
   }, []);
 
@@ -136,7 +196,7 @@ function ProfileTovch({
           }}
         >
           <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-400 to-green-500 p-3 text-white">
-            <div className="flex items-center justify-between">
+            <div className="mb-2 flex items-center justify-between">
               <span className="text-md font-medium">
                 {t("Шинэчлэлтийн мэдээ")}
               </span>
@@ -147,106 +207,160 @@ function ProfileTovch({
                 <CloseOutlined className="text-sm text-white" />
               </button>
             </div>
+            <div className="relative">
+              <Input
+                className="box text-sm"
+                placeholder={t("Хайх...")}
+                value={mailSearchQuery}
+                onChange={handleSearchChange}
+                prefix={<SearchOutlined className="text-gray-400" />}
+                suffix={
+                  mailSearchQuery && (
+                    <button
+                      onClick={clearSearch}
+                      className="flex h-4 w-4 items-center justify-center rounded-full hover:bg-gray-200"
+                    >
+                      <CloseOutlined className="text-xs text-gray-400" />
+                    </button>
+                  )
+                }
+                size="small"
+              />
+            </div>
           </div>
           <div className="no-transition-initial space-y-2 overflow-y-auto rounded-md bg-white p-3 dark:bg-gray-800">
-            {allNotifications.length > 0 ? (
-              allNotifications.map((mur, index) => {
-                const {
-                  turul,
-                  message,
-                  khariltsagchiinNer,
-                  _id,
-                  tailbar,
-                  ajiltniiNer,
-                  title,
-                  date,
-                } = mur?.object || {};
-                const isExpanded = expandedNotifications === index;
-                const displayTitle = (
-                  mur?.title ||
-                  title ||
-                  khariltsagchiinNer ||
-                  ajiltniiNer ||
-                  ""
-                ).replace(/<[^>]+>/g, "");
-                const displayMessage =
-                  message ||
-                  (title ? `${title}-ны өдөр` : null) ||
-                  tailbar ||
-                  mur?.message ||
-                  t("Мэдэгдлийн агуулга байхгүй байна.");
-                const displayDate = formatDate(mur.createdAt);
+            {filteredNotifications.length > 0 ? (
+              <>
+                {mailSearchQuery && (
+                  <div className="mb-2 px-2 text-xs text-gray-500 dark:text-gray-400">
+                    {t("{{count}} илэрц олдлоо", {
+                      count: filteredNotifications.length,
+                    })}
+                  </div>
+                )}
+                {filteredNotifications.map((mur, index) => {
+                  const {
+                    turul,
+                    message,
+                    khariltsagchiinNer,
+                    _id,
+                    tailbar,
+                    ajiltniiNer,
+                    title,
+                    date,
+                  } = mur?.object || {};
+                  const isExpanded = expandedNotifications === index;
+                  const displayTitle = (
+                    mur?.title ||
+                    title ||
+                    khariltsagchiinNer ||
+                    ajiltniiNer ||
+                    ""
+                  ).replace(/<[^>]+>/g, "");
+                  const displayMessage =
+                    message ||
+                    (title ? `${title}-ны өдөр` : null) ||
+                    tailbar ||
+                    mur?.message ||
+                    t("Мэдэгдлийн агуулга байхгүй байна.");
+                  const displayDate = formatDate(mur.createdAt);
 
-                const cleanedContent = displayMessage
-                  ?.replace(/<p>(<br\s*\/?>|\s|&nbsp;)+/gi, "<p>")
-                  ?.replace(/<p>(<br\s*\/?>|&nbsp;|\s)*<\/p>/gi, "")
-                  ?.replace(/^(\s|<br\s*\/?>)+/i, "");
+                  const cleanedContent = displayTitle
+                    ?.replace(/<p>(<br\s*\/?>|\s|&nbsp;)+/gi, "<p>")
+                    ?.replace(/<p>(<br\s*\/?>|&nbsp;|\s)*<\/p>/gi, "")
+                    ?.replace(/^(\s|<br\s*\/?>)+/i, "")
+                    ?.replace(/<mark[^>]*>/gi, "") // Remove any existing mark tags
+                    ?.replace(/<\/mark>/gi, ""); // Remove closing mark tags
 
-                return (
-                  <div
-                    key={`mail${index}`}
-                    className={`w-full overflow-hidden rounded-xl border-2 ${
-                      !mur.kharsanEsekh
-                        ? "border-green-300 bg-white dark:bg-gray-800 "
-                        : "border-gray-200 dark:border-gray-600"
-                    }`}
-                  >
+                  return (
                     <div
-                      onClick={() =>
-                        handleExpansionToggle(index, _id, mur?._id)
-                      }
-                      className="flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      key={`mail${index}`}
+                      className={`w-full overflow-hidden rounded-xl border-2 ${
+                        !mur.kharsanEsekh
+                          ? "border-green-300 bg-white dark:bg-gray-800 "
+                          : "border-gray-200 dark:border-gray-600"
+                      }`}
                     >
-                      <div className="flex flex-1 items-center space-x-3">
-                        <div className="relative">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
-                            <MailOutlined className="text-sm text-green-500 dark:text-green-300" />
+                      <div
+                        onClick={() =>
+                          handleExpansionToggle(index, _id, mur?._id)
+                        }
+                        className="flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      >
+                        <div className="flex flex-1 items-center space-x-3">
+                          <div className="relative">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+                              <MailOutlined className="text-sm text-green-500 dark:text-green-300" />
+                            </div>
+                            {!mur.kharsanEsekh && (
+                              <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-white bg-red-500"></div>
+                            )}
                           </div>
-                          {!mur.kharsanEsekh && (
-                            <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-white bg-red-500"></div>
-                          )}
+                          <div className="min-w-0 flex-1">
+                            <h3
+                              className="text-xs font-medium text-gray-800 dark:text-gray-200"
+                              dangerouslySetInnerHTML={{
+                                __html: cleanedContent,
+                              }}
+                            />
+                          </div>
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <h3 className="text-xs font-medium text-gray-800 dark:text-gray-200">
-                            {displayTitle}
-                          </h3>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="rounded-full px-2 py-1 text-xs text-white">
-                          <p className="truncate text-xs text-black dark:text-white">
-                            {displayDate}
-                          </p>
-                        </div>
-                        <LeftOutlined
-                          className={`text-gray-400 transition-transform dark:text-gray-500 ${
-                            isExpanded ? "-rotate-90" : "rotate-0"
-                          }`}
-                        />
-                      </div>
-                    </div>
-                    {isExpanded && (
-                      <div className="z-1000 relative px-4 pb-4 text-gray-600 dark:text-gray-300">
-                        <div className="border-t pt-3 dark:border-gray-600">
-                          <div
-                            dangerouslySetInnerHTML={{ __html: cleanedContent }}
-                            onClick={(e) =>
-                              handleMessageClick(
-                                displayTitle,
-                                displayMessage,
-                                mur.createdAt,
-                                e,
-                                _id
-                              )
-                            }
-                            className="mb-3 max-h-[100px] cursor-pointer overflow-y-auto rounded p-2 text-sm leading-relaxed hover:bg-gray-100 dark:hover:bg-gray-600"
+                        <div className="flex items-center space-x-2">
+                          <div className="rounded-full px-2 py-1 text-xs text-white">
+                            <p className="truncate text-xs text-black dark:text-white">
+                              {displayDate}
+                            </p>
+                          </div>
+                          <LeftOutlined
+                            className={`text-gray-400 transition-transform dark:text-gray-500 ${
+                              isExpanded ? "-rotate-90" : "rotate-0"
+                            }`}
                           />
                         </div>
                       </div>
-                    )}
-                  </div>
-                );
-              })
+                      {isExpanded && (
+                        <div className="z-1000 relative px-4 pb-4 text-gray-600 dark:text-gray-300">
+                          <div className="border-t pt-3 dark:border-gray-600">
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: mailSearchQuery
+                                  ? highlightText(
+                                      cleanedContent,
+                                      mailSearchQuery
+                                    )
+                                  : cleanedContent,
+                              }}
+                              onClick={(e) =>
+                                handleMessageClick(
+                                  displayTitle,
+                                  displayMessage,
+                                  mur.createdAt,
+                                  e,
+                                  _id
+                                )
+                              }
+                              className="mb-3 max-h-[100px] cursor-pointer overflow-y-auto rounded p-2 text-sm leading-relaxed hover:bg-gray-100 dark:hover:bg-gray-600"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </>
+            ) : mailSearchQuery ? (
+              <div className="flex h-full items-center justify-center">
+                <Empty
+                  description={
+                    <span className="text-gray-500 dark:text-gray-400">
+                      {t("«{{query}}» хайлтаар илэрц олдсонгүй", {
+                        query: mailSearchQuery,
+                      })}
+                    </span>
+                  }
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              </div>
             ) : (
               <div className="flex h-full items-center justify-center">
                 <Empty description={t("Хоосон байна")} />
@@ -257,13 +371,16 @@ function ProfileTovch({
       </Suspense>
     ),
     [
-      allNotifications,
+      filteredNotifications,
       expandedNotifications,
+      mailSearchQuery,
       t,
       handleMessageClick,
       handleExpansionToggle,
       formatDate,
       handleMailDropdownClose,
+      handleSearchChange,
+      clearSearch,
     ]
   );
 
@@ -360,6 +477,7 @@ function ProfileTovch({
             setDropdownVisible(visible);
             if (!visible) {
               setExpandedNotifications(null);
+              setMailSearchQuery(""); // Reset search when closing
             }
           }}
           overlayClassName="mail-dropdown-overlay"
