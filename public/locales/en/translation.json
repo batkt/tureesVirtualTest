@@ -193,6 +193,7 @@
   "AnyDesk татах": "Download AnyDesk",
   "Оруулах": "Upload",
   "Тусламж": "Helper",
+  "Киоск": "Kiosk",
 
   "Албан тушаал": "Position",
   "Албан тушаал бүртгэнэ үү!": "Enter a position!",
@@ -731,6 +732,9 @@
   "Та харилцагч сонгож дэлгэрэнгүй мэдээлэл үзнэ үү.": "Choose costumer to veiw more",
   "Барьцааны үлдэгдэл": "Remaining claim",
   "Барьцааны төлөлт": "Claim payment",
+  "Талбарын нэр": "Field name",
+  "Өмнөх утга": "Previous value",
+  "Шинэ утга": "New value",
 
   "Эхлээгүй": "Not started",
   "Хариулт": "Answer",

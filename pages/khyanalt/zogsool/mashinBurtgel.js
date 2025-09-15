@@ -846,7 +846,7 @@ function mashinBurtgel({ token }) {
         if (allSuccessful) {
           mashinMutate();
           mashinToololtMutate();
-          message.success(`${mashinIds.length} машин амжилттай устгагдлаа`);
+          message.success("Машин амжилттай устгагдлаа");
         } else {
           message.error("Зарим машин устгаж чадсангүй");
         }
