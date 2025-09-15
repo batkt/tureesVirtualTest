@@ -319,10 +319,10 @@ function BarilgaBurtgel({ token }) {
                           </div>
                         </div>
                       </div>
-                      <div className="mt-6 text-3xl font-bold leading-8 dark:text-gray-200">
+                      <div className="mt-6 text-2xl font-bold leading-8 dark:text-gray-200 sm:text-xl">
                         {mur.too}
                       </div>
-                      <div className="mt-1 text-base text-gray-600 dark:text-gray-200">
+                      <div className="mt-1 text-base text-gray-600 dark:text-gray-200 sm:text-sm">
                         {t(mur.utga)}
                       </div>
                     </div>
@@ -500,7 +500,7 @@ function BarilgaBurtgel({ token }) {
                     height={50}
                   />
                 </div>
-                <div className="flex  h-full items-center justify-between ">
+                <div className="flex  h-full items-center justify-between">
                   <div className="space-y-4">
                     {avlagiinChartSalbaraarAvya.data?.options?.labels.map(
                       (a, index) => (
