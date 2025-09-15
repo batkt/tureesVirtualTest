@@ -254,6 +254,7 @@ function Zogsool({
     modal({
       top: 0,
       width: 1400,
+
       title: t("Зогсоол бүртгэх"),
       icon: <PlusOutlined />,
       content: (

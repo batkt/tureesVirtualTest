@@ -146,9 +146,9 @@ function ZogsoolBurtgekh(
     <Form form={form} autoComplete="off">
       {!!data && <Form.Item name="_id" hidden></Form.Item>}
       <Form.Item name="barilgiinId" hidden></Form.Item>
-      <div className="grid h-[95vh] grid-cols-12 gap-6">
+      <div className="grid h-[65vh] grid-cols-12 gap-6">
         <div className="col-span-4">
-          <div className="grid h-[95vh] grid-cols-4 gap-5 overflow-y-auto">
+          <div className="grid h-[65vh] grid-cols-4 gap-5 overflow-y-auto">
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
                 {t("Зогсоолын нэр")}
@@ -535,7 +535,7 @@ function ZogsoolBurtgekh(
             <div className="text-xs text-gray-400"> </div>
           </div>
         </div>
-        <div className="col-span-4">
+        <div className="col-span-4 h-[80vh]">
           <Form.List name="tulburuud">
             {(fields, { add, remove }) => (
               <>
@@ -730,7 +730,7 @@ function Khaalga({
           onClick={() => remove(name)}
           className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
         >
-          <CloseCircleOutlined />
+          <CloseCircleOutlined className="dark:text-gray-300" />
         </div>
         <Form.Item
           label="Нэр:"
@@ -784,11 +784,11 @@ function Khaalga({
                   />
                 </Form.Item>
                 <SettingOutlined
-                  className="ml-2 mt-2"
+                  className="ml-2 mt-2 dark:text-gray-300"
                   onClick={() => cameraTokhirgooOruulyaIp(talbar, talbar.name)}
                 />
                 <MinusCircleOutlined
-                  className="ml-2 mt-2"
+                  className="ml-2 mt-2 dark:text-gray-300"
                   onClick={() => remove(talbar.name)}
                 />
               </div>
@@ -815,7 +815,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
           onClick={() => remove(name)}
           className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
         >
-          <CloseCircleOutlined />
+          <CloseCircleOutlined className="dark:text-gray-300" />
         </div>
         <Form.Item
           label="Цаг:"
@@ -881,7 +881,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
                     />
                   </Form.Item>
                   <MinusCircleOutlined
-                    className="mb-2.5 ml-2"
+                    className="mb-2.5 ml-2 dark:text-gray-300"
                     onClick={() => remove(mur.name)}
                   />
                 </div>
