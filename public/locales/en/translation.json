@@ -53,7 +53,8 @@
   "Дууссан ажил": "Finished work",
   "Идэвхтэй ажил": "Active work",
   "Цуцлагдсан": "Cancelled",
-  "Цуцлах": "Cancel",
+  "Цуцлах": "Confirm",
+  "Цуцалсан шалтгаан":"Reason for cancellation",
   "Нэмэх": "Add",
   "Лого": "Logo",
   "Нэр": "Name",
@@ -724,6 +725,7 @@
   "Түрээс эсэх":"Rent or not",
   "Авлагын үлдэгдэл":"Remaining loss",
   "Зассан түүх":"Corrected history",
+  "Та харилцагч сонгож дэлгэрэнгүй мэдээлэл үзнэ үү.":"Choose costumer to veiw more",
   "Барьцааны үлдэгдэл":"Remaining claim",
   "Барьцааны төлөлт":"Claim payment",
   
