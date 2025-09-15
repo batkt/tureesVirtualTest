@@ -784,7 +784,7 @@ function tulburTootsoo({ token }) {
             medeelel.signature2 = renderToString(
               <span style={{ position: "absolute" }}>
                 <img
-                  src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                  src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
                   style={{
                     width: 330,
                     height: 215,
@@ -2280,7 +2280,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature2 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+              src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
               style={{
                 width: 280,
                 height: 155,
