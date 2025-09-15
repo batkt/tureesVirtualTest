@@ -35,6 +35,7 @@ function KhuviinMedeelel({
   const [form] = Form.useForm();
   const [tamga, setTamga] = useState();
   const [gariinUseg, setGariinUseg] = useState();
+  const [gariinUseg1, setGariinUseg1] = useState();
 
   const barilga = useMemo(
     () => baiguullaga.barilguud.find((a) => a._id === barilgiinId),
@@ -80,6 +81,8 @@ function KhuviinMedeelel({
         setTamga(v.file.response);
       } else if (turul === "gariinUseg") {
         setGariinUseg(v.file.response);
+      } else if (turul === "gariinUseg1") {
+        setGariinUseg1(v.file.response);
       }
     }
   };
@@ -131,6 +134,7 @@ function KhuviinMedeelel({
   function khadgalakh() {
     const index = baiguullaga.barilguud.findIndex((a) => a._id === barilgiinId);
     gariinUseg && (baiguullaga.barilguud[index].gariinUseg = gariinUseg);
+    gariinUseg1 && (baiguullaga.barilguud[index].gariinUseg1 = gariinUseg1);
     tamga && (baiguullaga.barilguud[index].tamga = tamga);
     if (!!barilgaTokhirgoo) {
       baiguullaga.barilguud[index].tokhirgoo.jilBurTalbaiTulburNemekhEsekh =
@@ -156,6 +160,11 @@ function KhuviinMedeelel({
           uilchilgee(token).post("/confirmFile", {
             filename: gariinUseg,
             path: "gariinUseg",
+          });
+        gariinUseg1 &&
+          uilchilgee(token).post("/confirmFile", {
+            filename: gariinUseg1,
+            path: "gariinUseg1",
           });
         notification.success({ message: t("Амжилттай хадгаллаа") });
         baiguullagaMutate();
@@ -704,7 +713,7 @@ function KhuviinMedeelel({
                       <ImgCrop modalTitle="Зураг засах" rotationSlider>
                         <Upload
                           showUploadList={false}
-                          multiple={false}
+                          multiple={true}
                           name="file"
                           action={`${url}/upload`}
                           method="POST"
@@ -722,6 +731,7 @@ function KhuviinMedeelel({
                       {!!gariinUseg || !!barilga?.gariinUseg ? (
                         <Button
                           danger
+                          multiple={true}
                           icon={<DeleteOutlined />}
                           type="button"
                           onClick={() => setGariinUseg(undefined)}
@@ -746,6 +756,65 @@ function KhuviinMedeelel({
                       barilga?.gariinUseg && (
                         <img
                           src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                          alt="image"
+                          style={{
+                            height: "50px",
+                            width: "115px",
+                            objectFit: "contain",
+                          }}
+                        />
+                      )
+                    )}
+                  </div>
+                  <br></br>
+                  <Form.Item name="turul">
+                    <div className="flex flex-row items-center gap-2">
+                      <ImgCrop modalTitle="Зураг засах" rotationSlider>
+                        <Upload
+                          showUploadList={false}
+                          multiple={true}
+                          name="file"
+                          action={`${url}/upload`}
+                          method="POST"
+                          onChange={(v) => zuragKhadgalakh(v, "gariinUseg1")}
+                        >
+                          <Button
+                            className="h-9 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+                            icon={<UploadOutlined />}
+                          >
+                            {t("Гарын үсэг зураг оруулах")}
+                          </Button>
+                        </Upload>
+                      </ImgCrop>
+
+                      {!!gariinUseg1 || !!barilga?.gariinUseg1 ? (
+                        <Button
+                          danger
+                          multiple={true}
+                          icon={<DeleteOutlined />}
+                          type="button"
+                          onClick={() => setGariinUseg(undefined)}
+                          className="h-9"
+                        />
+                      ) : null}
+                    </div>
+                  </Form.Item>
+
+                  <div className="flex h-[54px] w-[115px] items-center justify-center border">
+                    {!!gariinUseg1 ? (
+                      <img
+                        src={`${url}/file?path=tmp/${gariinUseg1}`}
+                        alt="image"
+                        style={{
+                          height: "50px",
+                          width: "115px",
+                          objectFit: "contain",
+                        }}
+                      />
+                    ) : (
+                      barilga?.gariinUseg1 && (
+                        <img
+                          src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
                           alt="image"
                           style={{
                             height: "50px",
