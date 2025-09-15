@@ -1369,8 +1369,8 @@ function togloom1() {
                           disabled={data?.tuluv === 3}
                           title={
                             <div>
-                              Та үйлчлүүлэгчийн цаг сунгах гэж байна
-                              <div>үргэлжлүүлэх бол тийм товчийг дарна уу</div>
+                              {t("Та үйлчлүүлэгчийн цаг сунгах гэж байна")}
+                              <div>{t("үргэлжлүүлэх бол тийм товчийг дарна уу")}</div>
                             </div>
                           }
                           okText={t("Тийм")}
@@ -1388,7 +1388,7 @@ function togloom1() {
                         difference > 0 &&
                         data?.tulburTulsunEsekh !== true && (
                           <Popconfirm
-                            title={`Та цуцлахдаа итгэлтэй байна уу?`}
+                            title={t(`Та цуцлахдаа итгэлтэй байна уу?`)}
                             okText={t("Тийм")}
                             cancelText={t("Үгүй")}
                             onConfirm={() => {
@@ -1405,7 +1405,7 @@ function togloom1() {
                       {data.tulburTulsunEsekh === true && (
                         <Popconfirm
                           disabled={data?.tuluv === 3}
-                          title={`Та үйлчлүүлэгчийг гаргахдаа итгэлтэй байна уу?`}
+                          title={t(`Та үйлчлүүлэгчийг гаргахдаа итгэлтэй байна уу?`)}
                           okText={t("Тийм")}
                           cancelText={t("Үгүй")}
                           onConfirm={() =>
