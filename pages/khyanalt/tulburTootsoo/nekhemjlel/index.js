@@ -744,10 +744,10 @@ function tulburTootsoo({ token }) {
               medeelel.khuviinTamga = renderToString(
                 <span style={{ position: "absolute", zIndex: 1 }}>
                   <img
-                    src={"/Tamga1.png"}
+                    src={`${url}/file?path=tamga/${barilga.tamga}`}
                     style={{
-                      width: 250,
-                      height: 150,
+                      width: 150,
+                      height: 120,
                       transform: "translate(-10%, -50%)",
                       opacity: 0.65,
                     }}
@@ -2215,8 +2215,8 @@ function tulburTootsoo({ token }) {
               <img
                 src={`${url}/file?path=tamga/${barilga.tamga}`}
                 style={{
-                  width: 250,
-                  height: 150,
+                  width: 200,
+                  height: 110,
                   transform: "translate(-30%, -50%)",
                   opacity: 0.65,
                 }}
@@ -2270,9 +2270,9 @@ function tulburTootsoo({ token }) {
             <img
               src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
               style={{
-                width: 280,
-                height: "155",
-                transform: "translate(-40%, -50%)",
+                width: 140,
+                height: "100",
+                transform: "translate(-40%, -40%)",
               }}
             />
           </span>
@@ -2282,9 +2282,9 @@ function tulburTootsoo({ token }) {
             <img
               src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
               style={{
-                width: 280,
-                height: 155,
-                transform: "translate(-28%, -44%)",
+                width: 140,
+                height: 100,
+                transform: "translate(-28%, -50%)",
               }}
             />
           </span>
@@ -2954,18 +2954,12 @@ function tulburTootsoo({ token }) {
         );
 
         for (const [key, value] of Object.entries(nekhemjlekh)) {
-          const safeValue =
-            value === undefined || value === null || isNaN(value)
-              ? ""
-              : String(value);
-
-          // <key>
-          text = text?.replace(new RegExp(`<${key}>`, "g"), safeValue);
-
-          // &lt;key&gt;
-          text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), safeValue);
+          if (value !== undefined && value !== null) {
+            text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+          } else {
+            text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), "");
+          }
         }
-
         if (!!nekhemjlekh.mail) {
           mailuud.push({
             gereeniiDugaar: nekhemjlekh.gereeniiDugaar,
