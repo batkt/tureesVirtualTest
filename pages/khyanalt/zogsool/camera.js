@@ -501,27 +501,23 @@ function camera({ token }) {
     isValidating,
   } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
   useEffect(() => {
-    if (
-      baiguullaga?.tokhirgoo?.gadaaStickerAshiglakhEsekh ||
-      parkingJagsaalt?.[0]?.gadaaStickerAshiglakhEsekh
-    ) {
-      // gadaa sticker ashiglakh esekh
-      socket().on(`qpayMobileSdk${baiguullaga?._id}`, (res) => {
-        let dataObject = res;
+    if (songogdzonZogsool?.gadaaStickerAshiglakhEsekh) {
+      socket().on(`qpayMobileSdk${baiguullaga?._id}${camerVal[1]}`, (res) => {
         if (
-          dataObject &&
-          dataObject?.khaalgaTurul === "Гарах" &&
-          !!dataObject?.mashiniiDugaar
+          res &&
+          res?.khaalgaTurul === "Гарах" &&
+          !!res?.mashiniiDugaar &&
+          res?.cameraIP === camerVal[1]
         ) {
           khaalgaNeey(res.cameraIP);
           onRefresh();
         }
       });
       return () => {
-        socket().off(`qpayMobileSdk${baiguullaga?._id}`);
+        socket().off(`qpayMobileSdk${baiguullaga?._id}${camerVal[1]}`);
       };
     }
-  }, [baiguullaga, parkingJagsaalt?.[0]?.gadaaStickerAshiglakhEsekh]);
+  }, [baiguullaga, songogdzonZogsool, camerVal]);
 
   useEffect(() => {
     if (

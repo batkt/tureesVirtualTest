@@ -130,19 +130,6 @@ const KioskMobile = ({
     });
   }
 
-  const zogsoolMobileSdk = (data) => {
-    const yavuulakhData = {
-      baiguullagiinId: baiguullagiinId,
-      barilgiinId: barilgiinId,
-      mashiniiDugaar: data.plate_number,
-      cameraIP: data.garsanCameraIP,
-    };
-    uilchilgee(token)
-      .post("/zogsoolMobileSdk", yavuulakhData)
-      .then((res) => {})
-      .catch(aldaaBarigch);
-  };
-
   useEffect(() => {
     if (qpayObject && qpayObject.tulsunEsekh) {
       eBarimtTsonkhruuShiljye();
@@ -153,21 +140,6 @@ const KioskMobile = ({
         );
     }
   }, [qpayObject]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setCountdown((prev) => prev - 1);
-      if (
-        qpayObject?.tulsunEsekh &&
-        baiguullagiinId === "6715ef2ca5cefb3e54505428" &&
-        !!songogdsonData?.garsanCameraIP &&
-        !!songogdsonData.plate_number
-      ) {
-        // jiguur grand
-        zogsoolMobileSdk(songogdsonData);
-      }
-    }, 2000);
-  }, [countdown, qpayObject]);
 
   useEffect(() => {
     setCustomerTin();
