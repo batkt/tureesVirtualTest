@@ -710,7 +710,15 @@ function KhuviinMedeelel({
                 <div className="mt-3 flex w-full flex-col">
                   <Form.Item name="turul">
                     <div className="flex flex-row items-center gap-2">
-                      <ImgCrop modalTitle="Зураг засах" rotationSlider>
+                      <ImgCrop
+                        modalTitle="Зураг засах"
+                        rotationSlider
+                        quality={1}
+                        fillColor="transparent"
+                        modalProps={{
+                          maskClosable: false,
+                        }}
+                      >
                         <Upload
                           showUploadList={false}
                           multiple={true}
@@ -718,6 +726,7 @@ function KhuviinMedeelel({
                           action={`${url}/upload`}
                           method="POST"
                           onChange={(v) => zuragKhadgalakh(v, "gariinUseg")}
+                          accept="image/png,image/gif"
                         >
                           <Button
                             className="h-9 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
@@ -769,7 +778,15 @@ function KhuviinMedeelel({
                   <br></br>
                   <Form.Item name="turul">
                     <div className="flex flex-row items-center gap-2">
-                      <ImgCrop modalTitle="Зураг засах" rotationSlider>
+                      <ImgCrop
+                        modalTitle="Зураг засах"
+                        rotationSlider
+                        quality={1}
+                        fillColor="transparent"
+                        modalProps={{
+                          maskClosable: false,
+                        }}
+                      >
                         <Upload
                           showUploadList={false}
                           multiple={true}
@@ -777,6 +794,7 @@ function KhuviinMedeelel({
                           action={`${url}/upload`}
                           method="POST"
                           onChange={(v) => zuragKhadgalakh(v, "gariinUseg1")}
+                          accept="image/png,image/gif"
                         >
                           <Button
                             className="h-9 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"

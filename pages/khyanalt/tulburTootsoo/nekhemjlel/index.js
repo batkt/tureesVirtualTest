@@ -786,8 +786,8 @@ function tulburTootsoo({ token }) {
                 <img
                   src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
                   style={{
-                    width: 330,
-                    height: 215,
+                    width: 180,
+                    height: 105,
                     transform: "translate(-50%, -44%)",
                   }}
                 />
