@@ -6,20 +6,20 @@
  * @returns {Array} Array of URL objects with url, start, and end positions
  */
 export const extractUrls = (text) => {
-  if (!text || typeof text !== 'string') return [];
-  
+  if (!text || typeof text !== "string") return [];
+
   const urlRegex = /(https?:\/\/[^\s<>"{}|\\^`[\]]+)/gi;
   const urls = [];
   let match;
-  
+
   while ((match = urlRegex.exec(text)) !== null) {
     urls.push({
       url: match[0],
       start: match.index,
-      end: match.index + match[0].length
+      end: match.index + match[0].length,
     });
   }
-  
+
   return urls;
 };
 
@@ -44,31 +44,28 @@ export const isValidUrl = (string) => {
  * @returns {Array} Array of text segments and link preview components
  */
 export const replaceUrlsWithPreviews = (text, renderLinkPreview) => {
-  if (!text || typeof text !== 'string') return [text];
-  
+  if (!text || typeof text !== "string") return [text];
+
   const urls = extractUrls(text);
   if (urls.length === 0) return [text];
-  
+
   const segments = [];
   let lastIndex = 0;
-  
+
   urls.forEach((urlObj, index) => {
-    // Add text before URL
     if (urlObj.start > lastIndex) {
       segments.push(text.slice(lastIndex, urlObj.start));
     }
-    
-    // Add link preview component
+
     segments.push(renderLinkPreview(urlObj.url, index));
-    
+
     lastIndex = urlObj.end;
   });
-  
-  // Add remaining text after last URL
+
   if (lastIndex < text.length) {
     segments.push(text.slice(lastIndex));
   }
-  
+
   return segments;
 };
 
@@ -93,9 +90,9 @@ export const getDomainFromUrl = (url) => {
  */
 export const truncateUrl = (url, maxLength = 50) => {
   if (!url || url.length <= maxLength) return url;
-  
+
   const domain = getDomainFromUrl(url);
   if (domain.length >= maxLength) return domain;
-  
+
   return `${domain}...`;
 };
