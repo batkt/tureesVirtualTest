@@ -771,7 +771,7 @@ function tulburTootsoo({ token }) {
             medeelel.signature1 = renderToString(
               <span style={{ position: "absolute" }}>
                 <img
-                  src={"/fcSig2.png"}
+                  src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
                   style={{
                     width: 180,
                     height: 105,
@@ -784,7 +784,7 @@ function tulburTootsoo({ token }) {
             medeelel.signature2 = renderToString(
               <span style={{ position: "absolute" }}>
                 <img
-                  src={"/gariinUseg2.png"}
+                  src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
                   style={{
                     width: 330,
                     height: 215,
@@ -2199,7 +2199,7 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.khuviinTamga = renderToString(
             <span style={{ position: "absolute", zIndex: 1 }}>
               <img
-                src={"/khuviinTamga.png"}
+                src={`${url}/file?path=tamga/${barilga.tamga}`}
                 style={{
                   width: 75,
                   height: 40,
@@ -2213,7 +2213,7 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.khuviinTamga = renderToString(
             <span style={{ position: "absolute", zIndex: 1 }}>
               <img
-                src={"https://turees.zevtabs.mn/Tamga1.png"}
+                src={`${url}/file?path=tamga/${barilga.tamga}`}
                 style={{
                   width: 250,
                   height: 150,
@@ -2268,7 +2268,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature1 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={"https://turees.zevtabs.mn/fcSig2.png"}
+              src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
               style={{
                 width: 280,
                 height: "155",
@@ -2280,7 +2280,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature2 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={"https://turees.zevtabs.mn/gariinUseg2.png"}
+              src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
               style={{
                 width: 280,
                 height: 155,
