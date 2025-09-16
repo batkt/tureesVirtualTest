@@ -504,7 +504,7 @@ function ProfileTovch({
             <Suspense fallback={<LoadingSpinner />}>
               <SonorduulgaDropdown
                 ajiltan={ajiltan}
-                handleMessageClick={handleMessageClick}
+                handleMessageClick={fetchNotifications}
                 expandedNotifications={expandedNotifications}
                 handleExpansionToggle={handleExpansionToggle}
                 sonorduulgaKharlaa={sonorduulgaKharlaa}

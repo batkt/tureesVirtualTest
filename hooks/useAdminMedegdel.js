@@ -47,16 +47,13 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
     [ajiltanId]
   );
 
-  // Improved deduplication logic
   const allNotifications = useMemo(() => {
-    // Combine all sources
     const allSources = [
       ...(jagsaalt || []),
       ...(sonorduulga?.jagsaalt || []),
       ...realTimeNotifications,
     ];
 
-    // Filter for admin messages and clean up
     const adminNotifications = allSources
       .filter((mur) => mur?.turul === "medegdelAdmin" && mur?._id)
       .map((mur) => ({
@@ -64,7 +61,6 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
         object: { ...mur.object, zurag: undefined },
       }));
 
-    // More robust deduplication using Map to preserve latest version
     const uniqueNotifications = new Map();
 
     adminNotifications.forEach((notification) => {
@@ -72,7 +68,6 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
       if (!uniqueNotifications.has(id)) {
         uniqueNotifications.set(id, notification);
       } else {
-        // Keep the most recent version based on createdAt or updatedAt
         const existing = uniqueNotifications.get(id);
         const existingDate = new Date(
           existing.updatedAt || existing.createdAt || 0
@@ -87,7 +82,6 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
       }
     });
 
-    // Convert back to array and sort by creation date (newest first)
     return Array.from(uniqueNotifications.values()).sort(
       (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
     );
@@ -97,7 +91,6 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
     return allNotifications.filter((mur) => !mur.kharsanEsekh).length;
   }, [allNotifications]);
 
-  // Clear real-time notifications when main data updates to prevent duplicates
   useEffect(() => {
     if (
       (jagsaalt?.length > 0 || sonorduulga?.jagsaalt?.length > 0) &&
@@ -132,7 +125,6 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
           (prev) => new Map(prev.set(adminMedegdelId, "synced"))
         );
 
-        // Single mutate call with delay
         setTimeout(() => {
           sonorduulgaMutate();
         }, 300);
@@ -332,14 +324,12 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
 
       requestAnimationFrame(() => {
         setRealTimeNotifications((prev) => {
-          // Get all existing IDs from all sources
           const allExistingIds = new Set([
             ...prev.map((n) => n._id),
             ...(jagsaalt || []).map((n) => n._id),
             ...(sonorduulga?.jagsaalt || []).map((n) => n._id),
           ]);
 
-          // Only add truly new notifications
           const newUnique = validNotifications
             .map((notif) => ({
               ...notif,
@@ -349,18 +339,15 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
 
           if (newUnique.length === 0) return prev;
 
-          // Add to beginning and limit to 50
           return [...newUnique, ...prev].slice(0, 50);
         });
 
-        // Show modal for the latest new notification
         const latestNotification = validNotifications[0];
         const latestNotifId =
           latestNotification._id ||
           latestNotification.id ||
           "default-notification";
 
-        // Check if this is truly a new notification
         const allExistingIds = new Set([
           ...(jagsaalt || []).map((n) => n._id),
           ...(sonorduulga?.jagsaalt || []).map((n) => n._id),
@@ -406,7 +393,6 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
           });
         }
 
-        // Refresh data after handling real-time notification
         setTimeout(() => {
           sonorduulgaMutate();
         }, 1000);
