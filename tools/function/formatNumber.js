@@ -7,6 +7,10 @@ function formatNumber(num, fixed = 2) {
   }
 
   const fixedNum = parsed.toFixed(fixed);
+
+  if (Number(fixedNum) === 0) {
+    return (0).toFixed(fixed);
+  }
   const [intPart, decimalPart] = fixedNum.split(".");
 
   const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
