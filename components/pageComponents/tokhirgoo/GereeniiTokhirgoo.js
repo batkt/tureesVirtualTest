@@ -7,6 +7,7 @@ import {
   notification,
   Switch,
   Upload,
+  Modal,
 } from "antd";
 import ImgCrop from "antd-img-crop";
 import { useRouter } from "next/router";
@@ -36,6 +37,10 @@ function KhuviinMedeelel({
   const [tamga, setTamga] = useState();
   const [gariinUseg, setGariinUseg] = useState();
   const [gariinUseg1, setGariinUseg1] = useState();
+
+  const [deleteTamga, setDeleteTamga] = useState(false);
+  const [deleteGariinUseg, setDeleteGariinUseg] = useState(false);
+  const [deleteGariinUseg1, setDeleteGariinUseg1] = useState(false);
 
   const barilga = useMemo(
     () => baiguullaga.barilguud.find((a) => a._id === barilgiinId),
@@ -79,12 +84,52 @@ function KhuviinMedeelel({
     if (v.file.status === "done") {
       if (turul === "tamga") {
         setTamga(v.file.response);
+        setDeleteTamga(false);
       } else if (turul === "gariinUseg") {
         setGariinUseg(v.file.response);
+        setDeleteGariinUseg(false);
       } else if (turul === "gariinUseg1") {
         setGariinUseg1(v.file.response);
+        setDeleteGariinUseg1(false);
       }
     }
+  };
+  const { confirm } = Modal;
+  const handleTamgaDelete = () => {
+    confirm({
+      title: t("Устгах уу?"),
+      okText: t("Тийм"),
+      cancelText: t("Үгүй"),
+      onOk() {
+        setTamga(undefined);
+        setDeleteTamga(true);
+      },
+      onCancel() {},
+    });
+  };
+
+  const handleGariinUsegDelete = () => {
+    confirm({
+      title: t("Устгах уу?"),
+      okText: t("Тийм"),
+      cancelText: t("Үгүй"),
+      onOk() {
+        setGariinUseg(undefined);
+        setDeleteGariinUseg(true);
+      },
+    });
+  };
+
+  const handleGariinUseg1Delete = () => {
+    confirm({
+      title: t("Устгах уу?"),
+      okText: t("Тийм"),
+      cancelText: t("Үгүй"),
+      onOk() {
+        setGariinUseg1(undefined);
+        setDeleteGariinUseg1(true);
+      },
+    });
   };
 
   const gereeTokhirgooKhadgalya = () => {
@@ -133,9 +178,25 @@ function KhuviinMedeelel({
 
   function khadgalakh() {
     const index = baiguullaga.barilguud.findIndex((a) => a._id === barilgiinId);
-    gariinUseg && (baiguullaga.barilguud[index].gariinUseg = gariinUseg);
-    gariinUseg1 && (baiguullaga.barilguud[index].gariinUseg1 = gariinUseg1);
-    tamga && (baiguullaga.barilguud[index].tamga = tamga);
+
+    if (deleteTamga) {
+      baiguullaga.barilguud[index].tamga = null;
+    } else if (tamga) {
+      baiguullaga.barilguud[index].tamga = tamga;
+    }
+
+    if (deleteGariinUseg) {
+      baiguullaga.barilguud[index].gariinUseg = null;
+    } else if (gariinUseg) {
+      baiguullaga.barilguud[index].gariinUseg = gariinUseg;
+    }
+
+    if (deleteGariinUseg1) {
+      baiguullaga.barilguud[index].gariinUseg1 = null;
+    } else if (gariinUseg1) {
+      baiguullaga.barilguud[index].gariinUseg1 = gariinUseg1;
+    }
+
     if (!!barilgaTokhirgoo) {
       baiguullaga.barilguud[index].tokhirgoo.jilBurTalbaiTulburNemekhEsekh =
         barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh;
@@ -151,27 +212,36 @@ function KhuviinMedeelel({
     _.set(baiguullaga, `barilguud.${index}`, baiguullaga.barilguud[index]);
     updateMethod("baiguullaga", token, baiguullaga).then(({ data }) => {
       if (data === "Amjilttai") {
-        tamga &&
+        if (tamga && !deleteTamga) {
           uilchilgee(token).post("/confirmFile", {
             filename: tamga,
             path: "tamga",
           });
-        gariinUseg &&
+        }
+        if (gariinUseg && !deleteGariinUseg) {
           uilchilgee(token).post("/confirmFile", {
             filename: gariinUseg,
             path: "gariinUseg",
           });
-        gariinUseg1 &&
+        }
+        if (gariinUseg1 && !deleteGariinUseg1) {
           uilchilgee(token).post("/confirmFile", {
             filename: gariinUseg1,
             path: "gariinUseg1",
           });
+        }
+
         notification.success({ message: t("Амжилттай хадгаллаа") });
         baiguullagaMutate();
         setSongogdsonTsonkhniiIndex(3);
+
+        setDeleteTamga(false);
+        setDeleteGariinUseg(false);
+        setDeleteGariinUseg1(false);
       } else notification.warning({ message: t("Алдаа гарлаа") });
     });
   }
+
   function tamgaZuragKharakh(e, path) {
     setKharakhZurgiinZam(path);
     e.preventDefault();
@@ -182,6 +252,19 @@ function KhuviinMedeelel({
     e.preventDefault();
     e.stopPropagation();
   }
+
+  const shouldShowTamga = () => {
+    return tamga || (barilga?.tamga && !deleteTamga);
+  };
+
+  const shouldShowGariinUseg = () => {
+    return gariinUseg || (barilga?.gariinUseg && !deleteGariinUseg);
+  };
+
+  const shouldShowGariinUseg1 = () => {
+    return gariinUseg1 || (barilga?.gariinUseg1 && !deleteGariinUseg1);
+  };
+
   return (
     <>
       <div className="col-span-12 grid grid-cols-1 xl:grid-cols-3 xl:gap-5">
@@ -623,7 +706,7 @@ function KhuviinMedeelel({
                 <div className="flex w-full flex-col ">
                   <Form.Item name="turul">
                     <div className="flex flex-row items-center gap-2">
-                      {!!barilga?.tamga && (
+                      {!!barilga?.tamga && !deleteTamga && (
                         <Button
                           icon={<EyeOutlined />}
                           onClick={(e) =>
@@ -646,13 +729,13 @@ function KhuviinMedeelel({
                           onChange={(v) => zuragKhadgalakh(v, "tamga")}
                         >
                           <div className="flex flex-row items-center gap-2">
-                            {!barilga?.tamga && (
+                            {!shouldShowTamga() && (
                               <Button icon={<UploadOutlined />} className="h-9">
                                 {t("Тамга зураг оруулах")}
                               </Button>
                             )}
 
-                            {!!barilga?.tamga && (
+                            {shouldShowTamga() && (
                               <Button
                                 icon={<EditOutlined />}
                                 className="h-9 !text-gray-500 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
@@ -663,11 +746,11 @@ function KhuviinMedeelel({
                         </Upload>
                       </ImgCrop>
 
-                      {!!barilga?.tamga && (
+                      {shouldShowTamga() && (
                         <Button
                           danger
                           icon={<DeleteOutlined />}
-                          onClick={() => setTamga(undefined)}
+                          onClick={handleTamgaDelete}
                           className="h-9"
                           type="button"
                         />
@@ -675,7 +758,7 @@ function KhuviinMedeelel({
                     </div>
                   </Form.Item>
 
-                  {(!!tamga || !!barilga.tamga) && (
+                  {shouldShowTamga() && (
                     <div className="h-[54px] w-[115px] border">
                       {!!tamga ? (
                         <>
@@ -690,7 +773,8 @@ function KhuviinMedeelel({
                           />
                         </>
                       ) : (
-                        barilga?.tamga && (
+                        barilga?.tamga &&
+                        !deleteTamga && (
                           <>
                             <img
                               src={`${url}/file?path=tamga/${barilga.tamga}`}
@@ -737,34 +821,24 @@ function KhuviinMedeelel({
                         </Upload>
                       </ImgCrop>
 
-                      {!!gariinUseg || !!barilga?.gariinUseg ? (
+                      {shouldShowGariinUseg() && (
                         <Button
                           danger
                           multiple={true}
                           icon={<DeleteOutlined />}
                           type="button"
-                          onClick={() => setGariinUseg(undefined)}
+                          onClick={handleGariinUsegDelete}
                           className="h-9"
                         />
-                      ) : null}
+                      )}
                     </div>
                   </Form.Item>
 
-                  <div className="flex h-[54px] w-[115px] items-center justify-center border">
-                    {!!gariinUseg ? (
-                      <img
-                        src={`${url}/file?path=tmp/${gariinUseg}`}
-                        alt="image"
-                        style={{
-                          height: "50px",
-                          width: "115px",
-                          objectFit: "contain",
-                        }}
-                      />
-                    ) : (
-                      barilga?.gariinUseg && (
+                  {shouldShowGariinUseg() && (
+                    <div className="flex h-[54px] w-[115px] items-center justify-center border">
+                      {!!gariinUseg ? (
                         <img
-                          src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                          src={`${url}/file?path=tmp/${gariinUseg}`}
                           alt="image"
                           style={{
                             height: "50px",
@@ -772,9 +846,22 @@ function KhuviinMedeelel({
                             objectFit: "contain",
                           }}
                         />
-                      )
-                    )}
-                  </div>
+                      ) : (
+                        barilga?.gariinUseg &&
+                        !deleteGariinUseg && (
+                          <img
+                            src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                            alt="image"
+                            style={{
+                              height: "50px",
+                              width: "115px",
+                              objectFit: "contain",
+                            }}
+                          />
+                        )
+                      )}
+                    </div>
+                  )}
                   <br></br>
                   <Form.Item name="turul">
                     <div className="flex flex-row items-center gap-2">
@@ -805,34 +892,24 @@ function KhuviinMedeelel({
                         </Upload>
                       </ImgCrop>
 
-                      {!!gariinUseg1 || !!barilga?.gariinUseg1 ? (
+                      {shouldShowGariinUseg1() && (
                         <Button
                           danger
                           multiple={true}
                           icon={<DeleteOutlined />}
                           type="button"
-                          onClick={() => setGariinUseg(undefined)}
+                          onClick={handleGariinUseg1Delete}
                           className="h-9"
                         />
-                      ) : null}
+                      )}
                     </div>
                   </Form.Item>
 
-                  <div className="flex h-[54px] w-[115px] items-center justify-center border">
-                    {!!gariinUseg1 ? (
-                      <img
-                        src={`${url}/file?path=tmp/${gariinUseg1}`}
-                        alt="image"
-                        style={{
-                          height: "50px",
-                          width: "115px",
-                          objectFit: "contain",
-                        }}
-                      />
-                    ) : (
-                      barilga?.gariinUseg1 && (
+                  {shouldShowGariinUseg1() && (
+                    <div className="flex h-[54px] w-[115px] items-center justify-center border">
+                      {!!gariinUseg1 ? (
                         <img
-                          src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
+                          src={`${url}/file?path=tmp/${gariinUseg1}`}
                           alt="image"
                           style={{
                             height: "50px",
@@ -840,33 +917,22 @@ function KhuviinMedeelel({
                             objectFit: "contain",
                           }}
                         />
-                      )
-                    )}
-                  </div>
-
-                  {/* {!!barilga?.gariinUseg ? (
-                    <img
-                      src={`${url}/gariinUseg/${barilga.gariinUseg}}`}
-                      alt="image"
-                      style={{
-                        height: "104px",
-                        width: "115px",
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    gariinUseg && (
-                      <img
-                        src={`${url}/file?path=tmp/${gariinUseg}`}
-                        alt="image"
-                        style={{
-                          height: "104px",
-                          width: "115px",
-                          objectFit: "cover",
-                        }}
-                      />
-                    )
-                  )} */}
+                      ) : (
+                        barilga?.gariinUseg1 &&
+                        !deleteGariinUseg1 && (
+                          <img
+                            src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
+                            alt="image"
+                            style={{
+                              height: "50px",
+                              width: "115px",
+                              objectFit: "contain",
+                            }}
+                          />
+                        )
+                      )}
+                    </div>
+                  )}
                 </div>
               </Form>
 
