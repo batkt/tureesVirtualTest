@@ -1,18 +1,16 @@
 import _ from "lodash";
 function formatNumber(num, fixed = 2) {
-  if (num === undefined || num === null || num === "")
-    return formatNumber("0.00", fixed);
-  var fixedNum = parseFloat(num).toFixed(fixed).toString();
-  var numSplit = fixedNum.split(".");
-  if (numSplit === null || numSplit.length === 0) {
-    return formatNumber("0.00", fixed);
-  }
-  var firstFormatNum = numSplit[0]
-    .toString()
-    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-  if (_.isNaN(firstFormatNum)) firstFormatNum = "0";
-  if (fixed === 0) return firstFormatNum;
-  return firstFormatNum + "." + numSplit[1];
-}
+  const parsed = Number(num);
 
+  if (_.isNaN(parsed)) {
+    return (0).toFixed(fixed);
+  }
+
+  const fixedNum = parsed.toFixed(fixed);
+  const [intPart, decimalPart] = fixedNum.split(".");
+
+  const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  return fixed === 0 ? formattedInt : `${formattedInt}.${decimalPart}`;
+}
 export default formatNumber;
