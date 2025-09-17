@@ -30,19 +30,70 @@ const hrefAvya = (mur, ajiltan) => {
       sanal: "/khyanalt/medegdel/sanalKhuselt",
       gomdol: "/khyanalt/medegdel/sanalKhuselt",
       medegdel: "/khyanalt/medegdel",
-      sonorduulga: "/khyanalt/duudlaga/duudlaga",
+      sonorduulga: "/khyanalt/medegdel/duudlaga",
     },
     user: {
       daalgavar: "/khyanalt/daalgavar",
       sanal: "/khyanalt/medegdel/sanalKhuselt",
       gomdol: "/khyanalt/medegdel/sanalKhuselt",
       medegdel: "/khyanalt/medegdel",
-      sonorduulga: "/khyanalt/duudlaga/duudlaga",
+      sonorduulga: "/khyanalt/medegdel/duudlaga",
     },
   };
 
   const routes = ajiltan.erkh === "Admin" ? baseRoutes.admin : baseRoutes.user;
   return routes[mur.turul] || "";
+};
+
+const getTurulInfo = (turul) => {
+  const turulMap = {
+    duudlaga: {
+      label: "Дуудлага",
+      color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+    },
+    daalgavar: {
+      label: "Даалгавар",
+      color:
+        "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+    },
+    medegdel: {
+      label: "Мэдэгдэл",
+      color:
+        "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+    },
+    gomdol: {
+      label: "Гомдол",
+      color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+    },
+    sanal: {
+      label: "Санал",
+      color:
+        "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+    },
+    setgegdel: {
+      label: "Сэтгэгдэл",
+      color:
+        "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200",
+    },
+    medegdelAdmin: {
+      label: "Админ мэдэгдэл",
+      color:
+        "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+    },
+    medegdelAdminAppWeb: {
+      label: "Админ мэдэгдэл",
+      color:
+        "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+    },
+  };
+
+  return (
+    turulMap[turul] || {
+      label: turul,
+      color: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200",
+      icon: "📄",
+    }
+  );
 };
 
 const SonorduulgaDropdown = React.memo(
@@ -55,6 +106,7 @@ const SonorduulgaDropdown = React.memo(
     isLoadingMore,
     hasMore,
     isInitialLoading,
+    loadMore,
     isVisible,
     permanentlyDismissed = new Set(),
     onClose,
@@ -67,6 +119,36 @@ const SonorduulgaDropdown = React.memo(
       new Set()
     );
     const isFirstMount = useRef(true);
+
+    const handleScroll = useCallback(() => {
+      if (!scrollRef.current || isLoadingMore || !hasMore) {
+        console.log("Scroll blocked:", {
+          hasScrollRef: !!scrollRef.current,
+          isLoadingMore,
+          hasMore,
+        });
+        return;
+      }
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+      const threshold = 100;
+      const isNearBottom = scrollTop + clientHeight >= scrollHeight - threshold;
+
+      console.log("Scroll check:", {
+        scrollTop,
+        scrollHeight,
+        clientHeight,
+        threshold,
+        isNearBottom,
+        hasMore,
+        isLoadingMore,
+      });
+
+      if (isNearBottom) {
+        console.log("Loading more notifications...");
+        loadMore();
+      }
+    }, [isLoadingMore, hasMore, loadMore]);
 
     useEffect(() => {
       if (isVisible && !isInitialLoading && scrollRef.current) {
@@ -223,7 +305,11 @@ const SonorduulgaDropdown = React.memo(
             </button>
           </div>
         </div>
-        <div className="no-transition-initial space-y-2 overflow-y-auto rounded-md bg-white p-3 dark:bg-gray-800">
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="no-transition-initial space-y-2 overflow-y-auto rounded-md bg-white p-3 dark:bg-gray-800"
+        >
           {optimizedSonorduulga.length > 0 ? (
             <>
               {optimizedSonorduulga.map((mur, index) => {
@@ -274,6 +360,18 @@ const SonorduulgaDropdown = React.memo(
                           <h3 className="text-xs font-medium text-gray-800 dark:text-gray-200">
                             {displayData.title}
                           </h3>
+                          <div className="mt-1 flex items-center space-x-2">
+                            <span
+                              className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                                getTurulInfo(mur.turul).color
+                              }`}
+                            >
+                              <span className="mr-1">
+                                {getTurulInfo(mur.turul).icon}
+                              </span>
+                              {getTurulInfo(mur.turul).label}
+                            </span>
+                          </div>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -329,6 +427,18 @@ const SonorduulgaDropdown = React.memo(
                 </div>
               )}
 
+              {hasMore && optimizedSonorduulga.length > 0 && (
+                <div className="flex items-center justify-center p-4">
+                  <button
+                    onClick={loadMore}
+                    disabled={isLoadingMore}
+                    className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:bg-gray-400"
+                  >
+                    {isLoadingMore ? t("Ачаалж байна...") : t("Илүү ачаалах")}
+                  </button>
+                </div>
+              )}
+
               {!hasMore && optimizedSonorduulga.length > 0 && (
                 <div className="flex items-center justify-center p-4 text-sm text-gray-500 transition-colors duration-150 dark:text-gray-400">
                   {t("Илүү мэдэгдэл байхгүй")}
@@ -370,6 +480,7 @@ SonorduulgaDropdown.defaultProps = {
   isInitialLoading: true,
   isVisible: false,
   permanentlyDismissed: new Set(),
+  loadMore: () => {},
 };
 
 export default SonorduulgaDropdown;

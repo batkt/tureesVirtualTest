@@ -118,6 +118,10 @@ export const tsonknuud = [
         utga: "medegdelOlnoorIlgeekhEsekh",
       },
       {
+        ner: "Дуудлага үйлчилгээ",
+        utga: "duudlagaUilchilgee",
+      },
+      {
         ner: "Мэдэгдэл илгээх эсэх",
         utga: "medegdelIlgeekhEsekh",
       },
@@ -231,10 +235,7 @@ export const tsonknuud = [
     ner: "Тоглоомын киоск",
     key: "/khyanalt/togloomKiosk",
   },
-  {
-    ner: "Дуудлага үйлчилгээ",
-    key: "/khyanalt/duudlaga/duudlaga",
-  },
+
   {
     key: "/khyanalt/tailan",
     ner: "Тайлан",
@@ -521,6 +522,12 @@ export const khuudasnuud = [
         icon: (
           <AiOutlineExclamationCircle style={{ width: "24", height: "24" }} />
         ),
+      },
+      {
+        ner: "Дуудлага",
+        khuudasniiNer: "duudlaga",
+        href: "/khyanalt/medegdel/duudlaga",
+        icon: <PhoneOutlined className="text-2xl" />,
       },
 
       {
@@ -1013,12 +1020,6 @@ export const khuudasnuud = [
     //     icon: <TbLego style={{ width: "24", height: "24" }} />,
     //   },
     // ],
-  },
-  {
-    ner: "Дуудлага",
-    khuudasniiNer: "duudlaga",
-    href: "/khyanalt/duudlaga/duudlaga",
-    icon: <PhoneOutlined className="text-2xl" />,
   },
 ];
 

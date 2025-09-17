@@ -96,3 +96,4 @@ export const truncateUrl = (url, maxLength = 50) => {
 
   return `${domain}...`;
 };
+
