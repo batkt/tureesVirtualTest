@@ -641,24 +641,24 @@ function TaskManagementSystem({ token }) {
   const renderCallList = () => {
     const groupedDuudlaga = groupDuudlagaByName(filteredJagsaalt);
 
-    return groupedDuudlaga?.map((customerGroup) => {
-      const statusInfo = getStatusInfo(customerGroup.tuluv);
-      const isExpanded = expandedNames.has(customerGroup.khariltsagchiinNer);
-      const hasMultipleDuudlaga = customerGroup.duudlagaCount > 1;
+    return groupedDuudlaga?.map((khariltsagchGroup) => {
+      const statusInfo = getStatusInfo(khariltsagchGroup.tuluv);
+      const isExpanded = expandedNames.has(khariltsagchGroup.khariltsagchiinNer);
+      const hasMultipleDuudlaga = khariltsagchGroup.duudlagaCount > 1;
 
       return (
-        <div key={customerGroup?._id} className="mb-2">
-          {!!customerGroup._id ? (
+        <div key={khariltsagchGroup?._id} className="mb-2">
+          {!!khariltsagchGroup._id ? (
             <>
               <div
                 className={`grid cursor-pointer grid-cols-4 items-center gap-4 rounded-md p-2 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 ${
-                  khariltsagch?._id === customerGroup?._id
+                  khariltsagch?._id === khariltsagchGroup?._id
                     ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500"
                     : ""
                 }`}
                 onClick={() => {
-                  setDuudlaga(customerGroup);
-                  setKhariltsagch(customerGroup);
+                  setDuudlaga(khariltsagchGroup);
+                  setKhariltsagch(khariltsagchGroup);
                 }}
               >
                 <div className="flex items-center gap-3">
@@ -668,9 +668,9 @@ function TaskManagementSystem({ token }) {
                       title={statusInfo.text}
                     />
 
-                    {customerGroup.duudlagaCount > 1 && (
+                    {khariltsagchGroup.duudlagaCount > 1 && (
                       <div className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-                        {customerGroup.duudlagaCount}
+                        {khariltsagchGroup.duudlagaCount}
                       </div>
                     )}
                     <img
@@ -682,11 +682,11 @@ function TaskManagementSystem({ token }) {
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">
-                        {customerGroup.khariltsagchiinNer}
+                        {khariltsagchGroup.khariltsagchiinNer}
                       </span>
                     </div>
                     <span className="text-xs text-gray-500">
-                      {customerGroup.khariltsagchiinRegister}
+                      {khariltsagchGroup.khariltsagchiinRegister}
                     </span>
                   </div>
                 </div>
@@ -710,7 +710,7 @@ function TaskManagementSystem({ token }) {
 
                 <div className="ml-20 flex w-full justify-end">
                   <span className="text-xs text-gray-500">
-                    {moment(customerGroup.createdAt).format("MM-DD HH:mm")}
+                    {moment(khariltsagchGroup.createdAt).format("MM-DD HH:mm")}
                   </span>
                 </div>
               </div>
@@ -718,9 +718,9 @@ function TaskManagementSystem({ token }) {
               {hasMultipleDuudlaga && isExpanded && (
                 <div className="ml-6 mt-2 space-y-1 rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
                   <div className="mb-2 text-xs font-semibold text-gray-600 dark:text-gray-400">
-                    {t("Бүх дуудлагууд")} ({customerGroup.allDuudlaga.length}):
+                    {t("Бүх дуудлагууд")} ({khariltsagchGroup.allDuudlaga.length}):
                   </div>
-                  {customerGroup.allDuudlaga
+                  {khariltsagchGroup.allDuudlaga
                     .sort(
                       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                     )
@@ -826,7 +826,7 @@ function TaskManagementSystem({ token }) {
       );
     }
 
-    const customerDuudlaga = filteredJagsaalt
+    const khariltsagchDuudlaga = filteredJagsaalt
       ?.filter(
         (item) => item.khariltsagchiinNer === duudlaga.khariltsagchiinNer
       )
@@ -852,7 +852,7 @@ function TaskManagementSystem({ token }) {
                 {t("Нэр")}: {duudlaga.khariltsagchiinNer}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                {t("Нийт дуудлага")}: {customerDuudlaga.length}
+                {t("Нийт дуудлага")}: {khariltsagchDuudlaga.length}
               </div>
             </div>
             <span className="text-sm text-gray-600 dark:text-gray-400">
@@ -863,7 +863,7 @@ function TaskManagementSystem({ token }) {
 
         <div className="flex-1 overflow-y-auto px-4">
           <div className="space-y-3">
-            {customerDuudlaga.map((item, index) => {
+            {khariltsagchDuudlaga.map((item, index) => {
               const duudlagaStatusInfo = getStatusInfo(item.tuluv);
 
               const isSelectedCall = item._id === duudlaga._id;
