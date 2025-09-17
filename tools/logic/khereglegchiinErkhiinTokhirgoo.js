@@ -242,6 +242,10 @@ export const tsonknuud = [
       "Борлуулалтын\nАшигийн тооцоо\nЗардлын тооцоо\nАвлагын насжилтаар\n",
     tokhirgoo: [],
   },
+  {
+    key: "/khyanalt/todorkhoilolt",
+    ner: "Тодорхойлолт",
+  },
 ];
 
 export const khereglegchiinErkhuud = [
@@ -684,6 +688,28 @@ export const khuudasnuud = [
       </svg>
     ),
   },
+  {
+    ner: "Тодорхойлолт",
+    khuudasniiNer: "todorkhoilolt",
+    href: "/khyanalt/todorkhoilolt",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+        <polyline points="14 2 14 8 20 8" />
+      </svg>
+    ),
+  },
+
   {
     ner: "Зогсоол",
     href: "/khyanalt/zogsool",
