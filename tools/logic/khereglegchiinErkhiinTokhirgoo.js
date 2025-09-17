@@ -119,7 +119,7 @@ export const tsonknuud = [
       },
       {
         ner: "Дуудлага үйлчилгээ",
-        utga: "/khyanalt/medegdel/duudlaga",
+        utga: "duudlagaUilchilgee",
       },
       {
         ner: "Мэдэгдэл илгээх эсэх",
