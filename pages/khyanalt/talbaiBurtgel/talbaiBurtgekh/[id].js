@@ -190,7 +190,7 @@ function KhurunguudCard({
                 <div className="relative h-24 w-24">
                   <Upload
                     showUploadList={false}
-                    className="avatar-uploader flex h-24 w-24 items-center justify-center overflow-hidden"
+                    className="avatar-uploader h-30 flex w-24 items-center justify-center overflow-hidden"
                     multiple={false}
                     listType="picture-card"
                     name="file"
