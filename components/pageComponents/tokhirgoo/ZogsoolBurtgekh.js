@@ -15,6 +15,7 @@ import {
   Divider,
   TimePicker,
   Switch,
+  message,
 } from "antd";
 import {
   CloseCircleOutlined,
@@ -76,11 +77,20 @@ function ZogsoolBurtgekh(
     () => ({
       async khadgalya() {
         try {
+          try {
+            await form.validateFields();
+          } catch (errorInfo) {
+            message.error(t("Заавал бөглөх талбаруудыг бөглөнө үү"));
+            return;
+          }
+
           let body = form.getFieldsValue();
+
           body.tokiNer = body?.tokiBolonStickerAshiglakhEsekh
             ? body?.ner
             : undefined;
           body.barilgiinId = barilgiinId;
+
           console.log("eseh", body?.tokiBolonStickerAshiglakhEsekh);
           console.log("toki", body?.tokiNer);
 
@@ -777,6 +787,7 @@ function Khaalga({
                   name={[talbar.name, "cameraIP"]}
                   fieldKey={[talbar.key, "cameraIP"]}
                   className="m-0 w-full"
+                  rules={[{ required: true, message: "Камер IP оруулна уу!" }]}
                 >
                   <Input
                     style={{ width: "100%" }}
