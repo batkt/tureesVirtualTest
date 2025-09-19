@@ -627,46 +627,6 @@ function MashinBurtgel(
           </Select>
         </Form.Item>
       )}
-      {!!khungulultiinTurul && (
-        <Form.Item
-          name={"khungulukhKhugatsaa"}
-          requiredMark="optional"
-          rules={[
-            {
-              required: true,
-              message: t("Хөнгөлөх Хугацаа оруулна уу!"),
-            },
-          ]}
-          label={t("Хугацаа/мин")}
-        >
-          <InputNumber
-            type="number"
-            className="w-full"
-            min={0}
-            placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
-            onChange={(value) => {
-              if (
-                !data?.khungulukhKhugatsaa ||
-                data?.uldegdelKhungulukhKhugatsaa === 0
-              ) {
-                form.setFieldValue("uldegdelKhungulukhKhugatsaa", value || 0);
-              }
-            }}
-          />
-        </Form.Item>
-      )}
-      <Form.Item
-        name={"uldegdelKhungulukhKhugatsaa"}
-        label={t("Үлдэгдэл хугацаа/мин")}
-      >
-        <InputNumber
-          disabled={true}
-          type="number"
-          className="w-full"
-          min={0}
-          value={10}
-        />
-      </Form.Item>
       {turulShalgah !== "Байгууллага" && (
         <Form.Item
           requiredMark={"optional"}
