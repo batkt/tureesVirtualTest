@@ -1296,6 +1296,7 @@ function mashinBurtgel({ token }) {
           className="block overflow-auto md:hidden"
           jagsaalt={mashinGaralt?.jagsaalt}
           Component={TogloomTile}
+          componentProps={{ mashinBurtgekh, tsenegliy }}
         />
       </Card>
     </Admin>
