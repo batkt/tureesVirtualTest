@@ -166,7 +166,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         </tr>
       </tbody>
     </table>
-    <table style="margin-top: 2rem; width: 100%; margin-bottom:2rem;">
+    <table style="margin-top: 2rem; width: 100%; margin-bottom:0;">
       <thead style="background-color: #d1d5db; font-weight: 600;">
         <tr>
           <td style="border: 1px solid #000; text-align: right; font-weight: bold;">ГҮЙЛГЭЭНИЙ УТГА:</td>
@@ -192,11 +192,11 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
     <div style="display: block; width: 100%; text-align: left; margin: 0; padding:0;">
       Мастер түншлэл ХХК
     </div>
-    <div style="display: flex; width: 100%; align-items: flex-start; margin: 0; padding:0;">
+    <div style="display: flex; width: 100%; align-items: flex-start; margin-top: 0; padding:0;">
       <div style="width: 80%;">
-        <div style="margin-top: 0; display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
-          <p style="width: 40%; text-align: left; margin:3rem; font-weight: 600;">
+        <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
+          <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&lt;gariinUseg&gt;</p>
+          <p style="width: 40%; text-align: left; margin-top: 3.3rem; font-weight: 600;">
             &nbsp;&nbsp;&nbsp;&nbsp;/Б.Бат-Өлзий/
           </p>  
         </div>
@@ -206,7 +206,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         <div style="margin-top: 0; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Хүлээн зөвшөөрсөн...................................</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">
-            &lt;ner&gt;
+            &lt;ner&gt; 
           </p>
         <div>
       </div>

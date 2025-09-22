@@ -739,8 +739,7 @@ function tulburTootsoo({ token }) {
                     />
                   </span>
                 );
-              } else
-              {
+              } else {
                 medeelel.gariinUseg = renderToString(
                   <span style={{ position: "relative", zIndex: 9999 }}>
                     <img
@@ -748,7 +747,7 @@ function tulburTootsoo({ token }) {
                       style={{
                         width: 100,
                         height: 60,
-                        transform: "translate(40%, 25%)",
+                        transform: "translate(140%, -68%)",
                       }}
                     />
                   </span>
@@ -761,12 +760,12 @@ function tulburTootsoo({ token }) {
                       style={{
                         width: 200,
                         height: 160,
-                        transform: "translate(20%, -60%)",
+                        transform: "translate(20%, -70%)",
                         opacity: 0.65,
                       }}
                     />
                   </span>
-                ); 
+                );
               }
             } else if (ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d")
               // soyolj

@@ -303,8 +303,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
     <div style="display: block; width: 100%; text-align: left;">
       4. Гүйлгээний утга дээр гэрээлсэн байгууллага, хувь хүний регистрийн дугаар болон талбайн дугаарыг бичнэ үү.
     </div>
- 
-  <div style="display: block; width: 100%; text-align: left; margin-top: 2rem; ">
+  <div style="display: block; width: 100%; text-align: left; margin-top: 0; ">
       Мастер проперти менежмент ХХК
   </div>
   <div style="display: flex; width: 100%; align-items: flex-start;">
