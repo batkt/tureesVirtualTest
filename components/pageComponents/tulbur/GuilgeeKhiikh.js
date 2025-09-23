@@ -203,6 +203,8 @@ function GuilgeeKhiikh(
               ognoo: shineOgnoo,
               gereeniiId: data?._id,
               tailbar,
+              aldangiinTurul:
+                busadTurul === "aldangi" ? "aldangiTulult" : undefined,
             };
             break;
           case "voucher":

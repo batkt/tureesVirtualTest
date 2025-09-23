@@ -250,15 +250,12 @@ const Tailbar = React.forwardRef(
     }, []);
 
     function disabledDate(current) {
-      let minDate = moment()
-        .subtract(1, "month")
-        .startOf("month")
-        .format("YYYY-MM-DD");
-      let maxDate = moment().endOf("month").format("YYYY-MM-DD");
-      return (
-        (current <= moment(maxDate, "YYYY-MM-DD") &&
-          current >= moment(minDate, "YYYY-MM-DD")) === false
-      );
+      if (!current) return false;
+
+      const minDate = moment().subtract(1, "month").startOf("month");
+      const maxDate = moment().endOf("month");
+
+      return !current.isBetween(minDate, maxDate, "day", "[]");
     }
 
     function changeOgnoo(e) {
@@ -474,7 +471,7 @@ const select = {
   talbainIdnuud: 1,
   zardluud: 1,
   zoriulalt: 1,
-  zurguud:1,
+  zurguud: 1,
   tusgaiZoriulalt: 1,
 };
 

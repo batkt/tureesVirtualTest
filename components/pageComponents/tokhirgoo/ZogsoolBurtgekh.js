@@ -15,6 +15,7 @@ import {
   Divider,
   TimePicker,
   Switch,
+  message,
 } from "antd";
 import {
   CloseCircleOutlined,
@@ -76,11 +77,22 @@ function ZogsoolBurtgekh(
     () => ({
       async khadgalya() {
         try {
+          try {
+            await form.validateFields();
+          } catch (errorInfo) {
+            message.error(t("Заавал бөглөх талбаруудыг бөглөнө үү"));
+            return;
+          }
+
           let body = form.getFieldsValue();
+
           body.tokiNer = body?.tokiBolonStickerAshiglakhEsekh
             ? body?.ner
             : undefined;
           body.barilgiinId = barilgiinId;
+
+          console.log("eseh", body?.tokiBolonStickerAshiglakhEsekh);
+          console.log("toki", body?.tokiNer);
 
           await method("parking", token, body)
             .then(({ data }) => {
@@ -533,7 +545,7 @@ function ZogsoolBurtgekh(
             <div className="text-xs text-gray-400"> </div>
           </div>
         </div>
-        <div className="col-span-4 h-[80vh]">
+        <div className="h-full col-span-4 ">
           <Form.List name="tulburuud">
             {(fields, { add, remove }) => (
               <>
@@ -547,7 +559,7 @@ function ZogsoolBurtgekh(
                 </Button>
                 <div
                   className="space-y-3 overflow-y-auto"
-                  style={{ maxHeight: "70vh" }}
+                  style={{ maxHeight: "60vh" }}
                 >
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Tariff
@@ -559,56 +571,6 @@ function ZogsoolBurtgekh(
                       remove={remove}
                     />
                   ))}
-                  {/*
-                  {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    <div
-                      key={fieldKey}
-                      className="relative px-10 py-4 mb-5 border rounded-md shadow-md bg-green-50 dark:bg-gray-700 2xl:pr-20"
-                    >
-                      <div className="grid items-center w-full grid-cols-4 gap-5">
-                        <div
-                          onClick={() => remove(name)}
-                          className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
-                        >
-                          <CloseCircleOutlined />
-                        </div>
-                        <Form.Item
-                          label="Минут хүртэл:"
-                          labelCol={{ span: 24 }}
-                          {...restField}
-                          name={[name, "minut"]}
-                          fieldKey={[fieldKey, "minut"]}
-                          rules={[
-                            { required: true, message: "Минут бөглөнө үү." },
-                          ]}
-                          className="col-span-2 mb-0"
-                        >
-                          <InputNumber placeholder="Минут" className="w-full" />
-                        </Form.Item>
-                        <Form.Item
-                          label="Тариф/₮/:"
-                          labelCol={{ span: 24 }}
-                          {...restField}
-                          name={[name, "tulbur"]}
-                          fieldKey={[fieldKey, "tulbur"]}
-                          rules={[
-                            { required: true, message: "Тариф бөглөнө үү." },
-                          ]}
-                          className="col-span-2 mb-0"
-                        >
-                          <InputNumber
-                            formatter={(value) =>
-                              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            }
-                            className="w-full"
-                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                            placeholder="Тариф"
-                          />
-                        </Form.Item>
-                      </div>
-                    </div>
-                  ))}
-*/}
                 </div>
               </>
             )}
@@ -628,7 +590,7 @@ function ZogsoolBurtgekh(
                 </Button>
                 <div
                   className="space-y-3 overflow-y-auto"
-                  style={{ maxHeight: "70vh" }}
+                  style={{ maxHeight: "60vh" }}
                 >
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Khaalga
@@ -774,7 +736,12 @@ function Khaalga({
                   {...talbar.restField}
                   name={[talbar.name, "cameraIP"]}
                   fieldKey={[talbar.key, "cameraIP"]}
+<<<<<<< HEAD
                   className="w-full m-0"
+=======
+                  className="w-full m-0"
+                  rules={[{ required: true, message: "Камер IP оруулна уу!" }]}
+>>>>>>> c6eebcdb0740000cc3433c31ade71a54d87eca23
                 >
                   <Input
                     style={{ width: "100%" }}

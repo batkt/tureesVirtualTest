@@ -536,49 +536,50 @@ function MashinBurtgel(
                 </Select>
               </Form.Item>
               {tsagValue && (
-                <Form.Item
-                  name={"khungulukhKhugatsaa"}
-                  requiredMark="optional"
-                  rules={[
-                    {
-                      required: true,
-                      message: t("Хөнгөлөх Хугацаа оруулна уу!"),
-                    },
-                  ]}
-                  label={t("Хугацаа/мин")}
-                >
-                  <InputNumber
-                    type="number"
-                    className="w-full"
-                    min={0}
-                    placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
-                    onChange={(value) => {
-                      if (
-                        !data?.khungulukhKhugatsaa ||
-                        data?.uldegdelKhungulukhKhugatsaa === 0
-                      ) {
-                        form.setFieldValue(
-                          "uldegdelKhungulukhKhugatsaa",
-                          value || 0
-                        );
-                      }
-                    }}
-                  />
-                </Form.Item>
+                <React.Fragment>
+                  <Form.Item
+                    name={"khungulukhKhugatsaa"}
+                    requiredMark="optional"
+                    rules={[
+                      {
+                        required: true,
+                        message: t("Хөнгөлөх Хугацаа оруулна уу!"),
+                      },
+                    ]}
+                    label={t("Хугацаа/мин")}
+                  >
+                    <InputNumber
+                      type="number"
+                      className="w-full"
+                      min={0}
+                      placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
+                      onChange={(value) => {
+                        if (
+                          !data?.khungulukhKhugatsaa ||
+                          data?.uldegdelKhungulukhKhugatsaa === 0
+                        ) {
+                          form.setFieldValue(
+                            "uldegdelKhungulukhKhugatsaa",
+                            value || 0
+                          );
+                        }
+                      }}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name={"uldegdelKhungulukhKhugatsaa"}
+                    label={t("Үлдэгдэл хугацаа/мин")}
+                  >
+                    <InputNumber
+                      disabled={true}
+                      type="number"
+                      className="w-full"
+                      min={0}
+                      value={10}
+                    />
+                  </Form.Item>
+                </React.Fragment>
               )}
-
-              <Form.Item
-                name={"uldegdelKhungulukhKhugatsaa"}
-                label={t("Үлдэгдэл хугацаа/мин")}
-              >
-                <InputNumber
-                  disabled={true}
-                  type="number"
-                  className="w-full"
-                  min={0}
-                  value={10}
-                />
-              </Form.Item>
 
               {dotorGadnaTsagEsekh && (
                 <Form.Item label={t("Зогсоолын төрөл")} name="zogsooliinTurul">
@@ -596,35 +597,71 @@ function MashinBurtgel(
         </React.Fragment>
       )}
       {turulShalgah === "Байгууллага" && (
-        <Form.Item
-          label={t("Хөнгөлөлт төрөл")}
-          name="khungulultTurul"
-          requiredMark={"optional"}
-          rules={[
-            {
-              required: true,
-              message: t("Хөнгөлөлтийн төрөл сонгоно уу!"),
-            },
-          ]}
-        >
-          <Select
-            onChange={(e) => {
-              setKhungulultiinTurul(e);
-            }}
-            placeholder={t("Төрөл сонгох")}
+        <>
+          <Form.Item
+            label={t("Хөнгөлөлт төрөл")}
+            name="khungulultTurul"
+            requiredMark="optional"
+            rules={[
+              {
+                required: true,
+                message: t("Хөнгөлөлтийн төрөл сонгоно уу!"),
+              },
+            ]}
           >
-            {[
-              { label: "Сараар", key: 1, value: "saraar" },
-              { label: "Долоо хоногоор", key: 2, value: "dolooKhonog" },
-            ].map((a) => (
-              <Select.Option key={a.key} value={a.value}>
-                {t(a.label)}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+            <Select
+              onChange={(e) => {
+                setKhungulultiinTurul(e);
+              }}
+              placeholder={t("Төрөл сонгох")}
+            >
+              {[
+                { label: "Сараар", key: 1, value: "saraar" },
+                { label: "Долоо хоногоор", key: 2, value: "dolooKhonog" },
+              ].map((a) => (
+                <Select.Option key={a.key} value={a.value}>
+                  {t(a.label)}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          {(khungulultiinTurul === "saraar" ||
+            khungulultiinTurul === "dolooKhonog") && (
+            <Form.Item
+              name="khungulukhKhugatsaa"
+              requiredMark="optional"
+              rules={[
+                {
+                  required: true,
+                  message: t("Хөнгөлөх Хугацаа оруулна уу!"),
+                },
+              ]}
+              label={t("Хугацаа/мин")}
+            >
+              <InputNumber
+                type="number"
+                className="w-full"
+                min={0}
+                placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
+                onChange={(value) => {
+                  if (
+                    !data?.khungulukhKhugatsaa ||
+                    data?.uldegdelKhungulukhKhugatsaa === 0
+                  ) {
+                    form.setFieldValue(
+                      "uldegdelKhungulukhKhugatsaa",
+                      value || 0
+                    );
+                  }
+                }}
+              />
+            </Form.Item>
+          )}
+        </>
       )}
-      {!!khungulultiinTurul && (
+
+      {khungulultiinTurul === "Тогтмол цаг" && (
         <Form.Item
           name={"khungulukhKhugatsaa"}
           requiredMark="optional"
@@ -652,18 +689,7 @@ function MashinBurtgel(
           />
         </Form.Item>
       )}
-      <Form.Item
-        name={"uldegdelKhungulukhKhugatsaa"}
-        label={t("Үлдэгдэл хугацаа/мин")}
-      >
-        <InputNumber
-          disabled={true}
-          type="number"
-          className="w-full"
-          min={0}
-          value={10}
-        />
-      </Form.Item>
+
       {turulShalgah !== "Байгууллага" && (
         <Form.Item
           requiredMark={"optional"}

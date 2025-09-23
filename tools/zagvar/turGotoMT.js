@@ -5,75 +5,64 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
       <b>НЭХЭМЖЛЭХ</b>
     </div>
     <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between;">
-      <div style="display: block; width: 30%;">
-        <p style="font-weight: 600;">Төлөгч:</p>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Нэр:</p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Регистрийн дугаар:</p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Гэрээний дугаар:</p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Талбайн дугаар:</p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Талбайн хэмжээ:</p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Нэхэмжилсэн огноо:</p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Төлбөр хийх хугацаа:</p>
-        </div>
-      </div>
-      <div style="display: block; width: 70%;">
-        <p style="font-weight: 600;">&nbsp;&nbsp;&nbsp;</p>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;"></p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;ner&gt;
-          </p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;"></p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${medeelel?.register || ""}
-          </p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;"></p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;gereeniiDugaar&gt;
-          </p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;"></p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;talbainDugaar&gt;
-          </p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;"></p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;talbainKhemjee&gt;
-          </p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;"></p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;ekhelkhSar&gt;/&lt;ekhlekhUdur&gt;/&lt;ekhlekhOn&gt;
-          </p>
-        </div>
-        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;"></p>
-          <p style="width: 100%; text-align: left; font-weight: 600;">
-            &lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;
-          </p>
-        </div>
-      </div>
+  <!-- LEFT COLUMN -->
+  <div style="display: block; width: 30%;">
+    <p style="font-weight: 600; margin: 0;">Төлөгч:</p>
+    <div><p style="white-space: nowrap; margin: 0;">Нэр:</p></div>
+    <div><p style="white-space: nowrap; margin: 0;">Регистрийн дугаар:</p></div>
+    <div><p style="white-space: nowrap; margin: 0;">Гэрээний дугаар:</p></div>
+    <div><p style="white-space: nowrap; margin: 0;">Талбайн дугаар:</p></div>
+    <div><p style="white-space: nowrap; margin: 0;">Талбайн хэмжээ:</p></div>
+    <div><p style="white-space: nowrap; margin: 0;">Нэхэмжилсэн огноо:</p></div>
+    <div><p style="white-space: nowrap; margin: 0;">Төлбөр хийх хугацаа:</p></div>
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div style="display: block; width: 70%;">
+    <p style="font-weight: 600; margin: 0;">&nbsp;&nbsp;&nbsp;</p>
+
+    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+      <p style="white-space: nowrap; margin: 0;"></p>
+      <p style="width: 100%; text-align: left; font-weight: 600; margin: 0;">&lt;ner&gt;</p>
+    </div>
+
+    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+      <p style="white-space: nowrap; margin: 0;"></p>
+      <p style="width: 100%; text-align: left; font-weight: 600; margin: 0;">
+        ${medeelel?.register || ""}
+      </p>
+    </div>
+
+    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+      <p style="white-space: nowrap; margin: 0;"></p>
+      <p style="width: 100%; text-align: left; font-weight: 600; margin: 0;">&lt;gereeniiDugaar&gt;</p>
+    </div>
+
+    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+      <p style="white-space: nowrap; margin: 0;"></p>
+      <p style="width: 100%; text-align: left; font-weight: 600; margin: 0;">&lt;talbainDugaar&gt;</p>
+    </div>
+
+    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+      <p style="white-space: nowrap; margin: 0;"></p>
+      <p style="width: 100%; text-align: left; font-weight: 600; margin: 0;">&lt;talbainKhemjee&gt;</p>
+    </div>
+
+    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+      <p style="white-space: nowrap; margin: 0;"></p>
+      <p style="width: 100%; text-align: left; font-weight: 600; margin: 0;">
+        &lt;ekhelkhSar&gt;/&lt;ekhlekhUdur&gt;/&lt;ekhlekhOn&gt;
+      </p>
+    </div>
+
+    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+      <p style="white-space: nowrap; margin: 0;"></p>
+      <p style="width: 100%; text-align: left; font-weight: 600; margin: 0;">
+        &lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;
+      </p>
+    </div>
+  </div>
+
     </div>
     <table style="margin-top: 2rem; width: 100%;">
       <thead style="background-color: #d1d5db; font-weight: 600;">
@@ -177,7 +166,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         </tr>
       </tbody>
     </table>
-    <table style="margin-top: 2rem; width: 100%; margin-bottom:2rem;">
+    <table style="margin-top: 2rem; width: 100%; margin-bottom:0;">
       <thead style="background-color: #d1d5db; font-weight: 600;">
         <tr>
           <td style="border: 1px solid #000; text-align: right; font-weight: bold;">ГҮЙЛГЭЭНИЙ УТГА:</td>
@@ -200,28 +189,28 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
     <div style="display: block; width: 100%; text-align: left;">
       4. Гүйлгээний утга дээр гэрээлсэн байгууллага, хувь хүний регистрийн дугаар болон талбайн дугаарыг бичнэ үү.
     </div>
-    <div style="display: block; width: 100%; text-align: left; margin-top: 2rem; ">
+    <div style="display: block; width: 100%; text-align: left; margin: 0; padding:0;">
       Мастер түншлэл ХХК
     </div>
-    <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between;">
+    <div style="display: flex; width: 100%; align-items: flex-start; margin-top: 0; padding:0;">
       <div style="width: 80%;">
         <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
-          <p style="width: 40%; text-align: left; font-weight: 600;">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /Б.Бат-Өлзий/
+          <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&lt;gariinUseg&gt;</p>
+          <p style="width: 40%; text-align: left; margin-top: 3.3rem; font-weight: 600;">
+            &nbsp;&nbsp;&nbsp;&nbsp;/Б.Бат-Өлзий/
           </p>  
         </div>
-        <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
+        <div style="margin-top: 0; display: flex; align-items: flex-start; justify-content: space-between;">
           Холбогдох утас: 9990-0335
         </div>
-        <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
+        <div style="margin-top: 0; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Хүлээн зөвшөөрсөн...................................</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">
-            &lt;ner&gt;
+            &lt;ner&gt; 
           </p>
         <div>
       </div>
-      <div style="width: 20%;">
+      <div style="width: 20%; z-index:999">
         &lt;tamga&gt;
       </div>
     </div>
