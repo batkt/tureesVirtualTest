@@ -10,7 +10,6 @@ const API_CACHE_NAME = "api-cache-v1";
 const PAGES_CACHE_NAME = "pages-cache-v1";
 const OFFLINE_PAGE = "/offline.html";
 const pagesToCache = [
-  "/",
   "/khyanalt/zogsool/camera",
   "/khyanalt/zogsool",
   "/khyanalt/zogsool/mashinBurtgel",
@@ -71,7 +70,6 @@ self.addEventListener("fetch", (event) => {
       event.respondWith(handlePostRequest(req));
       return;
     }
-
     event.respondWith(
       fetch(req)
         .then((res) => {
@@ -86,27 +84,26 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Pages caching (only specific pages)
+  // Cached pages (camera, registration, etc.)
   if (pagesToCache.includes(url.pathname)) {
     event.respondWith(
-      fetch(req)
-        .then((res) => {
-          if (res.ok)
-            caches
-              .open(PAGES_CACHE_NAME)
-              .then((cache) => cache.put(req, res.clone()));
-          return res;
-        })
-        .catch(() =>
-          caches
-            .match(req)
-            .then((cached) => cached || caches.match(OFFLINE_PAGE))
-        )
+      caches.match(req).then((cached) => {
+        if (cached) return cached;
+        return fetch(req)
+          .then((res) => {
+            if (res.ok)
+              caches
+                .open(PAGES_CACHE_NAME)
+                .then((cache) => cache.put(req, res.clone()));
+            return res;
+          })
+          .catch(() => new Response("Resource not available", { status: 503 }));
+      })
     );
     return;
   }
 
-  // All other requests fallback to network
+  // Network-first for dynamic pages (login, root, etc.)
   event.respondWith(fetch(req).catch(() => caches.match(OFFLINE_PAGE)));
 });
 
