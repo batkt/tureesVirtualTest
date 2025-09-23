@@ -1,18 +1,14 @@
 export async function registerServiceWorker() {
   if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
-    console.warn("Service Worker дэмжигдэхгүй байна");
     return;
   }
 
   try {
     const registration = await navigator.serviceWorker.register("/sw.js");
 
-    console.log("Service Worker амжилттай бүртгэгдлээ:", registration.scope);
-
     // Шинэчлэлтийг автомат шинэчлэлтгүйгээр зохицуулах
     registration.addEventListener("updatefound", () => {
       const newWorker = registration.installing;
-      console.log("Шинэ service worker олдлоо, суулгаж байна...");
 
       newWorker.addEventListener("statechange", () => {
         if (
@@ -26,7 +22,6 @@ export async function registerServiceWorker() {
 
     return registration;
   } catch (error) {
-    console.error("Service Worker бүртгэхэд алдаа гарлаа:", error);
     throw error;
   }
 }
@@ -45,7 +40,6 @@ export function triggerSync() {
       navigator.serviceWorker.controller.postMessage({
         type: "TRIGGER_SYNC",
       });
-      console.log("Синк асаалт илгээгдлээ");
     }
     syncTimeout = null;
   }, SYNC_DEBOUNCE_TIME);

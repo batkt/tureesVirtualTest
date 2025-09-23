@@ -72,7 +72,6 @@ export const useBarilga = () => {
         }
         setIsInitialized(true);
       } catch (error) {
-        console.error("Барилга эхлүүлэхэд алдаа гарлаа:", error);
         setIsInitialized(true);
       }
     };
@@ -120,14 +119,10 @@ export const AuthProvider = ({ children }) => {
 
         try {
           const data = await getCachedPermissionsData();
-          console.log("Кэшээс уншсан эрхийн өгөгдөл:", data);
-        } catch (error) {
-          console.warn("Кэшээс эрхийн өгөгдөл авахад алдаа гарлаа:", error);
-        }
+        } catch (error) {}
 
         hasInitialized.current = true;
       } catch (error) {
-        console.error("App initialization failed:", error);
         hasInitialized.current = true;
       } finally {
         isInitializing.current = false;
@@ -147,16 +142,12 @@ export const AuthProvider = ({ children }) => {
 
   const initializeServiceWorker = async () => {
     if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
-      console.warn("Сервис воркер дэмжигдэхгүй байна");
       return;
     }
 
     try {
       await registerServiceWorker();
-      console.log("Сервис воркер амжилттай ажиллаж байна");
-    } catch (error) {
-      console.warn("Сервис воркерийн эхлэлт амжилтгүй:", error);
-    }
+    } catch (error) {}
   };
 
   const initializeAuthState = async () => {
@@ -175,9 +166,7 @@ export const AuthProvider = ({ children }) => {
 
       const erkh = localStorage.getItem("baiguulgiinErkhiinJagsaalt");
       setBaiguulgiinErkhiinJagsaalt(JSON.parse(erkh) || []);
-    } catch (error) {
-      console.error("Нэвтрэх төлөв эхлүүлэхэд алдаа гарлаа:", error);
-    }
+    } catch (error) {}
   };
 
   const setupNetworkListeners = () => {
@@ -208,15 +197,12 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const syncOfflineData = useCallback(async () => {
-    console.log("Өгөгдөл шинэчлэлт хийж байна...");
     if (token) {
       try {
         ajiltanMutate();
         baiguullagaMutate();
         message.success("Өгөгдөл шинэчлэгдлээ");
-      } catch (error) {
-        console.warn("Өгөгдөл шинэчлэлт хийхэд алдаа гарлаа:", error);
-      }
+      } catch (error) {}
     }
   }, [token, ajiltanMutate, baiguullagaMutate]);
 
@@ -234,9 +220,6 @@ export const AuthProvider = ({ children }) => {
               );
               permissionsData = res.data;
             } catch (error) {
-              console.warn(
-                "Эрхийн мэдээлэл татахад алдаа гарлаа, Интернетгүй үеийн эрх хадгалж байна"
-              );
               permissionsData = { moduluud: [], offlineFallback: true };
             }
 
@@ -253,15 +236,7 @@ export const AuthProvider = ({ children }) => {
 
               try {
                 await saveOfflineAuth(khereglech, loginResult);
-                console.log(
-                  "Интернетгүй үед нэвтрэлтийн мэдээлэл амжилттай хадгалагдлаа"
-                );
-              } catch (e) {
-                console.warn(
-                  "Интернетгүй үед мэдээлэл хадгалахад алдаа гарлаа",
-                  e
-                );
-              }
+              } catch (e) {}
 
               resolve(loginResult);
             } else {
@@ -381,7 +356,6 @@ export const AuthProvider = ({ children }) => {
             message.error(loginResult.error || "Нэвтрэлт амжилтгүй боллоо");
           }
         } catch (error) {
-          console.error("Нэвтрэх явцад алдаа гарлаа:", error);
           const errorMessage =
             error.message || error.toString() || "Нэвтрэх явцад алдаа гарлаа";
           message.warning(errorMessage);
@@ -400,7 +374,6 @@ export const AuthProvider = ({ children }) => {
 
           window.location.href = "/";
         } catch (error) {
-          console.error("Гарах үед алдаа гарлаа:", error);
           window.location.href = "/";
         }
       },
@@ -414,10 +387,6 @@ export const AuthProvider = ({ children }) => {
           await clearOfflineAuth();
           message.success("Интернетгүй үеийн мэдээлэл устгагдлаа");
         } catch (error) {
-          console.error(
-            "Интернетгүй үеийн мэдээлэл устгахад алдаа гарлаа:",
-            error
-          );
           message.error("Интернетгүй үеийн мэдээлэл устгахад алдаа гарлаа");
         }
       },
@@ -428,7 +397,6 @@ export const AuthProvider = ({ children }) => {
             await syncOfflineData();
             message.success("Мэдээлэл амжилттай шинэчлэгдлээ хийгдлээ");
           } catch (error) {
-            console.error("Шинэчлэл хийхэд алдаа гарлаа:", error);
             message.error("Шинэчлэл хийхэд алдаа гарлаа");
           }
         } else {
@@ -466,8 +434,4 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
-export const 
-
-
-
-useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);

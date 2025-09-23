@@ -3,513 +3,261 @@ const DB_VERSION = 9;
 const STORES = {
   USER: "user",
   PAYMENTS: "offline-payments",
+  CACHE: "cache",
 };
 
 let lastSyncTime = 0;
 let syncInProgress = false;
 
+const OFFLINE_PAGE = "/offline.html";
+
 function upgradeDB(db) {
   const stores = db.objectStoreNames;
 
-  if (!stores.contains(STORES.USER)) {
-    console.log("Хэрэглэгчийн сан үүсгэж байна");
-    db.createObjectStore(STORES.USER);
-  }
-
-  if (!stores.contains(STORES.PAYMENTS)) {
-    console.log("Төлбөрийн сан үүсгэж байна");
+  if (!stores.contains(STORES.USER)) db.createObjectStore(STORES.USER);
+  if (!stores.contains(STORES.PAYMENTS))
     db.createObjectStore(STORES.PAYMENTS, {
       keyPath: "id",
       autoIncrement: true,
     });
-  }
-
-  console.log(
-    "Шинэчлэлт дууссаны дараах сангууд:",
-    Array.from(db.objectStoreNames)
-  );
+  if (!stores.contains(STORES.CACHE)) db.createObjectStore(STORES.CACHE);
 }
 
 function openIndexedDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      console.log(
-        `ӨС-г ${event.oldVersion}-ээс ${event.newVersion} рүү шинэчилж байна`
-      );
-      upgradeDB(db);
-    };
+    request.onupgradeneeded = (event) => upgradeDB(event.target.result);
 
     request.onsuccess = (event) => {
       const db = event.target.result;
-      db.onversionchange = () => {
-        console.warn(
-          "ӨС-ийн хувилбар солигдлоо, хуучин холболтыг хаагаад байна"
-        );
-        db.close();
-      };
-      console.log("ӨС амжилттай нээгдлээ:", {
-        version: db.version,
-        stores: Array.from(db.objectStoreNames),
-      });
+      db.onversionchange = () => db.close();
       resolve(db);
     };
 
-    request.onerror = (event) => {
-      console.error("ӨС нээхэд алдаа гарлаа:", event.target.error);
-      reject(event.target.error);
-    };
-
-    request.onblocked = () => {
-      console.warn(
-        "ӨС-ийн шинэчлэлт хориглогдсон. Энэ ӨС-ийг ашиглаж буй бусад таб эсвэл цонхыг хаана уу."
-      );
-    };
+    request.onerror = (event) => reject(event.target.error);
   });
 }
 
-const API_CACHE_NAME = "api-cache-v1";
-
-self.addEventListener("install", (event) => {
-  console.log("Service Worker суулгагдаж байна");
-  event.waitUntil(
-    Promise.all([
-      openIndexedDB()
-        .then((db) => {
-          console.log("Өгөгдлийн сан суулгалтын үед эхлүүлэгдлээ");
-          db.close();
-        })
-        .catch((error) => {
-          console.error(
-            "Суулгалтын үед өгөгдлийн сан эхлүүлэхэд алдаа гарлаа:",
-            error
-          );
-        }),
-    ])
-  );
-});
-
-self.addEventListener("activate", (event) => {
-  console.log("Service Worker идэвхжиж байна");
-  event.waitUntil(
-    Promise.all([
-      caches.keys().then((keys) =>
-        Promise.all(
-          keys
-            .filter((key) => key !== API_CACHE_NAME)
-            .map((key) => {
-              console.log("Хуучин кэш устгаж байна:", key);
-              return caches.delete(key);
-            })
-        )
-      ),
-      openIndexedDB()
-        .then((db) => {
-          console.log("Идэвхжүүлэх үеийн өгөгдлийн сан баталгаажлаа");
-          console.log("Боломжтой сангууд:", Array.from(db.objectStoreNames));
-          db.close();
-        })
-        .catch((error) => {
-          console.error(
-            "Идэвхжүүлэх үеийн өгөгдлийн сан баталгаажуулахад алдаа гарлаа:",
-            error
-          );
-        }),
-    ])
-  );
-});
-
 function serializeHeaders(headers) {
-  const headerObj = {};
-  for (const [key, value] of headers.entries()) {
-    headerObj[key] = value;
-  }
-  return headerObj;
+  const obj = {};
+  for (const [key, value] of headers.entries()) obj[key] = value;
+  return obj;
 }
 
-function deserializeHeaders(headerObj) {
+function deserializeHeaders(obj) {
   const headers = new Headers();
-  for (const [key, value] of Object.entries(headerObj)) {
-    headers.set(key, value);
-  }
+  for (const [key, value] of Object.entries(obj)) headers.set(key, value);
   return headers;
 }
 
 self.addEventListener("fetch", (event) => {
-  const requestUrl = new URL(event.request.url);
-  let responsePromise;
+  const req = event.request;
+  const url = new URL(req.url);
 
-  if (requestUrl.pathname.startsWith("/api/")) {
-    if (event.request.method === "POST") {
-      responsePromise = (async () => {
-        try {
-          const response = await fetch(event.request.clone());
-          console.log("POST хүсэлт амжилттай боллоо:", requestUrl.pathname);
-          return response;
-        } catch (err) {
-          console.log(
-            "POST хүсэлт амжилтгүй, синкэд хадгалж байна:",
-            requestUrl.pathname,
-            err.message
-          );
-          const reqClone = event.request.clone();
-          let body;
-          let contentType = event.request.headers.get("content-type") || "";
+  if (url.pathname.startsWith("/api/") && req.method === "POST") {
+    event.respondWith(handlePostRequest(req));
+    return;
+  }
 
-          try {
-            if (contentType.includes("application/json")) {
-              body = await reqClone.json();
-            } else {
-              body = await reqClone.text();
-            }
-          } catch (bodyErr) {
-            console.warn("Хүсэлтийн өгөгдлийг задлахад алдаа гарлаа:", bodyErr);
-            body = null;
-          }
-
-          try {
-            const db = await openIndexedDB();
-
-            if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-              console.error(
-                "PAYMENTS сан олдсонгүй! Боломжтой сангууд:",
-                Array.from(db.objectStoreNames)
-              );
-              db.close();
-              throw new Error("PAYMENTS сан байхгүй байна");
-            }
-
-            const tx = db.transaction(STORES.PAYMENTS, "readwrite");
-            const store = tx.objectStore(STORES.PAYMENTS);
-
-            const paymentData = {
-              url: event.request.url,
-              body,
-              method: event.request.method,
-              headers: serializeHeaders(event.request.headers),
-              contentType,
-              synced: false,
-              createdAt: new Date().toISOString(),
-              retryCount: 0,
-              lastError: err.message,
-            };
-
-            await new Promise((resolve, reject) => {
-              const addRequest = store.add(paymentData);
-
-              addRequest.onsuccess = () => {
-                console.log("Оффлайн төлбөр амжилттай хадгалагдлаа");
-
-                self.clients.matchAll().then((clients) => {
-                  clients.forEach((client) => {
-                    client.postMessage({
-                      type: "PAYMENT_SAVED_OFFLINE",
-                      payment: { ...paymentData, id: addRequest.result },
-                      timestamp: new Date().toISOString(),
-                    });
-                  });
-                });
-
-                resolve();
-              };
-
-              addRequest.onerror = () => {
-                console.error(
-                  "Оффлайн төлбөр хадгалахад алдаа гарлаа:",
-                  addRequest.error
-                );
-                reject(addRequest.error);
-              };
-            });
-
-            db.close();
-          } catch (dbError) {
-            console.error(
-              "Оффлайн төлбөр хадгалахад өгөгдлийн сангийн алдаа гарлаа:",
-              dbError
-            );
-          }
-
-          return new Response(
-            JSON.stringify({
-              offline: true,
-              message: "Хүсэлт арын синкэд хадгалагдлаа",
-              timestamp: new Date().toISOString(),
-              success: true,
-            }),
-            { status: 200, headers: { "Content-Type": "application/json" } }
-          );
-        }
-      })();
-    } else {
-      responsePromise = fetch(event.request)
-        .then((response) => {
-          if (response.ok) {
-            const clone = response.clone();
+  if (url.pathname.startsWith("/api/")) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res.ok)
             caches
               .open(API_CACHE_NAME)
-              .then((cache) => cache.put(event.request, clone));
-          }
-          return response;
+              .then((cache) => cache.put(req, res.clone()));
+          return res;
         })
-        .catch(async (err) => {
-          console.error(
-            "GET хүсэлт амжилтгүй боллоо:",
-            err.message,
-            "URL:",
-            event.request.url
-          );
-          const cachedResponse = await caches.match(event.request);
-          if (cachedResponse) {
-            console.log("Кэшээс үйлчилж байна:", event.request.url);
-            return cachedResponse;
-          }
-          return new Response("Оффлайн байна", { status: 503 });
+        .catch(async () => {
+          const cached = await caches.match(req);
+          return cached || new Response("Оффлайн байна", { status: 503 });
+        })
+    );
+    return;
+  }
+
+  event.respondWith(
+    caches
+      .match(req)
+      .then(
+        (cached) =>
+          cached ||
+          fetch(req).catch(() => new Response("Оффлайн байна", { status: 503 }))
+      )
+  );
+});
+
+async function handlePostRequest(req) {
+  try {
+    return await fetch(req.clone());
+  } catch (err) {
+    const reqClone = req.clone();
+    let body,
+      contentType = req.headers.get("content-type") || "";
+
+    try {
+      body = contentType.includes("application/json")
+        ? await reqClone.json()
+        : await reqClone.text();
+    } catch {
+      body = null;
+    }
+
+    try {
+      const db = await openIndexedDB();
+      const tx = db.transaction(STORES.PAYMENTS, "readwrite");
+      const store = tx.objectStore(STORES.PAYMENTS);
+
+      await new Promise((resolve, reject) => {
+        const addReq = store.add({
+          url: req.url,
+          body,
+          method: req.method,
+          headers: serializeHeaders(req.headers),
+          contentType,
+          synced: false,
+          createdAt: new Date().toISOString(),
+          retryCount: 0,
+          lastError: err.message,
         });
-    }
-  } else {
-    responsePromise = caches.match(event.request).then((response) => {
-      if (response) {
-        console.log("Кэшээс үйлчилж байна:", event.request.url);
-        return response;
-      }
-      return fetch(event.request).catch(() => {
-        console.log("Оффлайн хуудас руу шилжиж байна:", event.request.url);
-        return new Response("Оффлайн байна", { status: 503 });
+        addReq.onsuccess = () => resolve();
+        addReq.onerror = () => reject(addReq.error);
       });
-    });
-  }
 
-  event.respondWith(responsePromise);
-});
+      db.close();
+    } catch {}
 
-self.addEventListener("sync", (event) => {
-  console.log("Арын синк асаалт авлаа:", event.tag);
-  if (event.tag === "sync-payments") {
-    event.waitUntil(syncPaymentsFromSW());
+    return new Response(
+      JSON.stringify({
+        offline: true,
+        message: "Хүсэлт арын синкэд хадгалагдлаа",
+        success: true,
+      }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
   }
-});
-
-self.addEventListener("message", (event) => {
-  console.log("Service worker мессеж хүлээн авлаа:", event.data);
-  if (event.data?.type === "TRIGGER_SYNC") {
-    const now = Date.now();
-    if (now - lastSyncTime < 5000) {
-      // 5 секундын хүлээлэг
-      console.log(
-        "Синк хүсэлт үл хэрэгслэгдлээ - дэндүү удалгүй синк хийсэн байна"
-      );
-      return;
-    }
-    syncPaymentsFromSW();
-  } else if (event.data?.type === "GET_PENDING_PAYMENTS") {
-    getPendingPayments()
-      .then((payments) => {
-        event.ports[0].postMessage({ payments });
-      })
-      .catch((error) => {
-        console.error(
-          "GET_PENDING_PAYMENTS мессежийн зохицуулагчид алдаа гарлаа:",
-          error
-        );
-        event.ports[0].postMessage({ payments: [], error: error.message });
-      });
-  }
-});
+}
 
 async function getPendingPayments() {
   try {
     const db = await openIndexedDB();
-
-    if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-      console.warn("PAYMENTS сан байхгүй байна, хоосон жагсаалт буцааж байна");
-      db.close();
-      return [];
-    }
-
+    if (!db.objectStoreNames.contains(STORES.PAYMENTS)) return [];
     const tx = db.transaction(STORES.PAYMENTS, "readonly");
     const store = tx.objectStore(STORES.PAYMENTS);
 
-    const allPayments = await new Promise((resolve, reject) => {
-      const getAllRequest = store.getAll();
-      getAllRequest.onsuccess = () => resolve(getAllRequest.result);
-      getAllRequest.onerror = () => reject(getAllRequest.error);
+    const payments = await new Promise((resolve, reject) => {
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
     });
 
     db.close();
-    console.log("Хүлээгдэж буй төлбөрүүд авлаа:", allPayments.length);
-    return allPayments;
-  } catch (error) {
-    console.error("Хүлээгдэж буй төлбөрүүд авахад алдаа гарлаа:", error);
+    return payments;
+  } catch {
     return [];
   }
 }
 
 async function syncPaymentsFromSW() {
-  const now = Date.now();
-
-  if (syncInProgress) {
-    console.log("Синк хийгдэж байгаа тул алгасаж байна...");
-    return;
-  }
-
-  if (now - lastSyncTime < 10000) {
-    console.log(
-      "Синк хүсэлт үл хэрэгслэгдлээ - дэндүү удалгүй синк хийсэн байна"
-    );
-    return;
-  }
-
+  if (syncInProgress || Date.now() - lastSyncTime < 10000) return;
   syncInProgress = true;
-  lastSyncTime = now;
+  lastSyncTime = Date.now();
 
-  console.log("Төлбөрийн синк эхлэж байна...");
   try {
     const db = await openIndexedDB();
-
-    if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-      console.warn("PAYMENTS сан байхгүй байна, синк хийх боломжгүй");
-      db.close();
-      return;
-    }
+    if (!db.objectStoreNames.contains(STORES.PAYMENTS)) return;
 
     const tx = db.transaction(STORES.PAYMENTS, "readwrite");
     const store = tx.objectStore(STORES.PAYMENTS);
-
-    const allPayments = await new Promise((resolve, reject) => {
-      const getAllRequest = store.getAll();
-      getAllRequest.onsuccess = () => resolve(getAllRequest.result);
-      getAllRequest.onerror = () => reject(getAllRequest.error);
+    const payments = await new Promise((resolve, reject) => {
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
     });
 
-    console.log(`${allPayments.length} төлбөр синк хийхэд бэлэн байна`);
-
-    let successCount = 0;
-    let failureCount = 0;
-
-    for (const payment of allPayments) {
+    for (const p of payments) {
       try {
-        console.log(
-          "Төлбөр синк хийж байна:",
-          payment.id,
-          "Давтан оролдсон:",
-          payment.retryCount || 0
-        );
+        if ((p.retryCount || 0) >= 5) continue;
 
-        if (payment.retryCount >= 5) {
-          console.warn(
-            "Төлбөр давтан оролдох хязгаар давсан байна:",
-            payment.id
-          );
-          failureCount++;
-          continue;
-        }
+        const headers = deserializeHeaders(p.headers);
+        if (p.body && p.contentType) headers.set("content-type", p.contentType);
 
-        const headers = deserializeHeaders(payment.headers);
-        if (payment.body && payment.contentType) {
-          headers.set("content-type", payment.contentType);
-        }
+        const body = p.body
+          ? p.contentType.includes("application/json")
+            ? JSON.stringify(p.body)
+            : p.body
+          : undefined;
 
-        let requestBody;
-        if (payment.body) {
-          requestBody = payment.contentType?.includes("application/json")
-            ? JSON.stringify(payment.body)
-            : payment.body;
-        }
-
-        const response = await fetch(payment.url, {
-          method: payment.method,
+        const response = await fetch(p.url, {
+          method: p.method,
           headers,
-          body: requestBody,
+          body,
         });
 
         if (response.ok) {
-          console.log("Төлбөр амжилттай синк хийгдлээ:", payment.id);
-          successCount++;
-
-          const deleteTx = db.transaction(STORES.PAYMENTS, "readwrite");
-          await new Promise((resolve, reject) => {
-            const deleteRequest = deleteTx
-              .objectStore(STORES.PAYMENTS)
-              .delete(payment.id);
-            deleteRequest.onsuccess = () => resolve();
-            deleteRequest.onerror = () => reject(deleteRequest.error);
-          });
-        } else {
-          console.error(
-            "Сервер синк хүсэлтийг татгалзлаа:",
-            response.status,
-            payment.id
+          await new Promise(
+            (res) => (store.delete(p.id).onsuccess = () => res())
           );
-          failureCount++;
-
-          const updateTx = db.transaction(STORES.PAYMENTS, "readwrite");
-          const updateStore = updateTx.objectStore(STORES.PAYMENTS);
-          payment.retryCount = (payment.retryCount || 0) + 1;
-          payment.lastError = `HTTP ${response.status}`;
-          payment.lastRetry = new Date().toISOString();
-
-          await new Promise((resolve, reject) => {
-            const putRequest = updateStore.put(payment);
-            putRequest.onsuccess = () => resolve();
-            putRequest.onerror = () => reject(putRequest.error);
-          });
+        } else {
+          p.retryCount = (p.retryCount || 0) + 1;
+          p.lastError = `HTTP ${response.status}`;
+          p.lastRetry = new Date().toISOString();
+          store.put(p);
         }
       } catch (err) {
-        console.error(
-          "Төлбөрийн синк амжилтгүй боллоо:",
-          payment.id,
-          err.message
-        );
-        failureCount++;
-
-        try {
-          const updateTx = db.transaction(STORES.PAYMENTS, "readwrite");
-          const updateStore = updateTx.objectStore(STORES.PAYMENTS);
-          payment.retryCount = (payment.retryCount || 0) + 1;
-          payment.lastError = err.message;
-          payment.lastRetry = new Date().toISOString();
-
-          await new Promise((resolve, reject) => {
-            const putRequest = updateStore.put(payment);
-            putRequest.onsuccess = () => resolve();
-            putRequest.onerror = () => reject(putRequest.error);
-          });
-        } catch (updateErr) {
-          console.error(
-            "Давтан оролдсон тоо шинэчлэхэд алдаа гарлаа:",
-            updateErr
-          );
-        }
+        p.retryCount = (p.retryCount || 0) + 1;
+        p.lastError = err.message;
+        p.lastRetry = new Date().toISOString();
+        store.put(p);
       }
     }
 
     db.close();
-    console.log(
-      `Төлбөрийн синк дууслаа: ${successCount} амжилттай, ${failureCount} амжилтгүй`
-    );
-
-    // Клиентэд мэдэгдэл илгээх - ШИНЭЧЛЭХГҮЙ
-    if (allPayments.length > 0) {
-      const clients = await self.clients.matchAll();
-      clients.forEach((client) => {
-        client.postMessage({
-          type: "SYNC_COMPLETED",
-          tag: "sync-payments",
-          timestamp: new Date().toISOString(),
-          results: {
-            total: allPayments.length,
-            successful: successCount,
-            failed: failureCount,
-          },
-        });
-      });
-    }
-  } catch (error) {
-    console.error("Төлбөрийн синк хийхэд алдаа гарлаа:", error);
+  } catch {
   } finally {
     syncInProgress = false;
   }
 }
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    Promise.all([
+      openIndexedDB(),
+      caches.open(API_CACHE_NAME).then((c) => c.add(OFFLINE_PAGE)),
+    ])
+  );
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys.filter((k) => k !== API_CACHE_NAME).map((k) => caches.delete(k))
+        )
+      )
+  );
+});
+
+self.addEventListener("sync", (event) => {
+  if (event.tag === "sync-payments") event.waitUntil(syncPaymentsFromSW());
+});
+
+self.addEventListener("message", (event) => {
+  const data = event.data;
+  if (!data) return;
+
+  if (data.type === "TRIGGER_SYNC") syncPaymentsFromSW();
+  if (data.type === "GET_PENDING_PAYMENTS")
+    getPendingPayments().then((payments) =>
+      event.ports[0].postMessage({ payments })
+    );
+  if (data.type === "CLEAR_CACHE") {
+    caches
+      .keys()
+      .then((names) => Promise.all(names.map((n) => caches.delete(n))));
+  }
+});
