@@ -13,26 +13,16 @@ export async function openDB() {
   try {
     const db = await idbOpen(DB_NAME, DB_VERSION, {
       upgrade(db, oldVersion, newVersion, transaction) {
-        console.log(
-          `Өгөгдлийн санг ${oldVersion}-ээс ${newVersion} рүү шинэчилж байна`
-        );
-
         if (!db.objectStoreNames.contains(STORES.USER)) {
-          console.log("Хэрэглэгчийн сан үүсгэж байна");
           db.createObjectStore(STORES.USER);
         }
 
         if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-          console.log("Төлбөрийн сан үүсгэж байна");
           db.createObjectStore(STORES.PAYMENTS, {
             keyPath: "id",
             autoIncrement: true,
           });
         }
-
-        console.log("Шинэчлэлт дууссаны дараах сангууд:", [
-          ...db.objectStoreNames,
-        ]);
       },
       blocked() {
         console.warn(
@@ -55,7 +45,6 @@ export async function openDB() {
 
 export async function saveOfflineAuth(credentials, serverResponse) {
   try {
-    console.log("💾 Оффлайн нэвтрэлтийн өгөгдөл хадгалж байна");
     const db = await openDB();
 
     const authData = {
@@ -68,7 +57,6 @@ export async function saveOfflineAuth(credentials, serverResponse) {
     };
 
     await db.put(STORES.USER, authData, "credentials");
-    console.log("✅ Оффлайн нэвтрэлтийн өгөгдөл амжилттай хадгалагдлаа");
   } catch (error) {
     console.error(
       "❌ Оффлайн нэвтрэлтийн өгөгдөл хадгалахад алдаа гарлаа:",
@@ -80,12 +68,7 @@ export async function saveOfflineAuth(credentials, serverResponse) {
 
 export async function performOfflineLogin(credentials) {
   try {
-    console.log("🔐 Оффлайн нэвтрэлт оролдож байна");
-
     if (typeof navigator !== "undefined" && navigator.onLine) {
-      console.log(
-        "❌ Сүлжээ холбогдсон байна - оффлайн нэвтрэлт хийх шаардлагагүй"
-      );
       throw new Error("Сүлжээ байгаа тул онлайн нэвтрэлт хэрэглэнэ үү");
     }
 
@@ -93,7 +76,6 @@ export async function performOfflineLogin(credentials) {
     const storedAuth = await db.get(STORES.USER, "credentials");
 
     if (!storedAuth) {
-      console.log("❌ Оффлайн нэвтрэлтийн мэдээлэл олдсонгүй");
       throw new Error("Оффлайн нэвтрэлтийн мэдээлэл байхгүй байна");
     }
 
@@ -104,11 +86,9 @@ export async function performOfflineLogin(credentials) {
       storedAuth.username !== inputUsername ||
       storedAuth.password !== inputPassword
     ) {
-      console.log("❌ Оффлайн нэвтрэлтийн мэдээлэл тохирохгүй байна");
       throw new Error("Нэвтрэх нэр эсвэл нууц үг буруу байна");
     }
 
-    console.log("✅ Оффлайн нэвтрэлт амжилттай боллоо");
     return {
       success: true,
       token: storedAuth.token,
@@ -141,7 +121,6 @@ export async function clearOfflineAuth() {
   try {
     const db = await openDB();
     await db.delete(STORES.USER, "credentials");
-    console.log("✅ Оффлайн нэвтрэлтийн мэдээлэл устгагдлаа");
   } catch (error) {
     console.error(
       "❌ Оффлайн нэвтрэлтийн мэдээлэл устгахад алдаа гарлаа:",
@@ -171,7 +150,6 @@ export async function attemptLogin(credentials, onlineLoginFunction) {
   }
 
   if (typeof navigator !== "undefined" && navigator.onLine) {
-    console.log("🌐 Сүлжээ байгаа - онлайн нэвтрэлт хийж байна");
     try {
       const onlineResult = await onlineLoginFunction(credentials);
 
@@ -197,9 +175,6 @@ export async function attemptLogin(credentials, onlineLoginFunction) {
       throw new Error(aldaaMessage);
     }
   } else {
-    console.log(
-      "📴 Сүлжээ тасарсан - Интернетгүй үеийн нэвтрэлт оролдож байна"
-    );
     try {
       const offlineResult = await performOfflineLogin(credentials);
       return {

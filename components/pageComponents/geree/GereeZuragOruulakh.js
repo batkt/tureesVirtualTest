@@ -50,7 +50,6 @@ const GereeZuragOruulakh = (
           message.error(t("Зураг хадгалах үед алдаа гарлаа"));
         }
       } catch (err) {
-        console.error(err);
         message.error(t("Зураг хадгалах үед алдаа гарлаа"));
       }
     },
@@ -83,7 +82,7 @@ const GereeZuragOruulakh = (
         headers={{ Authorization: `Bearer ${token}` }}
         onChange={({ fileList }) => setZurguud(fileList)}
       >
-        <div className="flex w-full cursor-pointer justify-between rounded-xl  bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-400 hover:text-white dark:bg-gray-600 dark:hover:bg-green-800">
+        <div className="flex w-full cursor-pointer justify-between rounded-xl bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-400 hover:text-white dark:bg-gray-600 dark:hover:bg-green-800">
           <div className="flex gap-5">
             <FileImageOutlined className="text-xl" />
             <div>

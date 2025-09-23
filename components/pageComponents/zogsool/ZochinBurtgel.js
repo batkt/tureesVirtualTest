@@ -112,7 +112,6 @@ function ZochinBurtgel(
           turul: "Иргэн",
         });
       } catch (error) {
-        console.error("Error getting sequence:", error);
         const generatedRegister = `ЗЧ00000001`;
         form.setFieldsValue({
           register: generatedRegister,
@@ -243,11 +242,6 @@ function ZochinBurtgel(
 
           processedData.register = `ЗЧ${sequence.toString().padStart(8, "0")}`;
         } catch (error) {
-          console.error(
-            "Error getting latest sequence, using timestamp fallback:",
-            error
-          );
-          // Fallback: Use timestamp-based unique register
           const timestamp = Date.now().toString().slice(-6);
           processedData.register = `ЗЧ${timestamp.padStart(8, "0")}`;
         }

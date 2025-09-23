@@ -96,7 +96,6 @@ function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
         await mutate(undefined, { revalidate: true });
         return result.data;
       } catch (error) {
-        console.error("Error sending duudlaga:", error);
         aldaaBarigch(error);
         throw error;
       }
@@ -114,7 +113,6 @@ function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
         await mutate(undefined, { revalidate: true });
         return result.data;
       } catch (error) {
-        console.error("Error updating duudlaga:", error);
         throw error;
       }
     },
@@ -138,7 +136,6 @@ function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
         await mutate(undefined, { revalidate: true });
         return result.data;
       } catch (err) {
-        console.error("Error updating duudlaga status:", err);
         aldaaBarigch(err);
         mutate(undefined, { revalidate: true });
         throw err;

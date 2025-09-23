@@ -7,19 +7,14 @@ export async function registerServiceWorker() {
   try {
     const registration = await navigator.serviceWorker.register("/sw.js");
 
-    console.log("Service Worker амжилттай бүртгэгдлээ:", registration.scope);
-
-    // Шинэчлэлтийг автомат шинэчлэлтгүйгээр зохицуулах
     registration.addEventListener("updatefound", () => {
       const newWorker = registration.installing;
-      console.log("Шинэ service worker олдлоо, суулгаж байна...");
 
       newWorker.addEventListener("statechange", () => {
         if (
           newWorker.state === "installed" &&
           navigator.serviceWorker.controller
         ) {
-          console.log("Шинэ service worker суулгагдлаа");
         }
       });
     });
@@ -31,7 +26,6 @@ export async function registerServiceWorker() {
   }
 }
 
-// Давтагдахаас сэргийлэх синк функц
 let syncTimeout = null;
 const SYNC_DEBOUNCE_TIME = 2000; // 2 секунд
 
@@ -45,7 +39,6 @@ export function triggerSync() {
       navigator.serviceWorker.controller.postMessage({
         type: "TRIGGER_SYNC",
       });
-      console.log("Синк асаалт илгээгдлээ");
     }
     syncTimeout = null;
   }, SYNC_DEBOUNCE_TIME);

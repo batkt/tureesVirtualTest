@@ -30,7 +30,6 @@ const LinkPreview = ({ url, className = "", height = 800 }) => {
         setError(null);
       })
       .catch((err) => {
-        console.warn("Link preview fetch failed:", err);
         setPreview(basicPreview);
         setError(err.message);
       })

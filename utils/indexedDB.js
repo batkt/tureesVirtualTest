@@ -1,23 +1,24 @@
-import { openDB as idbOpen } from 'idb';
+import { openDB as idbOpen } from "idb";
 
-const DB_NAME = 'turees-db';
+const DB_NAME = "turees-db";
 const DB_VERSION = 9;
 
 const STORES = {
-  USER: 'user',
-  PAYMENTS: 'offline-payments',
+  USER: "user",
+  PAYMENTS: "offline-payments",
 };
 
 export async function openDB() {
   return idbOpen(DB_NAME, DB_VERSION, {
     upgrade(db) {
       if (!db.objectStoreNames.contains(STORES.USER)) {
-        console.log('Хэрэглэгчийн сан үүсгэж байна');
         db.createObjectStore(STORES.USER);
       }
       if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-        console.log('Төлбөрийн сан үүсгэж байна');
-        db.createObjectStore(STORES.PAYMENTS, { keyPath: 'id', autoIncrement: true });
+        db.createObjectStore(STORES.PAYMENTS, {
+          keyPath: "id",
+          autoIncrement: true,
+        });
       }
     },
   });
@@ -26,11 +27,10 @@ export async function openDB() {
 export async function saveUser(token, info) {
   try {
     const db = await openDB();
-    await db.put(STORES.USER, token, 'token');
-    await db.put(STORES.USER, info, 'info');
-    console.log('Хэрэглэгчийн мэдээлэл амжилттай хадгалагдлаа');
+    await db.put(STORES.USER, token, "token");
+    await db.put(STORES.USER, info, "info");
   } catch (error) {
-    console.error('Хэрэглэгчийн мэдээлэл хадгалахад алдаа гарлаа:', error);
+    console.error("Хэрэглэгчийн мэдээлэл хадгалахад алдаа гарлаа:", error);
     throw error;
   }
 }
@@ -38,11 +38,11 @@ export async function saveUser(token, info) {
 export async function getUser() {
   try {
     const db = await openDB();
-    const token = await db.get(STORES.USER, 'token');
-    const info = await db.get(STORES.USER, 'info');
+    const token = await db.get(STORES.USER, "token");
+    const info = await db.get(STORES.USER, "info");
     return { token, info };
   } catch (error) {
-    console.error('Хэрэглэгчийн мэдээлэл авахад алдаа гарлаа:', error);
+    console.error("Хэрэглэгчийн мэдээлэл авахад алдаа гарлаа:", error);
     return { token: null, info: null };
   }
 }
@@ -50,30 +50,32 @@ export async function getUser() {
 export async function clearUser() {
   try {
     const db = await openDB();
-    await db.delete(STORES.USER, 'token');
-    await db.delete(STORES.USER, 'info');
-    console.log('Хэрэглэгчийн мэдээлэл амжилттай устгагдлаа');
+    await db.delete(STORES.USER, "token");
+    await db.delete(STORES.USER, "info");
   } catch (error) {
-    console.error('Хэрэглэгчийн мэдээлэл устгахад алдаа гарлаа:', error);
+    console.error("Хэрэглэгчийн мэдээлэл устгахад алдаа гарлаа:", error);
     throw error;
   }
 }
 
-export async function saveOfflinePayment({ token = null, data = {}, synced = false } = {}) {
+export async function saveOfflinePayment({
+  token = null,
+  data = {},
+  synced = false,
+} = {}) {
   try {
     const db = await openDB();
     const createdAt = new Date().toISOString();
-    const result = await db.add(STORES.PAYMENTS, { 
-      token, 
-      data, 
-      createdAt, 
-      synced, 
-      retryCount: 0 
+    const result = await db.add(STORES.PAYMENTS, {
+      token,
+      data,
+      createdAt,
+      synced,
+      retryCount: 0,
     });
-    console.log('Оффлайн төлбөр амжилттай хадгалагдлаа, ID:', result);
     return result;
   } catch (error) {
-    console.error('Оффлайн төлбөр хадгалахад алдаа гарлаа:', error);
+    console.error("Оффлайн төлбөр хадгалахад алдаа гарлаа:", error);
     throw error;
   }
 }
@@ -82,10 +84,9 @@ export async function getOfflinePayments() {
   try {
     const db = await openDB();
     const payments = await db.getAll(STORES.PAYMENTS);
-    console.log('Оффлайн төлбөр авлаа:', payments.length, 'ширхэг');
     return payments;
   } catch (error) {
-    console.error('Оффлайн төлбөр авахад алдаа гарлаа:', error);
+    console.error("Оффлайн төлбөр авахад алдаа гарлаа:", error);
     return [];
   }
 }
@@ -94,10 +95,9 @@ export async function deleteOfflinePayment(id) {
   try {
     const db = await openDB();
     const result = await db.delete(STORES.PAYMENTS, id);
-    console.log('Оффлайн төлбөр устгагдлаа:', id);
     return result;
   } catch (error) {
-    console.error('Оффлайн төлбөр устгахад алдаа гарлаа:', error);
+    console.error("Оффлайн төлбөр устгахад алдаа гарлаа:", error);
     throw error;
   }
 }

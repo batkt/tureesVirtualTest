@@ -44,7 +44,7 @@ const NotificationModal = React.memo(
     }, []);
 
     const NotificationModalLoading = () => (
-      <div className="flex h-64 items-center justify-center">
+      <div className="flex items-center justify-center h-64">
         <Spin size="large" />
       </div>
     );
@@ -74,7 +74,6 @@ const NotificationModal = React.memo(
             setDontShowAgainChecked(false);
           }
         } catch (error) {
-          console.error("Error in handleClose:", error);
           setDontShowAgainChecked(false);
         } finally {
           setIsSubmitting(false);
@@ -216,11 +215,11 @@ const NotificationModal = React.memo(
           title={
             <div className="flex flex-col items-center py-1">
               <div className="h-1" />
-              <div className="text-center text-base font-medium text-gray-800 dark:text-gray-200 sm:text-sm">
+              <div className="text-base font-medium text-center text-gray-800 dark:text-gray-200 sm:text-sm">
                 {t("📢 ШИНЭЧЛЭЛТИЙН МЭДЭЭ 📢")}
               </div>
               <div className="h-3" />
-              <div className="text-center text-sm text-gray-700 dark:text-gray-300 sm:text-base">
+              <div className="text-sm text-center text-gray-700 dark:text-gray-300 sm:text-base">
                 {displayData?.title}
               </div>
               <div className="h-1" />
@@ -238,13 +237,13 @@ const NotificationModal = React.memo(
           footer={
             <div className="flex items-center p-2 sm:p-4">
               {!isMessageModal ? (
-                <div className="flex w-full flex-col items-center justify-between gap-2 sm:flex-row sm:gap-0">
+                <div className="flex flex-col items-center justify-between w-full gap-2 sm:flex-row sm:gap-0">
                   <Checkbox
                     checked={dontShowAgainChecked}
                     onChange={handleCheckboxChange}
                     disabled={isSubmitting}
                   >
-                    <span className="select-none text-xs text-gray-800 dark:text-gray-200 sm:text-sm">
+                    <span className="text-xs text-gray-800 select-none dark:text-gray-200 sm:text-sm">
                       {t("Дахин харуулахгүй")}
                     </span>
                   </Checkbox>
@@ -258,11 +257,11 @@ const NotificationModal = React.memo(
                   </Button>
                 </div>
               ) : (
-                <div className="flex w-full justify-end">
+                <div className="flex justify-end w-full">
                   <Button
                     type="primary"
                     onClick={handleClose}
-                    className="w-full bg-gray-100 px-4 py-1 text-xs text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 sm:w-auto sm:px-6 sm:py-2 sm:text-sm"
+                    className="w-full px-4 py-1 text-xs text-black bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 sm:w-auto sm:px-6 sm:py-2 sm:text-sm"
                   >
                     {t("Хаах")}
                   </Button>
@@ -280,11 +279,11 @@ const NotificationModal = React.memo(
             <div className="mb-1 space-y-3 sm:mb-2">
               <div className="space-y-5 sm:space-y-4">
                 <div className="w-full">
-                  <div className="flex w-full flex-row items-center justify-between">
-                    <div className="text-left text-sm text-gray-800 dark:text-gray-200 sm:text-base">
+                  <div className="flex flex-row items-center justify-between w-full">
+                    <div className="text-sm text-left text-gray-800 dark:text-gray-200 sm:text-base">
                       {t("Нийтэлсэн")}
                     </div>
-                    <div className="text-right text-sm text-gray-800 dark:text-gray-200 sm:text-base">
+                    <div className="text-sm text-right text-gray-800 dark:text-gray-200 sm:text-base">
                       {displayData.date}
                     </div>
                   </div>
@@ -307,7 +306,7 @@ const NotificationModal = React.memo(
                   </div>
                 )}
                 <div className="sm:space-y-2">
-                  <div className="max-h-96 overflow-y-auto rounded-lg bg-gray-100 p-2 dark:bg-gray-700 sm:p-4">
+                  <div className="p-2 overflow-y-auto bg-gray-100 rounded-lg max-h-96 dark:bg-gray-700 sm:p-4">
                     <ContentWithLinkPreviews content={cleanedContent} />
                   </div>
                   {!isMessageModal && (

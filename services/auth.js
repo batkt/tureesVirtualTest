@@ -120,7 +120,6 @@ export const AuthProvider = ({ children }) => {
 
         try {
           const data = await getCachedPermissionsData();
-          console.log("Кэшээс уншсан эрхийн өгөгдөл:", data);
         } catch (error) {
           console.warn("Кэшээс эрхийн өгөгдөл авахад алдаа гарлаа:", error);
         }
@@ -153,7 +152,6 @@ export const AuthProvider = ({ children }) => {
 
     try {
       await registerServiceWorker();
-      console.log("Сервис воркер амжилттай ажиллаж байна");
     } catch (error) {
       console.warn("Сервис воркерийн эхлэлт амжилтгүй:", error);
     }
@@ -208,7 +206,6 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const syncOfflineData = useCallback(async () => {
-    console.log("Өгөгдөл шинэчлэлт хийж байна...");
     if (token) {
       try {
         ajiltanMutate();
@@ -253,9 +250,6 @@ export const AuthProvider = ({ children }) => {
 
               try {
                 await saveOfflineAuth(khereglech, loginResult);
-                console.log(
-                  "Интернетгүй үед нэвтрэлтийн мэдээлэл амжилттай хадгалагдлаа"
-                );
               } catch (e) {
                 console.warn(
                   "Интернетгүй үед мэдээлэл хадгалахад алдаа гарлаа",
@@ -466,8 +460,4 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
-export const 
-
-
-
-useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);

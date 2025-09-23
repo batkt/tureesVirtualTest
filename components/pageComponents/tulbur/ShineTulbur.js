@@ -601,9 +601,9 @@ function ShineTulbur(
 
   if (alkham !== 3 || eBarimt)
     return (
-      <div className="h-full w-full">
+      <div className="w-full h-full">
         {alkham === 1 && (
-          <div className="flex w-full flex-row justify-between border-b border-gray-300 p-4 text-lg font-semibold dark:text-gray-200">
+          <div className="flex flex-row justify-between w-full p-4 text-lg font-semibold border-b border-gray-300 dark:text-gray-200">
             <div>{t("Тооцоо хийх")}</div>
             <div className="flex items-center">
               {mashiniiDugaar}
@@ -750,7 +750,7 @@ function ShineTulbur(
               )}
               <div>
                 <p>
-                  <div className="flex w-full justify-center p-5 pt-3">
+                  <div className="flex justify-center w-full p-5 pt-3">
                     <div>
                       <QRCode level="L" value={eBarimt?.qrData} size={"100%"} />
                     </div>
@@ -1151,7 +1151,7 @@ function ShineTulbur(
             <div className="flex h-full w-[246px] flex-col items-center justify-end gap-6">
               <div className="flex h-[256px] w-[100%] flex-col justify-between rounded-[25px] border-2 border-dotted border-green-600 p-5">
                 <div className="flex flex-col gap-2 font-semibold">
-                  <div className="flex w-full justify-between font-semibold dark:text-gray-200">
+                  <div className="flex justify-between w-full font-semibold dark:text-gray-200">
                     <div>Нийт дүн:</div>
                     <div>{formatNumber(niitDun)}₮</div>
                   </div>
@@ -1228,7 +1228,7 @@ function ShineTulbur(
           setTin={setTin}
         />
         {alkham === 2 && eBarimtAshiglakhEsekh === true && (
-          <div className="mt-5 flex flex-row justify-between">
+          <div className="flex flex-row justify-between mt-5">
             <Button type="primary" danger onClick={() => ref.current.khaaya()}>
               {t("Хаах")}
             </Button>

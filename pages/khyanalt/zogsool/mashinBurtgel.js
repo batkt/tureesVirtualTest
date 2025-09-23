@@ -852,7 +852,6 @@ function mashinBurtgel({ token }) {
         }
       })
       .catch((error) => {
-        console.error("Delete error:", error);
         message.error("Алдаа гарлаа");
       });
   }
@@ -890,7 +889,6 @@ function mashinBurtgel({ token }) {
         }
       })
       .catch((error) => {
-        console.error("Delete error:", error);
         message.error("Алдаа гарлаа");
       });
   }

@@ -81,8 +81,6 @@ function ZogsoolBurtgekh(
             ? body?.ner
             : undefined;
           body.barilgiinId = barilgiinId;
-          console.log("eseh", body?.tokiBolonStickerAshiglakhEsekh);
-          console.log("toki", body?.tokiNer);
 
           await method("parking", token, body)
             .then(({ data }) => {
@@ -149,7 +147,7 @@ function ZogsoolBurtgekh(
       <div className="grid h-[65vh] grid-cols-12 gap-6">
         <div className="col-span-4">
           <div className="grid h-[65vh] grid-cols-4 gap-5 overflow-y-auto">
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Зогсоолын нэр")}
               </div>
@@ -168,7 +166,7 @@ function ZogsoolBurtgekh(
                 <Input placeholder="Нэр" autoFocus={true} />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Нийт зогсоолын тоо")}
               </div>
@@ -187,7 +185,7 @@ function ZogsoolBurtgekh(
                 <Input placeholder="Тоо" />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Үндсэн тариф")}
               </div>
@@ -206,7 +204,7 @@ function ZogsoolBurtgekh(
                 <Input placeholder="Тариф " />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Зогсоолын данс")}
               </div>
@@ -225,7 +223,7 @@ function ZogsoolBurtgekh(
                 <Input placeholder="Зогсоолын данс" />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Үндсэн тариф 30мин эсэх")}
               </div>
@@ -240,7 +238,7 @@ function ZogsoolBurtgekh(
                 />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Гарах цаг")}
               </div>
@@ -257,7 +255,7 @@ function ZogsoolBurtgekh(
                 />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Гадна зогсоол сонгох")}
               </div>
@@ -287,7 +285,7 @@ function ZogsoolBurtgekh(
             </div>
             {!!data && (
               <>
-                <div className="col-span-2 border-l-2 border-green-500 pl-4">
+                <div className="col-span-2 pl-4 border-l-2 border-green-500">
                   <div className="font-medium dark:text-white">
                     {t("Камер Stream тохиргоо")}
                   </div>
@@ -295,14 +293,14 @@ function ZogsoolBurtgekh(
                     Stream гаргахад шаардлагатай тохиргоо
                   </div>
                 </div>
-                <div className="col-span-2 flex items-center justify-start">
+                <div className="flex items-center justify-start col-span-2">
                   <Button type="primary" onClick={cameraTokhirgooOruulya}>
                     Тохиргоо оруулах
                   </Button>
                 </div>
               </>
             )}
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Орох хаалга гар тохиргоо")}
               </div>
@@ -321,7 +319,7 @@ function ZogsoolBurtgekh(
                 />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Гарах хаалга гар тохиргоо")}
               </div>
@@ -340,7 +338,7 @@ function ZogsoolBurtgekh(
                 />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Шалтгаан заавал бүртгэх")}
               </div>
@@ -358,7 +356,7 @@ function ZogsoolBurtgekh(
                 />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Зогсоолын тоо хязгаарлах")}
               </div>
@@ -379,7 +377,7 @@ function ZogsoolBurtgekh(
               </Form.Item>
             </div>
 
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Хүлээлгийн горим ашиглах эсэх")}
               </div>
@@ -398,7 +396,7 @@ function ZogsoolBurtgekh(
               </Form.Item>
             </div>
 
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Гадаа sticker QR ашиглах эсэх")}
               </div>
@@ -414,7 +412,7 @@ function ZogsoolBurtgekh(
                 />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Toki болон гадаа sticker QR ашиглах эсэх")}
               </div>
@@ -430,7 +428,7 @@ function ZogsoolBurtgekh(
                 />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Зогсоолыг барилга тус бүрээр нь хязгаарлах эсэх")}
               </div>
@@ -446,7 +444,7 @@ function ZogsoolBurtgekh(
                 />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 {t("Дурын төрөлтэй машинд тогтмол төлбөр бодогдох эсэх")}
               </div>
@@ -482,7 +480,7 @@ function ZogsoolBurtgekh(
                         : "max-h-0 -translate-y-2 transform opacity-0"
                     }`}
                   >
-                    <div className="col-span-2 border-l-2 border-green-500 pl-4">
+                    <div className="col-span-2 pl-4 border-l-2 border-green-500">
                       <div className="font-medium dark:text-white">
                         {t("Тогтмол төлбөрийн дүн")}
                       </div>
@@ -500,7 +498,7 @@ function ZogsoolBurtgekh(
               </Form.Item>
             </div>
 
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 Зогсоолоос машин автоматаар гаргах цагийн тохиргоо
               </div>
@@ -513,12 +511,12 @@ function ZogsoolBurtgekh(
                 />
               </Form.Item>
             </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white"></div>
               <div className="text-xs text-gray-400"></div>
             </div>
             <div className="text-xs text-gray-400"> </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+            <div className="col-span-2 pl-4 border-l-2 border-green-500">
               <div className="font-medium dark:text-white">
                 Баазаас машины түүхийн мэдээлэл цэвэрлэгдэх өдөр сонгох
               </div>
@@ -541,7 +539,7 @@ function ZogsoolBurtgekh(
               <>
                 <Button
                   icon={<PlusOutlined />}
-                  className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="flex w-full mb-3 bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
                   type="dashed"
                   onClick={() => add()}
                 >
@@ -622,7 +620,7 @@ function ZogsoolBurtgekh(
               <>
                 <Button
                   icon={<PlusOutlined />}
-                  className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="flex w-full mb-3 bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
                   type="dashed"
                   onClick={() => add()}
                 >
@@ -720,12 +718,12 @@ function Khaalga({
   return (
     <div
       key={fieldKey}
-      className="relative mb-2 rounded-md border bg-yellow-50 px-5 py-4 shadow-md dark:bg-gray-700"
+      className="relative px-5 py-4 mb-2 border rounded-md shadow-md bg-yellow-50 dark:bg-gray-700"
     >
-      <div className="mb-2 flex justify-center text-base font-bold dark:text-white">
+      <div className="flex justify-center mb-2 text-base font-bold dark:text-white">
         {t("Хаалга")} {fieldKey + 1}
       </div>
-      <div className="grid w-full grid-cols-4 items-center gap-5">
+      <div className="grid items-center w-full grid-cols-4 gap-5">
         <div
           onClick={() => remove(name)}
           className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
@@ -739,7 +737,7 @@ function Khaalga({
           name={[name, "ner"]}
           fieldKey={[fieldKey, "ner"]}
           rules={[{ required: true, message: "Нэр бөглөнө үү." }]}
-          className="col-span-2 mb-0 h-20"
+          className="h-20 col-span-2 mb-0"
         >
           <Input placeholder={t("Ялгах нэр")} />
         </Form.Item>
@@ -750,7 +748,7 @@ function Khaalga({
           name={[name, "turul"]}
           fieldKey={[fieldKey, "turul"]}
           rules={[{ required: true, message: "Төрөл бөглөнө үү." }]}
-          className="col-span-2 mb-0 h-20"
+          className="h-20 col-span-2 mb-0"
         >
           <Select style={{ width: "100%" }} placeholder={t("Орох / Гарах")}>
             <Select.Option value={"Орох"}>{t("Орох")}</Select.Option>
@@ -762,7 +760,7 @@ function Khaalga({
         {(talbaruud, { add, remove }) => (
           <>
             <Button
-              className="mt-5 h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
+              className="w-full h-8 mt-5 bg-white rounded-sm hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
               type="dashed"
               onClick={() => add()}
               block
@@ -771,12 +769,12 @@ function Khaalga({
               {t("Камер нэмэх")}
             </Button>
             {talbaruud.map((talbar) => (
-              <div className="mt-5 flex">
+              <div className="flex mt-5">
                 <Form.Item
                   {...talbar.restField}
                   name={[talbar.name, "cameraIP"]}
                   fieldKey={[talbar.key, "cameraIP"]}
-                  className="m-0 w-full"
+                  className="w-full m-0"
                 >
                   <Input
                     style={{ width: "100%" }}
@@ -784,11 +782,11 @@ function Khaalga({
                   />
                 </Form.Item>
                 <SettingOutlined
-                  className="ml-2 mt-2 dark:text-gray-300"
+                  className="mt-2 ml-2 dark:text-gray-300"
                   onClick={() => cameraTokhirgooOruulyaIp(talbar, talbar.name)}
                 />
                 <MinusCircleOutlined
-                  className="ml-2 mt-2 dark:text-gray-300"
+                  className="mt-2 ml-2 dark:text-gray-300"
                   onClick={() => remove(talbar.name)}
                 />
               </div>
@@ -805,12 +803,12 @@ function Tariff({ name, fieldKey, restField, remove }) {
   return (
     <div
       key={fieldKey}
-      className="relative mb-5 rounded-md border bg-green-50 px-5 py-4 shadow-md dark:bg-gray-700"
+      className="relative px-5 py-4 mb-5 border rounded-md shadow-md bg-green-50 dark:bg-gray-700"
     >
-      <div className="mb-2 flex justify-center text-base font-bold dark:text-white">
+      <div className="flex justify-center mb-2 text-base font-bold dark:text-white">
         {t("Тариф")} {fieldKey + 1}
       </div>
-      <div className="grid w-full grid-cols-4 items-center gap-5">
+      <div className="grid items-center w-full grid-cols-4 gap-5">
         <div
           onClick={() => remove(name)}
           className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
@@ -824,7 +822,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
           name={[name, "tsag"]}
           fieldKey={[fieldKey, "tsag"]}
           // rules={[{ required: true, message: "Цаг бөглөнө үү." }]}
-          className="col-span-3 mb-0 h-20"
+          className="h-20 col-span-3 mb-0"
         >
           <TimePicker.RangePicker
             format="HH:mm"
@@ -836,7 +834,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
         {(muruud, { add, remove }) => (
           <>
             <Button
-              className="mt-5 h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
+              className="w-full h-8 mt-5 bg-white rounded-sm hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
               type="dashed"
               onClick={() => add()}
               // id={"tariff"}
@@ -848,7 +846,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
             {muruud.map((mur, index) => (
               <div
                 key={index}
-                className="flex-center mt-3 grid w-full grid-cols-4 items-end gap-5"
+                className="grid items-end w-full grid-cols-4 gap-5 mt-3 flex-center"
               >
                 <Form.Item
                   label="Минут хүртэл:"
@@ -861,7 +859,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
                 >
                   <InputNumber placeholder="Минут" className="w-full" />
                 </Form.Item>
-                <div className="col-span-2 flex items-end">
+                <div className="flex items-end col-span-2">
                   <Form.Item
                     label="Тариф/₮/:"
                     labelCol={{ span: 24 }}

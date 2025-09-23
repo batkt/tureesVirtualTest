@@ -239,7 +239,6 @@ function TaskManagementSystem({ token }) {
         }
       }
     } catch (error) {
-      console.error("Status update error:", error);
       notification.error({
         message: t("Алдаа"),
         description: t("Төлөв шинэчлэхэд алдаа гарлаа"),
@@ -346,8 +345,6 @@ function TaskManagementSystem({ token }) {
       const eventName = `appWebDuudlaga${ajiltan.baiguullagiinId}`;
 
       const handleSonorduulga = (sonorduulga) => {
-        console.log("sonorduulga received:", sonorduulga);
-
         notification.success({
           message: "Шинэ дуудлага",
           description: "Шинэ дуудлага ирлээ",
@@ -374,7 +371,6 @@ function TaskManagementSystem({ token }) {
     (value) => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
-        console.log("Search term set to:", value);
         setSearchTerm(value);
 
         if (setKhariltsagchKhuudaslalt) {
@@ -643,7 +639,9 @@ function TaskManagementSystem({ token }) {
 
     return groupedDuudlaga?.map((khariltsagchGroup) => {
       const statusInfo = getStatusInfo(khariltsagchGroup.tuluv);
-      const isExpanded = expandedNames.has(khariltsagchGroup.khariltsagchiinNer);
+      const isExpanded = expandedNames.has(
+        khariltsagchGroup.khariltsagchiinNer
+      );
       const hasMultipleDuudlaga = khariltsagchGroup.duudlagaCount > 1;
 
       return (
@@ -718,7 +716,8 @@ function TaskManagementSystem({ token }) {
               {hasMultipleDuudlaga && isExpanded && (
                 <div className="ml-6 mt-2 space-y-1 rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
                   <div className="mb-2 text-xs font-semibold text-gray-600 dark:text-gray-400">
-                    {t("Бүх дуудлагууд")} ({khariltsagchGroup.allDuudlaga.length}):
+                    {t("Бүх дуудлагууд")} (
+                    {khariltsagchGroup.allDuudlaga.length}):
                   </div>
                   {khariltsagchGroup.allDuudlaga
                     .sort(
@@ -960,12 +959,12 @@ function TaskManagementSystem({ token }) {
                         )}
 
                         {/* {item.tuluv === 1 && (
-                          <div className="rounded-2xl bg-blue-500 px-3 py-1 text-xs text-white">
+                          <div className="px-3 py-1 text-xs text-white bg-blue-500 rounded-2xl">
                             {t("Дууссан")}
                           </div>
                         )}
                         {item.tuluv === -1 && (
-                          <div className="rounded-2xl bg-red-500 px-3 py-1 text-xs text-white">
+                          <div className="px-3 py-1 text-xs text-white bg-red-500 rounded-2xl">
                             {t("Цуцлагдсан")}
                           </div>
                         )} */}
@@ -993,7 +992,7 @@ function TaskManagementSystem({ token }) {
           </div>
         </div>
 
-        {/* <div className="flex items-end justify-between border-t p-4">
+        {/* <div className="flex items-end justify-between p-4 border-t">
           <div className="flex">
             {duudlaga?.duudlagiinTurul && (
               <Tag size="small" color="processing">
@@ -1019,7 +1018,7 @@ function TaskManagementSystem({ token }) {
                   cancelText={t("Үгүй")}
                   onConfirm={duudlagaDuusya}
                 >
-                  <div className="cursor-pointer rounded-full bg-blue-500 px-3 py-1 text-sm font-medium text-white hover:bg-blue-600">
+                  <div className="px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full cursor-pointer hover:bg-blue-600">
                     {t("Дуусгах")}
                   </div>
                 </Popconfirm>
@@ -1032,7 +1031,7 @@ function TaskManagementSystem({ token }) {
                   cancelText={t("Үгүй")}
                   onConfirm={duudlagaTsutslakh}
                 >
-                  <div className="cursor-pointer rounded-full bg-red-500 px-3 py-1 text-sm font-medium text-white hover:bg-red-600">
+                  <div className="px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-full cursor-pointer hover:bg-red-600">
                     {t("Цуцлах")}
                   </div>
                 </Popconfirm>
@@ -1040,12 +1039,12 @@ function TaskManagementSystem({ token }) {
             </div>
 
             {duudlaga?.tuluv === 1 && (
-              <div className="rounded-2xl bg-blue-500 px-3 py-1 text-white">
+              <div className="px-3 py-1 text-white bg-blue-500 rounded-2xl">
                 {t("Дууссан")}
               </div>
             )}
             {duudlaga?.tuluv === -1 && (
-              <div className="rounded-2xl bg-red-500 px-3 py-1 text-white">
+              <div className="px-3 py-1 text-white bg-red-500 rounded-2xl">
                 {t("Цуцлагдсан")}
               </div>
             )}

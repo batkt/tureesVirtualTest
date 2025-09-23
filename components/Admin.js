@@ -166,7 +166,6 @@ function Admin({
 
   useEffect(() => {
     socket().on(`autoLogout${baiguullaga?._id}`, (khariu) => {
-      console.log("kkkkk:",khariu);
       garya();
     });
 
@@ -183,7 +182,6 @@ function Admin({
       setIsOffline(!navigator.onLine);
 
       const handleOnline = async () => {
-        console.log("🟢 Network online - managing sync carefully");
         setIsOffline(false);
         setIsOnline(true);
 
@@ -191,7 +189,6 @@ function Admin({
         const timeSinceLastSync = now - lastSyncTime.current;
 
         if (timeSinceLastSync < 10000) {
-          console.log("❌ Skipping sync - too soon since last sync");
           return;
         }
 
@@ -218,19 +215,16 @@ function Admin({
                   });
                 }
               } catch (syncError) {
-                console.error("Sync registration failed:", syncError);
                 setSyncStatus("idle");
               }
             }, 2000); // 2 second delay
           } catch (error) {
-            console.error("Failed to register background sync:", error);
             setSyncStatus("idle");
           }
         }
       };
 
       const handleOffline = () => {
-        console.log("🔴 Network offline");
         setIsOffline(true);
         setIsOnline(false);
         setSyncStatus("idle");
@@ -263,7 +257,6 @@ function Admin({
 
         if (!data?.type) return;
 
-        console.log("📨 Admin SW Message:", data.type);
 
         switch (data.type) {
           case "PAYMENT_SAVED_OFFLINE":
@@ -280,11 +273,7 @@ function Admin({
             const now = Date.now();
             const timeSinceLastMessage = now - lastSyncTime.current;
 
-            console.log("🔄 Sync completed:", {
-              successful: data.results?.successful,
-              hasReloaded: hasReloadedThisSession.current,
-              timeSinceLastMessage,
-            });
+       
 
             if (data.results?.successful > 0) {
               if (timeSinceLastMessage > 5000) {
@@ -348,7 +337,6 @@ function Admin({
       const pending = await getPendingPaymentsFromSW();
       setPendingPayments(pending);
     } catch (error) {
-      console.error("Failed to load pending payments:", error);
     }
   }
 
@@ -377,7 +365,7 @@ function Admin({
     if (payment?.retryCount >= 5) {
       return (
         <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">
-          <svg className="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
               d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
@@ -392,7 +380,7 @@ function Admin({
     return (
       <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
         <svg
-          className="mr-1 h-3 w-3 animate-spin"
+          className="w-3 h-3 mr-1 animate-spin"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -508,12 +496,12 @@ function Admin({
   // Don't render certain elements during SSR
   if (!isClient) {
     return (
-      <div className="relative min-h-screen w-screen overflow-hidden bg-green-600 px-3 pb-5 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4">
+      <div className="relative w-screen min-h-screen px-3 pb-5 overflow-hidden bg-green-600 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4">
         <Head>
           <title>{t(title)}</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex items-center justify-center min-h-screen">
           <Loader />
         </div>
       </div>
@@ -529,13 +517,13 @@ function Admin({
           fixedZagvarNeegdsenEsekh === true &&
           setTurulZagvar(false);
       }}
-      className="relative min-h-screen w-screen overflow-hidden bg-green-600 px-3 pb-5 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4"
+      className="relative w-screen min-h-screen px-3 pb-5 overflow-hidden bg-green-600 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4"
     >
       {syncStatus === "syncing" && (
-        <div className="fixed left-0 right-0 top-16 z-50 mb-4 rounded border-l-4 border-blue-500 bg-blue-100 p-4 text-blue-700">
+        <div className="fixed left-0 right-0 z-50 p-4 mb-4 text-blue-700 bg-blue-100 border-l-4 border-blue-500 rounded top-16">
           <div className="flex items-center">
             <svg
-              className="mr-2 h-5 w-5 animate-spin"
+              className="w-5 h-5 mr-2 animate-spin"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -628,7 +616,7 @@ function Admin({
               <div
                 className={`flex w-44 items-center space-x-2 p-1 text-black dark:text-gray-200 `}
               >
-                <div className="rounded-md border bg-green-600 p-2 text-white transition-colors group-hover:bg-green-500">
+                <div className="p-2 text-white transition-colors bg-green-600 border rounded-md group-hover:bg-green-500">
                   <QuestionOutlined />
                 </div>
                 <div className="font-medium">{t("Тусламж")}</div>
@@ -648,7 +636,7 @@ function Admin({
                     : "invisible opacity-0"
                 }`}
               >
-                <div className="rounded-md border bg-yellow-600 p-2 text-white transition-colors group-hover:bg-yellow-500">
+                <div className="p-2 text-white transition-colors bg-yellow-600 border rounded-md group-hover:bg-yellow-500">
                   <FiSend />
                 </div>
                 <div className="font-medium">{t("Санал хүсэлт")}</div>
@@ -673,7 +661,7 @@ function Admin({
                     : "invisible opacity-0"
                 }`}
               >
-                <div className="rounded-md border bg-red-600 p-2 text-white transition-colors group-hover:bg-red-500">
+                <div className="p-2 text-white transition-colors bg-red-600 border rounded-md group-hover:bg-red-500">
                   <SiAnydesk />
                 </div>
                 <div className="font-medium">{t("AnyDesk татах")}</div>
@@ -693,7 +681,7 @@ function Admin({
       <div className="flex items-center justify-between py-4">
         {dedKhuudas && (
           <button
-            className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:hidden"
+            className="flex items-center justify-center w-8 h-8 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:hidden"
             onClick={() =>
               _.isFunction(onBack) ? onBack(router.back) : router.back()
             }
@@ -706,7 +694,7 @@ function Admin({
         )}
         <div className="flex gap-2 md:hidden">
           <img
-            className="h-10 w-10 "
+            className="w-10 h-10 "
             alt={baiguullaga?.ner}
             src={
               baiguullaga?.zurgiinNer
@@ -715,12 +703,12 @@ function Admin({
             }
           />
           {barilguud?.length > 0 ? (
-            <div className="relative mt-2 inline-block">
+            <div className="relative inline-block mt-2">
               <select
                 defaultValue={barilgiinId}
                 value={barilgiinId}
                 onChange={({ target }) => barilgaSoliyo(target.value, ajiltan)}
-                className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight text-black shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-gray-200"
+                className="block w-full px-4 py-1 pr-8 leading-tight text-black bg-white border border-gray-400 rounded shadow appearance-none focus:shadow-outline hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-gray-200"
               >
                 {barilguud?.map((a) => (
                   <option
@@ -733,9 +721,9 @@ function Admin({
                   </option>
                 ))}
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
                 <svg
-                  className="h-4 w-4 fill-current"
+                  className="w-4 h-4 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -765,7 +753,7 @@ function Admin({
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-bar-chart-2 h-8 w-8 -rotate-90 text-white"
+              className="w-8 h-8 text-white -rotate-90 feather feather-bar-chart-2"
             >
               <line x1="18" y1="20" x2="18" y2="10"></line>
               <line x1="12" y1="20" x2="12" y2="4"></line>
@@ -801,7 +789,7 @@ function Admin({
 
       <h2
         id="garchig"
-        className="-mt-4 ml-3 flex text-base font-semibold text-white md:hidden"
+        className="flex ml-3 -mt-4 text-base font-semibold text-white md:hidden"
       >
         {t(title)}
       </h2>
@@ -811,11 +799,11 @@ function Admin({
           dedKhuudas ? "w-full" : "main"
         }`}
       >
-        <div className="flex h-12 flex-row justify-between border-b p-2 ">
+        <div className="flex flex-row justify-between h-12 p-2 border-b ">
           <div className="flex">
             {dedKhuudas && (
               <button
-                className="hidden h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:flex"
+                className="items-center justify-center hidden w-8 h-8 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:flex"
                 onClick={() =>
                   _.isFunction(onBack) ? onBack(router.back) : router.back()
                 }
@@ -828,14 +816,14 @@ function Admin({
             )}
             <h2
               id="garchig"
-              className="ml-3 hidden items-center justify-center text-base font-semibold text-green-800 dark:text-gray-200 md:flex"
+              className="items-center justify-center hidden ml-3 text-base font-semibold text-green-800 dark:text-gray-200 md:flex"
             >
               {t(title)}
             </h2>
           </div>
-          <div className="flex w-full flex-row justify-between md:w-auto md:space-x-3 lg:space-x-6">
+          <div className="flex flex-row justify-between w-full md:w-auto md:space-x-3 lg:space-x-6">
             {token && baiguullaga?._id && barilgiinId && (
-              <div className="hidden h-8 items-center justify-center md:flex ">
+              <div className="items-center justify-center hidden h-8 md:flex ">
                 <MsgToololt
                   token={token}
                   baiguullagiinId={baiguullaga?._id}
@@ -845,12 +833,12 @@ function Admin({
               </div>
             )}
             {tsonkhniiId && (
-              <div className="hidden h-8 items-center justify-center md:flex ">
+              <div className="items-center justify-center hidden h-8 md:flex ">
                 <Zaavar token={token} id={tsonkhniiId} />
               </div>
             )}
-            <div className="hidden h-8 items-center justify-center md:flex">
-              <div className="mr-4 hidden whitespace-nowrap text-gray-700 dark:text-gray-300 lg:flex">
+            <div className="items-center justify-center hidden h-8 md:flex">
+              <div className="hidden mr-4 text-gray-700 whitespace-nowrap dark:text-gray-300 lg:flex">
                 Dark Mode
               </div>
               <Switch
@@ -890,14 +878,14 @@ function Admin({
                 />
               )}
             </div>
-            <div className="hidden items-center justify-center md:flex">
+            <div className="items-center justify-center hidden md:flex">
               {t("Лиценз")}- {license}
             </div>
             {!hideSearch ? (
               <>
                 <div
                   id="search"
-                  className="relative ml-2 w-40 text-gray-700 dark:text-gray-300 xl:w-56"
+                  className="relative w-40 ml-2 text-gray-700 dark:text-gray-300 xl:w-56"
                 >
                   <input
                     onFocus={() => setFocusaasGarsan(false)}
@@ -927,13 +915,13 @@ function Admin({
                       }
                     }}
                     type="text"
-                    className="box w-40 px-3 py-1 pr-10 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 xl:w-56"
+                    className="w-40 px-3 py-1 pr-10 shadow-xl box focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 xl:w-56"
                     placeholder={`${t("Хайлт")}...`}
                   />
                   {mSearch ? (
                     <CloseOutlined
                       onClick={onClickSearch}
-                      className="feather feather-search absolute inset-y-0 right-0 my-auto mr-2 h-4 w-4"
+                      className="absolute inset-y-0 right-0 w-4 h-4 my-auto mr-2 feather feather-search"
                     />
                   ) : (
                     <svg
@@ -946,7 +934,7 @@ function Admin({
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
+                      className="absolute inset-y-0 right-0 w-4 h-4 my-auto mt-2 mr-3 feather feather-search"
                     >
                       <circle cx="11" cy="11" r="8"></circle>
                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -976,7 +964,7 @@ function Admin({
                                   setFocusaasGarsan(true);
                                 }
                               }}
-                              className="w-full cursor-pointer py-1 hover:bg-gray-300 dark:hover:bg-gray-600"
+                              className="w-full py-1 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600"
                             >
                               {mur.mashiniiDugaar}
                             </div>
@@ -991,14 +979,14 @@ function Admin({
             ) : (
               <div></div>
             )}
-            <div className="right-5 flex gap-1 sm:gap-5">
+            <div className="flex gap-1 right-5 sm:gap-5">
               <Tooltip
                 placement="bottom"
                 title={
                   <div>Лицензийн хугацаа дуусахад хоног үлдлээ: {license}</div>
                 }
               >
-                <div className="ml-1 mr-2 flex items-center gap-1 text-base md:hidden">
+                <div className="flex items-center gap-1 ml-1 mr-2 text-base md:hidden">
                   {license} :{" "}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -1010,7 +998,7 @@ function Admin({
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="feather feather-clock h-5 w-5"
+                    className="w-5 h-5 feather feather-clock"
                   >
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
@@ -1038,7 +1026,7 @@ function Admin({
           visible === true ? "-right-full" : "right-5"
         } flex h-8 items-center justify-center rounded-3xl bg-green-600 px-3 py-5 shadow-md transition-all duration-500 dark:bg-gray-900 md:hidden`}
       >
-        <div className="mr-4 flex whitespace-nowrap text-white dark:text-gray-300">
+        <div className="flex mr-4 text-white whitespace-nowrap dark:text-gray-300">
           Dark Mode
         </div>
         <Switch
@@ -1047,14 +1035,14 @@ function Admin({
         />
       </div>
       {showNotificationModal && currentNotification && (
-        <div className="pointer-events-none fixed inset-0 flex items-end justify-center px-4 py-6 sm:items-start sm:justify-end sm:p-6 ">
-          <div className="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+        <div className="fixed inset-0 flex items-end justify-center px-4 py-6 pointer-events-none sm:items-start sm:justify-end sm:p-6 ">
+          <div className="w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-lg pointer-events-auto ring-1 ring-black ring-opacity-5">
             <div className="p-4">
               <div className="flex items-start">
                 {currentNotification.image && (
-                  <div className="mr-3 flex-shrink-0">
+                  <div className="flex-shrink-0 mr-3">
                     <img
-                      className="h-10 w-10 rounded-full"
+                      className="w-10 h-10 rounded-full"
                       src={currentNotification.image}
                       alt="Notification"
                     />
@@ -1073,14 +1061,14 @@ function Admin({
                     )}
                   </p>
                 </div>
-                <div className="ml-4 flex flex-shrink-0">
+                <div className="flex flex-shrink-0 ml-4">
                   <button
                     onClick={() => setShowNotificationModal(false)}
-                    className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
+                    className="inline-flex text-gray-400 bg-white rounded-md hover:text-gray-500 focus:outline-none"
                   >
                     <span className="sr-only">Close</span>
                     <svg
-                      className="h-5 w-5"
+                      className="w-5 h-5"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >

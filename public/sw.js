@@ -12,22 +12,15 @@ function upgradeDB(db) {
   const stores = db.objectStoreNames;
 
   if (!stores.contains(STORES.USER)) {
-    console.log("Хэрэглэгчийн сан үүсгэж байна");
     db.createObjectStore(STORES.USER);
   }
 
   if (!stores.contains(STORES.PAYMENTS)) {
-    console.log("Төлбөрийн сан үүсгэж байна");
     db.createObjectStore(STORES.PAYMENTS, {
       keyPath: "id",
       autoIncrement: true,
     });
   }
-
-  console.log(
-    "Шинэчлэлт дууссаны дараах сангууд:",
-    Array.from(db.objectStoreNames)
-  );
 }
 
 function openIndexedDB() {
@@ -36,49 +29,34 @@ function openIndexedDB() {
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      console.log(
-        `ӨС-г ${event.oldVersion}-ээс ${event.newVersion} рүү шинэчилж байна`
-      );
+
       upgradeDB(db);
     };
 
     request.onsuccess = (event) => {
       const db = event.target.result;
       db.onversionchange = () => {
-        console.warn(
-          "ӨС-ийн хувилбар солигдлоо, хуучин холболтыг хаагаад байна"
-        );
         db.close();
       };
-      console.log("ӨС амжилттай нээгдлээ:", {
-        version: db.version,
-        stores: Array.from(db.objectStoreNames),
-      });
+
       resolve(db);
     };
 
     request.onerror = (event) => {
-      console.error("ӨС нээхэд алдаа гарлаа:", event.target.error);
       reject(event.target.error);
     };
 
-    request.onblocked = () => {
-      console.warn(
-        "ӨС-ийн шинэчлэлт хориглогдсон. Энэ ӨС-ийг ашиглаж буй бусад таб эсвэл цонхыг хаана уу."
-      );
-    };
+    request.onblocked = () => {};
   });
 }
 
 const API_CACHE_NAME = "api-cache-v1";
 
 self.addEventListener("install", (event) => {
-  console.log("Service Worker суулгагдаж байна");
   event.waitUntil(
     Promise.all([
       openIndexedDB()
         .then((db) => {
-          console.log("Өгөгдлийн сан суулгалтын үед эхлүүлэгдлээ");
           db.close();
         })
         .catch((error) => {
@@ -92,7 +70,6 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
-  console.log("Service Worker идэвхжиж байна");
   event.waitUntil(
     Promise.all([
       caches.keys().then((keys) =>
@@ -100,15 +77,12 @@ self.addEventListener("activate", (event) => {
           keys
             .filter((key) => key !== API_CACHE_NAME)
             .map((key) => {
-              console.log("Хуучин кэш устгаж байна:", key);
               return caches.delete(key);
             })
         )
       ),
       openIndexedDB()
         .then((db) => {
-          console.log("Идэвхжүүлэх үеийн өгөгдлийн сан баталгаажлаа");
-          console.log("Боломжтой сангууд:", Array.from(db.objectStoreNames));
           db.close();
         })
         .catch((error) => {
@@ -146,14 +120,8 @@ self.addEventListener("fetch", (event) => {
       responsePromise = (async () => {
         try {
           const response = await fetch(event.request.clone());
-          console.log("POST хүсэлт амжилттай боллоо:", requestUrl.pathname);
           return response;
         } catch (err) {
-          console.log(
-            "POST хүсэлт амжилтгүй, синкэд хадгалж байна:",
-            requestUrl.pathname,
-            err.message
-          );
           const reqClone = event.request.clone();
           let body;
           let contentType = event.request.headers.get("content-type") || "";
@@ -200,8 +168,6 @@ self.addEventListener("fetch", (event) => {
               const addRequest = store.add(paymentData);
 
               addRequest.onsuccess = () => {
-                console.log("Оффлайн төлбөр амжилттай хадгалагдлаа");
-
                 self.clients.matchAll().then((clients) => {
                   clients.forEach((client) => {
                     client.postMessage({
@@ -263,7 +229,6 @@ self.addEventListener("fetch", (event) => {
           );
           const cachedResponse = await caches.match(event.request);
           if (cachedResponse) {
-            console.log("Кэшээс үйлчилж байна:", event.request.url);
             return cachedResponse;
           }
           return new Response("Оффлайн байна", { status: 503 });
@@ -272,11 +237,9 @@ self.addEventListener("fetch", (event) => {
   } else {
     responsePromise = caches.match(event.request).then((response) => {
       if (response) {
-        console.log("Кэшээс үйлчилж байна:", event.request.url);
         return response;
       }
       return fetch(event.request).catch(() => {
-        console.log("Оффлайн хуудас руу шилжиж байна:", event.request.url);
         return new Response("Оффлайн байна", { status: 503 });
       });
     });
@@ -286,21 +249,15 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("sync", (event) => {
-  console.log("Арын синк асаалт авлаа:", event.tag);
   if (event.tag === "sync-payments") {
     event.waitUntil(syncPaymentsFromSW());
   }
 });
 
 self.addEventListener("message", (event) => {
-  console.log("Service worker мессеж хүлээн авлаа:", event.data);
   if (event.data?.type === "TRIGGER_SYNC") {
     const now = Date.now();
     if (now - lastSyncTime < 5000) {
-      // 5 секундын хүлээлэг
-      console.log(
-        "Синк хүсэлт үл хэрэгслэгдлээ - дэндүү удалгүй синк хийсэн байна"
-      );
       return;
     }
     syncPaymentsFromSW();
@@ -339,10 +296,8 @@ async function getPendingPayments() {
     });
 
     db.close();
-    console.log("Хүлээгдэж буй төлбөрүүд авлаа:", allPayments.length);
     return allPayments;
   } catch (error) {
-    console.error("Хүлээгдэж буй төлбөрүүд авахад алдаа гарлаа:", error);
     return [];
   }
 }
@@ -351,21 +306,16 @@ async function syncPaymentsFromSW() {
   const now = Date.now();
 
   if (syncInProgress) {
-    console.log("Синк хийгдэж байгаа тул алгасаж байна...");
     return;
   }
 
   if (now - lastSyncTime < 10000) {
-    console.log(
-      "Синк хүсэлт үл хэрэгслэгдлээ - дэндүү удалгүй синк хийсэн байна"
-    );
     return;
   }
 
   syncInProgress = true;
   lastSyncTime = now;
 
-  console.log("Төлбөрийн синк эхлэж байна...");
   try {
     const db = await openIndexedDB();
 
@@ -384,20 +334,11 @@ async function syncPaymentsFromSW() {
       getAllRequest.onerror = () => reject(getAllRequest.error);
     });
 
-    console.log(`${allPayments.length} төлбөр синк хийхэд бэлэн байна`);
-
     let successCount = 0;
     let failureCount = 0;
 
     for (const payment of allPayments) {
       try {
-        console.log(
-          "Төлбөр синк хийж байна:",
-          payment.id,
-          "Давтан оролдсон:",
-          payment.retryCount || 0
-        );
-
         if (payment.retryCount >= 5) {
           console.warn(
             "Төлбөр давтан оролдох хязгаар давсан байна:",
@@ -426,7 +367,6 @@ async function syncPaymentsFromSW() {
         });
 
         if (response.ok) {
-          console.log("Төлбөр амжилттай синк хийгдлээ:", payment.id);
           successCount++;
 
           const deleteTx = db.transaction(STORES.PAYMENTS, "readwrite");
@@ -487,11 +427,7 @@ async function syncPaymentsFromSW() {
     }
 
     db.close();
-    console.log(
-      `Төлбөрийн синк дууслаа: ${successCount} амжилттай, ${failureCount} амжилтгүй`
-    );
 
-    // Клиентэд мэдэгдэл илгээх - ШИНЭЧЛЭХГҮЙ
     if (allPayments.length > 0) {
       const clients = await self.clients.matchAll();
       clients.forEach((client) => {
