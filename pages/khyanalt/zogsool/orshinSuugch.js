@@ -371,7 +371,6 @@ function orshinSuugch({ token }) {
       },
     ];
   }, [turul, baiguullaga, barilgiinId, tuluv, udurShuult, zochinGaralt]);
-  console.log("zochinGaralt.jagsaalt:", zochinGaralt?.jagsaalt);
 
   function onRefresh() {
     zochinMutate();
@@ -423,70 +422,39 @@ function orshinSuugch({ token }) {
   }
 
   async function mashinUstgaya(data) {
-    console.log("mashinUstgaya called with data:", data);
-    console.log("Data type:", typeof data);
-    console.log("Is array:", Array.isArray(data));
-
     let khariltsagchIds = [];
 
-    // Handle different data structures
     if (Array.isArray(data)) {
-      // Check if array contains strings (IDs) or objects
       if (data.length > 0 && typeof data[0] === "string") {
-        // Direct array of ID strings
         khariltsagchIds = data.filter((id) => id && typeof id === "string");
-        console.log(
-          "Case 1a - Direct array of ID strings, extracted IDs:",
-          khariltsagchIds
-        );
       } else {
-        // Array of objects with _id property
         khariltsagchIds = data
           .map((item) => item._id || item.id)
           .filter((id) => id);
-        console.log(
-          "Case 1b - Direct array of objects, extracted IDs:",
-          khariltsagchIds
-        );
       }
     } else if (data && data.jagsaalt && Array.isArray(data.jagsaalt)) {
-      // Data has jagsaalt property (like zochinGaralt.jagsaalt)
       khariltsagchIds = data.jagsaalt
         .map((item) => item._id || item.id)
         .filter((id) => id);
-      console.log("Case 2 - jagsaalt array, extracted IDs:", khariltsagchIds);
     } else if (data && (data._id || data.id)) {
-      // Single item
       khariltsagchIds = [data._id || data.id];
-      console.log("Case 3 - Single item, extracted ID:", khariltsagchIds);
     } else if (
       data &&
       data.selectedItems &&
       Array.isArray(data.selectedItems)
     ) {
-      // Nested selectedItems
       khariltsagchIds = data.selectedItems
         .map((item) => item._id || item.id)
         .filter((id) => id);
-      console.log("Case 4 - selectedItems, extracted IDs:", khariltsagchIds);
     } else {
-      console.log("No valid data structure found. Data:", data);
-      console.log(
-        "Data keys:",
-        data ? Object.keys(data) : "data is null/undefined"
-      );
       message.error(t("Машин сонгоно уу"));
       return;
     }
 
     if (khariltsagchIds.length === 0) {
-      console.log("No valid IDs found after extraction");
-      console.log("Original data structure:", JSON.stringify(data, null, 2));
       message.error(t("Машин сонгоно уу"));
       return;
     }
-
-    console.log("Proceeding with IDs:", khariltsagchIds);
 
     try {
       const khariltsagchPromises = khariltsagchIds.map((khariltsagchId) =>
@@ -544,16 +512,13 @@ function orshinSuugch({ token }) {
         message.error(t("Зарим машин устгаж чадсангүй"));
       }
     } catch (error) {
-      console.error("Delete error:", error.response || error);
       message.error(
         t("Алдаа гарлаа: ") + (error.response?.data?.message || error.message)
       );
     }
   }
 
-  // Alternative function if you want to wait for data to be ready
   async function mashinUstgayaSafe(data) {
-    // Wait for data to be ready if it's still loading
     const maxRetries = 10;
     let retries = 0;
     let processedData = data;
@@ -565,28 +530,22 @@ function orshinSuugch({ token }) {
         Array.isArray(processedData.jagsaalt) &&
         processedData.jagsaalt.length > 0
       ) {
-        break; // Data is ready
+        break;
       }
 
       if (Array.isArray(processedData) && processedData.length > 0) {
-        break; // Data is ready
+        break;
       }
 
-      // Wait a bit and retry
       await new Promise((resolve) => setTimeout(resolve, 100));
       retries++;
-      console.log(
-        `Waiting for data to be ready, retry ${retries}/${maxRetries}`
-      );
     }
 
     if (retries >= maxRetries) {
-      console.log("Data did not become ready within timeout");
       message.error(t("Машин сонгоно уу"));
       return;
     }
 
-    // Now call the main function
     return mashinUstgaya(processedData);
   }
   function zochinBurtgekh(data) {
@@ -875,7 +834,6 @@ function orshinSuugch({ token }) {
         />
       </Card>
 
-      {/* Loading overlay for save operations */}
       {zochinSaveLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
           <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">

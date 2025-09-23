@@ -296,7 +296,7 @@ function camera({ token }) {
     "/parking",
     streamQuery
   );
-  
+
   const zurchilteiMashinMsgilgeekh = (mashiniiDugaar) => {
     let yavuulakhData = {
       baiguullagiinId: baiguullaga?._id,
@@ -1090,8 +1090,6 @@ function camera({ token }) {
         dataIndex: "mashin",
         showSorterTooltip: false,
         render: (a, record) => {
-          console.log("Discount render - mashin object:", a);
-          console.log("Discount render - full record:", record);
           if (a?.khungulultTurul === "togtmolTsag") {
             return (
               <div className="flex items-center justify-center">

@@ -1,12 +1,14 @@
 import { openDB as idbOpen } from "idb";
 
 const DB_NAME = "turees-db";
-const DB_VERSION = 9;
+const DB_VERSION = 10; // bumped to match schema changes
 
-const STORES = {
+export const STORES = {
   USER: "user",
   PAYMENTS: "offline-payments",
+  CACHE: "cache", // added for consistency with your other code
 };
+
 export async function openDB() {
   return idbOpen(DB_NAME, DB_VERSION, {
     upgrade(db) {
@@ -18,6 +20,9 @@ export async function openDB() {
           keyPath: "id",
           autoIncrement: true,
         });
+      }
+      if (!db.objectStoreNames.contains(STORES.CACHE)) {
+        db.createObjectStore(STORES.CACHE);
       }
     },
   });
@@ -49,7 +54,13 @@ export async function saveOfflinePayment({
 } = {}) {
   const db = await openDB();
   const createdAt = new Date().toISOString();
-  return db.add(STORES.PAYMENTS, { token, data, createdAt, synced });
+  return db.add(STORES.PAYMENTS, {
+    token,
+    data,
+    createdAt,
+    synced,
+    retryCount: 0,
+  });
 }
 
 export async function getOfflinePayments() {

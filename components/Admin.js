@@ -166,7 +166,6 @@ function Admin({
 
   useEffect(() => {
     socket().on(`autoLogout${baiguullaga?._id}`, (khariu) => {
-      console.log("kkkkk:",khariu);
       garya();
     });
 
@@ -183,7 +182,6 @@ function Admin({
       setIsOffline(!navigator.onLine);
 
       const handleOnline = async () => {
-        console.log("🟢 Network online - managing sync carefully");
         setIsOffline(false);
         setIsOnline(true);
 
@@ -191,7 +189,6 @@ function Admin({
         const timeSinceLastSync = now - lastSyncTime.current;
 
         if (timeSinceLastSync < 10000) {
-          console.log("❌ Skipping sync - too soon since last sync");
           return;
         }
 
@@ -218,19 +215,16 @@ function Admin({
                   });
                 }
               } catch (syncError) {
-                console.error("Sync registration failed:", syncError);
                 setSyncStatus("idle");
               }
             }, 2000); // 2 second delay
           } catch (error) {
-            console.error("Failed to register background sync:", error);
             setSyncStatus("idle");
           }
         }
       };
 
       const handleOffline = () => {
-        console.log("🔴 Network offline");
         setIsOffline(true);
         setIsOnline(false);
         setSyncStatus("idle");
@@ -263,8 +257,6 @@ function Admin({
 
         if (!data?.type) return;
 
-        console.log("📨 Admin SW Message:", data.type);
-
         switch (data.type) {
           case "PAYMENT_SAVED_OFFLINE":
             setOfflinePayments((prev) => [...prev, data.payment]);
@@ -279,12 +271,6 @@ function Admin({
           case "SYNC_COMPLETED":
             const now = Date.now();
             const timeSinceLastMessage = now - lastSyncTime.current;
-
-            console.log("🔄 Sync completed:", {
-              successful: data.results?.successful,
-              hasReloaded: hasReloadedThisSession.current,
-              timeSinceLastMessage,
-            });
 
             if (data.results?.successful > 0) {
               if (timeSinceLastMessage > 5000) {
@@ -347,9 +333,7 @@ function Admin({
     try {
       const pending = await getPendingPaymentsFromSW();
       setPendingPayments(pending);
-    } catch (error) {
-      console.error("Failed to load pending payments:", error);
-    }
+    } catch (error) {}
   }
 
   async function triggerManualSync() {

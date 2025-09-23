@@ -122,11 +122,6 @@ const SonorduulgaDropdown = React.memo(
 
     const handleScroll = useCallback(() => {
       if (!scrollRef.current || isLoadingMore || !hasMore) {
-        console.log("Scroll blocked:", {
-          hasScrollRef: !!scrollRef.current,
-          isLoadingMore,
-          hasMore,
-        });
         return;
       }
 
@@ -134,18 +129,7 @@ const SonorduulgaDropdown = React.memo(
       const threshold = 100;
       const isNearBottom = scrollTop + clientHeight >= scrollHeight - threshold;
 
-      console.log("Scroll check:", {
-        scrollTop,
-        scrollHeight,
-        clientHeight,
-        threshold,
-        isNearBottom,
-        hasMore,
-        isLoadingMore,
-      });
-
       if (isNearBottom) {
-        console.log("Loading more notifications...");
         loadMore();
       }
     }, [isLoadingMore, hasMore, loadMore]);
@@ -200,7 +184,6 @@ const SonorduulgaDropdown = React.memo(
           try {
             await sonorduulgaKharlaa(objectId, notificationId);
           } catch (error) {
-            console.error("Failed to mark notification as read:", error);
             setLocalReadNotifications((prev) => {
               const newSet = new Set(prev);
               newSet.delete(notificationId);

@@ -134,7 +134,6 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
           response: response.data,
         };
       } catch (error) {
-        console.error("Error saving dont show again preference:", error);
         setServerSyncStatus(
           (prev) => new Map(prev.set(adminMedegdelId, "error"))
         );

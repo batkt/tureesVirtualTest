@@ -170,7 +170,6 @@ function MashinBurtgel(
 
   function onFinish() {
     const lastData = form.getFieldsValue();
-    console.log(lastData);
 
     lastData.ekhlekhOgnoo = ognoo[0]?.format("YYYY-MM-DD 00:00:00");
     lastData.duusakhOgnoo = ognoo[1]?.format("YYYY-MM-DD 23:59:59");
@@ -287,8 +286,6 @@ function MashinBurtgel(
 
   const tsagValue = Form.useWatch("tsagiinTurul", form);
   const khungulukhKhugatsaaValue = Form.useWatch("khungulukhKhugatsaa", form);
-  console.log(khungulukhKhugatsaaValue);
-  console.log(data);
 
   useEffect(() => {
     if (!data?.khungulukhKhugatsaa) {
@@ -918,7 +915,7 @@ function MashinBurtgel(
                     key={field.key}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 24 }}
-                    className="flex  w-full justify-end pr-10"
+                    className="flex w-full justify-end pr-10"
                     style={{ marginBottom: "16px" }}
                   >
                     <div

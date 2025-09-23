@@ -84,8 +84,6 @@ function useZochin(token, baiguullagiinId, khuudasniiKhemjee, query, order) {
         query._id = { $ne: excludeId };
       }
 
-      console.log("🔍 Query being sent:", JSON.stringify(query, null, 2));
-
       const response = await axios(token).get("/khariltsagch", {
         params: {
           query,
@@ -95,12 +93,10 @@ function useZochin(token, baiguullagiinId, khuudasniiKhemjee, query, order) {
 
       return response.data?.jagsaalt?.length > 0;
     } catch (error) {
-      console.error("Машины дугаар шалгахад алдаа гарлаа:", error);
       return false;
     }
   };
 
-  // ---- Хадгалах функцууд (өөрчлөлтгүй) ----
   const zochinHadgalya = async (zochinMedeelel) => {
     if (!token || !baiguullagiinId) {
       throw new Error("Шаардлагатай параметрүүд дутуу байна");
@@ -128,17 +124,10 @@ function useZochin(token, baiguullagiinId, khuudasniiKhemjee, query, order) {
       // Машины дугаар давхцал шалгах (зөвхөн машины дугаар байгаа тохиолдолд)
       // _id байгаа бол засварлаж байгаа гэсэн үг, тухайн бичлэгийг хасаж шалгана
       if (mashiniiDugaar && !mashiniiDugaar.startsWith("TEMP_")) {
-        console.log(
-          "🔍 Checking machine number:",
-          mashiniiDugaar,
-          "with excludeId:",
-          _id
-        );
         const machineExists = await checkMachineNumberExists(
           mashiniiDugaar,
           _id
         );
-        console.log("🔍 Machine exists check result:", machineExists);
         if (machineExists) {
           throw new Error("Энэ дугаартай машин аль хэдийн бүртгэгдсэн байна");
         }
@@ -160,7 +149,6 @@ function useZochin(token, baiguullagiinId, khuudasniiKhemjee, query, order) {
       await mutate();
       return response.data;
     } catch (error) {
-      console.error("Зочин хадгалахад алдаа гарлаа:", error);
       throw error;
     } finally {
       setIsLoading(false);

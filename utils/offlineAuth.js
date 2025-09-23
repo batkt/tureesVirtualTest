@@ -1,43 +1,42 @@
 import { openDB as idbOpen } from "idb";
 
 const DB_NAME = "turees-db";
-const DB_VERSION = 9;
+const DB_VERSION = 10; // bumped for consistency
 const STORES = {
   USER: "user",
   PAYMENTS: "offline-payments",
-  AUTH: "auth",
   CACHE: "cache",
 };
 
 export async function openDB() {
-  try {
-    const db = await idbOpen(DB_NAME, DB_VERSION, {
-      upgrade(db, oldVersion, newVersion, transaction) {
-        if (!db.objectStoreNames.contains(STORES.USER)) {
-          db.createObjectStore(STORES.USER);
-        }
-
-        if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-          db.createObjectStore(STORES.PAYMENTS, {
-            keyPath: "id",
-            autoIncrement: true,
-          });
-        }
-      },
-    });
-
-    return db;
-  } catch (error) {
-    throw error;
-  }
+  return idbOpen(DB_NAME, DB_VERSION, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains(STORES.USER)) {
+        db.createObjectStore(STORES.USER);
+      }
+      if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
+        db.createObjectStore(STORES.PAYMENTS, {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+      }
+      if (!db.objectStoreNames.contains(STORES.CACHE)) {
+        db.createObjectStore(STORES.CACHE);
+      }
+    },
+  });
 }
 
+/**
+ * Save credentials + token + permissions for offline login
+ */
 export async function saveOfflineAuth(credentials, serverResponse) {
   try {
     const db = await openDB();
 
     const authData = {
       username: credentials.nevtrekhNer || credentials.username,
+      // ⚠️ Hash this in production instead of storing plain text
       password: credentials.nuutsUg || credentials.password,
       token: serverResponse.token,
       userInfo: serverResponse.result || serverResponse.data,
@@ -47,78 +46,83 @@ export async function saveOfflineAuth(credentials, serverResponse) {
 
     await db.put(STORES.USER, authData, "credentials");
   } catch (error) {
+    console.error("Failed to save offline auth:", error);
     throw error;
   }
 }
 
+/**
+ * Offline login if no internet
+ */
 export async function performOfflineLogin(credentials) {
-  try {
-    if (typeof navigator !== "undefined" && navigator.onLine) {
-      throw new Error("Сүлжээ байгаа тул онлайн нэвтрэлт хэрэглэнэ үү");
-    }
+  const db = await openDB();
+  const storedAuth = await db.get(STORES.USER, "credentials");
 
-    const db = await openDB();
-    const storedAuth = await db.get(STORES.USER, "credentials");
-
-    if (!storedAuth) {
-      throw new Error("Оффлайн нэвтрэлтийн мэдээлэл байхгүй байна");
-    }
-
-    const inputUsername = credentials.nevtrekhNer || credentials.username;
-    const inputPassword = credentials.nuutsUg || credentials.password;
-
-    if (
-      storedAuth.username !== inputUsername ||
-      storedAuth.password !== inputPassword
-    ) {
-      throw new Error("Нэвтрэх нэр эсвэл нууц үг буруу байна");
-    }
-
-    return {
-      success: true,
-      token: storedAuth.token,
-      result: storedAuth.userInfo,
-      permissionsData: storedAuth.permissionsData,
-      offline: true,
-    };
-  } catch (error) {
-    throw error;
+  if (!storedAuth) {
+    throw new Error("Оффлайн нэвтрэлтийн мэдээлэл байхгүй байна");
   }
+
+  const inputUsername = credentials.nevtrekhNer || credentials.username;
+  const inputPassword = credentials.nuutsUg || credentials.password;
+
+  if (
+    storedAuth.username !== inputUsername ||
+    storedAuth.password !== inputPassword
+  ) {
+    throw new Error("Нэвтрэх нэр эсвэл нууц үг буруу байна");
+  }
+
+  return {
+    success: true,
+    token: storedAuth.token,
+    result: storedAuth.userInfo,
+    permissionsData: storedAuth.permissionsData,
+    offline: true,
+  };
 }
 
+/**
+ * Check if offline login data exists
+ */
 export async function hasOfflineAuth() {
   try {
-    if (typeof navigator !== "undefined" && navigator.onLine) {
-      return false;
-    }
-
     const db = await openDB();
     const storedAuth = await db.get(STORES.USER, "credentials");
     return !!(storedAuth && storedAuth.username && storedAuth.password);
-  } catch (error) {
+  } catch {
     return false;
   }
 }
 
+/**
+ * Clear saved offline credentials
+ */
 export async function clearOfflineAuth() {
   try {
     const db = await openDB();
     await db.delete(STORES.USER, "credentials");
   } catch (error) {
+    console.error("Failed to clear offline auth:", error);
     throw error;
   }
 }
 
+/**
+ * Get cached permissions
+ */
 export async function getCachedPermissionsData() {
   try {
     const db = await openDB();
     const storedAuth = await db.get(STORES.USER, "credentials");
     return storedAuth ? storedAuth.permissionsData : null;
   } catch (error) {
-    throw error;
+    return null;
   }
 }
 
+/**
+ * Attempt login → online first, fallback offline
+ */
 export async function attemptLogin(credentials, onlineLoginFunction) {
   const inputUsername = credentials.nevtrekhNer || credentials.username;
   const inputPassword = credentials.nuutsUg || credentials.password;
@@ -133,7 +137,9 @@ export async function attemptLogin(credentials, onlineLoginFunction) {
 
       try {
         await saveOfflineAuth(credentials, onlineResult);
-      } catch (saveError) {}
+      } catch (saveError) {
+        console.warn("Failed to save offline login:", saveError);
+      }
 
       return {
         success: true,
@@ -143,7 +149,6 @@ export async function attemptLogin(credentials, onlineLoginFunction) {
     } catch (onlineError) {
       const aldaaMessage =
         onlineError.response?.data?.aldaa || "Нэвтрэлт амжилтгүй боллоо";
-
       throw new Error(aldaaMessage);
     }
   } else {

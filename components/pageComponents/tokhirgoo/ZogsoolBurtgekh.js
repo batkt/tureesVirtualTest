@@ -91,9 +91,6 @@ function ZogsoolBurtgekh(
             : undefined;
           body.barilgiinId = barilgiinId;
 
-          console.log("eseh", body?.tokiBolonStickerAshiglakhEsekh);
-          console.log("toki", body?.tokiNer);
-
           await method("parking", token, body)
             .then(({ data }) => {
               if (data === "Amjilttai") {

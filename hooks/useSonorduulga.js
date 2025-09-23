@@ -203,10 +203,8 @@ function useSonorduulga(token) {
         setCurrentPage(page);
 
         if (newNotifications.length < pageSize) {
-          console.log("Setting hasMore to false - no more data");
           setHasMore(false);
         } else {
-          console.log("Setting hasMore to true - might have more data");
           setHasMore(true);
         }
       } catch (error) {
@@ -220,12 +218,9 @@ function useSonorduulga(token) {
   );
 
   const loadMore = useCallback(() => {
-    console.log("loadMore called:", { isLoadingMore, hasMore, currentPage });
     if (!isLoadingMore && hasMore) {
-      console.log("Fetching page:", currentPage + 1);
       fetchNotifications(currentPage + 1, true);
     } else {
-      console.log("Load more blocked:", { isLoadingMore, hasMore });
     }
   }, [currentPage, isLoadingMore, hasMore, fetchNotifications]);
 

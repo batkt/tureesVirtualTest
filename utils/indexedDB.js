@@ -1,7 +1,7 @@
 import { openDB as idbOpen } from "idb";
 
 const DB_NAME = "turees-db";
-const DB_VERSION = 9;
+const DB_VERSION = 10;
 
 export const STORES = {
   USER: "user",
@@ -27,14 +27,38 @@ export async function openDB() {
     },
   });
 }
+
+// ---------------- User ----------------
 export async function saveUsernameOnly(username) {
   const db = await openDB();
   await db.put(STORES.USER, username, "username");
 }
 
+export async function saveUser(token, info) {
+  const db = await openDB();
+  await db.put(STORES.USER, token, "token");
+  await db.put(STORES.USER, info, "info");
+}
+
+export async function getUser() {
+  try {
+    const db = await openDB();
+    const token = await db.get(STORES.USER, "token");
+    const info = await db.get(STORES.USER, "info");
+    return { token, info };
+  } catch {
+    return { token: null, info: null };
+  }
+}
+
+export async function clearUser() {
+  const db = await openDB();
+  await db.delete(STORES.USER, "token");
+  await db.delete(STORES.USER, "info");
+}
+
 export async function clearUserDataOnLogout() {
   const db = await openDB();
-
   const username = await db.get(STORES.USER, "username");
 
   const txUser = db.transaction(STORES.USER, "readwrite");
@@ -64,86 +88,47 @@ export async function clearUserDataOnLogout() {
   }
 }
 
-export async function saveUser(token, info) {
-  try {
-    const db = await openDB();
-    await db.put(STORES.USER, token, "token");
-    await db.put(STORES.USER, info, "info");
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function getUser() {
-  try {
-    const db = await openDB();
-    const token = await db.get(STORES.USER, "token");
-    const info = await db.get(STORES.USER, "info");
-    return { token, info };
-  } catch (error) {
-    return { token: null, info: null };
-  }
-}
-
-export async function clearUser() {
-  try {
-    const db = await openDB();
-    await db.delete(STORES.USER, "token");
-    await db.delete(STORES.USER, "info");
-  } catch (error) {
-    throw error;
-  }
-}
-
+// ---------------- Offline Payments ----------------
 export async function saveOfflinePayment({
   token = null,
   data = {},
   synced = false,
 } = {}) {
-  try {
-    const db = await openDB();
-    const createdAt = new Date().toISOString();
-    const result = await db.add(STORES.PAYMENTS, {
-      token,
-      data,
-      createdAt,
-      synced,
-      retryCount: 0,
-    });
-
-    return result;
-  } catch (error) {
-    throw error;
-  }
+  const db = await openDB();
+  const createdAt = new Date().toISOString();
+  return db.add(STORES.PAYMENTS, {
+    token,
+    data,
+    createdAt,
+    synced,
+    retryCount: 0,
+  });
 }
 
 export async function getOfflinePayments() {
-  try {
-    const db = await openDB();
-    const payments = await db.getAll(STORES.PAYMENTS);
-
-    return payments;
-  } catch (error) {
-    return [];
-  }
+  const db = await openDB();
+  return db.getAll(STORES.PAYMENTS);
 }
 
 export async function deleteOfflinePayment(id) {
-  try {
-    const db = await openDB();
-    const result = await db.delete(STORES.PAYMENTS, id);
-
-    return result;
-  } catch (error) {
-    throw error;
-  }
+  const db = await openDB();
+  return db.delete(STORES.PAYMENTS, id);
 }
+
+// ---------------- Clear All Cache ----------------
 export async function clearAllCache() {
   await clearUser();
+
   const db = await openDB();
   if (db.objectStoreNames.contains(STORES.PAYMENTS)) {
     const tx = db.transaction(STORES.PAYMENTS, "readwrite");
     await tx.objectStore(STORES.PAYMENTS).clear();
+    await tx.done;
+  }
+
+  if (db.objectStoreNames.contains(STORES.CACHE)) {
+    const tx = db.transaction(STORES.CACHE, "readwrite");
+    await tx.objectStore(STORES.CACHE).clear();
     await tx.done;
   }
 
@@ -156,5 +141,3 @@ export async function clearAllCache() {
     navigator.serviceWorker.controller.postMessage({ type: "CLEAR_CACHE" });
   }
 }
-
-export { STORES };

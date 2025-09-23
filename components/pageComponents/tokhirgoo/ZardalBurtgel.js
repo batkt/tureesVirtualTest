@@ -56,7 +56,7 @@ function ZardalBurtgel(
 
   useEffect(() => {
     function keyUp(e) {
-      if (e.key === "Escape") { 
+      if (e.key === "Escape") {
         e.preventDefault();
         garya();
       }
@@ -130,7 +130,6 @@ function ZardalBurtgel(
     }),
     [form, ognoonuud, nuatBodokhEsekh]
   );
-  console.log({ nuatBodokhEsekh });
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
       e.preventDefault();

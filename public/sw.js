@@ -1,40 +1,49 @@
 const DB_NAME = "turees-db";
-const DB_VERSION = 9;
+const DB_VERSION = 10;
 const STORES = {
   USER: "user",
   PAYMENTS: "offline-payments",
   CACHE: "cache",
 };
 
+const API_CACHE_NAME = "api-cache-v1";
+const PAGES_CACHE_NAME = "pages-cache-v1";
+const OFFLINE_PAGE = "/offline.html";
+const pagesToCache = [
+  "/",
+  "/khyanalt/zogsool/camera",
+  "/khyanalt/zogsool",
+  "/khyanalt/zogsool/mashinBurtgel",
+  "/khyanalt/zogsool/cameraVals",
+  "/khyanalt/zogsool/orshinSuugch",
+  OFFLINE_PAGE,
+];
+
 let lastSyncTime = 0;
 let syncInProgress = false;
 
-const OFFLINE_PAGE = "/offline.html";
-
+// ---------------- IndexedDB ----------------
 function upgradeDB(db) {
   const stores = db.objectStoreNames;
-
   if (!stores.contains(STORES.USER)) db.createObjectStore(STORES.USER);
-  if (!stores.contains(STORES.PAYMENTS))
+  if (!stores.contains(STORES.PAYMENTS)) {
     db.createObjectStore(STORES.PAYMENTS, {
       keyPath: "id",
       autoIncrement: true,
     });
+  }
   if (!stores.contains(STORES.CACHE)) db.createObjectStore(STORES.CACHE);
 }
 
 function openIndexedDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
-
     request.onupgradeneeded = (event) => upgradeDB(event.target.result);
-
     request.onsuccess = (event) => {
       const db = event.target.result;
       db.onversionchange = () => db.close();
       resolve(db);
     };
-
     request.onerror = (event) => reject(event.target.error);
   });
 }
@@ -51,16 +60,18 @@ function deserializeHeaders(obj) {
   return headers;
 }
 
+// ---------------- Fetch Handler ----------------
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  if (url.pathname.startsWith("/api/") && req.method === "POST") {
-    event.respondWith(handlePostRequest(req));
-    return;
-  }
-
+  // API POST requests
   if (url.pathname.startsWith("/api/")) {
+    if (req.method === "POST") {
+      event.respondWith(handlePostRequest(req));
+      return;
+    }
+
     event.respondWith(
       fetch(req)
         .then((res) => {
@@ -70,25 +81,36 @@ self.addEventListener("fetch", (event) => {
               .then((cache) => cache.put(req, res.clone()));
           return res;
         })
-        .catch(async () => {
-          const cached = await caches.match(req);
-          return cached || new Response("Оффлайн байна", { status: 503 });
-        })
+        .catch(() => caches.match(req))
     );
     return;
   }
 
-  event.respondWith(
-    caches
-      .match(req)
-      .then(
-        (cached) =>
-          cached ||
-          fetch(req).catch(() => new Response("Оффлайн байна", { status: 503 }))
-      )
-  );
+  // Pages caching (only specific pages)
+  if (pagesToCache.includes(url.pathname)) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res.ok)
+            caches
+              .open(PAGES_CACHE_NAME)
+              .then((cache) => cache.put(req, res.clone()));
+          return res;
+        })
+        .catch(() =>
+          caches
+            .match(req)
+            .then((cached) => cached || caches.match(OFFLINE_PAGE))
+        )
+    );
+    return;
+  }
+
+  // All other requests fallback to network
+  event.respondWith(fetch(req).catch(() => caches.match(OFFLINE_PAGE)));
 });
 
+// ---------------- POST offline storage ----------------
 async function handlePostRequest(req) {
   try {
     return await fetch(req.clone());
@@ -140,19 +162,18 @@ async function handlePostRequest(req) {
   }
 }
 
+// ---------------- Pending payments ----------------
 async function getPendingPayments() {
   try {
     const db = await openIndexedDB();
     if (!db.objectStoreNames.contains(STORES.PAYMENTS)) return [];
     const tx = db.transaction(STORES.PAYMENTS, "readonly");
     const store = tx.objectStore(STORES.PAYMENTS);
-
     const payments = await new Promise((resolve, reject) => {
       const req = store.getAll();
       req.onsuccess = () => resolve(req.result);
       req.onerror = () => reject(req.error);
     });
-
     db.close();
     return payments;
   } catch {
@@ -160,6 +181,7 @@ async function getPendingPayments() {
   }
 }
 
+// ---------------- Sync offline payments ----------------
 async function syncPaymentsFromSW() {
   if (syncInProgress || Date.now() - lastSyncTime < 10000) return;
   syncInProgress = true;
@@ -196,11 +218,11 @@ async function syncPaymentsFromSW() {
           body,
         });
 
-        if (response.ok) {
+        if (response.ok)
           await new Promise(
             (res) => (store.delete(p.id).onsuccess = () => res())
           );
-        } else {
+        else {
           p.retryCount = (p.retryCount || 0) + 1;
           p.lastError = `HTTP ${response.status}`;
           p.lastRetry = new Date().toISOString();
@@ -221,22 +243,27 @@ async function syncPaymentsFromSW() {
   }
 }
 
+// ---------------- Service Worker Events ----------------
 self.addEventListener("install", (event) => {
   event.waitUntil(
     Promise.all([
       openIndexedDB(),
-      caches.open(API_CACHE_NAME).then((c) => c.add(OFFLINE_PAGE)),
+      caches.open(PAGES_CACHE_NAME).then((cache) => cache.addAll(pagesToCache)),
+      caches.open(API_CACHE_NAME),
     ])
   );
 });
 
 self.addEventListener("activate", (event) => {
+  const validCaches = [API_CACHE_NAME, PAGES_CACHE_NAME];
   event.waitUntil(
     caches
       .keys()
       .then((keys) =>
         Promise.all(
-          keys.filter((k) => k !== API_CACHE_NAME).map((k) => caches.delete(k))
+          keys
+            .filter((k) => !validCaches.includes(k))
+            .map((k) => caches.delete(k))
         )
       )
   );

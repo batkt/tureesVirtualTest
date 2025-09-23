@@ -127,7 +127,6 @@ function UstsanTuukh() {
     moment().subtract(1, "months"),
     moment(),
   ]);
-  console.log(turul);
   const query = useMemo(() => {
     const classValue =
       turul === "ajiltan"
@@ -686,7 +685,7 @@ function UstsanTuukh() {
           return (
             <div className="flex items-center justify-center">
               <Button
-                className=" dark:bg-gray-700 "
+                className=" dark:bg-gray-700"
                 shape="circle"
                 size="small"
                 icon={
@@ -696,7 +695,7 @@ function UstsanTuukh() {
                   >
                     <EyeOutlined
                       style={{ fontSize: "16px" }}
-                      className=" dark:bg-gray-700 "
+                      className=" dark:bg-gray-700"
                     />
                   </div>
                 }
