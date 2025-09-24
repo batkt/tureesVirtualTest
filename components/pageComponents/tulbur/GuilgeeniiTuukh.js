@@ -233,12 +233,12 @@ function GuilgeeniiTuukh(
             item.ognoo && moment(item.ognoo).isValid()
               ? moment(item.ognoo).format("YYYY/MM/DD")
               : "",
-          Түрээс: item.undsenDun || 0,
-          "Төлөх дүн": item.tulukhDun || 0,
-          Хямдрал: item.khyamdral || 0,
-          "Төлсөн алданги": item.tulsunAldangi || 0,
-          "Төлсөн дүн": item.tulsunDun || 0,
-          Үлдэгдэл: item.uldegdel || 0,
+          Түрээс: formatNumber(item.undsenDun),
+          "Төлөх дүн": formatNumber(item.tulukhDun),
+          Хямдрал: formatNumber(item.khyamdral),
+          "Төлсөн алданги": formatNumber(item.tulsunAldangi),
+          "Төлсөн дүн": formatNumber(item.tulsunDun),
+          Үлдэгдэл: formatNumber(item.uldegdel),
           Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
           Хэлбэр:
             item.turul === "bank"
@@ -247,7 +247,6 @@ function GuilgeeniiTuukh(
                 : "Банк"
               : turulAvya(item.turul) || "",
           Тайлбар: item.tailbar || "",
-          "Нэмэлт тайлбар": item.nemeltTailbar || "",
           "Бүртгэсэн огноо":
             item.guilgeeKhiisenOgnoo &&
             moment(item.guilgeeKhiisenOgnoo).isValid()
@@ -288,7 +287,6 @@ function GuilgeeniiTuukh(
           { wch: 20 },
           { wch: 20 },
           { wch: 20 },
-          { wch: 20 },
         ];
         ws["!cols"] = wscols;
 
@@ -316,7 +314,6 @@ function GuilgeeniiTuukh(
         ws["I1"].s = headerStyle;
         ws["J1"].s = headerStyle;
         ws["K1"].s = headerStyle;
-        ws["L1"].s = headerStyle;
 
         XLSX?.utils.book_append_sheet(wb, ws, "гүйлгээ");
 
