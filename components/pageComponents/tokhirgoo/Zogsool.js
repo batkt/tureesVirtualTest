@@ -1,25 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
-import {
-  Button,
-  Input,
-  notification,
-  InputNumber,
-  Card,
-  Table,
-  Tooltip,
-  Popover,
-  Popconfirm,
-} from "antd";
+import React, { useEffect, useMemo } from "react";
+import { Button, Table, Popover, Popconfirm } from "antd";
 import {
   PlusOutlined,
-  CloseCircleOutlined,
   SettingOutlined,
   EditOutlined,
-  RedoOutlined,
   DeleteOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import uilchilgee from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
 import { modal } from "../../ant/Modal";
 import ZogsoolBurtgekh from "./ZogsoolBurtgekh";
@@ -29,13 +16,7 @@ import deleteMethod from "../../../tools/function/crud/deleteMethod";
 import SmsZagvar from "./SmsZagvar";
 import useOrder from "tools/function/useOrder";
 
-function Zogsool({
-  token,
-  baiguullaga,
-  baiguullagaMutate,
-  barilgiinId,
-  setSongogdsonTsonkhniiIndex,
-}) {
+function Zogsool({ token, baiguullaga, baiguullagaMutate, barilgiinId }) {
   const { t } = useTranslation();
   const ref = React.useRef(null);
   const { order } = useOrder({ createdAt: -1 });
@@ -66,7 +47,7 @@ function Zogsool({
       title: "№",
       width: "3rem",
       align: "center",
-      render: (text, record, index) =>
+      render: (index) =>
         (jagsaalt?.data?.khuudasniiDugaar || 0) *
           (jagsaalt?.data?.khuudasniiKhemjee || 0) -
         (jagsaalt?.data?.khuudasniiKhemjee || 0) +
@@ -295,8 +276,6 @@ function Zogsool({
           ref={ref}
           baiguullaga={baiguullaga}
           baiguullagaMutate={baiguullagaMutate}
-          // jagsaalt={jagsaalt.jagsaalt}
-          // refresh={jagsaalt.refresh}
         />
       ),
       footer,
@@ -344,7 +323,6 @@ function Zogsool({
         <div className="box mt-5 ">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              {/* {t("Зогсоол тохиргоо")} */}
               СМС тохиргоо
             </h2>
             <div
@@ -382,54 +360,3 @@ function Zogsool({
 }
 
 export default Zogsool;
-
-{
-  /*
-
-useEffect(() => {
-    if (baiguullaga !== undefined) {
-      setZogsoolTokhirgoo({
-        zogsooliinMinut: baiguullaga?.tokhirgoo?.zogsooliinMinut,
-        zogsooliinDun: baiguullaga?.tokhirgoo?.zogsooliinDun,
-        zogsooliinKhungulukhMinut:
-          baiguullaga?.tokhirgoo?.zogsooliinKhungulukhMinut,
-      });
-    }
-  }, [baiguullaga]);
-
-const isChanged = useMemo(() => {
-      if (!zogsoolTokhirgoo) return false;
-      return (
-        baiguullaga?.tokhirgoo?.zogsooliinMinut !==
-        zogsoolTokhirgoo["zogsooliinMinut"] ||
-        baiguullaga?.tokhirgoo?.zogsooliinDun !==
-        zogsoolTokhirgoo["zogsooliinDun"] ||
-        baiguullaga?.tokhirgoo?.zogsooliinKhungulukhMinut !==
-        zogsoolTokhirgoo["zogsooliinKhungulukhMinut"]
-      );
-    }, [zogsoolTokhirgoo, baiguullaga]);
-
-<div className="mt-5 box lg:mt-0">
-  <div className="flex flex-col items-center justify-between w-full gap-8 px-5 py-8 2xl:flex-row 2xl:gap-20">
-    <div className="flex flex-col items-center justify-center w-full gap-4">
-      <h2 className="text-xl">Орох Камер</h2>
-      <div className="border aspect-[3/2] w-full flex justify-center items-center bg-gray-400"><p>cameraOroh</p></div>
-    </div>
-    <div className="flex flex-col items-center justify-center w-full gap-4">
-      <h2 className="text-xl">Гарах Камер</h2>
-      <div className="border aspect-[3/2] w-full flex justify-center items-center bg-gray-400"><p>cameraGarah</p></div>
-    </div>
-  </div>
-</div>
-<div className="col-span-12 mt-5 xxl:col-span-4 lg:col-span-6">
-    <div className="flex flex-col w-full gap-5 p-5 box 2xl:gap-10">
-    <div className="border 2xl:aspect-[3/2] aspect-square flex justify-center items-center bg-gray-400"><p>Camera1</p></div>
-<div className="grid grid-cols-1 gap-5 2xl:grid-cols-2 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-2 sm:grid-cols-2 2xl:gap-20">
-    <div className="border 2xl:aspect-[3/2] xl:aspect-[3/2] lg:aspect-[3/2] aspect-square bg-gray-400"><p>Camera2</p></div>
-<div className="border 2xl:aspect-[3/2] xl:aspect-[3/2] lg:aspect-[3/2] aspect-square bg-gray-400"><p>Camera3</p></div>
-<div className="border 2xl:aspect-[3/2] xl:aspect-[3/2] lg:aspect-[3/2] aspect-square bg-gray-400"><p>Camera4</p></div>
-<div className="border 2xl:aspect-[3/2] xl:aspect-[3/2] lg:aspect-[3/2] aspect-square bg-gray-400"><p>Camera5</p></div>
-</div>
-</div>
-</div>*/
-}

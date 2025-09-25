@@ -1,4 +1,4 @@
-import { Steps, Button, Spin, message, Switch, Form, Modal } from "antd";
+import { Steps, Button, Spin, message, Modal } from "antd";
 import React from "react";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
@@ -12,7 +12,7 @@ import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
 import { useEffect } from "react";
 import { t } from "i18next";
 import { useQRCode } from "next-qrcode";
-//#endregion
+
 const { confirm } = Modal;
 function Tulbur(
   { destroy, data, token, ajiltan, baiguullaga, barilgiinId, onRefresh },

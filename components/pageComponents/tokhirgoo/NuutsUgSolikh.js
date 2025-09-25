@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Input, message, notification } from "antd";
+import { Button, Input, message } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useTranslation } from "react-i18next";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";

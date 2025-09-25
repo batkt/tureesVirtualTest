@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Button, Input, InputNumber, notification, Switch, Form } from "antd";
-import uilchilgee, { url } from "services/uilchilgee";
+import { Button, Input, notification, Form } from "antd";
+import uilchilgee from "services/uilchilgee";
 
-import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import { useTranslation } from "react-i18next";
 
 function EmailTokhirgoo({

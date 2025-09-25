@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, InputNumber, notification, Switch, Input } from "antd";
+import { Button, notification, Switch, Input } from "antd";
 import uilchilgee from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
 

@@ -14,15 +14,12 @@ import {
 
 import uilchilgee, { aldaaBarigch } from "../../../services/uilchilgee";
 
-import { InboxOutlined, SearchOutlined } from "@ant-design/icons";
-// import uilchilgee, { url } from "services/uilchilgee";
-import useGereeniiZagvar from "hooks/useGereeniiZagvar";
+import { SearchOutlined } from "@ant-design/icons";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import _ from "lodash";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import useJagsaalt from "hooks/useJagsaalt";
-import formatNumber from "tools/function/formatNumber";
 
 function GuilgeeExceleesOruulakhOlnoor(
   {
@@ -226,7 +223,6 @@ function GuilgeeExceleesOruulakhOlnoor(
         const a = document.createElement("a");
         a.style.display = "none";
         a.href = url;
-        // the filename you want
         a.download = `${zagvariinZam}.xlsx`;
         document.body.appendChild(a);
         a.click();
@@ -250,7 +246,6 @@ function GuilgeeExceleesOruulakhOlnoor(
       title: t("Талбайн Дугаар"),
       dataIndex: "talbainDugaar",
       key: "talbainDugaar",
-      // ...getColumnSearchProps("talbainDugaar"),
     },
     {
       title: t("Тоолуурын Дугаар"),
@@ -282,45 +277,6 @@ function GuilgeeExceleesOruulakhOlnoor(
       ),
     },
   ];
-  // const columns = [
-  //   {
-  //     title: t("Талбайн Дугаар"),
-  //     dataIndex: "talbainDugaar",
-  //     key: "talbainDugaar",
-  //   },
-  //   {
-  //     title: t("Тоолуурын Дугаар"),
-  //     dataIndex: "tooluuriinDugaar",
-  //     key: "tooluuriinDugaar",
-  //   },
-  //   {
-  //     title: t("Заалт"),
-  //     dataIndex: "suuliinZaalt",
-  //     key: "suuliinZaalt",
-  //     render: (text) => <span>{text.toFixed(2)}</span>,
-  //   },
-  //   {
-  //     title: t("Гүйдлийн коэффициент"),
-  //     dataIndex: "guidliinKoep",
-  //     key: "guidliinKoep",
-  //     render: (text, record, index) => (
-  //       <InputNumber
-  //         min={0}
-  //         value={record.guidliinKoep || 0}
-  //         onChange={(value) => {
-  //           const newData = [...data];
-  //           newData[index].guidliinKoep = value;
-
-  //           if (value > 0) {
-  //             message.warning("Гүйдлийн коэффициент 0-с их байна!", 3);
-  //           }
-
-  //           setData(newData);
-  //         }}
-  //       />
-  //     ),
-  //   },
-  // ];
 
   const selectedZardal = useMemo(() => {
     return zardal?.jagsaalt?.find((z) => z._id === ashiglaltiinId);
@@ -390,7 +346,7 @@ function GuilgeeExceleesOruulakhOlnoor(
           <div className="mt-4 flex justify-end">
             <Input
               placeholder="Талбай / Тоолуурын дугаар"
-              prefix={<SearchOutlined style={{ color: "#94a3b8" }} />} // 🔍 Icon дотроо
+              prefix={<SearchOutlined style={{ color: "#94a3b8" }} />}
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               allowClear
@@ -421,26 +377,11 @@ function GuilgeeExceleesOruulakhOlnoor(
                   position: "sticky",
                   padding: "1px 0",
                 },
-                
               }}
               scroll={{ y: 400 }}
               style={{ marginTop: "20px" }}
             />
           </div>
-          {/* <div className="flex items-end justify-end">
-            <Button
-              type="primary"
-              style={{
-                marginTop: 10,
-                display: "flex",
-                justifyContent: "end",
-                alignItems: "end",
-              }}
-              onClick={handleSave}
-            >
-              {t("Хадгалах")}
-            </Button>
-          </div> */}
         </>
       )}
     </div>

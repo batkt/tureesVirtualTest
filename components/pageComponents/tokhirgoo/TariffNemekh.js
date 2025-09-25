@@ -1,7 +1,6 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
-import { Button, InputNumber, message } from "antd";
-import React, { useImperativeHandle, useRef, useState } from "react";
-import uilchilgee from "services/uilchilgee";
+import { Button, InputNumber } from "antd";
+import React, { useImperativeHandle, useState } from "react";
 
 function TariffNemekh({ data, baiguullaga, barilgiinId, token, destroy }, ref) {
   const [ajliinUdur, setAjliinUdur] = useState([]);

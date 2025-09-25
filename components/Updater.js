@@ -30,9 +30,7 @@ function Updater() {
           message: t("Мэдэгдэл"),
           description: (
             <div style={{ maxWidth: "20rem" }} className="break-words">
-              {/* {t(" */}
               Системд шинэчлэлт хийгдсэн байна. Та шинэчлэлт хийх үү!
-              {/* ")} */}
               <div>
                 <Button
                   style={{ marginTop: 0, marginLeft: "auto" }}
@@ -40,15 +38,12 @@ function Updater() {
                   type="primary"
                   onClick={refreshPage}
                 >
-                  {/* {t(" */}
                   Тийм
-                  {/* ")} */}
                 </Button>
               </div>
             </div>
           ),
         });
-        //setMedegdel(notif)
       }
     });
     return () => {

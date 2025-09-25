@@ -4,7 +4,6 @@ import { url } from "services/uilchilgee";
 import updateMethod from "tools/function/crud/updateMethod";
 import getBase64 from "tools/function/getBase64";
 import { useTranslation } from "react-i18next";
-import { DeleteOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 

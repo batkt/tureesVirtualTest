@@ -15,7 +15,6 @@ import compareFields from "tools/function/compareFields";
 import { useTranslation } from "react-i18next";
 import uilchilgee from "services/uilchilgee";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { useAuth } from "services/auth";
 
 function UtasBurtgel(
   { data, destroy, token, baiguullaga, baiguullagaMutate },

@@ -1,7 +1,7 @@
 import React from "react";
 import uilchilgee, { url } from "services/uilchilgee";
 import PlanKharakh from "components/konva/plan";
-import { Button } from "antd";
+
 import { modal } from "components/ant/Modal";
 import { CloseCircleOutlined, FileExcelOutlined } from "@ant-design/icons";
 import { useAuth } from "services/auth";

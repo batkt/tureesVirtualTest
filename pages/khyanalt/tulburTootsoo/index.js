@@ -48,17 +48,7 @@ function iconAvya(a, bank) {
   let Icon = ExclamationOutlined;
   let color = "red";
   let tailbar = t("Гүйлгээ холбогдоогүй байна");
-  // if (
-  //   bank === "tdb"
-  //     ? a?.TxAddInf.includes("QPAY") || a?.TxAddInf.includes("qpay")
-  //     : bank === "golomt"
-  //     ? a?.tranDesc.includes("QPAY") || a?.tranDesc.includes("qpay")
-  //     : a?.description.includes("QPAY") || a?.description.includes("qpay")
-  // ) {
-  //   Icon = CheckOutlined;
-  //   color = "green";
-  //   tailbar = t("Гүйлгээ холбогдсон байна");
-  // } else
+
   if (
     (a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
       a?.kholbosonDun > 0) ||

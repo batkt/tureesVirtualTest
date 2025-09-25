@@ -1,4 +1,3 @@
-//#region import
 import Admin from "components/Admin";
 import { useEffect, useState, useRef, useMemo } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
@@ -7,7 +6,6 @@ import useMailiinZagvar from "hooks/useMailiinZagvar";
 import {
   Button,
   Checkbox,
-  Divider,
   Image,
   Input,
   message,
@@ -18,25 +16,22 @@ import {
 import {
   ArrowLeftOutlined,
   EditOutlined,
-  EyeOutlined,
-  FileExcelOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import ZagvarBurtgel from "components/pageComponents/medegdel/ZagvarBurtgel";
+
 import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh";
-import deleteMethod from "tools/function/crud/deleteMethod";
+
 import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
-import { modal } from "components/ant/Modal";
+
 import Aos from "aos";
-import TextArea from "antd/lib/input/TextArea";
+
 import useOrder from "tools/function/useOrder";
 import useJagsaalt from "hooks/useJagsaalt";
-import { useRouter } from "next/router";
+
 import getBase64 from "tools/function/getBase64";
 import { useTranslation } from "react-i18next";
 
-//#endregion
 export function uldegdeliinTurulKhurvuulya(turul) {
   var butsaahUtga = turul;
   switch (turul) {
@@ -72,10 +67,7 @@ function Khyanalt({ token }) {
   const [turulZagvar, setTurulZagvar] = useState(false);
 
   const [kharakhZurgiinZam, setKharakhZurgiinZam] = useState(false);
-  // const [songogdsonKhariltsagch, setsongogdsonKhariltsagch] = useState([]);
-  /**Илгээх төрөл
-   * enum {buunuur | davkharaar | avlagaar | gantsaar}
-   *  */
+
   const [ilgeekhTurul, setIlgeekhTurul] = useState("gantsaar");
   const [tuluv, setTuluv] = useState("idevkhtei");
   const ref = useRef(null);
@@ -145,7 +137,6 @@ function Khyanalt({ token }) {
     }
     return utga;
   }, [khariltsagch, msj]);
-  //#endregion
 
   async function appIlgeeye() {
     if (!!title) {
@@ -308,7 +299,6 @@ function Khyanalt({ token }) {
     }
   }
 
-  //#endregion
   function khariltsagchSongokh(mur) {
     setKhariltsagch(mur);
     const index = songogdsonKhariltsagch.findIndex((a) => a._id === mur._id);

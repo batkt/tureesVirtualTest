@@ -3,14 +3,12 @@ import {
   Button,
   InputNumber,
   Select,
-  notification,
   Popconfirm,
   Tooltip,
 } from "antd";
 import {
   ArrowRightOutlined,
   ArrowLeftOutlined,
-  DeleteOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useRef, useState } from "react";

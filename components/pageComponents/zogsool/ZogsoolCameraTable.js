@@ -1,10 +1,8 @@
 import { Table } from "antd";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { socket } from "services/uilchilgee";
+
+import React from "react";
 
 const ZogsoolCameraTable = ({
-  isValidating,
   uilchluulegchGaralt,
   columns,
   onChangeTable,

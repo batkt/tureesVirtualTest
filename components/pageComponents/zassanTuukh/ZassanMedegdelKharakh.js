@@ -1,5 +1,5 @@
 import React, { useEffect, useImperativeHandle, useState } from "react";
-import { Form, Table, Modal } from "antd";
+import { Form } from "antd";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useTranslation } from "react-i18next";
@@ -87,7 +87,7 @@ function ZassanMedegdelKharakh(
       .filter((data) => data._id === id)
       .map((b) => b.ner);
   }
-return (
+  return (
     <>
       <div className="flex dark:text-gray-400">
         <div className="h-[600px] w-full overflow-y-scroll pr-3">
@@ -116,10 +116,10 @@ return (
           <table className="w-full font-semibold">
             <thead>
               <tr className="flex border-b">
-                <th className="w-2/12 overflow-hidden p-1 text-center border-r">
+                <th className="w-2/12 overflow-hidden border-r p-1 text-center">
                   {t("Талбарын нэр")}
                 </th>
-                <th className="w-5/12 overflow-hidden p-1 text-center border-r">
+                <th className="w-5/12 overflow-hidden border-r p-1 text-center">
                   {t("Өмнөх утга")}
                 </th>
                 <th className="w-5/12 overflow-hidden p-1 text-center">
@@ -156,13 +156,13 @@ return (
                         <table className="w-full">
                           <thead>
                             <tr className="flex">
-                              <th className="w-1/3 overflow-hidden p-1 text-center border-r">
+                              <th className="w-1/3 overflow-hidden border-r p-1 text-center">
                                 {t("Нэр")}
                               </th>
-                              <th className="w-1/6 overflow-hidden p-1 text-center border-r">
+                              <th className="w-1/6 overflow-hidden border-r p-1 text-center">
                                 {t("Төрөл")}
                               </th>
-                              <th className="w-1/4 overflow-hidden p-1 text-center border-r">
+                              <th className="w-1/4 overflow-hidden border-r p-1 text-center">
                                 {t("Үнэ")}
                               </th>
                               <th className="w-1/4 overflow-hidden p-1 text-center">
@@ -190,7 +190,9 @@ return (
                                       </td>
                                       <td className="w-1/4 overflow-hidden border-r p-1 text-right">
                                         {formatNumber(
-                                          b.turul === "Дурын" ? b.dun : b.tariff,
+                                          b.turul === "Дурын"
+                                            ? b.dun
+                                            : b.tariff,
                                           2
                                         )}
                                       </td>
@@ -239,8 +241,10 @@ return (
                                         {b.ner}
                                       </td>
                                       <td className="w-2/3 overflow-hidden p-1 text-center">
-                                        {!isNaN(parseFloat(b.utga)) && isFinite(b.utga) ? 
-                                         formatNumber(b.utga, 2) : b.utga}
+                                        {!isNaN(parseFloat(b.utga)) &&
+                                        isFinite(b.utga)
+                                          ? formatNumber(b.utga, 2)
+                                          : b.utga}
                                       </td>
                                     </tr>
                                   ))
@@ -321,10 +325,11 @@ return (
                             })}
                           </tbody>
                         </table>
+                      ) : !isNaN(parseFloat(a.umnukhUtga)) &&
+                        isFinite(a.umnukhUtga) ? (
+                        formatNumber(a.umnukhUtga, 2)
                       ) : (
-             
-                        !isNaN(parseFloat(a.umnukhUtga)) && isFinite(a.umnukhUtga) ? 
-                        formatNumber(a.umnukhUtga, 2) : a.umnukhUtga
+                        a.umnukhUtga
                       )}
                     </td>
                     <td className="w-5/12 overflow-hidden border-r p-1 text-right">
@@ -378,7 +383,9 @@ return (
                                       </td>
                                       <td className="w-1/4 overflow-hidden border-r p-1 text-right">
                                         {formatNumber(
-                                          b.turul === "Дурын" ? b.dun : b.tariff,
+                                          b.turul === "Дурын"
+                                            ? b.dun
+                                            : b.tariff,
                                           2
                                         )}
                                       </td>
@@ -427,7 +434,9 @@ return (
                                         {b.ner}
                                       </td>
                                       <td className="w-2/3 overflow-hidden p-1 text-center">
-                                        {typeof b.utga === 'number' ? formatNumber(b.utga, 2) : b.utga}
+                                        {typeof b.utga === "number"
+                                          ? formatNumber(b.utga, 2)
+                                          : b.utga}
                                       </td>
                                     </tr>
                                   ))
@@ -466,10 +475,11 @@ return (
                             {JSON.parse(JSON.stringify(a?.shineUtga))}
                           </tbody>
                         </div>
+                      ) : !isNaN(parseFloat(a.shineUtga)) &&
+                        isFinite(a.shineUtga) ? (
+                        formatNumber(a.shineUtga, 2)
                       ) : (
-                    
-                        !isNaN(parseFloat(a.shineUtga)) && isFinite(a.shineUtga) ? 
-                        formatNumber(a.shineUtga, 2) : a.shineUtga
+                        a.shineUtga
                       )}
                     </td>
                   </tr>

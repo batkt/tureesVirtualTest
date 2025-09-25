@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Input, InputNumber, Table } from "antd";
+import { Table } from "antd";
 import moment from "moment";
 import Aos from "aos";
 import formatNumber from "tools/function/formatNumber";

@@ -43,17 +43,13 @@ function ProfileTovch({
     sonorduulga,
     sonorduulgaMutate,
     tooMutate,
-    jagsaalt,
-    setKhuudaslalt,
     kharaaguiToo,
     allNotifications: paginatedNotifications,
-    currentPage,
     isLoadingMore,
     hasMore,
     isInitialLoading,
     loadMore,
     fetchNotifications,
-    refreshNotifications,
   } = useSonorduulga(token, ajiltan?._id);
 
   const {
@@ -118,7 +114,7 @@ function ProfileTovch({
   const handleMailDropdownClose = useCallback(() => {
     setDropdownVisible(false);
     setExpandedNotifications(null);
-    setMailSearchQuery(""); // Reset search when closing
+    setMailSearchQuery("");
   }, []);
 
   const handleSonorduulgaDropdownClose = useCallback(() => {
@@ -126,7 +122,6 @@ function ProfileTovch({
     setExpandedNotifications(null);
   }, []);
 
-  // Filter notifications based on search query
   const filteredNotifications = useMemo(() => {
     if (!mailSearchQuery.trim()) {
       return allNotifications;
@@ -174,7 +169,6 @@ function ProfileTovch({
 
   const handleSearchChange = useCallback((e) => {
     setMailSearchQuery(e.target.value);
-    // Reset expanded notifications when searching
     setExpandedNotifications(null);
   }, []);
 
@@ -269,8 +263,8 @@ function ProfileTovch({
                     ?.replace(/<p>(<br\s*\/?>|\s|&nbsp;)+/gi, "<p>")
                     ?.replace(/<p>(<br\s*\/?>|&nbsp;|\s)*<\/p>/gi, "")
                     ?.replace(/^(\s|<br\s*\/?>)+/i, "")
-                    ?.replace(/<mark[^>]*>/gi, "") // Remove any existing mark tags
-                    ?.replace(/<\/mark>/gi, ""); // Remove closing mark tags
+                    ?.replace(/<mark[^>]*>/gi, "")
+                    ?.replace(/<\/mark>/gi, "");
 
                   return (
                     <div
@@ -477,7 +471,7 @@ function ProfileTovch({
             setDropdownVisible(visible);
             if (!visible) {
               setExpandedNotifications(null);
-              setMailSearchQuery(""); // Reset search when closing
+              setMailSearchQuery("");
             }
           }}
           overlayClassName="mail-dropdown-overlay"

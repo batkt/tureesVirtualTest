@@ -18,14 +18,12 @@ import {
   Input,
 } from "antd";
 import {
-  BellOutlined,
   DeleteOutlined,
   DollarCircleOutlined,
   DownOutlined,
   DownloadOutlined,
   EditOutlined,
   FileExcelOutlined,
-  FilterOutlined,
   MoreOutlined,
   PlusOutlined,
   SettingOutlined,
@@ -33,7 +31,7 @@ import {
   RedoOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
-import formatNumber from "tools/function/formatNumber";
+
 import { useRef, useEffect } from "react";
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
 import { modal } from "components/ant/Modal";

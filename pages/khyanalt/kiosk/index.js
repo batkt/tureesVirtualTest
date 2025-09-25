@@ -2,11 +2,9 @@ import {
   CheckCircleFilled,
   CloseCircleFilled,
   CloseOutlined,
-  InfoOutlined,
   LeftCircleFilled,
   LoadingOutlined,
   WarningOutlined,
-  SaveOutlined,
 } from "@ant-design/icons";
 import { Button, Drawer, Spin, message } from "antd";
 import DugaarKeyboard from "components/pageComponents/kiosk/DugaarKeyboard";
@@ -21,7 +19,6 @@ import {
 import { MdOutlineDiscount } from "react-icons/md";
 import moment, { utc } from "moment";
 import axios from "axios";
-//import Lottie from "lottie-react";w
 import amjilttaiAnimation from "./amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
@@ -711,9 +708,7 @@ const Kiosk = () => {
             >
               <LeftCircleFilled />
             </div>
-            {/* <div className="fixed left-[60%] top-3 !z-[10]">
-              {seconds > 9 ? `0:${seconds}` : `0:0${seconds}`}
-            </div> */}
+
             <div className="mt-8 flex w-full items-center justify-center md:mt-3">
               {!tulburiinKhelber && "Төлбөрийн хэлбэр сонгоно уу."}
               {tulburiinKhelber === "card" && "Картаа уншуулна уу."}
@@ -903,9 +898,6 @@ const Kiosk = () => {
               <div className="text-4xl font-bold">Гүйлгээ амжилттай</div>
               <Lottie animationData={amjilttaiAnimation} />
             </div>
-            {/* <div className="fixed left-[60%] top-3 !z-[10]">
-              {seconds > 9 ? `0:${seconds}` : `0:0${seconds}`}
-            </div> */}
           </div>
           <div
             className={`absolute left-0 top-5 h-full w-full px-3 transition-all duration-300 ${
@@ -959,16 +951,6 @@ const Kiosk = () => {
               })}
             </div>
             <div className="mt-8 flex w-full items-center justify-center gap-24  ">
-              {/* <DugaarKeyboard
-                dugaar={register}
-                setDugaar={setRegister}
-                handleUrgeljluulekh={handleEbarimtAvya}
-                setRegister={setRegister}
-                eBarimtTurul={eBarimtTurul}
-                dugaarRef={shineDugaarRef}
-                shineTurul={true}
-                baiguullagaNer={baiguullagaNer}
-              /> */}
               <ShineDugaarKeyboard
                 dugaar={register}
                 setDugaar={setRegister}
@@ -992,9 +974,7 @@ const Kiosk = () => {
             >
               <CloseCircleFilled />
             </div>
-            {/* <div className="fixed left-[60%] top-3">
-            {seconds > 9 ? `0:${seconds}` : `0:0${seconds}`}
-          </div> */}
+
             <div className="mt-8 flex items-center justify-center px-12 text-5xl text-zinc-200">
               Амжилттай төлөгдлөө
             </div>
@@ -1085,6 +1065,5 @@ const Kiosk = () => {
     </div>
   );
 };
-// export const getServerSideProps = shalgaltKhiikh;
 
 export default Kiosk;

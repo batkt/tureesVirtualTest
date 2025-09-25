@@ -1,4 +1,3 @@
-//#region import
 import Admin from "components/Admin";
 import { useEffect, useState, useRef, useMemo } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
@@ -34,8 +33,6 @@ import useJagsaalt from "hooks/useJagsaalt";
 import useOrder from "tools/function/useOrder";
 import { useTranslation } from "react-i18next";
 import useMashin from "hooks/useMashin";
-
-//#endregion
 
 var dateCount = {
   yearStart: moment().startOf("year"),
@@ -88,7 +85,7 @@ function Khyanalt({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
-  //#region const
+
   const { baiguullaga, barilgiinId } = useAuth();
   const { t } = useTranslation();
   const [khariltsagch, setKhariltsagch] = useState(null);
@@ -100,9 +97,7 @@ function Khyanalt({ token }) {
   const [title, setTitle] = useState();
 
   const [turulZagvar, setTurulZagvar] = useState(false);
-  /**Илгээх төрөл
-   * enum {buunuur | davkharaar | avlagaar | gantsaar}
-   *  */
+
   const [tuluv, setTuluv] = useState(null);
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
@@ -162,9 +157,6 @@ function Khyanalt({ token }) {
       setTurulZagvar(false);
     }
   }, [neesenEsekh]);
-
-  //#endregion
-  //#region method
 
   async function msgIlgeeye() {
     if (content !== "") {

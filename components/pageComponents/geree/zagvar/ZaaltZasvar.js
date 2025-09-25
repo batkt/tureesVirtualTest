@@ -185,10 +185,6 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
     });
     let songokhTalbaruud = [];
     zardal?.jagsaalt?.map((a) => {
-      /*songokhTalbaruud.push({
-        ner: `${a.ner}.Хэмжих нэгж`,
-        talbar: `${a.ner}.khemjikhNegj`,
-      });*/
       songokhTalbaruud.push({
         ner: `${a.ner}.Дүн`,
         talbar: `${a.ner}.tulukhDun`,
@@ -224,8 +220,8 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
         });
       } else {
         songokhTalbaruud.push({
-            ner: `${a.ner}.Хөнгөлөлт`,
-            talbar: `${a.ner}.khungulult`,
+          ner: `${a.ner}.Хөнгөлөлт`,
+          talbar: `${a.ner}.khungulult`,
         });
       }
     });

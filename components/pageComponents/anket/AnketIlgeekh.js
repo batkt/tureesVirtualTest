@@ -1,14 +1,4 @@
-import { SendOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  notification,
-  Radio,
-  Select,
-} from "antd";
-import FormLavlakh from "components/FormLavlakh";
+import { Input, notification, Radio, Select } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";

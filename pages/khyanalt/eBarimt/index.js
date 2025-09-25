@@ -40,7 +40,6 @@ const searchKeys = [
   "togloomNer",
   "togloomUtas",
 ];
-//#endregion
 
 function EbarimtMedeelel({ token }) {
   useEffect(() => {
@@ -415,7 +414,7 @@ function EbarimtMedeelel({ token }) {
         title: "Тайлант сар",
         dataIndex: "reportMonth",
         __style__: { h: "center" },
-        render: (date, row) => date ? date : row.date,
+        render: (date, row) => (date ? date : row.date),
       },
 
       ...(uilchilgeeAvi === "Зогсоол"
@@ -620,10 +619,7 @@ function EbarimtMedeelel({ token }) {
               pageSizeOptions: [100, 300, 500],
               defaultPageSize: [500],
               showSizeChanger: true,
-              // current: eBarimtGaralt?.khuudasniiDugaar,
-              // pageSize: 100,
-              // total: eBarimtGaralt?.niitMur,
-              // showSizeChanger: true,
+
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                 setEBarimtKhuudaslalt((kh) => ({
                   ...kh,

@@ -17,8 +17,8 @@ export const options = {
   scales: {
     xAxes: [
       {
-        barThickness: 6, // number (pixels) or 'flex'
-        maxBarThickness: 8, // number (pixels),
+        barThickness: 6,
+        maxBarThickness: 8,
         gridLines: {
           display: false,
         },

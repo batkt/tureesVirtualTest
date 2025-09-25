@@ -1,6 +1,5 @@
 import React from "react";
 import { message, Upload } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import _ from "lodash";
 import { t } from "i18next";

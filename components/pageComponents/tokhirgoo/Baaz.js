@@ -26,7 +26,6 @@ function Baaz({ token }) {
         const a = document.createElement("a");
         a.style.display = "none";
         a.href = url;
-        // the filename you want
         a.download = `backup.rar`;
         document.body.appendChild(a);
         a.click();

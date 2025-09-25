@@ -6,7 +6,7 @@ import { InputNumber, Input, Switch } from "antd";
 import axios from "axios";
 import { isString } from "lodash";
 import { t } from "i18next";
-import { useAuth } from "services/auth";
+
 import uilchilgee from "services/uilchilgee";
 
 function EBarimt({
@@ -29,7 +29,6 @@ function EBarimt({
   eBarimtAutomataarShivikh,
   setCustomerTin,
 }) {
-  // const { ajiltan } = useAuth();
   function registerShalgaya(register) {
     if (isString(register) && irgenEsekh === true)
       register = register?.toUpperCase();
@@ -301,7 +300,6 @@ function EBarimt({
       )}
     </div>
   );
-  return <div></div>;
 }
 
 export default EBarimt;

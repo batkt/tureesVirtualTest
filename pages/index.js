@@ -52,7 +52,6 @@ function Ajiltan() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* copy paste  hiihed haragdakh zurag shuu ustgaj bolohgui  */}
       <img
         className={`hidden w-full cursor-pointer object-contain transition-all`}
         src="/copyPasteLogo.png"
@@ -132,7 +131,6 @@ function Ajiltan() {
                       {t("Намайг сана")}
                     </label>
                   </div>
-                  {/* <a href="">{t("Нууц үг сэргээх")}</a> */}
                 </div>
 
                 <button

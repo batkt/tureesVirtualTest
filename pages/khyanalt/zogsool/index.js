@@ -21,35 +21,29 @@ import {
 } from "antd";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
-import useZogsool, { useZogsoolToololt } from "hooks/useZogsool";
+
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useRef, useEffect } from "react";
 import useOrder from "tools/function/useOrder";
-import useSWR from "swr";
+
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 import useUilchluulegch, {
-  useUilchluulegchZogsoolToo,
   useUilchluulegchdiinDunAvay,
 } from "hooks/useUilchluulegch";
 import { useUilchluulegchToololt } from "hooks/useUilchluulegch";
-import BaganiinSongolt from "../../../components/table/BaganiinSongolt";
+
 import useJagsaalt from "hooks/useJagsaalt";
 import {
   CloseSquareFilled,
-  DeleteOutlined,
   DownloadOutlined,
   DownOutlined,
-  EditOutlined,
   FileExcelOutlined,
   FilterOutlined,
-  MoreOutlined,
-  SettingOutlined,
   ShareAltOutlined,
-  UploadOutlined,
   VideoCameraAddOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
@@ -149,7 +143,7 @@ function Zogsool({ token }) {
     setSelectedRowkeys(newSelectedRowKeys);
   };
 
-  const shalgakhTsag = 18; //idevkhtei => todorkhoigui bolgoh shalguur tsag
+  const shalgakhTsag = 18;
 
   const streamQuery = useMemo(() => {
     var query = {
@@ -1377,54 +1371,17 @@ function Zogsool({ token }) {
             </div>
           </div>
 
-          {/*<Radio.Group onChange={zogsoolChange} defaultValue={`${jagsaalt[0]?._id}`} buttonStyle="solid">
-            <Radio.Button value={undefined}>Бүгд</Radio.Button>
-            {
-              jagsaalt?.map((zogsool)=>(
-                  <Radio.Button value={`${zogsool._id}`}>{zogsool.ner}</Radio.Button>
-              ))
-            }
-          </Radio.Group>*/}
           <div
             className="col-span-1 ml-auto flex w-fit place-content-end justify-start gap-4 xl:justify-end"
             data-aos="zoom-in-left"
             data-aos-duration="1000"
             data-aos-delay="300"
           >
-            {/*<Select
-                className="mb-3 w-max sm:mb-0 sm:mr-2 sm:w-auto"
-                defaultValue="Бүгд"
-                onChange={zogsoolChange}
-            >
-              {jagsaalt?.map((zogsool) => (
-                  <Select.Option className="w-1/3 sm:w-auto" key={zogsool._id} value={zogsool._id}>
-                    <div>{zogsool.ner}</div>
-                  </Select.Option>
-              ))}
-            </Select>*/}
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col space-y-2">
-                  {/*<a
-                          className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                          onClick={mashinOruulakhExcel}
-                      >
-                        <UploadOutlined style={{ fontSize: "18px" }} />
-                        <label>{t("Оруулах")}</label>
-                      </a>*/}
                   <a
                     className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                    // onClick={() => {
-                    //   excelTatajAvya(
-                    //     token,
-                    //     "zogsoolUilchluulegch",
-                    //     uilchluulegchGaralt.niitMur,
-                    //     exlCol(),
-                    //     query,
-                    //     order,
-                    //     "Зогсоол"
-                    //   );
-                    // }}
                     onClick={() => {
                       const excel = new Excel();
                       if (

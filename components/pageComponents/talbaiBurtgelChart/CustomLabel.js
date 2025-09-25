@@ -1,11 +1,7 @@
 import React, { useLayoutEffect } from "react";
-
 import * as am5 from "@amcharts/amcharts5";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
-
-//chart type
 import * as am5percent from "@amcharts/amcharts5/percent";
-
 function CustomLabel(props) {
   const chartID = props.chartID;
 
@@ -21,7 +17,6 @@ function CustomLabel(props) {
       })
     );
 
-    // Define data
     var data = [
       {
         country: "yum",
@@ -36,8 +31,6 @@ function CustomLabel(props) {
         sales: 80000,
       },
     ];
-
-    // Create series
     var series = chart.series.push(
       am5percent.PieSeries.new(root, {
         name: "Series",

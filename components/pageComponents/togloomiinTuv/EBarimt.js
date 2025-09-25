@@ -1,11 +1,8 @@
 import React from "react";
-import moment from "moment";
-import QRCode from "react-qr-code";
-import formatNumber from "tools/function/formatNumber";
+
 import { InputNumber, Input, Switch } from "antd";
 import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
-import { useQRCode } from "next-qrcode";
 
 function EBarimt({
   alkham,

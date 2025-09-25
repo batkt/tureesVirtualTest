@@ -3,11 +3,11 @@ import Admin from "components/Admin";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "services/auth";
 import useJagsaalt from "../../../hooks/useJagsaalt";
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import R2WPlayerComponent from "components/streamPlayer";
 import axios from "axios";
 import { Button } from "antd";
-import { CloseOutlined, DragOutlined } from "@ant-design/icons";
+import { CloseOutlined } from "@ant-design/icons";
 import { SocketStream } from "./stream";
 import { zogsoolUilchilgee } from "services/uilchilgee";
 

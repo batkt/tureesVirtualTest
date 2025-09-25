@@ -27,8 +27,8 @@ export default function App({ data }) {
     scales: {
       xAxes: [
         {
-          barThickness: 6, // number (pixels) or 'flex'
-          maxBarThickness: 8, // number (pixels)
+          barThickness: 6,
+          maxBarThickness: 8,
           ticks: {
             callback: function (label, index, labels) {
               if (_.isNumber(label)) return formatNumberNershil(label);

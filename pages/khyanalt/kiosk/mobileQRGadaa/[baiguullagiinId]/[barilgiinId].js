@@ -7,14 +7,9 @@ import {
 import { Button, Drawer, Spin, message } from "antd";
 import useUilchluulegchWithQuery from "hooks/useUilchluulegchWithQuery";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import uilchilgee, {
-  zogsoolUilchilgee,
-  aldaaBarigch,
-  socket,
-} from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { ebarimtKhelberuud } from "tools/logic/tulburiinKhelberuud";
 import moment, { utc } from "moment";
-//import Lottie from "lottie-react";
 import amjilttaiAnimation from "../../amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
@@ -138,7 +133,6 @@ const KioskMobile = ({
     }
   }, [qpayObject]);
 
-  
   useEffect(() => {
     setCustomerTin();
     if (register.length > 6) {
@@ -161,14 +155,6 @@ const KioskMobile = ({
       songogdsonData?.enter_date &&
       !songogdsonData?.fitnessHungulult
     ) {
-      // const odooTsag = moment(servereesAvsonOdooTsag);
-
-      // const guravTsagiinDaraa = moment(songogdsonData.enter_date).add(
-      //   3,
-      //   "hours"
-      // );
-      // const guravTsagiinDataaGarsanEsekh = odooTsag.isAfter(guravTsagiinDaraa);
-      // if (guravTsagiinDataaGarsanEsekh) {
       setSongogdsonData((prev) => {
         return {
           ...prev,
@@ -176,7 +162,6 @@ const KioskMobile = ({
           pay_amount: prev?.pay_amount < 3000 ? 0 : prev?.pay_amount - 3000,
         };
       });
-      // }
     }
   }, [songogdsonData?.enter_date, servereesAvsonOdooTsag, baiguullagiinId]);
 

@@ -1,12 +1,11 @@
 import { openDB as idbOpen } from "idb";
 
 const DB_NAME = "turees-db";
-const DB_VERSION = 10; // bumped to match schema changes
+const DB_VERSION = 9;
 
 export const STORES = {
   USER: "user",
   PAYMENTS: "offline-payments",
-  CACHE: "cache", // added for consistency with your other code
 };
 
 export async function openDB() {

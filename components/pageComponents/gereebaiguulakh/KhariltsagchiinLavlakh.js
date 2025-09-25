@@ -1,7 +1,6 @@
 import { Dropdown, Empty, Input } from "antd";
 import { SolutionOutlined } from "@ant-design/icons";
 import React, { useEffect, useMemo, useState } from "react";
-import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 

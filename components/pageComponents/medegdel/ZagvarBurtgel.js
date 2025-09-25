@@ -1,4 +1,4 @@
-import React, { suseEffect, useEffect, useImperativeHandle } from "react";
+import React, { useEffect, useImperativeHandle } from "react";
 import { Form, Input, message, Modal, notification } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";

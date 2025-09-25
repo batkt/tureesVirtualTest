@@ -2,17 +2,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Loader from "./loader";
+import { Button, Drawer, Switch, Tooltip, Alert, message } from "antd";
 import {
-  Button,
-  Drawer,
-  Switch,
-  Tooltip,
-  Alert,
-  message,
-  notification,
-} from "antd";
-import {
-  CalendarOutlined,
   CloseOutlined,
   LeftOutlined,
   QuestionOutlined,
@@ -25,13 +16,10 @@ import { socket } from "../services/uilchilgee";
 import ProfileTovch from "./tolgoi/ProfileTovch";
 import useErkh from "../tools/logic/khereglegchiinErkhiinTokhirgoo";
 import { useThemeValue } from "pages";
-import MSearch from "./tolgoi/MSearch";
 import moment from "moment";
 import Updater from "./Updater";
 import Zaavar from "./Zaavar";
 import MsgToololt from "./MsgToololt";
-import { GoArrowLeft } from "react-icons/go";
-import { BsBoxArrowLeft } from "react-icons/bs";
 import { TbArrowBarLeft } from "react-icons/tb";
 import Tuslamj from "./tolgoi/tuslamj";
 import { FiSend } from "react-icons/fi";

@@ -1,14 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
-import {
-  Drawer,
-  InputNumber,
-  Switch,
-  notification,
-  message,
-  Image,
-} from "antd";
+import { Drawer, InputNumber, Switch, notification, message } from "antd";
 import Zaavar from "components/Zaavar";
 import { useAuth } from "services/auth";
 import { BsBackspaceFill } from "react-icons/bs";
@@ -109,8 +102,6 @@ const TogloomKiosk = () => {
     const qpay = tulbur.find((a) => a.turul === "qpay")?.dun;
     const monpay = tulbur.find((a) => a.turul === "monpay")?.dun;
     const socialpay = tulbur.find((a) => a.turul === "socialpay")?.dun;
-    // const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
-    // const lend = tulbur.find((a) => a.turul === "lend")?.dun;
     const toki = tulbur.find((a) => a.turul === "toki")?.dun;
     const khungulult = tulbur.find((a) => a.turul === "khungulult")?.dun;
     return {
@@ -127,8 +118,6 @@ const TogloomKiosk = () => {
       qpay,
       monpay,
       socialpay,
-      // pocket,
-      // lend,
       toki,
       khungulult,
     };
@@ -692,19 +681,6 @@ const TogloomKiosk = () => {
             <div className="mt-20 flex justify-center text-8xl font-bold text-[#1DB771]">
               {formatNumber(tasalbarDun, 2)}₮
             </div>
-            {/* <div className="flex justify-center mt-10">
-                            <button
-                                className="flex h-[110px] w-[350px] items-center justify-center gap-4 rounded-3xl bg-[#1DB771] px-4 py-2 text-4xl font-bold text-white focus:outline-none"
-                                onClick={() => {
-                                    setAlkham(value.khaan > 0 ? 3 : 2);
-                                    loading ? null : batalgaajuulaltKhiiya(null, value.khaan > 0 ? "khaan" : "qpay")
-                                }}>
-                                <div>{t("Үргэлжлүүлэх")}</div>
-                                <div className="mt-2 font-[800]">
-                                    <img src="/VectorContiune.png" />
-                                </div>
-                            </button>
-                        </div> */}
           </div>
           <div
             className={`absolute left-0 top-0 h-full w-full transition-all duration-300 ${
@@ -733,7 +709,7 @@ const TogloomKiosk = () => {
             </div>
             <div className="mt-16 flex w-full justify-center">
               <div className="h-[450px] w-[450px] rounded-3xl bg-[#E9E9E9]">
-                {/* <img className="mb-5 p-5 w-full" src="/qpayQRCode.png" /> */}
+                
                 <img
                   className="mb-5 w-full p-5"
                   src={`data:image/png;base64,${qpayerTulukh?.qr_image}`}
@@ -876,9 +852,7 @@ const TogloomKiosk = () => {
               {t("Амжилттай төлсөн")}
             </div>
             <div className="mt-16 flex w-full justify-center">
-              {/* <div className="bg-[#E9E9E9] rounded-45 h-[450px] w-[450px]">
-                                <img className="mb-5 p-10 w-full" src="/qpayQRCode.png" />
-                            </div> */}
+              
               {eBarimt?.qrData && (
                 <div className="rounded-45 h-[450px] w-[450px] bg-[#E9E9E9]">
                   <QRCode
@@ -895,7 +869,7 @@ const TogloomKiosk = () => {
                     {t("Сугалааны дугаар")}
                   </div>
                   <div className="flex justify-end">
-                    {/* {t("QH 20649522")}  */}
+                    
                     {eBarimt?.lottery}
                   </div>
                 </div>
@@ -950,7 +924,7 @@ const TogloomKiosk = () => {
               {t("Байгууллагын регистр оруулна уу")}
             </div>
             <div className="mt-24 flex justify-center text-5xl font-bold text-black">
-              {/* {t("Зэв ТАБС ХХК")} */}
+             
               {baiguullagaNer?.name}
             </div>
             <div className="mt-10 flex justify-center">

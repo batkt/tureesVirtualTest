@@ -18,7 +18,7 @@ import AppTokhirgoo from "components/pageComponents/tokhirgoo/AppTokhirgoo";
 import SegmentTokhirgo from "components/pageComponents/tokhirgoo/SegmentTokhirgo";
 
 import { useMemo, useState } from "react";
-import EBarimt from "components/pageComponents/tokhirgoo/EBarimt";
+
 import Baaz from "components/pageComponents/tokhirgoo/Baaz";
 import {
   BuildFilled,
@@ -31,7 +31,7 @@ import TogloominTuv from "components/pageComponents/tokhirgoo/TogloominTuv";
 import Tasalbar from "components/pageComponents/tokhirgoo/Tasalbar";
 import { TbLego, TbTicket } from "react-icons/tb";
 import BarilgiinTokhirgoo from "components/pageComponents/tokhirgoo/BarilgiinTokhirgoo";
-import { BiBuilding } from "react-icons/bi";
+
 
 function AjiltanBurtgel({ token }) {
   const { t } = useTranslation();
@@ -117,27 +117,7 @@ function AjiltanBurtgel({ token }) {
           text: "Барилгын тохиргоо",
           tsonkh: BarilgiinTokhirgoo,
         },
-        // {
-        //   icon: (
-        //     <svg
-        //       xmlns="http://www.w3.org/2000/svg"
-        //       width="24"
-        //       height="24"
-        //       viewBox="0 0 24 24"
-        //       fill="none"
-        //       stroke="currentColor"
-        //       strokeWidth="1.5"
-        //       strokeLinecap="round"
-        //       strokeLinejoin="round"
-        //       className="feather feather-settings mr-2 h-4 w-4"
-        //     >
-        //       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-        //       <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        //     </svg>
-        //   ),
-        //   text: "Талбайн удирдлага",
-        //   tsonkh: TalbainTokhirgoo
-        // },
+      
         {
           icon: (
             <svg
@@ -201,27 +181,7 @@ function AjiltanBurtgel({ token }) {
           text: "И-мэйл тохиргоо",
           tsonkh: Email,
         },
-        // {
-        //   icon: (
-        //     <svg
-        //       xmlns="http://www.w3.org/2000/svg"
-        //       width="24"
-        //       height="24"
-        //       className="feather feather-settings mr-2 h-4 w-4"
-        //       viewBox="0 0 24 24"
-        //       fill="none"
-        //       stroke="currentColor"
-        //       strokeWidth="2"
-        //       strokeLinecap="round"
-        //       strokeLinejoin="round"
-        //       dataLucide="stop-circle">
-        //       <circle cx="12" cy="12" r="10"></circle>
-        //       <rect x="9" y="9" width="6" height="6"></rect>
-        //     </svg>
-        //   ),
-        //   text: "И-Баримт",
-        //   tsonkh: EBarimt,
-        // },
+        
         {
           icon: (
             <svg

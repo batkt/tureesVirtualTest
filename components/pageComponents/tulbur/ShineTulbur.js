@@ -7,7 +7,7 @@ import {
   Image,
   Popover,
 } from "antd";
-import React, { useMemo, useState} from "react";
+import React, { useMemo, useState } from "react";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
@@ -28,8 +28,7 @@ import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import ShineEbarimt from "./ShineEbarimt";
 import { TbDiscount2 } from "react-icons/tb";
 import { CloseCircleOutlined } from "@ant-design/icons";
-// import { useAuth } from "services/auth";
-//#endregion
+
 const { confirm } = Modal;
 function ShineTulbur(
   {
@@ -52,7 +51,6 @@ function ShineTulbur(
   },
   ref
 ) {
-  // const { ajiltan } = useAuth();
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
     !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
@@ -144,8 +142,6 @@ function ShineTulbur(
     const qpay = tulbur.find((a) => a.turul === "qpay")?.dun;
     const monpay = tulbur.find((a) => a.turul === "monpay")?.dun;
     const socialpay = tulbur.find((a) => a.turul === "socialpay")?.dun;
-    // const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
-    // const lend = tulbur.find((a) => a.turul === "lend")?.dun;
     const toki = tulbur.find((a) => a.turul === "toki")?.dun;
     const khungulult = tulbur.find((a) => a.turul === "khungulult")?.dun;
     return {
@@ -162,14 +158,10 @@ function ShineTulbur(
       qpay,
       monpay,
       socialpay,
-      // pocket,
-      // lend,
       toki,
       khungulult,
     };
   }, [tulbur]);
-
-  //Keyboard tovchlol ekhlel
 
   useKeyboardTovchlol("F4", f4Darsan);
   useKeyboardTovchlol("F3", f3darsan);
@@ -200,7 +192,6 @@ function ShineTulbur(
     ref.current.khaaya();
     message.success("Төлбөр амжилттай хадгалагдлаа");
   }
-  //Keyboard tovchlol tugsgul
 
   useEffect(() => {
     if (!!alkham && alkham === 3 && !loading) {
@@ -447,10 +438,8 @@ function ShineTulbur(
           setTerminal(false);
         })
         .catch((e) => {
-          // tulbur.find((a) => a.turul === "khaan") ? null : aldaaBarigch(e);
           setTerminal(false);
           setLoading(false);
-          // guilgeeniiTuukhKhadgalya(tulbur);
         });
     } else if (garaasSongosonTurul === "qpay") {
       qpayTulugdsun === "qpayTulugdsun"
@@ -601,9 +590,9 @@ function ShineTulbur(
 
   if (alkham !== 3 || eBarimt)
     return (
-      <div className="w-full h-full">
+      <div className="h-full w-full">
         {alkham === 1 && (
-          <div className="flex flex-row justify-between w-full p-4 text-lg font-semibold border-b border-gray-300 dark:text-gray-200">
+          <div className="flex w-full flex-row justify-between border-b border-gray-300 p-4 text-lg font-semibold dark:text-gray-200">
             <div>{t("Тооцоо хийх")}</div>
             <div className="flex items-center">
               {mashiniiDugaar}
@@ -665,19 +654,7 @@ function ShineTulbur(
               <div>
                 <p></p>
               </div>
-              {/* {eBarimt?.stocks?.map((mur, index) => (
-                  <div
-                    className={`flex flex-col items-stretch justify-between border-b-2 border-dashed py-1 ${
-                      index === 0 && "border-t-2"
-                    }`}
-                    key={`${index}-zakhialga`}
-                  >
-                    <div className="">{mur.name}:</div>
-                    <div className="-mt-1 text-right">
-                      {formatNumber(mur.totalAmount, 2)}₮
-                    </div>
-                  </div>
-                ))} */}
+
               <div>
                 <p>
                   <br />
@@ -750,7 +727,7 @@ function ShineTulbur(
               )}
               <div>
                 <p>
-                  <div className="flex justify-center w-full p-5 pt-3">
+                  <div className="flex w-full justify-center p-5 pt-3">
                     <div>
                       <QRCode level="L" value={eBarimt?.qrData} size={"100%"} />
                     </div>
@@ -834,7 +811,7 @@ function ShineTulbur(
                 </div>
                 <div
                   onClick={async () => {
-                    if (loading) return; 
+                    if (loading) return;
                     try {
                       setLoading(true);
                       await Promise.resolve(turulruuTooKhiikhFunction("khaan"));
@@ -850,15 +827,16 @@ function ShineTulbur(
                 >
                   {value.khaan > 0 && (
                     <div className="absolute right-0 top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1">
-                      <div className="font-semibold">{formatNumber(value.khaan)}₮</div>
+                      <div className="font-semibold">
+                        {formatNumber(value.khaan)}₮
+                      </div>
                     </div>
                   )}
-                    <>
-                      <BsFillCreditCardFill className="text-[30px] text-green-600" />
-                      <div className="text-lg font-bold text-green-600">Карт</div>
-                    </>                  
+                  <>
+                    <BsFillCreditCardFill className="text-[30px] text-green-600" />
+                    <div className="text-lg font-bold text-green-600">Карт</div>
+                  </>
                 </div>
-
               </div>
               <div className="flex gap-8">
                 <div
@@ -981,11 +959,6 @@ function ShineTulbur(
                 >
                   <Image preview={false} width={100} src="/Rectangle81.png" />
                 </div>
-                {/* <div
-                  className={`h-[85px] cursor-not-allowed rounded-3xl  hover:scale-110`}
-                >
-                  <Image preview={false} width={100} src="/Rectangle83.png" />
-                </div> */}
               </div>
             </div>
           </div>
@@ -1151,7 +1124,7 @@ function ShineTulbur(
             <div className="flex h-full w-[246px] flex-col items-center justify-end gap-6">
               <div className="flex h-[256px] w-[100%] flex-col justify-between rounded-[25px] border-2 border-dotted border-green-600 p-5">
                 <div className="flex flex-col gap-2 font-semibold">
-                  <div className="flex justify-between w-full font-semibold dark:text-gray-200">
+                  <div className="flex w-full justify-between font-semibold dark:text-gray-200">
                     <div>Нийт дүн:</div>
                     <div>{formatNumber(niitDun)}₮</div>
                   </div>
@@ -1228,7 +1201,7 @@ function ShineTulbur(
           setTin={setTin}
         />
         {alkham === 2 && eBarimtAshiglakhEsekh === true && (
-          <div className="flex flex-row justify-between mt-5">
+          <div className="mt-5 flex flex-row justify-between">
             <Button type="primary" danger onClick={() => ref.current.khaaya()}>
               {t("Хаах")}
             </Button>

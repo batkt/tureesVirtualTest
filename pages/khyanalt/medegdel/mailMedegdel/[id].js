@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import { useRouter } from "next/router";
-import { Button, Form, Input, message, Radio, Select } from "antd";
+import { Button, Form, Input, message } from "antd";
 import _ from "lodash";
 import { useAuth } from "services/auth";
 import readMethod from "tools/function/crud/readMethod";

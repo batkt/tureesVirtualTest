@@ -7,14 +7,9 @@ import {
 import { Drawer, Spin, message } from "antd";
 import useUilchluulegchWithQuery from "hooks/useUilchluulegchWithQuery";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import uilchilgee, {
-  zogsoolUilchilgee,
-  aldaaBarigch,
-  socket,
-} from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { ebarimtKhelberuud } from "tools/logic/tulburiinKhelberuud";
 import moment, { utc } from "moment";
-// import Lottie from "lottie-react";
 import amjilttaiAnimation from "../../amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
@@ -50,7 +45,7 @@ const KioskMobile = ({
     var query = {};
     if (drawerOngoikh) {
       query["tuukh.0.tuluv"] = 0;
-      // query["tuukh.0.garsanKhaalga"] = { $exists: false };
+
       query["tuukh.0.tulbur"] = { $eq: [] };
       query["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
         $gte: moment().subtract(3, "days").startOf("day"),

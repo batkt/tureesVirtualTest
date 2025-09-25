@@ -7,7 +7,6 @@ import {
   Select,
   Switch,
   Input,
-  Alert,
 } from "antd";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";

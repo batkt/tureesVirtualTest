@@ -1,11 +1,8 @@
-import { Button, message, notification, Popconfirm, Select } from "antd";
+import { Button, message, notification, Select } from "antd";
 import _ from "lodash";
 import React, { useMemo, useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useMailiinZagvarWithoutAuth } from "hooks/useMailiinZagvar";
-import useMedegdel from "hooks/medegdel/useMedegdel";
-import { toWords } from "mon_num";
-import formatNumber from "tools/function/formatNumber";
 import { t } from "i18next";
 
 function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
@@ -67,65 +64,6 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         aldaaBarigch(e);
       });
   }
-
-  // async function appIlgeeye() {
-  //       var khariu = { successCount: 0, failureCount: 0 };
-  //       let body;
-  //           for (const [key, value] of Object.entries(barimt)) {
-  //             body = barimt.mail?.replace(new RegExp(`<${key}>`, "g"), value);
-  //           }
-  //           uilchilgee(token)
-  //             .post(`/sonorduulgaIlgeeye`, {
-  //               firebaseToken: barimt?.firebaseToken,
-  //               dataiinId: barimt?.dataiinId,
-  //               barilgiinId: barimt.barilgiinId,
-  //               dataiinNer: barimt.ner,
-  //               medeelel: { title, body },
-  //             })
-  //             .then(({ data }) => {
-  //               if (!!data?.successCount) khariu.successCount += 1;
-  //               else if (!!data?.failureCount) khariu.failureCount += 1;
-
-  //                 notification.success({
-  //                   message: `Notification Амжилттай ${khariu.successCount} ${
-  //                     khariu.failureCount ? `Алдаатай ${khariu.failureCount}` : ""
-  //                   } илгээлээ`,
-  //                 });
-  //               }
-  //             );
-  //     uilchilgee(token)
-  //       .post(`/sonorduulgaIlgeeye`, {
-  //         firebaseToken: data?.firebaseToken,
-  //         dataiinId: data?.dataiinId,
-  //         barilgiinId: data.barilgiinId,
-  //         dataiinNer: data.ner,
-  //         medeelel: { title, body: ingeekhmSms },
-  //       })
-  //       .then(({ data }) => {
-  //         if (!!data?.successCount) {
-  //           sonorduulga.jagsaalt.unshift({
-  //             dataiinId: data?.dataiinId,
-  //             barilgiinId: data.barilgiinId,
-  //             dataiinNer: data.ner,
-  //             title,
-  //             message: ingeekhmSms,
-  //             turul: "medegdel",
-  //           });
-  //           sonorduulgaMutate({ ...sonorduulga }, false);
-  //           notification.success({ message: "Notification Амжилттай илгээлээ" });
-  //           setContent("");
-  //           setTitle("");
-  //         } else if (!!data?.failureCount) {
-  //           notification.warning({
-  //             description: _.get(data, "results.0.error.message"),
-  //             message: _.get(data, "results.0.error.code"),
-  //           });
-  //         }
-  //       })
-  //       .catch((e) => {
-  //         aldaaBarigch(e);
-  //       });
-  //   }
 
   async function msgIlgeeye() {
     var msgnuud = [];

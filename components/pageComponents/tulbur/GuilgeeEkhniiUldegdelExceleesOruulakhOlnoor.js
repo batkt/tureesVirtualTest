@@ -2,14 +2,11 @@ import React, { useMemo, useEffect } from "react";
 import { DatePicker, message, Select, Upload, Switch, Tooltip } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import uilchilgee, { url } from "services/uilchilgee";
-import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import _ from "lodash";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import useJagsaalt from "hooks/useJagsaalt";
-import formatNumber from "tools/function/formatNumber";
-
 function GuilgeeEkhniiUldegdelExceleesOruulakhOlnoor(
   {
     token,
