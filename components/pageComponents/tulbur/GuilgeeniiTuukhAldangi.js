@@ -76,7 +76,9 @@ function GuilgeeniiTuukhAldangi(
     "/aldangiinTuukh",
     query,
     undefined,
-    undefined
+    undefined,
+    undefined,
+    token
   );
   const { guilgeeniiAldangiTuukh, guilgeeniiAldangiTuukhMutate } =
     useGereeAldangiGuilgee(token, data?._id, ognoo, shineOgnoo);
@@ -501,19 +503,19 @@ function GuilgeeniiTuukhAldangi(
         <thead className="border-b border-gray-200 bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400">
           <tr>
             <th
-              onClick={() => toggleSortOrder("ognoo")}
+              onClick={() => toggleSortOrder("uldegdel")}
               className="min-w-[8rem] cursor-pointer p-1 text-center"
             >
               {t("Үлдэгдэл")}
             </th>
             <th
-              onClick={() => toggleSortOrder("ajiltan")}
+              onClick={() => toggleSortOrder("aldangi")}
               className="min-w-[8rem] cursor-pointer p-1 text-center"
             >
               {t("Алданги")}
             </th>
             <th
-              onClick={() => toggleSortOrder("tulukhAldangi")}
+              onClick={() => toggleSortOrder("ognoo")}
               className="min-w-[8rem] cursor-pointer p-1 text-center"
             >
               {t("Алдангийн өдөр")}
@@ -524,7 +526,7 @@ function GuilgeeniiTuukhAldangi(
           className="overflow-y-auto"
           style={{ maxHeight: "calc(90vh - 15rem)" }}
         >
-          {aldangiinTuukh?.jagsaalt?.map((a, i) => (
+          {aldangiinTuukh.jagsaalt?.map((a, i) => (
             <tr
               key={i}
               className="border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400"
@@ -536,7 +538,7 @@ function GuilgeeniiTuukhAldangi(
                 {formatNumber(a.aldangi, 0)}
               </td>
               <td className="min-w-[8rem] p-1 text-center">
-                {a.aldangiBodsonOgnoo}
+                {moment(a.aldangiBodsonOgnoo).format("YYYY-MM-DD")}
               </td>
             </tr>
           ))}
