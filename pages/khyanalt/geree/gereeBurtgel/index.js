@@ -1,4 +1,3 @@
-//#region import
 import moment from "moment";
 import { useAuth } from "services/auth";
 import readMethod from "tools/function/crud/readMethod";
@@ -19,7 +18,6 @@ import {
   RedoOutlined,
   FileTextOutlined,
   FileOutlined,
-  SnippetsOutlined,
 } from "@ant-design/icons";
 import {
   Table,
@@ -63,7 +61,6 @@ import { ImFileEmpty, ImFileText2 } from "react-icons/im";
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
 
-//#endregion
 function GereeSegmentTile({ zasya, token, ...a }) {
   return (
     <div className="box dark:text-white">
@@ -559,16 +556,6 @@ function ZakhialgiinKhyanalt() {
   }, [shineBagana]);
 
   const sheet = [
-    // {
-    //   title: t("Бүртгэсэн"),
-    //   dataIndex: "createdAt",
-    //   ellipsis: true,
-    //   className: "text-center",
-    //   align: "center",
-    //   render(date) {
-    //     return moment(date).format("YYYY-MM-DD HH:mm");
-    //   },
-    // },
     {
       title: t("Гэрээ"),
       dataIndex: "gereeniiDugaar",
@@ -605,25 +592,6 @@ function ZakhialgiinKhyanalt() {
       ellipsis: true,
     },
 
-    // {
-    //   title: t("Төрөл"),
-    //   dataIndex: "turul",
-    //   align: "center",
-    //   className: "text-center",
-    //   ellipsis: true,
-    // },
-
-    // {
-    //   title: t("Талбай /м2/"),
-    //   dataIndex: "talbainKhemjee",
-    //   align: "center",
-    //   className: "text-center",
-    //   ellipsis: true,
-    //   render: (talbainKhemjee) => {
-    //     return `${talbainKhemjee} м2`;
-    //   },
-    //   showSorterTooltip: false,
-    // },
     {
       title: t("Төлбөр"),
       dataIndex: "sariinTurees",
@@ -707,8 +675,6 @@ function ZakhialgiinKhyanalt() {
         .post("/erkhteiEsekh", { zam: "/khyanalt/geree/gereeBurtgel" })
         .then(({ data }) => data);
   }, [token]);
-  //#endregion
-
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     pageStyle: `@media print {
@@ -1359,10 +1325,6 @@ function ZakhialgiinKhyanalt() {
             geree.ekhelkhSar = moment(geree.gereeniiOgnoo).format("MM");
             geree.ekhlekhUdur = moment(geree.gereeniiOgnoo).format("DD");
             if (geree.khugatsaa > 0) {
-              // let duusakhOgnoo = moment(geree.gereeniiOgnoo).add(
-              //   geree.khugatsaa,
-              //   "M"
-              // );
               let duusakhOgnoo = moment(geree.duusakhOgnoo);
               geree.duusakhOn = duusakhOgnoo.format("YYYY");
               geree.duusakhSar = duusakhOgnoo.format("MM");
@@ -1445,13 +1407,6 @@ function ZakhialgiinKhyanalt() {
                         key === "baritsaaAvakhDun"
                       ? formatNumber(value)
                       : value
-                    // key === "register"
-
-                    //   : parseFloat(value) != NaN
-                    //   ? key !== "register"
-                    //     ? value
-                    //     : formatNumber(value)
-                    //   : value
                   ));
                 });
             }
@@ -1548,7 +1503,6 @@ function ZakhialgiinKhyanalt() {
     );
   }
 
-  //#endregion
 
   return (
     <Admin

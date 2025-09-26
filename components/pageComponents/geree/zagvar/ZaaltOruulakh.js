@@ -53,47 +53,30 @@ export var customPlugin = ({
   button = "T",
   songokhTalbaruud = talbaruud,
 }) => ({
-  // @Required @Unique
   name: name,
-  // @Required
+
   display: "container" || "command" || "submenu" || "dialog",
 
-  // @options
-  // * You can also set from the button list
-  // HTML title attribute (tooltip) - default: plugin's name
   title: title,
-  // HTML to be append to button (icon)
-  // Recommend using the inline svg icon. - default: "<span class="se-icon-text">!</span>"
 
   innerHTML: `<span style="padding:5px;">${button}</span>`,
-  // The class of the button. - default: "se-btn"
-  // "se-code-view-enabled": It is not disable when on code view mode.
-  // "se-resizing-enabled": It is not disable when on using resizing module.
+
   buttonClass: "",
 
-  // @Required
   add: function (core, targetElement) {
-    // Generate submenu HTML
-    // Always bind "core" when calling a plugin function
     let listDiv = this.setSubmenu.call(core);
 
-    // You must bind "core" object when registering an event.
-    /** add event listeners */
     var self = this;
     listDiv.querySelectorAll(".se-btn-list").forEach(function (btn) {
       btn.addEventListener("click", self.onClick.bind(core));
     });
 
-    // @Required
-    // You must add the "submenu" element using the "core.initMenuTarget" method.
-    /** append target button menu */
     core.initMenuTarget(this.name, targetElement, listDiv);
   },
 
   setSubmenu: function () {
     const listDiv = this.util.createElement("DIV");
-    // @Required
-    // A "se-submenu" class is required for the top level element.
+
     listDiv.className = "se-submenu se-list-layer";
     listDiv.innerHTML =
       '<div class="se-list-inner se-list-font-size"><ul class="se-list-basic">' +

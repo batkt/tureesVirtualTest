@@ -1,6 +1,5 @@
 import React from "react";
 import useZaavar from "../hooks/useZaavar";
-import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Modal, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 

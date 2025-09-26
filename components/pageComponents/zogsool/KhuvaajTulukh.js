@@ -93,7 +93,6 @@ function KhuvaajTulukh({
     const qpay = tulbur.find((a) => a.turul === "qpay")?.dun;
     const monpay = tulbur.find((a) => a.turul === "monpay")?.dun;
     const socialpay = tulbur.find((a) => a.turul === "socialpay")?.dun;
-    // const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
     const toki = tulbur.find((a) => a.turul === "toki")?.dun;
     return {
       belen,
@@ -108,7 +107,6 @@ function KhuvaajTulukh({
       qpay,
       monpay,
       socialpay,
-      // pocket,
       toki,
     };
   }, [tulbur]);
@@ -238,12 +236,10 @@ function KhuvaajTulukh({
           setSongogdsonBank(null);
         })
         .catch((e) => {
-          // aldaaBarigch(e);
           setTerminal(false);
           setLoading(false);
         });
     }
-    // if()
   }
 
   const terminaluud = [
@@ -313,14 +309,6 @@ function KhuvaajTulukh({
       zurag:
         "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
     },
-    /*{
-      ner: "Хөнгөлөх",
-      talbar: "khunglukh",
-      ref: zeelRef,
-      bgColor: "from-purple-800 to-green-700 border-purple-500",
-      zurag:
-        "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
-    },*/
   ];
 
   return (
@@ -369,7 +357,7 @@ function KhuvaajTulukh({
           Финтек
         </div>
       </div>
-      {/*tuluv belen*/}
+
       {tuluv === 1 && (
         <div className="col-span-3 flex flex-col text-center text-lg font-medium">
           <div
@@ -452,11 +440,6 @@ function KhuvaajTulukh({
                           {songogdsonBusadTurul.ner}
                         </div>
                         <InputNumber
-                          // disabled={
-                          //   !value.khunglukh &&
-                          //   ((niitDun ? niitDun : data?.tulukhDun) -
-                          //     tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
-                          // }
                           autoComplete="off"
                           min={0}
                           ref={khunglukhRef}
@@ -539,11 +522,6 @@ function KhuvaajTulukh({
                       </div>
                       <InputNumber
                         placeholder="Мөнгөн дүн"
-                        // disabled={
-                        //   !value[songogdsonBusadTurul.talbar] &&
-                        //   (data?.tulukhDun -
-                        //     tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
-                        // }
                         autoComplete="off"
                         ref={songogdsonBusadTurul.ref}
                         value={value[songogdsonBusadTurul.talbar]}
@@ -566,7 +544,7 @@ function KhuvaajTulukh({
           </div>
         </div>
       )}
-      {/*tuluv kart*/}
+
       {tuluv === 2 && (
         <div className="col-span-3 flex flex-col text-center text-lg font-medium">
           <div
@@ -634,11 +612,6 @@ function KhuvaajTulukh({
                     </div>
                     <InputNumber
                       placeholder="Мөнгөн дүн"
-                      // disabled={
-                      //   !value[songogdsonBank.talbar] &&
-                      //   (data?.tulukhDun -
-                      //     tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
-                      // }
                       autoComplete="off"
                       ref={songogdsonBank.ref}
                       value={value[songogdsonBank.talbar]}
@@ -659,7 +632,7 @@ function KhuvaajTulukh({
           </div>
         </div>
       )}
-      {/*tuluv qpay*/}
+
       {tuluv === 3 && (
         <div className="col-span-3">
           <div className="grid grid-cols-3 transition-all">
@@ -735,12 +708,6 @@ function KhuvaajTulukh({
                       </div>
                       <InputNumber
                         placeholder="Мөнгөн дүн"
-                        // disabled={
-                        //   !value[songogdTulburiinKhelber.ner] &&
-                        //   ((data?.tulukhDun -
-                        //     tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0 ||
-                        //     !!qpayerTulukh)
-                        // }
                         autoComplete="off"
                         ref={songogdTulburiinKhelber.ref}
                         value={value[songogdTulburiinKhelber.ner]}

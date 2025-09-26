@@ -1,10 +1,8 @@
 import { CloseCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, InputNumber, message } from "antd";
-import { modal } from "components/ant/Modal";
 import { t } from "i18next";
 import React, { useEffect, useMemo, useState } from "react";
 import uilchilgee from "services/uilchilgee";
-import TariffNemekh from "./TariffNemekh";
 
 const dolooKhonog = [
   { id: "1", ner: "Даваа" },

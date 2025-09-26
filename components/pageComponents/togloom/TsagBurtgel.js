@@ -291,16 +291,7 @@ function TsagBurtgel(
         </Form.Item>
       )}
       {bulegEsekh === false && (
-        <Form.Item
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: t("Овог бүртгэнэ үү!"),
-          //   },
-          // ]}
-          label={t("Овог")}
-          name="ovog"
-        >
+        <Form.Item label={t("Овог")} name="ovog">
           <Input
             onKeyDown={focuser}
             placeholder={t("Овог")}
@@ -308,29 +299,11 @@ function TsagBurtgel(
           />
         </Form.Item>
       )}
-      <Form.Item
-        // rules={[
-        //   {
-        //     required: true,
-        //     message: t("Нэр бүртгэнэ үү!"),
-        //   },
-        // ]}
-        label={t("Нэр")}
-        name="ner"
-      >
+      <Form.Item label={t("Нэр")} name="ner">
         <Input onKeyDown={focuser} placeholder={t("Нэр")} autoComplete="off" />
       </Form.Item>
       {bulegEsekh === false && (
-        <Form.Item
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: t("Хүйс бүртгэнэ үү!"),
-          //   },
-          // ]}
-          label={t("Хүйс")}
-          name="khuis"
-        >
+        <Form.Item label={t("Хүйс")} name="khuis">
           <Select
             onChange={() => form.getFieldInstance("nas").focus()}
             placeholder={t("Хүйс")}

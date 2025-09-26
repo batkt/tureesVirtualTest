@@ -1,7 +1,5 @@
 import React, { useEffect, useImperativeHandle, useState } from "react";
-import { Form, Input, Switch, notification } from "antd";
-import updateMethod from "tools/function/crud/updateMethod";
-import { aldaaBarigch } from "services/uilchilgee";
+import { Form, Input, Switch } from "antd";
 import { t } from "i18next";
 
 /**

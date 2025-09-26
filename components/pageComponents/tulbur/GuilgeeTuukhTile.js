@@ -1,10 +1,5 @@
-import {
-  DeleteOutlined,
-  EditOutlined,
-  FileExcelOutlined,
-} from "@ant-design/icons";
+import { FileExcelOutlined } from "@ant-design/icons";
 import { Button, Progress, Tag } from "antd";
-import { Tooltip } from "chart.js";
 import { modal } from "components/ant/Modal";
 import { t } from "i18next";
 import moment from "moment";

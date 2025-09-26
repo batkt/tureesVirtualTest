@@ -1,27 +1,13 @@
-import {
-  DatePicker,
-  Form,
-  Button,
-  message,
-  Select,
-  Input,
-  Switch,
-  Divider,
-  InputNumber,
-  notification,
-  Table,
-} from "antd";
+import { DatePicker, Form, Button, Input, Divider, notification } from "antd";
 import {
   ArrowLeftOutlined,
   SaveOutlined,
   PlusOutlined,
-  DeleteOutlined,
-  SettingOutlined,
 } from "@ant-design/icons";
 import AvlagiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/AvlagaiinKhuvaariUusgekh";
 import KhungulultiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/KhungulultiinKhuvaariUusgekh";
 import formatNumber from "tools/function/formatNumber";
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Aos from "aos";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";

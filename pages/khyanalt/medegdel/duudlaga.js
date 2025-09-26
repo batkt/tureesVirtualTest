@@ -1,16 +1,5 @@
 "use client";
-import {
-  ArrowLeftOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  EyeInvisibleOutlined,
-  FileExcelOutlined,
-  SnippetsOutlined,
-  UploadOutlined,
-  StarOutlined,
-  SendOutlined,
-} from "@ant-design/icons";
-import { Checkbox, Tooltip, Tag, Spin, Select } from "antd";
+import { Tag, Spin, Select } from "antd";
 import moment from "moment";
 import Admin from "components/Admin";
 import { socket } from "services/uilchilgee";
@@ -37,8 +26,7 @@ import {
 } from "antd";
 import Aos from "aos";
 import local from "antd/lib/date-picker/locale/mn_MN";
-import DuudlagaNemekh from "components/pageComponents/duudlaga/duudlagaAjiltanNemekh";
-import TextArea from "antd/lib/input/TextArea";
+
 import { useRouter } from "next/router";
 import useKhariltsagchDavkhraarAvya from "hooks/useKhariltsagchDavkhraarAvya";
 import modal from "components/ant/Modal";
@@ -957,17 +945,6 @@ function TaskManagementSystem({ token }) {
                             </div>
                           </Popconfirm>
                         )}
-
-                        {/* {item.tuluv === 1 && (
-                          <div className="px-3 py-1 text-xs text-white bg-blue-500 rounded-2xl">
-                            {t("Дууссан")}
-                          </div>
-                        )}
-                        {item.tuluv === -1 && (
-                          <div className="px-3 py-1 text-xs text-white bg-red-500 rounded-2xl">
-                            {t("Цуцлагдсан")}
-                          </div>
-                        )} */}
                       </div>
 
                       <div className="text-xs text-gray-500">
@@ -991,65 +968,6 @@ function TaskManagementSystem({ token }) {
             })}
           </div>
         </div>
-
-        {/* <div className="flex items-end justify-between p-4 border-t">
-          <div className="flex">
-            {duudlaga?.duudlagiinTurul && (
-              <Tag size="small" color="processing">
-                {t("Үйлчилгээ")}:{" "}
-                {i18n.language === "mn"
-                  ? duudlaga.duudlagiinTurul
-                  : turulTranslations[duudlaga.duudlagiinTurul] ||
-                    duudlaga.duudlagiinTurul}
-              </Tag>
-            )}
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <div
-              className={`${
-                duudlaga?.tuluv === -1 ? "hidden" : "flex"
-              } space-x-2`}
-            >
-              {duudlaga?.tuluv === 0 && (
-                <Popconfirm
-                  title={t("Дуудлагыг дуусгах уу?")}
-                  okText={t("Тийм")}
-                  cancelText={t("Үгүй")}
-                  onConfirm={duudlagaDuusya}
-                >
-                  <div className="px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full cursor-pointer hover:bg-blue-600">
-                    {t("Дуусгах")}
-                  </div>
-                </Popconfirm>
-              )}
-
-              {duudlaga?.tuluv !== 1 && (
-                <Popconfirm
-                  title={t("Дуудлагыг цуцлах уу?")}
-                  okText={t("Тийм")}
-                  cancelText={t("Үгүй")}
-                  onConfirm={duudlagaTsutslakh}
-                >
-                  <div className="px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-full cursor-pointer hover:bg-red-600">
-                    {t("Цуцлах")}
-                  </div>
-                </Popconfirm>
-              )}
-            </div>
-
-            {duudlaga?.tuluv === 1 && (
-              <div className="px-3 py-1 text-white bg-blue-500 rounded-2xl">
-                {t("Дууссан")}
-              </div>
-            )}
-            {duudlaga?.tuluv === -1 && (
-              <div className="px-3 py-1 text-white bg-red-500 rounded-2xl">
-                {t("Цуцлагдсан")}
-              </div>
-            )}
-          </div>
-        </div> */}
       </div>
     );
   };

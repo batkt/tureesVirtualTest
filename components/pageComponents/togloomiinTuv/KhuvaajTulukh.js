@@ -1,17 +1,8 @@
-import { ArrowLeftOutlined, QrcodeOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Form,
-  Image,
-  InputNumber,
-  Select,
-  Switch,
-  message,
-} from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import { Image, InputNumber, Select, message } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { t } from "i18next";
 import React, { useEffect } from "react";
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 const qpayTulburiinKhelberuud = [
   {
@@ -27,10 +18,6 @@ const qpayTulburiinKhelberuud = [
     ner: "socialpay",
     src: "https://play-lh.googleusercontent.com/-xjqjFYBmk1odZFvUnyobdiKu9pcgVf_7e-UnFXVL0pk2JpjSs71WkgFQUbpL47TmME",
   },
-  // {
-  //   ner: "pocket",
-  //   src: "https://upload.wikimedia.org/wikipedia/commons/1/1c/Pocket_logo.png",
-  // },
   {
     ner: "toki",
     src: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.toki.mn%2F&psig=AOvVaw1ej7t5Vo6qLIhInQ0XNMEm&ust=1715243807766000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJjD-6DT_YUDFQAAAAAdAAAAABAE",
@@ -85,7 +72,6 @@ function KhuvaajTulukh({
     const qpay = tulbur.find((a) => a.turul === "qpay")?.dun;
     const monpay = tulbur.find((a) => a.turul === "monpay")?.dun;
     const socialpay = tulbur.find((a) => a.turul === "socialpay")?.dun;
-    // const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
     const toki = tulbur.find((a) => a.turul === "toki")?.dun;
     return {
       belen,
@@ -100,7 +86,6 @@ function KhuvaajTulukh({
       qpay,
       monpay,
       socialpay,
-      // pocket,
       toki,
     };
   }, [tulbur]);
@@ -321,7 +306,6 @@ function KhuvaajTulukh({
           Финтек
         </div>
       </div>
-      {/*tuluv belen*/}
       {tuluv === 1 && (
         <div className="col-span-3 flex flex-col text-center text-lg font-medium">
           <div
@@ -518,7 +502,6 @@ function KhuvaajTulukh({
           </div>
         </div>
       )}
-      {/*tuluv kart*/}
       {tuluv === 2 && (
         <div className="col-span-3 flex flex-col text-center text-lg font-medium">
           <div
@@ -611,7 +594,6 @@ function KhuvaajTulukh({
           </div>
         </div>
       )}
-      {/*tuluv qpay*/}
       {tuluv === 3 && (
         <div className="col-span-3">
           <div className="grid grid-cols-3 transition-all">

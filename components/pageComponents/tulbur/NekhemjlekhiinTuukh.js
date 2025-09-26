@@ -111,7 +111,7 @@ function NekhemjlekhiinTuukh(
                 locale={locale}
                 value={shineOgnoo}
                 onChange={setShineOgnoo}
-                placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]} 
+                placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]}
               />
             </div>
             <div>

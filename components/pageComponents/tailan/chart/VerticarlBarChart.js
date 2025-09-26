@@ -1,10 +1,8 @@
 import _ from "lodash";
 import React from "react";
-
 import { Bar } from "react-chartjs-2";
 import formatNumberNershil from "tools/function/formatNumberNershil";
 import formatNumber from "tools/function/formatNumber";
-
 export default function App({ t, data }) {
   const options = {
     indexAxis: "y",
@@ -26,8 +24,8 @@ export default function App({ t, data }) {
     scales: {
       xAxes: [
         {
-          barThickness: 6, // number (pixels) or 'flex'
-          maxBarThickness: 8, // number (pixels)
+          barThickness: 6, 
+          maxBarThickness: 8, 
         },
       ],
       yAxes: [

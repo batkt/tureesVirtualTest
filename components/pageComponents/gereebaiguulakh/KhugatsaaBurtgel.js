@@ -17,7 +17,6 @@ import moment from "moment";
 import Aos from "aos";
 import _ from "lodash";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
-import { toWords } from "mon_num";
 
 const formItemLayout = {
   labelCol: {

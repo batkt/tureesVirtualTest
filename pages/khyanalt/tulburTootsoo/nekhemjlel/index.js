@@ -57,7 +57,7 @@ import khatuuZagvarIkhNaydTower from "tools/zagvar/turIkhNaydTower";
 const ilgeekhTurul = "davkharaar";
 
 function tulburTootsoo({ token }) {
-  // Initialize AOS once
+ 
   useEffect(() => {
     Aos.init({ once: true });
   }, []);
@@ -86,9 +86,7 @@ function tulburTootsoo({ token }) {
   const [updatedMedeelelList, setUpdatedMedeelelList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Change your state initialization
-
-  // Modal visible state for mailtuukh table
+ 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { mailtuukhmailtuukhJagsaalt } = mailtuukh(token, null, null, null);
@@ -170,7 +168,7 @@ function tulburTootsoo({ token }) {
   const [songogdsonZagvar, setSongogdsonZagvar] = React.useState();
   const [unshijBaina, setUnshijBaina] = React.useState(false);
 
-  // Update nekhemjleliinJagsaalt when nekhemjlel changes
+
   useEffect(() => {
     if (nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt]);
   }, [nekhemjlel]);

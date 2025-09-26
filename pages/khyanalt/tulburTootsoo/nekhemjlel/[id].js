@@ -442,8 +442,7 @@ function ZakhialgaNemekh({ token }) {
                     "zardaluud",
                   ],
                   ...complex,
-                  // ["image", "table", "list", "align", "codeView"],
-                  // ["font", "fontSize", "fontColor"],
+                  
                 ],
               }}
               width={width}
@@ -476,18 +475,7 @@ function ZakhialgaNemekh({ token }) {
               noStyle
             ></Form.Item>
 
-            {/* {(id === "new" || nekhemjlelZagvar.nekhemjlekh === "excel") && (
-              <div className="flex w-full items-center justify-end">
-                <Button
-                  disabled={!nekhemjlelZagvar.ner}
-                  className="flex w-full items-center justify-center gap-2"
-                  onClick={zagvarOruulakhExcel}
-                >
-                  <FileExcelOutlined /> Загвар{" "}
-                  {id === "new" ? "оруулах" : "засах"}
-                </Button>
-              </div>
-            )} */}
+            
             <div className="mt-3 flex items-center justify-between">
               <Radio.Group
                 disabled={!!kharuulakhExcel}

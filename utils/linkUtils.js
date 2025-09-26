@@ -1,9 +1,9 @@
-// Utility functions for handling links and URLs in notifications
+ 
 
 /**
  * Extract URLs from text content
- * @param {string} text - The text content to search for URLs
- * @returns {Array} Array of URL objects with url, start, and end positions
+ * @param {string} text  
+ * @returns {Array}  
  */
 export const extractUrls = (text) => {
   if (!text || typeof text !== "string") return [];
@@ -24,9 +24,9 @@ export const extractUrls = (text) => {
 };
 
 /**
- * Check if a string is a valid URL
- * @param {string} string - String to validate
- * @returns {boolean} True if valid URL
+ *  
+ * @param {string} string  
+ * @returns {boolean}  
  */
 export const isValidUrl = (string) => {
   try {
@@ -39,9 +39,9 @@ export const isValidUrl = (string) => {
 
 /**
  * Replace URLs in text with link previews
- * @param {string} text - Text content containing URLs
- * @param {Function} renderLinkPreview - Function to render link preview component
- * @returns {Array} Array of text segments and link preview components
+ * @param {string} text  
+ * @param {Function} renderLinkPreview 
+ * @returns {Array}  
  */
 export const replaceUrlsWithPreviews = (text, renderLinkPreview) => {
   if (!text || typeof text !== "string") return [text];
@@ -71,8 +71,8 @@ export const replaceUrlsWithPreviews = (text, renderLinkPreview) => {
 
 /**
  * Get domain from URL
- * @param {string} url - URL to extract domain from
- * @returns {string} Domain name
+ * @param {string} url  
+ * @returns {string}  
  */
 export const getDomainFromUrl = (url) => {
   try {
@@ -84,9 +84,9 @@ export const getDomainFromUrl = (url) => {
 
 /**
  * Truncate URL for display
- * @param {string} url - URL to truncate
- * @param {number} maxLength - Maximum length (default: 50)
- * @returns {string} Truncated URL
+ * @param {string} url  
+ * @param {number} maxLength  
+ * @returns {string}  
  */
 export const truncateUrl = (url, maxLength = 50) => {
   if (!url || url.length <= maxLength) return url;

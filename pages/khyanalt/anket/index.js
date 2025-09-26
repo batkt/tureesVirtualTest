@@ -1,7 +1,6 @@
 import {
   Button,
   DatePicker,
-  Drawer,
   Form,
   Input,
   message,
@@ -9,8 +8,6 @@ import {
   Radio,
   Select,
   Space,
-  Table,
-  Tabs,
 } from "antd";
 import React, {
   useState,
@@ -29,7 +26,6 @@ import {
   CloseCircleOutlined,
   DeleteOutlined,
   DoubleRightOutlined,
-  EditOutlined,
   EyeOutlined,
   FileExcelOutlined,
   MinusCircleOutlined,
@@ -64,7 +60,6 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
               message: t("Асуулт оруулна уу!"),
             },
           ]}
-          //validateTrigger={["onChange", "onBlur"]}
         >
           <Input
             placeholder={t("Асуулт", { count: name + 1 })}

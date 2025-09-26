@@ -6,23 +6,17 @@ export function useTailangiinZagvar(zagvar) {
     if (zagvar === "borluulaltiinTailanAvya")
       return [
         {
-          // Build our expander column
-          id: "expander", // Make sure it has an ID
+          id: "expander",
           Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
             <span {...getToggleAllRowsExpandedProps()}>
               {isAllRowsExpanded ? "-" : "+"}
             </span>
           ),
           Cell: ({ row }) =>
-            // Use the row.canExpand and row.getToggleRowExpandedProps prop getter
-            // to build the toggle for expanding a row
             row.canExpand ? (
               <span
                 {...row.getToggleRowExpandedProps({
                   style: {
-                    // We can even use the row.depth property
-                    // and paddingLeft to indicate the depth
-                    // of the row
                     paddingLeft: `${row.depth * 2}rem`,
                   },
                 })}
@@ -44,7 +38,6 @@ export function useTailangiinZagvar(zagvar) {
           Header: "Захиалгын тоо",
           accessor: "zakhialga",
           Footer: (info) => {
-            // Only calculate total visits if rows change
             const total = React.useMemo(
               () =>
                 info.rows.reduce((sum, row) => row.values.zakhialga + sum, 0),
@@ -58,7 +51,6 @@ export function useTailangiinZagvar(zagvar) {
           Header: "Үйлчилгээний тоо",
           accessor: "uichilgeeniiToo",
           Footer: (info) => {
-            // Only calculate total visits if rows change
             const total = React.useMemo(
               () =>
                 info.rows.reduce(
@@ -75,7 +67,6 @@ export function useTailangiinZagvar(zagvar) {
           Header: "Борлуулалтын дүн",
           accessor: "niitDun",
           Footer: (info) => {
-            // Only calculate total visits if rows change
             const total = React.useMemo(
               () => info.rows.reduce((sum, row) => row.values.niitDun + sum, 0),
               [info.rows]
@@ -91,7 +82,6 @@ export function useTailangiinZagvar(zagvar) {
           Header: "Үйлчилгээний хөлсний дүн",
           accessor: "uilchilgeeniiKhuls",
           Footer: (info) => {
-            // Only calculate total visits if rows change
             const total = React.useMemo(
               () =>
                 info.rows.reduce(
@@ -111,23 +101,17 @@ export function useTailangiinZagvar(zagvar) {
     else if (zagvar === "ajiltnaarTailanAvya")
       return [
         {
-          // Build our expander column
-          id: "expander", // Make sure it has an ID
+          id: "expander",
           Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
             <span {...getToggleAllRowsExpandedProps()}>
               {isAllRowsExpanded ? "-" : "+"}
             </span>
           ),
           Cell: ({ row }) =>
-            // Use the row.canExpand and row.getToggleRowExpandedProps prop getter
-            // to build the toggle for expanding a row
             row.canExpand ? (
               <span
                 {...row.getToggleRowExpandedProps({
                   style: {
-                    // We can even use the row.depth property
-                    // and paddingLeft to indicate the depth
-                    // of the row
                     paddingLeft: `${row.depth * 2}rem`,
                   },
                 })}
@@ -153,7 +137,6 @@ export function useTailangiinZagvar(zagvar) {
           Header: "Дууссан ажил",
           accessor: "duussanAjil",
           Footer: (info) => {
-            // Only calculate total visits if rows change
             const total = React.useMemo(
               () =>
                 info.rows.reduce((sum, row) => row.values.duussanAjil + sum, 0),
@@ -167,7 +150,6 @@ export function useTailangiinZagvar(zagvar) {
           Header: "Үйлчилгээний тоо",
           accessor: "zakhialguud",
           Footer: (info) => {
-            // Only calculate total visits if rows change
             const total = React.useMemo(
               () =>
                 info.rows.reduce((sum, row) => row.values.zakhialguud + sum, 0),
@@ -184,7 +166,6 @@ export function useTailangiinZagvar(zagvar) {
             return <>{formatNumber(value)}₮</>;
           },
           Footer: (info) => {
-            // Only calculate total visits if rows change
             const total = React.useMemo(
               () =>
                 info.rows.reduce(

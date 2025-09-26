@@ -25,8 +25,6 @@ import uilchilgee, {
 import { useEffect } from "react";
 import { t } from "i18next";
 import { useQRCode } from "next-qrcode";
-import updateMethod from "../../../tools/function/crud/updateMethod";
-//#endregion
 const { confirm } = Modal;
 function Tulbur(
   {
@@ -306,7 +304,6 @@ function Tulbur(
           setTerminal(false);
         })
         .catch((e) => {
-          // tulbur.find((a) => a.turul === "khaan") ? null : aldaaBarigch(e);
           setTerminal(false);
           setLoading(false);
           guilgeeniiTuukhKhadgalya(tulbur);
@@ -356,7 +353,6 @@ function Tulbur(
           >
             <div className="text-center">Авто зогсоолын үйлчилгээ</div>
             <div className="text-center">{baiguullaga?.ner}</div>
-            {/* <div>Борлуулагч:</div> */}
             <div className="flex justify-between">
               <p>Огноо:</p>
               <p>{moment(Date.now()).format("YYYY/MM/DD hh:mm:ss")}</p>
@@ -393,19 +389,6 @@ function Tulbur(
             <div>
               <p></p>
             </div>
-            {/* {eBarimt?.stocks?.map((mur, index) => (
-              <div
-                className={`flex flex-col items-stretch justify-between border-b-2 border-dashed py-1 ${
-                  index === 0 && "border-t-2"
-                }`}
-                key={`${index}-zakhialga`}
-              >
-                <div className="">{mur.name}:</div>
-                <div className="-mt-1 text-right">
-                  {formatNumber(mur.totalAmount, 2)}₮
-                </div>
-              </div>
-            ))} */}
             <div>
               <p>
                 <br />
@@ -596,12 +579,6 @@ function Tulbur(
               >
                 {t("Цуцлах")}
               </Button>
-              {/* <Button
-                type='primary'
-                onClick={batalgaajuuljDuusgakh}
-                icon={<CheckOutlined />}>
-                {t("Баталгаажуулах")}
-              </Button> */}
             </div>
           </div>
         )}

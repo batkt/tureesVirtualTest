@@ -31,7 +31,6 @@ import {
   DownloadOutlined,
   FileExcelOutlined,
   DownOutlined,
-  EyeOutlined,
   CloseOutlined,
   FilterOutlined,
   ShareAltOutlined,
@@ -57,7 +56,7 @@ import { modal } from "../../../components/ant/Modal";
 import _ from "lodash";
 import updateMethod from "../../../tools/function/crud/updateMethod";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
-import axios from "axios";
+
 import { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
 import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";

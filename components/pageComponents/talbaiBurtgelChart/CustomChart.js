@@ -3,20 +3,13 @@ import React, { useLayoutEffect } from "react";
 import * as am5 from "@amcharts/amcharts5";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
-//chart type
-import * as am5percent from "@amcharts/amcharts5/percent";
-
 function CustomLabel(props) {
   const chartID = props.chartID;
   useLayoutEffect(() => {
     var root = am5.Root.new(chartID);
 
-    // Set themes
-    // https://www.amcharts.com/docs/v5/concepts/themes/
     root.setThemes([am5themes_Animated.new(root)]);
 
-    // Create chart
-    // https://www.amcharts.com/docs/v5/charts/radar-chart/
     var chart = root.container.children.push(
       am5radar.RadarChart.new(root, {
         panX: false,
@@ -28,8 +21,6 @@ function CustomLabel(props) {
         endAngle: 180,
       })
     );
-
-    // Data
     var data = [
       {
         category: "Research",
@@ -64,9 +55,6 @@ function CustomLabel(props) {
         },
       },
     ];
-
-    // Add cursor
-    // https://www.amcharts.com/docs/v5/charts/radar-chart/#Cursor
     var cursor = chart.set(
       "cursor",
       am5radar.RadarCursor.new(root, {
@@ -75,12 +63,7 @@ function CustomLabel(props) {
     );
 
     cursor.lineY.set("visible", false);
-
-    // Create axes and their renderers
-    // https://www.amcharts.com/docs/v5/charts/radar-chart/#Adding_axes
-    var xRenderer = am5radar.AxisRendererCircular.new(root, {
-      //minGridDistance: 50
-    });
+    var xRenderer = am5radar.AxisRendererCircular.new(root, {});
 
     xRenderer.labels.template.setAll({
       radius: 10,
@@ -124,9 +107,6 @@ function CustomLabel(props) {
     );
 
     yAxis.data.setAll(data);
-
-    // Create series
-    // https://www.amcharts.com/docs/v5/charts/radar-chart/#Adding_series
     var series1 = chart.series.push(
       am5radar.RadarColumnSeries.new(root, {
         xAxis: xAxis,
@@ -166,9 +146,6 @@ function CustomLabel(props) {
     });
 
     series2.data.setAll(data);
-
-    // Animate chart and series in
-    // https://www.amcharts.com/docs/v5/concepts/animations/#Initial_animation
     series1.appear(1000);
     series2.appear(1000);
     chart.appear(1000, 100);

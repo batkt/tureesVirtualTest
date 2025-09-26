@@ -1,4 +1,3 @@
-// GereeZuragOruulakh.js
 import React, {
   useEffect,
   useState,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { Button, InputNumber, notification, Switch, Select, Input } from "antd";
-import uilchilgee, { url } from "services/uilchilgee";
+import { Button, InputNumber, notification, Switch, Select } from "antd";
+import uilchilgee from "services/uilchilgee";
 
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import { useTranslation } from "react-i18next";

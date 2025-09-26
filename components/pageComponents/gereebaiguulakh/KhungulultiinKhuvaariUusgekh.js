@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Input, InputNumber, Button, Table } from "antd";
+import React from "react";
+import { Button, Table } from "antd";
 import moment from "moment";
 import { SettingOutlined, DeleteOutlined } from "@ant-design/icons";
 import formatNumber from "tools/function/formatNumber";

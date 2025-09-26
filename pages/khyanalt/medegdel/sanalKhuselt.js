@@ -10,7 +10,7 @@ import local from "antd/lib/date-picker/locale/mn_MN";
 import { useRouter } from "next/router";
 import { useAuth } from "services/auth";
 import useJagsaalt from "hooks/useJagsaalt";
-import { map } from "lodash";
+
 import { useTranslation } from "react-i18next";
 const { RangePicker } = DatePicker;
 
@@ -176,13 +176,6 @@ function index({ token }) {
                         {mur.title}
                       </div>
                     </div>
-                    {/* {mur.tuluv !== 0 ? (
-                      <div className="font-semibold text-green-400">
-                        Хүлээн авсан
-                      </div>
-                    ) : (
-                      <div className="text-red-500">Хүлээн аваагүй</div>
-                    )} */}
                   </div>
                   <div className="col-span-1 flex items-center justify-end pr-3  text-sm">
                     {mur.utas}

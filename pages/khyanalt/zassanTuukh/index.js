@@ -269,25 +269,6 @@ function ZassanTuukh() {
               })),
           }}
         />
-        {/* <CardList
-          keyValue="zassanBarimt"
-          className="block overflow-auto md:hidden"
-          jagsaalt={zassanBarimt?.jagsaalt}
-          Component={UstsanTuukhTile}
-          componentProps={{ router }}
-          pagination={{
-            current: zassanBarimt?.data?.khuudasniiDugaar,
-            pageSize: zassanBarimt?.data?.khuudasniiKhemjee,
-            total: zassanBarimt?.data?.niitMur,
-            showSizeChanger: true,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              zassanBarimt.setKhuudaslalt((kh) => ({
-                ...kh,
-                khuudasniiDugaar,
-                khuudasniiKhemjee,
-              })),
-          }}
-        /> */}
       </Card>
     </Admin>
   );

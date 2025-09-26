@@ -1,4 +1,3 @@
-import Aos from "aos";
 import _ from "lodash";
 import Link from "next/link";
 import React, { useEffect, useRef } from "react";

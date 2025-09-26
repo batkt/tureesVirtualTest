@@ -103,8 +103,8 @@ function TogloomTulburiinDelgerenguiTailan(
           break;
         case "khaan":
           ugugdul.push({
-            ner: t("Карт"), //tur cart bolgiy Хаан банк
-            icon: "/cartniiZurag.png", // "https://play-lh.googleusercontent.com/Aw4bwCDJgAzu6AFAbbcfCFpheVMB6ZKiEM3JlrJ3cAM65fK-1QaTZZs_Vk4UFBzykQ=s480-rw",
+            ner: t("Карт"),
+            icon: "/cartniiZurag.png",
             dun: element.niitDun,
             too: element.niitToo,
             khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -175,14 +175,6 @@ function TogloomTulburiinDelgerenguiTailan(
             khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
           });
           break;
-        // case "pocket":
-        //   ugugdul.push({
-        //     ner: element._id,
-        //     icon: "https://play-lh.googleusercontent.com/l0PMiUcleEv4dTZslRa9psOfrlB3S8NpBwctOoxQ6vlqfjamIf2ZxVlynfqiSelbTg=w240-h480-rw",
-        //     dun: element.niitDun,
-        //     khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-        //   });
-        //   break;
         case "toki":
           ugugdul.push({
             ner: element._id,

@@ -4,15 +4,7 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import {
-  Form,
-  InputNumber,
-  Select,
-  Input,
-  notification,
-  Switch,
-  Modal,
-} from "antd";
+import { Form, Select, Input, notification, Modal } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 import compareFields from "tools/function/compareFields";

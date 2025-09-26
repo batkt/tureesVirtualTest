@@ -21,9 +21,6 @@ import { TbDiscount2 } from "react-icons/tb";
 import { useQRCode } from "next-qrcode";
 import Barcode from "react-barcode";
 
-// import { useAuth } from "services/auth";
-
-//#endregion
 function ShineTogloomTulbur(
   {
     destroy,
@@ -38,7 +35,6 @@ function ShineTogloomTulbur(
   },
   ref
 ) {
-  // const {ajiltan}=useAuth();
   const [alkham, setAlkham] = React.useState(
     data?.tulburTulsunEsekh === true ? 2 : 1
   );
@@ -68,9 +64,7 @@ function ShineTogloomTulbur(
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = React.useState();
   const [qpayModalTuluv, setQpayModalTuluv] = React.useState(false);
   const [tin, setTin] = React.useState("");
-  // const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
-  //   data?.dutuuDun ? data?.dutuuDun : data?.niitDun
-  // );
+
   const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(() => {
     const totalAmount = data?.dutuuDun ?? data?.niitDun ?? 0;
     const paidAmount = tulbur.reduce((a, b) => a + (b.dun || 0), 0);
@@ -163,8 +157,6 @@ function ShineTogloomTulbur(
     };
   }, [tulbur]);
 
-  //Keyboard tovchlol ekhlel
-
   useKeyboardTovchlol("F4", f4Darsan);
 
   function f4Darsan() {
@@ -204,15 +196,13 @@ function ShineTogloomTulbur(
     return res;
   };
 
-  //Keyboard tovchlol tugsgul
-
   function ebarimtAvya(id) {
     setLoading(true);
 
     if (!!eBarimt) {
       handlePrint();
       khaaya();
-      f4LockRef.current = false; // unlock after print
+      f4LockRef.current = false;
       return;
     }
 
@@ -226,7 +216,7 @@ function ShineTogloomTulbur(
     const body = {
       id,
       ebarimtiinTurul: "togloom",
-      dun: data?.niitDun || 0, // ✅ Prevent .toFixed() backend crash
+      dun: data?.niitDun || 0,
     };
 
     if (baiguullagaEsekh || irgenEsekh) {
@@ -244,7 +234,7 @@ function ShineTogloomTulbur(
       .then(({ data }) => {
         if (data.success === true || data.status === "SUCCESS") {
           setEBarimt(data);
-          setLoading(false); // let print handle f4LockRef reset
+          setLoading(false);
           onRefresh();
           destroy();
         } else {
@@ -429,9 +419,7 @@ function ShineTogloomTulbur(
           }
         })
         .catch((e) => {
-          // tulbur.find((a) => a.turul === "khaan") ? null : aldaaBarigch(e);
           setLoading(false);
-          // guilgeeniiTuukhKhadgalya(tulbur);
         });
     } else if (garaasSongosonTurul === "qpay") {
       qpayTulugdsun === "qpayTulugdsun"
@@ -743,7 +731,7 @@ function ShineTogloomTulbur(
                     )}
                   </td>
                 </tr>
-                {/* baiguullaga deer hvlej bga tohioldold sugalaa no no */}
+
                 {!!irgenEsekh && (
                   <tr>
                     <td colSpan={4} className="border">

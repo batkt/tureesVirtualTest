@@ -4,31 +4,12 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import {
-  Form,
-  Input,
-  message,
-  Modal,
-  Select,
-  DatePicker,
-  InputNumber,
-  Button,
-  Checkbox,
-  Switch,
-  TimePicker,
-} from "antd";
-import createMethod from "tools/function/crud/createMethod";
-import updateMethod from "tools/function/crud/updateMethod";
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import { Form, Input, message, Modal, Select, InputNumber } from "antd";
+import uilchilgee from "services/uilchilgee";
 import compareFields from "tools/function/compareFields";
-import moment from "moment";
 import { t } from "i18next";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import useZochin from "hooks/useZochin";
-import formatNumber from "tools/function/formatNumber";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
-import { MdRadioButtonUnchecked } from "react-icons/md";
-
 const order = { createdAt: -1 };
 
 function ZochinBurtgel(
@@ -76,7 +57,6 @@ function ZochinBurtgel(
 
   const dataOrjIrsenEsekh = !!data ? true : false;
 
-  // Function to get the next sequence number (for display purposes only)
   const getNextSequenceNumber = useCallback(async () => {
     if (!data?._id) {
       setIsLoadingSequence(true);
@@ -212,10 +192,8 @@ function ZochinBurtgel(
         processedData.zochinUrikhEsekh = true;
       }
 
-      // Generate register number right before saving (CRITICAL FIX)
       if (!data?._id) {
         try {
-          // Try to get the latest sequence number right before saving to prevent duplicates
           const response = await uilchilgee(token).get("/khariltsagch", {
             params: {
               query: {
@@ -291,7 +269,7 @@ function ZochinBurtgel(
 
       if (processedData.mashiniiDugaar) {
         result = await zochinHadgalya({
-          _id: data?._id, // Pass the current record ID when editing
+          _id: data?._id,
           mashiniiDugaar: processedData.mashiniiDugaar,
           ezemshigchiinUtas,
           khariltsagchMedeelel,

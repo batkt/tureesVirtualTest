@@ -1,4 +1,3 @@
-//#region import
 import Admin from "components/Admin";
 import { useEffect, useState, useRef, useMemo } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
@@ -39,8 +38,6 @@ import useJagsaalt from "hooks/useJagsaalt";
 import useOrder from "tools/function/useOrder";
 import useKhariltsagchDavkhraarAvya from "hooks/useKhariltsagchDavkhraarAvya";
 import { useTranslation } from "react-i18next";
-
-//#endregion
 
 var dateCount = {
   yearStart: moment().startOf("year"),
@@ -93,7 +90,7 @@ function Khyanalt({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
-  //#region const
+
   const { baiguullaga, barilgiinId } = useAuth();
   const { t } = useTranslation();
   const [khariltsagch, setKhariltsagch] = useState(null);

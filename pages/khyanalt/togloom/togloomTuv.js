@@ -1,5 +1,4 @@
 import Admin from "components/Admin";
-import locale from "antd/lib/date-picker/locale/mn_MN";
 import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
 import {
@@ -30,9 +29,7 @@ import {
   FileExcelOutlined,
   MoreOutlined,
   PaperClipOutlined,
-  PlusOutlined,
   SettingOutlined,
-  UploadOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
@@ -50,7 +47,7 @@ import Aos from "aos";
 import KhuukhedBurtgel from "components/pageComponents/togloom/TsagBurtgel";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useToololt } from "hooks/useToololt";
-import Tulbur from "components/pageComponents/togloomiinTuv/Tulbur";
+
 import { useTranslation } from "react-i18next";
 import BaganiinSongolt from "components/table/BaganiinSongolt";
 import { excelTatajAvya } from "../zogsool";
@@ -58,201 +55,11 @@ import { t } from "i18next";
 import { ImQrcode } from "react-icons/im";
 import { useQRCode } from "next-qrcode";
 import { useReactToPrint } from "react-to-print";
-import axios from "axios";
+
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import TogloomTile from "components/pageComponents/togloom/TogloomTile";
 import TogloomTulburiinDelgerenguiTailan from "components/pageComponents/togloom/TogloomTulburiinDelgerenguiTailan";
 import ShineTogloomTulbur from "components/pageComponents/togloomiinTuv/ShineTogloomTulbur";
-import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
-import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
-
-// const DelegrenguiKharakh = React.forwardRef(
-//   ({ data, destroy, confirm }, ref) => {
-//     const printRef = React.useRef(null);
-//     const [songogdsonAjiltan, setSongogdsonAjiltan] = useState(null);
-//     const [songogdson, setSongogdson] = useState([]);
-
-//     const [ognoo, setOgnoo] = useState([
-//       moment().startOf("day"),
-//       moment().endOf("day"),
-//     ]);
-
-//     const togloomAjiltanQuery = useMemo(() => {
-//       return undefined;
-//     }, [baiguullagiinId, barilgiinId]);
-
-//     const { ajilchdiinGaralt } = useAjiltniiJagsaalt(
-//       token,
-//       baiguullagiinId,
-//       togloomAjiltanQuery
-//     );
-
-//     const query1 = useMemo(() => {
-//       if (songogdsonAjiltan) {
-//         return { burtgesenAjiltaniiId: songogdsonAjiltan };
-//       }
-//       return undefined;
-//     }, [songogdsonAjiltan]);
-
-//     const togloomiinDun = useToololt("/togloomiinDunAvya", token, ognoo, query1);
-
-//     const handlePrint = useReactToPrint({
-//       content: () => printRef.current,
-//     });
-
-//     React.useImperativeHandle(
-//       ref,
-//       () => ({
-//         khadgalya() {
-//           handlePrint();
-//         },
-//         khaaya() {
-//           destroy();
-//         },
-//       }),
-//       []
-//     );
-
-//     useEffect(() => {
-//       function keyUp(e) {
-//         if (e.key === "Escape") {
-//           e.preventDefault();
-//           destroy();
-//         }
-//       }
-//       document.addEventListener("keyup", keyUp);
-//       return () => document.removeEventListener("keyup", keyUp);
-//     }, []);
-
-//     return (<div>
-//         <div className="hidden">
-//             <div className="p-6" ref={printRef}>
-//               <div className="flex items-center justify-start gap-6">
-//                 <div className="flex gap-6">
-//                   <div>Огноо: {moment(ognoo[0]).format("YYYY-MM-DD")}</div>
-//                   <div>{moment(ognoo[1]).format("YYYY-MM-DD")}</div>
-//                 </div>
-//               </div>
-//               <div className="flex items-center justify-start gap-2">
-//                 Ажилтан:{" "}
-//                 {songogdsonAjiltan === null || songogdsonAjiltan === undefined
-//                   ? "Бүх ажилтан"
-//                   : ajilchdiinGaralt?.jagsaalt
-//                       ?.filter((a) => a._id === songogdsonAjiltan)
-//                       .map((b) => b.ovog[0] + "." + b.ner + "     " + b.register)}
-//               </div>
-
-//               {tulburiinMedeelel.map((a, i) => {
-//                 return songogdson.length === 0 ? (
-//                   <div className="my-1" key={i}>{`${i + 1}. ${a.ner} (${
-//                     a.too
-//                   }) : ${formatNumber(a.dun)} ₮`}</div>
-//                 ) : (
-//                   songogdson.some((item) => item === a.ner) && (
-//                     <div className="my-1" key={i}>{`${i + 1}. ${a.ner} (${
-//                       a.too
-//                     }) : ${formatNumber(a.dun)} ₮`}</div>
-//                   )
-//                 );
-//               })}
-//               <div className="flex items-center justify-start gap-2">
-//                 <div>
-//                   Нийт дүн
-//                   {`(${tulburiinMedeelel?.reduce((a, b) => a + b?.too, 0) || 0})`}:
-//                 </div>
-//                 <div>
-//                   {formatNumber(
-//                     tulburiinMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0
-//                   )}
-//                   ₮
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//           <div className="flex w-full justify-between">
-
-//           <div>
-//             /{moment(ognoo[0]).format("YYYY-MM-DD")}/ - /
-//             {moment(ognoo[1]).format("YYYY-MM-DD")}/
-//           </div>
-//           <div className="flex flex-wrap gap-2">
-//             <DatePicker.RangePicker
-//               value={ognoo}
-//               onChange={setOgnoo}
-//               allowClear={false}
-//               locale={locale}
-//               style={{ width: "49%" }}
-//             />
-//             <Select
-//               id="ajiltanSongokhInput"
-//               placeholder={t("Ажилтан")}
-//               allowClear
-//               clearIcon={() => (
-//                 <div className="dark:bg-gray-800 dark:text-gray-200  hover:dark:text-gray-400">
-//                   <CloseCircleOutlined />
-//                 </div>
-//               )}
-//               style={{ width: "49%" }}
-//               onChange={(e) => setSongogdsonAjiltan(e)}
-//             >
-//               {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
-//                 <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>
-//                   <div className="flex flex-row justify-between">
-//                     <span className="truncate">
-//                       {mur.ovog && mur.ovog[0]}.{mur.ner}
-//                     </span>
-//                     <span>{mur.register}</span>
-//                   </div>
-//                 </Select.Option>
-//               ))}
-//             </Select>
-//           </div>
-//         </div>
-//           {tulburiinMedeelel.length > 0 ? (
-//           <div className="space-y-3">
-//             {tulburiinMedeelel.map((a, i) => {
-//               return (
-//                 <div
-//                   className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2"
-//                   key={i}>
-//                   <div
-//                     style={{ width: `${String(Math.round(a.khuvi))}%` }}
-//                     className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 `}>
-//                     <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 " />
-//                   </div>
-//                   <img
-//                     src={a.icon}
-//                     className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
-//                   />
-//                   <div className="z-10 flex w-full justify-between text-lg font-semibold">
-//                     {a.ner}:
-//                     <div className="flex font-normal">
-//                       {formatNumber(a.dun) || 0}₮
-//                       <div className="ml-3 flex w-14 items-center justify-center border-l border-green-600 pl-2 text-center">
-//                         <div>
-//                           {a.khuvi - Math.floor(a.khuvi) > 0
-//                             ? Number(a.khuvi).toFixed(2)
-//                             : a.khuvi || 0}
-//                         </div>
-//                         %
-//                       </div>
-//                     </div>
-//                   </div>
-//                 </div>
-//               );
-//             })}
-//           </div>
-//           ) : (
-//             <div className="flex h-52 w-full items-center justify-center">
-//               <div className="text-lg font-semibold text-black text-opacity-30 dark:text-gray-400">
-//                 Орлогын мэдээлэл байхгүй байна.
-//               </div>
-//             </div>
-//           )};
-//       </div>)
-
-//   }
-// );
 
 const QrCodeAvakh = React.forwardRef(
   ({ destroy, duusakhTsag, ekhlekhTsag }, ref) => {
@@ -877,65 +684,6 @@ function togloom1() {
     setShineBagana([]);
   }, [i18n.language]);
 
-  // function tulburTulyu(data) {
-  //   modal({
-  //     title: (
-  //       <div className="flex w-full flex-row justify-between dark:text-gray-200">
-  //         <div>{t("Тооцоо хийх")}</div>
-  //         <div className="flex items-center">
-  //           {mashiniiDugaar}
-  //           <div
-  //             className="ml-5 text-xl hover:text-red-400"
-  //             onClick={() => tulburRef.current.khaaya()}>
-  //             <CloseCircleOutlined />
-  //           </div>
-  //         </div>
-  //       </div>
-  //     ),
-  //     style: { top: 25 },
-  //     content: (
-  //       <ShineTulbur
-  //         suuliikhEsekh={index === 0}
-  //         niitDun={niitDun}
-  //         camerVal={camerVal[1]}
-  //         ref={tulburRef}
-  //         data={_.cloneDeep(data)}
-  //         eBarimtAshiglakhEsekh={
-  //           baiguullaga?.barilguud?.find((e) => e._id === barilgiinId)
-  //             ?.tokhirgoo?.eBarimtAshiglakhEsekh
-  //         }
-  //         eBarimtAutomataarShivikh={
-  //           baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh
-  //         }
-  //         token={token}
-  //         baiguullaga={baiguullaga}
-  //         barilgiinId={barilgiinId}
-  //         ajiltan={ajiltan}
-  //         uilchluugchiinId={uilchluugchiinId}
-  //         onRefresh={onRefresh}
-  //         setModalNeelttei={setModalNeelttei}
-  //         songogdsonZogsool={songogdzonZogsool}
-  //       />
-  //       // <Tulbur
-  //       //   suuliikhEsekh={index === 0}
-  //       //   niitDun={niitDun}
-  //       //   camerVal={camerVal[1]}
-  //       //   ref={tulburRef}
-  //       //   data={_.cloneDeep(data)}
-  //       //   token={token}
-  //       //   baiguullaga={baiguullaga}
-  //       //   barilgiinId={barilgiinId}
-  //       //   ajiltan={ajiltan}
-  //       //   uilchluugchiinId={uilchluugchiinId}
-  //       //   onRefresh={onRefresh}
-  //       //   setModalNeelttei={setModalNeelttei}
-  //       // />
-  //     ),
-  //     footer: false,
-  //     className: "!w-fit",
-  //   });
-  // }
-
   function tulburTulyu(data) {
     modal({
       title: (
@@ -952,7 +700,7 @@ function togloom1() {
           </div>
         </div>
       ),
-      // style: { top: 25 },
+
       className: "!w-fit",
       content: (
         <ShineTogloomTulbur
@@ -966,15 +714,6 @@ function togloom1() {
           barCodes={barCodes}
           setBarCodes={setBarCodes}
         />
-        // <Tulbur
-        //   ref={tulburRef}
-        //   data={_.cloneDeep(data)}
-        //   token={token}
-        //   baiguullaga={baiguullaga}
-        //   barilgiinId={barilgiinId}
-        //   ajiltan={ajiltan}
-        //   onRefresh={onRefresh}
-        // />
       ),
       footer: false,
     });
@@ -1081,22 +820,7 @@ function togloom1() {
           </Popover>
         ),
       },
-      // {
-      //   title: t("Нэр"),
-      //   align: "center",
-      //   dataIndex: "ner",
-      //   width: "10rem",
-      //   showSorterTooltip: false,
-      //   render: (v) => <div className="w-full text-left">{v}</div>
-      // },
-      // {
-      //   title: t("Нас"),
-      //   align: "center",
-      //   dataIndex: "nas",
-      //   width: "4rem",
-      //   showSorterTooltip: false,
-      //   sorter: () => 0,
-      // },
+
       {
         title: t("Утас"),
         align: "center",
@@ -1271,10 +995,7 @@ function togloom1() {
                   backgroundColor:
                     data?.tulburTulsunEsekh !== true ? "#FF8505" : "#253985",
                 }}
-                // type={`${data?.tulbur === [] ? "primary" : "warning"}`}
                 size="small"
-                // danger={data?.tuluv === "3"}
-                // icon={<DollarCircleOutlined className="text-white" />}
                 onClick={() => tulburTulyu(data)}
               >
                 {data?.tulburTulsunEsekh !== true ? (
@@ -1310,10 +1031,7 @@ function togloom1() {
                   alignItems: "center",
                   backgroundColor: "#0CB20C",
                 }}
-                // type={`${data?.tulbur === [] ? "primary" : "warning"}`}
                 size="small"
-                // danger={data?.tuluv === "3"}
-                // icon={<DollarCircleOutlined className="text-white" />}
               >
                 <div className="flex items-center  justify-center space-x-2 text-white">
                   <div className="flex items-center justify-center">
@@ -1370,7 +1088,9 @@ function togloom1() {
                           title={
                             <div>
                               {t("Та үйлчлүүлэгчийн цаг сунгах гэж байна")}
-                              <div>{t("үргэлжлүүлэх бол тийм товчийг дарна уу")}</div>
+                              <div>
+                                {t("үргэлжлүүлэх бол тийм товчийг дарна уу")}
+                              </div>
                             </div>
                           }
                           okText={t("Тийм")}
@@ -1405,7 +1125,9 @@ function togloom1() {
                       {data.tulburTulsunEsekh === true && (
                         <Popconfirm
                           disabled={data?.tuluv === 3}
-                          title={t(`Та үйлчлүүлэгчийг гаргахдаа итгэлтэй байна уу?`)}
+                          title={t(
+                            `Та үйлчлүүлэгчийг гаргахдаа итгэлтэй байна уу?`
+                          )}
                           okText={t("Тийм")}
                           cancelText={t("Үгүй")}
                           onConfirm={() =>
@@ -1644,7 +1366,6 @@ function togloom1() {
                   </div>
                 }
               >
-
                 <Button type="primary">
                   <span>{t("Хаалт нээх")}</span>
                 </Button>
@@ -2112,18 +1833,6 @@ function togloom1() {
               );
             }}
           />
-
-          {/* <div className="sticky bottom-12 z-10 bg-white dark:bg-gray-900 border-t px-4 py-2 flex justify-between text-sm font-semibold">
-            <span>И-Баримт Нийт:</span>
-            <span>
-              {!!togloomiinDun?.toololt
-                  ? formatNumber(
-                      togloomiinDun?.toololt?.reduce((a, b) => a + b.niitDun, 0)
-                    )
-                  : 0}
-                ₮
-            </span>
-          </div> */}
 
           <CardList
             cardListTuluv={"utas"}

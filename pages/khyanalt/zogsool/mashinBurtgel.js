@@ -92,25 +92,6 @@ function mashinBurtgel({ token }) {
     }
   }, [turul, tuluv, udurShuult]);
 
-  // const [shineCol, setShineCol] = useState(() => {
-  //   if (turul?.name === "Гэрээт") {
-  //     return [
-  //       {
-  //         title: t("Хугацаа"),
-  //         dataIndex: "createdAt",
-  //         ellipsis: true,
-  //         align: "center",
-  //         render(date) {
-  //           return "";
-  //         },
-  //         showSorterTooltip: false,
-  //       },
-  //     ];
-  //   } else {
-  //     return [];
-  //   }
-  // });
-
   const { mashinToololt, mashinToololtMutate } = useMashinToololt(
     token,
     barilgiinId

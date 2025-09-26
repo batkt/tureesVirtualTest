@@ -1,19 +1,13 @@
 import moment from "moment";
 import { useAuth } from "services/auth";
-import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
-import { Table, Button, Card, DatePicker, message, Popconfirm } from "antd";
-
-import Admin from "components/Admin";
-import shalgaltKhiikh from "services/shalgaltKhiikh";
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
-import formatNumber from "tools/function/formatNumber";
+import { Table, Card, DatePicker, message } from "antd";
+import uilchilgee from "services/uilchilgee";
 import React, { useMemo, useState, useEffect } from "react";
 import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh";
 import Aos from "aos";
 import { t } from "i18next";
 
 const { RangePicker } = DatePicker;
-//#endregion
 
 function KhungulultTuukh({ token }) {
   useEffect(() => {

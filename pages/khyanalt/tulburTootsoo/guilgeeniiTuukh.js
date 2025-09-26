@@ -1,4 +1,3 @@
-//#region imports
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import uilchilgee from "services/uilchilgee";
 import Admin from "components/Admin";
@@ -26,7 +25,6 @@ import {
   PrinterOutlined,
   CloseCircleOutlined,
   FilterOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
@@ -43,7 +41,7 @@ import _ from "lodash";
 import { modal } from "components/ant/Modal";
 import useGuilgeeniiToololtAvya from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
 import { useTuluugiiGereeniiToololtAvya } from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import GuilgeenTuukhTile from "components/pageComponents/tulbur/GuilgeeTuukhTile";
 import CardList from "components/cardList";
 import Aos from "aos";
@@ -55,8 +53,6 @@ import KhuulgaAldangi from "components/pageComponents/tulbur/KhuulgaAldangi";
 import { useTranslation } from "react-i18next";
 import { LiaMoneyCheckAltSolid } from "react-icons/lia";
 import NekhemjlekhiinTuukhTsonkh from "components/pageComponents/tulbur/NekhemjlekhiinTuukhTsonkh";
-
-//#endregion
 
 function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
   const { barilgiinId } = useAuth();
@@ -212,7 +208,6 @@ function guilgeeniiTuukh({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
-  //#region state
   const ref = React.useRef(null);
   const excelref = React.useRef();
   const baritsaaref = React.useRef(null);
@@ -705,8 +700,6 @@ function guilgeeniiTuukh({ token }) {
     ];
   }, [gereeniiMedeelel, loadingIndex, shineBagana, turulColumns, t]);
 
-  //#endregion
-  //#region handlers
   function onChangeTurul(turul) {
     setTurul(turul);
     setKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
@@ -979,10 +972,7 @@ function guilgeeniiTuukh({ token }) {
     });
   }
 
-  function refresh() {
-    // gereeniiMedeelelMutate();
-    // gereeToolloltMutate();
-  }
+  function refresh() {}
 
   function olnoorGuilgeeOruulakhExcel() {
     const footer = [
@@ -1044,50 +1034,6 @@ function guilgeeniiTuukh({ token }) {
     });
   }
 
-  // function olnoorGuilgeeoruulahExcelFc({ baiguullaga }) {
-  //   useEffect(() => {
-  //     if (baiguullaga === "foodcity") {
-  //       showModal();
-  //     } else {
-  //       closeModal();
-  //     }
-  //   }, [baiguullaga]);
-
-  //   const showModal = () => {
-  //     modal({
-  //       title: "",
-  //       icon: <FileExcelOutlined />,
-  //       content: (
-  //         <GuilgeeExceleesOruulakhOlnoor
-  //           ref={excelref}
-  //           token={token}
-  //           barilgiinId={barilgiinId}
-  //           baiguullaga={baiguullaga}
-  //           onFinish={refresh}
-  //           zam="tooluurZaaltOruulya"
-  //           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
-  //           tailbar="Гүйлгээний загвар excel файл"
-  //           zagvariinZam="tooluurZaaltZagvarAvya"
-  //         />
-  //       ),
-  //       footer: (
-  //         <Space>
-  //           <Button onClick={() => excelref.current.khaaya()}>
-  //             {t("Хаах")}
-  //           </Button>
-  //         </Space>
-  //       ),
-  //     });
-  //   };
-
-  //   const closeModal = () => {
-  //     modal.destroy();
-  //   };
-
-  //   return null;
-  // }
-
-  //#region Medeeleltatya
   function olnoorEkhniiUldegdelOruulakhExcel() {
     const footer = [
       <Space>
@@ -1155,8 +1101,6 @@ function guilgeeniiTuukh({ token }) {
     });
     return forExcel;
   }, [columns]);
-
-  //#endregion
 
   return (
     <Admin

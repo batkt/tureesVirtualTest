@@ -1,13 +1,5 @@
-import {
-  Badge,
-  Button,
-  DatePicker,
-  Input,
-  message,
-  notification,
-  Popconfirm,
-} from "antd";
-import React, { useImperativeHandle, useMemo, useState } from "react";
+import { Button, DatePicker, Input, message, Popconfirm } from "antd";
+import React, { useImperativeHandle, useState } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
@@ -247,6 +239,8 @@ function GuilgeeniiTuukh(
                 : "Банк"
               : turulAvya(item.turul) || "",
           Тайлбар: item.tailbar || "",
+          "Нэмэлт тайлбар": item.nemeltTailbar || "",
+
           "Бүртгэсэн огноо":
             item.guilgeeKhiisenOgnoo &&
             moment(item.guilgeeKhiisenOgnoo).isValid()
@@ -272,6 +266,11 @@ function GuilgeeniiTuukh(
               left: { style: "thin", color: { auto: 1 } },
               right: { style: "thin", color: { auto: 1 } },
             };
+            const numericColumns = ["B", "C", "D", "E", "F", "G"];
+            const colLetter = XLSX.utils.encode_col(C);
+            if (numericColumns.includes(colLetter)) {
+              cell.s.alignment = { horizontal: "right" };
+            }
           }
         }
 
@@ -314,6 +313,7 @@ function GuilgeeniiTuukh(
         ws["I1"].s = headerStyle;
         ws["J1"].s = headerStyle;
         ws["K1"].s = headerStyle;
+        ws["L1"].s = headerStyle;
 
         XLSX?.utils.book_append_sheet(wb, ws, "гүйлгээ");
 

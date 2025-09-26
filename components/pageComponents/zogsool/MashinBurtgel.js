@@ -9,23 +9,18 @@ import {
   Form,
   Input,
   message,
-  Modal,
   Select,
   DatePicker,
   InputNumber,
   Button,
-  Checkbox,
   Switch,
   TimePicker,
 } from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
-import compareFields from "tools/function/compareFields";
 import moment from "moment";
-import { t } from "i18next";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
-import formatNumber from "tools/function/formatNumber";
 import {
   PlusOutlined,
   DeleteOutlined,
@@ -138,18 +133,7 @@ function MashinBurtgel(
   );
 
   const dataOrjIrsenEsekh = !!data ? true : false;
-  const isEditMode = !!data; // Define isEditMode at component level
-
-  // function mashiniiFormatSolyo(value) {
-  //   const too = value.replace(/[^0-9]/g, "").slice(0, 4);
-  //   const useg = Array.from(value)
-  //     .filter((a) => /[А-Яа-яөӨүҮ]/.test(a))
-  //     .slice(0, 3)
-  //     .join("");
-  //   // const formattedValue = `${too}${useg}`.toUpperCase();
-  //   setInputValue(`${too}${useg}`.toUpperCase());
-  //   // setInputValue(formattedValue);
-  // }
+  const isEditMode = !!data;
 
   useImperativeHandle(
     ref,
@@ -290,7 +274,7 @@ function MashinBurtgel(
   useEffect(() => {
     if (!data?.khungulukhKhugatsaa) {
       form.setFieldsValue({
-        khungulukhKhugatsaa: data?.khungulukhKhugatsaa ?? 0, // always full time
+        khungulukhKhugatsaa: data?.khungulukhKhugatsaa ?? 0,
         uldegdelKhungulukhKhugatsaa: form.getFieldValue(
           "uldegdelKhungulukhKhugatsaa"
         ), // leftover

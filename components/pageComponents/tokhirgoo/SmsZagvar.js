@@ -1,45 +1,10 @@
-import React, {
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import {
-  Form,
-  Select,
-  Input,
-  Button,
-  notification,
-  InputNumber,
-  Divider,
-  TimePicker,
-  Switch,
-} from "antd";
-import {
-  CloseCircleOutlined,
-  MinusCircleOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
-import createMethod from "tools/function/crud/createMethod";
-import updateMethod from "tools/function/crud/updateMethod";
+import React, { useEffect, useImperativeHandle } from "react";
+import { Form, Input, notification } from "antd";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
-import moment from "moment";
-import StreamTokhirgoo from "./StreamTokhirgoo";
-import { modal } from "components/ant/Modal";
 
 function SmsZagvar(
-  {
-    data,
-    jagsaalt,
-    barilgiinId,
-    destroy,
-    token,
-    baiguullagaMutate,
-    baiguullaga,
-  },
+  { data, destroy, token, baiguullagaMutate, baiguullaga },
   ref
 ) {
   const { t } = useTranslation();
@@ -62,7 +27,6 @@ function SmsZagvar(
       async khadgalya() {
         try {
           let tokhirgoo = form.getFieldsValue();
-          // body.barilgiinId = barilgiinId;
           const response = await uilchilgee(token).post(
             "/baiguullagaTokhirgooZasya",
             {

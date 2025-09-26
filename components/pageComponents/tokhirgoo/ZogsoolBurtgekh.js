@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
 import {
   Form,
   Select,
@@ -12,7 +6,6 @@ import {
   Button,
   notification,
   InputNumber,
-  Divider,
   TimePicker,
   Switch,
   message,
@@ -27,7 +20,6 @@ import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import { aldaaBarigch } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
 import moment from "moment";
 import StreamTokhirgoo from "./StreamTokhirgoo";
 import StreamTokhirgooIp from "./StreamTokhirgooIp";

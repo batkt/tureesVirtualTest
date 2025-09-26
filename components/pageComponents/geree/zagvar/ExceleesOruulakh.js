@@ -54,7 +54,7 @@ function index(
         const a = document.createElement("a");
         a.style.display = "none";
         a.href = url;
-        // the filename you want
+
         a.download = `${zagvariinZam}.xlsx`;
         document.body.appendChild(a);
         a.click();

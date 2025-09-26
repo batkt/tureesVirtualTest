@@ -1,13 +1,4 @@
-import {
-  Form,
-  Input,
-  Switch,
-  Button,
-  Upload,
-  Select,
-  Dropdown,
-  Empty,
-} from "antd";
+import { Form, Input, Switch, Button, Upload, Select } from "antd";
 import {
   UploadOutlined,
   SolutionOutlined,
@@ -16,13 +7,12 @@ import {
   PlusOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import uilchilgee, { url, aldaaBarigch } from "services/uilchilgee";
 import FormLavlakh from "components/FormLavlakh";
 import { useEffect } from "react";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
-import { useAuth } from "services/auth";
 import KhariltsagchiinLavlakh from "./KhariltsagchiinLavlakh";
 
 var timeout = null;

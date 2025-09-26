@@ -71,7 +71,6 @@ function TulburiinDelgerenguiTailan({ token }) {
               ugugdul.push({
                 ner: "Данс",
                 icon: "/mobile.png",
-                // icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -99,7 +98,6 @@ function TulburiinDelgerenguiTailan({ token }) {
               ugugdul.push({
                 ner: "Хөнгөлөлт",
                 icon: "/discount.png",
-                // icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -107,8 +105,8 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "khaan":
               ugugdul.push({
-                ner: "Карт", //tur cart bolgiy Хаан банк
-                icon: "/cartniiZurag.png", // "https://play-lh.googleusercontent.com/Aw4bwCDJgAzu6AFAbbcfCFpheVMB6ZKiEM3JlrJ3cAM65fK-1QaTZZs_Vk4UFBzykQ=s480-rw",
+                ner: "Карт",
+                icon: "/cartniiZurag.png",
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -213,15 +211,7 @@ function TulburiinDelgerenguiTailan({ token }) {
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
-            // case "pocket":
-            //   ugugdul.push({
-            //     ner: element._id,
-            //     icon: "https://play-lh.googleusercontent.com/l0PMiUcleEv4dTZslRa9psOfrlB3S8NpBwctOoxQ6vlqfjamIf2ZxVlynfqiSelbTg=w240-h480-rw",
-            //     dun: element.niitDun,
-            //     too: element.niitToo,
-            //     khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-            //   });
-            //   break;
+
             case "toki":
               ugugdul.push({
                 ner: element._id,
@@ -235,7 +225,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               ugugdul.push({
                 ner: "Цэнэглэлт",
                 icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
-                // icon: "/eWalletIcon.png",
+
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -245,7 +235,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               ugugdul.push({
                 ner: "Pos бэлэн",
                 icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
-                // icon: "/eWalletIcon.png",
+
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -255,7 +245,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               ugugdul.push({
                 ner: "Pos карт",
                 icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
-                // icon: "/eWalletIcon.png",
+
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -265,7 +255,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               ugugdul.push({
                 ner: "Pos дансаар",
                 icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
-                // icon: "/eWalletIcon.png",
+
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -275,7 +265,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               ugugdul.push({
                 ner: "Зөрчил",
                 icon: "/exclamation.png",
-                // icon: "/eWalletIcon.png",
+
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -285,7 +275,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               ugugdul.push({
                 ner: "Авлага",
                 icon: "/budgeting.png",
-                // icon: "/eWalletIcon.png",
+
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: 100,
@@ -295,7 +285,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               ugugdul.push({
                 ner: "Үнэгүй",
                 icon: "/free.png",
-                // icon: "/eWalletIcon.png",
+
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -416,14 +406,7 @@ function TulburiinDelgerenguiTailan({ token }) {
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
-            // case "pocket":
-            //   ugugdul.push({
-            //     ner: element._id,
-            //     icon: "https://play-lh.googleusercontent.com/l0PMiUcleEv4dTZslRa9psOfrlB3S8NpBwctOoxQ6vlqfjamIf2ZxVlynfqiSelbTg=w240-h480-rw",
-            //     dun: element.niitDun,
-            //     khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-            //   });
-            //   break;
+
             case "toki":
               ugugdul.push({
                 ner: element._id,

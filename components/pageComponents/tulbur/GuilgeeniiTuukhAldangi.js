@@ -76,7 +76,9 @@ function GuilgeeniiTuukhAldangi(
     "/aldangiinTuukh",
     query,
     undefined,
-    undefined
+    undefined,
+    undefined,
+    token
   );
   const { guilgeeniiAldangiTuukh, guilgeeniiAldangiTuukhMutate } =
     useGereeAldangiGuilgee(token, data?._id, ognoo, shineOgnoo);
@@ -93,6 +95,12 @@ function GuilgeeniiTuukhAldangi(
     aldangiBodsonOgnoo: null,
     uldegdel: null,
     aldangi: null,
+    aldangiinKhuvi: null,
+    aldangiChuluulukhKhonog: null,
+    ognoo: null,
+    aldangiChuluulukhOgnoo: null,
+    niitAldangi: null,
+    umnukhAldangi: null,
   });
   const [sortColumn, setSortColumn] = useState(null);
   const tailbarRef = React.useRef(null);
@@ -116,7 +124,7 @@ function GuilgeeniiTuukhAldangi(
       .catch(aldaaBarigch);
   };
 
-  const canEditAldalgi = useMemo(() => {
+  const canEditAldangi = useMemo(() => {
     if (ajiltan?.erkh === "Admin") return true;
 
     const permissionArray = _.get(
@@ -501,22 +509,61 @@ function GuilgeeniiTuukhAldangi(
         <thead className="border-b border-gray-200 bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400">
           <tr>
             <th
+              onClick={() => toggleSortOrder("aldangiBodsonOgnoo")}
+              className="min-w-[8rem] cursor-pointer p-1 text-center"
+            >
+              {t("Алдангийн өдөр")}
+            </th>
+            <th
               onClick={() => toggleSortOrder("ognoo")}
+              className="min-w-[8rem] cursor-pointer p-1 text-center"
+            >
+              {t("Авлага үүсч байгаа огноо")}
+            </th>
+            <th
+              onClick={() => toggleSortOrder("aldangiChuluulukhKhonog")}
+              className="min-w-[8rem] cursor-pointer p-1 text-center"
+            >
+              {t("Чөлөөлөх хоног")}
+            </th>
+            <th
+              onClick={() => toggleSortOrder("aldangiChuluulukhOgnoo")}
+              className="min-w-[8rem] cursor-pointer p-1 text-center"
+            >
+              {t("Чөлөөлөх огноо")}
+            </th>
+
+            <th
+              onClick={() => toggleSortOrder("aldangiinKhuvi")}
+              className="min-w-[8rem] cursor-pointer p-1 text-center"
+            >
+              {t("Хувь")}
+            </th>
+
+            <th
+              onClick={() => toggleSortOrder("uldegdel")}
               className="min-w-[8rem] cursor-pointer p-1 text-center"
             >
               {t("Үлдэгдэл")}
             </th>
             <th
-              onClick={() => toggleSortOrder("ajiltan")}
+              onClick={() => toggleSortOrder("aldangi")}
               className="min-w-[8rem] cursor-pointer p-1 text-center"
             >
               {t("Алданги")}
             </th>
+
             <th
-              onClick={() => toggleSortOrder("tulukhAldangi")}
+              onClick={() => toggleSortOrder("umnukhAldangi")}
               className="min-w-[8rem] cursor-pointer p-1 text-center"
             >
-              {t("Алдангийн өдөр")}
+              {t("Өмнөх алданги")}
+            </th>
+            <th
+              onClick={() => toggleSortOrder("niitAldangi")}
+              className="min-w-[8rem] cursor-pointer p-1 text-center"
+            >
+              {t("Нийт алданги")}
             </th>
           </tr>
         </thead>
@@ -524,19 +571,40 @@ function GuilgeeniiTuukhAldangi(
           className="overflow-y-auto"
           style={{ maxHeight: "calc(90vh - 15rem)" }}
         >
-          {aldangiinTuukh?.jagsaalt?.map((a, i) => (
+          {aldangiinTuukh.jagsaalt?.map((a, i) => (
             <tr
               key={i}
               className="border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400"
             >
+              <td className="min-w-[8rem] p-1 text-center">
+                {moment(a.aldangiBodsonOgnoo).format("YYYY-MM-DD")}
+              </td>
+              <td className="min-w-[8rem] p-1 text-center">
+                {moment(a.ognoo).format("YYYY-MM-DD")}
+              </td>
+              <td className="min-w-[8rem] p-1 text-center">
+                {a.aldangiChuluulukhKhonog}
+              </td>
+              <td className="min-w-[8rem] p-1 text-center">
+                {moment(a.aldangiChuluulukhOgnoo).format("YYYY-MM-DD")}
+              </td>
+
+              <td className="min-w-[8rem] p-1 text-center">
+                {formatNumber(a.aldangiinKhuvi, 4)}
+              </td>
+
               <td className="min-w-[8rem] p-1 text-center">
                 {formatNumber(a.uldegdel, 0)}
               </td>
               <td className="min-w-[8rem] p-1 text-center">
                 {formatNumber(a.aldangi, 0)}
               </td>
+
               <td className="min-w-[8rem] p-1 text-center">
-                {a.aldangiBodsonOgnoo}
+                {formatNumber(a.umnukhAldangi, 0)}
+              </td>
+              <td className="min-w-[8rem] p-1 text-center">
+                {formatNumber(a.niitAldangi, 0)}
               </td>
             </tr>
           ))}
@@ -590,7 +658,7 @@ function GuilgeeniiTuukhAldangi(
             </div>
           </div>
 
-          {canEditAldalgi && (
+          {canEditAldangi && (
             <div className="ml-auto">
               <Button
                 type="primary"
@@ -624,7 +692,7 @@ function GuilgeeniiTuukhAldangi(
         />
       </div>
 
-      {canEditAldalgi && isModalOpen && (
+      {canEditAldangi && isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
             className="absolute inset-0 bg-black bg-opacity-30"

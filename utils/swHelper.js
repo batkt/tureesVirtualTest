@@ -25,9 +25,8 @@ export async function registerServiceWorker() {
   }
 }
 
-// Давтагдахаас сэргийлэх синк функц
 let syncTimeout = null;
-const SYNC_DEBOUNCE_TIME = 2000; // 2 секунд
+const SYNC_DEBOUNCE_TIME = 2000;
 
 export function triggerSync() {
   if (syncTimeout) {

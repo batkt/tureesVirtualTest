@@ -18,11 +18,9 @@ import {
   Switch,
 } from "antd";
 import Admin from "components/Admin";
-import useGereeniiJagsaalt, {
-  useGereeGuilgee,
-} from "hooks/useGereeniiJagsaalt";
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh";
-import _, { set } from "lodash";
+import _ from "lodash";
 import moment from "moment";
 import React, {
   useCallback,
@@ -138,7 +136,6 @@ function tulburTootsoo() {
   const qZardal = useMemo(
     () => ({
       turul: { $in: ["Дурын", "Тогтмол", "1м2", "1м3/талбай"] },
-      // tariff: { $exists: true },
       barilgiinId,
     }),
     [barilgiinId]
@@ -904,31 +901,7 @@ function tulburTootsoo() {
                         </Select>
                       </Form.Item>
                     )}
-                  {/* {ognoonuud.length > 0 && (
-                    <>
-                      <div className="mb-2">Сонгогдсон сарууд:</div>
-                      <div className="flex w-full flex-row flex-wrap">
-                        {ognoonuud.map((a, index) => (
-                          <div
-                            key={index}
-                            className="m mb-2 mr-2 flex items-center rounded bg-gray-200 px-2 py-1"
-                          >
-                            {moment(a).format("YYYY-MM")}
-                            <div
-                              onClick={() => {
-                                const uOgnoonuud = [...ognoonuud];
-                                uOgnoonuud.splice(index, 1);
-                                setOgnoonuud(uOgnoonuud);
-                              }}
-                              className="ml-1 flex h-[15px] w-[15px] cursor-pointer items-center justify-center rounded-full bg-red-400 text-[10px] text-white"
-                            >
-                              x
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )} */}
+
                   {baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh ? (
                     <Form.Item
                       name="khonogTootsokhEsekh"
@@ -1100,7 +1073,6 @@ function tulburTootsoo() {
                       labelAlign="left"
                     >
                       <Input
-                        // formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                         onKeyDown={focuser}
                         type={"number"}
                         placeholder={
@@ -1152,7 +1124,6 @@ function tulburTootsoo() {
                       <Button
                         htmlType="submit"
                         onClick={tseverlekh}
-                        //style={{ backgroundColor: "#209669", color: "#ffffff" }}
                         className="border-red-400 dark:border-red-400 dark:bg-gray-900 "
                       >
                         <span className="text-red-400 dark:text-red-400">

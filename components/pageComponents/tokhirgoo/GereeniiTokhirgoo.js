@@ -10,9 +10,7 @@ import {
   Modal,
 } from "antd";
 import ImgCrop from "antd-img-crop";
-import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
-
 import uilchilgee, { url } from "services/uilchilgee";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import { EditOutlined, EyeOutlined, UploadOutlined } from "@ant-design/icons";

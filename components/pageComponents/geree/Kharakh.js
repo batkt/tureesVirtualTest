@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import uilchilgee, { url } from "services/uilchilgee";
-import { toWords } from "mon_num";
-import { renderToString } from "react-dom/server";
 import dynamic from "next/dynamic";
 import { t } from "i18next";
 import formatNumber from "tools/function/formatNumber";
-import { Checkbox } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
 const Konva = dynamic(() => import("components/konva"), { ssr: false });
 
@@ -146,7 +142,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
 
   return (
     <div>
-      <div className="absolute right-0 flex justify-end gap-5 px-10 font-semibold top-4">
+      <div className="absolute right-0 top-4 flex justify-end gap-5 px-10 font-semibold">
         <div
           onClick={() =>
             KharakhKhesguud.find((a) => a === 1)
@@ -216,7 +212,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
       </div>
       <div
         ref={ref}
-        className="relative items-center justify-center gap-10 pb-5 pl-3 mt-0 print:gap-0 print:pb-0 print:pl-0"
+        className="relative mt-0 items-center justify-center gap-10 pb-5 pl-3 print:gap-0 print:pb-0 print:pl-0"
         style={{ height: "calc( 100vh - 10rem )" }}
       >
         {KharakhKhesguud.find((a) => a === 1) && (
@@ -246,7 +242,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                 return (
                   <div
                     key={`alkhamiinGereeniiZagvar${index}`}
-                    className="relative flex flex-row w-full p-1 rounded-md group hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
                   >
                     <div
                       className="w-full"
@@ -274,7 +270,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
         )}
         {KharakhKhesguud.find((a) => a === 2) && talbainuud?.length > 0 && (
           <div>
-            <div className="sticky top-0 left-0 text-2xl font-semibold opacity-30 print:hidden">
+            <div className="sticky left-0 top-0 text-2xl font-semibold opacity-30 print:hidden">
               Талбай
             </div>
             {talbainuud?.map((a, i) => {
@@ -284,7 +280,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                   className="flex w-full break-before-page flex-col justify-center space-y-1 bg-white pl-[24mm] pr-[14mm] text-black shadow-lg dark:text-white print:shadow-none"
                   style={{ width: "210mm", height: "200mm" }}
                 >
-                  <div className="flex gap-3 text-lg font">
+                  <div className="font flex gap-3 text-lg">
                     <div>{t("Код")}:</div>
                     <div>{a?.kod}</div>
                   </div>
@@ -317,7 +313,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
 
         {KharakhKhesguud.find((a) => a === 3) && akt && (
           <div>
-            <div className="sticky top-0 left-0 text-2xl font-semibold opacity-30 print:hidden">
+            <div className="sticky left-0 top-0 text-2xl font-semibold opacity-30 print:hidden">
               Акт
             </div>
 
@@ -343,7 +339,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                 return (
                   <div
                     key={`alkhamiinGereeniiZagvar${index}`}
-                    className="relative flex flex-row w-full p-1 rounded-md group hover:bg-gray-100 dark:hover:bg-gray-100 "
+                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-100 "
                   >
                     <div
                       className="w-full"
@@ -372,7 +368,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
 
         {geree?.zurguud?.length > 0 && (
           <div>
-            <div className="sticky top-0 left-0 text-2xl font-semibold opacity-30 print:hidden">
+            <div className="sticky left-0 top-0 text-2xl font-semibold opacity-30 print:hidden">
               PDF
             </div>
 
@@ -382,7 +378,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                   key={mur}
                   src={`${url}/zuragAvya/jpg/${baiguullaga?._id}/${mur}`}
                   alt="zurag"
-                  className="max-w-full border rounded-lg"
+                  className="max-w-full rounded-lg border"
                 />
               ))}
             </div>

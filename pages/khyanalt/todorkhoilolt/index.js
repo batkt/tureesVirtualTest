@@ -60,8 +60,12 @@ function Todorkhoilolt() {
     Aos.init({ once: true });
   });
 
+<<<<<<< HEAD
   const { token, baiguullaga, barilgiinId, ajiltan, baiguullagiinId } =
     useAuth();
+=======
+  const { baiguullaga, barilgiinId, token } = useAuth();
+>>>>>>> ae3d0d7188c74e69b1e20d7078d65e414a5b6cf8
   const { t } = useTranslation();
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
