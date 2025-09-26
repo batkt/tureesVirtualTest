@@ -14,6 +14,7 @@ function ZaaltZasvar({
   onTextChange,
   buttonListCustom = [],
   otherProps,
+  height,
 }) {
   useEffect(() => {
     onTextChange && onTextChange(instance?.getText());
@@ -64,6 +65,7 @@ function ZaaltZasvar({
         plugins: custom,
         buttonList: [...formatting, ["undsen"], ...buttonListCustom],
         resizingBar: false,
+        height: height,
       }}
       showToolbar={true}
       {...otherProps}

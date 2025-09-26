@@ -23,11 +23,12 @@ import {
   FileExcelOutlined,
   SnippetsOutlined,
   UploadOutlined,
+  PrinterOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import router from "next/router";
-import ZagvarBurtgel from "components/pageComponents/medegdel/ZagvarBurtgel";
-import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh";
+import Zasvar from "./zasvar";
+import Burtgel from "./burtgel";
 import deleteMethod from "tools/function/crud/deleteMethod";
 import createMethod from "tools/function/crud/createMethod";
 import useSWR from "swr";
@@ -38,6 +39,12 @@ import useJagsaalt from "hooks/useJagsaalt";
 import useOrder from "tools/function/useOrder";
 import useKhariltsagchDavkhraarAvya from "hooks/useKhariltsagchDavkhraarAvya";
 import { useTranslation } from "react-i18next";
+import { useReactToPrint } from "react-to-print";
+import { renderToString } from "react-dom/server";
+import {
+  todorkhoiloltTuukh,
+  useTodorkhoiloltTuukh,
+} from "hooks/useTodorkhoiloltTuukh";
 
 var dateCount = {
   yearStart: moment().startOf("year"),
@@ -48,58 +55,21 @@ var dateCount = {
 
 var timeout = null;
 
-function IlgeesenToo({
-  barilgiinId,
-  baiguullagiinId,
-  ekhlekhOgnoo,
-  duusakhOgnoo,
-  token,
-  text,
-  turul,
-  msjTuukh,
-}) {
-  const { data, mutate } = useSWR(
-    turul === "SMS"
-      ? [
-          "msgIlgeesenTooAvya",
-          barilgiinId,
-          baiguullagiinId,
-          ekhlekhOgnoo,
-          duusakhOgnoo,
-        ]
-      : null,
-    (url, barilgiinId, baiguullagiinId) =>
-      createMethod(url, token, {
-        barilgiinId,
-        baiguullagiinId,
-        ekhlekhOgnoo,
-        duusakhOgnoo,
-      }).then((a) => a.data)
-  );
-  useEffect(() => {
-    mutate();
-  }, [msjTuukh]);
-  return (
-    <div className="ml-6 flex flex-col-reverse text-center xl:flex-col xl:text-center">
-      <span>{text}</span> <span className="font-medium ">{data || 0}</span>
-    </div>
-  );
-}
-
 function Todorkhoilolt() {
   useEffect(() => {
     Aos.init({ once: true });
   });
 
-  const { baiguullaga, barilgiinId } = useAuth();
+  const { token, baiguullaga, barilgiinId, ajiltan, baiguullagiinId } =
+    useAuth();
   const { t } = useTranslation();
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
-  const [content, setContent] = useState();
+  const [content, setContent] = useState("");
   const [ner, setNer] = useState();
   const [msj, onTextChange] = useState("");
   const [loading, setLoading] = useState(false);
-  const [title, setTitle] = useState();
+  const [activeItem, setActiveItem] = useState(null);
 
   const [turulZagvar, setTurulZagvar] = useState(false);
 
@@ -107,7 +77,11 @@ function Todorkhoilolt() {
   const ref = useRef(null);
   const [zurag, setZurag] = useState();
   const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState([]);
-  const [turul, setTurul] = useState("SMS");
+  const [turul, setTurul] = useState("Тодорхойлолт");
+
+  const printRef = useRef(null);
+  const [printContent, setPrintContent] = useState("");
+  const burtgelRef = useRef(null);
 
   const khariltsagchiinQuery = useMemo(() => {
     return {
@@ -122,11 +96,20 @@ function Todorkhoilolt() {
     undefined
   );
 
+  const { mailtuukhmailtuukhJagsaalt } = todorkhoiloltTuukh(
+    token,
+    null,
+    null,
+    null
+  );
+
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
     token,
     turul
   );
   const [neesenEsekh, setNeesenEsekh] = useState(false);
+  const [songosonZagvar, setSongosonZagvar] = useState();
+  const [selectedContent, setSelectedContent] = useState(null);
 
   const query = useMemo(() => {
     return {
@@ -138,15 +121,68 @@ function Todorkhoilolt() {
   const { order } = useOrder({ createdAt: -1 });
   const medegdelAvya = useJagsaalt("/sonorduulga", query, order, undefined);
 
-  const khariltsagchiinMsjTuukhKharakh = useMemo(() => {
-    return { barilgiinId: barilgiinId, dugaar: khariltsagch?.utas };
-  });
+  const getCurrentContent = () => {
+    try {
+      const content = burtgelRef.current?.getContent() || "";
 
-  const msjTuukh = useJagsaalt(
-    "/msgTuukh",
-    khariltsagchiinMsjTuukhKharakh,
-    order
+      return content;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const barilga = baiguullaga?.barilguud?.find(
+    (a) => a.id === jagsaalt?.barilgiinId
   );
+  const printDataRef = useRef(null);
+
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: turul || "Тодорхойлолт",
+    onBeforeGetContent: () => {
+      let processedContent = printDataRef.current || getCurrentContent();
+
+      if (songogdsonKhariltsagch && jagsaalt) {
+        const foundClient = jagsaalt.find(
+          (c) =>
+            c.id === songogdsonKhariltsagch || c._id === songogdsonKhariltsagch
+        );
+
+        if (foundClient) {
+          const clientData = {
+            ner: foundClient.ner || "",
+            register: foundClient.register || "",
+            utas: foundClient.utas || "",
+            talbainDugaar: Array.isArray(foundClient.talbainDugaar)
+              ? foundClient.talbainDugaar.join(", ")
+              : foundClient.talbainDugaar || "",
+            gereeniiDugaar: Array.isArray(foundClient.gereenuud)
+              ? foundClient.gereenuud
+                  .map((g) => g.gereeniiDugaar)
+                  .filter(Boolean)
+                  .join(", ")
+              : "",
+            ...foundClient,
+          };
+
+          for (const [key, value] of Object.entries(clientData)) {
+            if (value !== null && value !== undefined) {
+              processedContent = processedContent?.replace(
+                new RegExp(`&lt;${key}&gt;`, "g"),
+                String(value)
+              );
+            }
+          }
+        }
+      }
+
+      setPrintContent(processedContent);
+      return Promise.resolve();
+    },
+    onAfterPrint: () => {
+      setPrintContent("");
+      printDataRef.current = null; // reset
+    },
+  });
 
   useEffect(() => {
     if (neesenEsekh === true) {
@@ -154,39 +190,143 @@ function Todorkhoilolt() {
     }
   }, [neesenEsekh]);
 
-  const ingeekhmSms = useMemo(() => {
-    if (!khariltsagch) return msj;
-    var utga = msj;
-    for (const [key, value] of Object.entries(khariltsagch)) {
-      utga = utga?.replace(new RegExp(`<${key}>`, "g"), value);
-    }
-
-    return utga;
-  }, [khariltsagch, msj]);
-
   async function mailIlgeeye() {
-    if (!!title) {
-      if (content !== " " || content !== "") {
+    if (
+      !!songogdsonKhariltsagch &&
+      !!songosonZagvar &&
+      turul === "Тодорхойлолт"
+    ) {
+      const currentContent = getCurrentContent();
+      const title = turul;
+      let todorkhoilolt = {};
+
+      if (!!currentContent) {
         const mailuud = [];
-        if (songogdsonKhariltsagch?.length > 0) {
-          songogdsonKhariltsagch.forEach((a) => {
-            var zagvar = content;
-            if (a.turul === "ААН") {
-              a.ovog = "";
+
+        if (!!songogdsonKhariltsagch) {
+          let clientsToProcess = [];
+
+          if (jagsaalt && Array.isArray(jagsaalt)) {
+            const foundClient = jagsaalt.find(
+              (client) =>
+                client.id === songogdsonKhariltsagch ||
+                client._id === songogdsonKhariltsagch
+            );
+
+            if (foundClient) {
+              todorkhoilolt = {
+                baiguullagiinNer: baiguullaga?.ner || "",
+                baiguullagiinId: foundClient.baiguullagiinId || "",
+                barilgiinId: foundClient.barilgiinId || "",
+                ovog: foundClient.ovog || "",
+                ner: foundClient.ner || "",
+                register: foundClient.register,
+                utas: foundClient.utas,
+                gereeniiDugaar: Array.isArray(foundClient.gereenuud)
+                  ? foundClient.gereenuud
+                      .map((g) => g.gereeniiDugaar)
+                      .filter(Boolean)
+                      .join(", ")
+                  : "",
+                mailiinZagvariinId: songosonZagvar._id,
+                mailKhayagTo: foundClient.mail,
+                maililgeesenAjiltniiNer: ajiltan.ner,
+                maililgeesenAjiltniiId: ajiltan._id,
+              };
+              clientsToProcess = [foundClient];
             }
-            a.ner = a.ner || "";
-            a.register = a.register || "";
-            a.utas = a.utas || "";
-            a.turul = a.turul || "";
-            a.khayag = a.khayag || "";
-            a.khayag = a.khayag || "";
-            for (const [key, value] of Object.entries(a)) {
-              zagvar = zagvar?.replace(
-                new RegExp(`&lt;${key}&gt;`, "g"),
-                value
-              );
-            }
-            if (!!a.mail) {
+          }
+
+          clientsToProcess.forEach((a) => {
+            if (a && a.mail) {
+              var zagvar = `
+              <div style="
+                font-family: Arial, sans-serif;
+                position: relative;
+                font-size: 12px;
+                padding-top: 5rem;
+                padding-left: 7.3rem;
+                padding-right: 3rem;
+                padding-bottom: 3.54rem;
+                color: #000;
+                line-height: 1.5;
+                min-height: 400px;
+              ">
+                <div style="margin-bottom: 20px; text-align: center;">
+                  <h2 style="margin: 0; font-size: 18px; font-weight: bold;">${
+                    title || "Тодорхойлолт"
+                  }</h2>
+                </div>
+                
+                <div style="min-height: 200px; word-wrap: break-word;">
+                  ${currentContent}
+                </div>
+                ${
+                  barilga?.gariinUseg
+                    ? `
+                <img src="${url}/file?path=gariinUseg/${barilga.gariinUseg}" 
+                     style="
+                       position: absolute;
+                       bottom: -200px;
+                       right: 380px;
+                       width: 180px;
+                       height: 140px;
+                       z-index: 100;
+                       opacity: 0.65;
+                      
+                     " 
+                     alt="gariinUseg"/>
+                `
+                    : ""
+                }
+                
+                ${
+                  barilga?.tamga
+                    ? `
+                <img src="${url}/file?path=tamga/${barilga.tamga}" 
+                     style="
+                       position: absolute;
+                       bottom: -200px;
+                       right: 260px;
+                       width: 200px;
+                       height: 160px;
+                       opacity: 0.65;
+                     " 
+                     alt="tamga"/>
+                `
+                    : ""
+                }
+              </div>
+            `;
+
+              let clientData = {
+                ner: a.ner || "",
+                register: a.register || "",
+                utas: a.utas || "",
+                turul: a.turul || "",
+                khayag: a.khayag || "",
+                ovog: a.ovog || "",
+                talbainDugaar: Array.isArray(a.talbainDugaar)
+                  ? a.talbainDugaar.join(", ")
+                  : a.talbainDugaar || "",
+                gereeniiDugaar: Array.isArray(a.gereenuud)
+                  ? a.gereenuud
+                      .map((g) => g.gereeniiDugaar)
+                      .filter(Boolean)
+                      .join(", ")
+                  : "",
+                ...a,
+              };
+
+              for (const [key, value] of Object.entries(clientData)) {
+                if (value !== null && value !== undefined) {
+                  zagvar = zagvar?.replace(
+                    new RegExp(`&lt;${key}&gt;`, "g"),
+                    String(value)
+                  );
+                }
+              }
+
               mailuud.push({
                 mail: a.mail,
                 content: zagvar,
@@ -194,23 +334,35 @@ function Todorkhoilolt() {
             }
           });
         }
-        setLoading(true);
-        uilchilgee(token)
-          .post(`/mailOlnoorIlgeeye`, { subject: title, mailuud })
-          .then(({ data }) => {
-            if (data === "Amjilttai") {
-              notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
-              setContent("");
-              setTitle("");
-              setNer("");
-              medegdelAvya.mutate();
-              setLoading(false);
+
+        if (mailuud.length > 0) {
+          setLoading(true);
+
+          try {
+            const { data } = await uilchilgee(token).post(
+              `/mailOlnoorIlgeeye`,
+              {
+                subject: title,
+                mailuud,
+                todorkhoilolt: todorkhoilolt,
+              }
+            );
+
+            if (data.success === true) {
+              notification.success({
+                message: t("И-мэйл Амжилттай илгээлээ"),
+              });
             }
-          })
-          .catch((e) => {
-            setLoading(false);
+          } catch (e) {
             aldaaBarigch(e);
+          } finally {
+            setLoading(false);
+          }
+        } else {
+          notification.warning({
+            message: t("И-мэйл хаягтай харилцагч олдсонгүй"),
           });
+        }
       } else {
         notification.warning({
           message: t("Мэдэгдэл оруулна уу"),
@@ -225,12 +377,12 @@ function Todorkhoilolt() {
 
   function send() {
     switch (turul) {
-      case "Mail":
+      case "Тодорхойлолт":
         mailIlgeeye();
         break;
     }
   }
-
+  console.log(content);
   function smsZagvarNemya(data) {
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>
@@ -244,13 +396,14 @@ function Todorkhoilolt() {
       </Button>,
     ];
     modal({
-      title: `${turul} ${t("Загвар үүсгэх")}`,
+      title: `${data?.turul}`,
       icon: <FileExcelOutlined />,
       content: (
-        <ZagvarBurtgel
+        <Burtgel
           ref={ref}
           setWaiting={setWaiting}
           data={data}
+          value={content}
           token={token}
           turul={turul}
           barilgiinId={barilgiinId}
@@ -259,6 +412,47 @@ function Todorkhoilolt() {
         />
       ),
       footer,
+      width: 800,
+      height: 500,
+      bodyStyle: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+    });
+  }
+  function tuukhDelgerengui(data) {
+    const read = true;
+    const footer = [
+      <Button onClick={() => ref.current.khaaya()}>
+        <div className="dark:text-[#E5E7EB]"> {t("Хаах")}</div>
+      </Button>,
+    ];
+    modal({
+      title: "Дэлгэрэнгүй",
+      icon: <FileExcelOutlined />,
+      content: (
+        <Burtgel
+          ref={ref}
+          read={read}
+          data={data}
+          value={data}
+          setWaiting={setWaiting}
+          token={token}
+          turul={turul}
+          barilgiinId={barilgiinId}
+          onRefresh={mailiinZagvarMutate}
+          medegdelZagvar={mailiinZagvarGaralt}
+        />
+      ),
+      footer,
+      width: 800,
+      height: 500,
+      bodyStyle: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      },
     });
   }
 
@@ -277,70 +471,9 @@ function Todorkhoilolt() {
         setWaiting(false);
       });
   }
-
-  function seen() {
-    const seenList = [...(medegdelAvya?.jagsaalt || [])].filter(
-      (a) => a.turul !== "medegdel" && a.kharsanEsekh !== true
-    );
-    if (seenList.length > 0) {
-      const seenIds = seenList.map((a) => a._id);
-      if (
-        medegdelAvya?.jagsaalt.filter(
-          (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
-        ).length > 0
-      )
-        setKhuudaslalt((a) => {
-          a.jagsaalt.forEach((b) => {
-            if (b.turul !== "medegdel" && b.kharsanEsekh === false)
-              b.kharsanEsekh = true;
-          });
-          return a;
-        });
-      uilchilgee(token)
-        .post("/sanalKharlaa", { id: seenIds })
-        .then(() => {
-          if (
-            medegdelAvya?.jagsaalt?.filter(
-              (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
-            ).length > 0
-          )
-            sonorduulgaMutate();
-        })
-        .catch(aldaaBarigch);
-    }
-  }
-
-  function davkharuudSongokh(e) {
-    setDavkhar(e);
-  }
-
-  function turulSongokh(mur) {
-    setTurul(mur);
-    setContent("");
-    setTitle("");
-    setNer("");
-  }
-
-  function onScroll(e) {
-    clearTimeout(timeout);
-    timeout = setTimeout(function () {
-      seen();
-    }, 300);
-  }
-
-  function zagvarSongokh(a) {
-    setTitle(a.ner);
-    setContent(a.mail);
-    setNer(a.ner);
-  }
-
-  function khariltsagchSongokh(mur) {
-    let turHadgalakh = mur;
-    const index = songogdsonKhariltsagch.findIndex((a) => a._id === mur._id);
-    index !== -1
-      ? (songogdsonKhariltsagch.splice(index, 1), (turHadgalakh = undefined))
-      : songogdsonKhariltsagch.push(mur);
-    setSongogdsonKhariltsagch([...songogdsonKhariltsagch]);
+  console.log(mailtuukhmailtuukhJagsaalt);
+  function zagvarSongokh(data) {
+    setSongosonZagvar(data);
   }
   return (
     <Admin
@@ -356,70 +489,19 @@ function Todorkhoilolt() {
       tsonkhniiId="68c8bfe7727027f1008c6f3d"
       loading={waiting}
     >
-      <div className="box col-span-12 xl:col-span-3">
-        <div className="p-2" data-aos="fade-right" data-aos-duration="1000">
-          <div className="rounded-md border p-2 shadow-md">
-            <div className="grid grid-cols-3 gap-1 font-medium" role="tablist">
-              {["SMS", "App", "Mail"].map((mur) => (
-                <div
-                  key={mur}
-                  className={`flex-1 cursor-pointer rounded-md py-2 text-center transition-colors ${
-                    turul === mur
-                      ? "bg-green-500 text-white"
-                      : "border-x hover:bg-green-500"
-                  }`}
-                  onClick={() => turulSongokh(mur)}
-                >
-                  {mur}
-                </div>
-              ))}
+      {loading && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50">
+          <div className="rounded-lg bg-white p-8 shadow-xl">
+            <div className="flex flex-col items-center space-y-4">
+              <Spin size="large" />
+              <div className="text-lg font-medium text-gray-700">
+                И-мэйл илгээж байна...
+              </div>
             </div>
           </div>
         </div>
-        <div
-          className="mx-2 mt-2 grid grid-cols-12 items-center space-x-3 rounded-md border p-2 pl-3 shadow-md"
-          data-aos="fade-left"
-          data-aos-duration="1000"
-          data-aos-delay="100"
-        ></div>
-        {turul === "SMS" ? (
-          <div
-            className="mx-2 my-4 flex flex-row items-center justify-between rounded-md border p-2 px-10 shadow-md"
-            data-aos="fade-left"
-            data-aos-duration="1000"
-            data-aos-delay="100"
-          >
-            <div>
-              <p className="rounded-md bg-white text-sm dark:bg-gray-900">
-                SMS
-              </p>
-            </div>
-            <div>
-              <IlgeesenToo
-                msjTuukh={msjTuukh}
-                barilgiinId={barilgiinId}
-                baiguullagiinId={baiguullaga?._id}
-                ekhlekhOgnoo={dateCount.yearStart}
-                duusakhOgnoo={dateCount.yearEnd}
-                token={token}
-                text={t("Нийт")}
-                turul={turul}
-              />
-            </div>
-            <div>
-              <IlgeesenToo
-                msjTuukh={msjTuukh}
-                barilgiinId={barilgiinId}
-                baiguullagiinId={baiguullaga?._id}
-                ekhlekhOgnoo={dateCount.monthStart}
-                duusakhOgnoo={dateCount.monthEnd}
-                token={token}
-                text={t("Энэ сард")}
-                turul={turul}
-              />
-            </div>
-          </div>
-        ) : null}
+      )}
+      <div className="box col-span-12 xl:col-span-3">
         <div
           onClick={(e) => {
             e.stopPropagation();
@@ -439,46 +521,73 @@ function Todorkhoilolt() {
             <EyeInvisibleOutlined />
           )}
         </div>
+
         <div
-          className={`fixed z-40 mt-5 rounded-md border-2 border-green-500 bg-white shadow-md transition-all duration-300 md:static md:w-auto md:border-none md:bg-transparent md:shadow-none ${
+          className={`fixed z-40 mt-5 h-full rounded-md border-2 border-green-500 bg-white shadow-md transition-all duration-300 md:static md:w-auto md:border-none md:bg-transparent md:shadow-none ${
             turulZagvar === true
               ? " right-[5vw] top-[10vh] w-[90vw] "
               : " -right-full top-[30vh] w-[90vw] "
           } flex-col p-2 font-medium  `}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex px-1 pb-2">
-            <p>
-              {turul} {t("загвар")}
-            </p>
-
+          <div className=" flex w-full justify-end">
+            <Select
+              bordered={false}
+              className="md:w-50 !h-[36px] w-full rounded-md  border-[1px] text-gray-800   dark:text-gray-200"
+              style={{ textOverflow: "ellipsis" }}
+              showSearch
+              filterOption={(o) => o}
+              allowClear={true}
+              onChange={(e) => setSongogdsonKhariltsagch(e)}
+              onSearch={(search) =>
+                setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
+              }
+              placeholder="Харилцагч сонгох"
+            >
+              {jagsaalt?.map((data) => (
+                <Select.Option
+                  key={data?._id}
+                  className="text-black dark:text-gray-200 "
+                >
+                  {data?.ner}{" "}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div className="mt-5 flex px-1 pb-2">
             <button
               className={`ml-auto cursor-pointer rounded-md bg-green-500 px-4 py-2 text-center text-white`}
               onClick={() =>
-                turul === "SMS"
+                turul === "Тодорхойлолт"
                   ? smsZagvarNemya()
-                  : turul === "App"
-                  ? smsZagvarNemya()
-                  : router.push("/khyanalt/medegdel/mailMedegdel/new")
+                  : router.push(
+                      "/khyanalt/todorkhoilolt/todorkhoiloltZasakh/new"
+                    )
               }
             >
               {t("Загвар үүсгэх")}
             </button>
           </div>
+
           <div
-            className={` h-medegdelHariltsagchPhone overflow-hidden overflow-y-scroll xl:block`}
+            className={` h-full h-medegdelHariltsagchPhone overflow-hidden overflow-y-scroll xl:block`}
           >
+            <p>Загварууд</p>
             {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
               <div>
                 {a.turul === turul ? (
                   <div
                     key={a.ner}
-                    className="intro-x relative mt-2 flex cursor-pointer items-center rounded-md border p-2 shadow-md"
-                    onClick={() => zagvarSongokh(a)}
+                    className={`intro-x relative mt-2 flex cursor-pointer items-center rounded-md border p-2 shadow-md hover:border-green-800 ${
+                      activeItem === a._id
+                        ? "border-green-800"
+                        : "border-gray-200"
+                    }`}
+                    onClick={() => {
+                      zagvarSongokh(a);
+                      setActiveItem(a._id);
+                    }}
                   >
-                    <div className="image-fit mr-1 h-8 w-8 flex-none ">
-                      <img alt="email" src="/email.png" />
-                    </div>
                     <div className="ml-2 mr-1 overflow-hidden">
                       <div className="flex items-center">
                         <div className="font-medium">{a.ner}</div>
@@ -498,10 +607,10 @@ function Todorkhoilolt() {
                       <div
                         className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800"
                         onClick={() =>
-                          turul === "SMS" || turul === "App"
+                          turul === "Тодорхойлолт"
                             ? smsZagvarNemya(a)
                             : router.push(
-                                `/khyanalt/medegdel/mailMedegdel/${a._id}`
+                                `/khyanalt/todorkhoilolt/todorkhoiloltZasakh/${a._id}`
                               )
                         }
                       >
@@ -517,439 +626,117 @@ function Todorkhoilolt() {
           </div>
         </div>
       </div>
-      <div
-        className={`col-span-12 lg:col-span-6 xl:col-span-3`}
-        data-aos="fade-up"
-        data-aos-duration="1000"
-      >
-        <div className={`box p-5 xl:block`}>
-          <div className="relative w-full text-gray-700 dark:text-gray-300">
-            <input
-              type="text"
-              className="block w-full rounded-md border border-slate-300 bg-white  px-3 py-1 text-sm shadow-sm focus:border-[#8aaaef] focus:outline-none focus:ring-1
-              focus:ring-[#8aaaef] dark:bg-gray-500 "
-              placeholder={t("Хайх /Нэр, Регистр, Утас, Гэрээ, Талбай/")}
-              onChange={({ target }) => {
-                clearTimeout(timeout);
-                timeout = setTimeout(function () {
-                  setKhariltsagchKhuudaslalt((a) => ({
-                    ...a,
-                    search: target.value,
-                  }));
-                }, 300);
-              }}
-            />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </div>
-          <div className="mt-2 flex cursor-pointer flex-row items-center justify-between space-x-4 space-y-2 rounded-md p-2 ">
-            <Checkbox
-              checked={jagsaalt?.length === songogdsonKhariltsagch.length}
-              onChange={(e) => {
-                if (e.target.checked === true)
-                  setSongogdsonKhariltsagch([...jagsaalt]);
-                else setSongogdsonKhariltsagch([]);
-              }}
-            >
-              <p className="pl-3">{t("Бүгдийг сонгох")}</p>
-            </Checkbox>
-            <div>
-              {songogdsonKhariltsagch.length}/{jagsaalt?.length}
-            </div>
-          </div>
-          <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
-            {jagsaalt?.map((mur) => (
-              <div>
-                {!!mur._id ? (
-                  <div
-                    className={`flex cursor-pointer flex-row items-center space-x-4  rounded-md p-2 ${
-                      khariltsagch?._id === mur?._id
-                        ? "rounded-l-full bg-green-100 shadow-lg  dark:bg-green-500 "
-                        : ""
-                    } `}
-                    key={mur?._id}
-                    onClick={() => khariltsagchSongokh(mur)}
-                  >
-                    <div>
-                      <Checkbox
-                        onClick={(e) => e.stopPropagation()}
-                        checked={
-                          songogdsonKhariltsagch.findIndex(
-                            (a) => a._id === mur._id
-                          ) !== -1
-                        }
-                        onChange={(e) => {
-                          if (e.target.checked == true) {
-                            songogdsonKhariltsagch.push(mur);
-                          } else {
-                            const index = songogdsonKhariltsagch.findIndex(
-                              (a) => a._id === mur._id
-                            );
-                            if (index !== -1) {
-                              songogdsonKhariltsagch.splice(index, 1);
-                            }
-                          }
-                          setSongogdsonKhariltsagch([
-                            ...songogdsonKhariltsagch,
-                          ]);
-                        }}
-                      />
-                    </div>
-                    <div className="image-fit relative h-10 w-10 flex-none rounded-full">
-                      <img
-                        alt="profileZurag"
-                        className="rounded-full"
-                        src={
-                          ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
-                            2 <
-                          1
-                            ? "/profileFemale.svg"
-                            : "/profile.svg"
-                        }
-                      />
-                    </div>
-                    <div className="flex w-full items-center justify-between">
-                      <div className="text-xs">{mur?.ner}</div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
-                        {Array.isArray(mur?.utas) && mur.utas.length > 0 ? (
-                          <div className="flex w-full justify-end gap-1">
-                            {mur.utas.map((a, i) => (
-                              <div key={i}>
-                                {a}
-                                {i !== mur.utas.length - 1 && ","}
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="flex w-full justify-end">
-                            <div>
-                              {typeof mur?.utas === "string" ? mur.utas : ""}
-                            </div>
-                          </div>
-                        )}
-
-                        {!!mur?.talbainDugaar ? (
-                          <Tooltip
-                            title={
-                              <div className="flex flex-wrap gap-2">
-                                {mur?.talbainDugaar?.map((dugaar, index) => (
-                                  <Tag
-                                    key={index}
-                                    color="transparent"
-                                    className="m-0"
-                                  >
-                                    {dugaar}
-                                  </Tag>
-                                ))}
-                              </div>
-                            }
-                            overlayClassName="max-w-[300px]"
-                          >
-                            <div className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-md bg-green-100 px-3 py-2 text-xs transition hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 sm:text-sm">
-                              <div className="max-w-[120px] truncate text-gray-800 dark:text-white">
-                                {mur?.talbainDugaar?.[0] ?? "—"}
-                              </div>
-                              <div className="max-w-[140px] truncate text-gray-600 dark:text-gray-300">
-                                {mur?.talbainDugaar?.length > 1
-                                  ? `+${mur.talbainDugaar.length - 1}`
-                                  : ""}
-                              </div>
-                            </div>
-                          </Tooltip>
-                        ) : (
-                          <div className="flex items-center justify-center rounded-lg bg-blue-500 px-2 py-1 text-xs text-gray-200 dark:bg-blue-700 dark:text-white">
-                            <div>{mur?.talbainDugaar}</div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
-        <div className="box relative col-span-12 mt-0 flex h-full min-h-[70vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem">
-          {songogdsonKhariltsagch.length < 2 ? (
-            <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
-              {khariltsagch && (
-                <div className="flex items-center">
-                  <div className="mr-3 text-lg xl:hidden">
-                    <ArrowLeftOutlined
-                      onClick={() => khariltsagchSongokh(khariltsagch)}
-                    />
-                  </div>
-                  <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
-                    <img
-                      alt="ProfileZurag"
-                      className="rounded-full"
-                      src={
-                        ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
-                          10) %
-                          2 <
-                        1
-                          ? "/profileFemale.svg"
-                          : "/profile.svg"
-                      }
-                    />
-                  </div>
-                  <div className="ml-3 mr-auto">
-                    <div className="text-base font-medium">
-                      {khariltsagch?.ner}
-                    </div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
-                      {khariltsagch?.utas.length > 0 ? (
-                        <div className="flex gap-1 ">
-                          {khariltsagch?.utas.map((a, i) => (
-                            <div key={i}>
-                              {a}
-                              {i !== khariltsagch.utas.length - 1 && ","}
-                            </div>
-                          ))}
-                          <span className="mx-1">•</span> {turul}
-                        </div>
-                      ) : (
-                        <div className="flex">
-                          <div>{khariltsagch?.utas}</div>
-                          <span className="mx-1">•</span> {turul}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            ""
-          )}
-          {songogdsonKhariltsagch.length > 1 ? (
-            <div
-              className="col-span-12 space-y-10 overflow-auto rounded-r-xl  bg-white pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
-              style={{
-                height: ` ${
-                  turul === "App"
-                    ? "calc(100vh - 26rem)"
-                    : turul === "SMS"
-                    ? "calc(100vh - 21rem)"
-                    : turul === "Mail"
-                    ? "calc(100vh - 24rem)"
-                    : ""
-                } `,
-              }}
-            >
-              <div
-                className={`box flex h-full items-center ${
-                  turulZagvar ? "hidden" : "lg:flex"
-                }`}
-                data-aos="fade-left"
-                data-aos-duration="1000"
-              >
-                <div className="mx-auto text-center">
-                  <div className="flex justify-center">
-                    <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
-                      <img alt="ProfileZurag" src="/profile.svg" />
-                    </div>
-                    <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
-                      <img alt="ProfileZurag" src="/profileFemale.svg" />
-                    </div>
-                  </div>
-                  <div className="mt-3">
-                    <div className="font-medium">{t("Өдрийн мэнд")}</div>
-                    <p>
-                      {t("Сонгогдсон харилцагч байна.", {
-                        count: songogdsonKhariltsagch.length,
-                      })}
-                    </p>
-                    <div className="mt-1 text-gray-600 dark:text-gray-300">
-                      {t("Та шаардлага илгээнэ үү.")}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div
-              className="w-full"
-              data-aos="fade-left"
-              data-aos-duration="1000"
-            >
-              <div
-                className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-y-scroll rounded-r-xl px-10 pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
-                style={{
-                  maxHeight: ` ${
-                    turul === "App"
-                      ? "calc(100vh - 31rem)"
-                      : turul === "SMS"
-                      ? "calc(100vh - 26rem)"
-                      : turul === "Mail"
-                      ? "calc(100vh - 28.5rem)"
-                      : ""
-                  } `,
-                }}
-                onScroll={onScroll}
-              >
-                {medegdelAvya?.jagsaalt.map((a) => {
-                  return (
-                    <div
-                      className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
-                        a.turul === "medegdel"
-                          ? "ml-auto rounded-br-none bg-green-500"
-                          : "rounded-bl-none"
-                      }`}
-                    >
-                      <span className="w-full break-words text-justify text-white ">
-                        {a.message}
-                      </span>
-
-                      <div
-                        className={`absolute right-2 h-5 w-5 fill-current text-white ${
-                          a.kharsanEsekh === true ? "" : "hidden"
-                        }`}
-                      >
-                        <svg
-                          width="20px"
-                          height="20px"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                          <path
-                            d="M16 7L12 11"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                          <path
-                            d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </div>
-                      <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
-                        {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
-                      </span>
-                      <span className="absolute -bottom-5 right-0 text-gray-500">
-                        {t("Мэдэгдэл")}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+      {!!songogdsonKhariltsagch ? (
+        <div className="box jusity-between relative col-span-12 flex h-full min-h-[70vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem">
           <div
-            className="w-full space-y-2 p-2"
+            className="mt-5 w-full space-y-2 p-2"
             data-aos="fade-right"
             data-aos-duration="1000"
           >
-            {turul !== "SMS" && (
+            {songosonZagvar && (
               <div>
-                <Input
-                  className="space-y-3"
-                  placeholder="Гарчиг"
-                  value={!!ner ? ner : title}
-                  onChange={({ target }) => setTitle(target.value)}
-                />
-              </div>
-            )}
-
-            {turul !== "App" ? (
-              <div>
-                <ZagvarUusgekh
-                  change={setContent}
+                <Burtgel
+                  ref={burtgelRef}
                   value={content}
+                  data={songosonZagvar}
+                  turul={turul}
+                  onChange={setContent}
                   onTextChange={onTextChange}
+                  height={500}
                 />
-              </div>
-            ) : (
-              <div className="space-y-2 ">
-                <div className="flex items-center space-x-3">
-                  <div>
-                    <Upload
-                      showUploadList={false}
-                      multiple={false}
-                      name="file"
-                      action={`${url}/upload`}
-                      method="POST"
-                      onChange={(v) => setZurag(v.file.response)}
-                    >
-                      <div className="flex flex-row space-x-1">
-                        <Button icon={<UploadOutlined />}>
-                          {t("Зураг оруулах")}
-                        </Button>
-                      </div>
-                    </Upload>
-                  </div>
-                </div>
-                <div>
-                  <ZagvarUusgekh
-                    change={setContent}
-                    value={content}
-                    onTextChange={onTextChange}
-                  />
-                </div>
               </div>
             )}
           </div>
-          <div className="absolute bottom-1 z-50 flex w-full items-center justify-between space-x-2 p-2">
-            <div className="text-xs font-semibold">{msj.length}/160</div>
-            <div className="flex items-center justify-between space-x-3">
-              <label className="font-medium">
-                {turul} {t("Илгээх")}
-              </label>
-              <div
-                onClick={send}
-                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
-                  loading ? "200" : "600"
-                } flex flex-none items-center justify-center rounded-full text-white`}
-              >
-                {loading ? (
-                  <Spin size="small" />
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-4 w-4"
-                  >
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                  </svg>
-                )}
+
+          <div style={{ display: "none" }}>
+            <div
+              ref={printRef}
+              style={{
+                height: "100vh",
+                position: "relative",
+                paddingTop: "5rem",
+                paddingLeft: "7.3rem",
+                paddingRight: "3rem",
+                paddingBottom: "3.54rem",
+                fontSize: "12px",
+                lineHeight: "1.5",
+                fontFamily: "Arial, sans-serif",
+                color: "#000",
+              }}
+            >
+              <div style={{ marginBottom: "20px", textAlign: "center" }}>
+                <h2
+                  style={{ margin: "0", fontSize: "18px", fontWeight: "bold" }}
+                >
+                  {turul || "Тодорхойлолт"}
+                </h2>
               </div>
+
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: printContent || getCurrentContent(),
+                }}
+                style={{
+                  minHeight: "200px",
+                  wordWrap: "break-word",
+                }}
+              />
+              {barilga?.gariinUseg && (
+                <img
+                  src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                  style={{
+                    position: "absolute",
+                    bottom: "300px",
+                    right: "380px",
+                    width: 180,
+                    height: 140,
+                    zIndex: 100,
+                    opacity: 0.65,
+                  }}
+                  alt="gariinUseg"
+                />
+              )}
+              {barilga?.tamga && (
+                <img
+                  src={`${url}/file?path=tamga/${barilga.tamga}`}
+                  style={{
+                    position: "absolute",
+                    bottom: "300px",
+                    right: "260px",
+                    width: 200,
+                    height: 160,
+                    opacity: 0.65,
+                  }}
+                  alt="tamga"
+                />
+              )}
             </div>
           </div>
+          {!!songogdsonKhariltsagch && !!songosonZagvar && (
+            <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
+              <div className="flex w-full justify-end">
+                <div className="m-2">
+                  <Button
+                    type="primary"
+                    icon={<PrinterOutlined />}
+                    onClick={handlePrint}
+                  >
+                    Хэвлэх
+                  </Button>
+                </div>
+                <div className="m-2">
+                  <Button
+                    type="primary"
+                    onClick={send}
+                    loading={loading}
+                    disabled={loading}
+                  >
+                    {loading ? "Илгээж байна..." : "Илгээх"}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div
@@ -971,12 +758,58 @@ function Todorkhoilolt() {
             <div className="mt-3">
               <div className="font-medium">{t("Өдрийн мэнд")}</div>
               <div className="mt-1 text-gray-600 dark:text-gray-300">
-                {t("Та мэдэгдэл илгээх харилцагчаа сонгоно уу.")}
+                {t("Та тодорхойлолт гаргах  харилцагчаа сонгоно уу.")}
               </div>
             </div>
           </div>
         </div>
       )}
+      <div className="box jusity-between relative  col-span-3 flex h-full min-h-[70vh] flex-col overflow-y-auto p-2 lg:col-span-6 lg:mt-0 xl:col-span-3 xl:h-H7HalfRem">
+        <div className="font-18 mb-2">Тодорхойлолт авсан түүх</div>
+        <div className="h-full">
+          {[...mailtuukhmailtuukhJagsaalt]
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .map((mur, index) => (
+              <div
+                key={index}
+                className="mb-3 rounded border border-gray-100 bg-green-600 p-2 text-gray-200"
+              >
+                <p className="font-medium">Харилцагч: {mur?.ner}</p>
+                <p className="text-sm text-gray-100">
+                  И-мэйл: {mur?.mailuud[0]?.mail}
+                </p>
+                <p className="text-sm text-gray-100">
+                  Утас: {mur?.utas?.join(",")}
+                </p>
+                <p className="text-sm text-gray-100">
+                  Тодорхойлолт өгсөн ажилтан: {mur?.maililgeesenAjiltniiNer}
+                </p>
+                <p className="text-sm text-gray-100">
+                  Огноо:{" "}
+                  {new Date(mur?.createdAt).toLocaleString("en-GB", {
+                    timeZone: "Asia/Ulaanbaatar",
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  })}
+                </p>
+
+                <button
+                  className="ml-auto flex cursor-pointer justify-end rounded-md bg-gray-200 px-4 py-1 text-center text-gray-800 hover:bg-gray-300"
+                  onClick={() => {
+                    printDataRef.current = mur?.mailuud[0]?.content;
+                    handlePrint();
+                  }}
+                >
+                  {t("Хэвлэх")}
+                </button>
+              </div>
+            ))}
+        </div>
+      </div>
     </Admin>
   );
 }

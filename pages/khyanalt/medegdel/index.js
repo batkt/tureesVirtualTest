@@ -1140,6 +1140,7 @@ function Khyanalt({ token }) {
                   change={setContent}
                   value={content}
                   onTextChange={onTextChange}
+                  height={100}
                 />
               </div>
             ) : (
@@ -1165,6 +1166,7 @@ function Khyanalt({ token }) {
                 <div>
                   <ZagvarUusgekh
                     change={setContent}
+                    height={100}
                     value={content}
                     onTextChange={onTextChange}
                   />
