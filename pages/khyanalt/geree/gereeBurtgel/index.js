@@ -938,11 +938,22 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         width: "7rem",
         render: (data) => {
-          let ognoo =
-            shuult.utga === "Цуцласан"
-              ? data?.find((a) => a.turul === "Tsutslakh")?.khiisenOgnoo
-              : data;
-          return moment(ognoo).format("YYYY-MM-DD");
+          let ognoo;
+          if (shuult.utga === "Цуцласан") {
+            const tsutslyo = data?.filter((a) => a.turul === "Tsutslakh") || [];
+            if (tsutslyo.length > 0) {
+              const latest = tsutslyo.reduce((prev, current) => {
+                return new Date(current.khiisenOgnoo) >
+                  new Date(prev.khiisenOgnoo)
+                  ? current
+                  : prev;
+              });
+              ognoo = latest.khiisenOgnoo;
+            }
+          } else {
+            ognoo = data;
+          }
+          return ognoo ? moment(ognoo).format("YYYY-MM-DD") : "-";
         },
         showSorterTooltip: false,
         sortOrder: sortOrderShalgakh(
@@ -1040,7 +1051,9 @@ function ZakhialgiinKhyanalt() {
                   trigger="hover"
                   content={
                     <div className="dark:text-gray-200">
-                      {gereeniiTuukhuud.map((a) => a.tsutslasanShaltgaan)}
+                      {gereeniiTuukhuud.map((a, i) => (
+                        <div key={i}>{a.tsutslasanShaltgaan}</div>
+                      ))}
                     </div>
                   }
                 >
@@ -1067,9 +1080,46 @@ function ZakhialgiinKhyanalt() {
           ellipsis: true,
           width: "6rem",
           render: (gereeniiTuukhuud) => {
+            const tsutslyo = gereeniiTuukhuud.filter(
+              (a) => a.turul === "Tsutslakh"
+            );
+
+            const gotsTsuts = tsutslyo.filter(
+              (a, index, self) =>
+                index === self.findIndex((b) => b.ajiltniiNer === a.ajiltniiNer)
+            );
+
             return (
               <div className="dark:text-gray-200">
-                {gereeniiTuukhuud.map((a) => a.ajiltniiNer)}
+                {gotsTsuts.map((a) => a.ajiltniiNer).join(", ")}
+              </div>
+            );
+          },
+          showSorterTooltip: false,
+          sortOrder: sortOrderShalgakh(order.gereeniiTuukhuud),
+          sorter: () => 0,
+        },
+        {
+          title: "Цуцалсан ажилтны түүх",
+          dataIndex: "gereeniiTuukhuud",
+          align: "center",
+          ellipsis: true,
+          width: "10rem",
+          render: (gereeniiTuukhuud) => {
+            const tsutslyo = gereeniiTuukhuud
+              .filter((a) => a.turul === "Tsutslakh")
+              .sort(
+                (a, b) => new Date(b.khiisenOgnoo) - new Date(a.khiisenOgnoo)
+              );
+
+            return (
+              <div className="text-left dark:text-gray-200">
+                {tsutslyo.map((a, i) => (
+                  <div key={i}>
+                    {moment(a.khiisenOgnoo).format("YYYY-MM-DD")} —{" "}
+                    {a.ajiltniiNer}
+                  </div>
+                ))}
               </div>
             );
           },
@@ -1079,6 +1129,7 @@ function ZakhialgiinKhyanalt() {
         }
       );
     }
+
     return [
       ...jagsaalt,
       ...shineBagana,
@@ -1502,7 +1553,6 @@ function ZakhialgiinKhyanalt() {
       "гэрээний жагсаалт"
     );
   }
-
 
   return (
     <Admin
