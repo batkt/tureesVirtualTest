@@ -1073,34 +1073,34 @@ function ZakhialgiinKhyanalt() {
           sortOrder: sortOrderShalgakh(order.gereeniiTuukhuud),
           sorter: () => 0,
         },
-        {
-          title: "Цуцалсан ажилтан",
-          dataIndex: "gereeniiTuukhuud",
-          align: "center",
-          ellipsis: true,
-          width: "6rem",
-          render: (gereeniiTuukhuud) => {
-            const tsutslyo = gereeniiTuukhuud.filter(
-              (a) => a.turul === "Tsutslakh"
-            );
+        // {
+        //   title: "Цуцалсан ажилтан",
+        //   dataIndex: "gereeniiTuukhuud",
+        //   align: "center",
+        //   ellipsis: true,
+        //   width: "6rem",
+        //   render: (gereeniiTuukhuud) => {
+        //     const tsutslyo = gereeniiTuukhuud.filter(
+        //       (a) => a.turul === "Tsutslakh"
+        //     );
 
-            const gotsTsuts = tsutslyo.filter(
-              (a, index, self) =>
-                index === self.findIndex((b) => b.ajiltniiNer === a.ajiltniiNer)
-            );
+        //     const gotsTsuts = tsutslyo.filter(
+        //       (a, index, self) =>
+        //         index === self.findIndex((b) => b.ajiltniiNer === a.ajiltniiNer)
+        //     );
 
-            return (
-              <div className="dark:text-gray-200">
-                {gotsTsuts.map((a) => a.ajiltniiNer).join(", ")}
-              </div>
-            );
-          },
-          showSorterTooltip: false,
-          sortOrder: sortOrderShalgakh(order.gereeniiTuukhuud),
-          sorter: () => 0,
-        },
+        //     return (
+        //       <div className="dark:text-gray-200">
+        //         {gotsTsuts.map((a) => a.ajiltniiNer).join(", ")}
+        //       </div>
+        //     );
+        //   },
+        //   showSorterTooltip: false,
+        //   sortOrder: sortOrderShalgakh(order.gereeniiTuukhuud),
+        //   sorter: () => 0,
+        // },
         {
-          title: "Цуцалсан ажилтны түүх",
+          title: "Түүх",
           dataIndex: "gereeniiTuukhuud",
           align: "center",
           ellipsis: true,
