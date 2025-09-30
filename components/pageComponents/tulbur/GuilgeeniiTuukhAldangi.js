@@ -222,13 +222,8 @@ function GuilgeeniiTuukhAldangi(
 
   const exceleerTatya = async () => {
     try {
-      console.log("Starting Excel export...");
-      console.log("sortedData:", sortedData);
-      console.log("aldangiinTuukh:", aldangiinTuukh);
-
       const wb = XLSX?.utils.book_new();
 
-      // Define header style once for both sheets
       const headerStyle = {
         fill: {
           patternType: "solid",
@@ -246,7 +241,6 @@ function GuilgeeniiTuukhAldangi(
         },
       };
 
-      // Define cell style for all data cells
       const cellStyle = {
         border: {
           top: { style: "thin", color: { auto: 1 } },
@@ -280,7 +274,6 @@ function GuilgeeniiTuukhAldangi(
       if (tulsunData.length > 0) {
         const tulsunWs = XLSX?.utils.json_to_sheet(tulsunData);
         if (tulsunWs && tulsunWs["!ref"]) {
-          // Apply styling to Төлсөн алданги sheet
           const range1 = XLSX.utils.decode_range(tulsunWs["!ref"]);
           for (let R = range1.s.r; R <= range1.e.r; ++R) {
             for (let C = range1.s.c; C <= range1.e.c; ++C) {
@@ -291,7 +284,6 @@ function GuilgeeniiTuukhAldangi(
                 if (!cell.s) {
                   cell.s = {};
                 }
-                // Apply header style to first row, cell style to others
                 if (R === 0) {
                   cell.s = { ...cell.s, ...headerStyle };
                 } else {
@@ -340,7 +332,6 @@ function GuilgeeniiTuukhAldangi(
       if (bodogdsonData.length > 0) {
         const bodogdsonWs = XLSX?.utils.json_to_sheet(bodogdsonData);
         if (bodogdsonWs && bodogdsonWs["!ref"]) {
-          // Apply styling to Бодогдсон алданги sheet
           const range2 = XLSX.utils.decode_range(bodogdsonWs["!ref"]);
           for (let R = range2.s.r; R <= range2.e.r; ++R) {
             for (let C = range2.s.c; C <= range2.e.c; ++C) {
@@ -351,7 +342,6 @@ function GuilgeeniiTuukhAldangi(
                 if (!cell.s) {
                   cell.s = {};
                 }
-                // Apply header style to first row, cell style to others
                 if (R === 0) {
                   cell.s = { ...cell.s, ...headerStyle };
                 } else {
@@ -378,8 +368,6 @@ function GuilgeeniiTuukhAldangi(
         }
       }
 
-      // Write the Excel file
-      console.log("Writing Excel file...");
       XLSX?.writeFile(
         wb,
         `${data?.gereeniiDugaar || "Гэрээ"}_алдангийн_хуулга.xlsx`,
@@ -388,9 +376,7 @@ function GuilgeeniiTuukhAldangi(
           cellStyles: true,
         }
       );
-      console.log("Excel file written successfully!");
     } catch (e) {
-      console.error("Excel export error:", e);
       aldaaBarigch(e.message);
     }
   };
@@ -778,7 +764,7 @@ function GuilgeeniiTuukhAldangi(
                   </div>
                   <div>
                     {t("Алдангийн үлдэгдэл")}:{" "}
-                    {formatNumber(aldangiinUldegdel, 2)}
+                    {formatNumber(aldangiinUldegdel, 0)}
                   </div>
                 </div>
               </div>
