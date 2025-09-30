@@ -254,9 +254,8 @@ function GuilgeeniiTuukhAldangi(
         },
       };
 
-      // Sheet 1: Төлсөн алданги (Tulsun Aldangi)
-      const tulsunData =
-        sortedData?.map((item) => {
+      if (sortedData && sortedData.length > 0) {
+        const tulsunData = sortedData.map((item) => {
           return {
             Огноо: moment(item.ognoo).format("YYYY/MM/DD"),
             Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
@@ -269,56 +268,54 @@ function GuilgeeniiTuukhAldangi(
               ? moment(item.guilgeeKhiisenOgnoo).format("YYYY/MM/DD HH:mm:ss")
               : "",
           };
-        }) || [];
+        });
 
-      const tulsunWs = XLSX?.utils.json_to_sheet(tulsunData);
-      if (tulsunWs) {
-        if (tulsunWs["!ref"]) {
-          const range1 = XLSX.utils.decode_range(tulsunWs["!ref"]);
-          for (let R = range1.s.r; R <= range1.e.r; ++R) {
-            for (let C = range1.s.c; C <= range1.e.c; ++C) {
-              const cellAddress = { r: R, c: C };
-              const cellRef = XLSX.utils.encode_cell(cellAddress);
-              const cell = tulsunWs[cellRef];
-              if (cell) {
-                if (!cell.s) {
-                  cell.s = {};
-                }
-                if (R === 0) {
-                  cell.s = { ...cell.s, ...headerStyle };
-                } else {
-                  // Data rows
-                  let currentCellStyle = { ...cell.s, ...cellStyle };
-                  // Apply #,##0.00 format to numeric columns (Төлөх алданги=2, Төлсөн алданги=3)
-                  if ([2, 3].includes(C)) {
-                    currentCellStyle.numFmt = "#,##0.00";
+        const tulsunWs = XLSX?.utils.json_to_sheet(tulsunData);
+        if (tulsunWs) {
+          if (tulsunWs["!ref"]) {
+            const range1 = XLSX.utils.decode_range(tulsunWs["!ref"]);
+            for (let R = range1.s.r; R <= range1.e.r; ++R) {
+              for (let C = range1.s.c; C <= range1.e.c; ++C) {
+                const cellAddress = { r: R, c: C };
+                const cellRef = XLSX.utils.encode_cell(cellAddress);
+                const cell = tulsunWs[cellRef];
+                if (cell) {
+                  if (!cell.s) {
+                    cell.s = {};
                   }
-                  cell.s = currentCellStyle;
+                  if (R === 0) {
+                    cell.s = { ...cell.s, ...headerStyle };
+                  } else {
+                    let currentCellStyle = { ...cell.s, ...cellStyle };
+                    if ([2, 3].includes(C)) {
+                      currentCellStyle.numFmt = "#,##0.00";
+                    }
+                    cell.s = currentCellStyle;
+                  }
                 }
               }
             }
           }
+
+          const tulsunCols = [
+            { wch: 15 }, // Огноо
+            { wch: 20 }, // Ажилтан
+            { wch: 15 }, // Төлөх алданги
+            { wch: 15 }, // Төлсөн алданги
+            { wch: 12 }, // Данс
+            { wch: 12 }, // Төлсөн данс
+            { wch: 25 }, // Тайлбар
+            { wch: 20 }, // Бүртгэсэн огноо
+          ];
+          tulsunWs["!cols"] = tulsunCols;
+
+          XLSX?.utils.book_append_sheet(wb, tulsunWs, "Төлсөн алданги");
+          console.log("Added Төлсөн алданги sheet");
         }
-
-        const tulsunCols = [
-          { wch: 15 }, // Огноо
-          { wch: 20 }, // Ажилтан
-          { wch: 15 }, // Төлөх алданги
-          { wch: 15 }, // Төлсөн алданги
-          { wch: 12 }, // Данс
-          { wch: 12 }, // Төлсөн данс
-          { wch: 25 }, // Тайлбар
-          { wch: 20 }, // Бүртгэсэн огноо
-        ];
-        tulsunWs["!cols"] = tulsunCols;
-
-        XLSX?.utils.book_append_sheet(wb, tulsunWs, "Төлсөн алданги");
-        console.log("Added Төлсөн алданги sheet");
       }
 
-      // Sheet 2: Бодогдсон алданги (Bodogdson Aldangi)
-      const bodogdsonData =
-        aldangiinTuukh.jagsaalt?.map((item) => {
+      if (aldangiinTuukh.jagsaalt && aldangiinTuukh.jagsaalt.length > 0) {
+        const bodogdsonData = aldangiinTuukh.jagsaalt.map((item) => {
           return {
             "Алдангийн өдөр": moment(item.aldangiBodsonOgnoo).format(
               "YYYY/MM/DD"
@@ -334,51 +331,50 @@ function GuilgeeniiTuukhAldangi(
             "Өмнөх алданги": item.umnukhAldangi || 0,
             "Нийт алданги": item.niitAldangi || 0,
           };
-        }) || [];
+        });
 
-      const bodogdsonWs = XLSX?.utils.json_to_sheet(bodogdsonData);
-      if (bodogdsonWs) {
-        if (bodogdsonWs["!ref"]) {
-          const range2 = XLSX.utils.decode_range(bodogdsonWs["!ref"]);
-          for (let R = range2.s.r; R <= range2.e.r; ++R) {
-            for (let C = range2.s.c; C <= range2.e.c; ++C) {
-              const cellAddress = { r: R, c: C };
-              const cellRef = XLSX.utils.encode_cell(cellAddress);
-              const cell = bodogdsonWs[cellRef];
-              if (cell) {
-                if (!cell.s) {
-                  cell.s = {};
-                }
-                if (R === 0) {
-                  cell.s = { ...cell.s, ...headerStyle };
-                } else {
-                  // Data rows
-                  let currentCellStyle = { ...cell.s, ...cellStyle };
-                  // Apply #,##0.00 format to numeric columns (Чөлөөлөх хоног=2, Хувь=4, Үлдэгдэл=5, Алданги=6, Өмнөх алданги=7, Нийт алданги=8)
-                  if ([2, 4, 5, 6, 7, 8].includes(C)) {
-                    currentCellStyle.numFmt = "#,##0.00";
+        const bodogdsonWs = XLSX?.utils.json_to_sheet(bodogdsonData);
+        if (bodogdsonWs) {
+          if (bodogdsonWs["!ref"]) {
+            const range2 = XLSX.utils.decode_range(bodogdsonWs["!ref"]);
+            for (let R = range2.s.r; R <= range2.e.r; ++R) {
+              for (let C = range2.s.c; C <= range2.e.c; ++C) {
+                const cellAddress = { r: R, c: C };
+                const cellRef = XLSX.utils.encode_cell(cellAddress);
+                const cell = bodogdsonWs[cellRef];
+                if (cell) {
+                  if (!cell.s) {
+                    cell.s = {};
                   }
-                  cell.s = currentCellStyle;
+                  if (R === 0) {
+                    cell.s = { ...cell.s, ...headerStyle };
+                  } else {
+                    let currentCellStyle = { ...cell.s, ...cellStyle };
+                    if ([2, 4, 5, 6, 7, 8].includes(C)) {
+                      currentCellStyle.numFmt = "#,##0.00";
+                    }
+                    cell.s = currentCellStyle;
+                  }
                 }
               }
             }
           }
+
+          const bodogdsonCols = [
+            { wch: 20 }, // Алдангийн өдөр
+            { wch: 30 }, // Авлага үүсч байгаа огноо
+            { wch: 20 }, // Чөлөөлөх хоног
+            { wch: 20 }, // Чөлөөлөх огноо
+            { wch: 20 }, // Хувь
+            { wch: 20 }, // Үлдэгдэл
+            { wch: 20 }, // Алданги
+            { wch: 20 }, // Өмнөх алданги
+            { wch: 20 }, // Нийт алданги
+          ];
+          bodogdsonWs["!cols"] = bodogdsonCols;
+
+          XLSX?.utils.book_append_sheet(wb, bodogdsonWs, "Бодогдсон алданги");
         }
-
-        const bodogdsonCols = [
-          { wch: 20 }, // Алдангийн өдөр
-          { wch: 30 }, // Авлага үүсч байгаа огноо
-          { wch: 20 }, // Чөлөөлөх хоног
-          { wch: 20 }, // Чөлөөлөх огноо
-          { wch: 20 }, // Хувь
-          { wch: 20 }, // Үлдэгдэл
-          { wch: 20 }, // Алданги
-          { wch: 20 }, // Өмнөх алданги
-          { wch: 20 }, // Нийт алданги
-        ];
-        bodogdsonWs["!cols"] = bodogdsonCols;
-
-        XLSX?.utils.book_append_sheet(wb, bodogdsonWs, "Бодогдсон алданги");
       }
 
       XLSX?.writeFile(
