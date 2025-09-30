@@ -194,7 +194,7 @@ function Todorkhoilolt() {
 
   async function khevleltKhadgalya() {
     if (!!songogdsonKhariltsagch && !!songosonZagvar) {
-      const currentContent = printDataRef.cuttent || getCurrentContent();
+      const currentContent = printDataRef.current || getCurrentContent();
 
       if (!!currentContent) {
         let todorkhoilolt = {};
@@ -934,7 +934,7 @@ function Todorkhoilolt() {
                         <span>{mur?.ner}</span>{" "}
                       </p>
 
-                      <p className=" bordered w-20 rounded bg-white px-1 text-center text-black">
+                      <p className="w-20 border border-solid border-blue-600  bg-blue-200  text-center  text-blue-600">
                         {mur?.turul === "Хэвлэх" ? "Хэвлэсэн" : "Илгээсэн"}
                       </p>
                     </span>
