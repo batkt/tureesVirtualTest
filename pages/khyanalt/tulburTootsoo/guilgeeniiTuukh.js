@@ -1347,7 +1347,7 @@ function guilgeeniiTuukh({ token }) {
                     render: (aldangiinUldegdel) => {
                       return (
                         <div className="w-full text-right">
-                          {formatNumber(aldangiinUldegdel || 0)}
+                          {formatNumber(aldangiinUldegdel || 2)}
                         </div>
                       );
                     },
