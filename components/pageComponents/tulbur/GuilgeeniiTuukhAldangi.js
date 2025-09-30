@@ -271,9 +271,9 @@ function GuilgeeniiTuukhAldangi(
           };
         }) || [];
 
-      if (tulsunData.length > 0) {
-        const tulsunWs = XLSX?.utils.json_to_sheet(tulsunData);
-        if (tulsunWs && tulsunWs["!ref"]) {
+      const tulsunWs = XLSX?.utils.json_to_sheet(tulsunData);
+      if (tulsunWs) {
+        if (tulsunWs["!ref"]) {
           const range1 = XLSX.utils.decode_range(tulsunWs["!ref"]);
           for (let R = range1.s.r; R <= range1.e.r; ++R) {
             for (let C = range1.s.c; C <= range1.e.c; ++C) {
@@ -292,21 +292,22 @@ function GuilgeeniiTuukhAldangi(
               }
             }
           }
-
-          const tulsunCols = [
-            { wch: 15 }, // Огноо
-            { wch: 20 }, // Ажилтан
-            { wch: 15 }, // Төлөх алданги
-            { wch: 15 }, // Төлсөн алданги
-            { wch: 12 }, // Данс
-            { wch: 12 }, // Төлсөн данс
-            { wch: 25 }, // Тайлбар
-            { wch: 20 }, // Бүртгэсэн огноо
-          ];
-          tulsunWs["!cols"] = tulsunCols;
-
-          XLSX?.utils.book_append_sheet(wb, tulsunWs, "Төлсөн алданги");
         }
+
+        const tulsunCols = [
+          { wch: 15 }, // Огноо
+          { wch: 20 }, // Ажилтан
+          { wch: 15 }, // Төлөх алданги
+          { wch: 15 }, // Төлсөн алданги
+          { wch: 12 }, // Данс
+          { wch: 12 }, // Төлсөн данс
+          { wch: 25 }, // Тайлбар
+          { wch: 20 }, // Бүртгэсэн огноо
+        ];
+        tulsunWs["!cols"] = tulsunCols;
+
+        XLSX?.utils.book_append_sheet(wb, tulsunWs, "Төлсөн алданги");
+        console.log("Added Төлсөн алданги sheet");
       }
 
       // Sheet 2: Бодогдсон алданги (Bodogdson Aldangi)
@@ -329,9 +330,9 @@ function GuilgeeniiTuukhAldangi(
           };
         }) || [];
 
-      if (bodogdsonData.length > 0) {
-        const bodogdsonWs = XLSX?.utils.json_to_sheet(bodogdsonData);
-        if (bodogdsonWs && bodogdsonWs["!ref"]) {
+      const bodogdsonWs = XLSX?.utils.json_to_sheet(bodogdsonData);
+      if (bodogdsonWs) {
+        if (bodogdsonWs["!ref"]) {
           const range2 = XLSX.utils.decode_range(bodogdsonWs["!ref"]);
           for (let R = range2.s.r; R <= range2.e.r; ++R) {
             for (let C = range2.s.c; C <= range2.e.c; ++C) {
@@ -350,22 +351,22 @@ function GuilgeeniiTuukhAldangi(
               }
             }
           }
-
-          const bodogdsonCols = [
-            { wch: 20 }, // Алдангийн өдөр
-            { wch: 30 }, // Авлага үүсч байгаа огноо
-            { wch: 20 }, // Чөлөөлөх хоног
-            { wch: 20 }, // Чөлөөлөх огноо
-            { wch: 20 }, // Хувь
-            { wch: 20 }, // Үлдэгдэл
-            { wch: 20 }, // Алданги
-            { wch: 20 }, // Өмнөх алданги
-            { wch: 20 }, // Нийт алданги
-          ];
-          bodogdsonWs["!cols"] = bodogdsonCols;
-
-          XLSX?.utils.book_append_sheet(wb, bodogdsonWs, "Бодогдсон алданги");
         }
+
+        const bodogdsonCols = [
+          { wch: 20 }, // Алдангийн өдөр
+          { wch: 30 }, // Авлага үүсч байгаа огноо
+          { wch: 20 }, // Чөлөөлөх хоног
+          { wch: 20 }, // Чөлөөлөх огноо
+          { wch: 20 }, // Хувь
+          { wch: 20 }, // Үлдэгдэл
+          { wch: 20 }, // Алданги
+          { wch: 20 }, // Өмнөх алданги
+          { wch: 20 }, // Нийт алданги
+        ];
+        bodogdsonWs["!cols"] = bodogdsonCols;
+
+        XLSX?.utils.book_append_sheet(wb, bodogdsonWs, "Бодогдсон алданги");
       }
 
       XLSX?.writeFile(
