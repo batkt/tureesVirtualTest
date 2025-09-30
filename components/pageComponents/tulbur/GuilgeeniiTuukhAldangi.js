@@ -217,7 +217,7 @@ function GuilgeeniiTuukhAldangi(
         setAldangiinUldegdel(undefined);
       },
     }),
-    [handlePrint, guilgeeniiAldangiTuukh]
+    [handlePrint, guilgeeniiAldangiTuukh, aldangiinTuukh]
   );
 
   const exceleerTatya = async () => {
@@ -307,9 +307,7 @@ function GuilgeeniiTuukhAldangi(
         tulsunWs["!cols"] = tulsunCols;
 
         XLSX?.utils.book_append_sheet(wb, tulsunWs, "Төлсөн алданги");
-        console.log("Added Төлсөн алданги sheet");
       }
-
       // Sheet 2: Бодогдсон алданги (Bodogdson Aldangi)
       const bodogdsonData =
         aldangiinTuukh.jagsaalt?.map((item) => {
