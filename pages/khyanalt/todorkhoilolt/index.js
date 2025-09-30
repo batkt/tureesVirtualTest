@@ -193,7 +193,7 @@ function Todorkhoilolt() {
       setTuukhKhevlekh(false);
       setPrintContent("");
       printDataRef.current = null;
-      // window.location.reload();
+      window.location.reload();
     },
   });
 
@@ -459,7 +459,7 @@ function Todorkhoilolt() {
           } catch (e) {
             aldaaBarigch(e);
           } finally {
-            // window.location.reload();
+            window.location.reload();
             setLoading(false);
             setIsModalOpen(false);
           }
@@ -501,7 +501,7 @@ function Todorkhoilolt() {
       </Button>,
     ];
     modal({
-      title: `${data?.turul}`,
+      title: "Тодорхойлолт",
       icon: <FileExcelOutlined />,
       content: (
         <Burtgel
