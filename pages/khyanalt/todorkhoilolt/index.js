@@ -1,7 +1,7 @@
 import Admin from "components/Admin";
 import { useEffect, useState, useRef, useMemo } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { Tooltip, Tag, Modal } from "antd";
+import { Tooltip, Tag, Modal, Form } from "antd";
 import { useAuth } from "services/auth";
 import useMailiinZagvar from "hooks/useMailiinZagvar";
 import {
@@ -449,6 +449,9 @@ function Todorkhoilolt() {
                 message: t("И-мэйл Амжилттай илгээлээ"),
               });
             }
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
           } catch (e) {
             aldaaBarigch(e);
           } finally {
@@ -855,34 +858,49 @@ function Todorkhoilolt() {
             open={isModalOpen}
             onCancel={() => setIsModalOpen(false)}
             closable={false}
-            footer={[
-              <Button
-                className="text-gray-800 dark:text-white"
-                key="cancel"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Хаах
-              </Button>,
-              <Button
-                key="send"
-                type="primary"
-                loading={loading}
-                onClick={() => {
-                  setIlgeekhTurul("Илгээх");
-                  send();
-                }}
-              >
-                {loading ? "Илгээж байна..." : "Илгээх"}
-              </Button>,
-            ]}
+            footer={null} // We'll handle the footer with Form.Item
           >
-            <input
-              className="h-7 bg-gray-50 pl-2  text-gray-800"
-              type="email"
-              placeholder="И-мэйл хаяг оруулна уу"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <Form
+              onFinish={(values) => {
+                setIlgeekhTurul("Илгээх");
+                setEmail(values.email);
+                send();
+              }}
+              initialValues={{ email: email }}
+            >
+              <Form.Item
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: "И-мэйл хаяг оруулна уу!",
+                  },
+                  {
+                    type: "email",
+                    message: "И-мэйл хаяг буруу байна!",
+                  },
+                ]}
+              >
+                <Input
+                  className="h-9"
+                  type="email"
+                  placeholder="И-мэйл хаяг оруулна уу"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Form.Item>
+
+              <Form.Item className="mb-0 flex justify-end">
+                <Button
+                  className="mr-2 text-gray-800 dark:text-white"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Хаах
+                </Button>
+                <Button type="primary" htmlType="submit" loading={loading}>
+                  {loading ? "Илгээж байна..." : "Илгээх"}
+                </Button>
+              </Form.Item>
+            </Form>
           </Modal>
         </div>
       ) : (
