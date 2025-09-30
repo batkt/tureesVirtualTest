@@ -105,9 +105,6 @@ function GuilgeeniiTuukhAldangi(
   const [sortColumn, setSortColumn] = useState(null);
   const tailbarRef = React.useRef(null);
   const printRef = React.useRef(null);
-  const handlePrint = useReactToPrint({
-    content: () => printRef.current,
-  });
   const fetchAldangiinUldegdel = () => {
     axios(token)
       .get("/geree", {
@@ -220,88 +217,180 @@ function GuilgeeniiTuukhAldangi(
         setAldangiinUldegdel(undefined);
       },
     }),
-    [printRef, guilgeeniiAldangiTuukh]
+    [handlePrint, guilgeeniiAldangiTuukh]
   );
 
   const exceleerTatya = async () => {
     try {
-      const wb = XLSX?.utils.book_new();
-      const dataSubset = guilgeeniiAldangiTuukh?.reverse().map((item) => {
-        return {
-          Огноо: moment(item.ognoo).format("YYYY/MM/DD"),
-          Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
-          "Төлөх алданги": item.tulukhAldangi || 0,
-          "Төлсөн алданги": item.tulsunAldangi || item.tulsunDun || 0,
-          Данс: item.dansniiDugaar || "",
-          "Төлсөн данс": item.tulsunDans || "",
-          Тайлбар: item.tailbar || "",
-          "Бүртгэсэн огноо": moment(item.guilgeeKhiisenOgnoo).format(
-            "YYYY/MM/DD"
-          ),
-        };
-      });
-      const ws = XLSX?.utils.json_to_sheet(dataSubset);
-      if (ws) {
-        const range = XLSX.utils.decode_range(ws["!ref"]);
-        for (let R = range.s.r; R <= range.e.r; ++R) {
-          for (let C = range.s.c; C <= range.e.c; ++C) {
-            const cellAddress = { r: R, c: C };
-            const cell = ws[XLSX.utils.encode_cell(cellAddress)];
-            if (!cell.s) {
-              cell.s = {};
-            }
-            cell.s.border = {
-              top: { style: "thin", color: { auto: 1 } },
-              bottom: { style: "thin", color: { auto: 1 } },
-              left: { style: "thin", color: { auto: 1 } },
-              right: { style: "thin", color: { auto: 1 } },
-            };
-          }
-        }
-        var wscols = [
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-        ];
+      console.log("Starting Excel export...");
+      console.log("sortedData:", sortedData);
+      console.log("aldangiinTuukh:", aldangiinTuukh);
 
-        ws["!cols"] = wscols;
-        const headerStyle = {
-          fill: {
-            patternType: "solid",
-            fgColor: { rgb: "88C849" },
-          },
-          border: {
-            top: { style: "thin", color: { auto: 1 } },
-            bottom: { style: "thin", color: { auto: 1 } },
-            left: { style: "thin", color: { auto: 1 } },
-            right: { style: "thin", color: { auto: 1 } },
-          },
-        };
-        ws["A1"].s = headerStyle;
-        ws["B1"].s = headerStyle;
-        ws["C1"].s = headerStyle;
-        ws["D1"].s = headerStyle;
-        ws["E1"].s = headerStyle;
-        ws["F1"].s = headerStyle;
-        ws["G1"].s = headerStyle;
-        ws["H1"].s = headerStyle;
-        XLSX?.utils.book_append_sheet(wb, ws, "гүйлгээ");
-        wb.Custprops;
-        XLSX?.writeFile(
-          wb,
-          data?.gereeniiDugaar + " гэрээний алдангийн хуулга.xlsx",
-          {
-            WTF: true,
-            cellStyles: true,
+      const wb = XLSX?.utils.book_new();
+
+      // Define header style once for both sheets
+      const headerStyle = {
+        fill: {
+          patternType: "solid",
+          fgColor: { rgb: "88C849" },
+        },
+        border: {
+          top: { style: "thin", color: { auto: 1 } },
+          bottom: { style: "thin", color: { auto: 1 } },
+          left: { style: "thin", color: { auto: 1 } },
+          right: { style: "thin", color: { auto: 1 } },
+        },
+        alignment: {
+          horizontal: "left",
+          vertical: "center",
+        },
+      };
+
+      // Define cell style for all data cells
+      const cellStyle = {
+        border: {
+          top: { style: "thin", color: { auto: 1 } },
+          bottom: { style: "thin", color: { auto: 1 } },
+          left: { style: "thin", color: { auto: 1 } },
+          right: { style: "thin", color: { auto: 1 } },
+        },
+        alignment: {
+          horizontal: "left",
+          vertical: "center",
+        },
+      };
+
+      // Sheet 1: Төлсөн алданги (Tulsun Aldangi)
+      const tulsunData =
+        sortedData?.map((item) => {
+          return {
+            Огноо: moment(item.ognoo).format("YYYY/MM/DD"),
+            Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
+            "Төлөх алданги": item.tulukhAldangi || 0,
+            "Төлсөн алданги": item.tulsunAldangi || item.tulsunDun || 0,
+            Данс: item.dansniiDugaar || "",
+            "Төлсөн данс": item.tulsunDans || "",
+            Тайлбар: item.tailbar || "",
+            "Бүртгэсэн огноо": item.guilgeeKhiisenOgnoo
+              ? moment(item.guilgeeKhiisenOgnoo).format("YYYY/MM/DD HH:mm:ss")
+              : "",
+          };
+        }) || [];
+
+      if (tulsunData.length > 0) {
+        const tulsunWs = XLSX?.utils.json_to_sheet(tulsunData);
+        if (tulsunWs && tulsunWs["!ref"]) {
+          // Apply styling to Төлсөн алданги sheet
+          const range1 = XLSX.utils.decode_range(tulsunWs["!ref"]);
+          for (let R = range1.s.r; R <= range1.e.r; ++R) {
+            for (let C = range1.s.c; C <= range1.e.c; ++C) {
+              const cellAddress = { r: R, c: C };
+              const cellRef = XLSX.utils.encode_cell(cellAddress);
+              const cell = tulsunWs[cellRef];
+              if (cell) {
+                if (!cell.s) {
+                  cell.s = {};
+                }
+                // Apply header style to first row, cell style to others
+                if (R === 0) {
+                  cell.s = { ...cell.s, ...headerStyle };
+                } else {
+                  cell.s = { ...cell.s, ...cellStyle };
+                }
+              }
+            }
           }
-        );
+
+          const tulsunCols = [
+            { wch: 15 }, // Огноо
+            { wch: 20 }, // Ажилтан
+            { wch: 15 }, // Төлөх алданги
+            { wch: 15 }, // Төлсөн алданги
+            { wch: 12 }, // Данс
+            { wch: 12 }, // Төлсөн данс
+            { wch: 25 }, // Тайлбар
+            { wch: 20 }, // Бүртгэсэн огноо
+          ];
+          tulsunWs["!cols"] = tulsunCols;
+
+          XLSX?.utils.book_append_sheet(wb, tulsunWs, "Төлсөн алданги");
+        }
       }
+
+      // Sheet 2: Бодогдсон алданги (Bodogdson Aldangi)
+      const bodogdsonData =
+        aldangiinTuukh.jagsaalt?.map((item) => {
+          return {
+            "Алдангийн өдөр": moment(item.aldangiBodsonOgnoo).format(
+              "YYYY/MM/DD"
+            ),
+            "Авлага үүсч байгаа огноо": moment(item.ognoo).format("YYYY/MM/DD"),
+            "Чөлөөлөх хоног": item.aldangiChuluulukhKhonog || 0,
+            "Чөлөөлөх огноо": moment(item.aldangiChuluulukhOgnoo).format(
+              "YYYY/MM/DD"
+            ),
+            Хувь: item.aldangiinKhuvi || 0,
+            Үлдэгдэл: item.uldegdel || 0,
+            Алданги: item.aldangi || 0,
+            "Өмнөх алданги": item.umnukhAldangi || 0,
+            "Нийт алданги": item.niitAldangi || 0,
+          };
+        }) || [];
+
+      if (bodogdsonData.length > 0) {
+        const bodogdsonWs = XLSX?.utils.json_to_sheet(bodogdsonData);
+        if (bodogdsonWs && bodogdsonWs["!ref"]) {
+          // Apply styling to Бодогдсон алданги sheet
+          const range2 = XLSX.utils.decode_range(bodogdsonWs["!ref"]);
+          for (let R = range2.s.r; R <= range2.e.r; ++R) {
+            for (let C = range2.s.c; C <= range2.e.c; ++C) {
+              const cellAddress = { r: R, c: C };
+              const cellRef = XLSX.utils.encode_cell(cellAddress);
+              const cell = bodogdsonWs[cellRef];
+              if (cell) {
+                if (!cell.s) {
+                  cell.s = {};
+                }
+                // Apply header style to first row, cell style to others
+                if (R === 0) {
+                  cell.s = { ...cell.s, ...headerStyle };
+                } else {
+                  cell.s = { ...cell.s, ...cellStyle };
+                }
+              }
+            }
+          }
+
+          const bodogdsonCols = [
+            { wch: 20 }, // Алдангийн өдөр
+            { wch: 30 }, // Авлага үүсч байгаа огноо
+            { wch: 20 }, // Чөлөөлөх хоног
+            { wch: 20 }, // Чөлөөлөх огноо
+            { wch: 20 }, // Хувь
+            { wch: 20 }, // Үлдэгдэл
+            { wch: 20 }, // Алданги
+            { wch: 20 }, // Өмнөх алданги
+            { wch: 20 }, // Нийт алданги
+          ];
+          bodogdsonWs["!cols"] = bodogdsonCols;
+
+          XLSX?.utils.book_append_sheet(wb, bodogdsonWs, "Бодогдсон алданги");
+        }
+      }
+
+      // Write the Excel file
+      console.log("Writing Excel file...");
+      XLSX?.writeFile(
+        wb,
+        `${data?.gereeniiDugaar || "Гэрээ"}_алдангийн_хуулга.xlsx`,
+        {
+          WTF: true,
+          cellStyles: true,
+        }
+      );
+      console.log("Excel file written successfully!");
     } catch (e) {
+      console.error("Excel export error:", e);
       aldaaBarigch(e.message);
     }
   };
@@ -382,126 +471,128 @@ function GuilgeeniiTuukhAldangi(
   }
 
   const TableContent = () => (
-    <table className="mt-4 w-full">
-      <thead className="w-full">
-        <tr className="flex min-w-[50rem] divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
-          <td
-            onClick={() => toggleSortOrder("ognoo")}
-            className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
-          >
-            {t("Огноо")}
-          </td>
-          <td
-            onClick={() => toggleSortOrder("ajiltan")}
-            className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
-          >
-            {t("Ажилтан")}
-          </td>
-          <td
-            onClick={() => toggleSortOrder("tulukhAldangi")}
-            className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
-          >
-            {t("Төлөх алданги")}
-          </td>
-          <td
-            onClick={() => toggleSortOrder("tulsunAldangi")}
-            className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
-          >
-            {t("Төлсөн алданги")}
-          </td>
-          <td
-            onClick={() => toggleSortOrder("dansniiDugaar")}
-            className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
-          >
-            {t("Данс")}
-          </td>
-          <td
-            onClick={() => toggleSortOrder("tulsunDans")}
-            className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
-          >
-            {t("Төлсөн данс")}
-          </td>
-          <td
-            onClick={() => toggleSortOrder("tailbar")}
-            className="w-full min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
-          >
-            {t("Тайлбар")}
-          </td>
-          <td
-            onClick={() => toggleSortOrder("burtgesenOgnoo")}
-            className="min-w-[16rem] cursor-pointer p-1 text-center"
-          >
-            {t("Бүртгэсэн огноо")}
-          </td>
-        </tr>
-      </thead>
-      <tbody
-        className="min-w-[50rem] overflow-y-scroll"
-        style={{ height: "calc(90vh - 15rem)" }}
-      >
-        {sortedData
-          ?.map((a, i) => (
-            <tr
-              key={i}
-              className="flex min-w-[50rem] divide-x border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400"
+    <div className="mt-4 overflow-x-auto">
+      <table className="w-full min-w-[50rem]">
+        <thead className="w-full">
+          <tr className="flex min-w-[50rem] divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700 dark:bg-gray-800 dark:text-gray-400">
+            <td
+              onClick={() => toggleSortOrder("ognoo")}
+              className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
             >
-              <td className="min-w-[8rem] overflow-hidden p-1 text-center">
-                {moment(a.ognoo).format("YYYY-MM-DD")}
-              </td>
-              <td className="min-w-[8rem] overflow-hidden p-1">
-                {a.guilgeeKhiisenAjiltniiNer}
-              </td>
-              <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                {formatNumber(a.tulukhAldangi, 0)}
-              </td>
-              <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                {formatNumber(a.tulsunAldangi || a.tulsunDun, 0)}
-              </td>
-              <td className="flex min-w-[8rem] justify-center p-1 text-center ">
-                {a.dansniiDugaar}
-              </td>
-              <td className="flex min-w-[8rem] justify-center p-1 text-center ">
-                {a.tulsunDans}
-              </td>
-              <td className="flex w-full min-w-[8rem] justify-between overflow-hidden p-1">
-                {a.tailbar}
-              </td>
-              <td className="flex w-full justify-center p-1 text-center ">
-                {a.guilgeeKhiisenOgnoo &&
-                  moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")}
-              </td>
-              <td className="flex min-w-[3rem] justify-center border-none">
-                {(ajiltan?.erkh === "Admin" ||
-                  !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
-                    (a) => a === barilgiinId
-                  )) &&
-                  (a.turul === "avlaga" ||
-                    a.turul === "voucher" ||
-                    a.turul === "barter" ||
-                    a.turul === "bank" ||
-                    a.turul === "khyamdral" ||
-                    a.turul === "aldangi" ||
-                    a.turul === "zalruulga" ||
-                    a.turul === "baritsaa" ||
-                    a.turul === "qpay" ||
-                    a.turul === "tulultBurtgekh") && (
-                    <Popconfirm
-                      title={t("Төлөлт устгах уу?")}
-                      okText={t("Тийм")}
-                      cancelText={t("Үгүй")}
-                      onConfirm={() => tulultUstgaya(a)}
-                    >
-                      <div className="hide-on-print flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
-                        <DeleteOutlined />
-                      </div>
-                    </Popconfirm>
-                  )}
-              </td>
-            </tr>
-          ))
-          .reverse()}
-      </tbody>
-    </table>
+              {t("Огноо")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("ajiltan")}
+              className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
+            >
+              {t("Ажилтан")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("tulukhAldangi")}
+              className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
+            >
+              {t("Төлөх алданги")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("tulsunAldangi")}
+              className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
+            >
+              {t("Төлсөн алданги")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("dansniiDugaar")}
+              className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
+            >
+              {t("Данс")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("tulsunDans")}
+              className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
+            >
+              {t("Төлсөн данс")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("tailbar")}
+              className="w-full min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
+            >
+              {t("Тайлбар")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("burtgesenOgnoo")}
+              className="min-w-[16rem] cursor-pointer p-1 text-center"
+            >
+              {t("Бүртгэсэн огноо")}
+            </td>
+          </tr>
+        </thead>
+        <tbody
+          className="min-w-[50rem] overflow-y-scroll"
+          style={{ height: "calc(90vh - 15rem)" }}
+        >
+          {sortedData
+            ?.map((a, i) => (
+              <tr
+                key={i}
+                className="flex min-w-[50rem] divide-x border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400"
+              >
+                <td className="min-w-[8rem] overflow-hidden p-1 text-center">
+                  {moment(a.ognoo).format("YYYY-MM-DD")}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1">
+                  {a.guilgeeKhiisenAjiltniiNer}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                  {formatNumber(a.tulukhAldangi, 0)}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                  {formatNumber(a.tulsunAldangi || a.tulsunDun, 0)}
+                </td>
+                <td className="flex min-w-[8rem] justify-center p-1 text-center ">
+                  {a.dansniiDugaar}
+                </td>
+                <td className="flex min-w-[8rem] justify-center p-1 text-center ">
+                  {a.tulsunDans}
+                </td>
+                <td className="flex w-full min-w-[8rem] justify-between overflow-hidden p-1">
+                  {a.tailbar}
+                </td>
+                <td className="flex w-full justify-center p-1 text-center ">
+                  {a.guilgeeKhiisenOgnoo &&
+                    moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")}
+                </td>
+                <td className="flex min-w-[3rem] justify-center border-none">
+                  {(ajiltan?.erkh === "Admin" ||
+                    !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
+                      (a) => a === barilgiinId
+                    )) &&
+                    (a.turul === "avlaga" ||
+                      a.turul === "voucher" ||
+                      a.turul === "barter" ||
+                      a.turul === "bank" ||
+                      a.turul === "khyamdral" ||
+                      a.turul === "aldangi" ||
+                      a.turul === "zalruulga" ||
+                      a.turul === "baritsaa" ||
+                      a.turul === "qpay" ||
+                      a.turul === "tulultBurtgekh") && (
+                      <Popconfirm
+                        title={t("Төлөлт устгах уу?")}
+                        okText={t("Тийм")}
+                        cancelText={t("Үгүй")}
+                        onConfirm={() => tulultUstgaya(a)}
+                      >
+                        <div className="hide-on-print flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
+                          <DeleteOutlined />
+                        </div>
+                      </Popconfirm>
+                    )}
+                </td>
+              </tr>
+            ))
+            .reverse()}
+        </tbody>
+      </table>
+    </div>
   );
   const TableContent2 = () => (
     <div className="mt-4 overflow-x-auto">
@@ -594,17 +685,17 @@ function GuilgeeniiTuukhAldangi(
               </td>
 
               <td className="min-w-[8rem] p-1 text-center">
-                {formatNumber(a.uldegdel, 0)}
+                {formatNumber(a.uldegdel, 2)}
               </td>
               <td className="min-w-[8rem] p-1 text-center">
-                {formatNumber(a.aldangi, 0)}
+                {formatNumber(a.aldangi, 2)}
               </td>
 
               <td className="min-w-[8rem] p-1 text-center">
-                {formatNumber(a.umnukhAldangi, 0)}
+                {formatNumber(a.umnukhAldangi, 2)}
               </td>
               <td className="min-w-[8rem] p-1 text-center">
-                {formatNumber(a.niitAldangi, 0)}
+                {formatNumber(a.niitAldangi, 2)}
               </td>
             </tr>
           ))}
@@ -613,9 +704,185 @@ function GuilgeeniiTuukhAldangi(
     </div>
   );
 
+  const pageStyle = `
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+    
+    @media print {
+      body, html {
+        margin: 0;
+        padding: 0;
+      }
+      .print-content {
+        width: 100%;
+        font-size: 11px;
+        line-height: 1.3;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+        margin-bottom: 15px;
+      }
+      .print-table th,
+      .print-table td {
+        border: 1px solid #000;
+        padding: 3px;
+        text-align: center;
+        font-size: 9px;
+      }
+      .print-table th {
+        background-color: #f0f0f0;
+        font-weight: bold;
+      }
+      .print-header {
+        margin-bottom: 10px;
+        font-size: 13px;
+        font-weight: bold;
+      }
+      .mb-8 {
+        margin-bottom: 20px;
+      }
+    }
+  `;
+
+  const handlePrint = useReactToPrint({
+    pageStyle: () => pageStyle,
+    content: () => printRef.current,
+  });
+
   return (
     <div className="">
-      <div ref={printRef} className="flex flex-col">
+      <div className="hidden">
+        <div className="print-content" ref={printRef}>
+          <div className="print-header">
+            <div className="mb-4 flex items-start justify-between">
+              <div>
+                <div className="text-lg font-bold">
+                  {t("Гүйлгээний алдангийн түүх")}
+                </div>
+                <div className="mt-2 text-sm">
+                  <div>
+                    {t("Гэрээний дугаар")}: {data?.gereeniiDugaar}
+                  </div>
+                  <div>
+                    {t("Талбайн дугаар")}: {data?.talbainDugaar}
+                  </div>
+                  <div>
+                    {t("Нэр")}: {data?.ner}
+                  </div>
+                  <div>
+                    {t("Утас")}: {data?.utas.join(",")}
+                  </div>
+                  <div>
+                    {t("Алдангийн үлдэгдэл")}:{" "}
+                    {formatNumber(aldangiinUldegdel, 2)}
+                  </div>
+                </div>
+              </div>
+              <div className="text-sm">
+                <div>
+                  {t("Хэвлэсэн огноо")}:{" "}
+                  {moment().format("YYYY-MM-DD HH:mm:ss")}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Төлсөн алданги */}
+          <div className="mb-8">
+            <div className="mb-2 text-base font-bold">
+              {t("Төлсөн алданги")}
+            </div>
+            <table className="print-table w-full">
+              <thead>
+                <tr>
+                  <th className="w-[12%]">{t("Огноо")}</th>
+                  <th className="w-[15%]">{t("Ажилтан")}</th>
+                  <th className="w-[12%]">{t("Төлөх алданги")}</th>
+                  <th className="w-[12%]">{t("Төлсөн алданги")}</th>
+                  <th className="w-[10%]">{t("Данс")}</th>
+                  <th className="w-[10%]">{t("Төлсөн данс")}</th>
+                  <th className="w-[20%]">{t("Тайлбар")}</th>
+                  <th className="w-[15%]">{t("Бүртгэсэн огноо")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedData?.map((a, i) => (
+                  <tr key={i}>
+                    <td>{moment(a.ognoo).format("YYYY-MM-DD")}</td>
+                    <td>{a.guilgeeKhiisenAjiltniiNer}</td>
+                    <td className="text-right">
+                      {formatNumber(a.tulukhAldangi, 0)}
+                    </td>
+                    <td className="text-right">
+                      {formatNumber(a.tulsunAldangi || a.tulsunDun, 0)}
+                    </td>
+                    <td>{a.dansniiDugaar}</td>
+                    <td>{a.tulsunDans}</td>
+                    <td className="text-left">{a.tailbar}</td>
+                    <td>
+                      {a.guilgeeKhiisenOgnoo &&
+                        moment(a.guilgeeKhiisenOgnoo).format(
+                          "YYYY-MM-DD HH:mm:ss"
+                        )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Бодогдсон алданги */}
+          <div>
+            <div className="mb-2 text-base font-bold">
+              {t("Бодогдсон алданги")}
+            </div>
+            <table className="print-table w-full">
+              <thead>
+                <tr>
+                  <th className="w-[12%]">{t("Алдангийн өдөр")}</th>
+                  <th className="w-[12%]">{t("Авлага үүсч байгаа огноо")}</th>
+                  <th className="w-[10%]">{t("Чөлөөлөх хоног")}</th>
+                  <th className="w-[12%]">{t("Чөлөөлөх огноо")}</th>
+                  <th className="w-[10%]">{t("Хувь")}</th>
+                  <th className="w-[12%]">{t("Үлдэгдэл")}</th>
+                  <th className="w-[12%]">{t("Алданги")}</th>
+                  <th className="w-[12%]">{t("Өмнөх алданги")}</th>
+                  <th className="w-[12%]">{t("Нийт алданги")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {aldangiinTuukh.jagsaalt?.map((a, i) => (
+                  <tr key={i}>
+                    <td>{moment(a.aldangiBodsonOgnoo).format("YYYY-MM-DD")}</td>
+                    <td>{moment(a.ognoo).format("YYYY-MM-DD")}</td>
+                    <td>{a.aldangiChuluulukhKhonog}</td>
+                    <td>
+                      {moment(a.aldangiChuluulukhOgnoo).format("YYYY-MM-DD")}
+                    </td>
+                    <td>{formatNumber(a.aldangiinKhuvi, 4)}</td>
+                    <td className="text-right">
+                      {formatNumber(a.uldegdel, 2)}
+                    </td>
+                    <td className="text-right">{formatNumber(a.aldangi, 2)}</td>
+                    <td className="text-right">
+                      {formatNumber(a.umnukhAldangi, 2)}
+                    </td>
+                    <td className="text-right">
+                      {formatNumber(a.niitAldangi, 2)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col">
         <div className="flex w-full items-center justify-start gap-8 dark:text-white">
           <div className="">
             <DatePicker.RangePicker
