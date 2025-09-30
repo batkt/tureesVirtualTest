@@ -94,6 +94,7 @@ function Todorkhoilolt() {
 
   const { mailtuukhmailtuukhJagsaalt } = todorkhoiloltTuukh(
     token,
+    khariltsagchiinQuery,
     null,
     null,
     null
@@ -116,7 +117,16 @@ function Todorkhoilolt() {
 
   const { order } = useOrder({ createdAt: -1 });
   const medegdelAvya = useJagsaalt("/sonorduulga", query, order, undefined);
-
+  // uilchilgee(token)
+  //   .post("/uldegdelBodyo", {
+  //     barilgiinId,
+  //     gereeniiDugaar: jagsaalt?.gereeniiDugaar,
+  //   })
+  //   .then(({ data }) => {
+  //     if (!!data) {
+  //       jagsaalt.uldegdel = data.uldegdel;
+  //     }
+  //   });
   const getCurrentContent = () => {
     try {
       const content = burtgelRef.current?.getContent() || "";
@@ -127,9 +137,9 @@ function Todorkhoilolt() {
     }
   };
   const barilga = baiguullaga?.barilguud?.find(
-    (a) => a.id === jagsaalt?.barilgiinId
+    (a) => a._id === jagsaalt?.[0]?.barilgiinId
   );
-  console.log(barilga);
+
   const printDataRef = useRef(null);
 
   const handlePrint = useReactToPrint({
@@ -152,7 +162,7 @@ function Todorkhoilolt() {
           register: foundClient.register,
 
           talbainDugaar: Array.isArray(foundClient.talbainDugaar)
-            ? foundClient.talbainDugaar.join(", ")
+            ? foundClient.talbainDugaar.join(",")
             : foundClient.talbainDugaar || "",
           gereeniiDugaar: Array.isArray(foundClient.gereenuud)
             ? foundClient.gereenuud
@@ -183,7 +193,7 @@ function Todorkhoilolt() {
       setTuukhKhevlekh(false);
       setPrintContent("");
       printDataRef.current = null;
-      window.location.reload();
+      // window.location.reload();
     },
   });
 
@@ -370,26 +380,26 @@ function Todorkhoilolt() {
                 : ""
             }
 
-  ${
-    barilga?.tamga
-      ? `
-    <img src="${url}/file?path=tamga/${barilga.tamga}" 
-         style="
-           position: absolute;
-           bottom: -100px; 
-           right: 260px;
-           width: 200px;
-           z-index: 1000;
-           height: 160px;
-           opacity: 0.65;
-         " 
-         alt="tamga"/>
-    `
-      : ""
-  }
-</div>
+              ${
+                barilga?.tamga
+                  ? `
+                <img src="${url}/file?path=tamga/${barilga.tamga}" 
+                    style="
+                      position: absolute;
+                      bottom: -100px; 
+                      right: 260px;
+                      width: 200px;
+                      z-index: 1000;
+                      height: 160px;
+                      opacity: 0.65;
+                    " 
+                    alt="tamga"/>
+                `
+                  : ""
+              }
+            </div>
 
-          `;
+                      `;
 
               let clientData = {
                 ner: a.ner || "",
@@ -449,7 +459,7 @@ function Todorkhoilolt() {
           } catch (e) {
             aldaaBarigch(e);
           } finally {
-            window.location.reload();
+            // window.location.reload();
             setLoading(false);
             setIsModalOpen(false);
           }
@@ -794,7 +804,7 @@ function Todorkhoilolt() {
                       width: 180,
                       height: 140,
                       zIndex: 100,
-                      opacity: 0.65,
+                      opacity: 1,
                     }}
                     alt="gariinUseg"
                   />
@@ -808,7 +818,7 @@ function Todorkhoilolt() {
                       right: "260px",
                       width: 200,
                       height: 160,
-                      opacity: 0.65,
+                      opacity: 1,
                     }}
                     alt="tamga"
                   />

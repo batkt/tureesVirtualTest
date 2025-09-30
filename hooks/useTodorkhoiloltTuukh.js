@@ -17,7 +17,13 @@ const fetcher = (url, token, query, order, khuudaslalt) => {
     .catch(aldaaBarigch);
 };
 
-export function todorkhoiloltTuukh(token, query, order, defaultKhuudaslalt) {
+export function todorkhoiloltTuukh(
+  token,
+  query,
+  order,
+  defaultKhuudaslalt,
+  barilgiinId
+) {
   const [khuudaslalt, setmailtuukh] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: defaultKhuudaslalt || 1000,
@@ -27,7 +33,14 @@ export function todorkhoiloltTuukh(token, query, order, defaultKhuudaslalt) {
 
   const { data, mutate } = useSWR(
     !!token
-      ? ["/todorkhoiloltiinTuukh", token, query, order, khuudaslalt]
+      ? [
+          "/todorkhoiloltiinTuukh",
+          token,
+          query,
+          order,
+          khuudaslalt,
+          barilgiinId,
+        ]
       : null,
     fetcher,
     { revalidateOnFocus: false }
