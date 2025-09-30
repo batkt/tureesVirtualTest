@@ -36,18 +36,12 @@ const undsenTalbaruud = [
   { ner: "Ажилтан", talbar: "ajiltan" },
 ];
 
-const khugatsaaniiTalbaruud = [
-  { ner: "Хугацаа", talbar: "khugatsaa" },
-  { ner: "Эхлэх өдөр", talbar: "ekhlekhUdur" },
-  { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
-];
-
-const talbainiiTalbaruud = [
-  { ner: "Талбайн дугаар", talbar: "talbainDugaar" },
-  { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
-  { ner: "Талбайн хэмжээ м2", talbar: "talbainKhemjee" },
-  { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
-];
+// const talbainiiTalbaruud = [
+//   { ner: "Талбайн дугаар", talbar: "talbainDugaar" },
+//   { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
+//   { ner: "Талбайн хэмжээ м2", talbar: "talbainKhemjee" },
+//   { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
+// ];
 
 const customPlugin = ({
   name = "custom_example",
@@ -140,19 +134,14 @@ function Zasvar({ value, change, data, read, height }, ref) {
       title: "Үндсэн мэдээлэл",
       button: renderToString(<SolutionOutlined />),
     });
-    const khugatsaa = customPlugin({
-      songokhTalbaruud: khugatsaaniiTalbaruud,
-      name: "khugatsaa",
-      title: t("Хугацаа"),
-      button: renderToString(<ClockCircleOutlined />),
-    });
-    const talbai = customPlugin({
-      songokhTalbaruud: talbainiiTalbaruud,
-      name: "talbai",
-      title: t("Түрээсийн талбай"),
-      button: renderToString(<BankOutlined />),
-    });
-    return [undsen, khugatsaa, talbai];
+
+    // const talbai = customPlugin({
+    //   songokhTalbaruud: talbainiiTalbaruud,
+    //   name: "talbai",
+    //   title: t("Түрээсийн талбай"),
+    //   button: renderToString(<BankOutlined />),
+    // });
+    return [undsen];
   }, []);
 
   const handleStringChange = React.useCallback(
@@ -181,11 +170,7 @@ function Zasvar({ value, change, data, read, height }, ref) {
       height={height}
       setOptions={{
         plugins: { ...plugins, ...custom },
-        buttonList: [
-          ...formatting,
-          ["align"],
-          ["undsen", "khugatsaa", "talbai", "fontSize", "font"],
-        ],
+        buttonList: [...formatting, ["align"], ["undsen", "fontSize", "font"]],
         readonly: read,
         showToolbar: !read,
         resizingBar: false,

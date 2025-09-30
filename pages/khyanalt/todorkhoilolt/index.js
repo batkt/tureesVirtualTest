@@ -129,15 +129,15 @@ function Todorkhoilolt() {
   const barilga = baiguullaga?.barilguud?.find(
     (a) => a.id === jagsaalt?.barilgiinId
   );
+  console.log(barilga);
   const printDataRef = useRef(null);
-  console.log(printDataRef.current);
+
   const handlePrint = useReactToPrint({
     content: () => printRef.current || printDataRef.current,
     documentTitle: turul || "Тодорхойлолт",
     onBeforeGetContent: () => {
       let processedContent = printDataRef.current || getCurrentContent();
 
-      console.log(songogdsonKhariltsagch);
       const foundClient = jagsaalt.find(
         (c) =>
           c.id === songogdsonKhariltsagch || c._id === songogdsonKhariltsagch
@@ -150,6 +150,7 @@ function Todorkhoilolt() {
           utas: foundClient.utas || "",
           ajiltan: ajiltan.ner || "",
           register: foundClient.register,
+
           talbainDugaar: Array.isArray(foundClient.talbainDugaar)
             ? foundClient.talbainDugaar.join(", ")
             : foundClient.talbainDugaar || "",
@@ -182,7 +183,7 @@ function Todorkhoilolt() {
       setTuukhKhevlekh(false);
       setPrintContent("");
       printDataRef.current = null;
-      // window.location.reload();
+      window.location.reload();
     },
   });
 
@@ -215,6 +216,7 @@ function Todorkhoilolt() {
               utas: foundClient.utas || "",
               ovog: foundClient.ovog || "",
               ajiltan: ajiltan.ner || "",
+
               talbainDugaar: Array.isArray(foundClient.talbainDugaar)
                 ? foundClient.talbainDugaar.join(", ")
                 : foundClient.talbainDugaar || "",
@@ -331,32 +333,32 @@ function Todorkhoilolt() {
             if (a && a.mail) {
               var zagvar = `
             <div style="
-  font-family: Arial, sans-serif;
-  position: relative;
-  font-size: 12px;
-  padding: 5rem 3rem 7rem 7.3rem; /* more bottom padding so content doesn't overlap */
-  color: #000;
-  line-height: 1.5;
-  min-height: 100vh; /* full viewport height */
-  box-sizing: border-box;
-">
-  <div style="margin-bottom: 20px; text-align: center;">
-    <h2 style="margin: 0; font-size: 18px; font-weight: bold;">
-      ${title || "Тодорхойлолт"}
-    </h2>
-  </div>
+            font-family: Arial, sans-serif;
+            position: relative;
+            font-size: 12px;
+            padding: 5rem 3rem 7rem 7.3rem; 
+            color: #000;
+            line-height: 1.5;
+            min-height: 60vh;
+            box-sizing: border-box;
+          ">
+            <div style="margin-bottom: 20px; text-align: center;">
+              <h2 style="margin: 0; font-size: 18px; font-weight: bold;">
+                ${title || "Тодорхойлолт"}
+              </h2>
+            </div>
 
-  <div style="min-height: 200px; word-wrap: break-word;">
-    ${currentContent}
-  </div>
+            <div style="min-height: 200px; word-wrap: break-word;">
+              ${currentContent}
+            </div>
 
-  ${
-    barilga?.gariinUseg
-      ? `
+            ${
+              barilga?.gariinUseg
+                ? `
     <img src="${url}/file?path=gariinUseg/${barilga.gariinUseg}" 
          style="
            position: absolute;
-           bottom: 300px;
+           bottom: -100px;
            right: 380px;
            width: 180px;
            height: 140px;
@@ -365,8 +367,8 @@ function Todorkhoilolt() {
          " 
          alt="gariinUseg"/>
     `
-      : ""
-  }
+                : ""
+            }
 
   ${
     barilga?.tamga
@@ -374,7 +376,7 @@ function Todorkhoilolt() {
     <img src="${url}/file?path=tamga/${barilga.tamga}" 
          style="
            position: absolute;
-           bottom: 300px; 
+           bottom: -100px; 
            right: 260px;
            width: 200px;
            z-index: 1000;
@@ -447,6 +449,7 @@ function Todorkhoilolt() {
           } catch (e) {
             aldaaBarigch(e);
           } finally {
+            window.location.reload();
             setLoading(false);
             setIsModalOpen(false);
           }
@@ -597,6 +600,7 @@ function Todorkhoilolt() {
               showSearch
               filterOption={(o) => o}
               allowClear={true}
+              value={songogdsonKhariltsagch}
               onChange={(e) => setSongogdsonKhariltsagch(e)}
               onSearch={(search) =>
                 setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
@@ -607,6 +611,7 @@ function Todorkhoilolt() {
               {jagsaalt?.map((data) => (
                 <Select.Option
                   key={data?._id}
+                  value={data?._id}
                   className="text-black dark:text-gray-200 "
                 >
                   {data?.ner}{" "}
@@ -698,7 +703,7 @@ function Todorkhoilolt() {
       {!!songogdsonKhariltsagch && !!songosonZagvar ? (
         <div className="box jusity-between relative  col-span-12 flex h-full min-h-[70vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem">
           <div
-            className="mt-5 w-full flex-1 space-y-2 p-2"
+            className="mt-5 w-full max-w-[100vh] flex-1 space-y-2 p-2"
             data-aos="fade-right"
             data-aos-duration="1000"
           >
@@ -900,7 +905,7 @@ function Todorkhoilolt() {
           </div>
         </div>
       )}
-      <div className="box jusity-between relative  col-span-3 flex h-full min-h-[70vh] flex-col overflow-y-auto p-2 lg:col-span-6 lg:mt-0 xl:col-span-3 xl:h-H7HalfRem">
+      <div className="box jusity-between relative  col-span-3 flex h-full max-h-[100vh] min-h-[70vh] flex-col overflow-y-scroll p-2 lg:col-span-6 lg:mt-0 xl:col-span-3 xl:h-H7HalfRem">
         <div className="font-18 mb-2">Тодорхойлолт авсан түүх</div>
 
         <div className="h-full">
