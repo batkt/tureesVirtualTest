@@ -287,7 +287,13 @@ function GuilgeeniiTuukhAldangi(
                 if (R === 0) {
                   cell.s = { ...cell.s, ...headerStyle };
                 } else {
-                  cell.s = { ...cell.s, ...cellStyle };
+                  // Data rows
+                  let currentCellStyle = { ...cell.s, ...cellStyle };
+                  // Apply #,##0.00 format to numeric columns (Төлөх алданги=2, Төлсөн алданги=3)
+                  if ([2, 3].includes(C)) {
+                    currentCellStyle.numFmt = "#,##0.00";
+                  }
+                  cell.s = currentCellStyle;
                 }
               }
             }
@@ -307,7 +313,9 @@ function GuilgeeniiTuukhAldangi(
         tulsunWs["!cols"] = tulsunCols;
 
         XLSX?.utils.book_append_sheet(wb, tulsunWs, "Төлсөн алданги");
+        console.log("Added Төлсөн алданги sheet");
       }
+
       // Sheet 2: Бодогдсон алданги (Bodogdson Aldangi)
       const bodogdsonData =
         aldangiinTuukh.jagsaalt?.map((item) => {
@@ -344,7 +352,13 @@ function GuilgeeniiTuukhAldangi(
                 if (R === 0) {
                   cell.s = { ...cell.s, ...headerStyle };
                 } else {
-                  cell.s = { ...cell.s, ...cellStyle };
+                  // Data rows
+                  let currentCellStyle = { ...cell.s, ...cellStyle };
+                  // Apply #,##0.00 format to numeric columns (Чөлөөлөх хоног=2, Хувь=4, Үлдэгдэл=5, Алданги=6, Өмнөх алданги=7, Нийт алданги=8)
+                  if ([2, 4, 5, 6, 7, 8].includes(C)) {
+                    currentCellStyle.numFmt = "#,##0.00";
+                  }
+                  cell.s = currentCellStyle;
                 }
               }
             }
