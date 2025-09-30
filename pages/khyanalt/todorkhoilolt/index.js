@@ -92,13 +92,8 @@ function Todorkhoilolt() {
     undefined
   );
 
-  const { mailtuukhmailtuukhJagsaalt } = todorkhoiloltTuukh(
-    token,
-    khariltsagchiinQuery,
-    null,
-    null,
-    null
-  );
+  const { mailtuukhmailtuukhJagsaalt, nmailtuukhJagsaaltMutate } =
+    todorkhoiloltTuukh(token, khariltsagchiinQuery, null, null, null);
 
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
     token,
@@ -188,12 +183,10 @@ function Todorkhoilolt() {
     },
     onAfterPrint: async () => {
       await khevleltKhadgalya();
-      setSongogdsonKhariltsagch();
-
       setTuukhKhevlekh(false);
       setPrintContent("");
       printDataRef.current = null;
-      window.location.reload();
+      nmailtuukhJagsaaltMutate();
     },
   });
 
@@ -202,7 +195,7 @@ function Todorkhoilolt() {
       setTurulZagvar(false);
     }
   }, [neesenEsekh]);
-
+  console.log(barilga);
   async function khevleltKhadgalya() {
     if (!!songogdsonKhariltsagch && !!songosonZagvar) {
       const currentContent = printDataRef.current || getCurrentContent();
@@ -678,7 +671,10 @@ function Todorkhoilolt() {
                         title="Загвар устгах уу?"
                         okText={t("Тийм")}
                         cancelText={t("Үгүй")}
-                        onConfirm={() => zagvarUstgaya(a)}
+                        onConfirm={(e) => {
+                          zagvarUstgaya(a);
+                          e.stopPropagation();
+                        }}
                       >
                         <div
                           className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-black dark:bg-gray-800 dark:text-black"
