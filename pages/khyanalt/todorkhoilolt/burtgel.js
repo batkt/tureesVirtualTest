@@ -18,6 +18,7 @@ const Burtgel = React.forwardRef(
       turul,
       setContent,
       setWaiting,
+      height,
     },
     ref
   ) => {
@@ -119,6 +120,7 @@ const Burtgel = React.forwardRef(
     return (
       <Form
         form={form}
+        height={height}
         initialValues={{
           ner: data?.ner || "",
         }}
@@ -132,6 +134,7 @@ const Burtgel = React.forwardRef(
           read={read}
           data={data}
           setContent={setContent}
+          height={height}
         />
       </Form>
     );

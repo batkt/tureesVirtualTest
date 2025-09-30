@@ -33,6 +33,7 @@ const undsenTalbaruud = [
   { ner: "Утас", talbar: "utas" },
   { ner: "Хаяг", talbar: "khayag" },
   { ner: "И-мэйл хаяг", talbar: "mail" },
+  { ner: "Ажилтан", talbar: "ajiltan" },
 ];
 
 const khugatsaaniiTalbaruud = [
@@ -93,7 +94,7 @@ const customPlugin = ({
   },
 });
 
-function Zasvar({ value, change, data, read }, ref) {
+function Zasvar({ value, change, data, read, height }, ref) {
   const editorRef = React.useRef();
   const [plugins, setPlugins] = useState({});
   const [utga, setUtga] = useState(data?.mail || "");
@@ -177,16 +178,17 @@ function Zasvar({ value, change, data, read }, ref) {
       defaultValue={utga}
       setContents={utga}
       onLoad={handleEditorLoad}
+      height={height}
       setOptions={{
-        height: 410,
         plugins: { ...plugins, ...custom },
         buttonList: [
           ...formatting,
           ["align"],
-          ["undsen", "khugatsaa", "talbai", "table", "fontSize", "font"],
+          ["undsen", "khugatsaa", "talbai", "fontSize", "font"],
         ],
         readonly: read,
         showToolbar: !read,
+        resizingBar: false,
       }}
       disable={read}
       showToolbar={true}

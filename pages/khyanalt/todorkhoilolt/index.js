@@ -1,7 +1,7 @@
 import Admin from "components/Admin";
 import { useEffect, useState, useRef, useMemo } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { Tooltip, Tag } from "antd";
+import { Tooltip, Tag, Modal } from "antd";
 import { useAuth } from "services/auth";
 import useMailiinZagvar from "hooks/useMailiinZagvar";
 import {
@@ -46,13 +46,6 @@ import {
   useTodorkhoiloltTuukh,
 } from "hooks/useTodorkhoiloltTuukh";
 
-var dateCount = {
-  yearStart: moment().startOf("year"),
-  yearEnd: moment().endOf("year"),
-  monthStart: moment().startOf("month"),
-  monthEnd: moment().endOf("month"),
-};
-
 var timeout = null;
 
 function Todorkhoilolt() {
@@ -76,13 +69,16 @@ function Todorkhoilolt() {
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
   const [zurag, setZurag] = useState();
-  const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState([]);
+  const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState();
   const [turul, setTurul] = useState("Тодорхойлолт");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const printRef = useRef(null);
   const [printContent, setPrintContent] = useState("");
   const burtgelRef = useRef(null);
-
+  const [tuukhKhevlekh, setTuukhKhevlekh] = useState(false);
+  const [ilgeekhTurul, setIlgeekhTurul] = useState("");
+  const [email, setEmail] = useState();
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
@@ -134,43 +130,44 @@ function Todorkhoilolt() {
     (a) => a.id === jagsaalt?.barilgiinId
   );
   const printDataRef = useRef(null);
-
+  console.log(printDataRef.current);
   const handlePrint = useReactToPrint({
-    content: () => printRef.current,
+    content: () => printRef.current || printDataRef.current,
     documentTitle: turul || "Тодорхойлолт",
     onBeforeGetContent: () => {
       let processedContent = printDataRef.current || getCurrentContent();
 
-      if (songogdsonKhariltsagch && jagsaalt) {
-        const foundClient = jagsaalt.find(
-          (c) =>
-            c.id === songogdsonKhariltsagch || c._id === songogdsonKhariltsagch
-        );
+      console.log(songogdsonKhariltsagch);
+      const foundClient = jagsaalt.find(
+        (c) =>
+          c.id === songogdsonKhariltsagch || c._id === songogdsonKhariltsagch
+      );
 
-        if (foundClient) {
-          const clientData = {
-            ner: foundClient.ner || "",
-            register: foundClient.register || "",
-            utas: foundClient.utas || "",
-            talbainDugaar: Array.isArray(foundClient.talbainDugaar)
-              ? foundClient.talbainDugaar.join(", ")
-              : foundClient.talbainDugaar || "",
-            gereeniiDugaar: Array.isArray(foundClient.gereenuud)
-              ? foundClient.gereenuud
-                  .map((g) => g.gereeniiDugaar)
-                  .filter(Boolean)
-                  .join(", ")
-              : "",
-            ...foundClient,
-          };
+      if (foundClient) {
+        const clientData = {
+          ner: foundClient.ner || "",
+          register: foundClient.register || "",
+          utas: foundClient.utas || "",
+          ajiltan: ajiltan.ner || "",
+          register: foundClient.register,
+          talbainDugaar: Array.isArray(foundClient.talbainDugaar)
+            ? foundClient.talbainDugaar.join(", ")
+            : foundClient.talbainDugaar || "",
+          gereeniiDugaar: Array.isArray(foundClient.gereenuud)
+            ? foundClient.gereenuud
+                .map((g) => g.gereeniiDugaar)
+                .filter(Boolean)
+                .join(", ")
+            : "",
+          ...foundClient,
+        };
 
-          for (const [key, value] of Object.entries(clientData)) {
-            if (value !== null && value !== undefined) {
-              processedContent = processedContent?.replace(
-                new RegExp(`&lt;${key}&gt;`, "g"),
-                String(value)
-              );
-            }
+        for (const [key, value] of Object.entries(clientData)) {
+          if (value !== null && value !== undefined) {
+            processedContent = processedContent?.replace(
+              new RegExp(`&lt;${key}&gt;`, "g"),
+              String(value)
+            );
           }
         }
       }
@@ -178,9 +175,14 @@ function Todorkhoilolt() {
       setPrintContent(processedContent);
       return Promise.resolve();
     },
-    onAfterPrint: () => {
+    onAfterPrint: async () => {
+      await khevleltKhadgalya();
+      setSongogdsonKhariltsagch();
+
+      setTuukhKhevlekh(false);
       setPrintContent("");
-      printDataRef.current = null; // reset
+      printDataRef.current = null;
+      // window.location.reload();
     },
   });
 
@@ -190,6 +192,93 @@ function Todorkhoilolt() {
     }
   }, [neesenEsekh]);
 
+  async function khevleltKhadgalya() {
+    if (!!songogdsonKhariltsagch && !!songosonZagvar) {
+      const currentContent = printDataRef.cuttent || getCurrentContent();
+
+      if (!!currentContent) {
+        let todorkhoilolt = {};
+
+        if (jagsaalt && Array.isArray(jagsaalt)) {
+          const foundClient = jagsaalt.find(
+            (client) =>
+              client.id === songogdsonKhariltsagch ||
+              client._id === songogdsonKhariltsagch
+          );
+
+          if (foundClient) {
+            let processedContent = currentContent;
+
+            const clientData = {
+              ner: foundClient.ner || "",
+              register: foundClient.register || "",
+              utas: foundClient.utas || "",
+              ovog: foundClient.ovog || "",
+              ajiltan: ajiltan.ner || "",
+              talbainDugaar: Array.isArray(foundClient.talbainDugaar)
+                ? foundClient.talbainDugaar.join(", ")
+                : foundClient.talbainDugaar || "",
+              gereeniiDugaar: Array.isArray(foundClient.gereenuud)
+                ? foundClient.gereenuud
+                    .map((g) => g.gereeniiDugaar)
+                    .filter(Boolean)
+                    .join(", ")
+                : "",
+              ...foundClient,
+            };
+
+            for (const [key, value] of Object.entries(clientData)) {
+              if (value !== null && value !== undefined) {
+                processedContent = processedContent?.replace(
+                  new RegExp(`&lt;${key}&gt;`, "g"),
+                  String(value)
+                );
+              }
+            }
+
+            todorkhoilolt = {
+              turul: "Хэвлэх",
+              baiguullagiinNer: baiguullaga?.ner || "",
+              baiguullagiinId: foundClient.baiguullagiinId || "",
+              barilgiinId: foundClient.barilgiinId || "",
+              ovog: foundClient.ovog || "",
+              ner: foundClient.ner || "",
+              register: foundClient.register,
+              utas: foundClient.utas,
+              gereeniiDugaar: Array.isArray(foundClient.gereenuud)
+                ? foundClient.gereenuud
+                    .map((g) => g.gereeniiDugaar)
+                    .filter(Boolean)
+                    .join(", ")
+                : "",
+              mailiinZagvariinId: songosonZagvar._id,
+              mailuud: [
+                {
+                  content: processedContent,
+                },
+              ],
+              maililgeesenAjiltniiNer: ajiltan.ner,
+              maililgeesenAjiltniiId: ajiltan._id,
+            };
+
+            try {
+              setLoading(true);
+
+              await createMethod("todorkhoiloltiinTuukh", token, todorkhoilolt);
+
+              notification.success({
+                message: t("Хэвлэлтийн түүх хадгалагдлаа"),
+              });
+            } catch (e) {
+              aldaaBarigch(e);
+            } finally {
+              setLoading(false);
+            }
+          }
+        }
+      }
+    }
+  }
   async function mailIlgeeye() {
     if (
       !!songogdsonKhariltsagch &&
@@ -215,6 +304,7 @@ function Todorkhoilolt() {
 
             if (foundClient) {
               todorkhoilolt = {
+                turul: ilgeekhTurul,
                 baiguullagiinNer: baiguullaga?.ner || "",
                 baiguullagiinId: foundClient.baiguullagiinId || "",
                 barilgiinId: foundClient.barilgiinId || "",
@@ -240,64 +330,64 @@ function Todorkhoilolt() {
           clientsToProcess.forEach((a) => {
             if (a && a.mail) {
               var zagvar = `
-              <div style="
-                font-family: Arial, sans-serif;
-                position: relative;
-                font-size: 12px;
-                padding-top: 5rem;
-                padding-left: 7.3rem;
-                padding-right: 3rem;
-                padding-bottom: 3.54rem;
-                color: #000;
-                line-height: 1.5;
-                min-height: 400px;
-              ">
-                <div style="margin-bottom: 20px; text-align: center;">
-                  <h2 style="margin: 0; font-size: 18px; font-weight: bold;">${
-                    title || "Тодорхойлолт"
-                  }</h2>
-                </div>
-                
-                <div style="min-height: 200px; word-wrap: break-word;">
-                  ${currentContent}
-                </div>
-                ${
-                  barilga?.gariinUseg
-                    ? `
-                <img src="${url}/file?path=gariinUseg/${barilga.gariinUseg}" 
-                     style="
-                       position: absolute;
-                       bottom: -200px;
-                       right: 380px;
-                       width: 180px;
-                       height: 140px;
-                       z-index: 100;
-                       opacity: 0.65;
-                      
-                     " 
-                     alt="gariinUseg"/>
-                `
-                    : ""
-                }
-                
-                ${
-                  barilga?.tamga
-                    ? `
-                <img src="${url}/file?path=tamga/${barilga.tamga}" 
-                     style="
-                       position: absolute;
-                       bottom: -200px;
-                       right: 260px;
-                       width: 200px;
-                       height: 160px;
-                       opacity: 0.65;
-                     " 
-                     alt="tamga"/>
-                `
-                    : ""
-                }
-              </div>
-            `;
+            <div style="
+  font-family: Arial, sans-serif;
+  position: relative;
+  font-size: 12px;
+  padding: 5rem 3rem 7rem 7.3rem; /* more bottom padding so content doesn't overlap */
+  color: #000;
+  line-height: 1.5;
+  min-height: 100vh; /* full viewport height */
+  box-sizing: border-box;
+">
+  <div style="margin-bottom: 20px; text-align: center;">
+    <h2 style="margin: 0; font-size: 18px; font-weight: bold;">
+      ${title || "Тодорхойлолт"}
+    </h2>
+  </div>
+
+  <div style="min-height: 200px; word-wrap: break-word;">
+    ${currentContent}
+  </div>
+
+  ${
+    barilga?.gariinUseg
+      ? `
+    <img src="${url}/file?path=gariinUseg/${barilga.gariinUseg}" 
+         style="
+           position: absolute;
+           bottom: 300px;
+           right: 380px;
+           width: 180px;
+           height: 140px;
+           z-index: 1000;
+           opacity: 0.65;
+         " 
+         alt="gariinUseg"/>
+    `
+      : ""
+  }
+
+  ${
+    barilga?.tamga
+      ? `
+    <img src="${url}/file?path=tamga/${barilga.tamga}" 
+         style="
+           position: absolute;
+           bottom: 300px; 
+           right: 260px;
+           width: 200px;
+           z-index: 1000;
+           height: 160px;
+           opacity: 0.65;
+         " 
+         alt="tamga"/>
+    `
+      : ""
+  }
+</div>
+
+          `;
 
               let clientData = {
                 ner: a.ner || "",
@@ -306,6 +396,7 @@ function Todorkhoilolt() {
                 turul: a.turul || "",
                 khayag: a.khayag || "",
                 ovog: a.ovog || "",
+                ajiltan: ajiltan.ner || "",
                 talbainDugaar: Array.isArray(a.talbainDugaar)
                   ? a.talbainDugaar.join(", ")
                   : a.talbainDugaar || "",
@@ -328,7 +419,7 @@ function Todorkhoilolt() {
               }
 
               mailuud.push({
-                mail: a.mail,
+                mail: email,
                 content: zagvar,
               });
             }
@@ -357,6 +448,7 @@ function Todorkhoilolt() {
             aldaaBarigch(e);
           } finally {
             setLoading(false);
+            setIsModalOpen(false);
           }
         } else {
           notification.warning({
@@ -382,7 +474,7 @@ function Todorkhoilolt() {
         break;
     }
   }
-  console.log(content);
+
   function smsZagvarNemya(data) {
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>
@@ -400,44 +492,11 @@ function Todorkhoilolt() {
       icon: <FileExcelOutlined />,
       content: (
         <Burtgel
+          height={400}
           ref={ref}
           setWaiting={setWaiting}
           data={data}
           value={content}
-          token={token}
-          turul={turul}
-          barilgiinId={barilgiinId}
-          onRefresh={mailiinZagvarMutate}
-          medegdelZagvar={mailiinZagvarGaralt}
-        />
-      ),
-      footer,
-      width: 800,
-      height: 500,
-      bodyStyle: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      },
-    });
-  }
-  function tuukhDelgerengui(data) {
-    const read = true;
-    const footer = [
-      <Button onClick={() => ref.current.khaaya()}>
-        <div className="dark:text-[#E5E7EB]"> {t("Хаах")}</div>
-      </Button>,
-    ];
-    modal({
-      title: "Дэлгэрэнгүй",
-      icon: <FileExcelOutlined />,
-      content: (
-        <Burtgel
-          ref={ref}
-          read={read}
-          data={data}
-          value={data}
-          setWaiting={setWaiting}
           token={token}
           turul={turul}
           barilgiinId={barilgiinId}
@@ -471,7 +530,7 @@ function Todorkhoilolt() {
         setWaiting(false);
       });
   }
-  console.log(mailtuukhmailtuukhJagsaalt);
+
   function zagvarSongokh(data) {
     setSongosonZagvar(data);
   }
@@ -542,6 +601,7 @@ function Todorkhoilolt() {
               onSearch={(search) =>
                 setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
               }
+              onClear={() => setSongogdsonKhariltsagch(null)}
               placeholder="Харилцагч сонгох"
             >
               {jagsaalt?.map((data) => (
@@ -584,6 +644,11 @@ function Todorkhoilolt() {
                         : "border-gray-200"
                     }`}
                     onClick={() => {
+                      if (!songogdsonKhariltsagch) {
+                        notification.warning({
+                          message: "Харилцагч сонгоно уу!",
+                        });
+                      }
                       zagvarSongokh(a);
                       setActiveItem(a._id);
                     }}
@@ -600,19 +665,23 @@ function Todorkhoilolt() {
                         cancelText={t("Үгүй")}
                         onConfirm={() => zagvarUstgaya(a)}
                       >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-black dark:bg-gray-800 dark:text-black">
+                        <div
+                          className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-black dark:bg-gray-800 dark:text-black"
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           <DeleteOutlined style={{ color: "red" }} />
                         </div>
                       </Popconfirm>
                       <div
                         className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800"
-                        onClick={() =>
+                        onClick={(e) => {
+                          e.stopPropagation();
                           turul === "Тодорхойлолт"
                             ? smsZagvarNemya(a)
                             : router.push(
                                 `/khyanalt/todorkhoilolt/todorkhoiloltZasakh/${a._id}`
-                              )
-                        }
+                              );
+                        }}
                       >
                         <EditOutlined style={{ color: "#85C1E9" }} />
                       </div>
@@ -626,100 +695,133 @@ function Todorkhoilolt() {
           </div>
         </div>
       </div>
-      {!!songogdsonKhariltsagch ? (
-        <div className="box jusity-between relative col-span-12 flex h-full min-h-[70vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem">
+      {!!songogdsonKhariltsagch && !!songosonZagvar ? (
+        <div className="box jusity-between relative  col-span-12 flex h-full min-h-[70vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem">
           <div
-            className="mt-5 w-full space-y-2 p-2"
+            className="mt-5 w-full flex-1 space-y-2 p-2"
             data-aos="fade-right"
             data-aos-duration="1000"
           >
-            {songosonZagvar && (
-              <div>
-                <Burtgel
-                  ref={burtgelRef}
-                  value={content}
-                  data={songosonZagvar}
-                  turul={turul}
-                  onChange={setContent}
-                  onTextChange={onTextChange}
-                  height={500}
-                />
-              </div>
-            )}
+            <div>
+              <Burtgel
+                ref={burtgelRef}
+                value={content}
+                data={songosonZagvar}
+                turul={turul}
+                onChange={setContent}
+                onTextChange={onTextChange}
+                height={500}
+              />
+            </div>
           </div>
 
           <div style={{ display: "none" }}>
-            <div
-              ref={printRef}
-              style={{
-                height: "100vh",
-                position: "relative",
-                paddingTop: "5rem",
-                paddingLeft: "7.3rem",
-                paddingRight: "3rem",
-                paddingBottom: "3.54rem",
-                fontSize: "12px",
-                lineHeight: "1.5",
-                fontFamily: "Arial, sans-serif",
-                color: "#000",
-              }}
-            >
-              <div style={{ marginBottom: "20px", textAlign: "center" }}>
-                <h2
-                  style={{ margin: "0", fontSize: "18px", fontWeight: "bold" }}
-                >
-                  {turul || "Тодорхойлолт"}
-                </h2>
-              </div>
-
+            {tuukhKhevlekh ? (
               <div
-                dangerouslySetInnerHTML={{
-                  __html: printContent || getCurrentContent(),
-                }}
+                ref={printRef}
                 style={{
-                  minHeight: "200px",
-                  wordWrap: "break-word",
+                  height: "100vh",
+                  position: "relative",
+                  paddingTop: "2rem",
+                  paddingLeft: "4.3rem",
+                  paddingRight: "3rem",
+                  paddingBottom: "3.54rem",
+                  fontSize: "12px",
+                  lineHeight: "1.5",
+                  fontFamily: "Arial, sans-serif",
+                  color: "#000",
                 }}
-              />
-              {barilga?.gariinUseg && (
-                <img
-                  src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
-                  style={{
-                    position: "absolute",
-                    bottom: "300px",
-                    right: "380px",
-                    width: 180,
-                    height: 140,
-                    zIndex: 100,
-                    opacity: 0.65,
+              >
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: printContent || getCurrentContent(),
                   }}
-                  alt="gariinUseg"
-                />
-              )}
-              {barilga?.tamga && (
-                <img
-                  src={`${url}/file?path=tamga/${barilga.tamga}`}
                   style={{
-                    position: "absolute",
-                    bottom: "300px",
-                    right: "260px",
-                    width: 200,
-                    height: 160,
-                    opacity: 0.65,
+                    minHeight: "200px",
+                    wordWrap: "break-word",
                   }}
-                  alt="tamga"
                 />
-              )}
-            </div>
+              </div>
+            ) : (
+              <div
+                ref={printRef}
+                style={{
+                  height: "100vh",
+                  position: "relative",
+                  paddingTop: "5rem",
+                  paddingLeft: "7.3rem",
+                  paddingRight: "3rem",
+                  paddingBottom: "3.54rem",
+                  fontSize: "12px",
+                  lineHeight: "1.5",
+                  fontFamily: "Arial, sans-serif",
+                  color: "#000",
+                }}
+              >
+                <div style={{ marginBottom: "20px", textAlign: "center" }}>
+                  <h2
+                    style={{
+                      margin: "0",
+                      fontSize: "18px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {turul || "Тодорхойлолт"}
+                  </h2>
+                </div>
+
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: printContent || getCurrentContent(),
+                  }}
+                  style={{
+                    minHeight: "200px",
+                    wordWrap: "break-word",
+                  }}
+                />
+                {barilga?.gariinUseg && (
+                  <img
+                    src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                    style={{
+                      position: "absolute",
+                      bottom: "300px",
+                      right: "380px",
+                      width: 180,
+                      height: 140,
+                      zIndex: 100,
+                      opacity: 0.65,
+                    }}
+                    alt="gariinUseg"
+                  />
+                )}
+                {barilga?.tamga && (
+                  <img
+                    src={`${url}/file?path=tamga/${barilga.tamga}`}
+                    style={{
+                      position: "absolute",
+                      bottom: "300px",
+                      right: "260px",
+                      width: 200,
+                      height: 160,
+                      opacity: 0.65,
+                    }}
+                    alt="tamga"
+                  />
+                )}
+              </div>
+            )}
           </div>
           {!!songogdsonKhariltsagch && !!songosonZagvar && (
-            <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
+            <div className="dark:border-dark-5 flex  flex-col  border-b border-gray-200 px-5 py-4 sm:flex-row">
               <div className="flex w-full justify-end">
                 <div className="m-2">
                   <Button
                     type="primary"
                     icon={<PrinterOutlined />}
-                    onClick={handlePrint}
+                    onClick={() => {
+                      setIlgeekhTurul("Хэвлэх");
+                      handlePrint();
+                    }}
                   >
                     Хэвлэх
                   </Button>
@@ -727,16 +829,50 @@ function Todorkhoilolt() {
                 <div className="m-2">
                   <Button
                     type="primary"
-                    onClick={send}
+                    onClick={() => setIsModalOpen(true)}
                     loading={loading}
                     disabled={loading}
                   >
-                    {loading ? "Илгээж байна..." : "Илгээх"}
+                    Илгээх
                   </Button>
                 </div>
               </div>
             </div>
           )}
+          <Modal
+            title="И-мэйлээр илгээх"
+            open={isModalOpen}
+            onCancel={() => setIsModalOpen(false)}
+            closable={false}
+            footer={[
+              <Button
+                className="text-gray-800 dark:text-white"
+                key="cancel"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Хаах
+              </Button>,
+              <Button
+                key="send"
+                type="primary"
+                loading={loading}
+                onClick={() => {
+                  setIlgeekhTurul("Илгээх");
+                  send();
+                }}
+              >
+                {loading ? "Илгээж байна..." : "Илгээх"}
+              </Button>,
+            ]}
+          >
+            <input
+              className="h-7 bg-gray-50 pl-2  text-gray-800"
+              type="email"
+              placeholder="И-мэйл хаяг оруулна уу"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Modal>
         </div>
       ) : (
         <div
@@ -766,46 +902,84 @@ function Todorkhoilolt() {
       )}
       <div className="box jusity-between relative  col-span-3 flex h-full min-h-[70vh] flex-col overflow-y-auto p-2 lg:col-span-6 lg:mt-0 xl:col-span-3 xl:h-H7HalfRem">
         <div className="font-18 mb-2">Тодорхойлолт авсан түүх</div>
+
         <div className="h-full">
           {[...mailtuukhmailtuukhJagsaalt]
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
             .map((mur, index) => (
               <div
                 key={index}
-                className="mb-3 rounded border border-gray-100 bg-green-600 p-2 text-gray-200"
+                className={`mb-3 rounded border border-gray-100 p-2 text-gray-200 
+                  ${
+                    mur?.turul === "Хэвлэх" ? "bg-yellow-600" : "bg-green-600"
+                  }`}
               >
-                <p className="font-medium">Харилцагч: {mur?.ner}</p>
-                <p className="text-sm text-gray-100">
-                  И-мэйл: {mur?.mailuud[0]?.mail}
-                </p>
-                <p className="text-sm text-gray-100">
-                  Утас: {mur?.utas?.join(",")}
-                </p>
-                <p className="text-sm text-gray-100">
-                  Тодорхойлолт өгсөн ажилтан: {mur?.maililgeesenAjiltniiNer}
-                </p>
-                <p className="text-sm text-gray-100">
-                  Огноо:{" "}
-                  {new Date(mur?.createdAt).toLocaleString("en-GB", {
-                    timeZone: "Asia/Ulaanbaatar",
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                  })}
-                </p>
+                <div className="mx-1 mb-1 flex flex-row justify-between">
+                  <span className="w-50% flex flex-row  justify-between">
+                    <span className="flex flex-col">
+                      <span>Өдөр:</span>
+                      <span>Харилцагч:</span>
+                      <span>Төрөл:</span>
+                    </span>
+                    <span className="ml-10 flex flex-col">
+                      <span className="flex justify-between ">
+                        {new Date(mur?.createdAt).toLocaleDateString("en-GB", {
+                          timeZone: "Asia/Ulaanbaatar",
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                        })}
+                      </span>
+                      <p className="flex justify-between font-medium">
+                        <span>{mur?.ner}</span>{" "}
+                      </p>
 
-                <button
-                  className="ml-auto flex cursor-pointer justify-end rounded-md bg-gray-200 px-4 py-1 text-center text-gray-800 hover:bg-gray-300"
-                  onClick={() => {
-                    printDataRef.current = mur?.mailuud[0]?.content;
-                    handlePrint();
-                  }}
-                >
-                  {t("Хэвлэх")}
-                </button>
+                      <p className=" bordered w-20 rounded bg-white px-1 text-center text-black">
+                        {mur?.turul === "Хэвлэх" ? "Хэвлэсэн" : "Илгээсэн"}
+                      </p>
+                    </span>
+                  </span>
+                  <span className="w-50% flex flex-row justify-between">
+                    <span className="flex flex-col">
+                      <span>Цаг:</span>
+                      <span>Утас:</span>
+                      <span>Ажилтан:</span>
+                    </span>
+                    <span className="ml-2 flex flex-col">
+                      {new Date(mur?.createdAt).toLocaleTimeString("en-GB", {
+                        timeZone: "Asia/Ulaanbaatar",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                      })}
+                      <p>{mur?.utas?.join(",")}</p>
+                      <p>{mur?.maililgeesenAjiltniiNer}</p>
+                    </span>
+                  </span>
+                </div>
+                <div className="flex flex-row">
+                  <p className="ml-1 justify-start">
+                    {mur?.mailKhayagTo ? (
+                      <p className="flex justify-between text-sm text-gray-100">
+                        {mur?.mailKhayagTo}
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                  </p>
+                  <button
+                    className="ml-auto flex cursor-pointer justify-end rounded-md bg-gray-200 px-4 py-1 text-center text-gray-800 hover:bg-gray-300"
+                    onClick={() => {
+                      setTuukhKhevlekh(true);
+                      printDataRef.current = mur?.mailuud[0]?.content;
+                      setSongogdsonKhariltsagch(mur._id);
+                      zagvarSongokh(mur);
+                      handlePrint();
+                    }}
+                  >
+                    {t("Хэвлэх")}
+                  </button>
+                </div>
               </div>
             ))}
         </div>
