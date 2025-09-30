@@ -361,7 +361,7 @@ function Todorkhoilolt() {
     <img src="${url}/file?path=gariinUseg/${barilga.gariinUseg}" 
          style="
            position: absolute;
-           bottom: -100px;
+           bottom: -50px;
            right: 380px;
            width: 180px;
            height: 140px;
@@ -379,7 +379,7 @@ function Todorkhoilolt() {
                 <img src="${url}/file?path=tamga/${barilga.tamga}" 
                     style="
                       position: absolute;
-                      bottom: -100px; 
+                      bottom: -50px; 
                       right: 260px;
                       width: 200px;
                       z-index: 1000;
