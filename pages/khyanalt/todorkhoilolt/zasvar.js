@@ -36,13 +36,17 @@ const undsenTalbaruud = [
   { ner: "Ажилтан", talbar: "ajiltan" },
 ];
 
-// const talbainiiTalbaruud = [
-//   { ner: "Талбайн дугаар", talbar: "talbainDugaar" },
-//   { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
-//   { ner: "Талбайн хэмжээ м2", talbar: "talbainKhemjee" },
-//   { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
-// ];
+const talbainiiTalbaruud = [
+  { ner: "Талбайн дугаар", talbar: "talbainDugaar" },
+  { ner: "Талбайн хэмжээ м2", talbar: "talbainKhemjee" },
+];
 
+const uldegdelTalbaruud = [
+  { ner: "Авлагын үлдэгдэл", talbar: "avalagiUldegdel" },
+  { ner: "Барьцаа үлдэгдэл", talbar: "baritsaaUldegdel" },
+  { ner: "Үлдэгдэл", talbar: "ulegdel" },
+  { ner: "Алданги", talbar: "aldangi" },
+];
 const customPlugin = ({
   name = "custom_example",
   title = t("Талбарийн нэр"),
@@ -94,7 +98,6 @@ function Zasvar({ value, change, data, read, height }, ref) {
   const [utga, setUtga] = useState(data?.mail || "");
   const [editorReady, setEditorReady] = useState(false);
 
-  // ✅ load suneditor plugins only in browser
   React.useEffect(() => {
     import("suneditor/src/plugins").then((mod) => {
       setPlugins(mod.default || {});
@@ -135,13 +138,19 @@ function Zasvar({ value, change, data, read, height }, ref) {
       button: renderToString(<SolutionOutlined />),
     });
 
-    // const talbai = customPlugin({
-    //   songokhTalbaruud: talbainiiTalbaruud,
-    //   name: "talbai",
-    //   title: t("Түрээсийн талбай"),
-    //   button: renderToString(<BankOutlined />),
-    // });
-    return [undsen];
+    const talbai = customPlugin({
+      songokhTalbaruud: talbainiiTalbaruud,
+      name: "talbai",
+      title: t("Түрээсийн талбай"),
+      button: renderToString(<DollarCircleOutlined />),
+    });
+    const uldegdel = customPlugin({
+      songokhTalbaruud: uldegdelTalbaruud,
+      name: "uldegdel",
+      title: t("Түрээсийн үлдэгдэл"),
+      button: renderToString(<BankOutlined />),
+    });
+    return [undsen, talbai, uldegdel];
   }, []);
 
   const handleStringChange = React.useCallback(
@@ -170,7 +179,11 @@ function Zasvar({ value, change, data, read, height }, ref) {
       height={height}
       setOptions={{
         plugins: { ...plugins, ...custom },
-        buttonList: [...formatting, ["align"], ["undsen", "fontSize", "font"]],
+        buttonList: [
+          ...formatting,
+          ["align"],
+          ["undsen", "talbai", "uldegdel", "fontSize", "font"],
+        ],
         readonly: read,
         showToolbar: !read,
         resizingBar: false,
