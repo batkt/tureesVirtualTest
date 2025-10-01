@@ -47,7 +47,7 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate, barilgiinId }) {
       title: "№",
       width: "3rem",
       align: "center",
-      render: (index) =>
+      render: (text, record, index) =>
         (jagsaalt?.data?.khuudasniiDugaar || 0) *
           (jagsaalt?.data?.khuudasniiKhemjee || 0) -
         (jagsaalt?.data?.khuudasniiKhemjee || 0) +
