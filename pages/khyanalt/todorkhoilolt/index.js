@@ -554,7 +554,7 @@ function Todorkhoilolt() {
       onSearch={(search) =>
         setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
       }
-      tsonkhniiId="68c8bfe7727027f1008c6f3d"
+      tsonkhniiId="68de448bbfbbe55b31ba2f82"
       loading={waiting}
     >
       {loading && (
