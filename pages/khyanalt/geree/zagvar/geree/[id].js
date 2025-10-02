@@ -194,7 +194,7 @@ function ZakhialgaNemekh({ token }) {
           className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-gray-600 dark:bg-gray-700 dark:text-gray-200"
           style={{ width: "300mm" }}
         >
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 pb-5">
             <div className="group relative">
               <div
                 className="sun-editor-editable rounded-md border border-dashed border-gray-600 p-2 text-black dark:border-gray-300 dark:bg-gray-700 dark:text-gray-200 [&_*]:text-black dark:[&_*]:text-gray-200"

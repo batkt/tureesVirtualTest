@@ -10,7 +10,7 @@ import { BellOutlined, LeftOutlined, CloseOutlined } from "@ant-design/icons";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-
+import { useRouter } from "next/router";
 const idAwyaa = (mur) => {
   switch (mur.turul) {
     case "setgegdel":
@@ -118,6 +118,7 @@ const SonorduulgaDropdown = React.memo(
     const [localReadNotifications, setLocalReadNotifications] = useState(
       new Set()
     );
+    const router = useRouter();
     const isFirstMount = useRef(true);
 
     const handleScroll = useCallback(() => {
@@ -377,15 +378,16 @@ const SonorduulgaDropdown = React.memo(
                       <div className="z-1000 relative px-4 pb-4 text-gray-600 dark:text-gray-300">
                         <div className="border-t pt-3 dark:border-gray-600">
                           <div
-                            onClick={(e) =>
+                            onClick={(e) => {
                               handleMessageClick(
                                 displayData.title,
                                 displayData.content,
                                 mur.createdAt,
                                 e,
                                 mur._id
-                              )
-                            }
+                              );
+                              router.push("/khyanalt/medegdel/duudlaga");
+                            }}
                             className="mb-3 max-h-[100px] cursor-pointer overflow-y-auto rounded p-2 text-sm leading-relaxed hover:bg-gray-100 dark:hover:bg-gray-600"
                           >
                             <div
