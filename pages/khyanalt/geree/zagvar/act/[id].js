@@ -144,6 +144,15 @@ function ZakhialgaNemekh({ token }) {
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
   }, [aktiinZagvar, defaultUtga]);
+  function nemekh() {
+    const newMur = {
+      zaalt: "<b>{t(Шинэ заалт)}</b>",
+    };
+
+    aktiinZagvar.dedKhesguud.push(newMur);
+    let value = _.cloneDeep(aktiinZagvar);
+    setGereeniiZagvar(value);
+  }
 
   function docNemekh(key, mur) {
     mur.zaalt = "<b>{t(Шинэ заалт)}</b>";
@@ -192,32 +201,32 @@ function ZakhialgaNemekh({ token }) {
       dedKhuudas
       className="p-4"
     >
-      <div className="col-span-12 flex justify-center p-4 lg:col-span-9 xl:col-span-8">
+      <div className="col-span-12 flex justify-center p-4 dark:bg-gray-800 lg:col-span-9 xl:col-span-8">
         <div
-          className="flex flex-col space-y-1 border-white bg-white p-[15mm] pl-[24mm] pr-[14mm] text-white dark:bg-gray-700"
+          className="flex flex-col space-y-1 border-dashed border-white bg-white p-[15mm] pl-[24mm] pr-[14mm] text-white dark:bg-gray-700"
           style={{ width: width, height: height }}
         >
           <div className="grid grid-cols-2 gap-4">
             <div className="group relative">
               <div
-                className="rounded-md border border-dashed border-gray-600 p-2"
+                className="sun-editor-editable rounded-md border border-dashed border-gray-600 p-2 text-gray-700 dark:border-gray-300 dark:bg-gray-700 dark:text-gray-300 [&_*]:text-gray-700 dark:[&_*]:text-gray-300"
                 dangerouslySetInnerHTML={{
                   __html:
                     aktiinZagvar.zuunTolgoi || t("Актын загварын зүүн толгой"),
                 }}
               />
               <div
-                className="absolute -right-2 -top-2 hidden group-hover:block"
+                className="absolute -right-2 -top-2 z-10"
                 onClick={() =>
                   docZasya("zuunTolgoi", aktiinZagvar.zuunTolgoi || "")
                 }
               >
-                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 text-gray-600 hover:bg-gray-200 dark:bg-gray-500 dark:text-gray-200 dark:hover:bg-gray-800" />
               </div>
             </div>
             <div className="group relative">
               <div
-                className="rounded-md border border-dashed border-gray-600 p-2"
+                className="sun-editor-editable rounded-md border border-dashed border-gray-600 p-2 text-gray-600 dark:border-gray-300 dark:bg-gray-700 dark:text-gray-300 [&_*]:text-gray-600 dark:[&_*]:text-gray-300"
                 dangerouslySetInnerHTML={{
                   __html:
                     aktiinZagvar.baruunTolgoi ||
@@ -225,80 +234,84 @@ function ZakhialgaNemekh({ token }) {
                 }}
               />
               <div
-                className="absolute -right-2 -top-2 hidden group-hover:block"
+                className="absolute -right-2 -top-2 z-10"
                 onClick={() =>
                   docZasya("baruunTolgoi", aktiinZagvar.baruunTolgoi || "")
                 }
               >
-                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 text-gray-600 hover:bg-gray-200 dark:bg-gray-500 dark:text-gray-200 dark:hover:bg-gray-800" />
               </div>
             </div>
           </div>
-          {aktiinZagvar?.dedKhesguud?.map((mur, index) => {
-            return (
-              <div
-                key={mur._id}
-                className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
+          <div className="flex flex-col space-y-6 pb-5">
+            {aktiinZagvar?.dedKhesguud?.map((mur, index) => {
+              return (
                 <div
-                  className="sun-editor-editable w-full border-white text-white dark:bg-gray-700"
-                  dangerouslySetInnerHTML={{ __html: mur.zaalt }}
-                />
-                <div className="absolute -right-2 -top-2 hidden flex-row space-x-2 group-hover:flex">
-                  <div onClick={() => docZasya(`dedKhesguud.${index}`, mur)}>
-                    <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
+                  key={mur._id}
+                  className="group relative flex w-full flex-row rounded-lg border border-dashed border-gray-600 p-1 text-gray-600 hover:bg-gray-100 dark:border-gray-300 dark:text-gray-200 dark:hover:bg-gray-700"
+                >
+                  <div className="absolute -right-2 -top-2 z-10 flex flex-col space-y-1">
+                    <div onClick={() => docZasya(`dedKhesguud.${index}`, mur)}>
+                      <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200   dark:bg-gray-500 dark:text-gray-200 dark:hover:bg-gray-500" />
+                    </div>
+                    <div onClick={() => docUstgaya(index, mur)}>
+                      <DeleteOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-red-400 dark:bg-gray-500  dark:text-gray-200 dark:hover:bg-gray-800" />
+                    </div>
                   </div>
-                  <div onClick={() => docUstgaya(index, mur)}>
-                    <DeleteOutlined className="cursor-pointer rounded-full border bg-white fill-current p-1 hover:bg-red-400 dark:bg-black dark:hover:bg-gray-800" />
+
+                  <div className="absolute -left-2 -top-2 z-10">
+                    <div onClick={() => docNemekh(index, _.cloneDeep(mur))}>
+                      <FileAddOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-green-400 dark:bg-gray-500 dark:text-gray-200 dark:hover:bg-gray-800" />
+                    </div>
                   </div>
+
+                  <div
+                    className="sun-editor-editable w-full text-white dark:border-gray-300 dark:bg-gray-700 dark:text-gray-300"
+                    dangerouslySetInnerHTML={{ __html: mur.zaalt }}
+                  />
                 </div>
-                <div className="absolute -bottom-2 -right-2 hidden flex-row space-x-2 group-hover:flex">
-                  <div onClick={() => docNemekh(index, _.cloneDeep(mur))}>
-                    <FileAddOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-green-400 dark:bg-black dark:hover:bg-gray-800" />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="group relative">
               <div
-                className="rounded-md border border-dashed border-gray-600 p-2"
+                className="rounded-md border border-dashed border-gray-600 p-2 text-gray-800 dark:border-gray-300 dark:text-gray-300"
                 dangerouslySetInnerHTML={{
                   __html: aktiinZagvar.zuunKhul || t("Актын загварын зүүн хөл"),
                 }}
               />
               <div
-                className="absolute -right-2 -top-2 hidden group-hover:block"
+                className="absolute -right-2 -top-2  group-hover:block"
                 onClick={() =>
                   docZasya("zuunKhul", aktiinZagvar.zuunKhul || "")
                 }
               >
-                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 text-gray-600 hover:bg-gray-200 dark:bg-gray-500 dark:text-gray-200 dark:hover:bg-gray-200" />
               </div>
             </div>
             <div className="group relative">
               <div
-                className="rounded-md border border-dashed border-gray-600 p-2"
+                className="rounded-md border border-dashed border-gray-600 p-2 text-gray-800 dark:border-gray-300 dark:text-gray-300 "
                 dangerouslySetInnerHTML={{
                   __html:
                     aktiinZagvar.baruunKhul || t("Актын загварын баруун хөл"),
                 }}
               />
               <div
-                className="absolute -right-2 -top-2 hidden group-hover:block"
+                className="absolute -right-2 -top-2  group-hover:block"
                 onClick={() =>
                   docZasya("baruunKhul", aktiinZagvar.baruunKhul || "")
                 }
               >
-                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 text-gray-600 hover:bg-gray-200 dark:bg-gray-500 dark:text-gray-200 dark:hover:bg-gray-200" />
               </div>
             </div>
           </div>
         </div>
       </div>
       <div className="col-span-12 lg:col-span-3 xl:col-span-4 ">
-        <div className="box p-9 lg:h-[800px]">
+        <div className="box p-9 dark:bg-gray-700  lg:h-[800px]">
           <Form form={form} onFinish={khadgalakh} autoComplete={"off"}>
             <Form.Item name="ner">
               <Input placeholder={t("Нэр")} />
@@ -342,6 +355,14 @@ function ZakhialgaNemekh({ token }) {
               loading={towchTuluv}
             >
               {t("Хадгалах")}
+            </Button>
+            <Button
+              className="mt-4 w-full"
+              type="primary"
+              onClick={() => nemekh()}
+            >
+              <FileAddOutlined />
+              Гэрээний заалт нэмэх
             </Button>
           </div>
         </div>

@@ -257,7 +257,15 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
         defaultValue={utga}
         setOptions={{
           height: 410,
-          plugins: { ...plugins, ...custom },
+          plugins: {
+            ...plugins,
+            undsen: custom[0],
+            khugatsaa: custom[1],
+            talbai: custom[2],
+            baritsaa: custom[3],
+            tulbur: custom[4],
+            zardaluud: custom[5],
+          },
           buttonList: [
             ...formatting,
             ["align"],

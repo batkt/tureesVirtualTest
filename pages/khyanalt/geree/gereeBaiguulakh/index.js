@@ -365,6 +365,15 @@ function GereeBaiguulakh({ token }) {
               );
             });
         });
+
+        butsaakhUtga.zuunKhul = butsaakhUtga.zuunKhul?.replace(
+          new RegExp(`&lt;${key}&gt;`, "g"),
+          value
+        );
+        butsaakhUtga.baruunKhul = butsaakhUtga.baruunKhul?.replace(
+          new RegExp(`&lt;${key}&gt;`, "g"),
+          value
+        );
       } else {
         butsaakhUtga.dedKhesguud
           ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
@@ -417,6 +426,14 @@ function GereeBaiguulakh({ token }) {
           b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
         });
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
+        new RegExp(`&lt;${key}&gt;`, "g"),
+        value
+      );
+      butsaakhUtga.zuunKhul = butsaakhUtga.zuunKhul?.replace(
+        new RegExp(`&lt;${key}&gt;`, "g"),
+        value
+      );
+      butsaakhUtga.baruunKhul = butsaakhUtga.baruunKhul?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
         value
       );
@@ -593,11 +610,13 @@ function GereeBaiguulakh({ token }) {
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div
+                        className="[&_*]:!text-gray-700 dark:[&_*]:!text-gray-200"
                         dangerouslySetInnerHTML={{
                           __html: alkhamiinGereeniiZagvar?.zuunTolgoi,
                         }}
                       />
                       <div
+                        className="[&_*]:!text-gray-700 dark:[&_*]:!text-gray-200"
                         dangerouslySetInnerHTML={{
                           __html: alkhamiinGereeniiZagvar?.baruunTolgoi,
                         }}
@@ -622,15 +641,34 @@ function GereeBaiguulakh({ token }) {
                           : ""
                       }
                       key={`alkhamiinGereeniiZagvar${index}`}
-                      className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-100"
+                      className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                       <div
-                        className="sun-editor-editable w-full text-center"
+                        className="sun-editor-editable w-full text-center dark:bg-gray-900 [&_*]:text-gray-700 dark:[&_*]:text-gray-200"
                         dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                       />
                     </div>
                   );
                 })}
+
+                {current === 0 &&
+                  alkhamiinGereeniiZagvar?.zuunKhul &&
+                  alkhamiinGereeniiZagvar?.baruunKhul && (
+                    <div className="mt-8 grid grid-cols-2 gap-4">
+                      <div
+                        className="[&_*]:!text-gray-700 dark:[&_*]:!text-gray-200"
+                        dangerouslySetInnerHTML={{
+                          __html: alkhamiinGereeniiZagvar?.zuunKhul,
+                        }}
+                      />
+                      <div
+                        className="[&_*]:!text-gray-700 dark:[&_*]:!text-gray-200"
+                        dangerouslySetInnerHTML={{
+                          __html: alkhamiinGereeniiZagvar?.baruunKhul,
+                        }}
+                      />
+                    </div>
+                  )}
               </div>
               {khadgalakhGeree?.talbainuud?.length > 0 &&
                 khadgalakhGeree?.talbainuud?.map((a, i) => {
@@ -685,11 +723,13 @@ function GereeBaiguulakh({ token }) {
                     <>
                       <div className="grid grid-cols-2 gap-4">
                         <div
+                          className="[&_*]:text-gray-700 dark:[&_*]:text-gray-200"
                           dangerouslySetInnerHTML={{
                             __html: alkhamiinAktiinZagvar?.zuunTolgoi,
                           }}
                         />
                         <div
+                          className="[&_*]:text-gray-700 dark:[&_*]:text-gray-200"
                           dangerouslySetInnerHTML={{
                             __html: alkhamiinAktiinZagvar?.baruunTolgoi,
                           }}
@@ -714,15 +754,34 @@ function GereeBaiguulakh({ token }) {
                             : ""
                         }
                         key={`alkhamiinAktiinZagvar${index}`}
-                        className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-100"
+                        className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
                       >
                         <div
-                          className="w-full"
+                          className="w-full [&_*]:text-gray-700 dark:[&_*]:text-gray-200"
                           dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                         />
                       </div>
                     );
                   })}
+
+                  {current === 0 &&
+                    alkhamiinAktiinZagvar?.zuunKhul &&
+                    alkhamiinAktiinZagvar?.baruunKhul && (
+                      <div className="mt-8 grid grid-cols-2 gap-4">
+                        <div
+                          className="[&_*]:text-gray-700 dark:[&_*]:text-gray-200"
+                          dangerouslySetInnerHTML={{
+                            __html: alkhamiinAktiinZagvar?.zuunKhul,
+                          }}
+                        />
+                        <div
+                          className="[&_*]:text-gray-700 dark:[&_*]:text-gray-200"
+                          dangerouslySetInnerHTML={{
+                            __html: alkhamiinAktiinZagvar?.baruunKhul,
+                          }}
+                        />
+                      </div>
+                    )}
                 </div>
               )}
             </div>

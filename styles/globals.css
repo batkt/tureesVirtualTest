@@ -68,6 +68,64 @@
   @apply dark:border-gray-600 dark:bg-gray-900 !important;
 }
 
+/* Existing modal styles */
+.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-container,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-wrapper-inner,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-wrapper-wysiwyg,
+.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor-editable,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-toolbar,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-navigation,
+.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor-common {
+  background-color: #1f2937;
+  color: #e5e7eb;
+  border-color: #374151;
+}
+
+.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor-editable {
+  caret-color: #f9fafb;
+}
+
+.dark
+  .ant-modal
+  .ant-modal-content
+  .ant-modal-body
+  .sun-editor-editable::placeholder {
+  color: #9ca3af;
+}
+
+.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor-common button {
+  background-color: #374151;
+  color: #e5e7eb;
+}
+
+.dark
+  .ant-modal
+  .ant-modal-content
+  .ant-modal-body
+  .sun-editor-common
+  button:hover {
+  background-color: #4b5563;
+}
+
+/* Add these new styles for content outside modal */
+.dark .sun-editor-editable {
+  color: #e5e7eb !important;
+}
+
+.dark .sun-editor-editable * {
+  color: inherit !important;
+}
+
+.dark .sun-editor-editable p,
+.dark .sun-editor-editable div,
+.dark .sun-editor-editable span,
+.dark .sun-editor-editable li,
+.dark .sun-editor-editable td,
+.dark .sun-editor-editable th {
+  color: #e5e7eb !important;
+}
+
 .pvtDropdownCurrent {
   @apply dark:bg-gray-800 dark:text-gray-200 !important;
 }

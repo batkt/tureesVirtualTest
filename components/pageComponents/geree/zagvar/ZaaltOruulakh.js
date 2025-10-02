@@ -55,13 +55,12 @@ export var customPlugin = ({
 }) => ({
   name: name,
 
-  display: "container" || "command" || "submenu" || "dialog",
+  // ✅ force correct type
+  display: "submenu",
 
   title: title,
 
   innerHTML: `<span style="padding:5px;">${button}</span>`,
-
-  buttonClass: "",
 
   add: function (core, targetElement) {
     let listDiv = this.setSubmenu.call(core);
@@ -90,6 +89,7 @@ export var customPlugin = ({
 
     return listDiv;
   },
+
   onClick: function (e) {
     const value = e.target.value;
     const node = this.util.createElement("span");
@@ -215,7 +215,7 @@ function index({ token, baiguullaga, destroy }, ref) {
         setOptions={{
           plugins: { ...plugins, ...plugin },
           height: 200,
-          buttonList: [...formatting],
+          buttonList: [...formatting, ["custom_example"]],
         }}
         showToolbar={true}
         ref={editorRef}
