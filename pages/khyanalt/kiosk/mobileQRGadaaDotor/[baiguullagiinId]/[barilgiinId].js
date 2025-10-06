@@ -194,7 +194,7 @@ const KioskMobile = ({
         zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
       };
       if (zogsool?.zogsooliinDans) {
-        yavuulakhBody["dansniiDugaar"] = zogsool?.zogsooliinDans;
+        yavuulakhBody["dansniiDugaar"] = zogsool?.zogsooliinDansSticker ? zogsool?.zogsooliinDansSticker : zogsool?.zogsooliinDans;
       }
       if (!!mashiniiDugaar) {
         yavuulakhBody["zogsooliinId"] = zogsool?._id;
