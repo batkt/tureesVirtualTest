@@ -226,6 +226,25 @@ function ZogsoolBurtgekh(
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
+                {t("Зогсоолын данс(Sticker)")}
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item
+                className="m-0"
+                name="zogsooliinDansSticker"
+                rules={[
+                  {
+                    required: false,
+                    message: t("Зогсоолын данс оруулна уу!"),
+                  },
+                ]}
+              >
+                <Input placeholder="Зогсоолын данс" />
+              </Form.Item>
+            </div>
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
                 {t("Үндсэн тариф 30мин эсэх")}
               </div>
             </div>
