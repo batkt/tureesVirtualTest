@@ -731,7 +731,14 @@ function mashinBurtgel({ token }) {
   function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
     uilchilgee(token)
       .get(service, {
-        params: { query, order, khuudasniiKhemjee: mur },
+        params: {
+          query: {
+            ...query,
+            barilgiinId: barilgiinId,
+          },
+          order,
+          khuudasniiKhemjee: mur,
+        },
       })
       .then(({ data }) => {
         const { Excel } = require("antd-table-saveas-excel");
@@ -1109,7 +1116,7 @@ function mashinBurtgel({ token }) {
                                   dataIndex: "temdeglel",
                                 },
                               ],
-                              undefined,
+                              query,
                               undefined,
                               "Машин бүртгэл"
                             )
@@ -1140,7 +1147,7 @@ function mashinBurtgel({ token }) {
                                   dataIndex: "burtgesenAjiltaniiNer",
                                 },
                               ],
-                              undefined,
+                              query,
                               undefined,
                               "Блок машины бүртгэл"
                             )
