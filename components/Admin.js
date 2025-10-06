@@ -660,7 +660,7 @@ function Admin({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Updater />
+      {/* <Updater /> */}
 
       <div className="flex items-center justify-between py-4">
         {dedKhuudas && (
