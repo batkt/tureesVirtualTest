@@ -537,10 +537,10 @@ function GuilgeeniiTuukhAldangi(
                   {a.guilgeeKhiisenAjiltniiNer}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.tulukhAldangi, 0)}
+                  {formatNumber(a.tulukhAldangi, 2)}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.tulsunAldangi || a.tulsunDun, 0)}
+                  {formatNumber(a.tulsunAldangi || a.tulsunDun, 2)}
                 </td>
                 <td className="flex min-w-[8rem] justify-center p-1 text-center ">
                   {a.dansniiDugaar}
@@ -676,7 +676,7 @@ function GuilgeeniiTuukhAldangi(
               </td>
 
               <td className="min-w-[8rem] p-1 text-center">
-                {formatNumber(a.aldangiinKhuvi, 4)}
+                {formatNumber(a.aldangiinKhuvi, 2)}
               </td>
 
               <td className="min-w-[8rem] p-1 text-center">
