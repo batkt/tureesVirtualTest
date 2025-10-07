@@ -248,12 +248,14 @@ function Admin({
         switch (data.type) {
           case "PAYMENT_SAVED_OFFLINE":
             setOfflinePayments((prev) => [...prev, data.payment]);
-            message.info(
-              t(
-                "Төлбөр интернетгүй үед хадгалагдлаа, Интернет холбогдох үед төлөв өөрчлөгдөх болно."
-              ),
-              10
-            );
+            if (!navigator.onLine) {
+              message.info(
+                t(
+                  "Төлбөр интернетгүй үед хадгалагдлаа, Интернет холбогдох үед төлөв өөрчлөгдөх болно."
+                ),
+                10
+              );
+            }
             break;
 
           case "SYNC_COMPLETED":
