@@ -1780,7 +1780,7 @@ function camera({ token }) {
             }
           }
           if (modalOpen.type !== "dugaarBurtgekh") {
-            updateMethod("zogsoolUilchluulegch", token, body).then(
+            updateMethod("uilchluulegch", token, body).then(
               ({ data }) => {
                 if (data === "Amjilttai") {
                   message.success(t("Амжилттай хадгаллаа"));
