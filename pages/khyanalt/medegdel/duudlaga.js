@@ -976,7 +976,7 @@ function TaskManagementSystem({ token }) {
     <Admin
       khuudasniiNer="duudlaga"
       title={t("Дуудлага үйлчилгээ")}
-      tsonkhniiId={"68a8185ed4ae20c5e822a580"}
+      tsonkhniiId={"68de43fdbfbbe55b31ba1586"}
       className={"gap-5 p-2 pb-10 sm:p-6 md:pb-0"}
       onSearch={task.onSearch}
     >

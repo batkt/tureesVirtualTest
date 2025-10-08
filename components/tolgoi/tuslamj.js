@@ -14,7 +14,7 @@ function Tuslamj() {
   const [songogdsonAlkham, setSongogdsonAlkham] = useState(0);
   const [daragdsanTokhirgooMedeelel, setDaragdsanTokhirgooMedeelel] =
     useState(0);
-  const tuslamj = useJagsaalt("https://zevtabs.mn/api/tuslamjAvya/rent");
+  const tuslamj = useJagsaalt("https://admin.zevtabs.mn/api/tuslamjAvya/rent");
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -71,7 +71,7 @@ function Tuslamj() {
                     <img
                       src={
                         mur.zurgiinId &&
-                        `https://zevtabs.mn/api/file?path=tuslamj/${mur.zurgiinId}`
+                        `https://admin.zevtabs.mn/api/file?path=tuslamj/${mur.zurgiinId}`
                       }
                       className="animate-css-deer  h-20"
                     />
@@ -146,7 +146,7 @@ function Tuslamj() {
                               className="w-full"
                               src={
                                 a.zurgiinId &&
-                                `https://zevtabs.mn/api/file?path=tuslamj/${a.zurgiinId}`
+                                `https://admin.zevtabs.mn/api/file?path=tuslamj/${a.zurgiinId}`
                               }
                             />
                             <LeftOutlined
@@ -194,7 +194,7 @@ function Tuslamj() {
                                 height={220}
                                 src={
                                   a.zurgiinId &&
-                                  `https://zevtabs.mn/api/file?path=tuslamj/${a.zurgiinId}`
+                                  `https://admin.zevtabs.mn/api/file?path=tuslamj/${a.zurgiinId}`
                                 }
                                 className={` border border-dashed border-blue-500 bg-gray-900 object-contain `}
                               />
