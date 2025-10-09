@@ -57,7 +57,6 @@ import khatuuZagvarIkhNaydTower from "tools/zagvar/turIkhNaydTower";
 const ilgeekhTurul = "davkharaar";
 
 function tulburTootsoo({ token }) {
- 
   useEffect(() => {
     Aos.init({ once: true });
   }, []);
@@ -86,7 +85,6 @@ function tulburTootsoo({ token }) {
   const [updatedMedeelelList, setUpdatedMedeelelList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
- 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { mailtuukhmailtuukhJagsaalt } = mailtuukh(token, null, null, null);
@@ -167,7 +165,6 @@ function tulburTootsoo({ token }) {
     React.useState(false);
   const [songogdsonZagvar, setSongogdsonZagvar] = React.useState();
   const [unshijBaina, setUnshijBaina] = React.useState(false);
-
 
   useEffect(() => {
     if (nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt]);
@@ -880,7 +877,8 @@ function tulburTootsoo({ token }) {
             medeelel.duusakhUdur = moment(ognoo)
               .set(
                 "date",
-                barilgiinId === "6731b43bc23730ac1908da2e"
+                barilgiinId === "6731b43bc23730ac1908da2e" ||
+                  barilgiinId === "622ec99a8e64e5b4f0c3acb6"
                   ? 10
                   : barilgiinId === "6735c77a7fc60cd66deb290a" ||
                     barilgiinId === "67512183c60497546f59513a"
@@ -1007,7 +1005,6 @@ function tulburTootsoo({ token }) {
                 nuatBodokhEsekh && a.tulukhDun
                   ? khungulultKhassanTulukhDun
                   : khungulultKhassanTulukhDun - khungulultKhassanTulukhDunNuat;
-
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(
                   `&lt;${a.tailbar}.khungulultKhassanTulukhDun&gt;`,
@@ -2693,6 +2690,7 @@ function tulburTootsoo({ token }) {
           const nuatBodokhEsekh = ashiglaltiinZardal?.jagsaalt?.find(
             (b) => b.ner === a.tailbar
           )?.nuatBodokhEsekh;
+
           let khungulultKhassanTulukhDun = a.tulukhDun
             ? a.khungulult
               ? a.tulukhDun - a.khungulult
