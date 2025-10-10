@@ -26,7 +26,10 @@ function SanalKhuseltIlgeekh({ destroy, ajiltan }, ref) {
     ilgeekhOgogdol.utas = ajiltan?.utas;
     ilgeekhOgogdol.turul = "DotoodSystemes";
     uilchilgee()
-      .post("https://zevtabs.mn/api/kholbooBarikhKhadgalya", ilgeekhOgogdol)
+      .post(
+        "https://admin.zevtabs.mn/api/kholbooBarikhKhadgalya",
+        ilgeekhOgogdol
+      )
       .then((response) => {
         if (response.data === "Amjilttai") {
           destroy();
