@@ -158,6 +158,7 @@ function MashinBurtgel(
     lastData.ekhlekhOgnoo = ognoo[0]?.format("YYYY-MM-DD 00:00:00");
     lastData.duusakhOgnoo = ognoo[1]?.format("YYYY-MM-DD 23:59:59");
     lastData.barilgiinId = barilgiinId;
+    lastData.burtgesenAjiltaniiNer = ajiltan?.ner;
 
     if (!!geree) {
       lastData.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;

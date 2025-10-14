@@ -382,6 +382,14 @@ function mashinBurtgel({ token }) {
         sorter: () => 0,
       },
       {
+        title: t("Бүртгэсэн ажилтан"),
+        align: "center",
+        width: "8rem",
+        dataIndex: "burtgesenAjiltaniiNer",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
         title: t("Нэр"),
         align: "left",
         width: "8rem",
@@ -389,6 +397,7 @@ function mashinBurtgel({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
       },
+
       {
         title: t("Утас"),
         width: "7rem",
