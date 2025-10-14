@@ -999,7 +999,7 @@ function togloom1() {
                 onClick={() => tulburTulyu(data)}
               >
                 {data?.tulburTulsunEsekh !== true ? (
-                  <div className="flex items-center  justify-center space-x-2 text-white">
+                  <div className="flex items-center justify-center space-x-2 text-white">
                     <div className="flex items-center justify-center">
                       <DollarCircleOutlined />
                     </div>
@@ -1011,7 +1011,7 @@ function togloom1() {
                     )?._id === data?._id && "[ F2 ]"}
                   </div>
                 ) : (
-                  <div className="flex items-center  justify-center space-x-2 text-white ">
+                  <div className="flex items-center justify-center space-x-2 text-white ">
                     <div className="flex items-center justify-center">
                       <PaperClipOutlined />
                     </div>
@@ -1033,7 +1033,7 @@ function togloom1() {
                 }}
                 size="small"
               >
-                <div className="flex items-center  justify-center space-x-2 text-white">
+                <div className="flex items-center justify-center space-x-2 text-white">
                   <div className="flex items-center justify-center">
                     <CheckCircleOutlined />
                   </div>
@@ -1155,7 +1155,7 @@ function togloom1() {
                     </div>
                   )}
                 >
-                  <a className=" flex items-center justify-center  hover:scale-150">
+                  <a className="flex items-center justify-center hover:scale-150">
                     <MoreOutlined style={{ fontSize: "18px" }} />
                   </a>
                 </Popover>
@@ -1463,7 +1463,7 @@ function togloom1() {
                             </div>
                           )}
                         >
-                          <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700 ">
+                          <a className="flex items-center justify-center hover:scale-150 dark:hover:bg-gray-700">
                             <DollarTwoTone style={{ fontSize: "18px" }} />
                           </a>
                         </Popover>
@@ -1813,12 +1813,27 @@ function togloom1() {
                     0
                   )
                 : 0;
+              const niitKhungulsunDun = Array.isArray(
+                togloominTuviinGaralt?.jagsaalt
+              )
+                ? togloominTuviinGaralt.jagsaalt.reduce(
+                    (sum, row) => sum + (Number(row?.khungulsunDun) || 0),
+                    0
+                  )
+                : 0;
 
               return (
                 <Table.Summary.Row>
-                  {[...Array(9)].map((_, i) => (
+                  {[...Array(8)].map((_, i) => (
                     <Table.Summary.Cell key={i} />
                   ))}
+
+                  <Table.Summary.Cell
+                    index={8}
+                    className="text-right font-bold"
+                  >
+                    {formatNumber(niitKhungulsunDun, 0)}
+                  </Table.Summary.Cell>
 
                   <Table.Summary.Cell
                     index={9}
@@ -1826,7 +1841,7 @@ function togloom1() {
                   >
                     {formatNumber(totalEbarimt, 0)}
                   </Table.Summary.Cell>
-                  <Table.Summary.Cell></Table.Summary.Cell>
+
                   <Table.Summary.Cell></Table.Summary.Cell>
                   <Table.Summary.Cell></Table.Summary.Cell>
                 </Table.Summary.Row>
