@@ -225,16 +225,13 @@ function tulburTootsoo({ token }) {
   }
 
   function guilgeeKholbyo(data) {
-    if (ajiltan?.erkh !== "Admin" && ajiltan?.erkh !== true) {
-      return;
-    }
+    const erkhteyu =
+      ajiltan?.erkh === "Admin" ||
+      _.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.includes(
+        data.barilgiinId
+      );
 
-    if (
-      ajiltan?.erkh !== "Admin" &&
-      !_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.find(
-        (a) => a === data.barilgiinId
-      )
-    ) {
+    if (!erkhteyu) {
       notification.warning({
         message: t("Таньд гүйлгээ хийх эрх байхгүй байна."),
       });
@@ -404,6 +401,9 @@ function tulburTootsoo({ token }) {
 
   const columns = useMemo(() => {
     let baganuud = [];
+    const nuukh =
+      ajiltan?.erkh === "Admin" ||
+      (_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`) || []).length > 0;
     if (songogdsonDans?.bank === "tdb") {
       baganuud = [
         {
@@ -467,103 +467,77 @@ function tulburTootsoo({ token }) {
       if (khuulgaTurul === "orlogo")
         baganuud = [
           ...baganuud,
-          {
-            title: t("Төлөв"),
-            width: "4rem",
-            align: "center",
-            render(a) {
-              return (
-                <div className="flex items-center justify-center">
-                  <Button
-                    shape="circle"
-                    size="small"
-                    onClick={() => guilgeeKholbyo(a)}
-                    icon={iconAvya(a, "tdb")}
-                  />
-                </div>
-              );
-            },
-          },
-          {
-            title: t("Талбай"),
-            dataIndex: "kholbosonTalbainId",
-            ellipsis: true,
-            align: "center",
-            width: "5rem",
-            render(data) {
-              if (data.length > 1) {
-                return (
-                  <Tooltip
-                    placement="top"
-                    title={
-                      <div className="flex justify-center truncate">
-                        {data.map((a, i) => (
-                          <div
-                            key={i}
-                            className={`${data.length - 1 !== i && "pr-1"}`}
-                          >
-                            {a}
-                            {data.length - 1 !== i && ","}
-                          </div>
-                        ))}
+          ...(ajiltan?.erkh === "Admin" ||
+          (_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`) || []).length > 0
+            ? [
+                {
+                  title: "Төлөв",
+                  width: "4rem",
+                  align: "center",
+                  render(a) {
+                    const erkhteyu =
+                      ajiltan?.erkh === "Admin" ||
+                      _.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.includes(
+                        a.barilgiinId
+                      );
+
+                    if (!erkhteyu) return null;
+
+                    return (
+                      <div className="flex items-center justify-center">
+                        <Button
+                          shape="circle"
+                          size="small"
+                          onClick={() => guilgeeKholbyo(a)}
+                          icon={iconAvya(a)}
+                        />
                       </div>
-                    }
-                  >
-                    <div className="flex justify-center truncate">
-                      {data.map((a, i) => (
-                        <div
-                          key={i}
-                          className={`${data.length - 1 !== i && "pr-1"}`}
-                        >
-                          {a}
-                          {data.length - 1 !== i && ","}
-                        </div>
-                      ))}
-                    </div>
-                  </Tooltip>
-                );
-              } else
-                return (
-                  <Tooltip placement="top" title={<div>{data}</div>}>
-                    <div>{data}</div>
-                  </Tooltip>
-                );
-            },
-          },
-          {
-            title: "НӨАТУС",
-            width: "5rem",
-            align: "center",
-            render(a) {
-              return (
-                <div className="flex items-center justify-center">
-                  <Button
-                    size="small"
-                    shape="circle"
-                    icon={
-                      <div
-                        className={`text-500 flex items-center justify-center`}
-                      >
-                        {a?.kholbosonGereeniiId &&
-                        a?.ebarimtAvsanEsekh === true ? (
-                          <Tooltip title="И-баримт хэвлэсэн байна">
-                            <CheckOutlined
-                              style={{ fontSize: "16px", color: "green" }}
-                            />
-                          </Tooltip>
-                        ) : (
-                          <ExclamationOutlined
-                            style={{ fontSize: "16px", color: "red" }}
-                            onClick={() => ebarimtUgukh(a)}
-                          />
-                        )}
+                    );
+                  },
+                },
+
+                {
+                  title: "НӨАТУС",
+                  width: "4.5rem",
+                  align: "center",
+                  render(a) {
+                    const erkhteyu =
+                      ajiltan?.erkh === "Admin" ||
+                      _.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.includes(
+                        a.barilgiinId
+                      );
+
+                    if (!erkhteyu) return null;
+
+                    return (
+                      <div className="flex items-center justify-center">
+                        <Button
+                          size="small"
+                          shape="circle"
+                          icon={
+                            <div className="text-500 flex items-center justify-center">
+                              {a?.kholbosonGereeniiId &&
+                              a?.ebarimtAvsanEsekh === true ? (
+                                <Tooltip title="И-баримт хэвлэсэн байна">
+                                  <CheckOutlined
+                                    style={{ fontSize: "16px", color: "green" }}
+                                  />
+                                </Tooltip>
+                              ) : (
+                                <ExclamationOutlined
+                                  style={{ fontSize: "16px", color: "red" }}
+                                  onClick={() => ebarimtUgukh(a)}
+                                />
+                              )}
+                            </div>
+                          }
+                        />
                       </div>
-                    }
-                  />
-                </div>
-              );
-            },
-          },
+                    );
+                  },
+                },
+              ]
+            : []),
         ];
     } else if (
       songogdsonDans?.bank === "khanbank" ||
@@ -646,13 +620,22 @@ function tulburTootsoo({ token }) {
       if (khuulgaTurul === "orlogo")
         baganuud = [
           ...baganuud,
-          ...(ajiltan?.erkh === "Admin" || ajiltan?.erkh === true
+          ...(ajiltan?.erkh === "Admin" ||
+          (_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`) || []).length > 0
             ? [
                 {
                   title: "Төлөв",
                   width: "4rem",
                   align: "center",
                   render(a) {
+                    const erkhteyu =
+                      ajiltan?.erkh === "Admin" ||
+                      _.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.includes(
+                        a.barilgiinId
+                      );
+
+                    if (!erkhteyu) return null;
+
                     return (
                       <div className="flex items-center justify-center">
                         <Button
@@ -666,10 +649,66 @@ function tulburTootsoo({ token }) {
                   },
                 },
                 {
+                  title: t("Талбай"),
+                  dataIndex: "kholbosonTalbainId",
+                  ellipsis: true,
+                  align: "center",
+                  width: "5rem",
+                  render(data) {
+                    if (data.length > 1) {
+                      return (
+                        <Tooltip
+                          placement="top"
+                          title={
+                            <div className="flex justify-center truncate">
+                              {data.map((a, i) => (
+                                <div
+                                  key={i}
+                                  className={`${
+                                    data.length - 1 !== i && "pr-1"
+                                  }`}
+                                >
+                                  {a}
+                                  {data.length - 1 !== i && ","}
+                                </div>
+                              ))}
+                            </div>
+                          }
+                        >
+                          <div className="flex justify-center truncate">
+                            {data.map((a, i) => (
+                              <div
+                                key={i}
+                                className={`${data.length - 1 !== i && "pr-1"}`}
+                              >
+                                {a}
+                                {data.length - 1 !== i && ","}
+                              </div>
+                            ))}
+                          </div>
+                        </Tooltip>
+                      );
+                    } else
+                      return (
+                        <Tooltip placement="top" title={<div>{data}</div>}>
+                          <div>{data}</div>
+                        </Tooltip>
+                      );
+                  },
+                },
+                {
                   title: "НӨАТУС",
                   width: "4.5rem",
                   align: "center",
                   render(a) {
+                    const erkhteyu =
+                      ajiltan?.erkh === "Admin" ||
+                      _.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.includes(
+                        a.barilgiinId
+                      );
+
+                    if (!erkhteyu) return null;
+
                     return (
                       <div className="flex items-center justify-center">
                         <Button
@@ -701,13 +740,6 @@ function tulburTootsoo({ token }) {
                 },
               ]
             : []),
-          {
-            title: t("Талбай"),
-            dataIndex: "kholbosonTalbainId",
-            ellipsis: true,
-            align: "center",
-            width: "5rem",
-          },
         ];
     } else if (songogdsonDans?.bank === "golomt") {
       baganuud = [
@@ -770,103 +802,126 @@ function tulburTootsoo({ token }) {
       if (khuulgaTurul === "orlogo")
         baganuud = [
           ...baganuud,
-          {
-            title: t("Төлөв"),
-            width: "4rem",
-            align: "center",
-            render(a) {
-              return (
-                <div className="flex items-center justify-center">
-                  <Button
-                    shape="circle"
-                    size="small"
-                    onClick={() => guilgeeKholbyo(a)}
-                    icon={iconAvya(a, "golomt")}
-                  />
-                </div>
-              );
-            },
-          },
-          {
-            title: t("Талбай"),
-            dataIndex: "kholbosonTalbainId",
-            ellipsis: true,
-            align: "center",
-            width: "5rem",
-            render(data) {
-              if (data.length > 1) {
-                return (
-                  <Tooltip
-                    placement="top"
-                    title={
-                      <div className="flex justify-center truncate">
-                        {data.map((a, i) => (
-                          <div
-                            key={i}
-                            className={`${data.length - 1 !== i && "pr-1"}`}
-                          >
-                            {a}
-                            {data.length - 1 !== i && ","}
-                          </div>
-                        ))}
+          ...(ajiltan?.erkh === "Admin" ||
+          (_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`) || []).length > 0
+            ? [
+                {
+                  title: t("Төлөв"),
+                  width: "4rem",
+                  align: "center",
+                  render(a) {
+                    const erkhteyu =
+                      ajiltan?.erkh === "Admin" ||
+                      _.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.includes(
+                        a.barilgiinId
+                      );
+
+                    if (!erkhteyu) return null;
+
+                    return (
+                      <div className="flex items-center justify-center">
+                        <Button
+                          shape="circle"
+                          size="small"
+                          onClick={() => guilgeeKholbyo(a)}
+                          icon={iconAvya(a, "golomt")}
+                        />
                       </div>
-                    }
-                  >
-                    <div className="flex justify-center truncate">
-                      {data.map((a, i) => (
-                        <div
-                          key={i}
-                          className={`${data.length - 1 !== i && "pr-1"}`}
+                    );
+                  },
+                },
+                {
+                  title: t("Талбай"),
+                  dataIndex: "kholbosonTalbainId",
+                  ellipsis: true,
+                  align: "center",
+                  width: "5rem",
+                  render(data) {
+                    if (data.length > 1) {
+                      return (
+                        <Tooltip
+                          placement="top"
+                          title={
+                            <div className="flex justify-center truncate">
+                              {data.map((a, i) => (
+                                <div
+                                  key={i}
+                                  className={`${
+                                    data.length - 1 !== i && "pr-1"
+                                  }`}
+                                >
+                                  {a}
+                                  {data.length - 1 !== i && ","}
+                                </div>
+                              ))}
+                            </div>
+                          }
                         >
-                          {a}
-                          {data.length - 1 !== i && ","}
-                        </div>
-                      ))}
-                    </div>
-                  </Tooltip>
-                );
-              } else
-                return (
-                  <Tooltip placement="top" title={<div>{data}</div>}>
-                    <div>{data}</div>
-                  </Tooltip>
-                );
-            },
-          },
-          {
-            title: "НӨАТУС",
-            width: "5rem",
-            align: "center",
-            render(a) {
-              return (
-                <div className="flex items-center justify-center">
-                  <Button
-                    size="small"
-                    shape="circle"
-                    icon={
-                      <div
-                        className={`text-500 flex items-center justify-center`}
-                      >
-                        {a?.kholbosonGereeniiId &&
-                        a?.ebarimtAvsanEsekh === true ? (
-                          <Tooltip title="И-баримт хэвлэсэн байна">
-                            <CheckOutlined
-                              style={{ fontSize: "16px", color: "green" }}
-                            />
-                          </Tooltip>
-                        ) : (
-                          <ExclamationOutlined
-                            style={{ fontSize: "16px", color: "red" }}
-                            onClick={() => ebarimtUgukh(a)}
-                          />
-                        )}
+                          <div className="flex justify-center truncate">
+                            {data.map((a, i) => (
+                              <div
+                                key={i}
+                                className={`${data.length - 1 !== i && "pr-1"}`}
+                              >
+                                {a}
+                                {data.length - 1 !== i && ","}
+                              </div>
+                            ))}
+                          </div>
+                        </Tooltip>
+                      );
+                    } else
+                      return (
+                        <Tooltip placement="top" title={<div>{data}</div>}>
+                          <div>{data}</div>
+                        </Tooltip>
+                      );
+                  },
+                },
+                {
+                  title: "НӨАТУС",
+                  width: "5rem",
+                  align: "center",
+                  render(a) {
+                    const erkhteyu =
+                      ajiltan?.erkh === "Admin" ||
+                      _.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.includes(
+                        a.barilgiinId
+                      );
+
+                    if (!erkhteyu) return null;
+
+                    return (
+                      <div className="flex items-center justify-center">
+                        <Button
+                          size="small"
+                          shape="circle"
+                          icon={
+                            <div
+                              className={`text-500 flex items-center justify-center`}
+                            >
+                              {a?.kholbosonGereeniiId &&
+                              a?.ebarimtAvsanEsekh === true ? (
+                                <Tooltip title="И-баримт хэвлэсэн байна">
+                                  <CheckOutlined
+                                    style={{ fontSize: "16px", color: "green" }}
+                                  />
+                                </Tooltip>
+                              ) : (
+                                <ExclamationOutlined
+                                  style={{ fontSize: "16px", color: "red" }}
+                                  onClick={() => ebarimtUgukh(a)}
+                                />
+                              )}
+                            </div>
+                          }
+                        />
                       </div>
-                    }
-                  />
-                </div>
-              );
-            },
-          },
+                    );
+                  },
+                },
+              ]
+            : []),
         ];
     }
     if (khuulgaTurul === "zarlaga")
@@ -1180,6 +1235,14 @@ function tulburTootsoo({ token }) {
                                   return moment(date).format(
                                     "YYYY-MM-DD HH:mm:ss"
                                   );
+                                },
+                              },
+                              {
+                                title: t("Цаг"),
+                                dataIndex: "TxTime",
+                                render(a) {
+                                  if (_.isString(a)) return `${a}`;
+                                  return "";
                                 },
                               },
                               {
