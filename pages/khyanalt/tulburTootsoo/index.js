@@ -225,6 +225,27 @@ function tulburTootsoo({ token }) {
   }
 
   function guilgeeKholbyo(data) {
+    if (ajiltan?.erkh !== "Admin" && ajiltan?.erkh !== true) {
+      return;
+    }
+
+    if (
+      ajiltan?.erkh !== "Admin" &&
+      !_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`)?.find(
+        (a) => a === data.barilgiinId
+      )
+    ) {
+      notification.warning({
+        message: t("Таньд гүйлгээ хийх эрх байхгүй байна."),
+      });
+      return;
+    }
+
+    function refresh() {
+      setTimeout(() => data.mutate && data.mutate(), 500);
+      refreshData();
+    }
+
     if (
       (data.kholbosonDun || 0) - (data.amount || data.tranAmount) === 0 ||
       data.balance - (data.kholbosonDun || 0) === 0
@@ -254,6 +275,7 @@ function tulburTootsoo({ token }) {
         message.info(t("Гүйлгээ гэрээнд холбогдсон байна."));
         return;
       }
+
       const footer = [
         <div className="pr-[1%]">
           <Button onClick={() => refGuilgee.current.khaaya()}>
@@ -270,6 +292,7 @@ function tulburTootsoo({ token }) {
           </Button>
         </div>,
       ];
+
       modal({
         wrapClassName: "guilgee-modal",
         title: (
@@ -277,7 +300,6 @@ function tulburTootsoo({ token }) {
             <span className="text-black dark:text-white">Гүйлгээ холбох</span>
           </div>
         ),
-
         width: "50rem",
         icon: <FileExcelOutlined />,
         content: (
@@ -624,63 +646,67 @@ function tulburTootsoo({ token }) {
       if (khuulgaTurul === "orlogo")
         baganuud = [
           ...baganuud,
-          {
-            title: "Төлөв",
-            width: "4rem",
-            align: "center",
-            render(a) {
-              return (
-                <div className="flex items-center justify-center">
-                  <Button
-                    shape="circle"
-                    size="small"
-                    onClick={() => guilgeeKholbyo(a)}
-                    icon={iconAvya(a)}
-                  />
-                </div>
-              );
-            },
-          },
+          ...(ajiltan?.erkh === "Admin" || ajiltan?.erkh === true
+            ? [
+                {
+                  title: "Төлөв",
+                  width: "4rem",
+                  align: "center",
+                  render(a) {
+                    return (
+                      <div className="flex items-center justify-center">
+                        <Button
+                          shape="circle"
+                          size="small"
+                          onClick={() => guilgeeKholbyo(a)}
+                          icon={iconAvya(a)}
+                        />
+                      </div>
+                    );
+                  },
+                },
+                {
+                  title: "НӨАТУС",
+                  width: "4.5rem",
+                  align: "center",
+                  render(a) {
+                    return (
+                      <div className="flex items-center justify-center">
+                        <Button
+                          size="small"
+                          shape="circle"
+                          icon={
+                            <div
+                              className={`text-500 flex items-center justify-center`}
+                            >
+                              {a?.kholbosonGereeniiId &&
+                              a?.ebarimtAvsanEsekh === true ? (
+                                <Tooltip title="И-баримт хэвлэсэн байна">
+                                  <CheckOutlined
+                                    style={{ fontSize: "16px", color: "green" }}
+                                  />
+                                </Tooltip>
+                              ) : (
+                                <ExclamationOutlined
+                                  style={{ fontSize: "16px", color: "red" }}
+                                  onClick={() => ebarimtUgukh(a)}
+                                />
+                              )}
+                            </div>
+                          }
+                        />
+                      </div>
+                    );
+                  },
+                },
+              ]
+            : []),
           {
             title: t("Талбай"),
             dataIndex: "kholbosonTalbainId",
             ellipsis: true,
             align: "center",
             width: "5rem",
-          },
-          {
-            title: "НӨАТУС",
-            width: "4.5rem",
-            align: "center",
-            render(a) {
-              return (
-                <div className="flex items-center justify-center">
-                  <Button
-                    size="small"
-                    shape="circle"
-                    icon={
-                      <div
-                        className={`text-500 flex items-center justify-center`}
-                      >
-                        {a?.kholbosonGereeniiId &&
-                        a?.ebarimtAvsanEsekh === true ? (
-                          <Tooltip title="И-баримт хэвлэсэн байна">
-                            <CheckOutlined
-                              style={{ fontSize: "16px", color: "green" }}
-                            />
-                          </Tooltip>
-                        ) : (
-                          <ExclamationOutlined
-                            style={{ fontSize: "16px", color: "red" }}
-                            onClick={() => ebarimtUgukh(a)}
-                          />
-                        )}
-                      </div>
-                    }
-                  />
-                </div>
-              );
-            },
           },
         ];
     } else if (songogdsonDans?.bank === "golomt") {
