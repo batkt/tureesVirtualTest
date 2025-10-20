@@ -187,7 +187,7 @@ function TsagBurtgel(
       uilchilgee(token)
         .post("/suuldUilchluulsenTuukhAvya", { dugaar: dugaar })
         .then(({ data }) => {
-          if (!!data && data.togolsonToo > 0) {
+          if (!!data) {
             form.setFieldValue("ovog", data.ovog);
             form.setFieldValue("ner", data.ner);
             form.setFieldValue("nas", data.nas);
