@@ -258,37 +258,139 @@ function tulburTootsoo() {
             khonogTootsokhEsekh &&
             baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh
           ) {
-            if (!!ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0)
+            var guchHonogOruulahEsehZardal = x.guchKhonogOruulakhEsekh;
+
+            if (
+              !guchHonogOruulahEsehZardal &&
+              ugugdul.khungulultKhuvi &&
+              ugugdul.khungulultKhuvi > 0
+            ) {
+              const ehlel = ognoonuud?.[0];
+              const duusah = ognoonuud?.[1];
+
+              const ehlelMonth = moment(ehlel).format("YYYY-MM");
+              const duusahMonth = moment(duusah).format("YYYY-MM");
+              const isSameMonth = ehlelMonth === duusahMonth;
+
+              if (isSameMonth) {
+                const totalDaysInMonth = moment(ehlel).daysInMonth();
+                var NegOdriinTolokh = khymdraaguiDun / totalDaysInMonth;
+                const dailyDiscount =
+                  (NegOdriinTolokh * ugugdul.khungulultKhuvi) / 100;
+                var khymdarsanDun = dailyDiscount * ugugdul.khungulultKhonog;
+              } else {
+                const ehlelMonthEnd = moment(ehlel).endOf("month");
+                const duusahMonthStart = moment(duusah).startOf("month");
+
+                const firstMonthDays =
+                  moment(ehlelMonthEnd).diff(moment(ehlel), "days") + 1;
+                const firstMonthTotalDays = moment(ehlel).daysInMonth();
+                const firstMonthDailyRate =
+                  khymdraaguiDun / firstMonthTotalDays;
+                const firstMonthDiscount =
+                  (firstMonthDailyRate * ugugdul.khungulultKhuvi) / 100;
+                const firstMonthTotal = firstMonthDiscount * firstMonthDays;
+
+                const secondMonthDays =
+                  moment(duusah).diff(duusahMonthStart, "days") + 1;
+                const secondMonthTotalDays = moment(duusah).daysInMonth();
+                const secondMonthDailyRate =
+                  khymdraaguiDun / secondMonthTotalDays;
+                const secondMonthDiscount =
+                  (secondMonthDailyRate * ugugdul.khungulultKhuvi) / 100;
+                const secondMonthTotal = secondMonthDiscount * secondMonthDays;
+
+                var khymdarsanDun = firstMonthTotal + secondMonthTotal;
+              }
+            } else if (ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0) {
               var khymdarsanDun =
                 ugugdul.khungulultKhonog *
                 ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100);
-            else
+            } else {
               var khymdarsanDun =
                 (ugugdul.khungulultKhonog * khymdraaguiDun) /
                 (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) ||
                   1);
+            }
           } else if (khungulukh === "khuvi") {
             var khymdarsanDun =
               khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
           } else {
             var khymdarsanDun = parseFloat(tootsoolol?.khunglugdsunDun);
           }
-        } else {
+        }
+        //turees heseg ehelj baina
+        else {
           ugugdul.tailbar = "Хөнгөлөлт";
           var khymdraaguiDun = x.sariinTurees;
+          var guchHonogOruulahEseh = x.guchKhonogOruulakhEsekh;
+
           if (
             khonogTootsokhEsekh &&
             baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh
           ) {
-            if (!!ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0)
+            if (
+              !guchHonogOruulahEseh &&
+              ugugdul.khungulultKhuvi &&
+              ugugdul.khungulultKhuvi > 0
+            ) {
+              const ehlel = ognoonuud?.[0];
+              const duusah = ognoonuud?.[1];
+
+              const ehlelMonth = moment(ehlel).format("YYYY-MM");
+              const duusahMonth = moment(duusah).format("YYYY-MM");
+              const isSameMonth = ehlelMonth === duusahMonth;
+
+              if (isSameMonth) {
+                const totalDaysInMonth = moment(ehlel).daysInMonth();
+
+                var NegOdriinTolokh = khymdraaguiDun / totalDaysInMonth;
+                const dailyDiscount =
+                  (NegOdriinTolokh * ugugdul.khungulultKhuvi) / 100;
+                var khymdarsanDun = dailyDiscount * ugugdul.khungulultKhonog;
+              } else {
+                const ehlelMonthEnd = moment(ehlel).endOf("month");
+                const duusahMonthStart = moment(duusah).startOf("month");
+
+                const firstMonthDays =
+                  moment(ehlelMonthEnd).diff(moment(ehlel), "days") + 1;
+                const firstMonthTotalDays = moment(ehlel).daysInMonth();
+                const firstMonthDailyRate =
+                  khymdraaguiDun / firstMonthTotalDays;
+                const firstMonthDiscount =
+                  (firstMonthDailyRate * ugugdul.khungulultKhuvi) / 100;
+                const firstMonthTotal = firstMonthDiscount * firstMonthDays;
+
+                const secondMonthDays =
+                  moment(duusah).diff(duusahMonthStart, "days") + 1;
+                const secondMonthTotalDays = moment(duusah).daysInMonth();
+                const secondMonthDailyRate =
+                  khymdraaguiDun / secondMonthTotalDays;
+                const secondMonthDiscount =
+                  (secondMonthDailyRate * ugugdul.khungulultKhuvi) / 100;
+                const secondMonthTotal = secondMonthDiscount * secondMonthDays;
+
+                var khymdarsanDun = firstMonthTotal + secondMonthTotal;
+              }
+            } else {
+              var negOdriinTolokh = khymdraaguiDun / 30;
+              console.log(negOdriinTolokh, "negOdriinTolokh");
+              console.log(negOdriinTolokh, "negOdriinTolokh");
+
               var khymdarsanDun =
-                ugugdul.khungulultKhonog *
-                ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100);
-            else
-              var khymdarsanDun =
-                (ugugdul.khungulultKhonog * khymdraaguiDun) /
-                (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) ||
-                  1);
+                ((negOdriinTolokh * ugugdul.khungulultKhuvi) / 100) *
+                ugugdul.khungulultKhonog;
+            }
+            //nice
+            // if (!!ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0)
+            //   var khymdarsanDun =
+            //     ugugdul.khungulultKhonog *
+            //     ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100);
+            // else
+            //   var khymdarsanDun =
+            //     (ugugdul.khungulultKhonog * khymdraaguiDun) /
+            //     (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) ||
+            //       1);
           } else if (khungulukh === "khuvi") {
             var khymdarsanDun =
               khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
@@ -497,7 +599,7 @@ function tulburTootsoo() {
       },
       {
         title: t("Хөнгөлөлт %"),
-        dataIndex: "khungulukhKhuvi",
+        dataIndex: "khungulultKhuvi",
         ellipsis: true,
         width: "7rem",
         align: "center",
@@ -760,25 +862,197 @@ function tulburTootsoo() {
       dun = 100;
     }
     tootsoolol.niitTalbai = songogdsonGereenuud?.length;
+
+    let totalKhunglugdsunDun = 0;
+
     if (
       khonogTootsokhEsekh &&
       baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh
     ) {
       var khungulultKhuvi = form.getFieldValue("khungulultKhuvi");
-      if (!!khungulultKhuvi && khungulultKhuvi > 0)
-        tootsoolol.khunglugdsunDun =
-          form.getFieldValue("khungulultKhonog") *
-          ((khungulultKhuvi * tootsoolol.niitSariinTurees) / 100);
-      else
-        tootsoolol.khunglugdsunDun =
-          (form.getFieldValue("khungulultKhonog") *
-            tootsoolol.niitSariinTurees) /
-          (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1);
-    } else
-      tootsoolol.khunglugdsunDun =
-        khungulukh === "khuvi"
-          ? (Number(tootsoolol.niitSariinTurees) * dun) / 100
-          : dun;
+
+      songogdsonGereenuud?.forEach((geree) => {
+        let gereeKhunglugdsunDun = 0;
+        let khymdraaguiDun = 0;
+
+        if (turul === "turees") {
+          khymdraaguiDun = geree.sariinTurees;
+        } else {
+          const zardal = geree?.zardluud?.find(
+            (a) => a._id === form.getFieldValue("zardliinId")
+          );
+          if (zardal) {
+            if (zardal.turul === "1м2")
+              khymdraaguiDun = geree.talbainKhemjee * zardal.tariff;
+            else if (zardal.turul === "1м3/талбай")
+              khymdraaguiDun = geree.talbainKhemjeeMetrKube * zardal.tariff;
+            else if (zardal.turul === "Дурын") khymdraaguiDun = zardal.dun;
+            else khymdraaguiDun = zardal.tariff;
+          }
+        }
+
+        if (
+          !geree.guchKhonogOruulakhEsekh &&
+          khungulultKhuvi &&
+          khungulultKhuvi > 0
+        ) {
+          const ehlel = ognoonuud?.[0];
+          const duusah = ognoonuud?.[1];
+
+          if (ehlel && duusah) {
+            const ehlelMonth = moment(ehlel).format("YYYY-MM");
+            const duusahMonth = moment(duusah).format("YYYY-MM");
+            const isSameMonth = ehlelMonth === duusahMonth;
+
+            if (isSameMonth) {
+              const totalDaysInMonth = moment(ehlel).daysInMonth();
+              const actualDays = moment(duusah).diff(moment(ehlel), "days") + 1;
+              const dailyRate = khymdraaguiDun / totalDaysInMonth;
+              const dailyDiscount = (dailyRate * khungulultKhuvi) / 100;
+              gereeKhunglugdsunDun = dailyDiscount * actualDays;
+            } else {
+              const ehlelMonthEnd = moment(ehlel).endOf("month");
+              const duusahMonthStart = moment(duusah).startOf("month");
+
+              const firstMonthDays =
+                moment(ehlelMonthEnd).diff(moment(ehlel), "days") + 1;
+              const firstMonthTotalDays = moment(ehlel).daysInMonth();
+              const firstMonthDailyRate = khymdraaguiDun / firstMonthTotalDays;
+              const firstMonthDiscount =
+                (firstMonthDailyRate * khungulultKhuvi) / 100;
+              const firstMonthTotal = firstMonthDiscount * firstMonthDays;
+
+              const secondMonthDays =
+                moment(duusah).diff(duusahMonthStart, "days") + 1;
+              const secondMonthTotalDays = moment(duusah).daysInMonth();
+              const secondMonthDailyRate =
+                khymdraaguiDun / secondMonthTotalDays;
+              const secondMonthDiscount =
+                (secondMonthDailyRate * khungulultKhuvi) / 100;
+              const secondMonthTotal = secondMonthDiscount * secondMonthDays;
+
+              gereeKhunglugdsunDun = firstMonthTotal + secondMonthTotal;
+            }
+          } else {
+            gereeKhunglugdsunDun =
+              khungulukh === "khuvi"
+                ? (Number(khymdraaguiDun) * dun) / 100
+                : dun;
+          }
+        } else if (khungulultKhuvi && khungulultKhuvi > 0) {
+          var negOdriinTolokh = khymdraaguiDun / 30;
+          gereeKhunglugdsunDun =
+            ((negOdriinTolokh * khungulultKhuvi) / 100) *
+            form.getFieldValue("khungulultKhonog");
+        } else {
+          gereeKhunglugdsunDun =
+            (form.getFieldValue("khungulultKhonog") * khymdraaguiDun) /
+            (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) || 1);
+        }
+
+        totalKhunglugdsunDun += gereeKhunglugdsunDun;
+      });
+    } else {
+      if (turul === "zardal") {
+        songogdsonGereenuud?.forEach((geree) => {
+          let gereeKhunglugdsunDun = 0;
+          let khymdraaguiDun = 0;
+
+          const zardal = geree?.zardluud?.find(
+            (a) => a._id === form.getFieldValue("zardliinId")
+          );
+          if (zardal) {
+            if (zardal.turul === "1м2")
+              khymdraaguiDun = geree.talbainKhemjee * zardal.tariff;
+            else if (zardal.turul === "1м3/талбай")
+              khymdraaguiDun = geree.talbainKhemjeeMetrKube * zardal.tariff;
+            else if (zardal.turul === "Дурын") khymdraaguiDun = zardal.dun;
+            else khymdraaguiDun = zardal.tariff;
+          }
+
+          if (!geree.guchKhonogOruulakhEsekh && dun && dun > 0) {
+            const ehlel = ognoonuud?.[0];
+            const duusah = ognoonuud?.[1];
+
+            if (ehlel && duusah) {
+              const ehlelMonth = moment(ehlel).format("YYYY-MM");
+              const duusahMonth = moment(duusah).format("YYYY-MM");
+              const isSameMonth = ehlelMonth === duusahMonth;
+
+              if (isSameMonth) {
+                const totalDaysInMonth = moment(ehlel).daysInMonth();
+                const actualDays =
+                  moment(duusah).diff(moment(ehlel), "days") + 1;
+                const dailyRate = khymdraaguiDun / totalDaysInMonth;
+                const dailyDiscount = (dailyRate * dun) / 100;
+                gereeKhunglugdsunDun = dailyDiscount * actualDays;
+              } else {
+                const ehlelMonthEnd = moment(ehlel).endOf("month");
+                const duusahMonthStart = moment(duusah).startOf("month");
+
+                const firstMonthDays =
+                  moment(ehlelMonthEnd).diff(moment(ehlel), "days") + 1;
+                const firstMonthTotalDays = moment(ehlel).daysInMonth();
+                const firstMonthDailyRate =
+                  khymdraaguiDun / firstMonthTotalDays;
+                const firstMonthDiscount = (firstMonthDailyRate * dun) / 100;
+                const firstMonthTotal = firstMonthDiscount * firstMonthDays;
+
+                const secondMonthDays =
+                  moment(duusah).diff(duusahMonthStart, "days") + 1;
+                const secondMonthTotalDays = moment(duusah).daysInMonth();
+                const secondMonthDailyRate =
+                  khymdraaguiDun / secondMonthTotalDays;
+                const secondMonthDiscount = (secondMonthDailyRate * dun) / 100;
+                const secondMonthTotal = secondMonthDiscount * secondMonthDays;
+
+                gereeKhunglugdsunDun = firstMonthTotal + secondMonthTotal;
+              }
+            } else {
+              gereeKhunglugdsunDun =
+                khungulukh === "khuvi"
+                  ? (Number(khymdraaguiDun) * dun) / 100
+                  : dun;
+            }
+          } else {
+            gereeKhunglugdsunDun =
+              khungulukh === "khuvi"
+                ? (Number(khymdraaguiDun) * dun) / 100
+                : dun;
+          }
+
+          totalKhunglugdsunDun += gereeKhunglugdsunDun;
+        });
+      } else {
+        songogdsonGereenuud?.forEach((geree) => {
+          let gereeKhunglugdsunDun = 0;
+          let khymdraaguiDun = 0;
+
+          if (turul === "turees") {
+            khymdraaguiDun = geree.sariinTurees;
+          } else {
+            const zardal = geree?.zardluud?.find(
+              (a) => a._id === form.getFieldValue("zardliinId")
+            );
+            if (zardal) {
+              if (zardal.turul === "1м2")
+                khymdraaguiDun = geree.talbainKhemjee * zardal.tariff;
+              else if (zardal.turul === "1м3/талбай")
+                khymdraaguiDun = geree.talbainKhemjeeMetrKube * zardal.tariff;
+              else if (zardal.turul === "Дурын") khymdraaguiDun = zardal.dun;
+              else khymdraaguiDun = zardal.tariff;
+            }
+          }
+
+          gereeKhunglugdsunDun =
+            khungulukh === "khuvi" ? (Number(khymdraaguiDun) * dun) / 100 : dun;
+
+          totalKhunglugdsunDun += gereeKhunglugdsunDun;
+        });
+      }
+    }
+
+    tootsoolol.khunglugdsunDun = totalKhunglugdsunDun;
     tootsoolol.niitTulukhDun =
       Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
 
@@ -911,8 +1185,13 @@ function tulburTootsoo() {
                       <Switch
                         checked={khonogTootsokhEsekh}
                         onChange={(v) => {
-                          form.setFieldValue("khungulultKhuvi", 0);
-                          form.setFieldValue("khungulultKhonog", 0);
+                          if (v) {
+                            form.setFieldValue("khungulultKhuvi", undefined);
+                            form.setFieldValue("khungulultKhonog", undefined);
+                          } else {
+                            form.setFieldValue("khungulultKhuvi", 0);
+                            form.setFieldValue("khungulultKhonog", 0);
+                          }
                           setKhonogTootsokhEsekh(v);
                           khungulukhDunTootsoolyo();
                         }}
@@ -921,6 +1200,26 @@ function tulburTootsoo() {
                   ) : (
                     ""
                   )}
+                  {/* {khonogTootsokhEsekh ? (
+                    <Form.Item
+                      name="gereeKharakh"
+                      labelAlign="left"
+                      label={t("Гэрээний төрөл")}
+                      rules={[
+                        {
+                          required: true,
+                          message: t("Гэрээний төрөл оруулж өгнө үү!"),
+                        },
+                      ]}
+                    >
+                      <Select placeholder={t("Нөхцөл")}>
+                        <Option value="Хоногоор">{t("30 хоногоор")}</Option>
+                        <Option value="Онсараар">{t("Он сараар")}</Option>
+                      </Select>
+                    </Form.Item>
+                  ) : (
+                    ""
+                  )} */}
                   {khonogTootsokhEsekh ? (
                     <Form.Item
                       labelAlign="left"
@@ -979,8 +1278,9 @@ function tulburTootsoo() {
                     >
                       <Input
                         type={"number"}
+                        readOnly
                         placeholder={t("Хөнгөлөх хоног")}
-                        onChange={khungulukhDunTootsoolyo}
+                        //onChange={khungulukhDunTootsoolyo}
                       />
                     </Form.Item>
                   ) : (
@@ -991,11 +1291,46 @@ function tulburTootsoo() {
                       label={"Хөнгөлөх хувь"}
                       name="khungulultKhuvi"
                       labelAlign="left"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("Хөнгөлөх хувь бүртгэнэ үү!"),
+                        },
+                        {
+                          validator: (_, value) => {
+                            if (
+                              value === undefined ||
+                              value === null ||
+                              value === ""
+                            ) {
+                              return Promise.reject(
+                                new Error(t("Хөнгөлөх хувь оруулна уу!"))
+                              );
+                            }
+                            if (Number(value) <= 0) {
+                              return Promise.reject(
+                                new Error(
+                                  t("Хөнгөлөх хувь 0-ээс их байх ёстой!")
+                                )
+                              );
+                            }
+                            if (Number(value) > 100) {
+                              return Promise.reject(
+                                new Error(
+                                  t("Хөнгөлөх хувь 100-аас бага байх ёстой!")
+                                )
+                              );
+                            }
+                            return Promise.resolve();
+                          },
+                        },
+                      ]}
                     >
                       <Input
-                        min={0}
-                        type={"number"}
-                        placeholder={"Хөнгөлөх хувь"}
+                        type="number"
+                        min={1}
+                        max={100}
+                        placeholder="Хөнгөлөх хувь"
                         onChange={khungulukhDunTootsoolyo}
                       />
                     </Form.Item>

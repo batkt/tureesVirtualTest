@@ -1037,7 +1037,7 @@ function togloom1() {
                     <CheckCircleOutlined />
                   </div>
                   <div className="flex items-center justify-center">
-                    {t("Дууссан")}
+                    {t("Төлөгдсөн")}
                   </div>
                 </div>
               </Button>
