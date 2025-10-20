@@ -90,7 +90,6 @@ const talbainiiTalbaruud = [
   { ner: "Зориулалт", talbar: "zoriulalt" },
   { ner: "Тусгай зориулалт", talbar: "tusgaiZoriulalt" },
   { ner: "Талбайн нэмэлт нөхцөл", talbar: "talbaiNemeltNukhtsul" },
-  { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
 ];
 
 const baritsaaniiTalbaruud = [
