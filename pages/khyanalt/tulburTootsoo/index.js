@@ -495,7 +495,54 @@ function tulburTootsoo({ token }) {
                     );
                   },
                 },
-
+                {
+                  title: t("Талбай"),
+                  dataIndex: "kholbosonTalbainId",
+                  ellipsis: true,
+                  align: "center",
+                  width: "5rem",
+                  render(data) {
+                    if (data && data.length > 1) {
+                      return (
+                        <Tooltip
+                          placement="top"
+                          title={
+                            <div className="flex justify-center truncate">
+                              {data.map((a, i) => (
+                                <div
+                                  key={i}
+                                  className={`${
+                                    data.length - 1 !== i && "pr-1"
+                                  }`}
+                                >
+                                  {a}
+                                  {data.length - 1 !== i && ","}
+                                </div>
+                              ))}
+                            </div>
+                          }
+                        >
+                          <div className="flex justify-center truncate">
+                            {data.map((a, i) => (
+                              <div
+                                key={i}
+                                className={`${data.length - 1 !== i && "pr-1"}`}
+                              >
+                                {a}
+                                {data.length - 1 !== i && ","}
+                              </div>
+                            ))}
+                          </div>
+                        </Tooltip>
+                      );
+                    } else
+                      return (
+                        <Tooltip placement="top" title={<div>{data}</div>}>
+                          <div>{data}</div>
+                        </Tooltip>
+                      );
+                  },
+                },
                 {
                   title: "НӨАТУС",
                   width: "4.5rem",
@@ -655,7 +702,7 @@ function tulburTootsoo({ token }) {
                   align: "center",
                   width: "5rem",
                   render(data) {
-                    if (data.length > 1) {
+                    if (data && data.length > 1) {
                       return (
                         <Tooltip
                           placement="top"
@@ -837,7 +884,7 @@ function tulburTootsoo({ token }) {
                   align: "center",
                   width: "5rem",
                   render(data) {
-                    if (data.length > 1) {
+                    if (data && data.length > 1) {
                       return (
                         <Tooltip
                           placement="top"
@@ -1180,7 +1227,8 @@ function tulburTootsoo({ token }) {
                             ];
                           } else if (
                             songogdsonDans?.bank === "khanbank" ||
-                            songogdsonDans?.bank === "bogd"
+                            songogdsonDans?.bank === "bogd" ||
+                            songogdsonDans?.bank === "tdb"
                           ) {
                             baganuud = [
                               {
