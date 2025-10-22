@@ -29,10 +29,8 @@ function KhungulultiinTokhirgoo({
   );
   const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState({
     ...barilga?.tokhirgoo,
-    sarBurAutoKhungulultOruulakhEsekh: barilga?.tokhirgoo
-      ?.sarBurAutoKhungulultOruulakhEsekh
-      ? barilga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
-      : undefined,
+    sarBurAutoKhungulultOruulakhEsekh:
+      barilga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh ?? false,
     khungulukhSarBuriinShalguurDun: barilga?.tokhirgoo
       ?.khungulukhSarBuriinShalguurDun
       ? barilga?.tokhirgoo?.khungulukhSarBuriinShalguurDun
@@ -57,10 +55,8 @@ function KhungulultiinTokhirgoo({
     if (barilga) {
       setBarilgaTokhirgoo({
         ...barilga?.tokhirgoo,
-        sarBurAutoKhungulultOruulakhEsekh: barilga?.tokhirgoo
-          ?.sarBurAutoKhungulultOruulakhEsekh
-          ? barilga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
-          : undefined,
+        sarBurAutoKhungulultOruulakhEsekh:
+          barilga?.tokhirgoo?.sarBurAutoKhungulultOruulakhEsekh ?? false,
         khungulukhSarBuriinShalguurDun: barilga?.tokhirgoo
           ?.khungulukhSarBuriinShalguurDun
           ? barilga?.tokhirgoo?.khungulukhSarBuriinShalguurDun
@@ -250,15 +246,13 @@ function KhungulultiinTokhirgoo({
               </div>
               <div className="ml-auto">
                 <Switch
-                  defaultChecked={
-                    barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh
-                  }
-                  onChange={(v) =>
+                  checked={barilgaTokhirgoo?.sarBurAutoKhungulultOruulakhEsekh}
+                  onChange={(v) => {
                     setBarilgaTokhirgoo((a) => ({
                       ...(a || {}),
                       sarBurAutoKhungulultOruulakhEsekh: v,
-                    }))
-                  }
+                    }));
+                  }}
                 />
               </div>
             </div>
