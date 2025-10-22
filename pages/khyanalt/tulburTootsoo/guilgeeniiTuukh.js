@@ -1084,6 +1084,7 @@ function guilgeeniiTuukh({ token }) {
             a.dataIndex === "aldangiinUldegdel" ||
             a.dataIndex === "niitTulsunAldangi" ||
             a.dataIndex === "baritsaaAvakhDun" ||
+            a.dataIndex === "avlagiinUldegdel" ||
             a.dataIndex === "baritsaaniiUldegdel"
           ? forExcel.push({
               title: a.excelHeader || a.title,
@@ -1093,6 +1094,9 @@ function guilgeeniiTuukh({ token }) {
               render: (val, data) => {
                 return a.dataIndex === "baritsaaAvakhDun"
                   ? (val || 0) - (data?.baritsaaniiUldegdel || 0)
+                  : a.dataIndex === "avlagiinUldegdel"
+                  ? (parseFloat(data.uldegdel) || 0) +
+                    (data.aldangiinUldegdel || 0)
                   : val;
               },
             })
