@@ -459,7 +459,7 @@ function AjiltniiDelgerenguiTailan(
           }
           disabled
           prefix={<ClockCircleOutlined className="text-blue-500" />}
-          className="w-full"
+          className="w-auto"
           placeholder="Ажилтны нэвтэрсэн цаг ачааллаж байна..."
         />
       </div>
@@ -470,7 +470,7 @@ function AjiltniiDelgerenguiTailan(
           value={songogdsonCamera || "Камер сонгогдоогүй"}
           disabled
           prefix={<ClockCircleOutlined className="text-blue-500" />}
-          className="w-full lg:w-64"
+          className="w-auto"
           placeholder="Камер сонгогдоогүй"
         />
       </div>
