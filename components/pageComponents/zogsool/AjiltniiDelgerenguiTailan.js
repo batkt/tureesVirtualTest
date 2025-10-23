@@ -66,9 +66,9 @@ function AjiltniiDelgerenguiTailan(
     useAjiltniOdriinTailan(
       token,
       barilgiinId,
-      ajiltniiGarsanTsag
-        ? moment(ajiltniiGarsanTsag).format("YYYY-MM-DD HH:mm:ss")
-        : moment().format("YYYY-MM-DD HH:mm:ss"),
+      khaaltOgnoo
+        ? moment(khaaltOgnoo).format("YYYY-MM-DD HH:mm:ss")
+        : moment().format("YYYY-MM-DD 23:59:59"),
       ajiltniiNevtersenTsag
         ? moment(ajiltniiNevtersenTsag).format("YYYY-MM-DD HH:mm:ss")
         : moment().format("YYYY-MM-DD HH:mm:ss"),
@@ -167,7 +167,7 @@ function AjiltniiDelgerenguiTailan(
         zogsooliinId: zogsooliinId,
         garsanCameraIp: songogdsonCamera,
         nevtersenOgnoo: ajiltniiNevtersenTsag,
-        khaaltOgnoo: currentTime.format("YYYY-MM-DD 23:59:59"),
+        khaaltOgnoo: currentTime,
         tulbur: transformedTulbur,
       };
 
@@ -408,8 +408,8 @@ function AjiltniiDelgerenguiTailan(
               </div>
               <div>
                 Дуусах огноо:{" "}
-                {ajiltniiGarsanTsag
-                  ? moment(ajiltniiGarsanTsag).format("YYYY-MM-DD HH:mm:ss")
+                {khaaltOgnoo
+                  ? moment(khaaltOgnoo).format("YYYY-MM-DD HH:mm:ss")
                   : moment().format("YYYY-MM-DD HH:mm:ss")}
               </div>
             </div>

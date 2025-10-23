@@ -17,7 +17,7 @@ const fetcher = (
     .post(url, {
       barilgiinId,
       ekhlekhOgnoo: moment(ekhlekhOgnoo).format("YYYY-MM-DD HH:mm:ss"),
-      duusakhOgnoo: moment(duusakhOgnoo).format("YYYY-MM-DD 23:59:59"),
+      duusakhOgnoo: duusakhOgnoo,
 
       garsanKhaalga: garsanKhaalga,
       baiguullagiinId,
