@@ -2,6 +2,9 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
+import { modal } from "../../../components/ant/Modal";
+import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
+
 import {
   Button,
   Card,
@@ -42,6 +45,7 @@ import {
   DownloadOutlined,
   DownOutlined,
   FileExcelOutlined,
+  PrinterOutlined,
   FilterOutlined,
   ShareAltOutlined,
   VideoCameraAddOutlined,
@@ -125,10 +129,40 @@ function tulburKhurvuulekh(v) {
   return utga;
 }
 
+function generateChild(mur, turul) {
+  if (mur?.length > 0) {
+    let res = [];
+    for (let i = 0; i < mur.length; i++) {
+      const a = mur[i];
+      if (!!a?.turul) if (a.turul !== turul) continue;
+      res.push({
+        value: !!a?.ner ? a.ner : a?.cameraIP,
+        title: !!a?.ner ? (
+          a.ner + (a?.turul ? " / " + a?.turul : "")
+        ) : (
+          <b key={a?.cameraIP} className="text-green-400 hover:text-green-800">
+            {t("Камер")}-{a?.cameraIP}
+          </b>
+        ),
+        children: generateChild(!!a?.khaalga ? a.khaalga : a?.camera, turul),
+        disabled: false,
+        disableCheckbox: true,
+        selectable: !a?.ner,
+        checkable: !a?.ner,
+      });
+    }
+    return res;
+  }
+  return [];
+}
+
 function Zogsool({ token }) {
   const { t, i18n } = useTranslation();
-  const { baiguullaga, barilgiinId } = useAuth();
+  const { baiguullaga, ajiltan, barilgiinId } = useAuth();
   const excelref = useRef(null);
+  const tailanRef = React.useRef(null);
+  const [cameraData, setCameraData] = useState([null, null]);
+
   const [ognoo, setOgnoo] = useState([
     moment().startOf("day"),
     moment().endOf("day"),
@@ -481,6 +515,39 @@ function Zogsool({ token }) {
     token,
     orlogoQuery
   );
+  function tulburiinDelgerengui() {
+    const footer = [
+      <div className="flex w-full items-center justify-between">
+        <Button type="primary" onClick={() => tailanRef.current.khaaya()}>
+          {t("Хаах")}
+        </Button>
+        <Button
+          type="primary"
+          icon={<PrinterOutlined />}
+          onClick={() => tailanRef.current.khadgalya()}
+        >
+          {t("Хэвлэх")}
+        </Button>
+      </div>,
+    ];
+    modal({
+      title: t("Төлбөрийн дэлгэрэнгүй"),
+      icon: <FileExcelOutlined />,
+      content: (
+        <TulburiinDelgerenguiTailan
+          ref={tailanRef}
+          defualtOgnoo={ognoo}
+          ajiltan={ajiltan}
+          garsanKhaalga={null}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+          barilgiinId={barilgiinId}
+          cameraData={cameraData}
+        />
+      ),
+      footer,
+    });
+  }
 
   function tseverliy() {
     const songogdson = [...selectedRowkeys];
@@ -1239,6 +1306,12 @@ function Zogsool({ token }) {
     Aos.init({ once: true });
   });
 
+  useEffect(() => {
+    const a1 = generateChild(jagsaalt, "Орох");
+    const a2 = generateChild(jagsaalt, "Гарах");
+    setCameraData([a1, a2]);
+  }, [jagsaalt]);
+
   const exlCol = () => {
     const aa = columns;
     aa.splice(columns.length - 1, 1);
@@ -1976,13 +2049,27 @@ function Zogsool({ token }) {
               placement="bottom"
               trigger="click"
             >
-              <Button
-                type="primary"
-                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
-              >
-                <span>Excel</span>
-                <DownOutlined width={5} />
-              </Button>
+              <div className="flex items-center gap-2">
+                {(ajiltan?.tokhirgoo?.zogsoolNegtgelDunKharakhEsekh === true ||
+                  ajiltan?.erkh === "Admin") && (
+                  <Button
+                    onClick={() => tulburiinDelgerengui()}
+                    className="mr-3 w-auto text-ellipsis"
+                    icon={<PrinterOutlined />}
+                    type="primary"
+                  >
+                    {t("Төлбөрийн дэлгэрэнгүй")}
+                  </Button>
+                )}
+
+                <Button
+                  type="primary"
+                  icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                >
+                  <span>Excel</span>
+                  <DownOutlined width={5} />
+                </Button>
+              </div>
             </Popover>
             <div className="flex items-start justify-center gap-1">
               <Button
@@ -1995,7 +2082,6 @@ function Zogsool({ token }) {
                     : "default"
                 }`}
                 className="dark:bg-gray-800 dark:text-gray-200"
-                onClick={() => tseverliy()}
               >
                 {t("Цэвэрлэх")}
                 {selectedRowkeys &&

@@ -65,6 +65,7 @@ import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import Stream1, { SocketStream, Stream2 } from "./stream";
 import StackStream from "./stackStream";
 import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
+import AjiltniiDelgerenguiTailan from "components/pageComponents/zogsool/AjiltniiDelgerenguiTailan";
 import ZogsoolCameraTable from "components/pageComponents/zogsool/ZogsoolCameraTable";
 import R2WPlayerComponent from "components/streamPlayer";
 import StackIkhNaydStream from "./StackIkhNaydStream";
@@ -241,6 +242,7 @@ function camera({ token }) {
   const tulburRef = React.useRef(null);
   const mashiniiDugaarRef = React.useRef(null);
   const tailanRef = React.useRef(null);
+  const ajiltniiTailanRef = React.useRef(null);
   const khungulultRef = React.useRef(null);
   // const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
   const { order, onChangeTable, setOrder } = useOrder({
@@ -1780,30 +1782,28 @@ function camera({ token }) {
             }
           }
           if (modalOpen.type !== "dugaarBurtgekh") {
-            updateMethod("uilchluulegch", token, body).then(
-              ({ data }) => {
-                if (data === "Amjilttai") {
-                  message.success(t("Амжилттай хадгаллаа"));
-                  if (
-                    value !== "Маргалдсан" &&
-                    value !== "Журам зөрчсөн" &&
-                    value !== "Зугтаасан"
-                  ) {
-                    khaalgaNeey(body?.tuukh?.[0]?.garsanKhaalga);
-                  }
-                  if (searchUtga.current?.value) {
-                    searchUtga.current.value = "";
-                    setUilchluulegchKhuudaslalt((e) => ({
-                      ...e,
-                      khuudasniiDugaar: 1,
-                      search: "",
-                    }));
-                    setKhaikh("");
-                  }
-                  onRefresh();
+            updateMethod("uilchluulegch", token, body).then(({ data }) => {
+              if (data === "Amjilttai") {
+                message.success(t("Амжилттай хадгаллаа"));
+                if (
+                  value !== "Маргалдсан" &&
+                  value !== "Журам зөрчсөн" &&
+                  value !== "Зугтаасан"
+                ) {
+                  khaalgaNeey(body?.tuukh?.[0]?.garsanKhaalga);
                 }
+                if (searchUtga.current?.value) {
+                  searchUtga.current.value = "";
+                  setUilchluulegchKhuudaslalt((e) => ({
+                    ...e,
+                    khuudasniiDugaar: 1,
+                    search: "",
+                  }));
+                  setKhaikh("");
+                }
+                onRefresh();
               }
-            );
+            });
             setModalOpen({ bool: false, item: null, type: "" });
             setValue(null);
           }
@@ -1839,6 +1839,43 @@ function camera({ token }) {
           baiguullagiinId={baiguullaga?._id}
           barilgiinId={barilgiinId}
           cameraData={cameraData}
+        />
+      ),
+      footer,
+    });
+  }
+
+  function ajiltniiDelgerengui() {
+    const footer = [
+      <div className="flex w-full items-center justify-between">
+        <Button
+          type="primary"
+          onClick={() => ajiltniiTailanRef.current.khaaya()}
+        >
+          {t("Хаах")}
+        </Button>
+        <Button
+          type="primary"
+          icon={<PrinterOutlined />}
+          onClick={() => ajiltniiTailanRef.current.khadgalya()}
+        >
+          {t("Хэвлэх")}
+        </Button>
+      </div>,
+    ];
+    modal({
+      title: t("Өдрийн хаалт"),
+      icon: <FileExcelOutlined />,
+      content: (
+        <AjiltniiDelgerenguiTailan
+          ref={ajiltniiTailanRef}
+          defualtOgnoo={ognoo}
+          ajiltan={ajiltan}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+          barilgiinId={barilgiinId}
+          selectedCamera={camerVal[1]}
+          zogsooliinId={songogdzonZogsool?._id}
         />
       ),
       footer,
@@ -2575,6 +2612,14 @@ function camera({ token }) {
                 data-aos-duration="1000"
                 data-aos-delay="300"
               >
+                <Button
+                  onClick={() => ajiltniiDelgerengui()}
+                  className="mr-3 w-auto text-ellipsis"
+                  icon={<PrinterOutlined />}
+                  type="primary"
+                >
+                  {t("Өдрийн хаалт")}
+                </Button>
                 {(ajiltan?.tokhirgoo?.zogsoolNegtgelDunKharakhEsekh === true ||
                   ajiltan?.erkh === "Admin") && (
                   <Button
@@ -2586,6 +2631,7 @@ function camera({ token }) {
                     {t("Төлбөрийн дэлгэрэнгүй")}
                   </Button>
                 )}
+
                 <div className="flex w-full items-center justify-center">
                   <div className="relative inline-block">
                     <Button
@@ -3098,14 +3144,14 @@ function camera({ token }) {
                     placement="bottom"
                     trigger="click"
                   >
-                    <Button
+                    {/* <Button
                       type="primary"
                       className="mr-3 w-auto text-ellipsis"
                       icon={<FileExcelOutlined />}
                     >
                       <span>Excel</span>
                       <DownOutlined width={5} />
-                    </Button>
+                    </Button> */}
                   </Popover>
                   <Button
                     className="w-auto text-ellipsis"

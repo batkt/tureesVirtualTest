@@ -48,7 +48,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { MdOutlineInventory } from "react-icons/md";
 import { GiBackwardTime } from "react-icons/gi";
- 
+
 import { ImFileEmpty, ImFileText2 } from "react-icons/im";
 import { useTranslation } from "react-i18next";
 
@@ -492,7 +492,7 @@ function talbaiBurtgekh({ token }) {
         size="small"
         className="col-span-12 mb-14 md:col-span-12 md:mb-0 xl:col-span-12"
       >
-        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
+        <div className="hideScroll flex grid w-full grid-cols-1 gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
@@ -693,6 +693,10 @@ function talbaiBurtgekh({ token }) {
               pageSize: talbainiiGaralt?.khuudasniiKhemjee,
               total: talbainiiGaralt?.niitMur,
               showSizeChanger: true,
+              responsive: true,
+              size: "default",
+              showQuickJumper: false,
+              className: "pt-4 sm:pt-2",
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                 setTalbaiKhuudaslalt((kh) => ({
                   ...kh,
@@ -713,10 +717,14 @@ function talbaiBurtgekh({ token }) {
             dataSource={talbainiiGaralt?.jagsaalt}
             onChange={onChangeTable}
             pagination={{
+              className: "pt-4 sm:pt-2",
               current: talbainiiGaralt?.khuudasniiDugaar,
               pageSize: talbainiiGaralt?.khuudasniiKhemjee,
               total: talbainiiGaralt?.niitMur,
               showSizeChanger: true,
+              responsive: true,
+              showQuickJumper: false,
+              size: "default",
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                 setTalbaiKhuudaslalt((kh) => ({
                   ...kh,

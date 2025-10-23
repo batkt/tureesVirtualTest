@@ -1113,7 +1113,7 @@ function guilgeeniiTuukh({ token }) {
       setNeesenEsekh={setNeesenEsekh}
     >
       <Card className="cardgrid col-span-12">
-        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:py-2 md:gap-6 2xl:grid-cols-12">
+        <div className="hideScroll flex grid w-full grid-cols-1 gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid-cols-6 sm:py-2 md:gap-6 2xl:grid-cols-12">
           {[
             {
               too: formatNumber(
@@ -1229,12 +1229,12 @@ function guilgeeniiTuukh({ token }) {
           })}
         </div>
         <div
-          className="mt-5 flex w-full flex-col-reverse gap-5 md:flex-row"
+          className="mt-5 flex w-full flex-col gap-5 md:flex-row"
           data-aos="zoom-in-up"
           data-aos-duration="1000"
           data-aos-delay="200"
         >
-          <div className="flex">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <DatePicker.RangePicker
               picker="month"
               value={ognoo}
@@ -1243,12 +1243,14 @@ function guilgeeniiTuukh({ token }) {
                 setLoadingIndex(0);
               }}
               clearIcon={false}
+              className="w-full sm:w-auto"
             />
-            <div className="ml-5">
+            <div className="w-full sm:ml-5 sm:w-auto">
               <Select
                 placeholder={t("Давхар")}
                 onChange={setDavkhar}
                 allowClear
+                className="w-full"
               >
                 {baiguullaga?.barilguud
                   ?.find((a) => a._id === barilgiinId)
@@ -1260,7 +1262,7 @@ function guilgeeniiTuukh({ token }) {
               </Select>
             </div>
           </div>
-          <div className="ml-auto flex w-full place-content-end gap-2 md:w-auto">
+          <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:flex-row sm:flex-wrap md:ml-auto md:w-auto md:place-content-end">
             <div className="hidden md:flex">
               <BaganiinSongolt
                 shineBagana={shineBagana}
@@ -1449,9 +1451,10 @@ function guilgeeniiTuukh({ token }) {
               trigger="click"
             >
               <Button
-                className="w-full"
+                className="w-full sm:w-auto"
                 type="primary"
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                size="default"
               >
                 <span>Excel</span>
                 <DownOutlined width={5} />
@@ -1462,6 +1465,8 @@ function guilgeeniiTuukh({ token }) {
                 type="primary"
                 onClick={olnoorGuilgeeOruulakhExcel}
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                size="default"
+                className="w-full sm:w-auto"
               >
                 <span>{t("Заалт оруулах")}</span>
                 <DownOutlined width={5} />
@@ -1472,6 +1477,8 @@ function guilgeeniiTuukh({ token }) {
                 type="primary"
                 onClick={olnoorGuilgeeOruulakhExcelFc}
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                size="default"
+                className="w-full sm:w-auto"
               >
                 <span>{t("Заалт")}</span>
                 <DownOutlined width={5} />
@@ -1482,6 +1489,8 @@ function guilgeeniiTuukh({ token }) {
                 type="primary"
                 onClick={olnoorEkhniiUldegdelOruulakhExcel}
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                size="default"
+                className="w-full sm:w-auto"
               >
                 <span>{t("Эхний үлдэгдэл оруулах")}</span>
                 <DownOutlined width={5} />

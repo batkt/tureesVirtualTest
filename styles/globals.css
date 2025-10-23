@@ -362,6 +362,7 @@ audio::-webkit-media-controls-volume-control-container {
   transition-duration: 0.15s;
   transition-duration: 0.2s;
 }
+
 .sun-editor-editable {
   padding: 0 !important;
 }
@@ -1510,4 +1511,11 @@ input[type="number"] {
   /* dark:bg-blue-600 */
   border-color: #2563eb !important;
   color: white !important;
+}
+
+.ant-btn[disabled],
+.ant-btn.ant-btn-disabled {
+  cursor: not-allowed !important;
+  opacity: 0.5;
+  filter: saturate(1);
 }
