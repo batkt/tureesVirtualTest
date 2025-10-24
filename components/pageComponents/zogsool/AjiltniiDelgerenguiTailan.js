@@ -1,21 +1,14 @@
-import React, { useRef, useEffect, useMemo, useState } from "react";
-import locale from "antd/lib/date-picker/locale/mn_MN";
-
-import {
-  Button,
-  Table,
-  DatePicker,
-  Space,
-  Card,
-  Checkbox,
-  TreeSelect,
-  message,
-  notification,
-  Input,
-} from "antd";
+import React, {
+  useRef,
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+} from "react";
+import { Button, Checkbox, Modal, message, notification, Input } from "antd";
 import {
   PrinterOutlined,
-  DownloadOutlined,
+  VideoCameraOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
 
@@ -24,10 +17,8 @@ import moment from "moment";
 import { t } from "i18next";
 import formatNumber from "tools/function/formatNumber";
 import uilchilgee from "services/uilchilgee";
-import { Excel } from "antd-table-saveas-excel";
 import useAjiltniOdriinTailan from "hooks/useAjiltniOdriinTailan";
 import createMethod from "tools/function/crud/createMethod";
-const { RangePicker } = DatePicker;
 
 function AjiltniiDelgerenguiTailan(
   {
@@ -36,7 +27,6 @@ function AjiltniiDelgerenguiTailan(
     token,
     baiguullagiinId,
     barilgiinId,
-    defualtOgnoo,
     selectedCamera,
     zogsooliinId,
   },
@@ -51,44 +41,51 @@ function AjiltniiDelgerenguiTailan(
   const [songogdson, setSongogdson] = useState([]);
   const [khaaltOgnoo, setKhaaltOgnoo] = useState(null);
 
+  const ajiltniiId = ajiltan?._id;
+
+  const defaultDuusakhOgnoo = useMemo(
+    () => moment().format("YYYY-MM-DD 23:59:59"),
+    []
+  );
+
+  const formattedNevtersenOgnoo = useMemo(() => {
+    if (!ajiltniiNevtersenTsag) return null;
+    return moment(ajiltniiNevtersenTsag).format("YYYY-MM-DD HH:mm:ss");
+  }, [ajiltniiNevtersenTsag]);
+
+  const defaultEkhlekhOgnoo = useMemo(
+    () => moment().format("YYYY-MM-DD HH:mm:ss"),
+    []
+  );
+
+  const effectiveNevtersenOgnoo = formattedNevtersenOgnoo || defaultEkhlekhOgnoo;
+
+  const formattedKhaaltOgnoo = useMemo(() => {
+    if (!khaaltOgnoo) return null;
+    return moment(khaaltOgnoo).format("YYYY-MM-DD HH:mm:ss");
+  }, [khaaltOgnoo]);
+
   const garsanKhaalga = useMemo(() => {
     return songogdsonCamera;
   }, [songogdsonCamera]);
 
   const query = useMemo(() => {
-    if (ajiltan?._id) {
-      return { burtgesenAjiltaniiId: ajiltan._id };
+    if (ajiltniiId) {
+      return { burtgesenAjiltaniiId: ajiltniiId };
     }
     return undefined;
-  }, [ajiltan]);
+  }, [ajiltniiId]);
 
   const { zogsoolTulburMedeelel, zogsoolTulburMedeelelMutate } =
     useAjiltniOdriinTailan(
       token,
       barilgiinId,
-      khaaltOgnoo
-        ? moment(khaaltOgnoo).format("YYYY-MM-DD HH:mm:ss")
-        : moment().format("YYYY-MM-DD 23:59:59"),
-      ajiltniiNevtersenTsag
-        ? moment(ajiltniiNevtersenTsag).format("YYYY-MM-DD HH:mm:ss")
-        : moment().format("YYYY-MM-DD HH:mm:ss"),
+      formattedKhaaltOgnoo || defaultDuusakhOgnoo,
+      effectiveNevtersenOgnoo,
       garsanKhaalga,
       baiguullagiinId,
       query
     );
-
-  React.useImperativeHandle(
-    ref,
-    () => ({
-      khaaya() {
-        destroy();
-      },
-      khadgalya() {
-        handlePrint();
-      },
-    }),
-    []
-  );
 
   const printRef = useRef();
 
@@ -97,44 +94,54 @@ function AjiltniiDelgerenguiTailan(
   });
 
   useEffect(() => {
-    if (selectedCamera) {
-      setSongogdsonCamera(selectedCamera);
+    if (!selectedCamera) {
+      setSongogdsonCamera(null);
+      return;
     }
+    setSongogdsonCamera(selectedCamera);
+    setAjiltniiNevtersenTsag(null);
+    setAjiltniiGarsanTsag(null);
+    setKhaaltOgnoo(null);
+    setHaaltDarsan(false);
   }, [selectedCamera]);
 
-  useEffect(() => {
-    if (ajiltan?._id) {
-      ajiltniiNevtersenTsagAvya();
-    }
-  }, [ajiltan]);
-
-  const ajiltniiNevtersenTsagAvya = () => {
-    if (!ajiltan?._id) return;
+  const ajiltniiNevtersenTsagAvya = useCallback(() => {
+    if (!ajiltniiId || !selectedCamera || !zogsooliinId) return;
 
     uilchilgee(token)
       .post("/ekhniiNevtersenOgnooAvya", {
-        ajiltniiId: ajiltan._id,
-        barilgiinId: barilgiinId,
+        ajiltniiId,
+        barilgiinId,
         garsanCameraIp: selectedCamera,
-        zogsooliinId: zogsooliinId,
-        baiguullagiinId: baiguullagiinId,
+        zogsooliinId,
+        baiguullagiinId,
       })
       .then(({ data }) => {
-        if (data?.data?.nevtersenOgnoo) {
-          setAjiltniiNevtersenTsag(data.data.nevtersenOgnoo);
-        }
-        if (data?.data?.khaaltOgnoo) {
-          setKhaaltOgnoo(data.data.khaaltOgnoo);
-        } else {
-          setKhaaltOgnoo(null);
-        }
+        const nevtersenOgnoo = data?.data?.nevtersenOgnoo || null;
+        const khaaltOgnooServer = data?.data?.khaaltOgnoo || null;
+
+        setAjiltniiNevtersenTsag(nevtersenOgnoo);
+        setKhaaltOgnoo(khaaltOgnooServer);
+        setHaaltDarsan(!!khaaltOgnooServer);
       })
       .catch((error) => {
         console.error("Ажилтны нэвтэрсэн цаг авахад алдаа:", error);
       });
-  };
+  }, [
+    ajiltniiId,
+    selectedCamera,
+    zogsooliinId,
+    token,
+    barilgiinId,
+    baiguullagiinId,
+  ]);
 
-  const ajiltniiAjalAasBuukh = async () => {
+  useEffect(() => {
+    if (!ajiltniiId || !selectedCamera || !zogsooliinId) return;
+    ajiltniiNevtersenTsagAvya();
+  }, [ajiltniiId, selectedCamera, zogsooliinId, ajiltniiNevtersenTsagAvya]);
+
+  const ajiltniiAjalAasBuukh = useCallback(async () => {
     if (!ajiltniiNevtersenTsag) {
       message.warning("Ажилтны нэвтэрсэн цаг олдсонгүй");
       return;
@@ -152,6 +159,7 @@ function AjiltniiDelgerenguiTailan(
       setHaaltDarsan(true);
       const currentTime = moment();
       setAjiltniiGarsanTsag(currentTime);
+      setKhaaltOgnoo(currentTime);
 
       const transformedTulbur = tulburiinMedeelel.map((item) => ({
         ognoo: currentTime.format("YYYY-MM-DD 23:59:59"),
@@ -179,16 +187,45 @@ function AjiltniiDelgerenguiTailan(
       notification.success({
         message: "Ажлаасаа буух мэдээлэл амжилттай хадгалагдлаа",
       });
+      destroy?.();
     } catch (error) {
       console.error("Өдрийн хаалт хадгалахад алдаа:", error);
       notification.error({
         message: "Өдрийн хаалт хадгалахад алдаа гарлаа",
         description: error?.response?.data?.message || "Дахин оролдоно уу",
       });
+      setHaaltDarsan(false);
+      setKhaaltOgnoo(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [
+    ajiltniiNevtersenTsag,
+    songogdsonCamera,
+    loading,
+    tulburiinMedeelel,
+    ajiltan,
+    barilgiinId,
+    baiguullagiinId,
+    zogsooliinId,
+    token,
+    zogsoolTulburMedeelelMutate,
+    destroy,
+  ]);
+
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      khaaya() {
+        destroy();
+      },
+      khadgalya() {
+        handlePrint();
+      },
+      ajiltniiAjalAasBuukh,
+    }),
+    [destroy, handlePrint, ajiltniiAjalAasBuukh]
+  );
 
   const handleDivClick = (a) => {
     setSongogdson((prev) => {
@@ -321,20 +358,30 @@ function AjiltniiDelgerenguiTailan(
             break;
 
           default:
-            ugugdul.push({
-              ner: element._id,
-              turul: element.tailbar,
-              icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
-              dun: element.niitDun,
-              too: element.niitToo,
-              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-            });
+            console.log(element);
             break;
         }
       });
     }
     return ugugdul;
   }, [zogsoolTulburMedeelel]);
+
+  const isDayCloseDisabled = useMemo(() => {
+    if (loading) return true;
+    if (!!khaaltOgnoo) return true;
+    if (haaltDarsan) return true;
+    return tulburiinMedeelel.length === 0;
+  }, [loading, khaaltOgnoo, haaltDarsan, tulburiinMedeelel]);
+
+  const handleDayCloseClick = useCallback(() => {
+    Modal.confirm({
+      title: t("Өдрийн хаалт"),
+      content: t("Та өнөөдрийн ажлаа дуусгахдаа итгэлтэй байна уу?"),
+      okText: t("Тийм"),
+      cancelText: t("Үгүй"),
+      onOk: ajiltniiAjalAasBuukh,
+    });
+  }, [ajiltniiAjalAasBuukh]);
 
   const columns = [
     {
@@ -446,47 +493,36 @@ function AjiltniiDelgerenguiTailan(
         </div>
       </div>
 
-      {/* Ажилтны нэвтэрсэн цаг */}
-      <div className="mb-4">
-        <label className="mb-2 block text-sm font-medium text-gray-700">
-          Ажилтны нэвтэрсэн цаг
-        </label>
-        <Input
-          value={
-            ajiltniiNevtersenTsag
-              ? moment(ajiltniiNevtersenTsag).format("YYYY-MM-DD HH:mm:ss")
-              : "Ачааллаж байна..."
-          }
-          disabled
-          prefix={<ClockCircleOutlined className="text-blue-500" />}
-          className="w-auto"
-          placeholder="Ажилтны нэвтэрсэн цаг ачааллаж байна..."
-        />
-      </div>
+      <div className="mb-4 flex flex-wrap items-end gap-4">
+        <div className="min-w-0 flex-1">
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Ажилтны нэвтэрсэн цаг
+          </label>
+          <Input
+            value={
+              ajiltniiNevtersenTsag
+                ? moment(ajiltniiNevtersenTsag).format("YYYY-MM-DD HH:mm:ss")
+                : "Ачааллаж байна..."
+            }
+            disabled
+            prefix={<ClockCircleOutlined className="text-blue-500" />}
+            className="w-full"
+            placeholder="Ажилтны нэвтэрсэн цаг ачааллаж байна..."
+          />
+        </div>
 
-      {/* Камер сонгох */}
-      <div className="mb-4">
-        <Input
-          value={songogdsonCamera || "Камер сонгогдоогүй"}
-          disabled
-          prefix={<ClockCircleOutlined className="text-blue-500" />}
-          className="w-auto"
-          placeholder="Камер сонгогдоогүй"
-        />
-      </div>
-
-      <div className="mb-4">
-        <Button
-          type="primary"
-          icon={<ClockCircleOutlined />}
-          onClick={ajiltniiAjalAasBuukh}
-          loading={loading}
-          disabled={
-            !!khaaltOgnoo || haaltDarsan || tulburiinMedeelel.length === 0
-          }
-        >
-          Өдрийн хаалт
-        </Button>
+        <div className="min-w-0 flex-1">
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Бүртгэл хийсэн камер
+          </label>
+          <Input
+            value={songogdsonCamera || "Камер сонгогдоогүй"}
+            disabled
+            prefix={<VideoCameraOutlined className="text-blue-500" />}
+            className="w-full"
+            placeholder="Камер сонгогдоогүй"
+          />
+        </div>
       </div>
 
       {tulburiinMedeelel.length > 0 ? (
@@ -545,7 +581,7 @@ function AjiltniiDelgerenguiTailan(
             </div>
           </div>
           <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
-            <div className="flex ">Төлбөр авсан:</div>
+            <div className="flex ">Бүртгэсэн дүн:</div>
             <div>
               {formatNumber(
                 tulburiinMedeelel?.reduce(
@@ -557,7 +593,7 @@ function AjiltniiDelgerenguiTailan(
             </div>
           </div>
           <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
-            <div className="flex ">Төлбөр аваагүй:</div>
+            <div className="flex ">Бүртгээгүй дүн:</div>
             <div>
               {formatNumber(
                 tulburiinMedeelel?.reduce(
@@ -576,6 +612,25 @@ function AjiltniiDelgerenguiTailan(
           </div>
         </div>
       )}
+
+      <div className="mt-6 flex flex-col gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
+        <Button type="danger" onClick={() => destroy?.()}>
+          {t("Хаах")}
+        </Button>
+        <div className="flex flex-wrap justify-end gap-2">
+          <Button type="primary" icon={<PrinterOutlined />} onClick={handlePrint}>
+            {t("Хэвлэх")}
+          </Button>
+          <Button
+            type="primary"
+            icon={<ClockCircleOutlined />}
+            onClick={handleDayCloseClick}
+            disabled={isDayCloseDisabled}
+          >
+            {t("Өдрийн хаалт")}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

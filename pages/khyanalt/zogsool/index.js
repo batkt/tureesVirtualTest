@@ -499,6 +499,19 @@ function Zogsool({ token }) {
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
 
+  // KassCameraKhaalt data using useJagsaalt hook - бүх датаг буцаах
+  const kassCameraKhaaltQuery = useMemo(() => {
+    return {
+      baiguullagiinId: baiguullaga?._id,
+      barilgiinId: barilgiinId,
+    };
+  }, [baiguullaga?._id, barilgiinId]);
+
+  const { jagsaalt: kassCameraKhaaltJagsaalt, mutate: kassCameraKhaaltMutate } =
+    useJagsaalt("/kassCameraKhaalt", kassCameraKhaaltQuery, {
+      khaaltOgnoo: -1,
+    });
+
   const orlogoQuery = useMemo(() => {
     return {
       baiguullagiinId: baiguullaga?._id,
@@ -604,6 +617,7 @@ function Zogsool({ token }) {
                     });
                     uilchluulegchMutate();
                     eBarimtMutate();
+                    kassCameraKhaaltMutate();
                     tseverlekh();
                   }
                 })
@@ -739,6 +753,97 @@ function Zogsool({ token }) {
           }
         });
   }, [uilchluulegchGaralt?.jagsaalt]);
+
+  // Өдрийн хаалтын хүснэгтийн баганууд
+  const kassCameraKhaaltColumns = useMemo(() => {
+    return [
+      {
+        title: "№",
+        align: "center",
+        dataIndex: "dugaar",
+        width: "3rem",
+        render: (text, record, index) => index + 1,
+      },
+      {
+        title: t("Ажилтны нэр"),
+        align: "center",
+        width: "12rem",
+        dataIndex: "ajiltaniiNer",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Нэвтэрсэн огноо"),
+        align: "center",
+        width: "10rem",
+        dataIndex: "nevtersenOgnoo",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render(v) {
+          return v && moment(v).format("YYYY-MM-DD HH:mm");
+        },
+      },
+      {
+        title: t("Хаалт огноо"),
+        align: "center",
+        width: "10rem",
+        dataIndex: "khaaltOgnoo",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render(v) {
+          return v && moment(v).format("YYYY-MM-DD HH:mm");
+        },
+      },
+      {
+        title: t("Гарсан камер"),
+        align: "center",
+        width: "10rem",
+        dataIndex: "garsanCameraIp",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Төлбөрийн мэдээлэл"),
+        align: "center",
+        width: "15rem",
+        dataIndex: "tulbur",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render(v) {
+          if (!v || v.length === 0) return "-";
+
+          if (v.length > 1) {
+            return (
+              <div className="flex justify-center">
+                <Popover
+                  content={() =>
+                    v.map((tulbur, index) => (
+                      <div key={index} className="dark:text-gray-200">
+                        {tulburKhurvuulekh(tulbur.turul)}:{" "}
+                        {formatNumber(tulbur.dun, 0)}₮
+                      </div>
+                    ))
+                  }
+                  placement="bottom"
+                  trigger="click"
+                >
+                  <Button
+                    icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
+                  ></Button>
+                </Popover>
+              </div>
+            );
+          } else {
+            return (
+              <div className="text-center">
+                {tulburKhurvuulekh(v[0]?.turul)}: {formatNumber(v[0]?.dun, 0)}₮
+              </div>
+            );
+          }
+        },
+      },
+    ];
+  }, [t]);
 
   const columns = useMemo(() => {
     const shinecol =
@@ -2282,6 +2387,44 @@ function Zogsool({ token }) {
                         </AntdTable.Summary.Cell>
                         <AntdTable.Summary.Cell>
                           <div className="truncate text-right font-bold "></div>
+                        </AntdTable.Summary.Cell>
+                      </AntdTable.Summary>
+                    )}
+                  />
+                ),
+              },
+              {
+                key: "3",
+                label: "Өдрийн хаалт",
+                children: (
+                  <Table
+                    className="mt-8 hidden overflow-auto md:block"
+                    tableLayout="auto"
+                    loading={!kassCameraKhaaltJagsaalt}
+                    dataSource={kassCameraKhaaltJagsaalt}
+                    scroll={{ y: "calc(100vh - 30rem)" }}
+                    size="small"
+                    bordered
+                    columns={kassCameraKhaaltColumns}
+                    pagination={{
+                      current: kassCameraKhaaltJagsaalt?.khuudasniiDugaar,
+                      total: kassCameraKhaaltJagsaalt?.niitMur,
+                      pageSizeOptions: [100, 300, 500],
+                      defaultPageSize: [500],
+                      showSizeChanger: true,
+                      onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                        setKhuudaslalt((kh) => ({
+                          ...kh,
+                          khuudasniiDugaar,
+                          khuudasniiKhemjee,
+                        })),
+                    }}
+                    summary={(e) => (
+                      <AntdTable.Summary className="border " fixed={"bottom"}>
+                        <AntdTable.Summary.Cell colSpan={6}>
+                          <div className="space-x-2 truncate text-base font-bold ">
+                            {t("Нийт")}: {e?.length || 0} {t("ажилтан")}
+                          </div>
                         </AntdTable.Summary.Cell>
                       </AntdTable.Summary>
                     )}

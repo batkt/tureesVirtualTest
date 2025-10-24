@@ -1,8 +1,5 @@
-import { useState } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
-import moment from "moment";
-
 const fetcher = (
   url,
   token,
@@ -16,9 +13,8 @@ const fetcher = (
   return axios(token)
     .post(url, {
       barilgiinId,
-      ekhlekhOgnoo: moment(ekhlekhOgnoo).format("YYYY-MM-DD HH:mm:ss"),
-      duusakhOgnoo: duusakhOgnoo,
-
+      ekhlekhOgnoo,
+      duusakhOgnoo,
       garsanKhaalga: garsanKhaalga,
       baiguullagiinId,
       ...query,
@@ -36,8 +32,15 @@ function useAjiltniOdriinTailan(
   baiguullagiinId,
   query
 ) {
+  const shouldFetch =
+    !!token &&
+    !!barilgiinId &&
+    !!ekhlekhOgnoo &&
+    !!garsanKhaalga &&
+    !!baiguullagiinId;
+
   const { data, mutate, isValidating } = useSWR(
-    !!token
+    shouldFetch
       ? [
           "/zogsooliinUdriinTailanAvya",
           token,

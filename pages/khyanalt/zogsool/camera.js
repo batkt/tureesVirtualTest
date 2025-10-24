@@ -1846,30 +1846,22 @@ function camera({ token }) {
   }
 
   function ajiltniiDelgerengui() {
-    const footer = [
-      <div className="flex w-full items-center justify-between">
-        <Button
-          type="primary"
-          onClick={() => ajiltniiTailanRef.current.khaaya()}
-        >
-          {t("Хаах")}
-        </Button>
-        <Button
-          type="primary"
-          icon={<PrinterOutlined />}
-          onClick={() => ajiltniiTailanRef.current.khadgalya()}
-        >
-          {t("Хэвлэх")}
-        </Button>
-      </div>,
-    ];
     modal({
-      title: t("Өдрийн хаалт"),
-      icon: <FileExcelOutlined />,
+      title: (
+        <div className="flex w-full items-center justify-between">
+          <div className="flex items-center gap-2">{t("Өдрийн хаалт")}</div>
+          <button
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white transition-colors duration-200 hover:bg-red-600"
+            onClick={() => ajiltniiTailanRef.current.khaaya()}
+            title="Хаах"
+          >
+            <CloseOutlined className="text-xs" />
+          </button>
+        </div>
+      ),
       content: (
         <AjiltniiDelgerenguiTailan
           ref={ajiltniiTailanRef}
-          defualtOgnoo={ognoo}
           ajiltan={ajiltan}
           token={token}
           baiguullagiinId={baiguullaga?._id}
@@ -1878,7 +1870,7 @@ function camera({ token }) {
           zogsooliinId={songogdzonZogsool?._id}
         />
       ),
-      footer,
+      footer: null,
     });
   }
 
