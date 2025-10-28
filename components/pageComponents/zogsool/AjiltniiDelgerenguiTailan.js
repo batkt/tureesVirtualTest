@@ -40,6 +40,7 @@ function AjiltniiDelgerenguiTailan(
 
   const [songogdson, setSongogdson] = useState([]);
   const [khaaltOgnoo, setKhaaltOgnoo] = useState(null);
+  const [tailanEkhlekhOgnoo, setTailanEkhlekhOgnoo] = useState(null);
 
   const ajiltniiId = ajiltan?._id;
 
@@ -52,13 +53,6 @@ function AjiltniiDelgerenguiTailan(
     if (!ajiltniiNevtersenTsag) return null;
     return moment(ajiltniiNevtersenTsag).format("YYYY-MM-DD HH:mm:ss");
   }, [ajiltniiNevtersenTsag]);
-
-  const defaultEkhlekhOgnoo = useMemo(
-    () => moment().format("YYYY-MM-DD HH:mm:ss"),
-    []
-  );
-
-  const effectiveNevtersenOgnoo = formattedNevtersenOgnoo || defaultEkhlekhOgnoo;
 
   const formattedKhaaltOgnoo = useMemo(() => {
     if (!khaaltOgnoo) return null;
@@ -76,16 +70,19 @@ function AjiltniiDelgerenguiTailan(
     return undefined;
   }, [ajiltniiId]);
 
-  const { zogsoolTulburMedeelel, zogsoolTulburMedeelelMutate } =
-    useAjiltniOdriinTailan(
-      token,
-      barilgiinId,
-      formattedKhaaltOgnoo || defaultDuusakhOgnoo,
-      effectiveNevtersenOgnoo,
-      garsanKhaalga,
-      baiguullagiinId,
-      query
-    );
+  const {
+    zogsoolTulburMedeelel,
+    zogsoolTulburMedeelelMutate,
+    zogsooliinUdriinTailanUnshijBaina,
+  } = useAjiltniOdriinTailan(
+    token,
+    barilgiinId,
+    formattedKhaaltOgnoo || defaultDuusakhOgnoo,
+    tailanEkhlekhOgnoo,
+    garsanKhaalga,
+    baiguullagiinId,
+    query
+  );
 
   const printRef = useRef();
 
@@ -96,6 +93,7 @@ function AjiltniiDelgerenguiTailan(
   useEffect(() => {
     if (!selectedCamera) {
       setSongogdsonCamera(null);
+      setTailanEkhlekhOgnoo(null);
       return;
     }
     setSongogdsonCamera(selectedCamera);
@@ -103,30 +101,44 @@ function AjiltniiDelgerenguiTailan(
     setAjiltniiGarsanTsag(null);
     setKhaaltOgnoo(null);
     setHaaltDarsan(false);
+    setTailanEkhlekhOgnoo(null);
   }, [selectedCamera]);
 
-  const ajiltniiNevtersenTsagAvya = useCallback(() => {
+  const ajiltniiNevtersenTsagAvya = useCallback(async () => {
     if (!ajiltniiId || !selectedCamera || !zogsooliinId) return;
 
-    uilchilgee(token)
-      .post("/ekhniiNevtersenOgnooAvya", {
-        ajiltniiId,
-        barilgiinId,
-        garsanCameraIp: selectedCamera,
-        zogsooliinId,
-        baiguullagiinId,
-      })
-      .then(({ data }) => {
-        const nevtersenOgnoo = data?.data?.nevtersenOgnoo || null;
-        const khaaltOgnooServer = data?.data?.khaaltOgnoo || null;
+    const fallbackOgnoo = moment().format("YYYY-MM-DD HH:mm:ss");
 
-        setAjiltniiNevtersenTsag(nevtersenOgnoo);
-        setKhaaltOgnoo(khaaltOgnooServer);
-        setHaaltDarsan(!!khaaltOgnooServer);
-      })
-      .catch((error) => {
-        console.error("Ажилтны нэвтэрсэн цаг авахад алдаа:", error);
-      });
+    try {
+      const { data } = await uilchilgee(token).post(
+        "/ekhniiNevtersenOgnooAvya",
+        {
+          ajiltniiId,
+          barilgiinId,
+          garsanCameraIp: selectedCamera,
+          zogsooliinId,
+          baiguullagiinId,
+        }
+      );
+
+      const nevtersenOgnoo = data?.data?.nevtersenOgnoo || null;
+      const khaaltOgnooServer = data?.data?.khaaltOgnoo || null;
+
+      setAjiltniiNevtersenTsag(nevtersenOgnoo);
+      setKhaaltOgnoo(khaaltOgnooServer);
+      setHaaltDarsan(!!khaaltOgnooServer);
+
+      const nevtersenMoment = nevtersenOgnoo ? moment(nevtersenOgnoo) : null;
+      const formattedNevtersenOgnoo =
+        nevtersenMoment && nevtersenMoment.isValid()
+          ? nevtersenMoment.format("YYYY-MM-DD HH:mm:ss")
+          : null;
+
+      setTailanEkhlekhOgnoo(formattedNevtersenOgnoo || fallbackOgnoo);
+    } catch (error) {
+      console.error("Ажилтны нэвтэрсэн цаг авахад алдаа:", error);
+      setTailanEkhlekhOgnoo((prev) => prev || fallbackOgnoo);
+    }
   }, [
     ajiltniiId,
     selectedCamera,
@@ -161,10 +173,27 @@ function AjiltniiDelgerenguiTailan(
       setAjiltniiGarsanTsag(currentTime);
       setKhaaltOgnoo(currentTime);
 
-      const transformedTulbur = tulburiinMedeelel.map((item) => ({
+      let latestTulbur = zogsoolTulburMedeelel;
+
+      if (!latestTulbur || !latestTulbur.length) {
+        const refreshedTulbur = await zogsoolTulburMedeelelMutate();
+        if (Array.isArray(refreshedTulbur)) {
+          latestTulbur = refreshedTulbur;
+        }
+      }
+
+      if (!latestTulbur || !latestTulbur.length) {
+        message.warning("Өнөөдрийн орлогын мэдээлэл олдсонгүй");
+        setHaaltDarsan(false);
+        setKhaaltOgnoo(null);
+        return;
+      }
+
+      const transformedTulbur = latestTulbur.map((item) => ({
         ognoo: currentTime.format("YYYY-MM-DD 23:59:59"),
-        turul: item.turul,
-        dun: item.dun,
+        turul: item?._id,
+        dun: item?.niitDun || 0,
+        too: item?.niitToo || 0,
       }));
 
       const kassCameraKhaaltData = {
@@ -203,12 +232,12 @@ function AjiltniiDelgerenguiTailan(
     ajiltniiNevtersenTsag,
     songogdsonCamera,
     loading,
-    tulburiinMedeelel,
     ajiltan,
     barilgiinId,
     baiguullagiinId,
     zogsooliinId,
     token,
+    zogsoolTulburMedeelel,
     zogsoolTulburMedeelelMutate,
     destroy,
   ]);
@@ -370,13 +399,22 @@ function AjiltniiDelgerenguiTailan(
     if (loading) return true;
     if (!!khaaltOgnoo) return true;
     if (haaltDarsan) return true;
-    return tulburiinMedeelel.length === 0;
-  }, [loading, khaaltOgnoo, haaltDarsan, tulburiinMedeelel]);
+    if (zogsooliinUdriinTailanUnshijBaina) return true;
+    return !zogsoolTulburMedeelel || zogsoolTulburMedeelel.length === 0;
+  }, [
+    loading,
+    khaaltOgnoo,
+    haaltDarsan,
+    zogsooliinUdriinTailanUnshijBaina,
+    zogsoolTulburMedeelel,
+  ]);
 
   const handleDayCloseClick = useCallback(() => {
     Modal.confirm({
       title: t("Өдрийн хаалт"),
-      content: t("Та өнөөдрийн ажлаа дуусгахдаа итгэлтэй байна уу?"),
+      content: t(
+        "Та өнөөдрийн ажлаа дуусгахдаа итгэлтэй байна уу? Өдрийн хаалт хийхдээ машин гаргах боломжгүй дараагын ажилтан заавал нэвтэрсэн байх шаардлагатай."
+      ),
       okText: t("Тийм"),
       cancelText: t("Үгүй"),
       onOk: ajiltniiAjalAasBuukh,
@@ -618,7 +656,11 @@ function AjiltniiDelgerenguiTailan(
           {t("Хаах")}
         </Button>
         <div className="flex flex-wrap justify-end gap-2">
-          <Button type="primary" icon={<PrinterOutlined />} onClick={handlePrint}>
+          <Button
+            type="primary"
+            icon={<PrinterOutlined />}
+            onClick={handlePrint}
+          >
             {t("Хэвлэх")}
           </Button>
           <Button

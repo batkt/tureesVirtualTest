@@ -223,42 +223,7 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-          case "monpay":
-            ugugdul.push({
-              ner: element._id,
-              icon: "https://play-lh.googleusercontent.com/GofyFzRM2Kwf3d47fl6FibZB7kE16Aljaodzc-ghiJmdiPpGljaqeop2T6JaURd8rw=s480-rw",
-              dun: element.niitDun,
-              too: element.niitToo,
-              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-            });
-            break;
-          case "socialpay":
-            ugugdul.push({
-              ner: element._id,
-              icon: "https://play-lh.googleusercontent.com/Jg_jjsNezlkTuxWT5ADzfqhjwHVvqZEDqQGbXJlkplNrYPyyMGXtmLA6dGrH37_paOY=w240-h480-rw",
-              dun: element.niitDun,
-              too: element.niitToo,
-              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-            });
-            break;
-          case "pocket":
-            ugugdul.push({
-              ner: element._id,
-              icon: "https://play-lh.googleusercontent.com/l0PMiUcleEv4dTZslRa9psOfrlB3S8NpBwctOoxQ6vlqfjamIf2ZxVlynfqiSelbTg=w240-h480-rw",
-              dun: element.niitDun,
-              too: element.niitToo,
-              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-            });
-            break;
-          case "lend":
-            ugugdul.push({
-              ner: element._id,
-              icon: "https://play-lh.googleusercontent.com/VEPdS1mrQMl-tmGa86GLKXiYt1WJFSSGrKeW83liDogKSTE5P0p0bei8i_QwatQhI0k=w240-h480-rw",
-              dun: element.niitDun,
-              too: element.niitToo,
-              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-            });
-            break;
+
           case "tseneglelt":
             ugugdul.push({
               ner: "Цэнэглэлт",
@@ -271,7 +236,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "PosBelen":
             ugugdul.push({
-              ner: "ПОС бэлэн",
+              ner: "Андройд ПОС Бэлэн",
               icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,
@@ -281,7 +246,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "PosCard":
             ugugdul.push({
-              ner: "ПОС карт",
+              ner: "Андройд ПОС Карт",
               icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,
@@ -291,7 +256,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "PosKhariltsakh":
             ugugdul.push({
-              ner: "ПОС дансаар",
+              ner: "Андройд ПОС Дансаар",
               icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,

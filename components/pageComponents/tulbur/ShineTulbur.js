@@ -924,7 +924,7 @@ function ShineTulbur(
                   khuleegdejBuiQpay={khuleegdejBuiQpay}
                   qpayerTulukhDun={value.qpay}
                 />
-                <div
+                {/* <div
                   className={`h-[85px] cursor-not-allowed rounded-3xl hover:scale-110`}
                 >
                   <Image
@@ -933,7 +933,7 @@ function ShineTulbur(
                     width={100}
                     src="/Rectangle60.png"
                   />
-                </div>
+                </div> */}
                 <div
                   className={`relative h-[85px] cursor-not-allowed rounded-3xl hover:scale-110`}
                 >
@@ -949,11 +949,11 @@ function ShineTulbur(
               </div>
 
               <div className="flex gap-[48px]">
-                <div
+                {/* <div
                   className={`h-[85px] cursor-not-allowed rounded-3xl hover:scale-110`}
                 >
                   <Image preview={false} width={100} src="/Rectangle66.png" />
-                </div>
+                </div> */}
                 <div
                   className={`h-[85px] cursor-not-allowed rounded-3xl hover:scale-110`}
                 >

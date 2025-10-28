@@ -723,7 +723,7 @@ function camera({ token }) {
       item: data,
       type: "unegui",
     });
-  } //Үнэгүй горимд зөвхөн машины дугаар бүртгэлтэй тохиолдолд ажиллана
+  }
 
   function khasakhDarsan() {
     setModalOpen({
@@ -1374,7 +1374,7 @@ function camera({ token }) {
                     <a
                       className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                       onClick={() => {
-                        if (isPaying) return; // олон даралт блоклоно
+                        if (isPaying) return;
                         if (!parent?.niitDun || parent.niitDun <= 0) {
                           notification.warn({
                             message: t("Дүн бодогдоогүй байна."),
@@ -1382,7 +1382,7 @@ function camera({ token }) {
                           return;
                         }
 
-                        setIsPaying(true); // хадгалалт эхэлсэн
+                        setIsPaying(true);
 
                         tulburTulyu(
                           mur,
@@ -1393,7 +1393,7 @@ function camera({ token }) {
                         );
 
                         setTimeout(() => {
-                          setIsPaying(false); // 2 секунд дараа дахин төлөх боломж
+                          setIsPaying(false);
                         }, 2000);
                       }}
                     >
