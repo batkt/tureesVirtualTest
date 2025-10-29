@@ -20,6 +20,19 @@ import uilchilgee from "services/uilchilgee";
 import useAjiltniOdriinTailan from "hooks/useAjiltniOdriinTailan";
 import createMethod from "tools/function/crud/createMethod";
 
+const RESTRICTED_PAYMENT_TYPES = new Set([
+  "khunglukh",
+  "khungulult",
+  "qpay",
+  "qpayUridchilsan",
+  "toki",
+  "kiosk",
+  "tseneglelt",
+  "zeel",
+  "Зөрчилтэй",
+  "Үнэгүй",
+]);
+
 function AjiltniiDelgerenguiTailan(
   {
     destroy,
@@ -38,6 +51,8 @@ function AjiltniiDelgerenguiTailan(
   const [loading, setLoading] = useState(false);
   const [haaltDarsan, setHaaltDarsan] = useState(false);
 
+  const ajiltandBuhTolborHarahEsekh =
+    ajiltan?.tokhirgoo?.ajiltandBuhTolborHaruulahEseh;
   const [songogdson, setSongogdson] = useState([]);
   const [khaaltOgnoo, setKhaaltOgnoo] = useState(null);
   const [tailanEkhlekhOgnoo, setTailanEkhlekhOgnoo] = useState(null);
@@ -273,7 +288,14 @@ function AjiltniiDelgerenguiTailan(
         zogsoolTulburMedeelel?.reduce((a, b) => a + b.niitDun, 0) || 0;
 
       zogsoolTulburMedeelel?.forEach((element) => {
-        switch (element?._id) {
+        const tulburiinTurul = element?._id;
+        if (
+          !ajiltandBuhTolborHarahEsekh &&
+          RESTRICTED_PAYMENT_TYPES.has(tulburiinTurul)
+        ) {
+          return;
+        }
+        switch (tulburiinTurul) {
           case "khariltsakh":
             ugugdul.push({
               ner: "Данс",
@@ -385,15 +407,113 @@ function AjiltniiDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
+          case "khunglukh":
+            ugugdul.push({
+              ner: "Хөнгөлөх",
+              icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "khungulult":
+            ugugdul.push({
+              ner: "Хөнгөлөлт",
+              icon: "/discount.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "qpay":
+            ugugdul.push({
+              ner: element._id,
+              icon: "https://qpay.mn/q/img/q.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "qpayUridchilsan":
+            ugugdul.push({
+              ner: "QPay QR",
+              icon: "https://qpay.mn/q/img/q.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "toki":
+            ugugdul.push({
+              ner: "Токи",
+              icon: "/Group_158.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "kiosk":
+            ugugdul.push({
+              ner: "Киоск",
+              icon: "/kiosk.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+
+          case "tseneglelt":
+            ugugdul.push({
+              ner: "Цэнэглэлт",
+              icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
+              // icon: "/eWalletIcon.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "zeel":
+            ugugdul.push({
+              ner: "Зээл",
+              icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "Зөрчилтэй":
+            ugugdul.push({
+              ner: "Зөрчил",
+              icon: "/exclamation.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "Үнэгүй":
+            ugugdul.push({
+              ner: "Үнэгүй",
+              icon: "/free.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
 
           default:
-            console.log(element);
+            ugugdul.push({
+              ner: tulburiinTurul,
+              icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
             break;
         }
       });
     }
     return ugugdul;
-  }, [zogsoolTulburMedeelel]);
+  }, [zogsoolTulburMedeelel, ajiltandBuhTolborHarahEsekh]);
 
   const isDayCloseDisabled = useMemo(() => {
     if (loading) return true;

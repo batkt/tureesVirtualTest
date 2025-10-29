@@ -198,7 +198,8 @@ function Zogsool({ token }) {
   const {
     jagsaalt: zurchilteiJagsaalt,
     mutate: zurchilteiMutate,
-    setKhuudaslalt,
+    setKhuudaslalt: setZurchilKhuudaslalt,
+    data: zurchilteiData,
   } = useJagsaalt(
     "/zurchilteiMashin",
     streamQuery,
@@ -365,12 +366,18 @@ function Zogsool({ token }) {
   }, [tuluvZurchil]);
 
   const [shaltgaan, setShaltgaan] = useState("Цэвэрлэсэн");
-  const [tootsooKhelber, setTootsooKhelber] = useState("");
+  const [tootsooKhelber, setTootsooKhelber] = useState("1");
+  const ZURCHIL_TAB_KEY = "4";
+  const DAILY_CLOSING_TAB_KEY = "3";
+
   const rowSelection = {
     selectedRowKeys: selectedRowkeys,
     onChange: onSelectChange,
     getCheckboxProps: (record) => {
-      if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh && tootsooKhelber == 3)
+      if (
+        baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh &&
+        tootsooKhelber === ZURCHIL_TAB_KEY
+      )
         return {
           disabled: record?.tuluv === 1,
         };
@@ -466,7 +473,7 @@ function Zogsool({ token }) {
         baseQuery["tuukh"] = { $elemMatch: { tulbur: { $eq: [] } } };
       }
     }
-    if (tootsooKhelber == 2) {
+    if (tootsooKhelber === "2") {
       delete baseQuery.createdAt;
       baseQuery["tuukh.tulbur.ognoo"] = {
         $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
@@ -499,18 +506,37 @@ function Zogsool({ token }) {
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
 
-  // KassCameraKhaalt data using useJagsaalt hook - бүх датаг буцаах
   const kassCameraKhaaltQuery = useMemo(() => {
-    return {
+    const query = {
       baiguullagiinId: baiguullaga?._id,
       barilgiinId: barilgiinId,
     };
-  }, [baiguullaga?._id, barilgiinId]);
 
-  const { jagsaalt: kassCameraKhaaltJagsaalt, mutate: kassCameraKhaaltMutate } =
-    useJagsaalt("/kassCameraKhaalt", kassCameraKhaaltQuery, {
+    if (ognoo?.[0] && ognoo?.[1]) {
+      query.nevtersenOgnoo = {
+        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+      };
+    }
+
+    return query;
+  }, [baiguullaga?._id, barilgiinId, ognoo]);
+
+  const {
+    jagsaalt: kassCameraKhaaltJagsaalt,
+    mutate: kassCameraKhaaltMutate,
+    setKhuudaslalt: setKassCameraKhuudaslalt,
+    data: kassCameraKhaaltData,
+    khuudaslalt: kassCameraKhuudaslalt,
+  } = useJagsaalt(
+    "/kassCameraKhaalt",
+    kassCameraKhaaltQuery,
+    {
       khaaltOgnoo: -1,
-    });
+    },
+    null,
+    ["ajiltaniiNer"]
+  );
 
   const orlogoQuery = useMemo(() => {
     return {
@@ -585,7 +611,7 @@ function Zogsool({ token }) {
           } else {
             if (
               baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh &&
-              tootsooKhelber == 3
+              tootsooKhelber === ZURCHIL_TAB_KEY
             ) {
               uilchilgee(token)
                 .post("/zurchiluudTulsunBolgoy", {
@@ -756,6 +782,31 @@ function Zogsool({ token }) {
 
   // Өдрийн хаалтын хүснэгтийн баганууд
   const kassCameraKhaaltColumns = useMemo(() => {
+    const getWorkedMinutes = (record) => {
+      if (!record?.nevtersenOgnoo || !record?.khaaltOgnoo) return null;
+      const start = moment(record.nevtersenOgnoo);
+      const end = moment(record.khaaltOgnoo);
+      if (!start.isValid() || !end.isValid()) return null;
+      const diff = end.diff(start, "minutes");
+      return diff >= 0 ? diff : null;
+    };
+
+    const formatWorkedDuration = (record) => {
+      const diffMinutes = getWorkedMinutes(record);
+      if (diffMinutes === null) return "-";
+      const hours = Math.floor(diffMinutes / 60);
+      const minutes = diffMinutes % 60;
+      return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+        2,
+        "0"
+      )}`;
+    };
+
+    const getTotalPayment = (payments) => {
+      if (!Array.isArray(payments) || payments.length === 0) return 0;
+      return payments.reduce((sum, item) => sum + Number(item?.dun || 0), 0);
+    };
+
     return [
       {
         title: "№",
@@ -793,6 +844,16 @@ function Zogsool({ token }) {
         render(v) {
           return v && moment(v).format("YYYY-MM-DD HH:mm");
         },
+      },
+      {
+        title: t("Ажиллсан хугацаа/цаг"),
+        align: "center",
+        width: "10rem",
+        dataIndex: "nevtersenOgnoo",
+        showSorterTooltip: false,
+        sorter: (a, b) =>
+          (getWorkedMinutes(a) || 0) - (getWorkedMinutes(b) || 0),
+        render: (_, record) => formatWorkedDuration(record),
       },
       {
         title: t("Гарсан камер"),
@@ -840,6 +901,19 @@ function Zogsool({ token }) {
               </div>
             );
           }
+        },
+      },
+      {
+        title: t("Нийт төлбөр"),
+        align: "right",
+        width: "10rem",
+        dataIndex: "tulbur",
+        showSorterTooltip: false,
+        sorter: (a, b) =>
+          (getTotalPayment(a?.tulbur) || 0) - (getTotalPayment(b?.tulbur) || 0),
+        render(value) {
+          const total = getTotalPayment(value);
+          return formatNumber(total, 2);
         },
       },
     ];
@@ -1434,7 +1508,12 @@ function Zogsool({ token }) {
           search,
           khuudasniiDugaar: 1,
         }));
-        setKhuudaslalt((a) => ({
+        setZurchilKhuudaslalt((a) => ({
+          ...a,
+          search,
+          khuudasniiDugaar: 1,
+        }));
+        setKassCameraKhuudaslalt((a) => ({
           ...a,
           search,
           khuudasniiDugaar: 1,
@@ -1564,7 +1643,7 @@ function Zogsool({ token }) {
                       const excel = new Excel();
                       if (
                         baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh &&
-                        tootsooKhelber == 3
+                        tootsooKhelber === ZURCHIL_TAB_KEY
                       ) {
                         uilchilgee(token)
                           .get("zurchilteiMashin", {
@@ -1649,6 +1728,134 @@ function Zogsool({ token }) {
                               ])
                               .addDataSource(data?.jagsaalt)
                               .saveAs("Зөрчил сануулах жагсаалт.xlsx");
+                          })
+                          .catch((aldaa) => aldaaBarigch(aldaa));
+                      } else if (tootsooKhelber === DAILY_CLOSING_TAB_KEY) {
+                        const excelQuery = {
+                          ...kassCameraKhaaltQuery,
+                        };
+                        const searchValue = kassCameraKhuudaslalt?.search;
+                        if (searchValue) {
+                          excelQuery.$or = [
+                            {
+                              ajiltaniiNer: {
+                                $regex: searchValue,
+                                $options: "i",
+                              },
+                            },
+                          ];
+                        }
+                        uilchilgee(token)
+                          .get("/kassCameraKhaalt", {
+                            params: {
+                              order: { khaaltOgnoo: -1 },
+                              query: excelQuery,
+                              khuudasniiKhemjee:
+                                kassCameraKhaaltData?.niitMur ||
+                                kassCameraKhuudaslalt?.khuudasniiKhemjee ||
+                                500,
+                            },
+                          })
+                          .then(({ data }) => {
+                            const rows = data?.jagsaalt || [];
+                            const paymentTypes = Array.from(
+                              new Set(
+                                rows.flatMap((row) =>
+                                  (row?.tulbur || []).map((item) => item.turul)
+                                )
+                              )
+                            ).sort();
+                            const paymentColumns = paymentTypes.map((type) => ({
+                              title: tulburKhurvuulekh(type),
+                              dataIndex: "tulbur",
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
+                              render(value) {
+                                if (!value || value.length === 0) return 0;
+                                return value
+                                  .filter((p) => p.turul === type)
+                                  .reduce(
+                                    (sum, curr) => sum + Number(curr?.dun || 0),
+                                    0
+                                  );
+                              },
+                            }));
+                            const totalPaymentColumn = {
+                              title: t("Нийт төлбөр"),
+                              dataIndex: "tulbur",
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
+                              render(value) {
+                                if (!value || value.length === 0) return 0;
+                                return value.reduce(
+                                  (sum, curr) => sum + Number(curr?.dun || 0),
+                                  0
+                                );
+                              },
+                            };
+                            excel
+                              .addSheet("Өдрийн хаалт")
+                              .addColumns([
+                                {
+                                  title: t("Ажилтны нэр"),
+                                  dataIndex: "ajiltaniiNer",
+                                  __style__: { h: "center" },
+                                },
+                                {
+                                  title: t("Нэвтэрсэн огноо"),
+                                  dataIndex: "nevtersenOgnoo",
+                                  __style__: { h: "center" },
+                                  render: (v) =>
+                                    v
+                                      ? moment(v).format("YYYY-MM-DD HH:mm")
+                                      : "",
+                                },
+                                {
+                                  title: t("Хаалт огноо"),
+                                  dataIndex: "khaaltOgnoo",
+                                  __style__: { h: "center" },
+                                  render: (v) =>
+                                    v
+                                      ? moment(v).format("YYYY-MM-DD HH:mm")
+                                      : "",
+                                },
+                                {
+                                  title: t("Ажилласан цаг"),
+                                  dataIndex: "nevtersenOgnoo",
+                                  __style__: { h: "center" },
+                                  render: (v, record) => {
+                                    if (
+                                      !record?.nevtersenOgnoo ||
+                                      !record?.khaaltOgnoo
+                                    )
+                                      return "-";
+                                    const diffMinutes = moment(
+                                      record.khaaltOgnoo
+                                    ).diff(
+                                      moment(record.nevtersenOgnoo),
+                                      "minutes"
+                                    );
+                                    if (diffMinutes < 0) return "-";
+                                    const hours = Math.floor(diffMinutes / 60);
+                                    const minutes = diffMinutes % 60;
+                                    return `${String(hours).padStart(
+                                      2,
+                                      "0"
+                                    )}:${String(minutes).padStart(2, "0")}`;
+                                  },
+                                },
+                                {
+                                  title: t("Гарсан камер"),
+                                  dataIndex: "garsanCameraIp",
+                                  __style__: { h: "center" },
+                                },
+                                ...paymentColumns,
+                                totalPaymentColumn,
+                              ])
+                              .addDataSource(rows)
+                              .saveAs("Өдрийн хаалт.xlsx");
                           })
                           .catch((aldaa) => aldaaBarigch(aldaa));
                       } else
@@ -2394,7 +2601,7 @@ function Zogsool({ token }) {
                 ),
               },
               {
-                key: "3",
+                key: DAILY_CLOSING_TAB_KEY,
                 label: "Өдрийн хаалт",
                 children: (
                   <Table
@@ -2407,13 +2614,13 @@ function Zogsool({ token }) {
                     bordered
                     columns={kassCameraKhaaltColumns}
                     pagination={{
-                      current: kassCameraKhaaltJagsaalt?.khuudasniiDugaar,
-                      total: kassCameraKhaaltJagsaalt?.niitMur,
+                      current: kassCameraKhaaltData?.khuudasniiDugaar,
+                      total: kassCameraKhaaltData?.niitMur,
                       pageSizeOptions: [100, 300, 500],
                       defaultPageSize: [500],
                       showSizeChanger: true,
                       onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                        setKhuudaslalt((kh) => ({
+                        setKassCameraKhuudaslalt((kh) => ({
                           ...kh,
                           khuudasniiDugaar,
                           khuudasniiKhemjee,
@@ -2433,7 +2640,7 @@ function Zogsool({ token }) {
               },
               baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh
                 ? {
-                    key: "3",
+                    key: ZURCHIL_TAB_KEY,
                     label: "Зөрчил сануулах",
                     children: (
                       <Table
@@ -2449,13 +2656,13 @@ function Zogsool({ token }) {
                         columns={columnsZurchil}
                         onChange={onChangeTable}
                         pagination={{
-                          current: zurchilteiJagsaalt?.khuudasniiDugaar,
-                          total: zurchilteiJagsaalt?.niitMur,
+                          current: zurchilteiData?.khuudasniiDugaar,
+                          total: zurchilteiData?.niitMur,
                           pageSizeOptions: [100, 300, 500],
                           defaultPageSize: [500],
                           showSizeChanger: true,
                           onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                            setKhuudaslalt((kh) => ({
+                            setZurchilKhuudaslalt((kh) => ({
                               ...kh,
                               khuudasniiDugaar,
                               khuudasniiKhemjee,

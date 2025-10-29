@@ -619,6 +619,35 @@ function index({ token, data }) {
               </div>
             </div>
           )}
+          {!!targetKeys.find((a) => a === "/khyanalt/zogsool/camera") && (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">
+                    {t("Ажилтанд бүх төлбөрийн төрлүүдийг харах эсэх")}
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-300">
+                    {t(
+                      "Тухайн ажилтан өдрийн тайлангаа авахдаа бүх төлбөрийн төрлүүдийг харах эсэх."
+                    )}
+                  </div>
+                </div>
+                <div className="ml-auto">
+                  <Switch
+                    checked={_.get(tokhirgoo, `ajiltandBuhTolborHaruulahEseh`)}
+                    onChange={(checked) => {
+                      setTokhirgoo((a) => {
+                        if (!checked) {
+                          _.set(a, `ajiltandBuhTolborHaruulahEseh`, false);
+                        } else _.set(a, `ajiltandBuhTolborHaruulahEseh`, true);
+                        return { ...a };
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
           {!!targetKeys.find(
             (a) => a === "/khyanalt/zogsool/mashinBurtgel"
           ) && (
