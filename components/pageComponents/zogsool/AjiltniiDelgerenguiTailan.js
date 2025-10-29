@@ -204,7 +204,14 @@ function AjiltniiDelgerenguiTailan(
         return;
       }
 
-      const transformedTulbur = latestTulbur.map((item) => ({
+      const visibleTulbur = latestTulbur.filter((item) => {
+        const turul = item?._id;
+        if (!ajiltandBuhTolborHarahEsekh && RESTRICTED_PAYMENT_TYPES.has(turul))
+          return false;
+        return true;
+      });
+
+      const transformedTulbur = visibleTulbur.map((item) => ({
         ognoo: currentTime.format("YYYY-MM-DD 23:59:59"),
         turul: item?._id,
         dun: item?.niitDun || 0,
@@ -255,6 +262,7 @@ function AjiltniiDelgerenguiTailan(
     zogsoolTulburMedeelel,
     zogsoolTulburMedeelelMutate,
     destroy,
+    ajiltandBuhTolborHarahEsekh,
   ]);
 
   React.useImperativeHandle(
