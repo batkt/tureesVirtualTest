@@ -19,6 +19,7 @@ function TulburiinDelgerenguiTailan({ token }) {
     moment().subtract(1, "days").startOf("day"),
     moment().subtract(1, "days").endOf("day"),
   ]);
+  console.log(barilgiinId, "barilgiinId");
 
   const { guilgeeniiToololt, guilgeeniiToololtMutate } =
     useGuilgeeniiToololtAvya(
@@ -61,7 +62,7 @@ function TulburiinDelgerenguiTailan({ token }) {
   const tulburiinMedeelel = useMemo(() => {
     var ugugdul = [];
     if (turul === "Zogsool") {
-      if (!!zogsoolTulburMedeelel) {
+      if (zogsoolTulburMedeelel?.length > 0) {
         var niitDun =
           zogsoolTulburMedeelel?.reduce((a, b) => a + b.niitDun, 0) || 0;
 
@@ -70,7 +71,7 @@ function TulburiinDelgerenguiTailan({ token }) {
             case "khariltsakh":
               ugugdul.push({
                 ner: "Данс",
-                icon: "/mobile.png",
+                icon: "/transaction.png",
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -79,7 +80,7 @@ function TulburiinDelgerenguiTailan({ token }) {
             case "belen":
               ugugdul.push({
                 ner: "Бэлэн",
-                icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
+                icon: "/Cash.png",
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -97,7 +98,7 @@ function TulburiinDelgerenguiTailan({ token }) {
             case "khungulult":
               ugugdul.push({
                 ner: "Хөнгөлөлт",
-                icon: "/discount.png",
+                icon: "/hongololt.png",
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -233,8 +234,8 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "PosBelen":
               ugugdul.push({
-                ner: "Pos бэлэн",
-                icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
+                ner: "Aндройд ПОС бэлэн",
+                icon: "/androidPosBelen.png",
 
                 dun: element.niitDun,
                 too: element.niitToo,
@@ -243,8 +244,8 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "PosCard":
               ugugdul.push({
-                ner: "Pos карт",
-                icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
+                ner: "Aндройд ПОС карт",
+                icon: "/androidpooos.png",
 
                 dun: element.niitDun,
                 too: element.niitToo,
@@ -253,8 +254,8 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "PosKhariltsakh":
               ugugdul.push({
-                ner: "Pos дансаар",
-                icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
+                ner: "Aндройд ПОС дансаар",
+                icon: "/androidDansPos.png",
 
                 dun: element.niitDun,
                 too: element.niitToo,
@@ -284,7 +285,7 @@ function TulburiinDelgerenguiTailan({ token }) {
             case "Үнэгүй":
               ugugdul.push({
                 ner: "Үнэгүй",
-                icon: "/free.png",
+                icon: "/Unegui.png",
 
                 dun: element.niitDun,
                 too: element.niitToo,

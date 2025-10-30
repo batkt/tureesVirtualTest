@@ -237,17 +237,17 @@ function TulburiinDelgerenguiTailan(
           case "PosBelen":
             ugugdul.push({
               ner: "Андройд ПОС Бэлэн",
-              icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
+              icon: "/androidPosBelen.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-          case "PosCard":
+          case "PosKart":
             ugugdul.push({
               ner: "Андройд ПОС Карт",
-              icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
+              icon: "/androidpooos.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -257,7 +257,7 @@ function TulburiinDelgerenguiTailan(
           case "PosKhariltsakh":
             ugugdul.push({
               ner: "Андройд ПОС Дансаар",
-              icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
+              icon: "/androidDansPos.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,
               too: element.niitToo,
