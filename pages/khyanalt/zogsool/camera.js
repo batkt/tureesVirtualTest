@@ -1868,6 +1868,7 @@ function camera({ token }) {
           barilgiinId={barilgiinId}
           selectedCamera={camerVal[1]}
           zogsooliinId={songogdzonZogsool?._id}
+          cameraData={cameraData}
         />
       ),
       footer: null,

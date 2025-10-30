@@ -5,7 +5,15 @@ import React, {
   useState,
   useCallback,
 } from "react";
-import { Button, Checkbox, Modal, message, notification, Input } from "antd";
+import {
+  Button,
+  Checkbox,
+  Modal,
+  message,
+  notification,
+  Input,
+  TreeSelect,
+} from "antd";
 import {
   PrinterOutlined,
   VideoCameraOutlined,
@@ -42,6 +50,7 @@ function AjiltniiDelgerenguiTailan(
     barilgiinId,
     selectedCamera,
     zogsooliinId,
+    cameraData,
   },
   ref
 ) {
@@ -73,6 +82,11 @@ function AjiltniiDelgerenguiTailan(
     if (!khaaltOgnoo) return null;
     return moment(khaaltOgnoo).format("YYYY-MM-DD HH:mm:ss");
   }, [khaaltOgnoo]);
+
+  const cameraTreeData = useMemo(() => {
+    if (!cameraData || !Array.isArray(cameraData?.[1])) return [];
+    return cameraData[1];
+  }, [cameraData]);
 
   const garsanKhaalga = useMemo(() => {
     return songogdsonCamera;
@@ -108,6 +122,10 @@ function AjiltniiDelgerenguiTailan(
   useEffect(() => {
     if (!selectedCamera) {
       setSongogdsonCamera(null);
+      setAjiltniiNevtersenTsag(null);
+      setAjiltniiGarsanTsag(null);
+      setKhaaltOgnoo(null);
+      setHaaltDarsan(false);
       setTailanEkhlekhOgnoo(null);
       return;
     }
@@ -119,8 +137,18 @@ function AjiltniiDelgerenguiTailan(
     setTailanEkhlekhOgnoo(null);
   }, [selectedCamera]);
 
+  const handleCameraSelect = useCallback((value) => {
+    const newValue = value || null;
+    setSongogdsonCamera(newValue);
+    setAjiltniiNevtersenTsag(null);
+    setAjiltniiGarsanTsag(null);
+    setKhaaltOgnoo(null);
+    setHaaltDarsan(false);
+    setTailanEkhlekhOgnoo(null);
+  }, []);
+
   const ajiltniiNevtersenTsagAvya = useCallback(async () => {
-    if (!ajiltniiId || !selectedCamera || !zogsooliinId) return;
+    if (!ajiltniiId || !songogdsonCamera || !zogsooliinId) return;
 
     const fallbackOgnoo = moment().format("YYYY-MM-DD HH:mm:ss");
 
@@ -130,7 +158,7 @@ function AjiltniiDelgerenguiTailan(
         {
           ajiltniiId,
           barilgiinId,
-          garsanCameraIp: selectedCamera,
+          garsanCameraIp: songogdsonCamera,
           zogsooliinId,
           baiguullagiinId,
         }
@@ -156,7 +184,7 @@ function AjiltniiDelgerenguiTailan(
     }
   }, [
     ajiltniiId,
-    selectedCamera,
+    songogdsonCamera,
     zogsooliinId,
     token,
     barilgiinId,
@@ -164,9 +192,9 @@ function AjiltniiDelgerenguiTailan(
   ]);
 
   useEffect(() => {
-    if (!ajiltniiId || !selectedCamera || !zogsooliinId) return;
+    if (!ajiltniiId || !songogdsonCamera || !zogsooliinId) return;
     ajiltniiNevtersenTsagAvya();
-  }, [ajiltniiId, selectedCamera, zogsooliinId, ajiltniiNevtersenTsagAvya]);
+  }, [ajiltniiId, songogdsonCamera, zogsooliinId, ajiltniiNevtersenTsagAvya]);
 
   const ajiltniiAjalAasBuukh = useCallback(async () => {
     if (!ajiltniiNevtersenTsag) {
@@ -681,12 +709,22 @@ function AjiltniiDelgerenguiTailan(
           <label className="mb-2 block text-sm font-medium text-gray-700">
             Бүртгэл хийсэн камер
           </label>
-          <Input
-            value={songogdsonCamera || "Камер сонгогдоогүй"}
-            disabled
-            prefix={<VideoCameraOutlined className="text-blue-500" />}
+          <TreeSelect
+            showSearch
+            value={songogdsonCamera}
+            placeholder={t("Камер сонгох")}
+            allowClear
+            treeDefaultExpandAll
+            onChange={handleCameraSelect}
+            treeData={cameraTreeData}
             className="w-full"
-            placeholder="Камер сонгогдоогүй"
+            dropdownStyle={{
+              maxHeight: 600,
+              minWidth: 280,
+              overflow: "auto",
+            }}
+            suffixIcon={<VideoCameraOutlined className="text-blue-500" />}
+            disabled={!cameraTreeData.length}
           />
         </div>
       </div>
