@@ -41,6 +41,7 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
+import BaganiinSongolt from "components/table/BaganiinSongolt";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
@@ -266,9 +267,14 @@ function camera({ token }) {
   // const [refresh, setRefresh] = useState(true);
   const [modalNeelttei, setModalNeelttei] = useState(false);
   const [guilgeeDrawerOpen, setGuilgeeDrawerOpen] = useState(false);
+  const [shineBagana, setShineBagana] = useState([]);
   const [songogdsonBurtgel, setSongogdsonBurtgel] = useState("");
   const [form] = Form.useForm();
   const searchUtga = useRef(null);
+
+  useEffect(() => {
+    setShineBagana([]);
+  }, [i18n.language]);
 
   const [isHovered, setIsHovered] = useState(false);
   const [isHovered2, setIsHovered2] = useState(false);
@@ -846,6 +852,24 @@ function camera({ token }) {
           }
         });
   }, [uilchluulegchGaralt?.jagsaalt]);
+  const baganaColumns = useMemo(
+    () => [
+      {
+        title: t("Тайлбар"),
+        align: "center",
+        width: "12rem",
+        dataIndex: ["mashin", "temdeglel"],
+        render: (_value, record) => (
+          <Tooltip title={record?.mashin?.temdeglel}>
+            <div className="w-full cursor-help truncate break-words text-left">
+              {record?.mashin?.temdeglel}
+            </div>
+          </Tooltip>
+        ),
+      },
+    ],
+    [t]
+  );
   const columns = useMemo(() => {
     const col = [
       {
@@ -1569,6 +1593,8 @@ function camera({ token }) {
             );
         },
       },
+      ...shineBagana,
+
       {
         title: () => <SettingOutlined />,
         width: "2rem",
@@ -1656,6 +1682,7 @@ function camera({ token }) {
     order,
     khelber,
     dun,
+    shineBagana,
     uilchluulegchGaralt,
   ]);
 
@@ -2605,6 +2632,12 @@ function camera({ token }) {
                 data-aos-duration="1000"
                 data-aos-delay="300"
               >
+                <BaganiinSongolt
+                  columns={baganaColumns}
+                  shineBagana={shineBagana}
+                  setShineBagana={setShineBagana}
+                  ButtonStyle="mr-3 w-full lg:w-auto text-ellipsis"
+                />
                 <Button
                   onClick={() => ajiltniiDelgerengui()}
                   className="mr-3 w-auto text-ellipsis"
