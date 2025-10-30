@@ -336,7 +336,7 @@ function AjiltniiDelgerenguiTailan(
             ugugdul.push({
               ner: "Данс",
               turul: "khariltsakh",
-              icon: "/mobile.png",
+              icon: "/transaction.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -346,7 +346,7 @@ function AjiltniiDelgerenguiTailan(
             ugugdul.push({
               ner: "Бэлэн",
               turul: "belen",
-              icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
+              icon: "/Cash.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -357,7 +357,7 @@ function AjiltniiDelgerenguiTailan(
             ugugdul.push({
               ner: "Карт",
               turul: "khaan",
-              icon: "/cartniiZurag.png",
+              icon: "/card.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -455,7 +455,7 @@ function AjiltniiDelgerenguiTailan(
           case "khungulult":
             ugugdul.push({
               ner: "Хөнгөлөлт",
-              icon: "/discount.png",
+              icon: "/hongololt.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -529,7 +529,7 @@ function AjiltniiDelgerenguiTailan(
           case "Үнэгүй":
             ugugdul.push({
               ner: "Үнэгүй",
-              icon: "/free.png",
+              icon: "/Unegui.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
