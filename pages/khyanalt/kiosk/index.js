@@ -308,6 +308,7 @@ const Kiosk = () => {
         dun: ilgeekhDun,
         zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
         mashiniiDugaar: songogdsonData?.plate_number + " kiosk",
+        turul: "kiosk",
       };
       if (parkingJagsaalt?.[0]?.zogsooliinDans) {
         yavuulakhBody["dansniiDugaar"] = parkingJagsaalt?.[0]?.zogsooliinDans;
