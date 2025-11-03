@@ -50,6 +50,7 @@ export const formatting = [
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
   { ner: "Нэр", talbar: "ner" },
+  { ner: "Байгууллагын хаяг", talbar: "baiguullagiinKhayag" },
   { ner: "Гэрээний дугаар", talbar: "gereeniiDugaar" },
   { ner: "Гэрээний огноо", talbar: "gereeniiOgnoo" },
   { ner: "Төрөл", talbar: "turul" },

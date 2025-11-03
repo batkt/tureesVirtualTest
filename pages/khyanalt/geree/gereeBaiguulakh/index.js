@@ -59,6 +59,14 @@ function GereeBaiguulakh({ token }) {
     Aos.init({ once: true });
   });
 
+  const songosonBarilgiinHayag = React.useMemo(() => {
+    if (!Array.isArray(baiguullaga?.barilguud)) return "";
+    return (
+      baiguullaga?.barilguud?.find((barilga) => barilga?._id === barilgiinId)
+        ?.khayag || ""
+    );
+  }, [baiguullaga?.barilguud, barilgiinId]);
+
   const zagvarRef = React.useRef();
   const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
@@ -68,6 +76,7 @@ function GereeBaiguulakh({ token }) {
     baritsaaAvakhKhugatsaa: 1,
     baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),
     barilgiinId: barilgiinId,
+    baiguullagiinKhayag: songosonBarilgiinHayag,
   });
 
   const [waiting, setWaiting] = useState(false);
@@ -450,10 +459,29 @@ function GereeBaiguulakh({ token }) {
         baritsaaAvakhKhugatsaa: 1,
         baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),
         barilgiinId: barilgiinId,
+        baiguullagiinKhayag: songosonBarilgiinHayag,
       });
       setCurrent(0);
     }
-  }, [barilgiinId]);
+  }, [barilgiinId, baiguullaga, songosonBarilgiinHayag, khadgalakhGeree.barilgiinId]);
+
+  useEffect(() => {
+    const nextHayag = songosonBarilgiinHayag || "";
+    setKhagalakhGeree((prev) => {
+      const currentHayag = prev?.baiguullagiinKhayag ?? "";
+      if (
+        prev?.barilgiinId === barilgiinId &&
+        currentHayag === nextHayag
+      ) {
+        return prev;
+      }
+      return {
+        ...prev,
+        barilgiinId,
+        baiguullagiinKhayag: nextHayag,
+      };
+    });
+  }, [barilgiinId, songosonBarilgiinHayag]);
 
   const prev = () => {
     if (current > 0) setCurrent(current - 1);
