@@ -668,7 +668,19 @@ function Zogsool({ token }) {
             uilchiluulegchToololt[0].turul.find((a) => a._id === null)?.too,
           0
         ),
-        query: { turul: { $nin: ["Дотоод", "Түрээслэгч", "Гэрээт"] } },
+        query: {
+          turul: {
+            $nin: [
+              "Дотоод",
+              "Түрээслэгч",
+              "Гэрээт",
+              "Дурын",
+              "СӨХ",
+              "Байгууллага",
+              "VIP",
+            ],
+          },
+        },
       },
       {
         name: "Түрээслэгч",
@@ -705,6 +717,52 @@ function Zogsool({ token }) {
         },
       },
       {
+        name: "Дурын",
+        too: formatNumber(
+          !!uilchiluulegchToololt &&
+            uilchiluulegchToololt[0].turul.find((a) => a._id === "Дурын")?.too,
+          0
+        ),
+        query: {
+          turul: "Дурын",
+        },
+      },
+      {
+        name: "СӨХ",
+        too: formatNumber(
+          !!uilchiluulegchToololt &&
+            uilchiluulegchToololt[0].turul.find((a) => a._id === "СӨХ")?.too,
+          0
+        ),
+        query: {
+          turul: "СӨХ",
+        },
+      },
+      {
+        name: "Байгууллага",
+        too: formatNumber(
+          !!uilchiluulegchToololt &&
+            uilchiluulegchToololt[0].turul.find((a) => a._id === "Байгууллага")
+              ?.too,
+          0
+        ),
+        query: {
+          turul: "Байгууллага",
+        },
+      },
+      {
+        name: "VIP",
+        too: formatNumber(
+          !!uilchiluulegchToololt &&
+            uilchiluulegchToololt[0].turul.find((a) => a._id === "VIP")?.too,
+          0
+        ),
+        query: {
+          turul: "VIP",
+        },
+      },
+
+      {
         name: "Зөрчилтэй",
         too: formatNumber(
           !!uilchiluulegchToololt &&
@@ -712,15 +770,6 @@ function Zogsool({ token }) {
           0
         ),
         query: { "tuukh.tuluv": -2 },
-      },
-      {
-        name: "Бусад",
-        too: formatNumber(
-          !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].tuluv.find((a) => a._id === -1)?.too,
-          0
-        ),
-        query: { "tuukh.tuluv": { $in: [-1, -3] } },
       },
     ],
     [uilchiluulegchToololt, uilchluulegchGaralt]

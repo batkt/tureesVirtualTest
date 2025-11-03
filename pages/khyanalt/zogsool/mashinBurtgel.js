@@ -708,6 +708,7 @@ function mashinBurtgel({ token }) {
           0
         ),
       },
+
       {
         name: "Түрээслэгч",
         too: formatNumber(
@@ -722,6 +723,35 @@ function mashinBurtgel({ token }) {
           0
         ),
       },
+      {
+        name: "Дурын",
+        too: formatNumber(
+          mashinToololt?.find((a) => a._id === "Дурын")?.too,
+          0
+        ),
+      },
+      {
+        name: "СӨХ",
+        too: formatNumber(mashinToololt?.find((a) => a._id === "СӨХ")?.too, 0),
+      },
+      {
+        name: "Байгууллага",
+        too: formatNumber(
+          mashinToololt?.find((a) => a._id === "Байгууллага")?.too,
+          0
+        ),
+      },
+      {
+        name: "VIP",
+        too: formatNumber(mashinToololt?.find((a) => a._id === "VIP")?.too, 0),
+      },
+      // {
+      //   name: "Оршин суугч",
+      //   too: formatNumber(
+      //     mashinToololt?.find((a) => a._id === "Оршин суугч")?.too,
+      //     0
+      //   ),
+      // },
       {
         name: "Блок",
         too: formatNumber(

@@ -194,7 +194,9 @@ const KioskMobile = ({
         zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
       };
       if (zogsool?.zogsooliinDans) {
-        yavuulakhBody["dansniiDugaar"] = zogsool?.zogsooliinDansSticker ? zogsool?.zogsooliinDansSticker : zogsool?.zogsooliinDans;
+        yavuulakhBody["dansniiDugaar"] = zogsool?.zogsooliinDansSticker
+          ? zogsool?.zogsooliinDansSticker
+          : zogsool?.zogsooliinDans;
       }
       if (!!mashiniiDugaar) {
         yavuulakhBody["zogsooliinId"] = zogsool?._id;
@@ -221,6 +223,7 @@ const KioskMobile = ({
   }
   const dugaarRef = useRef(null);
   const shineDugaarRef = useRef(null);
+  const autoSelectedRef = useRef(false);
   const handleUrgeljluulekh = () => {
     var ongoilgokhEsekh = true;
     dugaar.forEach((dug) => {
@@ -313,6 +316,24 @@ const KioskMobile = ({
       message.error(err);
     }
   };
+
+  useEffect(() => {
+    if (
+      drawerOngoikh &&
+      !isValidating &&
+      !autoSelectedRef.current &&
+      uilchluulegchGaralt?.jagsaalt?.length === 1
+    ) {
+      autoSelectedRef.current = true;
+      mashinSongiy(uilchluulegchGaralt.jagsaalt[0]);
+    }
+  }, [drawerOngoikh, isValidating, uilchluulegchGaralt?.jagsaalt?.length]);
+
+  useEffect(() => {
+    if (!drawerOngoikh) {
+      autoSelectedRef.current = false;
+    }
+  }, [drawerOngoikh]);
 
   const eBarimtAvya = (
     uilchluulegchiinId,
