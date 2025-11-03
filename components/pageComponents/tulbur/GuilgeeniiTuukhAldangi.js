@@ -310,7 +310,6 @@ function GuilgeeniiTuukhAldangi(
           tulsunWs["!cols"] = tulsunCols;
 
           XLSX?.utils.book_append_sheet(wb, tulsunWs, "Төлсөн алданги");
-          console.log("Added Төлсөн алданги sheet");
         }
       }
 

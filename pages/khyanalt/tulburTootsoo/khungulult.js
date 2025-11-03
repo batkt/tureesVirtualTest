@@ -374,8 +374,6 @@ function tulburTootsoo() {
               }
             } else {
               var negOdriinTolokh = khymdraaguiDun / 30;
-              console.log(negOdriinTolokh, "negOdriinTolokh");
-              console.log(negOdriinTolokh, "negOdriinTolokh");
 
               var khymdarsanDun =
                 ((negOdriinTolokh * ugugdul.khungulultKhuvi) / 100) *

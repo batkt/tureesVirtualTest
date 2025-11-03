@@ -128,7 +128,6 @@ function Todorkhoilolt() {
 
       return content;
     } catch (error) {
-      console.log(error);
     }
   };
   const barilga = baiguullaga?.barilguud?.find(
@@ -195,7 +194,6 @@ function Todorkhoilolt() {
       setTurulZagvar(false);
     }
   }, [neesenEsekh]);
-  console.log(barilga);
   async function khevleltKhadgalya() {
     if (!!songogdsonKhariltsagch && !!songosonZagvar) {
       const currentContent = printDataRef.current || getCurrentContent();

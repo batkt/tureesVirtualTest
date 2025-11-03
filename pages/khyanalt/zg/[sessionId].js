@@ -19,7 +19,6 @@ function TulburiinDelgerenguiTailan({ token }) {
     moment().subtract(1, "days").startOf("day"),
     moment().subtract(1, "days").endOf("day"),
   ]);
-  console.log(barilgiinId, "barilgiinId");
 
   const { guilgeeniiToololt, guilgeeniiToololtMutate } =
     useGuilgeeniiToololtAvya(

@@ -200,7 +200,6 @@ function KhurunguudCard({
                     headers={{ Authorization: `bearer ${token}` }}
                     fileList={fileList}
                     onChange={(e) => {
-                      console.log("Upload onChange:", e);
                       let newFileList = e.fileList;
 
                       newFileList = newFileList.map((file) => ({
@@ -238,7 +237,6 @@ function KhurunguudCard({
                         id={`${name}-image`}
                         alt=""
                         onError={(e) => {
-                          console.log("Image load error:", e);
                           e.target.src = "";
                           setZurgiinId(undefined);
                           clearImage();
