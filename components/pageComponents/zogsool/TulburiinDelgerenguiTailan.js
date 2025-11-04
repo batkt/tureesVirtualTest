@@ -40,8 +40,18 @@ function TulburiinDelgerenguiTailan(
     setCamerVal([camerVal[0], e]);
   };
   const zogsooAjiltanQuery = useMemo(() => {
+    const paths = new Set([
+      "/khyanalt/zogsool",
+      "/khyanalt/zogsool/camera",
+      "/khyanalt/kiosk",
+    ]);
+
+    if (typeof window !== "undefined" && window.location?.pathname) {
+      paths.add(window.location.pathname);
+    }
+
     return {
-      tsonkhniiErkhuud: { $in: [window.location.pathname, "/khyanalt/kiosk"] },
+      tsonkhniiErkhuud: { $in: Array.from(paths) },
     };
   }, [baiguullagiinId, barilgiinId]);
 
