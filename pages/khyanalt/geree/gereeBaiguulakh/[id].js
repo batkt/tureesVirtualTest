@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import useAktiinZagvar from "hooks/useAktiinZagvar";
 import dynamic from "next/dynamic";
 import formatNumber from "tools/function/formatNumber";
+import tootsohSariinNiilberDun from "tools/function/tootsohSariinNiilberDun";
 import createMethod from "tools/function/crud/createMethod";
 
 const Konva = dynamic(() => import("components/konva"), { ssr: false });
@@ -140,6 +141,7 @@ function GereeBaiguulakh({ token, data }) {
   }, [current]);
 
   function khadgalya(data) {
+    data.sariinNiilberDun = tootsohSariinNiilberDun(data);
     var utgaShalgakh = [];
     if (
       !data.dans ||
@@ -302,6 +304,8 @@ function GereeBaiguulakh({ token, data }) {
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
         (a) => a.khamaarakhKheseg === steps[current].title
       );
+    khadgalakhGeree.sariinNiilberDun =
+      tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"
@@ -335,7 +339,8 @@ function GereeBaiguulakh({ token, data }) {
               ? value[0]
               : key === "talbainNegjUne" ||
                 key === "talbainNiitUne" ||
-                key === "baritsaaAvakhDun"
+                key === "baritsaaAvakhDun" ||
+                key === "sariinNiilberDun"
               ? formatNumber(value)
               : value
             // : parseFloat(value) != NaN
@@ -344,10 +349,10 @@ function GereeBaiguulakh({ token, data }) {
             //   : formatNumber(value)
             // : value
           );
-        });
+      });
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
-        value
+        key === "sariinNiilberDun" ? formatNumber(value) : value
       );
     }
     return butsaakhUtga;
@@ -360,6 +365,8 @@ function GereeBaiguulakh({ token, data }) {
       butsaakhUtga.dedKhesguud = butsaakhUtga?.dedKhesguud?.filter(
         (a) => a.khamaarakhKheseg === steps[current].title
       );
+    khadgalakhGeree.sariinNiilberDun =
+      tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"
@@ -433,7 +440,8 @@ function GereeBaiguulakh({ token, data }) {
                 ? value[0]
                 : key === "talbainNegjUne" ||
                   key === "talbainNiitUne" ||
-                  key === "baritsaaAvakhDun"
+                  key === "baritsaaAvakhDun" ||
+                  key === "sariinNiilberDun"
                 ? formatNumber(value)
                 : value
               // : parseFloat(value) != NaN
@@ -446,7 +454,7 @@ function GereeBaiguulakh({ token, data }) {
       }
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
-        value
+        key === "sariinNiilberDun" ? formatNumber(value) : value
       );
     }
 

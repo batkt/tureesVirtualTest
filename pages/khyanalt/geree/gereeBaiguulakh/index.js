@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import useAktiinZagvar from "hooks/useAktiinZagvar";
 import dynamic from "next/dynamic";
 import formatNumber from "tools/function/formatNumber";
+import tootsohSariinNiilberDun from "tools/function/tootsohSariinNiilberDun";
 const Konva = dynamic(() => import("components/konva"), { ssr: false });
 
 const { Step } = Steps;
@@ -101,6 +102,7 @@ function GereeBaiguulakh({ token }) {
 
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
+      data.sariinNiilberDun = tootsohSariinNiilberDun(data);
       var utgaShalgakh = [];
       if (
         !data.dans ||
@@ -298,6 +300,8 @@ function GereeBaiguulakh({ token }) {
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud?.filter(
         (a) => a.khamaarakhKheseg === steps[current].title
       );
+    khadgalakhGeree.sariinNiilberDun =
+      tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"
@@ -387,12 +391,17 @@ function GereeBaiguulakh({ token }) {
         butsaakhUtga.dedKhesguud
           ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
           .map((b) => {
-            b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+            const orluulakhUtga =
+              key === "sariinNiilberDun" ? formatNumber(value) : value;
+            b.zaalt = b.zaalt.replace(
+              new RegExp(`&lt;${key}&gt;`, "g"),
+              orluulakhUtga
+            );
           });
       }
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
-        value
+        key === "sariinNiilberDun" ? formatNumber(value) : value
       );
     }
     return butsaakhUtga;
@@ -405,6 +414,8 @@ function GereeBaiguulakh({ token }) {
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
         (a) => a.khamaarakhKheseg === steps[current].title
       );
+    khadgalakhGeree.sariinNiilberDun =
+      tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"

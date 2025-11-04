@@ -16,7 +16,7 @@ const talbaruud = [
   { ner: t("Нэр"), talbar: "ner" },
   { ner: t("Байгууллага нэр"), talbar: "baiguullagiinNer" },
   { ner: t("Байгууллагын хаяг"), talbar: "baiguullagiinKhayag" },
-  { ner: t("Нийлбэр дүн"), talbar: "niilberDun" },
+  { ner: t("Сарын нийлбэр дүн"), talbar: "sariinNiilberDun" },
   { ner: t("Гэрээний дугаар"), talbar: "gereeniiDugaar" },
   { ner: t("Гэрээний огноо"), talbar: "gereeniiOgnoo" },
   { ner: t("Төрөл"), talbar: "turul" },

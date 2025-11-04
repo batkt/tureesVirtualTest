@@ -105,6 +105,7 @@ const baritsaaniiTalbaruud = [
 const tulburiinTalbaruud = [
   { ner: t("Хөнгөлөх хугацаа"), talbar: "khungulukhKhugatsaa" },
   { ner: t("Сарын түрээс"), talbar: "sariinTurees" },
+  { ner: t("Сарын нийлбэр дүн"), talbar: "sariinNiilberDun" },
   { ner: t("Мөнгөн дүн үсгээр"), talbar: "mungunDunUsgeer" },
 ];
 
