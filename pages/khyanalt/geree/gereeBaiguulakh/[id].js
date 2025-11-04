@@ -57,6 +57,13 @@ const steps = [
 function GereeBaiguulakh({ token, data }) {
   const { t } = useTranslation();
   const { baiguullaga, barilgiinId } = useAuth();
+  const songosonBarilgiinHayag = React.useMemo(() => {
+    if (!Array.isArray(baiguullaga?.barilguud)) return "";
+    return (
+      baiguullaga?.barilguud?.find((barilga) => barilga?._id === barilgiinId)
+        ?.khayag || ""
+    );
+  }, [baiguullaga?.barilguud, barilgiinId]);
   const router = useRouter();
   const [current, setCurrent] = React.useState(0);
   const [dutuuAlkham, setDutuuAlkham] = useState([]);
@@ -95,6 +102,20 @@ function GereeBaiguulakh({ token, data }) {
         .then(({ data }) => setAktiinZagvar(data));
     }
   }, [data]);
+  useEffect(() => {
+    const shineHayag = songosonBarilgiinHayag || "";
+    setKhagalakhGeree((prev) => {
+      const old = prev || {};
+      const aliUdaanHayag = old?.baiguullagiinKhayag ?? "";
+      if (aliUdaanHayag === shineHayag && old?.barilgiinId === barilgiinId)
+        return prev;
+      return {
+        ...old,
+        barilgiinId,
+        baiguullagiinKhayag: shineHayag,
+      };
+    });
+  }, [barilgiinId, songosonBarilgiinHayag]);
   useEffect(() => {
     if (current === 0) {
       var elem = document.getElementById("erunkhiiMedeelel");
