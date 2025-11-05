@@ -2309,7 +2309,7 @@ function Zogsool({ token }) {
                                 },
                               },
                               {
-                                title: t("QPAY Урьдчилсан"),
+                                title: t("Дотор QR"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
                                 __numFmt__: "#,##0.00",
@@ -2318,9 +2318,45 @@ function Zogsool({ token }) {
                                   return (
                                     (v[0]?.tulbur?.length > 0
                                       ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "qpayUridchilsan"
+                                          ?.filter((e) => e.turul === "DotorQR")
+                                          .reduce(
+                                            (a, b) => a + Number(b.dun || 0),
+                                            0
                                           )
+                                      : 0) || 0
+                                  );
+                                },
+                              },
+                              {
+                                title: t("Гадаа QR"),
+                                dataIndex: "tuukh",
+                                __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
+                                render(v, p, i) {
+                                  return (
+                                    (v[0]?.tulbur?.length > 0
+                                      ? v[0]?.tulbur
+                                          ?.filter((e) => e.turul === "GadaaQR")
+                                          .reduce(
+                                            (a, b) => a + Number(b.dun || 0),
+                                            0
+                                          )
+                                      : 0) || 0
+                                  );
+                                },
+                              },
+                              {
+                                title: t("Банк QR"),
+                                dataIndex: "tuukh",
+                                __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
+                                render(v, p, i) {
+                                  return (
+                                    (v[0]?.tulbur?.length > 0
+                                      ? v[0]?.tulbur
+                                          ?.filter((e) => e.turul === "bankQR")
                                           .reduce(
                                             (a, b) => a + Number(b.dun || 0),
                                             0

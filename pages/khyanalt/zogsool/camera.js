@@ -204,20 +204,30 @@ function tulburKhurvuulekh(v) {
     case "khungulult":
       utga = "Хөнгөлөлт";
       break;
-    case "tseneglelt":
-      utga = "Цэнэглэлт";
+    case "bankQR":
+      utga = "Банк QR";
       break;
-    case "qpayUridchilsan":
-      utga = "QPay QR";
+    case "tseneglelt":
+      utga = "Хэтэвч";
+      break;
+    case "qpay":
+      utga = "QPay";
+      break;
+    case "DotorQR":
+      utga = "Дотор QR";
+      break;
+
+    case "GadaaQR":
+      utga = "Гадаа QR";
       break;
     case "PosBelen":
-      utga = "Пос бэлэн";
+      utga = "Пос Бэлэн";
       break;
     case "PosCard":
-      utga = "Пос карт";
+      utga = "Пос Карт";
       break;
     case "PosKhariltsakh":
-      utga = "Пос дансаар";
+      utga = "Пос Данс";
       break;
     default:
       utga = v;

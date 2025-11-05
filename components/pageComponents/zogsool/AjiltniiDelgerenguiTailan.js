@@ -463,17 +463,36 @@ function AjiltniiDelgerenguiTailan(
             break;
           case "qpay":
             ugugdul.push({
-              ner: "Гадаа QR",
+              ner: "QPay",
               icon: "https://qpay.mn/q/img/q.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-          case "qpayUridchilsan":
+          case "GadaaQR":
+            ugugdul.push({
+              ner: "Гадаа QR",
+              icon: "/GadaaQR.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+
+          case "DotorQR":
             ugugdul.push({
               ner: "Дотор QR",
-              icon: "https://qpay.mn/q/img/q.png",
+              icon: "/QR.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "bankQR":
+            ugugdul.push({
+              ner: "Банк QR",
+              icon: "/Bank.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
