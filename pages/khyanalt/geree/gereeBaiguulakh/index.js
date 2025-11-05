@@ -77,7 +77,7 @@ function GereeBaiguulakh({ token }) {
     baritsaaAvakhKhugatsaa: 1,
     baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),
     barilgiinId: barilgiinId,
-    baiguullagiinKhayag: songosonBarilgiinHayag,
+    barilgiinKhayag: songosonBarilgiinHayag,
   });
 
   const [waiting, setWaiting] = useState(false);
@@ -158,6 +158,8 @@ function GereeBaiguulakh({ token }) {
       data.baiguullagiinId = baiguullaga._id;
       data.gereeniiZagvariinId = gereeniiZagvar._id;
       data.barilgiinId = barilgiinId;
+      data.barilgiinKhayag =
+        khadgalakhGeree?.barilgiinKhayag ?? songosonBarilgiinHayag ?? "";
       data.turGereeEsekh = gereeniiZagvar?.turGereeEsekh;
       if (!!data.customerTin && data.register === data.customerTin)
         data.register = undefined;
@@ -198,6 +200,7 @@ function GereeBaiguulakh({ token }) {
                 baiguullaga,
                 "tokhirgoo.baritsaaAvakhSar"
               ),
+              barilgiinKhayag: songosonBarilgiinHayag,
             });
             setCurrent(0);
             message.success(t("Амжилттай хадгаллаа"));
@@ -300,8 +303,7 @@ function GereeBaiguulakh({ token }) {
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud?.filter(
         (a) => a.khamaarakhKheseg === steps[current].title
       );
-    khadgalakhGeree.sariinNiilberDun =
-      tootsohSariinNiilberDun(khadgalakhGeree);
+    khadgalakhGeree.sariinNiilberDun = tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"
@@ -414,8 +416,7 @@ function GereeBaiguulakh({ token }) {
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
         (a) => a.khamaarakhKheseg === steps[current].title
       );
-    khadgalakhGeree.sariinNiilberDun =
-      tootsohSariinNiilberDun(khadgalakhGeree);
+    khadgalakhGeree.sariinNiilberDun = tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"
@@ -470,26 +471,28 @@ function GereeBaiguulakh({ token }) {
         baritsaaAvakhKhugatsaa: 1,
         baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),
         barilgiinId: barilgiinId,
-        baiguullagiinKhayag: songosonBarilgiinHayag,
+        barilgiinKhayag: songosonBarilgiinHayag,
       });
       setCurrent(0);
     }
-  }, [barilgiinId, baiguullaga, songosonBarilgiinHayag, khadgalakhGeree.barilgiinId]);
+  }, [
+    barilgiinId,
+    baiguullaga,
+    songosonBarilgiinHayag,
+    khadgalakhGeree.barilgiinId,
+  ]);
 
   useEffect(() => {
     const nextHayag = songosonBarilgiinHayag || "";
     setKhagalakhGeree((prev) => {
-      const currentHayag = prev?.baiguullagiinKhayag ?? "";
-      if (
-        prev?.barilgiinId === barilgiinId &&
-        currentHayag === nextHayag
-      ) {
+      const currentHayag = prev?.barilgiinKhayag ?? "";
+      if (prev?.barilgiinId === barilgiinId && currentHayag === nextHayag) {
         return prev;
       }
       return {
         ...prev,
         barilgiinId,
-        baiguullagiinKhayag: nextHayag,
+        barilgiinKhayag: nextHayag,
       };
     });
   }, [barilgiinId, songosonBarilgiinHayag]);
@@ -521,6 +524,7 @@ function GereeBaiguulakh({ token }) {
           gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
           baritsaaAvakhKhugatsaa: 1,
           baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),
+          barilgiinKhayag: songosonBarilgiinHayag,
         });
         setGereeniiZagvar(undefined);
         setCurrent(0);

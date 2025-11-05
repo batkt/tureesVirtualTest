@@ -11,19 +11,25 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
   const barilga = baiguullaga?.barilguud.find(
     (a) => a._id === geree?.barilgiinId
   );
+  const gereeMedeelel = React.useMemo(() => {
+    if (!geree) return undefined;
+    const hayag = geree.barilgiinKhayag ?? barilga?.khayag ?? "";
+    if (geree.barilgiinKhayag === hayag) return geree;
+    return { ...geree, barilgiinKhayag: hayag };
+  }, [geree, barilga?.khayag]);
   const [akt, setAkt] = useState();
   const [zurguud, setZurguud] = useState();
   const [KharakhKhesguud, setKharakhKhesguud] = useState([1]);
   const [talbainuud, setTalbainuud] = useState();
 
   useEffect(() => {
-    if (geree?.aktiinZagvariinId) {
+    if (gereeMedeelel?.aktiinZagvariinId) {
       KharakhKhesguud.push(3);
       uilchilgee(token)
-        .get(`/aktiinZagvar/${geree?.aktiinZagvariinId}`)
+        .get(`/aktiinZagvar/${gereeMedeelel?.aktiinZagvariinId}`)
         .then(({ data }) => {
           if (!!data) {
-            for (const [key, value] of Object.entries(geree)) {
+            for (const [key, value] of Object.entries(gereeMedeelel || {})) {
               data.dedKhesguud
                 .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
                 .map((b) => {
@@ -98,11 +104,11 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
           }
         });
     }
-    if (geree?.talbainIdnuud?.length > 0) {
+    if (gereeMedeelel?.talbainIdnuud?.length > 0) {
       KharakhKhesguud.push(2);
       uilchilgee(token)
         .get("/talbai", {
-          params: { query: { _id: { $in: geree?.talbainIdnuud } } },
+          params: { query: { _id: { $in: gereeMedeelel?.talbainIdnuud } } },
         })
         .then(({ data }) => {
           if (!!data) {
@@ -110,12 +116,12 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
           }
         });
     }
-    if (geree?.zurguud?.length > 0) {
+    if (gereeMedeelel?.zurguud?.length > 0) {
       KharakhKhesguud.push(4);
-      setZurguud(geree.zurguud);
-    } else if (geree?._id) {
+      setZurguud(gereeMedeelel.zurguud);
+    } else if (gereeMedeelel?._id) {
       uilchilgee(token)
-        .get(`/gereeniiZurguud/${geree._id}`)
+        .get(`/gereeniiZurguud/${gereeMedeelel._id}`)
         .then(({ data }) => {
           if (data?.length) {
             setZurguud(data);
@@ -126,7 +132,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
     }
 
     setKharakhKhesguud([...KharakhKhesguud]);
-  }, [geree, barilga, token]);
+  }, [gereeMedeelel, token]);
 
   React.useEffect(() => {
     const keydown = (e) => {
@@ -158,7 +164,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
           <EyeOutlined />
           Гэрээ
         </div>
-        {geree?.talbainIdnuud?.length > 0 && (
+        {gereeMedeelel?.talbainIdnuud?.length > 0 && (
           <div
             onClick={() =>
               KharakhKhesguud.find((a) => a === 2)
@@ -175,7 +181,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
             Талбай
           </div>
         )}
-        {geree?.aktiinZagvariinId && (
+        {gereeMedeelel?.aktiinZagvariinId && (
           <div
             onClick={() =>
               KharakhKhesguud.find((a) => a === 3)
@@ -192,7 +198,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
             Акт
           </div>
         )}
-        {geree?.zurguud && (
+        {gereeMedeelel?.zurguud && (
           <div
             onClick={() =>
               KharakhKhesguud.find((a) => a === 4)
@@ -366,14 +372,14 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
           </div>
         )}
 
-        {geree?.zurguud?.length > 0 && (
+        {gereeMedeelel?.zurguud?.length > 0 && (
           <div>
             <div className="sticky left-0 top-0 text-2xl font-semibold opacity-30 print:hidden">
               PDF
             </div>
 
             <div className="flex w-full flex-col space-y-4 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg dark:text-white print:shadow-none">
-              {geree.zurguud.map((mur) => (
+              {gereeMedeelel.zurguud.map((mur) => (
                 <img
                   key={mur}
                   src={`${url}/zuragAvya/jpg/${baiguullaga?._id}/${mur}`}

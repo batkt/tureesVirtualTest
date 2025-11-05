@@ -107,13 +107,13 @@ function GereeBaiguulakh({ token, data }) {
     const shineHayag = songosonBarilgiinHayag || "";
     setKhagalakhGeree((prev) => {
       const old = prev || {};
-      const aliUdaanHayag = old?.baiguullagiinKhayag ?? "";
+      const aliUdaanHayag = old?.barilgiinKhayag ?? "";
       if (aliUdaanHayag === shineHayag && old?.barilgiinId === barilgiinId)
         return prev;
       return {
         ...old,
         barilgiinId,
-        baiguullagiinKhayag: shineHayag,
+        barilgiinKhayag: shineHayag,
       };
     });
   }, [barilgiinId, songosonBarilgiinHayag]);
@@ -198,6 +198,11 @@ function GereeBaiguulakh({ token, data }) {
     data.baiguullagiinId = baiguullaga?._id;
     data.gereeniiZagvariinId = gereeniiZagvar._id;
     data.barilgiinId = barilgiinId;
+    data.barilgiinKhayag =
+      data?.barilgiinKhayag ??
+      khadgalakhGeree?.barilgiinKhayag ??
+      songosonBarilgiinHayag ??
+      "";
     data.turGereeEsekh = gereeniiZagvar?.turGereeEsekh;
 
     if (!!data?.unemlekhniiZurag)
@@ -304,8 +309,7 @@ function GereeBaiguulakh({ token, data }) {
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
         (a) => a.khamaarakhKheseg === steps[current].title
       );
-    khadgalakhGeree.sariinNiilberDun =
-      tootsohSariinNiilberDun(khadgalakhGeree);
+    khadgalakhGeree.sariinNiilberDun = tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"
@@ -349,7 +353,7 @@ function GereeBaiguulakh({ token, data }) {
             //   : formatNumber(value)
             // : value
           );
-      });
+        });
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
         key === "sariinNiilberDun" ? formatNumber(value) : value
@@ -365,8 +369,7 @@ function GereeBaiguulakh({ token, data }) {
       butsaakhUtga.dedKhesguud = butsaakhUtga?.dedKhesguud?.filter(
         (a) => a.khamaarakhKheseg === steps[current].title
       );
-    khadgalakhGeree.sariinNiilberDun =
-      tootsohSariinNiilberDun(khadgalakhGeree);
+    khadgalakhGeree.sariinNiilberDun = tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"
@@ -493,7 +496,7 @@ function GereeBaiguulakh({ token, data }) {
       loading={waiting}
       fixedZagvarNeegdsenEsekh={gereekharakhTovch}
     >
-      <div className="col-span-12 p-5 box">
+      <div className="box col-span-12 p-5">
         <div className="px-10">
           <Steps onChange={onChange} current={current}>
             {steps.map((item, index) => (
@@ -508,8 +511,8 @@ function GereeBaiguulakh({ token, data }) {
             ))}
           </Steps>
         </div>
-        <div className="grid grid-cols-12 gap-6 mt-3">
-          <div className="col-span-12 p-2 mt-3 bg-gray-50 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
+        <div className="mt-3 grid grid-cols-12 gap-6">
+          <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
             <currentItem.content
               t={t}
               next={next}
@@ -611,7 +614,7 @@ function GereeBaiguulakh({ token, data }) {
                 })}
               </Select>
             )}
-            <div className="flex flex-col items-center justify-center w-full gap-10 dark:bg-white">
+            <div className="flex w-full flex-col items-center justify-center gap-10 dark:bg-white">
               <div>
                 {current === 0 && gereeniiZagvar?.ner && (
                   <>
@@ -646,11 +649,11 @@ function GereeBaiguulakh({ token, data }) {
                           : ""
                       }
                       key={`alkhamiinGereeniiZagvar${index}`}
-                      className="relative flex flex-row w-full p-1 rounded-md group "
+                      className="group relative flex w-full flex-row rounded-md p-1 "
                     >
                       <div
-                        className="w-full text-center text-white sun-editor-editable "
-                        dangerouslySetInnerHTML={{ __html: mur.zaalt }} 
+                        className="sun-editor-editable w-full text-center text-white "
+                        dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                       />
                     </div>
                   );
@@ -731,7 +734,7 @@ function GereeBaiguulakh({ token, data }) {
                             : ""
                         }
                         key={`alkhamiinAktiinZagvar${index}`}
-                        className="relative flex flex-row w-full rounded-md group"
+                        className="group relative flex w-full flex-row rounded-md"
                       >
                         <div
                           className="w-full"

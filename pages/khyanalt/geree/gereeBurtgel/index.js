@@ -1368,6 +1368,9 @@ function ZakhialgiinKhyanalt() {
     const barilga = baiguullaga.barilguud.find(
       (a) => a._id === geree.barilgiinId
     );
+    if (!geree.barilgiinKhayag) {
+      geree.barilgiinKhayag = barilga?.khayag || "";
+    }
     readMethod("gereeniiZagvar", token, geree.gereeniiZagvariinId).then(
       ({ data }) => {
         if (!!data) {
