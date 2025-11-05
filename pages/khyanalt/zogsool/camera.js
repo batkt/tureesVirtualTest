@@ -942,7 +942,7 @@ function camera({ token }) {
         sorter: () => 0,
         render(v, p) {
           const d = p.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag;
-          return d && moment(d).format("MM-DD HH:mm");
+          return d && moment(d).format("MM-DD HH:mm:ss");
         },
       },
       {
@@ -954,7 +954,7 @@ function camera({ token }) {
         sorter: () => 0,
         render(v, p) {
           const d = p.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag;
-          return d && moment(d).format("MM-DD HH:mm");
+          return d && moment(d).format("MM-DD HH:mm:ss");
         },
       },
       {

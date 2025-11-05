@@ -501,24 +501,36 @@ const KioskMobile = ({
                   <div>Орсон </div>
                   <div>
                     {moment(songogdsonData.enter_date).format(
-                      "DD/MM/YYYY HH:mm"
+                      "DD/MM/YYYY HH:mm:ss"
                     )}
                   </div>
                 </div>
                 <div className="h-[1px] w-full bg-black dark:bg-black" />
                 <div className="flex w-full justify-between px-6">
                   <div>Гарсан</div>
-                  <div>{songogdsonData.garsanTsag ? moment(songogdsonData.garsanTsag).format("DD/MM/YYYY HH:mm") : moment().format("DD/MM/YYYY HH:mm")}</div>
+                  <div>
+                    {songogdsonData.garsanTsag
+                      ? moment(songogdsonData.garsanTsag).format(
+                          "DD/MM/YYYY HH:mm:ss"
+                        )
+                      : moment().format("DD/MM/YYYY HH:mm")}
+                  </div>
                 </div>
                 <div className="h-[1px] w-full bg-black dark:bg-black" />
                 <div className="flex w-full justify-between px-6">
                   <div>Зогссон хугацаа </div>
                   <div>
                     {(() => {
-                      const garsanTsag = songogdsonData.garsanTsag ? moment(songogdsonData.garsanTsag) : moment();
-                      const diff = garsanTsag.diff(moment(songogdsonData.enter_date));
+                      const garsanTsag = songogdsonData.garsanTsag
+                        ? moment(songogdsonData.garsanTsag)
+                        : moment();
+                      const diff = garsanTsag.diff(
+                        moment(songogdsonData.enter_date)
+                      );
                       const dur = moment.duration(diff);
-                      return `${String(dur.hours()).padStart(2, '0')}:${String(dur.minutes()).padStart(2, '0')}`;
+                      return `${String(dur.hours()).padStart(2, "0")}:${String(
+                        dur.minutes()
+                      ).padStart(2, "0")}`;
                     })()}
                   </div>
                 </div>
