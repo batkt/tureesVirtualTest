@@ -251,7 +251,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "PosBelen":
               ugugdul.push({
-                ner: "ПОС бэлэн",
+                ner: "ПОС Бэлэн",
                 icon: "/androidPosBelen.png",
 
                 dun: element.niitDun,
