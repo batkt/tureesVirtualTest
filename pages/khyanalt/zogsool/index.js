@@ -119,6 +119,18 @@ function tulburKhurvuulekh(v) {
     case "Fitness":
       utga = "Fitness";
       break;
+    case "bankQR":
+      utga = "Банк QR";
+      break;
+    case "GadaaQR":
+      utga = "Гадаа QR";
+      break;
+    case "DotorQR":
+      utga = "Дотор QR";
+      break;
+    case "qpay":
+      utga = "QPay";
+      break;
     case "Соёолж Ц/Д":
       utga = "Соёолж Ц/Д";
       break;
