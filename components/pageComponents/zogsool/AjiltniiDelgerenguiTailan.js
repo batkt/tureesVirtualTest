@@ -416,7 +416,7 @@ function AjiltniiDelgerenguiTailan(
 
           case "PosBelen":
             ugugdul.push({
-              ner: "Андройд ПОС бэлэн",
+              ner: "ПОС Бэлэн",
               icon: "/androidPosBelen.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -425,7 +425,7 @@ function AjiltniiDelgerenguiTailan(
             break;
           case "PosCard":
             ugugdul.push({
-              ner: "Андройд ПОС карт",
+              ner: "ПОС Карт",
               turul: "PosCard",
               icon: "/androidpooos.png",
               dun: element.niitDun,
@@ -435,7 +435,7 @@ function AjiltniiDelgerenguiTailan(
             break;
           case "PosKhariltsakh":
             ugugdul.push({
-              ner: "Андройд ПОС дансаар",
+              ner: "ПОС Данс",
               turul: "PosKhariltsakh",
               icon: "/androidDansPos.png",
               dun: element.niitDun,
@@ -463,7 +463,7 @@ function AjiltniiDelgerenguiTailan(
             break;
           case "qpay":
             ugugdul.push({
-              ner: element._id,
+              ner: "Гадаа QR",
               icon: "https://qpay.mn/q/img/q.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -472,7 +472,7 @@ function AjiltniiDelgerenguiTailan(
             break;
           case "qpayUridchilsan":
             ugugdul.push({
-              ner: "QPay QR",
+              ner: "Дотор QR",
               icon: "https://qpay.mn/q/img/q.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -500,7 +500,7 @@ function AjiltniiDelgerenguiTailan(
 
           case "tseneglelt":
             ugugdul.push({
-              ner: "Цэнэглэлт",
+              ner: "Хэтэвч",
               icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,

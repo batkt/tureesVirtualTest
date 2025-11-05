@@ -199,7 +199,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "qpay":
             ugugdul.push({
-              ner: element._id,
+              ner: "Гадаа QR",
               icon: "https://qpay.mn/q/img/q.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -208,7 +208,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "qpayUridchilsan":
             ugugdul.push({
-              ner: "QPay QR",
+              ner: "Дотор QR",
               icon: "https://qpay.mn/q/img/q.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -236,7 +236,7 @@ function TulburiinDelgerenguiTailan(
 
           case "tseneglelt":
             ugugdul.push({
-              ner: "Цэнэглэлт",
+              ner: "Хэтэвч",
               icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,
@@ -246,7 +246,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "PosBelen":
             ugugdul.push({
-              ner: "Андройд ПОС Бэлэн",
+              ner: "ПОС Бэлэн",
               icon: "/androidPosBelen.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,
@@ -256,7 +256,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "PosKart":
             ugugdul.push({
-              ner: "Андройд ПОС Карт",
+              ner: "ПОС Карт",
               icon: "/androidpooos.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,
@@ -266,7 +266,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "PosKhariltsakh":
             ugugdul.push({
-              ner: "Андройд ПОС Дансаар",
+              ner: "ПОС Данс",
               icon: "/androidDansPos.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,
@@ -301,6 +301,7 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
+
           default:
             ugugdul.push({
               ner: element._id,

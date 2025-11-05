@@ -106,7 +106,7 @@ function TulburiinDelgerenguiTailan({ token }) {
             case "khaan":
               ugugdul.push({
                 ner: "Карт",
-                icon: "/cartniiZurag.png",
+                icon: "/card.png",
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -159,7 +159,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "qpay":
               ugugdul.push({
-                ner: element._id,
+                ner: "Гадаа QR",
                 icon: "https://qpay.mn/q/img/q.png",
                 dun: element.niitDun,
                 too: element.niitToo,
@@ -168,7 +168,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "qpayUridchilsan":
               ugugdul.push({
-                ner: "QPay QR",
+                ner: "Дотор QR",
                 icon: "https://qpay.mn/q/img/q.png",
                 dun: element.niitDun,
                 too: element.niitToo,
@@ -223,7 +223,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "tseneglelt":
               ugugdul.push({
-                ner: "Цэнэглэлт",
+                ner: "Хэтэвч",
                 icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
 
                 dun: element.niitDun,
@@ -233,7 +233,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "PosBelen":
               ugugdul.push({
-                ner: "Aндройд ПОС бэлэн",
+                ner: "ПОС бэлэн",
                 icon: "/androidPosBelen.png",
 
                 dun: element.niitDun,
@@ -243,7 +243,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "PosCard":
               ugugdul.push({
-                ner: "Aндройд ПОС карт",
+                ner: "ПОС Карт",
                 icon: "/androidpooos.png",
 
                 dun: element.niitDun,
@@ -253,7 +253,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "PosKhariltsakh":
               ugugdul.push({
-                ner: "Aндройд ПОС дансаар",
+                ner: "ПОС Данс",
                 icon: "/androidDansPos.png",
 
                 dun: element.niitDun,
