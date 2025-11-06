@@ -101,6 +101,7 @@ function tulburKhurvuulekh(v) {
     case "golomt":
       utga = "Голомт";
       break;
+
     case "tdb":
       utga = "ХХБ";
       break;
@@ -131,6 +132,10 @@ function tulburKhurvuulekh(v) {
     case "qpay":
       utga = "QPay";
       break;
+    case "tseneglelt":
+      utga = "Хэтэвч";
+      break;
+
     case "Соёолж Ц/Д":
       utga = "Соёолж Ц/Д";
       break;
@@ -2302,7 +2307,7 @@ function Zogsool({ token }) {
                                 },
                               },
                               {
-                                title: t("qpay"),
+                                title: t("Qpay"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
                                 __numFmt__: "#,##0.00",
@@ -2369,6 +2374,27 @@ function Zogsool({ token }) {
                                     (v[0]?.tulbur?.length > 0
                                       ? v[0]?.tulbur
                                           ?.filter((e) => e.turul === "bankQR")
+                                          .reduce(
+                                            (a, b) => a + Number(b.dun || 0),
+                                            0
+                                          )
+                                      : 0) || 0
+                                  );
+                                },
+                              },
+                              {
+                                title: t("Хэтэвч"),
+                                dataIndex: "tuukh",
+                                __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
+                                render(v, p, i) {
+                                  return (
+                                    (v[0]?.tulbur?.length > 0
+                                      ? v[0]?.tulbur
+                                          ?.filter(
+                                            (e) => e.turul === "tseneglelt"
+                                          )
                                           .reduce(
                                             (a, b) => a + Number(b.dun || 0),
                                             0
