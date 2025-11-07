@@ -404,6 +404,21 @@ function tulburTootsoo({ token }) {
     const nuukh =
       ajiltan?.erkh === "Admin" ||
       (_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`) || []).length > 0;
+    const ajiltanBagana = {
+      title: t("Ажилтан"),
+      dataIndex: "burtgesenAjiltaniiNer",
+      align: "center",
+      width: "8rem",
+      render(value, record) {
+        if (!record?.kholbosonGereeniiId?.length) return "-";
+        if (!value) return "-";
+        return (
+          <Tooltip placement="top" title={<div>{value}</div>}>
+            <div className="flex w-full justify-center truncate">{value}</div>
+          </Tooltip>
+        );
+      },
+    };
     if (songogdsonDans?.bank === "tdb") {
       baganuud = [
         {
@@ -448,13 +463,13 @@ function tulburTootsoo({ token }) {
           },
         },
         {
-          title: t("Шилжүүлсэн данс"),
+          title: t("Данс"),
           dataIndex: "CtAcntOrg",
           align: "center",
           width: "10rem",
         },
         {
-          title: t("Холбосон огноо"),
+          title: t("Холбосон"),
           dataIndex: "updatedAt",
           align: "center",
           width: "8rem",
@@ -462,6 +477,7 @@ function tulburTootsoo({ token }) {
             return date ? moment(date).format("YYYY-MM-DD HH:mm") : "-";
           },
         },
+        ajiltanBagana,
       ];
 
       if (khuulgaTurul === "orlogo")
@@ -648,14 +664,14 @@ function tulburTootsoo({ token }) {
           },
         },
         {
-          title: t("Шилжүүлсэн данс"),
+          title: t("Данс"),
           align: "center",
           dataIndex: "relatedAccount",
           ellipsis: true,
           width: "10rem",
         },
         {
-          title: t("Холбосон огноо"),
+          title: t("Холбосон"),
           dataIndex: "updatedAt",
           align: "center",
           width: "8rem",
@@ -663,6 +679,7 @@ function tulburTootsoo({ token }) {
             return date ? moment(date).format("YYYY-MM-DD HH:mm") : "-";
           },
         },
+        ajiltanBagana,
       ];
       if (khuulgaTurul === "orlogo")
         baganuud = [
@@ -837,7 +854,7 @@ function tulburTootsoo({ token }) {
           width: "10rem",
         },
         {
-          title: t("Холбосон огноо"),
+          title: t("Холбосон"),
           dataIndex: "updatedAt",
           align: "center",
           width: "8rem",
@@ -845,6 +862,7 @@ function tulburTootsoo({ token }) {
             return date ? moment(date).format("YYYY-MM-DD HH:mm") : "-";
           },
         },
+        ajiltanBagana,
       ];
       if (khuulgaTurul === "orlogo")
         baganuud = [
@@ -1221,6 +1239,11 @@ function tulburTootsoo({ token }) {
                                 __style__: { h: "center" },
                               },
                               {
+                                title: t("Ажилтан"),
+                                dataIndex: "burtgesenAjiltaniiNer",
+                                __style__: { h: "center" },
+                              },
+                              {
                                 title: t("Талбай"),
                                 dataIndex: "kholbosonTalbainId",
                               },
@@ -1270,6 +1293,11 @@ function tulburTootsoo({ token }) {
                                 __style__: { h: "center" },
                               },
                               {
+                                title: t("Ажилтан"),
+                                dataIndex: "burtgesenAjiltaniiNer",
+                                __style__: { h: "center" },
+                              },
+                              {
                                 title: t("Талбай"),
                                 dataIndex: "kholbosonTalbainId",
                               },
@@ -1309,6 +1337,11 @@ function tulburTootsoo({ token }) {
                                 title: t("Шилжүүлсэн данс"),
                                 align: "center",
                                 dataIndex: "accNum",
+                                __style__: { h: "center" },
+                              },
+                              {
+                                title: t("Ажилтан"),
+                                dataIndex: "burtgesenAjiltaniiNer",
                                 __style__: { h: "center" },
                               },
                               {
