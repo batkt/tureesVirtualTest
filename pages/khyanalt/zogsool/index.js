@@ -135,6 +135,15 @@ function tulburKhurvuulekh(v) {
     case "tseneglelt":
       utga = "Хэтэвч";
       break;
+    case "PosKart":
+      utga = "Пос Карт";
+      break;
+    case "PosBelen":
+      utga = "Пос Бэлэн";
+      break;
+    case "PosKhariltsakh":
+      utga = "Пос Данс";
+      break;
 
     case "Соёолж Ц/Д":
       utga = "Соёолж Ц/Д";
@@ -2434,7 +2443,7 @@ function Zogsool({ token }) {
                                   return (
                                     (v[0]?.tulbur?.length > 0
                                       ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "PosCard")
+                                          ?.filter((e) => e.turul === "PosKart")
                                           .reduce(
                                             (a, b) => a + Number(b.dun || 0),
                                             0

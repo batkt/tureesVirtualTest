@@ -42,7 +42,7 @@ function useAjiltniOdriinTailan(
   const { data, mutate, isValidating } = useSWR(
     shouldFetch
       ? [
-          "/zogsooliinUdriinTailanAvya",
+          "/zogsooliinAjiltniiUdriinTailanAvya",
           token,
           barilgiinId,
           duusakhOgnoo,

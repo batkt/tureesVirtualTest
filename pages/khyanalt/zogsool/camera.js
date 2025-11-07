@@ -223,7 +223,7 @@ function tulburKhurvuulekh(v) {
     case "PosBelen":
       utga = "Пос Бэлэн";
       break;
-    case "PosCard":
+    case "PosKart":
       utga = "Пос Карт";
       break;
     case "PosKhariltsakh":

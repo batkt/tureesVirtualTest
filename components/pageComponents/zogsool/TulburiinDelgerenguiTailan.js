@@ -272,7 +272,7 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-          case "PosCard":
+          case "PosKart":
             ugugdul.push({
               ner: "ПОС Карт",
               icon: "/androidpooos.png",
