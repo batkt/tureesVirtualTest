@@ -32,7 +32,10 @@ const RESTRICTED_PAYMENT_TYPES = new Set([
   "khunglukh",
   "khungulult",
   "qpay",
-  "qpayUridchilsan",
+  "DotorQR",
+  "bankQR",
+  "GadaaQR",
+
   "toki",
   "kiosk",
   "tseneglelt",
@@ -60,8 +63,9 @@ function AjiltniiDelgerenguiTailan(
   const [loading, setLoading] = useState(false);
   const [haaltDarsan, setHaaltDarsan] = useState(false);
 
+  const ajiltanAdminEsekh = ajiltan?.erkh === "Admin";
   const ajiltandBuhTolborHarahEsekh =
-    ajiltan?.tokhirgoo?.ajiltandBuhTolborHaruulahEseh;
+    ajiltanAdminEsekh || !!ajiltan?.tokhirgoo?.ajiltandBuhTolborHaruulahEseh;
   const [songogdson, setSongogdson] = useState([]);
   const [khaaltOgnoo, setKhaaltOgnoo] = useState(null);
   const [tailanEkhlekhOgnoo, setTailanEkhlekhOgnoo] = useState(null);
