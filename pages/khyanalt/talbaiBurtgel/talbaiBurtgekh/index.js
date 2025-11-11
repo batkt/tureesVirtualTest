@@ -24,6 +24,7 @@ import {
   Table,
   Tag,
   Drawer,
+  Grid,
 } from "antd";
 import Admin from "components/Admin";
 import { modal } from "components/ant/Modal";
@@ -53,6 +54,7 @@ import { ImFileEmpty, ImFileText2 } from "react-icons/im";
 import { useTranslation } from "react-i18next";
 
 const Tailan = dynamic(() => import("components/konva/tailan"), { ssr: false });
+const { useBreakpoint } = Grid;
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -121,6 +123,8 @@ function talbaiBurtgekh({ token }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [neesenEsekh, setNeesenEsekh] = useState(false);
+  const screens = useBreakpoint();
+  const isMobileView = !screens.md;
 
   const showDrawer = () => {
     setOpen(true);
@@ -680,31 +684,33 @@ function talbaiBurtgekh({ token }) {
           className="mt-5 md:mt-0"
         >
           <p className="py-2 font-medium md:hidden">{t("Талбайн жагсаалт")}</p>
-          <CardList
-            tileProps={{ talbaiUstgay, barilgiinId }}
-            keyValue="talbai"
-            cardListTuluv={"utas"}
-            neesenEsekh={neesenEsekh}
-            className="block overflow-auto md:hidden"
-            jagsaalt={talbainiiGaralt?.jagsaalt}
-            Component={TalbaiTile}
-            pagination={{
-              current: talbainiiGaralt?.khuudasniiDugaar,
-              pageSize: talbainiiGaralt?.khuudasniiKhemjee,
-              total: talbainiiGaralt?.niitMur,
-              showSizeChanger: true,
-              responsive: true,
-              size: "default",
-              showQuickJumper: false,
-              className: "pt-4 sm:pt-2",
-              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                setTalbaiKhuudaslalt((kh) => ({
-                  ...kh,
-                  khuudasniiDugaar,
-                  khuudasniiKhemjee,
-                })),
-            }}
-          />
+          {isMobileView && (
+            <CardList
+              tileProps={{ talbaiUstgay, barilgiinId }}
+              keyValue="talbai"
+              cardListTuluv={"utas"}
+              neesenEsekh={neesenEsekh}
+              className="block overflow-auto md:hidden"
+              jagsaalt={talbainiiGaralt?.jagsaalt}
+              Component={TalbaiTile}
+              pagination={{
+                current: talbainiiGaralt?.khuudasniiDugaar,
+                pageSize: talbainiiGaralt?.khuudasniiKhemjee,
+                total: talbainiiGaralt?.niitMur,
+                showSizeChanger: true,
+                responsive: true,
+                size: "default",
+                showQuickJumper: false,
+                className: "pt-4 sm:pt-2",
+                onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                  setTalbaiKhuudaslalt((kh) => ({
+                    ...kh,
+                    khuudasniiDugaar,
+                    khuudasniiKhemjee,
+                  })),
+              }}
+            />
+          )}
 
           <Table
             className={"mt-6 hidden md:block"}
