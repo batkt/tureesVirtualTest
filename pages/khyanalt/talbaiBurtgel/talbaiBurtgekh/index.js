@@ -775,7 +775,7 @@ function talbaiBurtgekh({ token }) {
                 title: t("Тоолуурын №"),
                 dataIndex: "tooluuriinDugaar",
                 ellipsis: true,
-                width: "1.5rem",
+                width: "2.5rem",
                 align: "center",
                 showSorterTooltip: false,
                 sorter: () => 0,
@@ -822,7 +822,7 @@ function talbaiBurtgekh({ token }) {
                 showSorterTooltip: false,
                 defaultSortOrder: "descend",
                 sorter: () => 0,
-                width: "2.5rem",
+                width: "2rem",
               },
               {
                 title: t("Зардал"),
@@ -853,7 +853,7 @@ function talbaiBurtgekh({ token }) {
                 title: t("Тайлбар"),
                 dataIndex: "tailbar",
                 ellipsis: true,
-                width: "4.5rem",
+                width: "4rem",
                 align: "center",
                 render(a) {
                   return <div className="text-left">{a}</div>;

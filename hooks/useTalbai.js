@@ -7,6 +7,7 @@ function getSearch(search) {
   var fallback = [
     { kod: { $regex: search, $options: "i" } },
     { tailbar: { $regex: search, $options: "i" } },
+    { tooluuriinDugaar: { $regex: search, $options: "i" } },
   ];
   if (/^\d+$/.test(search)) {
     fallback.push({ talbainKhemjee: search });
