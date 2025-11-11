@@ -772,6 +772,15 @@ function talbaiBurtgekh({ token }) {
                 sorter: () => 0,
               },
               {
+                title: t("Тоолуурын №"),
+                dataIndex: "tooluuriinDugaar",
+                ellipsis: true,
+                width: "1.5rem",
+                align: "center",
+                showSorterTooltip: false,
+                sorter: () => 0,
+              },
+              {
                 title: t("Давхар"),
                 dataIndex: "davkhar",
                 ellipsis: true,
@@ -878,7 +887,7 @@ function talbaiBurtgekh({ token }) {
                 title: t("Ангилал"),
                 dataIndex: "segmentuud",
                 ellipsis: true,
-                width: "1.5rem",
+                width: "1rem",
                 align: "center",
                 render(segmentuud) {
                   if (segmentuud?.length > 0) {
@@ -914,7 +923,7 @@ function talbaiBurtgekh({ token }) {
                 title: t("Хөрөнгө"),
                 align: "center",
                 ellipsis: true,
-                width: "1.5rem",
+                width: "1rem",
                 render: (data) => {
                   return (
                     data?.khurunguud !== undefined && (
@@ -969,7 +978,7 @@ function talbaiBurtgekh({ token }) {
               },
               {
                 title: t("Түүх"),
-                width: "1.5rem",
+                width: "1rem",
                 align: "center",
                 render: (data) => {
                   return (
