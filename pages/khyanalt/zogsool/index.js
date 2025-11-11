@@ -1627,80 +1627,42 @@ function Zogsool({ token }) {
           ))}
         </div>
       </Card>
+
       <Card className="col-span-12">
         <div className="grid-cols-2 gap-5 sm:grid xl:flex">
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="100"
-            className="w-full xl:w-1/2"
-          >
-            <DatePicker.RangePicker
-              style={{ width: "100%" }}
-              size="middle"
-              value={ognoo}
-              onChange={setOgnoo}
-            />
-          </div>
-          {/*<Select
+          <div className="flex flex-row gap-2">
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
+              className="w-full xl:w-1/2"
+            >
+              <DatePicker.RangePicker
+                style={{ width: "100%" }}
+                size="middle"
+                value={ognoo}
+                onChange={setOgnoo}
+              />
+            </div>
+            {/*<Select
                 defaultValue="lucy"
                 style={{ width: 120 }}
                 // onChange={handleChange}
                 options={[jagsaalt.map((zogsool)=>({value: zogsool._id, label: zogsool.ner}))
                 ]}
             />*/}
-          <Select
-            className="xl:w-[490px]"
-            defaultValue={t("Бүгд")}
-            onChange={setZogsoolId}
-          >
-            <Select.Option value={false}>{t("Бүгд")}</Select.Option>
-            {jagsaalt.map((a) => (
-              <Select.Option key={a._id} value={a._id}>
-                {t(a.ner)}
-              </Select.Option>
-            ))}
-          </Select>
-          <div
-            className=" flex w-full flex-col sm:flex-row sm:items-center sm:justify-end md:mb-0 md:ml-auto xl:justify-start"
-            data-aos="fade-left"
-            data-aos-duration="1000"
-            data-aos-delay="200"
-          >
-            {/*<div className="flex flex-row space-x-2 p-1 font-medium">
-              {t("Зогсоолын орлого")} : {formatNumber(!!uilchluulegchdiinDun[0]?.dun ? uilchluulegchdiinDun[0].dun : 0, 0)}
-              ₮
-            </div>*/}
-            <div className="flex space-x-2 p-1 text-base font-medium xl:ml-5">
-              {t("Нийт бодогдсон")} :{" "}
-              {formatNumber(
-                !!uilchluulegchdiinDun?.[0]?.niitDun
-                  ? uilchluulegchdiinDun?.[0]?.niitDun
-                  : 0,
-                0
-              )}
-              ₮
-            </div>
-            <div className="flex space-x-2 p-1 text-base font-medium xl:ml-5">
-              {t("Нийт төлсөн")} :{" "}
-              {formatNumber(
-                !!uilchluulegchdiinDun?.[0]?.dun
-                  ? uilchluulegchdiinDun?.[0]?.dun
-                  : 0,
-                0
-              )}
-              ₮
-            </div>
-            <div className="flex space-x-2 p-1 text-base font-medium xl:ml-5">
-              {t("Нийт хөнгөлсөн")} :{" "}
-              {formatNumber(
-                !!uilchluulegchdiinDun?.[0]?.khungulsun
-                  ? uilchluulegchdiinDun?.[0]?.khungulsun
-                  : 0,
-                0
-              )}
-              ₮
-            </div>
+            <Select
+              className="xl:w-[245px]"
+              defaultValue={t("Бүгд")}
+              onChange={setZogsoolId}
+            >
+              <Select.Option value={false}>{t("Бүгд")}</Select.Option>
+              {jagsaalt.map((a) => (
+                <Select.Option key={a._id} value={a._id}>
+                  {t(a.ner)}
+                </Select.Option>
+              ))}
+            </Select>
           </div>
 
           <div

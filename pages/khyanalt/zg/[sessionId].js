@@ -643,7 +643,9 @@ function TulburiinDelgerenguiTailan({ token }) {
                         className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
                       />
                       <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
-                        {a.ner}:
+                        <span className="inline-flex items-center text-[15px] leading-none sm:text-lg">
+                          {a.ner}:
+                        </span>
                         <div className="flex font-normal">
                           {formatNumber(a.dun) || 0}₮
                           <div className=" ml-3 mr-3 flex w-10 items-center justify-center border-x border-green-600 text-center">
@@ -755,7 +757,9 @@ function TulburiinDelgerenguiTailan({ token }) {
                         className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
                       />
                       <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
-                        {a.ner}:
+                        <span className="inline-flex items-center text-[15px] leading-none sm:text-lg">
+                          {a.ner}:
+                        </span>
                         <div className="flex font-normal">
                           {formatNumber(a.dun, 0) || 0}
                           {a.checkToo === true ? "" : "₮"}
@@ -799,7 +803,9 @@ function TulburiinDelgerenguiTailan({ token }) {
                     className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
                   />
                   <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
-                    {a.ner}:
+                    <span className="inline-flex items-center text-[15px] leading-none sm:text-lg">
+                      {a.ner}:
+                    </span>
                     <div className="flex font-normal">
                       {formatNumber(a.dun) || 0}₮
                       <div className="ml-3 flex w-14 items-center justify-center border-l border-green-600 pl-2 text-center">
