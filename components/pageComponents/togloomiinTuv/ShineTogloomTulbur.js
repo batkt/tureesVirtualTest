@@ -42,6 +42,7 @@ function ShineTogloomTulbur(
     (data?.dutuuDun ? [] : data?.tulbur) || []
   );
   const f4LockRef = React.useRef(false);
+  const printLockRef = React.useRef(false);
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
   const [irgenEsekh, setIrgenEsekh] = React.useState(true);
@@ -86,6 +87,7 @@ function ShineTogloomTulbur(
       setTin("");
       setQpayModalTuluv(false);
       f4LockRef.current = false;
+      printLockRef.current = false;
     },
   });
 
@@ -197,9 +199,13 @@ function ShineTogloomTulbur(
   };
 
   function ebarimtAvya(id) {
+    if (printLockRef.current) {
+      return;
+    }
     setLoading(true);
 
     if (!!eBarimt) {
+      printLockRef.current = true;
       handlePrint();
       khaaya();
       f4LockRef.current = false;
@@ -251,7 +257,8 @@ function ShineTogloomTulbur(
   }
 
   useEffect(() => {
-    if (!!eBarimt) {
+    if (!!eBarimt && !printLockRef.current) {
+      printLockRef.current = true;
       handlePrint();
       khaaya();
     }
