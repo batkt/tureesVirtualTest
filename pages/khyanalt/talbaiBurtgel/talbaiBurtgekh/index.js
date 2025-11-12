@@ -49,7 +49,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { MdOutlineInventory } from "react-icons/md";
 import { GiBackwardTime } from "react-icons/gi";
-
+import BaganiinSongolt from "components/table/BaganiinSongolt";
 import { ImFileEmpty, ImFileText2 } from "react-icons/im";
 import { useTranslation } from "react-i18next";
 
@@ -92,6 +92,7 @@ function talbaiBurtgekh({ token }) {
   const [shuult, setShuult] = useState({
     query: { talbainDugaar: "105" },
   });
+  const [shineBagana, setShineBagana] = useState([]);
   const [query, setQuery] = useState({});
   const { order, onChangeTable } = useOrder({ createdAt: -1 });
   const {
@@ -579,11 +580,123 @@ function talbaiBurtgekh({ token }) {
             </Drawer>
           </div>
           <div
-            className="flex place-content-end justify-between gap-4 "
+            className="flex place-content-end items-center gap-4 "
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="200"
           >
+            <div className="hidden md:flex">
+              <BaganiinSongolt
+                shineBagana={shineBagana}
+                setShineBagana={setShineBagana}
+                columns={[
+                  {
+                    title: t("Тоолуурын №"),
+                    dataIndex: "tooluuriinDugaar",
+                    ellipsis: true,
+                    width: "2.5rem",
+                    align: "center",
+                    showSorterTooltip: false,
+                    sorter: () => 0,
+                  },
+                  {
+                    title: t("Тайлбар"),
+                    dataIndex: "tailbar",
+                    ellipsis: true,
+                    width: "4rem",
+                    align: "center",
+                    render(a) {
+                      return <div className="text-left">{a}</div>;
+                    },
+                  },
+                  {
+                    title: t("Түүх"),
+                    width: "1rem",
+                    align: "center",
+                    render: (data) => {
+                      return (
+                        <div className="flex flex-row justify-center">
+                          <Popover
+                            trigger="click"
+                            placement="topLeft"
+                            content={
+                              <Table
+                                style={{
+                                  display: "flex",
+                                }}
+                                pagination={false}
+                                size="small"
+                                dataSource={gereeniiMedeelel?.jagsaalt}
+                                columns={[
+                                  {
+                                    title: `${t("Гэрээ")} №`,
+                                    dataIndex: "gereeniiDugaar",
+                                  },
+                                  {
+                                    title: t("Овог"),
+                                    dataIndex: "ovog",
+                                  },
+                                  {
+                                    title: t("Нэр"),
+                                    dataIndex: "ner",
+                                  },
+                                  {
+                                    title: t("Регистр"),
+                                    dataIndex: "register",
+                                  },
+                                  {
+                                    title: t("Төрөл"),
+                                    dataIndex: "turul",
+                                  },
+                                  {
+                                    title: t("Гэрээний огноо"),
+                                    dataIndex: "gereeniiOgnoo",
+                                    render: (data) => {
+                                      return moment(data).format("YYYY-MM-DD");
+                                    },
+                                  },
+                                  {
+                                    title: t("Дуусах огноо"),
+                                    dataIndex: "duusakhOgnoo",
+                                    render: (data) => {
+                                      return moment(data).format("YYYY-MM-DD");
+                                    },
+                                  },
+                                  {
+                                    title: t("Хугацаа"),
+                                    dataIndex: "khugatsaa",
+                                  },
+                                  {
+                                    title: t("Сарын түрээс"),
+                                    dataIndex: "sariinTurees",
+                                    align: "center",
+                                    render: (data) => {
+                                      return formatNumber(data) + "₮";
+                                    },
+                                  },
+                                ]}
+                              ></Table>
+                            }
+                          >
+                            <a className="flex items-center justify-center hover:scale-150">
+                              <GiBackwardTime
+                                className="text-2xl"
+                                onClick={() =>
+                                  setShuult((a) => ({
+                                    ...a,
+                                    query: { talbainDugaar: data.kod },
+                                  }))
+                                }
+                              />
+                            </a>
+                          </Popover>
+                        </div>
+                      );
+                    },
+                  },
+                ]}
+              />
+            </div>
             <Link
               href={{
                 pathname: "/khyanalt/talbaiBurtgel/talbaiBurtgekh/new",
@@ -593,7 +706,6 @@ function talbaiBurtgekh({ token }) {
               <Button
                 type="primary"
                 className="w-full md:w-auto"
-                style={{ marginTop: "10px" }}
                 icon={<PlusOutlined style={{ fontSize: "16px" }} />}
               >
                 <span>{t("Нэмэх")}</span>
@@ -667,7 +779,6 @@ function talbaiBurtgekh({ token }) {
               <Button
                 type="primary"
                 className="w-full md:w-auto"
-                style={{ marginTop: "10px" }}
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
                 <span>Excel</span>
@@ -771,15 +882,7 @@ function talbaiBurtgekh({ token }) {
                 showSorterTooltip: false,
                 sorter: () => 0,
               },
-              {
-                title: t("Тоолуурын №"),
-                dataIndex: "tooluuriinDugaar",
-                ellipsis: true,
-                width: "2.5rem",
-                align: "center",
-                showSorterTooltip: false,
-                sorter: () => 0,
-              },
+              ...shineBagana,
               {
                 title: t("Давхар"),
                 dataIndex: "davkhar",
@@ -847,17 +950,6 @@ function talbaiBurtgekh({ token }) {
                 defaultSortOrder: "descend",
                 sorter: () => 0,
                 width: "2.5rem",
-              },
-
-              {
-                title: t("Тайлбар"),
-                dataIndex: "tailbar",
-                ellipsis: true,
-                width: "4rem",
-                align: "center",
-                render(a) {
-                  return <div className="text-left">{a}</div>;
-                },
               },
 
               {
@@ -976,91 +1068,7 @@ function talbaiBurtgekh({ token }) {
                   );
                 },
               },
-              {
-                title: t("Түүх"),
-                width: "1rem",
-                align: "center",
-                render: (data) => {
-                  return (
-                    <div className="flex flex-row justify-center">
-                      <Popover
-                        trigger="click"
-                        placement="topLeft"
-                        content={
-                          <Table
-                            style={{
-                              display: "flex",
-                            }}
-                            pagination={false}
-                            size="small"
-                            dataSource={gereeniiMedeelel?.jagsaalt}
-                            columns={[
-                              {
-                                title: `${t("Гэрээ")} №`,
-                                dataIndex: "gereeniiDugaar",
-                              },
-                              {
-                                title: t("Овог"),
-                                dataIndex: "ovog",
-                              },
-                              {
-                                title: t("Нэр"),
-                                dataIndex: "ner",
-                              },
-                              {
-                                title: t("Регистр"),
-                                dataIndex: "register",
-                              },
-                              {
-                                title: t("Төрөл"),
-                                dataIndex: "turul",
-                              },
-                              {
-                                title: t("Гэрээний огноо"),
-                                dataIndex: "gereeniiOgnoo",
-                                render: (data) => {
-                                  return moment(data).format("YYYY-MM-DD");
-                                },
-                              },
-                              {
-                                title: t("Дуусах огноо"),
-                                dataIndex: "duusakhOgnoo",
-                                render: (data) => {
-                                  return moment(data).format("YYYY-MM-DD");
-                                },
-                              },
-                              {
-                                title: t("Хугацаа"),
-                                dataIndex: "khugatsaa",
-                              },
-                              {
-                                title: t("Сарын түрээс"),
-                                dataIndex: "sariinTurees",
-                                align: "center",
-                                render: (data) => {
-                                  return formatNumber(data) + "₮";
-                                },
-                              },
-                            ]}
-                          ></Table>
-                        }
-                      >
-                        <a className="flex items-center justify-center hover:scale-150">
-                          <GiBackwardTime
-                            className="text-2xl"
-                            onClick={() =>
-                              setShuult((a) => ({
-                                ...a,
-                                query: { talbainDugaar: data.kod },
-                              }))
-                            }
-                          />
-                        </a>
-                      </Popover>
-                    </div>
-                  );
-                },
-              },
+
               {
                 title: () => <SettingOutlined />,
                 ellipsis: true,
@@ -1082,10 +1090,12 @@ function talbaiBurtgekh({ token }) {
                               },
                             }}
                           >
-                            <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 ">
+                            <span className="ant-dropdown-link flex w-full cursor-pointer items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
                               <EditOutlined style={{ fontSize: "18px" }} />
-                              <label>{t("Засах")}</label>
-                            </a>
+                              <label className="cursor-pointer">
+                                {t("Засах")}
+                              </label>
+                            </span>
                           </Link>
                           <Popconfirm
                             title="Талбай устгах уу?"

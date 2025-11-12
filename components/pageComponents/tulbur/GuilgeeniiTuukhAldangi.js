@@ -592,7 +592,7 @@ function GuilgeeniiTuukhAldangi(
     <div className="mt-4 overflow-x-auto">
       <div
         className="overflow-y-auto"
-        style={{ maxHeight: "calc(90vh - 15rem)", paddingBottom: "1rem" }}
+        style={{ maxHeight: "calc(80vh - 15rem)", paddingBottom: "1rem" }}
       >
         <table className="w-full min-w-[50rem]">
           <thead className="border-b border-gray-200 bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400">
