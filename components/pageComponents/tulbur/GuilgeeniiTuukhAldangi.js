@@ -607,7 +607,7 @@ function GuilgeeniiTuukhAldangi(
                 onClick={() => toggleSortOrder("ognoo")}
                 className="min-w-[8rem] cursor-pointer p-1 text-center"
               >
-                {t("Авлага үүсч байгаа огноо")}
+                {t("Авлага үүсч байгаа")}
               </th>
               <th
                 onClick={() => toggleSortOrder("aldangiChuluulukhKhonog")}
