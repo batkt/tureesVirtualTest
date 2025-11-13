@@ -36,8 +36,18 @@ const YurunkhiiMedeele = ({
   gereeniiZagvar,
   formSubmit,
   t,
+  baiguullaga,
+  barilgiinId,
 }) => {
   const [form] = Form.useForm();
+  const aldangiGereeTusBur = React.useMemo(() => {
+    const songogdsonBarilgaId = value?.barilgiinId || barilgiinId;
+    return (
+      baiguullaga?.barilguud?.find(
+        (barilga) => barilga?._id === songogdsonBarilgaId
+      )?.tokhirgoo?.aldangiGereeTusBur ?? false
+    );
+  }, [baiguullaga?.barilguud, value?.barilgiinId, barilgiinId]);
 
   useEffect(() => {
     if (
@@ -128,6 +138,11 @@ const YurunkhiiMedeele = ({
   value.duusakhOgnoo = moment(
     moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00")
   );
+  if (value?.aldangiBodojEkhlekhOgnoo) {
+    value.aldangiBodojEkhlekhOgnoo = moment(
+      moment(value.aldangiBodojEkhlekhOgnoo).format("YYYY-MM-DD 00:00:00")
+    );
+  }
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -169,6 +184,101 @@ const YurunkhiiMedeele = ({
       onFinish={onFinish}
       autoComplete={"off"}
     >
+      {aldangiGereeTusBur && (
+        <div
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="100"
+        >
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: t("Алданги бодох хувь оруулж өгнө үү!"),
+              },
+              {
+                validator: (_, value) => {
+                  if (value === undefined || value === null || value === "")
+                    return Promise.resolve();
+                  const dun = Number(value);
+                  if (Number.isNaN(dun))
+                    return Promise.reject(
+                      t("0-0.5 хооронд зөвхөн тоон утга оруулна уу!")
+                    );
+                  if (dun < 0 || dun > 0.5)
+                    return Promise.reject(
+                      t("Утгыг 0-0.5-ийн хооронд оруулна уу!")
+                    );
+                  return Promise.resolve();
+                },
+              },
+            ]}
+            name="aldangiinKhuvi"
+            label={t("Алданги бодох хувь")}
+            required={true}
+          >
+            <Input
+              onKeyUp={focuser}
+              type="number"
+              inputMode="decimal"
+              style={{ width: "100%" }}
+              max={0.5}
+              min={0}
+            />
+          </Form.Item>
+          <Form.Item
+            className="mt-5"
+            rules={[
+              {
+                required: true,
+                message: t("Алданги чөлөөлөх хоног оруулна уу!"),
+              },
+              {
+                validator: (_, value) => {
+                  if (value === undefined || value === null || value === "")
+                    return Promise.resolve();
+                  const dun = Number(value);
+                  if (!Number.isInteger(dun) || dun < 0 || dun > 100)
+                    return Promise.reject(
+                      t(
+                        "Хоногийн утгыг 0-100 хооронд бүхэл тоогоор оруулна уу!"
+                      )
+                    );
+                  return Promise.resolve();
+                },
+              },
+            ]}
+            name="aldangiChuluulukhKhonog"
+            label={t("Алданги чөлөөлөх хоног")}
+            required={true}
+          >
+            <InputNumber
+              onKeyUp={focuser}
+              style={{ width: "100%" }}
+              min={0}
+              max={100}
+            />
+          </Form.Item>
+          <Form.Item
+            className="mt-5"
+            rules={[
+              {
+                required: true,
+                message: t("Алданги бодож эхлэх огноо оруулна уу!"),
+              },
+            ]}
+            name="aldangiBodojEkhlekhOgnoo"
+            label={t("Алданги бодож эхлэх огноо")}
+            required={true}
+          >
+            <DatePicker
+              style={{ width: "100%" }}
+              placeholder={t("Огноо сонгоно уу")}
+              allowClear={false}
+            />
+          </Form.Item>
+        </div>
+      )}
       <div data-aos="fade-right" data-aos-duration="1000">
         <Form.Item
           rules={[

@@ -42,6 +42,7 @@ function BarilgiinTokhirgoo({
     if (barilga && duurguud.jagsaalt) {
       setBarilgaTokhirgoo({
         ...barilga?.tokhirgoo,
+        aldangiGereeTusBur: barilga?.tokhirgoo?.aldangiGereeTusBur ?? false,
         aldangiBodojEkhlekhOgnoo: barilga?.tokhirgoo?.aldangiBodojEkhlekhOgnoo
           ? moment(barilga?.tokhirgoo?.aldangiBodojEkhlekhOgnoo)
           : undefined,
@@ -174,79 +175,107 @@ function BarilgiinTokhirgoo({
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Алдангийн хувь")}</div>
-                <div className="text-gray-600">
-                  {t(
-                    "Гэрээний төлөлт хугацаа хэтэрсэн үед тооцох алдангийн хувь"
-                  )}
-                </div>
-              </div>
-              <div className="ml-auto">
-                <InputNumber
-                  min={0}
-                  max={0.5}
-                  value={barilgaTokhirgoo?.aldangiinKhuvi}
-                  onChange={(v) =>
-                    setBarilgaTokhirgoo((a) => ({
-                      ...(a || {}),
-                      aldangiinKhuvi: v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Алданги чөлөөлөх хоног")}</div>
-                <div className="text-gray-600">
-                  {t(
-                    "Алданги хугацаа хэтэрсэн хоногоос хэд хоногийн дараагаас бодож эхлэх хоног"
-                  )}
-                </div>
-              </div>
-
-              <div className="ml-auto">
-                <InputNumber
-                  min={0}
-                  max={100}
-                  value={barilgaTokhirgoo?.aldangiChuluulukhKhonog}
-                  onChange={(v) =>
-                    setBarilgaTokhirgoo((a) => ({
-                      ...(a || {}),
-                      aldangiChuluulukhKhonog: v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">
-                  {t("Алданги бодож эхлэх огноо")}
+                  {t("Гэрээ тус бүрээр алданги бодох эсэх")}
                 </div>
-                <div className="text-gray-600">
-                  {t("Хугацаа хэтэрсэн огноо бодож эхлэх огноо")}
-                </div>
+                <div className="text-gray-600"></div>
               </div>
-
               <div className="ml-auto">
-                <DatePicker
-                  placeholder="Огноо сонгоно уу"
-                  value={barilgaTokhirgoo?.aldangiBodojEkhlekhOgnoo}
+                <Switch
+                  checked={barilgaTokhirgoo?.aldangiGereeTusBur}
                   onChange={(v) =>
                     setBarilgaTokhirgoo((a) => ({
                       ...(a || {}),
-                      aldangiBodojEkhlekhOgnoo: v,
+                      aldangiGereeTusBur: v,
                     }))
                   }
                 />
               </div>
             </div>
           </div>
+          {!barilgaTokhirgoo?.aldangiGereeTusBur && (
+            <>
+              <div className="box">
+                <div className="flex items-center p-5">
+                  <div className="border-l-2 border-green-500 pl-4">
+                    <div className="font-medium">{t("Алдангийн хувь")}</div>
+                    <div className="text-gray-600">
+                      {t(
+                        "Гэрээний төлөлт хугацаа хэтэрсэн үед тооцох алдангийн хувь"
+                      )}
+                    </div>
+                  </div>
+                  <div className="ml-auto">
+                    <InputNumber
+                      min={0}
+                      max={0.5}
+                      value={barilgaTokhirgoo?.aldangiinKhuvi}
+                      onChange={(v) =>
+                        setBarilgaTokhirgoo((a) => ({
+                          ...(a || {}),
+                          aldangiinKhuvi: v,
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="box">
+                <div className="flex items-center p-5">
+                  <div className="border-l-2 border-green-500 pl-4">
+                    <div className="font-medium">
+                      {t("Алданги чөлөөлөх хоног")}
+                    </div>
+                    <div className="text-gray-600">
+                      {t(
+                        "Алданги хугацаа хэтэрсэн хоногоос хэд хоногийн дараагаас бодож эхлэх хоног"
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="ml-auto">
+                    <InputNumber
+                      min={0}
+                      max={100}
+                      value={barilgaTokhirgoo?.aldangiChuluulukhKhonog}
+                      onChange={(v) =>
+                        setBarilgaTokhirgoo((a) => ({
+                          ...(a || {}),
+                          aldangiChuluulukhKhonog: v,
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="box">
+                <div className="flex items-center p-5">
+                  <div className="border-l-2 border-green-500 pl-4">
+                    <div className="font-medium">
+                      {t("Алданги бодож эхлэх огноо")}
+                    </div>
+                    <div className="text-gray-600">
+                      {t("Хугацаа хэтэрсэн огноо бодож эхлэх огноо")}
+                    </div>
+                  </div>
+
+                  <div className="ml-auto">
+                    <DatePicker
+                      placeholder="Огноо сонгоно уу"
+                      value={barilgaTokhirgoo?.aldangiBodojEkhlekhOgnoo}
+                      onChange={(v) =>
+                        setBarilgaTokhirgoo((a) => ({
+                          ...(a || {}),
+                          aldangiBodojEkhlekhOgnoo: v,
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
