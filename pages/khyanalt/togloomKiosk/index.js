@@ -442,8 +442,7 @@ const TogloomKiosk = () => {
   };
 
   const handleTasalbariinBarCode = () => {
-    barCodes = [];
-    setBarCodes([]);
+    const newBarCodes = [];
     if (!!tasalbarShirkheg && tasalbarShirkheg > 0)
       for (var i = 0; i < tasalbarShirkheg; i++) {
         const nowDate = new Date();
@@ -460,9 +459,9 @@ const TogloomKiosk = () => {
           minutes * 60 +
           seconds +
           i;
-        barCodes.push(value);
+        newBarCodes.push(value);
       }
-    setBarCodes(barCodes);
+    setBarCodes(newBarCodes);
   };
 
   return (

@@ -446,7 +446,7 @@ function togloom1() {
       .then((res) => {
         setKhaalga(res.data);
       })
-      .catch((err) => message.error(err));
+      .catch((err) => message.error(err.message || "Алдаа гарлаа"));
   }, []);
 
   const togloomiinDun = useToololt("/togloomiinDunAvya", token, ognoo);
@@ -463,7 +463,7 @@ function togloom1() {
         }
       })
       .catch((err) => {
-        message.error(err);
+        message.error(err.message || "Алдаа гарлаа");
       });
   }
 

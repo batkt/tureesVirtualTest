@@ -516,7 +516,9 @@ function BarilgaBurtgel({ token }) {
               <div className="box flex h-full flex-col justify-start p-4">
                 <div>
                   <Pie
-                    data={avlaga?.datasets ? avlaga : { labels: [], datasets: [] }}
+                    data={
+                      avlaga?.datasets ? avlaga : { labels: [], datasets: [] }
+                    }
                     options={avlaga?.options || {}}
                     width={50}
                     height={50}
@@ -524,41 +526,33 @@ function BarilgaBurtgel({ token }) {
                 </div>
                 <div className="flex  h-full items-center justify-between">
                   <div className="space-y-4">
-                    {avlagiinChartSalbaraarAvya.data?.options?.labels.map(
-                      (a, index) => (
-                        <div className="flex items-center space-x-2">
-                          <div key={index}>
-                            <PieChartFilled
-                              style={{
-                                color:
-                                  avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
-                                    (a, i) => i === index
-                                  ),
-                              }}
-                            />
-                          </div>
-                          <div>{a}</div>
+                    {avlaga?.labels?.map((a, index) => (
+                      <div className="flex items-center space-x-2" key={index}>
+                        <div>
+                          <PieChartFilled
+                            style={{
+                              color:
+                                avlaga?.datasets?.[0]?.backgroundColor?.[index],
+                            }}
+                          />
                         </div>
-                      )
-                    )}
+                        <div>{a}</div>
+                      </div>
+                    ))}
                   </div>
                   <div className="space-y-4">
-                    {avlagiinChartSalbaraarAvya?.data?.series.map(
-                      (a, index) => (
-                        <div
-                          key={index}
-                          className="flex justify-end  font-bold text-green-700"
-                          style={{
-                            color:
-                              avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
-                                (a, i) => i === index
-                              ),
-                          }}
-                        >
-                          {formatNumber(a, 2)}
-                        </div>
-                      )
-                    )}
+                    {avlaga?.datasets?.[0]?.data?.map((a, index) => (
+                      <div
+                        key={index}
+                        className="flex justify-end  font-bold text-green-700"
+                        style={{
+                          color:
+                            avlaga?.datasets?.[0]?.backgroundColor?.[index],
+                        }}
+                      >
+                        {formatNumber(a, 2)}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -572,7 +566,9 @@ function BarilgaBurtgel({ token }) {
               <div className="box flex  h-full  flex-col justify-start p-4  ">
                 <div>
                   <Doughnut
-                    data={orlogo?.datasets ? orlogo : { labels: [], datasets: [] }}
+                    data={
+                      orlogo?.datasets ? orlogo : { labels: [], datasets: [] }
+                    }
                     options={orlogo?.options || {}}
                     width={50}
                     height={50}
@@ -580,41 +576,33 @@ function BarilgaBurtgel({ token }) {
                 </div>
                 <div className="flex  h-full items-center justify-between  ">
                   <div className="space-y-4">
-                    {orlogiinChartSalbaraarAvya.data?.options?.labels.map(
-                      (a, index) => (
-                        <div className="flex items-center space-x-2">
-                          <div key={index}>
-                            <PieChartFilled
-                              style={{
-                                color:
-                                  avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
-                                    (a, i) => i === index
-                                  ),
-                              }}
-                            />
-                          </div>
-                          <div>{a}</div>
+                    {orlogo?.labels?.map((a, index) => (
+                      <div className="flex items-center space-x-2" key={index}>
+                        <div>
+                          <PieChartFilled
+                            style={{
+                              color:
+                                orlogo?.datasets?.[0]?.backgroundColor?.[index],
+                            }}
+                          />
                         </div>
-                      )
-                    )}
+                        <div>{a}</div>
+                      </div>
+                    ))}
                   </div>
                   <div className="space-y-4">
-                    {orlogiinChartSalbaraarAvya?.data?.series.map(
-                      (a, index) => (
-                        <div
-                          key={index}
-                          className="flex justify-end  font-bold text-green-700"
-                          style={{
-                            color:
-                              orlogiinChartSalbaraarAvya?.data?.backgroundColor.find(
-                                (a, i) => i === index
-                              ),
-                          }}
-                        >
-                          {formatNumber(a, 2)}
-                        </div>
-                      )
-                    )}
+                    {orlogo?.datasets?.[0]?.data?.map((a, index) => (
+                      <div
+                        key={index}
+                        className="flex justify-end  font-bold text-green-700"
+                        style={{
+                          color:
+                            orlogo?.datasets?.[0]?.backgroundColor?.[index],
+                        }}
+                      >
+                        {formatNumber(a, 2)}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

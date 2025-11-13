@@ -1049,10 +1049,10 @@ function useErkh(ajiltan, baiguulgiinErkhiinJagsaalt) {
         return x;
       } else if (x.sub?.length > 0) {
         x.sub = x.sub.filter(
-          (g) => !!ajiltan?.tsonkhniiErkhuud.find((a) => a === g.href)
+          (g) => !!ajiltan?.tsonkhniiErkhuud?.find((a) => a === g.href)
         );
         return x;
-      } else if (!!ajiltan?.tsonkhniiErkhuud.find((a) => x.href === a))
+      } else if (!!ajiltan?.tsonkhniiErkhuud?.find((a) => x.href === a))
         return x;
     })
     .filter((x) => !!x);

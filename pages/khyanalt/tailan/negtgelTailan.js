@@ -256,7 +256,7 @@ function negtgelTailan({ token }) {
     jagsaalt = [...jagsaalt, ...shineBagana];
     var avlaga = [];
     var jagsaaltOgnoo = [];
-    tailanGaralt?.forEach((a) => {
+    (Array.isArray(tailanGaralt) ? tailanGaralt : [])?.forEach((a) => {
       a.avlaga?.forEach((b) => {
         var tempOgnoo = moment(b.ognoo).format("YYYY-MM");
         if (jagsaaltOgnoo.filter((a) => a === tempOgnoo)?.length === 0)
@@ -766,7 +766,7 @@ function negtgelTailan({ token }) {
                 </tr>
               </thead>
               <tbody>
-                {tailanGaralt?.map((mur, index) => {
+                {(Array.isArray(tailanGaralt) ? tailanGaralt : [])?.map((mur, index) => {
                   return (
                     <React.Fragment key={index}>
                       <tr className="border-gray-500">
@@ -874,7 +874,7 @@ function negtgelTailan({ token }) {
                   <td className="border border-gray-400 text-center text-mashJijigiinJijig">
                     {" "}
                     {formatNumber(
-                      tailanGaralt?.reduce(
+                      (Array.isArray(tailanGaralt) ? tailanGaralt : [])?.reduce(
                         (a, b) => a + (b?._id?.talbainKhemjee || 0),
                         0
                       ),
@@ -888,7 +888,7 @@ function negtgelTailan({ token }) {
                   ></td>
                   {avlaga?.map((murAvlaga, index) => {
                     var niitTulukhDun = 0;
-                    tailanGaralt?.map((mur, index) => {
+                    (Array.isArray(tailanGaralt) ? tailanGaralt : [])?.map((mur, index) => {
                       var tempAvlaga = mur?.avlaga?.filter(
                         (v) =>
                           moment(v.ognoo).format("YYYY-MM") ===
@@ -921,7 +921,7 @@ function negtgelTailan({ token }) {
                   <td className="border border-gray-400 text-right text-mashJijigiinJijig">
                     {" "}
                     {formatNumber(
-                      tailanGaralt?.reduce(
+                      (Array.isArray(tailanGaralt) ? tailanGaralt : [])?.reduce(
                         (a, b) => a + (b?.niitTulukhDun || 0),
                         0
                       ),

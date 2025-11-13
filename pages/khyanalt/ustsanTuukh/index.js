@@ -147,38 +147,6 @@ function UstsanTuukh() {
         ? "blockMashin"
         : cls;
 
-    if (turul === "ajiltan") {
-      classValue === "ajiltan";
-      turul = undefined;
-    }
-    if (turul === "Talbai") {
-      classValue === "Talbai";
-      turul = undefined;
-    }
-    if (turul === "khariltsagch") {
-      classValue === "Khariltsagch";
-      turul = undefined;
-    }
-    if (turul === "gereeniiZagvar") {
-      classValue === "gereeniiZagvar";
-      turul = undefined;
-    }
-    if (turul === "nekhemjlekhiinZagvar") {
-      classValue === "nekhemjlekhiinZagvar";
-      turul = undefined;
-    }
-    if (turul === "zardal") {
-      classValue === "zardal";
-      turul = undefined;
-    }
-    if (turul === "mashin") {
-      classValue === "mashin";
-      turul = undefined;
-    }
-    if (turul === "blockMashin") {
-      classValue === "blockMashin";
-      turul = undefined;
-    }
     return {
       baiguullagiinId: barilgiinId,
       ajiltniiId: ajiltankhaikh,

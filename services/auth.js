@@ -261,12 +261,12 @@ export const AuthProvider = ({ children }) => {
       setToken(loginToken);
       ajiltanMutate(result);
 
-      if (result?.barilguud?.length > 0 || result.erkh === "Admin") {
+      if (result?.barilguud?.length > 0 || result?.erkh === "Admin") {
         let solikhBarilgaOldsonEsekh = false;
         if (Array.isArray(result?.salbaruud)) {
-          for (const salbar of result.salbaruud) {
-            if (result.erkh !== "Admin") {
-              for (const barilga of result.barilguud) {
+          for (const salbar of result?.salbaruud || []) {
+            if (result?.erkh !== "Admin") {
+              for (const barilga of result?.barilguud || []) {
                 if (salbar?.salbariinId === barilga) {
                   if (
                     moment(salbar?.duusakhOgnoo)
