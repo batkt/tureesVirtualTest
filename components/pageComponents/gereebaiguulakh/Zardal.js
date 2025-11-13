@@ -1,11 +1,4 @@
-import {
-  Form,
-  Button,
-  InputNumber,
-  Select,
-  Popconfirm,
-  Tooltip,
-} from "antd";
+import { Form, Button, InputNumber, Select, Popconfirm, Tooltip } from "antd";
 import {
   ArrowRightOutlined,
   ArrowLeftOutlined,
@@ -28,7 +21,7 @@ const formItemLayout = {
   },
 };
 
-const query = {};
+let query = {};
 const searchKeys = ["ner"];
 
 const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
