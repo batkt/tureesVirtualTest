@@ -392,7 +392,7 @@ function ProfileTovch({
           </Menu.Item>
           <Menu.Divider />
           <Menu.Item key="0" className="profileMenuItem">
-            <Link href="/khyanalt/tokhirgoo">
+            <Link href="/khyanalt/tokhirgoo" legacyBehavior>
               <a>
                 <div className="flex w-44 items-center space-x-2 text-white dark:text-gray-100">
                   <SettingOutlined />

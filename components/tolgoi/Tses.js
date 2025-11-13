@@ -47,7 +47,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
         >
           {mur.sub.map((a) => {
             return (
-              <Link href={a.href} key={a.href}>
+              <Link href={a.href} key={a.href} legacyBehavior>
                 <a>
                   <li
                     className={`relative cursor-pointer rounded-l-lg transition-all duration-300 ${
@@ -80,7 +80,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
     );
   } else {
     return (
-      <Link href={mur.href}>
+      <Link href={mur.href} legacyBehavior>
         <a>
           <li className={selected ? "selected-menu" : "menu-item"}>
             <div className="flex flex-row p-1">

@@ -168,7 +168,7 @@ function AnketiinZagvar({
           }
         : undefined,
     };
-  }, [a, khariult, ognoo]);
+  }, [a, ognoo]);
   const khariult = useJagsaalt("/khariult", query, { ognoo: -1 });
   const [kharakh, setKharakh] = useState(false);
   return (

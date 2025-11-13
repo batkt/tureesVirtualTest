@@ -105,6 +105,56 @@ function GuilgeeniiTuukhAldangi(
   const [sortColumn, setSortColumn] = useState(null);
   const tailbarRef = React.useRef(null);
   const printRef = React.useRef(null);
+
+  const pageStyle = `
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    @media print {
+      body, html {
+        margin: 0;
+        padding: 0;
+      }
+      .print-content {
+        width: 100%;
+        font-size: 11px;
+        line-height: 1.3;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+        margin-bottom: 15px;
+      }
+      .print-table th,
+      .print-table td {
+        border: 1px solid #000;
+        padding: 3px;
+        text-align: center;
+        font-size: 9px;
+      }
+      .print-table th {
+        background-color: #f0f0f0;
+        font-weight: bold;
+      }
+      .print-header {
+        margin-bottom: 10px;
+        font-size: 13px;
+        font-weight: bold;
+      }
+      .mb-8 {
+        margin-bottom: 20px;
+      }
+    }
+  `;
+
+  const handlePrint = useReactToPrint({
+    pageStyle: () => pageStyle,
+    content: () => printRef.current,
+  });
+
   const fetchAldangiinUldegdel = () => {
     axios(token)
       .get("/geree", {
@@ -699,55 +749,6 @@ function GuilgeeniiTuukhAldangi(
       </div>
     </div>
   );
-
-  const pageStyle = `
-    @page {
-      size: A4;
-      margin: 15mm;
-    }
-    
-    @media print {
-      body, html {
-        margin: 0;
-        padding: 0;
-      }
-      .print-content {
-        width: 100%;
-        font-size: 11px;
-        line-height: 1.3;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 8px;
-        margin-bottom: 15px;
-      }
-      .print-table th,
-      .print-table td {
-        border: 1px solid #000;
-        padding: 3px;
-        text-align: center;
-        font-size: 9px;
-      }
-      .print-table th {
-        background-color: #f0f0f0;
-        font-weight: bold;
-      }
-      .print-header {
-        margin-bottom: 10px;
-        font-size: 13px;
-        font-weight: bold;
-      }
-      .mb-8 {
-        margin-bottom: 20px;
-      }
-    }
-  `;
-
-  const handlePrint = useReactToPrint({
-    pageStyle: () => pageStyle,
-    content: () => printRef.current,
-  });
 
   return (
     <div className="">

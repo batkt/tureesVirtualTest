@@ -22,8 +22,30 @@ import useSWR from "swr";
 import createMethod from "tools/function/crud/createMethod";
 import moment from "moment";
 import React from "react";
-import Chart from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { Pie, Doughnut, Line } from "react-chartjs-2";
+
+// Register Chart.js components
+ChartJS.register(
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 import useAvlagiinChartSalbaraar from "hooks/tailan/useAvlagiinChartSalbaraar";
 import useOrlogiinChartSalbaraarAvya from "hooks/tailan/useOrlogiinChartSalbaraarAvya";
 import useLineChart from "hooks/tailan/useLineChart";
@@ -215,7 +237,7 @@ function BarilgaBurtgel({ token }) {
                 data.datasets[tooltipitem.datasetIndex].data[
                   tooltipitem.index
                 ].toLocaleString();
-              if (Chart.helpers.isArray(dataLabel)) {
+              if (Array.isArray(dataLabel)) {
                 dataLabel = dataLabel.slice();
                 dataLabel[0] += value;
               } else {
@@ -257,7 +279,7 @@ function BarilgaBurtgel({ token }) {
                   tooltipitem.index
                 ].toLocaleString();
 
-              if (Chart.helpers.isArray(dataLabel)) {
+              if (Array.isArray(dataLabel)) {
                 dataLabel = dataLabel.slice();
                 dataLabel[0] += value;
               } else {
@@ -376,7 +398,7 @@ function BarilgaBurtgel({ token }) {
               <div className="box flex h-full items-center justify-start p-2 ">
                 <div className="h-[80%] w-full ">
                   <Line
-                    data={lineChart.data || []}
+                    data={lineChart.data || { labels: [], datasets: [] }}
                     responsive={{
                       "height < 128": {
                         legend: {
@@ -418,7 +440,7 @@ function BarilgaBurtgel({ token }) {
                               ]
                                 .toLocaleString()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                            if (Chart.helpers.isArray(dataLabel)) {
+                            if (Array.isArray(dataLabel)) {
                               dataLabel = dataLabel.slice();
                               dataLabel[0] += value;
                             } else {
@@ -494,8 +516,8 @@ function BarilgaBurtgel({ token }) {
               <div className="box flex h-full flex-col justify-start p-4">
                 <div>
                   <Pie
-                    data={avlaga}
-                    options={avlaga.options}
+                    data={avlaga?.datasets ? avlaga : { labels: [], datasets: [] }}
+                    options={avlaga?.options || {}}
                     width={50}
                     height={50}
                   />
@@ -550,8 +572,8 @@ function BarilgaBurtgel({ token }) {
               <div className="box flex  h-full  flex-col justify-start p-4  ">
                 <div>
                   <Doughnut
-                    data={orlogo}
-                    options={orlogo.options}
+                    data={orlogo?.datasets ? orlogo : { labels: [], datasets: [] }}
+                    options={orlogo?.options || {}}
                     width={50}
                     height={50}
                   />

@@ -1,10 +1,28 @@
 import _ from "lodash";
 import React from "react";
-
-import { HorizontalBar } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import formatNumberNershil from "tools/function/formatNumberNershil";
 import formatNumber from "tools/function/formatNumber";
 import { t } from "i18next";
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 export default function App({ data }) {
   const options = {
@@ -23,33 +41,30 @@ export default function App({ data }) {
         display: true,
         text: "Chart.js Horizontal Bar Chart",
       },
-    },
-    scales: {
-      xAxes: [
-        {
-          barThickness: 6,
-          maxBarThickness: 8,
-          ticks: {
-            callback: function (label, index, labels) {
-              if (_.isNumber(label)) return formatNumberNershil(label);
-              return t(label);
-            },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const { dataset, parsed } = context;
+            if (_.isNumber(parsed?.x))
+              return (
+                t(dataset.label) +
+                " " +
+                formatNumber(parsed.x)
+              );
+            return t(dataset.label) + " " + parsed.x;
           },
         },
-      ],
+      },
     },
-    tooltips: {
-      callbacks: {
-        label: function (tooltipItem, data) {
-          const { datasetIndex } = tooltipItem;
-          const { datasets } = data;
-          if (_.isNumber(tooltipItem?.xLabel))
-            return (
-              t(datasets[datasetIndex].label) +
-              " " +
-              formatNumber(tooltipItem?.value)
-            );
-          return t(datasets[datasetIndex].label) + " " + tooltipItem?.value;
+    scales: {
+      x: {
+        barThickness: 6,
+        maxBarThickness: 8,
+        ticks: {
+          callback: function (label, index, labels) {
+            if (_.isNumber(label)) return formatNumberNershil(label);
+            return t(label);
+          },
         },
       },
     },
@@ -58,5 +73,11 @@ export default function App({ data }) {
       easing: "easeInQuad",
     },
   };
-  return <HorizontalBar options={options} data={data} />;
+  // Ensure data has proper structure for Chart.js v4
+  const chartData = {
+    labels: data?.labels || [],
+    datasets: data?.datasets || [],
+  };
+
+  return <Bar options={options} data={chartData} />;
 }

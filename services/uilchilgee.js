@@ -2,16 +2,14 @@ import { notification } from "antd";
 import axios from "axios";
 import socketIOClient from "socket.io-client";
 import _ from "lodash";
-import getConfig from "next/config";
 import { t } from "i18next";
-const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
 
 export const url =
   //  "http://192.168.1.13:8081";
-  publicRuntimeConfig.URL || "https://turees.zevtabs.mn/api";
+  process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api";
 
 export const socket = () =>
-  socketIOClient(publicRuntimeConfig.SOCKET || "https://turees.zevtabs.mn", {
+  socketIOClient(process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn", {
     transports: ["websocket"],
   });
 
@@ -61,7 +59,7 @@ const uilchilgee = (token) => {
   return axios.create({
     baseURL:
       typeof window === "undefined"
-        ? serverRuntimeConfig.HTTP_URL || "http://103.143.40.230:8081"
+        ? process.env.HTTP_URL || "http://103.143.40.230:8081"
         : url,
     headers,
   });

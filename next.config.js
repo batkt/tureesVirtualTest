@@ -1,11 +1,36 @@
 module.exports = {
   output: "standalone",
-  serverRuntimeConfig: {
-    HTTP_URL: process.env.HTTP_URL || "http://103.143.40.230:8081", // Pass through env variables
+  env: {
+    // Server and client
+    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api",
+    NEXT_PUBLIC_SOCKET: process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
+    // Server only (no NEXT_PUBLIC_ prefix)
+    HTTP_URL: process.env.HTTP_URL || "http://103.143.40.230:8081",
   },
-  publicRuntimeConfig: {
-    // Will be available on both server and client
-    URL: process.env.URL || "https://turees.zevtabs.mn/api",
-    SOCKET: process.env.SOCKET || "https://turees.zevtabs.mn",
+  webpack: (config, { isServer }) => {
+    // Fix for suneditor dynamic imports
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'suneditor/src/lang': false,
+    };
+
+    return config;
   },
+  transpilePackages: [
+    'suneditor',
+    'suneditor-react',
+    'antd',
+    '@ant-design/icons',
+    '@ant-design/icons-svg',
+    'rc-util',
+    'rc-pagination',
+    'rc-picker',
+    'rc-table',
+    'rc-tree',
+    'rc-tooltip',
+    'rc-menu',
+    'rc-motion',
+    'rc-dropdown',
+    'rc-notification',
+  ],
 };

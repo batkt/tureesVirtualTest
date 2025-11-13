@@ -19,6 +19,8 @@ import {
   CloseCircleOutlined,
   CloseOutlined,
   FormOutlined,
+  DownOutlined,
+  UpOutlined,
 } from "@ant-design/icons";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import getListMethod from "../../../tools/function/crud/getListMethod";
@@ -158,6 +160,8 @@ function GuilgeeNiiluulekh(
   const [khaagdsanGereeEsekh, setKhaagdsanGereeEsekh] = useState(false);
   const [guilgeeniiTailbar, setGuilgeeniiTailbar] = useState();
   const [magadlaltaiGereenuud, setMagadlaltaiGereenuud] = React.useState([]);
+  const [expandedAldangi, setExpandedAldangi] = React.useState({});
+  const [expandedTurees, setExpandedTurees] = React.useState({});
   const inputRef = React.useRef();
 
   const query = useMemo(() => {
@@ -572,26 +576,6 @@ function GuilgeeNiiluulekh(
                 </span>
               </Popconfirm>
             </div>
-            {(geree?.aldangiinUldegdel || 0) > 0 && (
-              <div className="box grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
-                <div className="col-span-4">{t("Алдангийн үлдэгдэл")}</div>
-                <div>{formatNumber(geree?.aldangiinUldegdel || 0, 2)}</div>
-                <div>{geree.talbainDugaar}</div>
-                <div className="text-right text-green-600">
-                  <input
-                    className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700"
-                    placeholder="Барьцаа дүн"
-                    value={formatter(geree.tulsunAldangi)}
-                    onDoubleClick={({ target }) =>
-                      onDoubleClickKholbokhDun(target, index, "tulsunAldangi")
-                    }
-                    onChange={({ target }) => {
-                      onChangeKholbokhDun(target, index, "tulsunAldangi");
-                    }}
-                  />
-                </div>
-              </div>
-            )}
             {(geree?.baritsaaAvakhDun || 0) -
               (geree?.baritsaaniiUldegdel || 0) >
               0 && (
@@ -620,28 +604,111 @@ function GuilgeeNiiluulekh(
                 </div>
               </div>
             )}
+            {(geree?.aldangiinUldegdel || 0) > 0 && (
+              <div className="w-full space-y-2">
+                <div className="box grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
+                  <div className="col-span-4">{t("Алдангийн үлдэгдэл")}</div>
+                  <div>{formatNumber(geree?.aldangiinUldegdel || 0, 2)}</div>
+                  <div>{geree.talbainDugaar}</div>
+                  <div className="flex items-center gap-1 text-right text-green-600">
+                    <input
+                      className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700"
+                      placeholder="Барьцаа дүн"
+                      value={formatter(geree.tulsunAldangi)}
+                      onDoubleClick={({ target }) =>
+                        onDoubleClickKholbokhDun(target, index, "tulsunAldangi")
+                      }
+                      onChange={({ target }) => {
+                        onChangeKholbokhDun(target, index, "tulsunAldangi");
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setExpandedAldangi((prev) => ({
+                          ...prev,
+                          [index]: !prev[index],
+                        }))
+                      }
+                      className="flex h-6 w-6 items-center justify-center rounded border border-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+                    >
+                      {expandedAldangi[index] ? (
+                        <UpOutlined />
+                      ) : (
+                        <DownOutlined />
+                      )}
+                    </button>
+                  </div>
+                </div>
+                {expandedAldangi[index] && (
+                  <div className="box grid w-full grid-cols-3 gap-2 rounded-md border border-gray-400 bg-gray-100 p-2">
+                    <div className="col-span-3 text-sm font-medium">
+                      {t("Нэмэлт мэдээлэл")}
+                    </div>
+                    <div className="col-span-3 text-sm">
+                      {t("Энд нэмэлт агуулга харагдана")}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {geree && (
-              <div className="box grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
-                <div className="col-span-4">{t("Түрээсийн үлдэгдэл")}</div>
-                <div
-                  className={`text-${geree.uldegdel > 0 ? "red" : "green"}-500`}
-                >
-                  {formatNumber(geree.uldegdel, 2)}
+              <div className="w-full space-y-2">
+                <div className="box grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
+                  <div className="col-span-4">{t("Түрээсийн үлдэгдэл")}</div>
+                  <div
+                    className={`text-${
+                      geree.uldegdel > 0 ? "red" : "green"
+                    }-500`}
+                  >
+                    {formatNumber(geree.uldegdel, 2)}
+                  </div>
+                  <div>{geree.talbainDugaar}</div>
+                  <div className="flex items-center gap-1 text-right text-green-600">
+                    <input
+                      className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700 "
+                      placeholder={t("Төлөх дүн")}
+                      value={formatter(geree.tureesiinTulbur)}
+                      onDoubleClick={({ target }) =>
+                        onDoubleClickKholbokhDun(
+                          target,
+                          index,
+                          "tureesiinTulbur"
+                        )
+                      }
+                      onChange={({ target }) => {
+                        onChangeKholbokhDun(target, index, "tureesiinTulbur");
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setExpandedTurees((prev) => ({
+                          ...prev,
+                          [index]: !prev[index],
+                        }))
+                      }
+                      className="flex h-6 w-6 items-center justify-center rounded border border-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+                    >
+                      {expandedTurees[index] ? (
+                        <UpOutlined />
+                      ) : (
+                        <DownOutlined />
+                      )}
+                    </button>
+                  </div>
                 </div>
-                <div>{geree.talbainDugaar}</div>
-                <div className="text-right text-green-600">
-                  <input
-                    className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700 "
-                    placeholder={t("Төлөх дүн")}
-                    value={formatter(geree.tureesiinTulbur)}
-                    onDoubleClick={({ target }) =>
-                      onDoubleClickKholbokhDun(target, index, "tureesiinTulbur")
-                    }
-                    onChange={({ target }) => {
-                      onChangeKholbokhDun(target, index, "tureesiinTulbur");
-                    }}
-                  />
-                </div>
+                {expandedTurees[index] && (
+                  <div className="box grid w-full grid-cols-3 gap-2 rounded-md border border-gray-400 bg-gray-100 p-2">
+                    <div className="col-span-3 text-sm font-medium">
+                      {t("Нэмэлт мэдээлэл")}
+                    </div>
+                    <div className="col-span-3 text-sm">
+                      {t("Энд нэмэлт агуулга харагдана")}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
