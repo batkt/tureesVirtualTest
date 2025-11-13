@@ -554,7 +554,7 @@ const KioskMobile = ({
             )}
             {khungulukhDun > 0 && (
               <div
-                className={`gap mt-auto flex w-full flex-col flex-col items-center items-center justify-center justify-center text-white`}
+                className={`gap mt-auto flex w-full flex-col items-center justify-center text-white`}
               >
                 <button
                   onClick={() =>

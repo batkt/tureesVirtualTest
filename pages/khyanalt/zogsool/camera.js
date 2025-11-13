@@ -278,8 +278,12 @@ function camera({ token }) {
   const [modalNeelttei, setModalNeelttei] = useState(false);
   const [guilgeeDrawerOpen, setGuilgeeDrawerOpen] = useState(false);
   const [shineBagana, setShineBagana] = useState([]);
-  const [songogdsonBurtgel, setSongogdsonBurtgel] = useState("");
   const [form] = Form.useForm();
+  const songogdsonCameraIP = Form.useWatch("CAMERA_IP", form);
+  const orohCameraSongogdson =
+    !!camerVal[0] && songogdsonCameraIP === camerVal[0];
+  const garahCameraSongogdson =
+    !!camerVal[1] && songogdsonCameraIP === camerVal[1];
   const searchUtga = useRef(null);
 
   useEffect(() => {
@@ -684,6 +688,14 @@ function camera({ token }) {
   useKeyboardTovchlol("+", nemekhDarsan);
   useKeyboardTovchlol("-", khasakhDarsan);
 
+  const populateRegistrationDateTime = () => {
+    const now = moment();
+    form.setFieldsValue({
+      burtgelOgnoo: now,
+      burtgelTsag: now.format("HH:mm"),
+    });
+  };
+
   function f3Darsan() {
     khaalgaNeey(camerVal[0]);
     document.getElementById("neekhKhaalgaID").focus();
@@ -701,6 +713,7 @@ function camera({ token }) {
       type: "dugaarBurtgekh",
     });
     !!camerVal[0] && form.setFieldValue("CAMERA_IP", camerVal[0]);
+    populateRegistrationDateTime();
     setTimeout(() => {
       mashiniiDugaarRef.current.focus();
     }, 200);
@@ -748,6 +761,7 @@ function camera({ token }) {
       type: "dugaarBurtgekh",
     });
     !!camerVal[1] && form.setFieldValue("CAMERA_IP", camerVal[1]);
+    populateRegistrationDateTime();
     setTimeout(() => {
       mashiniiDugaarRef.current.focus();
     }, 200);
@@ -1987,7 +2001,29 @@ function camera({ token }) {
   };
 
   const dugaarBurtgekh = () => {
-    const body = form.getFieldsValue();
+    const body = { ...form.getFieldsValue() };
+    const ognoo = body?.burtgelOgnoo;
+    const tsag = body?.burtgelTsag;
+    if (ognoo?.clone && orohCameraSongogdson) {
+      const datetime = ognoo.clone();
+      const tsagMoment =
+        moment.isMoment(tsag) && tsag?.isValid()
+          ? tsag
+          : typeof tsag === "string" && tsag
+          ? moment(tsag, "HH:mm")
+          : null;
+      if (tsagMoment?.isValid()) {
+        datetime.set({
+          hour: tsagMoment.hour(),
+          minute: tsagMoment.minute(),
+          second: tsagMoment.second(),
+        });
+      }
+      body.burtgelOgnoo = datetime.format("YYYY-MM-DD HH:mm:ss");
+    } else {
+      delete body.burtgelOgnoo;
+    }
+    delete body.burtgelTsag;
     if (!!barilgiinId) body["barilgiinId"] = barilgiinId;
     uilchilgee(token)
       .post("/zogsoolSdkService", body)
@@ -2698,6 +2734,7 @@ function camera({ token }) {
                           item: null,
                           type: "dugaarBurtgekh",
                         });
+                        populateRegistrationDateTime();
                         setTimeout(() => {
                           mashiniiDugaarRef.current.focus();
                         }, 200);
@@ -3425,110 +3462,136 @@ function camera({ token }) {
                 <>
                   <Form
                     form={form}
-                    className="flex w-full"
+                    className="flex w-full flex-col gap-4"
                     onFinish={dugaarBurtgekh}
                   >
-                    <Form.Item
-                      label={t("Дугаар1")}
-                      name="mashiniiDugaar"
-                      className="w-2/5"
-                      normalize={(input) => {
-                        const too = input.replace(/[^0-9]/g, "").slice(0, 4);
-                        const useg = Array.from(input)
-                          .filter((a) => /[А-Яа-яөӨүҮ]/.test(a))
-                          .slice(0, 3)
-                          .join("");
-                        return `${too}${useg}`.toUpperCase();
-                      }}
-                      rules={[
-                        {
-                          required: true,
-                          message: t("Машины дугаар бүртгэнэ үү!"),
-                        },
-                        {
-                          required:
-                            form.getFieldValue("mashiniiDugaar")?.length > 0 &&
-                            songogdsonBurtgel !== "Гарах" &&
-                            true,
-                          min: 6,
-                          max: 7,
-                          pattern: new RegExp(
-                            "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
-                          ),
-                          message: t(
-                            "Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"
-                          ),
-                        },
-                      ]}
-                    >
-                      <Input
-                        onDoubleClick={() =>
-                          navigator.clipboard
-                            .readText()
-                            .then(
-                              (v) =>
-                                !!v && form.setFieldValue("mashiniiDugaar", v)
-                            )
-                        }
-                        maxLength={7}
-                        ref={mashiniiDugaarRef}
-                        placeholder="1234УБА"
-                        className="ml-[10px]"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name="CAMERA_IP"
-                      className="w-2/5"
-                      rules={[
-                        {
-                          required: true,
-                          message: t("Камер сонгоно уу."),
-                        },
-                      ]}
-                    >
-                      <Select
-                        onChange={(_, e) => setSongogdsonBurtgel(e.children)}
-                        className=""
-                        placeholder={`${t("Камер")} IP`}
+                    <div className="flex w-full">
+                      <Form.Item
+                        label={t("Дугаар1")}
+                        name="mashiniiDugaar"
+                        className="w-2/5"
+                        normalize={(input) => {
+                          const too = input.replace(/[^0-9]/g, "").slice(0, 4);
+                          const useg = Array.from(input)
+                            .filter((a) => /[А-Яа-яөӨүҮ]/.test(a))
+                            .slice(0, 3)
+                            .join("");
+                          return `${too}${useg}`.toUpperCase();
+                        }}
+                        rules={[
+                          {
+                            required: true,
+                            message: t("Машины дугаар бүртгэнэ үү!"),
+                          },
+                          {
+                            required:
+                              form.getFieldValue("mashiniiDugaar")?.length >
+                                0 &&
+                              !garahCameraSongogdson &&
+                              true,
+                            min: 6,
+                            max: 7,
+                            pattern: new RegExp(
+                              "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
+                            ),
+                            message: t(
+                              "Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"
+                            ),
+                          },
+                        ]}
                       >
-                        {camerVal[0] && (
-                          <Select.Option key={camerVal[0]}>Орох</Select.Option>
-                        )}
-                        {camerVal[1] && (
-                          <Select.Option key={camerVal[1]}>Гарах</Select.Option>
-                        )}
-                      </Select>
-                    </Form.Item>
-                    <a
-                      onClick={() => form.resetFields()}
-                      className="ml-2 flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white"
-                    >
-                      {t("Цэвэрлэх")}
-                    </a>
-                  </Form>
-
-                  <div className="flex flex-wrap">
-                    <div className="flex w-full flex-wrap">
-                      {["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map(
-                        (n) => (
-                          <a
-                            onClick={() => keyPadHandler(n)}
-                            className="m-1 rounded border px-3 py-2 hover:bg-green-200 dark:text-white"
-                          >
-                            {n}
-                          </a>
-                        )
-                      )}
-                    </div>
-                    {usguud.map((useg) => (
+                        <Input
+                          onDoubleClick={() =>
+                            navigator.clipboard
+                              .readText()
+                              .then(
+                                (v) =>
+                                  !!v && form.setFieldValue("mashiniiDugaar", v)
+                              )
+                          }
+                          maxLength={7}
+                          ref={mashiniiDugaarRef}
+                          placeholder="1234УБА"
+                          className="ml-[10px]"
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        name="CAMERA_IP"
+                        className="w-full md:w-2/5"
+                        rules={[
+                          {
+                            required: true,
+                            message: t("Камер сонгоно уу."),
+                          },
+                        ]}
+                      >
+                        <Select className="" placeholder={`${t("Камер")} IP`}>
+                          {camerVal[0] && (
+                            <Select.Option key={camerVal[0]}>
+                              Орох
+                            </Select.Option>
+                          )}
+                          {camerVal[1] && (
+                            <Select.Option key={camerVal[1]}>
+                              Гарах
+                            </Select.Option>
+                          )}
+                        </Select>
+                      </Form.Item>
                       <a
-                        onClick={() => keyPadHandler(useg)}
-                        className="m-1 rounded border px-3 py-2 hover:bg-green-200 dark:text-white"
+                        onClick={() => form.resetFields()}
+                        className="ml-2 flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white"
                       >
-                        {useg}
+                        {t("Цэвэрлэх")}
                       </a>
-                    ))}
-                  </div>
+                    </div>
+                    {orohCameraSongogdson && (
+                      <div className="flex w-full flex-col gap-3 md:flex-row">
+                        <Form.Item
+                          label={t("Огноо")}
+                          name="burtgelOgnoo"
+                          className="w-full md:w-1/2"
+                        >
+                          <DatePicker
+                            className="w-full"
+                            format="YYYY-MM-DD"
+                            placeholder={t("Огноо сонгоно уу")}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          label={t("Цаг")}
+                          name="burtgelTsag"
+                          className="w-full md:w-1/2"
+                        >
+                          <Input type="time" step={300} className="w-full" />
+                        </Form.Item>
+                      </div>
+                    )}
+                    <div className="flex flex-wrap">
+                      <div className="flex w-full flex-wrap">
+                        {["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map(
+                          (n) => (
+                            <a
+                              key={n}
+                              onClick={() => keyPadHandler(n)}
+                              className="m-1 rounded border px-3 py-2 hover:bg-green-200 dark:text-white"
+                            >
+                              {n}
+                            </a>
+                          )
+                        )}
+                      </div>
+                      {usguud.map((useg) => (
+                        <a
+                          key={useg}
+                          onClick={() => keyPadHandler(useg)}
+                          className="m-1 rounded border px-3 py-2 hover:bg-green-200 dark:text-white"
+                        >
+                          {useg}
+                        </a>
+                      ))}
+                    </div>
+                  </Form>
                 </>
               )}
             </Space>
