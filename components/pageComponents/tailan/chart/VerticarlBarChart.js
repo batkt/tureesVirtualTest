@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React from "react";
+import React, { useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -13,17 +13,18 @@ import {
 import formatNumberNershil from "tools/function/formatNumberNershil";
 import formatNumber from "tools/function/formatNumber";
 
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
 export default function App({ t, data }) {
+  // Register Chart.js components on client-side only
+  useEffect(() => {
+    ChartJS.register(
+      CategoryScale,
+      LinearScale,
+      BarElement,
+      Title,
+      Tooltip,
+      Legend
+    );
+  }, []);
   const options = {
     indexAxis: "y",
     elements: {

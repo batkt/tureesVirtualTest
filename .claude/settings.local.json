@@ -10,7 +10,8 @@
       "Bash(taskkill:*)",
       "Bash(timeout:*)",
       "Bash(ping:*)",
-      "Bash(nul)"
+      "Bash(nul)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

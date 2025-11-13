@@ -34,18 +34,6 @@ import {
   Legend,
 } from "chart.js";
 import { Pie, Doughnut, Line } from "react-chartjs-2";
-
-// Register Chart.js components
-ChartJS.register(
-  ArcElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 import useAvlagiinChartSalbaraar from "hooks/tailan/useAvlagiinChartSalbaraar";
 import useOrlogiinChartSalbaraarAvya from "hooks/tailan/useOrlogiinChartSalbaraarAvya";
 import useLineChart from "hooks/tailan/useLineChart";
@@ -63,6 +51,21 @@ function BarilgaBurtgel({ token }) {
     moment().startOf("month"),
     moment().endOf("month"),
   ]);
+
+  // Register Chart.js components on client-side only
+  useEffect(() => {
+    ChartJS.register(
+      ArcElement,
+      CategoryScale,
+      LinearScale,
+      PointElement,
+      LineElement,
+      Title,
+      Tooltip,
+      Legend
+    );
+  }, []);
+
   const barilgaToololt = useSWR(
     !!token ? ["khyanakhSambariinUgugdul", token, lineOgnoo] : null,
     (url, token, lineOgnoo) =>

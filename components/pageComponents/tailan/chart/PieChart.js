@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -6,13 +6,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-
-// Register Chart.js components
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend
-);
 
 export const data = {
   datasets: [
@@ -26,5 +19,14 @@ export const data = {
 };
 
 export default function App() {
+  // Register Chart.js components on client-side only
+  useEffect(() => {
+    ChartJS.register(
+      ArcElement,
+      Tooltip,
+      Legend
+    );
+  }, []);
+
   return <Pie data={data} />;
 }
