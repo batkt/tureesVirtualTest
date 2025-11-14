@@ -7,10 +7,24 @@ import "../styles/globals.css";
 import "suneditor/dist/css/suneditor.min.css";
 import "aos/dist/aos.css";
 import "../services/i18n";
-import "../lib/chartSetup"; // Register Chart.js components globally
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
+    // Register Chart.js components on client-side only
+    import('chart.js').then((ChartJS) => {
+      ChartJS.Chart.register(
+        ChartJS.ArcElement,
+        ChartJS.CategoryScale,
+        ChartJS.LinearScale,
+        ChartJS.BarElement,
+        ChartJS.PointElement,
+        ChartJS.LineElement,
+        ChartJS.Title,
+        ChartJS.Tooltip,
+        ChartJS.Legend
+      );
+    });
+
     registerServiceWorker();
   }, []);
 
