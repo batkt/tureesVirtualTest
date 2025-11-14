@@ -132,22 +132,39 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
 
           <!-- Түрээс хуучин/шинэ үнэ -->
           ${medeelel.zardluud
-            .sort((a, b) => a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" }))
+            .sort((a, b) =>
+              a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+            )
             .filter(
               (a) =>
                 a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" ||
                 a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд"
             )
-            .map((mur, index) => `
+            .map(
+              (mur, index) => `
               <tr>
-                <td style="border: 1px solid #000; text-align: center;">${index + 1}</td>
-                <td colspan="4" style="border: 1px solid #000; text-align: left;">${mur.tailbar}</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.negj&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tariff&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulult&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tulukhDun&gt;</td>
+                <td style="border: 1px solid #000; text-align: center;">${
+                  index + 1
+                }</td>
+                <td colspan="4" style="border: 1px solid #000; text-align: left;">${
+                  mur.tailbar
+                }</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.negj&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.tariff&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.khungulult&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.tulukhDun&gt;</td>
               </tr>
-            `).join("")}
+            `
+            )
+            .join("")}
 
           <!-- Түрээс төлбөр default -->
           ${
@@ -180,7 +197,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
 
           <!-- Менежмент -->
           ${medeelel.zardluud
-            .sort((a, b) => a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" }))
+            .sort((a, b) =>
+              a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+            )
             .filter(
               (a) =>
                 a.tailbar?.includes("Менежментийн төлбөр") ||
@@ -189,46 +208,81 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 a.tailbar === "Менежментийн төлбөр нэмэлт" ||
                 a.tailbar == "Түрээсийн төлбөр нэмэлт"
             )
-            .map((mur, index) => `
+            .map(
+              (mur, index) => `
               <tr>
-                <td style="border: 1px solid #000; text-align: center;">${index + 3}</td>
+                <td style="border: 1px solid #000; text-align: center;">${
+                  index + 3
+                }</td>
                 <td colspan="4" style="border: 1px solid #000; text-align: left;">Менежментийн төлбөр</td>
                 <td style="border: 1px solid #000; text-align: center;">&lt;talbainKhemjee&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tariff&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulult&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDun&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.tariff&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.khungulult&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.khungulultKhassanTulukhDun&gt;</td>
               </tr>
-            `).join("")}
+            `
+            )
+            .join("")}
 
 
           <!-- Дулаан / торгууль -->
           ${medeelel.zardluud
-            .sort((a, b) => a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" }))
+            .sort((a, b) =>
+              a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+            )
             .filter(
               (a) =>
                 a.tailbar === "Менежмент төлбөр хуучин" ||
                 a.tailbar === "Менежмент төлбөр шинэ" ||
                 a.tailbar === "Дулааны төлбөр" ||
-                a.tailbar === "Дулаан" ||
+                a.tailbar.includes("Дулаан") ||
                 a.tailbar === "Дулаан нэмэлт" ||
                 a.tailbar?.includes("торгууль")
             )
-            .map((mur, index) => `
+            .map(
+              (mur, index) => `
               <tr>
-                <td style="border: 1px solid #000; text-align: center;">${index + 3}</td>
-                <td colspan="4" style="border: 1px solid #000; text-align: left;">${mur.tailbar}</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.negj&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tariff&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulult&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tulukhDun&gt;</td>
+                <td style="border: 1px solid #000; text-align: center;">${
+                  index + 3
+                }</td>
+                <td colspan="4" style="border: 1px solid #000; text-align: left;">${
+                  mur.tailbar
+                }</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.negj&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.tariff&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.khungulult&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.tulukhDun&gt;</td>
               </tr>
-            `).join("")}
+            `
+            )
+            .join("")}
 
           <!-- Цахилгаан -->
           ${medeelel.zardluud
-            .sort((a, b) => a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" }))
-            .filter((a) => a.tailbar?.includes("Цахилгаан") || a.tailbar === "Цахилгаан нэмэлт")
-            .map((mur) => `
+            .sort((a, b) =>
+              a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+            )
+            .filter(
+              (a) =>
+                a.tailbar?.includes("Цахилгаан") ||
+                a.tailbar === "Цахилгаан нэмэлт"
+            )
+            .map(
+              (mur) => `
               <tr>
                 <td style="border: 1px solid #000; text-align: center;" rowspan="2">4</td>
                 <td colspan="2" rowspan="2" style="border: 1px solid #000; text-align: left;">Цахилгааны төлбөр</td>
@@ -245,7 +299,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 <td style="border: 1px solid #000; text-align: right;">${mur.tariff}/1.02</td>
                 <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tulukhDun&gt;</td>
               </tr>
-            `).join("")}
+            `
+            )
+            .join("")}
 
           <!-- Усны төлбөр header -->
           ${
@@ -274,9 +330,18 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
 
           <!-- Халуун ус -->
             ${medeelel.zardluud
-              .sort((a, b) => a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" }))
-              .filter((a) => a.tailbar?.includes("Халуун ус") || a.tailbar === "Халуун ус нэмэлт")
-              .map((mur) => `
+              .sort((a, b) =>
+                a.tailbar.localeCompare(b.tailbar, "en", {
+                  sensitivity: "base",
+                })
+              )
+              .filter(
+                (a) =>
+                  a.tailbar?.includes("Халуун ус") ||
+                  a.tailbar === "Халуун ус нэмэлт"
+              )
+              .map(
+                (mur) => `
                 <tr>
                   <td style="border: 1px solid #000; text-align: left;">${mur.tailbar}</td>
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.umnukhZaalt&gt;</td>
@@ -287,13 +352,24 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.usxalaasniitulburTariff&gt;</td>
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tulukhDun&gt;</td>
                 </tr>
-              `).join("")}
+              `
+              )
+              .join("")}
 
             <!-- Хүйтэн ус -->
             ${medeelel.zardluud
-              .sort((a, b) => a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" }))
-              .filter((a) => a.tailbar?.includes("Хүйтэн ус") || a.tailbar === "Хүйтэн ус нэмэлт")
-              .map((mur) => `
+              .sort((a, b) =>
+                a.tailbar.localeCompare(b.tailbar, "en", {
+                  sensitivity: "base",
+                })
+              )
+              .filter(
+                (a) =>
+                  a.tailbar?.includes("Хүйтэн ус") ||
+                  a.tailbar === "Хүйтэн ус нэмэлт"
+              )
+              .map(
+                (mur) => `
                 <tr>
                   <td style="border: 1px solid #000; text-align: left;">${mur.tailbar}</td>
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.umnukhZaalt&gt;</td>
@@ -304,7 +380,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.usxalaasniitulburTariff&gt;</td>
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tulukhDun&gt;</td>
                 </tr>
-              `).join("")}
+              `
+              )
+              .join("")}
 
 
         </tbody>
