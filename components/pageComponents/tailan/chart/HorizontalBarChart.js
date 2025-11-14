@@ -1,31 +1,11 @@
 import _ from "lodash";
-import React, { useEffect } from "react";
+import React from "react";
 import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
 import formatNumberNershil from "tools/function/formatNumberNershil";
 import formatNumber from "tools/function/formatNumber";
 import { t } from "i18next";
 
 export default function App({ data }) {
-  // Register Chart.js components on client-side only
-  useEffect(() => {
-    ChartJS.register(
-      CategoryScale,
-      LinearScale,
-      BarElement,
-      Title,
-      Tooltip,
-      Legend
-    );
-  }, []);
   const options = {
     indexAxis: "y",
     elements: {

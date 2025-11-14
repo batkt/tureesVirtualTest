@@ -1,16 +1,6 @@
 import _ from "lodash";
-import React, { useEffect } from "react";
+import React from "react";
 import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
 import formatNumberNershil from "tools/function/formatNumberNershil";
 import formatNumber from "tools/function/formatNumber";
 import { t } from "i18next";
@@ -57,19 +47,6 @@ export const options = {
 };
 
 export default function App({ data }) {
-  // Register Chart.js components on client-side only
-  useEffect(() => {
-    ChartJS.register(
-      CategoryScale,
-      LinearScale,
-      PointElement,
-      LineElement,
-      Title,
-      Tooltip,
-      Legend
-    );
-  }, []);
-
   // Ensure data has proper structure for Chart.js v4
   const chartData = {
     labels: data?.labels || [],
