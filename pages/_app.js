@@ -2,29 +2,39 @@ import { useEffect } from "react";
 import { AuthProvider } from "../services/auth";
 import { ThemeProvider } from "next-themes";
 import { registerServiceWorker } from "../utils/swHelper"
+import {
+  Chart as ChartJS,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import "antd/dist/antd.css";
 import "../styles/globals.css";
 import "suneditor/dist/css/suneditor.min.css";
 import "aos/dist/aos.css";
 import "../services/i18n";
 
+// Register Chart.js components
+ChartJS.register(
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    // Register Chart.js components on client-side only
-    import('chart.js').then((ChartJS) => {
-      ChartJS.Chart.register(
-        ChartJS.ArcElement,
-        ChartJS.CategoryScale,
-        ChartJS.LinearScale,
-        ChartJS.BarElement,
-        ChartJS.PointElement,
-        ChartJS.LineElement,
-        ChartJS.Title,
-        ChartJS.Tooltip,
-        ChartJS.Legend
-      );
-    });
-
     registerServiceWorker();
   }, []);
 

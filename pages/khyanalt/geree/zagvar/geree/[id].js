@@ -72,6 +72,7 @@ function ZakhialgaNemekh({ token }) {
         });
     } else if (!!gereeniiZagvar?._id) {
       gereeniiZagvar.ner = values.ner;
+      gereeniiZagvar.turGereeEsekh = values.turGereeEsekh;
       updateMethod("gereeniiZagvar", token, gereeniiZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
