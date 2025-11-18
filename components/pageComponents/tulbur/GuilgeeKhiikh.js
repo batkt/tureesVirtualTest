@@ -211,7 +211,7 @@ function GuilgeeKhiikh(
               turul: turul,
               tulsunDun: dun,
               tulukhDun: 0,
-              ognoo: new Date(),
+              ognoo: shineOgnoo,
               gereeniiId: data?._id,
               tailbar,
               nekhemjlekhDeerKharagdakh: false,
@@ -551,6 +551,18 @@ function GuilgeeKhiikh(
       </div>
       <Divider />
       <label>{t(labelTurul(turul))}</label>
+      {turul === "voucher" && (
+        <div className="flex w-full items-center justify-between gap-2">
+          <DatePicker
+            id="dataPicker1"
+            locale={i18n.language === "mn" && locale}
+            value={ognoo}
+            onChange={(v) => {
+              setOgnoo(v);
+            }}
+          />
+        </div>
+      )}
       {turul === "torguuli" && (
         <div className="flex w-full items-center justify-between gap-2">
           <DatePicker
@@ -722,6 +734,7 @@ function GuilgeeKhiikh(
           onChange={(v) => setShineOgnoo(v ? v.startOf("day") : null)}
         />
       )}
+
       {busadTurul === "zalruulga" && (
         <DatePicker
           locale={i18n.language === "mn" && locale}
