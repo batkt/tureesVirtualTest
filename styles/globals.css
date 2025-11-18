@@ -3,10 +3,8 @@
 @tailwind utilities;
 
 @layer utilities {
-  @variants responsive {
-    .large-size {
-      width: calc(100vw - 11rem);
-    }
+  .large-size {
+    width: calc(100vw - 11rem);
   }
 }
 
