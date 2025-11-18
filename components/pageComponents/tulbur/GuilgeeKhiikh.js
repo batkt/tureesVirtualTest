@@ -373,6 +373,8 @@ function GuilgeeKhiikh(
           default:
             break;
         }
+        const saveButton = document.getElementById(khadgalyaButtonId);
+        saveButton?.setAttribute("disabled", true);
         uilchilgee(token)
           .post("/gereeniiGuilgeeKhadgalya", {
             guilgee: guilgee,
@@ -386,7 +388,10 @@ function GuilgeeKhiikh(
 
             destroy();
           })
-          .catch(aldaaBarigch);
+          .catch((error) => {
+            saveButton?.removeAttribute("disabled");
+            aldaaBarigch(error);
+          });
       },
     }),
     [
@@ -412,6 +417,7 @@ function GuilgeeKhiikh(
       ashiglaltiinNer,
       niitDunGaz,
       togtmolGaz,
+      khadgalyaButtonId,
     ]
   );
 
