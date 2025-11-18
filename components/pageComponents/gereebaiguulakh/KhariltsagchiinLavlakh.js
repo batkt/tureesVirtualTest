@@ -5,6 +5,8 @@ import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 
 const KhariltsagchiinLavlakh = ({
+  value,
+  onChange,
   onChangeRegister,
   baiguullagaEsekh,
   baiguullaga,
@@ -13,7 +15,6 @@ const KhariltsagchiinLavlakh = ({
   khadgalsabRegister,
 }) => {
   const { t } = useTranslation();
-  const [register, setRegister] = useState(null);
   const [dropDownNeekhEsekh, setDropDownNeekhEsekh] = useState(false);
   const searchKeys = ["ner", "register", "customerTin"];
   const kharitsagchQuery = useMemo(() => {
@@ -32,7 +33,6 @@ const KhariltsagchiinLavlakh = ({
   );
 
   useEffect(() => {
-    setRegister(null);
     khariltsagchiinGaralt.mutate();
     khariltsagchiinGaralt.setKhuudaslalt((a) => ({
       ...a,
@@ -41,12 +41,6 @@ const KhariltsagchiinLavlakh = ({
       khuudasniiDugaar: 1,
     }));
   }, [baiguullagaEsekh]);
-
-  useEffect(() => {
-    if (!!khadgalsabRegister) {
-      setRegister(khadgalsabRegister);
-    }
-  }, []);
 
   function onScroll(e) {
     if (
@@ -101,8 +95,11 @@ const KhariltsagchiinLavlakh = ({
               <div
                 key={i}
                 onClick={() => {
-                  setRegister(mur.register ? mur.register : mur.customerTin);
-                  onChangeRegister({ target });
+                  const newValue = mur.register
+                    ? mur.register
+                    : mur.customerTin;
+                  onChange(newValue);
+                  onChangeRegister({ target: { value: newValue } });
                   setDropDownNeekhEsekh(false);
                 }}
                 className="relative flex cursor-pointer items-center justify-between px-1 py-1 hover:bg-gray-100"
@@ -125,12 +122,12 @@ const KhariltsagchiinLavlakh = ({
         onKeyUp={focuser}
         onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
         allowClear
-        value={register}
+        value={value}
         placeholder={t("Регистр, Бүртгэлийн дугаар")}
         prefix={<SolutionOutlined />}
         onChange={(e) => {
+          onChange(e.target.value);
           onChangeRegister(e);
-          setRegister(e.target.value);
           khariltsagchKhaikh(e.target.value);
         }}
       />

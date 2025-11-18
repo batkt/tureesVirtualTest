@@ -204,6 +204,10 @@ const YurunkhiiMedeele = ({
   });
 
   useEffect(() => {
+    form.setFieldsValue(value);
+  }, [value]);
+
+  useEffect(() => {
     if (barilgiinId !== value.barilgiinId) {
       form.resetFields();
     }

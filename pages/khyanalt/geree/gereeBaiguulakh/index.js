@@ -251,48 +251,6 @@ function GereeBaiguulakh({ token }) {
   const onChangeGereeniiZagvar = (_id) => {
     let value =
       gereeniiZagvarGaralt?.jagsaalt?.find((a) => a._id === _id) || {};
-    if (!!gereeniiZagvar?.turGereeEsekh !== !!value?.turGereeEsekh) {
-      const {
-        baiguullagaEsekh,
-        baritsaaAvakhEsekh,
-        baritsaaAvakhKhugatsaa,
-        baritsaaAvakhSar,
-        dans,
-        gerchilgeeniiZurag,
-        gereeniiDugaar,
-        mail,
-        ner,
-        ognoo,
-        ovog,
-        register,
-        segmentuud,
-        unemlekhniiZurag,
-        zuvshuurliinZurag,
-        utas,
-        zakhirliinOvog,
-        zakhirliinNer,
-      } = khadgalakhGeree;
-      setKhagalakhGeree({
-        baiguullagaEsekh,
-        baritsaaAvakhEsekh,
-        baritsaaAvakhKhugatsaa,
-        baritsaaAvakhSar,
-        dans,
-        gerchilgeeniiZurag,
-        gereeniiDugaar,
-        mail,
-        ner,
-        ognoo,
-        ovog,
-        register,
-        segmentuud,
-        unemlekhniiZurag,
-        zuvshuurliinZurag,
-        utas,
-        zakhirliinOvog,
-        zakhirliinNer,
-      });
-    }
     setGereeniiZagvar({ ...value });
   };
 
