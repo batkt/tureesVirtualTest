@@ -214,7 +214,13 @@ const YurunkhiiMedeele = ({
     );
     value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);
     value.davkhar = [...new Set(talbainuud.map((a) => a.davkhar))].join(",");
-    value.talbainIdnuud = talbainuud.map((a) => a._id);
+
+    // Only update talbainIdnuud if it actually changed
+    const newTalbainIdnuud = talbainuud.map((a) => a._id);
+    if (!_.isEqual(value.talbainIdnuud, newTalbainIdnuud)) {
+      value.talbainIdnuud = newTalbainIdnuud;
+    }
+
     value.talbainDugaar = talbainuud.map((a) => a.kod).join(",");
     form.setFieldsValue(value);
   }
@@ -293,18 +299,24 @@ const YurunkhiiMedeele = ({
     next();
   }
 
-  function onChangeM2(i, v) {
-    _.set(value.talbainuud, `${i}.talbainKhemjee`, v || 0);
+  const onChangeM2 = useCallback(
+    _.debounce((i, v) => {
+      _.set(value.talbainuud, `${i}.talbainKhemjee`, v || 0);
 
-    talbainBurtgelBugulyu(value.talbainuud);
-    onChange({ ...value });
-  }
+      talbainBurtgelBugulyu(value.talbainuud);
+      onChange({ ...value });
+    }, 500),
+    [value]
+  );
 
-  function onChangeUne(i, v) {
-    _.set(value.talbainuud, `${i}.talbainNiitUne`, v);
-    talbainBurtgelBugulyu(value.talbainuud);
-    onChange({ ...value });
-  }
+  const onChangeUne = useCallback(
+    _.debounce((i, v) => {
+      _.set(value.talbainuud, `${i}.talbainNiitUne`, v);
+      talbainBurtgelBugulyu(value.talbainuud);
+      onChange({ ...value });
+    }, 500),
+    [value]
+  );
 
   const baritsaaChange = (e) => {
     if (e === true) {
@@ -415,7 +427,7 @@ const YurunkhiiMedeele = ({
                   <div className="text-center">{talbai.davkhar}</div>
                   <div className="text-center">
                     {gereeniiZagvar.turGereeEsekh
-                      ? talbai.sulKhemjee
+                      ? talbai.sulKhemjee ?? talbai.talbainKhemjee
                       : talbai.talbainKhemjee}
                   </div>
                   {gereeniiZagvar.turGereeEsekh && (
