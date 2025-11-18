@@ -1,5 +1,5 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import uilchilgee from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Admin from "components/Admin";
 import React, { useMemo, useState, useEffect } from "react";
 
@@ -221,6 +221,7 @@ function guilgeeniiTuukh({ token }) {
   const [neesenEsekh, setNeesenEsekh] = useState(false);
   const [loadingIndex, setLoadingIndex] = React.useState(0);
   const [davkhar, setDavkhar] = React.useState(undefined);
+  const [aldangiLoading, setAldangiLoading] = useState(false);
   const { guilgeeniiToololt, guilgeeniiToololtMutate } =
     useGuilgeeniiToololtAvya(token, ognoo, barilgiinId);
   const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
@@ -344,6 +345,21 @@ function guilgeeniiTuukh({ token }) {
       ognoo,
       query
     );
+
+  const aldangiBodoyo = async () => {
+    if (!baiguullaga?._id || aldangiLoading) return;
+    setAldangiLoading(true);
+    await uilchilgee(token)
+      .post("/aldangiBodyo", { baiguullagiinId: baiguullaga._id })
+      .then(() => {
+        notification.success({
+          message: t("Амжилттай"),
+          description: t("Алдангийг амжилттай бодлоо"),
+        });
+      })
+      .catch(aldaaBarigch)
+      .finally(() => setAldangiLoading(false));
+  };
 
   const { gereeniiMedeelel, onSearch } = useMemo(() => {
     return {
@@ -1267,6 +1283,16 @@ function guilgeeniiTuukh({ token }) {
             </div>
           </div>
           <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:flex-row sm:flex-wrap md:ml-auto md:w-auto md:place-content-end">
+            {ajiltan?.nevtrekhNer === "CAdmin1" && (
+              <Button
+                type="primary"
+                onClick={aldangiBodoyo}
+                loading={aldangiLoading}
+                disabled={!baiguullaga?._id}
+              >
+                Алданги бодох
+              </Button>
+            )}
             <div className="hidden md:flex">
               <BaganiinSongolt
                 shineBagana={shineBagana}
