@@ -142,7 +142,7 @@ function GereeExceleesOruulakh(
           className="cursor-pointer font-medium text-blue-600"
           onClick={zagvarAvya}
         >
-          {t("Загвар татах")}
+          Загвар татах
         </a>
       )}
     </div>

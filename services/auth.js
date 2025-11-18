@@ -100,16 +100,15 @@ export const AuthProvider = ({ children }) => {
 
   const hasInitialized = useRef(false);
   const networkListenersAttached = useRef(false);
-  const isInitializing = useRef(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    if (!isClient || hasInitialized.current || isInitializing.current) return;
+    if (!isClient || hasInitialized.current) return;
 
-    isInitializing.current = true;
+    hasInitialized.current = true;
 
     const initializeApp = async () => {
       try {
@@ -118,14 +117,10 @@ export const AuthProvider = ({ children }) => {
         setupNetworkListeners();
 
         try {
-          const data = await getCachedPermissionsData();
+          await getCachedPermissionsData();
         } catch (error) {}
-
-        hasInitialized.current = true;
       } catch (error) {
-        hasInitialized.current = true;
-      } finally {
-        isInitializing.current = false;
+        console.error("Initialization error:", error);
       }
     };
 

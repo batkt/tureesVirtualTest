@@ -14,37 +14,68 @@ const { Password } = Input;
 export function useThemeValue() {
   const { theme, setTheme } = useTheme();
   const [themeValue, setThemeValue] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    setThemeValue(theme === "dark");
-  }, [theme]);
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      setThemeValue(theme === "dark");
+    }
+  }, [theme, mounted]);
+
   return { themeValue, setTheme };
 }
 
 function Ajiltan() {
   const [form] = Form.useForm();
   const [namaigsana, setNamaigsana] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const { themeValue, setTheme } = useThemeValue();
   const { newterya } = useAuth();
 
-  useEffect(async () => {
-    localStorage.removeItem("baiguulgiinErkhiinJagsaalt");
-    const nevtrekhNer = await localStorage.getItem("newtrekhNerTurees");
-    form.setFieldsValue({ nevtrekhNer });
-  }, []);
   useEffect(() => {
-    Aos.init({ once: true });
-  }, []);
+    // Ensure we're on the client side before initializing
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("baiguulgiinErkhiinJagsaalt");
+      const nevtrekhNer = localStorage.getItem("newtrekhNerTurees");
+      if (nevtrekhNer) {
+        form.setFieldsValue({ nevtrekhNer });
+      }
+      // Mark component as ready after initialization
+      setIsReady(true);
+    }
+  }, [form]);
+
+  useEffect(() => {
+    if (isReady) {
+      Aos.init({ once: true });
+    }
+  }, [isReady]);
 
   const { t, i18n } = useTranslation();
-  const images = [];
-  if (typeof window !== "undefined") {
+
+  // Move images creation into useMemo to avoid recreating on every render
+  const images = React.useMemo(() => {
+    if (typeof window === "undefined") return [];
     const snowflake1 = document.createElement("img");
     snowflake1.src = "/snowflake.png";
     const snowflake2 = document.createElement("img");
     snowflake2.src = "/snowflake1.png";
-    images.push(snowflake1);
-    images.push(snowflake2);
+    return [snowflake1, snowflake2];
+  }, []);
+
+  // Show loading state until component is ready
+  if (!isReady) {
+    return (
+      <div className="login flex min-h-screen items-center justify-center bg-green-600 dark:bg-gray-800 xl:bg-white">
+        <div className="text-xl text-white">Loading...</div>
+      </div>
+    );
   }
+
   return (
     <div className="login flex justify-center bg-green-600 dark:bg-gray-800 xl:bg-white ">
       <Head>
