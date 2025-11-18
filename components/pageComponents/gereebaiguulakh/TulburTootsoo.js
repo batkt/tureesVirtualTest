@@ -114,6 +114,10 @@ const Tulbur = ({
       notification.warning({ message: "Огноо сонгоно уу!" });
       return;
     }
+    if (!value.tulukhUdur || value.tulukhUdur.length === 0) {
+      notification.warning({ message: "Төлөх өдөр оруулна уу!" });
+      return;
+    }
     if (
       moment(ognoonuud[0]) < moment(value.gereeniiOgnoo) ||
       (moment(ognoonuud[0]) < moment().startOf("month") && !!value._id)
@@ -161,11 +165,11 @@ const Tulbur = ({
         ) / 10000,
     };
     setKhungulultKhuvaari((pre) => {
-      return [...pre, addRow];
+      const updated = [...pre, addRow];
+      value.khungulultuud = updated;
+      onChange({ ...value });
+      return updated;
     });
-    khungulultKhuvaari.push(addRow);
-    value.khungulultuud = khungulultKhuvaari;
-    onChange({ ...value });
     khuvaariUusgey();
   }
 
