@@ -137,6 +137,7 @@ function tulburTootsoo({ token }) {
   });
   const refGuilgee = React.useRef(null);
   const zardalRef = React.useRef(null);
+  const isSavingRef = React.useRef(false);
   const { baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
   const { dansGaralt } = useDans(token, baiguullaga?._id);
@@ -278,12 +279,15 @@ function tulburTootsoo({ token }) {
           <Button onClick={() => refGuilgee.current.khaaya()}>
             {t("Хаах")}
           </Button>
-          ,
+
           <Button
             type="primary"
-            onClick={() =>
-              !loading && !loadingBaritsaa && refGuilgee.current.khadgalya()
-            }
+            onClick={() => {
+              if (!loading && !loadingBaritsaa && !isSavingRef.current) {
+                isSavingRef.current = true;
+                refGuilgee.current.khadgalya();
+              }
+            }}
           >
             {t("Хадгалах")}
           </Button>
@@ -307,7 +311,10 @@ function tulburTootsoo({ token }) {
             ref={refGuilgee}
             token={token}
             baiguullagiinId={baiguullaga?._id}
-            onFinish={refreshData}
+            onFinish={() => {
+              refreshData();
+              isSavingRef.current = false;
+            }}
             setLoading={setLoading}
             setLoadingBaritsaa={setLoadingBaritsaa}
           />
