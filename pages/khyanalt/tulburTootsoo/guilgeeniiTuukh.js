@@ -207,7 +207,7 @@ function guilgeeniiTuukh({ token }) {
   const { t, i18n } = useTranslation();
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   const ref = React.useRef(null);
   const excelref = React.useRef();
   const baritsaaref = React.useRef(null);
