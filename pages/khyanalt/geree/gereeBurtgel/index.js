@@ -552,8 +552,8 @@ function ZakhialgiinKhyanalt() {
       }
 
       return column;
-    });
-  }, [shineBagana]);
+    }, []);
+    }, [shineBagana]);
 
   const sheet = [
     {

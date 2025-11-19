@@ -994,8 +994,7 @@ function mashinBurtgel({ token }) {
 
   useEffect(() => {
     Aos.init({ once: true });
-  });
-
+  }, []);
   function medegdelKhuudasruuOchiy() {
     router.push("/khyanalt/zogsool/zogsoolMedegdel");
   }

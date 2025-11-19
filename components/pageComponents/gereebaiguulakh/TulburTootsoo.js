@@ -35,7 +35,7 @@ const Tulbur = ({
   const [form] = Form.useForm();
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   const [khuvaari, setKhuvaari] = useState();
   const [ognoonuud, setOgnoonuud] = useState(value.ognoonuud || []);
   const [khungulultKhuvaari, setKhungulultKhuvaari] = useState(

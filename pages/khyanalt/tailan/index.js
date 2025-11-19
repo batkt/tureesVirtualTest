@@ -170,8 +170,7 @@ function AjiltanBurtgel({ token }) {
 
   useEffect(() => {
     Aos.init({ once: true });
-  });
-
+  }, []);
   return (
     <Admin
       title="Тайлан"

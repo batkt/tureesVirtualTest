@@ -84,8 +84,7 @@ function IlgeesenToo({
 function Khyanalt({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
-  });
-
+  }, []);
   const { baiguullaga, barilgiinId } = useAuth();
   const { t } = useTranslation();
   const [khariltsagch, setKhariltsagch] = useState(null);

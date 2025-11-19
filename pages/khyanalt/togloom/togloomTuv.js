@@ -1209,7 +1209,7 @@ function togloom1() {
 
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   function khuukhedBurtgekh(data) {
     modal({
       title: (

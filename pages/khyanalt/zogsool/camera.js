@@ -499,8 +499,7 @@ function camera({ token }) {
 
   useEffect(() => {
     Aos.init({ once: true });
-  });
-
+  }, []);
   useEffect(() => {
     var data = localStorage.getItem("CamerVal");
     data = JSON.parse(data);

@@ -134,7 +134,7 @@ function tulburTootsoo({ token }) {
   const { t } = useTranslation();
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   const refGuilgee = React.useRef(null);
   const zardalRef = React.useRef(null);
   const { baiguullaga, barilgiinId, ajiltan } = useAuth();

@@ -201,8 +201,7 @@ const YurunkhiiMedeele = ({
 
   useEffect(() => {
     Aos.init({ once: true });
-  });
-
+  }, []);
   useEffect(() => {
     form.setFieldsValue(value);
   }, [value]);

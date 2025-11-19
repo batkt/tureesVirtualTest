@@ -777,8 +777,8 @@ function guilgeeniiTuukh({ token }) {
         />
       ),
       footer,
-    });
-  }
+    }, []);
+    }
 
   function guilgeeKhiiya(data) {
     if (

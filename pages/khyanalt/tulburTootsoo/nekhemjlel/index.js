@@ -157,7 +157,7 @@ function tulburTootsoo({ token }) {
     useNekhemjlekhiinZagvar(token);
   const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", {
     barilgiinId: barilgiinId,
-  });
+  }, []);
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token);
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([]);

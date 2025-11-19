@@ -59,8 +59,7 @@ function index({ token }) {
 
   useEffect(() => {
     Aos.init({ duration: 1000 }, { once: true });
-  });
-
+  }, []);
   function sanalGomdolAvakh(mur) {
     uilchilgee(token)
       .post(`/sanalKhuleenAvlaa`, { id: mur._id })

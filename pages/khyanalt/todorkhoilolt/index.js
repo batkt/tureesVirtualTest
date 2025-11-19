@@ -51,8 +51,7 @@ var timeout = null;
 function Todorkhoilolt() {
   useEffect(() => {
     Aos.init({ once: true });
-  });
-
+  }, []);
   const { token, baiguullaga, barilgiinId, ajiltan, baiguullagiinId } =
     useAuth();
   const { t } = useTranslation();

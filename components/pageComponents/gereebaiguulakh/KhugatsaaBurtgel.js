@@ -146,7 +146,7 @@ const YurunkhiiMedeele = ({
 
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   useEffect(() => {
     form.getFieldInstance("khugatsaa").focus();
   }, []);

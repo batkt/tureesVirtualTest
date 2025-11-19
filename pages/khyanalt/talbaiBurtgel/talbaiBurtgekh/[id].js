@@ -377,7 +377,7 @@ function KhurunguudCard({
 function TalbaiBurtgekh({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   const router = useRouter();
   const { t } = useTranslation();
   const query = router.query;

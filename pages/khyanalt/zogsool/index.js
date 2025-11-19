@@ -1558,8 +1558,7 @@ function Zogsool({ token }) {
 
   useEffect(() => {
     Aos.init({ once: true });
-  });
-
+  }, []);
   useEffect(() => {
     const a1 = generateChild(jagsaalt, "Орох");
     const a2 = generateChild(jagsaalt, "Гарах");

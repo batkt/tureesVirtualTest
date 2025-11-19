@@ -44,7 +44,7 @@ const searchKeys = [
 function EbarimtMedeelel({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   const { t } = useTranslation();
   const { ajiltan, barilgiinId } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);

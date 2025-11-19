@@ -81,7 +81,7 @@ function TalbaiSegment({ token, ...a }) {
 function talbaiBurtgekh({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   const formRef = useRef();
   const router = useRouter();
   const querys = router.query;

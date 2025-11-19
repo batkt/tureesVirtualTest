@@ -216,8 +216,7 @@ const Zardal = ({
   const [form] = Form.useForm();
   useEffect(() => {
     Aos.init({ once: true });
-  });
-
+  }, []);
   useEffect(() => {
     if (
       (!!value.khugatsaa &&

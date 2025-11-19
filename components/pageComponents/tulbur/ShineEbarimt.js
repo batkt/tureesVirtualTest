@@ -28,8 +28,7 @@ function ShineEbarimt({
   }
   useEffect(() => {
     Aos.init();
-  });
-
+  }, []);
   function registerShalgaya(register) {
     setRegister(register);
     // setCustomerTin(customerTin);

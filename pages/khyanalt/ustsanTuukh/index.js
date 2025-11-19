@@ -681,7 +681,7 @@ function UstsanTuukh() {
   }
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   return (
     <Admin
       title="Устгасан түүх"

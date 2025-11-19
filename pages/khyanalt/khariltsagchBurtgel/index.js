@@ -169,7 +169,7 @@ function Tile({ zasya, token, ...a }) {
 function AjiltanBurtgel({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   const { t } = useTranslation();
   const formRef = useRef();
   const excelref = useRef();

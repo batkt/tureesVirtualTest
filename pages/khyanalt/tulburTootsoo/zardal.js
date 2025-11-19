@@ -574,8 +574,7 @@ function zardal({ token }) {
   }
   useEffect(() => {
     Aos.init({ once: true });
-  });
-
+  }, []);
   return (
     <Admin
       title="Зардлын жагсаалт"

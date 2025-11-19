@@ -87,8 +87,7 @@ function index({ token }) {
 
   useEffect(() => {
     Aos.init({ duration: 1000 }, { once: true });
-  });
-
+  }, []);
   // useEffect(() => {
   //   if (ajiltan?.erkh === "Admin")
   //     window.location.href = "/khyanalt/daalgavar/admin";
