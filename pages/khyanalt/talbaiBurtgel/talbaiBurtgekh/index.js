@@ -882,7 +882,7 @@ function talbaiBurtgekh({ token }) {
                 showSorterTooltip: false,
                 sorter: () => 0,
               },
-              ...shineBagana,
+
               {
                 title: t("Давхар"),
                 dataIndex: "davkhar",
@@ -1068,6 +1068,7 @@ function talbaiBurtgekh({ token }) {
                   );
                 },
               },
+              ...shineBagana,
 
               {
                 title: () => <SettingOutlined />,
