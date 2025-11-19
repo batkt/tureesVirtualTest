@@ -506,7 +506,7 @@ function TalbaiBurtgekh({ token }) {
   }
 
   function talbaiBurtgekh() {
-    const khurunguud = formRef.current.getFieldsValue(khurunguud);
+    const khurunguud = formRef.current.getFieldsValue();
     talbaiState.tooluuriinDugaar =
       formRef.current.getFieldValue("tooluuriinDugaar");
 
@@ -527,7 +527,7 @@ function TalbaiBurtgekh({ token }) {
       });
     }
 
-    const segmentuud = formRef.current.getFieldsValue(segmentuud);
+    const segmentuud = formRef.current.getFieldsValue();
     talbaiState.segmentuud = segmentuud.segmentuud;
     if (talbaiState.niitiinTalbaiEsekh)
       talbaiState.sulKhemjee =

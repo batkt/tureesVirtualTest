@@ -52,22 +52,24 @@ const select = {
   gereeniiDugaar: 1,
   ner: 1,
   mail: 1,
-  talbainKhemjee: 1,
-  talbainNiitUne: 1,
 };
 
-function ToolTip({ pointer }) {
+function ToolTip({ pointer, baiguullaga, token }) {
   const query = useMemo(() => {
     return {
-      talbainIdnuud: pointer?._id,
+      talbainIdnuud: { $in: [pointer?._id] },
+      baiguullagiinId: baiguullaga._id,
+      barilgiinId: pointer?.barilgiinId,
     };
-  }, [pointer?._id]);
+  }, [pointer?._id, pointer?.barilgiinId, baiguullaga._id]);
 
   const gereeMedeelel = useJagsaalt(
     pointer?.kod && "/geree",
     query,
     undefined,
-    select
+    select,
+    undefined,
+    token
   );
   return (
     <Group>
@@ -250,6 +252,7 @@ class App extends Component {
                         idevkhiteiEsekh: mur.idevkhiteiEsekh,
                         talbainNiitUne: mur.talbainNiitUne,
                         talbainKhemjee: mur.talbainKhemjee,
+                        barilgiinId: mur.barilgiinId,
                       },
                     });
                   }}
@@ -303,7 +306,13 @@ class App extends Component {
               );
             })}
 
-            {pointer && <ToolTip pointer={pointer} />}
+            {pointer && (
+              <ToolTip
+                pointer={pointer}
+                baiguullaga={props.baiguullaga}
+                token={props.token}
+              />
+            )}
           </Layer>
         </Stage>
       </div>
