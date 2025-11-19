@@ -813,7 +813,7 @@ const YurunkhiiMedeele = ({
             onClick={(e) => form.submit()}
             icon={<ArrowRightOutlined />}
           >
-            {t("Гэрээний хугацаа")}
+            {t("Үргэлжлүүлэх")}
           </Button>
         </div>
       </Form.Item>

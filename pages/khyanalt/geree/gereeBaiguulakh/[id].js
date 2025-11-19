@@ -469,6 +469,7 @@ function GereeBaiguulakh({ token, data }) {
   };
 
   const currentItem = steps[current];
+  const isFinalStep = current === steps.length - 1;
   const gereeniiZagvariinId = "gereeniiZagvar";
 
   const onChange = (value) => {
@@ -531,15 +532,16 @@ function GereeBaiguulakh({ token, data }) {
               onChangeGereeniiZagvar={onChangeGereeniiZagvar}
               setGereeniiZagvarKhuudaslalt={setGereeniiZagvarKhuudaslalt}
             />
-            {JSON.stringify(data) !== JSON.stringify(khadgalakhGeree) && (
-              <Button
-                type="primary"
-                style={{ width: "100%", marginTop: 10 }}
-                onClick={() => khadgalya(khadgalakhGeree)}
-              >
-                Хадгалах
-              </Button>
-            )}
+            {isFinalStep &&
+              JSON.stringify(data) !== JSON.stringify(khadgalakhGeree) && (
+                <Button
+                  type="primary"
+                  style={{ width: "100%", marginTop: 10 }}
+                  onClick={() => khadgalya(khadgalakhGeree)}
+                >
+                  Хадгалах
+                </Button>
+              )}
           </div>
           {!!gereeniiZagvar && (
             <div

@@ -33,6 +33,7 @@ const Tulbur = ({
   formSubmit,
 }) => {
   const [form] = Form.useForm();
+  const zasvarEsekh = typeof zasvar === "boolean" ? zasvar : !!value?._id; // contract editing flag
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -338,9 +339,9 @@ const Tulbur = ({
               icon={<ArrowLeftOutlined />}
               className="text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
             >
-              {t("Зардал бүртгэл")}
+              {t("Буцах")}
             </Button>
-            {!zasvar && (
+            {!zasvarEsekh && (
               <Button
                 type="primary"
                 gereeniiZagvar

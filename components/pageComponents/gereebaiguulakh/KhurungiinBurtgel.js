@@ -609,7 +609,7 @@ const YurunkhiiMedeele = ({
             icon={<ArrowLeftOutlined />}
             className="text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
           >
-            {t("Гэрээний хугацаа")}
+            {t("Буцах")}
           </Button>
           <Button
             type="primary"
@@ -617,7 +617,7 @@ const YurunkhiiMedeele = ({
             onClick={() => form.submit()}
             icon={<ArrowRightOutlined />}
           >
-            {t("Зардал бүртгэл")}
+            {t("Үргэлжлүүлэх")}
           </Button>
         </div>
       </Form.Item>

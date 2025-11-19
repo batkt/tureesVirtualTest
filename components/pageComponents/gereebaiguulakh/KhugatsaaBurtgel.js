@@ -451,7 +451,7 @@ const YurunkhiiMedeele = ({
               icon={<ArrowLeftOutlined />}
               className="text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
             >
-              {t("Ерөнхий мэдээлэл")}
+              {t("Буцах")}
             </Button>
             <Button
               id="tureesinTalbaiButton"
@@ -459,7 +459,7 @@ const YurunkhiiMedeele = ({
               onClick={() => form.submit()}
               icon={<ArrowRightOutlined />}
             >
-              {t("Түрээсийн талбай")}
+              {t("Үргэлжлүүлэх")}
             </Button>
           </div>
         </Form.Item>
