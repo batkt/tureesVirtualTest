@@ -437,7 +437,8 @@ function tulburTootsoo({ token }) {
               barilgiinId === "61d54c5748d9fcf140298137" ||
               barilgiinId === "657955ac70280a9ebe8f11ef" ||
               barilgiinId === "61e13558ccf0f605a3f09d3c" ||
-              barilgiinId === "619e267fdd4835aa2c168b28"
+              barilgiinId === "619e267fdd4835aa2c168b28" ||
+              barilgiinId === "68f702c1326ac1a2ad718c9f"
             ) {
               // ikh nayd tower
               if (
@@ -2031,7 +2032,8 @@ function tulburTootsoo({ token }) {
             : barilgiinId === "622ec99a8e64e5b4f0c3acb6" ||
               barilgiinId === "61d54c5748d9fcf140298137" ||
               barilgiinId === "657955ac70280a9ebe8f11ef" ||
-              barilgiinId === "61e13558ccf0f605a3f09d3c"
+              barilgiinId === "61e13558ccf0f605a3f09d3c" ||
+              barilgiinId === "68f702c1326ac1a2ad718c9f"
             ? khatuuZagvarIkhNaydTower(
                 nekhemjlekh,
                 ajiltan,
