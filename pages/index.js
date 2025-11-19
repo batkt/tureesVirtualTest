@@ -9,6 +9,7 @@ import Aos from "aos";
 import "../services/i18n";
 import { useTranslation } from "react-i18next";
 import Snowfall from "react-snowfall";
+import Loader from "components/loader";
 const { Password } = Input;
 
 export function useThemeValue() {
@@ -37,14 +38,13 @@ function Ajiltan() {
   const { newterya } = useAuth();
 
   useEffect(() => {
-    // Ensure we're on the client side before initializing
     if (typeof window !== "undefined") {
       localStorage.removeItem("baiguulgiinErkhiinJagsaalt");
       const nevtrekhNer = localStorage.getItem("newtrekhNerTurees");
       if (nevtrekhNer) {
         form.setFieldsValue({ nevtrekhNer });
       }
-      // Mark component as ready after initialization
+
       setIsReady(true);
     }
   }, [form]);
@@ -57,7 +57,6 @@ function Ajiltan() {
 
   const { t, i18n } = useTranslation();
 
-  // Move images creation into useMemo to avoid recreating on every render
   const images = React.useMemo(() => {
     if (typeof window === "undefined") return [];
     const snowflake1 = document.createElement("img");
@@ -67,11 +66,12 @@ function Ajiltan() {
     return [snowflake1, snowflake2];
   }, []);
 
-  // Show loading state until component is ready
   if (!isReady) {
     return (
       <div className="login flex min-h-screen items-center justify-center bg-green-600 dark:bg-gray-800 xl:bg-white">
-        <div className="text-xl text-white">Loading...</div>
+        <div className="text-xl text-white">
+          <Loader />
+        </div>
       </div>
     );
   }

@@ -135,7 +135,9 @@ function tulburTootsoo() {
 
   const qZardal = useMemo(
     () => ({
-      turul: { $in: ["Дурын", "Тогтмол", "1м2", "1м3/талбай"] },
+      turul: {
+        $in: ["Дурын", "Тогтмол", "1м2", "кВт", "1м3/талбай", "1м3", "кг"],
+      },
       barilgiinId,
     }),
     [barilgiinId]

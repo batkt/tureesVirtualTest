@@ -104,7 +104,7 @@ function ZardalBurtgel(
             }
           }
         );
-        if (data.ognoonuud?.length > 0 || ognoonuud?.length > 0) {
+        if (data?.ognoonuud?.length > 0 || ognoonuud?.length > 0) {
           uilchilgee(token)
             .post(`/gereeAshiglakhguiSaruud`, {
               barilgiinId,
