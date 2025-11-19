@@ -1068,6 +1068,7 @@ function talbaiBurtgekh({ token }) {
                   );
                 },
               },
+              ...shineBagana,
               {
                 title: () => <SettingOutlined />,
                 ellipsis: true,
@@ -1119,7 +1120,6 @@ function talbaiBurtgekh({ token }) {
                   </div>
                 ),
               },
-              ...shineBagana,
             ]}
           />
         </div>
