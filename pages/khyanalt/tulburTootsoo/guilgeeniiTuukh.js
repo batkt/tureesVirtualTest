@@ -207,7 +207,7 @@ function guilgeeniiTuukh({ token }) {
   const { t, i18n } = useTranslation();
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   const ref = React.useRef(null);
   const excelref = React.useRef();
   const baritsaaref = React.useRef(null);
@@ -763,22 +763,25 @@ function guilgeeniiTuukh({ token }) {
         {t("Хадгалах")}
       </Button>,
     ];
-    modal({
-      title: t("Барьцаа"),
-      icon: <FileExcelOutlined />,
-      content: (
-        <BaritsaaUdirdlaga
-          data={data}
-          baritsaaUdirdanKhadgalyaaId={baritsaaUdirdanKhadgalyaaId}
-          ref={baritsaaref}
-          token={token}
-          baiguullagiinId={baiguullaga?._id}
-          onFinish={refreshData}
-        />
-      ),
-      footer,
-    }, []);
-    }
+    modal(
+      {
+        title: t("Барьцаа"),
+        icon: <FileExcelOutlined />,
+        content: (
+          <BaritsaaUdirdlaga
+            data={data}
+            baritsaaUdirdanKhadgalyaaId={baritsaaUdirdanKhadgalyaaId}
+            ref={baritsaaref}
+            token={token}
+            baiguullagiinId={baiguullaga?._id}
+            onFinish={refreshData}
+          />
+        ),
+        footer,
+      },
+      []
+    );
+  }
 
   function guilgeeKhiiya(data) {
     if (

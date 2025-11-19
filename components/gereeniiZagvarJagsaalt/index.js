@@ -97,7 +97,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
   }
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   return (
     <div className="col-span-12">
       <div className="flex flex-col-reverse items-center sm:flex-row">

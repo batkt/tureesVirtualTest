@@ -119,7 +119,7 @@ function index({ token }) {
 
   useEffect(() => {
     Aos.init({ duration: 1000 }, { once: true });
-  }, []);
+  });
   useEffect(() => {
     setSetgegdel("");
   }, [daalgavar?._id]);

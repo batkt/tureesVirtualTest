@@ -58,7 +58,7 @@ function GereeBaiguulakh({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   const songosonBarilgiinHayag = React.useMemo(() => {
     if (!Array.isArray(baiguullaga?.barilguud)) return "";
     return (

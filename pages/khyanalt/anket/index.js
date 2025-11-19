@@ -315,7 +315,7 @@ function Anket({ token }) {
 
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   function anketBurtgey(v) {
     v.barilgiinId = barilgiinId;
     v.baiguullagiinId = baiguullaga._id;

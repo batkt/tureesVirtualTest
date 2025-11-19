@@ -12,7 +12,7 @@ const { RangePicker } = DatePicker;
 function KhungulultTuukh({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   const { ajiltan } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
 

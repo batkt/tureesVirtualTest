@@ -392,7 +392,7 @@ function TaskManagementSystem({ token }) {
 
   useEffect(() => {
     Aos.init({ duration: 1000, once: true });
-  }, []);
+  });
 
   useEffect(() => {
     setSetgegdel("");

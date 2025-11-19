@@ -51,7 +51,7 @@ var timeout = null;
 function Todorkhoilolt() {
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   const { token, baiguullaga, barilgiinId, ajiltan, baiguullagiinId } =
     useAuth();
   const { t } = useTranslation();
@@ -126,8 +126,7 @@ function Todorkhoilolt() {
       const content = burtgelRef.current?.getContent() || "";
 
       return content;
-    } catch (error) {
-    }
+    } catch (error) {}
   };
   const barilga = baiguullaga?.barilguud?.find(
     (a) => a._id === jagsaalt?.[0]?.barilgiinId

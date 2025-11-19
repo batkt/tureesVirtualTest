@@ -181,7 +181,7 @@ function ZassanTuukh() {
   }
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   return (
     <Admin
       title={t("Зассан түүх")}

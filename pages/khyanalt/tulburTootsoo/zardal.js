@@ -54,7 +54,6 @@ const useZardaliinDun = (token, barilgiinId, idnuud, ognoo) => {
 };
 
 const useDansniiKhuulga = (token, barilgiinId, zardliinBulgiinId, ognoo) => {
-
   const [khuudaslalt, setDansniiKhuulgaKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
@@ -217,7 +216,7 @@ function ZardalMur({
       {showDed && zardal.dedKhesguud && (
         <div className="w-full pl-12">
           <Zardal
-          t={t}
+            t={t}
             zardaluud={zardal.dedKhesguud}
             token={token}
             barilgiinId={barilgiinId}
@@ -274,13 +273,13 @@ function Zardal({
   baiguullagiinId,
   zardalBurtgekh,
   zardalUstgaya,
-  t
+  t,
 }) {
   return (
     <div className={`w-full space-y-4 ${parent ? "zardalkhusnegt" : ""}`}>
       {zardaluud?.map((a, i) => (
         <ZardalMur
-        t={t}
+          t={t}
           key={a?._id}
           zardal={a}
           index={i}
@@ -437,7 +436,9 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, onRefresh }) {
                   <div className="flex items-center justify-center">
                     <Popconfirm
                       placement="left"
-                      title={t("Холбогдсон зардал устгахдаа итгэлтэй байна уу?")}
+                      title={t(
+                        "Холбогдсон зардал устгахдаа итгэлтэй байна уу?"
+                      )}
                       okText={t("Тийм")}
                       cancelText={t("Үгүй")}
                       onConfirm={() => guilgeeUstgaya(a._id)}
@@ -511,7 +512,7 @@ function ZardalTable({
 }
 
 function zardal({ token }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { barilgiinId, baiguullaga } = useAuth();
   const zardalRef = useRef(null);
   const [ognoo, setOgnoo] = useState([moment(), moment()]);
@@ -538,7 +539,7 @@ function zardal({ token }) {
       width: 850,
       content: (
         <ZardalBurtgekh
-        t={t}
+          t={t}
           ref={zardalRef}
           token={token}
           onRefresh={onRefresh}
@@ -574,7 +575,7 @@ function zardal({ token }) {
   }
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   return (
     <Admin
       title="Зардлын жагсаалт"
@@ -605,7 +606,7 @@ function zardal({ token }) {
               display: "flex",
               justifyContent: "center",
             }}
-            className="dropdown-toggle btn box mt-3 ml-auto w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
+            className="dropdown-toggle btn box ml-auto mt-3 w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
             aria-expanded="false"
             onClick={() => zardalBurtgekh()}
             data-aos="fade-left"

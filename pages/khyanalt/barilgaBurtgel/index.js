@@ -155,7 +155,7 @@ function BarilgaBurtgel({ token }) {
 
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   const query = useMemo(() => {
     return {
       nariivchlal,

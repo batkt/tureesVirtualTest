@@ -54,7 +54,7 @@ var timeout = null;
 function Khyanalt({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   const { barilgiinId } = useAuth();
   const { t } = useTranslation();
   const [turul, setTurul] = useState("App");

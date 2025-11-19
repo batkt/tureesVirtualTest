@@ -59,7 +59,7 @@ const ilgeekhTurul = "davkharaar";
 function tulburTootsoo({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   const ref = useRef(null);
   const printRef = React.useRef(null);
   const printExcelRef = React.useRef(null);
@@ -155,9 +155,13 @@ function tulburTootsoo({ token }) {
   const { dansGaralt } = useDans(token, baiguullaga?._id);
   const { nekhemjlekhiinZagvar, nekhemjlekhiinZagvarMutate } =
     useNekhemjlekhiinZagvar(token);
-  const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", {
-    barilgiinId: barilgiinId,
-  }, []);
+  const ashiglaltiinZardal = useJagsaalt(
+    "/ashiglaltiinZardluud",
+    {
+      barilgiinId: barilgiinId,
+    },
+    []
+  );
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token);
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([]);

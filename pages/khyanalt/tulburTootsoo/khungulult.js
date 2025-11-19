@@ -67,7 +67,7 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
 function tulburTootsoo() {
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   const { t, i18n } = useTranslation();
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);

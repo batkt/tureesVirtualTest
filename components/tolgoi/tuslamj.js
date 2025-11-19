@@ -18,7 +18,7 @@ function Tuslamj() {
 
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   const { ajiltan } = useAuth();
 
   return (

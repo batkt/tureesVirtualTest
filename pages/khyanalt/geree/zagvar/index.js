@@ -9,7 +9,7 @@ import GereeniiZagvarJagsaalt from "components/gereeniiZagvarJagsaalt";
 function index({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   return (
     <Admin
       khuudasniiNer="gereeniiZagvar"

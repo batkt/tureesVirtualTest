@@ -590,7 +590,7 @@ function orshinSuugch({ token }) {
 
   useEffect(() => {
     Aos.init({ once: true });
-  }, []);
+  });
   return (
     <Admin
       title="Оршин суугч"
