@@ -361,6 +361,24 @@ function guilgeeniiTuukh({ token }) {
       .finally(() => setAldangiLoading(false));
   };
 
+  const aldangiUstgayaa = async () => {
+    if (!baiguullaga?._id || !barilgiinId || aldangiLoading) return;
+    setAldangiLoading(true);
+    await uilchilgee(token)
+      .post("/aldangiUstgayaa", {
+        baiguullagiinId: baiguullaga._id,
+        barilgiinId,
+      })
+      .then(() => {
+        notification.success({
+          message: t("Амжилттай"),
+          description: t("Алдангийг амжилттай устгалаа"),
+        });
+      })
+      .catch(aldaaBarigch)
+      .finally(() => setAldangiLoading(false));
+  };
+
   const { gereeniiMedeelel, onSearch } = useMemo(() => {
     return {
       gereeniiMedeelel:
@@ -1291,6 +1309,17 @@ function guilgeeniiTuukh({ token }) {
                 disabled={!baiguullaga?._id}
               >
                 Алданги бодох
+              </Button>
+            )}
+            {ajiltan?.nevtrekhNer === "CAdmin1" && (
+              <Button
+                className="mr-10"
+                type="primary"
+                onClick={aldangiUstgayaa}
+                loading={aldangiLoading}
+                disabled={!baiguullaga?._id || !barilgiinId}
+              >
+                Алданги устгах
               </Button>
             )}
             <div className="hidden md:flex">
