@@ -1154,7 +1154,7 @@ function guilgeeniiTuukh({ token }) {
       setNeesenEsekh={setNeesenEsekh}
     >
       <Card className="cardgrid col-span-12">
-        <div className="hideScroll flex grid w-full grid-cols-1 gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid-cols-6 sm:py-2 md:gap-6 2xl:grid-cols-12">
+        <div className="hideScroll grid w-full grid-cols-1 gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid-cols-6 sm:py-2 md:gap-6 2xl:grid-cols-12">
           {[
             {
               too: formatNumber(
@@ -1270,7 +1270,7 @@ function guilgeeniiTuukh({ token }) {
           })}
         </div>
         <div
-          className="mt-5 flex w-full flex-col gap-5 overflow-x-auto md:flex-row"
+          className="mt-5 flex w-full flex-col gap-5  md:flex-row"
           data-aos="zoom-in-up"
           data-aos-duration="1000"
           data-aos-delay="200"
