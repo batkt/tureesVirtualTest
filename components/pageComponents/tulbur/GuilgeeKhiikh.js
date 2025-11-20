@@ -211,7 +211,7 @@ function GuilgeeKhiikh(
               turul: turul,
               tulsunDun: dun,
               tulukhDun: 0,
-              ognoo: shineOgnoo,
+              ognoo: ognoo,
               gereeniiId: data?._id,
               tailbar,
               nekhemjlekhDeerKharagdakh: false,
