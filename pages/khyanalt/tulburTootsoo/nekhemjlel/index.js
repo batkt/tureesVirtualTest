@@ -1163,8 +1163,8 @@ function tulburTootsoo({ token }) {
               }
               if (
                 a.tailbar === "Худалдааны менежмент" ||
-                a.tailbar === "Хөрөнгийн менежмент" ||
-                a.tailbar === "Тавилга түрээс" ||
+                a.tailbar?.includes("Хөрөнгийн менежмент")  ||
+                a.tailbar?.includes("Тавилга түрээс")  ||
                 a.tailbar === "Түрээсийн төлбөр нэмэлт"
               ) {
                 menejmentCount++;
@@ -2770,8 +2770,8 @@ function tulburTootsoo({ token }) {
             niilberAshiglaltDunGoTo += khungulultKhassanTulukhDun;
           }
           if (
-            a.tailbar === "Худалдааны менежмент" ||
-            a.tailbar === "Хөрөнгийн менежмент" ||
+            a.tailbar?.includes("Худалдааны менежмент") ||
+            a.tailbar?.includes("Хөрөнгийн менежмент")   ||
             a.tailbar === "Тавилга түрээс" ||
             a.tailbar === "Түрээсийн төлбөр нэмэлт"
           ) {
