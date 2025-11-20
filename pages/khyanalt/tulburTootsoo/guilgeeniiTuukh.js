@@ -1270,7 +1270,7 @@ function guilgeeniiTuukh({ token }) {
           })}
         </div>
         <div
-          className="mt-5 flex w-full flex-col gap-5 md:flex-row"
+          className="mt-5 flex w-full flex-col gap-5 overflow-x-auto md:flex-row"
           data-aos="zoom-in-up"
           data-aos-duration="1000"
           data-aos-delay="200"

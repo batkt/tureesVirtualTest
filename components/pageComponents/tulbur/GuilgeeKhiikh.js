@@ -537,7 +537,7 @@ function GuilgeeKhiikh(
   }
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2 overflow-x-auto">
       <div className="flex w-full pb-4 ">
         <Radio.Group
           onChange={(e) => {
