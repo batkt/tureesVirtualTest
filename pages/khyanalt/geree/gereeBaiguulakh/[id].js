@@ -22,6 +22,7 @@ import dynamic from "next/dynamic";
 import formatNumber from "tools/function/formatNumber";
 import tootsohSariinNiilberDun from "tools/function/tootsohSariinNiilberDun";
 import createMethod from "tools/function/crud/createMethod";
+import { toWords } from "mon_num";
 
 const Konva = dynamic(() => import("components/konva"), { ssr: false });
 
@@ -54,6 +55,13 @@ const steps = [
     zaaltiinTolgoi: "ТАВ.ТӨЛБӨР ТООЦОО",
   },
 ];
+
+const toWordsOrEmpty = (value) => {
+  if (value === undefined || value === null || value === "") return "";
+  const numericValue = Number(value);
+  if (!Number.isFinite(numericValue) || numericValue === 0) return "";
+  return toWords(numericValue);
+};
 
 function GereeBaiguulakh({ token, data }) {
   const { t } = useTranslation();
@@ -333,6 +341,13 @@ function GereeBaiguulakh({ token, data }) {
       }
     }
 
+    khadgalakhGeree.talbainNegjUneUsgeer = toWordsOrEmpty(
+      khadgalakhGeree.talbainNegjUne
+    );
+    khadgalakhGeree.talbainNiitUneUsgeer = toWordsOrEmpty(
+      khadgalakhGeree.talbainNiitUne
+    );
+
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
       butsaakhUtga.dedKhesguud
         .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
@@ -392,6 +407,13 @@ function GereeBaiguulakh({ token, data }) {
         khadgalakhGeree.duusakhUdur = duusakhOgnoo.format("DD");
       }
     }
+
+    khadgalakhGeree.talbainNegjUneUsgeer = toWordsOrEmpty(
+      khadgalakhGeree.talbainNegjUne
+    );
+    khadgalakhGeree.talbainNiitUneUsgeer = toWordsOrEmpty(
+      khadgalakhGeree.talbainNiitUne
+    );
 
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
       if (key === "zardluud") {

@@ -35,6 +35,9 @@ const fetcher = async (token, id, turul) => {
       }
       geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne);
       geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne);
+      geree.baritsaaAvakhDunUsgeer = geree.baritsaaAvakhDun
+        ? toWords(geree.baritsaaAvakhDun)
+        : toWords(" ");
       geree.gariinUseg = renderToString(
         <span style={{ position: "absolute" }}>
           <img

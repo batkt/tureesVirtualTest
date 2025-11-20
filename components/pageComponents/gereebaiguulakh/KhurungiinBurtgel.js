@@ -34,6 +34,13 @@ const formItemLayout = {
   },
 };
 
+const toWordsOrEmpty = (value) => {
+  if (value === undefined || value === null || value === "") return "";
+  const numericValue = Number(value);
+  if (!Number.isFinite(numericValue) || numericValue === 0) return "";
+  return toWords(numericValue);
+};
+
 function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
   const { token, baiguullaga } = useAuth();
 
@@ -198,10 +205,13 @@ const YurunkhiiMedeele = ({
       (a, b) => a + Number(b.talbainNiitUne || 0),
       0
     );
-    value.talbainNegjUne = talbainuud.reduce((a, b) => a + b.talbainNegjUne, 0);
+    value.talbainNegjUne = talbainuud.reduce(
+      (a, b) => a + Number(b.talbainNegjUne || 0),
+      0
+    );
 
     if (gereeniiZagvar?.turGereeEsekh !== true) {
-      value.talbainNiitUne = value.baritsaaAvakhDun;
+      value.talbainNiitUne = Number(value.baritsaaAvakhDun || 0);
       value.talbainKhemjee = talbainuud.reduce(
         (a, b) => a + b.talbainKhemjee,
         0
@@ -212,7 +222,8 @@ const YurunkhiiMedeele = ({
       (a, b) => a + b.talbainKhemjeeMetrKube,
       0
     );
-    value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);
+    value.talbainNegjUneUsgeer = toWordsOrEmpty(value.talbainNegjUne);
+    value.talbainNiitUneUsgeer = toWordsOrEmpty(value.talbainNiitUne);
     value.davkhar = [...new Set(talbainuud.map((a) => a.davkhar))].join(",");
 
     // Only update talbainIdnuud if it actually changed
