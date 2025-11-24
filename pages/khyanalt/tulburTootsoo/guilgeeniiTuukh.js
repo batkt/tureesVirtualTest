@@ -1303,7 +1303,7 @@ function guilgeeniiTuukh({ token }) {
               </Select>
             </div>
           </div>
-          <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:flex-row sm:flex-wrap md:ml-auto md:w-auto md:place-content-end">
+          <div className="flex w-full flex-row flex-wrap items-center justify-start gap-2 sm:justify-end md:ml-auto md:w-auto">
             {ajiltan?.nevtrekhNer === "CAdmin1" && (
               <Button
                 type="primary"
