@@ -118,6 +118,12 @@ self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(event.request.url);
   let responsePromise;
 
+  // Never cache upload requests - always use network
+  if (requestUrl.pathname.includes("/upload")) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   if (requestUrl.pathname.startsWith("/api/")) {
     if (event.request.method === "POST") {
       responsePromise = (async () => {
