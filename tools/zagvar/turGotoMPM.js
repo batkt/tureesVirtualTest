@@ -128,7 +128,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         ${
           medeelel.zardluud.filter(
             (a) =>
-              a.tailbar === "Хөрөнгийн менежмент" ||
+              a.tailbar?.includes("Хөрөнгийн менежмент") ||
               a.tailbar === "Худалдааны менежмент"
           ).length > 0
             ? ""
@@ -163,8 +163,8 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           })
           .filter(
             (a) =>
-              a.tailbar === "Хөрөнгийн менежмент" ||
-              a.tailbar === "Худалдааны менежмент"
+              a.tailbar?.includes("Хөрөнгийн менежмент") ||
+              a.tailbar?.includes("Худалдааны менежмент")
           )
           .map((mur, index) => {
             return `

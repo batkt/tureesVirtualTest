@@ -640,8 +640,8 @@ function GuilgeeKhiikh(
                       ? "us"
                       : tukhainZardal?.ner?.includes("Хүйтэн ус")
                       ? "khuitenUs"
-                      : tukhainZardal?.ner === "Хөрөнгийн менежмент" ||
-                        tukhainZardal?.ner === "Худалдааны менежмент"
+                      : tukhainZardal?.ner?.includes("Хөрөнгийн менежмент") ||
+                        tukhainZardal?.ner?.includes("Худалдааны менежмент")
                       ? "managementGoto"
                       : "busad";
                     setAshiglaltiinId(v);

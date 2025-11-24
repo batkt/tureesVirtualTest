@@ -1,3 +1,5 @@
+import { Input, Button as AntButton } from "antd";
+import createMethod from "../../../tools/function/crud/createMethod";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React, { useMemo, useEffect, useState } from "react";
@@ -106,26 +108,124 @@ function iconAvyaZardal(a, bank) {
   );
 }
 
-function GuilgeeniiDun({ token, dansniiDugaar, barilgiinId, ognoo, turul, t }) {
+function GuilgeeniiDun({
+  token,
+  dansniiDugaar,
+  barilgiinId,
+  ognoo,
+  turul,
+  baiguullagiinId,
+  t,
+}) {
   const { data } = useSWR(
     !!token && !!dansniiDugaar && !!barilgiinId
-      ? [token, dansniiDugaar, barilgiinId, ognoo, turul]
+      ? [token, dansniiDugaar, barilgiinId, ognoo, turul, baiguullagiinId]
       : null,
-    (token, dansniiDugaar, barilgiinId, ognoo, turul) =>
-      uilchilgee(token)
-        .post("/dansniiKhuulgaDunAvya", {
+    async (
+      token,
+      dansniiDugaar,
+      barilgiinId,
+      ognoo,
+      turul,
+      baiguullagiinId
+    ) => {
+      try {
+        const res = await uilchilgee(token).post("/dansniiKhuulgaDunAvya", {
           dansniiDugaar,
           barilgiinId,
           turul,
           ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
           duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-        })
-        .then((a) => a.data)
-        .catch(aldaaBarigch)
+        });
+
+        const body = res.data;
+
+        // If endpoint returned precomputed dun, return it
+        if (
+          _.get(body, "0.dun") !== undefined ||
+          _.get(body, "dun") !== undefined
+        ) {
+          return body;
+        }
+
+        // If it returned a list (array) or jagsaalt array, sum numeric fields
+        const list = Array.isArray(body)
+          ? body
+          : Array.isArray(body?.jagsaalt)
+          ? body.jagsaalt
+          : null;
+
+        if (Array.isArray(list) && list.length > 0) {
+          let dun = 0;
+          list.forEach((item) => {
+            if (!item) return;
+            if (item.tranAmount !== undefined)
+              dun += Number(item.tranAmount) || 0;
+            else if (item.Amt !== undefined) dun += Number(item.Amt) || 0;
+            else if (item.amount !== undefined) dun += Number(item.amount) || 0;
+            else if (item.income !== undefined) dun += Number(item.income) || 0;
+          });
+          return [{ dun }];
+        }
+
+        // Last resort: query bankniiGuilgee endpoint to get records and sum
+        try {
+          const dateRange = {
+            $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+            $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+          };
+
+          const query = {
+            dansniiDugaar,
+            barilgiinId,
+            baiguullagiinId,
+            $and: [
+              {
+                $or: [
+                  { amount: { $gt: 0 } },
+                  { tranAmount: { $gt: 0 } },
+                  { Amt: { $gt: 0 } },
+                  { income: { $gt: 0 } },
+                ],
+              },
+              { $or: [{ TxDt: dateRange }, { tranDate: dateRange }] },
+            ],
+          };
+
+          const res2 = await uilchilgee(token).get("/bankniiGuilgee", {
+            params: { query, khuudasniiKhemjee: 1000 },
+          });
+          const list2 = Array.isArray(res2.data)
+            ? res2.data
+            : Array.isArray(res2.data?.jagsaalt)
+            ? res2.data.jagsaalt
+            : [];
+          let dun2 = 0;
+          list2.forEach((item) => {
+            if (!item) return;
+            if (item.tranAmount !== undefined)
+              dun2 += Number(item.tranAmount) || 0;
+            else if (item.Amt !== undefined) dun2 += Number(item.Amt) || 0;
+            else if (item.amount !== undefined)
+              dun2 += Number(item.amount) || 0;
+            else if (item.income !== undefined)
+              dun2 += Number(item.income) || 0;
+          });
+          return [{ dun: dun2 }];
+        } catch (e) {
+          // fallback to original body if this fails
+        }
+
+        return body;
+      } catch (e) {
+        return aldaaBarigch(e);
+      }
+    }
   );
+
   return (
     <div className="font-medium dark:bg-gray-900 dark:text-white">
-      {t("Гүйлгээний нийт дүн")}: {formatNumber(_.get(data, "0.dun"))}
+      {t("Гүйлгээний нийт дүн")}: {formatNumber(_.get(data, "0.dun") || 0)}
     </div>
   );
 }
@@ -142,8 +242,10 @@ function tulburTootsoo({ token }) {
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
   const { dansGaralt } = useDans(token, baiguullaga?._id);
   const [songogdsonDans, setSongogdsonDans] = React.useState(null);
+  const [garDun, setGarDun] = React.useState("");
   const [songogdsonTurul, setSongogdsonTurul] = React.useState(null);
   const [loading, setLoading] = useState(false);
+  const [garDunFormatted, setGarDunFormatted] = React.useState("");
   const [loadingBaritsaa, setLoadingBaritsaa] = useState(false);
 
   const [khuulgaTurul, setKhuulgaTurul] = React.useState("orlogo");
@@ -244,9 +346,20 @@ function tulburTootsoo({ token }) {
       refreshData();
     }
 
+    // Only consider the transaction "already linked" when there is at least
+    // one linked contract id. Previously a zero balance could mark it as
+    // linked even when `kholbosonGereeniiId` was an empty array.
+    const hasLinkedGereen =
+      Array.isArray(data?.kholbosonGereeniiId) &&
+      data.kholbosonGereeniiId.length > 0;
+
+    const kholbosonDunNum = Number(data.kholbosonDun || 0);
+    const amountNum = Number(data.amount || data.tranAmount || 0);
+    const balanceNum = Number(data.balance || 0);
+
     if (
-      (data.kholbosonDun || 0) - (data.amount || data.tranAmount) === 0 ||
-      data.balance - (data.kholbosonDun || 0) === 0
+      hasLinkedGereen &&
+      (kholbosonDunNum - amountNum === 0 || balanceNum - kholbosonDunNum === 0)
     ) {
       notification.success({
         message: t("Гүйлгээ холбогдсон байна"),
@@ -1140,6 +1253,147 @@ function tulburTootsoo({ token }) {
               </Select>
             </div>
 
+            {baiguullaga?._id === "612f457d185280db676d0b51" && (
+              <div className="mb-4 ml-3 flex items-center space-x-2">
+                <Input
+                  placeholder={t("bondogo2")}
+                  value={garDunFormatted}
+                  onChange={(e) => {
+                    const inputValue = e.target.value;
+
+                    const numericValue = inputValue.replace(/[^0-9.]/g, "");
+
+                    setGarDun(numericValue);
+
+                    if (numericValue === "" || numericValue === ".") {
+                      setGarDunFormatted(numericValue);
+                    } else {
+                      const parsed = parseFloat(numericValue);
+                      if (!isNaN(parsed)) {
+                        setGarDunFormatted(formatNumber(parsed, 0));
+                      } else {
+                        setGarDunFormatted(numericValue);
+                      }
+                    }
+                  }}
+                  style={{ width: 220 }}
+                />
+                <AntButton
+                  type="primary"
+                  onClick={async () => {
+                    if (!songogdsonDans) {
+                      notification.warning({ message: t("Данс сонгоно уу") });
+                      return;
+                    }
+                    try {
+                      setLoading(true);
+
+                      const bank = songogdsonDans?.bank;
+                      const dugaar =
+                        bank === "khanbank"
+                          ? garDun || ""
+                          : bank === "golomt"
+                          ? garDun || ""
+                          : bank === "bogd"
+                          ? garDun || ""
+                          : bank === "tran"
+                          ? garDun || ""
+                          : bank === "tdb"
+                          ? garDun || ""
+                          : garDun || "";
+
+                      const mungunDun = Number(garDun) || 0;
+
+                      const payload = {
+                        tranDate: new Date(),
+                        balance: 0,
+                        requestId: garDun || undefined,
+
+                        ...(bank === "golomt" ? { tranId: dugaar } : {}),
+                        ...(bank === "khanbank" ? { record: dugaar } : {}),
+                        ...(bank === "bogd" ? { recNum: dugaar } : {}),
+                        ...(bank === "tran" ? { jrno: dugaar } : {}),
+                        ...(bank === "tdb"
+                          ? {
+                              NtryRef: dugaar,
+                              TxDt: new Date().toISOString(),
+                              TxTime: moment().format("HH:mm"),
+                            }
+                          : {}),
+                        drOrCr: bank === "golomt" ? "Credit" : undefined,
+                        tranPostedDate: new Date().toISOString(),
+                        tranCrnCode: songogdsonDans?.currency || "MNT",
+                        exchRate: 1,
+                        accName: songogdsonDans?.accName || "",
+                        accNum: songogdsonDans?.dugaar || "",
+                        kholbosonGereeniiId: [],
+                        kholbosonTalbainId: [],
+                        dansniiDugaar: songogdsonDans?.dugaar,
+                        bank: songogdsonDans?.bank,
+                        baiguullagiinId: baiguullaga?._id,
+                        barilgiinId: barilgiinId,
+                        indexTalbar:
+                          barilgiinId +
+                          (songogdsonDans?.bank || "") +
+                          (songogdsonDans?.dugaar || "") +
+                          (dugaar || "") +
+                          mungunDun.toString(),
+
+                        description: "bondogo2 tailbar",
+                      };
+
+                      if (bank === "golomt") payload.tranAmount = mungunDun;
+                      else if (bank === "khanbank" || bank === "bogd")
+                        payload.amount = mungunDun;
+                      else if (bank === "tdb") payload.Amt = mungunDun;
+                      else if (bank === "tran") {
+                        payload.income = mungunDun;
+                        payload.outcome = 0;
+                      } else {
+                        payload.amount = mungunDun;
+                      }
+
+                      const desc = "bondogo2 tauilbar";
+                      if (bank === "golomt") {
+                        payload.tranDesc = desc;
+                        // also keep generic description
+                        payload.description = desc;
+                      } else if (bank === "tdb") {
+                        payload.TxAddInf = desc;
+                        payload.description = desc;
+                      } else if (bank === "khanbank" || bank === "bogd") {
+                        payload.description = desc;
+                      } else {
+                        payload.description = desc;
+                      }
+
+                      Object.keys(payload).forEach(
+                        (k) => payload[k] === undefined && delete payload[k]
+                      );
+
+                      await createMethod("bankniiGuilgee", token, payload);
+
+                      notification.success({
+                        message: t("Амжилттай хадгалагдлаа"),
+                      });
+
+                      bankniiGuilgeeToololtMutate &&
+                        bankniiGuilgeeToololtMutate();
+                      dansniiKhuulgaMutate && dansniiKhuulgaMutate();
+                      setGarDun("");
+                      setGarDunFormatted("");
+                    } catch (e) {
+                      aldaaBarigch(e);
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                >
+                  {t("Хадгалах")}
+                </AntButton>
+              </div>
+            )}
+
             {songogdsonDans && (
               <div className="mb-1 ml-5 flex-row space-x-2 p-1 font-medium md:flex">
                 {t("Үлдэгдэл")}:{" "}
@@ -1420,6 +1674,7 @@ function tulburTootsoo({ token }) {
                 dansniiDugaar={songogdsonDans?.dugaar}
                 ognoo={ekhlekhOgnoo}
                 turul={khuulgaTurul}
+                baiguullagiinId={baiguullaga?._id}
               />
             )}
           />
