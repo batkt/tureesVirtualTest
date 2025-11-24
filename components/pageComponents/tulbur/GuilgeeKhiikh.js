@@ -546,7 +546,7 @@ function GuilgeeKhiikh(
             setTailbar("");
           }}
           value={turul}
-          className="grid w-full grid-cols-2 justify-between sm:flex"
+          className="flex w-full flex-wrap items-center gap-4"
         >
           <Radio value={"voucher"}>{t("Ваучераар")}</Radio>
           <Radio value={"avlaga"}>{t("Авлага")}</Radio>
