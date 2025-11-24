@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: turees-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: turees-web
+  template:
+    metadata:
+      labels:
+        app: turees-web
+    spec:
+      containers:
+      - name: turees-web
+        image: buynaa24/turees-web:latest
+        ports:
+        - containerPort: 80
