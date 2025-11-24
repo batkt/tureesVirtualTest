@@ -117,15 +117,17 @@ function ShineTulbur(
     },
   });
 
+  const khaaya = React.useCallback(() => {
+    setModalNeelttei(false);
+    destroy();
+  }, [setModalNeelttei, destroy]);
+
   React.useImperativeHandle(
     ref,
     () => ({
-      khaaya() {
-        setModalNeelttei(false);
-        destroy();
-      },
+      khaaya,
     }),
-    [tulbur]
+    [khaaya]
   );
 
   const value = React.useMemo(() => {
@@ -189,7 +191,7 @@ function ShineTulbur(
     }
   }
   function ebarimtguiTulburDuusgakh() {
-    ref.current.khaaya();
+    khaaya();
     message.success("Төлбөр амжилттай хадгалагдлаа");
   }
 
@@ -469,12 +471,12 @@ function ShineTulbur(
     function keyUp(e) {
       if (e.key === "Escape") {
         e.preventDefault();
-        ref.current.khaaya();
+        khaaya();
       }
     }
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
-  }, []);
+  }, [khaaya]);
 
   function handleCancelQpay() {
     setQpayModalTuluv(false);
@@ -596,10 +598,7 @@ function ShineTulbur(
             <div>{t("Тооцоо хийх")}</div>
             <div className="flex items-center">
               {mashiniiDugaar}
-              <div
-                className="ml-5 text-xl hover:text-red-400"
-                onClick={() => ref.current.khaaya()}
-              >
+              <div className="ml-5 text-xl hover:text-red-400" onClick={khaaya}>
                 <CloseCircleOutlined />
               </div>
             </div>
@@ -1202,7 +1201,7 @@ function ShineTulbur(
         />
         {alkham === 2 && eBarimtAshiglakhEsekh === true && (
           <div className="mt-5 flex flex-row justify-between">
-            <Button type="primary" danger onClick={() => ref.current.khaaya()}>
+            <Button type="primary" danger onClick={khaaya}>
               {t("Хаах")}
             </Button>
             <Button

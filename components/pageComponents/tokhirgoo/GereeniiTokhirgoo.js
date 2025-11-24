@@ -803,7 +803,7 @@ function KhuviinMedeelel({
                       >
                         <Upload
                           showUploadList={false}
-                          multiple={true}
+                          multiple={false}
                           name="file"
                           action={`${url}/upload`}
                           method="POST"
@@ -822,7 +822,6 @@ function KhuviinMedeelel({
                       {shouldShowGariinUseg() && (
                         <Button
                           danger
-                          multiple={true}
                           icon={<DeleteOutlined />}
                           type="button"
                           onClick={handleGariinUsegDelete}
@@ -874,7 +873,7 @@ function KhuviinMedeelel({
                       >
                         <Upload
                           showUploadList={false}
-                          multiple={true}
+                          multiple={false}
                           name="file"
                           action={`${url}/upload`}
                           method="POST"
@@ -893,7 +892,6 @@ function KhuviinMedeelel({
                       {shouldShowGariinUseg1() && (
                         <Button
                           danger
-                          multiple={true}
                           icon={<DeleteOutlined />}
                           type="button"
                           onClick={handleGariinUseg1Delete}
