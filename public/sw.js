@@ -51,9 +51,6 @@ function openIndexedDB() {
 }
 
 const API_CACHE_NAME = "api-cache-v1";
-const PAGE_CACHE_NAME = "page-cache-v1";
-const STATIC_CACHE_NAME = "static-cache-v1";
-const CACHE_WHITELIST = [API_CACHE_NAME, PAGE_CACHE_NAME, STATIC_CACHE_NAME];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -68,7 +65,7 @@ self.addEventListener("install", (event) => {
       const keys = await caches.keys();
       await Promise.all(
         keys
-          .filter((key) => !CACHE_WHITELIST.includes(key))
+          .filter((key) => key !== API_CACHE_NAME)
           .map((key) => caches.delete(key))
       );
 
@@ -83,7 +80,7 @@ self.addEventListener("activate", (event) => {
       const keys = await caches.keys();
       await Promise.all(
         keys
-          .filter((key) => !CACHE_WHITELIST.includes(key))
+          .filter((key) => key !== API_CACHE_NAME)
           .map((key) => caches.delete(key))
       );
 
@@ -119,10 +116,9 @@ async function networkWithTimeout(request, timeoutMs = 5000) {
 
 self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(event.request.url);
+  let responsePromise;
 
   if (requestUrl.pathname.startsWith("/api/")) {
-    let responsePromise;
-
     if (event.request.method === "POST") {
       responsePromise = (async () => {
         try {
@@ -219,105 +215,19 @@ self.addEventListener("fetch", (event) => {
           return new Response("Интернет салсан байна", { status: 503 });
         });
     }
-
-    event.respondWith(responsePromise);
-    return;
+  } else {
+    responsePromise = caches.match(event.request).then((response) => {
+      if (response) {
+        return response;
+      }
+      return fetch(event.request).catch(() => {
+        return new Response("Интернет салсан байна", { status: 503 });
+      });
+    });
   }
 
-  if (event.request.method !== "GET") {
-    return;
-  }
-
-  if (event.request.mode === "navigate") {
-    event.respondWith(handleNavigationRequest(event.request));
-    return;
-  }
-
-  if (isStaticAssetRequest(requestUrl, event.request)) {
-    event.respondWith(cacheFirstStatic(event.request));
-    return;
-  }
-
-  event.respondWith(networkFirstGeneric(event.request));
+  event.respondWith(responsePromise);
 });
-
-function isStaticAssetRequest(requestUrl, request) {
-  const staticDestinations = ["style", "script", "worker", "font", "image"];
-  const isNextStatic = requestUrl.pathname.startsWith("/_next/static/");
-  const isOptimizedImage = requestUrl.pathname.startsWith("/_next/image");
-  const isAppStatic = requestUrl.pathname.startsWith("/static/");
-
-  return (
-    isNextStatic ||
-    isOptimizedImage ||
-    isAppStatic ||
-    staticDestinations.includes(request.destination)
-  );
-}
-
-async function cacheFirstStatic(request) {
-  const cache = await caches.open(STATIC_CACHE_NAME);
-  const cachedResponse = await cache.match(request);
-
-  if (cachedResponse) {
-    return cachedResponse;
-  }
-
-  try {
-    const networkResponse = await fetch(request);
-    if (networkResponse && networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
-    }
-    return networkResponse;
-  } catch (error) {
-    return (
-      cachedResponse ||
-      new Response("Интернет салсан байна", { status: 503 })
-    );
-  }
-}
-
-async function networkFirstGeneric(request) {
-  try {
-    const networkResponse = await fetch(request);
-    if (networkResponse && networkResponse.ok) {
-      const cache = await caches.open(STATIC_CACHE_NAME);
-      cache.put(request, networkResponse.clone());
-    }
-    return networkResponse;
-  } catch (error) {
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    return new Response("Интернет салсан байна", { status: 503 });
-  }
-}
-
-async function handleNavigationRequest(request) {
-  const cache = await caches.open(PAGE_CACHE_NAME);
-
-  try {
-    const networkResponse = await fetch(request);
-    if (networkResponse && networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
-    }
-    return networkResponse;
-  } catch (error) {
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    const cachedRoot = await caches.match("/");
-    if (cachedRoot) {
-      return cachedRoot;
-    }
-
-    return new Response("Интернет салсан байна", { status: 503 });
-  }
-}
 
 self.addEventListener("sync", (event) => {
   if (event.tag === "sync-payments") {
