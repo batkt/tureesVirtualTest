@@ -702,59 +702,57 @@ function KhuviinMedeelel({
             <div>
               <Form form={form} autoComplete="off" className="">
                 <div className="flex w-full flex-col ">
-                  <Form.Item name="turul">
-                    <div className="flex flex-row items-center gap-2">
-                      {!!barilga?.tamga && !deleteTamga && (
-                        <Button
-                          icon={<EyeOutlined />}
-                          onClick={(e) =>
-                            tamgaZuragKharakh(e, `tamga/${barilga.tamga}`)
-                          }
-                          className="h-9 !text-gray-500 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
-                          type="button"
-                        >
-                          {t("Тамга зураг харах")}
-                        </Button>
-                      )}
+                  <div className="flex flex-row items-center gap-2">
+                    {!!barilga?.tamga && !deleteTamga && (
+                      <Button
+                        icon={<EyeOutlined />}
+                        onClick={(e) =>
+                          tamgaZuragKharakh(e, `tamga/${barilga.tamga}`)
+                        }
+                        className="h-9 !text-gray-500 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+                        type="button"
+                      >
+                        {t("Тамга зураг харах")}
+                      </Button>
+                    )}
 
-                      <ImgCrop modalTitle="Зураг засах" rotationSlider>
-                        <Upload
-                          showUploadList={false}
-                          multiple={false}
-                          name="file"
-                          action={`${url}/upload`}
-                          method="POST"
-                          onChange={(v) => zuragKhadgalakh(v, "tamga")}
-                        >
-                          <div className="flex flex-row items-center gap-2">
-                            {!shouldShowTamga() && (
-                              <Button icon={<UploadOutlined />} className="h-9">
-                                {t("Тамга зураг оруулах")}
-                              </Button>
-                            )}
+                    <ImgCrop modalTitle="Зураг засах" rotationSlider>
+                      <Upload
+                        showUploadList={false}
+                        multiple={false}
+                        name="file"
+                        action={`${url}/upload`}
+                        method="POST"
+                        onChange={(v) => zuragKhadgalakh(v, "tamga")}
+                      >
+                        <div className="flex flex-row items-center gap-2">
+                          {!shouldShowTamga() && (
+                            <Button icon={<UploadOutlined />} className="h-9">
+                              {t("Тамга зураг оруулах")}
+                            </Button>
+                          )}
 
-                            {shouldShowTamga() && (
-                              <Button
-                                icon={<EditOutlined />}
-                                className="h-9 !text-gray-500 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
-                                type="button"
-                              />
-                            )}
-                          </div>
-                        </Upload>
-                      </ImgCrop>
+                          {shouldShowTamga() && (
+                            <Button
+                              icon={<EditOutlined />}
+                              className="h-9 !text-gray-500 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+                              type="button"
+                            />
+                          )}
+                        </div>
+                      </Upload>
+                    </ImgCrop>
 
-                      {shouldShowTamga() && (
-                        <Button
-                          danger
-                          icon={<DeleteOutlined />}
-                          onClick={handleTamgaDelete}
-                          className="h-9"
-                          type="button"
-                        />
-                      )}
-                    </div>
-                  </Form.Item>
+                    {shouldShowTamga() && (
+                      <Button
+                        danger
+                        icon={<DeleteOutlined />}
+                        onClick={handleTamgaDelete}
+                        className="h-9"
+                        type="button"
+                      />
+                    )}
+                  </div>
 
                   {shouldShowTamga() && (
                     <div className="h-[54px] w-[115px] border">
@@ -790,46 +788,44 @@ function KhuviinMedeelel({
                   )}
                 </div>
                 <div className="mt-3 flex w-full flex-col">
-                  <Form.Item name="turul">
-                    <div className="flex flex-row items-center gap-2">
-                      <ImgCrop
-                        modalTitle="Зураг засах"
-                        rotationSlider
-                        quality={1}
-                        fillColor="transparent"
-                        modalProps={{
-                          maskClosable: false,
-                        }}
+                  <div className="flex flex-row items-center gap-2">
+                    <ImgCrop
+                      modalTitle="Зураг засах"
+                      rotationSlider
+                      quality={1}
+                      fillColor="transparent"
+                      modalProps={{
+                        maskClosable: false,
+                      }}
+                    >
+                      <Upload
+                        showUploadList={false}
+                        multiple={false}
+                        name="file"
+                        action={`${url}/upload`}
+                        method="POST"
+                        onChange={(v) => zuragKhadgalakh(v, "gariinUseg")}
+                        accept="image/png,image/gif"
                       >
-                        <Upload
-                          showUploadList={false}
-                          multiple={false}
-                          name="file"
-                          action={`${url}/upload`}
-                          method="POST"
-                          onChange={(v) => zuragKhadgalakh(v, "gariinUseg")}
-                          accept="image/png,image/gif"
-                        >
-                          <Button
-                            className="h-9 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
-                            icon={<UploadOutlined />}
-                          >
-                            {t("Гарын үсэг зураг оруулах")}
-                          </Button>
-                        </Upload>
-                      </ImgCrop>
-
-                      {shouldShowGariinUseg() && (
                         <Button
-                          danger
-                          icon={<DeleteOutlined />}
-                          type="button"
-                          onClick={handleGariinUsegDelete}
-                          className="h-9"
-                        />
-                      )}
-                    </div>
-                  </Form.Item>
+                          className="h-9 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+                          icon={<UploadOutlined />}
+                        >
+                          {t("Гарын үсэг зураг оруулах")}
+                        </Button>
+                      </Upload>
+                    </ImgCrop>
+
+                    {shouldShowGariinUseg() && (
+                      <Button
+                        danger
+                        icon={<DeleteOutlined />}
+                        type="button"
+                        onClick={handleGariinUsegDelete}
+                        className="h-9"
+                      />
+                    )}
+                  </div>
 
                   {shouldShowGariinUseg() && (
                     <div className="flex h-[54px] w-[115px] items-center justify-center border">
@@ -860,46 +856,44 @@ function KhuviinMedeelel({
                     </div>
                   )}
                   <br></br>
-                  <Form.Item name="turul">
-                    <div className="flex flex-row items-center gap-2">
-                      <ImgCrop
-                        modalTitle="Зураг засах"
-                        rotationSlider
-                        quality={1}
-                        fillColor="transparent"
-                        modalProps={{
-                          maskClosable: false,
-                        }}
+                  <div className="flex flex-row items-center gap-2">
+                    <ImgCrop
+                      modalTitle="Зураг засах"
+                      rotationSlider
+                      quality={1}
+                      fillColor="transparent"
+                      modalProps={{
+                        maskClosable: false,
+                      }}
+                    >
+                      <Upload
+                        showUploadList={false}
+                        multiple={false}
+                        name="file"
+                        action={`${url}/upload`}
+                        method="POST"
+                        onChange={(v) => zuragKhadgalakh(v, "gariinUseg1")}
+                        accept="image/png,image/gif"
                       >
-                        <Upload
-                          showUploadList={false}
-                          multiple={false}
-                          name="file"
-                          action={`${url}/upload`}
-                          method="POST"
-                          onChange={(v) => zuragKhadgalakh(v, "gariinUseg1")}
-                          accept="image/png,image/gif"
-                        >
-                          <Button
-                            className="h-9 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
-                            icon={<UploadOutlined />}
-                          >
-                            {t("Гарын үсэг зураг оруулах")}
-                          </Button>
-                        </Upload>
-                      </ImgCrop>
-
-                      {shouldShowGariinUseg1() && (
                         <Button
-                          danger
-                          icon={<DeleteOutlined />}
-                          type="button"
-                          onClick={handleGariinUseg1Delete}
-                          className="h-9"
-                        />
-                      )}
-                    </div>
-                  </Form.Item>
+                          className="h-9 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
+                          icon={<UploadOutlined />}
+                        >
+                          {t("Гарын үсэг зураг оруулах")}
+                        </Button>
+                      </Upload>
+                    </ImgCrop>
+
+                    {shouldShowGariinUseg1() && (
+                      <Button
+                        danger
+                        icon={<DeleteOutlined />}
+                        type="button"
+                        onClick={handleGariinUseg1Delete}
+                        className="h-9"
+                      />
+                    )}
+                  </div>
 
                   {shouldShowGariinUseg1() && (
                     <div className="flex h-[54px] w-[115px] items-center justify-center border">
