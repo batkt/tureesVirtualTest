@@ -50,7 +50,17 @@ function iconAvya(a, bank) {
   let Icon = ExclamationOutlined;
   let color = "red";
   let tailbar = t("Гүйлгээ холбогдоогүй байна");
-
+  // if (
+  //   bank === "tdb"
+  //     ? a?.TxAddInf.includes("QPAY") || a?.TxAddInf.includes("qpay")
+  //     : bank === "golomt"
+  //     ? a?.tranDesc.includes("QPAY") || a?.tranDesc.includes("qpay")
+  //     : a?.description.includes("QPAY") || a?.description.includes("qpay")
+  // ) {
+  //   Icon = CheckOutlined;
+  //   color = "green";
+  //   tailbar = t("Гүйлгээ холбогдсон байна");
+  // } else
   if (
     (a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
       a?.kholbosonDun > 0) ||
@@ -346,9 +356,7 @@ function tulburTootsoo({ token }) {
       refreshData();
     }
 
-    // Only consider the transaction "already linked" when there is at least
-    // one linked contract id. Previously a zero balance could mark it as
-    // linked even when `kholbosonGereeniiId` was an empty array.
+
     const hasLinkedGereen =
       Array.isArray(data?.kholbosonGereeniiId) &&
       data.kholbosonGereeniiId.length > 0;
