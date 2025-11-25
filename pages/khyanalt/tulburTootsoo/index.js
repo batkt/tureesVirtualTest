@@ -50,45 +50,40 @@ function iconAvya(a, bank) {
   let Icon = ExclamationOutlined;
   let color = "red";
   let tailbar = t("Гүйлгээ холбогдоогүй байна");
-  // if (
-  //   bank === "tdb"
-  //     ? a?.TxAddInf.includes("QPAY") || a?.TxAddInf.includes("qpay")
-  //     : bank === "golomt"
-  //     ? a?.tranDesc.includes("QPAY") || a?.tranDesc.includes("qpay")
-  //     : a?.description.includes("QPAY") || a?.description.includes("qpay")
-  // ) {
-  //   Icon = CheckOutlined;
-  //   color = "green";
-  //   tailbar = t("Гүйлгээ холбогдсон байна");
-  // } else
-  if (
-    (a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
-      a?.kholbosonDun > 0) ||
-    (a?.magadlaltaiGereenuud?.length > 0 &&
-      !(a?.kholbosonGereeniiId?.length > 0))
-  ) {
-    Icon =
-      a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
-      a?.kholbosonDun > 0
-        ? TbEqualNot
-        : QuestionOutlined;
+
+ 
+  const shiljuulegDun =
+    bank === "tdb" ? a?.Amt : bank === "golomt" ? a?.tranAmount : a?.amount;
+
+  const kholbogdsonDun = a?.kholbosonDun || 0;
+
+ 
+  if (kholbogdsonDun > 0 && kholbogdsonDun < shiljuulegDun) {
+    Icon = TbEqualNot;
     color = "yellow";
-    tailbar =
-      a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
-      a?.kholbosonDun > 0
-        ? `${formatNumber(
-            a?.amount - a?.kholbosonDun || a?.Amt - a?.kholbosonDun || 0,
-            0
-          )} ₮ ${t("дутуу холбогдсон байна")}`
-        : "Холбох боломжтой гэрээнүүд байна";
-  } else if (
+    tailbar = `${formatNumber(shiljuulegDun - kholbogdsonDun, 0)} ₮ ${t(
+      "дутуу холбогдсон байна"
+    )}`;
+  }
+ 
+  else if (
+    a?.magadlaltaiGereenuud?.length > 0 &&
+    !(a?.kholbosonGereeniiId?.length > 0)
+  ) {
+    Icon = QuestionOutlined;
+    color = "yellow";
+    tailbar = "Холбох боломжтой гэрээнүүд байна";
+  }
+ 
+  else if (
     (a?.kholbosonGereeniiId && a?.kholbosonDun) ||
-    0 === a[`${bank === "tdb" ? "Amt" : "amount"}`]
+    shiljuulegDun === 0
   ) {
     Icon = CheckOutlined;
     color = "green";
     tailbar = t("Гүйлгээ холбогдсон байна");
   }
+
   return (
     <Tooltip title={tailbar}>
       <div className={`text-${color}-500 flex items-center justify-center`}>
@@ -355,7 +350,6 @@ function tulburTootsoo({ token }) {
       setTimeout(() => data.mutate && data.mutate(), 500);
       refreshData();
     }
-
 
     const hasLinkedGereen =
       Array.isArray(data?.kholbosonGereeniiId) &&
@@ -633,7 +627,7 @@ function tulburTootsoo({ token }) {
                           shape="circle"
                           size="small"
                           onClick={() => guilgeeKholbyo(a)}
-                          icon={iconAvya(a)}
+                          icon={iconAvya(a, "tdb")}
                         />
                       </div>
                     );
@@ -834,7 +828,7 @@ function tulburTootsoo({ token }) {
                           shape="circle"
                           size="small"
                           onClick={() => guilgeeKholbyo(a)}
-                          icon={iconAvya(a)}
+                          icon={iconAvya(a, "khanbank")}
                         />
                       </div>
                     );
