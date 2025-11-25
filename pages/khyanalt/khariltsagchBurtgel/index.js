@@ -927,23 +927,20 @@ function AjiltanBurtgel({ token }) {
                         rules={[
                           {
                             required: true,
-                            max: 8,
-                            min: 8,
+                            len: 8,
                             pattern: new RegExp("(^[0-9]+$)"),
                             message: t("Утасны дугаар оруулна уу !"),
                           },
                         ]}
                       >
                         <Input
-                          minLength={8}
                           maxLength={8}
-                          type="number"
+                          type="text"
                           className="appearance-none"
                           placeholder={
                             t("Утасны дугаар") + " " + (field.name + 1)
                           }
                           onChange={({ target }) => {
-                           
                             const value = target.value.slice(0, 8);
                             target.value = value;
                             setkhariltsagchState((a) => {
