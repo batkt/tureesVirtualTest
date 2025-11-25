@@ -428,6 +428,13 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="ekhniiSariinKhonog"
             label={t("Эхний сарын ашиглах хоног")}
+            rules={[
+              {
+                required: true,
+                message: t("Эхний сарын ашиглах хоног оруулна уу!"),
+              },
+            ]}
+            required={true}
           >
             <InputNumber
               onKeyUp={focuser}

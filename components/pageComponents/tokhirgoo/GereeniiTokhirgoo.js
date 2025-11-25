@@ -53,8 +53,8 @@ function KhuviinMedeelel({
       baiguullaga?.tokhirgoo?.bukhAjiltanGereendZasvarOruulakhEsekh,
     qpayShimtgelTusdaa: baiguullaga.tokhirgoo?.qpayShimtgelTusdaa,
 
-    baritsaaAvakhSar: baiguullaga?.tokhirgoo?.baritsaaAvakhSar,
     baritsaaAvakhEsekh: baiguullaga?.tokhirgoo?.baritsaaAvakhEsekh,
+    baritsaaAvakhSar: baiguullaga?.tokhirgoo?.baritsaaAvakhSar,
 
     baritsaaUneAdiltgakhEsekh:
       baiguullaga?.tokhirgoo?.baritsaaUneAdiltgakhEsekh,
@@ -132,6 +132,7 @@ function KhuviinMedeelel({
 
   const gereeTokhirgooKhadgalya = () => {
     const payload = {
+      baiguullagiinId: baiguullaga?._id,
       tokhirgoo: {
         gereeAvtomataarSungakhEsekh:
           gereeTokhirgoo?.gereeAvtomataarSungakhEsekh,
@@ -139,8 +140,9 @@ function KhuviinMedeelel({
           gereeTokhirgoo?.bukhAjiltanGereendZasvarOruulakhEsekh,
         qpayShimtgelTusdaa: baiguullaga.tokhirgoo?.qpayShimtgelTusdaa,
 
-        baritsaaAvakhSar: gereeTokhirgoo?.baritsaaAvakhSar,
         baritsaaAvakhEsekh: gereeTokhirgoo?.baritsaaAvakhEsekh,
+        baritsaaAvakhSar: gereeTokhirgoo?.baritsaaAvakhSar,
+
         baritsaaUneAdiltgakhEsekh: gereeTokhirgoo?.baritsaaUneAdiltgakhEsekh,
 
         aktAshiglakhEsekh: gereeTokhirgoo?.aktAshiglakhEsekh,
