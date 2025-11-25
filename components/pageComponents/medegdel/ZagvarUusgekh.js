@@ -17,7 +17,9 @@ function ZaaltZasvar({
   height,
 }) {
   useEffect(() => {
-    onTextChange && onTextChange(instance?.getText());
+    if (instance && typeof instance.getText === "function") {
+      onTextChange && onTextChange(instance.getText());
+    }
   }, [value]);
 
   const undsenTalbaruud = useMemo(() => {
