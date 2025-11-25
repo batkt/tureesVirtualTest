@@ -943,8 +943,11 @@ function AjiltanBurtgel({ token }) {
                             t("Утасны дугаар") + " " + (field.name + 1)
                           }
                           onChange={({ target }) => {
+                           
+                            const value = target.value.slice(0, 8);
+                            target.value = value;
                             setkhariltsagchState((a) => {
-                              _.set(a, "utas." + field.name, target.value);
+                              _.set(a, "utas." + field.name, value);
                               return a;
                             });
                           }}
