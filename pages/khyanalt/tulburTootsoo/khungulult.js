@@ -230,8 +230,10 @@ function tulburTootsoo() {
       });
       return;
     }
+
     if (songogdsonGereenuud.length > 0) {
       var ugugdul = form.getFieldsValue();
+
       if (!ugugdul.khonogTootsokhEsekh)
         ugugdul.ognoonuud = dundakhSaruudAvya(ognoonuud[0], ognoonuud[1]);
       ugugdul.barilgiinId = barilgiinId;
@@ -1166,7 +1168,34 @@ function tulburTootsoo() {
                                     "zardluud._id": e,
                                   },
                             });
-                            // setShuult({ query: { tuluv: { $ne: -1 } } });
+
+                            const selectedZardal = zardal.jagsaalt.find(
+                              (z) => z._id === e
+                            );
+
+                            if (
+                              selectedZardal &&
+                              (selectedZardal.ner === "Цахилгаан" ||
+                                selectedZardal.ner === "Халуун ус" ||
+                                selectedZardal.ner === "Хүйтэн ус")
+                            ) {
+                              uilchilgee(token)
+                                .post("/huwisakhZardalTootsyo", {
+                                  baiguullagiinId: baiguullaga?._id,
+                                  barilgiinId,
+                                  zardliinTurul: selectedZardal.ner,
+                                  gereeniiDugaar: selectedZardal.gereeniiDugaar,
+                                })
+                                .then(({ data }) => {
+                                  console.log(
+                                    "Variable expense calculation:",
+                                    data
+                                  );
+                                })
+                                .catch((error) => {
+                                  aldaaBarigch(error);
+                                });
+                            }
                           }}
                         >
                           {zardal.jagsaalt.map((z) => (
