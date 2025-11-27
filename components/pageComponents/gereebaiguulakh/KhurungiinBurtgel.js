@@ -109,9 +109,17 @@ const YurunkhiiMedeele = ({
   gereeniiZagvar,
   barilgiinId,
   formSubmit,
+  baiguullaga,
   t,
 }) => {
   const [form] = Form.useForm();
+  const baritsaaAvakhSar = baiguullaga?.tokhirgoo?.baritsaaAvakhSar || 0;
+
+  useEffect(() => {
+    if (value.baritsaaAvakhEsekh === true && baritsaaAvakhSar > 0) {
+      form.setFieldValue("baritsaaAvakhKhugatsaa", baritsaaAvakhSar);
+    }
+  }, [baritsaaAvakhSar, value.baritsaaAvakhEsekh]);
   useEffect(() => {
     if (!!value.talbainIdnuud && !value.talbainuud) {
       getListMethod("talbai", token, {
@@ -181,10 +189,8 @@ const YurunkhiiMedeele = ({
           notification.warning({
             message: (
               <div>
-                {
-                  ("талбай нь гэрээн дээр холбогдсон байна.",
-                  { talbainDugaar: talbainDugaar, data })
-                }
+                {talbainDugaar} {t("талбай нь")} {data}{" "}
+                {t("гэрээн дээр холбогдсон байна.")}
               </div>
             ),
           });
@@ -210,6 +216,12 @@ const YurunkhiiMedeele = ({
       0
     );
 
+    if (baritsaaAvakhSar > 0 && value.baritsaaAvakhEsekh === true) {
+      value.baritsaaAvakhDun = value.sariinTurees * baritsaaAvakhSar;
+      value.baritsaaAvakhDunUsgeer = toWords(value.baritsaaAvakhDun);
+      value.baritsaaAvakhKhugatsaa = baritsaaAvakhSar;
+    }
+
     if (gereeniiZagvar?.turGereeEsekh !== true) {
       value.talbainNiitUne = Number(value.baritsaaAvakhDun || 0);
       value.talbainKhemjee = talbainuud.reduce(
@@ -226,7 +238,6 @@ const YurunkhiiMedeele = ({
     value.talbainNiitUneUsgeer = toWordsOrEmpty(value.talbainNiitUne);
     value.davkhar = [...new Set(talbainuud.map((a) => a.davkhar))].join(",");
 
-    // Only update talbainIdnuud if it actually changed
     const newTalbainIdnuud = talbainuud.map((a) => a._id);
     if (!_.isEqual(value.talbainIdnuud, newTalbainIdnuud)) {
       value.talbainIdnuud = newTalbainIdnuud;
@@ -331,13 +342,22 @@ const YurunkhiiMedeele = ({
   const baritsaaChange = (e) => {
     if (e === true) {
       value.baritsaaAvakhEsekh = e;
-      value.baritsaaAvakhDun = value.sariinTurees;
-      value.baritsaaAvakhDunUsgeer = toWords(value.sariinTurees);
+
+      value.baritsaaAvakhDun = value.sariinTurees * (baritsaaAvakhSar || 1);
+      value.baritsaaAvakhDunUsgeer = toWords(value.baritsaaAvakhDun);
+
+      value.baritsaaAvakhKhugatsaa = baritsaaAvakhSar;
     } else {
       value.baritsaaAvakhDun = 0;
       value.baritsaaAvakhEsekh = e;
       value.baritsaaAvakhDunUsgeer = toWords(" ");
+      value.baritsaaAvakhKhugatsaa = 0;
     }
+
+    form.setFieldsValue({
+      baritsaaAvakhDun: value.baritsaaAvakhDun,
+      baritsaaAvakhKhugatsaa: value.baritsaaAvakhKhugatsaa,
+    });
     onChange({ ...value });
   };
   const baritsaaDunChange = (v) => {
