@@ -319,6 +319,15 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
+          case "Fitness":
+            ugugdul.push({
+              ner: "Фитнес Хөнгөлөлт",
+              icon: "/hongololt.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
 
           default:
             ugugdul.push({
@@ -535,7 +544,14 @@ function TulburiinDelgerenguiTailan(
               {formatNumber(
                 tulburiinMedeelel?.reduce(
                   (a, b) =>
-                    a + (b.ner != "Үнэгүй" && b.ner != "Зөрчил" ? b?.dun : 0),
+                    a +
+                    (b.ner != "Үнэгүй" &&
+                    b.ner != "Зөрчил" &&
+                    b.ner != "Хөнгөлөлт" &&
+                    b.ner != "Фитнес Хөнгөлөлт" &&
+                    b.ner != "Хөнгөлөх"
+                      ? b?.dun
+                      : 0),
                   0
                 ) || 0
               ) + "₮"}
@@ -548,6 +564,23 @@ function TulburiinDelgerenguiTailan(
                 tulburiinMedeelel?.reduce(
                   (a, b) =>
                     a + (b.ner == "Үнэгүй" || b.ner == "Зөрчил" ? b?.dun : 0),
+                  0
+                ) || 0
+              ) + "₮"}
+            </div>
+          </div>
+          <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
+            <div className="flex ">Нийт хөнгөлөлт:</div>
+            <div>
+              {formatNumber(
+                tulburiinMedeelel?.reduce(
+                  (a, b) =>
+                    a +
+                    (b.ner == "Хөнгөлөлт" ||
+                    b.ner == "Фитнес Хөнгөлөлт" ||
+                    b.ner == "Хөнгөлөх"
+                      ? b?.dun
+                      : 0),
                   0
                 ) || 0
               ) + "₮"}
