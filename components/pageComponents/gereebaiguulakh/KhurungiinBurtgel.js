@@ -532,7 +532,7 @@ const YurunkhiiMedeele = ({
               {value.davkhar}
             </div>
             <div className="col-span-4 text-center text-base font-medium">
-              {value.talbainKhemjee}
+              {parseFloat(value.talbainKhemjee).toFixed(2)}
             </div>
             <div className="col-span-4 pr-2 text-right text-base font-medium">
               {formatNumber(value.sariinTurees)}

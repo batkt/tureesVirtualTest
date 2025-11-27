@@ -51,31 +51,25 @@ function iconAvya(a, bank) {
   let color = "red";
   let tailbar = t("Гүйлгээ холбогдоогүй байна");
 
- 
   const shiljuulegDun =
     bank === "tdb" ? a?.Amt : bank === "golomt" ? a?.tranAmount : a?.amount;
 
   const kholbogdsonDun = a?.kholbosonDun || 0;
 
- 
   if (kholbogdsonDun > 0 && kholbogdsonDun < shiljuulegDun) {
     Icon = TbEqualNot;
     color = "yellow";
     tailbar = `${formatNumber(shiljuulegDun - kholbogdsonDun, 0)} ₮ ${t(
       "дутуу холбогдсон байна"
     )}`;
-  }
- 
-  else if (
+  } else if (
     a?.magadlaltaiGereenuud?.length > 0 &&
     !(a?.kholbosonGereeniiId?.length > 0)
   ) {
     Icon = QuestionOutlined;
     color = "yellow";
     tailbar = "Холбох боломжтой гэрээнүүд байна";
-  }
- 
-  else if (
+  } else if (
     (a?.kholbosonGereeniiId && a?.kholbosonDun) ||
     shiljuulegDun === 0
   ) {
@@ -1339,7 +1333,9 @@ function tulburTootsoo({ token }) {
                           (songogdsonDans?.bank || "") +
                           (songogdsonDans?.dugaar || "") +
                           (dugaar || "") +
-                          mungunDun.toString(),
+                          mungunDun.toString() +
+                          "_" +
+                          new Date().getTime(),
 
                         description: "bondogo2 tailbar",
                       };
