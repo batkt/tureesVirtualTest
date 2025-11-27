@@ -1179,13 +1179,18 @@ function tulburTootsoo() {
                                 selectedZardal.ner === "Халуун ус" ||
                                 selectedZardal.ner === "Хүйтэн ус")
                             ) {
+                              const params = new URLSearchParams({
+                                baiguullagiinId: baiguullaga?._id,
+                                barilgiinId,
+                                zardliinTurul: selectedZardal.ner,
+                                zardluud_id: selectedZardal._id,
+                                createdAt: -1,
+                              });
+
                               uilchilgee(token)
-                                .post("/huwisakhZardalTootsyo", {
-                                  baiguullagiinId: baiguullaga?._id,
-                                  barilgiinId,
-                                  zardliinTurul: selectedZardal.ner,
-                                  
-                                })
+                                .get(
+                                  `/huwisakhZardalTootsyo?${params.toString()}`
+                                )
                                 .then(({ data }) => {
                                   console.log(
                                     "Variable expense calculation:",
