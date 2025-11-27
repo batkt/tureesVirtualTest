@@ -446,7 +446,7 @@ function togloom1() {
       .then((res) => {
         setKhaalga(res.data);
       })
-      .catch((err) => message.error(err.message || "Алдаа гарлаа"));
+      .catch((err) => message.error("Хаалт олдсонгүй"));
   }, []);
 
   const togloomiinDun = useToololt("/togloomiinDunAvya", token, ognoo);
@@ -1352,7 +1352,7 @@ function togloom1() {
                   <div className="flex flex-col gap-2">
                     {(Array.isArray(khaalga) ? khaalga : []).map((a, index) => (
                       <div
-                        key={index} // add key here
+                        key={index}
                         onClick={() => {
                           khaaltNeey(a);
                           setKhaaltPopoverNeegdsen(false);
@@ -1370,7 +1370,7 @@ function togloom1() {
                 </Button>
               </Popover>
               <Button
-                className="col-span-2 w-full sm:w-auto"
+                className="flex flex-col gap-2"
                 type="primary"
                 onClick={() => khuukhedBurtgekh()}
               >
