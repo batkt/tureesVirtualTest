@@ -331,6 +331,49 @@ function AjiltanBurtgel({ token }) {
     setkhariltsagchState((a) => ({ ...a, [talbar]: utga }));
   }
 
+  function utasShalgakh(value, field) {
+    const exists = khariltsagchiinGaralt?.jagsaalt?.some(
+      (customer) =>
+        customer.utas?.includes(value) && customer._id !== khariltsagchState._id
+    );
+
+    if (exists) {
+      message.warning(t("Энэ утасны дугаарыг бүртгэсэн байна"));
+      return Promise.reject(t("Давхардсан утасны дугаар"));
+    }
+    return Promise.resolve();
+  }
+
+  function registerShalgakh(value) {
+    if (!value) return Promise.resolve();
+
+    const exists = khariltsagchiinGaralt?.jagsaalt?.some(
+      (customer) =>
+        customer.register === value && customer._id !== khariltsagchState._id
+    );
+
+    if (exists) {
+      message.warning(t("Бүртгэлтэй регистр байна"));
+      return Promise.reject(t("Давхардсан регистр"));
+    }
+    return Promise.resolve();
+  }
+
+  function emailShalgakh(value) {
+    if (!value) return Promise.resolve();
+
+    const exists = khariltsagchiinGaralt?.jagsaalt?.some(
+      (customer) =>
+        customer.mail === value && customer._id !== khariltsagchState._id
+    );
+
+    if (exists) {
+      message.warning(t("Энэ и-мэйл хаягыг бүртгэсэн байна"));
+      return Promise.reject(t("Давхардсан и-мэйл"));
+    }
+    return Promise.resolve();
+  }
+
   function tuukh(data) {
     getListMethod(
       "geree",
@@ -744,6 +787,16 @@ function AjiltanBurtgel({ token }) {
                       : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
                   message: t("Регистр бүртгэнэ үү!"),
                 },
+                {
+                  validator: async (_, value) => {
+                    if (
+                      value &&
+                      value.length === (formNuukh === "ААН" ? 7 : 10)
+                    ) {
+                      return registerShalgakh(value);
+                    }
+                  },
+                },
               ]}
             >
               <Input
@@ -931,6 +984,13 @@ function AjiltanBurtgel({ token }) {
                             pattern: new RegExp("(^[0-9]+$)"),
                             message: t("Утасны дугаар оруулна уу !"),
                           },
+                          {
+                            validator: async (_, value) => {
+                              if (value && value.length === 8) {
+                                return utasShalgakh(value, field);
+                              }
+                            },
+                          },
                         ]}
                       >
                         <Input
@@ -991,6 +1051,13 @@ function AjiltanBurtgel({ token }) {
                 {
                   required: true,
                   message: t("И-мейл хаяг бүртгэнэ үү!"),
+                },
+                {
+                  validator: async (_, value) => {
+                    if (value) {
+                      return emailShalgakh(value);
+                    }
+                  },
                 },
               ]}
             >
