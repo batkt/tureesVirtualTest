@@ -1184,7 +1184,7 @@ function tulburTootsoo() {
                                   baiguullagiinId: baiguullaga?._id,
                                   barilgiinId,
                                   zardliinTurul: selectedZardal.ner,
-                                  gereeniiDugaar: selectedZardal.gereeniiDugaar,
+                                  
                                 })
                                 .then(({ data }) => {
                                   console.log(
