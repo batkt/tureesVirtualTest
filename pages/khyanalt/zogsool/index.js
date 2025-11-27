@@ -24,7 +24,7 @@ import {
 } from "antd";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
-
+import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useRef, useEffect } from "react";
@@ -43,6 +43,7 @@ import useJagsaalt from "hooks/useJagsaalt";
 import {
   CloseSquareFilled,
   DownloadOutlined,
+  CloseCircleOutlined,
   DownOutlined,
   FileExcelOutlined,
   PrinterOutlined,
@@ -198,6 +199,7 @@ function Zogsool({ token }) {
   const [tuluv, setTuluv] = useState("");
   const [tuluvZurchil, setTuluvZurchil] = useState("");
   const [ajiltniiNers, setAjiltniiNers] = useState([]);
+  const [selectedAjiltan, setSelectedAjiltan] = useState(null);
   const [selectedRowkeys, setSelectedRowkeys] = useState([]);
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowkeys(newSelectedRowKeys);
@@ -461,6 +463,11 @@ function Zogsool({ token }) {
     if (!!zogsoolId) {
       baseQuery["tuukh.zogsooliinId"] = zogsoolId;
     }
+
+    if (!!selectedAjiltan) {
+      baseQuery["tuukh.burtgesenAjiltaniiId"] = selectedAjiltan;
+    }
+
     if (!!tulbur && tulbur !== "") {
       baseQuery["tuukh.tulbur.turul"] =
         !!tulbur && tulbur === "card"
@@ -507,8 +514,16 @@ function Zogsool({ token }) {
       };
     }
     return baseQuery;
-  }, [ognoo, zogsoolId, shuult, tuluv, tulbur, shalgakhTsag, tootsooKhelber]);
-
+  }, [
+    ognoo,
+    zogsoolId,
+    selectedAjiltan,
+    shuult,
+    tuluv,
+    tulbur,
+    shalgakhTsag,
+    tootsooKhelber,
+  ]);
   const or = useMemo(() => {
     var nemeh;
     if (tuluv !== "") {
@@ -830,30 +845,56 @@ function Zogsool({ token }) {
   }*/
 
   useEffect(() => {
-    var ajiltnuud = [];
+    const ajiltnuud = [];
     uilchluulegchGaralt?.jagsaalt?.forEach((element) => {
-      element.tuukh[0]?.burtgesenAjiltaniiId &&
-        !ajiltnuud.find(
-          (a) =>
-            a.burtgesenAjiltaniiId === element.tuukh[0]?.burtgesenAjiltaniiId
-        ) &&
-        ajiltnuud.push(element.tuukh[0]?.burtgesenAjiltaniiId);
+      const ajiltanId = element.tuukh[0]?.burtgesenAjiltaniiId;
+      if (ajiltanId && !ajiltnuud.includes(ajiltanId)) {
+        ajiltnuud.push(ajiltanId);
+      }
     });
-    ajiltnuud.length > 0 &&
+
+    if (ajiltnuud.length > 0) {
       uilchilgee(token)
         .get("/ajiltan", {
-          params: { query: { _id: ajiltnuud.map((a) => a) } },
+          params: { query: { _id: { $in: ajiltnuud } } },
         })
         .then(({ data }) => {
-          if (!!data && data?.jagsaalt?.length > 0) {
+          if (data?.jagsaalt?.length > 0) {
             setAjiltniiNers(
-              data?.jagsaalt?.map((a) => {
-                return { ner: a?.ner, id: a?._id };
-              })
+              data.jagsaalt.map((a) => ({
+                ner: a.ner,
+                id: a._id,
+              }))
             );
           }
-        });
-  }, [uilchluulegchGaralt?.jagsaalt]);
+        })
+        .catch((err) => console.error("Error fetching ajiltan:", err));
+    }
+  }, [uilchluulegchGaralt?.jagsaalt, token]);
+
+  const zogsooAjiltanQuery = useMemo(() => {
+    const paths = [
+      "/khyanalt/zogsool",
+      "/khyanalt/zogsool/camera",
+      "/khyanalt/kiosk",
+    ];
+
+    if (typeof window !== "undefined" && window.location?.pathname) {
+      paths.push(window.location.pathname);
+    }
+
+    return {
+      tsonkhniiErkhuud: { $in: paths },
+    };
+  }, []);
+
+  const { ajilchdiinGaralt, setAjiltniiKhuudaslalt } = useAjiltniiJagsaalt(
+    token,
+    baiguullaga?._id,
+    barilgiinId,
+    zogsooAjiltanQuery,
+    undefined
+  );
 
   // Өдрийн хаалтын хүснэгтийн баганууд
   const kassCameraKhaaltColumns = useMemo(() => {
@@ -1628,7 +1669,7 @@ function Zogsool({ token }) {
       </Card>
 
       <Card className="col-span-12">
-        <div className="grid-cols-2 gap-5 sm:grid xl:flex">
+        <div className="grid-cols-3 gap-5 sm:grid xl:flex">
           <div className="flex flex-row gap-2">
             <div
               data-aos="fade-right"
@@ -1659,6 +1700,37 @@ function Zogsool({ token }) {
               {jagsaalt.map((a) => (
                 <Select.Option key={a._id} value={a._id}>
                   {t(a.ner)}
+                </Select.Option>
+              ))}
+            </Select>
+            <Select
+              className="xl:w-[245px]"
+              placeholder={t("Ажилтан")}
+              allowClear
+              showSearch
+              value={selectedAjiltan}
+              onChange={setSelectedAjiltan}
+              clearIcon={() => (
+                <div className="dark:bg-gray-800 dark:text-gray-200 hover:dark:text-gray-400">
+                  <CloseCircleOutlined />
+                </div>
+              )}
+              filterOption={false}
+              onSearch={(search) =>
+                setAjiltniiKhuudaslalt((a) => ({
+                  ...a,
+                  search,
+                  khuudasniiDugaar: 1,
+                }))
+              }
+            >
+              {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
+                <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>
+                  <div className="flex flex-row justify-between">
+                    <span className="truncate">
+                      {mur.ovog && mur.ovog[0]}.{mur.ner}
+                    </span>
+                  </div>
                 </Select.Option>
               ))}
             </Select>
