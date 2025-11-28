@@ -1,6 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export const useKeyboardTovchlol = (tovch, callback) => {
+  const callbackRef = useRef(callback);
+
+  // Update ref when callback changes
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (
@@ -13,7 +20,7 @@ export const useKeyboardTovchlol = (tovch, callback) => {
         event.preventDefault();
       }
       if (tovch === event.key) {
-        callback();
+        callbackRef.current();
       }
     };
 
@@ -22,5 +29,5 @@ export const useKeyboardTovchlol = (tovch, callback) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [tovch, callback]);
+  }, [tovch]); // Remove callback from dependencies
 };
