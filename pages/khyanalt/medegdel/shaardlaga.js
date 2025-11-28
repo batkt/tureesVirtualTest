@@ -10,12 +10,12 @@ import {
   Input,
   message,
   notification,
-  Spin,
   Upload,
 } from "antd";
 import {
   ArrowLeftOutlined,
   EditOutlined,
+  SendOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 
@@ -142,10 +142,10 @@ function Khyanalt({ token }) {
     if (!!title) {
       if (content !== "") {
         if (songogdsonKhariltsagch.length > 0) {
-          var khariu = { successCount: 0, failureCount: 0 };
-          songogdsonKhariltsagch
+          setLoading(true);
+          const amlaltiinAldar = songogdsonKhariltsagch
             .filter((a) => !!a._id)
-            .map((a, index, array) => {
+            .map((a) => {
               a.ovog = a.ovog || "";
               a.ner = a.ner || "";
               a.register = a.register || "";
@@ -157,7 +157,7 @@ function Khyanalt({ token }) {
               for (const [key, value] of Object.entries(a)) {
                 body = body?.replace(new RegExp(`<${key}>`, "g"), value);
               }
-              uilchilgee(token)
+              return uilchilgee(token)
                 .post(`/sanalKhadgalya`, {
                   firebaseToken: a?.firebaseToken,
                   khariltsagchiinId: a?._id,
@@ -169,26 +169,28 @@ function Khyanalt({ token }) {
                   title,
                   message: ingeekhmSms,
                 })
-                .then(({ data }) => {
-                  zurag &&
+                .then(() => {
+                  if (zurag) {
                     uilchilgee(token).post("/confirmFile", {
                       filename: zurag,
                       path: "shaardlaga",
                     });
-                  if (!!data?.successCount) khariu.successCount += 1;
-                  else if (!!data?.failureCount) khariu.failureCount += 1;
-                  if (index === array.length - 1) {
-                    notification.success({
-                      message: t("Notification Амжилттай илгээлээ"),
-                    });
-                    setContent("");
-                    setTitle("");
-                    setZurag();
-                    sonorduulgaMutate();
                   }
-                });
-              return;
+                })
+                .catch(aldaaBarigch);
             });
+          try {
+            await Promise.all(amlaltiinAldar);
+            notification.success({
+              message: t("Notification Амжилттай илгээлээ"),
+            });
+            setContent("");
+            setTitle("");
+            setZurag();
+            sonorduulgaMutate();
+          } finally {
+            setLoading(false);
+          }
           return;
         }
         if (msj.length < 3600) {
@@ -216,28 +218,23 @@ function Khyanalt({ token }) {
                 firebaseToken: khariltsagch?.firebaseToken,
                 barilgiinId: khariltsagch?.barilgiinId,
               })
-              .then(({ data }) => {
-                zurag &&
+              .then(() => {
+                if (zurag) {
                   uilchilgee(token).post("/confirmFile", {
                     filename: zurag,
                     path: "shaardlaga",
                   });
-                if (!!data?.successCount) khariu.successCount += 1;
-                else if (!!data?.failureCount) khariu.failureCount += 1;
-                if (index === array.length - 1) {
-                  notification.success({
-                    message: t("Notification Амжилттай илгээлээ"),
-                  });
-                  setContent("");
-                  setTitle("");
-                  setZurag();
-                  sonorduulgaMutate();
                 }
+                notification.success({
+                  message: t("Notification Амжилттай илгээлээ"),
+                });
+                setContent("");
+                setTitle("");
+                setZurag();
+                sonorduulgaMutate();
               })
-              .catch((e) => {
-                setLoading(false);
-                aldaaBarigch(e);
-              });
+              .catch(aldaaBarigch)
+              .finally(() => setLoading(false));
           } else {
             notification.warning({
               message: t("Гарчиг заавал оруулна уу"),
@@ -640,32 +637,18 @@ function Khyanalt({ token }) {
               <label className="font-medium">
                 {turul} {t("Илгээх")}
               </label>
-              <div
+              <Button
                 onClick={send}
-                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
+                shape="circle"
+                size="large"
+                type="primary"
+                loading={loading}
+                disabled={loading}
+                icon={!loading && <SendOutlined />}
+                className={`flex flex-none items-center justify-center border-none !text-white !bg-green-${
                   loading ? "200" : "600"
-                } flex flex-none items-center justify-center rounded-full text-white`}
-              >
-                {loading ? (
-                  <Spin size="small" />
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-4 w-4"
-                  >
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                  </svg>
-                )}
-              </div>
+                } hover:!bg-green-500`}
+              />
             </div>
           </div>
         </div>
