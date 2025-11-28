@@ -243,6 +243,7 @@ function guilgeeniiTuukh({ token }) {
     let duusakhOgnoo = moment(ognoo && ognoo[1])
       .endOf("month")
       .format("YYYY-MM-DD 23:59:59");
+
     switch (turul) {
       case "voucher":
         sericeName = `/vouchertaiJagsaaltAvya/${ekhlekhOgnoo}/${duusakhOgnoo}`;
@@ -299,19 +300,19 @@ function guilgeeniiTuukh({ token }) {
         },
         barilgiinId,
       };
-    } else if (turul === "tsutslagdsanAvlaga")
+    } else if (turul === "tsutslagdsanAvlaga") {
       query = {
         baiguullagiinId: baiguullaga._id,
         davkhar,
         tuluv: -1,
         barilgiinId,
       };
-    else if (turul === "eneSardTulukh") {
+    } else if (turul === "eneSardTulukh") {
       sericeName = null;
       query = {
         davkhar,
       };
-    } else
+    } else {
       query = {
         davkhar,
         baiguullagiinId: baiguullaga?._id,
@@ -320,17 +321,35 @@ function guilgeeniiTuukh({ token }) {
           $ne: -1,
         },
       };
+    }
     if (query && !!tulukhOgnoo) {
+      const dateStr = tulukhOgnoo.format("YYYY-MM-DD");
+
+      const offsetHours = tulukhOgnoo.utcOffset() / 60;
+
+      const startDate = moment(dateStr)
+        .startOf("day")
+        .subtract(offsetHours, "hours")
+        .toISOString();
+
+      const endDate = moment(dateStr)
+        .endOf("day")
+        .subtract(offsetHours, "hours")
+        .toISOString();
+
       query.daraagiinTulukhOgnoo = {
-        $lte: tulukhOgnoo.format("YYYY-MM-DD 23:59:59"),
-        $gte: tulukhOgnoo.format("YYYY-MM-DD 00:00:00"),
+        $gte: startDate,
+        $lte: endDate,
       };
     }
+
     return { sericeName, query, turulColumns };
-  }, [turul, ognoo, davkhar, barilgiinId, tulukhOgnoo, t]);
+  }, [turul, ognoo, davkhar, barilgiinId, tulukhOgnoo, t, baiguullaga]);
+
   useEffect(() => {
     setShineBagana([]);
   }, [i18n.language]);
+
   const {
     data,
     mutate,
@@ -338,6 +357,12 @@ function guilgeeniiTuukh({ token }) {
     setKhuudaslalt,
     isValidating,
   } = useJagsaalt(sericeName, query, order, undefined, searchKeys, null, 500);
+
+  useEffect(() => {
+    if (tulukhOgnoo !== undefined) {
+      mutate();
+    }
+  }, [tulukhOgnoo, mutate]);
 
   const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
     useEneSardTuluuguiGereenuudAvya(
@@ -399,6 +424,10 @@ function guilgeeniiTuukh({ token }) {
     onSearchMedeelel,
     setEneSardTuluuguiGereenuud,
   ]);
+  useEffect(() => {
+    if (gereeniiMedeelel?.jagsaalt) {
+    }
+  }, [gereeniiMedeelel]);
 
   const columns = useMemo(() => {
     var jagsaalt = [
@@ -516,9 +545,16 @@ function guilgeeniiTuukh({ token }) {
                   <div>
                     <DatePicker
                       allowClear
+                      value={tulukhOgnoo}
+                      format="YYYY-MM-DD"
                       onChange={(v) => {
                         setTulukhOgnoo(v);
                         setLoadingIndex(0);
+
+                        setKhuudaslalt((kh) => ({
+                          ...kh,
+                          khuudasniiDugaar: 1,
+                        }));
                       }}
                       placeholder={t("Төлөх Огноо Хайх")}
                     />
@@ -526,16 +562,26 @@ function guilgeeniiTuukh({ token }) {
                 )}
               >
                 <a className="hover:scale-150 ">
-                  <FilterOutlined className="text-lg text-green-600" />
+                  <FilterOutlined
+                    className={`text-lg ${
+                      tulukhOgnoo ? "text-blue-600" : "text-green-600"
+                    }`}
+                  />
                 </a>
               </Popover>
             </div>
           </div>
         ),
-        dataIndex: "tulukhUdur",
-        render(a) {
+        dataIndex: "daraagiinTulukhOgnoo",
+        render(a, record) {
+          if (a) {
+            return moment(a).format("YYYY-MM-DD");
+          }
+
+          const responseDay = parseInt(record.tulukhUdur);
+          if (!responseDay) return "";
+
           const today = moment();
-          const responseDay = parseInt(a);
           const todayDay = today.date();
           let targetDate = today.clone();
           if (responseDay < todayDay) {
