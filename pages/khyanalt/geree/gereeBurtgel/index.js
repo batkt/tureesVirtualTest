@@ -97,6 +97,7 @@ const Tailbar = React.forwardRef(
     const { t } = useTranslation();
     const [shaltgaan, setTailbar] = React.useState("");
     const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment());
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
     const [sergeekhOgnoo, setSergeekhOgnoo] = React.useState(moment());
     const [tsutslakhLoading, setTsutslakhLoading] = useState(new Set());
     const [tsutslakhOgnoo, setTsutslakhOgnoo] = React.useState([
@@ -119,6 +120,10 @@ const Tailbar = React.forwardRef(
       ref,
       () => ({
         khadgalya() {
+          if (isSubmitting) {
+            return;
+          }
+
           if (shaltgaan === "") {
             notification.warning({
               message: t("Анхаар"),
@@ -126,6 +131,8 @@ const Tailbar = React.forwardRef(
             });
             return;
           }
+          setIsSubmitting(true);
+
           var tempAvlaguud = [];
           if (baiguullaga?.tokhirgoo?.udruurBodokhEsekh)
             tempAvlaguud =
@@ -161,10 +168,22 @@ const Tailbar = React.forwardRef(
                 confirm(shaltgaan);
                 destroy();
               }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              notification.error({
+                message: t("Алдаа"),
+                description: t("Үйлдэл амжилтгүй боллоо"),
+              });
+            })
+            .finally(() => {
+              setIsSubmitting(false);
             });
         },
         khaaya() {
-          destroy();
+          if (!isSubmitting) {
+            destroy();
+          }
         },
       }),
       [
@@ -175,6 +194,7 @@ const Tailbar = React.forwardRef(
         garaasAvlagaOruulakh,
         niilberAvlaga,
         tsutslakhOgnoo,
+        isSubmitting,
       ]
     );
     function garya() {
@@ -1206,6 +1226,7 @@ function ZakhialgiinKhyanalt() {
                       okText={t("Тийм")}
                       cancelText={t("Үгүй")}
                       onConfirm={() => gereeTsutsalya(data)}
+                      disabled={tsutslakhLoading.has(data._id)}
                     >
                       <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
                         <MinusCircleOutlined style={{ fontSize: "18px" }} />
@@ -1300,12 +1321,14 @@ function ZakhialgiinKhyanalt() {
       });
       return;
     }
+
+    setTsutslakhLoading((prev) => new Set(prev).add(data._id));
     setGereeniiTokhirgoo(null);
+
     const footer = [
       <Button
         onClick={() => {
           tailbarRef.current.khaaya();
-
           setTsutslakhLoading((prev) => {
             const newSet = new Set(prev);
             newSet.delete(data._id);
@@ -1317,6 +1340,7 @@ function ZakhialgiinKhyanalt() {
       </Button>,
       <Button
         type="primary"
+        loading={tsutslakhLoading.has(data._id)}
         onClick={() => {
           tailbarRef.current.khadgalya();
         }}
@@ -1324,6 +1348,7 @@ function ZakhialgiinKhyanalt() {
         {t("Цуцлах")}
       </Button>,
     ];
+
     modal({
       title: t("Цуцалсан шалтгаан"),
       icon: <MinusCircleOutlined />,
@@ -1336,7 +1361,6 @@ function ZakhialgiinKhyanalt() {
           baiguullaga={baiguullaga}
           confirm={() => {
             refresh();
-
             setTsutslakhLoading((prev) => {
               const newSet = new Set(prev);
               newSet.delete(data._id);
