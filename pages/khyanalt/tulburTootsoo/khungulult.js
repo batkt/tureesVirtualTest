@@ -750,7 +750,7 @@ function tulburTootsoo() {
       },
       {
         title: t("Хөнгөлөлт %"),
-        dataIndex: "khungulultKhuvi",
+        dataIndex: "khungulukhKhuvi",
         ellipsis: true,
         width: "7rem",
         align: "center",
