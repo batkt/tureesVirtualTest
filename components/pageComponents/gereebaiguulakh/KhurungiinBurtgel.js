@@ -553,8 +553,19 @@ const YurunkhiiMedeele = ({
                             ? value.talbainNiitUne || 0
                             : talbai.talbainNiitUne || 0
                         }
-                        formatter={(v) => formatNumber(v)}
-                        parser={(v) => v.replace(/[^\d]/g, "")}
+                        formatter={(v) => {
+                  
+                          if (!v) return "0";
+                          return String(v).replace(
+                            /\B(?=(\d{3})+(?!\d))/g,
+                            ","
+                          );
+                        }}
+                        parser={(v) => {
+               
+                          const parsed = v.replace(/[^\d]/g, "");
+                          return parsed ? Number(parsed) : 0;
+                        }}
                         onChange={(v) => onChangeUne(index, v)}
                         style={{ width: "100%" }}
                       />
