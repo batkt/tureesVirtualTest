@@ -2024,6 +2024,14 @@ function camera({ token }) {
     }
     delete body.burtgelTsag;
     if (!!barilgiinId) body["barilgiinId"] = barilgiinId;
+
+    // Remove undefined values to prevent toString errors
+    Object.keys(body).forEach(key => {
+      if (body[key] === undefined || body[key] === null) {
+        delete body[key];
+      }
+    });
+
     uilchilgee(token)
       .post("/zogsoolSdkService", body)
       .then((res) => {
@@ -2057,11 +2065,19 @@ function camera({ token }) {
           duration: 2,
         });
       }
+      if (!data.mashiniiDugaar) {
+        return notification.warn({
+          message: "Машины дугаар оруулна уу.",
+          duration: 2,
+        });
+      }
       const yavuulakhData = {
         mashiniiDugaar: data.mashiniiDugaar,
         CAMERA_IP: camerVal[1],
-        barilgiinId: barilgiinId,
       };
+      if (barilgiinId) {
+        yavuulakhData.barilgiinId = barilgiinId;
+      }
       uilchilgee(token)
         .post("/zogsoolSdkService", yavuulakhData)
         .then((res) => {
