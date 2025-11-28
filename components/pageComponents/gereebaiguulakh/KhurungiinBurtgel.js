@@ -322,7 +322,40 @@ const YurunkhiiMedeele = ({
 
   const onChangeM2 = useCallback(
     _.debounce((i, v) => {
+      const talbai = value.talbainuud[i];
+
+      if (
+        talbai.originalTalbainKhemjeeMetrKube === undefined &&
+        talbai.talbainKhemjeeMetrKube
+      ) {
+        _.set(
+          value.talbainuud,
+          `${i}.originalTalbainKhemjeeMetrKube`,
+          talbai.talbainKhemjeeMetrKube
+        );
+      }
+
       _.set(value.talbainuud, `${i}.talbainKhemjee`, v || 0);
+
+      if (
+        talbai.originalTalbainKhemjeeMetrKube !== undefined &&
+        talbai.sulKhemjee
+      ) {
+        const sulKhemjee = talbai.sulKhemjee ?? talbai.talbainKhemjee;
+        if (sulKhemjee > 0) {
+          if (v && v > 0) {
+            const newMetrKube =
+              talbai.originalTalbainKhemjeeMetrKube * (v / sulKhemjee);
+            _.set(value.talbainuud, `${i}.talbainKhemjeeMetrKube`, newMetrKube);
+          } else {
+            _.set(
+              value.talbainuud,
+              `${i}.talbainKhemjeeMetrKube`,
+              talbai.originalTalbainKhemjeeMetrKube
+            );
+          }
+        }
+      }
 
       talbainBurtgelBugulyu(value.talbainuud);
       onChange({ ...value });

@@ -4,7 +4,7 @@ import moment from "moment";
 import Aos from "aos";
 import formatNumber from "tools/function/formatNumber";
 
-function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
+function AvlagaiinKhuvaariUusgekh({ ugugdul, t, baritsaaAvakhEsekh }) {
   return (
     <div className="w-full">
       <div className="space-y-2 divide-y-2">
@@ -65,15 +65,20 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
               width: "1.5rem",
               align: "center",
               showSorterTooltip: false,
-              render(a, b) {
+              render(a, b, index) {
                 var tailbar = "";
                 switch (b.turul) {
                   case "khuvaari":
-                    tailbar = "Түрээсийн төлбөр";
+                    if (index === 0 && baritsaaAvakhEsekh === true) {
+                      tailbar = "Барьцаа авах дүн";
+                    } else {
+                      tailbar = "Түрээсийн төлбөр";
+                    }
                     break;
                   case "avlaga":
                   case "khungulult":
                     tailbar = a;
+                    break;
                   default:
                     break;
                 }

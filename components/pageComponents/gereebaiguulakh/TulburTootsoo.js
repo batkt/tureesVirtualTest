@@ -316,8 +316,7 @@ const Tulbur = ({
           <div className="text-right text-lg font-medium dark:text-gray-100">
             {formatNumber(
               (value.sariinTurees || 0) * (value.buunTulult || 1) +
-                (value.baritsaaAvakhDun || 0) *
-                  (value.baritsaaAvakhKhugatsaa || 0) -
+                (value.baritsaaAvakhEsekh ? value.baritsaaAvakhDun || 0 : 0) -
                 (((value.sariinTurees || 0) * 12) / 365) *
                   (value.khungulukhKhugatsaa || 0) -
                 (value.khyamdaral || 0)
@@ -328,7 +327,11 @@ const Tulbur = ({
       <Divider />
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
         <Form.Item name="avlaga" noStyle>
-          <AvlagiinKhuvaariUusgekh t={t} ugugdul={khuvaari} />
+          <AvlagiinKhuvaariUusgekh
+            t={t}
+            ugugdul={khuvaari}
+            baritsaaAvakhEsekh={value.baritsaaAvakhEsekh}
+          />
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
