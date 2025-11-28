@@ -225,34 +225,27 @@ function tulburTootsoo() {
 
     if (!gereeniiMedeelel?.jagsaalt) return [];
 
-    // If not expense type or no expense selected, return all data
     if (khungulukhTurul !== "zardal" || !zardliinId) {
       return gereeniiMedeelel.jagsaalt;
     }
 
-    // Get the selected expense to check if it's a utility type
     const selectedZardal = zardal?.jagsaalt?.find((z) => z._id === zardliinId);
 
-    // Check if it's a utility expense
     const isUtilityExpense =
       selectedZardal?.ner === "Халуун ус" ||
       selectedZardal?.ner === "Хүйтэн ус" ||
       selectedZardal?.ner === "Цахилгаан";
 
-    // If it's not a utility expense, return all data
     if (!isUtilityExpense) {
       return gereeniiMedeelel.jagsaalt;
     }
 
-    // Filter to only show entries where the expense has non-zero tulukhDun
     return gereeniiMedeelel.jagsaalt.filter((geree) => {
-      // First check in zardluud array
       const zardliinData = geree?.zardluud?.find((z) => z._id === zardliinId);
       if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
         return true;
       }
 
-      // Also check in avlaga.guilgeenuud array for utility expenses
       const hasAvlagaData = geree?.avlaga?.guilgeenuud?.some((guilgee) => {
         return (
           guilgee.tailbar === selectedZardal?.ner &&
@@ -364,7 +357,6 @@ function tulburTootsoo() {
         if (turul === "zardal") {
           ugugdul.tailbar = songogdsonZardal.ner;
 
-          // Check if expense name is one of the utility types - use tulukhDun
           var khymdraaguiDun;
           const isUtilityExpense =
             zardliinData?.ner === "Халуун ус" ||
@@ -375,11 +367,9 @@ function tulburTootsoo() {
             songogdsonZardal?.ner === "Цахилгаан";
 
           if (isUtilityExpense) {
-            // First check zardluud
             if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
               khymdraaguiDun = zardliinData?.tulukhDun || 0;
             } else {
-              // Check avlaga.guilgeenuud
               const avlagaData = x?.avlaga?.guilgeenuud?.find(
                 (guilgee) =>
                   guilgee.tailbar ===
@@ -467,9 +457,7 @@ function tulburTootsoo() {
           } else {
             var khymdarsanDun = parseFloat(tootsoolol?.khunglugdsunDun);
           }
-        }
-        //turees heseg ehelj baina
-        else {
+        } else {
           ugugdul.tailbar = "Хөнгөлөлт";
           var khymdraaguiDun = x.sariinTurees;
           var guchHonogOruulahEseh = x.guchKhonogOruulakhEsekh;
@@ -528,16 +516,6 @@ function tulburTootsoo() {
                 ((negOdriinTolokh * ugugdul.khungulultKhuvi) / 100) *
                 ugugdul.khungulultKhonog;
             }
-            //nice
-            // if (!!ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0)
-            //   var khymdarsanDun =
-            //     ugugdul.khungulultKhonog *
-            //     ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100);
-            // else
-            //   var khymdarsanDun =
-            //     (ugugdul.khungulultKhonog * khymdraaguiDun) /
-            //     (parseFloat(moment(ognoonuud[0]).endOf("month").format("DD")) ||
-            //       1);
           } else if (khungulukh === "khuvi") {
             var khymdarsanDun =
               khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
@@ -669,24 +647,20 @@ function tulburTootsoo() {
             (e) => e?._id === form.getFieldValue("zardliinId")
           );
 
-          // Get selected expense name
           const selectedZardal = zardal.jagsaalt.find(
             (e) => e?._id === form.getFieldValue("zardliinId")
           );
 
-          // Check if expense name is one of the utility types
           const isUtilityExpense =
             selectedZardal?.ner === "Халуун ус" ||
             selectedZardal?.ner === "Хүйтэн ус" ||
             selectedZardal?.ner === "Цахилгаан";
 
           if (isUtilityExpense) {
-            // First check zardluud
             if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
               return formatNumber(zardliinData?.tulukhDun || 0, 2);
             }
 
-            // If not in zardluud, check avlaga.guilgeenuud
             const avlagaData = data?.avlaga?.guilgeenuud?.find(
               (guilgee) =>
                 guilgee.tailbar === selectedZardal?.ner &&
@@ -1019,7 +993,6 @@ function tulburTootsoo() {
         const selectedZardal = zardal.jagsaalt?.find((z) => z._id === fVal);
         setSongogdsonZardal(gereeZardal || selectedZardal);
 
-        // Check if expense name is one of the utility types
         const isUtilityExpense =
           gereeZardal?.ner === "Халуун ус" ||
           gereeZardal?.ner === "Хүйтэн ус" ||
@@ -1029,12 +1002,10 @@ function tulburTootsoo() {
           selectedZardal?.ner === "Цахилгаан";
 
         if (isUtilityExpense) {
-          // First check zardluud
           if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
             tootsoolol.niitSariinTurees =
               tootsoolol.niitSariinTurees + (gereeZardal.tulukhDun || 0);
           } else {
-            // Check avlaga.guilgeenuud
             const avlagaData = e?.avlaga?.guilgeenuud?.find(
               (guilgee) =>
                 guilgee.tailbar === (gereeZardal?.ner || selectedZardal?.ner) &&
@@ -1088,12 +1059,10 @@ function tulburTootsoo() {
             (a) => a._id === form.getFieldValue("zardliinId")
           );
 
-          // Get selected expense info
           const selectedZardal = zardal.jagsaalt?.find(
             (z) => z._id === form.getFieldValue("zardliinId")
           );
 
-          // Check if expense name is one of the utility types
           const isUtilityExpense =
             zardal?.ner === "Халуун ус" ||
             zardal?.ner === "Хүйтэн ус" ||
@@ -1103,11 +1072,9 @@ function tulburTootsoo() {
             selectedZardal?.ner === "Цахилгаан";
 
           if (isUtilityExpense) {
-            // First check zardluud
             if (zardal && (zardal.tulukhDun || 0) !== 0) {
               khymdraaguiDun = zardal.tulukhDun || 0;
             } else {
-              // Check avlaga.guilgeenuud
               const avlagaData = geree?.avlaga?.guilgeenuud?.find(
                 (guilgee) =>
                   guilgee.tailbar === (zardal?.ner || selectedZardal?.ner) &&
@@ -1196,12 +1163,10 @@ function tulburTootsoo() {
             (a) => a._id === form.getFieldValue("zardliinId")
           );
 
-          // Get selected expense info
           const selectedZardal = zardal.jagsaalt?.find(
             (z) => z._id === form.getFieldValue("zardliinId")
           );
 
-          // Check if expense name is one of the utility types
           const isUtilityExpense =
             zardal?.ner === "Халуун ус" ||
             zardal?.ner === "Хүйтэн ус" ||
@@ -1211,11 +1176,9 @@ function tulburTootsoo() {
             selectedZardal?.ner === "Цахилгаан";
 
           if (isUtilityExpense) {
-            // First check zardluud
             if (zardal && (zardal.tulukhDun || 0) !== 0) {
               khymdraaguiDun = zardal.tulukhDun || 0;
             } else {
-              // Check avlaga.guilgeenuud
               const avlagaData = geree?.avlaga?.guilgeenuud?.find(
                 (guilgee) =>
                   guilgee.tailbar === (zardal?.ner || selectedZardal?.ner) &&
@@ -1428,7 +1391,6 @@ function tulburTootsoo() {
                                     "zardluud._id": e,
                                   },
                             });
-                            // setShuult({ query: { tuluv: { $ne: -1 } } });
                           }}
                         >
                           {zardal.jagsaalt.map((z) => (
@@ -1462,26 +1424,6 @@ function tulburTootsoo() {
                   ) : (
                     ""
                   )}
-                  {/* {khonogTootsokhEsekh ? (
-                    <Form.Item
-                      name="gereeKharakh"
-                      labelAlign="left"
-                      label={t("Гэрээний төрөл")}
-                      rules={[
-                        {
-                          required: true,
-                          message: t("Гэрээний төрөл оруулж өгнө үү!"),
-                        },
-                      ]}
-                    >
-                      <Select placeholder={t("Нөхцөл")}>
-                        <Option value="Хоногоор">{t("30 хоногоор")}</Option>
-                        <Option value="Онсараар">{t("Он сараар")}</Option>
-                      </Select>
-                    </Form.Item>
-                  ) : (
-                    ""
-                  )} */}
                   {!isSelectedUtilityExpense && khonogTootsokhEsekh ? (
                     <Form.Item
                       labelAlign="left"
@@ -1542,7 +1484,6 @@ function tulburTootsoo() {
                         type={"number"}
                         readOnly
                         placeholder={t("Хөнгөлөх хоног")}
-                        //onChange={khungulukhDunTootsoolyo}
                       />
                     </Form.Item>
                   ) : (
