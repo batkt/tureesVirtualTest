@@ -545,7 +545,7 @@ function GuilgeeniiTuukhAldangi(
             </td>
             <td
               onClick={() => toggleSortOrder("dansniiDugaar")}
-              className="min-w-[8rem] cursor-pointer overflow-hidden p-1 text-center"
+              className="min-w-[12rem] cursor-pointer overflow-hidden p-1 text-center"
             >
               {t("Данс")}
             </td>
@@ -591,7 +591,7 @@ function GuilgeeniiTuukhAldangi(
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                   {formatNumber(a.tulsunAldangi || a.tulsunDun, 2)}
                 </td>
-                <td className="flex min-w-[8rem] justify-center p-1 text-center ">
+                <td className="flex min-w-[12rem] justify-center p-1 text-center ">
                   {a.dansniiDugaar}
                 </td>
                 <td className="flex min-w-[8rem] justify-center p-1 text-center ">
