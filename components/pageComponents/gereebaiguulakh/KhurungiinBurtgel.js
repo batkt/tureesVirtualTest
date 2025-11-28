@@ -223,13 +223,6 @@ const YurunkhiiMedeele = ({
       (a, b) => a + Number(b.talbainNiitUne || 0),
       0
     );
-    console.log("💰 After sariinTurees calculation:", {
-      sariinTurees: value.sariinTurees,
-      talbainuud: talbainuud.map((t) => ({
-        kod: t.kod,
-        talbainNiitUne: t.talbainNiitUne,
-      })),
-    });
 
     value.talbainNegjUne = talbainuud.reduce(
       (a, b) => a + Number(b.talbainNegjUne || 0),
@@ -274,12 +267,7 @@ const YurunkhiiMedeele = ({
     }
 
     value.talbainDugaar = talbainuud.map((a) => a.kod).join(",");
-    console.log("✅ Final values:", {
-      sariinTurees: value.sariinTurees,
-      talbainNiitUne: value.talbainNiitUne,
-      baritsaaAvakhDun: value.baritsaaAvakhDun,
-      baritsaaAvakhEsekh: value.baritsaaAvakhEsekh,
-    });
+
     form.setFieldsValue(value);
   }
 
@@ -402,12 +390,13 @@ const YurunkhiiMedeele = ({
 
   const onChangeUne = useCallback(
     _.debounce((i, v) => {
+      _.set(value.talbainuud, `${i}.talbainNiitUne`, v || 0);
+
       if (gereeniiZagvar?.turGereeEsekh === true) {
         value.talbainNiitUne = v || 0;
         value.sariinTurees = v || 0;
-      } else {
-        _.set(value.talbainuud, `${i}.talbainNiitUne`, v);
       }
+
       talbainBurtgelBugulyu(value.talbainuud);
       onChange({ ...value });
     }, 500),
@@ -632,7 +621,7 @@ const YurunkhiiMedeele = ({
       >
         <Input placeholder={t("Талбайн нэмэлт нөхцөл")} />
       </Form.Item>
-      {gereeniiZagvar?.turGereeEsekh !== true && baritsaaAvakhEsekh ? (
+      {gereeniiZagvar?.turGereeEsekh !== true ? (
         <div>
           <div
             data-aos="fade-right"
