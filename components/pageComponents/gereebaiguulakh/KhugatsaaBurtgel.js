@@ -130,7 +130,7 @@ const YurunkhiiMedeele = ({
   };
 
   if (gereeniiZagvar?.turGereeEsekh === true) {
-    value.tulukhUdur = [moment(value?.gereeniiOgnoo).format("DD")];
+    value.tulukhUdur = moment(value?.gereeniiOgnoo).format("DD");
   }
   value.gereeniiOgnoo = moment(
     moment(value.gereeniiOgnoo).format("YYYY-MM-DD 00:00:00")
@@ -346,7 +346,6 @@ const YurunkhiiMedeele = ({
           {gereeniiZagvar?.turGereeEsekh === true ? (
             <Input
               style={{ width: "100%" }}
-              disabled
               allowClear
               placeholder={t("Авлага үүсэх огноо")}
               prefix={<SolutionOutlined />}

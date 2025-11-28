@@ -497,7 +497,7 @@ const YurunkhiiMedeele = ({
                     {t("м")}
                     <sup>2</sup>
                   </div>
-                  {talbai.talbainKhemjeeMetrKube && (
+                  {talbai.talbainKhemjeeMetrKube > 0 && (
                     <div className="flex items-center justify-center text-center">
                       {t("м")}
                       <sup>3</sup>
@@ -538,7 +538,7 @@ const YurunkhiiMedeele = ({
                       />
                     </div>
                   )}
-                  {talbai.talbainKhemjeeMetrKube && (
+                  {talbai.talbainKhemjeeMetrKube > 0 && (
                     <div className="text-center">
                       {talbai?.talbainKhemjeeMetrKube}
                     </div>
@@ -553,11 +553,10 @@ const YurunkhiiMedeele = ({
                             ? value.talbainNiitUne || 0
                             : talbai.talbainNiitUne || 0
                         }
-                        formatter={(value) =>
-                          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        }
-                        parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                        formatter={(v) => formatNumber(v)}
+                        parser={(v) => v.replace(/[^\d]/g, "")}
                         onChange={(v) => onChangeUne(index, v)}
+                        style={{ width: "100%" }}
                       />
                     ) : (
                       formatNumber(talbai.talbainNiitUne || 0)
@@ -565,6 +564,7 @@ const YurunkhiiMedeele = ({
                   </div>
                 </div>
               </div>
+
               <div className="absolute right-2 top-0 flex items-center justify-center rounded-full bg-gray-100 text-lg dark:bg-gray-800">
                 <Popconfirm
                   title={`${talbai.kod} талбай устгах уу?`}
