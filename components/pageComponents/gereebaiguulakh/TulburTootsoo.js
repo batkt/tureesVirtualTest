@@ -54,7 +54,13 @@ const Tulbur = ({
         value.duusakhOgnoo > moment().startOf("month")) ||
       !!value._id
     )
-      khuvaariUusgey();
+      console.log("🔍 Sending to backend:", {
+        dun: value.talbainNiitUne,
+        sariinTurees: value.sariinTurees,
+        baritsaaAvakhDun: value.baritsaaAvakhDun,
+        talbainuud: value.talbainuud,
+      });
+    khuvaariUusgey();
   }, []);
 
   function onFinish() {
@@ -72,7 +78,7 @@ const Tulbur = ({
     });
     uilchilgee(token)
       .post(`/khuvaariUusgey`, {
-        dun: value.talbainNiitUne,
+        dun: value.sariinTurees,
         khugatsaa: value.khugatsaa,
         tulukhUdruud: value.tulukhUdur,
         ekhlekhOgnoo: moment(
@@ -327,11 +333,7 @@ const Tulbur = ({
       <Divider />
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
         <Form.Item name="avlaga" noStyle>
-          <AvlagiinKhuvaariUusgekh
-            t={t}
-            ugugdul={khuvaari}
-            baritsaaAvakhEsekh={value.baritsaaAvakhEsekh}
-          />
+          <AvlagiinKhuvaariUusgekh t={t} ugugdul={khuvaari} />
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
