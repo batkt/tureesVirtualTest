@@ -324,10 +324,23 @@ function AjiltniiDelgerenguiTailan(
   const tulburiinMedeelel = useMemo(() => {
     var ugugdul = [];
     if (!!zogsoolTulburMedeelel) {
-      var niitDun =
-        zogsoolTulburMedeelel?.reduce((a, b) => a + b.niitDun, 0) || 0;
+      const mergedTulbur = Array.from(
+        zogsoolTulburMedeelel.reduce((acc, item) => {
+          const key = item?._id === "PosCard" ? "PosKart" : item?._id;
+          const merged = acc.get(key) || { ...item, _id: key, niitDun: 0, niitToo: 0 };
 
-      zogsoolTulburMedeelel?.forEach((element) => {
+          merged.niitDun += item?.niitDun || 0;
+          merged.niitToo += item?.niitToo || 0;
+
+          acc.set(key, merged);
+          return acc;
+        }, new Map()).values()
+      );
+
+      var niitDun =
+        mergedTulbur?.reduce((a, b) => a + b.niitDun, 0) || 0;
+
+      mergedTulbur?.forEach((element) => {
         const tulburiinTurul = element?._id;
         if (
           !ajiltandBuhTolborHarahEsekh &&
