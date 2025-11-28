@@ -94,6 +94,54 @@ function tulburTootsoo() {
         : undefined,
     };
   }, [ekhlekhOgnoo]);
+  const select = {
+    _id: 1,
+    gereeniiDugaar: 1,
+    aktiinZagvariinId: 1,
+    gereeniiOgnoo: 1,
+    turul: 1,
+    ovog: 1,
+    ner: 1,
+    register: 1,
+    customerTin: 1,
+    albanTushaal: 1,
+    zakhirliinOvog: 1,
+    zakhirliinNer: 1,
+    utas: 1,
+    mail: 1,
+    khayag: 1,
+    khugatsaa: 1,
+    duusakhOgnoo: 1,
+    sariinTurees: 1,
+    zuvshuurliinZurag: 1,
+    talbainDugaar: 1,
+    talbainNegjUne: 1,
+    talbainNiitUne: 1,
+    talbainKhemjee: 1,
+    talbainKhemjeeMetrKube: 1,
+    davkhar: 1,
+    baritsaaAvakhDun: 1,
+    baritsaaBairshuulakhKhugatsaa: 1,
+    baritsaaAvakhKhugatsaa: 1,
+    baiguullagiinId: 1,
+    baiguullagiinNer: 1,
+    barilgiinId: 1,
+    gereeniiZagvariinId: 1,
+    tulukhUdur: 1,
+    tuluv: 1,
+    dans: 1,
+    gereeniiTuukhuud: 1,
+    createdAt: 1,
+    aldangiinUldegdel: 1,
+    segmentuud: 1,
+    turGereeEsekh: 1,
+    talbainIdnuud: 1,
+    zardluud: 1,
+    zoriulalt: 1,
+    zurguud: 1,
+    tusgaiZoriulalt: 1,
+    avlaga: 1,
+  };
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, isValidating } =
     useGereeniiJagsaalt(
@@ -102,7 +150,9 @@ function tulburTootsoo() {
       undefined,
       shuult?.query,
       undefined,
-      1000
+      1000,
+      undefined,
+      select
     );
   const {
     khungulultTuukh,
@@ -135,9 +185,6 @@ function tulburTootsoo() {
 
   const qZardal = useMemo(
     () => ({
-      turul: {
-        $in: ["Дурын", "Тогтмол", "1м2", "кВт", "1м3/талбай", "1м3", "кг"],
-      },
       barilgiinId,
     }),
     [barilgiinId]
@@ -151,14 +198,85 @@ function tulburTootsoo() {
     undefined,
     token
   );
+
+  const isSelectedUtilityExpense = useMemo(() => {
+    const zardliinId = form.getFieldValue("zardliinId");
+    const khungulukhTurul = form.getFieldValue("khungulukhTurul");
+
+    if (khungulukhTurul !== "zardal" || !zardliinId) {
+      return false;
+    }
+
+    const selectedZardal = zardal?.jagsaalt?.find((z) => z._id === zardliinId);
+    return (
+      selectedZardal?.ner === "Халуун ус" ||
+      selectedZardal?.ner === "Хүйтэн ус" ||
+      selectedZardal?.ner === "Цахилгаан"
+    );
+  }, [
+    form.getFieldValue("zardliinId"),
+    form.getFieldValue("khungulukhTurul"),
+    zardal?.jagsaalt,
+  ]);
+
+  const filteredGereeniiJagsaalt = useMemo(() => {
+    const zardliinId = form.getFieldValue("zardliinId");
+    const khungulukhTurul = form.getFieldValue("khungulukhTurul");
+
+    if (!gereeniiMedeelel?.jagsaalt) return [];
+
+    // If not expense type or no expense selected, return all data
+    if (khungulukhTurul !== "zardal" || !zardliinId) {
+      return gereeniiMedeelel.jagsaalt;
+    }
+
+    // Get the selected expense to check if it's a utility type
+    const selectedZardal = zardal?.jagsaalt?.find((z) => z._id === zardliinId);
+
+    // Check if it's a utility expense
+    const isUtilityExpense =
+      selectedZardal?.ner === "Халуун ус" ||
+      selectedZardal?.ner === "Хүйтэн ус" ||
+      selectedZardal?.ner === "Цахилгаан";
+
+    // If it's not a utility expense, return all data
+    if (!isUtilityExpense) {
+      return gereeniiMedeelel.jagsaalt;
+    }
+
+    // Filter to only show entries where the expense has non-zero tulukhDun
+    return gereeniiMedeelel.jagsaalt.filter((geree) => {
+      // First check in zardluud array
+      const zardliinData = geree?.zardluud?.find((z) => z._id === zardliinId);
+      if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
+        return true;
+      }
+
+      // Also check in avlaga.guilgeenuud array for utility expenses
+      const hasAvlagaData = geree?.avlaga?.guilgeenuud?.some((guilgee) => {
+        return (
+          guilgee.tailbar === selectedZardal?.ner &&
+          (guilgee.tulukhDun || 0) !== 0
+        );
+      });
+
+      return hasAvlagaData;
+    });
+  }, [
+    gereeniiMedeelel?.jagsaalt,
+    form.getFieldValue("zardliinId"),
+    form.getFieldValue("khungulukhTurul"),
+    zardal?.jagsaalt,
+  ]);
+
   useEffect(() => {
     if (form.getFieldValue("turul") === "Бүгд") {
       onSelectChange(
-        gereeniiMedeelel?.jagsaalt.map((r) => r._id),
-        gereeniiMedeelel?.jagsaalt
+        filteredGereeniiJagsaalt.map((r) => r._id),
+        filteredGereeniiJagsaalt
       );
     }
-  }, [shuult, form]);
+  }, [shuult, form, filteredGereeniiJagsaalt]);
 
   useEffect(() => {
     khungulukhDunTootsoolyo();
@@ -230,10 +348,8 @@ function tulburTootsoo() {
       });
       return;
     }
-
     if (songogdsonGereenuud.length > 0) {
       var ugugdul = form.getFieldsValue();
-
       if (!ugugdul.khonogTootsokhEsekh)
         ugugdul.ognoonuud = dundakhSaruudAvya(ognoonuud[0], ognoonuud[1]);
       ugugdul.barilgiinId = barilgiinId;
@@ -247,17 +363,46 @@ function tulburTootsoo() {
 
         if (turul === "zardal") {
           ugugdul.tailbar = songogdsonZardal.ner;
-          var urjuulekhData =
-            zardliinData?.turul === "1м3/талбай"
-              ? x.talbainKhemjeeMetrKube || 1
-              : zardliinData?.turul === "1м2"
-              ? x?.talbainKhemjee
-              : zardliinData?.turul === "Тогтмол" && 1;
 
-          var khymdraaguiDun =
-            zardliinData?.turul === "Дурын"
-              ? zardliinData.dun
-              : zardliinData?.tariff * urjuulekhData;
+          // Check if expense name is one of the utility types - use tulukhDun
+          var khymdraaguiDun;
+          const isUtilityExpense =
+            zardliinData?.ner === "Халуун ус" ||
+            zardliinData?.ner === "Хүйтэн ус" ||
+            zardliinData?.ner === "Цахилгаан" ||
+            songogdsonZardal?.ner === "Халуун ус" ||
+            songogdsonZardal?.ner === "Хүйтэн ус" ||
+            songogdsonZardal?.ner === "Цахилгаан";
+
+          if (isUtilityExpense) {
+            // First check zardluud
+            if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
+              khymdraaguiDun = zardliinData?.tulukhDun || 0;
+            } else {
+              // Check avlaga.guilgeenuud
+              const avlagaData = x?.avlaga?.guilgeenuud?.find(
+                (guilgee) =>
+                  guilgee.tailbar ===
+                    (zardliinData?.ner || songogdsonZardal?.ner) &&
+                  (guilgee.tulukhDun || 0) !== 0
+              );
+              khymdraaguiDun = avlagaData?.tulukhDun || 0;
+            }
+          } else if (zardliinData) {
+            var urjuulekhData =
+              zardliinData?.turul === "1м3/талбай"
+                ? x.talbainKhemjeeMetrKube || 1
+                : zardliinData?.turul === "1м2"
+                ? x?.talbainKhemjee
+                : zardliinData?.turul === "Тогтмол" && 1;
+
+            khymdraaguiDun =
+              zardliinData?.turul === "Дурын"
+                ? zardliinData.dun
+                : zardliinData?.tariff * urjuulekhData;
+          } else {
+            khymdraaguiDun = 0;
+          }
           if (
             khonogTootsokhEsekh &&
             baiguullaga?.tokhirgoo?.khonogKhungulultOruulakhEsekh
@@ -523,6 +668,36 @@ function tulburTootsoo() {
           var zardliinData = data?.zardluud?.find(
             (e) => e?._id === form.getFieldValue("zardliinId")
           );
+
+          // Get selected expense name
+          const selectedZardal = zardal.jagsaalt.find(
+            (e) => e?._id === form.getFieldValue("zardliinId")
+          );
+
+          // Check if expense name is one of the utility types
+          const isUtilityExpense =
+            selectedZardal?.ner === "Халуун ус" ||
+            selectedZardal?.ner === "Хүйтэн ус" ||
+            selectedZardal?.ner === "Цахилгаан";
+
+          if (isUtilityExpense) {
+            // First check zardluud
+            if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
+              return formatNumber(zardliinData?.tulukhDun || 0, 2);
+            }
+
+            // If not in zardluud, check avlaga.guilgeenuud
+            const avlagaData = data?.avlaga?.guilgeenuud?.find(
+              (guilgee) =>
+                guilgee.tailbar === selectedZardal?.ner &&
+                (guilgee.tulukhDun || 0) !== 0
+            );
+
+            if (avlagaData) {
+              return formatNumber(avlagaData.tulukhDun || 0, 2);
+            }
+          }
+
           if (zardliinData) {
             var urjuulekhData =
               zardliinData?.turul === "1м3/талбай"
@@ -840,22 +1015,51 @@ function tulburTootsoo() {
       tootsoolol.niitSariinTurees = 0;
       const fVal = form.getFieldValue("zardliinId");
       songogdsonGereenuud?.map((e) => {
-        const zardal = e?.zardluud.find((a) => a._id === fVal);
-        setSongogdsonZardal(zardal);
-        if (!!zardal) {
-          if (zardal.turul === "1м2")
+        const gereeZardal = e?.zardluud.find((a) => a._id === fVal);
+        const selectedZardal = zardal.jagsaalt?.find((z) => z._id === fVal);
+        setSongogdsonZardal(gereeZardal || selectedZardal);
+
+        // Check if expense name is one of the utility types
+        const isUtilityExpense =
+          gereeZardal?.ner === "Халуун ус" ||
+          gereeZardal?.ner === "Хүйтэн ус" ||
+          gereeZardal?.ner === "Цахилгаан" ||
+          selectedZardal?.ner === "Халуун ус" ||
+          selectedZardal?.ner === "Хүйтэн ус" ||
+          selectedZardal?.ner === "Цахилгаан";
+
+        if (isUtilityExpense) {
+          // First check zardluud
+          if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
             tootsoolol.niitSariinTurees =
-              tootsoolol.niitSariinTurees + e.talbainKhemjee * zardal.tariff;
-          else if (zardal.turul === "1м3/талбай")
+              tootsoolol.niitSariinTurees + (gereeZardal.tulukhDun || 0);
+          } else {
+            // Check avlaga.guilgeenuud
+            const avlagaData = e?.avlaga?.guilgeenuud?.find(
+              (guilgee) =>
+                guilgee.tailbar === (gereeZardal?.ner || selectedZardal?.ner) &&
+                (guilgee.tulukhDun || 0) !== 0
+            );
+            if (avlagaData) {
+              tootsoolol.niitSariinTurees =
+                tootsoolol.niitSariinTurees + (avlagaData.tulukhDun || 0);
+            }
+          }
+        } else if (!!gereeZardal) {
+          if (gereeZardal.turul === "1м2")
             tootsoolol.niitSariinTurees =
               tootsoolol.niitSariinTurees +
-              e.talbainKhemjeeMetrKube * zardal.tariff;
-          else if (zardal.turul === "Дурын")
+              e.talbainKhemjee * gereeZardal.tariff;
+          else if (gereeZardal.turul === "1м3/талбай")
             tootsoolol.niitSariinTurees =
-              tootsoolol.niitSariinTurees + zardal.dun;
+              tootsoolol.niitSariinTurees +
+              e.talbainKhemjeeMetrKube * gereeZardal.tariff;
+          else if (gereeZardal.turul === "Дурын")
+            tootsoolol.niitSariinTurees =
+              tootsoolol.niitSariinTurees + gereeZardal.dun;
           else
             tootsoolol.niitSariinTurees =
-              zardal.tariff + tootsoolol.niitSariinTurees;
+              gereeZardal.tariff + tootsoolol.niitSariinTurees;
         }
       });
     }
@@ -883,7 +1087,35 @@ function tulburTootsoo() {
           const zardal = geree?.zardluud?.find(
             (a) => a._id === form.getFieldValue("zardliinId")
           );
-          if (zardal) {
+
+          // Get selected expense info
+          const selectedZardal = zardal.jagsaalt?.find(
+            (z) => z._id === form.getFieldValue("zardliinId")
+          );
+
+          // Check if expense name is one of the utility types
+          const isUtilityExpense =
+            zardal?.ner === "Халуун ус" ||
+            zardal?.ner === "Хүйтэн ус" ||
+            zardal?.ner === "Цахилгаан" ||
+            selectedZardal?.ner === "Халуун ус" ||
+            selectedZardal?.ner === "Хүйтэн ус" ||
+            selectedZardal?.ner === "Цахилгаан";
+
+          if (isUtilityExpense) {
+            // First check zardluud
+            if (zardal && (zardal.tulukhDun || 0) !== 0) {
+              khymdraaguiDun = zardal.tulukhDun || 0;
+            } else {
+              // Check avlaga.guilgeenuud
+              const avlagaData = geree?.avlaga?.guilgeenuud?.find(
+                (guilgee) =>
+                  guilgee.tailbar === (zardal?.ner || selectedZardal?.ner) &&
+                  (guilgee.tulukhDun || 0) !== 0
+              );
+              khymdraaguiDun = avlagaData?.tulukhDun || 0;
+            }
+          } else if (zardal) {
             if (zardal.turul === "1м2")
               khymdraaguiDun = geree.talbainKhemjee * zardal.tariff;
             else if (zardal.turul === "1м3/талбай")
@@ -963,7 +1195,35 @@ function tulburTootsoo() {
           const zardal = geree?.zardluud?.find(
             (a) => a._id === form.getFieldValue("zardliinId")
           );
-          if (zardal) {
+
+          // Get selected expense info
+          const selectedZardal = zardal.jagsaalt?.find(
+            (z) => z._id === form.getFieldValue("zardliinId")
+          );
+
+          // Check if expense name is one of the utility types
+          const isUtilityExpense =
+            zardal?.ner === "Халуун ус" ||
+            zardal?.ner === "Хүйтэн ус" ||
+            zardal?.ner === "Цахилгаан" ||
+            selectedZardal?.ner === "Халуун ус" ||
+            selectedZardal?.ner === "Хүйтэн ус" ||
+            selectedZardal?.ner === "Цахилгаан";
+
+          if (isUtilityExpense) {
+            // First check zardluud
+            if (zardal && (zardal.tulukhDun || 0) !== 0) {
+              khymdraaguiDun = zardal.tulukhDun || 0;
+            } else {
+              // Check avlaga.guilgeenuud
+              const avlagaData = geree?.avlaga?.guilgeenuud?.find(
+                (guilgee) =>
+                  guilgee.tailbar === (zardal?.ner || selectedZardal?.ner) &&
+                  (guilgee.tulukhDun || 0) !== 0
+              );
+              khymdraaguiDun = avlagaData?.tulukhDun || 0;
+            }
+          } else if (zardal) {
             if (zardal.turul === "1м2")
               khymdraaguiDun = geree.talbainKhemjee * zardal.tariff;
             else if (zardal.turul === "1м3/талбай")
@@ -1168,39 +1428,7 @@ function tulburTootsoo() {
                                     "zardluud._id": e,
                                   },
                             });
-
-                            const selectedZardal = zardal.jagsaalt.find(
-                              (z) => z._id === e
-                            );
-
-                            if (
-                              selectedZardal &&
-                              (selectedZardal.ner === "Цахилгаан" ||
-                                selectedZardal.ner === "Халуун ус" ||
-                                selectedZardal.ner === "Хүйтэн ус")
-                            ) {
-                              const params = new URLSearchParams({
-                                baiguullagiinId: baiguullaga?._id,
-                                barilgiinId,
-                                zardliinTurul: selectedZardal.ner,
-                                zardluud_id: selectedZardal._id,
-                                createdAt: -1,
-                              });
-
-                              uilchilgee(token)
-                                .get(
-                                  `/huwisakhZardalTootsyo?${params.toString()}`
-                                )
-                                .then(({ data }) => {
-                                  console.log(
-                                    "Variable expense calculation:",
-                                    data
-                                  );
-                                })
-                                .catch((error) => {
-                                  aldaaBarigch(error);
-                                });
-                            }
+                            // setShuult({ query: { tuluv: { $ne: -1 } } });
                           }}
                         >
                           {zardal.jagsaalt.map((z) => (
@@ -1254,7 +1482,7 @@ function tulburTootsoo() {
                   ) : (
                     ""
                   )} */}
-                  {khonogTootsokhEsekh ? (
+                  {!isSelectedUtilityExpense && khonogTootsokhEsekh ? (
                     <Form.Item
                       labelAlign="left"
                       name="ognoonuud"
@@ -1280,7 +1508,7 @@ function tulburTootsoo() {
                         }}
                       />
                     </Form.Item>
-                  ) : (
+                  ) : !isSelectedUtilityExpense ? (
                     <Form.Item
                       labelAlign="left"
                       name="ognoonuud"
@@ -1303,7 +1531,7 @@ function tulburTootsoo() {
                         }}
                       />
                     </Form.Item>
-                  )}
+                  ) : null}
                   {khonogTootsokhEsekh ? (
                     <Form.Item
                       label={t("Хөнгөлөх хоног")}
@@ -1526,7 +1754,7 @@ function tulburTootsoo() {
                   size="small"
                   loading={!gereeniiMedeelel}
                   rowKey={(row) => row._id}
-                  dataSource={gereeniiMedeelel?.jagsaalt}
+                  dataSource={filteredGereeniiJagsaalt}
                   columns={gereeniiColumn}
                   pagination={false}
                 />
