@@ -438,7 +438,8 @@ function tulburTootsoo({ token }) {
               barilgiinId === "657955ac70280a9ebe8f11ef" ||
               barilgiinId === "61e13558ccf0f605a3f09d3c" ||
               barilgiinId === "619e267fdd4835aa2c168b28" ||
-              barilgiinId === "68f702c1326ac1a2ad718c9f"
+              (barilgiinId === "68f702c1326ac1a2ad718c9f" &&
+                zagvar.nekhemjlekh == "khatuuZagvarIkhnayd")
             ) {
               // ikh nayd tower
               if (
@@ -1163,8 +1164,8 @@ function tulburTootsoo({ token }) {
               }
               if (
                 a.tailbar === "Худалдааны менежмент" ||
-                a.tailbar?.includes("Хөрөнгийн менежмент")  ||
-                a.tailbar?.includes("Тавилга түрээс")  ||
+                a.tailbar?.includes("Хөрөнгийн менежмент") ||
+                a.tailbar?.includes("Тавилга түрээс") ||
                 a.tailbar === "Түрээсийн төлбөр нэмэлт"
               ) {
                 menejmentCount++;
@@ -2771,7 +2772,7 @@ function tulburTootsoo({ token }) {
           }
           if (
             a.tailbar?.includes("Худалдааны менежмент") ||
-            a.tailbar?.includes("Хөрөнгийн менежмент")   ||
+            a.tailbar?.includes("Хөрөнгийн менежмент") ||
             a.tailbar === "Тавилга түрээс" ||
             a.tailbar === "Түрээсийн төлбөр нэмэлт"
           ) {
