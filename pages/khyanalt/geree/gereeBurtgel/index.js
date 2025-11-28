@@ -1166,50 +1166,40 @@ function ZakhialgiinKhyanalt() {
                     <label>{t("Зураг")}</label>
                   </a>
                   {shuult.utga !== "Цуцласан" && (
-                    <Popconfirm
-                      title="Цуцлахдаа итгэлтэй байна уу?"
-                      okText={t("Тийм")}
-                      cancelText={t("Үгүй")}
-                      onConfirm={() => gereeTsutsalya(data)}
-                      disabled={tsutslakhLoading.has(data._id)}
+                    <a
+                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                      onClick={() => {
+                        if (
+                          ajiltan?.erkh === "Admin" ||
+                          !!_.get(ajiltan, `tokhirgoo.gereeZasakhErkh`)?.find(
+                            (a) => a === data.barilgiinId
+                          )
+                        ) {
+                          router.push(
+                            `/khyanalt/geree/gereeBaiguulakh/${data._id}`
+                          );
+                        } else {
+                          notification.warning({
+                            message: t("Таньд гэрээ засах эрх байхгүй байна."),
+                          });
+                        }
+                      }}
                     >
-                      <a
-                        className={`ant-dropdown-link flex items-center justify-between rounded-lg p-2 ${
-                          tsutslakhLoading.has(data._id)
-                            ? "cursor-not-allowed opacity-50"
-                            : "hover:bg-green-100 dark:hover:bg-gray-700"
-                        } dark:text-white`}
-                        onClick={(e) => {
-                          if (tsutslakhLoading.has(data._id)) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                          }
-                        }}
-                      >
-                        <MinusCircleOutlined style={{ fontSize: "18px" }} />
-                        <label
-                          className={
-                            tsutslakhLoading.has(data._id)
-                              ? "cursor-not-allowed"
-                              : "cursor-pointer"
-                          }
-                        >
-                          {tsutslakhLoading.has(data._id)
-                            ? t("Цуцалж байна...")
-                            : t("Цуцлах")}
-                        </label>
-                      </a>
-                    </Popconfirm>
+                      <EditOutlined style={{ fontSize: "18px" }} />
+                      <label>{t("Засах")}</label>
+                    </a>
                   )}
+
                   {shuult.utga !== "Цуцласан" && (
                     <a
                       className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
                       onClick={() => gereeSungaya(data)}
                     >
                       <FieldTimeOutlined style={{ fontSize: "18px" }} />
-                      <label> {t("Сунгах")}</label>
+                      <label>{t("Сунгах")}</label>
                     </a>
                   )}
+
                   {shuult.utga !== "Цуцласан" && (
                     <Popconfirm
                       title="Цуцлахдаа итгэлтэй байна уу?"
