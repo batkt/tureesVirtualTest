@@ -4,7 +4,12 @@ import moment from "moment";
 import Aos from "aos";
 import formatNumber from "tools/function/formatNumber";
 
-function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
+function AvlagaiinKhuvaariUusgekh({
+  ugugdul,
+  t,
+  baritsaaAvakhEsekh,
+  baritsaaAvakhDun,
+}) {
   return (
     <div className="w-full">
       <div className="space-y-2 divide-y-2">
@@ -43,7 +48,10 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
               width: "1.5rem",
               align: "center",
               showSorterTooltip: false,
-              render(tulukhDun) {
+              render(tulukhDun, record, index) {
+                if (index === 0 && baritsaaAvakhEsekh === true) {
+                  return formatNumber(baritsaaAvakhDun || tulukhDun);
+                }
                 return formatNumber(tulukhDun);
               },
             },
@@ -65,7 +73,7 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
               width: "1.5rem",
               align: "center",
               showSorterTooltip: false,
-              render(a, b) {
+              render(a, b, index) {
                 var tailbar = "";
                 switch (b.turul) {
                   case "khuvaari":
@@ -74,6 +82,7 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
                   case "avlaga":
                   case "khungulult":
                     tailbar = a;
+                    break;
                   default:
                     break;
                 }

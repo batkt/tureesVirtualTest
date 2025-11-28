@@ -54,7 +54,13 @@ const Tulbur = ({
         value.duusakhOgnoo > moment().startOf("month")) ||
       !!value._id
     )
-      khuvaariUusgey();
+      console.log("🔍 Sending to backend:", {
+        dun: value.talbainNiitUne,
+        sariinTurees: value.sariinTurees,
+        baritsaaAvakhDun: value.baritsaaAvakhDun,
+        talbainuud: value.talbainuud,
+      });
+    khuvaariUusgey();
   }, []);
 
   function onFinish() {
@@ -72,7 +78,7 @@ const Tulbur = ({
     });
     uilchilgee(token)
       .post(`/khuvaariUusgey`, {
-        dun: value.talbainNiitUne,
+        dun: value.sariinTurees,
         khugatsaa: value.khugatsaa,
         tulukhUdruud: value.tulukhUdur,
         ekhlekhOgnoo: moment(
@@ -229,21 +235,22 @@ const Tulbur = ({
       onValuesChange={(values) => onChange({ ...value, ...values })}
       onFinish={onFinish}
     >
-      <div className="flex justify-between">
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="400"
+          className="w-full md:w-auto"
         >
           <Form.Item
             labelAlign="left"
             name="ognoonuud"
             label={t("Хөнгөлөх сар")}
+            className="w-full"
           >
             <DatePicker.RangePicker
-              className="flex-end w-full rounded-md md:w-auto"
+              className="w-full rounded-md md:w-auto"
               allowClear={false}
-              style={{ width: "100%" }}
               picker="month"
               placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
               onChange={(v) => {
@@ -252,33 +259,39 @@ const Tulbur = ({
             />
           </Form.Item>
         </div>
+
         <div
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="400"
+          className="w-full md:w-auto"
         >
-          <Form.Item name="khungulukhKhuvi" labelAlign="left">
+          <Form.Item
+            name="khungulukhKhuvi"
+            labelAlign="left"
+            className="w-full"
+          >
             <Input
-              className="flex-end ml-1 flex w-full rounded-md md:w-auto"
+              className="w-full rounded-md md:w-auto"
               onKeyDown={focuser}
-              type={"number"}
+              type="number"
               placeholder={t("Хөнгөлөх хувь")}
             />
           </Form.Item>
         </div>
+
         <div
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="400"
+          className="flex w-full md:block md:w-auto"
         >
           <Form.Item>
             <Button
-              className="ml-1 flex"
+              className="w-full md:w-auto"
               type="primary"
               icon={<PlusOutlined />}
-              onClick={() => {
-                khungulultOruulakh();
-              }}
+              onClick={() => khungulultOruulakh()}
             ></Button>
           </Form.Item>
         </div>
@@ -316,8 +329,7 @@ const Tulbur = ({
           <div className="text-right text-lg font-medium dark:text-gray-100">
             {formatNumber(
               (value.sariinTurees || 0) * (value.buunTulult || 1) +
-                (value.baritsaaAvakhDun || 0) *
-                  (value.baritsaaAvakhKhugatsaa || 0) -
+                (value.baritsaaAvakhEsekh ? value.baritsaaAvakhDun || 0 : 0) -
                 (((value.sariinTurees || 0) * 12) / 365) *
                   (value.khungulukhKhugatsaa || 0) -
                 (value.khyamdaral || 0)

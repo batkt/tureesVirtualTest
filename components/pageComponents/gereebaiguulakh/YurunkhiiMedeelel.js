@@ -639,13 +639,25 @@ const YurunkhiiMedeele = ({
                   />
                 </div>
               ))}
-              <Form.Item className="" wrapperCol={{ offset: 10 }}>
+              <Form.Item className="w-full" wrapperCol={{ offset: 0 }}>
                 <Button
                   icon={<PlusOutlined />}
-                  className="h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
+                  className="
+      mx-auto 
+      flex h-8      
+      w-full 
+      items-center 
+      justify-center 
+      rounded-sm 
+      bg-white 
+      px-4
+      hover:bg-green-100
+      dark:bg-gray-700
+      dark:text-gray-300 dark:hover:bg-gray-700 sm:w-auto
+    "
                   type="dashed"
                   onClick={() => add()}
-                  block
+                  block={false}
                 >
                   {t("Ялгах утга оруулах")}
                 </Button>

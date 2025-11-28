@@ -98,6 +98,7 @@ const Tailbar = React.forwardRef(
     const [shaltgaan, setTailbar] = React.useState("");
     const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment());
     const [sergeekhOgnoo, setSergeekhOgnoo] = React.useState(moment());
+    const [tsutslakhLoading, setTsutslakhLoading] = useState(new Set());
     const [tsutslakhOgnoo, setTsutslakhOgnoo] = React.useState([
       moment(),
       moment(),
@@ -525,6 +526,7 @@ function ZakhialgiinKhyanalt() {
   const [kharuulakhGeree, setKharuulakhGeree] = React.useState(null);
   const [gereeniiTokhirgoo, setGereeniiTokhirgoo] = React.useState(null);
 
+  const [tsutslakhLoading, setTsutslakhLoading] = useState(new Set());
   const componentRef = React.useRef();
   const excelref = React.useRef();
   const zuragref = React.useRef();
@@ -553,7 +555,7 @@ function ZakhialgiinKhyanalt() {
 
       return column;
     }, []);
-    }, [shineBagana]);
+  }, [shineBagana]);
 
   const sheet = [
     {
@@ -1164,27 +1166,40 @@ function ZakhialgiinKhyanalt() {
                     <label>{t("Зураг")}</label>
                   </a>
                   {shuult.utga !== "Цуцласан" && (
-                    <a
-                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                      onClick={() => {
-                        if (
-                          ajiltan?.erkh === "Admin" ||
-                          !!_.get(ajiltan, `tokhirgoo.gereeZasakhErkh`)?.find(
-                            (a) => a === data.barilgiinId
-                          )
-                        )
-                          router.push(
-                            `/khyanalt/geree/gereeBaiguulakh/${data._id}`
-                          );
-                        else
-                          notification.warning({
-                            message: t("Таньд гэрээ засах эрх байхгүй байна."),
-                          });
-                      }}
+                    <Popconfirm
+                      title="Цуцлахдаа итгэлтэй байна уу?"
+                      okText={t("Тийм")}
+                      cancelText={t("Үгүй")}
+                      onConfirm={() => gereeTsutsalya(data)}
+                      disabled={tsutslakhLoading.has(data._id)}
                     >
-                      <EditOutlined style={{ fontSize: "18px" }} />
-                      <label> {t("Засах")}</label>
-                    </a>
+                      <a
+                        className={`ant-dropdown-link flex items-center justify-between rounded-lg p-2 ${
+                          tsutslakhLoading.has(data._id)
+                            ? "cursor-not-allowed opacity-50"
+                            : "hover:bg-green-100 dark:hover:bg-gray-700"
+                        } dark:text-white`}
+                        onClick={(e) => {
+                          if (tsutslakhLoading.has(data._id)) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }
+                        }}
+                      >
+                        <MinusCircleOutlined style={{ fontSize: "18px" }} />
+                        <label
+                          className={
+                            tsutslakhLoading.has(data._id)
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }
+                        >
+                          {tsutslakhLoading.has(data._id)
+                            ? t("Цуцалж байна...")
+                            : t("Цуцлах")}
+                        </label>
+                      </a>
+                    </Popconfirm>
                   )}
                   {shuult.utga !== "Цуцласан" && (
                     <a
@@ -1215,10 +1230,33 @@ function ZakhialgiinKhyanalt() {
                         okText={t("Тийм")}
                         cancelText={t("Үгүй")}
                         onConfirm={() => gereeSergeeye(data)}
+                        disabled={tsutslakhLoading.has(data._id)}
                       >
-                        <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
+                        <a
+                          className={`ant-dropdown-link flex items-center justify-between rounded-lg p-2 ${
+                            tsutslakhLoading.has(data._id)
+                              ? "cursor-not-allowed opacity-50"
+                              : "hover:bg-green-100 dark:hover:bg-gray-700"
+                          } dark:text-white`}
+                          onClick={(e) => {
+                            if (tsutslakhLoading.has(data._id)) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }
+                          }}
+                        >
                           <RedoOutlined style={{ fontSize: "18px" }} />
-                          <label> {t("Сэргээх")}</label>
+                          <label
+                            className={
+                              tsutslakhLoading.has(data._id)
+                                ? "cursor-not-allowed"
+                                : "cursor-pointer"
+                            }
+                          >
+                            {tsutslakhLoading.has(data._id)
+                              ? t("Сэргээж байна...")
+                              : t("Сэргээх")}
+                          </label>
                         </a>
                       </Popconfirm>
                       <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
@@ -1257,6 +1295,10 @@ function ZakhialgiinKhyanalt() {
   }
 
   function gereeTsutsalya(data) {
+    if (tsutslakhLoading.has(data._id)) {
+      return;
+    }
+
     if (
       ajiltan?.erkh !== "Admin" &&
       !_.get(ajiltan, `tokhirgoo.gereeTsutslakhErkh`)?.find(
@@ -1270,8 +1312,25 @@ function ZakhialgiinKhyanalt() {
     }
     setGereeniiTokhirgoo(null);
     const footer = [
-      <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
-      <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
+      <Button
+        onClick={() => {
+          tailbarRef.current.khaaya();
+
+          setTsutslakhLoading((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(data._id);
+            return newSet;
+          });
+        }}
+      >
+        {t("Хаах")}
+      </Button>,
+      <Button
+        type="primary"
+        onClick={() => {
+          tailbarRef.current.khadgalya();
+        }}
+      >
         {t("Цуцлах")}
       </Button>,
     ];
@@ -1285,14 +1344,33 @@ function ZakhialgiinKhyanalt() {
           data={data}
           token={token}
           baiguullaga={baiguullaga}
-          confirm={() => refresh()}
+          confirm={() => {
+            refresh();
+
+            setTsutslakhLoading((prev) => {
+              const newSet = new Set(prev);
+              newSet.delete(data._id);
+              return newSet;
+            });
+          }}
         />
       ),
       footer,
+      onCancel: () => {
+        setTsutslakhLoading((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(data._id);
+          return newSet;
+        });
+      },
     });
   }
 
   function gereeSergeeye(data) {
+    if (tsutslakhLoading.has(data._id)) {
+      return;
+    }
+
     if (
       ajiltan?.erkh !== "Admin" &&
       !_.get(ajiltan, `tokhirgoo.gereeSergeekhErkh`)?.find(
@@ -1304,13 +1382,35 @@ function ZakhialgiinKhyanalt() {
       });
       return;
     }
+
     setGereeniiTokhirgoo(null);
+
+    setTsutslakhLoading((prev) => new Set(prev).add(data._id));
+
     const footer = [
-      <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
-      <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
+      <Button
+        onClick={() => {
+          tailbarRef.current.khaaya();
+
+          setTsutslakhLoading((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(data._id);
+            return newSet;
+          });
+        }}
+      >
+        {t("Хаах")}
+      </Button>,
+      <Button
+        type="primary"
+        onClick={() => {
+          tailbarRef.current.khadgalya();
+        }}
+      >
         {t("Сэргээх")}
       </Button>,
     ];
+
     modal({
       width: "20vw",
       title: t("Сэргээх шалтгаан"),
@@ -1321,13 +1421,27 @@ function ZakhialgiinKhyanalt() {
           ref={tailbarRef}
           data={data}
           token={token}
-          confirm={() => refresh()}
+          confirm={() => {
+            refresh();
+
+            setTsutslakhLoading((prev) => {
+              const newSet = new Set(prev);
+              newSet.delete(data._id);
+              return newSet;
+            });
+          }}
         />
       ),
       footer,
+      onCancel: () => {
+        setTsutslakhLoading((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(data._id);
+          return newSet;
+        });
+      },
     });
   }
-
   function gereeSungaya(data) {
     if (
       ajiltan?.erkh !== "Admin" &&

@@ -143,28 +143,25 @@ function ZogsoolBurtgekh(
 
   return (
     <Form form={form} autoComplete="off">
-      {!!data && <Form.Item name="_id" hidden></Form.Item>}
-      <Form.Item name="barilgiinId" hidden></Form.Item>
-      <div className="grid h-[65vh] grid-cols-12 gap-6">
-        <div className="col-span-4">
-          <div className="grid h-[65vh] grid-cols-4 gap-5 overflow-y-auto">
+      {!!data && <Form.Item name="_id" hidden />}
+      <Form.Item name="barilgiinId" hidden />
+
+      <div className="grid grid-cols-12 gap-6 sm:h-[65vh]">
+        <div className="col-span-12 md:col-span-6 lg:col-span-4">
+          <div className="grid max-h-screen grid-cols-4 gap-5 overflow-y-auto sm:max-h-[65vh]">
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
                 {t("Зогсоолын нэр")}
               </div>
             </div>
+
             <div className="col-span-2">
               <Form.Item
                 className="m-0"
                 name="ner"
-                rules={[
-                  {
-                    required: true,
-                    message: t("Нэр оруулна уу!"),
-                  },
-                ]}
+                rules={[{ required: true, message: t("Нэр оруулна уу!") }]}
               >
-                <Input placeholder="Нэр" autoFocus={true} />
+                <Input placeholder="Нэр" autoFocus />
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
@@ -553,22 +550,21 @@ function ZogsoolBurtgekh(
             <div className="text-xs text-gray-400"> </div>
           </div>
         </div>
-        <div className="col-span-4 h-full ">
+
+        <div className="col-span-12 md:col-span-6 lg:col-span-4">
           <Form.List name="tulburuud">
             {(fields, { add, remove }) => (
               <>
                 <Button
                   icon={<PlusOutlined />}
-                  className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="mb-3 w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
                   type="dashed"
                   onClick={() => add()}
                 >
                   Тариф нэмэх
                 </Button>
-                <div
-                  className="space-y-3 overflow-y-auto"
-                  style={{ maxHeight: "60vh" }}
-                >
+
+                <div className="max-h-screen space-y-3 overflow-y-auto sm:max-h-[65vh]">
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Tariff
                       key={key}
@@ -584,32 +580,31 @@ function ZogsoolBurtgekh(
             )}
           </Form.List>
         </div>
-        <div className="col-span-4">
+
+        <div className="col-span-12 md:col-span-6 lg:col-span-4">
           <Form.List name="khaalga">
             {(fields, { add, remove }) => (
               <>
                 <Button
                   icon={<PlusOutlined />}
-                  className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="mb-3 w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
                   type="dashed"
                   onClick={() => add()}
                 >
                   Хаалга нэмэх
                 </Button>
-                <div
-                  className="space-y-3 overflow-y-auto"
-                  style={{ maxHeight: "60vh" }}
-                >
+
+                <div className="max-h-screen space-y-3 overflow-y-auto sm:max-h-[65vh]">
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Khaalga
-                      form={form}
-                      token={token}
-                      refresh={refresh}
-                      barilgiinId={barilgiinId}
                       key={key}
                       name={name}
                       fieldKey={fieldKey}
                       restField={restField}
+                      form={form}
+                      token={token}
+                      refresh={refresh}
+                      barilgiinId={barilgiinId}
                       fields={fields}
                       remove={remove}
                     />
@@ -693,13 +688,15 @@ function Khaalga({
       <div className="mb-2 flex justify-center text-base font-bold dark:text-white">
         {t("Хаалга")} {fieldKey + 1}
       </div>
-      <div className="grid w-full grid-cols-4 items-center gap-5">
+
+      <div className="grid w-full grid-cols-1 items-center gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <div
           onClick={() => remove(name)}
           className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
         >
           <CloseCircleOutlined className="dark:text-gray-300" />
         </div>
+
         <Form.Item
           label="Нэр:"
           labelCol={{ span: 24 }}
@@ -707,10 +704,12 @@ function Khaalga({
           name={[name, "ner"]}
           fieldKey={[fieldKey, "ner"]}
           rules={[{ required: true, message: "Нэр бөглөнө үү." }]}
-          className="col-span-2 mb-0 h-20"
+          className="mb-0 h-20 sm:col-span-2 lg:col-span-2"
         >
           <Input placeholder={t("Ялгах нэр")} />
         </Form.Item>
+
+        {/* Type */}
         <Form.Item
           label="Төрөл:"
           labelCol={{ span: 24 }}
@@ -718,19 +717,20 @@ function Khaalga({
           name={[name, "turul"]}
           fieldKey={[fieldKey, "turul"]}
           rules={[{ required: true, message: "Төрөл бөглөнө үү." }]}
-          className="col-span-2 mb-0 h-20"
+          className="mb-0 h-20 sm:col-span-2 lg:col-span-2"
         >
-          <Select style={{ width: "100%" }} placeholder={t("Орох / Гарах")}>
+          <Select placeholder={t("Орох / Гарах")}>
             <Select.Option value={"Орох"}>{t("Орох")}</Select.Option>
             <Select.Option value={"Гарах"}>{t("Гарах")}</Select.Option>
           </Select>
         </Form.Item>
       </div>
+
       <Form.List name={[name, "camera"]}>
         {(talbaruud, { add, remove }) => (
           <>
             <Button
-              className="mt-5 h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
+              className="mt-5 h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
               type="dashed"
               onClick={() => add()}
               block
@@ -738,28 +738,32 @@ function Khaalga({
             >
               {t("Камер нэмэх")}
             </Button>
+
             {talbaruud.map((talbar) => (
-              <div className="mt-5 flex">
+              <div className="mt-5 grid grid-cols-1 items-center gap-3 sm:grid-cols-4">
                 <Form.Item
                   {...talbar.restField}
                   name={[talbar.name, "cameraIP"]}
                   fieldKey={[talbar.key, "cameraIP"]}
-                  className="m-0 w-full"
+                  className="col-span-3 m-0"
                   rules={[{ required: true, message: "Камер IP оруулна уу!" }]}
                 >
-                  <Input
-                    style={{ width: "100%" }}
-                    placeholder="Камер IP оруулна уу..."
-                  />
+                  <Input placeholder="Камер IP оруулна уу..." />
                 </Form.Item>
-                <SettingOutlined
-                  className="ml-2 mt-2 dark:text-gray-300"
-                  onClick={() => cameraTokhirgooOruulyaIp(talbar, talbar.name)}
-                />
-                <MinusCircleOutlined
-                  className="ml-2 mt-2 dark:text-gray-300"
-                  onClick={() => remove(talbar.name)}
-                />
+
+                <div className="flex gap-3 sm:col-span-1">
+                  <SettingOutlined
+                    className="mt-2 cursor-pointer dark:text-gray-300"
+                    onClick={() =>
+                      cameraTokhirgooOruulyaIp(talbar, talbar.name)
+                    }
+                  />
+
+                  <MinusCircleOutlined
+                    className="mt-2 cursor-pointer dark:text-gray-300"
+                    onClick={() => remove(talbar.name)}
+                  />
+                </div>
               </div>
             ))}
           </>
@@ -771,6 +775,7 @@ function Khaalga({
 
 function Tariff({ name, fieldKey, restField, remove }) {
   const { t } = useTranslation();
+
   return (
     <div
       key={fieldKey}
@@ -779,21 +784,23 @@ function Tariff({ name, fieldKey, restField, remove }) {
       <div className="mb-2 flex justify-center text-base font-bold dark:text-white">
         {t("Тариф")} {fieldKey + 1}
       </div>
-      <div className="grid w-full grid-cols-4 items-center gap-5">
+
+      {/* TIME GRID */}
+      <div className="grid w-full grid-cols-1 items-center gap-5 sm:grid-cols-4">
         <div
           onClick={() => remove(name)}
           className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
         >
           <CloseCircleOutlined className="dark:text-gray-300" />
         </div>
+
         <Form.Item
           label="Цаг:"
           labelCol={{ span: 24 }}
           {...restField}
           name={[name, "tsag"]}
           fieldKey={[fieldKey, "tsag"]}
-          // rules={[{ required: true, message: "Цаг бөглөнө үү." }]}
-          className="col-span-3 mb-0 h-20"
+          className="mb-0 h-20 sm:col-span-3"
         >
           <TimePicker.RangePicker
             format="HH:mm"
@@ -801,23 +808,24 @@ function Tariff({ name, fieldKey, restField, remove }) {
           />
         </Form.Item>
       </div>
+
       <Form.List name={[name, "tariff"]}>
         {(muruud, { add, remove }) => (
           <>
             <Button
-              className="mt-5 h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
+              className="mt-5 h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
               type="dashed"
               onClick={() => add()}
-              // id={"tariff"}
               block
               icon={<PlusOutlined />}
             >
               {t("Нэмэх")}
             </Button>
+
             {muruud.map((mur, index) => (
               <div
                 key={index}
-                className="flex-center mt-3 grid w-full grid-cols-4 items-end gap-5"
+                className="mt-3 grid grid-cols-1 items-end gap-5 sm:grid-cols-4"
               >
                 <Form.Item
                   label="Минут хүртэл:"
@@ -826,11 +834,12 @@ function Tariff({ name, fieldKey, restField, remove }) {
                   name={[mur.name, "minut"]}
                   fieldKey={[mur.key, "minut"]}
                   rules={[{ required: true, message: "Минут бөглөнө үү." }]}
-                  className="col-span-2 mb-0"
+                  className="mb-0 sm:col-span-2"
                 >
                   <InputNumber placeholder="Минут" className="w-full" />
                 </Form.Item>
-                <div className="col-span-2 flex items-end">
+
+                <div className="flex items-end sm:col-span-2">
                   <Form.Item
                     label="Тариф/₮/:"
                     labelCol={{ span: 24 }}
@@ -838,19 +847,20 @@ function Tariff({ name, fieldKey, restField, remove }) {
                     name={[mur.name, "tulbur"]}
                     fieldKey={[mur.key, "tulbur"]}
                     rules={[{ required: true, message: "Тариф бөглөнө үү." }]}
-                    className="mb-0"
+                    className="mb-0 w-full"
                   >
                     <InputNumber
+                      className="w-full"
                       formatter={(value) =>
                         `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                       }
-                      className="w-full"
                       parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                       placeholder="Тариф"
                     />
                   </Form.Item>
+
                   <MinusCircleOutlined
-                    className="mb-2.5 ml-2 dark:text-gray-300"
+                    className="mb-2.5 ml-2 cursor-pointer dark:text-gray-300"
                     onClick={() => remove(mur.name)}
                   />
                 </div>

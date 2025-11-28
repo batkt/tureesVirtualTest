@@ -114,12 +114,33 @@ const YurunkhiiMedeele = ({
 }) => {
   const [form] = Form.useForm();
   const baritsaaAvakhSar = baiguullaga?.tokhirgoo?.baritsaaAvakhSar || 0;
+  const baritsaaAvakhEsekh =
+    baiguullaga?.tokhirgoo?.baritsaaAvakhEsekh || false;
 
   useEffect(() => {
-    if (value.baritsaaAvakhEsekh === true && baritsaaAvakhSar > 0) {
-      form.setFieldValue("baritsaaAvakhKhugatsaa", baritsaaAvakhSar);
+    if (
+      value.baritsaaAvakhEsekh === undefined ||
+      value.baritsaaAvakhEsekh === null
+    ) {
+      form.setFieldValue("baritsaaAvakhEsekh", baritsaaAvakhEsekh);
+      onChange({ ...value, baritsaaAvakhEsekh });
+    } else if (!baritsaaAvakhEsekh && value.baritsaaAvakhEsekh === true) {
+      form.setFieldValue("baritsaaAvakhEsekh", false);
+      onChange({ ...value, baritsaaAvakhEsekh: false });
     }
-  }, [baritsaaAvakhSar, value.baritsaaAvakhEsekh]);
+  }, [baritsaaAvakhEsekh]);
+
+  useEffect(() => {
+    if (
+      value.baritsaaAvakhEsekh === true &&
+      baritsaaAvakhEsekh &&
+      baritsaaAvakhSar > 0
+    ) {
+      form.setFieldValue("baritsaaAvakhKhugatsaa", baritsaaAvakhSar);
+    } else if (!baritsaaAvakhEsekh) {
+      form.setFieldValue("baritsaaAvakhKhugatsaa", 0);
+    }
+  }, [baritsaaAvakhSar, value.baritsaaAvakhEsekh, baritsaaAvakhEsekh]);
   useEffect(() => {
     if (!!value.talbainIdnuud && !value.talbainuud) {
       getListMethod("talbai", token, {
@@ -144,7 +165,7 @@ const YurunkhiiMedeele = ({
     )
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
-          dun: value.talbainNiitUne,
+          dun: value.sariinTurees,
           khugatsaa: value.khugatsaa,
           tulukhUdruud: value.tulukhUdur,
           ekhlekhOgnoo: moment(
@@ -198,19 +219,18 @@ const YurunkhiiMedeele = ({
   };
 
   function talbainBurtgelBugulyu(talbainuud) {
-    gereeniiZagvar?.turGereeEsekh !== true
-      ? (value.baritsaaAvakhDun = talbainuud.reduce(
-          (a, b) => a + Number(b.talbainNiitUne || 0),
-          0
-        ))
-      : (value.talbainNiitUne = talbainuud.reduce(
-          (a, b) => a + Number(b.talbainNiitUne || 0),
-          0
-        ));
     value.sariinTurees = talbainuud.reduce(
       (a, b) => a + Number(b.talbainNiitUne || 0),
       0
     );
+    console.log("💰 After sariinTurees calculation:", {
+      sariinTurees: value.sariinTurees,
+      talbainuud: talbainuud.map((t) => ({
+        kod: t.kod,
+        talbainNiitUne: t.talbainNiitUne,
+      })),
+    });
+
     value.talbainNegjUne = talbainuud.reduce(
       (a, b) => a + Number(b.talbainNegjUne || 0),
       0
@@ -220,16 +240,26 @@ const YurunkhiiMedeele = ({
       value.baritsaaAvakhDun = value.sariinTurees * baritsaaAvakhSar;
       value.baritsaaAvakhDunUsgeer = toWords(value.baritsaaAvakhDun);
       value.baritsaaAvakhKhugatsaa = baritsaaAvakhSar;
+    } else if (value.baritsaaAvakhEsekh !== true) {
+      value.baritsaaAvakhDun = 0;
+      value.baritsaaAvakhDunUsgeer = "";
+      value.baritsaaAvakhKhugatsaa = 0;
     }
 
     if (gereeniiZagvar?.turGereeEsekh !== true) {
-      value.talbainNiitUne = Number(value.baritsaaAvakhDun || 0);
+      value.talbainNiitUne = value.sariinTurees;
       value.talbainKhemjee = talbainuud.reduce(
         (a, b) => a + b.talbainKhemjee,
         0
       );
-    } else
+    } else {
+      value.talbainNiitUne = talbainuud.reduce(
+        (a, b) => a + Number(b.talbainNiitUne || 0),
+        0
+      );
       value.talbainKhemjee = talbainuud.reduce((a, b) => b.talbainKhemjee, 0);
+    }
+
     value.talbainKhemjeeMetrKube = talbainuud.reduce(
       (a, b) => a + b.talbainKhemjeeMetrKube,
       0
@@ -244,8 +274,15 @@ const YurunkhiiMedeele = ({
     }
 
     value.talbainDugaar = talbainuud.map((a) => a.kod).join(",");
+    console.log("✅ Final values:", {
+      sariinTurees: value.sariinTurees,
+      talbainNiitUne: value.talbainNiitUne,
+      baritsaaAvakhDun: value.baritsaaAvakhDun,
+      baritsaaAvakhEsekh: value.baritsaaAvakhEsekh,
+    });
     form.setFieldsValue(value);
   }
+
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -322,7 +359,40 @@ const YurunkhiiMedeele = ({
 
   const onChangeM2 = useCallback(
     _.debounce((i, v) => {
+      const talbai = value.talbainuud[i];
+
+      if (
+        talbai.originalTalbainKhemjeeMetrKube === undefined &&
+        talbai.talbainKhemjeeMetrKube
+      ) {
+        _.set(
+          value.talbainuud,
+          `${i}.originalTalbainKhemjeeMetrKube`,
+          talbai.talbainKhemjeeMetrKube
+        );
+      }
+
       _.set(value.talbainuud, `${i}.talbainKhemjee`, v || 0);
+
+      if (
+        talbai.originalTalbainKhemjeeMetrKube !== undefined &&
+        talbai.sulKhemjee
+      ) {
+        const sulKhemjee = talbai.sulKhemjee ?? talbai.talbainKhemjee;
+        if (sulKhemjee > 0) {
+          if (v && v > 0) {
+            const newMetrKube =
+              talbai.originalTalbainKhemjeeMetrKube * (v / sulKhemjee);
+            _.set(value.talbainuud, `${i}.talbainKhemjeeMetrKube`, newMetrKube);
+          } else {
+            _.set(
+              value.talbainuud,
+              `${i}.talbainKhemjeeMetrKube`,
+              talbai.originalTalbainKhemjeeMetrKube
+            );
+          }
+        }
+      }
 
       talbainBurtgelBugulyu(value.talbainuud);
       onChange({ ...value });
@@ -332,11 +402,16 @@ const YurunkhiiMedeele = ({
 
   const onChangeUne = useCallback(
     _.debounce((i, v) => {
-      _.set(value.talbainuud, `${i}.talbainNiitUne`, v);
+      if (gereeniiZagvar?.turGereeEsekh === true) {
+        value.talbainNiitUne = v || 0;
+        value.sariinTurees = v || 0;
+      } else {
+        _.set(value.talbainuud, `${i}.talbainNiitUne`, v);
+      }
       talbainBurtgelBugulyu(value.talbainuud);
       onChange({ ...value });
     }, 500),
-    [value]
+    [value, gereeniiZagvar]
   );
 
   const baritsaaChange = (e) => {
@@ -483,7 +558,12 @@ const YurunkhiiMedeele = ({
                     {gereeniiZagvar.turGereeEsekh ? (
                       <InputNumber
                         size="small"
-                        value={value?.talbainNiitUne || 0}
+                        value={
+                          gereeniiZagvar.turGereeEsekh &&
+                          value.talbainuud?.length === 1
+                            ? value.talbainNiitUne || 0
+                            : talbai.talbainNiitUne || 0
+                        }
                         formatter={(value) =>
                           `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
@@ -532,7 +612,7 @@ const YurunkhiiMedeele = ({
               {value.davkhar}
             </div>
             <div className="col-span-4 text-center text-base font-medium">
-              {parseFloat(value.talbainKhemjee).toFixed(2)}
+              {parseFloat(value.talbainKhemjee || 0).toFixed(2)}
             </div>
             <div className="col-span-4 pr-2 text-right text-base font-medium">
               {formatNumber(value.sariinTurees)}
@@ -552,7 +632,7 @@ const YurunkhiiMedeele = ({
       >
         <Input placeholder={t("Талбайн нэмэлт нөхцөл")} />
       </Form.Item>
-      {gereeniiZagvar?.turGereeEsekh !== true ? (
+      {gereeniiZagvar?.turGereeEsekh !== true && baritsaaAvakhEsekh ? (
         <div>
           <div
             data-aos="fade-right"
