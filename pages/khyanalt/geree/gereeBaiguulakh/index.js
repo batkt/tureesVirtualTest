@@ -251,6 +251,20 @@ function GereeBaiguulakh({ token }) {
     let value =
       gereeniiZagvarGaralt?.jagsaalt?.find((a) => a._id === _id) || {};
     setGereeniiZagvar({ ...value });
+
+    setKhagalakhGeree({
+      ognoo: new Date(),
+      baritsaaAvakhEsekh: !value.turGereeEsekh,
+      gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
+      baritsaaAvakhKhugatsaa: 1,
+      baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),
+      barilgiinId: barilgiinId,
+      barilgiinKhayag: songosonBarilgiinHayag,
+    });
+
+    setCurrent(0);
+
+    setDutuuAlkham([]);
   };
 
   const alkhamiinGereeniiZagvar = React.useMemo(() => {

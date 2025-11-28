@@ -329,7 +329,9 @@ const Tulbur = ({
           <div className="text-right text-lg font-medium dark:text-gray-100">
             {formatNumber(
               (value.sariinTurees || 0) * (value.buunTulult || 1) +
-                (value.baritsaaAvakhEsekh ? value.baritsaaAvakhDun || 0 : 0) -
+                (!gereeniiZagvar?.turGereeEsekh && value.baritsaaAvakhEsekh
+                  ? value.baritsaaAvakhDun || 0
+                  : 0) -
                 (((value.sariinTurees || 0) * 12) / 365) *
                   (value.khungulukhKhugatsaa || 0) -
                 (value.khyamdaral || 0)
