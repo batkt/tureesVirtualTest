@@ -111,15 +111,15 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
       });
   }, [baiguullaga]);
   return (
-    <div className="col-span-12 grid grid-cols-12">
-      <div className="col-span-8 space-y-5 py-5">
-        <div className="box w-full rounded-md border p-5 py-2">
+    <div className="col-span-12 grid grid-cols-1 lg:grid-cols-12">
+      <div className="col-span-1 space-y-5 py-5 lg:col-span-8">
+        <div className="box w-full rounded-md border p-3 py-2 sm:p-5">
           <div className="pb-4 font-medium">{t("Ажлын өдөр")}</div>
-          <div className="grid grid-cols-7 gap-2 ">
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 md:grid-cols-7">
             {dolooKhonog.map((a, i) => {
               return (
                 <button
-                  className={`w-full rounded-md border shadow-md ${
+                  className={`w-full rounded-md border py-2 text-xs shadow-md sm:text-sm ${
                     ajliinUdur?.udur?.find((c) => c === a.id) !== undefined &&
                     "bg-blue-800 text-white"
                   }`}
@@ -165,7 +165,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
             {ajliinUdur.tariffuud?.map((a, i) => {
               return (
                 <div
-                  className="relative grid w-full grid-cols-4 items-center justify-between gap-5 rounded-md border bg-green-50 px-10 py-2 shadow-md dark:bg-gray-700 2xl:pr-20"
+                  className="relative grid w-full grid-cols-1 items-center gap-3 rounded-md border bg-green-50 px-4 py-3 shadow-md dark:bg-gray-700 sm:grid-cols-2 sm:gap-5 sm:px-10 sm:py-2 lg:grid-cols-4"
                   key={i}
                 >
                   <div
@@ -177,12 +177,14 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
                         ),
                       })
                     }
-                    className="absolute right-2 top-3 flex text-lg transition-all hover:text-red-500"
+                    className="absolute right-2 top-2 flex cursor-pointer text-lg transition-all hover:text-red-500 sm:top-3"
                   >
                     <CloseCircleOutlined />
                   </div>
 
-                  <label className="w-40 text-end ">{t("Минут хүртэл")}:</label>
+                  <label className="text-start text-sm sm:text-end sm:text-base">
+                    {t("Минут хүртэл")}:
+                  </label>
                   <InputNumber
                     value={ajliinUdur.tariffuud[i]?.minut}
                     onChange={(v) => {
@@ -192,7 +194,9 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
                     className="w-full"
                     placeholder={t("Минут")}
                   />
-                  <label className="w-40 text-end">{t("Тариф/₮/")}:</label>
+                  <label className="text-start text-sm sm:text-end sm:text-base">
+                    {t("Тариф/₮/")}:
+                  </label>
                   <InputNumber
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -211,13 +215,13 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
             })}
           </div>
         </div>
-        <div className="box w-full rounded-md border p-5 py-2">
+        <div className="box w-full rounded-md border p-3 py-2 sm:p-5">
           <div className="pb-4 font-medium">{t("Амралтын өдөр")}</div>
-          <div className="grid grid-cols-7 gap-2 ">
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 md:grid-cols-7">
             {dolooKhonog.map((a, i) => {
               return (
                 <button
-                  className={`w-full rounded-md border shadow-md ${
+                  className={`w-full rounded-md border py-2 text-xs shadow-md sm:text-sm ${
                     amraltiinUdur.udur?.find((c) => c === a.id) !== undefined &&
                     "bg-green-600 text-white"
                   }`}
@@ -263,7 +267,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
             {amraltiinUdur.tariffuud.map((a, i) => {
               return (
                 <div
-                  className="relative grid w-full grid-cols-4 items-center justify-between gap-5 rounded-md border bg-green-50 px-10 py-2 shadow-md dark:bg-gray-700 2xl:pr-20"
+                  className="relative grid w-full grid-cols-1 items-center gap-3 rounded-md border bg-green-50 px-4 py-3 shadow-md dark:bg-gray-700 sm:grid-cols-2 sm:gap-5 sm:px-10 sm:py-2 lg:grid-cols-4"
                   key={i}
                 >
                   <div
@@ -275,11 +279,13 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
                         ),
                       })
                     }
-                    className="absolute right-2 top-3 flex text-lg transition-all hover:text-red-500"
+                    className="absolute right-2 top-2 flex cursor-pointer text-lg transition-all hover:text-red-500 sm:top-3"
                   >
                     <CloseCircleOutlined />
                   </div>
-                  <label className="text-end">{t("Минут хүртэл")}:</label>
+                  <label className="text-start text-sm sm:text-end sm:text-base">
+                    {t("Минут хүртэл")}:
+                  </label>
                   <InputNumber
                     value={amraltiinUdur.tariffuud[i]?.minut}
                     onChange={(v) => {
@@ -289,7 +295,9 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
                     className="w-full"
                     placeholder={t("Минут")}
                   />
-                  <label className="w-40 text-end">{t("Тариф/₮/")}:</label>
+                  <label className="text-start text-sm sm:text-end sm:text-base">
+                    {t("Тариф/₮/")}:
+                  </label>
                   <InputNumber
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -309,10 +317,12 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
           </div>
         </div>
       </div>
-      <div className="col-span-4 p-5 pr-0">
-        <div className="box divide-y p-5 py-2">
-          <div className="flex items-center justify-between py-2">
-            {t("Ажлын өдөр үндсэн Тариф/₮/")}:{" "}
+      <div className="col-span-1 p-3 sm:p-5 lg:col-span-4 lg:pr-0">
+        <div className="box divide-y p-3 py-2 sm:p-5">
+          <div className="flex flex-col justify-between gap-2 py-2 sm:flex-row sm:items-center">
+            <span className="text-sm sm:text-base">
+              {t("Ажлын өдөр үндсэн Тариф/₮/")}:
+            </span>
             <InputNumber
               placeholder="Ажлын өдөр"
               formatter={(value) =>
@@ -323,11 +333,13 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
               onChange={(v) =>
                 setAjliinUdur({ ...ajliinUdur, undsenTariff: v })
               }
-              className=""
+              className="w-full sm:w-auto"
             />
           </div>
-          <div className="flex items-center justify-between py-2">
-            {t("Амралтын өдөр үндсэн Тариф/₮/")}:{" "}
+          <div className="flex flex-col justify-between gap-2 py-2 sm:flex-row sm:items-center">
+            <span className="text-sm sm:text-base">
+              {t("Амралтын өдөр үндсэн Тариф/₮/")}:
+            </span>
             <InputNumber
               placeholder="Амралтын өдөр"
               formatter={(value) =>
@@ -338,11 +350,13 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
               onChange={(v) =>
                 setAmraltiinUdur({ ...amraltiinUdur, undsenTariff: v })
               }
-              className=""
+              className="w-full sm:w-auto"
             />
           </div>
-          <div className="flex items-center justify-between py-2">
-            {t("Нэмэлт асран хамгаалагчийн Тариф")}:{" "}
+          <div className="flex flex-col justify-between gap-2 py-2 sm:flex-row sm:items-center">
+            <span className="text-sm sm:text-base">
+              {t("Нэмэлт асран хамгаалагчийн Тариф")}:
+            </span>
             <InputNumber
               placeholder="Асран хамгаалагч"
               formatter={(value) =>
@@ -351,17 +365,16 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
               parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
               value={asragchTariff}
               onChange={(v) => setAsragchTariff(v)}
-              className=""
+              className="w-full sm:w-auto"
             />
           </div>
         </div>
-        <div className="box mt-5 flex items-center justify-end px-5 py-2">
+        <div className="box mt-5 flex items-center justify-end px-3 py-2 sm:px-5">
           <Button
             className="w-full"
             type="primary"
             onClick={() => khadgalakh()}
           >
-            {" "}
             {t("Хадгалах")}
           </Button>
         </div>

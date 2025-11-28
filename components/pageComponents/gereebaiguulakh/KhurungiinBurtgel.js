@@ -612,7 +612,7 @@ const YurunkhiiMedeele = ({
               {value.davkhar}
             </div>
             <div className="col-span-4 text-center text-base font-medium">
-              {parseFloat(value.talbainKhemjee).toFixed(2)}
+              {parseFloat(value.talbainKhemjee || 0).toFixed(2)}
             </div>
             <div className="col-span-4 pr-2 text-right text-base font-medium">
               {formatNumber(value.sariinTurees)}
@@ -632,7 +632,7 @@ const YurunkhiiMedeele = ({
       >
         <Input placeholder={t("Талбайн нэмэлт нөхцөл")} />
       </Form.Item>
-      {gereeniiZagvar?.turGereeEsekh !== true ? (
+      {gereeniiZagvar?.turGereeEsekh !== true && baritsaaAvakhEsekh ? (
         <div>
           <div
             data-aos="fade-right"

@@ -235,21 +235,22 @@ const Tulbur = ({
       onValuesChange={(values) => onChange({ ...value, ...values })}
       onFinish={onFinish}
     >
-      <div className="flex justify-between">
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="400"
+          className="w-full md:w-auto"
         >
           <Form.Item
             labelAlign="left"
             name="ognoonuud"
             label={t("Хөнгөлөх сар")}
+            className="w-full"
           >
             <DatePicker.RangePicker
-              className="flex-end w-full rounded-md md:w-auto"
+              className="w-full rounded-md md:w-auto"
               allowClear={false}
-              style={{ width: "100%" }}
               picker="month"
               placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
               onChange={(v) => {
@@ -258,33 +259,39 @@ const Tulbur = ({
             />
           </Form.Item>
         </div>
+
         <div
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="400"
+          className="w-full md:w-auto"
         >
-          <Form.Item name="khungulukhKhuvi" labelAlign="left">
+          <Form.Item
+            name="khungulukhKhuvi"
+            labelAlign="left"
+            className="w-full"
+          >
             <Input
-              className="flex-end ml-1 flex w-full rounded-md md:w-auto"
+              className="w-full rounded-md md:w-auto"
               onKeyDown={focuser}
-              type={"number"}
+              type="number"
               placeholder={t("Хөнгөлөх хувь")}
             />
           </Form.Item>
         </div>
+
         <div
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="400"
+          className="flex w-full md:block md:w-auto"
         >
           <Form.Item>
             <Button
-              className="ml-1 flex"
+              className="w-full md:w-auto"
               type="primary"
               icon={<PlusOutlined />}
-              onClick={() => {
-                khungulultOruulakh();
-              }}
+              onClick={() => khungulultOruulakh()}
             ></Button>
           </Form.Item>
         </div>
