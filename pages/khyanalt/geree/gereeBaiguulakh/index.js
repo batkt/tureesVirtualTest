@@ -252,15 +252,26 @@ function GereeBaiguulakh({ token }) {
       gereeniiZagvarGaralt?.jagsaalt?.find((a) => a._id === _id) || {};
     setGereeniiZagvar({ ...value });
 
-    setKhagalakhGeree({
-      ognoo: new Date(),
+    setKhagalakhGeree((prev) => ({
+      ognoo: prev.ognoo || new Date(),
+      gereeniiDugaar:
+        prev.gereeniiDugaar || `ГД${moment(new Date()).format("YYMMDD")}`,
+      barilgiinId: prev.barilgiinId || barilgiinId,
+      barilgiinKhayag: prev.barilgiinKhayag || songosonBarilgiinHayag,
+      baiguullagaEsekh: prev.baiguullagaEsekh,
+      dans: prev.dans,
+      utas: prev.utas,
+      ner: prev.ner,
+      ovog: prev.ovog,
+      zakhirliinNer: prev.zakhirliinNer,
+      zakhirliinOvog: prev.zakhirliinOvog,
+      register: prev.register,
+      customerTin: prev.customerTin,
+
       baritsaaAvakhEsekh: !value.turGereeEsekh,
-      gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
       baritsaaAvakhKhugatsaa: 1,
       baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),
-      barilgiinId: barilgiinId,
-      barilgiinKhayag: songosonBarilgiinHayag,
-    });
+    }));
 
     setCurrent(0);
 

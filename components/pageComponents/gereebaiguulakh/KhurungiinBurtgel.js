@@ -540,7 +540,7 @@ const YurunkhiiMedeele = ({
                   )}
                   {talbai.talbainKhemjeeMetrKube > 0 && (
                     <div className="text-center">
-                      {talbai?.talbainKhemjeeMetrKube}
+                      {talbai?.talbainKhemjeeMetrKube.toFixed(2)}
                     </div>
                   )}
                   <div className="pr-2 text-right">
@@ -554,7 +554,6 @@ const YurunkhiiMedeele = ({
                             : talbai.talbainNiitUne || 0
                         }
                         formatter={(v) => {
-                  
                           if (!v) return "0";
                           return String(v).replace(
                             /\B(?=(\d{3})+(?!\d))/g,
@@ -562,7 +561,6 @@ const YurunkhiiMedeele = ({
                           );
                         }}
                         parser={(v) => {
-               
                           const parsed = v.replace(/[^\d]/g, "");
                           return parsed ? Number(parsed) : 0;
                         }}

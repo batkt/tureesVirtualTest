@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { renderToString } from "react-dom/server";
 import _ from "lodash";
 import { customPlugin } from "../geree/zagvar/ZaaltOruulakh";
-import { SolutionOutlined } from "@ant-design/icons";
+import { SolutionOutlined, DollarCircleOutlined } from "@ant-design/icons";
 import { formatting } from "../geree/zagvar/ZaaltZasvar";
 
 var instance = null;
@@ -52,8 +52,23 @@ function ZaaltZasvar({
       title: "Үндсэн мэдээлэл",
       button: renderToString(<SolutionOutlined />),
     });
-    return [undsen];
-  }, []);
+
+    const tulburiinTalbaruud = [
+      { ner: "Хөнгөлөх хугацаа", talbar: "khungulukhKhugatsaa" },
+      { ner: "Сарын түрээс", talbar: "sariinTurees" },
+      { ner: "Сарын нийлбэр дүн", talbar: "sariinNiilberDun" },
+      { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
+    ];
+
+    const tulbur = customPlugin({
+      songokhTalbaruud: tulburiinTalbaruud,
+      name: "tulbur",
+      title: "Төлбөр",
+      button: renderToString(<DollarCircleOutlined />),
+    });
+
+    return [undsen, tulbur];
+  }, [undsenTalbaruud]);
 
   return (
     <SunEditor
@@ -65,8 +80,13 @@ function ZaaltZasvar({
       setContents={value}
       setOptions={{
         plugins: custom,
-        buttonList: [...formatting, ["undsen"], ...buttonListCustom],
-        resizingBar: false,
+        buttonList: [
+          ...formatting,
+          ["undsen"],
+          ["tulbur"],
+          ...buttonListCustom,
+        ],
+        resizingBar: true,
         height: height,
       }}
       showToolbar={true}
