@@ -67,7 +67,7 @@ const Tulbur = ({
     next(value);
   }
 
-  function khuvaariUusgey() {
+  function khuvaariUusgey(updatedKhungulult = khungulultKhuvaari) {
     const zardluud = value.zardluud?.filter(function (item) {
       return (
         item.turul === "Дурын" ||
@@ -88,7 +88,7 @@ const Tulbur = ({
         ).format("YYYY-MM-DD 00:00:00"),
         duusakhOgnoo: moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00"),
         zardluud: zardluud,
-        khungulultuud: khungulultKhuvaari,
+        khungulultuud: updatedKhungulult,
         mk: value.talbainKhemjee,
         metrKube: value.talbainKhemjeeMetrKube,
         turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
@@ -171,13 +171,14 @@ const Tulbur = ({
             10000
         ) / 10000,
     };
-    setKhungulultKhuvaari((pre) => {
-      const updated = [...pre, addRow];
-      value.khungulultuud = updated;
-      onChange({ ...value });
-      return updated;
-    });
-    khuvaariUusgey();
+
+    const updatedKhungulult = [...khungulultKhuvaari, addRow];
+
+    setKhungulultKhuvaari(updatedKhungulult);
+
+    value.khungulultuud = updatedKhungulult;
+    onChange({ ...value });
+    khuvaariUusgey(updatedKhungulult);
   }
 
   useEffect(() => {
@@ -205,12 +206,13 @@ const Tulbur = ({
   }, [value.sariinTurees, value.talbainIdnuud]);
 
   function hungulultUstgakh(e) {
-    setKhungulultKhuvaari((pre) => {
-      return pre.filter((a) => a.key !== e);
-    });
-    value.khungulultuud = value.khungulultuud.filter((a) => a.key != e);
+    const updatedKhungulult = khungulultKhuvaari.filter((a) => a.key !== e);
+
+    setKhungulultKhuvaari(updatedKhungulult);
+    value.khungulultuud = updatedKhungulult;
     onChange({ ...value });
-    khuvaariUusgey();
+
+    khuvaariUusgey(updatedKhungulult);
   }
 
   const focuser = useCallback((e) => {

@@ -635,7 +635,7 @@ function tulburTootsoo() {
       form.getFieldValue("khungulukhTurul") === "zardal"
     ) {
       column.push({
-        title: zardal.jagsaalt.find(
+        title: zardal?.jagsaalt?.find(
           (e) => e?._id === form.getFieldValue("zardliinId")
         )?.ner,
         dataIndex: "data",
@@ -647,7 +647,7 @@ function tulburTootsoo() {
             (e) => e?._id === form.getFieldValue("zardliinId")
           );
 
-          const selectedZardal = zardal.jagsaalt.find(
+          const selectedZardal = zardal?.jagsaalt?.find(
             (e) => e?._id === form.getFieldValue("zardliinId")
           );
 
@@ -1393,7 +1393,7 @@ function tulburTootsoo() {
                             });
                           }}
                         >
-                          {zardal.jagsaalt.map((z) => (
+                          {zardal?.jagsaalt?.map((z) => (
                             <Select.Option value={z._id}>{z.ner}</Select.Option>
                           ))}
                         </Select>
