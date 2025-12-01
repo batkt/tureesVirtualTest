@@ -51,13 +51,12 @@ const talbaruud = [
 
 export var customPlugin = ({
   name = "custom_example",
-  title = t("Талбарийн нэр"),
+  title = "Талбарийн нэр",
   button = "T",
   songokhTalbaruud = talbaruud,
 }) => ({
   name: name,
 
-  // ✅ force correct type
   display: "submenu",
 
   title: title,
@@ -79,6 +78,11 @@ export var customPlugin = ({
     const listDiv = this.util.createElement("DIV");
 
     listDiv.className = "se-submenu se-list-layer";
+
+    listDiv.style.maxHeight = "300px";
+    listDiv.style.overflowY = "auto";
+    listDiv.style.overflowX = "hidden";
+
     listDiv.innerHTML =
       '<div class="se-list-inner se-list-font-size"><ul class="se-list-basic">' +
       songokhTalbaruud

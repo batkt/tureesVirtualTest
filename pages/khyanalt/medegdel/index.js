@@ -461,6 +461,7 @@ function Khyanalt({ token }) {
     modal({
       title: `${turul} ${t("Загвар үүсгэх")}`,
       icon: <FileExcelOutlined />,
+      width: 1200,  
       content: (
         <ZagvarBurtgel
           ref={ref}
