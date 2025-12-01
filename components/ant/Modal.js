@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Modal as AntModal } from "antd";
 
-export function modal({ content, onOk, onCancel, ...config }) {
+export function modal({ content, onOk, onCancel, width = 800, ...config }) {
   const div = document.createElement("div");
   document.body.appendChild(div);
 
@@ -34,6 +34,7 @@ export function modal({ content, onOk, onCancel, ...config }) {
       open
       closable={false}
       destroyOnClose
+      width={width}
       {...config}
       onOk={handleOk}
       onCancel={handleCancel}

@@ -33,7 +33,7 @@ const Tulbur = ({
   formSubmit,
 }) => {
   const [form] = Form.useForm();
-  const zasvarEsekh = typeof zasvar === "boolean" ? zasvar : !!value?._id; // contract editing flag
+  const zasvarEsekh = typeof zasvar === "boolean" ? zasvar : !!value?._id;
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -54,12 +54,7 @@ const Tulbur = ({
         value.duusakhOgnoo > moment().startOf("month")) ||
       !!value._id
     )
-      console.log("🔍 Sending to backend:", {
-        dun: value.talbainNiitUne,
-        sariinTurees: value.sariinTurees,
-        baritsaaAvakhDun: value.baritsaaAvakhDun,
-        talbainuud: value.talbainuud,
-      });
+      
     khuvaariUusgey();
   }, []);
 
@@ -171,13 +166,14 @@ const Tulbur = ({
             10000
         ) / 10000,
     };
-    setKhungulultKhuvaari((pre) => {
-      const updated = [...pre, addRow];
-      value.khungulultuud = updated;
-      onChange({ ...value });
-      return updated;
-    });
-    khuvaariUusgey();
+
+    const updatedKhungulult = [...khungulultKhuvaari, addRow];
+
+    setKhungulultKhuvaari(updatedKhungulult);
+
+    value.khungulultuud = updatedKhungulult;
+    onChange({ ...value });
+    khuvaariUusgey(updatedKhungulult);
   }
 
   useEffect(() => {

@@ -197,7 +197,7 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
 
   return (
     <>
-      <div className="col-span-3 max-h-[600px] overflow-y-auto">
+      <div className="col-span-3">
         {transactionsByMonth && transactionsByMonth.length > 0 ? (
           <>
             {transactionsByMonth.map(({ month, monthLabel, transactions }) => {
@@ -322,6 +322,18 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                         ? `${transaction._id}-${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}` 
                         : `${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}`;
                       
+                      // Update rawInputValues and focusedInputs immediately for instant display
+                      const formattedValue = formatNumber(value, 2);
+                      setRawInputValues((prev) => ({
+                        ...prev,
+                        [transactionId]: formattedValue
+                      }));
+                      setFocusedInputs((prev) => ({ ...prev, [transactionId]: true }));
+                      
+                      // Focus the input so user sees the change immediately
+                      e.target.focus();
+                      e.target.select();
+                      
                       if (setTransactionInputs) {
                         setTransactionInputs((prev) => {
                           // Get current total before adding this value
@@ -347,6 +359,12 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                               // Cap the value to what's available
                               const maxAllowed = Math.max(0, guilgeeniiDunRounded - sum - (currentTotalRounded - (prev[index]?.[transactionId] || 0)));
                               value = Math.max(0, Math.round(maxAllowed * 100) / 100);
+                              // Update rawInputValues with capped value
+                              const cappedFormattedValue = formatNumber(value, 2);
+                              setRawInputValues((prev) => ({
+                                ...prev,
+                                [transactionId]: cappedFormattedValue
+                              }));
                             }
                           }
                           
@@ -438,49 +456,88 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                         return; // Invalid input, don't update
                       }
                       
-                      // Parse the value - preserve exact decimal precision
-                      const parsedValue = parseFloat(cleaned);
-                      let value = isNaN(parsedValue) ? 0 : parsedValue;
-                      
-                      // Validate: Төлөх дүн cannot exceed Дүн - prevent input if exceeds
-                      const maxDun = transaction.tulukhDun || 0;
-                      if (value > maxDun && maxDun > 0) {
-                        // Don't allow the input - return without updating
-                        return;
-                      }
-                      
                       // Format with commas - preserve exact decimal places from user input
                       let formattedValue = '';
+                      let value = 0;
+                      let isValidNumber = false;
+                      
                       if (cleaned === '' || cleaned === '.') {
                         formattedValue = cleaned;
+                        // Don't update transactionInputs for incomplete input
                       } else {
                         const parts = cleaned.split('.');
-                        const intPart = parts[0] || '0';
+                        const intPart = parts[0] || '';
                         const decPart = parts[1] || '';
                         
-                        // Format integer part with commas
-                        const formattedInt = parseInt(intPart, 10).toLocaleString('en-US');
-                        
-                        // Preserve exact decimal part (max 2 digits)
-                        if (decPart) {
-                          const limitedDec = decPart.length > 2 ? decPart.substring(0, 2) : decPart;
-                          formattedValue = `${formattedInt}.${limitedDec}`;
+                        // If integer part is empty, user is typing a decimal starting with dot (e.g., ".00", ".36")
+                        if (intPart === '') {
+                          // Preserve the dot and decimal part (max 2 digits)
+                          if (decPart) {
+                            const limitedDec = decPart.length > 2 ? decPart.substring(0, 2) : decPart;
+                            formattedValue = `.${limitedDec}`;
+                            // Parse the value for validation
+                            const parsedValue = parseFloat(`0.${limitedDec}`);
+                            value = isNaN(parsedValue) ? 0 : parsedValue;
+                            isValidNumber = !isNaN(parsedValue);
+                          } else {
+                            formattedValue = '.';
+                            // Don't update transactionInputs for just "."
+                          }
                         } else {
-                          formattedValue = formattedInt;
+                          // Format integer part with commas
+                          const formattedInt = parseInt(intPart, 10).toLocaleString('en-US');
+                          
+                          // Preserve exact decimal part (max 2 digits)
+                          if (decPart) {
+                            const limitedDec = decPart.length > 2 ? decPart.substring(0, 2) : decPart;
+                            formattedValue = `${formattedInt}.${limitedDec}`;
+                            // Parse the full value
+                            const parsedValue = parseFloat(cleaned);
+                            value = isNaN(parsedValue) ? 0 : parsedValue;
+                            isValidNumber = !isNaN(parsedValue);
+                          } else {
+                            // Check if it ends with dot (e.g., "5.")
+                            if (cleaned.endsWith('.')) {
+                              formattedValue = `${formattedInt}.`;
+                              // Don't update transactionInputs for incomplete input like "5."
+                            } else {
+                              formattedValue = formattedInt;
+                              const parsedValue = parseFloat(cleaned);
+                              value = isNaN(parsedValue) ? 0 : parsedValue;
+                              isValidNumber = !isNaN(parsedValue);
+                            }
+                          }
                         }
                       }
                       
                       // Store formatted value for display
                       setRawInputValues((prev) => ({ ...prev, [transactionId]: formattedValue }));
                       
-                      // Store the exact value without any rounding
+                      // Auto-cap to maxDun while typing if value exceeds it
+                      const maxDun = transaction.tulukhDun || 0;
+                      let cappedValue = value;
+                      if (isValidNumber && maxDun > 0 && value > maxDun) {
+                        cappedValue = Math.round(maxDun * 100) / 100;
+                        // Update the formatted display value immediately
+                        const cappedFormatted = formatNumber(cappedValue, 2);
+                        setRawInputValues((prev) => ({
+                          ...prev,
+                          [transactionId]: cappedFormatted
+                        }));
+                      }
+                      
+                      // Store the exact value without any rounding (only if valid number, otherwise keep previous or 0)
                       if (setTransactionInputs) {
                         setTransactionInputs((prev) => {
+                          // If input is incomplete (like "." or "5."), keep the previous value or use 0
+                          // Otherwise use the capped value if it was capped, or the original value
+                          const valueToStore = isValidNumber ? cappedValue : (prev[index]?.[transactionId] || 0);
+                          
                           const updatedInputs = {
                             ...prev,
                             [index]: {
                               ...(prev[index] || {}),
-                              [transactionId]: value,
+                              [transactionId]: valueToStore,
                             },
                           };
                           
@@ -548,7 +605,13 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                           const storedValue = prev[index]?.[transactionId];
                           if (storedValue !== undefined && storedValue !== null) {
                             const numValue = typeof storedValue === 'number' ? storedValue : parseFloat(storedValue) || 0;
-                            const roundedValue = Math.round(numValue * 100) / 100;
+                            let roundedValue = Math.round(numValue * 100) / 100;
+                            
+                            // Cap to maxDun (Дүн) if it exceeds
+                            const maxDun = transaction.tulukhDun || 0;
+                            if (roundedValue > maxDun && maxDun > 0) {
+                              roundedValue = Math.round(maxDun * 100) / 100;
+                            }
                             
                             // Check total on blur and show warning if needed
                             const contractInputs = {
@@ -561,7 +624,8 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                             }, 0);
                             const roundedTotal = Math.round(total * 100) / 100;
                             
-                            // Validate on blur - if exceeds, cap it to the maximum allowed
+                            // Validate on blur - if exceeds guilgeeniiDun, cap it to the maximum allowed
+                            let finalValue = roundedValue;
                             if (zuruuZun && guilgeeniiDun !== undefined && guilgeeniiDun !== null) {
                               const sum = zuruuZun(index, "tureesiinTulbur");
                               const totalWouldBe = Math.round((sum + roundedTotal) * 100) / 100;
@@ -574,28 +638,39 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                                 
                                 // Calculate the capped value for this input
                                 const currentTotalWithoutThis = roundedTotal - roundedValue;
-                                const cappedValue = Math.max(0, cappedTotal - currentTotalWithoutThis);
-                                
-                                // Update with capped value
-                                return {
-                                  ...prev,
-                                  [index]: {
-                                    ...(prev[index] || {}),
-                                    [transactionId]: Math.round(cappedValue * 100) / 100,
-                                  },
-                                };
+                                finalValue = Math.max(0, cappedTotal - currentTotalWithoutThis);
+                                finalValue = Math.round(finalValue * 100) / 100;
                               }
                             }
                             
+                            // Update rawInputValues to show the capped value if it was changed
+                            if (finalValue !== numValue) {
+                              setRawInputValues((prev) => ({
+                                ...prev,
+                                [transactionId]: formatNumber(finalValue, 2)
+                              }));
+                            }
+                            
+                            // Update contractInputs with final value
+                            const finalContractInputs = {
+                              ...(prev[index] || {}),
+                              [transactionId]: finalValue,
+                            };
+                            const finalTotal = Object.values(finalContractInputs).reduce((sum, val) => {
+                              const numVal = typeof val === 'number' ? val : (parseFloat(val) || 0);
+                              return sum + numVal;
+                            }, 0);
+                            const finalRoundedTotal = Math.round(finalTotal * 100) / 100;
+                            
                             if (onChangeKholbokhDun) {
-                              const syntheticTarget = { value: formatter(roundedTotal) };
+                              const syntheticTarget = { value: formatter(finalRoundedTotal) };
                               // Don't skip validation on blur - show warning if total exceeds
                               onChangeKholbokhDun(syntheticTarget, index, "tureesiinTulbur", false);
                             }
                             
                             return {
                               ...prev,
-                              [index]: contractInputs,
+                              [index]: finalContractInputs,
                             };
                           }
                           return prev;
@@ -1283,12 +1358,150 @@ function GuilgeeNiiluulekh(
               </span>
               <span 
                 className="h-10 w-10 p-1 text-2xl text-red-500 cursor-pointer"
-                onClick={() =>
-                  setGereenuud((a) => {
-                    a.splice(index, 1);
-                    return [...a];
-                  })
-                }
+                onClick={() => {
+                  // Check if there are any changes for this contract
+                  const geree = gereenuud[index];
+                  const baritsaaTulbur = geree?.baritsaaTulbur === '' || geree?.baritsaaTulbur === null || geree?.baritsaaTulbur === undefined 
+                    ? 0 
+                    : (typeof geree.baritsaaTulbur === 'number' ? geree.baritsaaTulbur : parseFloat(geree.baritsaaTulbur) || 0);
+                  const tulsunAldangi = geree?.tulsunAldangi === '' || geree?.tulsunAldangi === null || geree?.tulsunAldangi === undefined 
+                    ? 0 
+                    : (typeof geree.tulsunAldangi === 'number' ? geree.tulsunAldangi : parseFloat(geree.tulsunAldangi) || 0);
+                  const tureesiinTulbur = geree?.tureesiinTulbur === '' || geree?.tureesiinTulbur === null || geree?.tureesiinTulbur === undefined 
+                    ? 0 
+                    : (typeof geree.tureesiinTulbur === 'number' ? geree.tureesiinTulbur : parseFloat(geree.tureesiinTulbur) || 0);
+                  
+                  // Check transaction inputs
+                  const contractTransactionInputs = transactionInputs[index] || {};
+                  const hasTransactionInputs = Object.values(contractTransactionInputs).some(val => {
+                    const numVal = typeof val === 'number' ? val : (parseFloat(val) || 0);
+                    return numVal > 0;
+                  });
+                  
+                  const hasChanges = baritsaaTulbur > 0 || tulsunAldangi > 0 || tureesiinTulbur > 0 || hasTransactionInputs;
+                  
+                  if (hasChanges) {
+                    Modal.confirm({
+                      content: t("Та энэ гэрээг устгахдаа итгэлтэй байна уу? Хийсэн өөрчлөлтүүд алдагдана."),
+                      okText: t("Тийм"),
+                      cancelText: t("Үгүй"),
+                      onOk: () => {
+                        // First, reset tureesiinTulbur for this contract to 0
+                        setGereenuud((a) => {
+                          const newGereenuud = [...a];
+                          if (newGereenuud[index]) {
+                            newGereenuud[index] = {
+                              ...newGereenuud[index],
+                              tureesiinTulbur: 0,
+                            };
+                          }
+                          return newGereenuud;
+                        });
+                        
+                        // Remove transaction inputs for this contract and recalculate total
+                        setTransactionInputs((prev) => {
+                          const updated = { ...prev };
+                          delete updated[index];
+                          // Reindex remaining transaction inputs after this index
+                          const reindexed = {};
+                          Object.keys(updated).forEach((key) => {
+                            const keyNum = parseInt(key, 10);
+                            if (keyNum > index) {
+                              reindexed[keyNum - 1] = updated[key];
+                            } else if (keyNum < index) {
+                              reindexed[key] = updated[key];
+                            }
+                            // Skip the deleted index
+                          });
+                          
+                          // Calculate new total from reindexed transaction inputs
+                          const newTotal = Object.values(reindexed).reduce((sum, contractInputs) => {
+                            const contractTotal = Object.values(contractInputs || {}).reduce((s, val) => {
+                              const numVal = typeof val === 'number' ? val : (parseFloat(val) || 0);
+                              return s + numVal;
+                            }, 0);
+                            return sum + contractTotal;
+                          }, 0);
+                          const roundedTotal = Math.round(newTotal * 100) / 100;
+                          
+                          // Update tureesiinTulbur total with the new total (after removing this contract's inputs)
+                          if (onChangeKholbokhDun) {
+                            const syntheticTarget = { value: formatter(roundedTotal) };
+                            // Use index 0 or the first remaining contract index for recalculation
+                            const recalculationIndex = index > 0 ? 0 : (Object.keys(reindexed).length > 0 ? 0 : 0);
+                            onChangeKholbokhDun(syntheticTarget, recalculationIndex, "tureesiinTulbur", true);
+                          }
+                          
+                          return reindexed;
+                        });
+                        
+                        // Remove the contract after a brief delay to ensure state updates
+                        setTimeout(() => {
+                          setGereenuud((a) => {
+                            const newGereenuud = [...a];
+                            newGereenuud.splice(index, 1);
+                            return newGereenuud;
+                          });
+                        }, 0);
+                      },
+                    });
+                  } else {
+                    // No changes, remove immediately
+                    // First reset tureesiinTulbur to 0
+                    setGereenuud((a) => {
+                      const newGereenuud = [...a];
+                      if (newGereenuud[index]) {
+                        newGereenuud[index] = {
+                          ...newGereenuud[index],
+                          tureesiinTulbur: 0,
+                        };
+                      }
+                      return newGereenuud;
+                    });
+                    
+                    setTransactionInputs((prev) => {
+                      const updated = { ...prev };
+                      delete updated[index];
+                      // Reindex remaining transaction inputs after this index
+                      const reindexed = {};
+                      Object.keys(updated).forEach((key) => {
+                        const keyNum = parseInt(key, 10);
+                        if (keyNum > index) {
+                          reindexed[keyNum - 1] = updated[key];
+                        } else if (keyNum < index) {
+                          reindexed[key] = updated[key];
+                        }
+                      });
+                      
+                      // Calculate new total and update
+                      const newTotal = Object.values(reindexed).reduce((sum, contractInputs) => {
+                        const contractTotal = Object.values(contractInputs || {}).reduce((s, val) => {
+                          const numVal = typeof val === 'number' ? val : (parseFloat(val) || 0);
+                          return s + numVal;
+                        }, 0);
+                        return sum + contractTotal;
+                      }, 0);
+                      const roundedTotal = Math.round(newTotal * 100) / 100;
+                      
+                      // Update tureesiinTulbur total
+                      if (onChangeKholbokhDun) {
+                        const syntheticTarget = { value: formatter(roundedTotal) };
+                        onChangeKholbokhDun(syntheticTarget, 0, "tureesiinTulbur", true);
+                      }
+                      
+                      return reindexed;
+                    });
+                    
+                    // Remove the contract
+                    setTimeout(() => {
+                      setGereenuud((a) => {
+                        const newGereenuud = [...a];
+                        newGereenuud.splice(index, 1);
+                        return newGereenuud;
+                      });
+                    }, 0);
+                  }
+                }}
               >
                 <CloseCircleOutlined />
               </span>
