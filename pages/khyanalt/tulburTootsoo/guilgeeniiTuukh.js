@@ -221,7 +221,8 @@ function guilgeeniiTuukh({ token }) {
   const [neesenEsekh, setNeesenEsekh] = useState(false);
   const [loadingIndex, setLoadingIndex] = React.useState(0);
   const [davkhar, setDavkhar] = React.useState(undefined);
-  const [aldangiLoading, setAldangiLoading] = useState(false);
+  const [aldangiBodokhLoading, setAldangiBodokhLoading] = useState(false);
+  const [aldangiUstgahLoading, setAldangiUstgahLoading] = useState(false);
   const { guilgeeniiToololt, guilgeeniiToololtMutate } =
     useGuilgeeniiToololtAvya(token, ognoo, barilgiinId);
   const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
@@ -372,8 +373,8 @@ function guilgeeniiTuukh({ token }) {
     );
 
   const aldangiBodoyo = async () => {
-    if (!baiguullaga?._id || aldangiLoading) return;
-    setAldangiLoading(true);
+    if (!baiguullaga?._id || aldangiBodokhLoading) return;
+    setAldangiBodokhLoading(true);
     await uilchilgee(token)
       .post("/aldangiBodyo", { baiguullagiinId: baiguullaga._id })
       .then(() => {
@@ -383,12 +384,12 @@ function guilgeeniiTuukh({ token }) {
         });
       })
       .catch(aldaaBarigch)
-      .finally(() => setAldangiLoading(false));
+      .finally(() => setAldangiBodokhLoading(false));
   };
 
   const aldangiUstgayaa = async () => {
-    if (!baiguullaga?._id || !barilgiinId || aldangiLoading) return;
-    setAldangiLoading(true);
+    if (!baiguullaga?._id || !barilgiinId || aldangiUstgahLoading) return;
+    setAldangiUstgahLoading(true);
     await uilchilgee(token)
       .post("/aldangiUstgayaa", {
         baiguullagiinId: baiguullaga._id,
@@ -401,7 +402,7 @@ function guilgeeniiTuukh({ token }) {
         });
       })
       .catch(aldaaBarigch)
-      .finally(() => setAldangiLoading(false));
+      .finally(() => setAldangiUstgahLoading(false));
   };
 
   const { gereeniiMedeelel, onSearch } = useMemo(() => {
@@ -1354,7 +1355,7 @@ function guilgeeniiTuukh({ token }) {
               <Button
                 type="primary"
                 onClick={aldangiBodoyo}
-                loading={aldangiLoading}
+                loading={aldangiBodokhLoading}
                 disabled={!baiguullaga?._id}
               >
                 Алданги бодох
@@ -1365,7 +1366,7 @@ function guilgeeniiTuukh({ token }) {
                 className="mr-10"
                 type="primary"
                 onClick={aldangiUstgayaa}
-                loading={aldangiLoading}
+                loading={aldangiUstgahLoading}
                 disabled={!baiguullaga?._id || !barilgiinId}
               >
                 Алданги устгах
