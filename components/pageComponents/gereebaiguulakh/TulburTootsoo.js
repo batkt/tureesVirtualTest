@@ -171,13 +171,14 @@ const Tulbur = ({
             10000
         ) / 10000,
     };
-    setKhungulultKhuvaari((pre) => {
-      const updated = [...pre, addRow];
-      value.khungulultuud = updated;
-      onChange({ ...value });
-      return updated;
-    });
-    khuvaariUusgey();
+
+    const updatedKhungulult = [...khungulultKhuvaari, addRow];
+
+    setKhungulultKhuvaari(updatedKhungulult);
+
+    value.khungulultuud = updatedKhungulult;
+    onChange({ ...value });
+    khuvaariUusgey(updatedKhungulult);
   }
 
   useEffect(() => {
