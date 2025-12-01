@@ -359,21 +359,6 @@ function AjiltanBurtgel({ token }) {
     return Promise.resolve();
   }
 
-  function emailShalgakh(value) {
-    if (!value) return Promise.resolve();
-
-    const exists = khariltsagchiinGaralt?.jagsaalt?.some(
-      (customer) =>
-        customer.mail === value && customer._id !== khariltsagchState._id
-    );
-
-    if (exists) {
-      message.warning(t("Энэ и-мэйл хаягыг бүртгэсэн байна"));
-      return Promise.reject(t("Давхардсан и-мэйл"));
-    }
-    return Promise.resolve();
-  }
-
   function tuukh(data) {
     getListMethod(
       "geree",
@@ -1051,13 +1036,6 @@ function AjiltanBurtgel({ token }) {
                 {
                   required: true,
                   message: t("И-мейл хаяг бүртгэнэ үү!"),
-                },
-                {
-                  validator: async (_, value) => {
-                    if (value) {
-                      return emailShalgakh(value);
-                    }
-                  },
                 },
               ]}
             >
