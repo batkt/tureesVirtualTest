@@ -197,7 +197,7 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
 
   return (
     <>
-      <div className="col-span-3 max-h-[600px] overflow-y-auto">
+      <div className="col-span-3">
         {transactionsByMonth && transactionsByMonth.length > 0 ? (
           <>
             {transactionsByMonth.map(({ month, monthLabel, transactions }) => {
@@ -322,6 +322,18 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                         ? `${transaction._id}-${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}` 
                         : `${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}`;
                       
+                      // Update rawInputValues and focusedInputs immediately for instant display
+                      const formattedValue = formatNumber(value, 2);
+                      setRawInputValues((prev) => ({
+                        ...prev,
+                        [transactionId]: formattedValue
+                      }));
+                      setFocusedInputs((prev) => ({ ...prev, [transactionId]: true }));
+                      
+                      // Focus the input so user sees the change immediately
+                      e.target.focus();
+                      e.target.select();
+                      
                       if (setTransactionInputs) {
                         setTransactionInputs((prev) => {
                           // Get current total before adding this value
@@ -347,6 +359,12 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                               // Cap the value to what's available
                               const maxAllowed = Math.max(0, guilgeeniiDunRounded - sum - (currentTotalRounded - (prev[index]?.[transactionId] || 0)));
                               value = Math.max(0, Math.round(maxAllowed * 100) / 100);
+                              // Update rawInputValues with capped value
+                              const cappedFormattedValue = formatNumber(value, 2);
+                              setRawInputValues((prev) => ({
+                                ...prev,
+                                [transactionId]: cappedFormattedValue
+                              }));
                             }
                           }
                           
