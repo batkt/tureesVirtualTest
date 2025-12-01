@@ -410,7 +410,8 @@ function tulburTootsoo({ token }) {
             <span className="text-black dark:text-white">Гүйлгээ холбох</span>
           </div>
         ),
-        width: "50rem",
+        width: "95%",
+        style: { maxWidth: "1400px" },
         icon: <FileExcelOutlined />,
         content: (
           <GuilgeeKholbokh

@@ -30,7 +30,10 @@ import { t } from "i18next";
 
 var timeout = null;
 
-function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun, onDoubleClickKholbokhDun, guilgeeniiDun, zuruuZun, transactionInputs, setTransactionInputs }) {
+function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun, onDoubleClickKholbokhDun, guilgeeniiDun, zuruuZun, zuruuDun, transactionInputs, setTransactionInputs }) {
+  const [focusedInputs, setFocusedInputs] = React.useState({});
+  const [rawInputValues, setRawInputValues] = React.useState({});
+  const [expandedMonths, setExpandedMonths] = useState({});
   const ognoo = useMemo(() => {
     const endDate = moment().endOf("month");
     const startDate = geree?.gereeniiOgnoo
@@ -194,64 +197,109 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
 
   return (
     <>
-      <div className="col-span-3 text-sm font-medium mb-2">
-        {t("Хуулга")} ({transactionsByMonth.length} {t("сар")})
-      </div>
-      <div className="col-span-3 max-h-96 overflow-y-auto">
+      <div className="col-span-3 max-h-[600px] overflow-y-auto">
         {transactionsByMonth && transactionsByMonth.length > 0 ? (
-          <Collapse ghost defaultActiveKey={[]}>
-            {transactionsByMonth.map(({ month, monthLabel, transactions }) => (
-              <Panel
-                key={month}
-                header={
-                  <div className="flex justify-between items-center w-full pr-4">
-                    <span className="font-medium">{monthLabel}</span>
-                    <span className="text-xs text-gray-500">
+          <>
+            {transactionsByMonth.map(({ month, monthLabel, transactions }) => {
+              // Calculate total for this month's transactions
+              const monthTotal = transactions.reduce((sum, transaction, idx) => {
+                // Make transactionId unique by combining _id, month, idx, and tailbar
+                // This ensures each transaction row has a unique ID even if _id is duplicated
+                const transactionId = transaction._id 
+                  ? `${transaction._id}-${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}` 
+                  : `${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}`;
+                const storedValue = transactionInputs?.[index]?.[transactionId];
+                const numValue = storedValue !== undefined && storedValue !== null 
+                  ? (typeof storedValue === 'number' ? storedValue : parseFloat(storedValue) || 0)
+                  : 0;
+                return sum + numValue;
+              }, 0);
+              const roundedMonthTotal = Math.round(monthTotal * 100) / 100;
+              const isExpanded = expandedMonths[month] || false;
+
+              return (
+              <div key={month} className="border-2 border-gray-400 rounded-md mb-4 overflow-hidden">
+                <div 
+                  className="flex justify-between items-center w-full cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 px-4 py-3 border-b border-gray-300"
+                  onClick={() => {
+                    setExpandedMonths(prev => ({
+                      ...prev,
+                      [month]: !prev[month]
+                    }));
+                  }}
+                >
+                  <span className="font-medium text-lg">{monthLabel}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-base text-gray-500">
                       {transactions.length} {t("гүйлгээ")}
                     </span>
+                    {isExpanded ? <UpOutlined /> : <DownOutlined />}
                   </div>
-                }
-              >
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs border-collapse">
+                </div>
+                <div className="px-4 py-3 border-b border-gray-300 bg-gray-50 dark:bg-gray-800">
+                  <div className="flex justify-start items-start">
+                    <span className="font-semibold text-lg mr-4">{t("Нийт")}:</span>
+                    <span className="font-semibold text-lg">{formatNumber(roundedMonthTotal, 2)}</span>
+                  </div>
+                </div>
+                {isExpanded && (
+                  <div className="px-3 py-2">
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse">
                     <thead className="bg-gray-200 dark:bg-gray-700">
                       <tr>
-                      <th className="border border-gray-300 px-2 py-1 text-center">{t("Авлага")}</th>
-                        <th className="border border-gray-300 px-2 py-1 text-center">{t("Дүн")}</th>
-              <th className="border border-gray-300 px-2 py-1 text-center">{t("Төлөх дүн")}</th>
+                      <th className="border border-gray-300 px-4 py-2 text-center text-base font-semibold">{t("Авлага")}</th>
+                        <th className="border border-gray-300 px-4 py-2 text-center text-base font-semibold">{t("Дүн")}</th>
+              <th className="border border-gray-300 px-4 py-2 text-center text-base font-semibold">{t("Төлөх дүн")}</th>
 
                       </tr>
                     </thead>
                     <tbody>
                       {transactions.map((transaction, idx) => {
-                        const transactionId = transaction._id || `${month}-${idx}`;
+                        // Make transactionId unique by combining _id, month, idx, and tailbar
+                        // This ensures each transaction row has a unique ID even if _id is duplicated
+                        const transactionId = transaction._id 
+                          ? `${transaction._id}-${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}` 
+                          : `${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}`;
                         const storedValue = transactionInputs?.[index]?.[transactionId];
-                        const numValue = storedValue !== undefined && storedValue !== null 
-                          ? (typeof storedValue === 'number' ? storedValue : parseFloat(storedValue) || 0)
-                          : undefined;
-                        const displayValue = numValue !== undefined 
-                          ? formatNumber(Math.round(numValue * 100) / 100, 2) 
-                          : "";
+                        const isFocused = focusedInputs[transactionId];
+                        const rawValue = rawInputValues[transactionId];
+                        
+                        // When focused, use raw input value to avoid rounding issues
+                        // When not focused, use stored value and format it
+                        let displayValue = "";
+                        if (isFocused && rawValue !== undefined) {
+                          // Show raw input while typing (already formatted by formatNumber)
+                          displayValue = rawValue;
+                        } else {
+                          const numValue = storedValue !== undefined && storedValue !== null 
+                            ? (typeof storedValue === 'number' ? storedValue : parseFloat(storedValue) || 0)
+                            : undefined;
+                          if (numValue !== undefined && numValue !== null) {
+                            displayValue = formatNumber(Math.round(numValue * 100) / 100, 2);
+                          }
+                        }
                         return (
                         <tr
                           key={`tuukh-${index}-${month}-${idx}`}
                           className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
                         >
-                          <td className="border border-gray-300 px-2 py-1 truncate max-w-xs">
+                          <td className="border border-gray-300 px-4 py-2 truncate max-w-xs text-sm">
                             {transaction.tailbar || "Түрээс"}
                           </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
+                          <td className="border border-gray-300 px-4 py-2 text-right text-sm">
                             {formatNumber(transaction.tulukhDun || 0, 2)}
                           </td>
                          
                          
-                          <td className="border border-gray-300 px-2 py-1">
+                          <td className="border border-gray-300 px-4 py-2">
                   <input
                     type="text"
-                    className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700 dark:text-gray-200"
-                    placeholder="0"
+                    className="w-full rounded-md border border-gray-400 bg-gray-200 px-3 py-2 text-right text-sm dark:bg-gray-700 dark:text-gray-200"
+                    placeholder="0.00"
                     value={displayValue}
-                    onDoubleClick={({ target }) => {
+                    onDoubleClick={(e) => {
+                      e.stopPropagation();
                       const tulukhDun = transaction.tulukhDun;
                       let value = 0;
                       if (tulukhDun !== undefined && tulukhDun !== null) {
@@ -269,12 +317,39 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                       
                       value = Math.round(value * 100) / 100;
                       
-                      target.value = formatNumber(value, 2);
-                      
-                      const transactionId = transaction._id || `${month}-${idx}`;
+                      // Use the same transactionId generation logic as in the map function
+                      const transactionId = transaction._id 
+                        ? `${transaction._id}-${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}` 
+                        : `${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}`;
                       
                       if (setTransactionInputs) {
                         setTransactionInputs((prev) => {
+                          // Get current total before adding this value
+                          const currentTotal = prev[index] 
+                            ? Object.values(prev[index]).reduce((sum, val) => {
+                                const numVal = typeof val === 'number' ? val : (parseFloat(val) || 0);
+                                return sum + numVal;
+                              }, 0)
+                            : 0;
+                          const currentTotalRounded = Math.round(currentTotal * 100) / 100;
+                          
+                          // Calculate what the new total would be
+                          const newTotal = currentTotalRounded - (prev[index]?.[transactionId] || 0) + value;
+                          const newTotalRounded = Math.round(newTotal * 100) / 100;
+                          
+                          // Validate: Check if new total would exceed guilgeeniiDun
+                          if (zuruuZun && guilgeeniiDun !== undefined && guilgeeniiDun !== null) {
+                            const sum = zuruuZun(index, "tureesiinTulbur");
+                            const totalWouldBe = Math.round((sum + newTotalRounded) * 100) / 100;
+                            const guilgeeniiDunRounded = Math.round(guilgeeniiDun * 100) / 100;
+                            
+                            if (totalWouldBe > guilgeeniiDunRounded) {
+                              // Cap the value to what's available
+                              const maxAllowed = Math.max(0, guilgeeniiDunRounded - sum - (currentTotalRounded - (prev[index]?.[transactionId] || 0)));
+                              value = Math.max(0, Math.round(maxAllowed * 100) / 100);
+                            }
+                          }
+                          
                           const updatedInputs = {
                             ...prev,
                             [index]: {
@@ -292,7 +367,153 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                           
                           if (onChangeKholbokhDun) {
                             const syntheticTarget = { value: formatter(roundedTotal) };
-                            onChangeKholbokhDun(syntheticTarget, index, "tureesiinTulbur");
+                            onChangeKholbokhDun(syntheticTarget, index, "tureesiinTulbur", true);
+                          }
+                          
+                          return updatedInputs;
+                        });
+                      } else if (onChangeKholbokhDun) {
+                        onChangeKholbokhDun(e.target, index, "tureesiinTulbur");
+                      }
+                    }}
+                    onFocus={(e) => {
+                      e.stopPropagation();
+                      // Use the same transactionId generation logic
+                      const transactionId = transaction._id 
+                        ? `${transaction._id}-${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}` 
+                        : `${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}`;
+                      setFocusedInputs((prev) => ({ ...prev, [transactionId]: true }));
+                      // Initialize raw value with current formatted value
+                      const currentValue = transactionInputs?.[index]?.[transactionId];
+                      if (currentValue !== undefined && currentValue !== null) {
+                        const numVal = typeof currentValue === 'number' ? currentValue : parseFloat(currentValue) || 0;
+                        setRawInputValues((prev) => ({
+                          ...prev,
+                          [transactionId]: formatNumber(Math.round(numVal * 100) / 100, 2)
+                        }));
+                      }
+                    }}
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      const { target } = e;
+                      let inputValue = target.value;
+                      // Use the same transactionId generation logic
+                      const transactionId = transaction._id 
+                        ? `${transaction._id}-${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}` 
+                        : `${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}`;
+                      
+                      // Allow empty input
+                      if (inputValue === '') {
+                        setRawInputValues((prev) => ({ ...prev, [transactionId]: '' }));
+                        if (setTransactionInputs) {
+                          setTransactionInputs((prev) => {
+                            const updatedInputs = {
+                              ...prev,
+                              [index]: {
+                                ...(prev[index] || {}),
+                                [transactionId]: 0,
+                              },
+                            };
+                            const contractInputs = updatedInputs[index] || {};
+                            const total = Object.values(contractInputs).reduce((sum, val) => {
+                              const numVal = typeof val === 'number' ? val : (parseFloat(val) || 0);
+                              return sum + numVal;
+                            }, 0);
+                            const roundedTotal = Math.round(total * 100) / 100;
+                            if (onChangeKholbokhDun) {
+                              const syntheticTarget = { value: formatter(roundedTotal) };
+                              onChangeKholbokhDun(syntheticTarget, index, "tureesiinTulbur");
+                            }
+                            return updatedInputs;
+                          });
+                        }
+                        return;
+                      }
+                      
+                      // Remove commas and parse
+                      const cleaned = inputValue.replace(/,/g, '').trim();
+                      
+                      // Allow typing numbers and decimal point
+                      if (!/^-?\d*\.?\d*$/.test(cleaned)) {
+                        return; // Invalid input, don't update
+                      }
+                      
+                      // Parse the value - preserve exact decimal precision
+                      const parsedValue = parseFloat(cleaned);
+                      let value = isNaN(parsedValue) ? 0 : parsedValue;
+                      
+                      // Validate: Төлөх дүн cannot exceed Дүн - prevent input if exceeds
+                      const maxDun = transaction.tulukhDun || 0;
+                      if (value > maxDun && maxDun > 0) {
+                        // Don't allow the input - return without updating
+                        return;
+                      }
+                      
+                      // Format with commas - preserve exact decimal places from user input
+                      let formattedValue = '';
+                      if (cleaned === '' || cleaned === '.') {
+                        formattedValue = cleaned;
+                      } else {
+                        const parts = cleaned.split('.');
+                        const intPart = parts[0] || '0';
+                        const decPart = parts[1] || '';
+                        
+                        // Format integer part with commas
+                        const formattedInt = parseInt(intPart, 10).toLocaleString('en-US');
+                        
+                        // Preserve exact decimal part (max 2 digits)
+                        if (decPart) {
+                          const limitedDec = decPart.length > 2 ? decPart.substring(0, 2) : decPart;
+                          formattedValue = `${formattedInt}.${limitedDec}`;
+                        } else {
+                          formattedValue = formattedInt;
+                        }
+                      }
+                      
+                      // Store formatted value for display
+                      setRawInputValues((prev) => ({ ...prev, [transactionId]: formattedValue }));
+                      
+                      // Store the exact value without any rounding
+                      if (setTransactionInputs) {
+                        setTransactionInputs((prev) => {
+                          const updatedInputs = {
+                            ...prev,
+                            [index]: {
+                              ...(prev[index] || {}),
+                              [transactionId]: value,
+                            },
+                          };
+                          
+                          const contractInputs = updatedInputs[index] || {};
+                          const total = Object.values(contractInputs).reduce((sum, val) => {
+                            const numVal = typeof val === 'number' ? val : (parseFloat(val) || 0);
+                            return sum + numVal;
+                          }, 0);
+                          
+                          const roundedTotal = Math.round(total * 100) / 100;
+                          
+                          // Validate: Total cannot exceed guilgeeniiDun (same validation as Барьцааны үлдэгдэл)
+                          // Use the same validation logic as onChangeKholbokhDun
+                          if (zuruuZun && guilgeeniiDun !== undefined && guilgeeniiDun !== null) {
+                            // Get current tureesiinTulbur from gereenuud to calculate the correct sum
+                            // zuruuZun(index, "tureesiinTulbur") excludes tureesiinTulbur for this contract
+                            // So we need to add the new roundedTotal to check if it exceeds guilgeeniiDun
+                            const sum = zuruuZun(index, "tureesiinTulbur");
+                            
+                            // Check if roundedTotal would exceed guilgeeniiDun
+                            // sum already excludes tureesiinTulbur for this contract, so sum + roundedTotal is the total
+                            const totalWouldBe = Math.round((sum + roundedTotal) * 100) / 100;
+                            const guilgeeniiDunRounded = Math.round(guilgeeniiDun * 100) / 100;
+                            
+                            if (totalWouldBe > guilgeeniiDunRounded) {
+                              // Don't allow the input - return without updating
+                              return prev;
+                            }
+                          }
+                          
+                          if (onChangeKholbokhDun) {
+                            const syntheticTarget = { value: formatter(roundedTotal) };
+                            onChangeKholbokhDun(syntheticTarget, index, "tureesiinTulbur", true); // Skip validation since we already validated
                           }
                           
                           return updatedInputs;
@@ -301,38 +522,84 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                         onChangeKholbokhDun(target, index, "tureesiinTulbur");
                       }
                     }}
-                    onChange={({ target }) => {
-                      const parsedValue = parser(target.value);
-                      const value = Math.round(_.toNumber(parsedValue) * 100) / 100 || 0;
-                      const transactionId = transaction._id || `${month}-${idx}`;
+                    onBlur={(e) => {
+                      e.stopPropagation();
+                      // Round and format on blur
+                      const { target } = e;
+                      // Use the same transactionId generation logic
+                      const transactionId = transaction._id 
+                        ? `${transaction._id}-${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}` 
+                        : `${month}-${idx}-${(transaction.tailbar || 'turees').replace(/\s+/g, '-')}`;
+                      setFocusedInputs((prev) => {
+                        const updated = { ...prev };
+                        delete updated[transactionId];
+                        return updated;
+                      });
+                      
+                      // Clear raw input value
+                      setRawInputValues((prev) => {
+                        const updated = { ...prev };
+                        delete updated[transactionId];
+                        return updated;
+                      });
                       
                       if (setTransactionInputs) {
                         setTransactionInputs((prev) => {
-                          const updatedInputs = {
-                            ...prev,
-                            [index]: {
+                          const storedValue = prev[index]?.[transactionId];
+                          if (storedValue !== undefined && storedValue !== null) {
+                            const numValue = typeof storedValue === 'number' ? storedValue : parseFloat(storedValue) || 0;
+                            const roundedValue = Math.round(numValue * 100) / 100;
+                            
+                            // Check total on blur and show warning if needed
+                            const contractInputs = {
                               ...(prev[index] || {}),
-                              [transactionId]: value,
-                            },
-                          };
-                          
-                          const contractInputs = updatedInputs[index] || {};
-                          const total = Object.values(contractInputs).reduce((sum, val) => {
-                            const numVal = typeof val === 'number' ? val : (parseFloat(val) || 0);
-                            return sum + numVal;
-                          }, 0);
-                          
-                          const roundedTotal = Math.round(total * 100) / 100;
-                          
-                          if (onChangeKholbokhDun) {
-                            const syntheticTarget = { value: formatter(roundedTotal) };
-                            onChangeKholbokhDun(syntheticTarget, index, "tureesiinTulbur");
+                              [transactionId]: roundedValue,
+                            };
+                            const total = Object.values(contractInputs).reduce((sum, val) => {
+                              const numVal = typeof val === 'number' ? val : (parseFloat(val) || 0);
+                              return sum + numVal;
+                            }, 0);
+                            const roundedTotal = Math.round(total * 100) / 100;
+                            
+                            // Validate on blur - if exceeds, cap it to the maximum allowed
+                            if (zuruuZun && guilgeeniiDun !== undefined && guilgeeniiDun !== null) {
+                              const sum = zuruuZun(index, "tureesiinTulbur");
+                              const totalWouldBe = Math.round((sum + roundedTotal) * 100) / 100;
+                              const guilgeeniiDunRounded = Math.round(guilgeeniiDun * 100) / 100;
+                              
+                              if (totalWouldBe > guilgeeniiDunRounded) {
+                                // Cap the total to the maximum allowed
+                                const maxAllowed = Math.max(0, guilgeeniiDunRounded - sum);
+                                const cappedTotal = Math.round(maxAllowed * 100) / 100;
+                                
+                                // Calculate the capped value for this input
+                                const currentTotalWithoutThis = roundedTotal - roundedValue;
+                                const cappedValue = Math.max(0, cappedTotal - currentTotalWithoutThis);
+                                
+                                // Update with capped value
+                                return {
+                                  ...prev,
+                                  [index]: {
+                                    ...(prev[index] || {}),
+                                    [transactionId]: Math.round(cappedValue * 100) / 100,
+                                  },
+                                };
+                              }
+                            }
+                            
+                            if (onChangeKholbokhDun) {
+                              const syntheticTarget = { value: formatter(roundedTotal) };
+                              // Don't skip validation on blur - show warning if total exceeds
+                              onChangeKholbokhDun(syntheticTarget, index, "tureesiinTulbur", false);
+                            }
+                            
+                            return {
+                              ...prev,
+                              [index]: contractInputs,
+                            };
                           }
-                          
-                          return updatedInputs;
+                          return prev;
                         });
-                      } else if (onChangeKholbokhDun) {
-                        onChangeKholbokhDun(target, index, "tureesiinTulbur");
                       }
                     }}
                   />
@@ -341,11 +608,14 @@ function GereeniiGuilgeeTuukhDisplay({ geree, token, index, onChangeKholbokhDun,
                         );
                       })}
                     </tbody>
-                  </table>
-                </div>
-              </Panel>
-            ))}
-          </Collapse>
+                      </table>
+                    </div>
+                  </div>
+                )}
+              </div>
+              );
+            })}
+          </>
         ) : (
           <div className="text-xs text-gray-400 p-2">
             {t("Мэдээлэл бэлтгэж байна...")}
@@ -401,15 +671,23 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
   let undsenGuilgee = [];
   let aldaa = [];
   gereenuud.forEach((mur) => {
-    if (mur.tureesiinTulbur > 0 || mur.tulsunAldangi > 0) {
+    // Ensure numeric values are not empty strings
+    const tureesiinTulbur = mur.tureesiinTulbur === '' || mur.tureesiinTulbur === null || mur.tureesiinTulbur === undefined 
+      ? 0 
+      : (typeof mur.tureesiinTulbur === 'number' ? mur.tureesiinTulbur : parseFloat(mur.tureesiinTulbur) || 0);
+    const tulsunAldangi = mur.tulsunAldangi === '' || mur.tulsunAldangi === null || mur.tulsunAldangi === undefined 
+      ? 0 
+      : (typeof mur.tulsunAldangi === 'number' ? mur.tulsunAldangi : parseFloat(mur.tulsunAldangi) || 0);
+    
+    if (tureesiinTulbur > 0 || tulsunAldangi > 0) {
       let guilgeeniiMur = {
         turul: "bank",
-        tulsunDun: mur.tureesiinTulbur || 0,
+        tulsunDun: tureesiinTulbur,
         guilgeeniiId: guilgee._id,
         gereeniiId: mur._id,
         dansniiDugaar: guilgee.dansniiDugaar,
-        tulukhAldangi: mur.aldangiinUldegdel,
-        tulsunAldangi: mur.tulsunAldangi,
+        tulukhAldangi: mur.aldangiinUldegdel || 0,
+        tulsunAldangi: tulsunAldangi,
       };
 
       switch (dans.bank) {
@@ -434,11 +712,16 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
       }
       undsenGuilgee.push(guilgeeniiMur);
     }
-    if (mur.baritsaaTulbur > 0) {
+    // Ensure baritsaaTulbur is a number, not empty string
+    const baritsaaTulbur = mur.baritsaaTulbur === '' || mur.baritsaaTulbur === null || mur.baritsaaTulbur === undefined 
+      ? 0 
+      : (typeof mur.baritsaaTulbur === 'number' ? mur.baritsaaTulbur : parseFloat(mur.baritsaaTulbur) || 0);
+    
+    if (baritsaaTulbur > 0) {
       let baritsaaniiMur = {
         gereeniiId: mur._id,
         guilgeeniiId: guilgee._id,
-        orlogo: mur.baritsaaTulbur,
+        orlogo: baritsaaTulbur,
         zarlaga: 0,
       };
       switch (dans.bank) {
@@ -496,7 +779,24 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
 
 async function baritsaaniiGuilgeeKhiiya(token, guilgeenuud) {
   let aldaa = [];
-  for await (const geree of guilgeenuud) {
+  // Sanitize all numeric fields before sending to backend
+  const sanitizedGuilgeenuud = guilgeenuud.map((geree) => {
+    const sanitized = { ...geree };
+    // Ensure all numeric fields are numbers, not empty strings
+    if (sanitized.orlogo !== undefined) {
+      sanitized.orlogo = sanitized.orlogo === '' || sanitized.orlogo === null 
+        ? 0 
+        : (typeof sanitized.orlogo === 'number' ? sanitized.orlogo : parseFloat(sanitized.orlogo) || 0);
+    }
+    if (sanitized.zarlaga !== undefined) {
+      sanitized.zarlaga = sanitized.zarlaga === '' || sanitized.zarlaga === null 
+        ? 0 
+        : (typeof sanitized.zarlaga === 'number' ? sanitized.zarlaga : parseFloat(sanitized.zarlaga) || 0);
+    }
+    return sanitized;
+  });
+  
+  for await (const geree of sanitizedGuilgeenuud) {
     const khariu = await uilchilgee(token)
       .post("/baritsaaniiGuilgeeKhiie", geree)
       .then(({ data }) => data)
@@ -532,6 +832,7 @@ function GuilgeeNiiluulekh(
   const [expandedTurees, setExpandedTurees] = React.useState({});
   const [transactionInputs, setTransactionInputs] = React.useState({}); // Store inputs by contract index and transaction ID
   const inputRef = React.useRef();
+  const lastWarningTimeRef = React.useRef({}); // Track last warning time per contract index
 
   const query = useMemo(() => {
     return { tuluv: khaagdsanGereeEsekh ? -1 : { $nin: [-1] }, barilgiinId };
@@ -613,9 +914,31 @@ function GuilgeeNiiluulekh(
             mur.tailbar = guilgeeniiTailbar;
           });
 
+        // Sanitize all numeric fields before sending to backend
+        const sanitizedGuilgeenuud = undsenGuilgee.map((mur) => {
+          const sanitized = { ...mur };
+          // Ensure all numeric fields are numbers, not empty strings
+          if (sanitized.tulsunDun !== undefined) {
+            sanitized.tulsunDun = sanitized.tulsunDun === '' || sanitized.tulsunDun === null 
+              ? 0 
+              : (typeof sanitized.tulsunDun === 'number' ? sanitized.tulsunDun : parseFloat(sanitized.tulsunDun) || 0);
+          }
+          if (sanitized.tulukhAldangi !== undefined) {
+            sanitized.tulukhAldangi = sanitized.tulukhAldangi === '' || sanitized.tulukhAldangi === null 
+              ? 0 
+              : (typeof sanitized.tulukhAldangi === 'number' ? sanitized.tulukhAldangi : parseFloat(sanitized.tulukhAldangi) || 0);
+          }
+          if (sanitized.tulsunAldangi !== undefined) {
+            sanitized.tulsunAldangi = sanitized.tulsunAldangi === '' || sanitized.tulsunAldangi === null 
+              ? 0 
+              : (typeof sanitized.tulsunAldangi === 'number' ? sanitized.tulsunAldangi : parseFloat(sanitized.tulsunAldangi) || 0);
+          }
+          return sanitized;
+        });
+
         if (undsenGuilgee.length > 0)
           uilchilgee(token)
-            .post("/tulultOlnoorKhadgalya", { guilgeenuud: undsenGuilgee })
+            .post("/tulultOlnoorKhadgalya", { guilgeenuud: sanitizedGuilgeenuud })
             .then(({ data }) => {
               if (data === "Amjilttai") {
                 notification.success({
@@ -714,12 +1037,23 @@ function GuilgeeNiiluulekh(
         ["baritsaaTulbur", "tureesiinTulbur", "tulsunAldangi"]
           .filter((a) => a !== talbar)
           .forEach((mur) => {
-            value += b[mur] || 0;
+            const val = b[mur];
+            const numVal = val === '' || val === null || val === undefined 
+              ? 0 
+              : (typeof val === 'number' ? val : parseFloat(val) || 0);
+            value += numVal;
           });
       } else {
-        value += b.baritsaaTulbur || 0;
-        value += b.tureesiinTulbur || 0;
-        value += b.tulsunAldangi || 0;
+        const baritsaa = b.baritsaaTulbur === '' || b.baritsaaTulbur === null || b.baritsaaTulbur === undefined 
+          ? 0 
+          : (typeof b.baritsaaTulbur === 'number' ? b.baritsaaTulbur : parseFloat(b.baritsaaTulbur) || 0);
+        const turees = b.tureesiinTulbur === '' || b.tureesiinTulbur === null || b.tureesiinTulbur === undefined 
+          ? 0 
+          : (typeof b.tureesiinTulbur === 'number' ? b.tureesiinTulbur : parseFloat(b.tureesiinTulbur) || 0);
+        const aldangi = b.tulsunAldangi === '' || b.tulsunAldangi === null || b.tulsunAldangi === undefined 
+          ? 0 
+          : (typeof b.tulsunAldangi === 'number' ? b.tulsunAldangi : parseFloat(b.tulsunAldangi) || 0);
+        value += baritsaa + turees + aldangi;
       }
       return _.toNumber(a + value);
     }, 0);
@@ -737,17 +1071,32 @@ function GuilgeeNiiluulekh(
     return dans.bank === "tdb" ? data.Amt : data.amount || data.tranAmount;
   }, [dans, data]);
 
-  function onChangeKholbokhDun(target, index, talbar) {
+  function onChangeKholbokhDun(target, index, talbar, skipValidation = false) {
     let sum = zuruuZun(index, talbar);
-    if (sum + _.toNumber(parser(target.value)) > guilgeeniiDun) {
-      target.value = formatter(guilgeeniiDun - sum);
-      notification.warning({
-        message: t("Анхаар"),
-        description: t("Гүйлгээний дүнгээс холбох дүн илүү гарсан байна"),
-      });
+    const parsedValue = parser(target.value);
+    const numValue = parsedValue === '' || parsedValue === null || parsedValue === undefined 
+      ? 0 
+      : _.toNumber(parsedValue) || 0;
+    
+    // Only show warning if not skipping validation (i.e., not during typing in transaction inputs)
+    // And limit warnings to once every 2 seconds per contract index
+    if (!skipValidation && sum + numValue > guilgeeniiDun) {
+      const now = Date.now();
+      const lastWarningTime = lastWarningTimeRef.current[index] || 0;
+      const timeSinceLastWarning = now - lastWarningTime;
+      
+      // Only show warning if at least 2 seconds have passed since last warning
+      if (timeSinceLastWarning >= 2000) {
+        target.value = formatter(guilgeeniiDun - sum);
+        lastWarningTimeRef.current[index] = now;
+        notification.warning({
+          message: t("Анхаар"),
+          description: t("Гүйлгээний дүнгээс холбох дүн илүү гарсан байна"),
+        });
+      }
     }
     setGereenuud((a) => {
-      _.set(a, `${index}.${talbar}`, _.toNumber(parser(target.value)));
+      _.set(a, `${index}.${talbar}`, numValue);
       return [...a];
     });
   }
@@ -775,8 +1124,12 @@ function GuilgeeNiiluulekh(
 
     if (sum < guilgeeniiDun) {
       target.value = formatNumber(guilgeeniiDun - sum);
+      const parsedValue = parser(target.value);
+      const numValue = parsedValue === '' || parsedValue === null || parsedValue === undefined 
+        ? 0 
+        : _.toNumber(parsedValue) || 0;
       setGereenuud((a) => {
-        _.set(a, `${index}.${talbar}`, _.toNumber(parser(target.value)));
+        _.set(a, `${index}.${talbar}`, numValue);
         return [...a];
       });
     }
@@ -928,22 +1281,17 @@ function GuilgeeNiiluulekh(
               <span>
                 {geree?.talbainDugaar} -- {geree?.register} -- {geree?.ner}
               </span>
-              <Popconfirm
-                title={`${geree?.talbainDugaar} талбайн мөр бичилт устгах уу?`}
-                okText={t("Тийм")}
-                cancelText={t("Үгүй")}
-                trigger={"click"}
-                onConfirm={() =>
+              <span 
+                className="h-10 w-10 p-1 text-2xl text-red-500 cursor-pointer"
+                onClick={() =>
                   setGereenuud((a) => {
                     a.splice(index, 1);
                     return [...a];
                   })
                 }
               >
-                <span className="h-10 w-10 p-1 text-2xl text-red-500">
-                  <CloseCircleOutlined />
-                </span>
-              </Popconfirm>
+                <CloseCircleOutlined />
+              </span>
             </div>
             {(geree?.baritsaaAvakhDun || 0) -
               (geree?.baritsaaniiUldegdel || 0) >
@@ -1008,7 +1356,15 @@ function GuilgeeNiiluulekh(
 
             {geree && (
               <div className="w-full space-y-2">
-                <div className="box grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
+                <div 
+                  onClick={() =>
+                    setExpandedTurees((prev) => ({
+                      ...prev,
+                      [index]: !prev[index],
+                    }))
+                  }
+                  className="box grid w-full grid-cols-3 cursor-pointer rounded-md border border-gray-400 bg-gray-100 p-1 hover:bg-gray-200 dark:hover:bg-gray-700"
+                >
                   <div className="col-span-4">{t("Түрээсийн үлдэгдэл")}</div>
                   <div
                     className={`text-${
@@ -1019,23 +1375,11 @@ function GuilgeeNiiluulekh(
                   </div>
                   <div>{geree.talbainDugaar}</div>
                   <div className="flex items-end justify-end gap-1 text-right text-green-600">
-                   
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setExpandedTurees((prev) => ({
-                          ...prev,
-                          [index]: !prev[index],
-                        }))
-                      }
-                      className="flex h-6 w-6 items-center justify-center rounded border border-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
-                    >
-                      {expandedTurees[index] ? (
-                        <UpOutlined />
-                      ) : (
-                        <DownOutlined />
-                      )}
-                    </button>
+                    {expandedTurees[index] ? (
+                      <UpOutlined />
+                    ) : (
+                      <DownOutlined />
+                    )}
                   </div>
                 </div>
                 {expandedTurees[index] && (
@@ -1048,6 +1392,7 @@ function GuilgeeNiiluulekh(
                       onDoubleClickKholbokhDun={onDoubleClickKholbokhDun}
                       guilgeeniiDun={guilgeeniiDun}
                       zuruuZun={zuruuZun}
+                      zuruuDun={zuruuDun}
                       transactionInputs={transactionInputs}
                       setTransactionInputs={setTransactionInputs}
                     />
