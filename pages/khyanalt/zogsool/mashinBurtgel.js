@@ -472,7 +472,9 @@ function mashinBurtgel({ token }) {
             return (
               <div className="flex justify-center">
                 <div className="flex h-[1.5rem] w-[4rem] items-center justify-center rounded-lg bg-green-400 px-2 py-1 font-[600] text-white">
-                  {record?.uldegdelKhungulukhKhugatsaa}
+                  {record?.uldegdelKhungulukhKhugatsaa
+                    ? record?.uldegdelKhungulukhKhugatsaa
+                    : record?.khungulukhKhugatsaa}
                 </div>
               </div>
             );

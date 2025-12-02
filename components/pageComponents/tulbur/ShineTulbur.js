@@ -169,7 +169,11 @@ function ShineTulbur(
   useKeyboardTovchlol("F3", f3darsan);
 
   function f4Darsan() {
+    if (isProcessing) return;
+
     if (alkham === 1) {
+      setIsProcessing(true);
+
       if (tulbur.length === 0) {
         turulruuTooKhiikhFunction("belen");
       }
@@ -177,6 +181,10 @@ function ShineTulbur(
       if (eBarimtAshiglakhEsekh === true && !eBarimtAutomataarShivikh) {
         setAlkham(2);
       }
+
+      setTimeout(() => {
+        setIsProcessing(false);
+      }, 1000);
     }
   }
   function f3darsan() {
@@ -202,6 +210,8 @@ function ShineTulbur(
   }, [alkham, loading]);
 
   function ebarimtAvya(id) {
+    if (loading) return;
+
     setLoading(true);
     if (!!eBarimt) handlePrint();
     else {
@@ -231,7 +241,10 @@ function ShineTulbur(
             destroy();
           }
         })
-        .catch(aldaaBarigch);
+        .catch((error) => {
+          aldaaBarigch(error);
+          setLoading(false);
+        });
     }
   }
 
@@ -351,7 +364,10 @@ function ShineTulbur(
           setQpayerTulukh("Tulugdsun");
         }
       })
-      .catch(aldaaBarigch);
+      .catch((error) => {
+        aldaaBarigch(error);
+        setLoading(false);
+      });
   }
 
   useEffect(() => {
@@ -367,6 +383,9 @@ function ShineTulbur(
   }, [khuleegdejBuiQpay, baiguullaga]);
 
   function qpayAvakh() {
+    if (loading) return;
+
+    setLoading(true);
     var ilgeekhDun = tulbur.find((a) => a.turul === "qpay")?.dun;
     if (!ilgeekhDun || ilgeekhDun <= 0) {
       message.warning("Төлөх дүн оруулна уу");
@@ -395,8 +414,11 @@ function ShineTulbur(
     garaasSongosonTurul,
     ebarimtShuud = false
   ) {
+    if (loading) return;
+
     setLoading(true);
     if (!tulbur || tulbur.length <= 0) {
+      setLoading(false);
       return notification.warn({
         message: "Төлбөрийн хэлбэр сонгоно уу",
         duration: 1,
