@@ -550,7 +550,20 @@ function Admin({
       </Drawer>
 
       {moment(new Date()).format("MM") === "12" ? (
-        <Snowfall images={images} radius={[5, 30]} snowflakeCount={250} />
+        <Snowfall 
+          images={images} 
+          radius={[3, 20]} 
+          snowflakeCount={100}
+          speed={[0.5, 1.5]}
+          wind={[-0.3, 0.5]}
+          style={{
+            position: 'fixed',
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+            zIndex: 1000
+          }}
+        />
       ) : null}
 
       <div

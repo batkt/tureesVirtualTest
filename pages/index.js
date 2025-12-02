@@ -88,7 +88,20 @@ function Ajiltan() {
         src="/copyPasteLogo.png"
       />
       {moment(new Date()).format("MM") === "12" ? (
-        <Snowfall radius={[10, 30]} snowflakeCount={200} images={images} />
+        <Snowfall 
+          radius={[5, 20]} 
+          snowflakeCount={80} 
+          images={images}
+          speed={[0.5, 1.5]}
+          wind={[-0.3, 0.5]}
+          style={{
+            position: 'fixed',
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+            zIndex: 1000
+          }}
+        />
       ) : null}
       <div className="container sm:px-10">
         <div className="block grid-cols-2 gap-4 xl:grid">
