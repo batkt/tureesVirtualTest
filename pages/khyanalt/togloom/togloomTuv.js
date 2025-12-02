@@ -701,6 +701,7 @@ function togloom1() {
       ),
 
       className: "!w-fit",
+      centered: true,
       content: (
         <ShineTogloomTulbur
           ref={tulburRef}
