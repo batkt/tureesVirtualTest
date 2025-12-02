@@ -574,6 +574,23 @@ function UstsanTuukh() {
             case "ashiglaltiinZardluud":
               text = "Ашиглалтын зардал";
               break;
+            case "SMS":
+            case "App":
+            case "Mail":
+              turulColumns.push({
+                title: "Нэр",
+                width: "3rem",
+                align: "left",
+                render: (medegdel) => {
+                  return (
+                    <>
+                      <div>{medegdel.object.ner}</div>
+                    </>
+                  );
+                },
+                sorter: () => 0,
+              });
+              break;
 
             default:
               text = mur;

@@ -4,6 +4,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { Tooltip, Tag } from "antd";
 import { useAuth } from "services/auth";
 import useMailiinZagvar from "hooks/useMailiinZagvar";
+import Modal from "antd/lib/modal/Modal";
 import {
   Button,
   Checkbox,
@@ -461,7 +462,7 @@ function Khyanalt({ token }) {
     modal({
       title: `${turul} ${t("Загвар үүсгэх")}`,
       icon: <FileExcelOutlined />,
-      width: 1200,  
+      width: 1200,
       content: (
         <ZagvarBurtgel
           ref={ref}
@@ -484,7 +485,10 @@ function Khyanalt({ token }) {
       .then(({ data }) => {
         if (data === "Amjilttai") {
           setWaiting(false);
-          notification.success({ message: t("Устгагдлаа") });
+          notification.success({
+            message: t("Устгагдлаа"),
+            description: `"${mur?.ner}" ${t("загвар амжилттай устгагдлаа")}`,
+          });
           mailiinZagvarMutate();
         }
       })
@@ -493,7 +497,6 @@ function Khyanalt({ token }) {
         setWaiting(false);
       });
   }
-
   function seen() {
     const seenList = [...(medegdelAvya?.jagsaalt || [])].filter(
       (a) => a.turul !== "medegdel" && a.kharsanEsekh !== true

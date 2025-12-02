@@ -3,6 +3,7 @@ import { Form, Modal } from "antd";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useTranslation } from "react-i18next";
+
 function MedegdelKharakh({ data, destroy }, ref) {
   const { t } = useTranslation();
   const [form] = Form.useForm();
@@ -40,6 +41,13 @@ function MedegdelKharakh({ data, destroy }, ref) {
   return (
     <>
       <div className="dark:text-gray-400">
+        {data.class === "mailiinZagvar" && (
+          <div className="flex justify-between">
+            <div>{t("Загварын нэр")}: </div>
+            <div>{data.object.ner}</div>
+          </div>
+        )}
+
         {data.class === "gereeniiGuilgee" && (
           <div className="flex justify-between">
             <div>{t("Хийсэн ажилтан")}: </div>
@@ -93,23 +101,67 @@ function MedegdelKharakh({ data, destroy }, ref) {
             </div>
           </div>
         )}
+
         <div className="flex justify-between">
           <div>{t("Устгасан ажилтан")}: </div>
           <div>{data.ajiltniiNer}</div>
         </div>
+
         <div className="flex justify-between">
           <div>{t("Устгасан огноо")}: </div>
           <div>{moment(data.object.updatedAt).format("YYYY-MM-DD")}</div>
         </div>
-        <div className="flex justify-between">
-          <div>{t("Устгасан дүн")}: </div>
-          <div>{formatNumber(data.object.khuuchinAldangiDun)}</div>
-        </div>
+
+        {data.object.turul === "baritsaa" && (
+          <>
+            {data.object.orlogo !== undefined && data.object.orlogo !== 0 && (
+              <div className="flex justify-between">
+                <div>{t("Орлого")}: </div>
+                <div className="font-bold text-green-600">
+                  {formatNumber(data.object.orlogo, 0)}
+                </div>
+              </div>
+            )}
+            {data.object.zarlaga !== undefined && data.object.zarlaga !== 0 && (
+              <div className="flex justify-between">
+                <div>{t("Зарлага")}: </div>
+                <div className="font-bold text-red-500">
+                  {formatNumber(data.object.zarlaga, 0)}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {data.object.khuuchinAldangiDun && data.object.turul !== "baritsaa" && (
+          <div className="flex justify-between">
+            <div>{t("Устгасан дүн")}: </div>
+            <div className="font-bold text-red-500">
+              {formatNumber(data.object.khuuchinAldangiDun)}
+            </div>
+          </div>
+        )}
+
+        {(data.object.khuuchinAldangiDun ||
+          data.object.turul === "baritsaa") && (
+          <div className="flex justify-between">
+            <div>{t("Устгасан дүн")}: </div>
+            <div className="font-bold text-red-500">
+              {formatNumber(
+                data.object.khuuchinAldangiDun ||
+                  data.object.tulukhDun ||
+                  data.object.tulsunDun ||
+                  0
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="flex justify-between">
           <div>{t("Хийсэн огноо")}:</div>
           <div>{moment(data.object.createdAt).format("YYYY-MM-DD")}</div>
         </div>
+
         {data.object.tulsunAldangi ? (
           <div className="flex justify-between">
             <div>{t("Төлсөн алдаги")} :</div>

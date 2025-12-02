@@ -367,8 +367,8 @@ function ZassanMedegdelKharakh(
                             className="overflow-y-scroll"
                             style={{ height: "calc(30vh - 15rem)" }}
                           >
-                            {zardluudId?.map((z) => {
-                              return JSON.parse(a.shineUtga)?.filter(
+                            {zardluudId?.map((z) =>
+                              JSON.parse(a.shineUtga)?.filter(
                                 (b) => b._id === z
                               )?.length > 0 ? (
                                 JSON.parse(a.shineUtga)
@@ -403,8 +403,8 @@ function ZassanMedegdelKharakh(
                                   <td className="w-1/4 overflow-hidden border-r p-1 text-right"></td>
                                   <td className="w-1/4 overflow-hidden p-1 text-right"></td>
                                 </tr>
-                              );
-                            })}
+                              )
+                            )}
                           </tbody>
                         </table>
                       ) : a.utganiiTurul === "object" &&
@@ -422,8 +422,8 @@ function ZassanMedegdelKharakh(
                             className="overflow-y-scroll"
                             style={{ height: "calc(30vh - 15rem)" }}
                           >
-                            {segmentuudId?.map((z) => {
-                              return JSON.parse(a.shineUtga)?.filter(
+                            {segmentuudId?.map((z) =>
+                              JSON.parse(a.shineUtga)?.filter(
                                 (b) => b._id === z
                               )?.length > 0 ? (
                                 JSON.parse(a.shineUtga)
@@ -447,8 +447,74 @@ function ZassanMedegdelKharakh(
                                   </td>
                                   <td className="w-2/3 overflow-hidden p-1 text-center"></td>
                                 </tr>
-                              );
-                            })}
+                              )
+                            )}
+                          </tbody>
+                        </table>
+                      ) : a.utganiiTurul === "object" &&
+                        a.talbar === "khungulultuud" ? (
+                        <table className="w-full">
+                          <th className="flex">
+                            <td className="w-1/4 overflow-hidden p-1 text-center">
+                              {t("Эхлэх огноо")}
+                            </td>
+                            <td className="w-1/4 overflow-hidden p-1 text-center">
+                              {t("Дуусах огноо")}
+                            </td>
+                            <td className="w-1/6 overflow-hidden p-1 text-center">
+                              {t("Хувь")}
+                            </td>
+                            <td className="w-1/6 overflow-hidden p-1 text-center">
+                              {t("Төрөл")}
+                            </td>
+                            <td className="w-1/6 overflow-hidden p-1 text-center">
+                              {t("Дүн")}
+                            </td>
+                          </th>
+                          <tbody
+                            className="overflow-y-scroll"
+                            style={{ height: "calc(30vh - 15rem)" }}
+                          >
+                            {khungulultuudId?.map((z) =>
+                              JSON.parse(a.shineUtga)?.filter(
+                                (b) => b._id === z
+                              )?.length > 0 ? (
+                                JSON.parse(a.shineUtga)
+                                  ?.filter((c) => c._id === z)
+                                  .map((b) => (
+                                    <tr className="flex border-t">
+                                      <td className="w-1/4 overflow-hidden border-r p-1 text-center">
+                                        {moment(b.ognoonuud?.[0]).format(
+                                          "YYYY-MM-DD"
+                                        )}
+                                      </td>
+                                      <td className="w-1/4 overflow-hidden border-r p-1 text-center">
+                                        {moment(b.ognoonuud?.[1]).format(
+                                          "YYYY-MM-DD"
+                                        )}
+                                      </td>
+                                      <td className="w-1/6 overflow-hidden border-r p-1 text-center">
+                                        {formatNumber(b.khungulukhKhuvi, 2)}%
+                                      </td>
+                                      <td className="w-1/6 overflow-hidden border-r p-1 text-center">
+                                        {b.turul === "turees"
+                                          ? "Түрээс"
+                                          : b.turul}
+                                      </td>
+                                      <td className="w-1/6 overflow-hidden p-1 text-right">
+                                        {formatNumber(b.khungulultiinDun, 2)}
+                                      </td>
+                                    </tr>
+                                  ))
+                              ) : (
+                                <tr className="flex border-t">
+                                  <td className="w-1/3 overflow-hidden border-r p-1 text-left">
+                                    &nbsp;
+                                  </td>
+                                  <td className="w-2/3 overflow-hidden p-1 text-center"></td>
+                                </tr>
+                              )
+                            )}
                           </tbody>
                         </table>
                       ) : a.utganiiTurul === "object" &&
