@@ -79,18 +79,10 @@ function KhuviinMedeelel({
   });
 
   const zuragKhadgalakh = (v, turul) => {
-    if (v.file.status === "done" && v.file.response) {
-      if (turul === "tamga") {
-        setTamga(v.file.response);
-        setDeleteTamga(false);
-      } else if (turul === "gariinUseg") {
-        setGariinUseg(v.file.response);
-        setDeleteGariinUseg(false);
-      } else if (turul === "gariinUseg1") {
-        setGariinUseg1(v.file.response);
-        setDeleteGariinUseg1(false);
-      }
-    } else if (v.file.status === "uploading") {
+    console.log("Upload change:", turul, v.file.status, v.file.response); // Debug log
+
+    if (v.file.status === "uploading") {
+      // Clear the state when starting new upload
       if (turul === "tamga") {
         setTamga(undefined);
       } else if (turul === "gariinUseg") {
@@ -98,9 +90,21 @@ function KhuviinMedeelel({
       } else if (turul === "gariinUseg1") {
         setGariinUseg1(undefined);
       }
+    } else if (v.file.status === "done") {
+      if (v.file.response) {
+        if (turul === "tamga") {
+          setTamga(v.file.response);
+          setDeleteTamga(false);
+        } else if (turul === "gariinUseg") {
+          setGariinUseg(v.file.response);
+          setDeleteGariinUseg(false);
+        } else if (turul === "gariinUseg1") {
+          setGariinUseg1(v.file.response);
+          setDeleteGariinUseg1(false);
+        }
+      }
     }
   };
-
   const { confirm } = Modal;
   const handleTamgaDelete = () => {
     confirm({
@@ -730,6 +734,7 @@ function KhuviinMedeelel({
 
                       <ImgCrop modalTitle="Зураг засах" rotationSlider>
                         <Upload
+                          key="tamga-upload"
                           showUploadList={false}
                           multiple={false}
                           name="file"
@@ -813,8 +818,9 @@ function KhuviinMedeelel({
                         }}
                       >
                         <Upload
+                          key="gariin-useg-upload"
                           showUploadList={false}
-                          multiple={true}
+                          multiple={false}
                           name="file"
                           action={`${url}/upload`}
                           method="POST"
@@ -884,8 +890,9 @@ function KhuviinMedeelel({
                         }}
                       >
                         <Upload
+                          key="gariin-useg1-upload"
                           showUploadList={false}
-                          multiple={true}
+                          multiple={false}
                           name="file"
                           action={`${url}/upload`}
                           method="POST"
