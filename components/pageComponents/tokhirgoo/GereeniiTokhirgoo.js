@@ -79,7 +79,7 @@ function KhuviinMedeelel({
   });
 
   const zuragKhadgalakh = (v, turul) => {
-    if (v.file.status === "done") {
+    if (v.file.status === "done" && v.file.response) {
       if (turul === "tamga") {
         setTamga(v.file.response);
         setDeleteTamga(false);
@@ -90,8 +90,17 @@ function KhuviinMedeelel({
         setGariinUseg1(v.file.response);
         setDeleteGariinUseg1(false);
       }
+    } else if (v.file.status === "uploading") {
+      if (turul === "tamga") {
+        setTamga(undefined);
+      } else if (turul === "gariinUseg") {
+        setGariinUseg(undefined);
+      } else if (turul === "gariinUseg1") {
+        setGariinUseg1(undefined);
+      }
     }
   };
+
   const { confirm } = Modal;
   const handleTamgaDelete = () => {
     confirm({
