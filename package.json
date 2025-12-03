@@ -33,7 +33,7 @@
     "next-qrcode": "^2.4.1",
     "next-themes": "^0.2.1",
     "nookies": "^2.5.2",
-    "plotly.js": "2.14.0",
+
     "react": "^18.2.0",
     "react-barcode": "^1.5.3",
     "react-chartjs-2": "^5.2.0",
