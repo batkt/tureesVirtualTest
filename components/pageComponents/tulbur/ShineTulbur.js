@@ -941,6 +941,7 @@ function ShineTulbur(
                   setQpayModalTuluv={setQpayModalTuluv}
                   handleCancelQpay={handleCancelQpay}
                   qpayModalTuluv={qpayModalTuluv}
+                  maskClosable={false}
                   turul={"qpay"}
                   khuleegdejBuiQpay={khuleegdejBuiQpay}
                   qpayerTulukhDun={value.qpay}

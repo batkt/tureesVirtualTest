@@ -820,6 +820,7 @@ function camera({ token }) {
     modal({
       title: false,
       style: { top: 25 },
+      maskClosable: false,
       content: (
         <ShineTulbur
           suuliikhEsekh={index === 0}
