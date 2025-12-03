@@ -79,7 +79,7 @@ function KhuviinMedeelel({
   });
 
   const zuragKhadgalakh = (v, turul) => {
-    console.log("Upload change:", turul, v.file.status, v.file.response); // Debug log
+    console.log("Upload change:", turul, v.file.status, v.file.response);
 
     if (v.file.status === "uploading") {
       // Clear the state when starting new upload
@@ -91,16 +91,24 @@ function KhuviinMedeelel({
         setGariinUseg1(undefined);
       }
     } else if (v.file.status === "done") {
-      if (v.file.response) {
+      // The response is the filename directly (as shown in your logs)
+      const filename = v.file.response;
+
+      console.log("Received filename:", filename, "for type:", turul);
+
+      if (filename) {
         if (turul === "tamga") {
-          setTamga(v.file.response);
+          setTamga(filename);
           setDeleteTamga(false);
+          console.log("Set tamga to:", filename);
         } else if (turul === "gariinUseg") {
-          setGariinUseg(v.file.response);
+          setGariinUseg(filename);
           setDeleteGariinUseg(false);
+          console.log("Set gariinUseg to:", filename);
         } else if (turul === "gariinUseg1") {
-          setGariinUseg1(v.file.response);
+          setGariinUseg1(filename);
           setDeleteGariinUseg1(false);
+          console.log("Set gariinUseg1 to:", filename);
         }
       }
     }
@@ -771,37 +779,47 @@ function KhuviinMedeelel({
                       )}
                     </div>
                   </Form.Item>
-
                   {shouldShowTamga() && (
                     <div className="h-[54px] w-[115px] border">
-                      {!!tamga ? (
-                        <>
-                          <img
-                            src={`${url}/file?path=tmp/${tamga}`}
-                            alt="image"
-                            style={{
-                              height: "50px",
-                              width: "115px",
-                              objectFit: "contain",
-                            }}
-                          />
-                        </>
-                      ) : (
-                        barilga?.tamga &&
-                        !deleteTamga && (
-                          <>
+                      {(() => {
+                        console.log("Rendering tamga. State:", {
+                          tamga,
+                          deleteTamga,
+                          barilgaTamga: barilga?.tamga,
+                        });
+
+                        if (!!tamga) {
+                          console.log("Showing new tamga from state:", tamga);
+                          return (
                             <img
-                              src={`${url}/file?path=tamga/${barilga.tamga}`}
-                              alt="image"
+                              src={`${url}/file?path=tmp/${tamga}`}
+                              alt="tamga"
                               style={{
                                 height: "50px",
                                 width: "115px",
                                 objectFit: "contain",
                               }}
                             />
-                          </>
-                        )
-                      )}
+                          );
+                        } else if (barilga?.tamga && !deleteTamga) {
+                          console.log(
+                            "Showing existing tamga from barilga:",
+                            barilga.tamga
+                          );
+                          return (
+                            <img
+                              src={`${url}/file?path=tamga/${barilga.tamga}`}
+                              alt="tamga"
+                              style={{
+                                height: "50px",
+                                width: "115px",
+                                objectFit: "contain",
+                              }}
+                            />
+                          );
+                        }
+                        return null;
+                      })()}
                     </div>
                   )}
                 </div>
@@ -851,30 +869,48 @@ function KhuviinMedeelel({
 
                   {shouldShowGariinUseg() && (
                     <div className="flex h-[54px] w-[115px] items-center justify-center border">
-                      {!!gariinUseg ? (
-                        <img
-                          src={`${url}/file?path=tmp/${gariinUseg}`}
-                          alt="image"
-                          style={{
-                            height: "50px",
-                            width: "115px",
-                            objectFit: "contain",
-                          }}
-                        />
-                      ) : (
-                        barilga?.gariinUseg &&
-                        !deleteGariinUseg && (
-                          <img
-                            src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
-                            alt="image"
-                            style={{
-                              height: "50px",
-                              width: "115px",
-                              objectFit: "contain",
-                            }}
-                          />
-                        )
-                      )}
+                      {(() => {
+                        console.log("Rendering gariinUseg. State:", {
+                          gariinUseg,
+                          deleteGariinUseg,
+                          barilgaGariinUseg: barilga?.gariinUseg,
+                        });
+
+                        if (!!gariinUseg) {
+                          console.log(
+                            "Showing new gariinUseg from state:",
+                            gariinUseg
+                          );
+                          return (
+                            <img
+                              src={`${url}/file?path=tmp/${gariinUseg}`}
+                              alt="gariinUseg"
+                              style={{
+                                height: "50px",
+                                width: "115px",
+                                objectFit: "contain",
+                              }}
+                            />
+                          );
+                        } else if (barilga?.gariinUseg && !deleteGariinUseg) {
+                          console.log(
+                            "Showing existing gariinUseg from barilga:",
+                            barilga.gariinUseg
+                          );
+                          return (
+                            <img
+                              src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                              alt="gariinUseg"
+                              style={{
+                                height: "50px",
+                                width: "115px",
+                                objectFit: "contain",
+                              }}
+                            />
+                          );
+                        }
+                        return null;
+                      })()}
                     </div>
                   )}
                   <br></br>
@@ -923,30 +959,48 @@ function KhuviinMedeelel({
 
                   {shouldShowGariinUseg1() && (
                     <div className="flex h-[54px] w-[115px] items-center justify-center border">
-                      {!!gariinUseg1 ? (
-                        <img
-                          src={`${url}/file?path=tmp/${gariinUseg1}`}
-                          alt="image"
-                          style={{
-                            height: "50px",
-                            width: "115px",
-                            objectFit: "contain",
-                          }}
-                        />
-                      ) : (
-                        barilga?.gariinUseg1 &&
-                        !deleteGariinUseg1 && (
-                          <img
-                            src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
-                            alt="image"
-                            style={{
-                              height: "50px",
-                              width: "115px",
-                              objectFit: "contain",
-                            }}
-                          />
-                        )
-                      )}
+                      {(() => {
+                        console.log("Rendering gariinUseg1. State:", {
+                          gariinUseg1,
+                          deleteGariinUseg1,
+                          barilgaGariinUseg1: barilga?.gariinUseg1,
+                        });
+
+                        if (!!gariinUseg1) {
+                          console.log(
+                            "Showing new gariinUseg1 from state:",
+                            gariinUseg1
+                          );
+                          return (
+                            <img
+                              src={`${url}/file?path=tmp/${gariinUseg1}`}
+                              alt="gariinUseg1"
+                              style={{
+                                height: "50px",
+                                width: "115px",
+                                objectFit: "contain",
+                              }}
+                            />
+                          );
+                        } else if (barilga?.gariinUseg1 && !deleteGariinUseg1) {
+                          console.log(
+                            "Showing existing gariinUseg1 from barilga:",
+                            barilga.gariinUseg1
+                          );
+                          return (
+                            <img
+                              src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
+                              alt="gariinUseg1"
+                              style={{
+                                height: "50px",
+                                width: "115px",
+                                objectFit: "contain",
+                              }}
+                            />
+                          );
+                        }
+                        return null;
+                      })()}
                     </div>
                   )}
                 </div>
