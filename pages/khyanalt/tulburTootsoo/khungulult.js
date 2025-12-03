@@ -1482,7 +1482,6 @@ function tulburTootsoo() {
                     >
                       <Input
                         type={"number"}
-                        readOnly
                         placeholder={t("Хөнгөлөх хоног")}
                       />
                     </Form.Item>
