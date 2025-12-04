@@ -39,7 +39,11 @@ function KhuviinMedeelel({
   const [tamga, setTamga] = useState();
   const [gariinUseg, setGariinUseg] = useState();
   const [gariinUseg1, setGariinUseg1] = useState();
-
+  const getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => callback(reader.result));
+    reader.readAsDataURL(img);
+  };
   const [deleteTamga, setDeleteTamga] = useState(false);
   const [deleteGariinUseg, setDeleteGariinUseg] = useState(false);
   const [deleteGariinUseg1, setDeleteGariinUseg1] = useState(false);
@@ -83,38 +87,30 @@ function KhuviinMedeelel({
   });
 
   const zuragKhadgalakh = (v, turul) => {
+    console.log("zuragKhadgalakh called:", { turul, status: v.file.status });
+
     if (v.file.status === "done") {
+      console.log("File upload done, response:", v.file.response); // Get the file object - prioritize originFileObj
+
       const fileToUse = v.file.originFileObj || v.file;
 
+      // We are forcing a Base64 data URL here for local preview
       if (fileToUse instanceof File || fileToUse instanceof Blob) {
-        // Define getBase64 *inside* the outer function scope to ensure
-        // the reader operates on the specific 'fileToUse' instance.
-        const getBase64Local = (img) => {
-          return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.addEventListener("load", () => resolve(reader.result));
-            reader.readAsDataURL(img);
-          });
-        };
-
-        const currentTurul = turul;
-        const responseId = v.file.response?.id; // Use the local promise-based function and await the result
-
-        getBase64Local(fileToUse).then((base64Url) => {
+        getBase64(fileToUse, (base64Url) => {
           const imageData = {
-            id: responseId,
-            url: base64Url,
-          }; // State updates using the isolated data
+            id: v.file.response?.id,
+            url: base64Url, // Store Base64 data URL
+          };
 
-          if (currentTurul === "tamga") {
+          if (turul === "tamga") {
             setTamga(imageData);
             setDeleteTamga(false);
             setCropKey((prev) => ({ ...prev, tamga: Date.now() }));
-          } else if (currentTurul === "gariinUseg") {
+          } else if (turul === "gariinUseg") {
             setGariinUseg(imageData);
             setDeleteGariinUseg(false);
             setCropKey((prev) => ({ ...prev, gariinUseg: Date.now() }));
-          } else if (currentTurul === "gariinUseg1") {
+          } else if (turul === "gariinUseg1") {
             setGariinUseg1(imageData);
             setDeleteGariinUseg1(false);
             setCropKey((prev) => ({ ...prev, gariinUseg1: Date.now() }));
