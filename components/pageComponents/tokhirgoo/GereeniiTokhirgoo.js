@@ -78,16 +78,20 @@ function KhuviinMedeelel({
     gereeDuusakhTulbur: barilga?.tokhirgoo?.gereeDuusakhTulbur,
   });
 
-  const zuragKhadgalakh = (v, turul) => {
-    if (v.file.status === "done") {
+  const zuragKhadgalakh = ({ file }, turul) => {
+    // Only process when upload is complete and has a response
+    if (file && file.status === "done" && file.response) {
+      const filename = file.response;
+
+      // Use functional state updates to avoid closure issues
       if (turul === "tamga") {
-        setTamga(v.file.response);
+        setTamga(filename);
         setDeleteTamga(false);
       } else if (turul === "gariinUseg") {
-        setGariinUseg(v.file.response);
+        setGariinUseg(filename);
         setDeleteGariinUseg(false);
       } else if (turul === "gariinUseg1") {
-        setGariinUseg1(v.file.response);
+        setGariinUseg1(filename);
         setDeleteGariinUseg1(false);
       }
     }
@@ -721,11 +725,13 @@ function KhuviinMedeelel({
 
                       <ImgCrop modalTitle="Зураг засах" rotationSlider>
                         <Upload
+                          key="tamga-upload"
                           showUploadList={false}
                           multiple={false}
                           name="file"
                           action={`${url}/upload`}
                           method="POST"
+                          data={{ turul: "tamga" }}
                           onChange={(v) => zuragKhadgalakh(v, "tamga")}
                         >
                           <div className="flex flex-row items-center gap-2">
@@ -804,11 +810,13 @@ function KhuviinMedeelel({
                         }}
                       >
                         <Upload
+                          key="gariinUseg-upload"
                           showUploadList={false}
-                          multiple={true}
+                          multiple={false}
                           name="file"
                           action={`${url}/upload`}
                           method="POST"
+                          data={{ turul: "gariinUseg" }}
                           onChange={(v) => zuragKhadgalakh(v, "gariinUseg")}
                           accept="image/png,image/gif"
                         >
@@ -824,7 +832,6 @@ function KhuviinMedeelel({
                       {shouldShowGariinUseg() && (
                         <Button
                           danger
-                          multiple={true}
                           icon={<DeleteOutlined />}
                           type="button"
                           onClick={handleGariinUsegDelete}
@@ -875,11 +882,13 @@ function KhuviinMedeelel({
                         }}
                       >
                         <Upload
+                          key="gariinUseg1-upload"
                           showUploadList={false}
-                          multiple={true}
+                          multiple={false}
                           name="file"
                           action={`${url}/upload`}
                           method="POST"
+                          data={{ turul: "gariinUseg1" }}
                           onChange={(v) => zuragKhadgalakh(v, "gariinUseg1")}
                           accept="image/png,image/gif"
                         >
@@ -895,7 +904,6 @@ function KhuviinMedeelel({
                       {shouldShowGariinUseg1() && (
                         <Button
                           danger
-                          multiple={true}
                           icon={<DeleteOutlined />}
                           type="button"
                           onClick={handleGariinUseg1Delete}
