@@ -80,6 +80,14 @@ function KhuviinMedeelel({
 
   const zuragKhadgalakh = (v, turul) => {
     if (v.file.status === "done") {
+      if (turul === "tamga" && tamga?.url) {
+        URL.revokeObjectURL(tamga.url);
+      } else if (turul === "gariinUseg" && gariinUseg?.url) {
+        URL.revokeObjectURL(gariinUseg.url);
+      } else if (turul === "gariinUseg1" && gariinUseg1?.url) {
+        URL.revokeObjectURL(gariinUseg1.url);
+      }
+
       const imageData = {
         id: v.file.response?.id,
         url: v.file.originFileObj
@@ -182,6 +190,13 @@ function KhuviinMedeelel({
         }
       });
   };
+  React.useEffect(() => {
+    return () => {
+      if (tamga?.url) URL.revokeObjectURL(tamga.url);
+      if (gariinUseg?.url) URL.revokeObjectURL(gariinUseg.url);
+      if (gariinUseg1?.url) URL.revokeObjectURL(gariinUseg1.url);
+    };
+  }, [tamga, gariinUseg, gariinUseg1]);
 
   function khadgalakh() {
     const index = baiguullaga.barilguud.findIndex((a) => a._id === barilgiinId);
@@ -193,7 +208,6 @@ function KhuviinMedeelel({
     }
 
     if (deleteGariinUseg) {
-      
       baiguullaga.barilguud[index].gariinUseg = null;
     } else if (gariinUseg) {
       baiguullaga.barilguud[index].gariinUseg = gariinUseg.id || gariinUseg;
