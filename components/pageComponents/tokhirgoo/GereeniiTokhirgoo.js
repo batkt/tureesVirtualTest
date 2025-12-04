@@ -40,7 +40,6 @@ function KhuviinMedeelel({
   const [deleteGariinUseg, setDeleteGariinUseg] = useState(false);
   const [deleteGariinUseg1, setDeleteGariinUseg1] = useState(false);
 
- 
   const tamgaUploadRef = useRef(null);
   const gariinUsegUploadRef = useRef(null);
   const gariinUseg1UploadRef = useRef(null);
@@ -84,11 +83,9 @@ function KhuviinMedeelel({
   });
 
   const zuragKhadgalakh = ({ file }, turul) => {
-     
     if (file && file.status === "done" && file.response) {
       const filename = file.response;
 
- 
       console.log(`[${turul}] Upload completed:`, {
         filename,
         turul,
@@ -96,7 +93,6 @@ function KhuviinMedeelel({
         fileUid: file.uid,
       });
 
-   
       if (turul === "tamga") {
         setTamga((prev) => {
           console.log(`[tamga] State update: ${prev} -> ${filename}`);
@@ -760,7 +756,6 @@ function KhuviinMedeelel({
                             barilgiinId,
                           }}
                           beforeUpload={(file) => {
-                      
                             const uploadId = `tamga-${Date.now()}-${Math.random()
                               .toString(36)
                               .substr(2, 9)}`;
@@ -807,7 +802,7 @@ function KhuviinMedeelel({
                       {!!tamga ? (
                         <>
                           <img
-                            src={`${url}/file?path=tmp/${tamga}`}
+                            src={`${url}/file?path=tmp/tamga/${tamga}`}
                             alt="image"
                             style={{
                               height: "50px",
@@ -861,7 +856,6 @@ function KhuviinMedeelel({
                             barilgiinId,
                           }}
                           beforeUpload={(file) => {
-                         
                             const uploadId = `gariinUseg-${Date.now()}-${Math.random()
                               .toString(36)
                               .substr(2, 9)}`;
@@ -899,7 +893,7 @@ function KhuviinMedeelel({
                     <div className="flex h-[54px] w-[115px] items-center justify-center border">
                       {!!gariinUseg ? (
                         <img
-                          src={`${url}/file?path=tmp/${gariinUseg}`}
+                          src={`${url}/file?path=tmp/gariinUseg/${gariinUseg}`}
                           alt="image"
                           style={{
                             height: "50px",
@@ -949,7 +943,6 @@ function KhuviinMedeelel({
                             barilgiinId,
                           }}
                           beforeUpload={(file) => {
-                       
                             const uploadId = `gariinUseg1-${Date.now()}-${Math.random()
                               .toString(36)
                               .substr(2, 9)}`;
@@ -987,7 +980,7 @@ function KhuviinMedeelel({
                     <div className="flex h-[54px] w-[115px] items-center justify-center border">
                       {!!gariinUseg1 ? (
                         <img
-                          src={`${url}/file?path=tmp/${gariinUseg1}`}
+                          src={`${url}/file?path=tmp/gariinUseg1/${gariinUseg1}`}
                           alt="image"
                           style={{
                             height: "50px",
