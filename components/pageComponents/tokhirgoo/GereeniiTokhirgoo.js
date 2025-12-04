@@ -193,6 +193,7 @@ function KhuviinMedeelel({
     }
 
     if (deleteGariinUseg) {
+      
       baiguullaga.barilguud[index].gariinUseg = null;
     } else if (gariinUseg) {
       baiguullaga.barilguud[index].gariinUseg = gariinUseg.id || gariinUseg;
