@@ -87,30 +87,28 @@ function KhuviinMedeelel({
   });
 
   const zuragKhadgalakh = (v, turul) => {
-    console.log("zuragKhadgalakh called:", { turul, status: v.file.status });
-
     if (v.file.status === "done") {
-      console.log("File upload done, response:", v.file.response); // Get the file object - prioritize originFileObj
-
       const fileToUse = v.file.originFileObj || v.file;
 
-      // We are forcing a Base64 data URL here for local preview
       if (fileToUse instanceof File || fileToUse instanceof Blob) {
+        const currentTurul = turul;
+        const responseId = v.file.response?.id;
+
         getBase64(fileToUse, (base64Url) => {
           const imageData = {
-            id: v.file.response?.id,
-            url: base64Url, // Store Base64 data URL
+            id: responseId,
+            url: base64Url,
           };
 
-          if (turul === "tamga") {
+          if (currentTurul === "tamga") {
             setTamga(imageData);
             setDeleteTamga(false);
             setCropKey((prev) => ({ ...prev, tamga: Date.now() }));
-          } else if (turul === "gariinUseg") {
+          } else if (currentTurul === "gariinUseg") {
             setGariinUseg(imageData);
             setDeleteGariinUseg(false);
             setCropKey((prev) => ({ ...prev, gariinUseg: Date.now() }));
-          } else if (turul === "gariinUseg1") {
+          } else if (currentTurul === "gariinUseg1") {
             setGariinUseg1(imageData);
             setDeleteGariinUseg1(false);
             setCropKey((prev) => ({ ...prev, gariinUseg1: Date.now() }));
