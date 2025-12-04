@@ -88,19 +88,32 @@ function KhuviinMedeelel({
     if (v.file.status === "done") {
       console.log("File upload done, response:", v.file.response);
 
-      // Revoke old blob URLs
+      // Get the current blob URL for the specific type
+      let currentBlobUrl = null;
       if (turul === "tamga" && tamga?.url) {
-        URL.revokeObjectURL(tamga.url);
+        currentBlobUrl = tamga.url;
       } else if (turul === "gariinUseg" && gariinUseg?.url) {
-        URL.revokeObjectURL(gariinUseg.url);
+        currentBlobUrl = gariinUseg.url;
       } else if (turul === "gariinUseg1" && gariinUseg1?.url) {
-        URL.revokeObjectURL(gariinUseg1.url);
+        currentBlobUrl = gariinUseg1.url;
       }
 
-      const fileToUse = v.file.originFileObj || v.file;
-      const newBlobUrl = fileToUse ? URL.createObjectURL(fileToUse) : null;
+      // Revoke old blob URL only if it exists and is a blob URL
+      if (currentBlobUrl && currentBlobUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(currentBlobUrl);
+      }
 
-      console.log("Created new blob URL:", newBlobUrl);
+      // Get the file object - prioritize originFileObj
+      const fileToUse = v.file.originFileObj || v.file;
+
+      // Create new blob URL only if we have a valid File/Blob object
+      let newBlobUrl = null;
+      if (fileToUse instanceof File || fileToUse instanceof Blob) {
+        newBlobUrl = URL.createObjectURL(fileToUse);
+        console.log("Created new blob URL:", newBlobUrl);
+      } else {
+        console.warn("No valid file object found for blob creation");
+      }
 
       const imageData = {
         id: v.file.response?.id,
@@ -110,7 +123,7 @@ function KhuviinMedeelel({
       if (turul === "tamga") {
         setTamga(imageData);
         setDeleteTamga(false);
-        setCropKey((prev) => ({ ...prev, tamga: Date.now() })); // Reset ImgCrop
+        setCropKey((prev) => ({ ...prev, tamga: Date.now() }));
       } else if (turul === "gariinUseg") {
         setGariinUseg(imageData);
         setDeleteGariinUseg(false);
