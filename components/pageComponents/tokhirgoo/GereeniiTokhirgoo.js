@@ -80,17 +80,21 @@ function KhuviinMedeelel({
 
   const zuragKhadgalakh = (v, turul) => {
     if (v.file.status === "done") {
-      console.log("Response:", v.file.response); // Debug this
-      const imageId = v.file.response?.id;
+      const imageData = {
+        id: v.file.response?.id,
+        url: v.file.originFileObj
+          ? URL.createObjectURL(v.file.originFileObj)
+          : null,
+      };
 
       if (turul === "tamga") {
-        setTamga(imageId); // Should be UUID only, no extension
+        setTamga(imageData);
         setDeleteTamga(false);
       } else if (turul === "gariinUseg") {
-        setGariinUseg(imageId);
+        setGariinUseg(imageData);
         setDeleteGariinUseg(false);
       } else if (turul === "gariinUseg1") {
-        setGariinUseg1(imageId);
+        setGariinUseg1(imageData);
         setDeleteGariinUseg1(false);
       }
     }
@@ -185,7 +189,7 @@ function KhuviinMedeelel({
     if (deleteTamga) {
       baiguullaga.barilguud[index].tamga = null;
     } else if (tamga) {
-      baiguullaga.barilguud[index].tamga = tamga;
+      baiguullaga.barilguud[index].tamga = tamga.id || tamga;
     }
 
     if (deleteGariinUseg) {
@@ -753,7 +757,12 @@ function KhuviinMedeelel({
                       {!!tamga ? (
                         <>
                           <img
-                            src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${tamga}`}
+                            src={
+                              tamga.url ||
+                              `${url}/zuragAvya/tamga/${baiguullaga?._id}/${
+                                tamga.id || tamga
+                              }`
+                            }
                             alt="image"
                             style={{
                               height: "50px",
@@ -939,7 +948,7 @@ function KhuviinMedeelel({
                 width={200}
                 preview={{
                   visible: !!kharakhZurgiinZam,
-                  src: `${url}/file?path=${kharakhZurgiinZam}`,
+                  src: `${url}/${kharakhZurgiinZam}`,
                   onVisibleChange: (value) => {
                     setKharakhZurgiinZam(undefined);
                   },
