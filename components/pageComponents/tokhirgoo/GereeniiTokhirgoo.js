@@ -79,21 +79,39 @@ function KhuviinMedeelel({
   });
 
   const zuragKhadgalakh = (v, turul) => {
+    console.log("zuragKhadgalakh called:", {
+      turul,
+      status: v.file.status,
+      file: v.file,
+    });
+
     if (v.file.status === "done") {
+      console.log("File upload done, response:", v.file.response);
+
+      // Revoke old blob URLs before creating new ones
       if (turul === "tamga" && tamga?.url) {
+        console.log("Revoking old tamga URL:", tamga.url);
         URL.revokeObjectURL(tamga.url);
       } else if (turul === "gariinUseg" && gariinUseg?.url) {
+        console.log("Revoking old gariinUseg URL:", gariinUseg.url);
         URL.revokeObjectURL(gariinUseg.url);
       } else if (turul === "gariinUseg1" && gariinUseg1?.url) {
+        console.log("Revoking old gariinUseg1 URL:", gariinUseg1.url);
         URL.revokeObjectURL(gariinUseg1.url);
       }
 
+      const newBlobUrl = v.file.originFileObj
+        ? URL.createObjectURL(v.file.originFileObj)
+        : null;
+
+      console.log("Created new blob URL:", newBlobUrl);
+
       const imageData = {
         id: v.file.response?.id,
-        url: v.file.originFileObj
-          ? URL.createObjectURL(v.file.originFileObj)
-          : null,
+        url: newBlobUrl,
       };
+
+      console.log("Setting imageData for", turul, ":", imageData);
 
       if (turul === "tamga") {
         setTamga(imageData);
@@ -268,7 +286,14 @@ function KhuviinMedeelel({
   const shouldShowGariinUseg1 = () => {
     return gariinUseg1 || (barilga?.gariinUseg1 && !deleteGariinUseg1);
   };
-
+  console.log("Current state:", {
+    tamga,
+    gariinUseg,
+    gariinUseg1,
+    barilgaTamga: barilga?.tamga,
+    barilgaGariinUseg: barilga?.gariinUseg,
+    barilgaGariinUseg1: barilga?.gariinUseg1,
+  });
   return (
     <>
       <div className="col-span-12 grid grid-cols-1 xl:grid-cols-3 xl:gap-5">
