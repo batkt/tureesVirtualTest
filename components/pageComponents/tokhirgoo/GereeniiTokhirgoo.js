@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Button,
   Form,
@@ -40,10 +40,6 @@ function KhuviinMedeelel({
   const [deleteGariinUseg, setDeleteGariinUseg] = useState(false);
   const [deleteGariinUseg1, setDeleteGariinUseg1] = useState(false);
 
-  const tamgaUploadRef = useRef(null);
-  const gariinUsegUploadRef = useRef(null);
-  const gariinUseg1UploadRef = useRef(null);
-
   const barilga = useMemo(
     () => baiguullaga.barilguud.find((a) => a._id === barilgiinId),
     [barilgiinId]
@@ -82,34 +78,16 @@ function KhuviinMedeelel({
     gereeDuusakhTulbur: barilga?.tokhirgoo?.gereeDuusakhTulbur,
   });
 
-  const zuragKhadgalakh = ({ file }, turul) => {
-    if (file && file.status === "done" && file.response) {
-      const filename = file.response;
-
-      console.log(`[${turul}] Upload completed:`, {
-        filename,
-        turul,
-        timestamp: new Date().toISOString(),
-        fileUid: file.uid,
-      });
-
+  const zuragKhadgalakh = (v, turul) => {
+    if (v.file.status === "done") {
       if (turul === "tamga") {
-        setTamga((prev) => {
-          console.log(`[tamga] State update: ${prev} -> ${filename}`);
-          return filename;
-        });
+        setTamga(v.file.response?.id);
         setDeleteTamga(false);
       } else if (turul === "gariinUseg") {
-        setGariinUseg((prev) => {
-          console.log(`[gariinUseg] State update: ${prev} -> ${filename}`);
-          return filename;
-        });
+        setGariinUseg(v.file.response?.id);
         setDeleteGariinUseg(false);
       } else if (turul === "gariinUseg1") {
-        setGariinUseg1((prev) => {
-          console.log(`[gariinUseg1] State update: ${prev} -> ${filename}`);
-          return filename;
-        });
+        setGariinUseg1(v.file.response?.id);
         setDeleteGariinUseg1(false);
       }
     }
@@ -234,25 +212,6 @@ function KhuviinMedeelel({
     _.set(baiguullaga, `barilguud.${index}`, baiguullaga.barilguud[index]);
     updateMethod("baiguullaga", token, baiguullaga).then(({ data }) => {
       if (data === "Amjilttai") {
-        if (tamga && !deleteTamga) {
-          uilchilgee(token).post("/confirmFile", {
-            filename: tamga,
-            path: "tamga",
-          });
-        }
-        if (gariinUseg && !deleteGariinUseg) {
-          uilchilgee(token).post("/confirmFile", {
-            filename: gariinUseg,
-            path: "gariinUseg",
-          });
-        }
-        if (gariinUseg1 && !deleteGariinUseg1) {
-          uilchilgee(token).post("/confirmFile", {
-            filename: gariinUseg1,
-            path: "gariinUseg1",
-          });
-        }
-
         notification.success({ message: t("Амжилттай хадгаллаа") });
         baiguullagaMutate();
         setSongogdsonTsonkhniiIndex(3);
@@ -264,13 +223,14 @@ function KhuviinMedeelel({
     });
   }
 
-  function tamgaZuragKharakh(e, path) {
-    setKharakhZurgiinZam(path);
+  function tamgaZuragKharakh(e, turul, id) {
+    setKharakhZurgiinZam(`zuragAvya/${turul}/${baiguullaga?._id}/${id}`);
     e.preventDefault();
     e.stopPropagation();
   }
-  function gariinUsegKharakh(e, path) {
-    setGariinUsegKharakhZam(path);
+
+  function gariinUsegKharakh(e, turul, id) {
+    setGariinUsegKharakhZam(`zuragAvya/${turul}/${baiguullaga?._id}/${id}`);
     e.preventDefault();
     e.stopPropagation();
   }
@@ -732,7 +692,7 @@ function KhuviinMedeelel({
                         <Button
                           icon={<EyeOutlined />}
                           onClick={(e) =>
-                            tamgaZuragKharakh(e, `tamga/${barilga.tamga}`)
+                            tamgaZuragKharakh(e, "tamga", barilga.tamga)
                           }
                           className="h-9 !text-gray-500 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
                           type="button"
@@ -743,28 +703,16 @@ function KhuviinMedeelel({
 
                       <ImgCrop modalTitle="Зураг засах" rotationSlider>
                         <Upload
-                          key="tamga-upload"
                           showUploadList={false}
                           multiple={false}
                           name="file"
-                          action={`${url}/upload`}
+                          action={`${url}/zuragKhadgalya`}
                           method="POST"
-                          headers={{ Authorization: `bearer ${token}` }}
                           data={{
                             turul: "tamga",
                             baiguullagiinId: baiguullaga?._id,
-                            barilgiinId,
                           }}
-                          beforeUpload={(file) => {
-                            const uploadId = `tamga-${Date.now()}-${Math.random()
-                              .toString(36)
-                              .substr(2, 9)}`;
-                            console.log(`[tamga] Starting upload:`, {
-                              uploadId,
-                              fileName: file.name,
-                            });
-                            return true;
-                          }}
+                          headers={{ Authorization: `bearer ${token}` }}
                           onChange={(v) => zuragKhadgalakh(v, "tamga")}
                         >
                           <div className="flex flex-row items-center gap-2">
@@ -802,7 +750,7 @@ function KhuviinMedeelel({
                       {!!tamga ? (
                         <>
                           <img
-                            src={`${url}/file?path=tmp/tamga/${tamga}`}
+                            src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${tamga}`}
                             alt="image"
                             style={{
                               height: "50px",
@@ -816,7 +764,7 @@ function KhuviinMedeelel({
                         !deleteTamga && (
                           <>
                             <img
-                              src={`${url}/file?path=tamga/${barilga.tamga}`}
+                              src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
                               alt="image"
                               style={{
                                 height: "50px",
@@ -843,28 +791,16 @@ function KhuviinMedeelel({
                         }}
                       >
                         <Upload
-                          key="gariinUseg-upload"
                           showUploadList={false}
-                          multiple={false}
+                          multiple={true}
                           name="file"
-                          action={`${url}/upload`}
+                          action={`${url}/zuragKhadgalya`}
                           method="POST"
-                          headers={{ Authorization: `bearer ${token}` }}
                           data={{
                             turul: "gariinUseg",
                             baiguullagiinId: baiguullaga?._id,
-                            barilgiinId,
                           }}
-                          beforeUpload={(file) => {
-                            const uploadId = `gariinUseg-${Date.now()}-${Math.random()
-                              .toString(36)
-                              .substr(2, 9)}`;
-                            console.log(`[gariinUseg] Starting upload:`, {
-                              uploadId,
-                              fileName: file.name,
-                            });
-                            return true;
-                          }}
+                          headers={{ Authorization: `bearer ${token}` }}
                           onChange={(v) => zuragKhadgalakh(v, "gariinUseg")}
                           accept="image/png,image/gif"
                         >
@@ -880,6 +816,7 @@ function KhuviinMedeelel({
                       {shouldShowGariinUseg() && (
                         <Button
                           danger
+                          multiple={true}
                           icon={<DeleteOutlined />}
                           type="button"
                           onClick={handleGariinUsegDelete}
@@ -893,7 +830,7 @@ function KhuviinMedeelel({
                     <div className="flex h-[54px] w-[115px] items-center justify-center border">
                       {!!gariinUseg ? (
                         <img
-                          src={`${url}/file?path=tmp/gariinUseg/${gariinUseg}`}
+                          src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${gariinUseg}`}
                           alt="image"
                           style={{
                             height: "50px",
@@ -930,28 +867,16 @@ function KhuviinMedeelel({
                         }}
                       >
                         <Upload
-                          key="gariinUseg1-upload"
                           showUploadList={false}
-                          multiple={false}
+                          multiple={true}
                           name="file"
-                          action={`${url}/upload`}
+                          action={`${url}/zuragKhadgalya`}
                           method="POST"
-                          headers={{ Authorization: `bearer ${token}` }}
                           data={{
                             turul: "gariinUseg1",
                             baiguullagiinId: baiguullaga?._id,
-                            barilgiinId,
                           }}
-                          beforeUpload={(file) => {
-                            const uploadId = `gariinUseg1-${Date.now()}-${Math.random()
-                              .toString(36)
-                              .substr(2, 9)}`;
-                            console.log(`[gariinUseg1] Starting upload:`, {
-                              uploadId,
-                              fileName: file.name,
-                            });
-                            return true;
-                          }}
+                          headers={{ Authorization: `bearer ${token}` }}
                           onChange={(v) => zuragKhadgalakh(v, "gariinUseg1")}
                           accept="image/png,image/gif"
                         >
@@ -967,6 +892,7 @@ function KhuviinMedeelel({
                       {shouldShowGariinUseg1() && (
                         <Button
                           danger
+                          multiple={true}
                           icon={<DeleteOutlined />}
                           type="button"
                           onClick={handleGariinUseg1Delete}
@@ -980,7 +906,7 @@ function KhuviinMedeelel({
                     <div className="flex h-[54px] w-[115px] items-center justify-center border">
                       {!!gariinUseg1 ? (
                         <img
-                          src={`${url}/file?path=tmp/gariinUseg1/${gariinUseg1}`}
+                          src={`${url}/zuragAvya/gariinUseg1/${baiguullaga?._id}/${gariinUseg1}`}
                           alt="image"
                           style={{
                             height: "50px",
