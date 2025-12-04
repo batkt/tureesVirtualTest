@@ -30,7 +30,11 @@ function KhuviinMedeelel({
     token,
     ajiltan?.baiguullagiinId
   );
-
+  const [cropKey, setCropKey] = useState({
+    tamga: Date.now(),
+    gariinUseg: Date.now(),
+    gariinUseg1: Date.now(),
+  });
   const [form] = Form.useForm();
   const [tamga, setTamga] = useState();
   const [gariinUseg, setGariinUseg] = useState();
@@ -79,30 +83,22 @@ function KhuviinMedeelel({
   });
 
   const zuragKhadgalakh = (v, turul) => {
-    console.log("zuragKhadgalakh called:", {
-      turul,
-      status: v.file.status,
-      file: v.file,
-    });
+    console.log("zuragKhadgalakh called:", { turul, status: v.file.status });
 
     if (v.file.status === "done") {
       console.log("File upload done, response:", v.file.response);
 
-      // Revoke old blob URLs before creating new ones
+      // Revoke old blob URLs
       if (turul === "tamga" && tamga?.url) {
-        console.log("Revoking old tamga URL:", tamga.url);
         URL.revokeObjectURL(tamga.url);
       } else if (turul === "gariinUseg" && gariinUseg?.url) {
-        console.log("Revoking old gariinUseg URL:", gariinUseg.url);
         URL.revokeObjectURL(gariinUseg.url);
       } else if (turul === "gariinUseg1" && gariinUseg1?.url) {
-        console.log("Revoking old gariinUseg1 URL:", gariinUseg1.url);
         URL.revokeObjectURL(gariinUseg1.url);
       }
 
-      const newBlobUrl = v.file.originFileObj
-        ? URL.createObjectURL(v.file.originFileObj)
-        : null;
+      const fileToUse = v.file.originFileObj || v.file;
+      const newBlobUrl = fileToUse ? URL.createObjectURL(fileToUse) : null;
 
       console.log("Created new blob URL:", newBlobUrl);
 
@@ -111,17 +107,18 @@ function KhuviinMedeelel({
         url: newBlobUrl,
       };
 
-      console.log("Setting imageData for", turul, ":", imageData);
-
       if (turul === "tamga") {
         setTamga(imageData);
         setDeleteTamga(false);
+        setCropKey((prev) => ({ ...prev, tamga: Date.now() })); // Reset ImgCrop
       } else if (turul === "gariinUseg") {
         setGariinUseg(imageData);
         setDeleteGariinUseg(false);
+        setCropKey((prev) => ({ ...prev, gariinUseg: Date.now() }));
       } else if (turul === "gariinUseg1") {
         setGariinUseg1(imageData);
         setDeleteGariinUseg1(false);
+        setCropKey((prev) => ({ ...prev, gariinUseg1: Date.now() }));
       }
     }
   };
@@ -834,6 +831,7 @@ function KhuviinMedeelel({
                   <Form.Item name="turul">
                     <div className="flex flex-row items-center gap-2">
                       <ImgCrop
+                        key={cropKey.gariinUseg}
                         modalTitle="Зураг засах"
                         rotationSlider
                         quality={1}
@@ -914,6 +912,7 @@ function KhuviinMedeelel({
                   <Form.Item name="turul">
                     <div className="flex flex-row items-center gap-2">
                       <ImgCrop
+                        key={cropKey.gariinUseg1}
                         modalTitle="Зураг засах"
                         rotationSlider
                         quality={1}
@@ -934,7 +933,6 @@ function KhuviinMedeelel({
                           }}
                           headers={{ Authorization: `bearer ${token}` }}
                           onChange={(v) => zuragKhadgalakh(v, "gariinUseg1")}
-                          accept="image/jpeg,image/jpg,image/png"
                         >
                           <Button
                             className="h-9 !text-gray-400 dark:!border-white dark:!bg-gray-800 dark:!text-gray-400"
