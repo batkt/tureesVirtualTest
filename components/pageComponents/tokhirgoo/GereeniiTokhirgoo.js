@@ -39,11 +39,7 @@ function KhuviinMedeelel({
   const [tamga, setTamga] = useState();
   const [gariinUseg, setGariinUseg] = useState();
   const [gariinUseg1, setGariinUseg1] = useState();
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
-  };
+
   const [deleteTamga, setDeleteTamga] = useState(false);
   const [deleteGariinUseg, setDeleteGariinUseg] = useState(false);
   const [deleteGariinUseg1, setDeleteGariinUseg1] = useState(false);
@@ -91,14 +87,24 @@ function KhuviinMedeelel({
       const fileToUse = v.file.originFileObj || v.file;
 
       if (fileToUse instanceof File || fileToUse instanceof Blob) {
-        const currentTurul = turul;
-        const responseId = v.file.response?.id;
+        // Define getBase64 *inside* the outer function scope to ensure
+        // the reader operates on the specific 'fileToUse' instance.
+        const getBase64Local = (img) => {
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.addEventListener("load", () => resolve(reader.result));
+            reader.readAsDataURL(img);
+          });
+        };
 
-        getBase64(fileToUse, (base64Url) => {
+        const currentTurul = turul;
+        const responseId = v.file.response?.id; // Use the local promise-based function and await the result
+
+        getBase64Local(fileToUse).then((base64Url) => {
           const imageData = {
             id: responseId,
             url: base64Url,
-          };
+          }; // State updates using the isolated data
 
           if (currentTurul === "tamga") {
             setTamga(imageData);
