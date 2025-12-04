@@ -417,9 +417,6 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
           Дарга:&nbsp;..........................................&lt;signature1&gt;........................................................../П.Гүндэгмаа/
         </div>
         <div style="margin-top: 0.5rem;"> 
-          Нягтлан бодогч:&nbsp;.................................&lt;signature2&gt;.............................................../Б.Үүртуяа/
-        </div>
-        <div style="margin-top: 0.5rem;"> 
           Хүлээн авсан:&nbsp;...................................................................................../&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/
         </div>
       </div>
