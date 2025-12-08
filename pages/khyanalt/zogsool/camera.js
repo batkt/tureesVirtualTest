@@ -2008,7 +2008,7 @@ function camera({ token }) {
           token={token}
           baiguullagiinId={baiguullaga?._id}
           barilgiinId={barilgiinId}
-          selectedCamera={camerVal[1]}
+          songogdsonCamera={camerVal[1]}
           zogsooliinId={songogdzonZogsool?._id}
           cameraData={cameraData}
         />
@@ -2091,16 +2091,19 @@ function camera({ token }) {
       form.setFieldValue("mashiniiDugaar", val ? val + v : v);
   };
 
+ 
+
   const dugaarBurtgekh = () => {
     const body = { ...form.getFieldsValue() };
     const ognoo = body?.burtgelOgnoo;
     const tsag = body?.burtgelTsag;
-    const selectedCamera = body?.CAMERA_IP;
+    const songogdsonCamera = body?.CAMERA_IP;
 
-    // Check if this is an exit camera registration
-    const isExitCamera = selectedCamera === camerVal[1];
+  
+    const garakhCamera = songogdsonCamera === camerVal[1];
 
-    if (ognoo?.clone && orohCameraSongogdson) {
+    if (ognoo?.clone && !garakhCamera) {
+   
       const datetime = ognoo.clone();
       const tsagMoment =
         moment.isMoment(tsag) && tsag?.isValid()
@@ -2128,74 +2131,170 @@ function camera({ token }) {
       }
     });
 
-    if (isExitCamera) {
-      const existingVehicle = uilchluulegchGaralt?.jagsaalt?.find(
-        (v) =>
-          v.mashiniiDugaar?.toUpperCase() === body.mashiniiDugaar?.toUpperCase()
-      );
-
-      if (existingVehicle) {
-        setModalOpen({ bool: false, item: null, type: "" });
-        form.resetFields();
-
-        const mur = existingVehicle.tuukh[0];
-        setTimeout(() => {
-          tulburTulyu(
-            mur,
-            existingVehicle._id,
-            existingVehicle.mashiniiDugaar,
-            existingVehicle.niitDun,
-            0
-          );
-        }, 300);
-        return;
-      }
-    }
-
     uilchilgee(token)
       .post("/zogsoolSdkService", body)
       .then((res) => {
         if (res.status === 200) {
           if (!!res?.data?.aldaa) {
             notification.warn({ message: res.data.aldaa });
+            setModalOpen({ bool: false, item: null, type: "" });
+            form.resetFields();
           } else {
             notification.success({ message: t("Амжилттай бүртгэгдлээ") });
 
-            if (isExitCamera && res?.data && !res?.data?.aldaa) {
-              const vehicleData = res.data;
+            setModalOpen({ bool: false, item: null, type: "" });
+            form.resetFields();
 
-              setModalOpen({ bool: false, item: null, type: "" });
-              form.resetFields();
+            if (searchUtga.current?.value) {
+              searchUtga.current.value = "";
+              setUilchluulegchKhuudaslalt((e) => ({
+                ...e,
+                khuudasniiDugaar: 1,
+                search: "",
+              }));
+              setKhaikh("");
+            }
 
-              if (vehicleData?.tuukh?.[0] && vehicleData?._id) {
-                setTimeout(() => {
+            if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh) {
+              zurchilteiMashinMsgilgeekh(body?.mashiniiDugaar);
+            }
+
+            onRefresh();
+
+            if (garakhCamera) {
+              const mashiniiDugaar = body.mashiniiDugaar?.toUpperCase();
+              const apiAvsanMashin = res.data?._id;
+
+              setTimeout(() => {
+                const shinechilsenMashin = uilchluulegchGaralt?.jagsaalt?.find(
+                  (v) => {
+                    const match =
+                      v.mashiniiDugaar?.toUpperCase() === mashiniiDugaar;
+                    return match;
+                  }
+                );
+
+                if (shinechilsenMashin?.tuukh?.[0] && shinechilsenMashin?._id) {
+                  const hasGarsanTsag =
+                    !!shinechilsenMashin?.tuukh?.[0]?.tsagiinTuukh?.[0]?.garsanTsag;
+
+                  if (!hasGarsanTsag) {
+                    setTimeout(() => {
+                      uilchilgee(token)
+                        .get("/zogsoolUilchluulegch", {
+                          params: {
+                            query: { _id: shinechilsenMashin._id },
+                          },
+                        })
+                        .then(({ data: freshData }) => {
+                          const fresh = freshData?.jagsaalt?.[0];
+                          if (fresh?.tuukh?.[0] && fresh?._id) {
+                            const haruulakhDun =
+                              fresh.niitDun ?? fresh.tuukh?.[0]?.tulukhDun ?? 0;
+
+                            tulburTulyu(
+                              fresh.tuukh[0],
+                              fresh._id,
+                              fresh.mashiniiDugaar,
+                              haruulakhDun,
+                              0
+                            );
+                          }
+                        })
+                        .catch((err) => {
+                          const haruulakhDun =
+                            shinechilsenMashin?.niitDun ??
+                            shinechilsenMashin?.tuukh?.[0]?.tulukhDun ??
+                            0;
+                          tulburTulyu(
+                            shinechilsenMashin.tuukh[0],
+                            shinechilsenMashin._id,
+                            shinechilsenMashin.mashiniiDugaar,
+                            haruulakhDun,
+                            0
+                          );
+                        });
+                    }, 500);
+                    return;
+                  }
+
+                  const haruulakhDun =
+                    shinechilsenMashin?.niitDun ??
+                    shinechilsenMashin?.tuukh?.[0]?.tulukhDun ??
+                    0;
+
                   tulburTulyu(
-                    vehicleData.tuukh[0],
-                    vehicleData._id,
-                    vehicleData.mashiniiDugaar,
-                    vehicleData.niitDun,
+                    shinechilsenMashin.tuukh[0],
+                    shinechilsenMashin._id,
+                    shinechilsenMashin.mashiniiDugaar,
+                    haruulakhDun,
                     0
                   );
-                }, 300);
-              }
-            } else {
-              setModalOpen({ bool: false, item: null, type: "" });
-              form.resetFields();
+                } else if (apiAvsanMashin) {
+                  uilchilgee(token)
+                    .get("/zogsoolUilchluulegch", {
+                      params: {
+                        query: { _id: apiAvsanMashin },
+                      },
+                    })
+                    .then(({ data: freshData }) => {
+                      const fresh = freshData?.jagsaalt?.[0];
+                      if (fresh?.tuukh?.[0] && fresh?._id) {
+                        tulburTulyu(
+                          fresh.tuukh[0],
+                          fresh._id,
+                          fresh.mashiniiDugaar,
+                          fresh.niitDun ?? fresh.tuukh?.[0]?.tulukhDun ?? 0,
+                          0
+                        );
+                      } else {
+                        notification.warn({
+                          message: t("Машины мэдээлэл дутуу байна"),
+                        });
+                      }
+                    })
+                    .catch((err) => {
+                      notification.error({
+                        message: t("Төлбөрийн цонх нээхэд алдаа гарлаа"),
+                      });
+                    });
+                } else {
+                  uilchilgee(token)
+                    .get("/zogsoolUilchluulegch", {
+                      params: {
+                        query: {
+                          mashiniiDugaar: mashiniiDugaar,
+                          "tuukh.garsanKhaalga": songogdsonCamera,
+                        },
+                        order: { createdAt: -1 },
+                        khuudasniiKhemjee: 1,
+                      },
+                    })
+                    .then(({ data: searchData }) => {
+                      const found = searchData?.jagsaalt?.[0];
+                      if (found?.tuukh?.[0] && found?._id) {
+                        tulburTulyu(
+                          found.tuukh[0],
+                          found._id,
+                          found.mashiniiDugaar,
+                          found.niitDun ?? found.tuukh?.[0]?.tulukhDun ?? 0,
+                          0
+                        );
+                      } else {
+                        notification.warn({
+                          message: t("Машины мэдээлэл олдсонгүй"),
+                        });
+                      }
+                    })
+                    .catch((err) => {
+                      notification.error({
+                        message: t("Машин хайхад алдаа гарлаа"),
+                      });
+                    });
+                }
+              }, 1500);
             }
           }
-
-          if (searchUtga.current?.value) {
-            searchUtga.current.value = "";
-            setUilchluulegchKhuudaslalt((e) => ({
-              ...e,
-              khuudasniiDugaar: 1,
-              search: "",
-            }));
-            setKhaikh("");
-          }
-          if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
-            zurchilteiMashinMsgilgeekh(body?.mashiniiDugaar);
-          onRefresh();
         }
       })
       .catch(aldaaBarigch);
@@ -2216,9 +2315,6 @@ function camera({ token }) {
         });
       }
 
-      const mur = data.tuukh[0];
-      tulburTulyu(mur, data._id, data.mashiniiDugaar, data.niitDun, 0);
-
       const yavuulakhData = {
         mashiniiDugaar: data.mashiniiDugaar,
         CAMERA_IP: camerVal[1],
@@ -2232,6 +2328,35 @@ function camera({ token }) {
           if (res.status === 200) {
             if (!res?.data?.aldaa) {
               notification.success({ message: t("Амжилттай бүртгэгдлээ") });
+              const mashinData = res?.data;
+
+              if (
+                mashinData?.tuukh?.[0] &&
+                mashinData?._id &&
+                mashinData?.mashiniiDugaar
+              ) {
+                tulburTulyu(
+                  mashinData.tuukh[0],
+                  mashinData._id,
+                  mashinData.mashiniiDugaar,
+                  mashinData?.niitDun ??
+                    mashinData?.tuukh?.[0]?.tulukhDun ??
+                    mashinData?.tulukhDun ??
+                    0,
+                  0
+                );
+              } else if (data?.tuukh?.[0]) {
+                tulburTulyu(
+                  data.tuukh[0],
+                  data._id,
+                  data.mashiniiDugaar,
+                  data?.niitDun ??
+                    data?.tuukh?.[0]?.tulukhDun ??
+                    data?.tulukhDun ??
+                    0,
+                  0
+                );
+              }
             }
             onRefresh();
           }
@@ -2315,7 +2440,10 @@ function camera({ token }) {
               res.data.tuukh[0],
               res.data._id,
               res.data.mashiniiDugaar,
-              res.data.niitDun,
+              res.data?.niitDun ??
+                res.data?.tuukh?.[0]?.tulukhDun ??
+                res.data?.tulukhDun ??
+                0,
               0
             );
           }
@@ -2387,13 +2515,56 @@ function camera({ token }) {
   }, [uilchluulegchGaralt?.jagsaalt, tuluvFilter]);
 
   const tableSummary = useMemo(() => {
-    if (!filteredJagsaalt || filteredJagsaalt.length === 0) return null;
+    if (!tuluvFilter && uilchluulegchGaralt?.niitDun !== undefined) {
+      return {
+        totalDun: uilchluulegchGaralt.niitDun || 0,
+        totalEbarimt: uilchluulegchGaralt.niitEbarimt || 0,
+
+        totalTulbur: 0,
+      };
+    }
+
+    const nemekhData = tuluvFilter
+      ? uilchluulegchGaralt?.jagsaalt?.filter((parent) => {
+          let dunTuluv = false;
+          parent?.tuukh?.forEach((mur) => {
+            if (mur.tulukhDun > 0) dunTuluv = true;
+          });
+          const mur = parent.tuukh[0];
+
+          let currentStatus = "";
+
+          if (parent.turul === "Үнэгүй" || mur?.tuluv === -1) {
+            currentStatus = "unegui";
+          } else if (
+            (mur.tuluv === 0 ||
+              parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
+            dunTuluv
+          ) {
+            currentStatus = "idevekhitei";
+          } else if (mur?.tuluv === 1 || mur?.tuluv === 2) {
+            currentStatus = "tulugsun";
+          } else if (
+            !!parent.zurchil &&
+            parent.zurchil !== "" &&
+            mur?.tuluv === -2
+          ) {
+            currentStatus = "zurchiltei";
+          } else if (mur?.tuluv === 0 && !dunTuluv) {
+            currentStatus = "unegui";
+          }
+
+          return currentStatus === tuluvFilter;
+        })
+      : uilchluulegchGaralt?.jagsaalt;
+
+    if (!nemekhData || nemekhData.length === 0) return null;
 
     let totalDun = 0;
     let totalEbarimt = 0;
     let totalTulbur = 0;
 
-    filteredJagsaalt.forEach((record) => {
+    nemekhData.forEach((record) => {
       const mur = record.tuukh[0];
 
       totalDun += record.niitDun || mur?.tulukhDun || 0;
@@ -2408,7 +2579,8 @@ function camera({ token }) {
     });
 
     return { totalDun, totalEbarimt, totalTulbur };
-  }, [filteredJagsaalt]);
+  }, [uilchluulegchGaralt, tuluvFilter]);
+
   const excel = new Excel();
   return (
     <Admin
@@ -3512,7 +3684,10 @@ function camera({ token }) {
                         <Table.Summary.Cell
                           index={0}
                           colSpan={dunIndex}
-                        ></Table.Summary.Cell>
+                          align="right"
+                        >
+                          Нийт дүн:
+                        </Table.Summary.Cell>
                         <Table.Summary.Cell index={dunIndex} align="right">
                           <strong>
                             {formatNumber(tableSummary?.totalDun || 0, 0)}
