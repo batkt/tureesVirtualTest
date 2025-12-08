@@ -272,7 +272,9 @@ function camera({ token }) {
   const [guilgeeKharakh, setGuilgeeKharakh] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [khelber, setKhelber] = useState("");
+
   const [dun, setDun] = useState("");
+  const [tuluvFilter, setTuluvFilter] = useState("");
   const [khaikh, setKhaikh] = useState("");
   // const [refresh, setRefresh] = useState(true);
   const [modalNeelttei, setModalNeelttei] = useState(false);
@@ -1392,7 +1394,74 @@ function camera({ token }) {
         },
       },
       {
-        title: t("Төлөв"),
+        title: t("И-Баримт"),
+        align: "center",
+        width: "9rem",
+        dataIndex: "ebarimtAvsanDun",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render: (v) => {
+          return <div className="w-full text-right">{formatNumber(v, 0)}</div>;
+        },
+      },
+      {
+        title: (
+          <Popover
+            placement="bottom"
+            content={
+              <div className="space-y-2">
+                <div
+                  onClick={() => setTuluvFilter("")}
+                  className={`relative ${
+                    tuluvFilter === "" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Бүгд")}
+                </div>
+
+                <div
+                  onClick={() => setTuluvFilter("idevekhitei")}
+                  className={`relative ${
+                    tuluvFilter === "idevekhitei" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Идэвхтэй")}
+                </div>
+                <div
+                  onClick={() => setTuluvFilter("tulugsun")}
+                  className={`relative ${
+                    tuluvFilter === "tulugsun" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Төлөгдсөн")}
+                </div>
+                <div
+                  onClick={() => setTuluvFilter("unegui")}
+                  className={`relative ${
+                    tuluvFilter === "unegui" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Үнэгүй")}
+                </div>
+                <div
+                  onClick={() => setTuluvFilter("zurchiltei")}
+                  className={`relative ${
+                    tuluvFilter === "zurchiltei" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Зөрчилтэй")}
+                </div>
+              </div>
+            }
+          >
+            <div
+              className={`flex cursor-pointer items-center justify-center gap-3`}
+            >
+              <FilterOutlined className="text-lg text-green-600" />
+              {t("Төлөв")}
+            </div>
+          </Popover>
+        ),
         align: "center",
         width: "10rem",
         dataIndex: "tuukh.tuluv",
@@ -1402,6 +1471,28 @@ function camera({ token }) {
             if (mur.tulukhDun > 0) dunTuluv = true;
           });
           const mur = parent.tuukh[0];
+
+          let currentStatus = "";
+          if (parent.turul === "Үнэгүй") {
+            currentStatus = "unegui";
+          } else if (
+            (mur.tuluv === 0 ||
+              parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
+            dunTuluv
+          ) {
+            currentStatus = "idevekhitei";
+          } else if (mur?.tuluv === 1 || mur?.tuluv === 2) {
+            currentStatus = "tulugsun";
+          } else if (
+            !!parent.zurchil &&
+            parent.zurchil !== "" &&
+            mur?.tuluv === -2
+          ) {
+            currentStatus = "zurchiltei";
+          } else if (mur?.tuluv === -1) {
+            currentStatus = "unegui";
+          }
+
           if (parent.turul === "Үнэгүй") {
             return (
               <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
@@ -1708,6 +1799,7 @@ function camera({ token }) {
     dun,
     shineBagana,
     uilchluulegchGaralt,
+    tuluvFilter,
   ]);
 
   const baganuud = [
@@ -1787,7 +1879,6 @@ function camera({ token }) {
     } else {
       setCamerVal([camerVal[0], e]);
       localStorage.setItem("CamerVal", JSON.stringify([camerVal[0], e]));
-      // setGarakhKhaalgaIp(e);
     }
   };
 
@@ -2004,6 +2095,11 @@ function camera({ token }) {
     const body = { ...form.getFieldsValue() };
     const ognoo = body?.burtgelOgnoo;
     const tsag = body?.burtgelTsag;
+    const selectedCamera = body?.CAMERA_IP;
+
+    // Check if this is an exit camera registration
+    const isExitCamera = selectedCamera === camerVal[1];
+
     if (ognoo?.clone && orohCameraSongogdson) {
       const datetime = ognoo.clone();
       const tsagMoment =
@@ -2026,20 +2122,68 @@ function camera({ token }) {
     delete body.burtgelTsag;
     if (!!barilgiinId) body["barilgiinId"] = barilgiinId;
 
-    // Remove undefined values to prevent toString errors
     Object.keys(body).forEach((key) => {
       if (body[key] === undefined || body[key] === null) {
         delete body[key];
       }
     });
 
+    if (isExitCamera) {
+      const existingVehicle = uilchluulegchGaralt?.jagsaalt?.find(
+        (v) =>
+          v.mashiniiDugaar?.toUpperCase() === body.mashiniiDugaar?.toUpperCase()
+      );
+
+      if (existingVehicle) {
+        setModalOpen({ bool: false, item: null, type: "" });
+        form.resetFields();
+
+        const mur = existingVehicle.tuukh[0];
+        setTimeout(() => {
+          tulburTulyu(
+            mur,
+            existingVehicle._id,
+            existingVehicle.mashiniiDugaar,
+            existingVehicle.niitDun,
+            0
+          );
+        }, 300);
+        return;
+      }
+    }
+
     uilchilgee(token)
       .post("/zogsoolSdkService", body)
       .then((res) => {
         if (res.status === 200) {
-          if (!!res?.data) notification.warn({ message: res.data.aldaa });
-          else notification.success({ message: t("Амжилттай бүртгэгдлээ") });
-          setModalOpen({ bool: false, item: null, type: "" });
+          if (!!res?.data?.aldaa) {
+            notification.warn({ message: res.data.aldaa });
+          } else {
+            notification.success({ message: t("Амжилттай бүртгэгдлээ") });
+
+            if (isExitCamera && res?.data && !res?.data?.aldaa) {
+              const vehicleData = res.data;
+
+              setModalOpen({ bool: false, item: null, type: "" });
+              form.resetFields();
+
+              if (vehicleData?.tuukh?.[0] && vehicleData?._id) {
+                setTimeout(() => {
+                  tulburTulyu(
+                    vehicleData.tuukh[0],
+                    vehicleData._id,
+                    vehicleData.mashiniiDugaar,
+                    vehicleData.niitDun,
+                    0
+                  );
+                }, 300);
+              }
+            } else {
+              setModalOpen({ bool: false, item: null, type: "" });
+              form.resetFields();
+            }
+          }
+
           if (searchUtga.current?.value) {
             searchUtga.current.value = "";
             setUilchluulegchKhuudaslalt((e) => ({
@@ -2051,7 +2195,6 @@ function camera({ token }) {
           }
           if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
             zurchilteiMashinMsgilgeekh(body?.mashiniiDugaar);
-          form.resetFields();
           onRefresh();
         }
       })
@@ -2072,6 +2215,10 @@ function camera({ token }) {
           duration: 2,
         });
       }
+
+      const mur = data.tuukh[0];
+      tulburTulyu(mur, data._id, data.mashiniiDugaar, data.niitDun, 0);
+
       const yavuulakhData = {
         mashiniiDugaar: data.mashiniiDugaar,
         CAMERA_IP: camerVal[1],
@@ -2083,22 +2230,12 @@ function camera({ token }) {
         .post("/zogsoolSdkService", yavuulakhData)
         .then((res) => {
           if (res.status === 200) {
-            if (!!res?.data) notification.warn({ message: res.data.aldaa });
-            else notification.success({ message: t("Амжилттай бүртгэгдлээ") });
-            if (searchUtga.current?.value) {
-              searchUtga.current.value = "";
-              setUilchluulegchKhuudaslalt((a) => ({
-                ...a,
-                search: "",
-                khuudasniiDugaar: 1,
-              }));
-              setKhaikh("");
+            if (!res?.data?.aldaa) {
+              notification.success({ message: t("Амжилттай бүртгэгдлээ") });
             }
-            form.resetFields();
             onRefresh();
           }
-        })
-        .catch(aldaaBarigch);
+        });
     }
   };
 
@@ -2162,21 +2299,26 @@ function camera({ token }) {
     yavuulakhData.barilgiinId = barilgiinId;
     yavuulakhData.orsonCamera = camerVal[0];
     yavuulakhData.garsanCamera = camerVal[1];
+
     uilchilgee(token)
       .post("/zogsoolOrlogoGaraas", yavuulakhData)
       .then((res) => {
         if (res.status === 200) {
           notification.success({ message: t("Амжилттай бүртгэгдлээ") });
+
           setModalOpen({ bool: false, item: null, type: "" });
           form.resetFields();
           onRefresh();
-          tulburTulyu(
-            res.data.tuukh[0],
-            res.data._id,
-            res.data.mashiniiDugaar,
-            res.data.niitDun,
-            0
-          );
+
+          if (res?.data?.tuukh?.[0] && res?.data?._id) {
+            tulburTulyu(
+              res.data.tuukh[0],
+              res.data._id,
+              res.data.mashiniiDugaar,
+              res.data.niitDun,
+              0
+            );
+          }
         }
       })
       .catch(aldaaBarigch);
@@ -2207,6 +2349,66 @@ function camera({ token }) {
       }
     });
   }
+  const filteredJagsaalt = useMemo(() => {
+    if (!uilchluulegchGaralt?.jagsaalt) return [];
+
+    if (!tuluvFilter) return uilchluulegchGaralt.jagsaalt;
+
+    return uilchluulegchGaralt.jagsaalt.filter((parent) => {
+      let dunTuluv = false;
+      parent?.tuukh?.forEach((mur) => {
+        if (mur.tulukhDun > 0) dunTuluv = true;
+      });
+      const mur = parent.tuukh[0];
+
+      let currentStatus = "";
+
+      if (parent.turul === "Үнэгүй" || mur?.tuluv === -1) {
+        currentStatus = "unegui";
+      } else if (
+        (mur.tuluv === 0 || parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
+        dunTuluv
+      ) {
+        currentStatus = "idevekhitei";
+      } else if (mur?.tuluv === 1 || mur?.tuluv === 2) {
+        currentStatus = "tulugsun";
+      } else if (
+        !!parent.zurchil &&
+        parent.zurchil !== "" &&
+        mur?.tuluv === -2
+      ) {
+        currentStatus = "zurchiltei";
+      } else if (mur?.tuluv === 0 && !dunTuluv) {
+        currentStatus = "unegui";
+      }
+
+      return currentStatus === tuluvFilter;
+    });
+  }, [uilchluulegchGaralt?.jagsaalt, tuluvFilter]);
+
+  const tableSummary = useMemo(() => {
+    if (!filteredJagsaalt || filteredJagsaalt.length === 0) return null;
+
+    let totalDun = 0;
+    let totalEbarimt = 0;
+    let totalTulbur = 0;
+
+    filteredJagsaalt.forEach((record) => {
+      const mur = record.tuukh[0];
+
+      totalDun += record.niitDun || mur?.tulukhDun || 0;
+
+      if (mur?.tuluv === 1 || mur?.tuluv === 2) {
+        if (mur.tulbur?.length > 0) {
+          totalTulbur += mur.tulbur.reduce((sum, t) => sum + (t.dun || 0), 0);
+        }
+      }
+
+      totalEbarimt += record.ebarimtAvsanDun || 0;
+    });
+
+    return { totalDun, totalEbarimt, totalTulbur };
+  }, [filteredJagsaalt]);
   const excel = new Excel();
   return (
     <Admin
@@ -3290,10 +3492,50 @@ function camera({ token }) {
             <div>
               <ZogsoolCameraTable
                 isValidating={isValidating}
-                uilchluulegchGaralt={uilchluulegchGaralt}
+                uilchluulegchGaralt={{
+                  ...uilchluulegchGaralt,
+                  jagsaalt: filteredJagsaalt,
+                }}
                 columns={columns}
                 onChangeTable={onChangeTable}
                 setUilchluulegchKhuudaslalt={setUilchluulegchKhuudaslalt}
+                summary={() => {
+                  if (!tableSummary) return null;
+
+                  const dunIndex = 7;
+                  const tulburIndex = 8;
+                  const ebarimtIndex = 9;
+
+                  return (
+                    <Table.Summary fixed>
+                      <Table.Summary.Row>
+                        <Table.Summary.Cell
+                          index={0}
+                          colSpan={dunIndex}
+                        ></Table.Summary.Cell>
+                        <Table.Summary.Cell index={dunIndex} align="right">
+                          <strong>
+                            {formatNumber(tableSummary?.totalDun || 0, 0)}
+                          </strong>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell index={tulburIndex} align="right">
+                          <strong>
+                            {formatNumber(tableSummary?.totalTulbur || 0, 0)}
+                          </strong>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell index={ebarimtIndex} align="right">
+                          <strong>
+                            {formatNumber(tableSummary?.totalEbarimt || 0, 0)}
+                          </strong>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell
+                          index={ebarimtIndex + 1}
+                          colSpan={6}
+                        ></Table.Summary.Cell>
+                      </Table.Summary.Row>
+                    </Table.Summary>
+                  );
+                }}
               />
               <CardList
                 cardListTuluv={"utas"}

@@ -7,6 +7,8 @@ const ZogsoolCameraTable = ({
   columns,
   onChangeTable,
   setUilchluulegchKhuudaslalt,
+  isValidating,
+  summary,
 }) => {
   return (
     <div>
@@ -20,6 +22,8 @@ const ZogsoolCameraTable = ({
         rowKey={(row) => row._id}
         columns={columns}
         onChange={onChangeTable}
+        loading={isValidating}
+        summary={summary}
         rowClassName={(record, index) => {
           const d = record.tuukh[0];
           if (d.tuluv === 0 && record.turul !== "Үнэгүй" && d?.tulukhDun)
