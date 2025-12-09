@@ -32,7 +32,7 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 const { confirm } = Modal;
 function ShineTulbur(
   {
-    destroy,
+    onClose = () => {},
     data,
     token,
     ajiltan,
@@ -106,7 +106,7 @@ function ShineTulbur(
   const eBarimtRef = React.useRef(null);
 
   const handlePrint = useReactToPrint({
-    content: () => eBarimtRef.current,
+    contentRef: eBarimtRef,
     onAfterPrint: () => {
       setEBarimt(null);
       setBaiguullagaEsekh(false);
@@ -119,8 +119,8 @@ function ShineTulbur(
 
   const khaaya = React.useCallback(() => {
     setModalNeelttei(false);
-    destroy();
-  }, [setModalNeelttei, destroy]);
+    onClose();
+  }, [setModalNeelttei, onClose]);
 
   React.useImperativeHandle(
     ref,
@@ -238,7 +238,7 @@ function ShineTulbur(
             setEBarimt(data);
             setLoading(false);
             onRefresh();
-            destroy();
+            onClose();
           }
         })
         .catch((error) => {
@@ -1019,7 +1019,7 @@ function ShineTulbur(
                 </div>
               </div>
               <div
-                onClick={() => destroy()}
+                onClick={() => onClose()}
                 style={{ backgroundColor: "rgba(255, 70, 70, 0.1)" }}
                 className="flex h-[57px] cursor-pointer items-center justify-center rounded-xl border-[1px] border-[#FF4646] shadow-xl hover:bg-[#FF4646] hover:text-white"
               >

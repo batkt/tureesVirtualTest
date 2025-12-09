@@ -551,6 +551,15 @@ function camera({ token }) {
   }, [modalOpen, value]);
 
   useEffect(() => {
+    if (tuluvFilter) {
+      setUilchluulegchKhuudaslalt((prev) => ({
+        ...prev,
+        khuudasniiDugaar: 1,
+      }));
+    }
+  }, [tuluvFilter]);
+
+  useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       let uilchluulegch = zogsool;
 
@@ -2091,19 +2100,15 @@ function camera({ token }) {
       form.setFieldValue("mashiniiDugaar", val ? val + v : v);
   };
 
- 
-
   const dugaarBurtgekh = () => {
     const body = { ...form.getFieldsValue() };
     const ognoo = body?.burtgelOgnoo;
     const tsag = body?.burtgelTsag;
     const songogdsonCamera = body?.CAMERA_IP;
 
-  
     const garakhCamera = songogdsonCamera === camerVal[1];
 
     if (ognoo?.clone && !garakhCamera) {
-   
       const datetime = ognoo.clone();
       const tsagMoment =
         moment.isMoment(tsag) && tsag?.isValid()
@@ -2166,132 +2171,78 @@ function camera({ token }) {
               const apiAvsanMashin = res.data?._id;
 
               setTimeout(() => {
-                const shinechilsenMashin = uilchluulegchGaralt?.jagsaalt?.find(
-                  (v) => {
-                    const match =
-                      v.mashiniiDugaar?.toUpperCase() === mashiniiDugaar;
-                    return match;
-                  }
-                );
-
-                if (shinechilsenMashin?.tuukh?.[0] && shinechilsenMashin?._id) {
-                  const hasGarsanTsag =
-                    !!shinechilsenMashin?.tuukh?.[0]?.tsagiinTuukh?.[0]?.garsanTsag;
-
-                  if (!hasGarsanTsag) {
-                    setTimeout(() => {
-                      uilchilgee(token)
-                        .get("/zogsoolUilchluulegch", {
-                          params: {
-                            query: { _id: shinechilsenMashin._id },
-                          },
-                        })
-                        .then(({ data: freshData }) => {
-                          const fresh = freshData?.jagsaalt?.[0];
-                          if (fresh?.tuukh?.[0] && fresh?._id) {
-                            const haruulakhDun =
-                              fresh.niitDun ?? fresh.tuukh?.[0]?.tulukhDun ?? 0;
-
-                            tulburTulyu(
-                              fresh.tuukh[0],
-                              fresh._id,
-                              fresh.mashiniiDugaar,
-                              haruulakhDun,
-                              0
-                            );
-                          }
-                        })
-                        .catch((err) => {
+                const fetchAndOpenModal = () => {
+                  if (apiAvsanMashin) {
+                    uilchilgee(token)
+                      .get("/zogsoolUilchluulegch", {
+                        params: {
+                          query: { _id: apiAvsanMashin },
+                        },
+                      })
+                      .then(({ data: freshData }) => {
+                        const fresh = freshData?.jagsaalt?.[0];
+                        if (fresh?.tuukh?.[0] && fresh?._id) {
                           const haruulakhDun =
-                            shinechilsenMashin?.niitDun ??
-                            shinechilsenMashin?.tuukh?.[0]?.tulukhDun ??
-                            0;
+                            fresh.niitDun ?? fresh.tuukh?.[0]?.tulukhDun ?? 0;
+
                           tulburTulyu(
-                            shinechilsenMashin.tuukh[0],
-                            shinechilsenMashin._id,
-                            shinechilsenMashin.mashiniiDugaar,
+                            fresh.tuukh[0],
+                            fresh._id,
+                            fresh.mashiniiDugaar,
                             haruulakhDun,
                             0
                           );
+                        } else {
+                          notification.warn({
+                            message: t("Машины мэдээлэл дутуу байна"),
+                          });
+                        }
+                      })
+                      .catch((err) => {
+                        notification.error({
+                          message: t("Төлбөрийн цонх нээхэд алдаа гарлаа"),
                         });
-                    }, 500);
-                    return;
-                  }
-
-                  const haruulakhDun =
-                    shinechilsenMashin?.niitDun ??
-                    shinechilsenMashin?.tuukh?.[0]?.tulukhDun ??
-                    0;
-
-                  tulburTulyu(
-                    shinechilsenMashin.tuukh[0],
-                    shinechilsenMashin._id,
-                    shinechilsenMashin.mashiniiDugaar,
-                    haruulakhDun,
-                    0
-                  );
-                } else if (apiAvsanMashin) {
-                  uilchilgee(token)
-                    .get("/zogsoolUilchluulegch", {
-                      params: {
-                        query: { _id: apiAvsanMashin },
-                      },
-                    })
-                    .then(({ data: freshData }) => {
-                      const fresh = freshData?.jagsaalt?.[0];
-                      if (fresh?.tuukh?.[0] && fresh?._id) {
-                        tulburTulyu(
-                          fresh.tuukh[0],
-                          fresh._id,
-                          fresh.mashiniiDugaar,
-                          fresh.niitDun ?? fresh.tuukh?.[0]?.tulukhDun ?? 0,
-                          0
-                        );
-                      } else {
-                        notification.warn({
-                          message: t("Машины мэдээлэл дутуу байна"),
-                        });
-                      }
-                    })
-                    .catch((err) => {
-                      notification.error({
-                        message: t("Төлбөрийн цонх нээхэд алдаа гарлаа"),
                       });
-                    });
-                } else {
-                  uilchilgee(token)
-                    .get("/zogsoolUilchluulegch", {
-                      params: {
-                        query: {
-                          mashiniiDugaar: mashiniiDugaar,
-                          "tuukh.garsanKhaalga": songogdsonCamera,
+                  } else {
+                    uilchilgee(token)
+                      .get("/zogsoolUilchluulegch", {
+                        params: {
+                          query: {
+                            mashiniiDugaar: mashiniiDugaar,
+                            "tuukh.garsanKhaalga": songogdsonCamera,
+                          },
+                          order: { createdAt: -1 },
+                          khuudasniiKhemjee: 1,
                         },
-                        order: { createdAt: -1 },
-                        khuudasniiKhemjee: 1,
-                      },
-                    })
-                    .then(({ data: searchData }) => {
-                      const found = searchData?.jagsaalt?.[0];
-                      if (found?.tuukh?.[0] && found?._id) {
-                        tulburTulyu(
-                          found.tuukh[0],
-                          found._id,
-                          found.mashiniiDugaar,
-                          found.niitDun ?? found.tuukh?.[0]?.tulukhDun ?? 0,
-                          0
-                        );
-                      } else {
-                        notification.warn({
-                          message: t("Машины мэдээлэл олдсонгүй"),
+                      })
+                      .then(({ data: searchData }) => {
+                        const found = searchData?.jagsaalt?.[0];
+                        if (found?.tuukh?.[0] && found?._id) {
+                          const haruulakhDun =
+                            found.niitDun ?? found.tuukh?.[0]?.tulukhDun ?? 0;
+
+                          tulburTulyu(
+                            found.tuukh[0],
+                            found._id,
+                            found.mashiniiDugaar,
+                            haruulakhDun,
+                            0
+                          );
+                        } else {
+                          notification.warn({
+                            message: t("Машины мэдээлэл олдсонгүй"),
+                          });
+                        }
+                      })
+                      .catch((err) => {
+                        notification.error({
+                          message: t("Машин хайхад алдаа гарлаа"),
                         });
-                      }
-                    })
-                    .catch((err) => {
-                      notification.error({
-                        message: t("Машин хайхад алдаа гарлаа"),
                       });
-                    });
-                }
+                  }
+                };
+
+                fetchAndOpenModal();
               }, 1500);
             }
           }
@@ -2513,6 +2464,15 @@ function camera({ token }) {
       return currentStatus === tuluvFilter;
     });
   }, [uilchluulegchGaralt?.jagsaalt, tuluvFilter]);
+
+  const filteredData = useMemo(
+    () => ({
+      ...uilchluulegchGaralt,
+      jagsaalt: filteredJagsaalt,
+      niitMur: filteredJagsaalt.length,
+    }),
+    [uilchluulegchGaralt, filteredJagsaalt]
+  );
 
   const tableSummary = useMemo(() => {
     if (!tuluvFilter && uilchluulegchGaralt?.niitDun !== undefined) {
@@ -3661,13 +3621,11 @@ function camera({ token }) {
                 </Drawer>
               </div>
             </div>
+
             <div>
               <ZogsoolCameraTable
                 isValidating={isValidating}
-                uilchluulegchGaralt={{
-                  ...uilchluulegchGaralt,
-                  jagsaalt: filteredJagsaalt,
-                }}
+                uilchluulegchGaralt={filteredData}
                 columns={columns}
                 onChangeTable={onChangeTable}
                 setUilchluulegchKhuudaslalt={setUilchluulegchKhuudaslalt}
@@ -3716,7 +3674,7 @@ function camera({ token }) {
                 cardListTuluv={"utas"}
                 keyValue="uilchluulegch"
                 className="block overflow-auto md:hidden"
-                jagsaalt={uilchluulegchGaralt?.jagsaalt}
+                jagsaalt={filteredJagsaalt}
                 Component={UilchluulegchTile}
               />
             </div>

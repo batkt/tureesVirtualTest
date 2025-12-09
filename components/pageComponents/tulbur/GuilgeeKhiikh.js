@@ -30,7 +30,7 @@ function GuilgeeKhiikh(
     data,
     token,
     onFinish,
-    destroy,
+    onClose,
     barilgiinId,
     khadgalyaButtonId,
     date,
@@ -160,7 +160,7 @@ function GuilgeeKhiikh(
     () => ({
       khaaya() {
         _.isFunction(onFinish) && onFinish();
-        destroy();
+        onClose();
       },
       khadgalya() {
         if (
@@ -386,7 +386,7 @@ function GuilgeeKhiikh(
             _.isFunction(data.mutate) && data.mutate();
             _.isFunction(onFinish) && onFinish();
 
-            destroy();
+            onClose();
           })
           .catch((error) => {
             saveButton?.removeAttribute("disabled");
@@ -461,10 +461,10 @@ function GuilgeeKhiikh(
         content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
         okText: t("Тийм"),
         cancelText: t("Үгүй"),
-        onOk: destroy,
+        onOk: onClose,
       });
     } else {
-      destroy();
+      onClose();
     }
   }
 

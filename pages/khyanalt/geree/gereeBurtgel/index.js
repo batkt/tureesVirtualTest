@@ -49,7 +49,7 @@ import locale from "antd/lib/date-picker/locale/mn_MN";
 import GereeExceleesOruulakh from "components/pageComponents/geree/GereeExceleesOruulakh";
 import GereeZuragOruulakh from "components/pageComponents/geree/GereeZuragOruulakh";
 import Sungakh from "components/pageComponents/geree/Sungakh";
-import { modal } from "components/ant/Modal";
+import { modal, destroyAll as destroyAllModals } from "components/ant/Modal";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import CardList from "components/cardList";
 import GereeTile from "components/pageComponents/geree/GereeTile";
@@ -93,7 +93,7 @@ function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
 }
 
 const Tailbar = React.forwardRef(
-  ({ token, baiguullaga, destroy, confirm, data, service }, ref) => {
+  ({ token, onClose, baiguullaga, confirm, data, service, destroy }, ref) => {
     const { t } = useTranslation();
     const [shaltgaan, setTailbar] = React.useState("");
     const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment());
@@ -166,7 +166,7 @@ const Tailbar = React.forwardRef(
                   message.success("Гэрээ амжилттай сэргээгдлээ");
                 } else message.success("Гэрээ амжилттай цуцлагдлаа");
                 confirm(shaltgaan);
-                destroy();
+                onClose();
               }
             })
             .catch((error) => {
@@ -182,7 +182,7 @@ const Tailbar = React.forwardRef(
         },
         khaaya() {
           if (!isSubmitting) {
-            destroy();
+            onClose();
           }
         },
       }),
@@ -195,17 +195,19 @@ const Tailbar = React.forwardRef(
         niilberAvlaga,
         tsutslakhOgnoo,
         isSubmitting,
+        onClose,
       ]
     );
     function garya() {
+      const closeFn = destroy || onClose;
       if (shaltgaan !== "")
         Modal.confirm({
           content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
           okText: t("Тийм"),
           cancelText: t("Үгүй"),
-          onOk: destroy,
+          onOk: closeFn,
         });
-      else destroy();
+      else closeFn();
     }
 
     useEffect(() => {
@@ -1324,7 +1326,7 @@ function ZakhialgiinKhyanalt() {
 
     setTsutslakhLoading((prev) => new Set(prev).add(data._id));
     setGereeniiTokhirgoo(null);
-
+    let modalInstance;
     const footer = [
       <Button
         onClick={() => {
@@ -1349,7 +1351,7 @@ function ZakhialgiinKhyanalt() {
       </Button>,
     ];
 
-    modal({
+    modalInstance = modal({
       title: t("Цуцалсан шалтгаан"),
       icon: <MinusCircleOutlined />,
       content: (
@@ -1358,6 +1360,7 @@ function ZakhialgiinKhyanalt() {
           ref={tailbarRef}
           data={data}
           token={token}
+          onClose={() => modalInstance.destroy()}
           baiguullaga={baiguullaga}
           confirm={() => {
             refresh();
@@ -1469,13 +1472,17 @@ function ZakhialgiinKhyanalt() {
       return;
     }
     setGereeniiTokhirgoo(null);
+
+    let modalInstance;
+
     const footer = [
-      <Button onClick={() => sungaltRef.current.khaaya()}>{t("Хаах")}</Button>,
-      <Button type="primary" onClick={() => sungaltRef.current.khadgalya()}>
+      <Button onClick={() => sungaltRef.current?.khaaya()}>{t("Хаах")}</Button>,
+      <Button type="primary" onClick={() => sungaltRef.current?.khadgalya()}>
         {t("Сунгах")}
       </Button>,
     ];
-    modal({
+
+    modalInstance = modal({
       width: global.innerWidth < 768 ? "90vw" : "20vw",
       title: t("Гэрээ сунгах"),
       icon: <MinusCircleOutlined />,
@@ -1485,6 +1492,7 @@ function ZakhialgiinKhyanalt() {
           data={data}
           token={token}
           baiguullaga={baiguullaga}
+          onClose={() => modalInstance.destroy()} // Add this!
           confirm={() => refresh()}
         />
       ),
@@ -1642,7 +1650,7 @@ function ZakhialgiinKhyanalt() {
           garchig={t("Зураг файл аа чирч оруулах эсвэл сонгоно уу")}
           tailbar={t("Зөвхөн JPG, PNG, GIF файл дэмжигдэнэ")}
           destroy={() => {
-            Modal.destroyAll();
+            destroyAllModals();
           }}
         />
       ),

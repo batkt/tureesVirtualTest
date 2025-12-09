@@ -218,21 +218,28 @@ function Khyanalt({ token }) {
   }
 
   function smsZagvarNemya(data) {
+    let modalInstance;
+
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
+      <Button onClick={() => ref.current.khaaya()}>
+        <div className="dark:text-[#E5E7EB]"> {t("Хаах")}</div>
+      </Button>,
       <Button
-        style={{ backgroundColor: "#209669", color: "#ffffff" }}
+        type="primary "
         onClick={() => ref.current.khadgalya(setWaiting(true))}
       >
         {t("Хадгалах")}
       </Button>,
     ];
-    modal({
+
+    modalInstance = modal({
       title: `${turul} ${t("Загвар үүсгэх")}`,
       icon: <FileExcelOutlined />,
+      width: 1200,
       content: (
         <ZagvarBurtgel
           ref={ref}
+          onClose={() => modalInstance.destroy()}
           setWaiting={setWaiting}
           data={data}
           token={token}

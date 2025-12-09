@@ -5,7 +5,7 @@ import { t } from "i18next";
 const { DatePicker, InputNumber, message, Modal } = require("antd");
 const moment = require("moment");
 
-const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
+const Sungakh = React.forwardRef(({ token, onClose, confirm, data }, ref) => {
   const [sar, setSar] = React.useState(1);
   const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(
     moment(data?.duusakhOgnoo).add(
@@ -31,9 +31,9 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
         content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
         okText: t("Тийм"),
         cancelText: t("Үгүй"),
-        onOk: destroy,
+        onOk: onClose,
       });
-    else destroy();
+    else onClose();
   }
 
   useEffect(() => {
@@ -43,10 +43,12 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
         garya();
       }
     }
-    document.getElementById("sungakhSar").focus();
+    const element = document.getElementById("sungakhSar");
+    if (element) element.focus();
+
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
-  }, [duusakhOgnoo]);
+  }, [duusakhOgnoo, onClose]);
 
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
@@ -76,15 +78,15 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
             if (data === "Amjilttai") {
               message.success(t("Гэрээ амжилттай сунгалаа"));
               confirm(duusakhOgnoo);
-              destroy();
+              onClose();
             }
           });
       },
       khaaya() {
-        destroy();
+        onClose();
       },
     }),
-    [duusakhOgnoo]
+    [duusakhOgnoo, onClose, confirm, token, data?._id, data?.barilgiinId, sar]
   );
 
   return (

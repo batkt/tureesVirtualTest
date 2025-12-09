@@ -1472,7 +1472,7 @@ function GuilgeeNiiluulekh(
     dans,
     token,
     baiguullagiinId,
-    destroy,
+    onClose,
     onFinish,
     barilgiinId,
     setLoading,
@@ -1519,7 +1519,7 @@ function GuilgeeNiiluulekh(
     ref,
     () => ({
       khaaya() {
-        destroy();
+        onClose();
       },
       async khadgalya() {
         const { aldaa, baritsaa, undsenGuilgee } = guilgeeBurduulya(
@@ -1560,7 +1560,7 @@ function GuilgeeNiiluulekh(
               description: t("Гүйлгээ амжилттай холбогдлоо"),
             });
             _.isFunction(onFinish) && onFinish();
-            destroy();
+            onClose();
           }
           setLoadingBaritsaa(false);
         }
@@ -1600,7 +1600,7 @@ function GuilgeeNiiluulekh(
                   description: t("Гүйлгээ амжилттай холбогдлоо"),
                 });
                 _.isFunction(onFinish) && onFinish();
-                destroy();
+                onClose();
               }
             })
             .catch(aldaaBarigch)
@@ -1620,9 +1620,9 @@ function GuilgeeNiiluulekh(
         content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
         okText: t("Тийм"),
         cancelText: t("Үгүй"),
-        onOk: destroy,
+        onOk: onClose,
       });
-    else destroy();
+    else onClose();
   }
 
   useEffect(() => {

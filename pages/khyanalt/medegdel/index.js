@@ -448,6 +448,8 @@ function Khyanalt({ token }) {
   }
 
   function smsZagvarNemya(data) {
+    let modalInstance; 
+
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>
         <div className="dark:text-[#E5E7EB]"> {t("Хаах")}</div>
@@ -459,13 +461,16 @@ function Khyanalt({ token }) {
         {t("Хадгалах")}
       </Button>,
     ];
-    modal({
+
+    modalInstance = modal({
+     
       title: `${turul} ${t("Загвар үүсгэх")}`,
       icon: <FileExcelOutlined />,
       width: 1200,
       content: (
         <ZagvarBurtgel
           ref={ref}
+          onClose={() => modalInstance.destroy()}  
           setWaiting={setWaiting}
           data={data}
           token={token}

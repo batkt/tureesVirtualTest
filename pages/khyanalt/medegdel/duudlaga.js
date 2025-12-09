@@ -29,7 +29,7 @@ import local from "antd/lib/date-picker/locale/mn_MN";
 
 import { useRouter } from "next/router";
 import useKhariltsagchDavkhraarAvya from "hooks/useKhariltsagchDavkhraarAvya";
-import modal from "components/ant/Modal";
+import { modal } from "components/ant/Modal";
 
 import { useTranslation } from "react-i18next";
 import useDuudlaga from "hooks/useDuudlaga";

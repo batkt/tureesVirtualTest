@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle } from "react";
+import React, { useEffect, useImperativeHandle, useCallback } from "react";
 import { Form, Input, message, Modal, notification } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
@@ -12,28 +12,28 @@ function ZagvarForm({ value, onChange }) {
       value={value}
       change={onChange}
       zogsoolEsekh={false}
-      height={400}  
+      height={400}
     />
   );
 }
 
 function ZagvarBurtgel(
-  { barilgiinId, destroy, token, setWaiting, data = {}, turul, onRefresh },
+  { barilgiinId, onClose, token, setWaiting, data = {}, turul, onRefresh },
   ref
 ) {
   const [form] = Form.useForm();
 
-  function garya() {
+  const garya = useCallback(() => {
     const values = form.getFieldsValue();
     if (compareFields(values, data, ["ner", "mail"]))
       Modal.confirm({
         content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
         okText: t("Тийм"),
         cancelText: t("Үгүй"),
-        onOk: destroy,
+        onOk: onClose,
       });
-    else destroy();
-  }
+    else onClose();
+  }, [form, data, onClose]);
 
   useEffect(() => {
     function keyUp(e) {
@@ -42,10 +42,10 @@ function ZagvarBurtgel(
         garya();
       }
     }
-    form.getFieldInstance("ner").focus();
+    form.getFieldInstance("ner")?.focus();
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
-  }, []);
+  }, [garya, form]);
 
   useImperativeHandle(
     ref,
@@ -64,17 +64,17 @@ function ZagvarBurtgel(
               setWaiting(false);
               message.success(t("Амжилттай хадгаллаа"));
               onRefresh();
-              destroy();
+              onClose();
             }
           });
         } else notification.warning({ message: t("Нэр заавал оруулна уу!") });
       },
       khaaya() {
-        destroy();
+        onClose();
         setWaiting(false);
       },
     }),
-    [form, barilgiinId]
+    [form, barilgiinId, data, token, turul, onClose, setWaiting, onRefresh]
   );
 
   return (
