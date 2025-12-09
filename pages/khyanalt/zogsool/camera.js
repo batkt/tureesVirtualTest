@@ -1091,7 +1091,47 @@ function camera({ token }) {
         },
       },
       {
-        title: t("Төрөл"),
+        title: (
+          <Popover
+            placement="bottom"
+            content={
+              <div className="space-y-2">
+                <div
+                  onClick={() => setTurul(undefined)}
+                  className={`relative ${
+                    turul === undefined && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Бүгд")}
+                </div>
+
+                <div
+                  onClick={() => setTurul("Төлбөртэй")}
+                  className={`relative ${
+                    turul === "Төлбөртэй" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Төлбөртэй")}
+                </div>
+                {/* <div
+                  onClick={() => setTurul("Идэвхтэй")}
+                  className={`relative ${
+                    turul === "Идэвхтэй" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Идэвхтэй")}
+                </div> */}
+              </div>
+            }
+          >
+            <div
+              className={`flex cursor-pointer items-center justify-center gap-3`}
+            >
+              <FilterOutlined className="text-lg text-green-600" />
+              {t("Төрөл")}
+            </div>
+          </Popover>
+        ),
         align: "center",
         width: "10rem",
         dataIndex: "turul",
@@ -1106,6 +1146,27 @@ function camera({ token }) {
             new Date(),
             "d"
           );
+
+          // If turul is "Үнэгүй", always show "Үнэгүй"
+          if (a === "Үнэгүй") {
+            return "Үнэгүй";
+          }
+
+          const mur = b.tuukh?.[0];
+          // Check if has payment records
+          const hasPayment = mur?.tulbur?.length > 0;
+
+          let dunTuluv = false;
+          b?.tuukh?.forEach((murItem) => {
+            if (murItem.tulukhDun > 0) dunTuluv = true;
+          });
+          // Идэвхтэй = has calculated amount but no payment records yet
+          const isActive =
+            (mur?.tuluv === 0 || b?.zurchil === "Гарсан цаг тодорхойгүй!") &&
+            dunTuluv &&
+            b.turul !== "Үнэгүй" &&
+            !hasPayment;
+
           return !!a ? (
             a === "Гэрээт" ? (
               <Tooltip
@@ -1118,7 +1179,7 @@ function camera({ token }) {
                     ? "дууссан"
                     : ekhlekhOgnoo > 0
                     ? "эхлээгүй"
-                    : "идэвхитэй"
+                    : "идэвхтэй"
                 } байна.`}
               >
                 <div className="flex items-center justify-center">
@@ -1135,6 +1196,10 @@ function camera({ token }) {
                   </div>
                 </div>
               </Tooltip>
+            ) : hasPayment ? (
+              "төлбөр[F4]"
+            ) : isActive ? (
+              "Идэвхтэй"
             ) : (
               a
             )
@@ -1434,7 +1499,7 @@ function camera({ token }) {
                     tuluvFilter === "idevekhitei" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  {t("Идэвхтэй")}
+                  {t("Төлбөртэй")}
                 </div>
                 <div
                   onClick={() => setTuluvFilter("tulugsun")}
@@ -1444,6 +1509,14 @@ function camera({ token }) {
                 >
                   {t("Төлөгдсөн")}
                 </div>
+                {/* <div
+                  onClick={() => setTuluvFilter("tulburtei")}
+                  className={`relative ${
+                    tuluvFilter === "tulburtei" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Төлбөртэй")}
+                </div> */}
                 <div
                   onClick={() => setTuluvFilter("unegui")}
                   className={`relative ${
@@ -2286,27 +2359,44 @@ function camera({ token }) {
                 mashinData?._id &&
                 mashinData?.mashiniiDugaar
               ) {
-                tulburTulyu(
-                  mashinData.tuukh[0],
-                  mashinData._id,
-                  mashinData.mashiniiDugaar,
-                  mashinData?.niitDun ??
-                    mashinData?.tuukh?.[0]?.tulukhDun ??
-                    mashinData?.tulukhDun ??
-                    0,
-                  0
-                );
+                // Check if still in free period (30 minutes) - only if exit time exists and duration <= 30
+                const tuukh = mashinData.tuukh[0];
+                const niitKhugatsaa = tuukh?.niitKhugatsaa;
+                const hasExitTime = !!tuukh?.tsagiinTuukh?.[0]?.garsanTsag;
+                const isInFreePeriod =
+                  hasExitTime && niitKhugatsaa && niitKhugatsaa <= 30;
+
+                // Only open payment modal if free period has passed or no exit time yet
+                if (!isInFreePeriod) {
+                  tulburTulyu(
+                    tuukh,
+                    mashinData._id,
+                    mashinData.mashiniiDugaar,
+                    mashinData?.niitDun ??
+                      tuukh?.tulukhDun ??
+                      mashinData?.tulukhDun ??
+                      0,
+                    0
+                  );
+                }
               } else if (data?.tuukh?.[0]) {
-                tulburTulyu(
-                  data.tuukh[0],
-                  data._id,
-                  data.mashiniiDugaar,
-                  data?.niitDun ??
-                    data?.tuukh?.[0]?.tulukhDun ??
-                    data?.tulukhDun ??
-                    0,
-                  0
-                );
+                // Check if still in free period (30 minutes) - only if exit time exists and duration <= 30
+                const tuukh = data.tuukh[0];
+                const niitKhugatsaa = tuukh?.niitKhugatsaa;
+                const hasExitTime = !!tuukh?.tsagiinTuukh?.[0]?.garsanTsag;
+                const isInFreePeriod =
+                  hasExitTime && niitKhugatsaa && niitKhugatsaa <= 30;
+
+                // Only open payment modal if free period has passed or no exit time yet
+                if (!isInFreePeriod) {
+                  tulburTulyu(
+                    tuukh,
+                    data._id,
+                    data.mashiniiDugaar,
+                    data?.niitDun ?? tuukh?.tulukhDun ?? data?.tulukhDun ?? 0,
+                    0
+                  );
+                }
               }
             }
             onRefresh();
@@ -2431,9 +2521,42 @@ function camera({ token }) {
   const filteredJagsaalt = useMemo(() => {
     if (!uilchluulegchGaralt?.jagsaalt) return [];
 
-    if (!tuluvFilter) return uilchluulegchGaralt.jagsaalt;
+    let filtered = uilchluulegchGaralt.jagsaalt;
 
-    return uilchluulegchGaralt.jagsaalt.filter((parent) => {
+    if (turul) {
+      if (turul === "Төлбөртэй") {
+        // Show records with payment (has payment records)
+        filtered = filtered.filter((parent) => {
+          const mur = parent.tuukh?.[0];
+          return mur?.tulbur?.length > 0;
+        });
+      } else if (turul === "Идэвхтэй") {
+        filtered = filtered.filter((parent) => {
+          let dunTuluv = false;
+          parent?.tuukh?.forEach((mur) => {
+            if (mur.tulukhDun > 0) dunTuluv = true;
+          });
+          const mur = parent.tuukh?.[0];
+          // Идэвхтэй means active - has calculated amount but not paid yet, and no payment records
+          const hasPayment = mur?.tulbur?.length > 0;
+          // Must not be free, must have calculated amount, must not be paid, must not have payment records
+          return (
+            parent.turul !== "Үнэгүй" &&
+            mur?.tuluv !== -1 &&
+            (mur?.tuluv === 0 ||
+              parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
+            dunTuluv &&
+            !hasPayment &&
+            mur?.tuluv !== 1 &&
+            mur?.tuluv !== 2
+          );
+        });
+      }
+    }
+
+    if (!tuluvFilter) return filtered;
+
+    return filtered.filter((parent) => {
       let dunTuluv = false;
       parent?.tuukh?.forEach((mur) => {
         if (mur.tulukhDun > 0) dunTuluv = true;
@@ -2442,28 +2565,50 @@ function camera({ token }) {
 
       let currentStatus = "";
 
-      if (parent.turul === "Үнэгүй" || mur?.tuluv === -1) {
-        currentStatus = "unegui";
-      } else if (
-        (mur.tuluv === 0 || parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
-        dunTuluv
-      ) {
-        currentStatus = "idevekhitei";
-      } else if (mur?.tuluv === 1 || mur?.tuluv === 2) {
+      // Check payment status first
+      const hasPayment = mur?.tulbur?.length > 0;
+
+      // Check if in free period (30 minutes)
+      const niitKhugatsaa = mur?.niitKhugatsaa;
+      const hasExitTime = !!mur?.tsagiinTuukh?.[0]?.garsanTsag;
+      const isInFreePeriod =
+        hasExitTime && niitKhugatsaa && niitKhugatsaa <= 30;
+
+      // Priority order: paid status > payment records > free (including free period) > violation > active
+      if (mur?.tuluv === 1 || mur?.tuluv === 2) {
+        // Fully paid
         currentStatus = "tulugsun";
+      } else if (hasPayment) {
+        // Has payment records (but not fully paid yet)
+        currentStatus = "tulburtei";
+      } else if (
+        parent.turul === "Үнэгүй" ||
+        mur?.tuluv === -1 ||
+        isInFreePeriod
+      ) {
+        // Free - includes records in free period (≤30 minutes)
+        currentStatus = "unegui";
       } else if (
         !!parent.zurchil &&
         parent.zurchil !== "" &&
         mur?.tuluv === -2
       ) {
+        // Violation
         currentStatus = "zurchiltei";
+      } else if (
+        (mur.tuluv === 0 || parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
+        dunTuluv
+      ) {
+        // Active - has calculated amount but not paid yet and not in free period
+        currentStatus = "idevekhitei";
       } else if (mur?.tuluv === 0 && !dunTuluv) {
+        // No amount calculated, not paid
         currentStatus = "unegui";
       }
 
       return currentStatus === tuluvFilter;
     });
-  }, [uilchluulegchGaralt?.jagsaalt, tuluvFilter]);
+  }, [uilchluulegchGaralt?.jagsaalt, tuluvFilter, turul]);
 
   const filteredData = useMemo(
     () => ({
