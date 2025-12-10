@@ -1020,11 +1020,11 @@ tbody.overflownone {
 }
 
 .ant-select-dropdown {
-  @apply dark:bg-gray-600 dark:text-gray-200 !important;
+  @apply dark:bg-gray-800 dark:text-gray-200 !important;
 }
 
 .ant-select-item {
-  @apply dark:bg-gray-700 dark:text-gray-200 !important;
+  @apply dark:bg-gray-800 dark:text-gray-200 !important;
 }
 
 .ant-select-arrow {

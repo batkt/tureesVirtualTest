@@ -136,10 +136,10 @@ function Khyanalt({ token }) {
 
   const query = useMemo(() => {
     return {
-      turul: "medegdel",
+      turul: { $in: ["medegdel", "Mail", "SMS", "App"] },
       khuleenAvagchiinId: khariltsagch?._id,
     };
-  }, [turul, khariltsagch]);
+  }, [khariltsagch]);
 
   const { order } = useOrder({ createdAt: -1 });
   const medegdelAvya = useJagsaalt("/sonorduulga", query, order, undefined);
@@ -372,12 +372,18 @@ function Khyanalt({ token }) {
               msgnuud.push({
                 to,
                 text,
+                khariltsagchiinId: a._id,
+                khariltsagchiinNer: a.ner,
+                barilgiinId: a.barilgiinId,
               })
             );
           else
             msgnuud.push({
               to: a.utas,
               text,
+              khariltsagchiinId: a._id,
+              khariltsagchiinNer: a.ner,
+              barilgiinId: a.barilgiinId,
             });
         });
       else if (!!khariltsagch) {
@@ -386,12 +392,18 @@ function Khyanalt({ token }) {
             msgnuud.push({
               to,
               text: ingeekhmSms,
+              khariltsagchiinId: a._id,
+              khariltsagchiinNer: a.ner,
+              barilgiinId: a.barilgiinId,
             })
           );
         else
           msgnuud.push({
             to: khariltsagch?.utas,
             text: ingeekhmSms,
+            khariltsagchiinId: a._id,
+            khariltsagchiinNer: a.ner,
+            barilgiinId: a.barilgiinId,
           });
       } else {
         message.warning(t("Та SMS илгээх гэрээгээ сонгоно уу"));
@@ -424,7 +436,7 @@ function Khyanalt({ token }) {
   }
   async function mailIlgeeye() {
     if (!!title) {
-      if (content !== " " || content !== "") {
+      if (content !== " " && content !== "") {
         const mailuud = [];
         if (songogdsonKhariltsagch?.length > 0) {
           songogdsonKhariltsagch.forEach((a) => {
@@ -437,7 +449,7 @@ function Khyanalt({ token }) {
             a.utas = a.utas || "";
             a.turul = a.turul || "";
             a.khayag = a.khayag || "";
-            a.khayag = a.khayag || "";
+
             for (const [key, value] of Object.entries(a)) {
               zagvar = zagvar?.replace(
                 new RegExp(`&lt;${key}&gt;`, "g"),
@@ -448,26 +460,59 @@ function Khyanalt({ token }) {
               mailuud.push({
                 mail: a.mail,
                 content: zagvar,
+                khariltsagchiinId: a._id,
+                khariltsagchiinNer: a.ner,
+                barilgiinId: a.barilgiinId,
               });
             }
           });
         }
+
+        if (mailuud.length === 0) {
+          toast.warning(t("Сонгосон харилцагчдад майл хаяг байхгүй байна"));
+          return;
+        }
+
         setLoading(true);
         uilchilgee(token)
-          .post(`/mailOlnoorIlgeeye`, { subject: title, mailuud })
+          .post(`/mailOlnoorIlgeeye`, {
+            subject: title,
+            mailuud,
+            turul: "Mail",
+          })
           .then(({ data }) => {
             if (data === "Amjilttai") {
               toast.success(t("И-мэйл Амжилттай илгээлээ"));
+
+              if (khariltsagch && songogdsonKhariltsagch.length === 1) {
+                medegdelAvya.jagsaalt.unshift({
+                  khariltsagchiinId: khariltsagch._id,
+                  barilgiinId: khariltsagch.barilgiinId,
+                  khariltsagchiinNer: khariltsagch.ner,
+                  title,
+                  message: ingeekhmSms,
+                  turul: "Mail",
+                  createdAt: new Date(),
+                });
+              }
+
               setContent("");
               setTitle("");
               setNer("");
+              setSongogdsonKhariltsagch([]);
               medegdelAvya.mutate();
+              setLoading(false);
+            } else {
+              toast.error(t("И-мэйл илгээхэд алдаа гарлаа"));
               setLoading(false);
             }
           })
           .catch((e) => {
             setLoading(false);
             aldaaBarigch(e);
+            toast.error(t("И-мэйл илгээхэд алдаа гарлаа"), {
+              description: e?.response?.data?.message || e.message,
+            });
           });
       } else {
         toast.warning(t("Мэдэгдэл оруулна уу"));
@@ -1125,13 +1170,24 @@ function Khyanalt({ token }) {
                 {medegdelAvya?.jagsaalt.map((a) => {
                   return (
                     <div
-                      className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
-                        a.turul === "medegdel"
+                      key={a._id || Math.random()} // key нэмэх
+                      className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 p-3 ${
+                        a.turul === "medegdel" ||
+                        a.turul === "Mail" ||
+                        a.turul === "SMS" ||
+                        a.turul === "App"
                           ? "ml-auto rounded-br-none bg-green-500"
-                          : "rounded-bl-none"
+                          : "rounded-bl-none bg-blue-500"
                       }`}
                     >
-                      <span className="w-full break-words text-justify text-white ">
+                      {/* Title харуулах (Mail-д байвал) */}
+                      {a.title && (
+                        <span className="mb-1 font-semibold text-white">
+                          {a.title}
+                        </span>
+                      )}
+
+                      <span className="w-full break-words text-justify text-white">
                         {a.message}
                       </span>
 
@@ -1140,38 +1196,15 @@ function Khyanalt({ token }) {
                           a.kharsanEsekh === true ? "" : "hidden"
                         }`}
                       >
-                        <svg
-                          width="20px"
-                          height="20px"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                          <path
-                            d="M16 7L12 11"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                          <path
-                            d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                        </svg>
+                        {/* SVG icon */}
                       </div>
+
                       <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
                         {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
                       </span>
-                      <span className="absolute -bottom-5 right-0 text-gray-500">
-                        {t("Мэдэгдэл")}
+
+                      <span className="absolute -bottom-5 right-0 text-xs text-gray-500">
+                        {a.turul === "medegdel" ? t("Мэдэгдэл") : a.turul}
                       </span>
                     </div>
                   );
@@ -1236,9 +1269,7 @@ function Khyanalt({ token }) {
             )}
           </div>
           <div className="absolute bottom-3 z-50 flex w-full items-center justify-between space-x-2 p-4">
-            <div className="text-xs font-semibold ">
-              {msj.length}/160
-            </div>
+            <div className="text-xs font-semibold ">{msj.length}/160</div>
             <div className="flex items-center justify-between space-x-3">
               <label className="font-medium dark:!text-white">
                 {turul} {t("Илгээх")}
