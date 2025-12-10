@@ -516,7 +516,6 @@ function camera({ token }) {
     setCameraData([a1, a2]);
   }, [jagsaalt]);
 
- 
   const ekhniiCameraOlokh = (treeData) => {
     if (!treeData || !Array.isArray(treeData)) return null;
     for (const item of treeData) {
@@ -531,7 +530,6 @@ function camera({ token }) {
     return null;
   };
 
-  
   useEffect(() => {
     if (cameraData[0] && !camerVal[0]) {
       const ekhniiCamera = ekhniiCameraOlokh(cameraData[0]);
@@ -540,6 +538,15 @@ function camera({ token }) {
       }
     }
   }, [cameraData[0]]);
+
+  useEffect(() => {
+    if (cameraData[1] && !camerVal[1]) {
+      const ekhniiCamera = ekhniiCameraOlokh(cameraData[1]);
+      if (ekhniiCamera) {
+        cameraChange(ekhniiCamera, 2);
+      }
+    }
+  }, [cameraData[1]]);
 
   const {
     uilchluulegchGaralt,

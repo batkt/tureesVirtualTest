@@ -1236,18 +1236,18 @@ function Khyanalt({ token }) {
             )}
           </div>
           <div className="absolute bottom-3 z-50 flex w-full items-center justify-between space-x-2 p-4">
-            <div className="text-xs font-semibold dark:text-black">
+            <div className="text-xs font-semibold ">
               {msj.length}/160
             </div>
             <div className="flex items-center justify-between space-x-3">
-              <label className="font-medium dark:text-black">
+              <label className="font-medium dark:!text-white">
                 {turul} {t("Илгээх")}
               </label>
               <div
                 onClick={send}
                 className={`h-8 w-8 cursor-pointer sm:h-8 sm:w-8 bg-green-${
                   loading ? "200" : "600"
-                } flex flex-none items-center justify-center rounded-full text-white dark:text-black`}
+                } flex flex-none items-center justify-center rounded-full text-white `}
               >
                 {loading ? (
                   <Spin size="small" />

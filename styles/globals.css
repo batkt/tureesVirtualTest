@@ -66,31 +66,110 @@
   @apply dark:border-gray-600 dark:bg-gray-900 !important;
 }
 
-/* Existing modal styles */
-.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor,
-.dark .ant-modal .ant-modal-content .ant-modal-body .se-container,
-.dark .ant-modal .ant-modal-content .ant-modal-body .se-wrapper-inner,
-.dark .ant-modal .ant-modal-content .ant-modal-body .se-wrapper-wysiwyg,
-.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor-editable,
-.dark .ant-modal .ant-modal-content .ant-modal-body .se-toolbar,
-.dark .ant-modal .ant-modal-content .ant-modal-body .se-navigation,
-.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor-common {
-  background-color: #1f2937;
-  color: #e5e7eb;
-  border-color: #374151;
+/* Base SunEditor dark mode styles */
+.dark .sun-editor,
+.dark .se-container,
+.dark .se-wrapper,
+.dark .se-wrapper-inner,
+.dark .se-wrapper-wysiwyg,
+.dark .sun-editor-editable,
+.dark .se-toolbar,
+.dark .se-btn-module,
+.dark .se-toolbar-sticky,
+.dark .se-navigation,
+.dark .sun-editor-common {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+  border-color: #374151 !important;
 }
 
-.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor-editable {
-  caret-color: #f9fafb;
-}
-.dark .sun-editor-editable {
+/* Toolbar buttons */
+.dark .se-toolbar button,
+.dark .se-btn,
+.dark .sun-editor-common button {
+  background-color: #374151 !important;
   color: #e5e7eb !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .se-toolbar button:hover,
+.dark .se-btn:hover,
+.dark .sun-editor-common button:hover {
+  background-color: #4b5563 !important;
+  color: #ffffff !important;
+}
+
+.dark .se-toolbar button.active,
+.dark .se-btn.active {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+/* Toolbar separator */
+.dark .se-toolbar-separator-vertical {
+  border-left-color: #4b5563 !important;
+}
+
+/* Input field at the top (Нэр field) */
+.dark input[type="text"],
+.dark input {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+  border-color: #374151 !important;
+}
+
+/* Editor content area */
+.dark .sun-editor-editable {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+  caret-color: #f9fafb !important;
 }
 
 .dark .sun-editor-editable * {
   color: inherit !important;
 }
 
+.dark .sun-editor-editable::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Dropdowns and modals within editor */
+.dark .se-list-layer,
+.dark .se-submenu,
+.dark .se-dialog,
+.dark .se-dialog-inner {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+  border-color: #374151 !important;
+}
+
+.dark .se-list-inner li button {
+  color: #e5e7eb !important;
+}
+
+.dark .se-list-inner li button:hover {
+  background-color: #374151 !important;
+}
+
+/* Character counter */
+.dark .se-char-counter-wrapper {
+  color: #9ca3af !important;
+}
+
+/* Modal specific styles */
+.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-container,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-wrapper-inner,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-wrapper-wysiwyg,
+.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor-editable,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-toolbar,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-navigation {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+  border-color: #374151 !important;
+}
+
+/* Line height and formatting */
 .sun-editor-editable {
   overflow: visible !important;
   line-height: 2.8 !important;
@@ -110,44 +189,27 @@
 .sun-editor-editable sub {
   bottom: -0.25em;
 }
-.dark
-  .ant-modal
-  .ant-modal-content
-  .ant-modal-body
-  .sun-editor-editable::placeholder {
-  color: #9ca3af;
-}
 
-.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor-common button {
-  background-color: #374151;
-  color: #e5e7eb;
-}
-
-.dark
-  .ant-modal
-  .ant-modal-content
-  .ant-modal-body
-  .sun-editor-common
-  button:hover {
-  background-color: #4b5563;
-}
-
-/* Add these new styles for content outside modal */
-.dark .sun-editor-editable {
-  color: #e5e7eb !important;
-}
-
-.dark .sun-editor-editable * {
-  color: inherit !important;
-}
-
+/* Content styling */
 .dark .sun-editor-editable p,
 .dark .sun-editor-editable div,
 .dark .sun-editor-editable span,
 .dark .sun-editor-editable li,
 .dark .sun-editor-editable td,
-.dark .sun-editor-editable th {
-  color: #000000 !important;
+.dark .sun-editor-editable th,
+.dark .sun-editor-editable h1,
+.dark .sun-editor-editable h2,
+.dark .sun-editor-editable h3,
+.dark .sun-editor-editable h4,
+.dark .sun-editor-editable h5,
+.dark .sun-editor-editable h6 {
+  color: #e5e7eb !important;
+}
+
+/* Icons in toolbar */
+.dark .se-toolbar svg,
+.dark .se-btn svg {
+  fill: #e5e7eb !important;
 }
 
 .pvtDropdownCurrent {
