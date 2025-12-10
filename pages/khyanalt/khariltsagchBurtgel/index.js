@@ -493,6 +493,96 @@ function AjiltanBurtgel({ token }) {
     khariltsagchToololtMutate();
   }
 
+  async function buhKhariltsagchTatakh() {
+    try {
+      setWaiting(true);
+
+      // Fetch all customer data without pagination
+      const { data } = await getListMethod("khariltsagch", token, {
+        query: {
+          ...query,
+          baiguullagiinId: ajiltan?.baiguullagiinId,
+          barilgiinId: barilgiinId,
+        },
+        // Don't include pagination parameters to get all records
+        khuudasniiDugaar: 1,
+        khuudasniiKhemjee: 999999, // Large number to get all records
+      });
+
+      if (data?.jagsaalt) {
+        const { Excel } = require("antd-table-saveas-excel");
+        const excel = new Excel();
+        excel
+          .addSheet("харилцагч")
+          .addColumns([
+            {
+              title: t("Төрөл"),
+              dataIndex: "turul",
+              align: "center",
+              ellipsis: true,
+              render: (turul) => {
+                return (
+                  <Tag color={turul === "Иргэн" ? "blue" : "orange"}>
+                    {t(turul)}
+                  </Tag>
+                );
+              },
+            },
+            {
+              title: t("Регистр"),
+              dataIndex: "register",
+              ellipsis: true,
+            },
+            {
+              title: t("Бүртгэлийн дугаар"),
+              dataIndex: "customerTin",
+              ellipsis: true,
+            },
+            { title: t("Нэр"), dataIndex: "ner", ellipsis: true },
+            {
+              title: t("Утас"),
+              dataIndex: "utas",
+              __style__: { h: "center" },
+            },
+            {
+              title: t("Хаяг"),
+              dataIndex: "khayag",
+            },
+            {
+              title: t("И-мэйл"),
+              dataIndex: "mail",
+            },
+            {
+              title: t("Төлөв"),
+              dataIndex: "idevkhiteiEsekh",
+              ellipsis: true,
+              align: "center",
+              render: (idevkhiteiEsekh) => {
+                return t(idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй");
+              },
+            },
+            {
+              title: t("Бүртгэгдсэн"),
+              dataIndex: "createdAt",
+              ellipsis: true,
+              render: (data) => {
+                return moment(data).format("YYYY-MM-DD");
+              },
+            },
+          ])
+          .addDataSource(data.jagsaalt)
+          .saveAs("харилцагчийн жагсаалт.xlsx");
+
+        message.success(t("Амжилттай татагдлаа"));
+      }
+    } catch (error) {
+      aldaaBarigch(error);
+      message.error(t("Татахад алдаа гарлаа"));
+    } finally {
+      setWaiting(false);
+    }
+  }
+
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -1151,76 +1241,7 @@ function AjiltanBurtgel({ token }) {
                   </a>
                   <a
                     className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                    onClick={() => {
-                      const { Excel } = require("antd-table-saveas-excel");
-                      const excel = new Excel();
-                      excel
-                        .addSheet("харилцагч")
-                        .addColumns([
-                          {
-                            title: t("Төрөл"),
-                            dataIndex: "turul",
-                            align: "center",
-                            ellipsis: true,
-                            render: (turul) => {
-                              return (
-                                <Tag
-                                  color={turul === "Иргэн" ? "blue" : "orange"}
-                                >
-                                  {t(turul)}
-                                </Tag>
-                              );
-                            },
-                          },
-                          {
-                            title: t("Регистр"),
-                            dataIndex: "register",
-                            ellipsis: true,
-                          },
-                          {
-                            title: t("Бүртгэлийн дугаар"),
-                            dataIndex: "customerTin",
-                            ellipsis: true,
-                          },
-                          { title: t("Нэр"), dataIndex: "ner", ellipsis: true },
-                          {
-                            title: t("Утас"),
-                            dataIndex: "utas",
-                            __style__: { h: "center" },
-                          },
-                          {
-                            title: t("Хаяг"),
-                            dataIndex: "khayag",
-                          },
-                          {
-                            title: t("И-мэйл"),
-                            dataIndex: "mail",
-                          },
-                          {
-                            title: t("Төлөв"),
-                            dataIndex: "idevkhiteiEsekh",
-                            ellipsis: true,
-                            align: "center",
-                            render: (idevkhiteiEsekh) => {
-                              return t(
-                                idevkhiteiEsekh === true
-                                  ? "Идэвхтэй"
-                                  : "Идэвхгүй"
-                              );
-                            },
-                          },
-                          {
-                            title: t("Бүртгэгдсэн"),
-                            dataIndex: "createdAt",
-                            ellipsis: true,
-                            render: (data) => {
-                              return moment(data).format("YYYY-MM-DD");
-                            },
-                          },
-                        ])
-                        .addDataSource(khariltsagchiinGaralt?.jagsaalt)
-                        .saveAs("харилцагчийн жагсаалт.xlsx");
-                    }}
+                    onClick={buhKhariltsagchTatakh}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Татах")}</label>
