@@ -530,7 +530,7 @@ function GereeBaiguulakh({ token, data }) {
                 value={index}
                 key={item.title}
                 title={t(item.title)}
-              />
+              />  
             ))}
           </Steps>
         </div>

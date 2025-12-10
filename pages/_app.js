@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { AuthProvider } from "../services/auth";
 import { ThemeProvider } from "next-themes";
-import { registerServiceWorker } from "../utils/swHelper"
+import { registerServiceWorker } from "../utils/swHelper";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -13,12 +13,13 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 import "antd/dist/antd.css";
 import "../styles/globals.css";
 import "suneditor/dist/css/suneditor.min.css";
 import "aos/dist/aos.css";
 import "../services/i18n";
+import { Toaster } from "sonner";
 
 // Register Chart.js components
 ChartJS.register(
@@ -41,6 +42,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider attribute="class">
       <AuthProvider>
+        <Toaster position="top-right" richColors suppressHydrationWarning />
         <Component {...pageProps} />
       </AuthProvider>
     </ThemeProvider>

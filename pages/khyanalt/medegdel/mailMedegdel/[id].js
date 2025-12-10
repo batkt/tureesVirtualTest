@@ -10,10 +10,12 @@ import { customPlugin } from "components/pageComponents/geree/zagvar/ZaaltOruula
 import { renderToString } from "react-dom/server";
 import { SolutionOutlined } from "@ant-design/icons";
 import createMethod from "tools/function/crud/createMethod";
+import plugins from "suneditor/src/plugins";
 import updateMethod from "tools/function/crud/updateMethod";
 import { aldaaBarigch } from "services/uilchilgee";
 import dynamic from "next/dynamic";
 import { t } from "i18next";
+
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -21,10 +23,63 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
   { ner: "Нэр", talbar: "ner" },
+  { ner: "Барилгын хаяг", talbar: "barilgiinKhayag" },
+  { ner: "Гэрээний дугаар", talbar: "gereeniiDugaar" },
+  { ner: "Гэрээний огноо", talbar: "gereeniiOgnoo" },
   { ner: "Төрөл", talbar: "turul" },
   { ner: "Регистр", talbar: "register" },
+  { ner: "Бүртгэлийн дугаар", talbar: "customerTin" },
+  { ner: "Албан тушаал", talbar: "albanTushaal" },
+  { ner: "Захиралын овог", talbar: "zakhirliinOvog" },
+  { ner: "Захиралын нэр", talbar: "zakhirliinNer" },
   { ner: "Утас", talbar: "utas" },
   { ner: "Хаяг", talbar: "khayag" },
+  { ner: "Нэршил", talbar: "khariltsagchiinNershil" },
+  { ner: "И-мэйл хаяг", talbar: "mail" },
+  { ner: "Гарын үсэг", talbar: "gariinUseg" },
+  { ner: "Тамга", talbar: "tamga" },
+];
+
+const khugatsaaniiTalbaruud = [
+  { ner: "Хугацаа", talbar: "khugatsaa" },
+  { ner: "Эхлэх он", talbar: "ekhlekhOn" },
+  { ner: "Эхлэх сар", talbar: "ekhelkhSar" },
+  { ner: "Эхлэх өдөр", talbar: "ekhlekhUdur" },
+  { ner: "Дуусах он", talbar: "duusakhOn" },
+  { ner: "Дуусах сар", talbar: "duusakhSar" },
+  { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
+  { ner: "Төлөлт хийгдэх огноо", talbar: "tulukhUdur" },
+];
+
+const talbainiiTalbaruud = [
+  { ner: "Талбайн дугаар", talbar: "talbainDugaar" },
+  { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
+  { ner: "Талбайн нэгж үнэ үсгээр", talbar: "talbainNegjUneUsgeer" },
+  { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
+  { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
+  { ner: "Талбайн хэмжээ м2", talbar: "talbainKhemjee" },
+  { ner: "Талбайн хэмжээ м3", talbar: "talbainKhemjeeMetrKube" },
+  { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
+  { ner: "Зардлын дүн", talbar: "zardliinDun" },
+  { ner: "Зориулалт", talbar: "zoriulalt" },
+  { ner: "Тусгай зориулалт", talbar: "tusgaiZoriulalt" },
+  { ner: "Талбайн нэмэлт нөхцөл", talbar: "talbaiNemeltNukhtsul" },
+];
+
+const baritsaaniiTalbaruud = [
+  { ner: "Барьцаа авах дүн", talbar: "baritsaaAvakhDun" },
+  { ner: "Барьцаа авах дүн үсгээр", talbar: "baritsaaAvakhDunUsgeer" },
+  {
+    ner: t("Барьцаа байршуулах хугацаа"),
+    talbar: "baritsaaBairshuulakhKhugatsaa",
+  },
+];
+
+const tulburiinTalbaruud = [
+  { ner: t("Хөнгөлөх хугацаа"), talbar: "khungulukhKhugatsaa" },
+  { ner: t("Сарын түрээс"), talbar: "sariinTurees" },
+  { ner: t("Сарын нийлбэр дүн"), talbar: "sariinNiilberDun" },
+  { ner: t("Мөнгөн дүн үсгээр"), talbar: "mungunDunUsgeer" },
 ];
 
 function getSize(khemjee, orientation) {
@@ -72,6 +127,7 @@ function ZakhialgaNemekh({ token }) {
 
   const custom = React.useMemo(() => {
     if (typeof window === "undefined") return [];
+
     const undsen = customPlugin({
       songokhTalbaruud: undsenTalbaruud,
       name: "undsen",
@@ -79,7 +135,35 @@ function ZakhialgaNemekh({ token }) {
       button: renderToString(<SolutionOutlined />),
     });
 
-    return [undsen];
+    const khugatsaa = customPlugin({
+      songokhTalbaruud: khugatsaaniiTalbaruud,
+      name: "khugatsaa",
+      title: "Хугацаа",
+      button: renderToString(<SolutionOutlined />),
+    });
+
+    const talbai = customPlugin({
+      songokhTalbaruud: talbainiiTalbaruud,
+      name: "talbai",
+      title: "Түрээсийн талбай",
+      button: renderToString(<SolutionOutlined />),
+    });
+
+    const baritsaa = customPlugin({
+      songokhTalbaruud: baritsaaniiTalbaruud,
+      name: "baritsaa",
+      title: "Барьцаа",
+      button: renderToString(<SolutionOutlined />),
+    });
+
+    const tulbur = customPlugin({
+      songokhTalbaruud: tulburiinTalbaruud,
+      name: "tulbur",
+      title: "Төлбөр",
+      button: renderToString(<SolutionOutlined />),
+    });
+
+    return [undsen, khugatsaa, talbai, baritsaa, tulbur];
   }, []);
 
   function khadgalya() {
@@ -134,9 +218,12 @@ function ZakhialgaNemekh({ token }) {
             value={mailiinZagvar?.mail}
             setContents={mailiinZagvar?.mail}
             setOptions={{
-              plugins: custom,
+              plugins: {
+                ...plugins,
+                ...custom,
+              },
               buttonList: [
-                ["undsen"],
+                ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
                 ["list", "align", "codeView"],
                 ["font", "fontSize", "fontColor"],
               ],

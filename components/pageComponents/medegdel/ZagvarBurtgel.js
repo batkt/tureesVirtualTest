@@ -1,5 +1,6 @@
 import React, { useEffect, useImperativeHandle, useCallback } from "react";
-import { Form, Input, message, Modal, notification } from "antd";
+import { Form, Input, message, Modal } from "antd";
+import { toast } from "sonner";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 import ZagvarUusgekh from "./ZagvarUusgekh";
@@ -52,26 +53,52 @@ function ZagvarBurtgel(
     () => ({
       khadgalya() {
         const zagvar = form.getFieldsValue();
-        if (!!zagvar.ner) {
-          const method = data?._id ? updateMethod : createMethod;
-          method("mailiinZagvar", token, {
-            barilgiinId,
-            ...data,
-            ...zagvar,
-            turul,
-          }).then(({ data }) => {
+
+        if (!zagvar.ner || zagvar.ner.trim() === "") {
+          toast.warning(t("Гарчиг заавал оруулна уу!"));
+          setWaiting(false);
+          return;
+        }
+
+        const stripHtml = (html) => {
+          const tmp = document.createElement("DIV");
+          tmp.innerHTML = html;
+          return tmp.textContent || tmp.innerText || "";
+        };
+
+        const textContent = stripHtml(zagvar.mail || "");
+
+        if (!zagvar.mail || textContent.trim() === "") {
+          toast.warning(t("Агуулга заавал оруулна уу!"));
+          setWaiting(false);
+          return;
+        }
+
+        const method = data?._id ? updateMethod : createMethod;
+        method("mailiinZagvar", token, {
+          barilgiinId,
+          ...data,
+          ...zagvar,
+          turul,
+        })
+          .then(({ data }) => {
             if (data === "Amjilttai") {
               setWaiting(false);
-              message.success(t("Амжилттай хадгаллаа"));
+              toast.success(t("Амжилттай хадгаллаа"));
               onRefresh();
               onClose();
             }
+          })
+          .catch(() => {
+            setWaiting(false);
           });
-        } else notification.warning({ message: t("Нэр заавал оруулна уу!") });
       },
       khaaya() {
         onClose();
         setWaiting(false);
+      },
+      getFormData() {
+        return form.getFieldsValue();
       },
     }),
     [form, barilgiinId, data, token, turul, onClose, setWaiting, onRefresh]

@@ -3,14 +3,15 @@ import { useEffect, useState, useRef, useMemo } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { Tooltip, Tag } from "antd";
 import { useAuth } from "services/auth";
+import _ from "lodash";
 import useMailiinZagvar from "hooks/useMailiinZagvar";
 import Modal from "antd/lib/modal/Modal";
+import { toast } from "sonner";
 import {
   Button,
   Checkbox,
   Input,
   message,
-  notification,
   Popconfirm,
   Select,
   Spin,
@@ -102,7 +103,7 @@ function Khyanalt({ token }) {
   const [title, setTitle] = useState();
 
   const [turulZagvar, setTurulZagvar] = useState(false);
-
+  const [geree, setGeree] = useState(null);
   const [tuluv, setTuluv] = useState("Бүгд");
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
@@ -154,6 +155,31 @@ function Khyanalt({ token }) {
   );
 
   useEffect(() => {
+    if (khariltsagch?._id) {
+      uilchilgee(token)
+        .get(`/geree`, {
+          params: { khariltsagchiinId: khariltsagch._id },
+        })
+        .then(({ data }) => {
+          console.log("Full Geree Response:", data);
+          if (data && data.length > 0) {
+            console.log("First Geree Object:", data[0]);
+            console.log("Geree Keys:", Object.keys(data[0]));
+            setGeree(data[0]);
+          } else {
+            setGeree(null);
+          }
+        })
+        .catch((error) => {
+          aldaaBarigch(error);
+          setGeree(null);
+        });
+    } else {
+      setGeree(null);
+    }
+  }, [khariltsagch, token]);
+
+  useEffect(() => {
     if (neesenEsekh === true) {
       setTurulZagvar(false);
     }
@@ -162,12 +188,49 @@ function Khyanalt({ token }) {
   const ingeekhmSms = useMemo(() => {
     if (!khariltsagch) return msj;
     var utga = msj;
-    for (const [key, value] of Object.entries(khariltsagch)) {
-      utga = utga?.replace(new RegExp(`<${key}>`, "g"), value);
+
+    // Deep flatten function
+    const flattenObject = (obj, prefix = "", result = {}) => {
+      if (!obj || typeof obj !== "object") return result;
+
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          const value = obj[key];
+
+          if (
+            value !== null &&
+            typeof value === "object" &&
+            !Array.isArray(value) &&
+            !(value instanceof Date)
+          ) {
+            // Recursively flatten nested objects
+            flattenObject(value, key, result);
+          } else if (!Array.isArray(value)) {
+            // Add with original key name (no prefix)
+            result[key] = value;
+          }
+        }
+      }
+
+      return result;
+    };
+
+    const khariltsagchData = flattenObject(khariltsagch || {});
+    const gereeData = flattenObject(geree || {});
+
+    const allData = { ...khariltsagchData, ...gereeData };
+
+    console.log("All available fields:", Object.keys(allData));
+
+    for (const [key, value] of Object.entries(allData)) {
+      if (value !== null && value !== undefined && value !== "") {
+        const regex = new RegExp(`<${key}>`, "g");
+        utga = utga?.replace(regex, value);
+      }
     }
 
     return utga;
-  }, [khariltsagch, msj]);
+  }, [khariltsagch, geree, msj]);
 
   async function appIlgeeye() {
     if (!!title) {
@@ -201,9 +264,7 @@ function Khyanalt({ token }) {
                   if (!!data?.successCount) khariu.successCount += 1;
                   else if (!!data?.failureCount) khariu.failureCount += 1;
                   if (index === array.length - 1) {
-                    notification.success({
-                      message: t("Notification Амжилттай илгээлээ"),
-                    });
+                    toast.success(t("Notification Амжилттай илгээлээ"));
                     setLoading(false);
                     onTextChange("");
                     setContent("");
@@ -254,9 +315,7 @@ function Khyanalt({ token }) {
                     message: ingeekhmSms,
                     turul: "medegdel",
                   });
-                  notification.success({
-                    message: t("Notification Амжилттай илгээлээ"),
-                  });
+                  toast.success(t("Notification Амжилттай илгээлээ"));
                   onTextChange("");
                   setContent("");
                   setTitle("");
@@ -264,9 +323,8 @@ function Khyanalt({ token }) {
                   medegdelAvya.mutate();
                   setLoading(false);
                 } else if (!!data?.failureCount) {
-                  notification.warning({
-                    description: _.get(data, "results.0.error.message"),
-                    message: _.get(data, "results.0.error.code"),
+                  toast.error(_.get(data, "results.0.error.message"), {
+                    description: _.get(data, "results.0.error.code"),
                   });
                   setLoading(false);
                 }
@@ -276,24 +334,16 @@ function Khyanalt({ token }) {
                 aldaaBarigch(e);
               });
           } else {
-            notification.warning({
-              message: t("Гарчиг заавал оруулна уу"),
-            });
+            toast.warning(t("Гарчиг заавал оруулна уу"));
           }
         } else {
-          notification.warning({
-            message: t("Мэдэгдэл илгээх үсгийн тоо хэтэрсэн байна"),
-          });
+          toast.warning(t("Мэдэгдэл илгээх үсгийн тоо хэтэрсэн байна"));
         }
       } else {
-        notification.warning({
-          message: t("Мэдэгдэл оруулна уу"),
-        });
+        toast.warning(t("Мэдэгдэл оруулна уу"));
       }
     } else {
-      notification.warning({
-        message: t("Гарчиг оруулна уу"),
-      });
+      toast.warning(t("Гарчиг оруулна уу"));
     }
   }
 
@@ -357,7 +407,7 @@ function Khyanalt({ token }) {
         .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
         .then(({ data }) => {
           if (data && data[0].Result === "SUCCESS") {
-            notification.success({ message: t("SMS Амжилттай илгээлээ") });
+            toast.success(t("SMS Амжилттай илгээлээ"));
             setContent("");
             setTitle("");
             msjTuukh.mutate();
@@ -369,9 +419,7 @@ function Khyanalt({ token }) {
           aldaaBarigch(e);
         });
     } else {
-      notification.warning({
-        message: t("Мэдэгдэл оруулна уу"),
-      });
+      toast.warning(t("Мэдэгдэл оруулна уу"));
     }
   }
   async function mailIlgeeye() {
@@ -409,7 +457,7 @@ function Khyanalt({ token }) {
           .post(`/mailOlnoorIlgeeye`, { subject: title, mailuud })
           .then(({ data }) => {
             if (data === "Amjilttai") {
-              notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
+              toast.success(t("И-мэйл Амжилттай илгээлээ"));
               setContent("");
               setTitle("");
               setNer("");
@@ -422,14 +470,10 @@ function Khyanalt({ token }) {
             aldaaBarigch(e);
           });
       } else {
-        notification.warning({
-          message: t("Мэдэгдэл оруулна уу"),
-        });
+        toast.warning(t("Мэдэгдэл оруулна уу"));
       }
     } else {
-      notification.warning({
-        message: t("Гарчиг оруулна уу"),
-      });
+      toast.warning(t("Гарчиг оруулна уу"));
     }
   }
 
@@ -448,29 +492,42 @@ function Khyanalt({ token }) {
   }
 
   function smsZagvarNemya(data) {
-    let modalInstance; 
+    let modalInstance;
 
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>
         <div className="dark:text-[#E5E7EB]"> {t("Хаах")}</div>
       </Button>,
       <Button
-        type="primary "
-        onClick={() => ref.current.khadgalya(setWaiting(true))}
+        type="primary"
+        onClick={() => {
+          const formData = ref.current.getFormData();
+
+          if (!formData?.ner || formData.ner.trim() === "") {
+            toast.warning(t("Гарчиг оруулна уу"));
+            return;
+          }
+
+          if (!formData?.mail || formData.mail.trim() === "") {
+            toast.warning(t("Агуулга оруулна уу"));
+            return;
+          }
+
+          ref.current.khadgalya(setWaiting(true));
+        }}
       >
         {t("Хадгалах")}
       </Button>,
     ];
 
     modalInstance = modal({
-     
       title: `${turul} ${t("Загвар үүсгэх")}`,
       icon: <FileExcelOutlined />,
       width: 1200,
       content: (
         <ZagvarBurtgel
           ref={ref}
-          onClose={() => modalInstance.destroy()}  
+          onClose={() => modalInstance.destroy()}
           setWaiting={setWaiting}
           data={data}
           token={token}
@@ -490,8 +547,7 @@ function Khyanalt({ token }) {
       .then(({ data }) => {
         if (data === "Amjilttai") {
           setWaiting(false);
-          notification.success({
-            message: t("Устгагдлаа"),
+          toast.success(t("Устгагдлаа"), {
             description: `"${mur?.ner}" ${t("загвар амжилттай устгагдлаа")}`,
           });
           mailiinZagvarMutate();
@@ -1179,17 +1235,19 @@ function Khyanalt({ token }) {
               </div>
             )}
           </div>
-          <div className="absolute bottom-1 z-50 flex w-full items-center justify-between space-x-2 p-2">
-            <div className="text-xs font-semibold">{msj.length}/160</div>
+          <div className="absolute bottom-3 z-50 flex w-full items-center justify-between space-x-2 p-4">
+            <div className="text-xs font-semibold dark:text-black">
+              {msj.length}/160
+            </div>
             <div className="flex items-center justify-between space-x-3">
-              <label className="font-medium">
+              <label className="font-medium dark:text-black">
                 {turul} {t("Илгээх")}
               </label>
               <div
                 onClick={send}
-                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
+                className={`h-8 w-8 cursor-pointer sm:h-8 sm:w-8 bg-green-${
                   loading ? "200" : "600"
-                } flex flex-none items-center justify-center rounded-full text-white`}
+                } flex flex-none items-center justify-center rounded-full text-white dark:text-black`}
               >
                 {loading ? (
                   <Spin size="small" />
@@ -1233,7 +1291,7 @@ function Khyanalt({ token }) {
             </div>
             <div className="mt-3">
               <div className="font-medium">{t("Өдрийн мэнд")}</div>
-              <div className="mt-1 text-gray-600 dark:text-gray-300">
+              <div className="mt-1 text-gray-800 dark:text-gray-300">
                 {t("Та мэдэгдэл илгээх харилцагчаа сонгоно уу.")}
               </div>
             </div>

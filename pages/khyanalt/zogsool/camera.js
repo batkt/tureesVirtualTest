@@ -516,6 +516,31 @@ function camera({ token }) {
     setCameraData([a1, a2]);
   }, [jagsaalt]);
 
+ 
+  const ekhniiCameraOlokh = (treeData) => {
+    if (!treeData || !Array.isArray(treeData)) return null;
+    for (const item of treeData) {
+      if (item.selectable && item.value) {
+        return item.value;
+      }
+      if (item.children) {
+        const childValue = ekhniiCameraOlokh(item.children);
+        if (childValue) return childValue;
+      }
+    }
+    return null;
+  };
+
+  
+  useEffect(() => {
+    if (cameraData[0] && !camerVal[0]) {
+      const ekhniiCamera = ekhniiCameraOlokh(cameraData[0]);
+      if (ekhniiCamera) {
+        cameraChange(ekhniiCamera, 1);
+      }
+    }
+  }, [cameraData[0]]);
+
   const {
     uilchluulegchGaralt,
     setUilchluulegchKhuudaslalt,

@@ -83,7 +83,33 @@
 .dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor-editable {
   caret-color: #f9fafb;
 }
+.dark .sun-editor-editable {
+  color: #e5e7eb !important;
+}
 
+.dark .sun-editor-editable * {
+  color: inherit !important;
+}
+
+.sun-editor-editable {
+  overflow: visible !important;
+  line-height: 2.8 !important;
+}
+
+.sun-editor-editable sup,
+.sun-editor-editable sub {
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.sun-editor-editable sup {
+  top: -0.5em;
+}
+
+.sun-editor-editable sub {
+  bottom: -0.25em;
+}
 .dark
   .ant-modal
   .ant-modal-content
@@ -121,7 +147,7 @@
 .dark .sun-editor-editable li,
 .dark .sun-editor-editable td,
 .dark .sun-editor-editable th {
-  color: #e5e7eb !important;
+  color: #000000 !important;
 }
 
 .pvtDropdownCurrent {
@@ -239,7 +265,7 @@ audio {
 }
 
 label {
-  @apply dark:text-white !important;
+  @apply dark:text-black !important;
 }
 
 audio::-webkit-media-controls-mute-button {
