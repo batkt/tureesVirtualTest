@@ -233,11 +233,13 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               {gereeniiZagvar?.ner && (
                 <div className="grid grid-cols-2 gap-4">
                   <div
+                    className="[&_*]:!text-black dark:[&_*]:!text-white"
                     dangerouslySetInnerHTML={{
                       __html: gereeniiZagvar?.zuunTolgoi,
                     }}
                   />
                   <div
+                    className="[&_*]:!text-black dark:[&_*]:!text-white"
                     dangerouslySetInnerHTML={{
                       __html: gereeniiZagvar?.baruunTolgoi,
                     }}
@@ -330,11 +332,13 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               {akt?.ner && (
                 <div className="grid grid-cols-2 gap-4">
                   <div
+                    className="[&_*]:!text-black dark:[&_*]:!text-white"
                     dangerouslySetInnerHTML={{
                       __html: akt?.zuunTolgoi,
                     }}
                   />
                   <div
+                    className="[&_*]:!text-black dark:[&_*]:!text-white"
                     dangerouslySetInnerHTML={{
                       __html: akt?.baruunTolgoi,
                     }}

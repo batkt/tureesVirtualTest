@@ -171,8 +171,8 @@
 
 /* Line height and formatting */
 .sun-editor-editable {
-  overflow: visible !important;
-  line-height: 2.8 !important;
+  overflow-y: visible !important;
+  line-height: 1.8 !important;
 }
 
 .sun-editor-editable sup,
@@ -1604,4 +1604,10 @@ input[type="number"] {
   cursor: not-allowed !important;
   opacity: 0.5;
   filter: saturate(1);
+}
+
+/* baruun zuun tolgoi darkmode shuuue */
+.dark .bg-gray-800 [class*="[&_*]:dark:!text-white"] *,
+.dark .bg-gray-800 [class*="[&_*]:!text-white"] * {
+  color: white !important;
 }
