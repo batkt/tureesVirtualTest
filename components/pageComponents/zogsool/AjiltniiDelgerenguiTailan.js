@@ -25,6 +25,7 @@ import moment from "moment";
 import { t } from "i18next";
 import formatNumber from "tools/function/formatNumber";
 import uilchilgee from "services/uilchilgee";
+import { useAuth } from "services/auth";
 import useAjiltniOdriinTailan from "hooks/useAjiltniOdriinTailan";
 import createMethod from "tools/function/crud/createMethod";
 
@@ -44,6 +45,44 @@ const RESTRICTED_PAYMENT_TYPES = new Set([
   "Үнэгүй",
 ]);
 
+const UNKNOWN_VALUE = "Тодорхойгүй";
+
+const getBrowserDetails = () => {
+  if (typeof navigator === "undefined") {
+    return {
+      browser: UNKNOWN_VALUE,
+      uildliinSystem: UNKNOWN_VALUE,
+      useragent: null,
+    };
+  }
+
+  const ua = navigator.userAgent || "";
+  const platform =
+    navigator.userAgentData?.platform || navigator.platform || UNKNOWN_VALUE;
+
+  let browser = UNKNOWN_VALUE;
+
+  if (ua.includes("Edg")) {
+    browser = "Edge";
+  } else if (ua.includes("OPR") || ua.includes("Opera")) {
+    browser = "Opera";
+  } else if (ua.includes("Chrome")) {
+    browser = "Chrome";
+  } else if (ua.includes("Safari")) {
+    browser = "Safari";
+  } else if (ua.includes("Firefox")) {
+    browser = "Firefox";
+  } else if (ua) {
+    browser = "Other";
+  }
+
+  return {
+    browser,
+    uildliinSystem: platform,
+    useragent: ua || UNKNOWN_VALUE,
+  };
+};
+
 function AjiltniiDelgerenguiTailan(
   {
     destroy,
@@ -62,6 +101,7 @@ function AjiltniiDelgerenguiTailan(
   const [songogdsonCamera, setSongogdsonCamera] = useState(null);
   const [loading, setLoading] = useState(false);
   const [haaltDarsan, setHaaltDarsan] = useState(false);
+  const { baiguullaga } = useAuth();
 
   const ajiltanAdminEsekh = ajiltan?.erkh === "Admin";
   const ajiltandBuhTolborHarahEsekh =
@@ -264,6 +304,35 @@ function AjiltniiDelgerenguiTailan(
 
       await createMethod("kassCameraKhaalt", token, kassCameraKhaaltData);
 
+      const { browser, uildliinSystem, useragent } = getBrowserDetails();
+
+      const nevtreltiinTuukhData = {
+        ajiltniiId: ajiltan?._id || UNKNOWN_VALUE,
+        ajiltniiNer: ajiltan?.ner || UNKNOWN_VALUE,
+        ognoo: currentTime.clone().add(1, "second"),
+        bairshilUls: "Mongolia",
+        bairshilKhot: "Ulaanbaatar",
+        uildliinSystem,
+        ip: "10.10.10",
+        browser,
+        baiguullagiinId: baiguullagiinId || baiguullaga?._id || UNKNOWN_VALUE,
+        baiguullagiinRegister:
+          baiguullaga?.register ||
+          ajiltan?.baiguullagiinRegister ||
+          UNKNOWN_VALUE,
+        barilgiinId: barilgiinId || UNKNOWN_VALUE,
+        useragent: useragent || UNKNOWN_VALUE,
+      };
+
+      try {
+        await createMethod("nevtreltiinTuukh", token, nevtreltiinTuukhData);
+      } catch (nevtreltiinTuukhError) {
+        console.error(
+          "Нэвтрэлтийн түүх хадгалахад алдаа:",
+          nevtreltiinTuukhError
+        );
+      }
+
       await zogsoolTulburMedeelelMutate();
 
       setHaaltDarsan(true);
@@ -289,6 +358,7 @@ function AjiltniiDelgerenguiTailan(
     ajiltan,
     barilgiinId,
     baiguullagiinId,
+    baiguullaga,
     zogsooliinId,
     token,
     zogsoolTulburMedeelel,
@@ -325,20 +395,26 @@ function AjiltniiDelgerenguiTailan(
     var ugugdul = [];
     if (!!zogsoolTulburMedeelel) {
       const mergedTulbur = Array.from(
-        zogsoolTulburMedeelel.reduce((acc, item) => {
-          const key = item?._id === "PosCard" ? "PosKart" : item?._id;
-          const merged = acc.get(key) || { ...item, _id: key, niitDun: 0, niitToo: 0 };
+        zogsoolTulburMedeelel
+          .reduce((acc, item) => {
+            const key = item?._id === "PosCard" ? "PosKart" : item?._id;
+            const merged = acc.get(key) || {
+              ...item,
+              _id: key,
+              niitDun: 0,
+              niitToo: 0,
+            };
 
-          merged.niitDun += item?.niitDun || 0;
-          merged.niitToo += item?.niitToo || 0;
+            merged.niitDun += item?.niitDun || 0;
+            merged.niitToo += item?.niitToo || 0;
 
-          acc.set(key, merged);
-          return acc;
-        }, new Map()).values()
+            acc.set(key, merged);
+            return acc;
+          }, new Map())
+          .values()
       );
 
-      var niitDun =
-        mergedTulbur?.reduce((a, b) => a + b.niitDun, 0) || 0;
+      var niitDun = mergedTulbur?.reduce((a, b) => a + b.niitDun, 0) || 0;
 
       mergedTulbur?.forEach((element) => {
         const tulburiinTurul = element?._id;
