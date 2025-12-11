@@ -359,6 +359,7 @@ const Kiosk = () => {
   }
   const dugaarRef = useRef(null);
   const shineDugaarRef = useRef(null);
+  const autoSelectRef = useRef(null);
   const handleUrgeljluulekh = () => {
     var ongoilgokhEsekh = true;
     dugaar.forEach((dug) => {
@@ -372,6 +373,40 @@ const Kiosk = () => {
       dugaarRef?.current?.khoosonInputFocusliy();
     }
   };
+
+  useEffect(() => {
+    const dugaarBugdBolsn = dugaar.every((dug) => dug !== "");
+    if (dugaarBugdBolsn && !drawerOngoikh) {
+      setDrawerOngoikh(true);
+    }
+  }, [dugaar, drawerOngoikh]);
+
+  useEffect(() => {
+    if (!drawerOngoikh) {
+      autoSelectRef.current = null;
+      return;
+    }
+    const negMashin = uilchluulegchGaralt?.jagsaalt?.length === 1;
+    const gantsMashin = uilchluulegchGaralt?.jagsaalt?.[0];
+    const uniq = gantsMashin?._id || gantsMashin?.mashiniiDugaar;
+    if (
+      negMashin &&
+      alkham === 0 &&
+      !songogdsonData &&
+      !unshijBaina &&
+      uniq &&
+      autoSelectRef.current !== uniq
+    ) {
+      autoSelectRef.current = uniq;
+      mashinSongiy(gantsMashin);
+    }
+  }, [
+    alkham,
+    drawerOngoikh,
+    songogdsonData,
+    uilchluulegchGaralt?.jagsaalt,
+    unshijBaina,
+  ]);
 
   const mashinSongiy = async (data) => {
     try {
