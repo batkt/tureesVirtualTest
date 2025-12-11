@@ -9,7 +9,13 @@ import {
 import { Button, Drawer, Spin, message } from "antd";
 import DugaarKeyboard from "components/pageComponents/kiosk/DugaarKeyboard";
 import useUilchluulegchWithQuery from "hooks/useUilchluulegchWithQuery";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useAuth } from "services/auth";
 import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
 import {
@@ -102,15 +108,18 @@ const Kiosk = () => {
         });
   }, [token]);
 
-  const msgNotif = (content) => {
-    messageApi.open({
-      content: content,
-      style: {
-        marginTop: "5rem",
-      },
-      duration: 3,
-    });
-  };
+  const msgNotif = useCallback(
+    (content) => {
+      messageApi.open({
+        content: content,
+        style: {
+          marginTop: "5rem",
+        },
+        duration: 3,
+      });
+    },
+    [messageApi]
+  );
 
   function showKhunglult(khungulukhTsag) {
     const footer = [
@@ -382,6 +391,33 @@ const Kiosk = () => {
   }, [dugaar, drawerOngoikh]);
 
   useEffect(() => {
+    if (!drawerOngoikh) return;
+
+    if (!isValidating && uilchluulegchGaralt?.jagsaalt?.length === 0) {
+      msgNotif(
+        <div className="flex items-center justify-center gap-2 rounded-full font-semibold">
+          <div className="text-yellow-500">
+            <WarningOutlined style={{ fontSize: "36px" }} size={100} />
+          </div>
+          <div className="text-4xl">Таны машин бүртгэгдээгүй байна.</div>
+        </div>
+      );
+      setDrawerOngoikh(false);
+      setSongogdsonData(null);
+      setTulburiinKhelber();
+      setKhuleegdejBuiQpay(null);
+      setKhuleegdejBuiPass(null);
+      setDugaar(Array(4).fill(""));
+      setEbarimtTurul("");
+      setEbarimt();
+      setRegister("");
+      setMinutes(3);
+      setSeconds(30);
+      setAlkham(0);
+    }
+  }, [drawerOngoikh, isValidating, uilchluulegchGaralt?.jagsaalt, msgNotif]);
+
+  useEffect(() => {
     if (!drawerOngoikh) {
       autoSelectRef.current = null;
       return;
@@ -437,6 +473,18 @@ const Kiosk = () => {
               </div>
             );
             setUnshijBaina(false);
+            setDrawerOngoikh(false);
+            setSongogdsonData(null);
+            setTulburiinKhelber();
+            setKhuleegdejBuiQpay(null);
+            setKhuleegdejBuiPass(null);
+            setDugaar(Array(4).fill(""));
+            setEbarimtTurul("");
+            setEbarimt();
+            setRegister("");
+            setMinutes(3);
+            setSeconds(30);
+            setAlkham(0);
           }
         } else {
           setUnshijBaina(false);
