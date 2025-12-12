@@ -637,10 +637,13 @@ function camera({ token }) {
   }, [tuluvFilter]);
 
   useEffect(() => {
-    socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
+    socket().on(`zogsool`, (zogsool) => {
       let uilchluulegch = zogsool;
 
-      if (uilchluulegch) {
+      if (
+        uilchluulegch &&
+        uilchluulegch?.baiguullagiinId === baiguullaga?._id
+      ) {
         var yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
           "???",
           ""
@@ -729,7 +732,7 @@ function camera({ token }) {
     });
 
     return () => {
-      socket().off(`zogsool${baiguullaga?._id}`);
+      socket().off(`zogsool`);
     };
   }, [baiguullaga]);
 
