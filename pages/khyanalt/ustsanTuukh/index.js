@@ -163,7 +163,7 @@ function UstsanTuukh() {
 
     return {
       baiguullagiinId: barilgiinId,
-      ajiltniiId: ajiltankhaikh,
+      ...(ajiltankhaikh && { ajiltniiId: ajiltankhaikh }),
       "object.turul": objectTurulFilter,
       class: turulClassFilter,
       createdAt: shuukhOgnoo

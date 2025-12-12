@@ -48,7 +48,7 @@ function ZassanTuukh() {
     return {
       baiguullagiinId: baiguullaga?._id,
       barilgiinId: barilgiinId,
-      ajiltniiId: ajiltankhaikh,
+      ...(ajiltankhaikh && { ajiltniiId: ajiltankhaikh }),
       classType: turul,
       createdAt: shuukhOgnoo
         ? {
