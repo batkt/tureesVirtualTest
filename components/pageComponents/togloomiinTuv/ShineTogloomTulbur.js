@@ -78,7 +78,7 @@ function ShineTogloomTulbur(
   const eBarimtRef = React.useRef(null);
 
   const handlePrint = useReactToPrint({
-    content: () => eBarimtRef.current,
+    contentRef: eBarimtRef,
     onAfterPrint: () => {
       setEBarimt(null);
       setBaiguullagaEsekh(false);

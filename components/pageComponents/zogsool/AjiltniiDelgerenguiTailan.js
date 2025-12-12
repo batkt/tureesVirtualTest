@@ -93,6 +93,7 @@ function AjiltniiDelgerenguiTailan(
     baiguullagiinId,
     barilgiinId,
     selectedCamera,
+    songogdsonCamera: propSongogdsonCamera,
     zogsooliinId,
     cameraData,
   },
@@ -218,11 +219,14 @@ function AjiltniiDelgerenguiTailan(
   const printRef = useRef();
 
   const handlePrint = useReactToPrint({
-    content: () => printRef.current,
+    contentRef: printRef,
   });
 
   useEffect(() => {
-    if (!selectedCamera) {
+ 
+    const cameraToUse = propSongogdsonCamera || selectedCamera;
+
+    if (!cameraToUse) {
       setSongogdsonCamera(null);
       setAjiltniiNevtersenTsag(null);
       setAjiltniiGarsanTsag(null);
@@ -231,13 +235,13 @@ function AjiltniiDelgerenguiTailan(
       setTailanEkhlekhOgnoo(null);
       return;
     }
-    setSongogdsonCamera(selectedCamera);
+    setSongogdsonCamera(cameraToUse);
     setAjiltniiNevtersenTsag(null);
     setAjiltniiGarsanTsag(null);
     setKhaaltOgnoo(null);
     setHaaltDarsan(false);
     setTailanEkhlekhOgnoo(null);
-  }, [selectedCamera]);
+  }, [selectedCamera, propSongogdsonCamera]);
 
   const handleCameraSelect = useCallback((value) => {
     const newValue = value || null;
@@ -779,7 +783,7 @@ function AjiltniiDelgerenguiTailan(
         title: t("Төлбөртэй машин байна"),
         width: 720,
         content: (
-          <div className="space-y-3">
+          <div className="space-y-3 overflow-x-auto">
             <Table
               size="small"
               rowKey={(r) => r?._id || r?.mashiniiDugaar || JSON.stringify(r)}

@@ -59,7 +59,7 @@ function NekhemjlekhiinTuukh(
   const printRef = React.useRef(null);
 
   const handlePrint = useReactToPrint({
-    content: () => printRef.current,
+    contentRef: printRef,
   });
 
   function changedZagvar(row, i) {

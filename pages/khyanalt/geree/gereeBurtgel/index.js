@@ -700,7 +700,7 @@ function ZakhialgiinKhyanalt() {
         .then(({ data }) => data);
   }, [token]);
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    contentRef: componentRef,
     pageStyle: `@media print {
       @page { 
         size: auto;

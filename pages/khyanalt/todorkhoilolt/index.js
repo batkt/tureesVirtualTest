@@ -133,50 +133,56 @@ function Todorkhoilolt() {
   );
 
   const printDataRef = useRef(null);
+  const onBeforePrintResolveRef = useRef(null);
+  const [printVersion, setPrintVersion] = useState(0);
 
   const handlePrint = useReactToPrint({
-    content: () => printRef.current || printDataRef.current,
+    contentRef: printRef,
     documentTitle: turul || "Тодорхойлолт",
-    onBeforeGetContent: () => {
-      let processedContent = printDataRef.current || getCurrentContent();
+    onBeforePrint: () => {
+      return new Promise((resolve) => {
+        onBeforePrintResolveRef.current = resolve;
 
-      const foundClient = jagsaalt.find(
-        (c) =>
-          c.id === songogdsonKhariltsagch || c._id === songogdsonKhariltsagch
-      );
+        let processedContent = printDataRef.current || getCurrentContent();
 
-      if (foundClient) {
-        const clientData = {
-          ner: foundClient.ner || "",
-          register: foundClient.register || "",
-          utas: foundClient.utas || "",
-          ajiltan: ajiltan.ner || "",
-          register: foundClient.register,
+        const foundClient = jagsaalt.find(
+          (c) =>
+            c.id === songogdsonKhariltsagch || c._id === songogdsonKhariltsagch
+        );
 
-          talbainDugaar: Array.isArray(foundClient.talbainDugaar)
-            ? foundClient.talbainDugaar.join(",")
-            : foundClient.talbainDugaar || "",
-          gereeniiDugaar: Array.isArray(foundClient.gereenuud)
-            ? foundClient.gereenuud
-                .map((g) => g.gereeniiDugaar)
-                .filter(Boolean)
-                .join(", ")
-            : "",
-          ...foundClient,
-        };
+        if (foundClient) {
+          const clientData = {
+            ner: foundClient.ner || "",
+            register: foundClient.register || "",
+            utas: foundClient.utas || "",
+            ajiltan: ajiltan.ner || "",
+            register: foundClient.register,
 
-        for (const [key, value] of Object.entries(clientData)) {
-          if (value !== null && value !== undefined) {
-            processedContent = processedContent?.replace(
-              new RegExp(`&lt;${key}&gt;`, "g"),
-              String(value)
-            );
+            talbainDugaar: Array.isArray(foundClient.talbainDugaar)
+              ? foundClient.talbainDugaar.join(",")
+              : foundClient.talbainDugaar || "",
+            gereeniiDugaar: Array.isArray(foundClient.gereenuud)
+              ? foundClient.gereenuud
+                  .map((g) => g.gereeniiDugaar)
+                  .filter(Boolean)
+                  .join(", ")
+              : "",
+            ...foundClient,
+          };
+
+          for (const [key, value] of Object.entries(clientData)) {
+            if (value !== null && value !== undefined) {
+              processedContent = processedContent?.replace(
+                new RegExp(`&lt;${key}&gt;`, "g"),
+                String(value)
+              );
+            }
           }
         }
-      }
 
-      setPrintContent(processedContent);
-      return Promise.resolve();
+        setPrintContent(processedContent);
+        setPrintVersion((v) => v + 1);
+      });
     },
     onAfterPrint: async () => {
       await khevleltKhadgalya();
@@ -186,6 +192,13 @@ function Todorkhoilolt() {
       nmailtuukhJagsaaltMutate();
     },
   });
+
+  useEffect(() => {
+    if (onBeforePrintResolveRef.current) {
+      onBeforePrintResolveRef.current();
+      onBeforePrintResolveRef.current = null;
+    }
+  }, [printVersion]);
 
   useEffect(() => {
     if (neesenEsekh === true) {

@@ -151,8 +151,8 @@ function GuilgeeniiTuukhAldangi(
   `;
 
   const handlePrint = useReactToPrint({
-    pageStyle: () => pageStyle,
-    content: () => printRef.current,
+    pageStyle,
+    contentRef: printRef,
   });
 
   const fetchAldangiinUldegdel = () => {

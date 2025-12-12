@@ -1503,8 +1503,7 @@ function tulburTootsoo({ token }) {
   }
 
   const handlePrint = useReactToPrint({
-    content: () =>
-      excelZagvarSongogdson ? printExcelRef.current : printRef.current,
+    contentRef: printRef,
     onAfterPrint: () => {
       if (songogdsonGereenuud?.length > 0)
         dugaarlaltKhadgalya(songogdsonGereenuud?.length + dugaarlalt - 1, () =>

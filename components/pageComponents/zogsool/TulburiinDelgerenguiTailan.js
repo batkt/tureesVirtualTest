@@ -86,7 +86,7 @@ function TulburiinDelgerenguiTailan(
   const printRef = React.useRef(null);
 
   const handlePrint = useReactToPrint({
-    content: () => printRef.current,
+    contentRef: printRef,
   });
 
   const handleDivClick = (a) => {

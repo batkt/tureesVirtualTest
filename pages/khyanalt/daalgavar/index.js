@@ -95,7 +95,9 @@ function index({ token }) {
 
   useEffect(() => {
     setSetgegdel("");
-    inputRef.current.focus();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
     //document.getElementById('').setAttribute('data-aos','')
   }, [daalgavar?._id]);
 
@@ -115,7 +117,9 @@ function index({ token }) {
       return;
     }
 
-    inputRef.current.focus();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
     uilchilgee(token)
       .post("/setgegdelBichie", {
         barilgiinId: barilgiinId,

@@ -459,10 +459,11 @@ function Anket({ token }) {
             </div>
           </div>
           <div
-            className="box col-span-12 overflow-auto p-1 pt-3 md:col-span-3 xl:col-span-3"
+            className="box col-span-12 flex flex-col overflow-auto p-1 pt-3 md:col-span-3 xl:col-span-3"
             data-aos="fade-left"
             data-aos-duration="1000"
             data-aos-delay="300"
+            style={{ height: "calc(100vh - 8rem)" }}
           >
             <span className="font-medium dark:text-gray-100 lg:px-5">
               {t("Анкетын загвар үүсгэх")}
@@ -470,7 +471,7 @@ function Anket({ token }) {
             <Form
               ref={formRef}
               form={form}
-              className="pl-5 pt-5"
+              className="flex flex-1 flex-col overflow-hidden pl-5 pt-5"
               name="dynamic_form_item"
               autoComplete={"off"}
               onFinish={(v) => {
@@ -483,8 +484,8 @@ function Anket({ token }) {
                 });
               }}
             >
-              <div>
-                <div className="grid-cols-1 gap-3 pr-5 lg:grid">
+              <div className="flex-1 overflow-y-auto pb-4 pr-5">
+                <div className="grid-cols-1 gap-3 lg:grid">
                   <Form.Item name="_id" hidden></Form.Item>
                   <Form.Item name="barilgiinId" hidden></Form.Item>
                   <Form.Item
@@ -515,7 +516,7 @@ function Anket({ token }) {
                 >
                   {(fields, { add, remove }, { errors }) => (
                     <>
-                      <Form.Item className="pb-3 pr-5">
+                      <Form.Item className="pb-3">
                         <Button
                           type="default"
                           id="asuultNemekhButton"
@@ -536,12 +537,12 @@ function Anket({ token }) {
                         <Form.ErrorList errors={errors} />
                       </Form.Item>
                       <div
-                        className="-my-8 grid w-full grid-cols-1 gap-2 overflow-y-auto py-5 pr-5 "
-                        style={{ maxHeight: "calc( 100vh - 20rem)" }}
+                        className="grid w-full grid-cols-1 gap-2"
                         id={"form-container"}
                       >
                         {fields.map(({ key, name, fieldKey, ...restField }) => (
                           <AsuultOruulakh
+                            key={key}
                             name={name}
                             fieldKey={fieldKey}
                             restField={restField}
@@ -554,7 +555,7 @@ function Anket({ token }) {
                   )}
                 </Form.List>
               </div>
-              <Form.Item className="flex justify-end pr-5">
+              <Form.Item className="mb-0 flex justify-end border-t border-gray-200 bg-white pb-0 pr-5 pt-3 dark:border-gray-700 dark:bg-gray-900">
                 <Button
                   type="primary"
                   onClick={() => form.submit()}

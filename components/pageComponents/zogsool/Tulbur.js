@@ -75,7 +75,7 @@ function Tulbur(
   const eBarimtRef = React.useRef(null);
 
   const handlePrint = useReactToPrint({
-    content: () => eBarimtRef.current,
+    contentRef: eBarimtRef,
   });
 
   React.useImperativeHandle(

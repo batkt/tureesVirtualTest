@@ -1,15 +1,23 @@
 import { openDB, STORES } from "./indexedDB";
 export async function saveOfflineAuth(credentials, serverResponse) {
-  const db = await openDB();
-  const authData = {
-    username: credentials.nevtrekhNer || credentials.username,
-    password: credentials.nuutsUg || credentials.password,
-    token: serverResponse.token,
-    userInfo: serverResponse.result || serverResponse.data,
-    permissionsData: serverResponse.permissionsData,
-    savedAt: new Date().toISOString(),
-  };
-  await db.put(STORES.USER, authData, "credentials");
+  try {
+    const db = await openDB();
+    const authData = {
+      username: credentials.nevtrekhNer || credentials.username,
+      password: credentials.nuutsUg || credentials.password,
+      token: serverResponse.token,
+      userInfo: serverResponse.result || serverResponse.data,
+      permissionsData: serverResponse.permissionsData,
+      savedAt: new Date().toISOString(),
+    };
+    await db.put(STORES.USER, authData, "credentials");
+  } catch (error) {
+    // If object store doesn't exist, the database version needs to be incremented
+    // to trigger the upgrade callback. This error should be resolved after
+    // the database version is updated and the page is refreshed.
+    console.error("Failed to save offline auth:", error);
+    throw error;
+  }
 }
 
 export async function performOfflineLogin(credentials) {

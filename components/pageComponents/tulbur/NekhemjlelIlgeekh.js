@@ -736,7 +736,7 @@ function GuilgeeKhiikh(
   }
 
   const handlePrint = useReactToPrint({
-    content: () => printRef.current,
+    contentRef: printRef,
     onAfterPrint: () => {},
   });
   function hevlekh() {

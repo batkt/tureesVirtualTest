@@ -57,7 +57,7 @@ function negtgelTailan({ token }) {
     moment().endOf("month"),
   ]);
   const handlePrint = useReactToPrint({
-    content: () => printRef.current,
+    contentRef: printRef,
     pageStyle: "print",
   });
   const query = useMemo(() => {

@@ -145,13 +145,27 @@ function UstsanTuukh() {
         ? "mashin"
         : turul === "blockMashin"
         ? "blockMashin"
+        : turul === "eBarimt"
+        ? "eBarimt"
         : cls;
+
+    const isTalbai = turul === "Talbai" || turul === "talbai";
+    const isEBarimt = turul === "eBarimt";
+    const turulClassFilter = isTalbai
+      ? { $in: ["Talbai", "talbai"] }
+      : classValue;
+    const objectTurulFilter =
+      isTalbai || isEBarimt
+        ? undefined
+        : turul
+        ? { $in: [turul, turul?.toLowerCase?.() || turul] }
+        : undefined;
 
     return {
       baiguullagiinId: barilgiinId,
       ajiltniiId: ajiltankhaikh,
-      "object.turul": turul,
-      class: classValue,
+      "object.turul": objectTurulFilter,
+      class: turulClassFilter,
       createdAt: shuukhOgnoo
         ? {
             $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
@@ -159,7 +173,7 @@ function UstsanTuukh() {
           }
         : undefined,
     };
-  }, [ajiltankhaikh, shuukhOgnoo, turul, barilgiinId, searchKeys]);
+  }, [ajiltankhaikh, shuukhOgnoo, turul, barilgiinId, cls]);
 
   const ustsanBarimt = useJagsaalt(
     "/ustsanBarimt",
@@ -202,6 +216,7 @@ function UstsanTuukh() {
         });
         break;
       case "talbai":
+      case "Talbai":
         turulColumns.push({
           title: "Талбайн дугаар",
           width: "3rem",

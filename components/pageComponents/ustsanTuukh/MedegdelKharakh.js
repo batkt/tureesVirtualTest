@@ -40,7 +40,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
 
   return (
     <>
-      <div className="dark:text-gray-400">
+      <div className="text-gray-800 dark:text-gray-100">
         {data.class === "mailiinZagvar" && (
           <div className="flex justify-between">
             <div>{t("Загварын нэр")}: </div>
@@ -109,7 +109,11 @@ function MedegdelKharakh({ data, destroy }, ref) {
 
         <div className="flex justify-between">
           <div>{t("Устгасан огноо")}: </div>
-          <div>{moment(data.object.updatedAt).format("YYYY-MM-DD")}</div>
+          <div>
+            {moment(data?.createdAt || data?.object?.updatedAt).format(
+              "YYYY-MM-DD"
+            )}
+          </div>
         </div>
 
         {data.object.turul === "baritsaa" && (
@@ -159,7 +163,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
 
         <div className="flex justify-between">
           <div>{t("Хийсэн огноо")}:</div>
-          <div>{moment(data.object.createdAt).format("YYYY-MM-DD")}</div>
+          <div>{moment(data?.object?.createdAt).format("YYYY-MM-DD")}</div>
         </div>
 
         {data.object.tulsunAldangi ? (

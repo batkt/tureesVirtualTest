@@ -58,8 +58,8 @@ function Tulbur(
 `;
 
   const handlePrint = useReactToPrint({
-    pageStyle: () => pageStyle,
-    content: () => eBarimtRef.current,
+    pageStyle,
+    contentRef: eBarimtRef,
     onAfterPrint: () => khaaya(),
   });
 

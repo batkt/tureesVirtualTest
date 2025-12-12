@@ -54,7 +54,7 @@ const TogloomKiosk = () => {
   const eBarimtRef = React.useRef(null);
 
   const handlePrint = useReactToPrint({
-    content: () => eBarimtRef.current,
+    contentRef: eBarimtRef,
   });
 
   function khaaya() {

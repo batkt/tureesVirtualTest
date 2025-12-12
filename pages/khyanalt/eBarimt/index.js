@@ -80,6 +80,7 @@ function EbarimtMedeelel({ token }) {
   const queryToololt = useMemo(() => {
     const query = {
       barilgiinId: barilgiinId,
+      baiguullagiinId: ajiltan?.baiguullagiinId,
       ekhlekhOgnoo: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
     };
@@ -94,7 +95,7 @@ function EbarimtMedeelel({ token }) {
       }
     }
     return query;
-  }, [ekhlekhOgnoo, uilchilgeeAvi]);
+  }, [barilgiinId, ajiltan?.baiguullagiinId, ekhlekhOgnoo, uilchilgeeAvi]);
 
   const { order, onChangeTable } = useOrder({ createAt: -1 });
 
@@ -111,7 +112,7 @@ function EbarimtMedeelel({ token }) {
     barilgiinId && token,
     barilgiinId
   );
-  const { ebarimtiinToololt } = useBarimtToollolt(
+  const { ebarimtiinToololt, ebarimtiinToololtMutate } = useBarimtToollolt(
     barilgiinId && token,
     queryToololt
   );
@@ -380,16 +381,22 @@ function EbarimtMedeelel({ token }) {
 
   function ebarimtUstgaya(mur) {
     setWaiting(true);
-    //mur.barilgiinId = barilgiinId;
     uilchilgee(token)
-      .post("/ebarimtButsaaya", mur)
+      .post("/ebarimtButsaaya", {
+        ...mur,
+        barilgiinId: barilgiinId,
+        baiguullagiinId: ajiltan?.baiguullagiinId,
+        ajiltniiNer: ajiltan?.ner,
+      })
       .then(({ data }) => {
         if (!!data) {
           setWaiting(false);
           eBarimtMutate();
+
+          ebarimtiinToololtMutate();
           message.success(
             t("дугаартай баримт амжилттай ebarimt -с устгагдлаа", {
-              dugaar: mur.billId,
+              dugaar: mur.billId || mur.id,
             })
           );
         }
@@ -606,6 +613,7 @@ function EbarimtMedeelel({ token }) {
           data-aos-duration="1000"
           data-aos-delay="300"
           data-aos-anchor-placement="top-bottom"
+          className="overflow-x-auto"
         >
           <Table
             bordered
@@ -628,7 +636,7 @@ function EbarimtMedeelel({ token }) {
                 })),
             }}
             onChange={onChangeTable}
-            scroll={{ y: "calc(100vh - 27rem)" }}
+            scroll={{ x: "max-content", y: "calc(100vh - 27rem)" }}
             rowKey={(row) => row._id}
             className="t-head"
             columns={columns}

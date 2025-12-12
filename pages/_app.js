@@ -2,6 +2,10 @@ import { useEffect } from "react";
 import { AuthProvider } from "../services/auth";
 import { ThemeProvider } from "next-themes";
 import { registerServiceWorker } from "../utils/swHelper";
+import { ConfigProvider } from "antd";
+import mnMN from "antd/lib/locale/mn_MN";
+import moment from "moment";
+import "moment/locale/mn";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -34,6 +38,8 @@ ChartJS.register(
   Legend
 );
 
+moment.locale("mn");
+
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
     registerServiceWorker();
@@ -43,7 +49,9 @@ function MyApp({ Component, pageProps }) {
     <ThemeProvider attribute="class">
       <AuthProvider>
         <Toaster position="top-right" richColors suppressHydrationWarning />
-        <Component {...pageProps} />
+        <ConfigProvider locale={mnMN}>
+          <Component {...pageProps} />
+        </ConfigProvider>
       </AuthProvider>
     </ThemeProvider>
   );

@@ -66,7 +66,7 @@ const QrCodeAvakh = React.forwardRef(
     const khevlekhRef = useRef(null);
     const { Canvas } = useQRCode();
     const handlePrint = useReactToPrint({
-      content: () => khevlekhRef.current,
+      contentRef: khevlekhRef,
     });
 
     React.useImperativeHandle(

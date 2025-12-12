@@ -53,7 +53,7 @@ function nasjiltinTailan({ token }) {
     setOgnoo(date);
   };
   const handlePrint = useReactToPrint({
-    content: () => printRef.current,
+    contentRef: printRef,
     pageStyle: "print",
   });
 

@@ -157,7 +157,7 @@ function GuilgeeniiTuukh(
   }
 
   const handlePrint = useReactToPrint({
-    content: () => printRef.current,
+    contentRef: printRef,
   });
 
   const toggleSortOrder = (column) => {
