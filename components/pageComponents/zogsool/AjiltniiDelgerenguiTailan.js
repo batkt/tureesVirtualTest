@@ -12,6 +12,7 @@ import {
   message,
   notification,
   Input,
+  Table,
   TreeSelect,
 } from "antd";
 import {
@@ -27,6 +28,7 @@ import formatNumber from "tools/function/formatNumber";
 import uilchilgee from "services/uilchilgee";
 import { useAuth } from "services/auth";
 import useAjiltniOdriinTailan from "hooks/useAjiltniOdriinTailan";
+import useJagsaalt from "hooks/useJagsaalt";
 import createMethod from "tools/function/crud/createMethod";
 
 const RESTRICTED_PAYMENT_TYPES = new Set([
@@ -157,6 +159,62 @@ function AjiltniiDelgerenguiTailan(
     query
   );
 
+  const udriinKhayaltOgnoo = useMemo(() => moment(), []);
+  const udriinEkhlekh = useMemo(
+    () => udriinKhayaltOgnoo.clone().startOf("day").toDate(),
+    [udriinKhayaltOgnoo]
+  );
+  const udriinDuusakh = useMemo(
+    () => udriinKhayaltOgnoo.clone().endOf("day").toDate(),
+    [udriinKhayaltOgnoo]
+  );
+
+  const tulburteiQuery = useMemo(() => {
+    if (!baiguullagiinId || !barilgiinId || !songogdsonCamera) return undefined;
+
+    const q = {
+      baiguullagiinId,
+      barilgiinId,
+      "tuukh.0.garsanKhaalga": songogdsonCamera,
+      "tuukh.tsagiinTuukh.garsanTsag": {
+        $gte: udriinEkhlekh,
+        $lte: udriinDuusakh,
+      },
+      "tuukh.0.tuluv": 0,
+      "tuukh.0.tulukhDun": { $gt: 0 },
+      "tuukh.0.tulbur.0": { $exists: false },
+    };
+
+    if (zogsooliinId) q["tuukh.0.zogsooliinId"] = zogsooliinId;
+    return q;
+  }, [
+    baiguullagiinId,
+    barilgiinId,
+    zogsooliinId,
+    songogdsonCamera,
+    udriinEkhlekh,
+    udriinDuusakh,
+  ]);
+
+  const tulburteiFetchEnabled = !!token && !!tulburteiQuery;
+  const {
+    data: tulburteiData,
+    mutate: tulburteiMutate,
+    isValidating: tulburteiUnshijBaina,
+  } = useJagsaalt(
+    tulburteiFetchEnabled ? "/zogsoolUilchluulegch" : null,
+    tulburteiQuery,
+    { "tuukh.0.tsagiinTuukh.0.garsanTsag": -1 },
+    undefined,
+    undefined,
+    token,
+    50
+  );
+
+  const tulburteiRows = useMemo(() => {
+    return Array.isArray(tulburteiData?.jagsaalt) ? tulburteiData.jagsaalt : [];
+  }, [tulburteiData]);
+
   const printRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -251,7 +309,7 @@ function AjiltniiDelgerenguiTailan(
       return;
     }
 
-    if (loading) return;
+    if (loading || haaltDarsan) return;
 
     try {
       setLoading(true);
@@ -273,6 +331,7 @@ function AjiltniiDelgerenguiTailan(
         message.warning("Өнөөдрийн орлогын мэдээлэл олдсонгүй");
         setHaaltDarsan(false);
         setKhaaltOgnoo(null);
+        setLoading(false);
         return;
       }
 
@@ -687,17 +746,119 @@ function AjiltniiDelgerenguiTailan(
     zogsoolTulburMedeelel,
   ]);
 
-  const handleDayCloseClick = useCallback(() => {
-    Modal.confirm({
-      title: t("Өдрийн хаалт"),
-      content: t(
-        "Та өнөөдрийн ажлаа дуусгахдаа итгэлтэй байна уу? Өдрийн хаалт хийхдээ машин гаргах боломжгүй дараагын ажилтан заавал нэвтэрсэн байх шаардлагатай."
-      ),
-      okText: t("Тийм"),
-      cancelText: t("Үгүй"),
-      onOk: ajiltniiAjalAasBuukh,
-    });
-  }, [ajiltniiAjalAasBuukh]);
+  const handleDayCloseClick = useCallback(async () => {
+    if (!songogdsonCamera) {
+      message.warning("Камер сонгоно уу");
+      return;
+    }
+    if (tulburteiUnshijBaina) return;
+
+    const showFinalConfirm = () => {
+      Modal.confirm({
+        title: t("Өдрийн хаалт"),
+        content: t(
+          "Та өнөөдрийн ажлаа дуусгахдаа итгэлтэй байна уу? Өдрийн хаалт хийхдээ машин гаргах боломжгүй дараагын ажилтан заавал нэвтэрсэн байх шаардлагатай."
+        ),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
+        onOk: ajiltniiAjalAasBuukh,
+      });
+    };
+
+    try {
+      const refreshed = (await tulburteiMutate()) ?? tulburteiData;
+      const rows = Array.isArray(refreshed?.jagsaalt) ? refreshed.jagsaalt : [];
+      const hasTulburtei = rows.length > 0;
+
+      if (!hasTulburtei) {
+        showFinalConfirm();
+        return;
+      }
+
+      Modal.confirm({
+        title: t("Төлбөртэй машин байна"),
+        width: 720,
+        content: (
+          <div className="space-y-3">
+            <Table
+              size="small"
+              rowKey={(r) => r?._id || r?.mashiniiDugaar || JSON.stringify(r)}
+              pagination={false}
+              dataSource={rows}
+              columns={[
+                {
+                  title: "№",
+                  width: 60,
+                  align: "center",
+                  render: (_v, _r, idx) => idx + 1,
+                },
+                {
+                  title: t("Машины дугаар"),
+                  dataIndex: "mashiniiDugaar",
+                  render: (v) => String(v || "").toUpperCase(),
+                },
+                {
+                  title: t("Төлөх дүн"),
+                  align: "right",
+                  render: (_v, r) =>
+                    formatNumber(
+                      r?.niitDun ?? r?.tuukh?.[0]?.tulukhDun ?? 0,
+                      0
+                    ),
+                },
+                {
+                  title: t("Орсон"),
+                  align: "center",
+                  render: (_v, r) => {
+                    const v = r?.tuukh?.[0]?.tsagiinTuukh?.[0]?.orsonTsag;
+                    return v ? moment(v).format("MM-DD HH:mm") : "";
+                  },
+                },
+                {
+                  title: t("Гарсан"),
+                  align: "center",
+                  render: (_v, r) => {
+                    const v = r?.tuukh?.[0]?.tsagiinTuukh?.[0]?.garsanTsag;
+                    return v ? moment(v).format("MM-DD HH:mm") : "";
+                  },
+                },
+                {
+                  title: t("Хугацаа/мин"),
+                  align: "right",
+                  render: (_v, r) =>
+                    formatNumber(r?.tuukh?.[0]?.niitKhugatsaa ?? 0, 0),
+                },
+                {
+                  title: t("Төлсөн"),
+                  align: "right",
+                  render: (_v, r) =>
+                    formatNumber(
+                      Array.isArray(r?.tuukh?.[0]?.tulbur)
+                        ? r.tuukh[0].tulbur.reduce(
+                            (sum, p) => sum + Number(p?.dun || 0),
+                            0
+                          )
+                        : 0,
+                      0
+                    ),
+                },
+              ]}
+            />
+          </div>
+        ),
+        okText: t("Үргэлжлүүлэх"),
+        cancelText: t("Болих"),
+        onOk: showFinalConfirm,
+      });
+    } catch (_e) {
+      showFinalConfirm();
+    }
+  }, [
+    ajiltniiAjalAasBuukh,
+    tulburteiData,
+    tulburteiMutate,
+    tulburteiUnshijBaina,
+  ]);
 
   const columns = [
     {
@@ -825,6 +986,69 @@ function AjiltniiDelgerenguiTailan(
             className="w-full"
             placeholder="Ажилтны нэвтэрсэн цаг ачааллаж байна..."
           />
+
+          {/* {songogdsonCamera && (
+            <div className="mt-3 space-y-2">
+              <div className="text-sm font-medium text-gray-700">
+                Төлөх дүнтэй боловч төлөөгүй машинууд ({songogdsonCamera}):{" "}
+                {tulburteiUnshijBaina ? "..." : tulburteiRows.length}
+              </div>
+              {!tulburteiUnshijBaina && tulburteiRows.length > 0 && (
+                <Table
+                  size="small"
+                  rowKey={(r) =>
+                    r?._id || r?.mashiniiDugaar || JSON.stringify(r)
+                  }
+                  pagination={false}
+                  dataSource={tulburteiRows}
+                  columns={[
+                    {
+                      title: "№",
+                      width: 60,
+                      align: "center",
+                      render: (_v, _r, idx) => idx + 1,
+                    },
+                    {
+                      title: t("Машины дугаар"),
+                      dataIndex: "mashiniiDugaar",
+                      render: (v) => String(v || "").toUpperCase(),
+                    },
+                    {
+                      title: t("Төлөх дүн"),
+                      align: "right",
+                      render: (_v, r) =>
+                        formatNumber(
+                          r?.niitDun ?? r?.tuukh?.[0]?.tulukhDun ?? 0,
+                          0
+                        ),
+                    },
+                    {
+                      title: t("Орсон"),
+                      align: "center",
+                      render: (_v, r) => {
+                        const v = r?.tuukh?.[0]?.tsagiinTuukh?.[0]?.orsonTsag;
+                        return v ? moment(v).format("MM-DD HH:mm") : "";
+                      },
+                    },
+                    {
+                      title: t("Гарсан"),
+                      align: "center",
+                      render: (_v, r) => {
+                        const v = r?.tuukh?.[0]?.tsagiinTuukh?.[0]?.garsanTsag;
+                        return v ? moment(v).format("MM-DD HH:mm") : "";
+                      },
+                    },
+                    {
+                      title: t("Хугацаа/мин"),
+                      align: "right",
+                      render: (_v, r) =>
+                        formatNumber(r?.tuukh?.[0]?.niitKhugatsaa ?? 0, 0),
+                    },
+                  ]}
+                />
+              )}
+            </div>
+          )} */}
         </div>
 
         <div className="min-w-0 flex-1">

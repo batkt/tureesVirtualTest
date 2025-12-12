@@ -505,7 +505,7 @@ function camera({ token }) {
   useEffect(() => {
     var data = localStorage.getItem("CamerVal");
     data = JSON.parse(data);
-    if (!!data) {
+    if (Array.isArray(data) && data.length === 2) {
       setCamerVal(data);
     }
   }, []);
@@ -531,22 +531,41 @@ function camera({ token }) {
   };
 
   useEffect(() => {
-    if (cameraData[0] && !camerVal[0]) {
-      const ekhniiCamera = ekhniiCameraOlokh(cameraData[0]);
-      if (ekhniiCamera) {
-        cameraChange(ekhniiCamera, 1);
+    const treeHasValue = (treeData, value) => {
+      if (!value || !treeData || !Array.isArray(treeData)) return false;
+      for (const item of treeData) {
+        if (item?.value === value) return true;
+        if (item?.children && treeHasValue(item.children, value)) return true;
       }
-    }
-  }, [cameraData[0]]);
+      return false;
+    };
 
-  useEffect(() => {
-    if (cameraData[1] && !camerVal[1]) {
-      const ekhniiCamera = ekhniiCameraOlokh(cameraData[1]);
-      if (ekhniiCamera) {
-        cameraChange(ekhniiCamera, 2);
+     
+    if (!Array.isArray(cameraData?.[0]) || !Array.isArray(cameraData?.[1]))
+      return;
+
+     
+    if (cameraData[0].length > 0) {
+      const isValidIn = treeHasValue(cameraData[0], camerVal[0]);
+      if (!camerVal[0] || !isValidIn) {
+        const firstIn = ekhniiCameraOlokh(cameraData[0]);
+        if (firstIn && firstIn !== camerVal[0]) {
+          cameraChange(firstIn, 1);
+        }
       }
     }
-  }, [cameraData[1]]);
+
+     
+    if (cameraData[1].length > 0) {
+      const isValidOut = treeHasValue(cameraData[1], camerVal[1]);
+      if (!camerVal[1] || !isValidOut) {
+        const firstOut = ekhniiCameraOlokh(cameraData[1]);
+        if (firstOut && firstOut !== camerVal[1]) {
+          cameraChange(firstOut, 2);
+        }
+      }
+    }
+  }, [cameraData?.[0], cameraData?.[1], camerVal?.[0], camerVal?.[1]]);
 
   const {
     uilchluulegchGaralt,
@@ -1534,6 +1553,14 @@ function camera({ token }) {
                   {t("Төлбөртэй")}
                 </div>
                 <div
+                  onClick={() => setTuluvFilter("active")}
+                  className={`relative ${
+                    tuluvFilter === "active" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Идэвхтэй")}
+                </div>
+                <div
                   onClick={() => setTuluvFilter("tulugsun")}
                   className={`relative ${
                     tuluvFilter === "tulugsun" && "bg-green-500 text-white"
@@ -1587,8 +1614,14 @@ function camera({ token }) {
           const mur = parent.tuukh[0];
 
           let currentStatus = "";
+          const isActive =
+            mur?.tuluv === 0 &&
+            !mur?.tsagiinTuukh?.[0]?.garsanTsag &&
+            !mur?.garsanKhaalga;
           if (parent.turul === "Үнэгүй") {
             currentStatus = "unegui";
+          } else if (isActive) {
+            currentStatus = "active";
           } else if (
             (mur.tuluv === 0 ||
               parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
@@ -2398,36 +2431,93 @@ function camera({ token }) {
                 const isInFreePeriod =
                   hasExitTime && niitKhugatsaa && niitKhugatsaa <= 30;
 
-                // Only open payment modal if free period has passed or no exit time yet
                 if (!isInFreePeriod) {
-                  tulburTulyu(
-                    tuukh,
-                    mashinData._id,
-                    mashinData.mashiniiDugaar,
-                    mashinData?.niitDun ??
-                      tuukh?.tulukhDun ??
-                      mashinData?.tulukhDun ??
-                      0,
-                    0
-                  );
+                  uilchilgee(token)
+                    .get("/zogsoolUilchluulegch", {
+                      params: { query: { _id: mashinData._id } },
+                    })
+                    .then(({ data: freshData }) => {
+                      const fresh = freshData?.jagsaalt?.[0];
+                      if (fresh?.tuukh?.[0] && fresh?._id) {
+                        const haruulakhDun =
+                          fresh.niitDun ?? fresh.tuukh?.[0]?.tulukhDun ?? 0;
+                        tulburTulyu(
+                          fresh.tuukh[0],
+                          fresh._id,
+                          fresh.mashiniiDugaar,
+                          haruulakhDun,
+                          0
+                        );
+                      } else {
+                        tulburTulyu(
+                          tuukh,
+                          mashinData._id,
+                          mashinData.mashiniiDugaar,
+                          mashinData?.niitDun ?? tuukh?.tulukhDun ?? 0,
+                          0
+                        );
+                      }
+                    })
+                    .catch(() => {
+                      tulburTulyu(
+                        tuukh,
+                        mashinData._id,
+                        mashinData.mashiniiDugaar,
+                        mashinData?.niitDun ?? tuukh?.tulukhDun ?? 0,
+                        0
+                      );
+                    });
                 }
               } else if (data?.tuukh?.[0]) {
-                // Check if still in free period (30 minutes) - only if exit time exists and duration <= 30
                 const tuukh = data.tuukh[0];
                 const niitKhugatsaa = tuukh?.niitKhugatsaa;
                 const hasExitTime = !!tuukh?.tsagiinTuukh?.[0]?.garsanTsag;
                 const isInFreePeriod =
                   hasExitTime && niitKhugatsaa && niitKhugatsaa <= 30;
 
-                // Only open payment modal if free period has passed or no exit time yet
                 if (!isInFreePeriod) {
-                  tulburTulyu(
-                    tuukh,
-                    data._id,
-                    data.mashiniiDugaar,
-                    data?.niitDun ?? tuukh?.tulukhDun ?? data?.tulukhDun ?? 0,
-                    0
-                  );
+                  uilchilgee(token)
+                    .get("/zogsoolUilchluulegch", {
+                      params: {
+                        query: {
+                          mashiniiDugaar: data.mashiniiDugaar,
+                          "tuukh.0.garsanKhaalga": camerVal[1],
+                        },
+                        order: { createdAt: -1 },
+                        khuudasniiKhemjee: 1,
+                      },
+                    })
+                    .then(({ data: searchData }) => {
+                      const found = searchData?.jagsaalt?.[0];
+                      if (found?.tuukh?.[0] && found?._id) {
+                        const haruulakhDun =
+                          found.niitDun ?? found.tuukh?.[0]?.tulukhDun ?? 0;
+                        tulburTulyu(
+                          found.tuukh[0],
+                          found._id,
+                          found.mashiniiDugaar,
+                          haruulakhDun,
+                          0
+                        );
+                      } else {
+                        tulburTulyu(
+                          tuukh,
+                          data._id,
+                          data.mashiniiDugaar,
+                          data?.niitDun ?? tuukh?.tulukhDun ?? 0,
+                          0
+                        );
+                      }
+                    })
+                    .catch(() => {
+                      tulburTulyu(
+                        tuukh,
+                        data._id,
+                        data.mashiniiDugaar,
+                        data?.niitDun ?? tuukh?.tulukhDun ?? 0,
+                        0
+                      );
+                    });
                 }
               }
             }
@@ -2557,7 +2647,6 @@ function camera({ token }) {
 
     if (turul) {
       if (turul === "Төлбөртэй") {
-        // Show records with payment (has payment records)
         filtered = filtered.filter((parent) => {
           const mur = parent.tuukh?.[0];
           return mur?.tulbur?.length > 0;
@@ -2569,9 +2658,9 @@ function camera({ token }) {
             if (mur.tulukhDun > 0) dunTuluv = true;
           });
           const mur = parent.tuukh?.[0];
-          // Идэвхтэй means active - has calculated amount but not paid yet, and no payment records
+
           const hasPayment = mur?.tulbur?.length > 0;
-          // Must not be free, must have calculated amount, must not be paid, must not have payment records
+
           return (
             parent.turul !== "Үнэгүй" &&
             mur?.tuluv !== -1 &&
@@ -2597,44 +2686,38 @@ function camera({ token }) {
 
       let currentStatus = "";
 
-      // Check payment status first
       const hasPayment = mur?.tulbur?.length > 0;
 
-      // Check if in free period (30 minutes)
       const niitKhugatsaa = mur?.niitKhugatsaa;
       const hasExitTime = !!mur?.tsagiinTuukh?.[0]?.garsanTsag;
       const isInFreePeriod =
         hasExitTime && niitKhugatsaa && niitKhugatsaa <= 30;
+      const isActive = mur?.tuluv === 0 && !hasExitTime && !mur?.garsanKhaalga;
 
-      // Priority order: paid status > payment records > free (including free period) > violation > active
-      if (mur?.tuluv === 1 || mur?.tuluv === 2) {
-        // Fully paid
+      if (isActive) {
+        currentStatus = "active";
+      } else if (mur?.tuluv === 1 || mur?.tuluv === 2) {
         currentStatus = "tulugsun";
       } else if (hasPayment) {
-        // Has payment records (but not fully paid yet)
         currentStatus = "tulburtei";
       } else if (
         parent.turul === "Үнэгүй" ||
         mur?.tuluv === -1 ||
         isInFreePeriod
       ) {
-        // Free - includes records in free period (≤30 minutes)
         currentStatus = "unegui";
       } else if (
         !!parent.zurchil &&
         parent.zurchil !== "" &&
         mur?.tuluv === -2
       ) {
-        // Violation
         currentStatus = "zurchiltei";
       } else if (
         (mur.tuluv === 0 || parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
         dunTuluv
       ) {
-        // Active - has calculated amount but not paid yet and not in free period
         currentStatus = "idevekhitei";
       } else if (mur?.tuluv === 0 && !dunTuluv) {
-        // No amount calculated, not paid
         currentStatus = "unegui";
       }
 
@@ -2671,8 +2754,14 @@ function camera({ token }) {
 
           let currentStatus = "";
 
+          const hasExitTime = !!mur?.tsagiinTuukh?.[0]?.garsanTsag;
+          const isActive =
+            mur?.tuluv === 0 && !hasExitTime && !mur?.garsanKhaalga;
+
           if (parent.turul === "Үнэгүй" || mur?.tuluv === -1) {
             currentStatus = "unegui";
+          } else if (isActive) {
+            currentStatus = "active";
           } else if (
             (mur.tuluv === 0 ||
               parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&

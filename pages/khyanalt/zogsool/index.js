@@ -1873,22 +1873,37 @@ function Zogsool({ token }) {
                                 )
                               )
                             ).sort();
-                            const paymentColumns = paymentTypes.map((type) => ({
-                              title: tulburKhurvuulekh(type),
-                              dataIndex: "tulbur",
-                              __style__: { h: "right" },
-                              __numFmt__: "#,##0.00",
-                              __cellType__: "TypeNumeric",
-                              render(value) {
-                                if (!value || value.length === 0) return 0;
-                                return value
-                                  .filter((p) => p.turul === type)
-                                  .reduce(
-                                    (sum, curr) => sum + Number(curr?.dun || 0),
-                                    0
-                                  );
-                              },
-                            }));
+
+                            const kharagdakhTulbur = paymentTypes.filter(
+                              (type) =>
+                                rows.some((row) =>
+                                  (row?.tulbur || []).some(
+                                    (p) =>
+                                      p?.turul === type &&
+                                      Number(p?.dun || 0) !== 0
+                                  )
+                                )
+                            );
+
+                            const paymentColumns = kharagdakhTulbur.map(
+                              (type) => ({
+                                title: tulburKhurvuulekh(type),
+                                dataIndex: "tulbur",
+                                __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
+                                render(value) {
+                                  if (!value || value.length === 0) return 0;
+                                  return value
+                                    .filter((p) => p.turul === type)
+                                    .reduce(
+                                      (sum, curr) =>
+                                        sum + Number(curr?.dun || 0),
+                                      0
+                                    );
+                                },
+                              })
+                            );
                             const totalPaymentColumn = {
                               title: t("Нийт төлбөр"),
                               dataIndex: "tulbur",
@@ -2036,6 +2051,37 @@ function Zogsool({ token }) {
                                 },
                               ],
                             };
+
+                            const kharagdakhTulbur = Object.entries(
+                              totals.paymentTotals
+                            )
+                              .filter(([_type, sum]) => Number(sum || 0) !== 0)
+                              .map(([type]) => type)
+                              .sort();
+
+                            const khurvukhBaganuud =
+                              kharagdakhTulbur.map((type) => ({
+                                title: tulburKhurvuulekh(type),
+                                dataIndex: "tuukh",
+                                __style__: { h: "right" },
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
+                                render(v, record) {
+                                  const payments = Array.isArray(
+                                    record?.tuukh?.[0]?.tulbur
+                                  )
+                                    ? record.tuukh[0].tulbur
+                                    : [];
+                                  if (!payments.length) return 0;
+                                  return payments
+                                    .filter((p) => p?.turul === type)
+                                    .reduce(
+                                      (sum, curr) =>
+                                        sum + Number(curr?.dun || 0),
+                                      0
+                                    );
+                                },
+                              }));
                             excel.addSheet("Жагсаалт").addColumns([
                               {
                                 title: "№",
@@ -2163,349 +2209,7 @@ function Zogsool({ token }) {
                                   return v || 0;
                                 },
                               },
-                              {
-                                title: t("Бэлэн"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "belen")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Зээл"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "zeel")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Дансаар"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "khariltsakh"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Карт"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) =>
-                                              e.turul === "khaan" ||
-                                              e.turul === "tdb" ||
-                                              e.turul === "khas" ||
-                                              e.turul === "golomt" ||
-                                              e.turul === "kapitron" ||
-                                              e.turul === "tur"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Токи"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "toki")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Киоск"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "kiosk")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Хөнгөлөлт"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "khungulult"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Fitness"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "Fitness")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Соёолж Ц/Д"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "Соёолж Ц/Д"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Qpay"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "qpay")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Дотор QR"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "DotorQR")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Гадаа QR"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "GadaaQR")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Банк QR"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "bankQR")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Хэтэвч"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "tseneglelt"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Пос бэлэн"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "PosBelen"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Пос карт"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter((e) => e.turul === "PosKart")
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Пос дансаар"),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, p, i) {
-                                  return (
-                                    (v[0]?.tulbur?.length > 0
-                                      ? v[0]?.tulbur
-                                          ?.filter(
-                                            (e) => e.turul === "PosKhariltsakh"
-                                          )
-                                          .reduce(
-                                            (a, b) => a + Number(b.dun || 0),
-                                            0
-                                          )
-                                      : 0) || 0
-                                  );
-                                },
-                              },
+                              ...khurvukhBaganuud,
                               {
                                 title: "Төлөв",
                                 dataIndex: "tuukh",

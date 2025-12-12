@@ -631,7 +631,7 @@ function GereeBaiguulakh({ token }) {
             )}
             <div className="flex w-full flex-col items-center justify-center gap-10">
               <div>
-                {current === 0 && alkhamiinGereeniiZagvar?.ner && (
+                {!!alkhamiinGereeniiZagvar?.ner && (
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div
@@ -676,8 +676,7 @@ function GereeBaiguulakh({ token }) {
                   );
                 })}
 
-                {current === 0 &&
-                  alkhamiinGereeniiZagvar?.zuunKhul &&
+                {alkhamiinGereeniiZagvar?.zuunKhul &&
                   alkhamiinGereeniiZagvar?.baruunKhul && (
                     <div className="mt-8 grid grid-cols-2 gap-4">
                       <div
@@ -744,7 +743,7 @@ function GereeBaiguulakh({ token }) {
                 })}
               {baiguullaga?.tokhirgoo?.aktAshiglakhEsekh === true && (
                 <div>
-                  {current === 0 && alkhamiinAktiinZagvar?.ner && (
+                  {!!alkhamiinAktiinZagvar?.ner && (
                     <>
                       <div className="grid grid-cols-2 gap-4">
                         <div
@@ -789,8 +788,7 @@ function GereeBaiguulakh({ token }) {
                     );
                   })}
 
-                  {current === 0 &&
-                    alkhamiinAktiinZagvar?.zuunKhul &&
+                  {alkhamiinAktiinZagvar?.zuunKhul &&
                     alkhamiinAktiinZagvar?.baruunKhul && (
                       <div className="mt-8 grid grid-cols-2 gap-4">
                         <div
