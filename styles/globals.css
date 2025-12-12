@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  /* next-themes uses `.dark` on the <html> element (attribute="class") */
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-white text-gray-900 dark:bg-black dark:text-gray-100;
+  }
+
+  /* Default to inheriting the current theme text color unless a component overrides it */
+  :where(p, span, div, li, td, th, h1, h2, h3, h4, h5, h6) {
+    color: inherit;
+  }
+}
+
 @layer utilities {
   .large-size {
     width: calc(100vw - 11rem);
@@ -327,7 +347,7 @@ audio {
 }
 
 label {
-  @apply dark:text-black !important;
+  @apply text-gray-900 dark:text-gray-200 !important;
 }
 
 audio::-webkit-media-controls-mute-button {
@@ -1117,11 +1137,11 @@ input:-webkit-autofill {
 }
 
 .ant-radio-button-wrapper {
-  @apply dark:bg-gray-800 dark:text-gray-50;
+  @apply dark:bg-gray-800 dark:text-gray-50 !important;
 }
 
 .ant-radio-button-wrapper-checked {
-  @apply dark:bg-gray-800 !important;
+  @apply dark:bg-gray-800 dark:text-gray-50 !important;
 }
 
 .ant-picker-clear {

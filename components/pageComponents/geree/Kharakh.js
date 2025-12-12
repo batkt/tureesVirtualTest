@@ -250,10 +250,10 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                 return (
                   <div
                     key={`alkhamiinGereeniiZagvar${index}`}
-                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <div
-                      className="w-full"
+                      className="w-full [&_*]:!text-black dark:[&_*]:!text-white"
                       dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                     />
                   </div>
@@ -262,11 +262,13 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               {gereeniiZagvar?.ner && (
                 <div className="grid grid-cols-2 gap-4">
                   <div
+                    className="[&_*]:!text-black dark:[&_*]:!text-white"
                     dangerouslySetInnerHTML={{
                       __html: gereeniiZagvar?.zuunKhul,
                     }}
                   />
                   <div
+                    className="[&_*]:!text-black dark:[&_*]:!text-white"
                     dangerouslySetInnerHTML={{
                       __html: gereeniiZagvar?.baruunKhul,
                     }}
@@ -285,7 +287,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               return (
                 <div
                   key={i}
-                  className="flex w-full break-before-page flex-col justify-center space-y-1 bg-white pl-[24mm] pr-[14mm] text-black shadow-lg dark:text-white print:shadow-none"
+                  className="flex w-full break-before-page flex-col justify-center space-y-1 bg-white pl-[24mm] pr-[14mm] text-black shadow-lg dark:bg-gray-800 dark:text-white print:shadow-none"
                   style={{ width: "210mm", height: "200mm" }}
                 >
                   <div className="font flex gap-3 text-lg">
@@ -326,7 +328,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
             </div>
 
             <div
-              className=" flex w-full break-before-page flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg dark:text-white print:shadow-none"
+              className=" flex w-full break-before-page flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg dark:bg-gray-800 dark:text-white print:shadow-none"
               style={{ width: "210mm" }}
             >
               {akt?.ner && (
@@ -349,10 +351,10 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                 return (
                   <div
                     key={`alkhamiinGereeniiZagvar${index}`}
-                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-100 "
+                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     <div
-                      className="w-full"
+                      className="w-full [&_*]:!text-black dark:[&_*]:!text-white"
                       dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                     />
                   </div>
@@ -361,11 +363,13 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               {akt?.ner && (
                 <div className="grid grid-cols-2 gap-4">
                   <div
+                    className="[&_*]:!text-black dark:[&_*]:!text-white"
                     dangerouslySetInnerHTML={{
                       __html: akt?.zuunKhul,
                     }}
                   />
                   <div
+                    className="[&_*]:!text-black dark:[&_*]:!text-white"
                     dangerouslySetInnerHTML={{
                       __html: akt?.baruunKhul,
                     }}
@@ -382,13 +386,13 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               PDF
             </div>
 
-            <div className="flex w-full flex-col space-y-4 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg dark:text-white print:shadow-none">
+            <div className="flex w-full flex-col space-y-4 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg dark:bg-gray-800 dark:text-white print:shadow-none">
               {gereeMedeelel.zurguud.map((mur) => (
                 <img
                   key={mur}
                   src={`${url}/zuragAvya/jpg/${baiguullaga?._id}/${mur}`}
                   alt="zurag"
-                  className="max-w-full rounded-lg border"
+                  className="max-w-full rounded-lg border border-gray-200 dark:border-gray-700"
                 />
               ))}
             </div>

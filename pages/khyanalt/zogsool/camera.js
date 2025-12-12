@@ -367,6 +367,35 @@ function camera({ token }) {
     return zogsool;
   }, [parkingJagsaalt, camerVal]);
 
+  const uneguiKhugatsaaMin = useMemo(() => {
+    const raw = songogdzonZogsool?.mashinGargakhKhugatsaa;
+    const n = Number(raw);
+    return Number.isFinite(n) && n > 0 ? n : 30;
+  }, [songogdzonZogsool?.mashinGargakhKhugatsaa]);
+
+  const tuukhiinKhugatsaaMin = useCallback((tuukh) => {
+    if (!tuukh) return null;
+    const niitKhugatsaa = tuukh?.niitKhugatsaa;
+    if (Number.isFinite(Number(niitKhugatsaa)) && Number(niitKhugatsaa) >= 0) {
+      return Number(niitKhugatsaa);
+    }
+    const orsonTsag = tuukh?.tsagiinTuukh?.[0]?.orsonTsag;
+    const garsanTsag = tuukh?.tsagiinTuukh?.[0]?.garsanTsag || new Date();
+    if (!orsonTsag) return null;
+    return moment(garsanTsag).diff(moment(orsonTsag), "minutes");
+  }, []);
+
+  const isInUneguiKhugatsaa = useCallback(
+    (tuukh) => {
+      const minutes = tuukhiinKhugatsaaMin(tuukh);
+      return (
+        Number.isFinite(Number(minutes)) &&
+        Number(minutes) <= uneguiKhugatsaaMin
+      );
+    },
+    [tuukhiinKhugatsaaMin, uneguiKhugatsaaMin]
+  );
+
   const [isPaying, setIsPaying] = React.useState(false);
 
   const query = useMemo(() => {
@@ -540,11 +569,9 @@ function camera({ token }) {
       return false;
     };
 
-     
     if (!Array.isArray(cameraData?.[0]) || !Array.isArray(cameraData?.[1]))
       return;
 
-     
     if (cameraData[0].length > 0) {
       const isValidIn = treeHasValue(cameraData[0], camerVal[0]);
       if (!camerVal[0] || !isValidIn) {
@@ -555,7 +582,6 @@ function camera({ token }) {
       }
     }
 
-     
     if (cameraData[1].length > 0) {
       const isValidOut = treeHasValue(cameraData[1], camerVal[1]);
       if (!camerVal[1] || !isValidOut) {
@@ -2302,6 +2328,16 @@ function camera({ token }) {
               zurchilteiMashinMsgilgeekh(body?.mashiniiDugaar);
             }
 
+            if (!garakhCamera && !searchUtga.current?.value) {
+              const pageSize = uilchluulegchGaralt?.khuudasniiKhemjee || 10;
+              const total = uilchluulegchGaralt?.niitMur || 0;
+              const targetPage = Math.max(1, Math.ceil((total + 1) / pageSize));
+              setUilchluulegchKhuudaslalt((e) => ({
+                ...e,
+                khuudasniiDugaar: targetPage,
+              }));
+            }
+
             onRefresh();
 
             if (garakhCamera) {
@@ -2320,6 +2356,10 @@ function camera({ token }) {
                       .then(({ data: freshData }) => {
                         const fresh = freshData?.jagsaalt?.[0];
                         if (fresh?.tuukh?.[0] && fresh?._id) {
+                          // Don't open payment modal if it's still within free-time window
+                          if (isInUneguiKhugatsaa(fresh.tuukh[0])) {
+                            return;
+                          }
                           const haruulakhDun =
                             fresh.niitDun ?? fresh.tuukh?.[0]?.tulukhDun ?? 0;
 
@@ -2356,6 +2396,10 @@ function camera({ token }) {
                       .then(({ data: searchData }) => {
                         const found = searchData?.jagsaalt?.[0];
                         if (found?.tuukh?.[0] && found?._id) {
+                          // Don't open payment modal if it's still within free-time window
+                          if (isInUneguiKhugatsaa(found.tuukh[0])) {
+                            return;
+                          }
                           const haruulakhDun =
                             found.niitDun ?? found.tuukh?.[0]?.tulukhDun ?? 0;
 
@@ -2424,12 +2468,22 @@ function camera({ token }) {
                 mashinData?._id &&
                 mashinData?.mashiniiDugaar
               ) {
-                // Check if still in free period (30 minutes) - only if exit time exists and duration <= 30
                 const tuukh = mashinData.tuukh[0];
                 const niitKhugatsaa = tuukh?.niitKhugatsaa;
-                const hasExitTime = !!tuukh?.tsagiinTuukh?.[0]?.garsanTsag;
+                const orsonTsag = tuukh?.tsagiinTuukh?.[0]?.orsonTsag;
+                const garsanTsag =
+                  tuukh?.tsagiinTuukh?.[0]?.garsanTsag || new Date();
+                const computedMin =
+                  Number.isFinite(Number(niitKhugatsaa)) &&
+                  Number(niitKhugatsaa) >= 0
+                    ? Number(niitKhugatsaa)
+                    : orsonTsag
+                    ? moment(garsanTsag).diff(moment(orsonTsag), "minutes")
+                    : null;
+
                 const isInFreePeriod =
-                  hasExitTime && niitKhugatsaa && niitKhugatsaa <= 30;
+                  Number.isFinite(Number(computedMin)) &&
+                  Number(computedMin) <= uneguiKhugatsaaMin;
 
                 if (!isInFreePeriod) {
                   uilchilgee(token)
@@ -2471,9 +2525,20 @@ function camera({ token }) {
               } else if (data?.tuukh?.[0]) {
                 const tuukh = data.tuukh[0];
                 const niitKhugatsaa = tuukh?.niitKhugatsaa;
-                const hasExitTime = !!tuukh?.tsagiinTuukh?.[0]?.garsanTsag;
+                const orsonTsag = tuukh?.tsagiinTuukh?.[0]?.orsonTsag;
+                const garsanTsag =
+                  tuukh?.tsagiinTuukh?.[0]?.garsanTsag || new Date();
+                const computedMin =
+                  Number.isFinite(Number(niitKhugatsaa)) &&
+                  Number(niitKhugatsaa) >= 0
+                    ? Number(niitKhugatsaa)
+                    : orsonTsag
+                    ? moment(garsanTsag).diff(moment(orsonTsag), "minutes")
+                    : null;
+
                 const isInFreePeriod =
-                  hasExitTime && niitKhugatsaa && niitKhugatsaa <= 30;
+                  Number.isFinite(Number(computedMin)) &&
+                  Number(computedMin) <= uneguiKhugatsaaMin;
 
                 if (!isInFreePeriod) {
                   uilchilgee(token)
@@ -2691,7 +2756,9 @@ function camera({ token }) {
       const niitKhugatsaa = mur?.niitKhugatsaa;
       const hasExitTime = !!mur?.tsagiinTuukh?.[0]?.garsanTsag;
       const isInFreePeriod =
-        hasExitTime && niitKhugatsaa && niitKhugatsaa <= 30;
+        hasExitTime &&
+        Number.isFinite(Number(niitKhugatsaa)) &&
+        Number(niitKhugatsaa) <= uneguiKhugatsaaMin;
       const isActive = mur?.tuluv === 0 && !hasExitTime && !mur?.garsanKhaalga;
 
       if (isActive) {
@@ -2725,14 +2792,16 @@ function camera({ token }) {
     });
   }, [uilchluulegchGaralt?.jagsaalt, tuluvFilter, turul]);
 
-  const filteredData = useMemo(
-    () => ({
+  const filteredData = useMemo(() => {
+    const hasClientFilter = !!turul || !!tuluvFilter;
+    if (!hasClientFilter) return uilchluulegchGaralt;
+    return {
       ...uilchluulegchGaralt,
       jagsaalt: filteredJagsaalt,
-      niitMur: filteredJagsaalt.length,
-    }),
-    [uilchluulegchGaralt, filteredJagsaalt]
-  );
+
+      niitMur: uilchluulegchGaralt?.niitMur ?? filteredJagsaalt.length,
+    };
+  }, [uilchluulegchGaralt, filteredJagsaalt, turul, tuluvFilter]);
 
   const tableSummary = useMemo(() => {
     if (!tuluvFilter && uilchluulegchGaralt?.niitDun !== undefined) {
@@ -3776,8 +3845,12 @@ function camera({ token }) {
                                             ? v?.[0]?.uneguiGarsan
                                             : !!v?.[0]?.tsagiinTuukh[0]
                                                 ?.garsanTsag &&
-                                              v?.[0]?.niitKhugatsaa <= 30
-                                            ? t("30 мин")
+                                              Number.isFinite(
+                                                Number(v?.[0]?.niitKhugatsaa)
+                                              ) &&
+                                              Number(v?.[0]?.niitKhugatsaa) <=
+                                                uneguiKhugatsaaMin
+                                            ? minToHour(uneguiKhugatsaaMin)
                                             : t(parent.zurchil);
                                       },
                                     },
