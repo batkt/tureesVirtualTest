@@ -637,104 +637,120 @@ function camera({ token }) {
   }, [tuluvFilter]);
 
   useEffect(() => {
-    socket().on(`zogsool`, (zogsool) => {
-      let uilchluulegch = zogsool;
+    if (!baiguullaga?._id || !parkingJagsaalt) return;
+    const s = socket();
+    const cleanup = [];
+    const getCams = (type) =>
+      parkingJagsaalt?.flatMap((item) =>
+        item?.khaalga
+          ?.filter((k) => k.turul === type)
+          ?.flatMap((k) => k.camera?.map((c) => c.cameraIP) || [])
+      ) || [];
 
+    const orohCams = getCams("Орох");
+    const garahCams = getCams("Гарах");
+    console.log("orohCams", orohCams);
+    console.log("garahCams", garahCams);
+    const handleOroh = (data) => {
+      if (!data) return;
+
+      const dugaar = data.mashiniiDugaar?.replace("???", "");
+      if (!dugaar) return;
+
+      const url = `/sambar/${data.cameraIP}/${dugaar}/${moment().format(
+        "HH:mm:ss"
+      )}`;
+
+      zogsoolUilchilgee()
+        .get(url)
+        .catch(() => {});
+
+      if (!data.oruulakhguiEsekh) {
+        khaalgaNeey(data.cameraIP);
+        onRefresh();
+      }
+
+      if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
+        zurchilteiMashinMsgilgeekh(dugaar);
+    };
+    const handleGarah = (u) => {
+      if (!u) return;
+
+      let dugaar = u.mashiniiDugaar?.replace("???", "");
+      const garsanKhaalga = u?.tuukh?.[0]?.garsanKhaalga;
+      let niit = u?.niitDun;
+      if (u?.tuukh?.[0]?.tulbur?.length > 0) {
+        niit =
+          u.niitDun -
+          u.tuukh.reduce(
+            (s, t) => s + t?.tulbur?.reduce((a, b) => a + (b?.dun || 0), 0),
+            0
+          );
+      }
+      if (niit < 0) niit = 0;
+
+      let url = `/sambar/${garsanKhaalga}/${dugaar}/${niit}`;
       if (
-        uilchluulegch &&
-        uilchluulegch?.baiguullagiinId === baiguullaga?._id
+        baiguullaga?._id === "65cf2f027fbc788f85e50b90" ||
+        baiguullaga?._id === "6549bbe0d437e6d25d557341"
       ) {
-        var yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
-          "???",
-          ""
-        );
-        if (
-          !!uilchluulegch?.khaalgaTurul &&
-          uilchluulegch?.khaalgaTurul === "oroh" &&
-          !!uilchluulegch?.cameraIP
-        ) {
-          var url = `/sambar/${
-            uilchluulegch?.cameraIP
-          }/${yanzalsanMashiniiDugaar}/${moment().format("HH:mm:ss")}`;
+        const start = moment(u?.createdAt).format("YYYY-MM-DD HH:mm:ss");
+        const end = moment().format("YYYY-MM-DD HH:mm:ss");
 
-          if (!!yanzalsanMashiniiDugaar)
-            zogsoolUilchilgee()
-              .get(url)
-              .then((res) => {})
-              .catch((err) => {});
-          if (!uilchluulegch?.oruulakhguiEsekh) {
-            khaalgaNeey(uilchluulegch?.cameraIP);
-            onRefresh();
-          }
-          if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
-            zurchilteiMashinMsgilgeekh(yanzalsanMashiniiDugaar);
-        } else {
-          const garsanKhaalga = uilchluulegch?.tuukh?.[0]?.garsanKhaalga;
-          // var yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
-          //   "???",
-          //   ""
-          // );
-          let yanzalsanNiitDun = uilchluulegch?.niitDun;
-          if (uilchluulegch?.tuukh?.[0]?.tulbur?.length > 0) {
-            yanzalsanNiitDun =
-              uilchluulegch?.niitDun -
-              uilchluulegch?.tuukh?.reduce(
-                (sav, niit) =>
-                  sav + niit?.tulbur?.reduce((a, b) => a + b?.dun, 0),
-                0
-              );
-          }
-          if (yanzalsanNiitDun < 0) yanzalsanNiitDun = 0;
-          var url = `/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`;
-          if (
-            baiguullaga?._id == "65cf2f027fbc788f85e50b90" ||
-            baiguullaga?._id == "6549bbe0d437e6d25d557341"
-          ) {
-            var ekhlekhOgnoo = moment(uilchluulegch?.createdAt).format(
-              "YYYY-MM-DD HH:mm:ss"
-            );
-            var duusakhOgnoo = moment().format("YYYY-MM-DD HH:mm:ss");
-            url = `/sambarOgnootoi/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}/${ekhlekhOgnoo}/${duusakhOgnoo}`;
-          }
+        url = `/sambarOgnootoi/${garsanKhaalga}/${dugaar}/${niit}/${start}/${end}`;
+      }
+      if (u?.turul === "Үнэгүй" || niit === 0) {
+        if (u?.tuukh?.[0]?.garsanKhaalga) {
+          toololtMutate();
+          zogsoolTusBuriinTooMutate();
 
-          if (
-            uilchluulegch?.turul === "Үнэгүй" ||
-            // (uilchluulegch?.tuukh &&
-            //   uilchluulegch?.tuukh?.length > 0 &&
-            // dunTuluv &&
-            yanzalsanNiitDun === 0
-            // )
-          ) {
-            if (
-              uilchluulegch?.tuukh &&
-              uilchluulegch?.tuukh?.length > 0 &&
-              !!uilchluulegch?.tuukh?.[0]?.garsanKhaalga
-            ) {
-              toololtMutate();
-              zogsoolTusBuriinTooMutate();
-              if (songogdzonZogsool?.garakhKhaalgaGarTokhirgoo !== true) {
-                khaalgaNeey(uilchluulegch?.tuukh?.[0]?.garsanKhaalga);
-              }
-            }
+          if (songogdzonZogsool?.garakhKhaalgaGarTokhirgoo !== true) {
+            khaalgaNeey(u.tuukh[0].garsanKhaalga);
           }
-          if (!!yanzalsanMashiniiDugaar)
-            zogsoolUilchilgee()
-              .get(url)
-              .then((res) => {
-                if (res) {
-                }
-              })
-              .catch((err) => {});
-
-          onRefresh();
         }
       }
-    });
-
-    return () => {
-      socket().off(`zogsool`);
+      if (!!dugaar) {
+        zogsoolUilchilgee()
+          .get(url)
+          .catch(() => {});
+      }
+      onRefresh();
     };
-  }, [baiguullaga]);
+    const handleGarahTulsun = (data) => {
+      if (!data) return;
+      zogsoolUilchilgee()
+        .get(
+          `/sambar/${data.cameraIP}/${data.mashiniiDugaar?.replace(
+            "???",
+            ""
+          )}/Tulugdluu`
+        )
+        .catch(() => {});
+
+      khaalgaNeey(data.cameraIP);
+      onRefresh();
+    };
+    orohCams.forEach((camIP) => {
+      const eventName = `zogsoolOroh${baiguullaga._id}${camIP}`;
+      s.on(eventName, handleOroh);
+      cleanup.push(() => s.off(eventName, handleOroh));
+    });
+    garahCams.forEach((camIP) => {
+      const e1 = `zogsoolGarah${baiguullaga._id}${camIP}`;
+      const e2 = `zogsoolGarahTulsun${baiguullaga._id}${camIP}`;
+
+      s.on(e1, handleGarah);
+      s.on(e2, handleGarahTulsun);
+
+      cleanup.push(() => s.off(e1, handleGarah));
+      cleanup.push(() => s.off(e2, handleGarahTulsun));
+    });
+    return () => cleanup.forEach((fn) => fn());
+  }, [
+    baiguullaga,
+    parkingJagsaalt,
+    songogdzonZogsool?.garakhKhaalgaGarTokhirgoo,
+  ]);
 
   const tooQuery = useMemo(() => {
     const todayStart = moment().startOf("day").toDate();
