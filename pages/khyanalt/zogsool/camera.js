@@ -601,7 +601,12 @@ function camera({ token }) {
     isValidating,
   } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
   useEffect(() => {
-    if (!songogdzonZogsool?.gadaaStickerAshiglakhEsekh) return;
+    if (
+      !baiguullaga?._id ||
+      !parkingJagsaalt ||
+      !songogdzonZogsool?.gadaaStickerAshiglakhEsekh
+    )
+      return;
     if (!socketRef.current) {
       socketRef.current = socket();
     }
@@ -630,7 +635,7 @@ function camera({ token }) {
       onRefresh();
     };
     garahCams.forEach((camIP) => {
-      const e2 = `qpayMobileSdk${baiguullaga._id}${camIP}`;
+      const e2 = `qpayMobileSdk${baiguullaga?._id}${camIP}`;
       s.on(e2, handleGarahTulsun);
       cleanup.push(() => s.off(e2, handleGarahTulsun));
     });
