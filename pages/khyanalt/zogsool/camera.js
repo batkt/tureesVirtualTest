@@ -2967,7 +2967,7 @@ function camera({ token }) {
                     className="mt-3"
                     scroll={{ y: "calc(100vh / 4.5)" }}
                     size="small"
-                    loading={dansKhuleelt}
+                    loading={false}
                     dataSource={dansniiKhuulgaGaralt?.jagsaalt}
                     columns={baganuud}
                   />
@@ -3982,7 +3982,7 @@ function camera({ token }) {
 
             <div>
               <ZogsoolCameraTable
-                isValidating={isValidating}
+                isValidating={false}
                 uilchluulegchGaralt={filteredData}
                 columns={columns}
                 onChangeTable={onChangeTable}
