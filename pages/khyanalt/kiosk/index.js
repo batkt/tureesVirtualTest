@@ -207,28 +207,30 @@ const Kiosk = () => {
   }, [register]);
 
   useEffect(() => {
-    if (drawerOngoikh) {
-      const timer = setInterval(() => {
-        setSeconds((prevSeconds) => {
-          if (prevSeconds > 0) {
-            return prevSeconds - 1;
+    if (!drawerOngoikh) return;
+
+    const timer = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if (prevSeconds > 0) {
+          return prevSeconds - 1;
+        }
+
+        setMinutes((prevMinutes) => {
+          if (prevMinutes > 0) {
+            return prevMinutes - 1;
           } else {
-            if (minutes > 0) {
-              setMinutes((prevMinutes) => prevMinutes - 1);
-              return 59;
-            } else {
-              clearInterval(timer);
-              if (onTimeout && typeof onTimeout === "function") {
-                onTimeout();
-              }
-              return 0;
-            }
+            clearInterval(timer);
+            onTimeout?.();
+            return 0;
           }
         });
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  }, [minutes, drawerOngoikh]);
+
+        return 59;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [drawerOngoikh]);
 
   useEffect(() => {
     if (

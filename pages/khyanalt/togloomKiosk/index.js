@@ -340,28 +340,30 @@ const TogloomKiosk = () => {
 
   useEffect(() => {
     setTsonkhniiId("66ab276bd5a5012b78e05f9e");
-    if (drawerOngoikh) {
-      const timer = setInterval(() => {
-        setSeconds((prevSeconds) => {
-          if (prevSeconds > 0) {
-            return prevSeconds - 1;
+    if (!drawerOngoikh) return;
+
+    const timer = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if (prevSeconds > 0) {
+          return prevSeconds - 1;
+        }
+
+        setMinutes((prevMinutes) => {
+          if (prevMinutes > 0) {
+            return prevMinutes - 1;
           } else {
-            if (minutes > 0) {
-              setMinutes((prevMinutes) => prevMinutes - 1);
-              return 59;
-            } else {
-              clearInterval(timer);
-              if (onTimeout && typeof onTimeout === "function") {
-                onTimeout();
-              }
-              return 0;
-            }
+            clearInterval(timer);
+            onTimeout?.();
+            return 0;
           }
         });
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  }, [minutes, drawerOngoikh]);
+
+        return 59;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [drawerOngoikh]);
 
   function onTimeout() {
     setDrawerOngoikh(false);
@@ -708,7 +710,6 @@ const TogloomKiosk = () => {
             </div>
             <div className="mt-16 flex w-full justify-center">
               <div className="h-[450px] w-[450px] rounded-3xl bg-[#E9E9E9]">
-                
                 <img
                   className="mb-5 w-full p-5"
                   src={`data:image/png;base64,${qpayerTulukh?.qr_image}`}
@@ -851,7 +852,6 @@ const TogloomKiosk = () => {
               {t("Амжилттай төлсөн")}
             </div>
             <div className="mt-16 flex w-full justify-center">
-              
               {eBarimt?.qrData && (
                 <div className="rounded-45 h-[450px] w-[450px] bg-[#E9E9E9]">
                   <QRCode
@@ -867,10 +867,7 @@ const TogloomKiosk = () => {
                   <div className="fixed flex justify-center">
                     {t("Сугалааны дугаар")}
                   </div>
-                  <div className="flex justify-end">
-                    
-                    {eBarimt?.lottery}
-                  </div>
+                  <div className="flex justify-end">{eBarimt?.lottery}</div>
                 </div>
                 <div className="mt-5">
                   <div className="fixed flex justify-center">
@@ -923,7 +920,6 @@ const TogloomKiosk = () => {
               {t("Байгууллагын регистр оруулна уу")}
             </div>
             <div className="mt-24 flex justify-center text-5xl font-bold text-black">
-             
               {baiguullagaNer?.name}
             </div>
             <div className="mt-10 flex justify-center">

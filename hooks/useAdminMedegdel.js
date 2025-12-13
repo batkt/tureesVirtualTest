@@ -445,14 +445,19 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
   ]);
 
   useEffect(() => {
-    if (medegdelAdminCount > 0) {
-      const interval = setInterval(() => {
-        setAnimateMail(true);
-        setTimeout(() => setAnimateMail(false), 3000);
-      }, 5000);
+    if (medegdelAdminCount <= 0) return;
 
-      return () => clearInterval(interval);
-    }
+    const interval = setInterval(() => {
+      setAnimateMail(true);
+
+      const timeout = setTimeout(() => {
+        setAnimateMail(false);
+      }, 3000);
+
+      return () => clearTimeout(timeout);
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [medegdelAdminCount]);
 
   return {
