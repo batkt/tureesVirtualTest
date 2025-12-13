@@ -287,6 +287,7 @@ function camera({ token }) {
   const garahCameraSongogdson =
     !!camerVal[1] && songogdsonCameraIP === camerVal[1];
   const searchUtga = useRef(null);
+  const socketRef = useRef(null);
 
   useEffect(() => {
     setShineBagana([]);
@@ -600,23 +601,41 @@ function camera({ token }) {
     isValidating,
   } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
   useEffect(() => {
-    if (songogdzonZogsool?.gadaaStickerAshiglakhEsekh) {
-      socket().on(`qpayMobileSdk${baiguullaga?._id}${camerVal[1]}`, (res) => {
-        if (
-          res &&
-          res?.khaalgaTurul === "Гарах" &&
-          !!res?.mashiniiDugaar &&
-          res?.cameraIP === camerVal[1]
-        ) {
-          khaalgaNeey(res.cameraIP);
-          onRefresh();
-        }
-      });
-      return () => {
-        socket().off(`qpayMobileSdk${baiguullaga?._id}${camerVal[1]}`);
-      };
+    if (!songogdzonZogsool?.gadaaStickerAshiglakhEsekh) return;
+    if (!socketRef.current) {
+      socketRef.current = socket();
     }
-  }, [baiguullaga, songogdzonZogsool, camerVal]);
+
+    const s = socketRef.current;
+    const cleanup = [];
+    const getCams = (type) =>
+      parkingJagsaalt?.flatMap((item) =>
+        item?.khaalga
+          ?.filter((k) => k.turul === type)
+          ?.flatMap((k) => k.camera?.map((c) => c.cameraIP) || [])
+      ) || [];
+    const garahCams = getCams("Гарах");
+    const handleGarahTulsun = (data) => {
+      if (!data) return;
+      zogsoolUilchilgee()
+        .get(
+          `/sambar/${data.cameraIP}/${data.mashiniiDugaar?.replace(
+            "???",
+            ""
+          )}/Tulugdluu`
+        )
+        .catch(() => {});
+
+      khaalgaNeey(data.cameraIP);
+      onRefresh();
+    };
+    garahCams.forEach((camIP) => {
+      const e2 = `qpayMobileSdk${baiguullaga._id}${camIP}`;
+      s.on(e2, handleGarahTulsun);
+      cleanup.push(() => s.off(e2, handleGarahTulsun));
+    });
+    return () => cleanup.forEach((fn) => fn());
+  }, [baiguullaga, songogdzonZogsool, parkingJagsaalt]);
 
   useEffect(() => {
     if (
@@ -638,7 +657,11 @@ function camera({ token }) {
 
   useEffect(() => {
     if (!baiguullaga?._id || !parkingJagsaalt) return;
-    const s = socket();
+    if (!socketRef.current) {
+      socketRef.current = socket();
+    }
+
+    const s = socketRef.current;
     const cleanup = [];
     const getCams = (type) =>
       parkingJagsaalt?.flatMap((item) =>
