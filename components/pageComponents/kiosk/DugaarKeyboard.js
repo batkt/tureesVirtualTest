@@ -82,7 +82,7 @@ const DugaarKeyboard = ({
   return (
     <div className="flex flex-col items-center justify-between gap-12">
       {!shineTurul ? (
-        <div className="text-5xl font-bold md:text-[20px]">
+        <div className="text-5xl mt-4 font-bold md:text-[20px] text-black dark:text-white">
           Улсын дугаар оруулна уу
         </div>
       ) : (

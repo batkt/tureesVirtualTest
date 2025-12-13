@@ -157,7 +157,7 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
-          <div className="mt-3 flex w-full justify-end rounded-md bg-gray-50 px-1 py-2">
+          <div className="mt-3 flex w-full justify-end rounded-md dark:bg-gray-900 bg-gray-50 px-1 py-2">
             <Button type="primary" onClick={khadgalakh}>
               {t("Хадгалах")}
             </Button>

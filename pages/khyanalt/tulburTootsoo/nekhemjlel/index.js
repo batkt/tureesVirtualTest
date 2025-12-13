@@ -702,11 +702,11 @@ function tulburTootsoo({ token }) {
             medeelel.gariinUseg = renderToString(
               <span style={{ position: "absolute" }}>
                 <img
-                  src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                  src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
                   style={{
                     width: 100,
                     height: 50,
-                    transform: "translate(10%, -30%)",
+                    transform: "translate(10%, -40%)",
                   }}
                 />
               </span>
@@ -717,11 +717,11 @@ function tulburTootsoo({ token }) {
                 medeelel.gariinUseg1 = renderToString(
                   <span style={{ position: "absolute", zIndex: 9999 }}>
                     <img
-                      src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                      src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
                       style={{
                         width: 100,
                         height: 60,
-                        transform: "translate(10%, -40%)",
+                        transform: "translate(10%, -50%)",
                       }}
                     />
                   </span>
@@ -730,7 +730,7 @@ function tulburTootsoo({ token }) {
                 medeelel.tamga1 = renderToString(
                   <span style={{ position: "relative", zIndex: 9999 }}>
                     <img
-                      src={`${url}/file?path=tamga/${barilga.tamga}`}
+                      src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
                       style={{
                         width: 200,
                         height: 160,
@@ -744,11 +744,11 @@ function tulburTootsoo({ token }) {
                 medeelel.gariinUseg = renderToString(
                   <span style={{ position: "relative", zIndex: 9999 }}>
                     <img
-                      src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                      src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
                       style={{
                         width: 100,
                         height: 60,
-                        transform: "translate(140%, -68%)",
+                        transform: "translate(140%, -78%)",
                       }}
                     />
                   </span>
@@ -757,7 +757,7 @@ function tulburTootsoo({ token }) {
                 medeelel.tamga = renderToString(
                   <span>
                     <img
-                      src={`${url}/file?path=tamga/${barilga.tamga}`}
+                      src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
                       style={{
                         width: 200,
                         height: 160,
@@ -773,7 +773,7 @@ function tulburTootsoo({ token }) {
               medeelel.tamga = renderToString(
                 <span style={{ position: "absolute", zIndex: 1 }}>
                   <img
-                    src={`${url}/file?path=tamga/${barilga.tamga}`}
+                    src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
                     style={{
                       width: 180,
                       height: 130,
@@ -787,7 +787,7 @@ function tulburTootsoo({ token }) {
               medeelel.khuviinTamga = renderToString(
                 <span style={{ position: "absolute", zIndex: 1 }}>
                   <img
-                    src={`${url}/file?path=tamga/${barilga.tamga}`}
+                    src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
                     style={{
                       width: 150,
                       height: 120,
@@ -800,7 +800,7 @@ function tulburTootsoo({ token }) {
               medeelel.tamga = renderToString(
                 <span style={{ position: "absolute", zIndex: 1 }}>
                   <img
-                    src={`${url}/file?path=tamga/${barilga.tamga}`}
+                    src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
                     style={{
                       width: 180,
                       height: 130,
@@ -814,11 +814,11 @@ function tulburTootsoo({ token }) {
             medeelel.signature1 = renderToString(
               <span style={{ position: "absolute" }}>
                 <img
-                  src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                  src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
                   style={{
                     width: 180,
                     height: 105,
-                    transform: "translate(-45%, -35%)",
+                    transform: "translate(-45%, -45%)",
                   }}
                 />
               </span>
@@ -827,7 +827,7 @@ function tulburTootsoo({ token }) {
             medeelel.signature2 = renderToString(
               <span style={{ position: "absolute" }}>
                 <img
-                  src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
+                  src={`${url}/zuragAvya/gariinUseg1/${baiguullaga?._id}/${barilga.gariinUseg1}`}
                   style={{
                     width: 180,
                     height: 105,
@@ -2242,7 +2242,7 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.khuviinTamga = renderToString(
             <span style={{ position: "absolute", zIndex: 1 }}>
               <img
-                src={`${url}/file?path=tamga/${barilga.tamga}`}
+                src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
                 style={{
                   width: 75,
                   height: 40,
@@ -2256,7 +2256,7 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.khuviinTamga = renderToString(
             <span style={{ position: "absolute", zIndex: 1 }}>
               <img
-                src={`${url}/file?path=tamga/${barilga.tamga}`}
+                src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
                 style={{
                   width: 200,
                   height: 110,
@@ -2271,11 +2271,11 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.gariinUseg = renderToString(
             <span style={{ position: "relative", zIndex: 9999 }}>
               <img
-                src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
                 style={{
                   width: 80,
                   height: 40,
-                  transform: "translate(10%, 30%)",
+                  transform: "translate(10%, 20%)",
                 }}
               />
             </span>
@@ -2286,11 +2286,11 @@ function tulburTootsoo({ token }) {
             nekhemjlekh.gariinUseg1 = renderToString(
               <span style={{ position: "absolute", zIndex: 9999 }}>
                 <img
-                  src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                  src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
                   style={{
                     width: 100,
                     height: 60,
-                    transform: "translate(10%, -40%)",
+                    transform: "translate(10%, -50%)",
                   }}
                 />
               </span>
@@ -2299,11 +2299,11 @@ function tulburTootsoo({ token }) {
             nekhemjlekh.gariinUseg = renderToString(
               <span style={{ position: "relative", zIndex: 9999 }}>
                 <img
-                  src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                  src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
                   style={{
                     width: 100,
                     height: 60,
-                    transform: "translate(40%, 25%)",
+                    transform: "translate(40%, 15%)",
                   }}
                 />
               </span>
@@ -2312,11 +2312,11 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.gariinUseg = renderToString(
             <span style={{ position: "relative", zIndex: 9999 }}>
               <img
-                src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+                src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
                 style={{
                   width: 100,
                   height: 50,
-                  transform: "translate(10%, -30%)",
+                  transform: "translate(10%, -40%)",
                 }}
               />
             </span>
@@ -2325,11 +2325,11 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature1 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+              src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
               style={{
                 width: 140,
                 height: "100",
-                transform: "translate(-40%, -40%)",
+                transform: "translate(-40%, -50%)",
               }}
             />
           </span>
@@ -2337,7 +2337,7 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.signature2 = renderToString(
           <span style={{ position: "absolute" }}>
             <img
-              src={`${url}/file?path=gariinUseg1/${barilga.gariinUseg1}`}
+              src={`${url}/zuragAvya/gariinUseg1/${baiguullaga?._id}/${barilga.gariinUseg1}`}
               style={{
                 width: 140,
                 height: 100,
@@ -2352,7 +2352,7 @@ function tulburTootsoo({ token }) {
             nekhemjlekh.tamga1 = renderToString(
               <span style={{ position: "relative", zIndex: 9999 }}>
                 <img
-                  src={`${url}/file?path=tamga/${barilga.tamga}`}
+                  src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
                   style={{
                     width: 200,
                     height: 160,
@@ -2366,7 +2366,7 @@ function tulburTootsoo({ token }) {
             nekhemjlekh.tamga = renderToString(
               <span>
                 <img
-                  src={`${url}/file?path=tamga/${barilga.tamga}`}
+                  src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
                   style={{
                     width: 200,
                     height: 160,
@@ -2380,7 +2380,7 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.tamga = renderToString(
             <span>
               <img
-                src={`${url}/file?path=tamga/${barilga.tamga}`}
+                src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
                 style={{
                   width: 115,
                   height: 100,
