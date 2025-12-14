@@ -318,7 +318,7 @@ const Kiosk = () => {
         barilgiinId: barilgiinId,
         dun: ilgeekhDun,
         zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
-        mashiniiDugaar: songogdsonData?.plate_number + "kiosk",
+        mashiniiDugaar: songogdsonData?.plate_number,
         turul: "kiosk",
         zogsooliinId: parkingJagsaalt?.[0]?._id,
         zogsoolUilchluulegchiinId: uilchluugchiinId,
