@@ -621,7 +621,15 @@ function camera({ token }) {
       ) || [];
     const garahCams = getCams("Гарах");
     const handleGarahTulsun = (data) => {
-      if (!data) return;
+      if (
+        !data ||
+        !data?.mashiniiDugaar ||
+        !data?.baiguullagiinId ||
+        data?.baiguullagiinId !== baiguullaga?._id
+      )
+        return;
+      let dugaar = data.mashiniiDugaar?.replace("???", "");
+      if (!dugaar) return;
       zogsoolUilchilgee()
         .get(
           `/sambar/${data.cameraIP}/${data.mashiniiDugaar?.replace(
@@ -680,7 +688,13 @@ function camera({ token }) {
     console.log("orohCams", orohCams);
     console.log("garahCams", garahCams);
     const handleOroh = (data) => {
-      if (!data) return;
+      if (
+        !data ||
+        !data?.mashiniiDugaar ||
+        !data?.baiguullagiinId ||
+        data?.baiguullagiinId !== baiguullaga?._id
+      )
+        return;
 
       const dugaar = data.mashiniiDugaar?.replace("???", "");
       if (!dugaar) return;
@@ -702,9 +716,16 @@ function camera({ token }) {
         zurchilteiMashinMsgilgeekh(dugaar);
     };
     const handleGarah = (u) => {
-      if (!u) return;
+      if (
+        !u ||
+        !u?.mashiniiDugaar ||
+        !u?.baiguullagiinId ||
+        u?.baiguullagiinId !== baiguullaga?._id
+      )
+        return;
 
       let dugaar = u.mashiniiDugaar?.replace("???", "");
+      if (!dugaar) return;
       const garsanKhaalga = u?.tuukh?.[0]?.garsanKhaalga;
       let niit = u?.niitDun;
       if (u?.tuukh?.[0]?.tulbur?.length > 0) {
@@ -745,13 +766,18 @@ function camera({ token }) {
       onRefresh();
     };
     const handleGarahTulsun = (data) => {
-      if (!data) return;
+      if (
+        !data ||
+        !data?.mashiniiDugaar ||
+        !data?.baiguullagiinId ||
+        data?.baiguullagiinId !== baiguullaga?._id
+      )
+        return;
+      let dugaar = data?.mashiniiDugaar?.replace("???", "");
+      if (!dugaar) return;
       zogsoolUilchilgee()
         .get(
-          `/sambar/${data.cameraIP}/${data.mashiniiDugaar?.replace(
-            "???",
-            ""
-          )}/Tulugdluu`
+          `/sambar/${data?.cameraIP}/${dugaar}/${moment().format("HH:mm:ss")}`
         )
         .catch(() => {});
 
