@@ -295,7 +295,6 @@ function camera({ token }) {
 
   const [isHovered, setIsHovered] = useState(false);
   const [isHovered2, setIsHovered2] = useState(false);
-  const [open, setOpen] = useState(false);
 
   const que = useMemo(() => {
     return {
@@ -1624,15 +1623,11 @@ function camera({ token }) {
         title: (
           <Popover
             placement="bottom"
-            open={open}
-            trigger="click"
-            onOpenChange={setOpen}
             content={
               <div className="space-y-2">
                 <div
                   onClick={() => {
                     setTuluvFilter("");
-                    setOpen(false);
                   }}
                   className={`relative ${
                     tuluvFilter === "" && "bg-green-500 text-white"
@@ -1644,7 +1639,6 @@ function camera({ token }) {
                 <div
                   onClick={() => {
                     setTuluvFilter("idevekhitei");
-                    setOpen(false);
                   }}
                   className={`relative ${
                     tuluvFilter === "idevekhitei" && "bg-green-500 text-white"
@@ -1655,7 +1649,6 @@ function camera({ token }) {
                 <div
                   onClick={() => {
                     setTuluvFilter("active");
-                    setOpen(false);
                   }}
                   className={`relative ${
                     tuluvFilter === "active" && "bg-green-500 text-white"
@@ -1666,7 +1659,6 @@ function camera({ token }) {
                 <div
                   onClick={() => {
                     setTuluvFilter("tulugsun");
-                    setOpen(false);
                   }}
                   className={`relative ${
                     tuluvFilter === "tulugsun" && "bg-green-500 text-white"
@@ -1685,7 +1677,6 @@ function camera({ token }) {
                 <div
                   onClick={() => {
                     setTuluvFilter("unegui");
-                    setOpen(false);
                   }}
                   className={`relative ${
                     tuluvFilter === "unegui" && "bg-green-500 text-white"
@@ -1696,7 +1687,6 @@ function camera({ token }) {
                 <div
                   onClick={() => {
                     setTuluvFilter("zurchiltei");
-                    setOpen(false);
                   }}
                   className={`relative ${
                     tuluvFilter === "zurchiltei" && "bg-green-500 text-white"
