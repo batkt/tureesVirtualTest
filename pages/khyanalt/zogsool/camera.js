@@ -1626,7 +1626,7 @@ function camera({ token }) {
             placement="bottom"
             open={open}
             trigger="click"
-            onOpenChange={(v) => setOpen(v)}
+            onOpenChange={setOpen}
             content={
               <div className="space-y-2">
                 <div
@@ -1708,7 +1708,6 @@ function camera({ token }) {
             }
           >
             <div
-              onClick={() => setOpen(true)}
               className={`flex cursor-pointer items-center justify-center gap-3`}
             >
               <FilterOutlined className="text-lg text-green-600" />
