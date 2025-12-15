@@ -244,8 +244,8 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 a.tailbar.includes("Дулаан") ||
                 a.tailbar === "Дулаан нэмэлт" ||
                 a.tailbar === "Ус-2" ||
-                a.tailbar?.includes("Авлага бусад") ||
-                a.tailbar?.includes("торгууль")
+                a.tailbar?.includes("Засвар үйлчилгээний зардал") ||
+                a.tailbar?.includes("Торгууль")
             )
             .map(
               (mur, index) => `
