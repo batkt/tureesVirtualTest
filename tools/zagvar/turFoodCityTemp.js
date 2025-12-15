@@ -129,23 +129,82 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
           </tr>
         </thead>
         <tbody>
-
-          <!-- Түрээс хуучин/шинэ үнэ -->
-          ${medeelel.zardluud
-            .sort((a, b) =>
-              a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
-            )
-            .filter(
+          ${(() => {
+            let rowNumber = 0;
+            const incrementRow = () => ++rowNumber;
+            
+            const tureesHuuShin = medeelel.zardluud
+              .sort((a, b) =>
+                a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+              )
+              .filter(
+                (a) =>
+                  a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" ||
+                  a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд"
+              );
+            
+            const hasTureesHuuShin = tureesHuuShin.length > 0;
+            const hasTureesDefault = medeelel.zardluud.filter(
               (a) =>
                 a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" ||
-                a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд"
-            )
-            .map(
-              (mur, index) => `
+                a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд" ||
+                a.tailbar === "Түрээсийн төлбөр нэмэлт"
+            ).length === 0;
+            
+            const menegment = medeelel.zardluud
+              .sort((a, b) =>
+                a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+              )
+              .filter(
+                (a) =>
+                  a.tailbar?.includes("Менежментийн төлбөр") ||
+                  a.tailbar === "Менежментийн зардал" ||
+                  a.tailbar === "Менежмент" ||
+                  a.tailbar === "Менежментийн төлбөр нэмэлт" ||
+                  a.tailbar == "Түрээсийн төлбөр нэмэлт"
+              );
+            
+            const dulaan = medeelel.zardluud
+              .sort((a, b) =>
+                a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+              )
+              .filter(
+                (a) =>
+                  a.tailbar === "Менежмент төлбөр хуучин" ||
+                  a.tailbar === "Менежмент төлбөр шинэ" ||
+                  a.tailbar === "Дулааны төлбөр" ||
+                  a.tailbar.includes("Дулаан") ||
+                  a.tailbar === "Дулаан нэмэлт" ||
+                  a.tailbar === "Ус-2" ||
+                  a.tailbar?.includes("Засвар үйлчилгээний зардал") ||
+                  a.tailbar?.includes("Торгууль")
+              );
+            
+            const tsakhilgaan = medeelel.zardluud
+              .sort((a, b) =>
+                a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+              )
+              .filter(
+                (a) =>
+                  a.tailbar?.includes("Цахилгаан") ||
+                  a.tailbar === "Цахилгаан нэмэлт"
+              );
+            
+            const hasUs = medeelel.zardluud.filter(
+              (a) =>
+                a.tailbar?.includes("Хүйтэн ус") ||
+                a.tailbar === "Хүйтэн ус нэмэлт" ||
+                a.tailbar?.includes("Халуун ус") ||
+                a.tailbar === "Халуун ус нэмэлт"
+            ).length > 0;
+            
+            let html = '';
+            
+            // Түрээс хуучин/шинэ үнэ
+            if (hasTureesHuuShin) {
+              html += tureesHuuShin.map((mur) => `
               <tr>
-                <td style="border: 1px solid #000; text-align: center;">${
-                  index + 1
-                }</td>
+                <td style="border: 1px solid #000; text-align: center;">${incrementRow()}</td>
                 <td colspan="4" style="border: 1px solid #000; text-align: left;">${
                   mur.tailbar
                 }</td>
@@ -164,20 +223,14 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               </tr>
             `
             )
-            .join("")}
+            .join("");
+            }
 
-          <!-- Түрээс төлбөр default -->
-          ${
-            medeelel.zardluud.filter(
-              (a) =>
-                a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" ||
-                a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд" ||
-                a.tailbar === "Түрээсийн төлбөр нэмэлт"
-            ).length > 0
-              ? ""
-              : `
+            // Түрээс төлбөр default
+            if (hasTureesDefault) {
+              html += `
                 <tr>
-                  <td style="border: 1px solid #000; text-align: center;">1</td>
+                  <td style="border: 1px solid #000; text-align: center;">${incrementRow()}</td>
                   <td colspan="4" style="border: 1px solid #000; text-align: left;">Түрээсийн төлбөр</td>
                   <td style="border: 1px solid #000; text-align: center;">&lt;talbainKhemjee&gt;</td>
                   <td style="border: 1px solid #000; text-align: right;">&lt;talbainNegjUne&gt;</td>
@@ -185,35 +238,20 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
                 </tr>
                 <tr>
-                  <td style="border: 1px solid #000; text-align: center;">2</td>
+                  <td style="border: 1px solid #000; text-align: center;">${incrementRow()}</td>
                   <td colspan="4" style="border: 1px solid #000; text-align: left;">Алданги</td>
                   <td></td>
                   <td style="border: 1px solid #000; text-align: right;"></td> 
                   <td style="border: 1px solid #000; text-align: right;"></td>   
                   <td style="border: 1px solid #000; text-align: right;">&lt;aldangiinUldegdel&gt;</td>              
                 </tr>
-              `
-          }
+              `;
+            }
 
-          <!-- Менежмент -->
-          ${medeelel.zardluud
-            .sort((a, b) =>
-              a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
-            )
-            .filter(
-              (a) =>
-                a.tailbar?.includes("Менежментийн төлбөр") ||
-                a.tailbar === "Менежментийн зардал" ||
-                a.tailbar === "Менежмент" ||
-                a.tailbar === "Менежментийн төлбөр нэмэлт" ||
-                a.tailbar == "Түрээсийн төлбөр нэмэлт"
-            )
-            .map(
-              (mur, index) => `
+            // Менежмент
+            html += menegment.map((mur) => `
               <tr>
-                <td style="border: 1px solid #000; text-align: center;">${
-                  index + 3
-                }</td>
+                <td style="border: 1px solid #000; text-align: center;">${incrementRow()}</td>
                 <td colspan="4" style="border: 1px solid #000; text-align: left;">Менежментийн төлбөр</td>
                 <td style="border: 1px solid #000; text-align: center;">&lt;talbainKhemjee&gt;</td>
                 <td style="border: 1px solid #000; text-align: right;">&lt;${
@@ -228,31 +266,12 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               </tr>
             `
             )
-            .join("")}
+            .join("");
 
-
-          <!-- Дулаан / торгууль -->
-          ${medeelel.zardluud
-            .sort((a, b) =>
-              a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
-            )
-            .filter(
-              (a) =>
-                a.tailbar === "Менежмент төлбөр хуучин" ||
-                a.tailbar === "Менежмент төлбөр шинэ" ||
-                a.tailbar === "Дулааны төлбөр" ||
-                a.tailbar.includes("Дулаан") ||
-                a.tailbar === "Дулаан нэмэлт" ||
-                a.tailbar === "Ус-2" ||
-                a.tailbar?.includes("Засвар үйлчилгээний зардал") ||
-                a.tailbar?.includes("Торгууль")
-            )
-            .map(
-              (mur, index) => `
+            // Дулаан / торгууль
+            html += dulaan.map((mur) => `
               <tr>
-                <td style="border: 1px solid #000; text-align: center;">${
-                  index + 3
-                }</td>
+                <td style="border: 1px solid #000; text-align: center;">${incrementRow()}</td>
                 <td colspan="4" style="border: 1px solid #000; text-align: left;">${
                   mur.tailbar
                 }</td>
@@ -271,22 +290,14 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               </tr>
             `
             )
-            .join("")}
+            .join("");
 
-          <!-- Цахилгаан -->
-          ${medeelel.zardluud
-            .sort((a, b) =>
-              a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
-            )
-            .filter(
-              (a) =>
-                a.tailbar?.includes("Цахилгаан") ||
-                a.tailbar === "Цахилгаан нэмэлт"
-            )
-            .map(
-              (mur) => `
+            // Цахилгаан
+            html += tsakhilgaan.map((mur) => {
+              const currentRow = incrementRow();
+              return `
               <tr>
-                <td style="border: 1px solid #000; text-align: center;" rowspan="2">4</td>
+                <td style="border: 1px solid #000; text-align: center;" rowspan="2">${currentRow}</td>
                 <td colspan="2" rowspan="2" style="border: 1px solid #000; text-align: left;">Цахилгааны төлбөр</td>
                 <td colspan="2" style="border: 1px solid #000; text-align: center;">Өмнөх заалт</td>
                 <td style="border: 1px solid #000; text-align: center;">Одоо заалт</td>
@@ -301,22 +312,15 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 <td style="border: 1px solid #000; text-align: right;">${mur.tariff}/1.02</td>
                 <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tulukhDun&gt;</td>
               </tr>
-            `
-            )
-            .join("")}
+            `;
+            })
+            .join("");
 
-          <!-- Усны төлбөр header -->
-          ${
-            medeelel.zardluud.filter(
-              (a) =>
-                a.tailbar?.includes("Хүйтэн ус") ||
-                a.tailbar === "Хүйтэн ус нэмэлт" ||
-                a.tailbar?.includes("Халуун ус") ||
-                a.tailbar === "Халуун ус нэмэлт"
-            ).length > 0
-              ? `
+            // Усны төлбөр header
+            if (hasUs) {
+              html += `
                 <tr>
-                  <td style="border: 1px solid #000; text-align: center;" rowspan="3">5</td>
+                  <td style="border: 1px solid #000; text-align: center;" rowspan="3">${incrementRow()}</td>
                   <td style="border: 1px solid #000; text-align: left;">Усны төлбөр</td>
                   <td style="border: 1px solid #000; text-align: center;">Өмнөх</td>
                   <td style="border: 1px solid #000; text-align: center;">Одоо</td>
@@ -327,11 +331,10 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   <td style="border: 1px solid #000; text-align: center;">Нийт дүн</td>
                 </tr>
               `
-              : ""
-          }
+            }
 
-          <!-- Халуун ус -->
-            ${medeelel.zardluud
+            // Халуун ус
+            html += medeelel.zardluud
               .sort((a, b) =>
                 a.tailbar.localeCompare(b.tailbar, "en", {
                   sensitivity: "base",
@@ -356,10 +359,10 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 </tr>
               `
               )
-              .join("")}
+              .join("");
 
-            <!-- Хүйтэн ус -->
-            ${medeelel.zardluud
+            // Хүйтэн ус
+            html += medeelel.zardluud
               .sort((a, b) =>
                 a.tailbar.localeCompare(b.tailbar, "en", {
                   sensitivity: "base",
@@ -384,8 +387,10 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 </tr>
               `
               )
-              .join("")}
-
+              .join("");
+            
+            return html;
+          })()}
 
         </tbody>
         <tfoot>
