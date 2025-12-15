@@ -1622,7 +1622,7 @@ function camera({ token }) {
       {
         title: (
           <Popover
-            placement="bottom"
+            placement="top"
             content={
               <div className="space-y-2">
                 <div
