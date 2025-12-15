@@ -295,6 +295,7 @@ function camera({ token }) {
 
   const [isHovered, setIsHovered] = useState(false);
   const [isHovered2, setIsHovered2] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const que = useMemo(() => {
     return {
@@ -1623,8 +1624,17 @@ function camera({ token }) {
         title: (
           <Popover
             placement="bottom"
+            open={open}
+            trigger="hover"
+            onOpenChange={(v) => setOpen(v)}
+            mouseEnterDelay={0}
+            mouseLeaveDelay={0.2}
             content={
-              <div className="space-y-2">
+              <div
+                className="space-y-2"
+                onMouseEnter={() => setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+              >
                 <div
                   onClick={() => setTuluvFilter("")}
                   className={`relative ${
