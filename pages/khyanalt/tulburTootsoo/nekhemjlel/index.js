@@ -59,7 +59,7 @@ const ilgeekhTurul = "davkharaar";
 function tulburTootsoo({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   const ref = useRef(null);
   const printRef = React.useRef(null);
   const printExcelRef = React.useRef(null);
@@ -352,7 +352,7 @@ function tulburTootsoo({ token }) {
   }, [barilgiinId, token, barimt, songogdsonGereenuud, nekhemjleliinJagsaalt]);
 
   const nekhemjlekhuud = useMemo(() => {
-    if (barimt && songogdsonGereenuud)
+    if (barimt && songogdsonGereenuud && Array.isArray(songogdsonGereenuud))
       return songogdsonGereenuud
         ?.filter((a) => !!nekhemjleliinJagsaalt?.find((n) => n._id === a))
         ?.map((a, i) => {
@@ -369,13 +369,39 @@ function tulburTootsoo({ token }) {
             if (
               ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" &&
               barilgiinId === "6659717af6cab41f3ec723b5"
-            )
-              // foodcity
+            ) {
+             
+              const tulsunDun = parseFloat(
+                typeof medeelel.tulsunDun === 'string' 
+                  ? medeelel.tulsunDun.replace(/,/g, '') 
+                  : medeelel.tulsunDun || 0
+              ) || 0;
+              medeelel.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+              
+              if (medeelel.niitDun !== undefined && medeelel.niitDun !== null) {
+                const niitDun = parseFloat(
+                  typeof medeelel.niitDun === 'string' 
+                    ? medeelel.niitDun.replace(/,/g, '') 
+                    : medeelel.niitDun || 0
+                ) || 0;
+                medeelel.niitDun = formatNumber(niitDun);
+              }
+              
+              if (medeelel.garaasBodsonNiitDun !== undefined && medeelel.garaasBodsonNiitDun !== null) {
+                const garaasBodsonNiitDun = parseFloat(
+                  typeof medeelel.garaasBodsonNiitDun === 'string' 
+                    ? medeelel.garaasBodsonNiitDun.replace(/,/g, '') 
+                    : medeelel.garaasBodsonNiitDun || 0
+                ) || 0;
+                medeelel.garaasBodsonNiitDun = formatNumber(garaasBodsonNiitDun);
+              }
+             
               zagvar.nekhemjlekh = khatuuZagvarFoodCity(
                 medeelel,
                 ajiltan,
                 baiguullaga
               );
+            }
             else if (
               ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "67512183c60497546f59513a"
@@ -1565,7 +1591,35 @@ function tulburTootsoo({ token }) {
       var text = songosonZagvar?.khatuuZagvarEsekh
         ? ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" &&
           barilgiinId === "6659717af6cab41f3ec723b5"
-          ? khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga)
+          ? (() => {
+             
+              const tulsunDun = parseFloat(
+                typeof nekhemjlekh.tulsunDun === 'string' 
+                  ? nekhemjlekh.tulsunDun.replace(/,/g, '') 
+                  : nekhemjlekh.tulsunDun || 0
+              ) || 0;
+              nekhemjlekh.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+              
+              if (nekhemjlekh.niitDun !== undefined && nekhemjlekh.niitDun !== null) {
+                const niitDun = parseFloat(
+                  typeof nekhemjlekh.niitDun === 'string' 
+                    ? nekhemjlekh.niitDun.replace(/,/g, '') 
+                    : nekhemjlekh.niitDun || 0
+                ) || 0;
+                nekhemjlekh.niitDun = formatNumber(niitDun);
+              }
+              
+              if (nekhemjlekh.garaasBodsonNiitDun !== undefined && nekhemjlekh.garaasBodsonNiitDun !== null) {
+                const garaasBodsonNiitDun = parseFloat(
+                  typeof nekhemjlekh.garaasBodsonNiitDun === 'string' 
+                    ? nekhemjlekh.garaasBodsonNiitDun.replace(/,/g, '') 
+                    : nekhemjlekh.garaasBodsonNiitDun || 0
+                ) || 0;
+                nekhemjlekh.garaasBodsonNiitDun = formatNumber(garaasBodsonNiitDun);
+              }
+               
+              return khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga);
+            })()
           : ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0" ||
             barilgiinId === "6544bf602143a024b43f16ab"
           ? khatuuZagvarKaidu(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
@@ -1997,7 +2051,34 @@ function tulburTootsoo({ token }) {
         var text = songosonZagvar?.khatuuZagvarEsekh
           ? ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" &&
             barilgiinId === "6659717af6cab41f3ec723b5"
-            ? khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga)
+            ? (() => {
+                const tulsunDun = parseFloat(
+                  typeof nekhemjlekh.tulsunDun === 'string' 
+                    ? nekhemjlekh.tulsunDun.replace(/,/g, '') 
+                    : nekhemjlekh.tulsunDun || 0
+                ) || 0;
+                nekhemjlekh.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+                
+                if (nekhemjlekh.niitDun !== undefined && nekhemjlekh.niitDun !== null) {
+                  const niitDun = parseFloat(
+                    typeof nekhemjlekh.niitDun === 'string' 
+                      ? nekhemjlekh.niitDun.replace(/,/g, '') 
+                      : nekhemjlekh.niitDun || 0
+                  ) || 0;
+                  nekhemjlekh.niitDun = formatNumber(niitDun);
+                }
+                
+                if (nekhemjlekh.garaasBodsonNiitDun !== undefined && nekhemjlekh.garaasBodsonNiitDun !== null) {
+                  const garaasBodsonNiitDun = parseFloat(
+                    typeof nekhemjlekh.garaasBodsonNiitDun === 'string' 
+                      ? nekhemjlekh.garaasBodsonNiitDun.replace(/,/g, '') 
+                      : nekhemjlekh.garaasBodsonNiitDun || 0
+                  ) || 0;
+                  nekhemjlekh.garaasBodsonNiitDun = formatNumber(garaasBodsonNiitDun);
+                }
+                 
+                return khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga);
+              })()
             : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "67512183c60497546f59513a"
             ? khatuuZagvarGotoMPM(

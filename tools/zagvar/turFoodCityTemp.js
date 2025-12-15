@@ -394,6 +394,22 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               Нийт дүн
             </td>
             <td style="border: 1px solid #000; text-align: right; padding: 8px;">
+              &lt;niitDun&gt;
+            </td>
+          </tr>
+          <tr style="font-weight: 600; background-color: #f9f9f9;">
+            <td colspan="8" style="border: 1px solid #000; text-align: right; padding: 8px; white-space: nowrap;">
+              Төлсөн дүн
+            </td>
+            <td style="border: 1px solid #000; text-align: right; padding: 8px;">
+              &lt;umnukhSariinTulsunDun&gt;
+            </td>
+          </tr>
+          <tr style="font-weight: 600; background-color: #f9f9f9;">
+            <td colspan="8" style="border: 1px solid #000; text-align: right; padding: 8px; white-space: nowrap;">
+              Нийт үлдэгдэл
+            </td>
+            <td style="border: 1px solid #000; text-align: right; padding: 8px;">
               &lt;garaasBodsonNiitDun&gt;
             </td>
           </tr>
