@@ -1625,18 +1625,15 @@ function camera({ token }) {
           <Popover
             placement="bottom"
             open={open}
-            trigger="hover"
+            trigger="click"
             onOpenChange={(v) => setOpen(v)}
-            mouseEnterDelay={0}
-            mouseLeaveDelay={0.2}
             content={
-              <div
-                className="space-y-2"
-                onMouseEnter={() => setOpen(true)}
-                onMouseLeave={() => setOpen(false)}
-              >
+              <div className="space-y-2">
                 <div
-                  onClick={() => setTuluvFilter("")}
+                  onClick={() => {
+                    setTuluvFilter("");
+                    setOpen(false);
+                  }}
                   className={`relative ${
                     tuluvFilter === "" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
@@ -1645,7 +1642,10 @@ function camera({ token }) {
                 </div>
 
                 <div
-                  onClick={() => setTuluvFilter("idevekhitei")}
+                  onClick={() => {
+                    setTuluvFilter("idevekhitei");
+                    setOpen(false);
+                  }}
                   className={`relative ${
                     tuluvFilter === "idevekhitei" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
@@ -1653,7 +1653,10 @@ function camera({ token }) {
                   {t("Төлбөртэй")}
                 </div>
                 <div
-                  onClick={() => setTuluvFilter("active")}
+                  onClick={() => {
+                    setTuluvFilter("active");
+                    setOpen(false);
+                  }}
                   className={`relative ${
                     tuluvFilter === "active" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
@@ -1661,7 +1664,10 @@ function camera({ token }) {
                   {t("Идэвхтэй")}
                 </div>
                 <div
-                  onClick={() => setTuluvFilter("tulugsun")}
+                  onClick={() => {
+                    setTuluvFilter("tulugsun");
+                    setOpen(false);
+                  }}
                   className={`relative ${
                     tuluvFilter === "tulugsun" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
@@ -1677,7 +1683,10 @@ function camera({ token }) {
                   {t("Төлбөртэй")}
                 </div> */}
                 <div
-                  onClick={() => setTuluvFilter("unegui")}
+                  onClick={() => {
+                    setTuluvFilter("unegui");
+                    setOpen(false);
+                  }}
                   className={`relative ${
                     tuluvFilter === "unegui" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
@@ -1685,7 +1694,10 @@ function camera({ token }) {
                   {t("Үнэгүй")}
                 </div>
                 <div
-                  onClick={() => setTuluvFilter("zurchiltei")}
+                  onClick={() => {
+                    setTuluvFilter("zurchiltei");
+                    setOpen(false);
+                  }}
                   className={`relative ${
                     tuluvFilter === "zurchiltei" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
@@ -1696,6 +1708,7 @@ function camera({ token }) {
             }
           >
             <div
+              onClick={() => setOpen(true)}
               className={`flex cursor-pointer items-center justify-center gap-3`}
             >
               <FilterOutlined className="text-lg text-green-600" />
