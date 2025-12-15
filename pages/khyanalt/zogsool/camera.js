@@ -630,15 +630,6 @@ function camera({ token }) {
         return;
       let dugaar = data.mashiniiDugaar?.replace("???", "");
       if (!dugaar) return;
-      zogsoolUilchilgee()
-        .get(
-          `/sambar/${data.cameraIP}/${data.mashiniiDugaar?.replace(
-            "???",
-            ""
-          )}/Tulugdluu`
-        )
-        .catch(() => {});
-
       khaalgaNeey(data.cameraIP);
       onRefresh();
     };
