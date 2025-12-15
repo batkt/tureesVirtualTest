@@ -177,6 +177,12 @@ const splitTulbur = (payments) => {
   return result;
 };
 
+const getPaymentTotal = (row) => {
+  const { payments } = splitTulbur(row?.tuukh?.[0]?.tulbur);
+  if (!payments.length) return 0;
+  return payments.reduce((sum, item) => sum + (Number(item?.dun) || 0), 0);
+};
+
 function generateChild(mur, turul) {
   if (mur?.length > 0) {
     let res = [];
@@ -1158,7 +1164,8 @@ function Zogsool({ token }) {
         sorter: () => 0,
         dataIndex: "niitDun",
         render(v, parents) {
-          return v && formatNumber(v, 0);
+          const total = getPaymentTotal(parents);
+          return formatNumber(total || v || 0, 0);
         },
       },
       {
@@ -2042,7 +2049,9 @@ function Zogsool({ token }) {
                                     0
                                 );
                                 acc.tulukhDun += tulukhValue || 0;
-                                acc.niitDun += Number(row?.niitDun) || 0;
+                                const paymentTotal = getPaymentTotal(row);
+                                acc.niitDun +=
+                                  paymentTotal || Number(row?.niitDun) || 0;
                                 acc.ebarimtAvsanDun +=
                                   Number(row?.ebarimtAvsanDun) || 0;
 
@@ -2099,8 +2108,8 @@ function Zogsool({ token }) {
                               .map(([type]) => type)
                               .sort();
 
-                            const khurvukhBaganuud =
-                              kharagdakhTulbur.map((type) => ({
+                            const khurvukhBaganuud = kharagdakhTulbur.map(
+                              (type) => ({
                                 title: tulburKhurvuulekh(type),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
@@ -2119,7 +2128,8 @@ function Zogsool({ token }) {
                                       0
                                     );
                                 },
-                              }));
+                              })
+                            );
                             excel.addSheet("Жагсаалт").addColumns([
                               {
                                 title: "№",
@@ -2221,8 +2231,9 @@ function Zogsool({ token }) {
                                 __style__: { h: "right" },
                                 __numFmt__: "#,##0.00",
                                 __cellType__: "TypeNumeric",
-                                render: (v) => {
-                                  return v || 0;
+                                render: (v, record) => {
+                                  const total = getPaymentTotal(record);
+                                  return total || v || 0;
                                 },
                               },
                               {
@@ -2462,14 +2473,13 @@ function Zogsool({ token }) {
                                   b?.tuukh?.[0]?.tulbur
                                 );
 
-                                acc.niitDun += Number(b?.niitDun) || 0;
+                                acc.niitDun += getPaymentTotal(b);
                                 acc.payment += payments.reduce(
                                   (c, d) => c + (Number(d?.dun) || 0),
                                   0
                                 );
                                 acc.discount += discount || 0;
-                                acc.ebarimt +=
-                                  Number(b?.ebarimtAvsanDun) || 0;
+                                acc.ebarimt += Number(b?.ebarimtAvsanDun) || 0;
                                 return acc;
                               },
                               {
@@ -2488,9 +2498,7 @@ function Zogsool({ token }) {
 
                           return (
                             <>
-                              <AntdTable.Summary.Cell
-                                colSpan={summaryColSpan}
-                              >
+                              <AntdTable.Summary.Cell colSpan={summaryColSpan}>
                                 <div className="space-x-2 truncate text-base font-bold ">
                                   {t("Нийт")}
                                 </div>
@@ -2583,14 +2591,13 @@ function Zogsool({ token }) {
                                   b?.tuukh?.[0]?.tulbur
                                 );
 
-                                acc.niitDun += Number(b?.niitDun) || 0;
+                                acc.niitDun += getPaymentTotal(b);
                                 acc.payment += payments.reduce(
                                   (c, d) => c + (Number(d?.dun) || 0),
                                   0
                                 );
                                 acc.discount += discount || 0;
-                                acc.ebarimt +=
-                                  Number(b?.ebarimtAvsanDun) || 0;
+                                acc.ebarimt += Number(b?.ebarimtAvsanDun) || 0;
                                 return acc;
                               },
                               {
@@ -2609,9 +2616,7 @@ function Zogsool({ token }) {
 
                           return (
                             <>
-                              <AntdTable.Summary.Cell
-                                colSpan={summaryColSpan}
-                              >
+                              <AntdTable.Summary.Cell colSpan={summaryColSpan}>
                                 <div className="space-x-2 truncate text-base font-bold ">
                                   {t("Нийт")}
                                 </div>
