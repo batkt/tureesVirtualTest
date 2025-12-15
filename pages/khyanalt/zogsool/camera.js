@@ -4036,7 +4036,7 @@ function camera({ token }) {
 
             <div>
               <ZogsoolCameraTable
-                isValidating={isValidating}
+                isValidating={false}
                 uilchluulegchGaralt={filteredData}
                 columns={columns}
                 onChangeTable={onChangeTable}
