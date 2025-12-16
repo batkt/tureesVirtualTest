@@ -132,28 +132,32 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
           ${(() => {
             let rowNumber = 0;
             const incrementRow = () => ++rowNumber;
-            
+
             const tureesHuuShin = medeelel.zardluud
               .sort((a, b) =>
-                a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+                a.tailbar.localeCompare(b.tailbar, "en", {
+                  sensitivity: "base",
+                })
               )
               .filter(
                 (a) =>
                   a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" ||
                   a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд"
               );
-            
+
             const hasTureesHuuShin = tureesHuuShin.length > 0;
-            const hasTureesDefault = medeelel.zardluud.filter(
-              (a) =>
-                a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" ||
-                a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд" ||
-                a.tailbar === "Түрээсийн төлбөр нэмэлт"
-            ).length === 0;
-            
+            const hasTureesDefault =
+              medeelel.zardluud.filter(
+                (a) =>
+                  a.tailbar === "Түрээс хуучин үнэ 8/01-8/15 хооронд" ||
+                  a.tailbar === "Түрээс шинэ үнэ 8/16-8/31 хооронд"
+              ).length === 0;
+
             const menegment = medeelel.zardluud
               .sort((a, b) =>
-                a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+                a.tailbar.localeCompare(b.tailbar, "en", {
+                  sensitivity: "base",
+                })
               )
               .filter(
                 (a) =>
@@ -163,10 +167,12 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   a.tailbar === "Менежментийн төлбөр нэмэлт" ||
                   a.tailbar == "Түрээсийн төлбөр нэмэлт"
               );
-            
+
             const dulaan = medeelel.zardluud
               .sort((a, b) =>
-                a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+                a.tailbar.localeCompare(b.tailbar, "en", {
+                  sensitivity: "base",
+                })
               )
               .filter(
                 (a) =>
@@ -179,30 +185,35 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   a.tailbar?.includes("Засвар үйлчилгээний зардал") ||
                   a.tailbar?.includes("Торгууль")
               );
-            
+
             const tsakhilgaan = medeelel.zardluud
               .sort((a, b) =>
-                a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+                a.tailbar.localeCompare(b.tailbar, "en", {
+                  sensitivity: "base",
+                })
               )
               .filter(
                 (a) =>
                   a.tailbar?.includes("Цахилгаан") ||
                   a.tailbar === "Цахилгаан нэмэлт"
               );
-            
-            const hasUs = medeelel.zardluud.filter(
-              (a) =>
-                a.tailbar?.includes("Хүйтэн ус") ||
-                a.tailbar === "Хүйтэн ус нэмэлт" ||
-                a.tailbar?.includes("Халуун ус") ||
-                a.tailbar === "Халуун ус нэмэлт"
-            ).length > 0;
-            
-            let html = '';
-            
+
+            const hasUs =
+              medeelel.zardluud.filter(
+                (a) =>
+                  a.tailbar?.includes("Хүйтэн ус") ||
+                  a.tailbar === "Хүйтэн ус нэмэлт" ||
+                  a.tailbar?.includes("Халуун ус") ||
+                  a.tailbar === "Халуун ус нэмэлт"
+              ).length > 0;
+
+            let html = "";
+
             // Түрээс хуучин/шинэ үнэ
             if (hasTureesHuuShin) {
-              html += tureesHuuShin.map((mur) => `
+              html += tureesHuuShin
+                .map(
+                  (mur) => `
               <tr>
                 <td style="border: 1px solid #000; text-align: center;">${incrementRow()}</td>
                 <td colspan="4" style="border: 1px solid #000; text-align: left;">${
@@ -222,8 +233,8 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 }.tulukhDun&gt;</td>
               </tr>
             `
-            )
-            .join("");
+                )
+                .join("");
             }
 
             // Түрээс төлбөр default
@@ -249,7 +260,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
             }
 
             // Менежмент
-            html += menegment.map((mur) => `
+            html += menegment
+              .map(
+                (mur) => `
               <tr>
                 <td style="border: 1px solid #000; text-align: center;">${incrementRow()}</td>
                 <td colspan="4" style="border: 1px solid #000; text-align: left;">Менежментийн төлбөр</td>
@@ -265,11 +278,13 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 }.khungulultKhassanTulukhDun&gt;</td>
               </tr>
             `
-            )
-            .join("");
+              )
+              .join("");
 
             // Дулаан / торгууль
-            html += dulaan.map((mur) => `
+            html += dulaan
+              .map(
+                (mur) => `
               <tr>
                 <td style="border: 1px solid #000; text-align: center;">${incrementRow()}</td>
                 <td colspan="4" style="border: 1px solid #000; text-align: left;">${
@@ -289,13 +304,14 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 }.tulukhDun&gt;</td>
               </tr>
             `
-            )
-            .join("");
+              )
+              .join("");
 
             // Цахилгаан
-            html += tsakhilgaan.map((mur) => {
-              const currentRow = incrementRow();
-              return `
+            html += tsakhilgaan
+              .map((mur) => {
+                const currentRow = incrementRow();
+                return `
               <tr>
                 <td style="border: 1px solid #000; text-align: center;" rowspan="2">${currentRow}</td>
                 <td colspan="2" rowspan="2" style="border: 1px solid #000; text-align: left;">Цахилгааны төлбөр</td>
@@ -313,8 +329,8 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tulukhDun&gt;</td>
               </tr>
             `;
-            })
-            .join("");
+              })
+              .join("");
 
             // Усны төлбөр header
             if (hasUs) {
@@ -330,7 +346,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   <td style="border: 1px solid #000; text-align: center;">Ус халаасны тариф</td>
                   <td style="border: 1px solid #000; text-align: center;">Нийт дүн</td>
                 </tr>
-              `
+              `;
             }
 
             // Халуун ус
@@ -388,7 +404,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               `
               )
               .join("");
-            
+
             return html;
           })()}
 
