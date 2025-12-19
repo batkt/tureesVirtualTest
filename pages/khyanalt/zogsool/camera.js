@@ -685,6 +685,12 @@ function camera({ token }) {
       )
         return;
 
+      console.log(" ------->> " + data.oruulakhguiEsekh);
+      if (!data?.oruulakhguiEsekh) {
+        khaalgaNeey(data.cameraIP);
+        onRefresh();
+      }  
+
       const dugaar = data.mashiniiDugaar?.replace("???", "");
       if(!!dugaar)
       {
@@ -696,12 +702,6 @@ function camera({ token }) {
           .get(url)
           .catch(() => {});
       }
-
-      if (!data.oruulakhguiEsekh) {
-        khaalgaNeey(data.cameraIP);
-        onRefresh();
-      }
-
       if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
         zurchilteiMashinMsgilgeekh(dugaar);
     };
