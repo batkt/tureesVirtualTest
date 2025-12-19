@@ -628,8 +628,6 @@ function camera({ token }) {
         data?.baiguullagiinId !== baiguullaga?._id
       )
         return;
-      let dugaar = data.mashiniiDugaar?.replace("???", "");
-      if (!dugaar) return;
       khaalgaNeey(data.cameraIP);
       onRefresh();
     };
@@ -688,15 +686,16 @@ function camera({ token }) {
         return;
 
       const dugaar = data.mashiniiDugaar?.replace("???", "");
-      if (!dugaar) return;
-
-      const url = `/sambar/${data.cameraIP}/${dugaar}/${moment().format(
-        "HH:mm:ss"
-      )}`;
-
-      zogsoolUilchilgee()
-        .get(url)
-        .catch(() => {});
+      if(!!dugaar)
+      {
+        const url = `/sambar/${data.cameraIP}/${dugaar}/${moment().format(
+          "HH:mm:ss"
+        )}`;
+        
+        zogsoolUilchilgee()
+          .get(url)
+          .catch(() => {});
+      }
 
       if (!data.oruulakhguiEsekh) {
         khaalgaNeey(data.cameraIP);
@@ -716,7 +715,6 @@ function camera({ token }) {
         return;
 
       let dugaar = u.mashiniiDugaar?.replace("???", "");
-      if (!dugaar) return;
       const garsanKhaalga = u?.tuukh?.[0]?.garsanKhaalga;
       let niit = u?.niitDun;
       if (u?.tuukh?.[0]?.tulbur?.length > 0) {
@@ -765,12 +763,14 @@ function camera({ token }) {
       )
         return;
       let dugaar = data?.mashiniiDugaar?.replace("???", "");
-      if (!dugaar) return;
-      zogsoolUilchilgee()
-        .get(
-          `/sambar/${data?.cameraIP}/${dugaar}/${moment().format("HH:mm:ss")}`
-        )
-        .catch(() => {});
+      if (!!dugaar)
+      {
+        zogsoolUilchilgee()
+          .get(
+            `/sambar/${data?.cameraIP}/${dugaar}/${moment().format("HH:mm:ss")}`
+          )
+          .catch(() => {});
+      }
 
       khaalgaNeey(data.cameraIP);
       onRefresh();
