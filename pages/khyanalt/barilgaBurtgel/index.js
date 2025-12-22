@@ -182,10 +182,10 @@ function BarilgaBurtgel({ token }) {
   );
 
   const avalgiinChartUngu =
-    avlagiinChartSalbaraarAvya?.data?.backgroundColor.map((a) => a);
+    avlagiinChartSalbaraarAvya?.data?.backgroundColor?.map((a) => a) || [];
 
   const orolgiinChartUngu =
-    orlogiinChartSalbaraarAvya?.data?.backgroundColor.map((a) => a);
+    orlogiinChartSalbaraarAvya?.data?.backgroundColor?.map((a) => a) || [];
 
   const avlaga = useMemo(() => {
     return {

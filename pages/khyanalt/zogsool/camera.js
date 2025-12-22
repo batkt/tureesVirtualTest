@@ -39,6 +39,8 @@ import {
   ArrowRightOutlined,
   VideoCameraAddOutlined,
   VideoCameraOutlined,
+  LoadingOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import BaganiinSongolt from "components/table/BaganiinSongolt";
@@ -243,7 +245,11 @@ function tulburKhurvuulekh(v) {
 
 function camera({ token }) {
   const { t, i18n } = useTranslation();
-  const { baiguullaga, ajiltan, barilgiinId } = useAuth();
+  const { baiguullaga, ajiltan, barilgiinId, isOfflineMode, isOnline } =
+    useAuth();
+  const [syncStatus, setSyncStatus] = useState("idle"); // idle, syncing, success, error
+  const [pendingUpdates, setPendingUpdates] = useState([]);
+  const [pendingCarsUpdateTrigger, setPendingCarsUpdateTrigger] = useState(0);
   const [ognoo, setOgnoo] = useState([
     moment().startOf("day"),
     moment().endOf("day"),
@@ -538,7 +544,140 @@ function camera({ token }) {
     if (Array.isArray(data) && data.length === 2) {
       setCamerVal(data);
     }
+    // Load pending updates
+    if (typeof window !== "undefined") {
+      const stored = JSON.parse(
+        localStorage.getItem("cameraPendingUpdates") || "[]"
+      );
+      setPendingUpdates(stored);
+    }
   }, []);
+
+  const syncPendingUpdates = useCallback(async () => {
+    if (typeof window === "undefined") return;
+
+    const storedUpdates = JSON.parse(
+      localStorage.getItem("cameraPendingUpdates") || "[]"
+    );
+    const storedCars = JSON.parse(
+      localStorage.getItem("cameraPendingCars") || "[]"
+    );
+
+    if (storedUpdates.length === 0 && storedCars.length === 0) return;
+
+    setSyncStatus("syncing");
+    const successful = [];
+    const failed = [];
+    const successfulCars = [];
+    const failedCars = [];
+
+    // Sync pending updates
+    for (const update of storedUpdates) {
+      try {
+        if (update.type === "updateUilchluulegch") {
+          const response = await updateMethod(
+            "uilchluulegch",
+            token,
+            update.body
+          );
+          if (response?.data === "Amjilttai") {
+            successful.push(update.id);
+          } else {
+            failed.push(update);
+          }
+        }
+      } catch (error) {
+        failed.push(update);
+      }
+    }
+
+    // Sync pending cars
+    for (const car of storedCars) {
+      try {
+        if (car.type === "addCar" || car.type === "addCarFromEntry") {
+          const endpoint =
+            car.type === "addCarFromEntry"
+              ? "/zogsoolOrlogoGaraas"
+              : "/zogsoolSdkService";
+          const response = await uilchilgee(token).post(endpoint, car.data);
+          if (response?.status === 200 && !response?.data?.aldaa) {
+            successfulCars.push(car.id);
+          } else {
+            failedCars.push(car);
+          }
+        } else if (car.type === "removeCar") {
+          const response = await uilchilgee(token).post(
+            "/zogsoolSdkService",
+            car.data
+          );
+          if (response?.status === 200 && !response?.data?.aldaa) {
+            successfulCars.push(car.id);
+          } else {
+            failedCars.push(car);
+          }
+        }
+      } catch (error) {
+        failedCars.push(car);
+      }
+    }
+
+    // Remove successful updates
+    const remainingUpdates = storedUpdates.filter(
+      (update) => !successful.includes(update.id)
+    );
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        "cameraPendingUpdates",
+        JSON.stringify(remainingUpdates)
+      );
+    }
+    setPendingUpdates(remainingUpdates);
+
+    // Remove successful cars
+    const remainingCars = storedCars.filter(
+      (car) => !successfulCars.includes(car.id)
+    );
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cameraPendingCars", JSON.stringify(remainingCars));
+      // Trigger UI update to remove synced cars
+      setPendingCarsUpdateTrigger((prev) => prev + 1);
+    }
+
+    const totalSuccessful = successful.length + successfulCars.length;
+    const totalFailed = failed.length + failedCars.length;
+
+    if (totalSuccessful > 0) {
+      setSyncStatus("success");
+      message.success(
+        t(`Амжилттай синк хийгдлээ (${totalSuccessful} өгөгдөл)`)
+      );
+      onRefresh();
+      setTimeout(() => setSyncStatus("idle"), 3000);
+    }
+
+    if (totalFailed > 0 && totalSuccessful === 0) {
+      setSyncStatus("error");
+      message.error(t("Синк хийхэд алдаа гарлаа"));
+      setTimeout(() => setSyncStatus("idle"), 3000);
+    } else if (totalFailed > 0) {
+      message.warning(t(`${totalFailed} өгөгдөл синк хийгдсэнгүй`));
+    }
+  }, [token, t, onRefresh]);
+
+  // Sync pending updates when coming back online
+  useEffect(() => {
+    if (!isOfflineMode && isOnline && typeof window !== "undefined") {
+      const storedUpdates = JSON.parse(
+        localStorage.getItem("cameraPendingUpdates") || "[]"
+      );
+      const storedCars = JSON.parse(
+        localStorage.getItem("cameraPendingCars") || "[]"
+      );
+      if (storedUpdates.length > 0 || storedCars.length > 0) {
+        syncPendingUpdates();
+      }
+    }
+  }, [isOfflineMode, isOnline, syncPendingUpdates]);
 
   useEffect(() => {
     const a1 = generateChild(jagsaalt, "Орох");
@@ -1291,6 +1430,18 @@ function camera({ token }) {
           // If turul is "Үнэгүй", always show "Үнэгүй"
           if (a === "Үнэгүй") {
             return "Үнэгүй";
+          }
+
+          // Use mashin.turul if it exists - this should always be used when available
+          const mashinTurul = b?.mashin?.turul;
+          if (mashinTurul) {
+            return mashinTurul;
+          }
+
+          // Also check top-level turul if it's a valid type
+          const topLevelTurul = b?.turul;
+          if (topLevelTurul && topLevelTurul !== "Үнэгүй") {
+            return topLevelTurul;
           }
 
           const mur = b.tuukh?.[0];
@@ -2173,32 +2324,96 @@ function camera({ token }) {
             }
           }
           if (modalOpen.type !== "dugaarBurtgekh") {
-            updateMethod("uilchluulegch", token, body).then(({ data }) => {
-              if (data === "Amjilttai") {
-                message.success(t("Амжилттай хадгаллаа"));
-                if (
-                  value !== "Маргалдсан" &&
-                  value !== "Журам зөрчсөн" &&
-                  value !== "Зугтаасан"
-                ) {
-                  khaalgaNeey(body?.tuukh?.[0]?.garsanKhaalga);
-                }
-                if (searchUtga.current?.value) {
-                  searchUtga.current.value = "";
-                  setUilchluulegchKhuudaslalt((e) => ({
-                    ...e,
-                    khuudasniiDugaar: 1,
-                    search: "",
-                  }));
-                  setKhaikh("");
-                }
-                onRefresh();
+            // Check if offline
+            if (isOfflineMode || !isOnline) {
+              // Store pending update
+              const pendingUpdate = {
+                type: "updateUilchluulegch",
+                body: body,
+                timestamp: new Date().toISOString(),
+                id: Date.now(),
+              };
+              if (typeof window !== "undefined") {
+                const stored = JSON.parse(
+                  localStorage.getItem("cameraPendingUpdates") || "[]"
+                );
+                stored.push(pendingUpdate);
+                localStorage.setItem(
+                  "cameraPendingUpdates",
+                  JSON.stringify(stored)
+                );
+                setPendingUpdates(stored);
               }
-            });
+              message.warning(
+                t(
+                  "Оффлайн горимд байна. Хадгалсан өгөгдөл сүлжээнд холбогдох үед синк хийгдэнэ."
+                )
+              );
+              setModalOpen({ bool: false, item: null, type: "" });
+              setValue(null);
+              onRefresh();
+              return;
+            }
+
+            updateMethod("uilchluulegch", token, body)
+              .then(({ data }) => {
+                if (data === "Amjilttai") {
+                  message.success(t("Амжилттай хадгаллаа"));
+                  if (
+                    value !== "Маргалдсан" &&
+                    value !== "Журам зөрчсөн" &&
+                    value !== "Зугтаасан"
+                  ) {
+                    khaalgaNeey(body?.tuukh?.[0]?.garsanKhaalga);
+                  }
+                  if (searchUtga.current?.value) {
+                    searchUtga.current.value = "";
+                    setUilchluulegchKhuudaslalt((e) => ({
+                      ...e,
+                      khuudasniiDugaar: 1,
+                      search: "",
+                    }));
+                    setKhaikh("");
+                  }
+                  onRefresh();
+                }
+              })
+              .catch((error) => {
+                // If network error, store as pending
+                if (!navigator.onLine) {
+                  const pendingUpdate = {
+                    type: "updateUilchluulegch",
+                    body: body,
+                    timestamp: new Date().toISOString(),
+                    id: Date.now(),
+                  };
+                  if (typeof window !== "undefined") {
+                    const stored = JSON.parse(
+                      localStorage.getItem("cameraPendingUpdates") || "[]"
+                    );
+                    stored.push(pendingUpdate);
+                    localStorage.setItem(
+                      "cameraPendingUpdates",
+                      JSON.stringify(stored)
+                    );
+                    setPendingUpdates(stored);
+                  }
+                  message.warning(
+                    t(
+                      "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед синк хийгдэнэ."
+                    )
+                  );
+                }
+              });
             setModalOpen({ bool: false, item: null, type: "" });
             setValue(null);
           }
         } else message.warn("Уучлаарай дахин оролдоно уу");
+      })
+      .catch((error) => {
+        if (!navigator.onLine || isOfflineMode) {
+          message.warning(t("Оффлайн горимд байна. Огноо авах боломжгүй."));
+        }
       });
   };
 
@@ -2376,6 +2591,39 @@ function camera({ token }) {
       }
     });
 
+    // Check if offline
+    if (isOfflineMode || !isOnline) {
+      // Store as pending car
+      const pendingCar = {
+        type: "addCar",
+        data: {
+          ...body,
+          baiguullagiinId: baiguullaga?._id,
+          barilgiinId: barilgiinId,
+          createdAt: new Date().toISOString(),
+        },
+        timestamp: new Date().toISOString(),
+        id: Date.now(),
+      };
+      if (typeof window !== "undefined") {
+        const stored = JSON.parse(
+          localStorage.getItem("cameraPendingCars") || "[]"
+        );
+        stored.push(pendingCar);
+        localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
+        // Trigger UI update
+        setPendingCarsUpdateTrigger((prev) => prev + 1);
+      }
+
+      notification.success({ message: t("Амжилттай бүртгэгдлээ (Оффлайн)") });
+      setModalOpen({ bool: false, item: null, type: "" });
+      form.resetFields();
+
+      // Update UI immediately
+      onRefresh();
+      return;
+    }
+
     uilchilgee(token)
       .post("/zogsoolSdkService", body)
       .then((res) => {
@@ -2531,6 +2779,34 @@ function camera({ token }) {
       if (barilgiinId) {
         yavuulakhData.barilgiinId = barilgiinId;
       }
+      // Check if offline
+      if (isOfflineMode || !isOnline) {
+        // Store as pending car removal
+        const pendingCar = {
+          type: "removeCar",
+          data: {
+            ...yavuulakhData,
+            originalData: data,
+            baiguullagiinId: baiguullaga?._id,
+          },
+          timestamp: new Date().toISOString(),
+          id: Date.now(),
+        };
+        if (typeof window !== "undefined") {
+          const stored = JSON.parse(
+            localStorage.getItem("cameraPendingCars") || "[]"
+          );
+          stored.push(pendingCar);
+          localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
+          // Trigger UI update
+          setPendingCarsUpdateTrigger((prev) => prev + 1);
+        }
+
+        notification.success({ message: t("Амжилттай бүртгэгдлээ (Оффлайн)") });
+        onRefresh();
+        return;
+      }
+
       uilchilgee(token)
         .post("/zogsoolSdkService", yavuulakhData)
         .then((res) => {
@@ -2729,6 +3005,36 @@ function camera({ token }) {
     yavuulakhData.orsonCamera = camerVal[0];
     yavuulakhData.garsanCamera = camerVal[1];
 
+    // Check if offline
+    if (isOfflineMode || !isOnline) {
+      // Store as pending car
+      const pendingCar = {
+        type: "addCarFromEntry",
+        data: {
+          ...yavuulakhData,
+          baiguullagiinId: baiguullaga?._id,
+          createdAt: new Date().toISOString(),
+        },
+        timestamp: new Date().toISOString(),
+        id: Date.now(),
+      };
+      if (typeof window !== "undefined") {
+        const stored = JSON.parse(
+          localStorage.getItem("cameraPendingCars") || "[]"
+        );
+        stored.push(pendingCar);
+        localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
+        // Trigger UI update
+        setPendingCarsUpdateTrigger((prev) => prev + 1);
+      }
+
+      notification.success({ message: t("Амжилттай бүртгэгдлээ (Оффлайн)") });
+      setModalOpen({ bool: false, item: null, type: "" });
+      form.resetFields();
+      onRefresh();
+      return;
+    }
+
     uilchilgee(token)
       .post("/zogsoolOrlogoGaraas", yavuulakhData)
       .then((res) => {
@@ -2753,7 +3059,38 @@ function camera({ token }) {
           }
         }
       })
-      .catch(aldaaBarigch);
+      .catch((error) => {
+        // If network error, store as pending
+        if (!navigator.onLine || isOfflineMode) {
+          const pendingCar = {
+            type: "addCarFromEntry",
+            data: {
+              ...yavuulakhData,
+              baiguullagiinId: baiguullaga?._id,
+              createdAt: new Date().toISOString(),
+            },
+            timestamp: new Date().toISOString(),
+            id: Date.now(),
+          };
+          if (typeof window !== "undefined") {
+            const stored = JSON.parse(
+              localStorage.getItem("cameraPendingCars") || "[]"
+            );
+            stored.push(pendingCar);
+            localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
+            // Trigger UI update
+            setPendingCarsUpdateTrigger((prev) => prev + 1);
+          }
+          notification.warning(
+            t(
+              "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед синк хийгдэнэ."
+            )
+          );
+          onRefresh();
+        } else {
+          aldaaBarigch(error);
+        }
+      });
   };
 
   const modalKhaakh = () => {
@@ -2781,10 +3118,70 @@ function camera({ token }) {
       }
     });
   }
-  const filteredJagsaalt = useMemo(() => {
-    if (!uilchluulegchGaralt?.jagsaalt) return [];
+  // Merge pending cars with actual data for offline support
+  const mergedJagsaalt = useMemo(() => {
+    const actual = uilchluulegchGaralt?.jagsaalt || [];
+    const pendingCars =
+      typeof window !== "undefined"
+        ? JSON.parse(localStorage.getItem("cameraPendingCars") || "[]")
+        : [];
 
-    let filtered = uilchluulegchGaralt.jagsaalt;
+    // Filter out pending cars that are already synced (exist in actual data)
+    const unsyncedPending = pendingCars.filter((pending) => {
+      if (pending.type === "addCar" || pending.type === "addCarFromEntry") {
+        // Check if this car already exists in actual data
+        return !actual.some(
+          (item) => item.mashiniiDugaar === pending.data.mashiniiDugaar
+        );
+      }
+      return false; // Remove operations don't need to be shown
+    });
+
+    // Add pending cars to the list with proper structure
+    const pendingToAdd = unsyncedPending
+      .filter((p) => p.type === "addCar" || p.type === "addCarFromEntry")
+      .map((p) => {
+        const carData = p.data;
+        // Ensure mashiniiDugaar is uppercase to match actual data format
+        const mashiniiDugaar =
+          carData.mashiniiDugaar?.toUpperCase() || carData.mashiniiDugaar;
+        return {
+          _id: `pending_${p.id}`, // Temporary ID
+          mashiniiDugaar: mashiniiDugaar,
+          baiguullagiinId: carData.baiguullagiinId || baiguullaga?._id,
+          barilgiinId: carData.barilgiinId || barilgiinId,
+          turul: carData.turul || "Үнэгүй",
+          isPending: true,
+          createdAt: carData.createdAt || p.timestamp,
+          niitDun: carData.tulukhDun || 0,
+          tuukh: carData.tuukh || [
+            {
+              tuluv: 0,
+              tulukhDun: carData.tulukhDun || 0,
+              tsagiinTuukh: [
+                {
+                  orsonTsag: new Date(carData.createdAt || p.timestamp),
+                },
+              ],
+            },
+          ],
+          mashin: carData.mashin || {},
+        };
+      });
+
+    const merged = [...actual, ...pendingToAdd];
+    return merged;
+  }, [
+    uilchluulegchGaralt?.jagsaalt,
+    baiguullaga?._id,
+    barilgiinId,
+    pendingCarsUpdateTrigger,
+  ]);
+
+  const filteredJagsaalt = useMemo(() => {
+    if (!mergedJagsaalt || mergedJagsaalt.length === 0) return [];
+
+    let filtered = mergedJagsaalt;
 
     if (turul) {
       if (turul === "Төлбөртэй") {
@@ -2866,18 +3263,27 @@ function camera({ token }) {
 
       return currentStatus === tuluvFilter;
     });
-  }, [uilchluulegchGaralt?.jagsaalt, tuluvFilter, turul]);
+  }, [mergedJagsaalt, tuluvFilter, turul]);
 
   const filteredData = useMemo(() => {
     const hasClientFilter = !!turul || !!tuluvFilter;
-    if (!hasClientFilter) return uilchluulegchGaralt;
-    return {
+    // Always use merged data to include pending cars
+    const baseData = {
       ...uilchluulegchGaralt,
-      jagsaalt: filteredJagsaalt,
-
-      niitMur: uilchluulegchGaralt?.niitMur ?? filteredJagsaalt.length,
+      jagsaalt: hasClientFilter ? filteredJagsaalt : mergedJagsaalt,
+      niitMur: hasClientFilter
+        ? uilchluulegchGaralt?.niitMur ?? filteredJagsaalt.length
+        : uilchluulegchGaralt?.niitMur ?? mergedJagsaalt.length,
     };
-  }, [uilchluulegchGaralt, filteredJagsaalt, turul, tuluvFilter]);
+    if (!hasClientFilter) return baseData;
+    return baseData;
+  }, [
+    uilchluulegchGaralt,
+    filteredJagsaalt,
+    mergedJagsaalt,
+    turul,
+    tuluvFilter,
+  ]);
 
   const tableSummary = useMemo(() => {
     if (!tuluvFilter && uilchluulegchGaralt?.niitDun !== undefined) {
@@ -4008,6 +4414,34 @@ function camera({ token }) {
                   >
                     {t("Камер")}
                   </Button>
+                  {/* Offline/Sync Status Indicator */}
+                  {isOfflineMode || !isOnline ? (
+                    <div className="flex items-center gap-2 rounded-lg bg-yellow-100 px-3 py-1.5 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                      <ExclamationCircleOutlined />
+                      <span className="text-sm font-medium">
+                        {t("Оффлайн горим")}
+                      </span>
+                      {pendingUpdates.length > 0 && (
+                        <span className="text-xs">
+                          ({pendingUpdates.length} {t("хүлээгдэж буй")})
+                        </span>
+                      )}
+                    </div>
+                  ) : syncStatus === "syncing" ? (
+                    <div className="flex items-center gap-2 rounded-lg bg-blue-100 px-3 py-1.5 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                      <LoadingOutlined spin />
+                      <span className="text-sm font-medium">
+                        {t("Синк хийж байна...")}
+                      </span>
+                    </div>
+                  ) : syncStatus === "success" ? (
+                    <div className="flex items-center gap-2 rounded-lg bg-green-100 px-3 py-1.5 text-green-800 dark:bg-green-900 dark:text-green-200">
+                      <CheckCircleOutlined />
+                      <span className="text-sm font-medium">
+                        {t("Синк амжилттай")}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
                 <Drawer
                   width={"100vw"}

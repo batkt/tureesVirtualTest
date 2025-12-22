@@ -51,6 +51,7 @@ function openIndexedDB() {
 }
 
 const API_CACHE_NAME = "api-cache-v1";
+const PAGE_CACHE_NAME = "page-cache-v1";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -62,10 +63,18 @@ self.addEventListener("install", (event) => {
         console.error("IndexedDB setup failed:", error);
       }
 
+      // Cache offline.html and other critical assets
+      const pageCache = await caches.open(PAGE_CACHE_NAME);
+      try {
+        await pageCache.add("/offline.html");
+      } catch (error) {
+        console.error("Failed to cache offline.html:", error);
+      }
+
       const keys = await caches.keys();
       await Promise.all(
         keys
-          .filter((key) => key !== API_CACHE_NAME)
+          .filter((key) => key !== API_CACHE_NAME && key !== PAGE_CACHE_NAME)
           .map((key) => caches.delete(key))
       );
 
@@ -80,7 +89,7 @@ self.addEventListener("activate", (event) => {
       const keys = await caches.keys();
       await Promise.all(
         keys
-          .filter((key) => key !== API_CACHE_NAME)
+          .filter((key) => key !== API_CACHE_NAME && key !== PAGE_CACHE_NAME)
           .map((key) => caches.delete(key))
       );
 
@@ -116,7 +125,10 @@ async function networkWithTimeout(request, timeoutMs = 5000) {
 
 self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(event.request.url);
-  let responsePromise;
+  const isNavigationRequest =
+    event.request.mode === "navigate" ||
+    (event.request.method === "GET" &&
+      event.request.headers.get("accept")?.includes("text/html"));
 
   // Never cache upload requests - always use network
   if (requestUrl.pathname.includes("/upload")) {
@@ -124,115 +136,191 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Handle API requests
   if (requestUrl.pathname.startsWith("/api/")) {
     if (event.request.method === "POST") {
-      responsePromise = (async () => {
-        try {
-          const response = await networkWithTimeout(event.request.clone());
-          return response;
-        } catch (err) {
-          const reqClone = event.request.clone();
-          let body;
-          let contentType = event.request.headers.get("content-type") || "";
-
+      event.respondWith(
+        (async () => {
           try {
-            if (contentType.includes("application/json")) {
-              body = await reqClone.json();
-            } else {
-              body = await reqClone.text();
-            }
-          } catch (bodyErr) {
-            body = null;
-          }
+            const response = await networkWithTimeout(event.request.clone());
+            return response;
+          } catch (err) {
+            const reqClone = event.request.clone();
+            let body;
+            let contentType = event.request.headers.get("content-type") || "";
 
-          try {
-            const db = await openIndexedDB();
-
-            if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-              db.close();
-              throw new Error("PAYMENTS сан байхгүй байна");
+            try {
+              if (contentType.includes("application/json")) {
+                body = await reqClone.json();
+              } else {
+                body = await reqClone.text();
+              }
+            } catch (bodyErr) {
+              body = null;
             }
 
-            const tx = db.transaction(STORES.PAYMENTS, "readwrite");
-            const store = tx.objectStore(STORES.PAYMENTS);
+            try {
+              const db = await openIndexedDB();
 
-            const paymentData = {
-              url: event.request.url,
-              body,
-              method: event.request.method,
-              headers: serializeHeaders(event.request.headers),
-              contentType,
-              synced: false,
-              createdAt: new Date().toISOString(),
-              retryCount: 0,
-              lastError: err.message,
-            };
+              if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
+                db.close();
+                throw new Error("PAYMENTS сан байхгүй байна");
+              }
 
-            await new Promise((resolve, reject) => {
-              const addRequest = store.add(paymentData);
+              const tx = db.transaction(STORES.PAYMENTS, "readwrite");
+              const store = tx.objectStore(STORES.PAYMENTS);
 
-              addRequest.onsuccess = () => {
-                self.clients.matchAll().then((clients) => {
-                  clients.forEach((client) => {
-                    client.postMessage({
-                      type: "PAYMENT_SAVED_OFFLINE",
-                      payment: { ...paymentData, id: addRequest.result },
-                      timestamp: new Date().toISOString(),
-                    });
-                  });
-                });
-
-                resolve();
+              const paymentData = {
+                url: event.request.url,
+                body,
+                method: event.request.method,
+                headers: serializeHeaders(event.request.headers),
+                contentType,
+                synced: false,
+                createdAt: new Date().toISOString(),
+                retryCount: 0,
+                lastError: err.message,
               };
 
-              addRequest.onerror = () => reject(addRequest.error);
-            });
+              await new Promise((resolve, reject) => {
+                const addRequest = store.add(paymentData);
 
-            db.close();
-          } catch (dbError) {}
+                addRequest.onsuccess = () => {
+                  self.clients.matchAll().then((clients) => {
+                    clients.forEach((client) => {
+                      client.postMessage({
+                        type: "PAYMENT_SAVED_OFFLINE",
+                        payment: { ...paymentData, id: addRequest.result },
+                        timestamp: new Date().toISOString(),
+                      });
+                    });
+                  });
 
-          return new Response(
-            JSON.stringify({
-              offline: true,
-              message: "Хүсэлт арын синкэд хадгалагдлаа",
-              timestamp: new Date().toISOString(),
-              success: true,
-            }),
-            { status: 200, headers: { "Content-Type": "application/json" } }
-          );
-        }
-      })();
+                  resolve();
+                };
+
+                addRequest.onerror = () => reject(addRequest.error);
+              });
+
+              db.close();
+            } catch (dbError) {}
+
+            return new Response(
+              JSON.stringify({
+                offline: true,
+                message: "Хүсэлт арын синкэд хадгалагдлаа",
+                timestamp: new Date().toISOString(),
+                success: true,
+              }),
+              { status: 200, headers: { "Content-Type": "application/json" } }
+            );
+          }
+        })()
+      );
+      return;
     } else {
-      responsePromise = networkWithTimeout(event.request)
-        .then((response) => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches
-              .open(API_CACHE_NAME)
-              .then((cache) => cache.put(event.request, clone));
+      // GET API requests - Network first, then cache, then proper JSON error
+      event.respondWith(
+        (async () => {
+          try {
+            const response = await networkWithTimeout(event.request);
+            if (response.ok) {
+              const clone = response.clone();
+              caches
+                .open(API_CACHE_NAME)
+                .then((cache) => cache.put(event.request, clone));
+            }
+            return response;
+          } catch (err) {
+            const cachedResponse = await caches.match(event.request);
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            // Return proper JSON error response for API requests
+            return new Response(
+              JSON.stringify({
+                offline: true,
+                error: "Интернет салсан байна",
+                message: "Сүлжээнд холбогдох боломжгүй байна",
+              }),
+              {
+                status: 503,
+                headers: { "Content-Type": "application/json" },
+              }
+            );
           }
-          return response;
-        })
-        .catch(async () => {
-          const cachedResponse = await caches.match(event.request);
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          return new Response("Интернет салсан байна", { status: 503 });
-        });
+        })()
+      );
+      return;
     }
-  } else {
-    responsePromise = caches.match(event.request).then((response) => {
-      if (response) {
-        return response;
-      }
-      return fetch(event.request).catch(() => {
-        return new Response("Интернет салсан байна", { status: 503 });
-      });
-    });
   }
 
-  event.respondWith(responsePromise);
+  // Handle navigation requests (HTML pages)
+  if (isNavigationRequest) {
+    event.respondWith(
+      (async () => {
+        // Try cache first
+        const cachedResponse = await caches.match(event.request);
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        // Try network
+        try {
+          const networkResponse = await fetch(event.request);
+          if (networkResponse.ok) {
+            // Cache successful responses
+            const clone = networkResponse.clone();
+            caches
+              .open(PAGE_CACHE_NAME)
+              .then((cache) => cache.put(event.request, clone));
+          }
+          return networkResponse;
+        } catch (err) {
+          // Network failed - serve offline.html as fallback
+          const offlineResponse = await caches.match("/offline.html");
+          if (offlineResponse) {
+            return offlineResponse;
+          }
+          // If offline.html is not cached, return a basic offline message
+          return new Response(
+            '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Оффлайн</title></head><body><h1>Интернет салсан байна</h1><p>Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.</p></body></html>',
+            {
+              status: 200,
+              headers: { "Content-Type": "text/html; charset=utf-8" },
+            }
+          );
+        }
+      })()
+    );
+    return;
+  }
+
+  // Handle other requests (assets, images, etc.) - Cache first, then network
+  event.respondWith(
+    (async () => {
+      const cachedResponse = await caches.match(event.request);
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      try {
+        const networkResponse = await fetch(event.request);
+        if (networkResponse.ok) {
+          // Cache successful responses
+          const clone = networkResponse.clone();
+          caches
+            .open(PAGE_CACHE_NAME)
+            .then((cache) => cache.put(event.request, clone));
+        }
+        return networkResponse;
+      } catch (err) {
+        // For non-navigation requests, return a proper error
+        // Don't show offline.html for assets
+        return new Response("", { status: 503 });
+      }
+    })()
+  );
 });
 
 self.addEventListener("sync", (event) => {
