@@ -2065,6 +2065,8 @@ function tulburTootsoo({ token }) {
                 nekhemjlekh.umnukhSariinTulsunDun = formatNumber(tulsunDun);
                 
                 if (nekhemjlekh.niitDun !== undefined && nekhemjlekh.niitDun !== null) {
+                  if(nekhemjlekh.aldangiinUldegdel > 0)
+                  nekhemjlekh.niitDun += nekhemjlekh.aldangiinUldegdel || 0;
                   const niitDun = parseFloat(
                     typeof nekhemjlekh.niitDun === 'string' 
                       ? nekhemjlekh.niitDun.replace(/,/g, '') 
