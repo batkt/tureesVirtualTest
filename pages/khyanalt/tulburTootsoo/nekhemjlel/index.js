@@ -386,8 +386,9 @@ function tulburTootsoo({ token }) {
                 ) || 0;
                 medeelel.niitDun = formatNumber(niitDun);
               }
-              
               if (medeelel.garaasBodsonNiitDun !== undefined && medeelel.garaasBodsonNiitDun !== null) {
+                if(medeelel.aldangiinUldegdel > 0)
+                  medeelel.garaasBodsonNiitDun += medeelel.aldangiinUldegdel || 0;
                 const garaasBodsonNiitDun = parseFloat(
                   typeof medeelel.garaasBodsonNiitDun === 'string' 
                     ? medeelel.garaasBodsonNiitDun.replace(/,/g, '') 
