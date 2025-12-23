@@ -130,6 +130,25 @@ self.addEventListener("fetch", (event) => {
     (event.request.method === "GET" &&
       event.request.headers.get("accept")?.includes("text/html"));
 
+ 
+  const authEndpoints = [
+    "/ajiltanNevtrey",
+    "/erkhiinMedeelelAvya",
+    "/ajiltanGarya",
+    "/token",
+    "/login",
+    "/logout",
+    "/auth",
+  ];
+  const isAuthRequest = authEndpoints.some((endpoint) =>
+    requestUrl.pathname.includes(endpoint)
+  );
+  
+  if (isAuthRequest) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   // Never cache upload requests - always use network
   if (requestUrl.pathname.includes("/upload")) {
     event.respondWith(fetch(event.request));
