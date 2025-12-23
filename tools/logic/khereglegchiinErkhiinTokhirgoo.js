@@ -10,7 +10,7 @@ import { SiRiotgames } from "react-icons/si";
 import { TbLego } from "react-icons/tb";
 import useKhuudasniiJagsaalt from "hooks/useKhuudasniiJagsaalt";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
-import { message } from "antd";
+import { toast } from "sonner";
 import { t } from "i18next";
 import {
   MobileFilled,
@@ -300,19 +300,27 @@ export function ekhniiTsonkhruuOchyo(ajiltan, token) {
       });
       if (ajiltan?.erkh === "Admin") {
         if (AdminErkhShalgakh !== undefined) {
-          message.success(t("Тавтай морил"));
+          toast.success(t("Тавтай морил"), {
+            duration: 3000,
+          });
           window.location.href = "/khyanalt/barilgaBurtgel";
         } else if (data?.moduluud?.length > 0) {
-          message.success(t("Тавтай морил"));
+          toast.success(t("Тавтай морил"), {
+            duration: 3000,
+          });
           window.location.href = data?.moduluud[0]?.zam;
         } else {
-          message.warn("Байгууллагын эрхийн тохиргоог шалгуулна уу!");
+          toast.warning("Байгууллагын эрхийн тохиргоог шалгуулна уу", {
+            duration: 5000,
+          });
         }
       } else if (erkhShalgakh.length > 0) {
         message.success(t("Тавтай морил"));
         window.location.href = erkhShalgakh[0];
       } else {
-        message.error("Ажилтны эрхийн тохиргоо хийгдээгүй байна!");
+        toast.error("Ажилтны эрхийн тохиргоо хийгдээгүй байна", {
+          duration: 5000,
+        });
       }
     })
     .catch(aldaaBarigch);

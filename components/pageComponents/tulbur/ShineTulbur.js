@@ -1,12 +1,12 @@
 import {
   Steps,
   Button,
-  message,
   Modal,
   notification,
   Image,
   Popover,
 } from "antd";
+import { toast } from "sonner";
 import React, { useMemo, useState } from "react";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
@@ -200,7 +200,9 @@ function ShineTulbur(
   }
   function ebarimtguiTulburDuusgakh() {
     khaaya();
-    message.success("Төлбөр амжилттай хадгалагдлаа");
+    toast.success("Төлбөр амжилттай хадгалагдлаа", {
+      duration: 3000,
+    });
   }
 
   useEffect(() => {
@@ -216,7 +218,9 @@ function ShineTulbur(
     if (!!eBarimt) handlePrint();
     else {
       if (baiguullagaEsekh === true && register?.toString().length !== 7) {
-        message.warning(t("Байгууллагын регистр оруулна уу"));
+        toast.warning(t("Байгууллагын регистр оруулна уу"), {
+          duration: 4000,
+        });
         setLoading(false);
         return;
       }
@@ -303,11 +307,15 @@ function ShineTulbur(
   function guilgeeniiTuukhKhadgalya(tulbur, qpayEsekh, ebarimtShuud = false) {
     if (khungulukhEsekh === true) {
       if (!khunglult.khungulukhDun || khunglult.khungulukhDun === "") {
-        message.warn(t("Хөнгөлөх дүн оруулна уу"));
+        toast.warning(t("Хөнгөлөх дүн оруулна уу"), {
+          duration: 4000,
+        });
         return;
       }
       if (!khunglult.tailbar || khunglult.tailbar === "") {
-        message.warn(t("Хөнгөлөх шалтгаан оруулна уу"));
+        toast.warning(t("Хөнгөлөх шалтгаан оруулна уу"), {
+          duration: 4000,
+        });
         return;
       }
     }
@@ -356,7 +364,9 @@ function ShineTulbur(
           setLoading(false);
         } else {
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
-          message.success("Төлбөр амжилттай хадгалагдлаа");
+          toast.success("Төлбөр амжилттай хадгалагдлаа", {
+      duration: 3000,
+    });
           setLoading(false);
         }
         if (!!qpayEsekh && qpayEsekh === true) {
@@ -374,7 +384,9 @@ function ShineTulbur(
     if (khuleegdejBuiQpay) {
       socket().on(`qpay/${baiguullaga._id}/${khuleegdejBuiQpay}`, (qpay) => {
         batalgaajuulaltKhiiya("qpayTulugdsun");
-        message.success("Qpay Амжилттай төлөгдлөө");
+        toast.success("Qpay Амжилттай төлөгдлөө", {
+          duration: 3000,
+        });
       });
     }
     return () => {
@@ -388,7 +400,9 @@ function ShineTulbur(
     setLoading(true);
     var ilgeekhDun = tulbur.find((a) => a.turul === "qpay")?.dun;
     if (!ilgeekhDun || ilgeekhDun <= 0) {
-      message.warning("Төлөх дүн оруулна уу");
+      toast.warning("Төлөх дүн оруулна уу", {
+        duration: 4000,
+      });
       setLoading(false);
       return;
     }
@@ -447,7 +461,9 @@ function ShineTulbur(
             data?.status == true &&
             data?.response?.response_code !== "000"
           ) {
-            message.success(data?.response?.response_msg);
+            toast.success(data?.response?.response_msg, {
+              duration: 4000,
+            });
           } else if (
             data.status === true &&
             data?.response?.response_code === "366"
@@ -455,7 +471,9 @@ function ShineTulbur(
             tulbur.find((a) => a.turul === "khaan").msg =
               data?.response?.response_msg;
             setTulbur(tulbur);
-            message.warning(data?.response?.response_msg);
+            toast.warning(data?.response?.response_msg, {
+              duration: 4000,
+            });
             setLoading(false);
           }
           setSongogdsonBank(null);

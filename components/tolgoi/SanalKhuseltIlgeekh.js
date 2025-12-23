@@ -1,5 +1,6 @@
 import React, { useImperativeHandle } from "react";
-import { Form, Input, message } from "antd";
+import { Form, Input } from "antd";
+import { toast } from "sonner";
 import TextArea from "antd/lib/input/TextArea";
 import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
@@ -33,11 +34,16 @@ function SanalKhuseltIlgeekh({ destroy, ajiltan }, ref) {
       .then((response) => {
         if (response.data === "Amjilttai") {
           destroy();
-          message.success("Амжилттай илгээлээ");
+          toast.success("Амжилттай илгээлээ", {
+            duration: 3000,
+          });
         }
       })
       .catch((error) => {
-        message.error(error);
+        toast.error("Алдаа гарлаа", {
+          description: error?.message || error,
+          duration: 4000,
+        });
       });
   }
 

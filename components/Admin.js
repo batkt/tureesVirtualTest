@@ -2,7 +2,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Loader from "./loader";
-import { Button, Drawer, Switch, Tooltip, Alert, message } from "antd";
+import { Button, Drawer, Switch, Tooltip, Alert } from "antd";
+import { toast } from "sonner";
 import {
   CloseOutlined,
   LeftOutlined,
@@ -249,11 +250,13 @@ function Admin({
           case "PAYMENT_SAVED_OFFLINE":
             setOfflinePayments((prev) => [...prev, data.payment]);
             if (!navigator.onLine) {
-              message.info(
+              toast.info(
                 t(
                   "Төлбөр интернетгүй үед хадгалагдлаа, Интернет холбогдох үед төлөв өөрчлөгдөх болно."
                 ),
-                10
+                {
+                  duration: 10000,
+                }
               );
             }
             break;
@@ -264,16 +267,20 @@ function Admin({
 
             if (data.results?.successful > 0) {
               if (timeSinceLastMessage > 5000) {
-                message.success(
+                toast.success(
                   `Төлбөрийн синк амжилттай (${data.results.successful})`,
-                  3
+                  {
+                    duration: 3000,
+                  }
                 );
               }
             } else if (
               data.results?.successful === 0 &&
               timeSinceLastMessage > 5000
             ) {
-              message.info("Синк хийх зүйл олдсонгүй", 3);
+              toast.info("Синк хийх зүйл олдсонгүй", {
+                duration: 3000,
+              });
             }
 
             setSyncStatus("idle");
@@ -335,7 +342,9 @@ function Admin({
       setSyncStatus("syncing");
       navigator.serviceWorker.controller?.postMessage({ type: "TRIGGER_SYNC" });
     } else {
-      message.warning("Интернет холболт байхгүй байна");
+      toast.warning("Интернет холболт байхгүй байна", {
+        duration: 3000,
+      });
     }
   }
 

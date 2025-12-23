@@ -62,7 +62,28 @@
   display: flex;
   width: 300%;
 }
+.login-input {
+  min-width: 100% !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  @apply px-4 py-3 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-size: 0.875rem !important;
+}
 
+.login-input:hover {
+  border-color: rgba(34, 197, 94, 0.5) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12) !important;
+}
+
+.login-input:focus,
+.login-input-focused {
+  border-color: #22c55e !important;
+  box-shadow: inset 0 0 0 2px rgba(34, 197, 94, 0.2),
+    0 4px 6px rgba(0, 0, 0, 0.12) !important;
+  outline: none !important;
+}
 .swipe-content {
   width: 33.33%;
   transition: transform 0.3s ease-in-out;

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { format, isValid } from "date-fns";
-import { message } from "antd";
+import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { socket } from "services/uilchilgee";
@@ -137,7 +137,9 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
         setServerSyncStatus(
           (prev) => new Map(prev.set(adminMedegdelId, "error"))
         );
-        message.error(t("Тохиргоо хадгалахад алдаа гарлаа"));
+        toast.error(t("Тохиргоо хадгалахад алдаа гарлаа"), {
+          duration: 4000,
+        });
         aldaaBarigch(error);
         return { success: false, error };
       }
@@ -191,7 +193,9 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
             prev.filter((notif) => notif._id !== notifId)
           );
 
-          message.success(t("Тохиргоо хадгаллаа"));
+          toast.success(t("Тохиргоо хадгаллаа"), {
+            duration: 3000,
+          });
         } else return false;
       } else if (
         adminMedegdelId &&
@@ -208,7 +212,9 @@ const useAdminMedegdel = (token, ajiltanId, options = {}) => {
           newDismissed.delete(notifId);
           setPermanentlyDismissed(newDismissed);
 
-          message.success(t("Тохиргоо цуцаллаа"));
+          toast.success(t("Тохиргоо цуцаллаа"), {
+            duration: 3000,
+          });
         }
       }
 

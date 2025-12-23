@@ -88,18 +88,18 @@ function Ajiltan() {
         src="/copyPasteLogo.png"
       />
       {moment(new Date()).format("MM") === "12" ? (
-        <Snowfall 
-          radius={[5, 20]} 
-          snowflakeCount={80} 
+        <Snowfall
+          radius={[5, 20]}
+          snowflakeCount={80}
           images={images}
           speed={[0.5, 1.5]}
           wind={[-0.3, 0.5]}
           style={{
-            position: 'fixed',
-            width: '100%',
-            height: '100%',
-            pointerEvents: 'none',
-            zIndex: 1000
+            position: "fixed",
+            width: "100%",
+            height: "100%",
+            pointerEvents: "none",
+            zIndex: 1000,
           }}
         />
       ) : null}
