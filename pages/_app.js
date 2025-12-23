@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { AuthProvider } from "../services/auth";
 import { ThemeProvider } from "next-themes";
 import { registerServiceWorker } from "../utils/swHelper";
@@ -20,12 +21,10 @@ import {
 } from "chart.js";
 import "antd/dist/antd.css";
 import "../styles/globals.css";
-import "suneditor/dist/css/suneditor.min.css";
-import "aos/dist/aos.css";
 import "../services/i18n";
 import { Toaster } from "sonner";
 
-// Register Chart.js components
+// Register Chart.js components (used on many pages, so register early)
 ChartJS.register(
   ArcElement,
   CategoryScale,
@@ -38,11 +37,27 @@ ChartJS.register(
   Legend
 );
 
+// Lazy load AOS (animation library) - only needed on client
+const loadAOS = () => {
+  if (typeof window !== "undefined") {
+    import("aos/dist/aos.css").then(() => {
+      const Aos = require("aos");
+      Aos.init({ once: true, duration: 800, easing: "ease-out-cubic", offset: 50 });
+    }).catch(() => {
+      // AOS failed to load, continue silently
+    });
+  }
+};
+
 moment.locale("mn");
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+  
   useEffect(() => {
     registerServiceWorker();
+    // Load AOS on client side only
+    loadAOS();
   }, []);
 
   return (
@@ -50,7 +65,9 @@ function MyApp({ Component, pageProps }) {
       <AuthProvider>
         <Toaster position="top-right" richColors suppressHydrationWarning />
         <ConfigProvider locale={mnMN}>
-          <Component {...pageProps} />
+          <div key={router.asPath} className="page-transition-enter">
+            <Component {...pageProps} />
+          </div>
         </ConfigProvider>
       </AuthProvider>
     </ThemeProvider>

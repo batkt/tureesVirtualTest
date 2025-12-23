@@ -1,5 +1,5 @@
 const DB_NAME = "turees-db";
-const DB_VERSION = 10;
+const DB_VERSION = 9;
 const STORES = {
   USER: "user",
   PAYMENTS: "offline-payments",
@@ -50,8 +50,8 @@ function openIndexedDB() {
   });
 }
 
-const API_CACHE_NAME = "api-cache-v2";
-const PAGE_CACHE_NAME = "page-cache-v2";
+const API_CACHE_NAME = "api-cache-v1";
+const SW_VERSION = "1.0.0";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -63,22 +63,18 @@ self.addEventListener("install", (event) => {
         console.error("IndexedDB setup failed:", error);
       }
 
-      // Cache offline.html and other critical assets
-      const pageCache = await caches.open(PAGE_CACHE_NAME);
-      try {
-        await pageCache.add("/offline.html");
-      } catch (error) {
-        console.error("Failed to cache offline.html:", error);
-      }
-
+      // Only clean up old caches, don't skip waiting immediately
       const keys = await caches.keys();
       await Promise.all(
         keys
-          .filter((key) => key !== API_CACHE_NAME && key !== PAGE_CACHE_NAME)
+          .filter((key) => key !== API_CACHE_NAME)
           .map((key) => caches.delete(key))
       );
 
-      await self.skipWaiting();
+      // Only skip waiting if this is a new installation, not an update
+      if (!self.registration.active) {
+        await self.skipWaiting();
+      }
     })()
   );
 });
@@ -86,14 +82,19 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
+      // Clean up old caches
       const keys = await caches.keys();
       await Promise.all(
         keys
-          .filter((key) => key !== API_CACHE_NAME && key !== PAGE_CACHE_NAME)
+          .filter((key) => key !== API_CACHE_NAME)
           .map((key) => caches.delete(key))
       );
 
-      await self.clients.claim();
+      // Only claim clients if we're the active service worker
+      // This prevents infinite reload loops
+      if (self.registration.active && self.registration.active === self) {
+        await self.clients.claim();
+      }
     })()
   );
 });
@@ -125,30 +126,7 @@ async function networkWithTimeout(request, timeoutMs = 5000) {
 
 self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(event.request.url);
-  const isNavigationRequest =
-    event.request.mode === "navigate" ||
-    (event.request.method === "GET" &&
-      event.request.headers.get("accept")?.includes("text/html"));
-
- 
-  const authEndpoints = [
-    "/ajiltanNevtrey",
-    "/erkhiinMedeelelAvya",
-    "/ajiltanGarya",
-    "/token",
-    "/login",
-    "/logout",
-    "/auth",
-  ];
-  const isAuthRequest = authEndpoints.some((endpoint) =>
-    requestUrl.pathname.includes(endpoint)
-  );
-  
-  // Never cache auth-related API requests - always fetch fresh
-  if (isAuthRequest) {
-    event.respondWith(fetch(event.request));
-    return;
-  }
+  let responsePromise;
 
   // Never cache upload requests - always use network
   if (requestUrl.pathname.includes("/upload")) {
@@ -156,228 +134,115 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Handle API requests
   if (requestUrl.pathname.startsWith("/api/")) {
     if (event.request.method === "POST") {
-      event.respondWith(
-        (async () => {
-          try {
-            const response = await networkWithTimeout(event.request.clone());
-            return response;
-          } catch (err) {
-            const reqClone = event.request.clone();
-            let body;
-            let contentType = event.request.headers.get("content-type") || "";
+      responsePromise = (async () => {
+        try {
+          const response = await networkWithTimeout(event.request.clone());
+          return response;
+        } catch (err) {
+          const reqClone = event.request.clone();
+          let body;
+          let contentType = event.request.headers.get("content-type") || "";
 
-            try {
-              if (contentType.includes("application/json")) {
-                body = await reqClone.json();
-              } else {
-                body = await reqClone.text();
-              }
-            } catch (bodyErr) {
-              body = null;
+          try {
+            if (contentType.includes("application/json")) {
+              body = await reqClone.json();
+            } else {
+              body = await reqClone.text();
+            }
+          } catch (bodyErr) {
+            body = null;
+          }
+
+          try {
+            const db = await openIndexedDB();
+
+            if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
+              db.close();
+              throw new Error("PAYMENTS сан байхгүй байна");
             }
 
-            try {
-              const db = await openIndexedDB();
+            const tx = db.transaction(STORES.PAYMENTS, "readwrite");
+            const store = tx.objectStore(STORES.PAYMENTS);
 
-              if (!db.objectStoreNames.contains(STORES.PAYMENTS)) {
-                db.close();
-                throw new Error("PAYMENTS сан байхгүй байна");
-              }
+            const paymentData = {
+              url: event.request.url,
+              body,
+              method: event.request.method,
+              headers: serializeHeaders(event.request.headers),
+              contentType,
+              synced: false,
+              createdAt: new Date().toISOString(),
+              retryCount: 0,
+              lastError: err.message,
+            };
 
-              const tx = db.transaction(STORES.PAYMENTS, "readwrite");
-              const store = tx.objectStore(STORES.PAYMENTS);
+            await new Promise((resolve, reject) => {
+              const addRequest = store.add(paymentData);
 
-              const paymentData = {
-                url: event.request.url,
-                body,
-                method: event.request.method,
-                headers: serializeHeaders(event.request.headers),
-                contentType,
-                synced: false,
-                createdAt: new Date().toISOString(),
-                retryCount: 0,
-                lastError: err.message,
-              };
-
-              await new Promise((resolve, reject) => {
-                const addRequest = store.add(paymentData);
-
-                addRequest.onsuccess = () => {
-                  self.clients.matchAll().then((clients) => {
-                    clients.forEach((client) => {
-                      client.postMessage({
-                        type: "PAYMENT_SAVED_OFFLINE",
-                        payment: { ...paymentData, id: addRequest.result },
-                        timestamp: new Date().toISOString(),
-                      });
+              addRequest.onsuccess = () => {
+                self.clients.matchAll().then((clients) => {
+                  clients.forEach((client) => {
+                    client.postMessage({
+                      type: "PAYMENT_SAVED_OFFLINE",
+                      payment: { ...paymentData, id: addRequest.result },
+                      timestamp: new Date().toISOString(),
                     });
                   });
+                });
 
-                  resolve();
-                };
+                resolve();
+              };
 
-                addRequest.onerror = () => reject(addRequest.error);
-              });
-
-              db.close();
-            } catch (dbError) {}
-
-            return new Response(
-              JSON.stringify({
-                offline: true,
-                message: "Хүсэлт арын синкэд хадгалагдлаа",
-                timestamp: new Date().toISOString(),
-                success: true,
-              }),
-              { status: 200, headers: { "Content-Type": "application/json" } }
-            );
-          }
-        })()
-      );
-      return;
-    } else {
-      // GET API requests - Network first, then cache, then proper JSON error
-      event.respondWith(
-        (async () => {
-          try {
-            const response = await networkWithTimeout(event.request);
-            if (response.ok) {
-              const clone = response.clone();
-              caches
-                .open(API_CACHE_NAME)
-                .then((cache) => cache.put(event.request, clone));
-            }
-            return response;
-          } catch (err) {
-            const cachedResponse = await caches.match(event.request);
-            if (cachedResponse) {
-              return cachedResponse;
-            }
-            // Return proper JSON error response for API requests
-            return new Response(
-              JSON.stringify({
-                offline: true,
-                error: "Интернет салсан байна",
-                message: "Сүлжээнд холбогдох боломжгүй байна",
-              }),
-              {
-                status: 503,
-                headers: { "Content-Type": "application/json" },
-              }
-            );
-          }
-        })()
-      );
-      return;
-    }
-  }
-
-  // Handle navigation requests (HTML pages)
-  if (isNavigationRequest) {
-    // Never cache the login page - always fetch fresh
-    const isLoginPage = requestUrl.pathname === "/" || requestUrl.pathname === "/login";
-    
-    if (isLoginPage) {
-      // For login page, always fetch from network and never cache
-      event.respondWith(
-        (async () => {
-          try {
-            const networkResponse = await fetch(event.request);
-            // Clear any existing cached login page
-            const pageCache = await caches.open(PAGE_CACHE_NAME);
-            await pageCache.delete(event.request);
-            return networkResponse;
-          } catch (err) {
-            // If network fails, don't serve cached login page
-            return fetch(event.request).catch(() => {
-              return new Response(
-                '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Оффлайн</title></head><body><h1>Интернет салсан байна</h1><p>Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.</p></body></html>',
-                {
-                  status: 200,
-                  headers: { "Content-Type": "text/html; charset=utf-8" },
-                }
-              );
+              addRequest.onerror = () => reject(addRequest.error);
             });
-          }
-        })()
-      );
-      return;
-    }
 
-    // For other navigation requests, use network-first when online
-    event.respondWith(
-      (async () => {
-        // Try network first when online
-        try {
-          const networkResponse = await fetch(event.request);
-          if (networkResponse.ok) {
-            // Only cache if it's not an error page
-            const clone = networkResponse.clone();
-            caches
-              .open(PAGE_CACHE_NAME)
-              .then((cache) => cache.put(event.request, clone));
-            return networkResponse;
-          }
-          // If network response is not ok, try cache
-          const cachedResponse = await caches.match(event.request);
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          return networkResponse;
-        } catch (err) {
-          // Network failed - try cache as fallback
-          const cachedResponse = await caches.match(event.request);
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          
-          // If no cache, serve offline.html as fallback
-          const offlineResponse = await caches.match("/offline.html");
-          if (offlineResponse) {
-            return offlineResponse;
-          }
-          // If offline.html is not cached, return a basic offline message
+            db.close();
+          } catch (dbError) {}
+
           return new Response(
-            '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Оффлайн</title></head><body><h1>Интернет салсан байна</h1><p>Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.</p></body></html>',
-            {
-              status: 200,
-              headers: { "Content-Type": "text/html; charset=utf-8" },
-            }
+            JSON.stringify({
+              offline: true,
+              message: "Хүсэлт арын синкэд хадгалагдлаа",
+              timestamp: new Date().toISOString(),
+              success: true,
+            }),
+            { status: 200, headers: { "Content-Type": "application/json" } }
           );
         }
-      })()
-    );
-    return;
+      })();
+    } else {
+      responsePromise = networkWithTimeout(event.request)
+        .then((response) => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches
+              .open(API_CACHE_NAME)
+              .then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(async () => {
+          const cachedResponse = await caches.match(event.request);
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          return new Response("Интернет салсан байна", { status: 503 });
+        });
+    }
+  } else {
+    responsePromise = caches.match(event.request).then((response) => {
+      if (response) {
+        return response;
+      }
+      return fetch(event.request).catch(() => {
+        return new Response("Интернет салсан байна", { status: 503 });
+      });
+    });
   }
 
-  // Handle other requests (assets, images, etc.) - Cache first, then network
-  event.respondWith(
-    (async () => {
-      const cachedResponse = await caches.match(event.request);
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-
-      try {
-        const networkResponse = await fetch(event.request);
-        if (networkResponse.ok) {
-          // Cache successful responses
-          const clone = networkResponse.clone();
-          caches
-            .open(PAGE_CACHE_NAME)
-            .then((cache) => cache.put(event.request, clone));
-        }
-        return networkResponse;
-      } catch (err) {
-        // For non-navigation requests, return a proper error
-        // Don't show offline.html for assets
-        return new Response("", { status: 503 });
-      }
-    })()
-  );
+  event.respondWith(responsePromise);
 });
 
 self.addEventListener("sync", (event) => {
@@ -401,22 +266,6 @@ self.addEventListener("message", (event) => {
       .catch((error) => {
         event.ports[0].postMessage({ payments: [], error: error.message });
       });
-  } else if (event.data?.type === "CLEAR_LOGIN_CACHE") {
-    // Clear login page from cache after successful login
-    (async () => {
-      try {
-        const pageCache = await caches.open(PAGE_CACHE_NAME);
-        const loginPageUrls = [
-          new Request("/", { method: "GET" }),
-          new Request("/login", { method: "GET" }),
-        ];
-        await Promise.all(
-          loginPageUrls.map((url) => pageCache.delete(url).catch(() => {}))
-        );
-      } catch (error) {
-        // Silently fail
-      }
-    })();
   }
 });
 

@@ -315,8 +315,16 @@ export function ekhniiTsonkhruuOchyo(ajiltan, token) {
           });
         }
       } else if (erkhShalgakh.length > 0) {
-        message.success(t("Тавтай морил"));
+        toast.success(t("Тавтай морил"), {
+          duration: 3000,
+        });
         window.location.href = erkhShalgakh[0];
+      } else if (ajiltan?.tsonkhniiErkhuud?.length > 0) {
+        // If user has permissions but they don't match modules, redirect to first permission anyway
+        toast.success(t("Тавтай морил"), {
+          duration: 3000,
+        });
+        window.location.href = ajiltan.tsonkhniiErkhuud[0];
       } else {
         toast.error("Ажилтны эрхийн тохиргоо хийгдээгүй байна", {
           duration: 5000,

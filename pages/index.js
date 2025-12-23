@@ -126,10 +126,29 @@ function Ajiltan() {
               </div>
             </div>
           </div>
-          <div className="my-10 flex h-screen py-5 xl:my-0 xl:h-auto xl:py-0">
-            <div className="mx-auto my-auto w-full rounded-md bg-white px-5 py-14 pb-5 shadow-md dark:bg-gray-900 sm:w-3/4 sm:px-8 lg:w-2/4 xl:ml-20 xl:w-auto xl:bg-transparent xl:p-0 xl:shadow-none xl:dark:bg-gray-800">
-              <h2 className="intro-x text-center text-2xl font-bold dark:text-gray-300 xl:text-left xl:text-3xl"></h2>
-              <div data-aos="flip-right">
+          <div className="flex items-center justify-center">
+            <div className="w-full max-w-md">
+              <div className="rounded-3xl bg-white/80 backdrop-blur-xl p-8 shadow-2xl dark:bg-gray-800/80 sm:p-10" data-aos="fade-left" data-aos-duration="1000">
+                
+               
+                <div className="mb-8 flex justify-center lg:hidden">
+                  <div className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 px-4 py-2">
+                    <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                    <span className="text-lg font-bold text-white">TABS</span>
+                  </div>
+                </div>
+
+                <div className="mb-8 text-center" data-aos="fade-down" data-aos-delay="200">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                    {t("Нэвтрэх")}
+                  </h2>
+                  <p className="mt-3 text-gray-600 dark:text-gray-400">
+                    {t("Бүртгэлдээ нэвтэрнэ үү")}
+                  </p>
+                </div>
+
                 <Form
                   autoComplete={"off"}
                   form={form}
@@ -139,109 +158,149 @@ function Ajiltan() {
                       newterya({ ...form.getFieldsValue(), namaigsana });
                   }}
                 >
-                  <div data-aos="fade-up" data-aos-delay="500">
-                    <Form.Item name="nevtrekhNer">
-                      <Input
-                        placeholder={t("Нэвтрэх нэр")}
-                        className="login-input"
-                      />
-                    </Form.Item>
-                  </div>
-                  <div data-aos="fade" data-aos-delay="300">
-                    <Form.Item name="nuutsUg">
-                      <Password
-                        placeholder={t("Нууц үг")}
-                        className="login-input"
-                      />
-                    </Form.Item>
+                  <div className="space-y-5">
+                    <div data-aos="fade-up" data-aos-delay="300">
+                      <Form.Item name="nevtrekhNer" className="mb-0">
+                        <div className="group relative">
+                          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400 transition-colors group-focus-within:text-emerald-600 dark:text-gray-500 dark:group-focus-within:text-emerald-400">
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                          </div>
+                          <Input
+                            placeholder={t("Нэвтрэх нэр")}
+                            className="h-14 rounded-xl border-2 border-gray-200 bg-gray-50/50 pl-12 text-base transition-all focus:border-emerald-500 focus:bg-white dark:border-gray-600 dark:bg-gray-700/50 dark:focus:border-emerald-400 dark:focus:bg-gray-700"
+                            size="large"
+                          />
+                        </div>
+                      </Form.Item>
+                    </div>
+
+                    <div data-aos="fade-up" data-aos-delay="400">
+                      <Form.Item name="nuutsUg" className="mb-0">
+                        <div className="group relative">
+                          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400 transition-colors group-focus-within:text-emerald-600 dark:text-gray-500 dark:group-focus-within:text-emerald-400">
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                          </div>
+                          <Password
+                            placeholder={t("Нууц үг")}
+                            className="h-14 rounded-xl border-2 border-gray-200 bg-gray-50/50 pl-12 text-base transition-all focus:border-emerald-500 focus:bg-white dark:border-gray-600 dark:bg-gray-700/50 dark:focus:border-emerald-400 dark:focus:bg-gray-700"
+                            size="large"
+                          />
+                        </div>
+                      </Form.Item>
+                    </div>
+
+                    <div className="flex items-center justify-between" data-aos="fade-up" data-aos-delay="500">
+                      <label className="flex cursor-pointer items-center">
+                        <input
+                          id="remember-me"
+                          type="checkbox"
+                          className="h-4 w-4 rounded border-gray-300 text-emerald-600 transition-all focus:ring-2 focus:ring-emerald-500 focus:ring-offset-0 dark:border-gray-600 dark:bg-gray-700"
+                          onChange={({ target }) => setNamaigsana(target.checked)}
+                        />
+                        <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                          {t("Намайг сана")}
+                        </span>
+                      </label>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        newterya({ ...form.getFieldsValue(), namaigsana })
+                      }
+                      className="group relative mt-2 flex h-14 w-full items-center justify-center overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-base font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/40 hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-emerald-500/50 active:scale-[0.98] dark:shadow-emerald-500/20 dark:hover:shadow-emerald-500/30"
+                      data-aos="fade-up"
+                      data-aos-delay="600"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        {t("Нэвтрэх")}
+                        <svg className="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      </span>
+                    </button>
                   </div>
                 </Form>
-                <div
-                  className="intro-x mt-4 flex text-xs text-gray-700 dark:text-gray-600 sm:text-sm"
-                  data-aos="fade-down"
-                  data-aos-delay="400"
-                >
-                  <div className="mr-auto flex items-center">
-                    <input
-                      id="remember-me"
-                      type="checkbox"
-                      className="form-check-input mr-2 border"
-                      onChange={({ target }) => setNamaigsana(target.checked)}
-                    />
-                    <label
-                      className="cursor-pointer select-none"
-                      htmlFor="remember-me"
-                    >
-                      {t("Намайг сана")}
-                    </label>
-                  </div>
-                </div>
 
-                <button
-                  onClick={() =>
-                    newterya({ ...form.getFieldsValue(), namaigsana })
-                  }
-                  className="group relative mt-5 flex w-full justify-center rounded-md border border-transparent bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 xl:mt-8"
-                  data-aos="fade-down"
-                  data-aos-delay="500"
-                >
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <svg
-                      className="h-5 w-5 text-green-500 group-hover:text-green-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                  {t("Нэвтрэх")}
-                </button>
-                <div className="mt-24 text-center xl:hidden">
+                <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
                   © Zev-TABS LLC © {moment(new Date()).format("YYYY")}.{" "}
+                  <br className="sm:hidden" />
                   {t("Бүх эрх хуулиар баталгаажсан.")}
                 </div>
               </div>
-              <div className="fixed right-10 top-6 flex w-10 gap-2 transition-all hover:scale-105">
-                {i18n.language === "en" ? (
-                  <img
-                    onClick={() => {
-                      i18n.changeLanguage("mn");
-                      window.localStorage.setItem("Localelanguage", "mn");
-                    }}
-                    className={`w-full cursor-pointer object-contain transition-all`}
-                    src="/MN.png"
-                  />
-                ) : (
-                  <img
-                    onClick={() => {
-                      i18n.changeLanguage("en");
-                      window.localStorage.setItem("Localelanguage", "en");
-                    }}
-                    className={`w-full cursor-pointer object-contain transition-all`}
-                    src="/UK.png"
-                  />
-                )}
-              </div>
-              <div className="dark-mode-switcher dark:bg-dark-2 fixed bottom-0 right-0 z-50 mb-10 mr-10 flex h-12 w-40 cursor-pointer items-center justify-center rounded-full border bg-white shadow-md dark:bg-gray-900">
-                <div className="mr-4 text-gray-700 dark:text-gray-300">
-                  Dark Mode
-                </div>
-                <Switch
-                  checked={themeValue}
-                  onClick={() => setTheme(themeValue ? "light" : "dark")}
-                />
-              </div>
-              <div className="fixed bottom-0 hidden xl:block">
-                © Zev-TABS LLC © {moment(new Date()).format("YYYY")}.{" "}
-                {t("Бүх эрх хуулиар баталгаажсан.")}
-              </div>
             </div>
           </div>
+        </div>
+      </div>
+
+  
+      <div className="fixed right-6 top-6 z-50 transition-all hover:scale-105">
+        <button 
+          onClick={() => {
+            const newLang = i18n.language === "en" ? "mn" : "en";
+            i18n.changeLanguage(newLang);
+            window.localStorage.setItem("Localelanguage", newLang);
+          }}
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow-lg transition-all hover:shadow-xl dark:bg-gray-800/80"
+        >
+          <img
+            className="h-7 w-7 rounded-full object-cover"
+            src={i18n.language === "en" ? "/MN.png" : "/UK.png"}
+            alt="Language"
+          />
+        </button>
+      </div>
+
+ 
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="flex items-center gap-3 rounded-full bg-white/80 backdrop-blur-sm px-5 py-3 shadow-lg transition-all hover:shadow-xl dark:bg-gray-800/80">
+          <svg className="h-5 w-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <Switch
+            checked={themeValue}
+            onChange={(checked) => setTheme(checked ? "dark" : "light")}
+          />
+          <svg className="h-5 w-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </div>
+      </div>
+ 
+      <div className="fixed right-6 top-6 z-50 transition-all hover:scale-105">
+        <button 
+          onClick={() => {
+            const newLang = i18n.language === "en" ? "mn" : "en";
+            i18n.changeLanguage(newLang);
+            window.localStorage.setItem("Localelanguage", newLang);
+          }}
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow-lg transition-all hover:shadow-xl dark:bg-gray-800/80"
+        >
+          <img
+            className="h-7 w-7 rounded-full object-cover"
+            src={i18n.language === "en" ? "/MN.png" : "/UK.png"}
+            alt="Language"
+          />
+        </button>
+      </div>
+
+    
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="flex items-center gap-3 rounded-full bg-white/80 backdrop-blur-sm px-5 py-3 shadow-lg transition-all hover:shadow-xl dark:bg-gray-800/80">
+          <svg className="h-5 w-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <Switch
+            checked={themeValue}
+            onChange={(checked) => setTheme(checked ? "dark" : "light")}
+          />
+          <svg className="h-5 w-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
         </div>
       </div>
     </div>

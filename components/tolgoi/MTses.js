@@ -15,12 +15,12 @@ function MenuItem({ mur, selected, khuudasniiNer, t }) {
       <div className="">
         <li className="mt-2 h-8 text-base" onClick={() => setOpen(!open)}>
           <div className={"flex flex-row items-center px-1 leading-8"}>
-            <div className={`mr-4 ${selected ? "text-green-600" : ""}`}>
+            <div className={`mr-4 flex-shrink-0 ${selected ? "text-green-600" : ""}`}>
               {mur.icon}
             </div>
-            {t(mur.ner)}
+            <span className="flex-1 min-w-0 truncate">{t(mur.ner)}</span>
             <div
-              className={`transform ${open ? "rotate-180" : ""} ml-auto`}
+              className={`transform flex-shrink-0 ${open ? "rotate-180" : ""} ml-2`}
               style={{ transitionDuration: ".1s" }}
             >
               <svg

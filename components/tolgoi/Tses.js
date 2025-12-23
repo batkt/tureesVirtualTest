@@ -15,19 +15,14 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
     return (
       <div className="">
         <li className={"menu-item"} onClick={() => setOpen(!open)}>
-          <div className={"flex flex-row items-center whitespace-nowrap"}>
-            <div
-              className={`mr-2 flex-shrink-0 ${
-                selected ? "text-green-600 dark:text-green-400" : ""
-              }`}
-            >
+          <div className={"flex flex-row p-1"}>
+            <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
               {mur.icon}
             </div>
-            <span className="truncate">{t(mur.ner)}</span>
+            {t(mur.ner)}
             <div
-              className={`transform transition-transform duration-200 ${
-                open ? "rotate-180" : ""
-              } ml-auto`}
+              className={`transform ${open ? "rotate-180" : ""} ml-auto`}
+              style={{ transitionDuration: ".1s" }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -47,38 +42,32 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
           </div>
         </li>
         <ul
-          style={{
-            height: open ? "auto" : "0rem",
-            maxHeight: open ? "none" : "0rem",
-            opacity: open ? 1 : 0,
-          }}
-          className={`sub-menu flex flex-col transition-all duration-200 ${
-            open ? "" : "overflow-hidden"
-          }`}
+          style={{ height: open ? `${2.5 * mur.sub.length}rem` : "0rem" }}
+          className={`sub-menu flex flex-col transition-all duration-500`}
         >
           {mur.sub.map((a) => {
             return (
               <Link href={a.href} key={a.href} legacyBehavior>
                 <a>
                   <li
-                    className={`relative ml-4 cursor-pointer rounded-l-lg transition-all duration-300 ${
+                    className={`submenu-item relative cursor-pointer rounded-l-lg transition-all duration-300 ${
+                      open ? "ml-0" : "ml-56"
+                    } p-2 text-white ${
                       a.khuudasniiNer === khuudasniiNer
                         ? "bg-white dark:bg-gray-800"
                         : ""
                     }`}
                   >
-                    <div className={"flex flex-row px-3 py-1.5"}>
+                    <div className={"flex flex-row px-1"}>
                       <div
                         className={`${
                           a.khuudasniiNer === khuudasniiNer
-                            ? "font-medium text-green-500 dark:text-green-500"
+                            ? "font-medium text-green-500"
                             : ""
-                        } flex flex-row items-center truncate whitespace-nowrap text-sm`}
+                        } flex flex-row whitespace-nowrap`}
                       >
-                        <div className={`mr-2 flex flex-shrink-0 items-center`}>
-                          {a.icon}
-                        </div>
-                        <span className="truncate">{t(a.ner)}</span>
+                        <div className={`mr-2`}>{a.icon}</div>
+                        {t(a.ner)}
                       </div>
                     </div>
                   </li>
@@ -93,16 +82,12 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
     return (
       <Link href={mur.href} legacyBehavior>
         <a>
-          <li className={`${selected ? "selected-menu" : "menu-item"} ml-4`}>
-            <div className="flex flex-row items-center whitespace-nowrap p-1">
-              <div
-                className={`mr-2 flex-shrink-0 ${
-                  selected ? "text-green-600" : ""
-                }`}
-              >
+          <li className={selected ? "selected-menu" : "menu-item"}>
+            <div className="flex flex-row p-1">
+              <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
                 {mur.icon}
               </div>
-              <span className="truncate">{t(mur.ner)}</span>
+              {t(mur.ner)}
             </div>
           </li>
         </a>
@@ -191,7 +176,7 @@ function NTses({
                 />
               </div>
               {barilguud?.length > 0 ? (
-                <div className="relative mt-2 w-full">
+                <div className="relative mt-2 inline-block">
                   <select
                     defaultValue={barilgiinId}
                     value={barilgiinId}
@@ -199,7 +184,7 @@ function NTses({
                       onChangeBarilga && onChangeBarilga();
                       barilgaSoliyo(target.value, ajiltan);
                     }}
-                    className="modern-select"
+                    className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800"
                   >
                     {barilguud?.map((a) => (
                       <option key={a?._id} value={a?._id} disabled={a.disabled}>
@@ -207,11 +192,18 @@ function NTses({
                       </option>
                     ))}
                   </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg
+                      className="h-4 w-4 fill-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
                 </div>
               ) : (
-                <div className="mt-2 text-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {_.get(barilguud, "0.ner")}
-                </div>
+                _.get(barilguud, "0.ner")
               )}
             </div>
           </div>

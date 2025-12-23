@@ -100,7 +100,7 @@ export var customPlugin = ({
     const value = e.target.value;
     const node = this.util.createElement("span");
     this.util.addClass(node, "se-custom-tag");
-    node.textContent = value;
+    node.textContent = value + "  "; // Add 2 spaces after variable
 
     this.insertNode(node);
     const zeroWidthSpace = this.util.createTextNode(this.util.zeroWidthSpace);

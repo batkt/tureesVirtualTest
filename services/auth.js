@@ -7,6 +7,7 @@ import React, {
   useRef,
   useCallback,
 } from "react";
+import { message } from "antd";
 import { toast } from "sonner";
 import { setCookie, parseCookies } from "nookies";
 import uilchilgee from "./uilchilgee";
@@ -42,18 +43,14 @@ export const useBarilga = () => {
       (salbar) => salbar?.salbariinId === id
     );
     if (!tukhainBarilga && ajiltan?.erkh !== "Admin") {
-      return toast.error("Ажилтанд барилгын тохиргоо хийгдээгүй байна", {
-        duration: 4000,
-      });
+      return message.warn("Ажилтанд барилгын тохиргоо хийгдээгүй байна");
     } else {
       if (
         moment(tukhainBarilga?.duusakhOgnoo)
           .startOf("day")
           .isBefore(moment().startOf("day"))
       ) {
-        return toast.error("Тухайн барилгын лиценз дууссан байна", {
-          duration: 4000,
-        });
+        return message.warn("Тухайн барилгын лиценз дууссан байна");
       }
     }
     setBarilgiinId(id);
@@ -157,9 +154,7 @@ export const AuthProvider = ({ children }) => {
       if (!storedToken && !isOnline()) {
         const hasOfflineCredentials = await hasOfflineAuth();
         if (hasOfflineCredentials) {
-          toast.info("Оффлайн горимд нэвтрэх боломжтой байна", {
-            duration: 4000,
-          });
+          message.info("Оффлайн горимд нэвтрэх боломжтой байна");
         }
       } else if (storedToken) {
         setToken(storedToken);
@@ -182,10 +177,7 @@ export const AuthProvider = ({ children }) => {
   const handleOnline = useCallback(() => {
     const wasOffline = isOfflineMode;
     setIsOfflineMode(false);
-    toast.success("Интернэт холбогдлоо", {
-      description: "Холболт сэргээгдлээ",
-      duration: 3000,
-    });
+    message.success("Интернэт холбогдлоо");
 
     if (wasOffline) {
       syncOfflineData();
@@ -194,10 +186,10 @@ export const AuthProvider = ({ children }) => {
 
   const handleOffline = useCallback(() => {
     setIsOfflineMode(true);
-    toast.warning("Интернэт тасарсан байна", {
-      description: "Та одоо оффлайн горимд ажиллаж байна",
-      duration: 0, // Don't auto-dismiss
-    });
+    message.warning(
+      "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
+      0
+    );
   }, []);
 
   const syncOfflineData = useCallback(async () => {
@@ -205,9 +197,7 @@ export const AuthProvider = ({ children }) => {
       try {
         ajiltanMutate();
         baiguullagaMutate();
-        toast.success("Өгөгдөл шинэчлэгдлээ", {
-          duration: 2000,
-        });
+        message.success("Өгөгдөл шинэчлэгдлээ");
       } catch (error) {}
     }
   }, [token, ajiltanMutate, baiguullagaMutate]);
@@ -218,10 +208,19 @@ export const AuthProvider = ({ children }) => {
         .post("/ajiltanNevtrey", khereglech)
         .then(async ({ data, status }) => {
           if (status === 200 && data) {
+            // Handle both response structures: {result, token} or {data: {result, token}}
+            const token = data.token || data.data?.token;
+            const result = data.result || data.data?.result;
+            
+            if (!token || !result) {
+              reject(new Error("Хэрэглэгчийн мэдээлэл буруу байна"));
+              return;
+            }
+
             let permissionsData = null;
 
             try {
-              const res = await uilchilgee(data.token).post(
+              const res = await uilchilgee(token).post(
                 "/erkhiinMedeelelAvya"
               );
               permissionsData = res.data;
@@ -235,8 +234,8 @@ export const AuthProvider = ({ children }) => {
                 permissionsData.offlineFallback)
             ) {
               const loginResult = {
-                token: data.token,
-                result: data.result,
+                token: token,
+                result: result,
                 permissionsData,
               };
 
@@ -266,38 +265,6 @@ export const AuthProvider = ({ children }) => {
       });
       setToken(loginToken);
       ajiltanMutate(result);
-
-      // Clear login page from service worker cache after successful login
-      if (
-        typeof window !== "undefined" &&
-        "serviceWorker" in navigator &&
-        navigator.serviceWorker.controller
-      ) {
-        try {
-          // Send message to service worker to clear login page cache
-          navigator.serviceWorker.controller.postMessage({
-            type: "CLEAR_LOGIN_CACHE",
-          });
-
-          // Also directly clear cache if possible
-          if ("caches" in window) {
-            const cacheNames = await caches.keys();
-            for (const cacheName of cacheNames) {
-              const cache = await caches.open(cacheName);
-              const loginPageUrls = [
-                new Request("/", { method: "GET" }),
-                new Request("/login", { method: "GET" }),
-              ];
-              await Promise.all(
-                loginPageUrls.map((url) => cache.delete(url).catch(() => {}))
-              );
-            }
-          }
-        } catch (error) {
-          // Silently fail if cache clearing doesn't work
-          console.debug("Cache clear attempt:", error);
-        }
-      }
 
       if (result?.barilguud?.length > 0 || result?.erkh === "Admin") {
         let solikhBarilgaOldsonEsekh = false;
@@ -376,15 +343,11 @@ export const AuthProvider = ({ children }) => {
     () => ({
       newterya: async (khereglech) => {
         if (!khereglech.nevtrekhNer) {
-          toast.warning("Нэвтрэх нэрийг бөглөнө үү", {
-            duration: 3000,
-          });
+          message.warning("Нэвтрэх нэрийг бөглөнө үү");
           return;
         }
         if (!khereglech.nuutsUg) {
-          toast.warning("Нууц үгийг бөглөнө үү", {
-            duration: 3000,
-          });
+          message.warning("Нууц үгийг бөглөнө үү");
           return;
         }
 
@@ -407,18 +370,12 @@ export const AuthProvider = ({ children }) => {
               processSuccessfulLogin(loginResult.data, false);
             }
           } else {
-            toast.error("Нэвтрэлт амжилтгүй боллоо", {
-              description: loginResult.error || "Дахин оролдоно уу",
-              duration: 4000,
-            });
+            message.error(loginResult.error || "Нэвтрэлт амжилтгүй боллоо");
           }
         } catch (error) {
           const errorMessage =
             error.message || error.toString() || "Нэвтрэх явцад алдаа гарлаа";
-          toast.warning("Алдаа гарлаа", {
-            description: errorMessage,
-            duration: 4000,
-          });
+          message.warning(errorMessage);
         }
       },
 
@@ -445,13 +402,9 @@ export const AuthProvider = ({ children }) => {
       clearOfflineDataOnly: async () => {
         try {
           await clearOfflineAuth();
-          toast.success("Интернетгүй үеийн мэдээлэл устгагдлаа", {
-            duration: 3000,
-          });
+          message.success("Интернетгүй үеийн мэдээлэл устгагдлаа");
         } catch (error) {
-          toast.error("Интернетгүй үеийн мэдээлэл устгахад алдаа гарлаа", {
-            duration: 4000,
-          });
+          message.error("Интернетгүй үеийн мэдээлэл устгахад алдаа гарлаа");
         }
       },
 
@@ -459,20 +412,12 @@ export const AuthProvider = ({ children }) => {
         if (isOnline() && token) {
           try {
             await syncOfflineData();
-            toast.success("Мэдээлэл амжилттай шинэчлэгдлээ", {
-              description: "Бүх өгөгдөл шинэчлэгдлээ",
-              duration: 3000,
-            });
+            message.success("Мэдээлэл амжилттай шинэчлэгдлээ хийгдлээ");
           } catch (error) {
-            toast.error("Шинэчлэл хийхэд алдаа гарлаа", {
-              description: "Дахин оролдоно уу",
-              duration: 4000,
-            });
+            message.error("Шинэчлэл хийхэд алдаа гарлаа");
           }
         } else {
-          toast.warning("Интернэт холболт шаардлагатай", {
-            duration: 3000,
-          });
+          message.warning("Интернэт холболт шаардлагатай");
         }
       },
 

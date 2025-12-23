@@ -268,7 +268,7 @@ function ZakhialgaNemekh({ token }) {
           <div className="grid grid-cols-2 gap-4">
             <div className="group relative">
               <div
-                className="rounded-md border border-dashed border-gray-600 p-2 dark:border-gray-300 dark:text-gray-200"
+                className="rounded-md border border-dashed border-gray-600 p-2 text-gray-900 dark:border-gray-300 dark:bg-gray-800 dark:text-gray-200 [&_*]:!text-gray-900 dark:[&_*]:!text-gray-200"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.zuunKhul || t("Гэрээний загварын зүүн хөл"),
@@ -285,7 +285,7 @@ function ZakhialgaNemekh({ token }) {
             </div>
             <div className="group relative">
               <div
-                className="rounded-md border border-dashed border-gray-600 p-2 dark:border-gray-300 dark:text-gray-200"
+                className="rounded-md border border-dashed border-gray-600 p-2 text-gray-900 dark:border-gray-300 dark:bg-gray-800 dark:text-gray-200 [&_*]:!text-gray-900 dark:[&_*]:!text-gray-200"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.baruunKhul ||

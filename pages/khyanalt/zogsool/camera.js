@@ -3615,17 +3615,14 @@ function camera({ token }) {
                 <TreeSelect
                   placement={cameraKharakh === 1 ? "topRight" : "bottomLeft"}
                   showSearch
-                  style={{
-                    backgroundColor: "#10B981",
-                    borderColor: "#10B981",
-                  }}
                   value={camerVal[0]}
                   dropdownStyle={{
                     maxHeight: 600,
                     minWidth: 280,
                     overflow: "auto",
                   }}
-                  className="w-40"
+                  style={{ width: "12.5rem" }}
+                  className="w-50"
                   placeholder={t("Камер сонгох")}
                   allowClear
                   treeDefaultExpandAll
@@ -3802,17 +3799,14 @@ function camera({ token }) {
                   }}
                   placement={cameraKharakh === 2 ? "topRight" : "bottomRight"}
                   showSearch
-                  style={{
-                    backgroundColor: "#10B981",
-                    borderColor: "#10B981",
-                  }}
                   value={camerVal[1]}
                   dropdownStyle={{
                     maxHeight: 600,
                     minWidth: 280,
                     overflow: "auto",
                   }}
-                  className="w-40"
+                  style={{ width: "12.5rem" }}
+                  className="w-50"
                   placeholder={t("Камер сонгох")}
                   allowClear
                   treeDefaultExpandAll
@@ -4704,7 +4698,7 @@ function camera({ token }) {
                   </Form.Item>
                   <a
                     onClick={() => form.resetFields()}
-                    className="ml-2 flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white"
+                    className="flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white whitespace-nowrap"
                   >
                     {t("Цэвэрлэх")}
                   </a>
@@ -4716,11 +4710,11 @@ function camera({ token }) {
                     className="flex w-full flex-col gap-4"
                     onFinish={dugaarBurtgekh}
                   >
-                    <div className="flex w-full">
+                    <div className="flex w-full gap-2 items-end">
                       <Form.Item
                         label={t("Дугаар1")}
                         name="mashiniiDugaar"
-                        className="w-2/5"
+                        className="flex-1 mb-0"
                         normalize={(input) => {
                           const too = input.replace(/[^0-9]/g, "").slice(0, 4);
                           const useg = Array.from(input)
@@ -4763,12 +4757,12 @@ function camera({ token }) {
                           maxLength={7}
                           ref={mashiniiDugaarRef}
                           placeholder="1234УБА"
-                          className="ml-[10px]"
+                        
                         />
                       </Form.Item>
                       <Form.Item
                         name="CAMERA_IP"
-                        className="w-full"
+                        className="flex-1 mb-0"
                         rules={[
                           {
                             required: true,
@@ -4791,7 +4785,7 @@ function camera({ token }) {
                       </Form.Item>
                       <a
                         onClick={() => form.resetFields()}
-                        className="ml-2 flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white"
+                        className="flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white whitespace-nowrap"
                       >
                         {t("Цэвэрлэх")}
                       </a>
