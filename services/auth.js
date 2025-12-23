@@ -257,13 +257,17 @@ export const AuthProvider = ({ children }) => {
       ajiltanMutate(result);
 
       // Clear login page from service worker cache after successful login
-      if (typeof window !== "undefined" && "serviceWorker" in navigator && navigator.serviceWorker.controller) {
+      if (
+        typeof window !== "undefined" &&
+        "serviceWorker" in navigator &&
+        navigator.serviceWorker.controller
+      ) {
         try {
           // Send message to service worker to clear login page cache
           navigator.serviceWorker.controller.postMessage({
             type: "CLEAR_LOGIN_CACHE",
           });
-          
+
           // Also directly clear cache if possible
           if ("caches" in window) {
             const cacheNames = await caches.keys();
@@ -273,7 +277,9 @@ export const AuthProvider = ({ children }) => {
                 new Request("/", { method: "GET" }),
                 new Request("/login", { method: "GET" }),
               ];
-              await Promise.all(loginPageUrls.map(url => cache.delete(url).catch(() => {})));
+              await Promise.all(
+                loginPageUrls.map((url) => cache.delete(url).catch(() => {}))
+              );
             }
           }
         } catch (error) {
