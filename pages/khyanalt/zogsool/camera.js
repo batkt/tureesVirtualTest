@@ -151,7 +151,10 @@ function generateChild(mur, turul) {
         title: !!a?.ner ? (
           a.ner + (a?.turul ? " / " + a?.turul : "")
         ) : (
-          <b key={a?.cameraIP} className="text-green-400 hover:text-green-800">
+          <b
+            key={a?.cameraIP}
+            className="w-full text-green-400 hover:text-green-800"
+          >
             {t("Камер")}-{a?.cameraIP}
           </b>
         ),
@@ -828,15 +831,14 @@ function camera({ token }) {
       if (!data?.oruulakhguiEsekh) {
         khaalgaNeey(data.cameraIP);
         onRefresh();
-      }  
+      }
 
       const dugaar = data.mashiniiDugaar?.replace("???", "");
-      if(!!dugaar)
-      {
+      if (!!dugaar) {
         const url = `/sambar/${data.cameraIP}/${dugaar}/${moment().format(
           "HH:mm:ss"
         )}`;
-        
+
         zogsoolUilchilgee()
           .get(url)
           .catch(() => {});
@@ -902,8 +904,7 @@ function camera({ token }) {
       )
         return;
       let dugaar = data?.mashiniiDugaar?.replace("???", "");
-      if (!!dugaar)
-      {
+      if (!!dugaar) {
         zogsoolUilchilgee()
           .get(
             `/sambar/${data?.cameraIP}/${dugaar}/${moment().format("HH:mm:ss")}`
@@ -3624,7 +3625,7 @@ function camera({ token }) {
                     minWidth: 280,
                     overflow: "auto",
                   }}
-                  className="custom-dropdown-bg"
+                  className="w-40"
                   placeholder={t("Камер сонгох")}
                   allowClear
                   treeDefaultExpandAll
@@ -3811,6 +3812,7 @@ function camera({ token }) {
                     minWidth: 280,
                     overflow: "auto",
                   }}
+                  className="w-40"
                   placeholder={t("Камер сонгох")}
                   allowClear
                   treeDefaultExpandAll
@@ -3862,7 +3864,7 @@ function camera({ token }) {
                 />
                 <Button
                   onClick={() => ajiltniiDelgerengui()}
-                  className="mr-3 w-auto text-ellipsis"
+                  className="mr-3  w-full text-ellipsis"
                   icon={<PrinterOutlined />}
                   type="primary"
                 >
@@ -3872,7 +3874,7 @@ function camera({ token }) {
                   ajiltan?.erkh === "Admin") && (
                   <Button
                     onClick={() => tulburiinDelgerengui()}
-                    className="mr-3 w-auto text-ellipsis"
+                    className="mr-3 w-full text-ellipsis"
                     icon={<PrinterOutlined />}
                     type="primary"
                   >
@@ -4407,7 +4409,7 @@ function camera({ token }) {
                     </Button> */}
                   </Popover>
                   <Button
-                    className="w-auto text-ellipsis"
+                    className="w-full text-ellipsis"
                     icon={<CameraOutlined />}
                     onClick={() => setDrawerOpen(true)}
                     type="primary"
@@ -4766,7 +4768,7 @@ function camera({ token }) {
                       </Form.Item>
                       <Form.Item
                         name="CAMERA_IP"
-                        className="w-full md:w-2/5"
+                        className="w-full"
                         rules={[
                           {
                             required: true,

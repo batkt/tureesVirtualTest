@@ -3696,14 +3696,14 @@ function tulburTootsoo({ token }) {
               </div>
               <div className="flex w-full justify-between gap-2">
                 <DatePicker
-                  className="w-1/2 lg:w-auto"
+                  className="w-1/2 lg:w-[200px]"
                   clearIcon
                   placeholder={t("Огноо сонгох")}
                   value={ognoo}
                   onChange={setOgnoo}
                 />
                 <Select
-                  className="w-1/2 lg:w-auto"
+                  className="w-1/2 lg:w-[200px]"
                   placeholder={t("Данс сонгох")}
                   value={songogdsonDans}
                   onChange={setDans}
@@ -3717,7 +3717,7 @@ function tulburTootsoo({ token }) {
               </div>
               <div className="flex w-full justify-between gap-2">
                 <Select
-                  className="w-1/2 lg:w-auto"
+                  className="w-1/2 lg:w-[200px]"
                   allowClear
                   placeholder={t("Давхар сонгох")}
                   onChange={(v) => {

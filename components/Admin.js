@@ -914,7 +914,7 @@ function Admin({
                       }
                     }}
                     type="text"
-                    className="box w-40 px-3 py-1 pr-10 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 xl:w-56"
+                    className="bg-white dark:bg-gray-900 box w-40 px-3 py-1 pr-10 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 xl:w-56"
                     placeholder={`${t("Хайлт")}...`}
                   />
                   {mSearch ? (

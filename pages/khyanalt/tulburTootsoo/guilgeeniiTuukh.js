@@ -1333,7 +1333,7 @@ function guilgeeniiTuukh({ token }) {
               clearIcon={false}
               className="w-full sm:w-auto"
             />
-            <div className="w-full sm:ml-5 sm:w-auto">
+            <div className="w-full sm:ml-5 sm:w-[200px]">
               <Select
                 placeholder={t("Давхар")}
                 onChange={setDavkhar}
@@ -1641,7 +1641,7 @@ function guilgeeniiTuukh({ token }) {
           }}
           cardListTuluv={"utas"}
           keyValue="guilgeeTuukh"
-          className="block overflow-auto md:hidden"
+          className="block overflow-auto md:hidden w-[200px]"
           jagsaalt={gereeniiMedeelel?.jagsaalt}
           Component={GuilgeenTuukhTile}
           pagination={{

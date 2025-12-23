@@ -256,6 +256,32 @@ export const AuthProvider = ({ children }) => {
       setToken(loginToken);
       ajiltanMutate(result);
 
+      // Clear login page from service worker cache after successful login
+      if (typeof window !== "undefined" && "serviceWorker" in navigator && navigator.serviceWorker.controller) {
+        try {
+          // Send message to service worker to clear login page cache
+          navigator.serviceWorker.controller.postMessage({
+            type: "CLEAR_LOGIN_CACHE",
+          });
+          
+          // Also directly clear cache if possible
+          if ("caches" in window) {
+            const cacheNames = await caches.keys();
+            for (const cacheName of cacheNames) {
+              const cache = await caches.open(cacheName);
+              const loginPageUrls = [
+                new Request("/", { method: "GET" }),
+                new Request("/login", { method: "GET" }),
+              ];
+              await Promise.all(loginPageUrls.map(url => cache.delete(url).catch(() => {})));
+            }
+          }
+        } catch (error) {
+          // Silently fail if cache clearing doesn't work
+          console.debug("Cache clear attempt:", error);
+        }
+      }
+
       if (result?.barilguud?.length > 0 || result?.erkh === "Admin") {
         let solikhBarilgaOldsonEsekh = false;
         if (Array.isArray(result?.salbaruud)) {

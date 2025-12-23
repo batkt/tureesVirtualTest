@@ -50,8 +50,8 @@ function openIndexedDB() {
   });
 }
 
-const API_CACHE_NAME = "api-cache-v1";
-const PAGE_CACHE_NAME = "page-cache-v1";
+const API_CACHE_NAME = "api-cache-v2";
+const PAGE_CACHE_NAME = "page-cache-v2";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -144,6 +144,7 @@ self.addEventListener("fetch", (event) => {
     requestUrl.pathname.includes(endpoint)
   );
   
+  // Never cache auth-related API requests - always fetch fresh
   if (isAuthRequest) {
     event.respondWith(fetch(event.request));
     return;
@@ -276,27 +277,64 @@ self.addEventListener("fetch", (event) => {
 
   // Handle navigation requests (HTML pages)
   if (isNavigationRequest) {
+    // Never cache the login page - always fetch fresh
+    const isLoginPage = requestUrl.pathname === "/" || requestUrl.pathname === "/login";
+    
+    if (isLoginPage) {
+      // For login page, always fetch from network and never cache
+      event.respondWith(
+        (async () => {
+          try {
+            const networkResponse = await fetch(event.request);
+            // Clear any existing cached login page
+            const pageCache = await caches.open(PAGE_CACHE_NAME);
+            await pageCache.delete(event.request);
+            return networkResponse;
+          } catch (err) {
+            // If network fails, don't serve cached login page
+            return fetch(event.request).catch(() => {
+              return new Response(
+                '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Оффлайн</title></head><body><h1>Интернет салсан байна</h1><p>Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.</p></body></html>',
+                {
+                  status: 200,
+                  headers: { "Content-Type": "text/html; charset=utf-8" },
+                }
+              );
+            });
+          }
+        })()
+      );
+      return;
+    }
+
+    // For other navigation requests, use network-first when online
     event.respondWith(
       (async () => {
-        // Try cache first
-        const cachedResponse = await caches.match(event.request);
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-
-        // Try network
+        // Try network first when online
         try {
           const networkResponse = await fetch(event.request);
           if (networkResponse.ok) {
-            // Cache successful responses
+            // Only cache if it's not an error page
             const clone = networkResponse.clone();
             caches
               .open(PAGE_CACHE_NAME)
               .then((cache) => cache.put(event.request, clone));
+            return networkResponse;
+          }
+          // If network response is not ok, try cache
+          const cachedResponse = await caches.match(event.request);
+          if (cachedResponse) {
+            return cachedResponse;
           }
           return networkResponse;
         } catch (err) {
-          // Network failed - serve offline.html as fallback
+          // Network failed - try cache as fallback
+          const cachedResponse = await caches.match(event.request);
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          
+          // If no cache, serve offline.html as fallback
           const offlineResponse = await caches.match("/offline.html");
           if (offlineResponse) {
             return offlineResponse;
@@ -363,6 +401,22 @@ self.addEventListener("message", (event) => {
       .catch((error) => {
         event.ports[0].postMessage({ payments: [], error: error.message });
       });
+  } else if (event.data?.type === "CLEAR_LOGIN_CACHE") {
+    // Clear login page from cache after successful login
+    (async () => {
+      try {
+        const pageCache = await caches.open(PAGE_CACHE_NAME);
+        const loginPageUrls = [
+          new Request("/", { method: "GET" }),
+          new Request("/login", { method: "GET" }),
+        ];
+        await Promise.all(
+          loginPageUrls.map((url) => pageCache.delete(url).catch(() => {}))
+        );
+      } catch (error) {
+        // Silently fail
+      }
+    })();
   }
 });
 
