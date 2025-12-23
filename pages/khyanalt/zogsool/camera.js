@@ -3684,7 +3684,7 @@ function camera({ token }) {
                     PORT={554}
                   />
                 ) : baiguullaga?._id === "662ee74ba29549374bc40245" &&
-                  camerVal[1] === "192.168.8.8" ? (
+                  camerVal[1] === "172.16.19.115" ? (
                   <R2WPlayerComponent
                     USER={"admin"}
                     ROOT={"live"}
@@ -4401,7 +4401,7 @@ function camera({ token }) {
                   >
                     {/* <Button
                       type="primary"
-                      className="mr-3 w-auto text-ellipsis"
+                      className="w-auto mr-3 text-ellipsis"
                       icon={<FileExcelOutlined />}
                     >
                       <span>Excel</span>
