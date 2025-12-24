@@ -20,11 +20,11 @@ import {
   InputNumber,
   Select,
   Upload,
-  message,
   Switch,
   Modal,
   Popconfirm,
 } from "antd";
+import { toast } from "sonner";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { url } from "services/uilchilgee";
@@ -553,7 +553,7 @@ function TalbaiBurtgekh({ token }) {
         .then(({ data }) => {
           if (data === "Amjilttai") {
             setWaiting(false);
-            message.success(t("Бүртгэл амжилттай засагдлаа"));
+            toast.success(t("Бүртгэл амжилттай засагдлаа"));
             formRef.current.resetFields();
             router.back();
           }
@@ -567,7 +567,7 @@ function TalbaiBurtgekh({ token }) {
         .then(({ data }) => {
           if (data !== undefined) {
             setWaiting(false);
-            message.success(t("Бүртгэл амжилттай хийгдлээ"));
+            toast.success(t("Бүртгэл амжилттай хийгдлээ"));
             formRef.current.resetFields();
             router.back();
           }

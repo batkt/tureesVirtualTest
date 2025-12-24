@@ -11,7 +11,6 @@ import {
   Button,
   Checkbox,
   Input,
-  message,
   Popconfirm,
   Select,
   Spin,
@@ -287,7 +286,7 @@ function Khyanalt({ token }) {
         }
         if (msj.length < 3600) {
           if (loading) {
-            message.warning(t("Хүсэлт илгээгдсэн байна"));
+            toast.warning(t("Хүсэлт илгээгдсэн байна"));
             return;
           }
           if (!!title) {
@@ -358,7 +357,7 @@ function Khyanalt({ token }) {
   async function msgIlgeeye() {
     if (content !== "") {
       if (loading) {
-        message.warning(t("Хүсэлт илгээгдсэн байна"));
+        toast.warning(t("Хүсэлт илгээгдсэн байна"));
         return;
       }
       var msgnuud = [];
@@ -430,11 +429,11 @@ function Khyanalt({ token }) {
             barilgiinId: khariltsagch.barilgiinId || barilgiinId,
           });
       } else {
-        message.warning(t("Та SMS илгээх гэрээгээ сонгоно уу"));
+        toast.warning(t("Та SMS илгээх гэрээгээ сонгоно уу"));
         return;
       }
       if (!(msgnuud.length > 0)) {
-        message.warning(t("Илгээх мэдээлэл байхгүй байна"));
+        toast.warning(t("Илгээх мэдээлэл байхгүй байна"));
         return;
       }
 

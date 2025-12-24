@@ -603,7 +603,7 @@ function KhuvaajTulukh({
                   <div
                     onClick={() =>
                       mur.ner === "qpay" && qpayerTulukh === "Tulugdsun"
-                        ? message.warning("Qpay-ээр төлөгдсөн")
+                        ? toast.warning("Qpay-ээр төлөгдсөн")
                         : setSongogdsonTulburiinKhelber(mur)
                     }
                     key={mur.ner}

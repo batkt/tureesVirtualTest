@@ -352,7 +352,7 @@ function ZardalBurtgel(
       <Form.Item>
         <div className="flex flex-row justify-between">
           <div />
-          <div className="space-x-2">
+          <div className="space-x-2 dark:text-white">
             <label>{t("НӨАТ бодох эсэх")}:</label>
             <Switch checked={nuatBodokhEsekh} onChange={setNuatBodokhEsekh} />
           </div>

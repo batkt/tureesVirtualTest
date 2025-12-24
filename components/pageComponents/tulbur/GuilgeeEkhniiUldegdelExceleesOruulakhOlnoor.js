@@ -142,14 +142,14 @@ function GuilgeeEkhniiUldegdelExceleesOruulakhOlnoor(
           headers={{ Authorization: `bearer ${token}` }}
           beforeUpload={(file) => {
             if (!tureesEkhniiUldegdelEsekh && !ashiglaltiinId) {
-              message.warning(t("Ашиглалтын зардал сонгоно уу"));
+              toast.warning(t("Ашиглалтын зардал сонгоно уу"));
               return false;
             }
             return file;
           }}
           onChange={({ file }) => {
             if (file.response === "Amjilttai") {
-              message.success(
+              toast.success(
                 t("Эхний үлдэгдэл мэдээлэл Excel -ээс амжилттай орууллаа")
               );
               _.isFunction(onFinish) && onFinish();

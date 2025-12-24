@@ -49,12 +49,12 @@ function index({ token, data }) {
         })
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Бүртгэл амжилттай хийгдлээ"));
+            toast.success(t("Бүртгэл амжилттай хийгдлээ"));
             router.back();
           }
         });
     } catch (e) {
-      message.error(e);
+      toast.error(e);
     }
   };
   const que = useMemo(() => {

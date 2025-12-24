@@ -52,7 +52,7 @@ function BlockMashinBurtgel(
     const method = data?._id ? updateMethod : createMethod;
     method("blockMashin", token, data).then(({ data }) => {
       if (data === "Amjilttai") {
-        message.success(t("Амжилттай хадгаллаа"));
+        toast.success(t("Амжилттай хадгаллаа"));
         onRefreshBlock && onRefreshBlock();
         destroy();
       }

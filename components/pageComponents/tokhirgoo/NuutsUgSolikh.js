@@ -21,7 +21,7 @@ function NuutsUgSolikh({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
     } = state;
 
     if (!shineNuutsUg || shineNuutsUg !== shineNuutsUgDavtan) {
-      message.warning(t("Шинэ нууц үгүүд таарахгүй байна"));
+      toast.warning(t("Шинэ нууц үгүүд таарахгүй байна"));
       return;
     }
 
@@ -37,13 +37,13 @@ function NuutsUgSolikh({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
           updateMethod("ajiltan", token, ajiltanObject).then(
             ({ data, status }) => {
               if (status === 200 && "Amjilttai" === data) {
-                message.success(t("Амжилттай засагдлаа"));
+                toast.success(t("Амжилттай засагдлаа"));
                 ajiltanMutate({ ...ajiltanObject });
               }
             }
           );
         } else {
-          message.warning(t(data.message));
+          toast.warning(t(data.message));
         }
       })
       .catch((e) => aldaaBarigch(e));

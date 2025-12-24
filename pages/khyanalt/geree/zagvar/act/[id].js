@@ -53,7 +53,7 @@ function ZakhialgaNemekh({ token }) {
       createMethod("aktiinZagvar", token, values)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
             router.back();
           }
         })
@@ -66,7 +66,7 @@ function ZakhialgaNemekh({ token }) {
       updateMethod("aktiinZagvar", token, aktiinZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
             router.back();
           }
         })
@@ -244,7 +244,7 @@ function ZakhialgaNemekh({ token }) {
               return (
                 <div
                   key={mur._id}
-                  className="group relative flex w-full flex-row rounded-lg border border-dashed border-gray-600 p-1 text-gray-600 hover:bg-gray-100 dark:border-gray-300 dark:text-gray-200 dark:hover:bg-gray-700"
+                  className="group relative flex w-full flex-row rounded-lg border border-dashed border-gray-600 p-1 text-gray-900 hover:bg-gray-100 dark:border-gray-300 dark:text-gray-200 dark:hover:bg-gray-700"
                 >
                   <div className="absolute -right-2 -top-2 z-10 flex flex-col space-y-1">
                     <div onClick={() => docZasya(`dedKhesguud.${index}`, mur)}>
@@ -353,7 +353,7 @@ function ZakhialgaNemekh({ token }) {
               {t("Хадгалах")}
             </Button>
             <Button
-              className="mt-4 w-full"
+              className="flex-1 whitespace-nowrap"
               type="primary"
               onClick={() => nemekh()}
             >

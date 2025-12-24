@@ -133,23 +133,43 @@ function ZakhialgaNemekh({ token }) {
 
     return [
       createButtonWithItems(
-        { name: "undsen", title: "Үндсэн мэдээлэл", innerHTML: renderToString(<SolutionOutlined />) },
+        {
+          name: "undsen",
+          title: "Үндсэн мэдээлэл",
+          innerHTML: renderToString(<SolutionOutlined />),
+        },
         undsenTalbaruud
       ),
       createButtonWithItems(
-        { name: "khugatsaa", title: "Хугацаа", innerHTML: renderToString(<ClockCircleOutlined />) },
+        {
+          name: "khugatsaa",
+          title: "Хугацаа",
+          innerHTML: renderToString(<ClockCircleOutlined />),
+        },
         khugatsaaniiTalbaruud
       ),
       createButtonWithItems(
-        { name: "talbai", title: "Түрээсийн талбай", innerHTML: renderToString(<BankOutlined />) },
+        {
+          name: "talbai",
+          title: "Түрээсийн талбай",
+          innerHTML: renderToString(<BankOutlined />),
+        },
         talbainiiTalbaruud
       ),
       createButtonWithItems(
-        { name: "baritsaa", title: "Барьцаа", innerHTML: renderToString(<LockOutlined />) },
+        {
+          name: "baritsaa",
+          title: "Барьцаа",
+          innerHTML: renderToString(<LockOutlined />),
+        },
         baritsaaniiTalbaruud
       ),
       createButtonWithItems(
-        { name: "tulbur", title: "Төлбөр", innerHTML: renderToString(<DollarCircleOutlined />) },
+        {
+          name: "tulbur",
+          title: "Төлбөр",
+          innerHTML: renderToString(<DollarCircleOutlined />),
+        },
         tulburiinTalbaruud
       ),
     ];
@@ -163,7 +183,7 @@ function ZakhialgaNemekh({ token }) {
       method("mailiinZagvar", token, mailiinZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
             router.back();
           }
         })
@@ -171,7 +191,7 @@ function ZakhialgaNemekh({ token }) {
           aldaaBarigch(e);
           setWaiting(false);
         });
-    } else message.warning("Нэр оруулна уу!");
+    } else toast.warning("Нэр оруулна уу!");
   }
 
   function handleChange(e) {

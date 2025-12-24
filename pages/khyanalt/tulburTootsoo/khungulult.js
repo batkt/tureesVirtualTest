@@ -547,7 +547,7 @@ function tulburTootsoo() {
         .then(({ data }) => {
           if (data === "Amjilttai") {
             setWaiting(false);
-            message.success("Хөнгөлөлт амжилттай хийгдлээ");
+            toast.success("Хөнгөлөлт амжилттай хийгдлээ");
             formRef.current.resetFields();
             setTootsoolol({});
             setOgnoonuud([]);
@@ -559,7 +559,7 @@ function tulburTootsoo() {
         });
     } else {
       setWaiting(false);
-      message.warning("Хөнгөлөх талбай сонгоно уу");
+      toast.warning("Хөнгөлөх талбай сонгоно уу");
     }
   }
 
@@ -721,7 +721,7 @@ function tulburTootsoo() {
                     (s) => ({ ...s, jagsaalt: s.jagsaalt }),
                     true
                   );
-                  message.success(t("Устгагдлаа"));
+                  toast.success(t("Устгагдлаа"));
                 }
               })
           }

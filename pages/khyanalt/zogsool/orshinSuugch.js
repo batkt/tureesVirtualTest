@@ -137,7 +137,7 @@ function orshinSuugch({ token }) {
           }
           setButsaakh(true);
         } catch (error) {
-          message.error(error);
+          toast.error(error);
         }
       };
       fetchData();
@@ -445,12 +445,12 @@ function orshinSuugch({ token }) {
         .map((item) => item._id || item.id)
         .filter((id) => id);
     } else {
-      message.error(t("Машин сонгоно уу"));
+      toast.error(t("Машин сонгоно уу"));
       return;
     }
 
     if (khariltsagchIds.length === 0) {
-      message.error(t("Машин сонгоно уу"));
+      toast.error(t("Машин сонгоно уу"));
       return;
     }
 
@@ -503,14 +503,14 @@ function orshinSuugch({ token }) {
       if (allSuccessful) {
         zochinMutate();
         khariltsagchToololtMutate();
-        message.success(
+        toast.success(
           t(`${khariltsagchIds.length} машин амжилттай устгагдлаа`)
         );
       } else {
-        message.error(t("Зарим машин устгаж чадсангүй"));
+        toast.error(t("Зарим машин устгаж чадсангүй"));
       }
     } catch (error) {
-      message.error(
+      toast.error(
         t("Алдаа гарлаа: ") + (error.response?.data?.message || error.message)
       );
     }
@@ -540,7 +540,7 @@ function orshinSuugch({ token }) {
     }
 
     if (retries >= maxRetries) {
-      message.error(t("Машин сонгоно уу"));
+      toast.error(t("Машин сонгоно уу"));
       return;
     }
 
@@ -742,41 +742,43 @@ function orshinSuugch({ token }) {
               key: "1",
               label: t("Оршин суугч бүртгэх"),
               children: (
-                <Table
-                  className="hidden overflow-auto md:block"
-                  tableLayout="fixed"
-                  loading={!zochinGaralt || zochinSaveLoading}
-                  dataSource={zochinGaralt?.jagsaalt}
-                  scroll={{ y: "calc(100vh - 30rem)" }}
-                  size="small"
-                  bordered
-                  rowKey={(record) => record._id}
-                  rowSelection={{
-                    type: "checkbox",
-                    selectedRowKeys: songogdsonMashin,
-                    onChange: (selectedRowKeys) => {
-                      setSongogdsonMashin(selectedRowKeys);
-                    },
-                    getCheckboxProps: () => ({
+                <div className="overflow-x-auto">
+                  <Table
+                    className="overflow-auto"
+                    tableLayout="fixed"
+                    loading={!zochinGaralt || zochinSaveLoading}
+                    dataSource={zochinGaralt?.jagsaalt}
+                    scroll={{ y: "calc(100vh - 30rem)", x: "max-content" }}
+                    size="small"
+                    bordered
+                    rowKey={(record) => record._id}
+                    rowSelection={{
+                      type: "checkbox",
+                      selectedRowKeys: songogdsonMashin,
+                      onChange: (selectedRowKeys) => {
+                        setSongogdsonMashin(selectedRowKeys);
+                      },
+                      getCheckboxProps: () => ({
+                        disabled: zochinSaveLoading,
+                      }),
+                    }}
+                    onChange={onChangeTable}
+                    columns={columns}
+                    pagination={{
+                      current: zochinGaralt?.khuudasniiDugaar,
+                      pageSize: zochinGaralt?.khuudasniiKhemjee,
+                      total: zochinGaralt?.niitMur,
+                      showSizeChanger: true,
+                      onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                        setZochinKhuudaslalt((kh) => ({
+                          ...kh,
+                          khuudasniiDugaar,
+                          khuudasniiKhemjee,
+                        })),
                       disabled: zochinSaveLoading,
-                    }),
-                  }}
-                  onChange={onChangeTable}
-                  columns={columns}
-                  pagination={{
-                    current: zochinGaralt?.khuudasniiDugaar,
-                    pageSize: zochinGaralt?.khuudasniiKhemjee,
-                    total: zochinGaralt?.niitMur,
-                    showSizeChanger: true,
-                    onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                      setZochinKhuudaslalt((kh) => ({
-                        ...kh,
-                        khuudasniiDugaar,
-                        khuudasniiKhemjee,
-                      })),
-                    disabled: zochinSaveLoading,
-                  }}
-                />
+                    }}
+                  />
+                </div>
               ),
             },
           ]}
@@ -822,13 +824,6 @@ function orshinSuugch({ token }) {
             </Form.Item>
           </Form>
         </Modal>
-        <CardList
-          cardListTuluv={"utas"}
-          keyValue="uilchluulegch"
-          className="block overflow-auto md:hidden"
-          jagsaalt={zochinGaralt?.jagsaalt}
-          Component={TogloomTile}
-        />
       </Card>
 
       {zochinSaveLoading && (

@@ -190,12 +190,12 @@ function GuilgeeniiTuukhAldangi(
     if (isSubmitting) return;
 
     if (aldangiDun === "" || aldangiDun === null || aldangiDun === undefined) {
-      message.error(t("Алданги дүнг оруулна уу"));
+      toast.error(t("Алданги дүнг оруулна уу"));
       return;
     }
     const newValue = Number(aldangiDun);
     if (newValue === aldangiinUldegdel) {
-      message.warning(t("Алданги өөрчлөгдөөгүй байна"));
+      toast.warning(t("Алданги өөрчлөгдөөгүй байна"));
       return;
     }
 
@@ -210,7 +210,7 @@ function GuilgeeniiTuukhAldangi(
         gereeniiDugaar: data?.gereeniiDugaar,
       })
       .then(() => {
-        message.success(t("Амжилттай хадгалагдлаа"));
+        toast.success(t("Амжилттай хадгалагдлаа"));
         closeModal();
         setAldangiDun("");
         setZasahTailbar("");
@@ -462,7 +462,7 @@ function GuilgeeniiTuukhAldangi(
         })
         .then(({ data }) => {
           if (data) {
-            message.success(t("Төлөлт амжилттай устгагдлаа!"));
+            toast.success(t("Төлөлт амжилттай устгагдлаа!"));
             refreshData();
             guilgeeniiAldangiTuukhMutate();
           }
@@ -499,7 +499,7 @@ function GuilgeeniiTuukhAldangi(
                 })
                 .then(({ data }) => {
                   if (data) {
-                    message.success(t("Төлөлт амжилттай устгагдлаа!"));
+                    toast.success(t("Төлөлт амжилттай устгагдлаа!"));
                     refreshData();
                     guilgeeniiAldangiTuukhMutate();
                     setAldangiinUldegdel(undefined);

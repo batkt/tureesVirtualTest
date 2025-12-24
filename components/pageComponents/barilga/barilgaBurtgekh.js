@@ -21,13 +21,13 @@ const BarilgaBurtgekh = forwardRef(
             .post("/baiguullaga", baiguullagaData)
             .then(({ data }) => {
               if (data === "Amjilttai") {
-                message.destroy();
-                message.success(t("Амжилттай хадгаллаа"));
+                toastdestroy();
+                toast.success(t("Амжилттай хадгаллаа"));
                 salbarMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }));
                 destroy();
               } else {
-                message.destroy();
-                message.warning(t("Алдаа гарлаа"));
+                toastdestroy();
+                toast.warning(t("Алдаа гарлаа"));
               }
             });
         },

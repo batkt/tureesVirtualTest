@@ -281,7 +281,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                                 ).then(() => {
                                   gereeniiZagvarMutate();
                                   aktiinZagvarMutate();
-                                  message.success(
+                                  toast.success(
                                     t("Гэрээний загвар устгагдлаа")
                                   );
                                 });

@@ -168,7 +168,7 @@ function EbarimtMedeelel({ token }) {
     uilchilgee(token)
       .post("/ebarimtIlgeeye", { barilgiinId: barilgiinId })
       .then(({ status }) => {
-        status === 200 && message.success("Баримт амжилттай илгээлээ");
+        status === 200 && toast.success("Баримт амжилттай илгээлээ");
         eBarimtMedeelelMutate();
         setWaiting(false);
         setLoading(false);
@@ -394,7 +394,7 @@ function EbarimtMedeelel({ token }) {
           eBarimtMutate();
 
           ebarimtiinToololtMutate();
-          message.success(
+          toast.success(
             t("дугаартай баримт амжилттай ebarimt -с устгагдлаа", {
               dugaar: mur.billId || mur.id,
             })

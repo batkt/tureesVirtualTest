@@ -1,4 +1,9 @@
-import React, { useImperativeHandle, forwardRef, useState } from "react";
+import React, {
+  useImperativeHandle,
+  forwardRef,
+  useState,
+  useRef,
+} from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -12,8 +17,7 @@ import { Table } from "@tiptap/extension-table";
 import { TableRow } from "@tiptap/extension-table-row";
 import { TableHeader } from "@tiptap/extension-table-header";
 import { TableCell } from "@tiptap/extension-table-cell";
-import { Extension } from "@tiptap/core";
-import { Dropdown, Button } from "antd";
+import { Dropdown } from "antd";
 import {
   UndoOutlined,
   RedoOutlined,
@@ -24,10 +28,6 @@ import {
   AlignLeftOutlined,
   AlignCenterOutlined,
   AlignRightOutlined,
-  UnorderedListOutlined,
-  OrderedListOutlined,
-  LinkOutlined,
-  PictureOutlined,
   TableOutlined,
 } from "@ant-design/icons";
 
@@ -44,7 +44,7 @@ const sanitizeContent = (content) => {
     .replace(/ant-form-item/g, "")
     .trim();
 
-  // Remove empty paragraphs and divs
+  // Remove empty paragraphs and divs (but NOT spaces inside them)
   cleaned = cleaned
     .replace(/<p>\s*<\/p>/g, "")
     .replace(/<div>\s*<\/div>/g, "")
@@ -70,21 +70,7 @@ const TipTapEditor = forwardRef(
     },
     ref
   ) => {
-    // Extension to ensure spacebar always works and preserve whitespace
-    const SpaceHandler = Extension.create({
-      name: 'spaceHandler',
-      addKeyboardShortcuts() {
-        return {
-          'Space': () => {
-            // Force insert space - this should work
-            if (this.editor) {
-              this.editor.commands.insertContent(' ');
-            }
-            return true; // Return true to prevent default
-          },
-        };
-      },
-    });
+    const isUpdatingFromProp = useRef(false);
 
     const editor = useEditor({
       extensions: [
@@ -100,32 +86,22 @@ const TipTapEditor = forwardRef(
             keepMarks: true,
             keepAttributes: false,
           },
-          // Disable paragraph from StarterKit so we can configure it separately
           paragraph: false,
         }),
         // Custom Paragraph extension that preserves whitespace
         Paragraph.extend({
           parseHTML() {
-            return [{ tag: 'p' }];
+            return [{ tag: "p" }];
           },
           renderHTML({ HTMLAttributes }) {
-            return ['p', { 
-              ...HTMLAttributes, 
-              style: 'white-space: pre-wrap; word-wrap: break-word;',
-            }, 0];
-          },
-          addAttributes() {
-            return {
-              ...this.parent?.(),
-              style: {
-                default: 'white-space: pre-wrap; word-wrap: break-word;',
-                parseHTML: element => element.getAttribute('style') || 'white-space: pre-wrap; word-wrap: break-word;',
-                renderHTML: attributes => {
-                  const style = attributes.style || 'white-space: pre-wrap; word-wrap: break-word;';
-                  return { style };
-                },
+            return [
+              "p",
+              {
+                ...HTMLAttributes,
+                style: "white-space: pre-wrap; word-wrap: break-word;",
               },
-            };
+              0,
+            ];
           },
         }),
         TextStyle,
@@ -145,17 +121,21 @@ const TipTapEditor = forwardRef(
         TableHeader,
         TableCell.configure({
           HTMLAttributes: {
-            class: 'tiptap-table-cell',
+            class: "tiptap-table-cell",
           },
         }),
-        SpaceHandler,
       ],
       content: sanitizeContent(value || defaultValue || setContents || ""),
       editable: !readonly,
       immediatelyRender: false,
+      parseOptions: {
+        preserveWhitespace: "full",
+      },
       onUpdate: ({ editor }) => {
-        if (onChange) {
-          onChange(editor.getHTML());
+        // Only call onChange if we're not updating from a prop change
+        if (onChange && !isUpdatingFromProp.current) {
+          const html = editor.getHTML();
+          onChange(html);
         }
       },
     });
@@ -165,7 +145,11 @@ const TipTapEditor = forwardRef(
         setContents: (content) => {
           if (editor) {
             const cleaned = sanitizeContent(content || "");
+            isUpdatingFromProp.current = true;
             editor.commands.setContent(cleaned);
+            setTimeout(() => {
+              isUpdatingFromProp.current = false;
+            }, 0);
           }
         },
         getContents: () => {
@@ -178,59 +162,46 @@ const TipTapEditor = forwardRef(
       setContent: (content) => {
         if (editor) {
           const cleaned = sanitizeContent(content || "");
+          isUpdatingFromProp.current = true;
           editor.commands.setContent(cleaned);
+          setTimeout(() => {
+            isUpdatingFromProp.current = false;
+          }, 0);
         }
       },
     }));
 
+    // Handle setContents prop changes
     React.useEffect(() => {
       if (editor && setContents !== undefined) {
         const cleaned = sanitizeContent(setContents || "");
-        editor.commands.setContent(cleaned);
+        const currentContent = editor.getHTML();
+        if (currentContent !== cleaned) {
+          isUpdatingFromProp.current = true;
+          editor.commands.setContent(cleaned);
+          setTimeout(() => {
+            isUpdatingFromProp.current = false;
+          }, 0);
+        }
       }
     }, [setContents, editor]);
 
+    // Handle value prop changes
     React.useEffect(() => {
       if (editor && value !== undefined) {
         const cleaned = sanitizeContent(value || "");
         const currentContent = editor.getHTML();
-        if (currentContent !== cleaned) {
+
+        // Only update if content is actually different and we're not in the middle of editing
+        if (currentContent !== cleaned && !editor.isFocused) {
+          isUpdatingFromProp.current = true;
           editor.commands.setContent(cleaned);
+          setTimeout(() => {
+            isUpdatingFromProp.current = false;
+          }, 0);
         }
       }
     }, [value, editor]);
-
-    // CRITICAL: Ensure spacebar works by directly handling it on the editor DOM
-    React.useEffect(() => {
-      if (!editor) return;
-
-      const editorElement = editor.view.dom;
-      
-      const handleKeyDown = (e) => {
-        // If spacebar is pressed in the editor
-        if ((e.key === " " || e.keyCode === 32) && 
-            !e.ctrlKey && !e.metaKey && !e.altKey &&
-            (e.target === editorElement || editorElement.contains(e.target))) {
-          
-          // Check if editor is focused (use view.hasFocus())
-          if (editor.view.hasFocus()) {
-            // Insert space directly using Tiptap command
-            editor.commands.insertContent(' ');
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-            return false;
-          }
-        }
-      };
-
-      // Add listener directly to editor element with capture to catch it early
-      editorElement.addEventListener("keydown", handleKeyDown, true);
-      
-      return () => {
-        editorElement.removeEventListener("keydown", handleKeyDown, true);
-      };
-    }, [editor]);
 
     if (!editor) {
       return <div>Loading editor...</div>;
@@ -322,62 +293,6 @@ const TipTapEditor = forwardRef(
             <AlignRightOutlined />
           </button>
           <div className="toolbar-separator" />
-          {/* <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={editor.isActive("bulletList") ? "is-active" : ""}
-            title="Bullet List"
-          >
-            <UnorderedListOutlined />
-          </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            className={editor.isActive("orderedList") ? "is-active" : ""}
-            title="Numbered List"
-          >
-            <OrderedListOutlined />
-          </button> */}
-          {/* <div className="toolbar-separator" /> */}
-          {/* <button
-            type="button"
-            onClick={() => {
-              const url = window.prompt("Enter URL:");
-              if (url) {
-                editor.chain().focus().setLink({ href: url }).run();
-              }
-            }}
-            className={editor.isActive("link") ? "is-active" : ""}
-            title="Insert Link"
-          >
-            <LinkOutlined />
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              const url = window.prompt("Enter image URL:");
-              if (url) {
-                editor.chain().focus().setImage({ src: url }).run();
-              }
-            }}
-            title="Insert Image"
-          >
-            <PictureOutlined />
-          </button> */}
-          {/* <button
-            type="button"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-                .run()
-            }
-            title="Хүснэгт оруулах"
-          >
-            <TableOutlined />
-          </button> */}
-          {/* {customButtons.length > 0 && <div className="toolbar-separator" />} */}
           {customButtons.map((buttonGroup, groupIndex) => (
             <React.Fragment key={groupIndex}>
               {buttonGroup.map((btn, btnIndex) => {
@@ -393,7 +308,6 @@ const TipTapEditor = forwardRef(
                     onClick: () => {
                       const templateValue = item.talbar || item.value;
                       if (templateValue) {
-                        // Insert template variable like <ovog> as plain text
                         const tagText = `<${templateValue}>`;
                         editor.chain().focus().insertContent(tagText).run();
                       }
@@ -432,7 +346,6 @@ const TipTapEditor = forwardRef(
                       if (btn.onClick) {
                         btn.onClick(editor);
                       } else if (btn.value) {
-                        // Ensure value is plain text, not HTML encoded
                         const value = btn.value
                           .replace(/&lt;/g, "<")
                           .replace(/&gt;/g, ">");
@@ -456,13 +369,6 @@ const TipTapEditor = forwardRef(
           editor={editor}
           style={{ minHeight: `${height}px` }}
           className="tiptap-content"
-          onKeyDown={(e) => {
-            // Ensure spacebar works - don't prevent default for space
-            if (e.key === " " || e.keyCode === 32) {
-              // Allow space to work normally
-              return;
-            }
-          }}
         />
       </div>
     );

@@ -379,7 +379,7 @@ function tulburTootsoo({ token }) {
           : data?.description.includes("QPAY") ||
             data?.description.includes("qpay"))
       ) {
-        message.info(t("Гүйлгээ гэрээнд холбогдсон байна."));
+        toast.info(t("Гүйлгээ гэрээнд холбогдсон байна."));
         return;
       }
 
@@ -436,7 +436,7 @@ function tulburTootsoo({ token }) {
 
   function zardalKholbyo(data) {
     if (!!data?.zardliinBulgiinId) {
-      message.info(t("Зардал холбогдсон байна."));
+      toast.info(t("Зардал холбогдсон байна."));
       return;
     }
 

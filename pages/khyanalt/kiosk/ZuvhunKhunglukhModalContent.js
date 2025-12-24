@@ -53,7 +53,7 @@ function ZuvhunKhunglukhModalContent(
           .then((res) => {
             if (res.data === "Amjilttai") {
               destroy();
-              message.success(t("Амжилттай хөнгөлөлт орууллаа"));
+              toast.success(t("Амжилттай хөнгөлөлт орууллаа"));
             }
           })
           .catch((err) => {

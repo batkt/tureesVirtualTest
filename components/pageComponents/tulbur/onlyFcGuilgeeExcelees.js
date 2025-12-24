@@ -118,7 +118,7 @@ function GuilgeeExceleesOruulakhOlnoor(
 
   const fetchData = async () => {
     if (!ognoo) {
-      message.warning("Огноо сонгоно уу!");
+      toast.warning("Огноо сонгоно уу!");
       return;
     }
     try {
@@ -129,9 +129,9 @@ function GuilgeeExceleesOruulakhOlnoor(
       });
 
       setData(response.data || []);
-      message.success("Өгөгдөл амжилттай татагдлаа!");
+      toast.success("Өгөгдөл амжилттай татагдлаа!");
     } catch (error) {
-      message.error("Өгөгдөл татахад алдаа гарлаа!" + error);
+      toast.error("Өгөгдөл татахад алдаа гарлаа!" + error);
     } finally {
       setLoading(false);
     }
@@ -154,7 +154,7 @@ function GuilgeeExceleesOruulakhOlnoor(
       }));
 
     if (!hadgalakhJagsaalt.length) {
-      message.info("Хадгалах мөр сонгоно уу.");
+      toast.info("Хадгалах мөр сонгоно уу.");
       return;
     }
 
@@ -167,10 +167,10 @@ function GuilgeeExceleesOruulakhOlnoor(
       })
       .then((response) => {
         if (response.status === 200) {
-          message.success("Өөрчлөлтүүд амжилттай хадгалагдлаа!");
+          toast.success("Өөрчлөлтүүд амжилттай хадгалагдлаа!");
           destroy();
         } else {
-          message.error("Хадгалахад алдаа гарлаа!");
+          toast.error("Хадгалахад алдаа гарлаа!");
         }
       })
       .catch(aldaaBarigch);

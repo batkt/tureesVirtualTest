@@ -103,7 +103,7 @@ function ShineTogloomTulbur(
       .get("/userKhadgalakh/" + barCodes + "")
       .then(function (response) {})
       .catch(function (error) {
-        message.error("ERROR: /api/userKhadgalakh" + error);
+        toast.error("ERROR: /api/userKhadgalakh" + error);
       });
   };
 
@@ -213,7 +213,7 @@ function ShineTogloomTulbur(
     }
 
     if (baiguullagaEsekh === true && register?.toString().length !== 7) {
-      message.warning(t("Байгууллагын регистр оруулна уу"));
+      toast.warning(t("Байгууллагын регистр оруулна уу"));
       setLoading(false);
       f4LockRef.current = false;
       return;
@@ -244,7 +244,7 @@ function ShineTogloomTulbur(
           onRefresh();
           destroy();
         } else {
-          message.error("Баримт үүсгэхэд алдаа гарлаа");
+          toast.error("Баримт үүсгэхэд алдаа гарлаа");
           setLoading(false);
           f4LockRef.current = false;
         }
@@ -291,11 +291,11 @@ function ShineTogloomTulbur(
   function guilgeeniiTuukhKhadgalya(tulbur, qpayEsekh) {
     if (khungulukhEsekh === true) {
       if (!khunglult.khungulukhDun || khunglult.khungulukhDun === "") {
-        message.warn(t("Хөнгөлөх дүн оруулна уу"));
+        toastwarn(t("Хөнгөлөх дүн оруулна уу"));
         return;
       }
       if (!khunglult.tailbar || khunglult.tailbar === "") {
-        message.warn(t("Хөнгөлөх шалтгаан оруулна уу"));
+        toastwarn(t("Хөнгөлөх шалтгаан оруулна уу"));
         return;
       }
     }
@@ -325,7 +325,7 @@ function ShineTogloomTulbur(
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
           setAlkham(2);
           onRefresh();
-          message.success("Төлбөр амжилттай хадгалагдлаа");
+          toast.success("Төлбөр амжилттай хадгалагдлаа");
           setLoading(false);
         }
         if (!!qpayEsekh && qpayEsekh === true) {
@@ -340,7 +340,7 @@ function ShineTogloomTulbur(
       socket().on(`qpay/${baiguullaga._id}/${khuleegdejBuiQpay}`, (qpay) => {
         if (!loading) {
           batalgaajuulaltKhiiya("qpayTulugdsun");
-          message.success("Qpay Амжилттай төлөгдлөө");
+          toast.success("Qpay Амжилттай төлөгдлөө");
         }
       });
     }
@@ -352,7 +352,7 @@ function ShineTogloomTulbur(
   function qpayAvakh() {
     var ilgeekhDun = tulbur.find((a) => a.turul === "qpay")?.dun;
     if (!ilgeekhDun || ilgeekhDun <= 0) {
-      message.warning("Төлөх дүн оруулна уу");
+      toast.warning("Төлөх дүн оруулна уу");
       setLoading(false);
       return;
     }
@@ -413,7 +413,7 @@ function ShineTogloomTulbur(
             data?.status == true &&
             data?.response?.response_code !== "000"
           ) {
-            message.success(data?.response?.response_msg);
+            toast.success(data?.response?.response_msg);
           } else if (
             data.status === true &&
             data?.response?.response_code === "366"
@@ -421,7 +421,7 @@ function ShineTogloomTulbur(
             tulbur.find((a) => a.turul === "khaan").msg =
               data?.response?.response_msg;
             setTulbur(tulbur);
-            message.warning(data?.response?.response_msg);
+            toast.warning(data?.response?.response_msg);
             setLoading(false);
           }
         })

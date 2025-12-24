@@ -29,7 +29,7 @@ const KioskMobile = ({
   tsag,
 }) => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = toastuseMessage();
   const [register, setRegister] = useState("");
   const [baiguullagaNer, setBaiguullagaNer] = useState();
   const [customerTin, setCustomerTin] = useState();
@@ -308,7 +308,7 @@ const KioskMobile = ({
       }
     } catch (err) {
       setUnshijBaina(false);
-      message.error(err);
+      toast.error(err);
     }
   };
 

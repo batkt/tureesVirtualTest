@@ -176,7 +176,7 @@ const TsagSungakh = React.forwardRef(
       () => ({
         khadgalya() {
           if (!niitDun) {
-            message.warn("Сунгах хугацаа эсвэл асран хамгаалагчаа нэмнэ үү!");
+            toastwarn("Сунгах хугацаа эсвэл асран хамгаалагчаа нэмнэ үү!");
             setKhugatsaa(false);
             return;
           }
@@ -446,7 +446,7 @@ function togloom1() {
       .then((res) => {
         setKhaalga(res.data);
       })
-      .catch((err) => message.error("Хаалт олдсонгүй"));
+      .catch((err) => toast.error("Хаалт олдсонгүй"));
   }, []);
 
   const togloomiinDun = useToololt("/togloomiinDunAvya", token, ognoo);
@@ -463,7 +463,7 @@ function togloom1() {
         }
       })
       .catch((err) => {
-        message.error(err.message || "Алдаа гарлаа");
+        toast.error(err.message || "Алдаа гарлаа");
       });
   }
 
@@ -497,7 +497,7 @@ function togloom1() {
               })
               .then(({ data }) => {
                 if (data === "Amjilttai") {
-                  message.success("Цуцлагдлаа");
+                  toast.success("Цуцлагдлаа");
                 }
               })
               .finally(() => onRefresh())
@@ -542,7 +542,7 @@ function togloom1() {
               })
               .then(({ data }) => {
                 if (data === "Amjilttai") {
-                  message.success(t("Цаг амжилттай сунагдлаа"));
+                  toast.success(t("Цаг амжилттай сунагдлаа"));
                   togloominTuviinGaralt.mutate();
                 }
               })
@@ -756,8 +756,8 @@ function togloom1() {
           ),
           footer,
         });
-      } else message.warn("Цаг дууссан байна!");
-    } else message.warn("Цаг дууссан байна!");
+      } else toastwarn("Цаг дууссан байна!");
+    } else toastwarn("Цаг дууссан байна!");
   }
 
   const columns = useMemo(() => {
@@ -1135,7 +1135,7 @@ function togloom1() {
                               .post("/khuukhedGargaya", { id: data._id })
                               .then(({ data }) => {
                                 if (data === "Amjilttai") {
-                                  message.success(
+                                  toast.success(
                                     `${ovog && ovog.charAt(0)}.${ner} гарлаа`
                                   );
                                 }
@@ -1253,7 +1253,7 @@ function togloom1() {
     tulburRef.current === null &&
       (!!data
         ? tulburTulyu(data)
-        : message.warn("Төлбөр төлөх үйлчлүүлэгч байхгүй байна"));
+        : toastwarn("Төлбөр төлөх үйлчлүүлэгч байхгүй байна"));
   });
 
   return (
@@ -1783,79 +1783,73 @@ function togloom1() {
           data-aos-delay="300"
           data-aos-anchor-placement="top-bottom"
         >
-          <Table
-            className="mt-8 hidden overflow-auto md:block"
-            dataSource={togloominTuviinGaralt?.jagsaalt}
-            scroll={{ y: "calc(100vh - 30rem)" }}
-            size="small"
-            bordered
-            rowKey={(row) => row._id}
-            columns={columns}
-            onChange={onChangeTable}
-            pagination={{
-              current: togloominTuviinGaralt?.data?.khuudasniiDugaar,
-              pageSize: togloominTuviinGaralt?.data?.khuudasniiKhemjee,
-              total: togloominTuviinGaralt?.data?.niitMur,
-              showSizeChanger: true,
-              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                togloominTuviinGaralt.setKhuudaslalt((kh) => ({
-                  ...kh,
-                  khuudasniiDugaar,
-                  khuudasniiKhemjee,
-                })),
-            }}
-            summary={() => {
-              const totalEbarimt = Array.isArray(
-                togloominTuviinGaralt?.jagsaalt
-              )
-                ? togloominTuviinGaralt.jagsaalt.reduce(
-                    (sum, row) => sum + (Number(row?.ebarimtAvsanDun) || 0),
-                    0
-                  )
-                : 0;
-              const niitKhungulsunDun = Array.isArray(
-                togloominTuviinGaralt?.jagsaalt
-              )
-                ? togloominTuviinGaralt.jagsaalt.reduce(
-                    (sum, row) => sum + (Number(row?.khungulsunDun) || 0),
-                    0
-                  )
-                : 0;
+          <div className="mt-8 overflow-x-auto">
+            <Table
+              className="overflow-auto"
+              dataSource={togloominTuviinGaralt?.jagsaalt}
+              scroll={{ y: "calc(100vh - 30rem)", x: "max-content" }}
+              size="small"
+              bordered
+              rowKey={(row) => row._id}
+              columns={columns}
+              onChange={onChangeTable}
+              pagination={{
+                current: togloominTuviinGaralt?.data?.khuudasniiDugaar,
+                pageSize: togloominTuviinGaralt?.data?.khuudasniiKhemjee,
+                total: togloominTuviinGaralt?.data?.niitMur,
+                showSizeChanger: true,
+                onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                  togloominTuviinGaralt.setKhuudaslalt((kh) => ({
+                    ...kh,
+                    khuudasniiDugaar,
+                    khuudasniiKhemjee,
+                  })),
+              }}
+              summary={() => {
+                const totalEbarimt = Array.isArray(
+                  togloominTuviinGaralt?.jagsaalt
+                )
+                  ? togloominTuviinGaralt.jagsaalt.reduce(
+                      (sum, row) => sum + (Number(row?.ebarimtAvsanDun) || 0),
+                      0
+                    )
+                  : 0;
+                const niitKhungulsunDun = Array.isArray(
+                  togloominTuviinGaralt?.jagsaalt
+                )
+                  ? togloominTuviinGaralt.jagsaalt.reduce(
+                      (sum, row) => sum + (Number(row?.khungulsunDun) || 0),
+                      0
+                    )
+                  : 0;
 
-              return (
-                <Table.Summary.Row>
-                  {[...Array(8)].map((_, i) => (
-                    <Table.Summary.Cell key={i} />
-                  ))}
+                return (
+                  <Table.Summary.Row>
+                    {[...Array(8)].map((_, i) => (
+                      <Table.Summary.Cell key={i} />
+                    ))}
 
-                  <Table.Summary.Cell
-                    index={8}
-                    className="text-right font-bold"
-                  >
-                    {formatNumber(niitKhungulsunDun, 0)}
-                  </Table.Summary.Cell>
+                    <Table.Summary.Cell
+                      index={8}
+                      className="text-right font-bold"
+                    >
+                      {formatNumber(niitKhungulsunDun, 0)}
+                    </Table.Summary.Cell>
 
-                  <Table.Summary.Cell
-                    index={9}
-                    className="text-right font-bold"
-                  >
-                    {formatNumber(totalEbarimt, 0)}
-                  </Table.Summary.Cell>
+                    <Table.Summary.Cell
+                      index={9}
+                      className="text-right font-bold"
+                    >
+                      {formatNumber(totalEbarimt, 0)}
+                    </Table.Summary.Cell>
 
-                  <Table.Summary.Cell></Table.Summary.Cell>
-                  <Table.Summary.Cell></Table.Summary.Cell>
-                </Table.Summary.Row>
-              );
-            }}
-          />
-
-          <CardList
-            cardListTuluv={"utas"}
-            keyValue="uilchluulegch"
-            className="block overflow-auto md:hidden"
-            jagsaalt={togloominTuviinGaralt?.jagsaalt}
-            Component={TogloomTile}
-          />
+                    <Table.Summary.Cell></Table.Summary.Cell>
+                    <Table.Summary.Cell></Table.Summary.Cell>
+                  </Table.Summary.Row>
+                );
+              }}
+            />
+          </div>
         </div>
       </Card>
     </Admin>

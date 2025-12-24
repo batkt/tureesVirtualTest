@@ -160,7 +160,7 @@ function Khyanalt({ token }) {
   async function msgIlgeeye() {
     if (content !== "") {
       if (loading) {
-        message.warning(t("Хүсэлт илгээгдсэн байна"));
+        toast.warning(t("Хүсэлт илгээгдсэн байна"));
         return;
       }
       var msgnuud = [];
@@ -182,11 +182,11 @@ function Khyanalt({ token }) {
           });
         });
       else {
-        message.warning(t("Та SMS илгээх харилцагч сонгоно уу"));
+        toast.warning(t("Та SMS илгээх харилцагч сонгоно уу"));
         return;
       }
       if (!(msgnuud.length > 0)) {
-        message.warning(t("Илгээх мэдээлэл байхгүй байна"));
+        toast.warning(t("Илгээх мэдээлэл байхгүй байна"));
         return;
       }
 

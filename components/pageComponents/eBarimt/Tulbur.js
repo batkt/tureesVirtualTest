@@ -82,7 +82,7 @@ function Tulbur(
         (baiguullagaEsekh === true && register?.toString().length !== 7) ||
         (irgenEsekh === true && register?.toString().length !== 10)
       ) {
-        message.warning(t("Байгууллагын регистр оруулна уу"));
+        toast.warning(t("Байгууллагын регистр оруулна уу"));
         return;
       }
       setLoading(true);

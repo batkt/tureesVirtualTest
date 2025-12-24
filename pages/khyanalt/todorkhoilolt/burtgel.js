@@ -72,7 +72,7 @@ const Burtgel = React.forwardRef(
               .then(({ data: responseData }) => {
                 if (responseData === "Amjilttai") {
                   setWaiting(false);
-                  message.success(t("Амжилттай хадгаллаа"));
+                  toast.success(t("Амжилттай хадгаллаа"));
                   onRefresh();
                   destroy();
                 }

@@ -22,7 +22,7 @@ function Tasalbar({ token, baiguullaga, barilgiinId }) {
         .put(`/tasalbar/${tasalbar._id}`, tasalbar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
           } else {
             return;
           }
@@ -43,7 +43,7 @@ function Tasalbar({ token, baiguullaga, barilgiinId }) {
                   setTasalbar(data?.jagsaalt[0]);
                 }
               });
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
           } else {
             return;
           }

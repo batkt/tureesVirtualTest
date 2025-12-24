@@ -370,42 +370,48 @@ function tulburTootsoo({ token }) {
               ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" &&
               barilgiinId === "6659717af6cab41f3ec723b5"
             ) {
-             
-              const tulsunDun = parseFloat(
-                typeof medeelel.tulsunDun === 'string' 
-                  ? medeelel.tulsunDun.replace(/,/g, '') 
-                  : medeelel.tulsunDun || 0
-              ) || 0;
-              medeelel.umnukhSariinTulsunDun = formatNumber(tulsunDun);
-              
-              if (medeelel.niitDun !== undefined && medeelel.niitDun !== null) {
-                if(medeelel.aldangiinUldegdel > 0)
-                  medeelel.niitDun += medeelel.aldangiinUldegdel || 0;
-                const niitDun = parseFloat(
-                  typeof medeelel.niitDun === 'string' 
-                    ? medeelel.niitDun.replace(/,/g, '') 
-                    : medeelel.niitDun || 0
+              const tulsunDun =
+                parseFloat(
+                  typeof medeelel.tulsunDun === "string"
+                    ? medeelel.tulsunDun.replace(/,/g, "")
+                    : medeelel.tulsunDun || 0
                 ) || 0;
+              medeelel.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+
+              if (medeelel.niitDun !== undefined && medeelel.niitDun !== null) {
+                if (medeelel.aldangiinUldegdel > 0)
+                  medeelel.niitDun += medeelel.aldangiinUldegdel || 0;
+                const niitDun =
+                  parseFloat(
+                    typeof medeelel.niitDun === "string"
+                      ? medeelel.niitDun.replace(/,/g, "")
+                      : medeelel.niitDun || 0
+                  ) || 0;
                 medeelel.niitDun = formatNumber(niitDun);
               }
-              if (medeelel.garaasBodsonNiitDun !== undefined && medeelel.garaasBodsonNiitDun !== null) {
-                if(medeelel.aldangiinUldegdel > 0)
-                  medeelel.garaasBodsonNiitDun += medeelel.aldangiinUldegdel || 0;
-                const garaasBodsonNiitDun = parseFloat(
-                  typeof medeelel.garaasBodsonNiitDun === 'string' 
-                    ? medeelel.garaasBodsonNiitDun.replace(/,/g, '') 
-                    : medeelel.garaasBodsonNiitDun || 0
-                ) || 0;
-                medeelel.garaasBodsonNiitDun = formatNumber(garaasBodsonNiitDun);
+              if (
+                medeelel.garaasBodsonNiitDun !== undefined &&
+                medeelel.garaasBodsonNiitDun !== null
+              ) {
+                if (medeelel.aldangiinUldegdel > 0)
+                  medeelel.garaasBodsonNiitDun +=
+                    medeelel.aldangiinUldegdel || 0;
+                const garaasBodsonNiitDun =
+                  parseFloat(
+                    typeof medeelel.garaasBodsonNiitDun === "string"
+                      ? medeelel.garaasBodsonNiitDun.replace(/,/g, "")
+                      : medeelel.garaasBodsonNiitDun || 0
+                  ) || 0;
+                medeelel.garaasBodsonNiitDun =
+                  formatNumber(garaasBodsonNiitDun);
               }
-             
+
               zagvar.nekhemjlekh = khatuuZagvarFoodCity(
                 medeelel,
                 ajiltan,
                 baiguullaga
               );
-            }
-            else if (
+            } else if (
               ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "67512183c60497546f59513a"
             )
@@ -1506,10 +1512,10 @@ function tulburTootsoo({ token }) {
 
   function send() {
     if (!barimt) {
-      message.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
+      toast.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
       return;
     } else if (!songogdsonGereenuud || songogdsonGereenuud?.length === 0) {
-      message.warning(t("Гэрээ сонгоно уу"));
+      toast.warning(t("Гэрээ сонгоно уу"));
       return;
     } else {
       switch (turul) {
@@ -1545,15 +1551,15 @@ function tulburTootsoo({ token }) {
   });
   function hevlekh() {
     if (!songogdsonDans) {
-      message.warning(t("Данс сонгоно уу"));
+      toast.warning(t("Данс сонгоно уу"));
       return;
     }
     if (!barimt) {
-      message.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
+      toast.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
       return;
     }
     if (!songogdsonGereenuud || songogdsonGereenuud?.length === 0) {
-      message.warning(t("Гэрээ сонгоно уу"));
+      toast.warning(t("Гэрээ сонгоно уу"));
       return;
     }
     if (excelZagvarSongogdson) {
@@ -1595,34 +1601,43 @@ function tulburTootsoo({ token }) {
         ? ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" &&
           barilgiinId === "6659717af6cab41f3ec723b5"
           ? (() => {
-             
-              const tulsunDun = parseFloat(
-                typeof nekhemjlekh.tulsunDun === 'string' 
-                  ? nekhemjlekh.tulsunDun.replace(/,/g, '') 
-                  : nekhemjlekh.tulsunDun || 0
-              ) || 0;
-              nekhemjlekh.umnukhSariinTulsunDun = formatNumber(tulsunDun);
-              
-              if (nekhemjlekh.niitDun !== undefined && nekhemjlekh.niitDun !== null) {
-                if(nekhemjlekh.aldangiinUldegdel > 0)
-                  nekhemjlekh.niitDun += nekhemjlekh.aldangiinUldegdel || 0;
-                const niitDun = parseFloat(
-                  typeof nekhemjlekh.niitDun === 'string' 
-                    ? nekhemjlekh.niitDun.replace(/,/g, '') 
-                    : nekhemjlekh.niitDun || 0
+              const tulsunDun =
+                parseFloat(
+                  typeof nekhemjlekh.tulsunDun === "string"
+                    ? nekhemjlekh.tulsunDun.replace(/,/g, "")
+                    : nekhemjlekh.tulsunDun || 0
                 ) || 0;
+              nekhemjlekh.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+
+              if (
+                nekhemjlekh.niitDun !== undefined &&
+                nekhemjlekh.niitDun !== null
+              ) {
+                if (nekhemjlekh.aldangiinUldegdel > 0)
+                  nekhemjlekh.niitDun += nekhemjlekh.aldangiinUldegdel || 0;
+                const niitDun =
+                  parseFloat(
+                    typeof nekhemjlekh.niitDun === "string"
+                      ? nekhemjlekh.niitDun.replace(/,/g, "")
+                      : nekhemjlekh.niitDun || 0
+                  ) || 0;
                 nekhemjlekh.niitDun = formatNumber(niitDun);
               }
-              
-              if (nekhemjlekh.garaasBodsonNiitDun !== undefined && nekhemjlekh.garaasBodsonNiitDun !== null) {
-                const garaasBodsonNiitDun = parseFloat(
-                  typeof nekhemjlekh.garaasBodsonNiitDun === 'string' 
-                    ? nekhemjlekh.garaasBodsonNiitDun.replace(/,/g, '') 
-                    : nekhemjlekh.garaasBodsonNiitDun || 0
-                ) || 0;
-                nekhemjlekh.garaasBodsonNiitDun = formatNumber(garaasBodsonNiitDun);
+
+              if (
+                nekhemjlekh.garaasBodsonNiitDun !== undefined &&
+                nekhemjlekh.garaasBodsonNiitDun !== null
+              ) {
+                const garaasBodsonNiitDun =
+                  parseFloat(
+                    typeof nekhemjlekh.garaasBodsonNiitDun === "string"
+                      ? nekhemjlekh.garaasBodsonNiitDun.replace(/,/g, "")
+                      : nekhemjlekh.garaasBodsonNiitDun || 0
+                  ) || 0;
+                nekhemjlekh.garaasBodsonNiitDun =
+                  formatNumber(garaasBodsonNiitDun);
               }
-               
+
               return khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga);
             })()
           : ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0" ||
@@ -2020,15 +2035,15 @@ function tulburTootsoo({ token }) {
   }
   function mailIlgeeye() {
     if (!barimt) {
-      message.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
+      toast.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
       return;
     }
     if (!songogdsonGereenuud || songogdsonGereenuud?.length === 0) {
-      message.warning(t("Гэрээ сонгоно уу"));
+      toast.warning(t("Гэрээ сонгоно уу"));
       return;
     }
     if (loading) {
-      message.warning(t("И-мэйл илгээгдсэн байна"));
+      toast.warning(t("И-мэйл илгээгдсэн байна"));
       return;
     }
     if (!excelZagvarSongogdson) {
@@ -2057,33 +2072,43 @@ function tulburTootsoo({ token }) {
           ? ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" &&
             barilgiinId === "6659717af6cab41f3ec723b5"
             ? (() => {
-                const tulsunDun = parseFloat(
-                  typeof nekhemjlekh.tulsunDun === 'string' 
-                    ? nekhemjlekh.tulsunDun.replace(/,/g, '') 
-                    : nekhemjlekh.tulsunDun || 0
-                ) || 0;
-                nekhemjlekh.umnukhSariinTulsunDun = formatNumber(tulsunDun);
-                
-                if (nekhemjlekh.niitDun !== undefined && nekhemjlekh.niitDun !== null) {
-                  if(nekhemjlekh.aldangiinUldegdel > 0)
-                  nekhemjlekh.niitDun += nekhemjlekh.aldangiinUldegdel || 0;
-                  const niitDun = parseFloat(
-                    typeof nekhemjlekh.niitDun === 'string' 
-                      ? nekhemjlekh.niitDun.replace(/,/g, '') 
-                      : nekhemjlekh.niitDun || 0
+                const tulsunDun =
+                  parseFloat(
+                    typeof nekhemjlekh.tulsunDun === "string"
+                      ? nekhemjlekh.tulsunDun.replace(/,/g, "")
+                      : nekhemjlekh.tulsunDun || 0
                   ) || 0;
+                nekhemjlekh.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+
+                if (
+                  nekhemjlekh.niitDun !== undefined &&
+                  nekhemjlekh.niitDun !== null
+                ) {
+                  if (nekhemjlekh.aldangiinUldegdel > 0)
+                    nekhemjlekh.niitDun += nekhemjlekh.aldangiinUldegdel || 0;
+                  const niitDun =
+                    parseFloat(
+                      typeof nekhemjlekh.niitDun === "string"
+                        ? nekhemjlekh.niitDun.replace(/,/g, "")
+                        : nekhemjlekh.niitDun || 0
+                    ) || 0;
                   nekhemjlekh.niitDun = formatNumber(niitDun);
                 }
-                
-                if (nekhemjlekh.garaasBodsonNiitDun !== undefined && nekhemjlekh.garaasBodsonNiitDun !== null) {
-                  const garaasBodsonNiitDun = parseFloat(
-                    typeof nekhemjlekh.garaasBodsonNiitDun === 'string' 
-                      ? nekhemjlekh.garaasBodsonNiitDun.replace(/,/g, '') 
-                      : nekhemjlekh.garaasBodsonNiitDun || 0
-                  ) || 0;
-                  nekhemjlekh.garaasBodsonNiitDun = formatNumber(garaasBodsonNiitDun);
+
+                if (
+                  nekhemjlekh.garaasBodsonNiitDun !== undefined &&
+                  nekhemjlekh.garaasBodsonNiitDun !== null
+                ) {
+                  const garaasBodsonNiitDun =
+                    parseFloat(
+                      typeof nekhemjlekh.garaasBodsonNiitDun === "string"
+                        ? nekhemjlekh.garaasBodsonNiitDun.replace(/,/g, "")
+                        : nekhemjlekh.garaasBodsonNiitDun || 0
+                    ) || 0;
+                  nekhemjlekh.garaasBodsonNiitDun =
+                    formatNumber(garaasBodsonNiitDun);
                 }
-                 
+
                 return khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga);
               })()
             : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
@@ -3550,7 +3575,7 @@ function tulburTootsoo({ token }) {
       .then(({ data }) => {
         if (data === "Amjilttai") {
           setWaiting(false);
-          message.success(t("Устгагдлаа"));
+          toast.success(t("Устгагдлаа"));
           nekhemjlekhiinZagvarMutate();
         }
       })
@@ -3592,7 +3617,7 @@ function tulburTootsoo({ token }) {
             .then((response) => {})
             .catch((err) => {
               setUnshijBaina(false);
-              message.error(err);
+              toast.error(err);
             });
         } else {
           notification.warn({
@@ -3608,7 +3633,7 @@ function tulburTootsoo({ token }) {
       }
       return "Amjilttai";
     } catch (err) {
-      message.error(err);
+      toast.error(err);
     }
   }
   return (

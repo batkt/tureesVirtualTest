@@ -1,7 +1,6 @@
 import {
   Button,
   Input,
-  message,
   Select,
   Table,
   Space,
@@ -12,6 +11,7 @@ import {
   notification,
   Modal,
 } from "antd";
+import { toast } from "sonner";
 import {
   UserOutlined,
   HomeOutlined,
@@ -64,7 +64,7 @@ const iconColor = { fontSize: "18px" };
 function checkUtas(utasnuud, utga) {
   const utguud = utasnuud || [];
   if (!!utguud.find((a) => a === utga)) {
-    message.warning("Энэ утасны дугаарыг бүртгэсэн байна");
+    toast.warning("Энэ утасны дугаарыг бүртгэсэн байна");
     return false;
   }
   return true;
@@ -338,7 +338,7 @@ function AjiltanBurtgel({ token }) {
     );
 
     if (exists) {
-      message.warning(t("Энэ утасны дугаарыг бүртгэсэн байна"));
+      toast.warning(t("Энэ утасны дугаарыг бүртгэсэн байна"));
       return Promise.reject(t("Давхардсан утасны дугаар"));
     }
     return Promise.resolve();
@@ -353,7 +353,7 @@ function AjiltanBurtgel({ token }) {
     );
 
     if (exists) {
-      message.warning(t("Бүртгэлтэй регистр байна"));
+      toast.warning(t("Бүртгэлтэй регистр байна"));
       return Promise.reject(t("Давхардсан регистр"));
     }
     return Promise.resolve();
@@ -394,7 +394,7 @@ function AjiltanBurtgel({ token }) {
         .then(({ data }) => {
           if (data !== undefined) {
             setWaiting(false);
-            message.success(t("Бүртгэл амжилттай засагдлаа"));
+            toast.success(t("Бүртгэл амжилттай засагдлаа"));
             formRef.current.resetFields();
             khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
             khariltsagchToololtMutate();
@@ -409,7 +409,7 @@ function AjiltanBurtgel({ token }) {
         .then(({ data }) => {
           if (data !== undefined) {
             setWaiting(false);
-            message.success(t("Бүртгэл амжилттай хийгдлээ"));
+            toast.success(t("Бүртгэл амжилттай хийгдлээ"));
             setWaiting(false);
             formRef.current.resetFields();
             khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
@@ -475,7 +475,7 @@ function AjiltanBurtgel({ token }) {
           setWaiting(false);
           khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
           khariltsagchToololtMutate();
-          message.success(t("Устгагдлаа"));
+          toast.success(t("Устгагдлаа"));
         }
       })
       .catch((e) => {
@@ -573,11 +573,11 @@ function AjiltanBurtgel({ token }) {
           .addDataSource(data.jagsaalt)
           .saveAs("харилцагчийн жагсаалт.xlsx");
 
-        message.success(t("Амжилттай татагдлаа"));
+        toast.success(t("Амжилттай татагдлаа"));
       }
     } catch (error) {
       aldaaBarigch(error);
-      message.error(t("Татахад алдаа гарлаа"));
+      toast.error(t("Татахад алдаа гарлаа"));
     } finally {
       setWaiting(false);
     }
@@ -666,11 +666,11 @@ function AjiltanBurtgel({ token }) {
       var day = parseInt(khariltsagchState.register.substring(6, 8));
       var nowYear = new Date().getFullYear().toString().substring(2, 4);
       if (month > 32 || (12 < month && month < 20)) {
-        message.warning("Регистерийн дугаарын сар буруу байна!");
+        toast.warning("Регистерийн дугаарын сар буруу байна!");
         khariltsagchState.register = "";
         return;
       } else if (year > nowYear && 21 <= month && month <= 32) {
-        message.warning("Регистерийн дугаарын жил, сарын хослол буруу байна!");
+        toast.warning("Регистерийн дугаарын жил, сарын хослол буруу байна!");
         khariltsagchState.register = "";
         return;
       }
@@ -681,7 +681,7 @@ function AjiltanBurtgel({ token }) {
       var shine = new Date(shineDate - 1);
       var nowDay = shine.getDate();
       if (nowDay < day) {
-        message.warning("Регистерийн дугаарын өдөр буруу байна!");
+        toast.warning("Регистерийн дугаарын өдөр буруу байна!");
         return;
       }
     }
@@ -771,40 +771,67 @@ function AjiltanBurtgel({ token }) {
           name="control-ref"
           onFinish={onFinish}
         >
-          <div data-aos="fade-right" data-aos-duration="1000">
-            <Form.Item
-              name="turul"
-              rules={[
-                {
-                  required: true,
-                  message: t("Төрөл сонгоно уу!"),
-                },
-              ]}
-            >
-              <Select
-                autoFocus={true}
-                style={{ width: "100%" }}
-                value={khariltsagchState.turul}
-                placeholder={t("Төрөл сонгох")}
-                onChange={turulSongokh}
-              >
-                <Option value="Иргэн">{t("Иргэн")}</Option>
-                <Option value="ААН">{t("ААН")}</Option>
-              </Select>
-            </Form.Item>
-          </div>
-          {khariltsagchState.turul !== "ААН" && (
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="100"
-            >
+          <div className="space-y-4">
+            <div data-aos="fade-right" data-aos-duration="1000">
               <Form.Item
-                name="ovog"
+                name="turul"
                 rules={[
                   {
                     required: true,
-                    message: t("Овог бүртгэнэ үү!"),
+                    message: t("Төрөл сонгоно уу!"),
+                  },
+                ]}
+              >
+                <Select
+                  autoFocus={true}
+                  style={{ width: "100%" }}
+                  value={khariltsagchState.turul}
+                  placeholder={t("Төрөл сонгох")}
+                  onChange={turulSongokh}
+                >
+                  <Option value="Иргэн">{t("Иргэн")}</Option>
+                  <Option value="ААН">{t("ААН")}</Option>
+                </Select>
+              </Form.Item>
+            </div>
+            {khariltsagchState.turul !== "ААН" && (
+              <div
+                data-aos="fade-right"
+                data-aos-duration="1000"
+                data-aos-delay="100"
+              >
+                <Form.Item
+                  name="ovog"
+                  rules={[
+                    {
+                      required: true,
+                      message: t("Овог бүртгэнэ үү!"),
+                    },
+                  ]}
+                >
+                  <Input
+                    onKeyUp={focuser}
+                    type="text"
+                    allowClear
+                    placeholder={t("Овог")}
+                    value={khariltsagchState.ovog}
+                    prefix={<UserOutlined style={iconColor} />}
+                    onChange={(e) => onChange("ovog", e.target.value)}
+                  ></Input>
+                </Form.Item>
+              </div>
+            )}
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="200"
+            >
+              <Form.Item
+                name="ner"
+                rules={[
+                  {
+                    required: true,
+                    message: t("Нэр заавал оруулна уу!"),
                   },
                 ]}
               >
@@ -812,366 +839,341 @@ function AjiltanBurtgel({ token }) {
                   onKeyUp={focuser}
                   type="text"
                   allowClear
-                  placeholder={t("Овог")}
-                  value={khariltsagchState.ovog}
+                  placeholder={t("Нэр")}
+                  value={khariltsagchState.ner}
                   prefix={<UserOutlined style={iconColor} />}
-                  onChange={(e) => onChange("ovog", e.target.value)}
+                  onChange={(e) => onChange("ner", e.target.value)}
                 ></Input>
               </Form.Item>
             </div>
-          )}
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="200"
-          >
-            <Form.Item
-              name="ner"
-              rules={[
-                {
-                  required: true,
-                  message: t("Нэр заавал оруулна уу!"),
-                },
-              ]}
-            >
-              <Input
-                onKeyUp={focuser}
-                type="text"
-                allowClear
-                placeholder={t("Нэр")}
-                value={khariltsagchState.ner}
-                prefix={<UserOutlined style={iconColor} />}
-                onChange={(e) => onChange("ner", e.target.value)}
-              ></Input>
-            </Form.Item>
-          </div>
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="300"
-          >
-            <Form.Item
-              name="register"
-              rules={[
-                {
-                  required: !khariltsagchState.customerTin,
-                  len: formNuukh === "ААН" ? 7 : 10,
-                  pattern:
-                    formNuukh === "ААН"
-                      ? new RegExp("(\\d{7})")
-                      : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
-                  message: t("Регистр бүртгэнэ үү!"),
-                },
-                {
-                  validator: async (_, value) => {
-                    if (
-                      value &&
-                      value.length === (formNuukh === "ААН" ? 7 : 10)
-                    ) {
-                      return registerShalgakh(value);
-                    }
-                  },
-                },
-              ]}
-            >
-              <Input
-                onKeyUp={focuser}
-                allowClear
-                maxLength={10}
-                placeholder={t("Регистр")}
-                value={khariltsagchState.register}
-                onChange={(e) =>
-                  onChange("register", e?.target?.value?.toUpperCase())
-                }
-                prefix={<SolutionOutlined style={iconColor} />}
-                onBlur={() => (formNuukh === "ААН" ? "" : checkRegister())}
-              ></Input>
-            </Form.Item>
-          </div>
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="500"
-          >
-            <Form.Item
-              name="customerTin"
-              rules={[
-                {
-                  required: !khariltsagchState.register,
-                  message: t("Бүртгэлийн дугаар бүртгэнэ үү!"),
-                },
-              ]}
-            >
-              <Input
-                onKeyUp={focuser}
-                allowClear
-                placeholder={t("Бүртгэлийн дугаар")}
-                value={khariltsagchState.customerTin}
-                onChange={(e) => onChange("customerTin", e.target.value)}
-                prefix={<SolutionOutlined style={iconColor} />}
-              ></Input>
-            </Form.Item>
-          </div>
-          {khariltsagchState.turul === "ААН" && (
             <div
               data-aos="fade-right"
               data-aos-duration="1000"
-              data-aos-delay="100"
+              data-aos-delay="300"
             >
               <Form.Item
-                name="zakhirliinOvog"
+                name="register"
                 rules={[
                   {
-                    required: true,
-                    message: t("Захирлын Овог бүртгэнэ үү!"),
+                    required: !khariltsagchState.customerTin,
+                    len: formNuukh === "ААН" ? 7 : 10,
+                    pattern:
+                      formNuukh === "ААН"
+                        ? new RegExp("(\\d{7})")
+                        : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
+                    message: t("Регистр бүртгэнэ үү!"),
+                  },
+                  {
+                    validator: async (_, value) => {
+                      if (
+                        value &&
+                        value.length === (formNuukh === "ААН" ? 7 : 10)
+                      ) {
+                        return registerShalgakh(value);
+                      }
+                    },
                   },
                 ]}
               >
                 <Input
                   onKeyUp={focuser}
-                  type="text"
                   allowClear
-                  placeholder={t("Захирлын Овог")}
-                  value={khariltsagchState.zakhirliinOvog}
-                  prefix={<UserOutlined style={iconColor} />}
-                  onChange={(e) => onChange("zakhirliinOvog", e.target.value)}
+                  maxLength={10}
+                  placeholder={t("Регистр")}
+                  value={khariltsagchState.register}
+                  onChange={(e) =>
+                    onChange("register", e?.target?.value?.toUpperCase())
+                  }
+                  prefix={<SolutionOutlined style={iconColor} />}
+                  onBlur={() => (formNuukh === "ААН" ? "" : checkRegister())}
                 ></Input>
               </Form.Item>
             </div>
-          )}
-          {khariltsagchState.turul === "ААН" && (
             <div
               data-aos="fade-right"
               data-aos-duration="1000"
-              data-aos-delay="100"
+              data-aos-delay="500"
             >
               <Form.Item
-                name="zakhirliinNer"
+                name="customerTin"
                 rules={[
                   {
-                    required: true,
-                    message: t("Захирлын нэр бүртгэнэ үү!"),
+                    required: !khariltsagchState.register,
+                    message: t("Бүртгэлийн дугаар бүртгэнэ үү!"),
                   },
                 ]}
               >
                 <Input
                   onKeyUp={focuser}
-                  type="text"
                   allowClear
-                  placeholder={t("Захирлын нэр")}
-                  value={khariltsagchState.zakhirliinNer}
-                  prefix={<UserOutlined style={iconColor} />}
-                  onChange={(e) => onChange("zakhirliinNer", e.target.value)}
+                  placeholder={t("Бүртгэлийн дугаар")}
+                  value={khariltsagchState.customerTin}
+                  onChange={(e) => onChange("customerTin", e.target.value)}
+                  prefix={<SolutionOutlined style={iconColor} />}
                 ></Input>
               </Form.Item>
             </div>
-          )}
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="400"
-          >
-            <Form.Item
-              name="khayag"
-              rules={[
-                {
-                  required: true,
-                  message: t("Хаяг бүртгэнэ үү!"),
-                },
-              ]}
+            {khariltsagchState.turul === "ААН" && (
+              <div
+                data-aos="fade-right"
+                data-aos-duration="1000"
+                data-aos-delay="100"
+              >
+                <Form.Item
+                  name="zakhirliinOvog"
+                  rules={[
+                    {
+                      required: true,
+                      message: t("Захирлын Овог бүртгэнэ үү!"),
+                    },
+                  ]}
+                >
+                  <Input
+                    onKeyUp={focuser}
+                    type="text"
+                    allowClear
+                    placeholder={t("Захирлын Овог")}
+                    value={khariltsagchState.zakhirliinOvog}
+                    prefix={<UserOutlined style={iconColor} />}
+                    onChange={(e) => onChange("zakhirliinOvog", e.target.value)}
+                  ></Input>
+                </Form.Item>
+              </div>
+            )}
+            {khariltsagchState.turul === "ААН" && (
+              <div
+                data-aos="fade-right"
+                data-aos-duration="1000"
+                data-aos-delay="100"
+              >
+                <Form.Item
+                  name="zakhirliinNer"
+                  rules={[
+                    {
+                      required: true,
+                      message: t("Захирлын нэр бүртгэнэ үү!"),
+                    },
+                  ]}
+                >
+                  <Input
+                    onKeyUp={focuser}
+                    type="text"
+                    allowClear
+                    placeholder={t("Захирлын нэр")}
+                    value={khariltsagchState.zakhirliinNer}
+                    prefix={<UserOutlined style={iconColor} />}
+                    onChange={(e) => onChange("zakhirliinNer", e.target.value)}
+                  ></Input>
+                </Form.Item>
+              </div>
+            )}
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="400"
             >
-              <Input
-                onKeyUp={focuser}
-                allowClear
-                placeholder={t("Хаяг")}
-                value={khariltsagchState.khayag}
-                onChange={(e) => onChange("khayag", e.target.value)}
-                prefix={<HomeOutlined style={iconColor} />}
-              ></Input>
-            </Form.Item>
-          </div>
-          <div
-            data-aos="fade-right "
-            data-aos-duration="1000"
-            data-aos-delay="700"
-          >
-            <Form.List name="segmentuud" className="">
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    <div key={key}>
-                      <YalgakhUtga
-                        t={t}
-                        key={key}
-                        khariltsagchState={khariltsagchState}
-                        name={name}
-                        fieldKey={fieldKey}
-                        {...restField}
-                        remove={remove}
-                      />
-                    </div>
-                  ))}
-                  <Form.Item>
-                    <Button
-                      icon={<PlusOutlined />}
-                      className="h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                    >
-                      {t("Ялгах утга оруулах")}
-                    </Button>
-                  </Form.Item>
-                </>
-              )}
-            </Form.List>
-          </div>
-          <div
-            data-aos="fade-right"
-            data-aos-duration="800"
-            data-aos-delay="400"
-            className="relative flex flex-wrap"
-          >
-            <Form.List
-              rules={[
-                {
-                  validator: async (_, names) => {
-                    if (!names || names.length < 1) {
-                      return Promise.reject(
-                        new Error(t("Утасны дугаар оруулна уу !"))
-                      );
-                    }
+              <Form.Item
+                name="khayag"
+                rules={[
+                  {
+                    required: true,
+                    message: t("Хаяг бүртгэнэ үү!"),
                   },
-                },
-              ]}
-              name={"utas"}
+                ]}
+              >
+                <Input
+                  onKeyUp={focuser}
+                  allowClear
+                  placeholder={t("Хаяг")}
+                  value={khariltsagchState.khayag}
+                  onChange={(e) => onChange("khayag", e.target.value)}
+                  prefix={<HomeOutlined style={iconColor} />}
+                ></Input>
+              </Form.Item>
+            </div>
+            <div
+              data-aos="fade-right "
+              data-aos-duration="1000"
+              data-aos-delay="700"
             >
-              {(fields, { add, remove }, { errors }) => (
-                <>
-                  {fields.map((field) => (
-                    <Space key={field.key} align="baseline">
-                      <Form.Item
-                        {...field}
-                        rules={[
-                          {
-                            required: true,
-                            len: 8,
-                            pattern: new RegExp("(^[0-9]+$)"),
-                            message: t("Утасны дугаар оруулна уу !"),
-                          },
-                          {
-                            validator: async (_, value) => {
-                              if (value && value.length === 8) {
-                                return utasShalgakh(value, field);
-                              }
-                            },
-                          },
-                        ]}
+              <Form.List name="segmentuud" className="">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, fieldKey, ...restField }) => (
+                      <div key={key}>
+                        <YalgakhUtga
+                          t={t}
+                          key={key}
+                          khariltsagchState={khariltsagchState}
+                          name={name}
+                          fieldKey={fieldKey}
+                          {...restField}
+                          remove={remove}
+                        />
+                      </div>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        icon={<PlusOutlined />}
+                        className="h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
+                        type="dashed"
+                        onClick={() => add()}
+                        block
                       >
-                        <Input
-                          maxLength={8}
-                          type="text"
-                          className="appearance-none"
-                          placeholder={
-                            t("Утасны дугаар") + " " + (field.name + 1)
-                          }
-                          onChange={({ target }) => {
-                            const value = target.value.slice(0, 8);
-                            target.value = value;
+                        {t("Ялгах утга оруулах")}
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="800"
+              data-aos-delay="400"
+              className="relative flex flex-wrap"
+            >
+              <Form.List
+                rules={[
+                  {
+                    validator: async (_, names) => {
+                      if (!names || names.length < 1) {
+                        return Promise.reject(
+                          new Error(t("Утасны дугаар оруулна уу !"))
+                        );
+                      }
+                    },
+                  },
+                ]}
+                name={"utas"}
+              >
+                {(fields, { add, remove }, { errors }) => (
+                  <>
+                    {fields.map((field) => (
+                      <Space key={field.key} align="baseline">
+                        <Form.Item
+                          {...field}
+                          rules={[
+                            {
+                              required: true,
+                              len: 8,
+                              pattern: new RegExp("(^[0-9]+$)"),
+                              message: t("Утасны дугаар оруулна уу !"),
+                            },
+                            {
+                              validator: async (_, value) => {
+                                if (value && value.length === 8) {
+                                  return utasShalgakh(value, field);
+                                }
+                              },
+                            },
+                          ]}
+                        >
+                          <Input
+                            maxLength={8}
+                            type="text"
+                            className="appearance-none"
+                            placeholder={
+                              t("Утасны дугаар") + " " + (field.name + 1)
+                            }
+                            onChange={({ target }) => {
+                              const value = target.value.slice(0, 8);
+                              target.value = value;
+                              setkhariltsagchState((a) => {
+                                _.set(a, "utas." + field.name, value);
+                                return a;
+                              });
+                            }}
+                          />
+                        </Form.Item>
+
+                        <MinusCircleOutlined
+                          className="-ml-1 mr-3"
+                          onClick={() => {
+                            remove(field.name);
                             setkhariltsagchState((a) => {
-                              _.set(a, "utas." + field.name, value);
+                              a.utas.splice(a.name, 1);
                               return a;
                             });
                           }}
                         />
-                      </Form.Item>
+                      </Space>
+                    ))}
 
-                      <MinusCircleOutlined
-                        className="-ml-1 mr-3"
-                        onClick={() => {
-                          remove(field.name);
-                          setkhariltsagchState((a) => {
-                            a.utas.splice(a.name, 1);
-                            return a;
-                          });
-                        }}
-                      />
-                    </Space>
-                  ))}
-
-                  <Form.Item className="w-full ">
-                    <Button
-                      icon={<PlusOutlined />}
-                      className="h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                    >
-                      {t("Утасны дугаар нэмэх")}
-                    </Button>
-                    <Form.ErrorList errors={errors} />
-                  </Form.Item>
-                </>
-              )}
-            </Form.List>
-          </div>
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="600"
-          >
-            <Form.Item
-              name="mail"
-              rules={[
-                {
-                  required: true,
-                  message: t("И-мейл хаяг бүртгэнэ үү!"),
-                },
-              ]}
+                    <Form.Item className="w-full ">
+                      <Button
+                        icon={<PlusOutlined />}
+                        className="h-8 w-full rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                      >
+                        {t("Утасны дугаар нэмэх")}
+                      </Button>
+                      <Form.ErrorList errors={errors} />
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="600"
             >
-              <Input
-                onKeyUp={focuser}
-                type="email"
-                placeholder={t("И-мэйл")}
-                value={khariltsagchState.email}
-                onChange={(e) => onChange("mail", e.target.value)}
-                prefix={<MailOutlined style={iconColor} />}
-              />
-            </Form.Item>
-          </div>
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="700"
-          >
-            <Form.Item name="temdeglel">
-              <TextArea
-                onKeyDown={focuser}
-                style={{ width: "100%" }}
-                rows={4}
-                placeholder={t("Тэмдэглэл")}
-                onChange={(e) => onChange("temdeglel", e.target.value)}
-              ></TextArea>
-            </Form.Item>
-          </div>
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="700"
-            className="flex justify-end"
-          >
-            <Form.Item>
-              <Button
-                className="mt-2"
-                id="khariltsagchBurtgekhButton"
-                onClick={() => {
-                  formRef.current.submit();
-                }}
-                type={"primary"}
+              <Form.Item
+                name="mail"
+                rules={[
+                  {
+                    required: true,
+                    message: t("И-мейл хаяг бүртгэнэ үү!"),
+                  },
+                ]}
               >
-                {t("Хадгалах")}
-              </Button>
-            </Form.Item>
+                <Input
+                  onKeyUp={focuser}
+                  type="email"
+                  placeholder={t("И-мэйл")}
+                  value={khariltsagchState.email}
+                  onChange={(e) => onChange("mail", e.target.value)}
+                  prefix={<MailOutlined style={iconColor} />}
+                />
+              </Form.Item>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="700"
+            >
+              <Form.Item name="temdeglel">
+                <TextArea
+                  onKeyDown={focuser}
+                  style={{ width: "100%" }}
+                  rows={4}
+                  placeholder={t("Тэмдэглэл")}
+                  onChange={(e) => onChange("temdeglel", e.target.value)}
+                ></TextArea>
+              </Form.Item>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="700"
+              className="flex justify-end"
+            >
+              <Form.Item>
+                <Button
+                  className="mt-2"
+                  id="khariltsagchBurtgekhButton"
+                  onClick={() => {
+                    formRef.current.submit();
+                  }}
+                  type={"primary"}
+                >
+                  {t("Хадгалах")}
+                </Button>
+              </Form.Item>
+            </div>
           </div>
         </Form>
       </div>
@@ -1264,14 +1266,14 @@ function AjiltanBurtgel({ token }) {
           </div>
         </div>
         <div
-          className="mt-8 hidden overflow-auto md:block"
+          className="mt-8 overflow-x-auto"
           data-aos="fade-up-left"
           data-aos-duration="1000"
           data-aos-delay="400"
         >
           <Table
             bordered
-            scroll={{ y: "calc(100vh - 27rem)" }}
+            scroll={{ y: "calc(100vh - 27rem)", x: "max-content" }}
             rowKey={(row) => row._id}
             dataSource={khariltsagchiinGaralt?.jagsaalt}
             pagination={{
@@ -1656,35 +1658,6 @@ function AjiltanBurtgel({ token }) {
             </Form>
           </Modal>
         </div>
-        <p className="py-2 font-medium md:hidden">
-          {t("Харилцагчийн жагсаалт")}
-        </p>
-        <CardList
-          keyValue=""
-          cardListTuluv={"utas"}
-          neesenEsekh={neesenEsekh}
-          className="block overflow-auto md:hidden"
-          jagsaalt={khariltsagchiinGaralt?.jagsaalt}
-          Component={KhariltsagchTile}
-          tileProps={{
-            khariltsagchUstgay,
-            zasya,
-            setUtasKhariltsagchNmekh,
-            setNuutsUgKhariltsagch,
-          }}
-          pagination={{
-            current: khariltsagchiinGaralt?.khuudasniiDugaar,
-            pageSize: khariltsagchiinGaralt?.khuudasniiKhemjee,
-            total: khariltsagchiinGaralt?.niitMur,
-            showSizeChanger: true,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setKhariltsagchKhuudaslalt((kh) => ({
-                ...kh,
-                khuudasniiDugaar,
-                khuudasniiKhemjee,
-              })),
-          }}
-        />
       </div>
     </Admin>
   );

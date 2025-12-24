@@ -64,7 +64,7 @@ export function excelTatajAvya(
   order,
   sheetName
 ) {
-  message.loading(t("Өгөгдөл боловсруулж байна та түр хүлээнэ үү!"), 100000);
+  toastloading(t("Өгөгдөл боловсруулж байна та түр хүлээнэ үү!"), 100000);
   uilchilgee(token)
     .get(service, {
       params: { query, order, khuudasniiKhemjee: mur, khuudasniiDugaar: 1 },
@@ -78,7 +78,7 @@ export function excelTatajAvya(
         .saveAs(sheetName + ".xlsx");
     })
     .catch(aldaaBarigch)
-    .finally(() => message.destroy());
+    .finally(() => toastdestroy());
 }
 
 function tulburKhurvuulekh(v) {
@@ -2665,38 +2665,40 @@ function Zogsool({ token }) {
                 key: DAILY_CLOSING_TAB_KEY,
                 label: "Өдрийн хаалт",
                 children: (
-                  <Table
-                    className="mt-8 hidden overflow-auto md:block"
-                    tableLayout="auto"
-                    loading={!kassCameraKhaaltJagsaalt}
-                    dataSource={kassCameraKhaaltJagsaalt}
-                    scroll={{ y: "calc(100vh - 30rem)" }}
-                    size="small"
-                    bordered
-                    columns={kassCameraKhaaltColumns}
-                    pagination={{
-                      current: kassCameraKhaaltData?.khuudasniiDugaar,
-                      total: kassCameraKhaaltData?.niitMur,
-                      pageSizeOptions: [100, 300, 500],
-                      defaultPageSize: [500],
-                      showSizeChanger: true,
-                      onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                        setKassCameraKhuudaslalt((kh) => ({
-                          ...kh,
-                          khuudasniiDugaar,
-                          khuudasniiKhemjee,
-                        })),
-                    }}
-                    summary={(e) => (
-                      <AntdTable.Summary className="border " fixed={"bottom"}>
-                        <AntdTable.Summary.Cell colSpan={6}>
-                          <div className="space-x-2 truncate text-base font-bold ">
-                            {t("Нийт")}: {e?.length || 0} {t("ажилтан")}
-                          </div>
-                        </AntdTable.Summary.Cell>
-                      </AntdTable.Summary>
-                    )}
-                  />
+                  <div className="mt-8 overflow-x-auto">
+                    <Table
+                      className="overflow-auto"
+                      tableLayout="auto"
+                      loading={!kassCameraKhaaltJagsaalt}
+                      dataSource={kassCameraKhaaltJagsaalt}
+                      scroll={{ y: "calc(100vh - 30rem)", x: "max-content" }}
+                      size="small"
+                      bordered
+                      columns={kassCameraKhaaltColumns}
+                      pagination={{
+                        current: kassCameraKhaaltData?.khuudasniiDugaar,
+                        total: kassCameraKhaaltData?.niitMur,
+                        pageSizeOptions: [100, 300, 500],
+                        defaultPageSize: [500],
+                        showSizeChanger: true,
+                        onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                          setKassCameraKhuudaslalt((kh) => ({
+                            ...kh,
+                            khuudasniiDugaar,
+                            khuudasniiKhemjee,
+                          })),
+                      }}
+                      summary={(e) => (
+                        <AntdTable.Summary className="border " fixed={"bottom"}>
+                          <AntdTable.Summary.Cell colSpan={6}>
+                            <div className="space-x-2 truncate text-base font-bold ">
+                              {t("Нийт")}: {e?.length || 0} {t("ажилтан")}
+                            </div>
+                          </AntdTable.Summary.Cell>
+                        </AntdTable.Summary>
+                      )}
+                    />
+                  </div>
                 ),
               },
               baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh
@@ -2704,64 +2706,65 @@ function Zogsool({ token }) {
                     key: ZURCHIL_TAB_KEY,
                     label: "Зөрчил сануулах",
                     children: (
-                      <Table
-                        className="mt-8 hidden overflow-auto md:block"
-                        tableLayout="auto"
-                        loading={!zurchilteiJagsaalt}
-                        dataSource={zurchilteiJagsaalt}
-                        scroll={{ y: "calc(100vh - 30rem)" }}
-                        size="small"
-                        bordered
-                        rowSelection={rowSelection}
-                        rowKey={"_id"}
-                        columns={columnsZurchil}
-                        onChange={onChangeTable}
-                        pagination={{
-                          current: zurchilteiData?.khuudasniiDugaar,
-                          total: zurchilteiData?.niitMur,
-                          pageSizeOptions: [100, 300, 500],
-                          defaultPageSize: [500],
-                          showSizeChanger: true,
-                          onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                            setZurchilKhuudaslalt((kh) => ({
-                              ...kh,
-                              khuudasniiDugaar,
-                              khuudasniiKhemjee,
-                            })),
-                        }}
-                        summary={(e) => (
-                          <AntdTable.Summary
-                            className="border "
-                            fixed={"bottom"}
-                          >
-                            <AntdTable.Summary.Cell colSpan={9}>
-                              <div className="space-x-2 truncate text-base font-bold ">
-                                {t("Нийт")}
-                              </div>
-                            </AntdTable.Summary.Cell>
-                            <AntdTable.Summary.Cell>
-                              <div className="truncate text-right font-bold ">
-                                {formatNumber(
-                                  e?.reduce((a, b) => a + (b.niitDun || 0), 0),
-                                  2
-                                )}
-                              </div>
-                            </AntdTable.Summary.Cell>
-                          </AntdTable.Summary>
-                        )}
-                      />
+                      <div className="mt-8 overflow-x-auto">
+                        <Table
+                          className="overflow-auto"
+                          tableLayout="auto"
+                          loading={!zurchilteiJagsaalt}
+                          dataSource={zurchilteiJagsaalt}
+                          scroll={{
+                            y: "calc(100vh - 30rem)",
+                            x: "max-content",
+                          }}
+                          size="small"
+                          bordered
+                          rowSelection={rowSelection}
+                          rowKey={"_id"}
+                          columns={columnsZurchil}
+                          onChange={onChangeTable}
+                          pagination={{
+                            current: zurchilteiData?.khuudasniiDugaar,
+                            total: zurchilteiData?.niitMur,
+                            pageSizeOptions: [100, 300, 500],
+                            defaultPageSize: [500],
+                            showSizeChanger: true,
+                            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                              setZurchilKhuudaslalt((kh) => ({
+                                ...kh,
+                                khuudasniiDugaar,
+                                khuudasniiKhemjee,
+                              })),
+                          }}
+                          summary={(e) => (
+                            <AntdTable.Summary
+                              className="border "
+                              fixed={"bottom"}
+                            >
+                              <AntdTable.Summary.Cell colSpan={9}>
+                                <div className="space-x-2 truncate text-base font-bold ">
+                                  {t("Нийт")}
+                                </div>
+                              </AntdTable.Summary.Cell>
+                              <AntdTable.Summary.Cell>
+                                <div className="truncate text-right font-bold ">
+                                  {formatNumber(
+                                    e?.reduce(
+                                      (a, b) => a + (b.niitDun || 0),
+                                      0
+                                    ),
+                                    2
+                                  )}
+                                </div>
+                              </AntdTable.Summary.Cell>
+                            </AntdTable.Summary>
+                          )}
+                        />
+                      </div>
                     ),
                   }
                 : null,
             ]}
             onChange={(v) => setTootsooKhelber(v)}
-          />
-          <CardList
-            cardListTuluv={"utas"}
-            keyValue="uilchluulegch"
-            className="block overflow-auto md:hidden"
-            jagsaalt={uilchluulegchGaralt?.jagsaalt}
-            Component={UilchluulegchTile}
           />
         </div>
       </Card>

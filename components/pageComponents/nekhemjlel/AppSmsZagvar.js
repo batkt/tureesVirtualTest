@@ -46,7 +46,7 @@ function AppSmsZagvar(
           }).then(({ data }) => {
             if (data === "Amjilttai") {
               setWaiting(false);
-              message.success(t("Амжилттай хадгаллаа"));
+              toast.success(t("Амжилттай хадгаллаа"));
               onRefresh();
               destroy();
             }

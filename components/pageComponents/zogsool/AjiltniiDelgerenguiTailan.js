@@ -223,7 +223,6 @@ function AjiltniiDelgerenguiTailan(
   });
 
   useEffect(() => {
- 
     const cameraToUse = propSongogdsonCamera || selectedCamera;
 
     if (!cameraToUse) {
@@ -304,12 +303,12 @@ function AjiltniiDelgerenguiTailan(
 
   const ajiltniiAjalAasBuukh = useCallback(async () => {
     if (!ajiltniiNevtersenTsag) {
-      message.warning("Ажилтны нэвтэрсэн цаг олдсонгүй");
+      toast.warning("Ажилтны нэвтэрсэн цаг олдсонгүй");
       return;
     }
 
     if (!songogdsonCamera) {
-      message.warning("Камер сонгоно уу");
+      toast.warning("Камер сонгоно уу");
       return;
     }
 
@@ -332,7 +331,7 @@ function AjiltniiDelgerenguiTailan(
       }
 
       if (!latestTulbur || !latestTulbur.length) {
-        message.warning("Өнөөдрийн орлогын мэдээлэл олдсонгүй");
+        toast.warning("Өнөөдрийн орлогын мэдээлэл олдсонгүй");
         setHaaltDarsan(false);
         setKhaaltOgnoo(null);
         setLoading(false);
@@ -752,7 +751,7 @@ function AjiltniiDelgerenguiTailan(
 
   const handleDayCloseClick = useCallback(async () => {
     if (!songogdsonCamera) {
-      message.warning("Камер сонгоно уу");
+      toast.warning("Камер сонгоно уу");
       return;
     }
     if (tulburteiUnshijBaina) return;

@@ -52,8 +52,12 @@ function openIndexedDB() {
 
 const API_CACHE_NAME = "api-cache-v1";
 const SW_VERSION = "1.0.0";
+const CACHE_CLEANUP_INTERVAL = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
+const LAST_CLEANUP_KEY = "last-cache-cleanup";
 
 self.addEventListener("install", (event) => {
+  // Don't skip waiting - let the old service worker finish serving pages
+  // New service worker will activate on next page load/navigation
   event.waitUntil(
     (async () => {
       try {
@@ -63,7 +67,7 @@ self.addEventListener("install", (event) => {
         console.error("IndexedDB setup failed:", error);
       }
 
-      // Only clean up old caches, don't skip waiting immediately
+      // Only clean up old caches, don't skip waiting
       const keys = await caches.keys();
       await Promise.all(
         keys
@@ -71,18 +75,98 @@ self.addEventListener("install", (event) => {
           .map((key) => caches.delete(key))
       );
 
-      // Only skip waiting if this is a new installation, not an update
-      if (!self.registration.active) {
-        await self.skipWaiting();
-      }
+      // Don't call skipWaiting() to prevent auto-reload
+      // The new service worker will activate naturally on next navigation
     })()
   );
 });
 
+// Function to get last cleanup time from cache metadata
+async function getLastCleanupTime() {
+  try {
+    const cache = await caches.open(API_CACHE_NAME);
+    const response = await cache.match(LAST_CLEANUP_KEY);
+    if (response) {
+      const data = await response.json();
+      return data.timestamp || 0;
+    }
+  } catch (error) {
+    console.error("Error getting last cleanup time:", error);
+  }
+  return 0;
+}
+
+// Function to update last cleanup time
+async function updateLastCleanupTime() {
+  try {
+    const cache = await caches.open(API_CACHE_NAME);
+    const response = new Response(JSON.stringify({ timestamp: Date.now() }), {
+      headers: { "Content-Type": "application/json" },
+    });
+    await cache.put(LAST_CLEANUP_KEY, response);
+  } catch (error) {
+    console.error("Error updating last cleanup time:", error);
+  }
+}
+
+// Function to clean all caches
+async function cleanAllCaches() {
+  try {
+    // Get all cache keys
+    const keys = await caches.keys();
+
+    // Delete all caches
+    await Promise.all(keys.map((key) => caches.delete(key)));
+
+    // Recreate the API cache to store cleanup metadata
+    const cache = await caches.open(API_CACHE_NAME);
+
+    // Update last cleanup time in the new cache
+    await updateLastCleanupTime();
+
+    console.log("Cache cleaned at:", new Date().toISOString());
+  } catch (error) {
+    console.error("Error cleaning caches:", error);
+  }
+}
+
+// Function to check and clean cache if needed
+async function checkAndCleanCache() {
+  try {
+    const lastCleanup = await getLastCleanupTime();
+    const now = Date.now();
+    const timeSinceLastCleanup = now - lastCleanup;
+
+    if (timeSinceLastCleanup >= CACHE_CLEANUP_INTERVAL || lastCleanup === 0) {
+      await cleanAllCaches();
+    }
+  } catch (error) {
+    console.error("Error in checkAndCleanCache:", error);
+  }
+}
+
+// Periodic cache cleanup check (runs when service worker is active)
+let cleanupInterval = null;
+
+function startPeriodicCleanup() {
+  // Clear existing interval if any
+  if (cleanupInterval) {
+    clearInterval(cleanupInterval);
+  }
+
+  // Check every hour if cleanup is needed
+  cleanupInterval = setInterval(() => {
+    checkAndCleanCache();
+  }, 60 * 60 * 1000); // Check every hour
+
+  // Also check immediately
+  checkAndCleanCache();
+}
+
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
-      // Clean up old caches
+      // Clean up old caches (different names, not current API cache)
       const keys = await caches.keys();
       await Promise.all(
         keys
@@ -90,11 +174,15 @@ self.addEventListener("activate", (event) => {
           .map((key) => caches.delete(key))
       );
 
-      // Only claim clients if we're the active service worker
+      // Check if cache cleanup is needed
+      await checkAndCleanCache();
+
+      // Start periodic cleanup
+      startPeriodicCleanup();
+
+      // Don't call clients.claim() - it causes pages to reload immediately
+      // Service worker will take control naturally on next navigation
       // This prevents infinite reload loops
-      if (self.registration.active && self.registration.active === self) {
-        await self.clients.claim();
-      }
     })()
   );
 });
@@ -266,6 +354,9 @@ self.addEventListener("message", (event) => {
       .catch((error) => {
         event.ports[0].postMessage({ payments: [], error: error.message });
       });
+  } else if (event.data?.type === "CLEAN_CACHE") {
+    // Allow manual cache cleanup
+    checkAndCleanCache();
   }
 });
 

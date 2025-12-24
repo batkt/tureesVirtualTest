@@ -106,14 +106,14 @@ function GereeExceleesOruulakh(
           headers={{ Authorization: `bearer ${token}` }}
           beforeUpload={(file) => {
             if (!zagvariinId) {
-              message.warning(t("Гэрээний загвар сонгоно уу"));
+              toast.warning(t("Гэрээний загвар сонгоно уу"));
               return false;
             }
             return file;
           }}
           onChange={({ file }) => {
             if (file.response === "Amjilttai") {
-              message.success(
+              toast.success(
                 t("Гэрээний мэдээлэл Excel -ээс амжилттай орууллаа")
               );
               _.isFunction(onFinish) && onFinish();

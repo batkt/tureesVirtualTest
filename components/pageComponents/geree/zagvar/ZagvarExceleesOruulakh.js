@@ -53,7 +53,7 @@ function ZagvarExceleesOruulakh(
         }}
         onChange={({ file }) => {
           if (file.response === "Amjilttai") {
-            message.success(t("Excel -ээс загвар амжилттай орууллаа"));
+            toast.success(t("Excel -ээс загвар амжилттай орууллаа"));
           }
           if (!!file.response?.aldaa) setAldaa(file.response?.aldaa);
         }}

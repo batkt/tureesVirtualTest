@@ -21,36 +21,31 @@ export async function registerServiceWorker() {
 
       newWorker.addEventListener("statechange", () => {
         if (newWorker.state === "installed") {
-          // Only reload if there's an active service worker (update scenario)
+          // Only notify if there's an active service worker (update scenario)
           if (navigator.serviceWorker.controller) {
-            // Don't auto-reload, let user control it
-            // Or add a debounce to prevent infinite loops
-            const shouldReload = confirm(
-              "Шинэ хувилбар байна. Хуудсыг дахин ачаалах уу?"
-            );
-            if (shouldReload) {
-              // Add a small delay to prevent immediate reload loops
-              setTimeout(() => {
-                window.location.reload();
-              }, 100);
-            }
+            // Don't auto-reload - just wait for the new worker to activate
+            // The new worker will take control on next page load
+            console.log("Шинэ хувилбар бэлэн болсон. Дараагийн хуудсын ачааллалтад хэрэгжих болно.");
             isUpdating = false;
           } else {
             // First install, no need to reload
             isUpdating = false;
           }
         } else if (newWorker.state === "activated") {
+          // New worker is now active, but don't auto-reload
+          // Let it take effect naturally on next navigation
           isUpdating = false;
         }
       });
     });
 
     // Check for updates periodically, but not too frequently
+    // Reduced frequency to prevent excessive update checks
     setInterval(() => {
       if (!isUpdating) {
         registration.update();
       }
-    }, 60000); // Check every minute
+    }, 5 * 60 * 1000); // Check every 5 minutes instead of every minute
 
     return registration;
   } catch (error) {

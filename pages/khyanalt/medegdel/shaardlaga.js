@@ -74,11 +74,11 @@ function Khyanalt({ token }) {
   function beforeUpload(file, callback) {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
+      toast.error("You can only upload JPG/PNG file!");
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error("Image must smaller than 2MB!");
+      toast.error("Image must smaller than 2MB!");
     }
     callback(file);
     return true;
@@ -195,7 +195,7 @@ function Khyanalt({ token }) {
         }
         if (msj.length < 3600) {
           if (loading) {
-            message.warning(t("Хүсэлт илгээгдсэн байна"));
+            toast.warning(t("Хүсэлт илгээгдсэн байна"));
             return;
           }
           if (!!title) {

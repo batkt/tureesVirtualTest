@@ -135,7 +135,7 @@ function mashinBurtgel({ token }) {
           }
           setButsaakh(true);
         } catch (error) {
-          message.error(error);
+          toast.error(error);
         }
       };
       fetchData();
@@ -855,12 +855,12 @@ function mashinBurtgel({ token }) {
     } else if (data && data._id) {
       mashinIds = [data._id];
     } else {
-      message.error("Машин сонгоно уу");
+      toast.error("Машин сонгоно уу");
       return;
     }
 
     if (mashinIds.length === 0) {
-      message.error("Машин сонгоно уу");
+      toast.error("Машин сонгоно уу");
       return;
     }
     const deletePromises = mashinIds.map((mashinId) =>
@@ -875,13 +875,13 @@ function mashinBurtgel({ token }) {
         if (allSuccessful) {
           mashinMutate();
           mashinToololtMutate();
-          message.success("Машин амжилттай устгагдлаа");
+          toast.success("Машин амжилттай устгагдлаа");
         } else {
-          message.error("Зарим машин устгаж чадсангүй");
+          toast.error("Зарим машин устгаж чадсангүй");
         }
       })
       .catch((error) => {
-        message.error("Алдаа гарлаа");
+        toast.error("Алдаа гарлаа");
       });
   }
 
@@ -892,12 +892,12 @@ function mashinBurtgel({ token }) {
     } else if (data && data?._id) {
       mashinIds = [data?._id];
     } else {
-      message.error("Машин сонгоно уу");
+      toast.error("Машин сонгоно уу");
       return;
     }
 
     if (mashinIds.length === 0) {
-      message.error("Машин сонгоно уу");
+      toast.error("Машин сонгоно уу");
       return;
     }
     const deletePromises = mashinIds.map((mashinId) =>
@@ -912,13 +912,13 @@ function mashinBurtgel({ token }) {
         if (allSuccessful) {
           blockMashinMutate();
           mashinToololtMutate();
-          message.success(`${mashinIds.length} машин амжилттай устгагдлаа`);
+          toast.success(`${mashinIds.length} машин амжилттай устгагдлаа`);
         } else {
-          message.error("Зарим машин устгаж чадсангүй");
+          toast.error("Зарим машин устгаж чадсангүй");
         }
       })
       .catch((error) => {
-        message.error("Алдаа гарлаа");
+        toast.error("Алдаа гарлаа");
       });
   }
 
@@ -1240,12 +1240,13 @@ function mashinBurtgel({ token }) {
               key: "1",
               label: t("Машин бүртгэл"),
               children: (
-                <Table
-                  className="hidden overflow-auto md:block"
-                  tableLayout="fixed"
-                  loading={!mashinGaralt}
-                  dataSource={mashinGaralt?.jagsaalt}
-                  scroll={{ y: "calc(100vh - 30rem)" }}
+                <div className="overflow-x-auto">
+                  <Table
+                    className="overflow-auto"
+                    tableLayout="fixed"
+                    loading={!mashinGaralt}
+                    dataSource={mashinGaralt?.jagsaalt}
+                    scroll={{ y: "calc(100vh - 30rem)", x: "max-content" }}
                   size="small"
                   bordered
                   rowKey={(record) => record._id}
@@ -1271,18 +1272,20 @@ function mashinBurtgel({ token }) {
                       })),
                   }}
                 />
+                </div>
               ),
             },
             {
               key: "2",
               label: t("Блок жагсаалт"),
               children: (
-                <Table
-                  className="hidden overflow-auto md:block"
-                  tableLayout="fixed"
-                  loading={!blockMashinGaralt}
-                  dataSource={blockMashinGaralt?.jagsaalt}
-                  scroll={{ y: "calc(100vh - 30rem)" }}
+                <div className="overflow-x-auto">
+                  <Table
+                    className="overflow-auto"
+                    tableLayout="fixed"
+                    loading={!blockMashinGaralt}
+                    dataSource={blockMashinGaralt?.jagsaalt}
+                    scroll={{ y: "calc(100vh - 30rem)", x: "max-content" }}
                   size="small"
                   bordered
                   onChange={onChangeTable}
@@ -1308,6 +1311,7 @@ function mashinBurtgel({ token }) {
                       })),
                   }}
                 />
+                </div>
               ),
             },
           ]}
@@ -1316,14 +1320,7 @@ function mashinBurtgel({ token }) {
             setActiveTab(v);
           }}
         />
-        <CardList
-          cardListTuluv={"utas"}
-          keyValue="uilchluulegch"
-          className="block overflow-auto md:hidden"
-          jagsaalt={mashinGaralt?.jagsaalt}
-          Component={TogloomTile}
-          componentProps={{ mashinBurtgekh, tsenegliy }}
-        />
+
       </Card>
     </Admin>
   );

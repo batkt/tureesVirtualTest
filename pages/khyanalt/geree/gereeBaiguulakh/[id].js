@@ -232,7 +232,7 @@ function GereeBaiguulakh({ token, data }) {
         setTimeout(() => {
           window.location.reload();
         }, 600);
-        message.success(t("Амжилттай хадгаллаа"));
+        toast.success(t("Амжилттай хадгаллаа"));
       }
     });
   }
@@ -530,7 +530,7 @@ function GereeBaiguulakh({ token, data }) {
                 value={index}
                 key={item.title}
                 title={t(item.title)}
-              />  
+              />
             ))}
           </Steps>
         </div>

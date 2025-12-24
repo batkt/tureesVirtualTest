@@ -38,7 +38,7 @@ function KhungulultTuukh({ token }) {
       .then(({ data }) => {
         if (data !== undefined) {
           khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-          message.success(t("Устгагдлаа"));
+          toast.success(t("Устгагдлаа"));
         }
       });
   }

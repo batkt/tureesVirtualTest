@@ -117,22 +117,6 @@ function segmentiinTokhirgoo({ token }) {
             componentProps={{ zasya: segmentBurtegye, token }}
           />
         </div>
-        <div hidden={!segment.jagsaalt}>
-          <CardList
-            pagination={{
-              current: segment?.data?.khuudasniiDugaar,
-              pageSize: segment?.data?.khuudasniiKhemjee,
-              total: segment?.data?.niitMur,
-              showSizeChanger: true,
-              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                segment.setKhuudaslalt((kh) => ({
-                  ...kh,
-                  khuudasniiDugaar,
-                  khuudasniiKhemjee,
-                })),
-            }}
-          />
-        </div>
       </div>
     </div>
   );

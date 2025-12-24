@@ -43,14 +43,14 @@ export const useBarilga = () => {
       (salbar) => salbar?.salbariinId === id
     );
     if (!tukhainBarilga && ajiltan?.erkh !== "Admin") {
-      return message.warn("Ажилтанд барилгын тохиргоо хийгдээгүй байна");
+      return toastwarn("Ажилтанд барилгын тохиргоо хийгдээгүй байна");
     } else {
       if (
         moment(tukhainBarilga?.duusakhOgnoo)
           .startOf("day")
           .isBefore(moment().startOf("day"))
       ) {
-        return message.warn("Тухайн барилгын лиценз дууссан байна");
+        return toastwarn("Тухайн барилгын лиценз дууссан байна");
       }
     }
     setBarilgiinId(id);
@@ -154,7 +154,7 @@ export const AuthProvider = ({ children }) => {
       if (!storedToken && !isOnline()) {
         const hasOfflineCredentials = await hasOfflineAuth();
         if (hasOfflineCredentials) {
-          message.info("Оффлайн горимд нэвтрэх боломжтой байна");
+          toast.info("Оффлайн горимд нэвтрэх боломжтой байна");
         }
       } else if (storedToken) {
         setToken(storedToken);
@@ -177,7 +177,7 @@ export const AuthProvider = ({ children }) => {
   const handleOnline = useCallback(() => {
     const wasOffline = isOfflineMode;
     setIsOfflineMode(false);
-    message.success("Интернэт холбогдлоо");
+    toast.success("Интернэт холбогдлоо");
 
     if (wasOffline) {
       syncOfflineData();
@@ -186,7 +186,7 @@ export const AuthProvider = ({ children }) => {
 
   const handleOffline = useCallback(() => {
     setIsOfflineMode(true);
-    message.warning(
+    toast.warning(
       "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
       0
     );
@@ -197,7 +197,7 @@ export const AuthProvider = ({ children }) => {
       try {
         ajiltanMutate();
         baiguullagaMutate();
-        message.success("Өгөгдөл шинэчлэгдлээ");
+        toast.success("Өгөгдөл шинэчлэгдлээ");
       } catch (error) {}
     }
   }, [token, ajiltanMutate, baiguullagaMutate]);
@@ -211,7 +211,7 @@ export const AuthProvider = ({ children }) => {
             // Handle both response structures: {result, token} or {data: {result, token}}
             const token = data.token || data.data?.token;
             const result = data.result || data.data?.result;
-            
+
             if (!token || !result) {
               reject(new Error("Хэрэглэгчийн мэдээлэл буруу байна"));
               return;
@@ -220,9 +220,7 @@ export const AuthProvider = ({ children }) => {
             let permissionsData = null;
 
             try {
-              const res = await uilchilgee(token).post(
-                "/erkhiinMedeelelAvya"
-              );
+              const res = await uilchilgee(token).post("/erkhiinMedeelelAvya");
               permissionsData = res.data;
             } catch (error) {
               permissionsData = { moduluud: [], offlineFallback: true };
@@ -329,11 +327,6 @@ export const AuthProvider = ({ children }) => {
           description: "Та одоо оффлайн горимд ажиллаж байна",
           duration: 3000,
         });
-      } else {
-        toast.success("Амжилттай нэвтэрлээ", {
-          description: "Тавтай морилно уу!",
-          duration: 3000,
-        });
       }
     },
     [ajiltanMutate, barilgaSoliyo]
@@ -343,11 +336,11 @@ export const AuthProvider = ({ children }) => {
     () => ({
       newterya: async (khereglech) => {
         if (!khereglech.nevtrekhNer) {
-          message.warning("Нэвтрэх нэрийг бөглөнө үү");
+          toast.warning("Нэвтрэх нэрийг бөглөнө үү");
           return;
         }
         if (!khereglech.nuutsUg) {
-          message.warning("Нууц үгийг бөглөнө үү");
+          toast.warning("Нууц үгийг бөглөнө үү");
           return;
         }
 
@@ -370,12 +363,12 @@ export const AuthProvider = ({ children }) => {
               processSuccessfulLogin(loginResult.data, false);
             }
           } else {
-            message.error(loginResult.error || "Нэвтрэлт амжилтгүй боллоо");
+            toast.error(loginResult.error || "Нэвтрэлт амжилтгүй боллоо");
           }
         } catch (error) {
           const errorMessage =
             error.message || error.toString() || "Нэвтрэх явцад алдаа гарлаа";
-          message.warning(errorMessage);
+          toast.warning(errorMessage);
         }
       },
 
@@ -402,9 +395,9 @@ export const AuthProvider = ({ children }) => {
       clearOfflineDataOnly: async () => {
         try {
           await clearOfflineAuth();
-          message.success("Интернетгүй үеийн мэдээлэл устгагдлаа");
+          toast.success("Интернетгүй үеийн мэдээлэл устгагдлаа");
         } catch (error) {
-          message.error("Интернетгүй үеийн мэдээлэл устгахад алдаа гарлаа");
+          toast.error("Интернетгүй үеийн мэдээлэл устгахад алдаа гарлаа");
         }
       },
 
@@ -412,12 +405,12 @@ export const AuthProvider = ({ children }) => {
         if (isOnline() && token) {
           try {
             await syncOfflineData();
-            message.success("Мэдээлэл амжилттай шинэчлэгдлээ хийгдлээ");
+            toast.success("Мэдээлэл амжилттай шинэчлэгдлээ хийгдлээ");
           } catch (error) {
-            message.error("Шинэчлэл хийхэд алдаа гарлаа");
+            toast.error("Шинэчлэл хийхэд алдаа гарлаа");
           }
         } else {
-          message.warning("Интернэт холболт шаардлагатай");
+          toast.warning("Интернэт холболт шаардлагатай");
         }
       },
 

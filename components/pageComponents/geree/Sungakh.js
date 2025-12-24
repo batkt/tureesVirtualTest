@@ -76,7 +76,7 @@ const Sungakh = React.forwardRef(({ token, onClose, confirm, data }, ref) => {
           })
           .then(({ data }) => {
             if (data === "Amjilttai") {
-              message.success(t("Гэрээ амжилттай сунгалаа"));
+              toast.success(t("Гэрээ амжилттай сунгалаа"));
               confirm(duusakhOgnoo);
               onClose();
             }

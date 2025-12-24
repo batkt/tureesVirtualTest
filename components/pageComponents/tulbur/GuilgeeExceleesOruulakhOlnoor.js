@@ -136,14 +136,14 @@ function GuilgeeExceleesOruulakhOlnoor(
           headers={{ Authorization: `bearer ${token}` }}
           beforeUpload={(file) => {
             if (!ashiglaltiinId) {
-              message.warning(t("Гүйлгээний загвар сонгоно уу"));
+              toast.warning(t("Гүйлгээний загвар сонгоно уу"));
               return false;
             }
             return file;
           }}
           onChange={({ file }) => {
             if (file.response === "Amjilttai") {
-              message.success(
+              toast.success(
                 t("Гүйлгээний мэдээлэл Excel -ээс амжилттай орууллаа")
               );
               _.isFunction(onFinish) && onFinish();

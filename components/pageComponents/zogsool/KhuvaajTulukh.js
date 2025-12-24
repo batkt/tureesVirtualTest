@@ -229,7 +229,7 @@ function KhuvaajTulukh({
             tulbur.find((a) => a.turul === "khaan").msg =
               data?.response?.response_msg;
             setTulbur(tulbur);
-            message.warning(data?.response?.response_msg);
+            toast.warning(data?.response?.response_msg);
             setLoading(false);
             setTerminal(false);
           }
@@ -642,7 +642,7 @@ function KhuvaajTulukh({
                   <div
                     onClick={() =>
                       mur.ner === "qpay" && qpayerTulukh === "Tulugdsun"
-                        ? message.warning("Qpay-ээр төлөгдсөн")
+                        ? toast.warning("Qpay-ээр төлөгдсөн")
                         : setSongogdsonTulburiinKhelber(mur)
                     }
                     key={mur.ner}

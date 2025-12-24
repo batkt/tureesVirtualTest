@@ -283,7 +283,7 @@ function ZochinBurtgel(
       }
 
       if (result === "Amjilttai" || result?.success) {
-        message.success(t("Амжилттай хадгаллаа"));
+        toast.success(t("Амжилттай хадгаллаа"));
 
         if (onRefresh) {
           onRefresh();
@@ -302,7 +302,7 @@ function ZochinBurtgel(
       ) {
         try {
           await uilchilgee(token).post(`/zochinHadgalya`, {});
-          message.success(
+          toast.success(
             t("Зогсоолд орсон машины мэдээлэл амжилттай өөрчлөгдсөн")
           );
         } catch (error) {
@@ -313,11 +313,11 @@ function ZochinBurtgel(
       console.error("Хадгалахад алдаа гарлаа:", error);
 
       if (error?.response?.data?.message) {
-        message.error(error.response.data.message);
+        toast.error(error.response.data.message);
       } else if (error?.message) {
-        message.error(error.message);
+        toast.error(error.message);
       } else {
-        message.error(t("Хадгалахад алдаа гарлаа"));
+        toast.error(t("Хадгалахад алдаа гарлаа"));
       }
     }
   }

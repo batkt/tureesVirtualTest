@@ -335,7 +335,7 @@ function ZakhialgaNemekh({ token }) {
       method("nekhemjlekhiinZagvar", token, nekhemjlelZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
             router.back();
           }
         })
@@ -343,7 +343,7 @@ function ZakhialgaNemekh({ token }) {
           aldaaBarigch(e);
           setWaiting(false);
         });
-    } else message.warning(t("Нэр оруулна уу!"));
+    } else toast.warning(t("Нэр оруулна уу!"));
   }
   function onChange(e) {
     setNekhemjlelZagvar((nekhemjlelZagvar) => ({
@@ -452,7 +452,6 @@ function ZakhialgaNemekh({ token }) {
               noStyle
             ></Form.Item>
 
-            
             <div className="mt-3 flex items-center justify-between">
               <Radio.Group
                 disabled={!!kharuulakhExcel}

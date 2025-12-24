@@ -28,13 +28,14 @@ import {
   DatePicker,
   Button,
   Space,
-  message,
   Input,
   InputNumber,
   notification,
   Modal,
   Switch,
+  Grid,
 } from "antd";
+import { toast } from "sonner";
 import { toWords } from "mon_num";
 import Admin from "components/Admin";
 import formatNumber from "tools/function/formatNumber";
@@ -163,8 +164,8 @@ const Tailbar = React.forwardRef(
             .then(({ data }) => {
               if (data === "Amjilttai") {
                 if (service === "/gereeSergeeye") {
-                  message.success("Гэрээ амжилттай сэргээгдлээ");
-                } else message.success("Гэрээ амжилттай цуцлагдлаа");
+                  toast.success("Гэрээ амжилттай сэргээгдлээ");
+                } else toast.success("Гэрээ амжилттай цуцлагдлаа");
                 confirm(shaltgaan);
                 onClose();
               }
@@ -501,10 +502,14 @@ function setURLSearchParam(key, value) {
   history.replaceState(null, null, "?" + url.toString());
 }
 
+const { useBreakpoint } = Grid;
+
 function ZakhialgiinKhyanalt() {
   //#region const
   const { t, i18n } = useTranslation();
   const { token, baiguullaga, barilgiinId, ajiltan, gereeniiId } = useAuth();
+  const screens = useBreakpoint();
+  const isMobileView = !screens.md;
   const [gereeOgnoo, setGereeOgnoo] = React.useState();
   const query = useMemo(() => {
     return {
@@ -1851,7 +1856,7 @@ function ZakhialgiinKhyanalt() {
                   title: t("Авлага үүсэх өдөр"),
                   dataIndex: "tulukhUdur",
                   align: "center",
-                  ellipsis: true, 
+                  ellipsis: true,
                   width: "10rem",
                 },
                 {
@@ -1943,63 +1948,65 @@ function ZakhialgiinKhyanalt() {
           data-aos-duration="1000"
           data-aos-delay="300"
           data-aos-anchor-placement="top-bottom"
-          className="mt-2 hidden  md:block "
+          className="mt-2"
         >
-          <Table
-            bordered
-            scroll={{ y: "calc(100vh - 29rem)", x: "calc(100vw - 25rem)" }}
-            size="small"
-            loading={!gereeniiMedeelel}
-            rowKey={(row) => row._id}
-            onChange={(a, b, c) => {
-              !JSON.stringify(c).includes("udur") && onChangeTable(a, b, c);
-            }}
-            columns={columns}
-            dataSource={gereeniiMedeelel?.jagsaalt}
-            pagination={{
-              current: gereeniiMedeelel?.khuudasniiDugaar,
-              pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
-              total: gereeniiMedeelel?.niitMur,
-              showSizeChanger: true,
-              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                setGereeniiKhuudaslalt((kh) => ({
-                  ...kh,
-                  khuudasniiDugaar,
-                  khuudasniiKhemjee,
-                })),
-            }}
-          />
+          <p className="py-2 font-medium md:hidden">{t("Гэрээний жагсаалт")}</p>
+          {isMobileView && (
+            <CardList
+              tileProps={{
+                gereeKharya,
+                gereeSungaya,
+                gereeTsutsalya,
+                gereeSergeeye,
+                shuult,
+                ajiltan,
+              }}
+              keyValue="geree"
+              cardListTuluv={"utas"}
+              className="block overflow-auto md:hidden"
+              jagsaalt={gereeniiMedeelel?.jagsaalt}
+              Component={GereeTile}
+              pagination={{
+                current: gereeniiMedeelel?.khuudasniiDugaar,
+                pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
+                total: gereeniiMedeelel?.niitMur,
+                showSizeChanger: true,
+                onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                  setGereeniiKhuudaslalt((kh) => ({
+                    ...kh,
+                    khuudasniiDugaar,
+                    khuudasniiKhemjee,
+                  })),
+              }}
+            />
+          )}
+          <div className="hidden overflow-x-auto md:block">
+            <Table
+              bordered
+              scroll={{ y: "calc(100vh - 29rem)", x: "max-content" }}
+              size="small"
+              loading={!gereeniiMedeelel}
+              rowKey={(row) => row._id}
+              onChange={(a, b, c) => {
+                !JSON.stringify(c).includes("udur") && onChangeTable(a, b, c);
+              }}
+              columns={columns}
+              dataSource={gereeniiMedeelel?.jagsaalt}
+              pagination={{
+                current: gereeniiMedeelel?.khuudasniiDugaar,
+                pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
+                total: gereeniiMedeelel?.niitMur,
+                showSizeChanger: true,
+                onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                  setGereeniiKhuudaslalt((kh) => ({
+                    ...kh,
+                    khuudasniiDugaar,
+                    khuudasniiKhemjee,
+                  })),
+              }}
+            />
+          </div>
         </div>
-        <CardList
-          keyValue="geree"
-          className="block md:hidden"
-          jagsaalt={gereeniiMedeelel?.jagsaalt}
-          Component={GereeTile}
-          neesenEsekh={neesenEsekh}
-          componentProps={{ router }}
-          cardListTuluv={"utas"}
-          tileProps={{
-            gereeniiTokhirgoo,
-            shuult,
-            gereeSungaya,
-            gereeTsutsalya,
-            gereeKharya,
-            ajiltan,
-            gereeSergeeye,
-          }}
-          pagination={{
-            current: gereeniiMedeelel?.khuudasniiDugaar,
-            pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
-            total: gereeniiMedeelel?.niitMur,
-            showSizeChanger: true,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setGereeniiKhuudaslalt((kh) => ({
-                ...kh,
-                khuudasniiDugaar,
-                khuudasniiKhemjee,
-              })),
-          }}
-        />
       </Card>
     </Admin>
   );

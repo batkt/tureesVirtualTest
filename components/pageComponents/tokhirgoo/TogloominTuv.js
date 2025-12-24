@@ -45,7 +45,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
         .put(`/togloomiinTariff/${ajliinUdur._id}`, ajliinUdur)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
           } else {
             return;
           }
@@ -55,7 +55,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
         .post("/togloomiinTariff", ajliinUdur)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
           } else {
             return;
           }
@@ -75,7 +75,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
         .post("/togloomiinTariff", amraltiinUdur)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
           } else {
             return;
           }

@@ -651,19 +651,17 @@ function camera({ token }) {
 
     if (totalSuccessful > 0) {
       setSyncStatus("success");
-      message.success(
-        t(`Амжилттай синк хийгдлээ (${totalSuccessful} өгөгдөл)`)
-      );
+      toast.success(t(`Амжилттай синк хийгдлээ (${totalSuccessful} өгөгдөл)`));
       onRefresh();
       setTimeout(() => setSyncStatus("idle"), 3000);
     }
 
     if (totalFailed > 0 && totalSuccessful === 0) {
       setSyncStatus("error");
-      message.error(t("Синк хийхэд алдаа гарлаа"));
+      toast.error(t("Синк хийхэд алдаа гарлаа"));
       setTimeout(() => setSyncStatus("idle"), 3000);
     } else if (totalFailed > 0) {
-      message.warning(t(`${totalFailed} өгөгдөл синк хийгдсэнгүй`));
+      toast.warning(t(`${totalFailed} өгөгдөл синк хийгдсэнгүй`));
     }
   }, [token, t, onRefresh]);
 
@@ -1211,7 +1209,7 @@ function camera({ token }) {
           <div
             onClick={() => {
               navigator.clipboard.writeText(String(a).toUpperCase());
-              message.success(`${String(a).toUpperCase()} дугаарыг хууллаа`);
+              toast.success(`${String(a).toUpperCase()} дугаарыг хууллаа`);
             }}
             className="flex cursor-copy items-center justify-center gap-3"
           >
@@ -2295,7 +2293,7 @@ function camera({ token }) {
           }
           if (modalOpen.type === "zurchil") {
             if (!value || value === "" || value === undefined) {
-              message.warn("Зөрчлийн шалтгаан оруулна уу!");
+              toastwarn("Зөрчлийн шалтгаан оруулна уу!");
               return;
             }
             body.zurchil = value;
@@ -2345,7 +2343,7 @@ function camera({ token }) {
                 );
                 setPendingUpdates(stored);
               }
-              message.warning(
+              toast.warning(
                 t(
                   "Оффлайн горимд байна. Хадгалсан өгөгдөл сүлжээнд холбогдох үед синк хийгдэнэ."
                 )
@@ -2359,7 +2357,7 @@ function camera({ token }) {
             updateMethod("uilchluulegch", token, body)
               .then(({ data }) => {
                 if (data === "Amjilttai") {
-                  message.success(t("Амжилттай хадгаллаа"));
+                  toast.success(t("Амжилттай хадгаллаа"));
                   if (
                     value !== "Маргалдсан" &&
                     value !== "Журам зөрчсөн" &&
@@ -2399,7 +2397,7 @@ function camera({ token }) {
                     );
                     setPendingUpdates(stored);
                   }
-                  message.warning(
+                  toast.warning(
                     t(
                       "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед синк хийгдэнэ."
                     )
@@ -2409,11 +2407,11 @@ function camera({ token }) {
             setModalOpen({ bool: false, item: null, type: "" });
             setValue(null);
           }
-        } else message.warn("Уучлаарай дахин оролдоно уу");
+        } else toastwarn("Уучлаарай дахин оролдоно уу");
       })
       .catch((error) => {
         if (!navigator.onLine || isOfflineMode) {
-          message.warning(t("Оффлайн горимд байна. Огноо авах боломжгүй."));
+          toast.warning(t("Оффлайн горимд байна. Огноо авах боломжгүй."));
         }
       });
   };
@@ -2514,7 +2512,7 @@ function camera({ token }) {
       songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh &&
       (sulToo === 0 || sulToo <= -1)
     ) {
-      message.warn("Зогсоол дүүрсэн байна");
+      toastwarn("Зогсоол дүүрсэн байна");
       return;
     } else {
       // if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
@@ -4519,13 +4517,6 @@ function camera({ token }) {
                     </Table.Summary>
                   );
                 }}
-              />
-              <CardList
-                cardListTuluv={"utas"}
-                keyValue="uilchluulegch"
-                className="block overflow-auto md:hidden"
-                jagsaalt={filteredJagsaalt}
-                Component={UilchluulegchTile}
               />
             </div>
           </div>

@@ -694,11 +694,11 @@ function GuilgeeKhiikh(
 
   function maileerIlgeekh() {
     if (!barimt) {
-      message.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
+      toast.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
       return;
     }
     if (loading) {
-      message.warning(t("И-мэйл илгээгдсэн байна"));
+      toast.warning(t("И-мэйл илгээгдсэн байна"));
       return;
     }
     var mailuud = [];
@@ -741,11 +741,11 @@ function GuilgeeKhiikh(
   });
   function hevlekh() {
     if (!songogdsonDans) {
-      message.warning(t("Данс сонгоно уу"));
+      toast.warning(t("Данс сонгоно уу"));
       return;
     }
     if (!barimt) {
-      message.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
+      toast.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
       return;
     }
     handlePrint();

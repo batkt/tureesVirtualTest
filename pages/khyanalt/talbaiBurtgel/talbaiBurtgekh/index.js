@@ -17,7 +17,6 @@ import {
   Card,
   Form,
   Input,
-  message,
   Popconfirm,
   Popover,
   Space,
@@ -26,6 +25,7 @@ import {
   Drawer,
   Grid,
 } from "antd";
+import { toast } from "sonner";
 import Admin from "components/Admin";
 import { modal } from "components/ant/Modal";
 import CardList from "components/cardList";
@@ -374,7 +374,7 @@ function talbaiBurtgekh({ token }) {
         .then(({ data }) => {
           if (data === "Amjilttai") {
             setWaiting(false);
-            message.success(t("Бүртгэл амжилттай засагдлаа"));
+            toast.success(t("Бүртгэл амжилттай засагдлаа"));
             formRef.current.resetFields();
             talbainiiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
@@ -391,7 +391,7 @@ function talbaiBurtgekh({ token }) {
         .then(({ data }) => {
           if (data !== undefined) {
             setWaiting(false);
-            message.success(t("Бүртгэл амжилттай хийгдлээ"));
+            toast.success(t("Бүртгэл амжилттай хийгдлээ"));
             formRef.current.resetFields();
             talbainiiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
@@ -413,7 +413,7 @@ function talbaiBurtgekh({ token }) {
         if (data === "Amjilttai") {
           setWaiting(false);
           talbainiiJagsaaltMutate();
-          message.success(t("Устгагдлаа"));
+          toast.success(t("Устгагдлаа"));
         }
       })
       .catch((e) => {
@@ -477,7 +477,7 @@ function talbaiBurtgekh({ token }) {
     });
   }
   function duusgakh() {
-    message.success("Амжилттай бүртгэгдлээ");
+    toast.success("Амжилттай бүртгэгдлээ");
     setTimeout(excelref.current.khaaya(), 2500);
   }
 
@@ -809,10 +809,6 @@ function talbaiBurtgekh({ token }) {
                 pageSize: talbainiiGaralt?.khuudasniiKhemjee,
                 total: talbainiiGaralt?.niitMur,
                 showSizeChanger: true,
-                responsive: true,
-                size: "default",
-                showQuickJumper: false,
-                className: "pt-4 sm:pt-2",
                 onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                   setTalbaiKhuudaslalt((kh) => ({
                     ...kh,
@@ -824,24 +820,20 @@ function talbaiBurtgekh({ token }) {
           )}
 
           <Table
-            className={"mt-6 hidden md:block"}
+            className={"mt-6"}
             bordered
             size="small"
             loading={!talbainiiGaralt}
             tableLayout={"fixed"}
             rowKey={(row) => row._id}
-            scroll={{ y: "calc(100vh - 28rem)" }}
+            scroll={{ y: "calc(100vh - 28rem)", x: "max-content" }}
             dataSource={talbainiiGaralt?.jagsaalt}
             onChange={onChangeTable}
             pagination={{
-              className: "pt-4 sm:pt-2",
               current: talbainiiGaralt?.khuudasniiDugaar,
               pageSize: talbainiiGaralt?.khuudasniiKhemjee,
               total: talbainiiGaralt?.niitMur,
               showSizeChanger: true,
-              responsive: true,
-              showQuickJumper: false,
-              size: "default",
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                 setTalbaiKhuudaslalt((kh) => ({
                   ...kh,

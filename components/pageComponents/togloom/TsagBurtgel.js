@@ -90,7 +90,7 @@ function TsagBurtgel(
         if (data === "Amjilttai") {
           if (baiguullagiinId === "66cd8c682375830948ea46ca")
             handleTasalbariinBarCode(tasalbarShirkheg || 1);
-          message.success(t("Амжилттай хадгаллаа"));
+          toast.success(t("Амжилттай хадгаллаа"));
           onRefresh && onRefresh();
           setLoading(false);
           destroy();
@@ -100,10 +100,10 @@ function TsagBurtgel(
               duusakhOgnoo: tsag?.duusakhTsag,
             })
             .then(function (response) {
-              message.warning(response);
+              toast.warning(response);
             })
             .catch(function (error) {
-              message.error(error);
+              toast.error(error);
             });
         }
       })

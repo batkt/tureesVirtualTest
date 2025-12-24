@@ -37,7 +37,7 @@ import useJagsaalt from "../../../hooks/useJagsaalt";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 const Kiosk = () => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = toastuseMessage();
   const [register, setRegister] = useState("");
   const [baiguullagaNer, setBaiguullagaNer] = useState();
   const [customerTin, setCustomerTin] = useState();
@@ -497,7 +497,7 @@ const Kiosk = () => {
       }
     } catch (err) {
       setUnshijBaina(false);
-      message.error(err);
+      toast.error(err);
     }
   };
 

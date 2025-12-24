@@ -29,7 +29,7 @@ const GereeZuragOruulakh = (
         );
 
         if (!successfulFiles.length) {
-          message.warning(t("Зураг хадгалагдсангүй"));
+          toast.warning(t("Зураг хадгалагдсангүй"));
           return;
         }
 
@@ -42,14 +42,14 @@ const GereeZuragOruulakh = (
         );
 
         if (response.data === "Amjilttai" || response.data?.success) {
-          message.success(t("Амжилттай хадгалагдлаа"));
+          toast.success(t("Амжилттай хадгалагдлаа"));
           if (typeof onFinish === "function") onFinish();
           destroy();
         } else {
-          message.error(t("Зураг хадгалах үед алдаа гарлаа"));
+          toast.error(t("Зураг хадгалах үед алдаа гарлаа"));
         }
       } catch (err) {
-        message.error(t("Зураг хадгалах үед алдаа гарлаа"));
+        toast.error(t("Зураг хадгалах үед алдаа гарлаа"));
       }
     },
   }));

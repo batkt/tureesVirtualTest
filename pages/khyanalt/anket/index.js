@@ -323,7 +323,7 @@ function Anket({ token }) {
       .post("/asuult", v)
       .then(({ data }) => {
         if (data !== undefined) {
-          message.success(t("Анкетын загвар амжилттай бүртгэгдлээ"));
+          toast.success(t("Анкетын загвар амжилттай бүртгэгдлээ"));
           formRef.current.resetFields();
           asuult.mutate();
           setData(undefined);
@@ -340,7 +340,7 @@ function Anket({ token }) {
       .then(({ data }) => {
         if (data === "Amjilttai") {
           asuult.mutate();
-          message.success(t("Устгагдлаа"));
+          toast.success(t("Устгагдлаа"));
           setData(undefined);
         }
       })

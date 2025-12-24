@@ -81,10 +81,10 @@ const TogloomKiosk = () => {
     zogsoolUilchilgee()
       .get("/userKhadgalakh/" + barCodes + "")
       .then(function (response) {
-        if (!!response.message) message.error("/api/userKhadgalakh", response);
+        if (!!response.message) toast.error("/api/userKhadgalakh", response);
       })
       .catch(function (error) {
-        message.error("ERROR: /api/userKhadgalakh", error);
+        toast.error("ERROR: /api/userKhadgalakh", error);
       });
   };
 
@@ -187,7 +187,7 @@ const TogloomKiosk = () => {
             data?.status == true &&
             data?.response?.response_code !== "000"
           ) {
-            message.success(data?.response?.response_msg);
+            toast.success(data?.response?.response_msg);
           } else if (
             data.status === true &&
             data?.response?.response_code === "366"
@@ -195,7 +195,7 @@ const TogloomKiosk = () => {
             tulbur.find((a) => a.turul === "khaan").msg =
               data?.response?.response_msg;
             setTulbur(tulbur);
-            message.warning(data?.response?.response_msg);
+            toast.warning(data?.response?.response_msg);
             setLoading(false);
           }
           setTerminal(false);
@@ -203,7 +203,7 @@ const TogloomKiosk = () => {
         .catch((e) => {
           setTerminal(false);
           setLoading(false);
-          message.error(e.message);
+          toast.error(e.message);
         });
     } else if (garaasSongosonTurul === "qpay") {
       qpayTulugdsun === "qpayTulugdsun"
@@ -218,7 +218,7 @@ const TogloomKiosk = () => {
         batalgaajuulaltKhiiya("qpayTulugdsun", "qpay");
         setAlkham(4);
         setQpayerTulukh("Tulugdsun");
-        message.success("Qpay Амжилттай төлөгдлөө");
+        toast.success("Qpay Амжилттай төлөгдлөө");
       });
     }
     return () => {
@@ -230,7 +230,7 @@ const TogloomKiosk = () => {
     if (khuleegdejBuiQpay) {
       socket().on(`qpay/${baiguullaga._id}/${khuleegdejBuiQpay}`, (qpay) => {
         if (qpayerTulukh !== "Tulugdsun") {
-          message.success("Qpay Амжилттай төлөгдлөө");
+          toast.success("Qpay Амжилттай төлөгдлөө");
           batalgaajuulaltKhiiya("qpayTulugdsun", "qpay");
           setQpayerTulukh("Tulugdsun");
           setAlkham(4);
@@ -245,7 +245,7 @@ const TogloomKiosk = () => {
   function qpayAvakh() {
     var ilgeekhDun = tulbur.find((a) => a.turul === "qpay")?.dun;
     if (!ilgeekhDun || ilgeekhDun <= 0) {
-      message.warning("Төлөх дүн оруулна уу");
+      toast.warning("Төлөх дүн оруулна уу");
       setLoading(false);
       return;
     }
@@ -305,7 +305,7 @@ const TogloomKiosk = () => {
         if (!!data) {
           setTasalbariinGuilgeeId(data);
           setLoading(false);
-          message.success("Төлбөр амжилттай хадгалагдлаа");
+          toast.success("Төлбөр амжилттай хадгалагдлаа");
         }
         if (!!qpayEsekh && qpayEsekh === true) {
           setQpayerTulukh("Tulugdsun");

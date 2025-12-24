@@ -72,7 +72,7 @@ function ZogsoolBurtgekh(
           try {
             await form.validateFields();
           } catch (errorInfo) {
-            message.error(t("Заавал бөглөх талбаруудыг бөглөнө үү"));
+            toast.error(t("Заавал бөглөх талбаруудыг бөглөнө үү"));
             return;
           }
 

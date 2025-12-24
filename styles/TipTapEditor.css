@@ -92,7 +92,9 @@
 
 .tiptap-content {
   padding: 1rem;
-  min-height: 200px;
+  min-height: 120px;
+  max-height: 300px;
+  overflow-y: auto;
   outline: none;
   background: white !important;
   opacity: 1 !important;
@@ -109,7 +111,7 @@
 
 .tiptap-content .ProseMirror {
   outline: none;
-  min-height: 200px;
+  min-height: 100px;
   background: white !important;
   color: #111827 !important;
   opacity: 1 !important;

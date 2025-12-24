@@ -73,7 +73,11 @@ function Zasakh({ token }) {
     if (typeof window === "undefined") return [];
     return [
       createButtonWithItems(
-        { name: "undsen", title: "Үндсэн мэдээлэл", innerHTML: renderToString(<SolutionOutlined />) },
+        {
+          name: "undsen",
+          title: "Үндсэн мэдээлэл",
+          innerHTML: renderToString(<SolutionOutlined />),
+        },
         undsenTalbaruud
       ),
     ];
@@ -87,7 +91,7 @@ function Zasakh({ token }) {
       method("mailiinZagvar", token, mailiinZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
             router.back();
           }
         })
@@ -95,7 +99,7 @@ function Zasakh({ token }) {
           aldaaBarigch(e);
           setWaiting(false);
         });
-    } else message.warning("Нэр оруулна уу!");
+    } else toast.warning("Нэр оруулна уу!");
   }
 
   function handleChange(e) {

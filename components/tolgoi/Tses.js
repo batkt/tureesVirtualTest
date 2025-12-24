@@ -43,31 +43,45 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
         </li>
         <ul
           style={{ height: open ? `${2.5 * mur.sub.length}rem` : "0rem" }}
-          className={`sub-menu flex flex-col transition-all duration-500`}
+          className={`sub-menu flex flex-col transition-all duration-300 ease-in-out overflow-hidden`}
         >
           {mur.sub.map((a) => {
             return (
               <Link href={a.href} key={a.href} legacyBehavior>
                 <a>
                   <li
-                    className={`submenu-item relative cursor-pointer rounded-l-lg transition-all duration-300 ${
+                    className={`submenu-item relative cursor-pointer rounded-l-lg transition-all duration-300 ease-out ${
                       open ? "ml-0" : "ml-56"
-                    } p-2 text-white ${
+                    } p-2 ${
                       a.khuudasniiNer === khuudasniiNer
-                        ? "bg-white dark:bg-gray-800"
-                        : ""
+                        ? "bg-white text-green-600 shadow-lg dark:bg-gray-800 dark:text-green-400"
+                        : "text-white hover:bg-green-600/95 hover:shadow-md hover:translate-x-1 hover:scale-[1.02] dark:hover:bg-gray-700/90 dark:hover:shadow-lg"
                     }`}
+                    style={{
+                      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    }}
                   >
                     <div className={"flex flex-row px-1"}>
                       <div
                         className={`${
                           a.khuudasniiNer === khuudasniiNer
-                            ? "font-medium text-green-500"
+                            ? "font-medium"
                             : ""
-                        } flex flex-row whitespace-nowrap`}
+                        } flex flex-row whitespace-nowrap transition-all duration-300 ease-out`}
                       >
-                        <div className={`mr-2`}>{a.icon}</div>
-                        {t(a.ner)}
+                        <div 
+                          className={`mr-2 transition-all duration-300 ease-out ${
+                            a.khuudasniiNer === khuudasniiNer
+                              ? "text-green-600 dark:text-green-400"
+                              : "text-white group-hover:scale-110"
+                          }`}
+                          style={{
+                            transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease-out",
+                          }}
+                        >
+                          {a.icon}
+                        </div>
+                        <span className="transition-all duration-300 ease-out">{t(a.ner)}</span>
                       </div>
                     </div>
                   </li>

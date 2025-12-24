@@ -79,7 +79,7 @@ function BaritsaaKhuulga(
       })
       .then(({ data }) => {
         if (data) {
-          message.success(t("Төлөлт амжилттай устгагдлаа!"));
+          toast.success(t("Төлөлт амжилттай устгагдлаа!"));
           baritsaaKhuulgaMutate();
           onFinish();
         }

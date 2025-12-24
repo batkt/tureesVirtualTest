@@ -184,7 +184,7 @@ function MashinBurtgel(
     const method = lastData?._id ? updateMethod : createMethod;
     method("mashin", token, lastData).then(({ data }) => {
       if (data === "Amjilttai") {
-        message.success(t("Амжилттай хадгаллаа"));
+        toast.success(t("Амжилттай хадгаллаа"));
         onRefresh && onRefresh();
         destroy();
       }
@@ -203,7 +203,7 @@ function MashinBurtgel(
         })
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(
+            toast.success(
               t("Зогсоолд орсон машины мэдээлэл амжилттай өөрчлөгдсөн")
             );
           }

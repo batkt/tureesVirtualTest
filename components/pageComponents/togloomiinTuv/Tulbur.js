@@ -73,7 +73,7 @@ function Tulbur(
     if (!!eBarimt) handlePrint();
     else {
       if (baiguullagaEsekh === true && register?.toString().length !== 7) {
-        message.warning(t("Байгууллагын регистр оруулна уу"));
+        toast.warning(t("Байгууллагын регистр оруулна уу"));
         setLoading(false);
         return;
       }
@@ -140,11 +140,11 @@ function Tulbur(
   function guilgeeniiTuukhKhadgalya(tulbur, qpayEsekh) {
     if (khungulukhEsekh === true) {
       if (!khunglult.khungulukhDun || khunglult.khungulukhDun === "") {
-        message.warn(t("Хөнгөлөх дүн оруулна уу"));
+        toastwarn(t("Хөнгөлөх дүн оруулна уу"));
         return;
       }
       if (!khunglult.tailbar || khunglult.tailbar === "") {
-        message.warn(t("Хөнгөлөх шалтгаан оруулна уу"));
+        toastwarn(t("Хөнгөлөх шалтгаан оруулна уу"));
         return;
       }
     }
@@ -169,7 +169,7 @@ function Tulbur(
           setLoading(false);
         } else {
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
-          message.success("Төлбөр амжилттай хадгалагдлаа");
+          toast.success("Төлбөр амжилттай хадгалагдлаа");
           setLoading(false);
         }
         if (!!qpayEsekh && qpayEsekh === true) {
@@ -184,7 +184,7 @@ function Tulbur(
     if (khuleegdejBuiQpay) {
       socket().on(`qpay/${baiguullaga._id}/${khuleegdejBuiQpay}`, (qpay) => {
         batalgaajuulaltKhiiya("qpayTulugdsun");
-        message.success("Qpay Амжилттай төлөгдлөө");
+        toast.success("Qpay Амжилттай төлөгдлөө");
       });
     }
     return () => {
@@ -195,7 +195,7 @@ function Tulbur(
   function qpayAvakh() {
     var ilgeekhDun = tulbur.find((a) => a.turul === "qpay")?.dun;
     if (!ilgeekhDun || ilgeekhDun <= 0) {
-      message.warning("Төлөх дүн оруулна уу");
+      toast.warning("Төлөх дүн оруулна уу");
       setLoading(false);
       return;
     }
@@ -243,7 +243,7 @@ function Tulbur(
             tulbur.find((a) => a.turul === "khaan").msg =
               data?.response?.response_msg;
             setTulbur(tulbur);
-            message.warning(data?.response?.response_msg);
+            toast.warning(data?.response?.response_msg);
             setLoading(false);
           }
           setSongogdsonBank(null);

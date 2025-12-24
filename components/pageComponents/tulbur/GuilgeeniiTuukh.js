@@ -103,7 +103,7 @@ function GuilgeeniiTuukh(
         })
         .then(({ data }) => {
           if (data) {
-            message.success(t("Төлөлт амжилттай устгагдлаа!"));
+            toast.success(t("Төлөлт амжилттай устгагдлаа!"));
             refreshData();
             guilgeeniiTuukhMutate();
           }
@@ -141,7 +141,7 @@ function GuilgeeniiTuukh(
                 })
                 .then(({ data }) => {
                   if (data) {
-                    message.success(t("Төлөлт амжилттай устгагдлаа!"));
+                    toast.success(t("Төлөлт амжилттай устгагдлаа!"));
                     uldegdelMutate();
                     guilgeeniiTuukhMutate();
                     refreshData();
@@ -201,7 +201,7 @@ function GuilgeeniiTuukh(
         if (guilgeeniiTuukh && guilgeeniiTuukh.length > 0) {
           exceleerTatya();
         } else {
-          message.info(t("Өгөгдөл ачаалж байна..."));
+          toast.info(t("Өгөгдөл ачаалж байна..."));
           setTimeout(() => {
             if (guilgeeniiTuukh && guilgeeniiTuukh.length > 0) {
               exceleerTatya();

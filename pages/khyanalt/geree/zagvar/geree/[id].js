@@ -62,7 +62,7 @@ function ZakhialgaNemekh({ token }) {
       createMethod("gereeniiZagvar", token, values)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
             router.back();
           }
         })
@@ -76,7 +76,7 @@ function ZakhialgaNemekh({ token }) {
       updateMethod("gereeniiZagvar", token, gereeniiZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
             router.back();
           }
         })
@@ -192,13 +192,13 @@ function ZakhialgaNemekh({ token }) {
     >
       <div className="col-span-12 flex justify-center p-4 lg:col-span-9 xl:col-span-10">
         <div
-          className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+          className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-gray-900 dark:bg-gray-700 dark:text-white"
           style={{ width: "300mm" }}
         >
           <div className="grid grid-cols-2 gap-4 pb-5">
             <div className="group relative">
               <div
-                className="sun-editor-editable rounded-md border border-dashed border-gray-600 p-2 text-black dark:border-gray-300 dark:bg-gray-700 dark:text-gray-200 [&_*]:text-black dark:[&_*]:text-gray-200"
+                className="sun-editor-editable rounded-md border border-dashed border-gray-600 p-2 text-black dark:border-gray-300 dark:bg-gray-700 dark:text-white [&_*]:text-black dark:[&_*]:text-white"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.zuunTolgoi ||
@@ -217,7 +217,7 @@ function ZakhialgaNemekh({ token }) {
 
             <div className="group relative">
               <div
-                className="sun-editor-editable rounded-md border border-dashed border-gray-600 p-2 text-gray-600 dark:border-gray-300 dark:bg-gray-700 dark:text-gray-200 [&_*]:text-gray-600 dark:[&_*]:text-gray-200"
+                className="sun-editor-editable rounded-md border border-dashed border-gray-600 p-2 text-gray-900 dark:border-gray-300 dark:bg-gray-700 dark:text-white [&_*]:text-gray-900 dark:[&_*]:text-white"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.baruunTolgoi ||
@@ -239,7 +239,7 @@ function ZakhialgaNemekh({ token }) {
               return (
                 <div
                   key={mur._id}
-                  className="group relative flex w-full flex-row rounded-lg border border-dashed border-gray-600 p-1 text-gray-600 hover:bg-gray-100 dark:border-gray-300 dark:text-gray-200 dark:hover:bg-gray-700"
+                  className="group relative flex w-full flex-row rounded-lg border border-dashed border-gray-600 p-1 text-gray-900 hover:bg-gray-100 dark:border-gray-300 dark:text-white dark:hover:bg-gray-700"
                 >
                   <div className="absolute -right-2 -top-2 z-10 flex flex-col space-y-1">
                     <div onClick={() => docZasya(`dedKhesguud.${index}`, mur)}>
@@ -257,7 +257,7 @@ function ZakhialgaNemekh({ token }) {
                   </div>
 
                   <div
-                    className="sun-editor-editable w-full text-white dark:border-gray-300 dark:bg-gray-700 dark:text-gray-300"
+                    className="sun-editor-editable w-full text-gray-900 dark:border-gray-300 dark:bg-gray-700 dark:text-white [&_*]:text-gray-900 dark:[&_*]:text-white"
                     dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                   />
                 </div>
@@ -268,7 +268,7 @@ function ZakhialgaNemekh({ token }) {
           <div className="grid grid-cols-2 gap-4">
             <div className="group relative">
               <div
-                className="rounded-md border border-dashed border-gray-600 p-2 text-gray-900 dark:border-gray-300 dark:bg-gray-800 dark:text-gray-200 [&_*]:!text-gray-900 dark:[&_*]:!text-gray-200"
+                className="rounded-md border border-dashed border-gray-600 p-2 text-gray-900 dark:border-gray-300 dark:bg-gray-800 dark:text-white [&_*]:!text-gray-900 dark:[&_*]:!text-white"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.zuunKhul || t("Гэрээний загварын зүүн хөл"),
@@ -285,7 +285,7 @@ function ZakhialgaNemekh({ token }) {
             </div>
             <div className="group relative">
               <div
-                className="rounded-md border border-dashed border-gray-600 p-2 text-gray-900 dark:border-gray-300 dark:bg-gray-800 dark:text-gray-200 [&_*]:!text-gray-900 dark:[&_*]:!text-gray-200"
+                className="rounded-md border border-dashed border-gray-600 p-2 text-gray-900 dark:border-gray-300 dark:bg-gray-800 dark:text-white [&_*]:!text-gray-900 dark:[&_*]:!text-white"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.baruunKhul ||
@@ -319,30 +319,28 @@ function ZakhialgaNemekh({ token }) {
               <Input placeholder={t("Гэрээний загварын нэр")} />
             </Form.Item>
             <div className="flex justify-end gap-2">
-              <p className="mt-1 dark:text-white">{t("Түр гэрээ эсэх")} :</p>
+              <p className="mt-1 text-gray-900 dark:text-white">{t("Түр гэрээ эсэх")} :</p>
               <Form.Item name="turGereeEsekh" valuePropName="checked">
                 <Switch />
               </Form.Item>
             </div>
             <Form.Item>
-              <div className="flex gap-2">
-                <Button
-                  className="flex-1"
-                  type="primary"
-                  onClick={() => form.submit()}
-                  loading={towchTuluv}
-                >
-                  {t("Хадгалах")}
-                </Button>
-                <Button
-                  className="flex-1"
-                  type="primary"
-                  onClick={() => nemekh()}
-                >
-                  <FileAddOutlined />
-                  Гэрээний заалт нэмэх
-                </Button>
-              </div>
+              <Button
+                className="w-full"
+                type="primary"
+                onClick={() => form.submit()}
+                loading={towchTuluv}
+              >
+                {t("Хадгалах")}
+              </Button>
+              <Button
+                className="mt-4 w-full"
+                type="primary"
+                onClick={() => nemekh()}
+              >
+                <FileAddOutlined />
+                Гэрээний заалт нэмэх
+              </Button>
             </Form.Item>
           </Form>
         </div>

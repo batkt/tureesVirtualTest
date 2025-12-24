@@ -64,7 +64,19 @@ function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider attribute="class">
       <AuthProvider>
-        <Toaster position="top-right" richColors suppressHydrationWarning />
+        <Toaster 
+          position="top-right" 
+          richColors 
+          suppressHydrationWarning 
+          expand={true}
+          gap={8}
+          toastOptions={{
+            style: {
+              maxWidth: '400px',
+              wordBreak: 'break-word',
+            },
+          }}
+        />
         <ConfigProvider locale={mnMN}>
           <div key={router.asPath} className="page-transition-enter">
             <Component {...pageProps} />

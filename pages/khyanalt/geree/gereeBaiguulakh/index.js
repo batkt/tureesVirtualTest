@@ -94,7 +94,7 @@ function GereeBaiguulakh({ token }) {
   );
   const next = (data) => {
     if (current === 0 && !gereeniiZagvar) {
-      message.warning(t("Гэрээний загвар сонгоно уу!"));
+      toast.warning(t("Гэрээний загвар сонгоно уу!"));
       zagvarRef.current.focus();
       return;
     }
@@ -202,7 +202,7 @@ function GereeBaiguulakh({ token }) {
               barilgiinKhayag: songosonBarilgiinHayag,
             });
             setCurrent(0);
-            message.success(t("Амжилттай хадгаллаа"));
+            toast.success(t("Амжилттай хадгаллаа"));
             setWaiting(false);
           }
         })
@@ -237,7 +237,7 @@ function GereeBaiguulakh({ token }) {
 
   function alkhamSoliyo(index) {
     if (current === 0 && !gereeniiZagvar) {
-      message.warning(t("Гэрээний загвар сонгоно уу!"));
+      toast.warning(t("Гэрээний загвар сонгоно уу!"));
       zagvarRef.current.focus();
       return;
     }

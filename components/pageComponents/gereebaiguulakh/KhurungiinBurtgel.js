@@ -371,18 +371,18 @@ const YurunkhiiMedeele = ({
 
   function onFinish() {
     if (value.talbainuud === undefined) {
-      message.warning(t("Талбай бүртгэнэ үү!"));
+      toast.warning(t("Талбай бүртгэнэ үү!"));
       return;
     } else if (value.talbainuud.length <= 0) {
-      message.warning(t("Талбай бүртгэнэ үү!"));
+      toast.warning(t("Талбай бүртгэнэ үү!"));
       return;
     }
     if (value.talbainNiitUne === undefined) {
-      message.warning(t("Талбайн үнэ бүртгэнэ үү!"));
+      toast.warning(t("Талбайн үнэ бүртгэнэ үү!"));
       return;
     }
     if (value.talbainKhemjee === undefined) {
-      message.warning(t("Талбайн хэмжээ бүртгэнэ үү!"));
+      toast.warning(t("Талбайн хэмжээ бүртгэнэ үү!"));
       return;
     }
     next();
