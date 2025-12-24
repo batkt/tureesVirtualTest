@@ -753,6 +753,23 @@ function UstsanTuukh() {
               placeholder={t("Ажилтан")}
               onChange={(v) => setAjiltankhaikh(v)}
               allowClear
+              getPopupContainer={(triggerNode) => {
+                let container = triggerNode.parentElement;
+                while (
+                  container &&
+                  !container.classList.contains("max-h-[60vh]")
+                ) {
+                  container = container.parentElement;
+                }
+                return container || document.body;
+              }}
+              dropdownMatchSelectWidth={false}
+              dropdownStyle={{
+                zIndex: 1050,
+                backgroundColor: "rgba(255, 255, 255, 0.98)",
+                backdropFilter: "blur(12px) saturate(180%)",
+              }}
+              dropdownClassName="ant-select-dropdown-opaque"
             >
               {ajiltan?.jagsaalt.map((a) => (
                 <Select.Option key={a._id} value={a._id}>
@@ -769,6 +786,23 @@ function UstsanTuukh() {
             <Select
               className="w-full sm:w-36"
               placeholder={t("Төрөл")}
+              getPopupContainer={(triggerNode) => {
+                let container = triggerNode.parentElement;
+                while (
+                  container &&
+                  !container.classList.contains("max-h-[60vh]")
+                ) {
+                  container = container.parentElement;
+                }
+                return container || document.body;
+              }}
+              dropdownMatchSelectWidth={false}
+              dropdownStyle={{
+                zIndex: 1050,
+                backgroundColor: "rgba(255, 255, 255, 0.98)",
+                backdropFilter: "blur(12px) saturate(180%)",
+              }}
+              dropdownClassName="ant-select-dropdown-opaque"
               onChange={(v) => setTurul(v)}
               allowClear
             >

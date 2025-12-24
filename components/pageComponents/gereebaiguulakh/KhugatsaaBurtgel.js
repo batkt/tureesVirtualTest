@@ -355,6 +355,17 @@ const YurunkhiiMedeele = ({
               onChange={() => form.getFieldInstance("duusakhOgnoo").focus()}
               defaultValue={_.get(value, "tulukhUdur.0")}
               placeholder={t("Авлага үүсгэх огноо сар бүрийн / өдөр")}
+              getPopupContainer={(triggerNode) => {
+                return document.body;
+              }}
+              dropdownMatchSelectWidth={true}
+              dropdownStyle={{
+                zIndex: 1050,
+                backgroundColor: "rgba(255, 255, 255, 0.98)",
+                backdropFilter: "blur(12px) saturate(180%)",
+              }}
+              dropdownClassName="ant-select-dropdown-opaque"
+              virtual={false}
               prefix={<SolutionOutlined />}
             >
               {new Array(31).fill("").map((a, i) => (

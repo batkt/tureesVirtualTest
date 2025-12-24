@@ -55,6 +55,20 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
       onSearch={(search) =>
         ashiglaltiinZardal.setKhuudaslalt((a) => ({ ...a, search }))
       }
+      getPopupContainer={(triggerNode) => {
+        let container = triggerNode.parentElement;
+        while (container && !container.classList.contains("max-h-[60vh]")) {
+          container = container.parentElement;
+        }
+        return container || document.body;
+      }}
+      dropdownMatchSelectWidth={false}
+      dropdownStyle={{
+        zIndex: 1050,
+        backgroundColor: "rgba(255, 255, 255, 0.98)",
+        backdropFilter: "blur(12px) saturate(180%)",
+      }}
+      dropdownClassName="ant-select-dropdown-opaque"
     >
       <div value={1} disabled className="flex w-full border-b">
         <div className="flex">
@@ -68,8 +82,8 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
       </div>
       {ashiglaltiinZardal?.jagsaalt.map((a, i) => {
         return (
-          <Select.Option key={a._id}>
-            <div className="flex w-full justify-between border-b">
+          <Select.Option key={a._id} value={a._id}>
+            <div className="pointer-events-none flex w-full justify-between border-b">
               <p className="flex border-r bg-green-400 bg-opacity-10 pl-2 pr-2 text-left">
                 {a.ner}
               </p>

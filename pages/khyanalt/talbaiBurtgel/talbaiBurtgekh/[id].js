@@ -63,27 +63,33 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
   }
   return (
     <>
-      <div className="flex flex-row justify-end gap-2 lg:gap-0 lg:pl-[33%] ">
+      <div className="mb-3 flex flex-row items-center gap-3">
         <Form.Item
-          className="w-2/4 lg:w-full"
+          label={t("Төрөл")}
+          className="mb-0 flex-1"
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
           {...restField}
           name={[name, "ner"]}
           fieldKey={[fieldKey, "ner"]}
         >
           <Select
             style={{ width: "100%" }}
-            className=""
             placeholder={t("Төрөл")}
-            name="ner"
             onChange={solikh}
           >
             {segment?.jagsaalt?.map((mur) => (
-              <Select.Option value={mur?.ner}>{mur?.ner}</Select.Option>
+              <Select.Option key={mur?.ner} value={mur?.ner}>
+                {t(mur?.ner)}
+              </Select.Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item
-          className="w-2/4 lg:w-full"
+          label={t("Утга")}
+          className="mb-0 flex-1"
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
           {...restField}
           name={[name, "utga"]}
           fieldKey={[fieldKey, "utga"]}
@@ -93,11 +99,19 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
             placeholder={t("Утга")}
             onChange={solikhtTurul}
           >
-            {turul?.utguud?.map((a) => (
-              <Select.Option value={a}>{a}</Select.Option>
+            {turul?.utguud?.map((a, index) => (
+              <Select.Option key={`${a}-${index}`} value={a}>
+                {t(a)}
+              </Select.Option>
             ))}
           </Select>
         </Form.Item>
+        <div className="flex items-end pb-1">
+          <CloseCircleOutlined
+            className="text-lg text-gray-500 transition-colors hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400"
+            onClick={() => remove(name)}
+          />
+        </div>
       </div>
     </>
   );
@@ -904,7 +918,7 @@ function TalbaiBurtgekh({ token }) {
                       <div className="flex w-full justify-end pb-5 sm:px-6 sm:pl-[33%]">
                         <Button
                           icon={<PlusOutlined />}
-                          className="h-8 rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 "
+                          className="h-8 rounded-sm bg-white hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
                           type="dashed"
                           onClick={() => add()}
                           block
@@ -926,7 +940,7 @@ function TalbaiBurtgekh({ token }) {
                   onChange={(e) => onChange("tailbar", e.target.value)}
                 ></TextArea>
               </Form.Item>
-              <div className="flex w-full justify-end space-x-5 pr-[4%] md:pl-[33%] ">
+              <div className="mt-2 flex w-full justify-end space-x-5 pr-[4%] md:pl-[33%] ">
                 <div className="w-full">
                   <Button onClick={showDrawer} type="primary">
                     <span className="mr-2 text-white">

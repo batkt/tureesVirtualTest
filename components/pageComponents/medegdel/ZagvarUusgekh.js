@@ -34,9 +34,20 @@ function ZaaltZasvar({
     barilgiinId: barilgiinId,
   });
 
+  const editorRef = React.useRef(null);
+
+  // Extract plain text from HTML content
+  const extractPlainText = (html) => {
+    if (!html) return '';
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
+  };
+
   useEffect(() => {
-    if (instance && typeof instance.getText === "function") {
-      onTextChange && onTextChange(instance.getText());
+    if (value && onTextChange) {
+      const plainText = extractPlainText(value);
+      onTextChange(plainText);
     }
   }, [value]);
 
@@ -321,7 +332,15 @@ function ZaaltZasvar({
 
   return (
     <TipTapEditor
-      onChange={change}
+      ref={editorRef}
+      onChange={(html) => {
+        change(html);
+        // Extract plain text from HTML for SMS character count
+        if (onTextChange) {
+          const plainText = extractPlainText(html);
+          onTextChange(plainText);
+        }
+      }}
       value={value}
       defaultValue={value}
       setContents={value}

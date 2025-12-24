@@ -186,8 +186,16 @@ function Khyanalt({ token }) {
   }, [neesenEsekh]);
 
   const ingeekhmSms = useMemo(() => {
-    if (!khariltsagch) return msj;
-    var utga = msj;
+    // If msj is empty, try to extract plain text from content (HTML)
+    let textToUse = msj;
+    if (!textToUse && content) {
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = content;
+      textToUse = tempDiv.textContent || tempDiv.innerText || "";
+    }
+
+    if (!khariltsagch) return textToUse || "";
+    var utga = textToUse || "";
 
     // Deep flatten function
     const flattenObject = (obj, prefix = "", result = {}) => {
@@ -230,7 +238,7 @@ function Khyanalt({ token }) {
     }
 
     return utga;
-  }, [khariltsagch, geree, msj]);
+  }, [khariltsagch, geree, msj, content]);
 
   async function appIlgeeye() {
     if (!!title) {
@@ -354,9 +362,17 @@ function Khyanalt({ token }) {
         return;
       }
       var msgnuud = [];
+      // Extract plain text from content (HTML) if msj is empty
+      let textToUse = msj;
+      if (!textToUse && content) {
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = content;
+        textToUse = tempDiv.textContent || tempDiv.innerText || "";
+      }
+
       if (songogdsonKhariltsagch.length > 0)
         songogdsonKhariltsagch.map((a) => {
-          var text = msj;
+          var text = textToUse || "";
           a.ovog = a.ovog || "";
           a.ner = a.ner || "";
           a.register = a.register || "";
@@ -387,23 +403,31 @@ function Khyanalt({ token }) {
             });
         });
       else if (!!khariltsagch) {
+        // Ensure ingeekhmSms is not empty - extract from content if needed
+        let finalText = ingeekhmSms || "";
+        if (!finalText && content) {
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = content;
+          finalText = tempDiv.textContent || tempDiv.innerText || "";
+        }
+
         if (_.isArray(khariltsagch?.utas))
           khariltsagch?.utas.map((to) =>
             msgnuud.push({
               to,
-              text: ingeekhmSms,
-              khariltsagchiinId: a._id,
-              khariltsagchiinNer: a.ner,
-              barilgiinId: a.barilgiinId,
+              text: finalText,
+              khariltsagchiinId: khariltsagch._id,
+              khariltsagchiinNer: khariltsagch.ner,
+              barilgiinId: khariltsagch.barilgiinId || barilgiinId,
             })
           );
         else
           msgnuud.push({
             to: khariltsagch?.utas,
-            text: ingeekhmSms,
-            khariltsagchiinId: a._id,
-            khariltsagchiinNer: a.ner,
-            barilgiinId: a.barilgiinId,
+            text: finalText,
+            khariltsagchiinId: khariltsagch._id,
+            khariltsagchiinNer: khariltsagch.ner,
+            barilgiinId: khariltsagch.barilgiinId || barilgiinId,
           });
       } else {
         message.warning(t("Та SMS илгээх гэрээгээ сонгоно уу"));
@@ -614,7 +638,7 @@ function Khyanalt({ token }) {
           (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
         ).length > 0
       )
-        setKhuudaslalt((a) => {
+        medegdelAvya?.setKhuudaslalt((a) => {
           a.jagsaalt.forEach((b) => {
             if (b.turul !== "medegdel" && b.kharsanEsekh === false)
               b.kharsanEsekh = true;
@@ -629,7 +653,7 @@ function Khyanalt({ token }) {
               (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
             ).length > 0
           )
-            sonorduulgaMutate();
+            medegdelAvya?.mutate();
         })
         .catch(aldaaBarigch);
     }
@@ -853,12 +877,12 @@ function Khyanalt({ token }) {
                         cancelText={t("Үгүй")}
                         onConfirm={() => zagvarUstgaya(a)}
                       >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-black dark:bg-gray-800 dark:text-black">
-                          <DeleteOutlined style={{ color: "red" }} />
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-red-500 dark:bg-gray-800 dark:text-red-500">
+                          <DeleteOutlined />
                         </div>
                       </Popconfirm>
                       <div
-                        className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800"
+                        className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-blue-500 dark:bg-gray-800 dark:text-blue-400"
                         onClick={() =>
                           turul === "SMS" || turul === "App"
                             ? smsZagvarNemya(a)
@@ -867,7 +891,7 @@ function Khyanalt({ token }) {
                               )
                         }
                       >
-                        <EditOutlined style={{ color: "#85C1E9" }} />
+                        <EditOutlined />
                       </div>
                     </div>
                   </div>
@@ -1153,9 +1177,18 @@ function Khyanalt({ token }) {
               data-aos-duration="1000"
             >
               <div
-                className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-y-scroll rounded-r-xl px-10 pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+                className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-y-auto rounded-r-xl px-10 pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
                 style={{
                   maxHeight: ` ${
+                    turul === "App"
+                      ? "calc(100vh - 31rem)"
+                      : turul === "SMS"
+                      ? "calc(100vh - 26rem)"
+                      : turul === "Mail"
+                      ? "calc(100vh - 28.5rem)"
+                      : ""
+                  } `,
+                  height: ` ${
                     turul === "App"
                       ? "calc(100vh - 31rem)"
                       : turul === "SMS"

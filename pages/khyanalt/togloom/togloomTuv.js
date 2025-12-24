@@ -999,7 +999,7 @@ function togloom1() {
                 onClick={() => tulburTulyu(data)}
               >
                 {data?.tulburTulsunEsekh !== true ? (
-                  <div className="flex items-center justify-center space-x-2 text-white">
+                  <div className="flex items-center justify-center space-x-2 ">
                     <div className="flex items-center justify-center">
                       <DollarCircleOutlined />
                     </div>
@@ -1011,7 +1011,7 @@ function togloom1() {
                     )?._id === data?._id && "[ F2 ]"}
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center space-x-2 text-white ">
+                  <div className="flex items-center justify-center space-x-2  ">
                     <div className="flex items-center justify-center">
                       <PaperClipOutlined />
                     </div>
@@ -1033,7 +1033,7 @@ function togloom1() {
                 }}
                 size="small"
               >
-                <div className="flex items-center justify-center space-x-2 text-white">
+                <div className="flex items-center justify-center space-x-2 ">
                   <div className="flex items-center justify-center">
                     <CheckCircleOutlined />
                   </div>

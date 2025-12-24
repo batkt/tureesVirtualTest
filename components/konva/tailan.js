@@ -42,7 +42,7 @@ function tailan({ token, points }) {
             height: "100%",
             title: [
               <div className="flex justify-between ">
-                <div className="flex items-center justify-start bg-gray-50">
+                <div className="flex items-center justify-start">
                   {t("Дэлгэрэнгүй Мэдээлэл")}
                 </div>
                 <div

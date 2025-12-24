@@ -3,12 +3,16 @@
   border: 1px solid #d1d5db;
   border-radius: 0.375rem;
   overflow: hidden;
-  background: white;
+  background: white !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 .dark .tiptap-editor-wrapper {
   border-color: #374151;
-  background: #1f2937;
+  background: #1f2937 !important;
+  opacity: 1 !important;
 }
 
 .tiptap-toolbar {
@@ -90,19 +94,57 @@
   padding: 1rem;
   min-height: 200px;
   outline: none;
+  background: white !important;
+  opacity: 1 !important;
+  color: #111827 !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 .dark .tiptap-content {
-  color: #e5e7eb;
+  color: #e5e7eb !important;
+  background: #1f2937 !important;
+  opacity: 1 !important;
 }
 
 .tiptap-content .ProseMirror {
   outline: none;
   min-height: 200px;
+  background: white !important;
+  color: #111827 !important;
+  opacity: 1 !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
+}
+
+.dark .tiptap-content .ProseMirror {
+  background: #1f2937 !important;
+  color: #e5e7eb !important;
+  opacity: 1 !important;
 }
 
 .tiptap-content .ProseMirror p {
   margin: 0.5rem 0;
+  white-space: pre-wrap !important;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
+  color: inherit !important;
+}
+
+/* CRITICAL: Ensure spaces are preserved in all elements */
+.tiptap-content .ProseMirror * {
+  white-space: pre-wrap !important;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
+}
+
+/* Ensure contenteditable allows spaces */
+.tiptap-content .ProseMirror[contenteditable="true"] {
+  white-space: pre-wrap !important;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
 }
 
 .tiptap-content .ProseMirror p.is-editor-empty:first-child::before {
@@ -215,4 +257,3 @@
   background: transparent;
   padding: 0;
 }
-

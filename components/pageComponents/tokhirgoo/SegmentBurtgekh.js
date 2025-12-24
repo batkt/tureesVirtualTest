@@ -20,7 +20,7 @@ const formItemLayout = {
 const formItemLayoutWithOutLabel = {
   wrapperCol: {
     xs: { span: 24, offset: 0 },
-    sm: { span: 20, offset: 4 },
+    sm: { span: 20, offset: 0 },
   },
 };
 
@@ -134,36 +134,39 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
                 label={index === 0 ? t("Утгууд") : ""}
                 required={false}
                 key={field.key}
+                className="mb-2"
               >
-                <Form.Item
-                  {...field}
-                  validateTrigger={["onChange", "onBlur"]}
-                  rules={[
-                    {
-                      required: true,
-                      whitespace: true,
-                      message: t("Та утга нэмэх юм уу энэ хэсгийг устагна уу."),
-                    },
-                  ]}
-                  noStyle
-                >
-                  <Input placeholder={t("Утга")} className="relative w-[85%]" />
-                </Form.Item>
+                <div className="flex items-center gap-2">
+                  <Form.Item
+                    {...field}
+                    validateTrigger={["onChange", "onBlur"]}
+                    rules={[
+                      {
+                        required: true,
+                        whitespace: true,
+                        message: t("Та утга нэмэх юм уу энэ хэсгийг устагна уу."),
+                      },
+                    ]}
+                    noStyle
+                    className="flex-1 mb-0"
+                  >
+                    <Input placeholder={t("Утга")} className="w-full" />
+                  </Form.Item>
 
-                {fields.length > 1 ? (
-                  <MinusCircleOutlined
-                    className="bg-gray-300w-full dynamic-delete-button absolute bottom-0 right-5 opacity-40 "
-                    onClick={() => remove(field.name)}
-                  />
-                ) : null}
+                  {fields.length > 1 && (
+                    <MinusCircleOutlined
+                      className="text-lg text-gray-500 transition-colors hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 flex-shrink-0 cursor-pointer"
+                      onClick={() => remove(field.name)}
+                    />
+                  )}
+                </div>
               </Form.Item>
             ))}
-            <Form.Item {...formItemLayoutWithOutLabel}>
+            <Form.Item {...formItemLayoutWithOutLabel} className="mb-0">
               <Button
                 type="dashed"
                 onClick={() => add()}
-                // className="relative w-[85%]"
-                className="relative w-[85%] dark:bg-gray-700 dark:text-white"
+                className="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600"
                 icon={<PlusOutlined />}
               >
                 {t("Утга нэмэх")}

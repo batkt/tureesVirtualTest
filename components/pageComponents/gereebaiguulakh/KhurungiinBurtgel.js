@@ -59,26 +59,69 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
     query
   );
   function onValueChange(v) {
-    onChange(_.cloneDeep(talbainiiGaralt.jagsaalt.find((a) => a._id === v)));
+    if (!talbainiiGaralt?.jagsaalt) return;
+
+    if (mode === "multiple") {
+      const selectedItems = talbainiiGaralt.jagsaalt.filter(
+        (a) => v && Array.isArray(v) && v.includes(a._id)
+      );
+      onChange(selectedItems.map((a) => _.cloneDeep(a)));
+    } else {
+      const selectedItem = talbainiiGaralt.jagsaalt.find((a) => a._id === v);
+      if (selectedItem) {
+        onChange(_.cloneDeep(selectedItem));
+      } else if (v === undefined || v === null) {
+        // Allow clearing selection
+        onChange(undefined);
+      }
+    }
   }
+
+  // Get the value for the Select - should be ID(s), not object(s)
+  const selectValue = useMemo(() => {
+    if (!value) return undefined;
+    if (mode === "multiple") {
+      return Array.isArray(value)
+        ? value.map((v) => (typeof v === "string" ? v : v?._id))
+        : [];
+    } else {
+      return typeof value === "string" ? value : value?._id;
+    }
+  }, [value, mode]);
 
   return (
     <Select
       id={id}
       placeholder="Талбай"
       filterOption={false}
-      value={value}
+      value={selectValue}
       mode={mode}
       showSearch
       onChange={onValueChange}
       loading={!talbainiiGaralt}
       onSearch={(search) => setTalbaiKhuudaslalt((a) => ({ ...a, search }))}
+      getPopupContainer={(triggerNode) => {
+        // Always render to body to avoid scroll/click issues
+        return document.body;
+      }}
+      dropdownMatchSelectWidth={true}
+      dropdownStyle={{
+        zIndex: 1050,
+        backgroundColor: "rgba(255, 255, 255, 0.98)",
+        backdropFilter: "blur(12px) saturate(180%)",
+      }}
+      dropdownClassName="ant-select-dropdown-opaque"
+      virtual={false}
     >
       {talbainiiGaralt?.jagsaalt?.map((a) => {
         return (
-          <Select.Option key={a._id} disabled={a?.sulKhemjee === 0}>
+          <Select.Option
+            key={a._id}
+            value={a._id}
+            disabled={a?.sulKhemjee === 0}
+          >
             <div
-              className={`flex ${
+              className={`pointer-events-none flex ${
                 gereeniiZagvar?.turGereeEsekh !== true && a.idevkhiteiEsekh
                   ? "opacity-50"
                   : "opacity-100"
@@ -462,7 +505,8 @@ const YurunkhiiMedeele = ({
         data-aos="fade-right"
         data-aos-duration="1000"
         data-aos-delay="100"
-        className="max-h-[60vh] space-y-2 overflow-y-scroll pb-4"
+        className="max-h-[60vh] space-y-2 overflow-y-auto pb-4"
+        style={{ maxHeight: "60vh", overflowY: "auto" }}
       >
         {value.talbainuud?.map((talbai, index) => {
           return (
@@ -708,7 +752,7 @@ const YurunkhiiMedeele = ({
       ) : null}
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
-          className="flex w-full flex-col justify-between gap-4 md:flex-row mt-4"
+          className="mt-4 flex w-full flex-col justify-between gap-4 md:flex-row"
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="700"

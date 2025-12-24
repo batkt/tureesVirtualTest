@@ -13,20 +13,12 @@
     color-scheme: light;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-
   html.dark {
     color-scheme: dark;
   }
 
   body {
     @apply bg-white text-gray-900 dark:bg-black dark:text-gray-100;
-  }
-
-  * {
-    scroll-behavior: smooth;
   }
 
   :where(p, span, div, li, td, th, h1, h2, h3, h4, h5, h6) {
@@ -553,6 +545,51 @@
   outline: none !important;
 }
 
+.login-input .ant-input-password-icon {
+  color: rgba(0, 0, 0, 0.45) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 10 !important;
+}
+
+.dark .login-input .ant-input-password-icon {
+  color: rgba(255, 255, 255, 0.65) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.login-input .ant-input-password-icon:hover {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+.dark .login-input .ant-input-password-icon:hover {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Fix username field icon visibility in light mode */
+.group.relative .absolute.inset-y-0 svg {
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 10 !important;
+  color: rgb(156, 163, 175) !important;
+}
+
+.group.relative:focus-within .absolute.inset-y-0 svg,
+.group.relative.group-focus-within .absolute.inset-y-0 svg {
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: rgb(5, 150, 105) !important;
+}
+
+.dark .group.relative .absolute.inset-y-0 svg {
+  color: rgb(107, 114, 128) !important;
+}
+
+.dark .group.relative:focus-within .absolute.inset-y-0 svg,
+.dark .group.relative.group-focus-within .absolute.inset-y-0 svg {
+  color: rgb(52, 211, 153) !important;
+}
+
 .login-input::placeholder {
   color: rgba(156, 163, 175, 0.8) !important;
   @apply dark:text-gray-500 !important;
@@ -598,6 +635,311 @@
   width: 10rem;
   right: 4.5rem;
   top: 1px;
+}
+
+/* Tariff input border fix for dark mode */
+.tariffInput .ant-input-number,
+.tariffInput .ant-input-number-input {
+  @apply border border-gray-300 dark:border-gray-600 !important;
+}
+
+.dark .tariffInput .ant-input-number,
+.dark .tariffInput .ant-input-number-input {
+  border: 1px solid rgba(75, 85, 99, 0.8) !important;
+}
+
+/* Fix Select dropdown in scroll containers */
+.ant-select-dropdown {
+  z-index: 1050 !important;
+}
+
+/* Fix transparent dropdown issue */
+.ant-select-dropdown-opaque,
+.ant-select-dropdown {
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  opacity: 1 !important;
+}
+
+.dark .ant-select-dropdown-opaque,
+.dark .ant-select-dropdown {
+  background: rgba(31, 41, 55, 0.98) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  opacity: 1 !important;
+}
+
+/* Ensure dropdown items are clickable and visible */
+.ant-select-dropdown .ant-select-item {
+  background: transparent !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+.ant-select-dropdown .ant-select-item:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+.dark .ant-select-dropdown .ant-select-item:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Ensure scroll containers don't clip dropdowns */
+.max-h-\[60vh\] {
+  position: relative;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================
+   CRITICAL SCROLL FIXES
+   ============================================ */
+
+/* 1. Fix overflow-y-auto to actually scroll */
+.overflow-y-auto {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  /* Remove any height restrictions that prevent scrolling */
+  min-height: 0 !important;
+}
+
+/* 2. Fix overflow-y-scroll */
+.overflow-y-scroll {
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch !important;
+  min-height: 0 !important;
+}
+
+/* 3. Fix overflow-auto */
+.overflow-auto {
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  min-height: 0 !important;
+}
+
+/* 4. Ensure scroll containers have proper dimensions */
+.overflow-y-auto[style*="max-height"],
+.overflow-y-auto[style*="maxHeight"],
+.overflow-y-scroll[style*="max-height"],
+.overflow-y-scroll[style*="maxHeight"],
+.overflow-auto[style*="max-height"],
+.overflow-auto[style*="maxHeight"] {
+  display: block !important;
+  position: relative !important;
+}
+
+/* 5. Fix max-h-[60vh] to properly scroll */
+.max-h-\[60vh\] {
+  position: relative !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  max-height: 60vh !important;
+  display: block !important;
+}
+
+/* 6. Fix modal body scrolling */
+.ant-modal-body {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  max-height: calc(80vh - 120px) !important;
+  display: block !important;
+}
+
+/* 7. Fix drawer body scrolling */
+.ant-drawer-body {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+/* 8. Fix table body scrolling */
+tbody.overflownone {
+  display: block !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  max-height: calc(70vh - 8rem) !important;
+  width: 100% !important;
+}
+
+/* 9. Fix guilgee-table-body scrolling */
+.guilgee-table-body {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  display: block !important;
+}
+
+/* 10. Fix Select dropdown scrolling */
+.ant-select-dropdown {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  max-height: 280px !important;
+}
+
+.ant-select-item-option-content {
+  pointer-events: none !important;
+}
+
+.ant-select-item {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* 11. Fix DatePicker panel scrolling */
+.ant-picker-year-panel .rc-virtual-list-holder,
+.ant-picker-month-panel .rc-virtual-list-holder,
+.ant-picker-decade-panel .rc-virtual-list-holder {
+  height: 100% !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  display: block !important;
+}
+
+/* 12. Remove conflicting scroll behavior from html/body */
+html,
+body {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  height: 100% !important;
+  position: relative !important;
+}
+
+/* 13. Fix nested scroll containers */
+.overflow-y-auto .overflow-y-auto,
+.overflow-auto .overflow-auto {
+  position: relative !important;
+  display: block !important;
+}
+
+/* 14. Ensure parent containers don't prevent scrolling */
+.flex.flex-col {
+  min-height: 0 !important;
+}
+
+.flex.flex-col > * {
+  min-height: 0 !important;
+}
+
+/* 15. Fix iOS scroll momentum */
+@supports (-webkit-overflow-scrolling: touch) {
+  .overflow-y-auto,
+  .overflow-y-scroll,
+  .overflow-auto,
+  .ant-modal-body,
+  .ant-drawer-body,
+  .guilgee-table-body,
+  .ant-select-dropdown,
+  tbody.overflownone {
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* 16. Remove any overflow hidden that might block scrolling */
+.overflow-hidden.overflow-y-auto,
+.overflow-hidden.overflow-y-scroll {
+  overflow: hidden auto !important;
+}
+
+/* 17. Fix scroll in print containers */
+@media screen {
+  .overflownone {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* 18. Ensure scrollbar is always visible when needed */
+.overflow-y-scroll::-webkit-scrollbar {
+  -webkit-appearance: none !important;
+  width: 5px !important;
+}
+
+.overflow-y-scroll::-webkit-scrollbar-thumb {
+  background: gray !important;
+  border-radius: 2px !important;
+}
+
+/* 19. Fix table scroll wrapper */
+.ant-table-body {
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* 20. Fix cascade menu scrolling */
+.ant-cascader-dropdown {
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  max-height: 280px !important;
+}
+
+/* 21. CRITICAL: Remove smooth scroll behavior that can interfere */
+* {
+  scroll-behavior: auto !important;
+}
+
+html {
+  scroll-behavior: auto !important;
+}
+
+/* 22. Fix for containers with absolute positioning */
+.absolute.overflow-y-auto,
+.absolute.overflow-auto {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* 23. Ensure grid/flex items can scroll */
+.grid > .overflow-y-auto,
+.flex > .overflow-y-auto {
+  min-height: 0 !important;
+  min-width: 0 !important;
+}
+
+/* 24. Fix for truncated scroll containers */
+.overflow-y-auto[class*="h-"],
+.overflow-auto[class*="h-"] {
+  display: block !important;
+  position: relative !important;
+}
+/* Fix form item content to allow interactions */
+.ant-form-item-control-input-content .ant-select {
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure Select options are visible and clickable */
+.ant-select-dropdown .ant-select-item-option {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+}
+
+/* Ensure Select.Option content doesn't block clicks */
+.ant-select-item-option-content {
+  pointer-events: none !important;
+}
+
+/* Make sure the entire option row is clickable */
+.ant-select-item-option {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.ant-select-item-option > * {
+  pointer-events: none !important;
 }
 
 input::-webkit-outer-spin-button,
@@ -1125,6 +1467,7 @@ audio::-webkit-media-controls-volume-control-container {
 /* ============================================
    ANT DESIGN - BUTTONS
    ============================================ */
+
 .ant-btn {
   border-radius: 0.375rem !important;
   border-width: 1px !important;
@@ -1142,6 +1485,14 @@ audio::-webkit-media-controls-volume-control-container {
   transition-duration: 0.2s !important;
   position: relative !important;
   overflow: hidden !important;
+}
+
+/* Base button default colors for light mode */
+.ant-btn:not(.ant-btn-primary):not(.ant-btn-tertiary):not(.ant-btn-dangerous),
+.ant-btn-default,
+.ant-btn-default.ant-btn-sm {
+  color: #111827 !important;
+  background: #ffffffe6 !important;
 }
 
 .ant-btn::before {
@@ -1163,7 +1514,8 @@ audio::-webkit-media-controls-volume-control-container {
 }
 
 .ant-btn-primary {
-  @apply border-none text-white !important;
+  border: none !important;
+  color: white !important;
   background: linear-gradient(
     135deg,
     rgba(16, 185, 129, 0.95),
@@ -1192,7 +1544,8 @@ audio::-webkit-media-controls-volume-control-container {
 }
 
 .ant-btn-tertiary {
-  @apply border-none text-white !important;
+  border: none !important;
+  color: white !important;
   background: linear-gradient(
     135deg,
     rgba(234, 179, 8, 0.95),
@@ -1219,33 +1572,61 @@ audio::-webkit-media-controls-volume-control-container {
     0 1px 2px -1px rgba(234, 179, 8, 0.2) !important;
 }
 
-.ant-btn-default {
-  @apply dark:bg-inherit dark:text-[#E5E7EB] dark:hover:text-gray-100 dark:focus:text-gray-400 !important;
+.ant-btn-default,
+.ant-btn-default:not([class*="bg-"]) {
   border: 1px solid rgba(229, 231, 235, 0.8) !important;
   backdrop-filter: blur(8px) !important;
+  color: #111827 !important;
+  background: #ffffffe6 !important;
 }
 
-/* Default background only when no Tailwind bg- class is present */
-.ant-btn-default:not([class*="bg-"]) {
-  background: rgba(255, 255, 255, 0.9) !important;
-}
-
-.ant-btn-default:hover:not(:disabled) {
-  background: rgba(249, 250, 251, 0.95) !important;
+/* Override any hover/focus states that might interfere */
+.ant-btn-default:hover,
+.ant-btn-default:focus,
+.ant-btn-default:active,
+.ant-btn-default.ant-btn-sm:hover,
+.ant-btn-default.ant-btn-sm:focus,
+.ant-btn-default.ant-btn-sm:active {
+  color: #111827 !important;
+  background: #f9fafbf2 !important;
   border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+.ant-btn-default:hover:not(:disabled),
+.ant-btn-default:focus:not(:disabled),
+.ant-btn-default.ant-btn-sm:hover:not(:disabled),
+.ant-btn-default.ant-btn-sm:focus:not(:disabled) {
+  background: #f9fafbf2 !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #111827 !important;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -2px rgba(0, 0, 0, 0.1) !important;
   transform: translateY(-1px) !important;
 }
 
-.dark .ant-btn-default {
+/* Dark mode button colors */
+.dark
+  .ant-btn:not(.ant-btn-primary):not(.ant-btn-tertiary):not(.ant-btn-dangerous),
+.dark .ant-btn-default,
+.dark .ant-btn-default.ant-btn-sm {
+  color: #e5e7eb !important;
   background: rgba(31, 41, 55, 0.9) !important;
   border-color: rgba(75, 85, 99, 0.8) !important;
 }
 
-.dark .ant-btn-default:hover:not(:disabled) {
+.dark .ant-btn-default:hover:not(:disabled),
+.dark .ant-btn-default.ant-btn-sm:hover:not(:disabled) {
+  color: rgba(243, 244, 246, 1) !important;
   background: rgba(55, 65, 81, 0.95) !important;
   border-color: rgba(16, 185, 129, 0.5) !important;
+}
+
+/* Ensure button text and icons are visible */
+.ant-btn-default > span,
+.ant-btn-default .anticon,
+.ant-btn-default.ant-btn-sm > span,
+.ant-btn-default.ant-btn-sm .anticon {
+  color: inherit !important;
 }
 
 .ant-btn[disabled],
@@ -1302,7 +1683,40 @@ audio::-webkit-media-controls-volume-control-container {
 }
 
 .ant-input-password-icon {
-  @apply dark:text-gray-300 !important;
+  color: rgba(0, 0, 0, 0.45) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-flex !important;
+}
+
+.dark .ant-input-password-icon {
+  color: rgba(255, 255, 255, 0.65) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.ant-input-password-icon:hover {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+.dark .ant-input-password-icon:hover {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Fix password icon visibility in all input types */
+.ant-input-password .ant-input-password-icon,
+.ant-input-affix-wrapper .ant-input-password-icon {
+  color: rgba(0, 0, 0, 0.45) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 10 !important;
+}
+
+.dark .ant-input-password .ant-input-password-icon,
+.dark .ant-input-affix-wrapper .ant-input-password-icon {
+  color: rgba(255, 255, 255, 0.65) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .ant-input-affix-wrapper {
@@ -1335,6 +1749,10 @@ audio::-webkit-media-controls-volume-control-container {
 
 .ant-form-item {
   background: transparent !important;
+  margin-bottom: 24px !important;
+}
+
+.ant-form-item:last-child {
   margin-bottom: 0 !important;
 }
 
@@ -1352,6 +1770,8 @@ audio::-webkit-media-controls-volume-control-container {
   flex: 1 1 auto !important;
   max-width: 100% !important;
   background: transparent !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 .ant-form-item-control-input-content > * {
@@ -1587,6 +2007,9 @@ audio::-webkit-media-controls-volume-control-container {
   cursor: pointer !important;
   position: relative !important;
   overflow: hidden !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  background-color: transparent !important;
 }
 
 .ant-select-item:hover:not(.ant-select-item-disabled):not(
@@ -2039,6 +2462,110 @@ audio::-webkit-media-controls-volume-control-container {
   @apply flex flex-col justify-center p-1 md:flex-row;
 }
 
+/* Fix DatePicker year/month panel virtual scrolling - ensure items render immediately and scroll works */
+.ant-picker-year-panel,
+.ant-picker-month-panel,
+.ant-picker-decade-panel {
+  position: relative !important;
+}
+
+.ant-picker-year-panel .rc-virtual-list,
+.ant-picker-month-panel .rc-virtual-list,
+.ant-picker-decade-panel .rc-virtual-list {
+  height: 100% !important;
+  min-height: 200px !important;
+}
+
+.ant-picker-year-panel .rc-virtual-list-holder,
+.ant-picker-month-panel .rc-virtual-list-holder,
+.ant-picker-decade-panel .rc-virtual-list-holder {
+  height: 100% !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.ant-picker-year-panel .rc-virtual-list-holder-inner,
+.ant-picker-month-panel .rc-virtual-list-holder-inner,
+.ant-picker-decade-panel .rc-virtual-list-holder-inner {
+  min-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Ensure year/month cells are visible and scrollable */
+.ant-picker-year-panel .ant-picker-cell,
+.ant-picker-month-panel .ant-picker-cell,
+.ant-picker-decade-panel .ant-picker-cell {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Fix DatePicker calendar month/year Select dropdowns */
+.ant-picker-calendar-month-select,
+.ant-picker-calendar-year-select {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.ant-picker-calendar-month-select .ant-select-dropdown,
+.ant-picker-calendar-year-select .ant-select-dropdown {
+  z-index: 1050 !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  opacity: 1 !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.dark .ant-picker-calendar-month-select .ant-select-dropdown,
+.dark .ant-picker-calendar-year-select .ant-select-dropdown {
+  background: rgba(31, 41, 55, 0.98) !important;
+}
+
+.ant-picker-calendar-month-select .ant-select-item,
+.ant-picker-calendar-year-select .ant-select-item {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: rgba(17, 24, 39, 1) !important;
+}
+
+.dark .ant-picker-calendar-month-select .ant-select-item,
+.dark .ant-picker-calendar-year-select .ant-select-item {
+  color: #e5e7eb !important;
+}
+
+.ant-picker-calendar-month-select .ant-select-selection-search,
+.ant-picker-calendar-year-select .ant-select-selection-search {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.ant-picker-calendar-month-select .ant-select-selection-search-input,
+.ant-picker-calendar-year-select .ant-select-selection-search-input {
+  width: 100% !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: rgba(17, 24, 39, 1) !important;
+}
+
+.dark .ant-picker-calendar-month-select .ant-select-selection-search-input,
+.dark .ant-picker-calendar-year-select .ant-select-selection-search-input {
+  color: #e5e7eb !important;
+}
+
 @media only screen and (max-width: 768px) {
   .ant-picker-header-next-btn,
   .ant-picker-header-prev-btn,
@@ -2301,8 +2828,8 @@ tbody.overflownone {
    ============================================ */
 .ant-pagination-item-link {
   display: flex !important;
-  align-items: center;
-  justify-content: center;
+  align-items: center !important;
+  justify-content: center !important;
   border-radius: 0.375rem !important;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
   border: 1px solid rgba(229, 231, 235, 0.8) !important;
@@ -2316,10 +2843,62 @@ tbody.overflownone {
 }
 
 .ant-pagination-item-link > .anticon {
-  align-items: center;
+  align-items: center !important;
   display: flex !important;
-  justify-content: center;
-  height: 100%;
+  justify-content: center !important;
+  height: 100% !important;
+  font-size: 14px !important;
+}
+
+.ant-pagination-item-container {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.ant-pagination-item-ellipsis {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: rgba(0, 0, 0, 0.25) !important;
+  font-size: 12px !important;
+  letter-spacing: 2px !important;
+}
+
+.dark .ant-pagination-item-ellipsis {
+  color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.ant-pagination-item-link-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 14px !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.ant-pagination-jump-prev:hover .ant-pagination-item-link-icon,
+.ant-pagination-jump-next:hover .ant-pagination-item-link-icon {
+  opacity: 1 !important;
+}
+
+.ant-pagination-jump-prev .ant-pagination-item-ellipsis,
+.ant-pagination-jump-next .ant-pagination-item-ellipsis {
+  opacity: 1 !important;
+  transition: opacity 0.2s !important;
+}
+
+.ant-pagination-jump-prev:hover .ant-pagination-item-ellipsis,
+.ant-pagination-jump-next:hover .ant-pagination-item-ellipsis {
+  opacity: 0 !important;
 }
 
 .ant-pagination-item {
@@ -2543,14 +3122,73 @@ tbody.overflownone {
 .ant-notification-notice {
   border-width: 1px;
   @apply w-auto rounded-lg border-white bg-white p-5 shadow-lg !important;
+  min-width: 300px !important;
+  max-width: 500px !important;
+}
+
+.ant-notification-notice-content {
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 !important;
+  width: 100% !important;
 }
 
 .ant-notification-notice-message {
   margin-bottom: 0 !important;
+  margin-left: 0 !important;
+  text-align: center !important;
+  word-wrap: break-word !important;
+  word-break: keep-all !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  flex: 1 !important;
+  display: block !important;
+  line-height: 1.5 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+.ant-notification-notice-message > * {
+  text-align: center !important;
+  width: 100% !important;
+}
+
+.ant-notification-notice-with-icon {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-notification-notice-with-icon .ant-notification-notice-content {
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 !important;
+  justify-content: flex-start !important;
+}
+
+.ant-notification-notice-with-icon .ant-notification-notice-message {
+  margin-left: 0 !important;
+  text-align: center !important;
+  flex: 1 !important;
+  display: block !important;
+  width: 100% !important;
 }
 
 .ant-notification-notice-icon {
-  display: inline-block !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-right: 12px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Success notification specific styling */
+.ant-notification-notice-success .ant-notification-notice-message,
+.ant-notification-notice-warning .ant-notification-notice-message,
+.ant-notification-notice-error .ant-notification-notice-message,
+.ant-notification-notice-info .ant-notification-notice-message {
+  text-align: center !important;
+  width: 100% !important;
+  display: block !important;
 }
 
 /* ============================================
@@ -2590,6 +3228,181 @@ tbody.overflownone {
   @apply text-gray-900 dark:text-gray-200 !important;
   font-weight: 600 !important;
   letter-spacing: -0.025em !important;
+}
+
+/* ============================================
+   TIPTAP EDITOR FIXES
+   ============================================ */
+
+/* Fix transparency and visibility issues */
+.tiptap-editor-wrapper {
+  background: #ffffff !important;
+  opacity: 1 !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.375rem !important;
+  overflow: hidden !important;
+}
+
+.dark .tiptap-editor-wrapper {
+  background: #1f2937 !important;
+  border-color: #374151 !important;
+  opacity: 1 !important;
+}
+
+/* Fix toolbar visibility */
+.tiptap-toolbar {
+  background: #f9fafb !important;
+  opacity: 1 !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 0.25rem !important;
+  padding: 0.5rem !important;
+}
+
+.dark .tiptap-toolbar {
+  background: #111827 !important;
+  border-bottom-color: #374151 !important;
+  opacity: 1 !important;
+}
+
+.tiptap-toolbar button {
+  background: #ffffff !important;
+  color: #374151 !important;
+  opacity: 1 !important;
+  border: 1px solid #d1d5db !important;
+}
+
+.dark .tiptap-toolbar button {
+  background: #374151 !important;
+  color: #e5e7eb !important;
+  border-color: #4b5563 !important;
+  opacity: 1 !important;
+}
+
+/* Fix content area visibility and spacing */
+.tiptap-content {
+  background: #ffffff !important;
+  opacity: 1 !important;
+  padding: 1rem !important;
+  min-height: 200px !important;
+  color: #111827 !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.dark .tiptap-content {
+  background: #1f2937 !important;
+  color: #e5e7eb !important;
+  opacity: 1 !important;
+}
+
+/* Fix ProseMirror editor content - CRITICAL for space preservation */
+.tiptap-content .ProseMirror {
+  background: #ffffff !important;
+  color: #111827 !important;
+  outline: none !important;
+  min-height: 200px !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
+  position: relative !important;
+  z-index: 1 !important;
+  opacity: 1 !important;
+}
+
+.dark .tiptap-content .ProseMirror {
+  color: #e5e7eb !important;
+  background: #1f2937 !important;
+  opacity: 1 !important;
+}
+
+/* CRITICAL: Ensure spaces are preserved and visible */
+.tiptap-content .ProseMirror p,
+.tiptap-content .ProseMirror div,
+.tiptap-content .ProseMirror span,
+.tiptap-content .ProseMirror,
+.tiptap-content .ProseMirror * {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
+}
+
+/* Ensure text nodes preserve spaces - CRITICAL */
+.tiptap-content .ProseMirror p::before,
+.tiptap-content .ProseMirror p::after {
+  white-space: pre-wrap !important;
+}
+
+/* Fix paragraph spacing and ensure spaces are visible */
+.tiptap-content .ProseMirror p {
+  margin: 0.5rem 0 !important;
+  color: #111827 !important;
+  white-space: pre-wrap !important;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
+}
+
+.dark .tiptap-content .ProseMirror p {
+  color: #e5e7eb !important;
+}
+
+/* CRITICAL: Ensure all text elements preserve spaces */
+.tiptap-content .ProseMirror * {
+  color: inherit !important;
+  opacity: 1 !important;
+  white-space: pre-wrap !important;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
+}
+
+/* Ensure the contenteditable element itself allows spaces */
+.tiptap-content .ProseMirror[contenteditable="true"] {
+  white-space: pre-wrap !important;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
+  -webkit-user-modify: read-write-plaintext-only !important;
+}
+
+/* Fix for text nodes - ensure spaces are not collapsed */
+.tiptap-content .ProseMirror p > *,
+.tiptap-content .ProseMirror div > *,
+.tiptap-content .ProseMirror span > * {
+  white-space: pre-wrap !important;
+}
+
+/* Fix table cell spacing and visibility */
+.tiptap-content .ProseMirror table td,
+.tiptap-content .ProseMirror table th {
+  background: transparent !important;
+  color: inherit !important;
+  opacity: 1 !important;
+  white-space: pre-wrap !important;
+  word-spacing: normal !important;
+  padding: 0.5rem !important;
+}
+
+.dark .tiptap-content .ProseMirror table td,
+.dark .tiptap-content .ProseMirror table th {
+  color: #e5e7eb !important;
+  background: transparent !important;
+}
+
+/* Ensure editor wrapper has solid background */
+.tiptap-editor-wrapper {
+  background: #ffffff !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.dark .tiptap-editor-wrapper {
+  background: #1f2937 !important;
+  opacity: 1 !important;
 }
 
 .ant-popover-title {

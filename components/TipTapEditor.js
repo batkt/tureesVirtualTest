@@ -1,6 +1,7 @@
 import React, { useImperativeHandle, forwardRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Paragraph from "@tiptap/extension-paragraph";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import { TextAlign } from "@tiptap/extension-text-align";
@@ -11,6 +12,7 @@ import { Table } from "@tiptap/extension-table";
 import { TableRow } from "@tiptap/extension-table-row";
 import { TableHeader } from "@tiptap/extension-table-header";
 import { TableCell } from "@tiptap/extension-table-cell";
+import { Extension } from "@tiptap/core";
 import { Dropdown, Button } from "antd";
 import {
   UndoOutlined,
@@ -68,6 +70,22 @@ const TipTapEditor = forwardRef(
     },
     ref
   ) => {
+    // Extension to ensure spacebar always works and preserve whitespace
+    const SpaceHandler = Extension.create({
+      name: 'spaceHandler',
+      addKeyboardShortcuts() {
+        return {
+          'Space': () => {
+            // Force insert space - this should work
+            if (this.editor) {
+              this.editor.commands.insertContent(' ');
+            }
+            return true; // Return true to prevent default
+          },
+        };
+      },
+    });
+
     const editor = useEditor({
       extensions: [
         StarterKit.configure({
@@ -81,6 +99,33 @@ const TipTapEditor = forwardRef(
           orderedList: {
             keepMarks: true,
             keepAttributes: false,
+          },
+          // Disable paragraph from StarterKit so we can configure it separately
+          paragraph: false,
+        }),
+        // Custom Paragraph extension that preserves whitespace
+        Paragraph.extend({
+          parseHTML() {
+            return [{ tag: 'p' }];
+          },
+          renderHTML({ HTMLAttributes }) {
+            return ['p', { 
+              ...HTMLAttributes, 
+              style: 'white-space: pre-wrap; word-wrap: break-word;',
+            }, 0];
+          },
+          addAttributes() {
+            return {
+              ...this.parent?.(),
+              style: {
+                default: 'white-space: pre-wrap; word-wrap: break-word;',
+                parseHTML: element => element.getAttribute('style') || 'white-space: pre-wrap; word-wrap: break-word;',
+                renderHTML: attributes => {
+                  const style = attributes.style || 'white-space: pre-wrap; word-wrap: break-word;';
+                  return { style };
+                },
+              },
+            };
           },
         }),
         TextStyle,
@@ -98,7 +143,12 @@ const TipTapEditor = forwardRef(
         }),
         TableRow,
         TableHeader,
-        TableCell,
+        TableCell.configure({
+          HTMLAttributes: {
+            class: 'tiptap-table-cell',
+          },
+        }),
+        SpaceHandler,
       ],
       content: sanitizeContent(value || defaultValue || setContents || ""),
       editable: !readonly,
@@ -149,6 +199,38 @@ const TipTapEditor = forwardRef(
         }
       }
     }, [value, editor]);
+
+    // CRITICAL: Ensure spacebar works by directly handling it on the editor DOM
+    React.useEffect(() => {
+      if (!editor) return;
+
+      const editorElement = editor.view.dom;
+      
+      const handleKeyDown = (e) => {
+        // If spacebar is pressed in the editor
+        if ((e.key === " " || e.keyCode === 32) && 
+            !e.ctrlKey && !e.metaKey && !e.altKey &&
+            (e.target === editorElement || editorElement.contains(e.target))) {
+          
+          // Check if editor is focused (use view.hasFocus())
+          if (editor.view.hasFocus()) {
+            // Insert space directly using Tiptap command
+            editor.commands.insertContent(' ');
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            return false;
+          }
+        }
+      };
+
+      // Add listener directly to editor element with capture to catch it early
+      editorElement.addEventListener("keydown", handleKeyDown, true);
+      
+      return () => {
+        editorElement.removeEventListener("keydown", handleKeyDown, true);
+      };
+    }, [editor]);
 
     if (!editor) {
       return <div>Loading editor...</div>;
@@ -256,7 +338,7 @@ const TipTapEditor = forwardRef(
           >
             <OrderedListOutlined />
           </button> */}
-          <div className="toolbar-separator" />
+          {/* <div className="toolbar-separator" /> */}
           {/* <button
             type="button"
             onClick={() => {
@@ -282,7 +364,7 @@ const TipTapEditor = forwardRef(
           >
             <PictureOutlined />
           </button> */}
-          <button
+          {/* <button
             type="button"
             onClick={() =>
               editor
@@ -294,8 +376,8 @@ const TipTapEditor = forwardRef(
             title="Хүснэгт оруулах"
           >
             <TableOutlined />
-          </button>
-          {customButtons.length > 0 && <div className="toolbar-separator" />}
+          </button> */}
+          {/* {customButtons.length > 0 && <div className="toolbar-separator" />} */}
           {customButtons.map((buttonGroup, groupIndex) => (
             <React.Fragment key={groupIndex}>
               {buttonGroup.map((btn, btnIndex) => {
@@ -374,6 +456,13 @@ const TipTapEditor = forwardRef(
           editor={editor}
           style={{ minHeight: `${height}px` }}
           className="tiptap-content"
+          onKeyDown={(e) => {
+            // Ensure spacebar works - don't prevent default for space
+            if (e.key === " " || e.keyCode === 32) {
+              // Allow space to work normally
+              return;
+            }
+          }}
         />
       </div>
     );

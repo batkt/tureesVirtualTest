@@ -53,27 +53,33 @@ function YalgakhUtga({ fieldKey, name, remove, t, ...restField }) {
   }
   return (
     <>
-      <div className="flex flex-row justify-end gap-3 md:ml-44">
+      <div className="mb-3 flex flex-row items-center gap-3">
         <Form.Item
-          className="w-full pl-2"
-          wrapperCol={{ offset: 0 }}
+          label={t("Төрөл")}
+          className="mb-0 flex-1"
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
           {...restField}
           name={[name, "ner"]}
           fieldKey={[fieldKey, "ner"]}
         >
           <Select
             style={{ width: "100%" }}
-            placeholder={t("Нэр")}
+            placeholder={t("Төрөл")}
             onChange={solikh}
           >
             {segment?.jagsaalt?.map((mur) => (
-              <Select.Option value={mur?.ner}>{t(mur?.ner)}</Select.Option>
+              <Select.Option key={mur?.ner} value={mur?.ner}>
+                {t(mur?.ner)}
+              </Select.Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item
-          className="w-2/4 "
-          wrapperCol={{ offset: 0 }}
+          label={t("Утга")}
+          className="mb-0 flex-1"
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
           {...restField}
           name={[name, "utga"]}
           fieldKey={[fieldKey, "utga"]}
@@ -83,12 +89,19 @@ function YalgakhUtga({ fieldKey, name, remove, t, ...restField }) {
             placeholder={t("Утга")}
             onChange={solikhtTurul}
           >
-            {turul?.utguud?.map((a) => (
-              <Select.Option value={a}>{t(a)}</Select.Option>
+            {turul?.utguud?.map((a, index) => (
+              <Select.Option key={`${a}-${index}`} value={a}>
+                {t(a)}
+              </Select.Option>
             ))}
           </Select>
         </Form.Item>
-        <CloseCircleOutlined className="pt-2" onClick={() => remove(name)} />
+        <div className="flex items-end pb-1">
+          <CloseCircleOutlined
+            className="text-lg text-gray-500 transition-colors hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400"
+            onClick={() => remove(name)}
+          />
+        </div>
       </div>
     </>
   );
@@ -644,12 +657,13 @@ const YurunkhiiMedeele = ({
                   icon={<PlusOutlined />}
                   className="
       mx-auto 
-      flex h-8      
+      mt-2 flex      
+      h-8 
       w-full 
       items-center 
       justify-center 
       rounded-sm 
-      bg-white 
+      bg-white
       px-4
       hover:bg-green-100
       dark:bg-gray-700

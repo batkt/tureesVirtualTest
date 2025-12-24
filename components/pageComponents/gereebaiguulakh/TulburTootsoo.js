@@ -105,7 +105,7 @@ const Tulbur = ({
 
   function khungulultOruulakh() {
     if (!value.sariinTurees || value.sariinTurees === 0) {
-      notification.warning({ message: "Сарын түрээс оруулна уу!" });
+      notification.warning({ message: t("Сарын түрээс оруулна уу!") });
       return;
     }
     if (!value.khungulukhKhuvi || value.khungulukhKhuvi === 0) {

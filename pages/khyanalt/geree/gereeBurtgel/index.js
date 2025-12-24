@@ -1851,7 +1851,7 @@ function ZakhialgiinKhyanalt() {
                   title: t("Авлага үүсэх өдөр"),
                   dataIndex: "tulukhUdur",
                   align: "center",
-                  ellipsis: true,
+                  ellipsis: true, 
                   width: "10rem",
                 },
                 {
