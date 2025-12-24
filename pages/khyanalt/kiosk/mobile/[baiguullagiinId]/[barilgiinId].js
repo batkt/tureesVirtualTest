@@ -4,7 +4,8 @@ import {
   LoadingOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Drawer, Spin, message } from "antd";
+import { Button, Drawer, Spin } from "antd";
+import { toast } from "sonner";
 import useUilchluulegchWithQuery from "hooks/useUilchluulegchWithQuery";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
@@ -29,7 +30,6 @@ const KioskMobile = ({
   khungulukh,
 }) => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
-  const [messageApi, contextHolder] = toastuseMessage();
   const [register, setRegister] = useState("");
   const [baiguullagaNer, setBaiguullagaNer] = useState();
   const [customerTin, setCustomerTin] = useState();
@@ -89,13 +89,8 @@ const KioskMobile = ({
   }, [token]);
 
   const msgNotif = (content) => {
-    messageApi.open({
-      content: content,
-      style: {
-        marginTop: "2rem",
-      },
-      key: "1",
-      duration: 2,
+    toast.info(content, {
+      duration: 2000,
     });
   };
 
@@ -376,7 +371,6 @@ const KioskMobile = ({
 
   return (
     <div className="relative flex h-[calc(100vh-25px)] w-screen flex-col overflow-hidden bg-[#1E1E1E]">
-      {contextHolder}
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] text-center text-xs text-[#00D987]">
         Төлбөр төлснөөс хойш {zogsool?.garakhTsag || 30} минут дотор та
         зогсоолоос гараагүй бол төлбөр нэмэгдэж бодогдохыг анхаарна уу!

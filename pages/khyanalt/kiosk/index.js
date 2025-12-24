@@ -6,7 +6,8 @@ import {
   LoadingOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Drawer, Spin, message } from "antd";
+import { Button, Drawer, Spin } from "antd";
+import { toast } from "sonner";
 import DugaarKeyboard from "components/pageComponents/kiosk/DugaarKeyboard";
 import useUilchluulegchWithQuery from "hooks/useUilchluulegchWithQuery";
 import React, {
@@ -37,7 +38,6 @@ import useJagsaalt from "../../../hooks/useJagsaalt";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 const Kiosk = () => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
-  const [messageApi, contextHolder] = toastuseMessage();
   const [register, setRegister] = useState("");
   const [baiguullagaNer, setBaiguullagaNer] = useState();
   const [customerTin, setCustomerTin] = useState();
@@ -110,15 +110,11 @@ const Kiosk = () => {
 
   const msgNotif = useCallback(
     (content) => {
-      messageApi.open({
-        content: content,
-        style: {
-          marginTop: "5rem",
-        },
-        duration: 3,
+      toast.info(content, {
+        duration: 3000,
       });
     },
-    [messageApi]
+    []
   );
 
   function showKhunglult(khungulukhTsag) {
@@ -696,7 +692,6 @@ const Kiosk = () => {
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden">
-      {contextHolder}
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] px-[100px] text-center text-2xl text-[#00D987]">
         Төлбөр төлснөөс хойш{" "}
         {parkingJagsaalt?.find((e) => e?.garakhTsag)?.garakhTsag || 30} минут

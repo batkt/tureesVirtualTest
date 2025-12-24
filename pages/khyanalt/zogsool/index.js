@@ -78,7 +78,7 @@ export function excelTatajAvya(
         .saveAs(sheetName + ".xlsx");
     })
     .catch(aldaaBarigch)
-    .finally(() => toastdestroy());
+    .finally(() => toast.destroy());
 }
 
 function tulburKhurvuulekh(v) {
