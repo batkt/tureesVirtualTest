@@ -325,22 +325,24 @@ function ZakhialgaNemekh({ token }) {
               </Form.Item>
             </div>
             <Form.Item>
-              <Button
-                className="w-full"
-                type="primary"
-                onClick={() => form.submit()}
-                loading={towchTuluv}
-              >
-                {t("Хадгалах")}
-              </Button>
-              <Button
-                className="mt-4 w-full"
-                type="primary"
-                onClick={() => nemekh()}
-              >
-                <FileAddOutlined />
-                Гэрээний заалт нэмэх
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  className="flex-1"
+                  type="primary"
+                  onClick={() => form.submit()}
+                  loading={towchTuluv}
+                >
+                  {t("Хадгалах")}
+                </Button>
+                <Button
+                  className="flex-1"
+                  type="primary"
+                  onClick={() => nemekh()}
+                >
+                  <FileAddOutlined />
+                  Гэрээний заалт нэмэх
+                </Button>
+              </div>
             </Form.Item>
           </Form>
         </div>

@@ -3615,14 +3615,17 @@ function camera({ token }) {
                 <TreeSelect
                   placement={cameraKharakh === 1 ? "topRight" : "bottomLeft"}
                   showSearch
+                  style={{
+                    backgroundColor: "#10B981",
+                    borderColor: "#10B981",
+                  }}
                   value={camerVal[0]}
                   dropdownStyle={{
                     maxHeight: 600,
                     minWidth: 280,
                     overflow: "auto",
                   }}
-                  style={{ width: "12.5rem" }}
-                  className="w-50"
+                  className="sm:w-50 w-full md:w-auto"
                   placeholder={t("Камер сонгох")}
                   allowClear
                   treeDefaultExpandAll
@@ -3681,7 +3684,7 @@ function camera({ token }) {
                     PORT={554}
                   />
                 ) : baiguullaga?._id === "662ee74ba29549374bc40245" &&
-                  camerVal[1] === "172.16.19.115" ? (
+                  camerVal[1] === "192.168.8.8" ? (
                   <R2WPlayerComponent
                     USER={"admin"}
                     ROOT={"live"}
@@ -3799,14 +3802,16 @@ function camera({ token }) {
                   }}
                   placement={cameraKharakh === 2 ? "topRight" : "bottomRight"}
                   showSearch
+                  style={{
+                    backgroundColor: "#10B981",
+                    borderColor: "#10B981",
+                  }}
                   value={camerVal[1]}
                   dropdownStyle={{
                     maxHeight: 600,
                     minWidth: 280,
                     overflow: "auto",
                   }}
-                  style={{ width: "12.5rem" }}
-                  className="w-50"
                   placeholder={t("Камер сонгох")}
                   allowClear
                   treeDefaultExpandAll
@@ -4395,7 +4400,7 @@ function camera({ token }) {
                   >
                     {/* <Button
                       type="primary"
-                      className="w-auto mr-3 text-ellipsis"
+                      className="mr-3 w-auto text-ellipsis"
                       icon={<FileExcelOutlined />}
                     >
                       <span>Excel</span>
@@ -4698,7 +4703,7 @@ function camera({ token }) {
                   </Form.Item>
                   <a
                     onClick={() => form.resetFields()}
-                    className="flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white whitespace-nowrap"
+                    className="ml-2 flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white"
                   >
                     {t("Цэвэрлэх")}
                   </a>
@@ -4710,11 +4715,11 @@ function camera({ token }) {
                     className="flex w-full flex-col gap-4"
                     onFinish={dugaarBurtgekh}
                   >
-                    <div className="flex w-full gap-2 items-end">
+                    <div className="flex w-full">
                       <Form.Item
                         label={t("Дугаар1")}
                         name="mashiniiDugaar"
-                        className="flex-1 mb-0"
+                        className="w-2/5"
                         normalize={(input) => {
                           const too = input.replace(/[^0-9]/g, "").slice(0, 4);
                           const useg = Array.from(input)
@@ -4757,12 +4762,12 @@ function camera({ token }) {
                           maxLength={7}
                           ref={mashiniiDugaarRef}
                           placeholder="1234УБА"
-                        
+                          className="ml-[10px]"
                         />
                       </Form.Item>
                       <Form.Item
                         name="CAMERA_IP"
-                        className="flex-1 mb-0"
+                        className="w-full"
                         rules={[
                           {
                             required: true,
@@ -4785,7 +4790,7 @@ function camera({ token }) {
                       </Form.Item>
                       <a
                         onClick={() => form.resetFields()}
-                        className="flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white whitespace-nowrap"
+                        className="ml-2 flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white"
                       >
                         {t("Цэвэрлэх")}
                       </a>

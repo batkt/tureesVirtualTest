@@ -12,9 +12,8 @@ import {
 import { Input, Modal, Select } from "antd";
 import dynamic from "next/dynamic";
 import { t } from "i18next";
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
+import TipTapEditor from "components/TipTapEditor";
+import { createButtonWithItems } from "components/TipTapEditorHelper";
 
 export const basic = [
   ["font", "fontSize"],
@@ -111,10 +110,6 @@ const tulburiinTalbaruud = [
 
 function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
   const editorRef = React.useRef();
-  const plugins = React.useMemo(
-    () => require("suneditor/src/plugins")?.default || {},
-    []
-  );
   const [utga, setUtga] = React.useState(value);
 
   function garya() {
@@ -251,39 +246,126 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
     return [undsen, khugatsaa, baritsaa, talbai, tulbur, zardaluud];
   }, []);
 
+  const customButtons = React.useMemo(() => {
+    const buttons = [
+      createButtonWithItems(
+        {
+          name: "undsen",
+          title: "Үндсэн мэдээлэл",
+          innerHTML: renderToString(<SolutionOutlined />),
+        },
+        undsenTalbaruud
+      ),
+      createButtonWithItems(
+        {
+          name: "khugatsaa",
+          title: t("Хугацаа"),
+          innerHTML: renderToString(<ClockCircleOutlined />),
+        },
+        khugatsaaniiTalbaruud
+      ),
+      createButtonWithItems(
+        {
+          name: "talbai",
+          title: t("Түрээсийн талбай"),
+          innerHTML: renderToString(<BankOutlined />),
+        },
+        talbainiiTalbaruud
+      ),
+      createButtonWithItems(
+        {
+          name: "baritsaa",
+          title: t("Барьцаа"),
+          innerHTML: renderToString(<LockOutlined />),
+        },
+        baritsaaniiTalbaruud
+      ),
+      createButtonWithItems(
+        {
+          name: "tulbur",
+          title: t("Төлбөр"),
+          innerHTML: renderToString(<DollarCircleOutlined />),
+        },
+        tulburiinTalbaruud
+      ),
+    ];
+
+    // Add zardaluud if zardal exists
+    if (zardal?.jagsaalt) {
+      let songokhTalbaruud = [];
+      zardal.jagsaalt.forEach((a) => {
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Дүн`,
+          talbar: `${a.ner}.tulukhDun`,
+        });
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Хэмжих нэгж`,
+          talbar: `${a.ner}.khemjikhNegj`,
+        });
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Тариф`,
+          talbar: `${a.ner}.tariff`,
+        });
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Тариф үсгээр`,
+          talbar: `${a.ner}.tariffUsgeer`,
+        });
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Нэгж`,
+          talbar: `${a.ner}.negj`,
+        });
+        if (a.turul == "кВт" || a.turul == "1м3") {
+          songokhTalbaruud.push({
+            ner: `${a.ner}.Өмнөх заалт`,
+            talbar: `${a.ner}.umnukhZaalt`,
+          });
+          songokhTalbaruud.push({
+            ner: `${a.ner}.Сүүлийн заалт`,
+            talbar: `${a.ner}.suuliinZaalt`,
+          });
+        } else {
+          songokhTalbaruud.push({
+            ner: `${a.ner}.Хөнгөлөлт`,
+            talbar: `${a.ner}.khungulult`,
+          });
+        }
+      });
+      songokhTalbaruud.push({
+        ner: "Нийт ашиглалтын зардал",
+        talbar: "niitZardliinDun",
+      });
+      songokhTalbaruud.push({
+        ner: "Нийт ашиглалтын зардал/Нөатгүй/",
+        talbar: "niitZardliinNuatguiDun",
+      });
+      songokhTalbaruud.push({
+        ner: "Нөат (10%)",
+        talbar: "niitZardliinNuatiinDun",
+      });
+
+      buttons.push(
+        createButtonWithItems(
+          {
+            name: "zardaluud",
+            title: "Ашиглалтын зардал авлага",
+            innerHTML: renderToString(<DollarCircleOutlined />),
+          },
+          songokhTalbaruud
+        )
+      );
+    }
+
+    return [buttons];
+  }, [zardal, t]);
+
   if (_.isString(value))
     return (
-      <SunEditor
+      <TipTapEditor
         onChange={setUtga}
+        value={utga}
         defaultValue={utga}
-        setOptions={{
-          height: 410,
-          plugins: {
-            ...plugins,
-            undsen: custom[0],
-            khugatsaa: custom[1],
-            talbai: custom[2],
-            baritsaa: custom[3],
-            tulbur: custom[4],
-            zardaluud: custom[5],
-          },
-          buttonList: [
-            ...formatting,
-            ["align"],
-            [
-              "undsen",
-              "khugatsaa",
-              "talbai",
-              "baritsaa",
-              "tulbur",
-              "zardaluud",
-              "table",
-              "fontSize",
-              "font",
-            ],
-          ],
-        }}
-        showToolbar={true}
+        height={410}
+        customButtons={customButtons}
         ref={editorRef}
       />
     );
@@ -325,26 +407,12 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
         </Select>
       </div>
       <div className="mt-5" />
-      <SunEditor
+      <TipTapEditor
         onChange={(v) => setUtga((a) => ({ ...a, zaalt: v }))}
+        value={utga?.zaalt}
         defaultValue={utga?.zaalt}
-        setOptions={{
-          plugins: { ...plugins, ...custom },
-          height: 410,
-          buttonList: [
-            ...formatting,
-            ["table", "align", "fontSize", "font"],
-            [
-              "undsen",
-              "khugatsaa",
-              "talbai",
-              "baritsaa",
-              "tulbur",
-              "zardaluud",
-            ],
-          ],
-        }}
-        showToolbar={true}
+        height={410}
+        customButtons={customButtons}
       />
     </React.Fragment>
   );

@@ -7,9 +7,8 @@ import compareFields from "tools/function/compareFields";
 import dynamic from "next/dynamic";
 import { formatting } from "./ZaaltZasvar";
 import { t } from "i18next";
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
+import TipTapEditor from "components/TipTapEditor";
+import { createButtonWithItems } from "components/TipTapEditorHelper";
 
 const talbaruud = [
   { ner: t("Овог"), talbar: "ovog" },
@@ -120,10 +119,6 @@ const formItemLayout = {
 
 function index({ token, baiguullaga, destroy }, ref) {
   const editorRef = React.useRef();
-  const plugins = React.useMemo(
-    () => require("suneditor/src/plugins")?.default || {},
-    []
-  );
   const [form] = Form.useForm();
   const [zaalt, setZaalt] = React.useState("");
 
@@ -192,10 +187,14 @@ function index({ token, baiguullaga, destroy }, ref) {
     [form, zaalt]
   );
 
-  const plugin = React.useMemo(
-    () => customPlugin({ songokhTalbaruud: talbaruud }),
-    []
-  );
+  const customButtons = React.useMemo(() => {
+    return [
+      createButtonWithItems(
+        { name: "custom_example", title: "Талбарийн нэр", innerHTML: "T" },
+        talbaruud
+      ),
+    ];
+  }, []);
 
   return (
     <Form form={form} {...formItemLayout}>
@@ -215,15 +214,12 @@ function index({ token, baiguullaga, destroy }, ref) {
           ))}
         </Select>
       </Form.Item>
-      <SunEditor
+      <TipTapEditor
         onChange={setZaalt}
+        value={zaalt}
         defaultValue={zaalt}
-        setOptions={{
-          plugins: { ...plugins, ...plugin },
-          height: 200,
-          buttonList: [...formatting, ["custom_example"]],
-        }}
-        showToolbar={true}
+        height={200}
+        customButtons={[customButtons]}
         ref={editorRef}
       />
     </Form>

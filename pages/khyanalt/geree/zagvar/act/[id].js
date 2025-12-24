@@ -22,10 +22,6 @@ import ZaaltZasvar from "components/pageComponents/geree/zagvar/ZaaltZasvar";
 import { aldaaBarigch } from "services/uilchilgee";
 import compareFields from "tools/function/compareFields";
 
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
-
 var defaultUtga = {
   dedKhesguud: [{ zaalt: "new" }],
   ner: undefined,

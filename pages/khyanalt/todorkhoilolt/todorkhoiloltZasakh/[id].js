@@ -14,9 +14,8 @@ import updateMethod from "tools/function/crud/updateMethod";
 import { aldaaBarigch } from "services/uilchilgee";
 import dynamic from "next/dynamic";
 import { t } from "i18next";
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
+import TipTapEditor from "components/TipTapEditor";
+import { createButtonWithItems } from "components/TipTapEditorHelper";
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -70,16 +69,14 @@ function Zasakh({ token }) {
     return getSize(mailiinZagvar?.khuudasniiKhemjee, mailiinZagvar?.chiglel);
   }, [mailiinZagvar.khuudasniiKhemjee, mailiinZagvar.chiglel]);
 
-  const custom = React.useMemo(() => {
+  const customButtons = React.useMemo(() => {
     if (typeof window === "undefined") return [];
-    const undsen = customPlugin({
-      songokhTalbaruud: undsenTalbaruud,
-      name: "undsen",
-      title: "Үндсэн мэдээлэл",
-      button: renderToString(<SolutionOutlined />),
-    });
-
-    return [undsen];
+    return [
+      createButtonWithItems(
+        { name: "undsen", title: "Үндсэн мэдээлэл", innerHTML: renderToString(<SolutionOutlined />) },
+        undsenTalbaruud
+      ),
+    ];
   }, []);
 
   function khadgalya() {
@@ -129,20 +126,12 @@ function Zasakh({ token }) {
           style={{ height: "calc(100vh - 7rem)" }}
           className="col-span-9 overflow-auto p-10"
         >
-          <SunEditor
+          <TipTapEditor
             onChange={(e) => handleChange(e)}
             value={mailiinZagvar?.mail}
             setContents={mailiinZagvar?.mail}
-            setOptions={{
-              plugins: custom,
-              buttonList: [
-                ["undsen"],
-                ["list", "align", "codeView"],
-                ["font", "fontSize", "fontColor"],
-              ],
-            }}
-            width={width}
             height={height}
+            customButtons={[customButtons]}
           />
         </div>
         <div className="col-span-3 rounded-xl bg-white p-10 dark:bg-gray-900">

@@ -708,7 +708,7 @@ const YurunkhiiMedeele = ({
       ) : null}
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
-          className="flex w-full flex-col justify-between gap-4 md:flex-row"
+          className="flex w-full flex-col justify-between gap-4 md:flex-row mt-4"
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="700"

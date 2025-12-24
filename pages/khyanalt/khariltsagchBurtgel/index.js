@@ -1162,6 +1162,7 @@ function AjiltanBurtgel({ token }) {
           >
             <Form.Item>
               <Button
+                className="mt-2"
                 id="khariltsagchBurtgekhButton"
                 onClick={() => {
                   formRef.current.submit();

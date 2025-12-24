@@ -122,7 +122,7 @@ function EmailTokhirgoo({
                 >
                   <Input />
                 </Form.Item>
-                <div className="flex w-full justify-end">
+                <div className="flex w-full justify-end mt-2">
                   <Button type="primary" htmlType="submit">
                     {t("Хадгалах")}
                   </Button>

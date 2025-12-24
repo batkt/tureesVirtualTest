@@ -12,9 +12,8 @@ import { Input, Modal, Select } from "antd";
 import dynamic from "next/dynamic";
 import { t } from "i18next";
 
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
+import TipTapEditor from "components/TipTapEditor";
+import { createButtonWithItems } from "components/TipTapEditorHelper";
 
 export const formatting = [
   ["undo", "redo"],
@@ -94,28 +93,20 @@ const customPlugin = ({
 
 function Zasvar({ value, change, data, read, height }, ref) {
   const editorRef = React.useRef();
-  const [plugins, setPlugins] = useState({});
   const [utga, setUtga] = useState(data?.mail || "");
-  const [editorReady, setEditorReady] = useState(false);
-
-  React.useEffect(() => {
-    import("suneditor/src/plugins").then((mod) => {
-      setPlugins(mod.default || {});
-    });
-  }, []);
 
   React.useImperativeHandle(ref, () => ({
     editor: editorRef.current?.editor,
     getContent: () => {
-      if (editorRef.current?.editor && editorReady) {
+      if (editorRef.current?.editor) {
         return editorRef.current.editor.getContents();
       }
       return utga || "";
     },
     setContent: (val) => {
       setUtga(val);
-      if (editorRef.current?.editor && editorReady) {
-        editorRef.current.editor.setContents(val);
+      if (editorRef.current?.editor) {
+        editorRef.current.editor.setContent(val);
       }
     },
   }));
@@ -124,33 +115,24 @@ function Zasvar({ value, change, data, read, height }, ref) {
     if (data) {
       const newValue = data.mail || "";
       setUtga(newValue);
-      if (editorRef.current?.editor && editorReady) {
-        editorRef.current.editor.setContents(newValue);
-      }
     }
-  }, [data, editorReady]);
+  }, [data]);
 
-  const custom = React.useMemo(() => {
-    const undsen = customPlugin({
-      songokhTalbaruud: undsenTalbaruud,
-      name: "undsen",
-      title: "Үндсэн мэдээлэл",
-      button: renderToString(<SolutionOutlined />),
-    });
-
-    const talbai = customPlugin({
-      songokhTalbaruud: talbainiiTalbaruud,
-      name: "talbai",
-      title: t("Түрээсийн талбай"),
-      button: renderToString(<DollarCircleOutlined />),
-    });
-    const uldegdel = customPlugin({
-      songokhTalbaruud: uldegdelTalbaruud,
-      name: "uldegdel",
-      title: t("Түрээсийн үлдэгдэл"),
-      button: renderToString(<BankOutlined />),
-    });
-    return [undsen, talbai, uldegdel];
+  const customButtons = React.useMemo(() => {
+    return [
+      createButtonWithItems(
+        { name: "undsen", title: "Үндсэн мэдээлэл", innerHTML: renderToString(<SolutionOutlined />) },
+        undsenTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "talbai", title: t("Түрээсийн талбай"), innerHTML: renderToString(<DollarCircleOutlined />) },
+        talbainiiTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "uldegdel", title: t("Түрээсийн үлдэгдэл"), innerHTML: renderToString(<BankOutlined />) },
+        uldegdelTalbaruud
+      ),
+    ];
   }, []);
 
   const handleStringChange = React.useCallback(
@@ -161,35 +143,15 @@ function Zasvar({ value, change, data, read, height }, ref) {
     [change]
   );
 
-  const handleEditorLoad = React.useCallback(() => {
-    setEditorReady(true);
-    if (editorRef.current?.editor && utga) {
-      setTimeout(() => {
-        editorRef.current.editor.setContents(utga);
-      }, 100);
-    }
-  }, [utga]);
-
   return (
-    <SunEditor
+    <TipTapEditor
       onChange={handleStringChange}
+      value={utga}
       defaultValue={utga}
       setContents={utga}
-      onLoad={handleEditorLoad}
-      height={height}
-      setOptions={{
-        plugins: { ...plugins, ...custom },
-        buttonList: [
-          ...formatting,
-          ["align"],
-          ["undsen", "talbai", "uldegdel", "fontSize", "font"],
-        ],
-        readonly: read,
-        showToolbar: !read,
-        resizingBar: false,
-      }}
-      disable={read}
-      showToolbar={true}
+      height={height || 400}
+      readonly={read}
+      customButtons={[customButtons]}
       ref={editorRef}
     />
   );

@@ -493,7 +493,7 @@ function AjiltanBurtgel({ token }) {
                 prefix={<SecurityScanOutlined style={iconColor} />}
               />
             </Form.Item>
-            <Form.Item className="flex justify-end">
+            <Form.Item className="flex justify-end mt-2">
               <Button
                 id="khadgalyaButton"
                 onClick={() => formRef.current.submit()}

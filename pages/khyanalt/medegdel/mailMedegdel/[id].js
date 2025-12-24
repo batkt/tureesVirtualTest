@@ -8,17 +8,20 @@ import { useAuth } from "services/auth";
 import readMethod from "tools/function/crud/readMethod";
 import { customPlugin } from "components/pageComponents/geree/zagvar/ZaaltOruulakh";
 import { renderToString } from "react-dom/server";
-import { SolutionOutlined } from "@ant-design/icons";
+import {
+  SolutionOutlined,
+  ClockCircleOutlined,
+  BankOutlined,
+  LockOutlined,
+  DollarCircleOutlined,
+} from "@ant-design/icons";
 import createMethod from "tools/function/crud/createMethod";
-import plugins from "suneditor/src/plugins";
 import updateMethod from "tools/function/crud/updateMethod";
 import { aldaaBarigch } from "services/uilchilgee";
 import dynamic from "next/dynamic";
 import { t } from "i18next";
-
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
+import TipTapEditor from "components/TipTapEditor";
+import { createButtonWithItems } from "components/TipTapEditorHelper";
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -125,45 +128,31 @@ function ZakhialgaNemekh({ token }) {
     return getSize(mailiinZagvar?.khuudasniiKhemjee, mailiinZagvar?.chiglel);
   }, [mailiinZagvar.khuudasniiKhemjee, mailiinZagvar.chiglel]);
 
-  const custom = React.useMemo(() => {
+  const customButtons = React.useMemo(() => {
     if (typeof window === "undefined") return [];
 
-    const undsen = customPlugin({
-      songokhTalbaruud: undsenTalbaruud,
-      name: "undsen",
-      title: "Үндсэн мэдээлэл",
-      button: renderToString(<SolutionOutlined />),
-    });
-
-    const khugatsaa = customPlugin({
-      songokhTalbaruud: khugatsaaniiTalbaruud,
-      name: "khugatsaa",
-      title: "Хугацаа",
-      button: renderToString(<SolutionOutlined />),
-    });
-
-    const talbai = customPlugin({
-      songokhTalbaruud: talbainiiTalbaruud,
-      name: "talbai",
-      title: "Түрээсийн талбай",
-      button: renderToString(<SolutionOutlined />),
-    });
-
-    const baritsaa = customPlugin({
-      songokhTalbaruud: baritsaaniiTalbaruud,
-      name: "baritsaa",
-      title: "Барьцаа",
-      button: renderToString(<SolutionOutlined />),
-    });
-
-    const tulbur = customPlugin({
-      songokhTalbaruud: tulburiinTalbaruud,
-      name: "tulbur",
-      title: "Төлбөр",
-      button: renderToString(<SolutionOutlined />),
-    });
-
-    return [undsen, khugatsaa, talbai, baritsaa, tulbur];
+    return [
+      createButtonWithItems(
+        { name: "undsen", title: "Үндсэн мэдээлэл", innerHTML: renderToString(<SolutionOutlined />) },
+        undsenTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "khugatsaa", title: "Хугацаа", innerHTML: renderToString(<ClockCircleOutlined />) },
+        khugatsaaniiTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "talbai", title: "Түрээсийн талбай", innerHTML: renderToString(<BankOutlined />) },
+        talbainiiTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "baritsaa", title: "Барьцаа", innerHTML: renderToString(<LockOutlined />) },
+        baritsaaniiTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "tulbur", title: "Төлбөр", innerHTML: renderToString(<DollarCircleOutlined />) },
+        tulburiinTalbaruud
+      ),
+    ];
   }, []);
 
   function khadgalya() {
@@ -213,23 +202,12 @@ function ZakhialgaNemekh({ token }) {
           style={{ height: "calc(100vh - 7rem)" }}
           className="col-span-9 overflow-auto p-10"
         >
-          <SunEditor
+          <TipTapEditor
             onChange={(e) => handleChange(e)}
             value={mailiinZagvar?.mail}
             setContents={mailiinZagvar?.mail}
-            setOptions={{
-              plugins: {
-                ...plugins,
-                ...custom,
-              },
-              buttonList: [
-                ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
-                ["list", "align", "codeView"],
-                ["font", "fontSize", "fontColor"],
-              ],
-            }}
-            width={width}
             height={height}
+            customButtons={[customButtons]}
           />
         </div>
         <div className="col-span-3 rounded-xl bg-white p-10 dark:bg-gray-900">

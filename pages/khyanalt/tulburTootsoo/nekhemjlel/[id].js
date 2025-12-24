@@ -26,9 +26,7 @@ import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 import ZagvarExceleesOruulakh from "components/pageComponents/geree/zagvar/ZagvarExceleesOruulakh";
 import { modal } from "components/ant/Modal";
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
+import NekhemjlekhZasvar from "components/pageComponents/nekhemjlel/ZagvarUusgekh";
 
 export const complex = [
   ["undo", "redo"],
@@ -164,10 +162,6 @@ function ZakhialgaNemekh({ token }) {
   });
   const [kharuulakhExcel, setKharuulakhExcel] = React.useState(null);
   const excelRef = useRef(null);
-  const plugins = React.useMemo(
-    () => require("suneditor/src/plugins")?.default || {},
-    []
-  );
   const { barilgiinId } = useAuth();
   const [waiting, setWaiting] = useState(false);
   const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", {
@@ -424,28 +418,11 @@ function ZakhialgaNemekh({ token }) {
           className="col-span-12 overflow-auto p-10 lg:col-span-9"
         >
           {!ashiglaltiinZardal?.isValidating && !kharuulakhExcel && (
-            <SunEditor
+            <NekhemjlekhZasvar
               onChange={(e) => handleChange(e)}
               value={nekhemjlelZagvar?.nekhemjlekh}
               setContents={nekhemjlelZagvar?.nekhemjlekh}
-              setOptions={{
-                plugins: { ...plugins, ...custom },
-                buttonList: [
-                  [
-                    "undsen",
-                    "khugatsaa",
-                    "talbai",
-                    "baritsaa",
-                    "tulbur",
-                    "nekhemjlel",
-                    "nekhemjlekhiinNemelt",
-                    "zardaluud",
-                  ],
-                  ...complex,
-                  
-                ],
-              }}
-              width={width}
+              ashiglaltiinZardal={ashiglaltiinZardal}
               height={height}
             />
           )}

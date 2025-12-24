@@ -21,6 +21,7 @@ import {
 } from "chart.js";
 import "antd/dist/antd.css";
 import "../styles/globals.css";
+import "../styles/TipTapEditor.css";
 import "../services/i18n";
 import { Toaster } from "sonner";
 

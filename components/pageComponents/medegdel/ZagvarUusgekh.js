@@ -14,6 +14,8 @@ import { formatting } from "../geree/zagvar/ZaaltZasvar";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useAuth } from "services/auth";
 import { useTranslation } from "react-i18next";
+import TipTapEditor from "components/TipTapEditor";
+import { createButtonWithItems } from "components/TipTapEditorHelper";
 
 var instance = null;
 
@@ -157,9 +159,7 @@ function ZaaltZasvar({
     []
   );
 
-  const SunEditor = React.useMemo(() => require("suneditor-react").default, []);
-
-  const custom = React.useMemo(() => {
+  const customButtons = React.useMemo(() => {
     const undsen = customPlugin({
       songokhTalbaruud: undsenTalbaruud,
       name: "undsen",
@@ -269,22 +269,43 @@ function ZaaltZasvar({
       talbar: `niitZardliinNuatiinDun`,
     });
 
-    const zardaluud = customPlugin({
-      songokhTalbaruud,
+    const zardaluud = {
       name: "zardaluud",
       title: "Ашиглалтын зардал авлага",
-      button: renderToString(<DollarCircleOutlined />),
-    });
+      innerHTML: renderToString(<DollarCircleOutlined />),
+      items: songokhTalbaruud,
+    };
 
     return [
-      undsen,
-      khugatsaa,
-      talbai,
-      baritsaa,
-      tulbur,
-      nekhemjlel,
-      nekhemjlelNemelt,
-      zardaluud,
+      createButtonWithItems(
+        { name: "undsen", title: "Үндсэн мэдээлэл", innerHTML: renderToString(<SolutionOutlined />) },
+        undsenTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "khugatsaa", title: "Хугацаа", innerHTML: renderToString(<ClockCircleOutlined />) },
+        khugatsaaniiTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "talbai", title: "Түрээсийн талбай", innerHTML: renderToString(<BankOutlined />) },
+        talbainiiTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "baritsaa", title: "Барьцаа", innerHTML: renderToString(<LockOutlined />) },
+        baritsaaniiTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "tulbur", title: t("Төлбөр"), innerHTML: renderToString(<DollarCircleOutlined />) },
+        tulburiinTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "nekhemjlel", title: t("Нэхэмжлэл"), innerHTML: renderToString(<DollarCircleOutlined />) },
+        nekhemjlekhiinTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "nekhemjlekhiinNemelt", title: t("Нэхэмжлэхийн бусад авлага"), innerHTML: renderToString(<DollarCircleOutlined />) },
+        nekhemjlekhiinNemelt
+      ),
+      createButtonWithItems(zardaluud, songokhTalbaruud),
     ];
   }, [
     undsenTalbaruud,
@@ -299,33 +320,13 @@ function ZaaltZasvar({
   ]);
 
   return (
-    <SunEditor
+    <TipTapEditor
       onChange={change}
+      value={value}
       defaultValue={value}
-      getSunEditorInstance={(e) => {
-        instance = e;
-      }}
       setContents={value}
-      setOptions={{
-        plugins: custom,
-        buttonList: [
-          ...formatting,
-          [
-            "undsen",
-            "khugatsaa",
-            "talbai",
-            "baritsaa",
-            "tulbur",
-            "nekhemjlel",
-            "nekhemjlekhiinNemelt",
-            "zardaluud",
-          ],
-          ...buttonListCustom,
-        ],
-        resizingBar: true,
-        height: height,
-      }}
-      showToolbar={true}
+      height={height}
+      customButtons={[customButtons]}
       {...otherProps}
     />
   );

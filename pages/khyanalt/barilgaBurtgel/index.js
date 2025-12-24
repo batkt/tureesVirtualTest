@@ -645,7 +645,7 @@ function BarilgaBurtgel({ token }) {
             </div>
           </div>
 
-          {/* Salbar Comparison Selector */}
+         
           {compareMode && (
             <div className="flex-shrink-0 rounded-xl border border-blue-200/50 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 shadow-sm backdrop-blur-sm dark:border-blue-900/50 dark:from-blue-950/30 dark:to-indigo-950/30 dark:shadow-xl">
               <div className="mb-2 flex items-center gap-2">
@@ -701,7 +701,7 @@ function BarilgaBurtgel({ token }) {
             </div>
           )}
 
-          {/* Charts Grid */}
+        
           <div
             className="grid min-h-0 flex-1 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12"
             style={{ height: "100%" }}
@@ -747,7 +747,7 @@ function BarilgaBurtgel({ token }) {
               </Card>
             </div>
 
-            {/* Pie Chart - Avlaga */}
+      
             <div className="flex min-h-0 flex-col sm:col-span-1 lg:col-span-3">
               <Card
                 className="rounded-2xl border-0 bg-white shadow-lg backdrop-blur-sm dark:border dark:border-gray-700/50 dark:bg-gradient-to-br dark:from-gray-800/95 dark:to-gray-900/95 dark:shadow-xl"
@@ -806,7 +806,7 @@ function BarilgaBurtgel({ token }) {
               </Card>
             </div>
 
-            {/* Doughnut Chart - Orlogo */}
+       
             <div className="flex min-h-0 flex-col sm:col-span-1 lg:col-span-3">
               <Card
                 className="rounded-2xl border-0 bg-white shadow-lg backdrop-blur-sm dark:border dark:border-gray-700/50 dark:bg-gradient-to-br dark:from-gray-800/95 dark:to-gray-900/95 dark:shadow-xl"
@@ -867,7 +867,7 @@ function BarilgaBurtgel({ token }) {
         </div>
       </div>
 
-      {/* Sidebar */}
+   
       <div
         className="col-span-12 space-y-2 p-2 md:p-5 xl:col-span-3"
         data-aos="fade-left"

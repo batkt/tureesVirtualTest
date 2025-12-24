@@ -12,6 +12,8 @@ import {
 } from "@ant-design/icons";
 
 import { formatting } from "../geree/zagvar/ZaaltZasvar";
+import TipTapEditor from "components/TipTapEditor";
+import { createButtonWithItems } from "components/TipTapEditorHelper";
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -103,12 +105,7 @@ function NekhemjlekhZasvar({
 }) {
   useEffect(() => {}, [value]);
 
-  const SunEditor = React.useMemo(
-    () => typeof window !== "undefined" && require("suneditor-react").default,
-    []
-  );
-
-  const custom = React.useMemo(() => {
+  const customButtons = React.useMemo(() => {
     const undsen = customPlugin({
       songokhTalbaruud: undsenTalbaruud,
       name: "undsen",
@@ -209,51 +206,56 @@ function NekhemjlekhZasvar({
       talbar: `niitZardliinNuatiinDun`,
     });
 
-    const zardaluud = customPlugin({
-      songokhTalbaruud,
+    const zardaluud = {
       name: "zardaluud",
       title: "Ашиглалтын зардал авлага",
-      button: renderToString(<DollarCircleOutlined />),
-    });
+      innerHTML: renderToString(<DollarCircleOutlined />),
+      items: songokhTalbaruud,
+    };
+
     return [
-      undsen,
-      khugatsaa,
-      baritsaa,
-      talbai,
-      tulbur,
-      nekhemjlel,
-      nekhemjlelNemelt,
-      zardaluud,
+      createButtonWithItems(
+        { name: "undsen", title: "Үндсэн мэдээлэл", innerHTML: renderToString(<SolutionOutlined />) },
+        undsenTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "khugatsaa", title: "Хугацаа", innerHTML: renderToString(<ClockCircleOutlined />) },
+        khugatsaaniiTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "talbai", title: "Түрээсийн талбай", innerHTML: renderToString(<BankOutlined />) },
+        talbainiiTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "baritsaa", title: "Барьцаа", innerHTML: renderToString(<LockOutlined />) },
+        baritsaaniiTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "tulbur", title: "Төлбөр", innerHTML: renderToString(<DollarCircleOutlined />) },
+        tulburiinTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "nekhemjlel", title: "Нэхэмжлэл", innerHTML: renderToString(<SnippetsOutlined />) },
+        nekhemjlekhiinTalbaruud
+      ),
+      createButtonWithItems(
+        { name: "nekhemjlekhiinNemelt", title: "Нэхэмжлэхийн бусад авлага", innerHTML: renderToString(<DollarCircleOutlined />) },
+        nekhemjlekhiinNemelt
+      ),
+      createButtonWithItems(zardaluud, songokhTalbaruud),
     ];
-  }, []);
-  if (SunEditor)
-    return (
-      <SunEditor
-        onChange={change}
-        defaultValue={value}
-        setContents={value}
-        setOptions={{
-          plugins: custom,
-          buttonList: [
-            ...formatting,
-            [
-              "undsen",
-              "khugatsaa",
-              "talbai",
-              "baritsaa",
-              "tulbur",
-              "nekhemjlel",
-              "nekhemjlekhiinNemelt",
-              "zardaluud",
-            ],
-            ...buttonListCustom,
-          ],
-        }}
-        showToolbar={true}
-        {...otherProps}
-      />
-    );
-  return <div />;
+  }, [ashiglaltiinZardal]);
+
+  return (
+    <TipTapEditor
+      onChange={change}
+      value={value}
+      defaultValue={value}
+      setContents={value}
+      customButtons={[customButtons]}
+      {...otherProps}
+    />
+  );
 }
 
 export default NekhemjlekhZasvar;
