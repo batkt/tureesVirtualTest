@@ -14,7 +14,7 @@ import { t } from "i18next";
 import React, { useEffect } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
-
+import { toast } from "sonner";
 const qpayTulburiinKhelberuud = [
   {
     ner: "qpay",

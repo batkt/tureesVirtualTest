@@ -18,7 +18,7 @@ import React, {
 } from "react";
 import moment from "moment";
 import _ from "lodash";
-
+import { toast } from "sonner";
 import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Aos from "aos";

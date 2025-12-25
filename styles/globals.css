@@ -1378,14 +1378,23 @@ tbody.overflownone {
 }
 
 .ant-dropdown-menu {
-  @apply text-gray-900 shadow-lg dark:bg-gray-700 dark:text-gray-200 !important;
+  @apply shadow-lg !important;
   border-radius: 0.5rem !important;
   border: 1px solid #e5e7eb !important;
   padding: 0.5rem !important;
+}
+
+/* Default text color only when no bg class */
+.ant-dropdown-menu:not([class*="bg-"]) {
+  @apply text-gray-900 dark:text-gray-200 !important;
+}
+
+/* Default background only when no Tailwind bg class */
+.ant-dropdown-menu:not([class*="bg-"]) {
   background-color: #ffffff !important;
 }
 
-.dark .ant-dropdown-menu {
+.dark .ant-dropdown-menu:not([class*="bg-"]) {
   background-color: #374151 !important;
   border-color: #4b5563 !important;
 }
@@ -1395,28 +1404,73 @@ tbody.overflownone {
 }
 
 .ant-dropdown-menu-item {
-  @apply text-gray-900 dark:text-gray-100 !important;
   border-radius: 0.375rem !important;
   transition: background-color 0.2s ease !important;
   margin: 0.125rem 0 !important;
 }
 
+/* Active state background */
 .ant-dropdown-menu-item-active {
   @apply hover:bg-gray-100 dark:hover:bg-gray-700 !important;
+}
+
+/* Default text color when active and no Tailwind class */
+.ant-dropdown-menu-item-active:not(:has([class*="text-"])) {
   color: #111827 !important;
 }
 
-.dark .ant-dropdown-menu-item-active {
+.dark .ant-dropdown-menu-item-active:not(:has([class*="text-"])) {
   color: #e5e7eb !important;
 }
 
+/* When active and has Tailwind text-white class, use white color */
+.ant-dropdown-menu-item-active:has([class*="text-white"]) {
+  color: #ffffff !important;
+}
+
+.ant-dropdown-menu-item-active:has([class*="text-white"]) * {
+  color: #ffffff !important;
+}
+
+/* When active and has Tailwind text class, inherit color */
+.ant-dropdown-menu-item-active:has([class*="text-"]) {
+  color: inherit !important;
+}
+
+.ant-dropdown-menu-item-active:has([class*="text-"]) * {
+  color: inherit !important;
+}
+
+/* Hover background always applies */
 .ant-dropdown-menu-item:hover {
   @apply bg-gray-100 dark:bg-gray-700 !important;
+}
+
+/* Default text color on hover only when no Tailwind class */
+.ant-dropdown-menu-item:hover:not(:has([class*="text-"])) {
   color: #111827 !important;
 }
 
-.dark .ant-dropdown-menu-item:hover {
+.dark .ant-dropdown-menu-item:hover:not(:has([class*="text-"])) {
   color: #e5e7eb !important;
+}
+
+/* When has Tailwind text-white class, use white color on hover */
+.ant-dropdown-menu-item:hover:has([class*="text-white"]) {
+  color: #ffffff !important;
+}
+
+.ant-dropdown-menu-item:hover:has([class*="text-white"]) * {
+  color: #ffffff !important;
+}
+
+/* When has Tailwind text class, inherit color on hover */
+.ant-dropdown-menu-item:hover:has([class*="text-"]) {
+  color: inherit !important;
+}
+
+.ant-dropdown-menu-item:hover:has([class*="text-"]) * {
+  color: inherit !important;
 }
 
 .ant-pagination-item > a {
@@ -1670,6 +1724,14 @@ input:-webkit-autofill {
   border-radius: 0.375rem !important;
   border: 1px solid #d1d5db !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  height: 32px !important;
+  line-height: 30px !important;
+}
+
+/* RangePicker should have minimum width to display placeholder text */
+.ant-picker-range {
+  min-width: 320px !important;
+  height: 32px !important;
 }
 
 .ant-picker:hover {
@@ -1696,9 +1758,7 @@ input:-webkit-autofill {
   box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1) !important;
 }
 
-.ant-picker-input > input {
-  @apply dark:text-gray-50 !important;
-}
+/* Picker input text color is handled by the more specific rules below */
 
 .ant-picker-header-view {
   @apply dark:text-gray-50 !important;
@@ -2076,6 +2136,29 @@ input:-webkit-autofill {
 
 .profile > .ant-dropdown-menu {
   @apply rounded-md p-2 transition duration-300 ease-in-out !important;
+}
+.ant-dropdown-menu.bg-green-500 {
+  background-color: rgb(34, 197, 94) !important;
+}
+
+.ant-dropdown-menu.bg-green-600 {
+  background-color: rgb(5, 150, 105) !important;
+}
+
+.ant-dropdown-menu.bg-blue-500 {
+  background-color: rgb(59, 130, 246) !important;
+}
+
+.ant-dropdown-menu.bg-red-500 {
+  background-color: rgb(239, 68, 68) !important;
+}
+
+.ant-dropdown-menu.bg-yellow-500 {
+  background-color: rgb(234, 179, 8) !important;
+}
+
+.ant-dropdown-menu.bg-gray-500 {
+  background-color: rgb(107, 114, 128) !important;
 }
 
 .profileMenuItem {
@@ -2829,9 +2912,39 @@ html {
 }
 
 /* Ant Design components - Text colors for both modes */
-/* Light mode - black text (only when no Tailwind class) */
-.ant-dropdown-menu:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-dropdown-menu-item:not([class*="text-"]):not([class*="dark:text-"]) {
+/* Light mode - black text (only when no Tailwind class and no bg class) */
+.ant-dropdown-menu:not([class*="text-"]):not([class*="dark:text-"]):not(
+    [class*="bg-"]
+  ) {
+  color: #111827 !important;
+}
+
+/* Allow menu items and their children to respect Tailwind text classes */
+.ant-dropdown-menu-item:has([class*="text-white"]),
+.ant-dropdown-menu-item:has([class*="text-white"]) * {
+  color: #ffffff !important;
+}
+
+/* When menu has bg class and menu item has text-white child, force white */
+.ant-dropdown-menu[class*="bg-"]
+  .ant-dropdown-menu-item:has([class*="text-white"]),
+.ant-dropdown-menu[class*="bg-"]
+  .ant-dropdown-menu-item:has([class*="text-white"])
+  * {
+  color: #ffffff !important;
+}
+
+.ant-dropdown-menu-item:has([class*="text-"]) {
+  color: inherit !important;
+}
+
+.ant-dropdown-menu-item:has([class*="text-"]) * {
+  color: inherit !important;
+}
+
+.ant-dropdown-menu-item:not([class*="text-"]):not([class*="dark:text-"]):not(
+    :has([class*="text-"])
+  ) {
   color: #111827 !important;
 }
 
@@ -2971,9 +3084,44 @@ html {
   color: #111827 !important;
 }
 
-/* Dark mode - white/light text (only when no Tailwind class) */
-.dark .ant-dropdown-menu:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-dropdown-menu-item:not([class*="text-"]):not([class*="dark:text-"]) {
+/* Dark mode - white/light text (only when no Tailwind class and no bg class) */
+.dark
+  .ant-dropdown-menu:not([class*="text-"]):not([class*="dark:text-"]):not(
+    [class*="bg-"]
+  ) {
+  color: #e5e7eb !important;
+}
+
+/* Allow menu items and their children to respect Tailwind text classes */
+/* When menu item has text-white child, force white text (dark mode) */
+.dark .ant-dropdown-menu-item:has([class*="text-white"]),
+.dark .ant-dropdown-menu-item:has([class*="text-white"]) * {
+  color: #ffffff !important;
+}
+
+/* When menu has bg class and menu item has text-white child, force white (dark mode) */
+.dark
+  .ant-dropdown-menu[class*="bg-"]
+  .ant-dropdown-menu-item:has([class*="text-white"]),
+.dark
+  .ant-dropdown-menu[class*="bg-"]
+  .ant-dropdown-menu-item:has([class*="text-white"])
+  * {
+  color: #ffffff !important;
+}
+
+.dark .ant-dropdown-menu-item:has([class*="text-"]) {
+  color: inherit !important;
+}
+
+.dark .ant-dropdown-menu-item:has([class*="text-"]) * {
+  color: inherit !important;
+}
+
+.dark
+  .ant-dropdown-menu-item:not([class*="text-"]):not([class*="dark:text-"]):not(
+    :has([class*="text-"])
+  ) {
   color: #e5e7eb !important;
 }
 

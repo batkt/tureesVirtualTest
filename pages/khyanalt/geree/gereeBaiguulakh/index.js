@@ -12,6 +12,7 @@ import TulburTootsoo from "components/pageComponents/gereebaiguulakh/TulburToots
 import moment from "moment";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import _ from "lodash";
+import { toast } from "sonner";
 import Aos from "aos";
 import { useEffect } from "react";
 import { aldaaBarigch } from "services/uilchilgee";

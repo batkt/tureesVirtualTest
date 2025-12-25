@@ -34,7 +34,7 @@ import useDansKhuulga from "hooks/khuulga/useDansKhuulga";
 import useBankniiGuilgeeToololt from "hooks/khuulga/useBankniiGuilgeeToololt";
 import GuilgeeKholbokh from "components/pageComponents/tulbur/GuilgeeNiiluulekh";
 import ZardalKholbokh from "components/pageComponents/tulbur/ZardalKholbokh";
-
+import { toast } from "sonner";
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
 import Tulbur from "components/pageComponents/eBarimt/Tulbur";

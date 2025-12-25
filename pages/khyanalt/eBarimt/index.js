@@ -12,7 +12,7 @@ import {
   Select,
   Table as AntdTable,
 } from "antd";
-
+import { toast } from "sonner";
 import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";

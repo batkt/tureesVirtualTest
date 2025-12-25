@@ -47,7 +47,7 @@ import TogloomTile from "components/pageComponents/togloom/TogloomTile";
 import uilchilgee from "services/uilchilgee";
 import { useRouter } from "next/router";
 import Tseneglekh from "components/pageComponents/zogsool/Tseneglekh";
-
+import { toast } from "sonner";
 function mashinBurtgel({ token }) {
   const { t } = useTranslation();
   const router = useRouter();

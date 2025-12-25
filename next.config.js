@@ -84,6 +84,14 @@ const nextConfig = {
       "suneditor/src/lang": false,
     };
 
+    // Provide a stub for react-plotly.js on the server (browser-only library)
+    if (isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        "react-plotly.js": require.resolve('./lib/react-plotly-stub.js'),
+      };
+    }
+
     return config;
   },
 

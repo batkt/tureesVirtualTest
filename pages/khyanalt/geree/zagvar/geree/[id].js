@@ -14,6 +14,7 @@ import {
   FileExcelOutlined,
   FileOutlined,
 } from "@ant-design/icons";
+
 import { modal } from "components/ant/Modal";
 import ZaaltZasvar from "components/pageComponents/geree/zagvar/ZaaltZasvar";
 import _ from "lodash";

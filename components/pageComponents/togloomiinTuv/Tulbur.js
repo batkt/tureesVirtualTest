@@ -12,6 +12,7 @@ import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
 import { useEffect } from "react";
 import { t } from "i18next";
 import { useQRCode } from "next-qrcode";
+import { toast } from "sonner";
 
 const { confirm } = Modal;
 function Tulbur(

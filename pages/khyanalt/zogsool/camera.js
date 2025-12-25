@@ -21,6 +21,7 @@ import {
   notification,
   InputNumber,
 } from "antd";
+import { toast } from "sonner";
 import {
   StarOutlined,
   CameraOutlined,

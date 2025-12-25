@@ -18,7 +18,7 @@ import {
   SendOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-
+import { toast } from "sonner";
 import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh";
 
 import useSanalGomdol from "hooks/medegdel/useSanalGomdol";

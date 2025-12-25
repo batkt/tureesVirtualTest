@@ -4,6 +4,7 @@ import Admin from "components/Admin";
 import { useRouter } from "next/router";
 import { Button, Form, Input, message, Radio, Select } from "antd";
 import _ from "lodash";
+import { toast } from "sonner";
 import { useAuth } from "services/auth";
 import readMethod from "tools/function/crud/readMethod";
 import { customPlugin } from "components/pageComponents/geree/zagvar/ZaaltOruulakh";

@@ -21,12 +21,13 @@ import updateMethod from "tools/function/crud/updateMethod";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+import { toast } from "sonner";
 import {
   PlusOutlined,
   DeleteOutlined,
   MinusCircleOutlined,
 } from "@ant-design/icons";
-
+ 
 const order = { createdAt: -1 };
 
 function MashinBurtgel(

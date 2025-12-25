@@ -46,6 +46,7 @@ import uilchilgee from "services/uilchilgee";
 import { useRouter } from "next/router";
 import Tseneglekh from "components/pageComponents/zogsool/Tseneglekh";
 import ZochinBurtgel from "components/pageComponents/zogsool/ZochinBurtgel";
+import { toast } from "sonner";
 
 function orshinSuugch({ token }) {
   const { t } = useTranslation();

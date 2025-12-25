@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useMailiinZagvarWithoutAuth } from "hooks/useMailiinZagvar";
 import { t } from "i18next";
+import { toast } from "sonner";
 
 function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [turul, setTurul] = useState("SMS");

@@ -3,6 +3,7 @@ import { message, Upload } from "antd";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import _ from "lodash";
 import { t } from "i18next";
+import { toast } from "sonner";
 
 function ZuvhunKhunglukhModalContent(
   {

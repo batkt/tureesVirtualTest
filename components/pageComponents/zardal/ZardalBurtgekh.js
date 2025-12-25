@@ -8,7 +8,7 @@ import { Input, message, Modal } from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import _ from "lodash";
-
+import { toast } from "sonner";
 function ZardalMur({
   zardal,
   token,

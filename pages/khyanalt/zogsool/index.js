@@ -4,7 +4,7 @@ import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
 import { modal } from "../../../components/ant/Modal";
 import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
-
+import { toast } from "sonner";
 import {
   Button,
   Card,

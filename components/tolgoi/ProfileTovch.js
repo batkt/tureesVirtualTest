@@ -381,7 +381,7 @@ function ProfileTovch({
   const ProfileDropdown = useMemo(
     () => (
       <Suspense fallback={<LoadingSpinner />}>
-        <Menu className="bg-green-500">
+        <Menu className="bg-green-600">
           <Menu.Item className="profileMenuItem">
             <div className="text-lg font-medium text-white">{`${
               (ajiltan?.ovog && ajiltan?.ovog[0]) || ""
