@@ -5,6 +5,7 @@ import { url } from "services/uilchilgee";
 import updateMethod from "tools/function/crud/updateMethod";
 import getBase64 from "tools/function/getBase64";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 const { TextArea } = Input;
 
@@ -43,7 +44,7 @@ function KhuviinMedeelel({
     <div className="xxl:col-span-9 col-span-12 lg:col-span-6">
       <div className="box lg:mt-5">
         <div className="dark:border-dark-5 flex items-center border-b border-gray-200 p-5">
-          <h2 className="mr-auto text-base font-medium dark:text-gray-200">
+          <h2 className="mr-auto text-base font-medium text-gray-900 ">
             {t("Хувийн мэдээлэл")}
           </h2>
         </div>
@@ -53,7 +54,9 @@ function KhuviinMedeelel({
               <div className="grid grid-cols-12 gap-x-5">
                 <div className="col-span-12 xl:col-span-6">
                   <div className="mt-3">
-                    <label className="form-label">{t("Овог")}</label>
+                    <label className="form-label text-gray-900 ">
+                      {t("Овог")}
+                    </label>
                     <Input defaultValue={ajiltan.ovog} disabled />
                   </div>
                 </div>

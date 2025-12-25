@@ -17,6 +17,7 @@ import React, {
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
+import { toast } from "sonner";
 import _ from "lodash";
 import useGereeAldangiGuilgee from "hooks/useGereeniiAldangiJagsaalt";
 import { useTranslation } from "react-i18next";
@@ -219,7 +220,12 @@ function GuilgeeniiTuukhAldangi(
 
         refreshData();
       })
-      .catch(aldaaBarigch);
+      .catch((error) => {
+        aldaaBarigch(error);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   const toggleSortOrder = (column) => {
