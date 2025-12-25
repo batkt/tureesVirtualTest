@@ -558,6 +558,24 @@ audio::-webkit-media-controls-volume-control-container {
 .login {
   position: relative;
   --tw-bg-opacity: 1;
+  min-height: 100vh;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+  overflow-x: hidden;
+}
+
+/* Remove extra white space on mobile for login page */
+@media (max-width: 768px) {
+  .login {
+    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .login .container {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
 }
 
 .login:before {

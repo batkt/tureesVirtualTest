@@ -77,7 +77,7 @@ function Ajiltan() {
   }
 
   return (
-    <div className="login flex justify-center bg-green-600 dark:bg-gray-800 xl:bg-white ">
+    <div className="login flex min-h-screen justify-center bg-green-600 dark:bg-gray-800 xl:bg-white">
       <Head>
         <title>{t("Нэвтрэх хуудас")}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -103,7 +103,7 @@ function Ajiltan() {
           }}
         />
       ) : null}
-      <div className="container sm:px-10">
+      <div className="container mx-auto flex min-h-screen items-center justify-center sm:px-10">
         <div className="block grid-cols-2 gap-4 xl:grid">
           <div className="z-10 hidden min-h-screen flex-col xl:flex">
             <div
@@ -140,9 +140,6 @@ function Ajiltan() {
                       alt="Rently Logo"
                       className="h-8 w-auto object-contain"
                     />
-                    <span className="text-lg font-bold text-white">
-                      © Zev-TABS LLC ©
-                    </span>
                   </div>
                 </div>
 
