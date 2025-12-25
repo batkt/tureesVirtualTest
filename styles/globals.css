@@ -932,10 +932,15 @@ audio::-webkit-media-controls-volume-control-container {
 
 .ant-modal-body {
   @apply rounded-xl px-4 py-8 sm:px-6 md:px-8 !important;
+  @apply text-gray-900 dark:text-gray-200 !important;
   overflow: hidden !important;
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.ant-modal-body * {
+  @apply text-gray-900 dark:text-gray-200 !important;
 }
 
 /* Add this to your CSS file */
@@ -1017,6 +1022,38 @@ tbody.overflownone {
 
 .ant-modal-body {
   @apply dark:bg-gray-800 !important;
+  @apply text-gray-900 dark:text-gray-200 !important;
+  color: #111827 !important; /* Force black text in light mode */
+}
+
+.dark .ant-modal-body {
+  color: #e5e7eb !important; /* Force light text in dark mode */
+}
+
+.ant-modal-body p,
+.ant-modal-body div:not(.ant-radio-group):not(.ant-checkbox-group),
+.ant-modal-body span:not(.ant-radio-button-wrapper):not(.ant-checkbox-wrapper),
+.ant-modal-body label,
+.ant-modal-body h1,
+.ant-modal-body h2,
+.ant-modal-body h3,
+.ant-modal-body h4,
+.ant-modal-body h5,
+.ant-modal-body h6 {
+  color: #111827 !important; /* Force black text in light mode */
+}
+
+.dark .ant-modal-body p,
+.dark .ant-modal-body div:not(.ant-radio-group):not(.ant-checkbox-group),
+.dark .ant-modal-body span:not(.ant-radio-button-wrapper):not(.ant-checkbox-wrapper),
+.dark .ant-modal-body label,
+.dark .ant-modal-body h1,
+.dark .ant-modal-body h2,
+.dark .ant-modal-body h3,
+.dark .ant-modal-body h4,
+.dark .ant-modal-body h5,
+.dark .ant-modal-body h6 {
+  color: #e5e7eb !important; /* Force light text in dark mode */
 }
 
 .ant-modal-header {
@@ -2321,6 +2358,62 @@ input[type="number"] {
 .ant-pagination-jump-prev,
 .ant-pagination-jump-next {
   display: none !important;
+}
+
+/* Ant Design Picker Panel - Dark Mode White Text */
+.dark .ant-picker-panel-container {
+  color: #ffffff !important;
+}
+
+.dark .ant-picker-panel-container * {
+  color: #ffffff !important;
+}
+
+.dark .ant-picker-panel {
+  color: #ffffff !important;
+}
+
+.dark .ant-picker-panel * {
+  color: #ffffff !important;
+}
+
+.dark .ant-picker-time-panel {
+  color: #ffffff !important;
+}
+
+.dark .ant-picker-time-panel * {
+  color: #ffffff !important;
+}
+
+.dark .ant-picker-content {
+  color: #ffffff !important;
+}
+
+.dark .ant-picker-content * {
+  color: #ffffff !important;
+}
+
+.dark .ant-picker-time-panel-column {
+  color: #ffffff !important;
+}
+
+.dark .ant-picker-time-panel-column * {
+  color: #ffffff !important;
+}
+
+/* Override specific picker elements that need white text in dark mode */
+.dark .ant-picker-time-panel-column > ul > li {
+  color: #ffffff !important;
+}
+
+.dark .ant-picker-time-panel-column > ul > li:hover {
+  background-color: #374151 !important;
+  color: #ffffff !important;
+}
+
+.dark .ant-picker-time-panel-column > ul > li.ant-picker-time-panel-cell-selected {
+  background-color: #059669 !important;
+  color: #ffffff !important;
 }
 
 /* Sun Editor Editable - Force text color in dark mode */

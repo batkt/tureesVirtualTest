@@ -4706,11 +4706,11 @@ function camera({ token }) {
                     className="flex w-full flex-col gap-4"
                     onFinish={dugaarBurtgekh}
                   >
-                    <div className="flex w-full">
+                    <div className="flex w-full gap-2">
                       <Form.Item
                         label={t("Дугаар1")}
                         name="mashiniiDugaar"
-                        className="w-2/5"
+                        className="w-[180px] flex-shrink-0"
                         normalize={(input) => {
                           const too = input.replace(/[^0-9]/g, "").slice(0, 4);
                           const useg = Array.from(input)
@@ -4753,12 +4753,11 @@ function camera({ token }) {
                           maxLength={7}
                           ref={mashiniiDugaarRef}
                           placeholder="1234УБА"
-                          className="ml-[10px]"
                         />
                       </Form.Item>
                       <Form.Item
                         name="CAMERA_IP"
-                        className="w-full"
+                        className="flex-1"
                         rules={[
                           {
                             required: true,
@@ -4781,7 +4780,7 @@ function camera({ token }) {
                       </Form.Item>
                       <a
                         onClick={() => form.resetFields()}
-                        className="ml-2 flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white"
+                        className="flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white"
                       >
                         {t("Цэвэрлэх")}
                       </a>
