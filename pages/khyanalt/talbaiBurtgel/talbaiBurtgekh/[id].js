@@ -62,8 +62,8 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
     setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
   }
   return (
-    <>
-      <div className="mb-3 flex flex-row items-center gap-3">
+    <div className="flex w-full justify-end">
+      <div className="mb-3 flex w-[67%] flex-row items-end gap-3">
         <Form.Item
           label={t("Төрөл")}
           className="mb-0 flex-1"
@@ -113,7 +113,7 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
