@@ -21,6 +21,7 @@ import { modal } from "components/ant/Modal";
 import ZaaltZasvar from "components/pageComponents/geree/zagvar/ZaaltZasvar";
 import { aldaaBarigch } from "services/uilchilgee";
 import compareFields from "tools/function/compareFields";
+import { toast } from "sonner";
 
 var defaultUtga = {
   dedKhesguud: [{ zaalt: "new" }],
@@ -344,22 +345,24 @@ function ZakhialgaNemekh({ token }) {
                 </div>
               </div>
             </div>
-            <Button
-              className="w-full"
-              type="primary"
-              onClick={() => form.submit()}
-              loading={towchTuluv}
-            >
-              {t("Хадгалах")}
-            </Button>
-            <Button
-              className="flex-1 whitespace-nowrap"
-              type="primary"
-              onClick={() => nemekh()}
-            >
-              <FileAddOutlined />
-              Гэрээний заалт нэмэх
-            </Button>
+            <Form.Item>
+              <Button
+                className="w-full"
+                type="primary"
+                onClick={() => form.submit()}
+                loading={towchTuluv}
+              >
+                {t("Хадгалах")}
+              </Button>
+              <Button
+                className="mt-4 w-full"
+                type="primary"
+                onClick={() => nemekh()}
+              >
+                <FileAddOutlined />
+                Гэрээний заалт нэмэх
+              </Button>
+            </Form.Item>
           </div>
         </div>
       </div>

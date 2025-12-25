@@ -189,7 +189,7 @@ function ProfileTovch({
             zIndex: 1000,
           }}
         >
-          <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-400 to-green-500 p-3 text-white">
+          <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-800 to-green-500 p-3 text-white">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-md font-medium">
                 {t("Шинэчлэлтийн мэдээ")}

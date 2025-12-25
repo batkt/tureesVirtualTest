@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  /* next-themes uses `.dark` on the <html> element (attribute="class") */
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-white text-gray-900 dark:bg-black dark:text-gray-100;
+  }
+
+  /* Default to inheriting the current theme text color unless a component overrides it */
+  :where(p, span, div, li, td, th, h1, h2, h3, h4, h5, h6) {
+    color: inherit;
+  }
+}
+
 @layer utilities {
   .large-size {
     width: calc(100vw - 11rem);
@@ -147,7 +167,7 @@
   cursor: not-allowed;
 }
 
-.tiptap-content {
+.tiptap-content:not([class*="text-"]):not([class*="dark:text-"]) {
   padding: 1rem;
   min-height: 120px;
   max-height: 300px;
@@ -160,13 +180,13 @@
   z-index: 1 !important;
 }
 
-.dark .tiptap-content {
+.dark .tiptap-content:not([class*="text-"]):not([class*="dark:text-"]) {
   color: #e5e7eb !important;
   background: #1f2937 !important;
   opacity: 1 !important;
 }
 
-.tiptap-content .ProseMirror {
+.tiptap-content .ProseMirror:not([class*="text-"]):not([class*="dark:text-"]) {
   outline: none;
   min-height: 100px;
   background: white !important;
@@ -178,7 +198,9 @@
   letter-spacing: normal !important;
 }
 
-.dark .tiptap-content .ProseMirror {
+.dark
+  .tiptap-content
+  .ProseMirror:not([class*="text-"]):not([class*="dark:text-"]) {
   background: #1f2937 !important;
   color: #e5e7eb !important;
   opacity: 1 !important;
@@ -300,6 +322,45 @@ audio {
 
 label {
   @apply dark:text-black;
+}
+
+/* Ensure text-black class works in light mode for all elements including labels */
+body:not(.dark) .text-black,
+body:not(.dark) .text-black label,
+body:not(.dark) .text-black * {
+  color: #000000 !important;
+}
+
+/* Ensure text-black shows white in dark mode by default */
+.dark .text-black {
+  color: #ffffff !important;
+}
+
+/* Allow Tailwind dark mode classes to override */
+.dark .text-black[class*="dark:text-white"],
+.dark .text-black[class*="dark:!text-white"],
+.dark [class*="dark:text-white"],
+.dark [class*="dark:!text-white"] {
+  color: #ffffff !important;
+}
+
+/* Make labels inherit from parent when parent has dark mode classes */
+.dark .text-black[class*="dark:text-white"] label,
+.dark .text-black[class*="dark:!text-white"] label,
+.dark [class*="dark:text-white"] label,
+.dark [class*="dark:!text-white"] label {
+  color: inherit !important;
+}
+
+/* Allow labels to respect Tailwind text color classes from parent */
+[class*="text-"] label,
+.text-black label,
+.text-gray-900 label,
+.text-white label,
+.text-gray-600 label,
+.text-gray-700 label,
+.text-gray-800 label {
+  color: inherit !important;
 }
 
 /* Allow labels to inherit text color from parent with dark mode classes */
@@ -716,16 +777,16 @@ audio::-webkit-media-controls-volume-control-container {
 
 /* Modern Calendar Cell Styles */
 .ant-picker-cell {
-  @apply dark:text-gray-500 !important;
+  @apply text-gray-900 dark:text-gray-500 !important;
   transition: all 0.2s ease !important;
 }
 
 .ant-picker-cell-in-view {
-  @apply dark:text-gray-300 !important;
+  @apply text-gray-900 dark:text-gray-300 !important;
 }
 
 .ant-picker-content > thead > tr > th {
-  @apply dark:text-gray-300 !important;
+  @apply text-gray-900 dark:text-gray-300 !important;
   font-weight: 500 !important;
 }
 
@@ -786,7 +847,7 @@ audio::-webkit-media-controls-volume-control-container {
 }
 
 .ant-empty-description {
-  @apply dark:text-gray-300;
+  @apply text-gray-900 dark:text-gray-300 !important;
 }
 
 .report-box .report-box__indicator {
@@ -939,9 +1000,7 @@ audio::-webkit-media-controls-volume-control-container {
   flex-direction: column;
 }
 
-.ant-modal-body * {
-  @apply text-gray-900 dark:text-gray-200 !important;
-}
+/* Color removed from .ant-modal-body * to allow Tailwind classes to work */
 
 /* Add this to your CSS file */
 .guilgee-modal .ant-modal-body {
@@ -1020,40 +1079,53 @@ tbody.overflownone {
   border-radius: 0.5rem;
 }
 
-.ant-modal-body {
+.ant-modal-body:not([class*="text-"]):not([class*="dark:text-"]) {
   @apply dark:bg-gray-800 !important;
-  @apply text-gray-900 dark:text-gray-200 !important;
-  color: #111827 !important; /* Force black text in light mode */
+  color: #111827 !important; /* Default black text in light mode */
 }
 
-.dark .ant-modal-body {
-  color: #e5e7eb !important; /* Force light text in dark mode */
+.dark .ant-modal-body:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important; /* Default light text in dark mode */
 }
 
-.ant-modal-body p,
-.ant-modal-body div:not(.ant-radio-group):not(.ant-checkbox-group),
-.ant-modal-body span:not(.ant-radio-button-wrapper):not(.ant-checkbox-wrapper),
-.ant-modal-body label,
-.ant-modal-body h1,
-.ant-modal-body h2,
-.ant-modal-body h3,
-.ant-modal-body h4,
-.ant-modal-body h5,
-.ant-modal-body h6 {
-  color: #111827 !important; /* Force black text in light mode */
+.ant-modal-body p:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-modal-body
+  div:not(.ant-radio-group):not(.ant-checkbox-group):not([class*="text-"]):not(
+    [class*="dark:text-"]
+  ),
+.ant-modal-body
+  span:not(.ant-radio-button-wrapper):not(.ant-checkbox-wrapper):not(
+    [class*="text-"]
+  ):not([class*="dark:text-"]),
+.ant-modal-body label:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-modal-body h1:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-modal-body h2:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-modal-body h3:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-modal-body h4:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-modal-body h5:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-modal-body h6:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important; /* Default black text in light mode */
 }
 
-.dark .ant-modal-body p,
-.dark .ant-modal-body div:not(.ant-radio-group):not(.ant-checkbox-group),
-.dark .ant-modal-body span:not(.ant-radio-button-wrapper):not(.ant-checkbox-wrapper),
-.dark .ant-modal-body label,
-.dark .ant-modal-body h1,
-.dark .ant-modal-body h2,
-.dark .ant-modal-body h3,
-.dark .ant-modal-body h4,
-.dark .ant-modal-body h5,
-.dark .ant-modal-body h6 {
-  color: #e5e7eb !important; /* Force light text in dark mode */
+.dark .ant-modal-body p:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-modal-body
+  div:not(.ant-radio-group):not(.ant-checkbox-group):not([class*="text-"]):not(
+    [class*="dark:text-"]
+  ),
+.dark
+  .ant-modal-body
+  span:not(.ant-radio-button-wrapper):not(.ant-checkbox-wrapper):not(
+    [class*="text-"]
+  ):not([class*="dark:text-"]),
+.dark .ant-modal-body label:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-modal-body h1:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-modal-body h2:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-modal-body h3:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-modal-body h4:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-modal-body h5:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-modal-body h6:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important; /* Default light text in dark mode */
 }
 
 .ant-modal-header {
@@ -1201,8 +1273,38 @@ tbody.overflownone {
   overflow: hidden !important;
 }
 
+/* Camera table - allow all columns to be visible */
+.cameraTable {
+  min-width: 100% !important;
+}
+
+.cameraTable .ant-table-container {
+  overflow-x: visible !important;
+}
+
+.cameraTable .ant-table {
+  table-layout: auto !important;
+  width: auto !important;
+  min-width: 100% !important;
+}
+
+.cameraTable .ant-table-content {
+  overflow-x: visible !important;
+  width: auto !important;
+}
+
+.cameraTable .ant-table-body {
+  overflow-x: visible !important;
+}
+
+/* Ensure columns don't wrap unnecessarily */
+.cameraTable .ant-table-thead > tr > th,
+.cameraTable .ant-table-tbody > tr > td {
+  white-space: nowrap !important;
+}
+
 .ant-table-thead > tr > th {
-  @apply bg-gray-50 dark:bg-gray-900 dark:text-gray-300 !important;
+  @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-300 !important;
   border-bottom: 2px solid #e5e7eb !important;
   font-weight: 600 !important;
 }
@@ -1212,7 +1314,7 @@ tbody.overflownone {
 }
 
 .ant-table-row > tr > td {
-  @apply mt-1 rounded-md shadow-lg dark:bg-gray-700 dark:text-gray-300;
+  @apply mt-1 rounded-md text-gray-900 shadow-lg dark:bg-gray-700 dark:text-gray-300;
   transition: background-color 0.2s ease !important;
 }
 
@@ -1271,11 +1373,21 @@ tbody.overflownone {
 }
 
 /* Modern Dropdown Styles */
+.ant-dropdown {
+  @apply bg-white dark:bg-gray-700 !important;
+}
+
 .ant-dropdown-menu {
-  @apply shadow-lg dark:bg-gray-900 dark:text-gray-100 !important;
+  @apply text-gray-900 shadow-lg dark:bg-gray-700 dark:text-gray-200 !important;
   border-radius: 0.5rem !important;
   border: 1px solid #e5e7eb !important;
   padding: 0.5rem !important;
+  background-color: #ffffff !important;
+}
+
+.dark .ant-dropdown-menu {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
 }
 
 .dark .ant-dropdown-menu {
@@ -1283,7 +1395,7 @@ tbody.overflownone {
 }
 
 .ant-dropdown-menu-item {
-  @apply dark:text-gray-100 !important;
+  @apply text-gray-900 dark:text-gray-100 !important;
   border-radius: 0.375rem !important;
   transition: background-color 0.2s ease !important;
   margin: 0.125rem 0 !important;
@@ -1291,10 +1403,20 @@ tbody.overflownone {
 
 .ant-dropdown-menu-item-active {
   @apply hover:bg-gray-100 dark:hover:bg-gray-700 !important;
+  color: #111827 !important;
+}
+
+.dark .ant-dropdown-menu-item-active {
+  color: #e5e7eb !important;
 }
 
 .ant-dropdown-menu-item:hover {
   @apply bg-gray-100 dark:bg-gray-700 !important;
+  color: #111827 !important;
+}
+
+.dark .ant-dropdown-menu-item:hover {
+  color: #e5e7eb !important;
 }
 
 .ant-pagination-item > a {
@@ -1315,7 +1437,7 @@ tbody.overflownone {
 
 /* Modern Select Styles */
 .ant-select-selector {
-  @apply dark:bg-gray-800 dark:text-gray-200 !important;
+  @apply text-gray-900 dark:bg-gray-800 dark:text-gray-200 !important;
   border-radius: 0.375rem !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
@@ -1331,7 +1453,7 @@ tbody.overflownone {
 }
 
 .ant-select-dropdown {
-  @apply dark:bg-gray-800 dark:text-gray-200 !important;
+  @apply text-gray-900 dark:bg-gray-800 dark:text-gray-200 !important;
   border-radius: 0.5rem !important;
   border: 1px solid #e5e7eb !important;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
@@ -1345,7 +1467,7 @@ tbody.overflownone {
 }
 
 .ant-select-item {
-  @apply dark:bg-gray-800 dark:text-gray-200 !important;
+  @apply text-gray-900 dark:bg-gray-800 dark:text-gray-200 !important;
   border-radius: 0.375rem !important;
   transition: background-color 0.2s ease !important;
   margin: 0.125rem 0 !important;
@@ -1353,10 +1475,20 @@ tbody.overflownone {
 
 .ant-select-item:hover {
   @apply bg-gray-100 dark:bg-gray-700 !important;
+  color: #111827 !important;
+}
+
+.dark .ant-select-item:hover {
+  color: #e5e7eb !important;
 }
 
 .ant-select-item-option-selected {
   @apply bg-blue-50 dark:bg-blue-900/30 !important;
+  color: #111827 !important;
+}
+
+.dark .ant-select-item-option-selected {
+  color: #e5e7eb !important;
 }
 
 /* Inputs inside select dropdowns */
@@ -1516,9 +1648,10 @@ input:-webkit-autofill {
 }
 
 .ant-picker-cell-disabled .ant-picker-cell-inner {
-  @apply dark:text-gray-500 !important;
+  @apply text-gray-400 dark:text-gray-500 !important;
   opacity: 0.4 !important;
   cursor: not-allowed !important;
+  color: #9ca3af !important;
 }
 
 .event-active:before {
@@ -1571,12 +1704,78 @@ input:-webkit-autofill {
   @apply dark:text-gray-50 !important;
 }
 
+/* Radio button group and wrapper styles */
+.ant-radio-group,
+.ant-radio-group-outline,
+.ant-radio-group-small,
+.ant-picker-calendar-mode-switch {
+  border-radius: 0.5rem !important;
+}
+
 .ant-radio-button-wrapper {
-  @apply text-gray-900 dark:bg-gray-800 dark:text-gray-50;
+  @apply dark:bg-gray-800;
+  /* Default text color - can be overridden by Tailwind classes */
+  color: #111827; /* Black text in light mode */
+  border-radius: 0.5rem;
+}
+
+.ant-radio-button-wrapper:first-child {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+.ant-radio-button-wrapper:last-child {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+/* Only apply dark mode color if no Tailwind text classes are present */
+.dark
+  .ant-radio-button-wrapper:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb; /* White text in dark mode */
 }
 
 .ant-radio-button-wrapper-checked {
-  @apply text-gray-900 dark:bg-gray-800 dark:text-gray-50 !important;
+  @apply dark:bg-gray-800;
+  /* Default text color - can be overridden by Tailwind classes */
+  color: #111827; /* Black text in light mode */
+}
+
+/* Only apply dark mode color if no Tailwind text classes are present */
+.dark
+  .ant-radio-button-wrapper-checked:not([class*="text-"]):not(
+    [class*="dark:text-"]
+  ) {
+  color: #e5e7eb; /* White text in dark mode */
+}
+
+.ant-radio-button,
+.ant-radio-button-checked {
+  /* Default text color - can be overridden by Tailwind classes */
+  color: #111827; /* Black text in light mode */
+}
+
+/* Only apply dark mode color if no Tailwind text classes are present */
+.dark .ant-radio-button:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-radio-button-checked:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb; /* White text in dark mode */
+}
+
+/* Ensure all text inside radio buttons is visible in light mode */
+/* Only apply if no Tailwind text color classes are present */
+.ant-radio-group *:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-radio-button-wrapper *:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-radio-button *:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827; /* Black text in light mode */
+}
+
+.dark .ant-radio-group *:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-radio-button-wrapper
+  *:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-radio-button *:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb; /* White text in dark mode */
 }
 
 .ant-picker-clear {
@@ -1680,6 +1879,18 @@ input:-webkit-autofill {
   height: 100%;
 }
 
+.anticon-plus {
+  font-size: 1.25rem !important;
+  width: 2.2rem !important;
+  height: 1.25rem !important;
+}
+
+.anticon-plus svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  font-size: 1.25rem !important;
+}
+
 .ant-notification-notice-icon {
   display: inline-block !important;
 }
@@ -1761,7 +1972,7 @@ input:-webkit-autofill {
 }
 
 .ant-table-cell {
-  @apply bg-white dark:bg-gray-800 dark:text-gray-300 !important;
+  @apply bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 !important;
 }
 
 .ant-table-row:nth-child(even) > .ant-table-cell {
@@ -2121,9 +2332,115 @@ input[type="number"] {
   display: flex !important;
 }
 
+/* Make icons respect ALL Tailwind color classes on parent - ensure icon inherits color */
+[class*="text-"] .anticon {
+  color: inherit !important;
+}
+
+[class*="text-"] > .anticon {
+  color: inherit !important;
+}
+
+/* Make SVG paths use currentColor to pick up the inherited color */
+[class*="text-"] .anticon svg {
+  color: inherit !important;
+}
+
+[class*="text-"] .anticon svg * {
+  fill: currentColor !important;
+  stroke: none !important;
+}
+
+/* Specific overrides for direct icon children */
+.text-green-600 > .anticon,
+.text-green-600 .anticon {
+  color: rgb(0, 187, 129) !important;
+}
+
+.text-red-600 > .anticon,
+.text-red-600 .anticon {
+  color: rgb(220, 38, 38) !important;
+}
+
+.text-green-600 > .anticon svg *,
+.text-green-600 .anticon svg * {
+  fill: rgb(0, 187, 129) !important;
+}
+
+.text-red-600 > .anticon svg *,
+.text-red-600 .anticon svg * {
+  fill: rgb(220, 38, 38) !important;
+}
+/* Ant Design Icons - Force color inheritance from Tailwind classes */
+.anticon.text-green-500,
+.text-green-500.anticon,
+span.text-green-500 > .anticon,
+div.text-green-500 > .anticon {
+  color: rgb(34, 197, 94) !important;
+}
+
+.anticon.text-green-600,
+.text-green-600.anticon,
+span.text-green-600 > .anticon,
+div.text-green-600 > .anticon {
+  color: rgb(22, 163, 74) !important;
+}
+
+.anticon.text-red-500,
+.text-red-500.anticon,
+span.text-red-500 > .anticon,
+div.text-red-500 > .anticon {
+  color: rgb(239, 68, 68) !important;
+}
+
+.anticon.text-red-600,
+.text-red-600.anticon,
+span.text-red-600 > .anticon,
+div.text-red-600 > .anticon {
+  color: rgb(220, 38, 38) !important;
+}
+
+/* SVG fills - use currentColor to pick up the icon's color */
+.anticon.text-green-500 svg *,
+.text-green-500.anticon svg *,
+span.text-green-500 > .anticon svg *,
+div.text-green-500 > .anticon svg * {
+  fill: rgb(34, 197, 94) !important;
+  stroke: none !important;
+}
+
+.anticon.text-green-600 svg *,
+.text-green-600.anticon svg *,
+span.text-green-600 > .anticon svg *,
+div.text-green-600 > .anticon svg * {
+  fill: rgb(22, 163, 74) !important;
+  stroke: none !important;
+}
+
+.anticon.text-red-500 svg *,
+.text-red-500.anticon svg *,
+span.text-red-500 > .anticon svg *,
+div.text-red-500 > .anticon svg * {
+  fill: rgb(239, 68, 68) !important;
+  stroke: none !important;
+}
+
+.anticon.text-red-600 svg *,
+.text-red-600.anticon svg *,
+span.text-red-600 > .anticon svg *,
+div.text-red-600 > .anticon svg * {
+  fill: rgb(220, 38, 38) !important;
+  stroke: none !important;
+}
+
+/* Generic rule for all other text colors - lower specificity */
+[class*="text-"] .anticon {
+  color: inherit !important;
+}
 .ant-btn > span {
   display: flex !important;
 }
+
 .ant-upload-text {
   @apply dark:text-gray-200 !important;
 }
@@ -2145,6 +2462,12 @@ input[type="number"] {
   border-radius: 0.5rem !important;
 }
 
+.ant-popover-content {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+}
+
 .ant-popover-inner {
   @apply bg-white dark:bg-gray-800 !important;
   border-radius: 0.5rem !important;
@@ -2153,8 +2476,8 @@ input[type="number"] {
     0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
   padding: 0.5rem !important;
   display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
 }
 
 .dark .ant-popover-inner {
@@ -2163,49 +2486,57 @@ input[type="number"] {
     0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
 }
 
-.ant-popover-inner-content {
-  @apply text-gray-900 dark:text-gray-200 !important;
+.ant-popover-inner-content:not([class*="text-"]):not([class*="dark:text-"]) {
   padding: 0 !important;
   color: #111827 !important;
   display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
   flex-direction: column !important;
 }
 
 .ant-popover-inner-content
-  *:not(.anticon-delete):not([class*="DeleteOutlined"]) {
-  @apply text-gray-900 dark:text-gray-200 !important;
+  *:not(.anticon-delete):not([class*="DeleteOutlined"]):not(
+    [class*="text-"]
+  ):not([class*="dark:text-"]) {
   color: #111827 !important;
 }
 
 .ant-popover-inner-content
-  .anticon:not(.anticon-delete):not([class*="DeleteOutlined"]) {
+  .anticon:not(.anticon-delete):not([class*="DeleteOutlined"]):not(
+    [class*="text-"]
+  ):not([class*="dark:text-"]) {
   color: #111827 !important;
 }
 
-.dark .ant-popover-inner-content {
+.dark
+  .ant-popover-inner-content:not([class*="text-"]):not([class*="dark:text-"]) {
   color: #e5e7eb !important;
 }
 
 .dark
   .ant-popover-inner-content
-  *:not(.anticon-delete):not([class*="DeleteOutlined"]) {
+  *:not(.anticon-delete):not([class*="DeleteOutlined"]):not(
+    [class*="text-"]
+  ):not([class*="dark:text-"]) {
   color: #e5e7eb !important;
 }
 
 .dark
   .ant-popover-inner-content
-  .anticon:not(.anticon-delete):not([class*="DeleteOutlined"]) {
+  .anticon:not(.anticon-delete):not([class*="DeleteOutlined"]):not(
+    [class*="text-"]
+  ):not([class*="dark:text-"]) {
   color: #e5e7eb !important;
 }
 
 /* Popover menu items - modern styling */
-.ant-popover-inner-content .ant-dropdown-link,
-.ant-popover-inner-content a {
+.ant-popover-inner-content
+  .ant-dropdown-link:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-popover-inner-content a:not([class*="text-"]):not([class*="dark:text-"]) {
   display: flex !important;
   align-items: center !important;
-  justify-content: center !important;
+  justify-content: flex-start !important;
   gap: 0.75rem !important;
   padding: 0.625rem 0.875rem !important;
   border-radius: 0.375rem !important;
@@ -2213,10 +2544,17 @@ input[type="number"] {
   margin: 0.125rem 0 !important;
   color: #111827 !important;
   width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
-.dark .ant-popover-inner-content .ant-dropdown-link,
-.dark .ant-popover-inner-content a {
+.dark
+  .ant-popover-inner-content
+  .ant-dropdown-link:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-popover-inner-content
+  a:not([class*="text-"]):not([class*="dark:text-"]) {
   color: #e5e7eb !important;
 }
 
@@ -2281,22 +2619,13 @@ input[type="number"] {
   @apply dark:text-white !important;
 }
 
+/* Hide popover arrow */
 .ant-popover-arrow {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  display: none !important;
 }
 
-.ant-popover-arrow-content::before {
-  @apply dark:bg-gray-800 !important;
-  transform: none !important;
-}
-
-.ant-popover:hover .ant-popover-arrow,
-.ant-popover:hover .ant-popover-arrow-content,
-.ant-popover:hover .ant-popover-arrow-content::before {
-  transform: none !important;
-  transition: none !important;
+.ant-popover-arrow-content {
+  display: none !important;
 }
 .ant-drawer-close {
   @apply dark:text-white !important;
@@ -2411,7 +2740,10 @@ input[type="number"] {
   color: #ffffff !important;
 }
 
-.dark .ant-picker-time-panel-column > ul > li.ant-picker-time-panel-cell-selected {
+.dark
+  .ant-picker-time-panel-column
+  > ul
+  > li.ant-picker-time-panel-cell-selected {
   background-color: #059669 !important;
   color: #ffffff !important;
 }
@@ -2452,4 +2784,335 @@ input[type="number"] {
 .dark .bg-gray-800 [class*="[&_*]:dark:!text-white"] *,
 .dark .bg-gray-800 [class*="[&_*]:!text-white"] * {
   color: white !important;
+}
+
+/* Prevent body scrolling when modal or drawer is open */
+body.ant-modal-open,
+body.ant-drawer-open {
+  overflow: hidden !important;
+}
+
+html.ant-modal-open,
+html.ant-drawer-open {
+  overflow: hidden !important;
+}
+
+/* Prevent horizontal scrolling on main page */
+body {
+  overflow-x: hidden !important;
+}
+
+html {
+  overflow-x: hidden !important;
+}
+
+/* Default text colors - only apply when Tailwind classes are NOT present */
+/* This allows Tailwind color classes to override defaults */
+
+/* Ant Design components - Light mode black text (only when no Tailwind class) */
+.ant-table-cell:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-table-thead > tr > th:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-table-tbody > tr > td:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.dark .ant-table-cell:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-table-thead
+  > tr
+  > th:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-table-tbody
+  > tr
+  > td:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+/* Ant Design components - Text colors for both modes */
+/* Light mode - black text (only when no Tailwind class) */
+.ant-dropdown-menu:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-dropdown-menu-item:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-select-selector:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-select-item:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-select-dropdown:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-card:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-card-grid:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-menu-item:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-menu-item a:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-tabs-tab-btn:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-pagination-item > a:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-pagination-total-text:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-divider-inner-text:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-steps-item-title:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-upload-text:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-upload-hint:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Form elements - light mode (only when no Tailwind class) */
+.ant-form-item-label > label:not([class*="text-"]):not([class*="dark:text-"]),
+.form-label:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-input:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-input-number:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-input-password:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-input-affix-wrapper:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-picker-input > input:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-picker-header-view:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-picker-content
+  > thead
+  > tr
+  > th:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-picker-cell-in-view:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Radio and Checkbox - light mode (only when no Tailwind class) */
+.ant-radio-wrapper:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-radio-wrapper span:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-checkbox-wrapper:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-checkbox-wrapper > span:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Drawer - light mode (only when no Tailwind class) */
+.ant-drawer-title:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-drawer-body:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Modal - light mode (only when no Tailwind class) */
+.ant-modal-title:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-modal-confirm-title:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-modal-confirm-content:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Empty state - light mode (only when no Tailwind class) */
+.ant-empty-description:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Table pagination - light mode (only when no Tailwind class) */
+.ant-table-pagination
+  > li
+  > button:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Select arrow - light mode (only when no Tailwind class) */
+.ant-select-arrow:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Picker elements - light mode (only when no Tailwind class) */
+.ant-picker-prev-icon:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-picker-next-icon:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-picker-super-prev-icon:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-picker-super-next-icon:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+.ant-picker-clear:not([class*="text-"]):not([class*="dark:text-"]),
+.ant-picker-suffix:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Transfer list - light mode (only when no Tailwind class) */
+.ant-transfer-list-header:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Steps - light mode (only when no Tailwind class) */
+.ant-steps-icon:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Cascader - light mode (only when no Tailwind class) */
+.ant-cascader-menu-item:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #111827 !important;
+}
+
+/* Dark mode - white/light text (only when no Tailwind class) */
+.dark .ant-dropdown-menu:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-dropdown-menu-item:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-select-selector:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-select-item:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-select-dropdown:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-card:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-card-grid:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-menu-item:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-menu-item a:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-tabs-tab-btn:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-pagination-item > a:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-pagination-total-text:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-divider-inner-text:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-steps-item-title:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-upload-text:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-upload-hint:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark
+  .ant-form-item-label
+  > label:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .form-label:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-input:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-input-number:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-input-password:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-input-affix-wrapper:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark
+  .ant-picker-input
+  > input:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-picker-header-view:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark
+  .ant-picker-content
+  > thead
+  > tr
+  > th:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark
+  .ant-picker-cell-in-view:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-radio-wrapper:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-radio-wrapper span:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-checkbox-wrapper:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-checkbox-wrapper
+  > span:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-drawer-title:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-drawer-body:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-modal-title:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-modal-confirm-title:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-modal-confirm-content:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-empty-description:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark
+  .ant-table-pagination
+  > li
+  > button:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-select-arrow:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-picker-prev-icon:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-picker-next-icon:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-picker-super-prev-icon:not([class*="text-"]):not([class*="dark:text-"]),
+.dark
+  .ant-picker-super-next-icon:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-picker-clear:not([class*="text-"]):not([class*="dark:text-"]),
+.dark .ant-picker-suffix:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark
+  .ant-transfer-list-header:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-steps-icon:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-cascader-menu-item:not([class*="text-"]):not([class*="dark:text-"]) {
+  color: #e5e7eb !important;
 }

@@ -16,6 +16,7 @@ import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import { EditOutlined, EyeOutlined, UploadOutlined } from "@ant-design/icons";
 import updateMethod from "tools/function/crud/updateMethod";
 import { DeleteOutlined } from "@ant-design/icons";
+import _ from "lodash";
 
 function KhuviinMedeelel({
   ajiltan = {},

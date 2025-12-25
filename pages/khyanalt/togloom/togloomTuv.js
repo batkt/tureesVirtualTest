@@ -17,6 +17,7 @@ import {
   TimePicker,
   Tooltip,
 } from "antd";
+import { toast } from "sonner";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -1003,7 +1004,7 @@ function togloom1() {
                     <div className="flex items-center justify-center">
                       <DollarCircleOutlined />
                     </div>
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center text-white">
                       {t("Төлбөр")}
                     </div>
                     {togloominTuviinGaralt?.jagsaalt?.find(
@@ -1015,7 +1016,7 @@ function togloom1() {
                     <div className="flex items-center justify-center">
                       <PaperClipOutlined />
                     </div>
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center text-white">
                       {t("И-Баримт")}
                     </div>
                   </div>

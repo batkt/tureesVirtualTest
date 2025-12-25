@@ -24,6 +24,7 @@ import { t } from "i18next";
 import moment from "moment";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import axios from "axios";
+import { toast } from "sonner";
 
 function TsagBurtgel(
   {
@@ -83,11 +84,30 @@ function TsagBurtgel(
     data.ognoo = moment(tsag.ekhlekhtsag).format("YYYY-MM-DD 00:00:00");
     data.burtgesenAjiltaniiId = ajiltan?._id;
     data.barilgiinId = barilgiinId;
+    // Format ekhlekhTsag and duusakhTsag as ISO strings
+    if (tsag.ekhlekhtsag) {
+      data.ekhlekhTsag = moment(tsag.ekhlekhtsag).toISOString();
+    }
+    if (tsag.duusakhTsag) {
+      data.duusakhTsag = moment(tsag.duusakhTsag).toISOString();
+    }
     const tasalbarShirkheg = data.khuukhdiinToo;
     const method = data?._id ? updateMethod : createMethod;
+    console.log("Sending data to API:", JSON.stringify(data, null, 2));
     method("togloomiinTuvKhadgalya", token, data)
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
+      .then((response) => {
+        console.log("Full API Response:", response);
+        const responseData = response?.data;
+        console.log("Response Data:", responseData);
+        console.log("Response Data Type:", typeof responseData);
+        console.log("Response Data === 'Amjilttai':", responseData === "Amjilttai");
+
+        // Check if response is successful - only accept "Amjilttai" string or object with message/success
+        const isSuccess = responseData === "Amjilttai" || 
+                         responseData?.message === "Amjilttai" ||
+                         responseData?.success === true;
+
+        if (isSuccess) {
           if (baiguullagiinId === "66cd8c682375830948ea46ca")
             handleTasalbariinBarCode(tasalbarShirkheg || 1);
           toast.success(t("Амжилттай хадгаллаа"));
@@ -105,10 +125,23 @@ function TsagBurtgel(
             .catch(function (error) {
               toast.error(error);
             });
+        } else {
+          console.error("Unexpected response format. Expected 'Amjilttai' but got:", responseData);
+          const errorMsg = typeof responseData === "object" 
+            ? JSON.stringify(responseData, null, 2) 
+            : String(responseData);
+          toast.error(t("Хадгалахад алдаа гарлаа. Хариу: ") + errorMsg);
+          setLoading(false);
         }
       })
       .catch((e) => {
+        console.error("API Error:", e);
+        console.error("Error Response:", e?.response?.data);
+        console.error("Error Status:", e?.response?.status);
         aldaaBarigch(e);
+        setLoading(false);
+      })
+      .finally(() => {
         setLoading(false);
       });
   }

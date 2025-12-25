@@ -2,6 +2,7 @@ import { Button, InputNumber, message } from "antd";
 import { t } from "i18next";
 import React, { useEffect, useState } from "react";
 import uilchilgee from "services/uilchilgee";
+import { toast } from "sonner";
 
 function Tasalbar({ token, baiguullaga, barilgiinId }) {
   const [tasalbar, setTasalbar] = useState({

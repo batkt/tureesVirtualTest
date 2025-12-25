@@ -17,6 +17,7 @@ import {
   Tabs,
   Switch,
 } from "antd";
+import { toast } from "sonner";
 import Admin from "components/Admin";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh";

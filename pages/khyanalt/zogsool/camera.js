@@ -2432,7 +2432,7 @@ function camera({ token }) {
       </div>,
     ];
     modal({
-      title: t("Төлбөрийн дэлгэрэнгүй"),
+      title: t("Орлого тайлан"),
       icon: <FileExcelOutlined />,
       content: (
         <TulburiinDelgerenguiTailan
@@ -3871,11 +3871,11 @@ function camera({ token }) {
                   ajiltan?.erkh === "Admin") && (
                   <Button
                     onClick={() => tulburiinDelgerengui()}
-                    className="mr-3 w-full text-ellipsis"
+                    className="mr-3 !w-full text-ellipsis"
                     icon={<PrinterOutlined />}
                     type="primary"
                   >
-                    {t("Төлбөрийн дэлгэрэнгүй")}
+                    {t("Орлого тайлан")}
                   </Button>
                 )}
 

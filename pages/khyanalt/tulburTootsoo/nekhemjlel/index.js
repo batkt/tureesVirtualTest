@@ -3712,7 +3712,7 @@ function tulburTootsoo({ token }) {
             data-aos-duration="1000"
           >
             <div className="mb-3 flex w-full flex-col gap-2 md:ml-auto md:w-auto md:flex-row">
-              <div className="flex w-full items-center justify-between">
+              <div className="flex w-full items-center justify-between text-black dark:!text-white">
                 <label>{t("Олон сараар нэхэмжлэх эсэх")}:</label>
                 <Switch
                   checked={olnoorSaraarEsekh}
