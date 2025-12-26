@@ -86,124 +86,150 @@
   @apply dark:border-gray-600 dark:bg-gray-900 !important;
 }
 
-/* TipTap Editor Styles - Replaced SunEditor */
-.tiptap-editor-wrapper {
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  overflow: hidden;
-  background: white !important;
-  opacity: 1 !important;
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-.dark .tiptap-editor-wrapper {
-  border-color: #374151;
-  background: #1f2937 !important;
-  opacity: 1 !important;
-}
-
-.tiptap-toolbar {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem;
-  border-bottom: 1px solid #e5e7eb;
-  background: #f9fafb;
-}
-
-.dark .tiptap-toolbar {
-  border-bottom-color: #374151;
-  background: #111827;
-}
-
-.tiptap-toolbar button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.375rem 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.25rem;
-  background: white;
-  color: #374151;
-  cursor: pointer;
-  font-size: 0.875rem;
-  min-width: 2rem;
-  height: 2rem;
-  transition: all 0.2s;
-}
-
-.dark .tiptap-toolbar button {
-  border-color: #4b5563;
-  background: #374151;
-  color: #e5e7eb;
-}
-
-.tiptap-toolbar button:hover:not(:disabled) {
-  background: #f3f4f6;
-  border-color: #9ca3af;
-}
-
-.dark .tiptap-toolbar button:hover:not(:disabled) {
-  background: #4b5563;
-  border-color: #6b7280;
-}
-
-.tiptap-toolbar button.is-active {
-  background: #3b82f6;
-  color: white;
-  border-color: #2563eb;
-}
-
-.dark .tiptap-toolbar button.is-active {
-  background: #2563eb;
-  border-color: #1d4ed8;
-}
-
-.tiptap-toolbar button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.tiptap-content:not([class*="text-"]):not([class*="dark:text-"]) {
-  padding: 1rem;
-  min-height: 120px;
-  max-height: 300px;
-  overflow-y: auto;
-  outline: none;
-  background: white !important;
-  opacity: 1 !important;
-  color: #111827 !important;
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-.dark .tiptap-content:not([class*="text-"]):not([class*="dark:text-"]) {
+/* Base SunEditor dark mode styles */
+.dark .sun-editor,
+.dark .se-container,
+.dark .se-wrapper,
+.dark .se-wrapper-inner,
+.dark .se-wrapper-wysiwyg,
+.dark .sun-editor-editable,
+.dark .se-toolbar,
+.dark .se-btn-module,
+.dark .se-toolbar-sticky,
+.dark .se-navigation,
+.dark .sun-editor-common {
+  background-color: #1f2937 !important;
   color: #e5e7eb !important;
-  background: #1f2937 !important;
-  opacity: 1 !important;
+  border-color: #374151 !important;
 }
 
-.tiptap-content .ProseMirror:not([class*="text-"]):not([class*="dark:text-"]) {
-  outline: none;
-  min-height: 100px;
-  background: white !important;
-  color: #111827 !important;
-  opacity: 1 !important;
-  white-space: pre-wrap !important;
-  word-wrap: break-word !important;
-  word-spacing: normal !important;
-  letter-spacing: normal !important;
-}
-
-.dark
-  .tiptap-content
-  .ProseMirror:not([class*="text-"]):not([class*="dark:text-"]) {
-  background: #1f2937 !important;
+/* Toolbar buttons */
+.dark .se-toolbar button,
+.dark .se-btn,
+.dark .sun-editor-common button {
+  background-color: #374151 !important;
   color: #e5e7eb !important;
-  opacity: 1 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .se-toolbar button:hover,
+.dark .se-btn:hover,
+.dark .sun-editor-common button:hover {
+  background-color: #4b5563 !important;
+  color: #ffffff !important;
+}
+
+.dark .se-toolbar button.active,
+.dark .se-btn.active {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+/* Toolbar separator */
+.dark .se-toolbar-separator-vertical {
+  border-left-color: #4b5563 !important;
+}
+
+/* Input field at the top (Нэр field) */
+.dark input[type="text"],
+.dark input {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+  border-color: #374151 !important;
+}
+
+/* Editor content area */
+.dark .sun-editor-editable {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+  caret-color: #f9fafb !important;
+}
+
+.dark .sun-editor-editable * {
+  color: inherit !important;
+}
+
+.dark .sun-editor-editable::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Dropdowns and modals within editor */
+.dark .se-list-layer,
+.dark .se-submenu,
+.dark .se-dialog,
+.dark .se-dialog-inner {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+  border-color: #374151 !important;
+}
+
+.dark .se-list-inner li button {
+  color: #e5e7eb !important;
+}
+
+.dark .se-list-inner li button:hover {
+  background-color: #374151 !important;
+}
+
+/* Character counter */
+.dark .se-char-counter-wrapper {
+  color: #9ca3af !important;
+}
+
+/* Modal specific styles */
+.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-container,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-wrapper-inner,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-wrapper-wysiwyg,
+.dark .ant-modal .ant-modal-content .ant-modal-body .sun-editor-editable,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-toolbar,
+.dark .ant-modal .ant-modal-content .ant-modal-body .se-navigation {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+  border-color: #374151 !important;
+}
+
+/* Line height and formatting */
+.sun-editor-editable {
+  overflow-y: visible !important;
+  line-height: 1.8 !important;
+}
+
+.sun-editor-editable sup,
+.sun-editor-editable sub {
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.sun-editor-editable sup {
+  top: -0.5em;
+}
+
+.sun-editor-editable sub {
+  bottom: -0.25em;
+}
+
+/* Content styling */
+.dark .sun-editor-editable p,
+.dark .sun-editor-editable div,
+.dark .sun-editor-editable span,
+.dark .sun-editor-editable li,
+.dark .sun-editor-editable td,
+.dark .sun-editor-editable th,
+.dark .sun-editor-editable h1,
+.dark .sun-editor-editable h2,
+.dark .sun-editor-editable h3,
+.dark .sun-editor-editable h4,
+.dark .sun-editor-editable h5,
+.dark .sun-editor-editable h6 {
+  color: #e5e7eb !important;
+}
+
+/* Icons in toolbar */
+.dark .se-toolbar svg,
+.dark .se-btn svg {
+  fill: #e5e7eb !important;
 }
 
 .pvtDropdownCurrent {
@@ -321,68 +347,7 @@ audio {
 }
 
 label {
-  @apply dark:text-black;
-}
-
-/* Ensure text-black class works in light mode for all elements including labels */
-body:not(.dark) .text-black,
-body:not(.dark) .text-black label,
-body:not(.dark) .text-black * {
-  color: #000000 !important;
-}
-
-/* Ensure text-black shows white in dark mode by default */
-.dark .text-black {
-  color: #ffffff !important;
-}
-
-/* Allow Tailwind dark mode classes to override */
-.dark .text-black[class*="dark:text-white"],
-.dark .text-black[class*="dark:!text-white"],
-.dark [class*="dark:text-white"],
-.dark [class*="dark:!text-white"] {
-  color: #ffffff !important;
-}
-
-/* Make labels inherit from parent when parent has dark mode classes */
-.dark .text-black[class*="dark:text-white"] label,
-.dark .text-black[class*="dark:!text-white"] label,
-.dark [class*="dark:text-white"] label,
-.dark [class*="dark:!text-white"] label {
-  color: inherit !important;
-}
-
-/* Allow labels to respect Tailwind text color classes from parent */
-[class*="text-"] label,
-.text-black label,
-.text-gray-900 label,
-.text-white label,
-.text-gray-600 label,
-.text-gray-700 label,
-.text-gray-800 label {
-  color: inherit !important;
-}
-
-/* Allow labels to inherit text color from parent with dark mode classes */
-.dark label,
-[class*="dark:text-"] label {
-  color: inherit !important;
-}
-
-/* Specific rule for labels inside elements with dark:text-white */
-.dark.text-white label,
-[class*="dark:text-white"] label {
-  color: #ffffff !important;
-}
-
-/* Form Label Dark Mode Support */
-.form-label {
   @apply text-gray-900 dark:text-gray-200 !important;
-  color: #111827 !important;
-}
-
-.dark .form-label {
-  color: #e5e7eb !important;
 }
 
 audio::-webkit-media-controls-mute-button {
@@ -504,25 +469,8 @@ audio::-webkit-media-controls-volume-control-container {
   transition-duration: 0.2s;
 }
 
-/* TipTap content styling */
-.tiptap-content .ProseMirror p {
-  margin: 0.5rem 0;
-  white-space: pre-wrap !important;
-  word-spacing: normal !important;
-  letter-spacing: normal !important;
-  color: inherit !important;
-}
-
-.tiptap-content .ProseMirror * {
-  white-space: pre-wrap !important;
-  word-spacing: normal !important;
-  letter-spacing: normal !important;
-}
-
-.tiptap-content .ProseMirror[contenteditable="true"] {
-  white-space: pre-wrap !important;
-  word-spacing: normal !important;
-  letter-spacing: normal !important;
+.sun-editor-editable {
+  padding: 0 !important;
 }
 .ant-badge-dot.ant-scroll-number {
   right: 5px;
@@ -558,24 +506,6 @@ audio::-webkit-media-controls-volume-control-container {
 .login {
   position: relative;
   --tw-bg-opacity: 1;
-  min-height: 100vh;
-  padding-bottom: 0 !important;
-  margin-bottom: 0 !important;
-  overflow-x: hidden;
-}
-
-/* Remove extra white space on mobile for login page */
-@media (max-width: 768px) {
-  .login {
-    min-height: 100vh;
-    height: 100vh;
-    overflow-y: auto;
-  }
-  
-  .login .container {
-    padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
-  }
 }
 
 .login:before {
@@ -613,199 +543,36 @@ audio::-webkit-media-controls-volume-control-container {
   @apply font-medium dark:bg-gray-800 dark:text-gray-200 !important;
 }
 
-/* Modern Input Styles */
 .ant-input {
-  @apply dark:bg-gray-800 dark:text-gray-300  !important;
-  border-radius: 0.375rem !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-.ant-input:focus {
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
-}
-
-.dark .ant-input:focus {
-  border-color: #60a5fa !important;
-  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2) !important;
+  @apply dark:bg-gray-800 dark:text-gray-300 !important;
 }
 
 .ant-input-number {
   @apply dark:bg-gray-800 dark:text-gray-300 !important;
-  border-radius: 0.375rem !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-.ant-input-number:focus,
-.ant-input-number-focused {
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
-}
-
-.dark .ant-input-number:focus,
-.dark .ant-input-number-focused {
-  border-color: #60a5fa !important;
-  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2) !important;
 }
 
 .ant-input-password {
   @apply dark:bg-gray-800 dark:text-gray-300 !important;
-  border-radius: 0.375rem !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-.ant-input-password:focus-within {
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
-}
-
-.dark .ant-input-password:focus-within {
-  border-color: #60a5fa !important;
-  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2) !important;
 }
 
 .ant-input-password-icon {
-  color: #6b7280 !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  display: inline-block !important;
-  z-index: 20 !important;
-}
-
-.dark .ant-input-password-icon {
-  color: #9ca3af !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  display: inline-block !important;
-}
-
-.ant-input-password-icon:hover {
-  color: #374151 !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-.dark .ant-input-password-icon:hover {
-  color: #d1d5db !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-/* Ensure password icon is visible when input is focused */
-.ant-input-password-focused .ant-input-password-icon,
-.ant-input-password:focus-within .ant-input-password-icon {
-  color: #6b7280 !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  display: inline-block !important;
-}
-
-.dark .ant-input-password-focused .ant-input-password-icon,
-.dark .ant-input-password:focus-within .ant-input-password-icon {
-  color: #9ca3af !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  display: inline-block !important;
-}
-
-/* Login page custom icons - ensure visibility in all states */
-.group .absolute.inset-y-0 svg,
-.group .absolute.left-0 svg {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  color: #9ca3af !important;
-  z-index: 10 !important;
-  pointer-events: none !important;
-}
-
-.group:focus-within .absolute.inset-y-0 svg,
-.group:focus-within .absolute.left-0 svg,
-.group.focus-within .absolute.inset-y-0 svg,
-.group.focus-within .absolute.left-0 svg {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  color: #10b981 !important;
-  z-index: 10 !important;
-}
-
-.dark .group .absolute.inset-y-0 svg,
-.dark .group .absolute.left-0 svg {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  color: #6b7280 !important;
-  z-index: 10 !important;
-}
-
-.dark .group:focus-within .absolute.inset-y-0 svg,
-.dark .group:focus-within .absolute.left-0 svg,
-.dark .group.focus-within .absolute.inset-y-0 svg,
-.dark .group.focus-within .absolute.left-0 svg {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  color: #34d399 !important;
-  z-index: 10 !important;
-}
-
-/* Ensure login input icons don't disappear when typing or focused */
-.group.relative .absolute.inset-y-0,
-.group.relative .absolute.left-0 {
-  display: flex !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: none !important;
-  z-index: 10 !important;
-}
-
-.group.relative:focus-within .absolute.inset-y-0,
-.group.relative:focus-within .absolute.left-0,
-.group.relative.focus-within .absolute.inset-y-0,
-.group.relative.focus-within .absolute.left-0 {
-  display: flex !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  z-index: 10 !important;
-}
-
-/* Override any hiding styles */
-.group.relative .absolute.inset-y-0 svg,
-.group.relative .absolute.left-0 svg {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  width: 1.25rem !important;
-  height: 1.25rem !important;
-}
-
-.group.relative:focus-within .absolute.inset-y-0 svg,
-.group.relative:focus-within .absolute.left-0 svg {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  width: 1.25rem !important;
-  height: 1.25rem !important;
+  @apply dark:text-gray-300 !important;
 }
 
 .zurag .ant-empty-image svg {
   @apply h-full w-full !important;
 }
 
-/* Modern Calendar Cell Styles */
 .ant-picker-cell {
-  @apply text-gray-900 dark:text-gray-500 !important;
-  transition: all 0.2s ease !important;
+  @apply dark:text-gray-500 !important;
 }
 
 .ant-picker-cell-in-view {
-  @apply text-gray-900 dark:text-gray-300 !important;
+  @apply dark:text-gray-300 !important;
 }
 
 .ant-picker-content > thead > tr > th {
-  @apply text-gray-900 dark:text-gray-300 !important;
-  font-weight: 500 !important;
+  @apply dark:text-gray-300 !important;
 }
 
 .main {
@@ -865,7 +632,7 @@ audio::-webkit-media-controls-volume-control-container {
 }
 
 .ant-empty-description {
-  @apply text-gray-900 dark:text-gray-300 !important;
+  @apply dark:text-gray-300;
 }
 
 .report-box .report-box__indicator {
@@ -895,12 +662,22 @@ audio::-webkit-media-controls-volume-control-container {
 
 .zoom-in {
   cursor: pointer;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   transition-property: background-color, border-color, color, fill, stroke,
-    opacity, box-shadow;
+    opacity, box-shadow, transform;
   transition-duration: 0.15s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 0.3s;
-  @apply hover:shadow-xl;
+  @apply hover:scale-105 hover:shadow-xl;
 }
 
 .ant-input-search
@@ -920,29 +697,11 @@ audio::-webkit-media-controls-volume-control-container {
   color: rgba(145, 199, 20, var(--tw-text-opacity));
 }
 
-/* Modern Pagination Styles */
 .ant-pagination-item-link {
   display: flex !important;
   align-items: center;
   justify-content: center;
-  border-radius: 0.375rem !important;
-  transition: background-color 0.2s ease, border-color 0.2s ease !important;
 }
-
-.ant-pagination-item {
-  border-radius: 0.375rem !important;
-  transition: background-color 0.2s ease, border-color 0.2s ease !important;
-}
-
-.ant-pagination-item:hover:not(.ant-pagination-item-active) {
-  border-color: #3b82f6 !important;
-}
-
-.dark .ant-pagination-item:hover:not(.ant-pagination-item-active) {
-  border-color: #60a5fa !important;
-  background-color: rgba(96, 165, 250, 0.1) !important;
-}
-
 .ant-pagination-total-text {
   @apply dark:text-white !important;
 }
@@ -1011,14 +770,11 @@ audio::-webkit-media-controls-volume-control-container {
 
 .ant-modal-body {
   @apply rounded-xl px-4 py-8 sm:px-6 md:px-8 !important;
-  @apply text-gray-900 dark:text-gray-200 !important;
   overflow: hidden !important;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
-
-/* Color removed from .ant-modal-body * to allow Tailwind classes to work */
 
 /* Add this to your CSS file */
 .guilgee-modal .ant-modal-body {
@@ -1077,73 +833,19 @@ tbody.overflownone {
   margin-bottom: 1rem;
 }
 
-/* Modern Calendar Panel Styles */
 .ant-picker-calendar .ant-picker-panel {
   @apply bg-white dark:bg-gray-800;
   border: 0;
-  border-top: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.2s ease;
-}
-
-.dark .ant-picker-calendar .ant-picker-panel {
-  border-top-color: #374151;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  border-top: 1px solid #f0f0f0;
+  border-radius: 0;
 }
 
 .ant-picker-calendar {
   @apply bg-white dark:bg-gray-800;
-  border-radius: 0.5rem;
 }
 
-.ant-modal-body:not([class*="text-"]):not([class*="dark:text-"]) {
+.ant-modal-body {
   @apply dark:bg-gray-800 !important;
-  color: #111827 !important; /* Default black text in light mode */
-}
-
-.dark .ant-modal-body:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important; /* Default light text in dark mode */
-}
-
-.ant-modal-body p:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-modal-body
-  div:not(.ant-radio-group):not(.ant-checkbox-group):not([class*="text-"]):not(
-    [class*="dark:text-"]
-  ),
-.ant-modal-body
-  span:not(.ant-radio-button-wrapper):not(.ant-checkbox-wrapper):not(
-    [class*="text-"]
-  ):not([class*="dark:text-"]),
-.ant-modal-body label:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-modal-body h1:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-modal-body h2:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-modal-body h3:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-modal-body h4:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-modal-body h5:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-modal-body h6:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important; /* Default black text in light mode */
-}
-
-.dark .ant-modal-body p:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-modal-body
-  div:not(.ant-radio-group):not(.ant-checkbox-group):not([class*="text-"]):not(
-    [class*="dark:text-"]
-  ),
-.dark
-  .ant-modal-body
-  span:not(.ant-radio-button-wrapper):not(.ant-checkbox-wrapper):not(
-    [class*="text-"]
-  ):not([class*="dark:text-"]),
-.dark .ant-modal-body label:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-modal-body h1:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-modal-body h2:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-modal-body h3:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-modal-body h4:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-modal-body h5:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-modal-body h6:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important; /* Default light text in dark mode */
 }
 
 .ant-modal-header {
@@ -1162,45 +864,8 @@ tbody.overflownone {
   @apply dark:bg-gray-800 dark:text-gray-400 !important;
 }
 
-/* Ant Design Form Item Label - Dark Mode Support */
-.ant-form-item-label,
-.ant-col.ant-form-item-label,
-.ant-col-10.ant-form-item-label,
-.ant-col-12.ant-form-item-label,
-.ant-col-14.ant-form-item-label,
-.ant-col-16.ant-form-item-label,
-.ant-col-18.ant-form-item-label,
-.ant-col-20.ant-form-item-label,
-.ant-col-22.ant-form-item-label,
-.ant-col-24.ant-form-item-label {
-  @apply dark:text-gray-200 !important;
-}
-
-.ant-form-item-label > label,
-.ant-col.ant-form-item-label > label,
-.ant-col-10.ant-form-item-label > label,
-.ant-col-12.ant-form-item-label > label,
-.ant-col-14.ant-form-item-label > label,
-.ant-col-16.ant-form-item-label > label,
-.ant-col-18.ant-form-item-label > label,
-.ant-col-20.ant-form-item-label > label,
-.ant-col-22.ant-form-item-label > label,
-.ant-col-24.ant-form-item-label > label {
-  @apply text-gray-900 dark:text-gray-200 !important;
-  color: #111827 !important;
-}
-
-.dark .ant-form-item-label > label,
-.dark .ant-col.ant-form-item-label > label,
-.dark .ant-col-10.ant-form-item-label > label,
-.dark .ant-col-12.ant-form-item-label > label,
-.dark .ant-col-14.ant-form-item-label > label,
-.dark .ant-col-16.ant-form-item-label > label,
-.dark .ant-col-18.ant-form-item-label > label,
-.dark .ant-col-20.ant-form-item-label > label,
-.dark .ant-col-22.ant-form-item-label > label,
-.dark .ant-col-24.ant-form-item-label > label {
-  color: #e5e7eb !important;
+.ant-form-item-label > label {
+  @apply dark:text-gray-400 !important;
 }
 
 .ant-drawer-title {
@@ -1284,64 +949,16 @@ tbody.overflownone {
   @apply w-auto rounded-lg border-white bg-white p-5 shadow-lg !important;
 }
 
-/* Modern Table Styles */
 .ant-table {
   @apply bg-white dark:bg-gray-700 !important;
-  border-radius: 0.5rem !important;
-  overflow: hidden !important;
-}
-
-/* Camera table - allow all columns to be visible */
-.cameraTable {
-  min-width: 100% !important;
-}
-
-.cameraTable .ant-table-container {
-  overflow-x: visible !important;
-}
-
-.cameraTable .ant-table {
-  table-layout: auto !important;
-  width: auto !important;
-  min-width: 100% !important;
-}
-
-.cameraTable .ant-table-content {
-  overflow-x: visible !important;
-  width: auto !important;
-}
-
-.cameraTable .ant-table-body {
-  overflow-x: visible !important;
-}
-
-/* Ensure columns don't wrap unnecessarily */
-.cameraTable .ant-table-thead > tr > th,
-.cameraTable .ant-table-tbody > tr > td {
-  white-space: nowrap !important;
 }
 
 .ant-table-thead > tr > th {
-  @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-300 !important;
-  border-bottom: 2px solid #e5e7eb !important;
-  font-weight: 600 !important;
-}
-
-.dark .ant-table-thead > tr > th {
-  border-bottom-color: #374151 !important;
+  @apply bg-gray-50 dark:bg-gray-900 dark:text-gray-300 !important;
 }
 
 .ant-table-row > tr > td {
-  @apply mt-1 rounded-md text-gray-900 shadow-lg dark:bg-gray-700 dark:text-gray-300;
-  transition: background-color 0.2s ease !important;
-}
-
-.ant-table-tbody > tr > td {
-  border-bottom: 1px solid #f3f4f6 !important;
-}
-
-.dark .ant-table-tbody > tr > td {
-  border-bottom-color: #374151 !important;
+  @apply mt-1 rounded-md shadow-lg dark:bg-gray-700 dark:text-gray-300;
 }
 
 .ant-notification-notice-message {
@@ -1390,105 +1007,16 @@ tbody.overflownone {
   @apply font-medium text-blue-500 !important;
 }
 
-/* Modern Dropdown Styles */
-.ant-dropdown {
-  @apply bg-white dark:bg-gray-700 !important;
-}
-
 .ant-dropdown-menu {
-  @apply shadow-lg !important;
-  border-radius: 0.5rem !important;
-  border: 1px solid #e5e7eb !important;
-  padding: 0.5rem !important;
-}
-
-/* Default text color only when no bg class */
-.ant-dropdown-menu:not([class*="bg-"]) {
-  @apply text-gray-900 dark:text-gray-200 !important;
-}
-
-/* Default background only when no Tailwind bg class */
-.ant-dropdown-menu:not([class*="bg-"]) {
-  background-color: #ffffff !important;
-}
-
-.dark .ant-dropdown-menu:not([class*="bg-"]) {
-  background-color: #374151 !important;
-  border-color: #4b5563 !important;
-}
-
-.dark .ant-dropdown-menu {
-  border-color: #374151 !important;
+  @apply shadow-lg dark:bg-gray-900 dark:text-gray-100 !important;
 }
 
 .ant-dropdown-menu-item {
-  border-radius: 0.375rem !important;
-  transition: background-color 0.2s ease !important;
-  margin: 0.125rem 0 !important;
+  @apply dark:text-gray-100 !important;
 }
 
-/* Active state background */
 .ant-dropdown-menu-item-active {
-  @apply hover:bg-gray-100 dark:hover:bg-gray-700 !important;
-}
-
-/* Default text color when active and no Tailwind class */
-.ant-dropdown-menu-item-active:not(:has([class*="text-"])) {
-  color: #111827 !important;
-}
-
-.dark .ant-dropdown-menu-item-active:not(:has([class*="text-"])) {
-  color: #e5e7eb !important;
-}
-
-/* When active and has Tailwind text-white class, use white color */
-.ant-dropdown-menu-item-active:has([class*="text-white"]) {
-  color: #ffffff !important;
-}
-
-.ant-dropdown-menu-item-active:has([class*="text-white"]) * {
-  color: #ffffff !important;
-}
-
-/* When active and has Tailwind text class, inherit color */
-.ant-dropdown-menu-item-active:has([class*="text-"]) {
-  color: inherit !important;
-}
-
-.ant-dropdown-menu-item-active:has([class*="text-"]) * {
-  color: inherit !important;
-}
-
-/* Hover background always applies */
-.ant-dropdown-menu-item:hover {
-  @apply bg-gray-100 dark:bg-gray-700 !important;
-}
-
-/* Default text color on hover only when no Tailwind class */
-.ant-dropdown-menu-item:hover:not(:has([class*="text-"])) {
-  color: #111827 !important;
-}
-
-.dark .ant-dropdown-menu-item:hover:not(:has([class*="text-"])) {
-  color: #e5e7eb !important;
-}
-
-/* When has Tailwind text-white class, use white color on hover */
-.ant-dropdown-menu-item:hover:has([class*="text-white"]) {
-  color: #ffffff !important;
-}
-
-.ant-dropdown-menu-item:hover:has([class*="text-white"]) * {
-  color: #ffffff !important;
-}
-
-/* When has Tailwind text class, inherit color on hover */
-.ant-dropdown-menu-item:hover:has([class*="text-"]) {
-  color: inherit !important;
-}
-
-.ant-dropdown-menu-item:hover:has([class*="text-"]) * {
-  color: inherit !important;
+  @apply hover:bg-gray-300 dark:bg-gray-700 !important;
 }
 
 .ant-pagination-item > a {
@@ -1507,74 +1035,16 @@ tbody.overflownone {
   @apply dark:text-gray-500 !important;
 }
 
-/* Modern Select Styles */
 .ant-select-selector {
-  @apply text-gray-900 dark:bg-gray-800 dark:text-gray-200 !important;
-  border-radius: 0.375rem !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-.ant-select-focused .ant-select-selector {
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
-}
-
-.dark .ant-select-focused .ant-select-selector {
-  border-color: #60a5fa !important;
-  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2) !important;
+  @apply dark:bg-gray-800 dark:text-gray-200 !important;
 }
 
 .ant-select-dropdown {
-  @apply text-gray-900 dark:bg-gray-800 dark:text-gray-200 !important;
-  border-radius: 0.5rem !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
-}
-
-.dark .ant-select-dropdown {
-  border-color: #374151 !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3),
-    0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+  @apply dark:bg-gray-800 dark:text-gray-200 !important;
 }
 
 .ant-select-item {
-  @apply text-gray-900 dark:bg-gray-800 dark:text-gray-200 !important;
-  border-radius: 0.375rem !important;
-  transition: background-color 0.2s ease !important;
-  margin: 0.125rem 0 !important;
-}
-
-.ant-select-item:hover {
-  @apply bg-gray-100 dark:bg-gray-700 !important;
-  color: #111827 !important;
-}
-
-.dark .ant-select-item:hover {
-  color: #e5e7eb !important;
-}
-
-.ant-select-item-option-selected {
-  @apply bg-blue-50 dark:bg-blue-900/30 !important;
-  color: #111827 !important;
-}
-
-.dark .ant-select-item-option-selected {
-  color: #e5e7eb !important;
-}
-
-/* Inputs inside select dropdowns */
-.ant-select-dropdown .ant-select-selection-search-input,
-.ant-select-dropdown input[type="text"],
-.ant-select-dropdown .ant-input {
-  @apply bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 !important;
-  border-color: #d1d5db !important;
-}
-
-.dark .ant-select-dropdown .ant-select-selection-search-input,
-.dark .ant-select-dropdown input[type="text"],
-.dark .ant-select-dropdown .ant-input {
-  border-color: #4b5563 !important;
+  @apply dark:bg-gray-800 dark:text-gray-200 !important;
 }
 
 .ant-select-arrow {
@@ -1593,29 +1063,11 @@ tbody.overflownone {
   @apply flex items-center dark:text-gray-100 !important;
 }
 
-/* Modern Calendar Navigation Icons */
 .ant-picker-prev-icon,
 .ant-picker-next-icon,
 .ant-picker-super-prev-icon,
 .ant-picker-super-next-icon {
   @apply dark:text-gray-100 !important;
-  transition: color 0.2s ease !important;
-}
-
-.ant-picker-header-view button:hover,
-.ant-picker-prev-btn:hover,
-.ant-picker-next-btn:hover,
-.ant-picker-super-prev-btn:hover,
-.ant-picker-super-next-btn:hover {
-  color: #059669 !important;
-}
-
-.dark .ant-picker-header-view button:hover,
-.dark .ant-picker-prev-btn:hover,
-.dark .ant-picker-next-btn:hover,
-.dark .ant-picker-super-prev-btn:hover,
-.dark .ant-picker-super-next-btn:hover {
-  color: #34d399 !important;
 }
 
 .ant-steps-item-title {
@@ -1650,210 +1102,82 @@ input:-webkit-autofill {
   @apply flex !important;
 }
 
-/* Modern Picker Panel */
 .ant-picker-panel {
-  @apply dark:bg-gray-700 !important;
-  border-radius: 0.5rem !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-  overflow: hidden !important;
+  @apply rounded-lg border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-800 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
-.dark .ant-picker-panel {
-  border-color: #374151 !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
-    0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
-}
-
-/* Modern Calendar Cell Styles */
 .ant-picker-cell {
-  padding: 4px !important;
+  @apply transition-all duration-200 !important;
 }
 
-.ant-picker-cell-inner {
-  border-radius: 0.375rem !important;
-  transition: all 0.2s ease !important;
-  font-weight: 400 !important;
+.ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
+  @apply bg-green-600 font-semibold text-white !important;
 }
 
-.ant-picker-cell:hover:not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
-  background-color: #f3f4f6 !important;
-  color: #111827 !important;
-}
-
-.dark
-  .ant-picker-cell:hover:not(.ant-picker-cell-disabled)
-  .ant-picker-cell-inner {
-  background-color: #4b5563 !important;
-  color: #f9fafb !important;
-}
-
-.ant-picker-cell-selected .ant-picker-cell-inner,
-.ant-picker-cell-selected:hover .ant-picker-cell-inner {
-  background-color: #059669 !important;
-  color: #ffffff !important;
-  font-weight: 500 !important;
-}
-
-.dark .ant-picker-cell-selected .ant-picker-cell-inner,
-.dark .ant-picker-cell-selected:hover .ant-picker-cell-inner {
-  background-color: #34d399 !important;
-  color: #111827 !important;
-}
-
-.ant-picker-cell-today .ant-picker-cell-inner {
-  border: 1px solid #059669 !important;
-  font-weight: 500 !important;
-}
-
-.dark .ant-picker-cell-today .ant-picker-cell-inner {
-  border-color: #34d399 !important;
-}
-
-.ant-picker-cell-today.ant-picker-cell-selected .ant-picker-cell-inner {
-  border-color: transparent !important;
+.ant-picker-cell-in-view:hover .ant-picker-cell-inner {
+  @apply bg-green-100 dark:bg-gray-700 !important;
 }
 
 .ant-picker-cell-disabled:before {
-  @apply dark:bg-gray-800 !important;
+  @apply dark:bg-gray-700 !important;
 }
 
 .ant-picker-cell-disabled .ant-picker-cell-inner {
-  @apply text-gray-400 dark:text-gray-500 !important;
-  opacity: 0.4 !important;
-  cursor: not-allowed !important;
-  color: #9ca3af !important;
+  @apply text-gray-400 dark:text-gray-600 !important;
 }
 
 .event-active:before {
   content: "";
-  @apply mr-1 h-3 w-3 rounded-full bg-yellow-500;
+  @apply mr-1 h-2 w-2 rounded-full bg-yellow-500 shadow-md;
 }
 
 .event-selected:before {
   content: "";
-  @apply mr-1 h-3 w-3 rounded-full bg-green-500;
+  @apply mr-1 h-2 w-2 rounded-full bg-green-500 shadow-md;
 }
 
-/* Modern Picker Input */
 .ant-picker {
-  @apply dark:bg-gray-700 !important;
-  border-radius: 0.375rem !important;
-  border: 1px solid #d1d5db !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-  height: 32px !important;
-  line-height: 30px !important;
+  @apply rounded-lg border border-gray-300 bg-white transition-all duration-200 dark:border-gray-600 dark:bg-gray-800 !important;
 }
 
-/* RangePicker should have minimum width to display placeholder text */
-.ant-picker-range {
-  min-width: 320px !important;
-  height: 32px !important;
+.ant-picker:focus-within {
+  @apply border-green-600 ring-2 ring-green-100 dark:border-green-500 dark:ring-green-900 !important;
 }
 
-.ant-picker:hover {
-  border-color: #9ca3af !important;
+.ant-picker-input > input {
+  @apply bg-white text-gray-900 placeholder-gray-400 dark:bg-gray-800 dark:text-gray-50 dark:placeholder-gray-500 !important;
 }
 
-.ant-picker-focused,
-.ant-picker-focused:hover {
-  border-color: #059669 !important;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+.ant-picker-input > input:focus {
+  @apply border-green-600 dark:border-green-500 !important;
 }
 
-.dark .ant-picker {
-  border-color: #4b5563 !important;
+.ant-picker-header {
+  @apply border-b border-gray-200 dark:border-gray-700 !important;
 }
-
-.dark .ant-picker:hover {
-  border-color: #6b7280 !important;
-}
-
-.dark .ant-picker-focused,
-.dark .ant-picker-focused:hover {
-  border-color: #34d399 !important;
-  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1) !important;
-}
-
-/* Picker input text color is handled by the more specific rules below */
 
 .ant-picker-header-view {
-  @apply dark:text-gray-50 !important;
+  @apply font-semibold text-gray-900 dark:text-gray-50 !important;
 }
 
-/* Radio button group and wrapper styles */
-.ant-radio-group,
-.ant-radio-group-outline,
-.ant-radio-group-small,
-.ant-picker-calendar-mode-switch {
-  border-radius: 0.5rem !important;
+.ant-picker-prev-icon,
+.ant-picker-next-icon,
+.ant-picker-super-prev-icon,
+.ant-picker-super-next-icon {
+  @apply transition-colors duration-200 hover:text-green-600 dark:hover:text-green-500 !important;
+}
+
+.ant-picker-content > thead > tr > th {
+  @apply bg-gray-50 font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300 !important;
 }
 
 .ant-radio-button-wrapper {
-  @apply dark:bg-gray-800;
-  /* Default text color - can be overridden by Tailwind classes */
-  color: #111827; /* Black text in light mode */
-  border-radius: 0.5rem;
-}
-
-.ant-radio-button-wrapper:first-child {
-  border-top-left-radius: 0.5rem;
-  border-bottom-left-radius: 0.5rem;
-}
-
-.ant-radio-button-wrapper:last-child {
-  border-top-right-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
-}
-
-/* Only apply dark mode color if no Tailwind text classes are present */
-.dark
-  .ant-radio-button-wrapper:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb; /* White text in dark mode */
+  @apply dark:bg-gray-800 dark:text-gray-50 !important;
 }
 
 .ant-radio-button-wrapper-checked {
-  @apply dark:bg-gray-800;
-  /* Default text color - can be overridden by Tailwind classes */
-  color: #111827; /* Black text in light mode */
-}
-
-/* Only apply dark mode color if no Tailwind text classes are present */
-.dark
-  .ant-radio-button-wrapper-checked:not([class*="text-"]):not(
-    [class*="dark:text-"]
-  ) {
-  color: #e5e7eb; /* White text in dark mode */
-}
-
-.ant-radio-button,
-.ant-radio-button-checked {
-  /* Default text color - can be overridden by Tailwind classes */
-  color: #111827; /* Black text in light mode */
-}
-
-/* Only apply dark mode color if no Tailwind text classes are present */
-.dark .ant-radio-button:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-radio-button-checked:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb; /* White text in dark mode */
-}
-
-/* Ensure all text inside radio buttons is visible in light mode */
-/* Only apply if no Tailwind text color classes are present */
-.ant-radio-group *:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-radio-button-wrapper *:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-radio-button *:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827; /* Black text in light mode */
-}
-
-.dark .ant-radio-group *:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-radio-button-wrapper
-  *:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-radio-button *:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb; /* White text in dark mode */
+  @apply dark:bg-gray-800 dark:text-gray-50 !important;
 }
 
 .ant-picker-clear {
@@ -1886,36 +1210,6 @@ input:-webkit-autofill {
 
 .ant-input-affix-wrapper {
   @apply dark:bg-gray-800 dark:text-gray-300 !important;
-  border-radius: 0.375rem !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-.ant-input-affix-wrapper:focus,
-.ant-input-affix-wrapper-focused {
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
-}
-
-.dark .ant-input-affix-wrapper:focus,
-.dark .ant-input-affix-wrapper-focused {
-  border-color: #60a5fa !important;
-  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2) !important;
-}
-
-/* Inputs inside dropdowns - Light/Dark mode */
-.ant-select-dropdown .ant-input,
-.ant-select-dropdown input,
-.ant-dropdown-menu .ant-input,
-.ant-dropdown-menu input {
-  @apply bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 !important;
-  border-color: #d1d5db !important;
-}
-
-.dark .ant-select-dropdown .ant-input,
-.dark .ant-select-dropdown input,
-.dark .ant-dropdown-menu .ant-input,
-.dark .ant-dropdown-menu input {
-  border-color: #4b5563 !important;
 }
 
 .ant-divider-inner-text {
@@ -1955,18 +1249,6 @@ input:-webkit-autofill {
   display: flex !important;
   justify-content: center;
   height: 100%;
-}
-
-.anticon-plus {
-  font-size: 1.25rem !important;
-  width: 2.2rem !important;
-  height: 1.25rem !important;
-}
-
-.anticon-plus svg {
-  width: 1.25rem !important;
-  height: 1.25rem !important;
-  font-size: 1.25rem !important;
 }
 
 .ant-notification-notice-icon {
@@ -2050,7 +1332,7 @@ input:-webkit-autofill {
 }
 
 .ant-table-cell {
-  @apply bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 !important;
+  @apply bg-white dark:bg-gray-800 dark:text-gray-300 !important;
 }
 
 .ant-table-row:nth-child(even) > .ant-table-cell {
@@ -2058,8 +1340,7 @@ input:-webkit-autofill {
 }
 
 .ant-table-row:hover > .ant-table-cell {
-  @apply bg-green-100 dark:bg-gray-600 !important;
-  transition: background-color 0.2s ease !important;
+  @apply bg-green-200 dark:bg-gray-600 !important;
 }
 
 .cameraTable .green > .ant-table-cell {
@@ -2112,71 +1393,9 @@ input:-webkit-autofill {
 .ant-checkbox:hover .ant-checkbox-inner {
   border-color: rgb(74 222 128); /* green-400 */
 }
-/* .ant-modal-content {
-  z-index: 3000 !important; 
-} */
-
-/* .mail-dropdown-overlay {
-  border-radius: 8px;
-}
-
-.mail-dropdown-overlay .ant-dropdown {
-  padding: 0;
-}
-
-.mail-dropdown-container {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-}
-
-
-
-.notification-modal .ant-modal-content {
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.notification-modal .ant-modal-header {
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-}
-
-.notification-modal .ant-modal-footer {
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-}
-
-.dark .mail-dropdown-container {
-  background: #1f2937;
-} */
 
 .profile > .ant-dropdown-menu {
   @apply rounded-md p-2 transition duration-300 ease-in-out !important;
-}
-.ant-dropdown-menu.bg-green-500 {
-  background-color: rgb(34, 197, 94) !important;
-}
-
-.ant-dropdown-menu.bg-green-600 {
-  background-color: rgb(5, 150, 105) !important;
-}
-
-.ant-dropdown-menu.bg-blue-500 {
-  background-color: rgb(59, 130, 246) !important;
-}
-
-.ant-dropdown-menu.bg-red-500 {
-  background-color: rgb(239, 68, 68) !important;
-}
-
-.ant-dropdown-menu.bg-yellow-500 {
-  background-color: rgb(234, 179, 8) !important;
-}
-
-.ant-dropdown-menu.bg-gray-500 {
-  background-color: rgb(107, 114, 128) !important;
 }
 
 .profileMenuItem {
@@ -2220,14 +1439,8 @@ input[type="number"] {
   color: rgb(5 150 105) !important;
 }
 
-/* Modern Calendar Range Selection */
 .ant-picker-cell-in-view.ant-picker-cell-in-range::before {
-  background-color: #d1fae5 !important;
-  @apply dark:bg-gray-700;
-}
-
-.dark .ant-picker-cell-in-view.ant-picker-cell-in-range::before {
-  background-color: #1f2937 !important;
+  @apply dark:bg-gray-800;
 }
 
 .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
@@ -2236,19 +1449,7 @@ input[type="number"] {
 .ant-picker-cell-in-view.ant-picker-cell-range-end:not(
     .ant-picker-cell-range-end-single
   )::before {
-  background-color: #d1fae5 !important;
-  @apply dark:bg-gray-700;
-}
-
-.dark
-  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
-    .ant-picker-cell-range-start-single
-  )::before,
-.dark
-  .ant-picker-cell-in-view.ant-picker-cell-range-end:not(
-    .ant-picker-cell-range-end-single
-  )::before {
-  background-color: #1f2937 !important;
+  @apply dark:bg-gray-800;
 }
 
 .ant-transfer-list-content-item-checked {
@@ -2267,7 +1468,6 @@ input[type="number"] {
   @apply bg-black bg-opacity-10 dark:bg-white dark:bg-opacity-10;
 }
 
-/* Modern Button Styles - No size changes */
 .ant-btn {
   border-radius: 0.375rem !important;
   border-width: 1px !important;
@@ -2276,272 +1476,63 @@ input[type="number"] {
   align-items: center !important;
   justify-content: center !important;
   font-weight: 500 !important;
-  position: relative !important;
-  overflow: hidden !important;
-  /* Modern shadow */
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-  /* Smooth transitions */
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  /* Better border */
-  border-style: solid !important;
-  border-color: #d1d5db !important;
+  padding: 0.5rem 0.75rem !important;
+  --tw-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 transparent),
+    var(--tw-ring-shadow, 0 0 transparent), var(--tw-shadow) !important;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-duration: 0.15s !important;
+  transition-duration: 0.2s !important;
 }
 
-.dark .ant-btn {
-  border-color: #4b5563 !important;
-  background-color: #1f2937 !important;
-  color: #e5e7eb !important;
-}
-
-/* Modern Primary Button */
 .ant-btn-primary {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-  border: none !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3),
-    0 2px 4px -2px rgba(16, 185, 129, 0.2) !important;
+  @apply border-none bg-green-500 text-white after:absolute after:h-3/6 after:w-3/6 after:rounded-md focus:ring-4 focus:ring-green-200 after:focus:animate-ping after:focus:bg-white after:focus:bg-opacity-60 !important;
 }
-
-.ant-btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
-  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4),
-    0 4px 6px -4px rgba(16, 185, 129, 0.3) !important;
-}
-
-.ant-btn-primary:active:not(:disabled) {
-  box-shadow: 0 2px 4px -1px rgba(16, 185, 129, 0.3),
-    0 1px 2px -1px rgba(16, 185, 129, 0.2) !important;
-}
-
-.dark .ant-btn-primary {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
-}
-
-.dark .ant-btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #047857 0%, #059669 100%) !important;
-}
-
-/* Modern Tertiary Button */
 .ant-btn-tertiary {
-  background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%) !important;
-  border: none !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 6px -1px rgba(234, 179, 8, 0.3),
-    0 2px 4px -2px rgba(234, 179, 8, 0.2) !important;
-}
-
-.ant-btn-tertiary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%) !important;
-  box-shadow: 0 10px 15px -3px rgba(234, 179, 8, 0.4),
-    0 4px 6px -4px rgba(234, 179, 8, 0.3) !important;
-}
-
-.ant-btn-tertiary:active:not(:disabled) {
-  box-shadow: 0 2px 4px -1px rgba(234, 179, 8, 0.3),
-    0 1px 2px -1px rgba(234, 179, 8, 0.2) !important;
-}
-
-.dark .ant-btn-tertiary {
-  background: linear-gradient(135deg, #ca8a04 0%, #a16207 100%) !important;
-}
-
-.dark .ant-btn-tertiary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #a16207 0%, #ca8a04 100%) !important;
+  @apply border-none  bg-yellow-500 text-white after:absolute after:h-3/6 after:w-3/6 after:rounded-md focus:ring-4 focus:ring-yellow-200 after:focus:animate-ping after:focus:bg-white after:focus:bg-opacity-60 dark:bg-yellow-500 !important;
 }
 
 .ant-tabs-tab-btn:hover {
   color: rgb(5 150 105) !important;
 }
 
-/* Modern Tag Styles */
-.ant-tag {
-  border-radius: 0.375rem !important;
-  padding: 0.125rem 0.5rem !important;
-  font-size: 0.875rem !important;
-  line-height: 1.5rem !important;
-  border: 1px solid !important;
-  transition: background-color 0.2s ease, border-color 0.2s ease,
-    color 0.2s ease !important;
-}
-
-.dark .ant-tag {
-  border-color: #4b5563 !important;
-}
-
-/* Modern Default Button Hover */
-.ant-btn:not(.ant-btn-primary):not(.ant-btn-tertiary):not(
-    .ant-btn-dangerous
-  ):hover:not(:disabled) {
-  border-color: #9ca3af !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -2px rgba(0, 0, 0, 0.06) !important;
-  background-color: #f9fafb !important;
-}
-
-.dark
-  .ant-btn:not(.ant-btn-primary):not(.ant-btn-tertiary):not(
-    .ant-btn-dangerous
-  ):hover:not(:disabled) {
-  border-color: #6b7280 !important;
-  background-color: #374151 !important;
-  color: #f9fafb !important;
-}
-
-/* Modern Button Focus */
-.ant-btn:focus-visible {
+.ant-btn:hover {
   outline: 2px solid transparent !important;
   outline-offset: 2px !important;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0
+    var(--tw-ring-offset-width) var(--tw-ring-offset-color) !important;
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0
+    calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color) !important;
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
+    var(--tw-shadow, 0 0 #0000) !important;
+  --tw-ring-opacity: 1 !important;
+  --tw-ring-color: rgba(5, 150, 105, var(--tw-ring-opacity)) !important;
+  --tw-ring-opacity: 0.5 !important;
 }
 
-.dark .ant-btn:focus-visible {
-  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.2) !important;
-}
-
-/* Modern Dangerous Button */
-.ant-btn-dangerous {
-  background-color: #dc2626 !important;
-  border-color: #dc2626 !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3),
-    0 2px 4px -2px rgba(220, 38, 38, 0.2) !important;
-}
-
-.ant-btn-dangerous:hover:not(:disabled) {
-  background-color: #b91c1c !important;
-  border-color: #b91c1c !important;
-  box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.4),
-    0 4px 6px -4px rgba(220, 38, 38, 0.3) !important;
-}
-
-.ant-btn-dangerous:active:not(:disabled) {
-  box-shadow: 0 2px 4px -1px rgba(220, 38, 38, 0.3),
-    0 1px 2px -1px rgba(220, 38, 38, 0.2) !important;
-}
-
-.dark .ant-btn-dangerous {
-  background-color: #ef4444 !important;
-  border-color: #ef4444 !important;
-}
-
-.dark .ant-btn-dangerous:hover:not(:disabled) {
-  background-color: #dc2626 !important;
-  border-color: #dc2626 !important;
+.ant-btn-dangerous:hover {
+  outline: 2px solid transparent !important;
+  outline-offset: 2px !important;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0
+    var(--tw-ring-offset-width) var(--tw-ring-offset-color) !important;
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0
+    calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color) !important;
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
+    var(--tw-shadow, 0 0 #0000) !important;
+  --tw-ring-opacity: 1 !important;
+  --tw-ring-color: rgba(220, 38, 38, var(--tw-ring-opacity)) !important;
+  --tw-ring-opacity: 0.5 !important;
 }
 
 .anticon svg {
   display: flex !important;
 }
 
-/* Make icons respect ALL Tailwind color classes on parent - ensure icon inherits color */
-[class*="text-"] .anticon {
-  color: inherit !important;
-}
-
-[class*="text-"] > .anticon {
-  color: inherit !important;
-}
-
-/* Make SVG paths use currentColor to pick up the inherited color */
-[class*="text-"] .anticon svg {
-  color: inherit !important;
-}
-
-[class*="text-"] .anticon svg * {
-  fill: currentColor !important;
-  stroke: none !important;
-}
-
-/* Specific overrides for direct icon children */
-.text-green-600 > .anticon,
-.text-green-600 .anticon {
-  color: rgb(0, 187, 129) !important;
-}
-
-.text-red-600 > .anticon,
-.text-red-600 .anticon {
-  color: rgb(220, 38, 38) !important;
-}
-
-.text-green-600 > .anticon svg *,
-.text-green-600 .anticon svg * {
-  fill: rgb(0, 187, 129) !important;
-}
-
-.text-red-600 > .anticon svg *,
-.text-red-600 .anticon svg * {
-  fill: rgb(220, 38, 38) !important;
-}
-/* Ant Design Icons - Force color inheritance from Tailwind classes */
-.anticon.text-green-500,
-.text-green-500.anticon,
-span.text-green-500 > .anticon,
-div.text-green-500 > .anticon {
-  color: rgb(34, 197, 94) !important;
-}
-
-.anticon.text-green-600,
-.text-green-600.anticon,
-span.text-green-600 > .anticon,
-div.text-green-600 > .anticon {
-  color: rgb(22, 163, 74) !important;
-}
-
-.anticon.text-red-500,
-.text-red-500.anticon,
-span.text-red-500 > .anticon,
-div.text-red-500 > .anticon {
-  color: rgb(239, 68, 68) !important;
-}
-
-.anticon.text-red-600,
-.text-red-600.anticon,
-span.text-red-600 > .anticon,
-div.text-red-600 > .anticon {
-  color: rgb(220, 38, 38) !important;
-}
-
-/* SVG fills - use currentColor to pick up the icon's color */
-.anticon.text-green-500 svg *,
-.text-green-500.anticon svg *,
-span.text-green-500 > .anticon svg *,
-div.text-green-500 > .anticon svg * {
-  fill: rgb(34, 197, 94) !important;
-  stroke: none !important;
-}
-
-.anticon.text-green-600 svg *,
-.text-green-600.anticon svg *,
-span.text-green-600 > .anticon svg *,
-div.text-green-600 > .anticon svg * {
-  fill: rgb(22, 163, 74) !important;
-  stroke: none !important;
-}
-
-.anticon.text-red-500 svg *,
-.text-red-500.anticon svg *,
-span.text-red-500 > .anticon svg *,
-div.text-red-500 > .anticon svg * {
-  fill: rgb(239, 68, 68) !important;
-  stroke: none !important;
-}
-
-.anticon.text-red-600 svg *,
-.text-red-600.anticon svg *,
-span.text-red-600 > .anticon svg *,
-div.text-red-600 > .anticon svg * {
-  fill: rgb(220, 38, 38) !important;
-  stroke: none !important;
-}
-
-/* Generic rule for all other text colors - lower specificity */
-[class*="text-"] .anticon {
-  color: inherit !important;
-}
 .ant-btn > span {
   display: flex !important;
 }
-
 .ant-upload-text {
   @apply dark:text-gray-200 !important;
 }
@@ -2558,175 +1549,16 @@ div.text-red-600 > .anticon svg * {
   justify-content: center;
 }
 
-/* Modern Popover Styles */
-.ant-popover {
-  border-radius: 0.5rem !important;
-}
-
-.ant-popover-content {
-  display: flex !important;
-  align-items: flex-start !important;
-  justify-content: flex-start !important;
-}
-
 .ant-popover-inner {
-  @apply bg-white dark:bg-gray-800 !important;
-  border-radius: 0.5rem !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
-  padding: 0.5rem !important;
-  display: flex !important;
-  align-items: flex-start !important;
-  justify-content: flex-start !important;
-}
-
-.dark .ant-popover-inner {
-  border-color: #374151 !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3),
-    0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
-}
-
-.ant-popover-inner-content:not([class*="text-"]):not([class*="dark:text-"]) {
-  padding: 0 !important;
-  color: #111827 !important;
-  display: flex !important;
-  align-items: flex-start !important;
-  justify-content: flex-start !important;
-  flex-direction: column !important;
-}
-
-.ant-popover-inner-content
-  *:not(.anticon-delete):not([class*="DeleteOutlined"]):not(
-    [class*="text-"]
-  ):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-popover-inner-content
-  .anticon:not(.anticon-delete):not([class*="DeleteOutlined"]):not(
-    [class*="text-"]
-  ):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.dark
-  .ant-popover-inner-content:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark
-  .ant-popover-inner-content
-  *:not(.anticon-delete):not([class*="DeleteOutlined"]):not(
-    [class*="text-"]
-  ):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark
-  .ant-popover-inner-content
-  .anticon:not(.anticon-delete):not([class*="DeleteOutlined"]):not(
-    [class*="text-"]
-  ):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-/* Popover menu items - modern styling */
-.ant-popover-inner-content
-  .ant-dropdown-link:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-popover-inner-content a:not([class*="text-"]):not([class*="dark:text-"]) {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  gap: 0.75rem !important;
-  padding: 0.625rem 0.875rem !important;
-  border-radius: 0.375rem !important;
-  transition: background-color 0.2s ease !important;
-  margin: 0.125rem 0 !important;
-  color: #111827 !important;
-  width: 100% !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-
-.dark
-  .ant-popover-inner-content
-  .ant-dropdown-link:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-popover-inner-content
-  a:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.ant-popover-inner-content .ant-dropdown-link:hover,
-.ant-popover-inner-content a:hover {
-  @apply bg-gray-100 dark:bg-gray-700 !important;
-}
-
-/* Delete items - red color */
-.ant-popover-inner-content .ant-dropdown-link:has(.anticon-delete),
-.ant-popover-inner-content .ant-dropdown-link:has([class*="DeleteOutlined"]),
-.ant-popover-inner-content a:has(.anticon-delete),
-.ant-popover-inner-content a:has([class*="DeleteOutlined"]) {
-  color: #dc2626 !important;
-}
-
-.ant-popover-inner-content .ant-dropdown-link:has(.anticon-delete):hover,
-.ant-popover-inner-content
-  .ant-dropdown-link:has([class*="DeleteOutlined"]):hover,
-.ant-popover-inner-content a:has(.anticon-delete):hover,
-.ant-popover-inner-content a:has([class*="DeleteOutlined"]):hover {
-  @apply bg-red-50 dark:bg-red-900/20 !important;
-  color: #dc2626 !important;
-}
-
-/* Delete icons - always red */
-.ant-popover-inner-content .anticon-delete,
-.ant-popover-inner-content [class*="DeleteOutlined"],
-.ant-popover-inner-content svg[class*="delete"] {
-  color: #dc2626 !important;
-  fill: #dc2626 !important;
-}
-
-.dark .ant-popover-inner-content .anticon-delete,
-.dark .ant-popover-inner-content [class*="DeleteOutlined"],
-.dark .ant-popover-inner-content svg[class*="delete"] {
-  color: #ef4444 !important;
-  fill: #ef4444 !important;
-}
-
-/* Delete text labels - target labels within delete items */
-.ant-popover-inner-content .ant-dropdown-link:has(.anticon-delete) label,
-.ant-popover-inner-content
-  .ant-dropdown-link:has([class*="DeleteOutlined"])
-  label,
-.ant-popover-inner-content a:has(.anticon-delete) label,
-.ant-popover-inner-content a:has([class*="DeleteOutlined"]) label {
-  color: #dc2626 !important;
-}
-
-.dark .ant-popover-inner-content .ant-dropdown-link:has(.anticon-delete) label,
-.dark
-  .ant-popover-inner-content
-  .ant-dropdown-link:has([class*="DeleteOutlined"])
-  label,
-.dark .ant-popover-inner-content a:has(.anticon-delete) label,
-.dark .ant-popover-inner-content a:has([class*="DeleteOutlined"]) label {
-  color: #ef4444 !important;
+  @apply dark:bg-gray-800 !important;
 }
 
 .ant-checkbox-wrapper > span {
   @apply dark:text-white !important;
 }
 
-/* Hide popover arrow */
-.ant-popover-arrow {
-  display: none !important;
-}
-
-.ant-popover-arrow-content {
-  display: none !important;
+.ant-popover-arrow-content::before {
+  @apply dark:bg-gray-800 !important;
 }
 .ant-drawer-close {
   @apply dark:text-white !important;
@@ -2766,112 +1598,39 @@ div.text-red-600 > .anticon svg * {
 }
 
 /* styles/globals.css эсвэл tailwind.css файлд */
+.ant-pagination-item,
+.ant-pagination-next,
+.ant-pagination-prev {
+  @apply rounded-lg border border-gray-300 bg-white text-gray-700 transition-all duration-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 !important;
+}
+
+.ant-pagination-item:hover,
+.ant-pagination-next:hover,
+.ant-pagination-prev:hover {
+  @apply border-green-600 text-green-600 dark:border-green-500 dark:text-green-400 !important;
+}
+
+.ant-pagination-item-active,
+.ant-pagination-item-active:hover {
+  @apply border-green-600 bg-green-600 text-white dark:border-green-500 dark:bg-green-600 !important;
+}
+
+.ant-pagination-disabled {
+  @apply cursor-not-allowed opacity-50 dark:opacity-40 !important;
+}
+
 .dark .ant-pagination-item,
 .dark .ant-pagination-next,
 .dark .ant-pagination-prev {
   background-color: #1f2937 !important;
-  /* dark:bg-gray-800 */
   border-color: #374151 !important;
-  /* dark:border-gray-700 */
   color: #d1d5db !important;
-  /* dark:text-gray-300 */
 }
 
 .dark .ant-pagination-item-active {
-  background-color: #2563eb !important;
-  /* dark:bg-blue-600 */
-  border-color: #2563eb !important;
+  background-color: #16a34a !important;
+  border-color: #16a34a !important;
   color: white !important;
-}
-
-/* Hide double arrow pagination buttons */
-.ant-pagination-jump-prev,
-.ant-pagination-jump-next {
-  display: none !important;
-}
-
-/* Ant Design Picker Panel - Dark Mode White Text */
-.dark .ant-picker-panel-container {
-  color: #ffffff !important;
-}
-
-.dark .ant-picker-panel-container * {
-  color: #ffffff !important;
-}
-
-.dark .ant-picker-panel {
-  color: #ffffff !important;
-}
-
-.dark .ant-picker-panel * {
-  color: #ffffff !important;
-}
-
-.dark .ant-picker-time-panel {
-  color: #ffffff !important;
-}
-
-.dark .ant-picker-time-panel * {
-  color: #ffffff !important;
-}
-
-.dark .ant-picker-content {
-  color: #ffffff !important;
-}
-
-.dark .ant-picker-content * {
-  color: #ffffff !important;
-}
-
-.dark .ant-picker-time-panel-column {
-  color: #ffffff !important;
-}
-
-.dark .ant-picker-time-panel-column * {
-  color: #ffffff !important;
-}
-
-/* Override specific picker elements that need white text in dark mode */
-.dark .ant-picker-time-panel-column > ul > li {
-  color: #ffffff !important;
-}
-
-.dark .ant-picker-time-panel-column > ul > li:hover {
-  background-color: #374151 !important;
-  color: #ffffff !important;
-}
-
-.dark
-  .ant-picker-time-panel-column
-  > ul
-  > li.ant-picker-time-panel-cell-selected {
-  background-color: #059669 !important;
-  color: #ffffff !important;
-}
-
-/* Sun Editor Editable - Force text color in dark mode */
-.dark .sun-editor-editable {
-  color: #ffffff !important;
-}
-
-.dark .sun-editor-editable * {
-  color: #ffffff !important;
-}
-
-.dark .sun-editor-editable p,
-.dark .sun-editor-editable div,
-.dark .sun-editor-editable span,
-.dark .sun-editor-editable b,
-.dark .sun-editor-editable strong,
-.dark .sun-editor-editable i,
-.dark .sun-editor-editable em,
-.dark .sun-editor-editable h1,
-.dark .sun-editor-editable h2,
-.dark .sun-editor-editable h3,
-.dark .sun-editor-editable h4,
-.dark .sun-editor-editable h5,
-.dark .sun-editor-editable h6 {
-  color: #ffffff !important;
 }
 
 .ant-btn[disabled],
@@ -2885,400 +1644,4 @@ div.text-red-600 > .anticon svg * {
 .dark .bg-gray-800 [class*="[&_*]:dark:!text-white"] *,
 .dark .bg-gray-800 [class*="[&_*]:!text-white"] * {
   color: white !important;
-}
-
-/* Prevent body scrolling when modal or drawer is open */
-body.ant-modal-open,
-body.ant-drawer-open {
-  overflow: hidden !important;
-}
-
-html.ant-modal-open,
-html.ant-drawer-open {
-  overflow: hidden !important;
-}
-
-/* Prevent horizontal scrolling on main page */
-body {
-  overflow-x: hidden !important;
-}
-
-html {
-  overflow-x: hidden !important;
-}
-
-/* Default text colors - only apply when Tailwind classes are NOT present */
-/* This allows Tailwind color classes to override defaults */
-
-/* Ant Design components - Light mode black text (only when no Tailwind class) */
-.ant-table-cell:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-table-thead > tr > th:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-table-tbody > tr > td:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.dark .ant-table-cell:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-table-thead
-  > tr
-  > th:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-table-tbody
-  > tr
-  > td:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-/* Ant Design components - Text colors for both modes */
-/* Light mode - black text (only when no Tailwind class and no bg class) */
-.ant-dropdown-menu:not([class*="text-"]):not([class*="dark:text-"]):not(
-    [class*="bg-"]
-  ) {
-  color: #111827 !important;
-}
-
-/* Allow menu items and their children to respect Tailwind text classes */
-.ant-dropdown-menu-item:has([class*="text-white"]),
-.ant-dropdown-menu-item:has([class*="text-white"]) * {
-  color: #ffffff !important;
-}
-
-/* When menu has bg class and menu item has text-white child, force white */
-.ant-dropdown-menu[class*="bg-"]
-  .ant-dropdown-menu-item:has([class*="text-white"]),
-.ant-dropdown-menu[class*="bg-"]
-  .ant-dropdown-menu-item:has([class*="text-white"])
-  * {
-  color: #ffffff !important;
-}
-
-.ant-dropdown-menu-item:has([class*="text-"]) {
-  color: inherit !important;
-}
-
-.ant-dropdown-menu-item:has([class*="text-"]) * {
-  color: inherit !important;
-}
-
-.ant-dropdown-menu-item:not([class*="text-"]):not([class*="dark:text-"]):not(
-    :has([class*="text-"])
-  ) {
-  color: #111827 !important;
-}
-
-.ant-select-selector:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-select-item:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-select-dropdown:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-card:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-card-grid:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-menu-item:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-menu-item a:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-tabs-tab-btn:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-pagination-item > a:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-pagination-total-text:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-divider-inner-text:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-steps-item-title:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-upload-text:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-upload-hint:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Form elements - light mode (only when no Tailwind class) */
-.ant-form-item-label > label:not([class*="text-"]):not([class*="dark:text-"]),
-.form-label:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-input:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-input-number:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-input-password:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-input-affix-wrapper:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-picker-input > input:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-picker-header-view:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-picker-content
-  > thead
-  > tr
-  > th:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-picker-cell-in-view:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Radio and Checkbox - light mode (only when no Tailwind class) */
-.ant-radio-wrapper:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-radio-wrapper span:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-checkbox-wrapper:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-checkbox-wrapper > span:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Drawer - light mode (only when no Tailwind class) */
-.ant-drawer-title:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-drawer-body:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Modal - light mode (only when no Tailwind class) */
-.ant-modal-title:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-modal-confirm-title:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-modal-confirm-content:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Empty state - light mode (only when no Tailwind class) */
-.ant-empty-description:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Table pagination - light mode (only when no Tailwind class) */
-.ant-table-pagination
-  > li
-  > button:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Select arrow - light mode (only when no Tailwind class) */
-.ant-select-arrow:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Picker elements - light mode (only when no Tailwind class) */
-.ant-picker-prev-icon:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-picker-next-icon:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-picker-super-prev-icon:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-picker-super-next-icon:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-.ant-picker-clear:not([class*="text-"]):not([class*="dark:text-"]),
-.ant-picker-suffix:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Transfer list - light mode (only when no Tailwind class) */
-.ant-transfer-list-header:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Steps - light mode (only when no Tailwind class) */
-.ant-steps-icon:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Cascader - light mode (only when no Tailwind class) */
-.ant-cascader-menu-item:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #111827 !important;
-}
-
-/* Dark mode - white/light text (only when no Tailwind class and no bg class) */
-.dark
-  .ant-dropdown-menu:not([class*="text-"]):not([class*="dark:text-"]):not(
-    [class*="bg-"]
-  ) {
-  color: #e5e7eb !important;
-}
-
-/* Allow menu items and their children to respect Tailwind text classes */
-/* When menu item has text-white child, force white text (dark mode) */
-.dark .ant-dropdown-menu-item:has([class*="text-white"]),
-.dark .ant-dropdown-menu-item:has([class*="text-white"]) * {
-  color: #ffffff !important;
-}
-
-/* When menu has bg class and menu item has text-white child, force white (dark mode) */
-.dark
-  .ant-dropdown-menu[class*="bg-"]
-  .ant-dropdown-menu-item:has([class*="text-white"]),
-.dark
-  .ant-dropdown-menu[class*="bg-"]
-  .ant-dropdown-menu-item:has([class*="text-white"])
-  * {
-  color: #ffffff !important;
-}
-
-.dark .ant-dropdown-menu-item:has([class*="text-"]) {
-  color: inherit !important;
-}
-
-.dark .ant-dropdown-menu-item:has([class*="text-"]) * {
-  color: inherit !important;
-}
-
-.dark
-  .ant-dropdown-menu-item:not([class*="text-"]):not([class*="dark:text-"]):not(
-    :has([class*="text-"])
-  ) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-select-selector:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-select-item:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-select-dropdown:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-card:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-card-grid:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-menu-item:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-menu-item a:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-tabs-tab-btn:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-pagination-item > a:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-pagination-total-text:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-divider-inner-text:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-steps-item-title:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-upload-text:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-upload-hint:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark
-  .ant-form-item-label
-  > label:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .form-label:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-input:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-input-number:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-input-password:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-input-affix-wrapper:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark
-  .ant-picker-input
-  > input:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-picker-header-view:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark
-  .ant-picker-content
-  > thead
-  > tr
-  > th:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark
-  .ant-picker-cell-in-view:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-radio-wrapper:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-radio-wrapper span:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-checkbox-wrapper:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-checkbox-wrapper
-  > span:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-drawer-title:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-drawer-body:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-modal-title:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-modal-confirm-title:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-modal-confirm-content:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-empty-description:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark
-  .ant-table-pagination
-  > li
-  > button:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-select-arrow:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-picker-prev-icon:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-picker-next-icon:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-picker-super-prev-icon:not([class*="text-"]):not([class*="dark:text-"]),
-.dark
-  .ant-picker-super-next-icon:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-picker-clear:not([class*="text-"]):not([class*="dark:text-"]),
-.dark .ant-picker-suffix:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark
-  .ant-transfer-list-header:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-steps-icon:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
-}
-
-.dark .ant-cascader-menu-item:not([class*="text-"]):not([class*="dark:text-"]) {
-  color: #e5e7eb !important;
 }
