@@ -529,11 +529,11 @@ function EbarimtMedeelel({ token }) {
                   <div className="relative h-full rounded-2xl p-3 sm:p-2.5">
                     <div className="flex h-full flex-col justify-between">
                       <div>
-                        <div className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-2xl font-bold text-transparent">
+                        <div className="mb-0.5 bg-gradient-to-r from-green-900 to-green-700 bg-clip-text text-3xl font-bold text-transparent dark:from-green-100 dark:to-green-300">
                           {mur.too}
                         </div>
                       </div>
-                      <div className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                      <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         {t(mur.utga)}
                       </div>
                     </div>

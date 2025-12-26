@@ -118,7 +118,7 @@ function Ajiltan() {
                 src="/illustration.svg"
               />
               <div
-                className="-intro-x animate__fadeInLeftBig mt-10 mr-5 text-4xl font-medium leading-tight text-white"
+                className="-intro-x animate__fadeInLeftBig mr-5 mt-10 text-4xl font-medium leading-tight text-white"
                 data-aos="fade-right"
                 data-aos-duration="3000"
               >
@@ -169,7 +169,7 @@ function Ajiltan() {
                     <div data-aos="fade-up" data-aos-delay="300">
                       <Form.Item name="nevtrekhNer" className="mb-0">
                         <div className="group relative">
-                          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400 transition-colors group-focus-within:text-emerald-600 dark:text-gray-500 dark:group-focus-within:text-emerald-400">
+                          <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-4 text-gray-400 transition-colors group-focus-within:text-emerald-600 dark:text-gray-500 dark:group-focus-within:text-emerald-400">
                             <svg
                               className="h-5 w-5"
                               fill="none"
@@ -186,7 +186,7 @@ function Ajiltan() {
                           </div>
                           <Input
                             placeholder={t("Нэвтрэх нэр")}
-                            className="h-14 rounded-xl border-2 border-gray-200 bg-gray-50/50 pl-12 text-base transition-all focus:border-emerald-500 focus:bg-white dark:border-gray-600 dark:bg-gray-700/50 dark:focus:border-emerald-400 dark:focus:bg-gray-700"
+                            className="h-14 rounded-xl border-2 border-gray-200 bg-gray-50/50 pl-12 text-base transition-all focus:border-emerald-500 focus:bg-white dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:border-emerald-400 dark:focus:bg-gray-700"
                             size="large"
                           />
                         </div>
@@ -196,7 +196,7 @@ function Ajiltan() {
                     <div data-aos="fade-up" data-aos-delay="400">
                       <Form.Item name="nuutsUg" className="mb-0">
                         <div className="group relative">
-                          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400 transition-colors group-focus-within:text-emerald-600 dark:text-gray-500 dark:group-focus-within:text-emerald-400">
+                          <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-4 text-gray-400 transition-colors group-focus-within:text-emerald-600 dark:text-gray-500 dark:group-focus-within:text-emerald-400">
                             <svg
                               className="h-5 w-5"
                               fill="none"
@@ -213,7 +213,7 @@ function Ajiltan() {
                           </div>
                           <Password
                             placeholder={t("Нууц үг")}
-                            className="h-14 rounded-xl border-2 border-gray-200 bg-gray-50/50 pl-12 text-base transition-all focus:border-emerald-500 focus:bg-white dark:border-gray-600 dark:bg-gray-700/50 dark:focus:border-emerald-400 dark:focus:bg-gray-700"
+                            className="h-14 rounded-xl border-2 border-gray-200 bg-gray-50/50 pl-12 text-base transition-all focus:border-emerald-500 focus:bg-white dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:border-emerald-400 dark:focus:bg-gray-700"
                             size="large"
                           />
                         </div>

@@ -1269,48 +1269,48 @@ function guilgeeniiTuukh({ token }) {
               <div
                 key={`${index}toololt`}
                 className={`group relative w-[65vw] cursor-pointer overflow-hidden rounded-2xl 
-                  transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl 
-                  hover:shadow-gray-300 dark:hover:shadow-gray-800 sm:col-span-12 sm:w-auto lg:col-span-2 ${
-                    turul === mur?.turul
-                      ? "border-2 border-green-500 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
-                      : "border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
-                  }`}
+            transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl 
+            hover:shadow-gray-300 dark:hover:shadow-gray-800 sm:col-span-12 sm:w-auto lg:col-span-2 ${
+              turul === mur?.turul
+                ? "border-2 border-green-500 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
+                : "border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
+            }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
                 <Tooltip title={<div>{t(mur.tailbar)}</div>}>
-                  <div className="relative h-full w-[65vw] overflow-hidden rounded-2xl sm:w-auto">
+                  <div className="relative h-20 w-[65vw] overflow-hidden rounded-2xl sm:h-20 sm:w-auto">
                     <div className="absolute inset-0 bg-green-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10"></div>
-                    <div className="relative h-full rounded-2xl p-3 sm:p-2.5">
-                      <div className="flex h-full flex-col justify-between">
+                    <div className="relative h-full rounded-2xl p-3">
+                      <div className="flex h-full flex-col justify-between gap-1">
                         <div>
-                          <div className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-xl font-bold text-transparent">
+                          <div className="text-lg font-bold text-green-600 dark:text-green-400">
                             {mur.too}
                           </div>
                         </div>
                         <div className="flex items-end justify-between">
-                          <div className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                          <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
                             {t(mur.utga)}
                           </div>
                           <div className="flex flex-col text-center">
                             {mur.turul === "eneSardTulukh" && (
                               <>
-                                <div className="flex justify-center text-xl">
+                                <div className="flex justify-center">
                                   <ExclamationCircleOutlined
                                     style={{
-                                      fontSize: "24px",
+                                      fontSize: "18px",
                                       color: "red",
                                     }}
                                   />
                                 </div>
-                                <div className="text-xl font-bold text-red-500">
+                                <div className="text-xs font-bold text-red-500">
                                   {tolooguiGereeniiToo?.too}
                                 </div>
                               </>
                             )}
-                            <div className="text-xl text-green-600 dark:text-green-400">
+                            <div className="text-lg text-green-600 dark:text-green-400">
                               {mur.icon}
                             </div>
                           </div>
@@ -1324,6 +1324,7 @@ function guilgeeniiTuukh({ token }) {
             );
           })}
         </div>
+
         <div
           className="mt-5 flex w-full flex-col gap-5  md:flex-row"
           data-aos="zoom-in-up"
@@ -1380,170 +1381,7 @@ function guilgeeniiTuukh({ token }) {
                 Алданги устгах
               </Button>
             )}
-            <div className="hidden md:flex">
-              <BaganiinSongolt
-                shineBagana={shineBagana}
-                setShineBagana={setShineBagana}
-                columns={[
-                  {
-                    title: t("Сарын түрээс"),
-                    width: "8rem",
-                    dataIndex: "sariinTurees",
-                    summary: true,
-                    align: "center",
-                    render: (a) => {
-                      return (
-                        <div className="w-full text-right">
-                          {formatNumber(a || 0)}
-                        </div>
-                      );
-                    },
-                  },
-                  {
-                    title: t("Талбайн үнэ"),
-                    width: "8rem",
-                    align: "center",
-                    summary: true,
-                    dataIndex: "talbainNiitUne",
-                    render: (a) => {
-                      return (
-                        <div className="w-full text-right">
-                          {formatNumber(a || 0)}
-                        </div>
-                      );
-                    },
-                  },
-                  {
-                    title: t("Давхар"),
-                    dataIndex: "davkhar",
-                    ellipsis: true,
-                    align: "center",
-                    width: "5rem",
-                    showSorterTooltip: false,
-                    defaultSortOrder: "descend",
-                    sorter: () => 0,
-                  },
-                  {
-                    title: t("Түрээслэгч"),
-                    dataIndex: "ner",
-                    ellipsis: true,
-                    align: "center",
-                    width: "8rem",
-                    render(a) {
-                      return <div className="text-left">{a}</div>;
-                    },
-                  },
-                  {
-                    title: t("Гэрээний огноо"),
-                    width: "11rem",
-                    dataIndex: "gereeniiOgnoo",
-                    ellipsis: true,
-                    align: "center",
-                    render(a) {
-                      return moment(a).format("YYYY-MM-DD");
-                    },
-                    sorter: () => 0,
-                  },
-                  {
-                    title: t("Гэрээний дугаар"),
-                    width: "11rem",
-                    dataIndex: "gereeniiDugaar",
-                    ellipsis: true,
-                    align: "center",
-                    render(a) {
-                      return a;
-                    },
-                    sorter: () => 0,
-                  },
-                  {
-                    title: t("Алданги"),
-                    dataIndex: "aldangiinUldegdel",
-                    className: "text-center",
-                    align: "center",
-                    ellipsis: true,
-                    width: "7rem",
-                    summary: true,
-                    render: (aldangiinUldegdel) => {
-                      return (
-                        <div className="w-full text-right">
-                          {formatNumber(aldangiinUldegdel || 0)}
-                        </div>
-                      );
-                    },
-                  },
-                  {
-                    title: t("Төлсөн алданги"),
-                    dataIndex: "niitTulsunAldangi",
-                    className: "text-center",
-                    align: "center",
-                    ellipsis: true,
-                    width: "7rem",
-                    summary: true,
-                    render: (niitTulsunAldangi) => {
-                      return (
-                        <div className="w-full text-right">
-                          {formatNumber(niitTulsunAldangi || 0)}
-                        </div>
-                      );
-                    },
-                  },
-                  {
-                    title: t("Авлагын үлдэгдэл"),
-                    dataIndex: "avlagiinUldegdel",
-                    className: "text-center",
-                    align: "center",
-                    ellipsis: true,
-                    width: "7rem",
-                    summary: true,
-                    render(text, data, index) {
-                      return (
-                        <div className="w-full text-right">
-                          {formatNumber(
-                            (parseFloat(data.uldegdel) || 0) +
-                              (data.aldangiinUldegdel || 0)
-                          )}
-                        </div>
-                      );
-                    },
-                  },
-                  {
-                    title: t("Барьцааны үлдэгдэл"),
-                    dataIndex: "baritsaaAvakhDun",
-                    className: "text-center",
-                    align: "center",
-                    ellipsis: true,
-                    width: "7rem",
-                    summary: true,
-                    render: (baritsaaAvakhDun, data) => {
-                      return (
-                        <div className="w-full text-right">
-                          {formatNumber(
-                            (baritsaaAvakhDun || 0) -
-                              (data.baritsaaniiUldegdel || 0)
-                          )}
-                        </div>
-                      );
-                    },
-                  },
-                  {
-                    title: t("Барьцааны төлөлт"),
-                    dataIndex: "baritsaaniiUldegdel",
-                    className: "text-center",
-                    align: "center",
-                    ellipsis: true,
-                    width: "7rem",
-                    summary: true,
-                    render: (baritsaaniiUldegdel) => {
-                      return (
-                        <div className="w-full text-right">
-                          {formatNumber(baritsaaniiUldegdel || 0)}
-                        </div>
-                      );
-                    },
-                  },
-                ]}
-              />
-            </div>
+
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
@@ -1613,6 +1451,168 @@ function guilgeeniiTuukh({ token }) {
                 <DownOutlined width={5} />
               </Button>
             </Popover>
+            <BaganiinSongolt
+              shineBagana={shineBagana}
+              setShineBagana={setShineBagana}
+              columns={[
+                {
+                  title: t("Сарын түрээс"),
+                  width: "8rem",
+                  dataIndex: "sariinTurees",
+                  summary: true,
+                  align: "center",
+                  render: (a) => {
+                    return (
+                      <div className="w-full text-right">
+                        {formatNumber(a || 0)}
+                      </div>
+                    );
+                  },
+                },
+                {
+                  title: t("Талбайн үнэ"),
+                  width: "8rem",
+                  align: "center",
+                  summary: true,
+                  dataIndex: "talbainNiitUne",
+                  render: (a) => {
+                    return (
+                      <div className="w-full text-right">
+                        {formatNumber(a || 0)}
+                      </div>
+                    );
+                  },
+                },
+                {
+                  title: t("Давхар"),
+                  dataIndex: "davkhar",
+                  ellipsis: true,
+                  align: "center",
+                  width: "5rem",
+                  showSorterTooltip: false,
+                  defaultSortOrder: "descend",
+                  sorter: () => 0,
+                },
+                {
+                  title: t("Түрээслэгч"),
+                  dataIndex: "ner",
+                  ellipsis: true,
+                  align: "center",
+                  width: "8rem",
+                  render(a) {
+                    return <div className="text-left">{a}</div>;
+                  },
+                },
+                {
+                  title: t("Гэрээний огноо"),
+                  width: "11rem",
+                  dataIndex: "gereeniiOgnoo",
+                  ellipsis: true,
+                  align: "center",
+                  render(a) {
+                    return moment(a).format("YYYY-MM-DD");
+                  },
+                  sorter: () => 0,
+                },
+                {
+                  title: t("Гэрээний дугаар"),
+                  width: "11rem",
+                  dataIndex: "gereeniiDugaar",
+                  ellipsis: true,
+                  align: "center",
+                  render(a) {
+                    return a;
+                  },
+                  sorter: () => 0,
+                },
+                {
+                  title: t("Алданги"),
+                  dataIndex: "aldangiinUldegdel",
+                  className: "text-center",
+                  align: "center",
+                  ellipsis: true,
+                  width: "7rem",
+                  summary: true,
+                  render: (aldangiinUldegdel) => {
+                    return (
+                      <div className="w-full text-right">
+                        {formatNumber(aldangiinUldegdel || 0)}
+                      </div>
+                    );
+                  },
+                },
+                {
+                  title: t("Төлсөн алданги"),
+                  dataIndex: "niitTulsunAldangi",
+                  className: "text-center",
+                  align: "center",
+                  ellipsis: true,
+                  width: "7rem",
+                  summary: true,
+                  render: (niitTulsunAldangi) => {
+                    return (
+                      <div className="w-full text-right">
+                        {formatNumber(niitTulsunAldangi || 0)}
+                      </div>
+                    );
+                  },
+                },
+                {
+                  title: t("Авлагын үлдэгдэл"),
+                  dataIndex: "avlagiinUldegdel",
+                  className: "text-center",
+                  align: "center",
+                  ellipsis: true,
+                  width: "7rem",
+                  summary: true,
+                  render(text, data, index) {
+                    return (
+                      <div className="w-full text-right">
+                        {formatNumber(
+                          (parseFloat(data.uldegdel) || 0) +
+                            (data.aldangiinUldegdel || 0)
+                        )}
+                      </div>
+                    );
+                  },
+                },
+                {
+                  title: t("Барьцааны үлдэгдэл"),
+                  dataIndex: "baritsaaAvakhDun",
+                  className: "text-center",
+                  align: "center",
+                  ellipsis: true,
+                  width: "7rem",
+                  summary: true,
+                  render: (baritsaaAvakhDun, data) => {
+                    return (
+                      <div className="w-full text-right">
+                        {formatNumber(
+                          (baritsaaAvakhDun || 0) -
+                            (data.baritsaaniiUldegdel || 0)
+                        )}
+                      </div>
+                    );
+                  },
+                },
+                {
+                  title: t("Барьцааны төлөлт"),
+                  dataIndex: "baritsaaniiUldegdel",
+                  className: "text-center",
+                  align: "center",
+                  ellipsis: true,
+                  width: "7rem",
+                  summary: true,
+                  render: (baritsaaniiUldegdel) => {
+                    return (
+                      <div className="w-full text-right">
+                        {formatNumber(baritsaaniiUldegdel || 0)}
+                      </div>
+                    );
+                  },
+                },
+              ]}
+            />
           </div>
         </div>
         <div

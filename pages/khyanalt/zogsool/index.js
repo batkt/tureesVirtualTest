@@ -1701,11 +1701,11 @@ function Zogsool({ token }) {
                 <div className="absolute inset-0 bg-green-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10"></div>
                 <div className="relative flex h-full flex-col justify-between rounded-2xl p-3">
                   <div>
-                    <div className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-3xl font-bold leading-none text-transparent">
+                    <div className="mb-0.5 bg-gradient-to-r from-green-900 to-green-700 bg-clip-text text-3xl font-bold text-transparent dark:from-green-100 dark:to-green-300">
                       {a.too || 0}
                     </div>
                   </div>
-                  <div className="line-clamp-2 text-xs font-medium text-gray-500 dark:text-gray-400">
+                  <div className="line-clamp-2 text-sm font-medium text-gray-500 dark:text-gray-400">
                     {t(a.name)}
                   </div>
                 </div>
