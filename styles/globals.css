@@ -1012,19 +1012,15 @@ tbody.overflownone {
 }
 
 .ant-dropdown-menu-item {
-  @apply dark:text-gray-100 !important;
+  @apply text-gray-700 transition-colors duration-200 hover:bg-blue-50 dark:text-gray-100 dark:hover:bg-gray-800 !important;
 }
 
 .ant-dropdown-menu-item-active {
-  @apply hover:bg-gray-300 dark:bg-gray-700 !important;
+  @apply bg-blue-50 text-blue-600 dark:bg-blue-900 dark:text-blue-300 !important;
 }
 
 .ant-pagination-item > a {
   @apply dark:text-gray-200 !important;
-}
-
-.ant-pagination-item-active {
-  @apply dark:bg-gray-900 dark:text-gray-100 !important;
 }
 
 .ant-table-pagination > li > button {
@@ -1036,7 +1032,11 @@ tbody.overflownone {
 }
 
 .ant-select-selector {
-  @apply dark:bg-gray-800 dark:text-gray-200 !important;
+  @apply rounded-lg border-gray-200 bg-white text-gray-700 transition-all duration-200 hover:border-blue-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-blue-500 !important;
+}
+
+.ant-select-focused .ant-select-selector {
+  @apply border-blue-500 shadow-md dark:border-blue-500 !important;
 }
 
 .ant-select-dropdown {
@@ -1044,11 +1044,19 @@ tbody.overflownone {
 }
 
 .ant-select-item {
-  @apply dark:bg-gray-800 dark:text-gray-200 !important;
+  @apply text-gray-700 transition-colors duration-200 dark:text-gray-300 !important;
+}
+
+.ant-select-item-option-selected {
+  @apply bg-blue-50 text-blue-600 dark:bg-blue-900 dark:text-blue-300 !important;
+}
+
+.ant-select-item-option:hover {
+  @apply bg-blue-50 dark:bg-gray-800 !important;
 }
 
 .ant-select-arrow {
-  @apply dark:text-gray-200 !important;
+  @apply text-gray-500 dark:text-gray-400 !important;
 }
 
 .ant-modal-confirm-content {
@@ -1173,11 +1181,11 @@ input:-webkit-autofill {
 }
 
 .ant-radio-button-wrapper {
-  @apply dark:bg-gray-800 dark:text-gray-50 !important;
+  @apply rounded-lg border border-gray-200 bg-white text-gray-700 transition-all duration-200 hover:border-blue-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:hover:border-blue-500 !important;
 }
 
 .ant-radio-button-wrapper-checked {
-  @apply dark:bg-gray-800 dark:text-gray-50 !important;
+  @apply rounded-lg border-blue-600 bg-blue-600 text-white shadow-md dark:border-blue-600 dark:bg-blue-600 dark:text-white !important;
 }
 
 .ant-picker-clear {
@@ -1597,26 +1605,26 @@ input[type="number"] {
   border-radius: 45px;
 }
 
-/* styles/globals.css эсвэл tailwind.css файлд */
+/* Modern Pagination Styles */
 .ant-pagination-item,
 .ant-pagination-next,
 .ant-pagination-prev {
-  @apply rounded-lg border border-gray-300 bg-white text-gray-700 transition-all duration-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 !important;
+  @apply rounded-md border border-gray-200 bg-white text-gray-700 transition-all duration-200 hover:border-blue-400 hover:shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 !important;
 }
 
 .ant-pagination-item:hover,
 .ant-pagination-next:hover,
 .ant-pagination-prev:hover {
-  @apply border-green-600 text-green-600 dark:border-green-500 dark:text-green-400 !important;
+  @apply border-blue-400 text-gray-800 shadow-sm dark:border-blue-500 dark:text-gray-100 !important;
 }
 
 .ant-pagination-item-active,
 .ant-pagination-item-active:hover {
-  @apply border-green-600 bg-green-600 text-white dark:border-green-500 dark:bg-green-600 !important;
+  @apply border-blue-600 bg-blue-600 text-white shadow-md dark:border-blue-600 dark:bg-blue-600 dark:text-white !important;
 }
 
 .ant-pagination-disabled {
-  @apply cursor-not-allowed opacity-50 dark:opacity-40 !important;
+  @apply cursor-not-allowed opacity-50 dark:opacity-50 !important;
 }
 
 .dark .ant-pagination-item,
@@ -1627,9 +1635,16 @@ input[type="number"] {
   color: #d1d5db !important;
 }
 
-.dark .ant-pagination-item-active {
-  background-color: #16a34a !important;
-  border-color: #16a34a !important;
+.dark .ant-pagination-item-active,
+.dark .ant-pagination-item-active:hover {
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
+  color: white !important;
+}
+
+/* Ensure active page number text is white */
+.ant-pagination-item-active a,
+.dark .ant-pagination-item-active a {
   color: white !important;
 }
 

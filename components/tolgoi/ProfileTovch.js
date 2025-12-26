@@ -189,7 +189,7 @@ function ProfileTovch({
             zIndex: 1000,
           }}
         >
-          <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-800 to-green-500 p-3 text-white">
+          <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-600  to-green-500 p-3 text-white shadow-sm dark:bg-green-800">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-md font-medium">
                 {t("Шинэчлэлтийн мэдээ")}
@@ -381,12 +381,12 @@ function ProfileTovch({
   const ProfileDropdown = useMemo(
     () => (
       <Suspense fallback={<LoadingSpinner />}>
-        <Menu className="bg-green-600">
+        <Menu className="rounded-lg border border-green-600 bg-green-600 shadow-lg dark:border-gray-700 dark:bg-gray-900">
           <Menu.Item className="profileMenuItem">
-            <div className="text-lg font-medium text-white">{`${
+            <div className="text-lg font-semibold text-white dark:text-white">{`${
               (ajiltan?.ovog && ajiltan?.ovog[0]) || ""
             }.${ajiltan?.ner}`}</div>
-            <div className="text-sm font-medium text-gray-200">
+            <div className="text-sm font-medium text-green-100 dark:text-gray-400">
               {ajiltan?.albanTushaal}
             </div>
           </Menu.Item>
@@ -406,7 +406,7 @@ function ProfileTovch({
             className="profileMenuItem"
             onClick={() => setShowTuslamj(true)}
           >
-            <div className="flex w-44 items-center space-x-2 text-white">
+            <div className="flex w-44 items-center space-x-2 text-white dark:text-gray-100">
               <QuestionOutlined />
               <span>{t("Тусламж")}</span>
             </div>
@@ -416,14 +416,14 @@ function ProfileTovch({
             className="profileMenuItem"
             onClick={() => showSanalKhuselt(ajiltan)}
           >
-            <div className="flex w-44 items-center space-x-2 text-white">
+            <div className="flex w-44 items-center space-x-2 text-white dark:text-gray-100">
               <FiSend />
               <span>{t("Санал хүсэлт")}</span>
             </div>
           </Menu.Item>
           <Menu.Divider />
           <Menu.Item key="3" onClick={garya} className="profileMenuItem">
-            <div className="flex w-44 items-center space-x-2 text-white">
+            <div className="flex w-44 items-center space-x-2 text-white dark:text-gray-100">
               <LogoutOutlined />
               <span>{t("Гарах")}</span>
             </div>
@@ -460,6 +460,33 @@ function ProfileTovch({
         .buzz-animation {
           animation: buzz 0.4s ease-in-out;
         }
+        .profileMenuItem {
+          background: transparent !important;
+          border: none !important;
+          transition: all 0.2s ease !important;
+          color: white !important;
+        }
+        .profileMenuItem:hover {
+          background: rgba(255, 255, 255, 0.2) !important;
+          border-left: 3px solid rgba(255, 255, 255, 0.5) !important;
+          padding-left: calc(1rem - 3px) !important;
+        }
+        .dark .profileMenuItem {
+          background: #1f2937 !important;
+          color: #d1d5db !important;
+        }
+        .dark .profileMenuItem:hover {
+          background: #374151 !important;
+          border-left: 3px solid #2563eb !important;
+          padding-left: calc(1rem - 3px) !important;
+        }
+        .bg-green-600 {
+          background: linear-gradient(
+            135deg,
+            #2563eb 0%,
+            #1d4ed8 100%
+          ) !important;
+        }
       `}</style>
       <div className="flex h-8 items-center justify-end gap-1 md:gap-3">
         <Dropdown
@@ -479,13 +506,13 @@ function ProfileTovch({
           getPopupContainer={(trigger) => trigger.parentNode}
         >
           <button
-            className={`relative flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 dark:text-white dark:hover:bg-gray-700 ${
+            className={`relative flex h-8 w-8 items-center justify-center rounded-full transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-white dark:hover:bg-gray-700 ${
               animateMail && medegdelAdminCount > 0 ? "buzz-animation" : ""
             }`}
           >
             <Badge count={medegdelAdminCount} dot>
               <MailOutlined
-                className="h-5 w-5 text-gray-600 hover:text-green-600 dark:text-white"
+                className="h-5 w-5 text-gray-600 transition-colors duration-200 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
                 style={{ fontSize: "18px" }}
               />
             </Badge>
@@ -523,7 +550,7 @@ function ProfileTovch({
           overlayClassName="sonorduulga-dropdown-overlay"
           getPopupContainer={(trigger) => trigger.parentNode}
         >
-          <button className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 dark:text-white dark:hover:bg-gray-700">
+          <button className="flex h-8 w-8 items-center justify-center rounded-full transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-white dark:hover:bg-gray-700">
             <Badge count={kharaaguiToo} dot>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -550,7 +577,7 @@ function ProfileTovch({
           trigger={["click"]}
           className="cursor-pointer"
         >
-          <button className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 dark:hover:bg-gray-700">
+          <button className="flex h-8 w-8 items-center justify-center rounded-full transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:hover:bg-gray-700">
             <img
               alt={ajiltan?.ner}
               src={
