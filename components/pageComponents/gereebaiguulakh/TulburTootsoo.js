@@ -54,8 +54,7 @@ const Tulbur = ({
         value.duusakhOgnoo > moment().startOf("month")) ||
       !!value._id
     )
-      
-    khuvaariUusgey();
+      khuvaariUusgey();
   }, []);
 
   function onFinish() {
@@ -71,6 +70,10 @@ const Tulbur = ({
         item.turul === "Тогтмол"
       );
     });
+
+    console.log("=== KHUVAARI UUSGEY ===");
+    console.log("khungulultuud:", updatedKhungulult);
+
     uilchilgee(token)
       .post(`/khuvaariUusgey`, {
         dun: value.sariinTurees,
@@ -94,9 +97,21 @@ const Tulbur = ({
         gereeniiOgnoo: value.gereeniiOgnoo,
       })
       .then(({ data }) => {
+        const khungulultItems = data?.filter(
+          (item) => item.turul === "khungulult"
+        );
+
         setKhuvaari(data);
-        _.set(value, "avlaga.guilgeenuud", data);
-        onChange({ ...value });
+
+        const shineValue = {
+          ...value,
+          avlaga: {
+            ...value.avlaga,
+            guilgeenuud: data,
+          },
+        };
+
+        onChange(shineValue);
       })
       .catch((e) => {
         aldaaBarigch(e);

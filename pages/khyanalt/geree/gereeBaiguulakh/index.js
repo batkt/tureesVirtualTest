@@ -164,7 +164,7 @@ function GereeBaiguulakh({ token }) {
       if (!!data.customerTin && data.register === data.customerTin)
         data.register = undefined;
 
-      const guilgeenuud = [...(data.avlaga.guilgeenuud || [])];
+      const guilgeenuud = [...(data.avlaga?.guilgeenuud || [])];
       if (gereeniiZagvar?.turGereeEsekh !== true && data?.baritsaaAvakhDun > 0)
         guilgeenuud.push({
           turul: "baritsaa",
