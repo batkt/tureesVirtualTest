@@ -1328,7 +1328,7 @@ input:-webkit-autofill {
 }
 
 .ant-steps-item-icon {
-  @apply flex items-center justify-center dark:bg-gray-800 !important;
+  @apply ml-10 flex items-center justify-center dark:bg-gray-800 !important;
 }
 
 .ant-steps-icon {

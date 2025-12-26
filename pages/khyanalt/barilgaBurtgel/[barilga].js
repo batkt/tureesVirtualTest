@@ -374,7 +374,7 @@ function GereeBaiguulakh({ token }) {
                       logoZuragKharakh(e, `logo/${logoMedeelel.logo}`)
                     }
                   >
-                    {t("Тамга зураг харах")}
+                    {t("Лого зураг харах")}
                   </Button>
                 )}
                 {!!logoMedeelel?.logo && (

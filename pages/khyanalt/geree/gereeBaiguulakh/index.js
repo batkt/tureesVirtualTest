@@ -518,15 +518,12 @@ function GereeBaiguulakh({ token }) {
           <Steps onChange={onChange} current={current}>
             {steps.map((item, index) => (
               <Step
-                status={
-                  dutuuAlkham?.find((a) => a === index) === index && "error"
-                }
                 value={index}
                 key={item.title}
                 title={t(item.title)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
-                data-aos-delay={1 + index + "00"}
+                data-aos-delay={`${1 + index}00`}
               />
             ))}
           </Steps>
