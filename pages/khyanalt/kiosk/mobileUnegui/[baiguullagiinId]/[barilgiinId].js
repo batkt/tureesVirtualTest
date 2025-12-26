@@ -388,7 +388,14 @@ const KioskMobile = ({
                 <div className="h-[1px] w-full bg-black dark:bg-black" />
                 <div className="flex w-full justify-between px-6 text-red-400">
                   <div>Төлбөр</div>
-                  <div>{formatNumber(songogdsonData.pay_amount, 0)}₮</div>
+                  <div>
+                    {formatNumber(
+                      songogdsonData?.anhniiPayAmount ??
+                        songogdsonData?.pay_amount,
+                      0
+                    )}
+                    ₮
+                  </div>
                 </div>
                 {khungulukhDun > 0 && (
                   <div className="h-[1px] w-full bg-black dark:bg-black" />

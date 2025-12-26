@@ -347,6 +347,15 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
+          case "Ugaalga":
+            ugugdul.push({
+              ner: "Угаалга Хөнгөлөлт",
+              icon: "/hongololt.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
 
           default:
             ugugdul.push({

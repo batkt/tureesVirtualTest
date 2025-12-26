@@ -51,13 +51,20 @@ function ShineTulbur(
   },
   ref
 ) {
+  const isUgaalgaDiscount = (t) =>
+    typeof t === "string" && t.toLowerCase().startsWith("ugaalga");
+
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
     !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
   );
   const [isProcessing, setIsProcessing] = useState(false);
   const [khaanbank, setTerminal] = React.useState(false);
-  const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
+  // Note: some kiosk discounts are stored as separate "tulbur" records (e.g. "ugaalga/ 1 цаг").
+  // These should NOT be included in manual payment calculation (otherwise niitDun becomes mismatched).
+  const [tulbur, setTulbur] = React.useState(
+    (data?.tulbur || []).filter((x) => !isUgaalgaDiscount(x?.turul))
+  );
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
   const [irgenEsekh, setIrgenEsekh] = React.useState(true);
@@ -81,7 +88,9 @@ function ShineTulbur(
   const [qpayModalTuluv, setQpayModalTuluv] = React.useState(false);
   const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
     niitDun?.toString() -
-      (data?.tulbur?.length > 0 && data?.tulbur?.reduce((a, b) => a + b.dun, 0))
+      ((data?.tulbur || [])
+        .filter((x) => !isUgaalgaDiscount(x?.turul))
+        .reduce((a, b) => a + (Number(b?.dun) || 0), 0) || 0)
   );
 
   const khungulultAnkhOrjIrsen = useMemo(() => {

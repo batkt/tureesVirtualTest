@@ -29,6 +29,7 @@ import axios from "axios";
 import amjilttaiAnimation from "./amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
+import getTsagiinTariff from "tools/function/getTsagiinTariff";
 import { modal } from "components/ant/Modal";
 import ZuvhunKhunglukhModalContent from "./ZuvhunKhunglukhModalContent";
 import ShineDugaarKeyboard from "components/pageComponents/kiosk/ShineKeyboard";
@@ -108,16 +109,13 @@ const Kiosk = () => {
         });
   }, [token]);
 
-  const msgNotif = useCallback(
-    (content) => {
-      toast.info(content, {
-        duration: 3000,
-      });
-    },
-    []
-  );
+  const msgNotif = useCallback((content) => {
+    toast.info(content, {
+      duration: 3000,
+    });
+  }, []);
 
-  function showKhunglult(khungulukhTsag) {
+  function showKhunglult(khungulukhTsag, khungulultTurul) {
     const footer = [
       <Button onClick={() => khungulultRef.current.khaaya()}>Үгүй</Button>,
       <Button
@@ -139,6 +137,7 @@ const Kiosk = () => {
           ref={khungulultRef}
           zogsool={parkingJagsaalt?.[0]}
           khungulukhTsag={khungulukhTsag}
+          khungulultTurul={khungulultTurul}
         />
       ),
       footer,
@@ -280,6 +279,32 @@ const Kiosk = () => {
         });
       }
     }
+    // Ugaalga (1h + 24h) - time does NOT matter; amounts are always available
+    if (
+      ajiltan?._id === "694e6d2d5b0e44bb0cca2945" &&
+      songogdsonData?.enter_date &&
+      !songogdsonData?.ugaalgaHungulult &&
+      !songogdsonData?.ugaalgaHungulult24
+    ) {
+      setSongogdsonData((prev) => {
+        const undsenUne =
+          getTsagiinTariff(
+            parkingJagsaalt?.[0]?.tulburuud,
+            servereesAvsonOdooTsag,
+            60
+          ) ||
+          parkingJagsaalt?.[0]?.undsenUne ||
+          2000;
+        const rawPay = Number(prev?.pay_amount) || 0;
+        const nextPay = rawPay < undsenUne ? 0 : rawPay - undsenUne;
+        return {
+          ...prev,
+          ugaalgaHungulult: undsenUne,
+          ugaalgaHungulult24: undsenUne * 24,
+          pay_amount: nextPay,
+        };
+      });
+    }
     if (ajiltan?._id === "68425acd7611dd8da7e7a7d2") {
       setSongogdsonData((prev) => {
         return {
@@ -288,7 +313,12 @@ const Kiosk = () => {
         };
       });
     }
-  }, [songogdsonData?.enter_date, servereesAvsonOdooTsag, ajiltan?._id]);
+  }, [
+    songogdsonData?.enter_date,
+    servereesAvsonOdooTsag,
+    ajiltan?._id,
+    parkingJagsaalt?.[0]?.undsenUne,
+  ]);
   function onTimeout() {
     setDrawerOngoikh(false);
     setSongogdsonData(null);
@@ -454,12 +484,16 @@ const Kiosk = () => {
           {
             params: {
               baiguullagiinId: baiguullaga?._id,
+              barilgiinId: barilgiinId,
             },
           }
         );
         if (response.data.success == true) {
           if (response.data?.data?.pay_amount > 0) {
-            setSongogdsonData(response.data?.data);
+            setSongogdsonData({
+              ...response.data?.data,
+              anhniiPayAmount: response.data?.data?.pay_amount,
+            });
             setAlkham(1);
             setUnshijBaina(false);
           } else {
@@ -868,7 +902,14 @@ const Kiosk = () => {
                   <div className="w-full border border-[#1E1E1E]" />
                   <div className="flex w-full justify-between px-6 text-red-400">
                     <div>Төлбөр</div>
-                    <div>{formatNumber(songogdsonData?.pay_amount, 0)}₮</div>
+                    <div>
+                      {formatNumber(
+                        songogdsonData?.anhniiPayAmount ??
+                          songogdsonData?.pay_amount,
+                        0
+                      )}
+                      ₮
+                    </div>
                   </div>
 
                   {(ajiltan?._id === "66384a9061eeda747d01a320" ||
@@ -905,6 +946,42 @@ const Kiosk = () => {
                             <MdOutlineDiscount className="text-green-400" />
                           </Button>
                           {formatNumber(songogdsonData?.fitnessHungulult24, 0)}₮
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {ajiltan?._id === "694e6d2d5b0e44bb0cca2945" && (
+                    <>
+                      <div className="w-full border border-[#1E1E1E]" />
+                      <div className="flex w-full justify-between px-6 ">
+                        <div className="text-red-400">
+                          Угаалга хөнгөлөлт/1цаг
+                        </div>
+                        <div className="flex gap-4">
+                          <Button
+                            disabled={!songogdsonData?.ugaalgaHungulult}
+                            onClick={() => showKhunglult(1, "ugaalga")}
+                            className="cursor-pointer"
+                          >
+                            <MdOutlineDiscount className="text-green-400" />
+                          </Button>
+                          {formatNumber(songogdsonData?.ugaalgaHungulult, 0)}₮
+                        </div>
+                      </div>
+                      <div className="w-full border border-[#1E1E1E]" />
+                      <div className="flex w-full justify-between px-6 ">
+                        <div className="text-red-400">
+                          Угаалга хөнгөлөлт/24цаг
+                        </div>
+                        <div className="flex gap-4">
+                          <Button
+                            disabled={!songogdsonData?.ugaalgaHungulult24}
+                            onClick={() => showKhunglult(24, "ugaalga")}
+                            className="cursor-pointer"
+                          >
+                            <MdOutlineDiscount className="text-green-400" />
+                          </Button>
+                          {formatNumber(songogdsonData?.ugaalgaHungulult24, 0)}₮
                         </div>
                       </div>
                     </>
@@ -958,7 +1035,7 @@ const Kiosk = () => {
                   <div className="flex items-center justify-center">
                     {passaarTulukh && passaarTulukh?.qr_image && (
                       <QRCode
-                        className=" border-8 border-white"
+                        className="border-8 border-white "
                         value={passaarTulukh?.qr_image}
                       />
                     )}
@@ -967,7 +1044,14 @@ const Kiosk = () => {
                   <div className="mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
                     <div className="flex w-full justify-between px-6 text-red-400">
                       <div>Төлбөр:</div>
-                      <div>{formatNumber(songogdsonData.pay_amount, 0)}₮</div>
+                      <div>
+                        {formatNumber(
+                          songogdsonData?.anhniiPayAmount ??
+                            songogdsonData?.pay_amount,
+                          0
+                        )}
+                        ₮
+                      </div>
                     </div>
                   </div>
                 </>
@@ -1034,7 +1118,7 @@ const Kiosk = () => {
                 );
               })}
             </div>
-            <div className="mt-8 flex w-full items-center justify-center gap-24  ">
+            <div className="mt-8 flex w-full items-center justify-center gap-24 ">
               <ShineDugaarKeyboard
                 dugaar={register}
                 setDugaar={setRegister}
@@ -1072,7 +1156,7 @@ const Kiosk = () => {
             )}
             {eBarimt && eBarimtTurul === "khuviKhun" && (
               <div className="mt-16 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
-                <div className="flex w-full justify-between  pl-4">
+                <div className="flex w-full justify-between pl-4">
                   <div>Сугалааны дугаар</div>
                   <div>{eBarimt?.lottery}</div>
                 </div>
@@ -1093,7 +1177,7 @@ const Kiosk = () => {
             )}
             {eBarimt && eBarimtTurul === "baiguullaga" && (
               <div className="mt-16 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
-                <div className="flex w-full justify-between  pl-4">
+                <div className="flex w-full justify-between pl-4">
                   <div>ТТД</div>
                   <div>{eBarimt?.registerNo}</div>
                 </div>

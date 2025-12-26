@@ -121,6 +121,9 @@ function tulburKhurvuulekh(v) {
     case "Fitness":
       utga = "Fitness";
       break;
+    case "Ugaalga":
+      utga = "Ugaalga";
+      break;
     case "bankQR":
       utga = "Банк QR";
       break;
@@ -158,7 +161,8 @@ function tulburKhurvuulekh(v) {
 
 const isDiscountPayment = (payment) => {
   if (!payment?.turul) return false;
-  return String(payment.turul).toLowerCase().includes("khungulult");
+  const t = String(payment.turul).toLowerCase();
+  return t.includes("khungulult") || t.startsWith("ugaalga");
 };
 
 const splitTulbur = (payments) => {
@@ -1237,6 +1241,14 @@ function Zogsool({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   Fitness
+                </div>
+                <div
+                  onClick={() => setTulbur("Ugaalga")}
+                  className={`relative ${
+                    tulbur === "Ugaalga" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                >
+                  Ugaalga
                 </div>
                 <div
                   onClick={() => setTulbur("Соёолж Ц/Д")}

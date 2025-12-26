@@ -14,6 +14,7 @@ function ZuvhunKhunglukhModalContent(
     token,
     zogsool,
     khungulukhTsag,
+    khungulultTurul,
   },
   ref
 ) {
@@ -38,6 +39,22 @@ function ZuvhunKhunglukhModalContent(
     ref,
     () => ({
       ilgeeye() {
+        const turul = khungulultTurul || "fitness";
+        const tsag = Number(khungulukhTsag) || 2;
+        const khungulult =
+          turul === "ugaalga"
+            ? tsag === 24
+              ? songogdsonData?.ugaalgaHungulult24
+              : songogdsonData?.ugaalgaHungulult
+            : tsag === 24
+            ? songogdsonData?.fitnessHungulult24
+            : songogdsonData?.fitnessHungulult;
+
+        const dun = Number(khungulult) || 0;
+        if (dun <= 0) {
+          toast.error(t("Хөнгөлөлтийн дүн 0 байна"));
+          return;
+        }
         uilchilgee(token)
           .post("/v1/kioskPay", {
             turul: "kiosk",
@@ -47,9 +64,13 @@ function ZuvhunKhunglukhModalContent(
             barilgiinId,
             ajiltniiNer: ajiltan?.ner,
             ajiltniiId: ajiltan?._id,
-            zogsoolUndsenUne: zogsool?.undsenUne || 2000,
-            khungulukhTsag: khungulukhTsag || 2,
-            khungulult: songogdsonData?.fitnessHungulult,
+            zogsoolUndsenUne:
+              Number(songogdsonData?.ugaalgaHungulult) ||
+              Number(songogdsonData?.parkingUndsenUne) ||
+              Number(zogsool?.undsenUne) ||
+              2000,
+            khungulukhTsag: tsag,
+            khungulult: dun,
           })
           .then((res) => {
             if (res.data === "Amjilttai") {

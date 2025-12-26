@@ -14,6 +14,7 @@ import moment, { utc } from "moment";
 import amjilttaiAnimation from "../../amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
+import getTsagiinTariff from "tools/function/getTsagiinTariff";
 import DugaarKeyboardMobile from "components/pageComponents/kiosk/DugaarKeyboardMobile";
 import useQpayObject from "hooks/useQpayObject";
 import ZuvhunKhunglukhModalContent from "../../ZuvhunKhunglukhModalContent";
@@ -92,7 +93,7 @@ const KioskMobile = ({
     });
   };
 
-  function showKhunglult() {
+  function showKhunglult(khungulukhTsag, khungulultTurul) {
     const footer = [
       <Button onClick={() => khungulultRef.current.khaaya()}>Үгүй</Button>,
       <Button
@@ -111,6 +112,8 @@ const KioskMobile = ({
           barilgiinId={barilgiinId}
           token={token}
           ref={khungulultRef}
+          khungulukhTsag={khungulukhTsag}
+          khungulultTurul={khungulultTurul}
         />
       ),
       footer,
@@ -155,6 +158,28 @@ const KioskMobile = ({
           ...prev,
           fitnessHungulult: 3000,
           pay_amount: prev?.pay_amount < 3000 ? 0 : prev?.pay_amount - 3000,
+        };
+      });
+    }
+    // Ugaalga: time does NOT matter; amounts are always available (1h + 24h)
+    if (
+      baiguullagiinId === "6115f350b35689cdbf1b9da3" &&
+      songogdsonData?.enter_date &&
+      !songogdsonData?.ugaalgaHungulult &&
+      !songogdsonData?.ugaalgaHungulult24
+    ) {
+      const undsenUne =
+        getTsagiinTariff(zogsool?.tulburuud, servereesAvsonOdooTsag, 60) ||
+        zogsool?.undsenUne ||
+        2000;
+      setSongogdsonData((prev) => {
+        const rawPay = Number(prev?.pay_amount) || 0;
+        const nextPay = rawPay < undsenUne ? 0 : rawPay - undsenUne;
+        return {
+          ...prev,
+          ugaalgaHungulult: undsenUne,
+          ugaalgaHungulult24: undsenUne * 24,
+          pay_amount: nextPay,
         };
       });
     }
@@ -249,45 +274,92 @@ const KioskMobile = ({
         );
         if (response.data.success == true) {
           if (response.data?.data?.pay_amount > 0) {
+            let car = { ...response.data?.data };
+            let payAmount = Number(car?.pay_amount) || 0;
+            const anhniiPayAmount = payAmount;
+            car.anhniiPayAmount = anhniiPayAmount;
+
+            // Apply Ugaalga discount BEFORE creating QPay invoice
+            if (
+              baiguullagiinId === "6115f350b35689cdbf1b9da3" &&
+              car?.enter_date
+            ) {
+              const odooTsag = moment(servereesAvsonOdooTsag || new Date());
+              const undsenUne =
+                getTsagiinTariff(zogsool?.tulburuud, odooTsag, 60) ||
+                zogsool?.undsenUne ||
+                car?.parkingUndsenUne ||
+                2000;
+              const enter = moment(car.enter_date);
+
+              if (odooTsag.isAfter(enter.clone().add(24, "hours"))) {
+                const discount24 = undsenUne * 24;
+                car.ugaalgaHungulult24 = discount24;
+                car.ugaalgaHungulult = 0;
+                payAmount = payAmount < discount24 ? 0 : payAmount - discount24;
+              } else if (odooTsag.isAfter(enter.clone().add(1, "hours"))) {
+                const discount1 = undsenUne;
+                car.ugaalgaHungulult = discount1;
+                car.ugaalgaHungulult24 = 0;
+                payAmount = payAmount < discount1 ? 0 : payAmount - discount1;
+              }
+            }
+
             if (
               !!data?.tuukh[0]?.tulbur?.find((x) => x.turul == "qpayKhungulult")
             ) {
               setKhungulukhDun(0);
             }
             if (khungulukhDun > 0) {
-              if (khungulukhDun < response.data?.data?.pay_amount) {
+              if (khungulukhDun < payAmount) {
+                const finalPay = payAmount - khungulukhDun;
                 setSongogdsonData({
-                  ...response.data?.data,
-                  pay_amount: response.data?.data?.pay_amount - khungulukhDun,
+                  ...car,
+                  anhniiPayAmount,
+                  pay_amount: finalPay,
                 });
                 setAlkham(1);
                 setTulburiinKhelber("qpay");
-                qpayAvakh(
-                  response.data?.data?.session_id,
-                  barilgiinId,
-                  response.data?.data?.pay_amount - khungulukhDun,
-                  response.data?.data?.plate_number,
-                  response.data?.data?.garsanCameraIP
-                );
+                if (finalPay > 0) {
+                  qpayAvakh(
+                    car?.session_id,
+                    barilgiinId,
+                    finalPay,
+                    car?.plate_number,
+                    car?.garsanCameraIP
+                  );
+                } else {
+                  setQpayerTulukh(false);
+                  setKhuleegdejBuiQpay();
+                }
                 setUnshijBaina(false);
               } else {
-                setKhungulukhDun(response.data?.data?.pay_amount);
-                setSongogdsonData(response.data?.data);
+                setKhungulukhDun(payAmount);
+                setSongogdsonData({ ...car, anhniiPayAmount, pay_amount: 0 });
                 setAlkham(1);
                 setTulburiinKhelber("qpay");
                 setUnshijBaina(false);
               }
             } else {
-              setSongogdsonData(response.data?.data);
+              setSongogdsonData({
+                ...car,
+                anhniiPayAmount,
+                pay_amount: payAmount,
+              });
               setAlkham(1);
               setTulburiinKhelber("qpay");
-              qpayAvakh(
-                response.data?.data?.session_id,
-                barilgiinId,
-                response.data?.data?.pay_amount,
-                response.data?.data?.plate_number,
-                response.data?.data?.garsanCameraIP
-              );
+              if (payAmount > 0) {
+                qpayAvakh(
+                  car?.session_id,
+                  barilgiinId,
+                  payAmount,
+                  car?.plate_number,
+                  car?.garsanCameraIP
+                );
+              } else {
+                setQpayerTulukh(false);
+                setKhuleegdejBuiQpay();
+              }
               setUnshijBaina(false);
             }
           } else {
@@ -532,7 +604,14 @@ const KioskMobile = ({
                 <div className="h-[1px] w-full bg-black dark:bg-black" />
                 <div className="flex w-full justify-between px-6 text-red-400">
                   <div>Төлбөр</div>
-                  <div>{formatNumber(songogdsonData.pay_amount, 0)}₮</div>
+                  <div>
+                    {formatNumber(
+                      songogdsonData?.anhniiPayAmount ??
+                        songogdsonData?.pay_amount,
+                      0
+                    )}
+                    ₮
+                  </div>
                 </div>
                 {khungulukhDun > 0 && (
                   <div className="h-[1px] w-full bg-black dark:bg-black" />
@@ -551,12 +630,46 @@ const KioskMobile = ({
                       <div className="flex gap-4">
                         Энд дар
                         <Button
-                          onClick={() => showKhunglult()}
+                          onClick={() => showKhunglult(2, "fitness")}
                           className="cursor-pointer"
                         >
                           <MdOutlineDiscount className="text-green-400" />
                         </Button>
                         {formatNumber(songogdsonData?.fitnessHungulult, 0)}₮
+                      </div>
+                    </div>
+                  </>
+                )}
+                {baiguullagiinId === "6115f350b35689cdbf1b9da3" && (
+                  <>
+                    <div className="w-full border border-[#1E1E1E]" />
+                    <div className="flex w-full justify-between px-6 ">
+                      <div className="text-red-400">Угаалга хөнгөлөлт/1цаг</div>
+                      <div className="flex gap-4">
+                        <Button
+                          disabled={!songogdsonData?.ugaalgaHungulult}
+                          onClick={() => showKhunglult(1, "ugaalga")}
+                          className="cursor-pointer"
+                        >
+                          <MdOutlineDiscount className="text-green-400" />
+                        </Button>
+                        {formatNumber(songogdsonData?.ugaalgaHungulult, 0)}₮
+                      </div>
+                    </div>
+                    <div className="w-full border border-[#1E1E1E]" />
+                    <div className="flex w-full justify-between px-6 ">
+                      <div className="text-red-400">
+                        Угаалга хөнгөлөлт/24цаг
+                      </div>
+                      <div className="flex gap-4">
+                        <Button
+                          disabled={!songogdsonData?.ugaalgaHungulult24}
+                          onClick={() => showKhunglult(24, "ugaalga")}
+                          className="cursor-pointer"
+                        >
+                          <MdOutlineDiscount className="text-green-400" />
+                        </Button>
+                        {formatNumber(songogdsonData?.ugaalgaHungulult24, 0)}₮
                       </div>
                     </div>
                   </>
@@ -697,7 +810,7 @@ const KioskMobile = ({
           </div>
           {eBarimt && eBarimtTurul === "khuviKhun" && (
             <div className="mx-4 mt-8 flex flex-col items-center justify-center gap-2 rounded-xl bg-[#414143] p-2 py-4">
-              <div className="flex w-full justify-between  pl-4">
+              <div className="flex w-full justify-between pl-4">
                 <div>Сугалааны дугаар</div>
                 <div>{eBarimt?.lottery}</div>
               </div>
@@ -718,7 +831,7 @@ const KioskMobile = ({
           )}
           {eBarimt && eBarimtTurul === "baiguullaga" && (
             <div className="mx-4 mt-8 flex flex-col items-center justify-center gap-2 rounded-xl bg-[#414143] p-2 py-4">
-              <div className="flex w-full justify-between  pl-4">
+              <div className="flex w-full justify-between pl-4">
                 <div>ТТД</div>
                 <div>{eBarimt?.registerNo}</div>
               </div>
