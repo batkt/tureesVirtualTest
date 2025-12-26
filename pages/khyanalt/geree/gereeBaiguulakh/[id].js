@@ -64,9 +64,12 @@ const toWordsOrEmpty = (value) => {
   return toWords(numericValue);
 };
 
-function GereeBaiguulakh({ token, data }) {
+function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
   const { t } = useTranslation();
   const { baiguullaga, barilgiinId } = useAuth();
+  
+  // Use tsonkhniiId from props, or fallback to data
+  const tsonkhniiId = propTsonkhniiId || data?.tsonkhniiId;
   const songosonBarilgiinHayag = React.useMemo(() => {
     if (!Array.isArray(baiguullaga?.barilguud)) return "";
     return (
@@ -519,6 +522,7 @@ function GereeBaiguulakh({ token, data }) {
       setTurulZagvar={setGereekharakhTovch}
       loading={waiting}
       fixedZagvarNeegdsenEsekh={gereekharakhTovch}
+      tsonkhniiId={tsonkhniiId}
     >
       <div className="box col-span-12 p-5">
         <div className="px-10">
