@@ -118,7 +118,7 @@ function Ajiltan() {
                 src="/illustration.svg"
               />
               <div
-                className="-intro-x animate__fadeInLeftBig mt-10 text-4xl font-medium leading-tight text-white"
+                className="-intro-x animate__fadeInLeftBig mt-10 mr-5 text-4xl font-medium leading-tight text-white"
                 data-aos="fade-right"
                 data-aos-duration="3000"
               >

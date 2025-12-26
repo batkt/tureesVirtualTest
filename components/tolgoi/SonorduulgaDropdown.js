@@ -252,7 +252,7 @@ const SonorduulgaDropdown = React.memo(
             zIndex: 1000,
           }}
         >
-          <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-400 to-green-500 p-3 text-white">
+          <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-2xl border-b-4 border-green-400 bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 p-4 text-white shadow-lg dark:border-green-600 dark:from-green-900 dark:via-green-800 dark:to-emerald-900">
             <div className="flex items-center justify-between">
               <span className="text-md font-medium">{t("Сонордуулга")}</span>
               <button
@@ -278,7 +278,7 @@ const SonorduulgaDropdown = React.memo(
           zIndex: 1000,
         }}
       >
-        <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-400 to-green-500 p-3 text-white">
+        <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg border-green-400 bg-gradient-to-r from-green-600 via-green-500 to-emerald-500  p-3 text-white shadow-lg dark:border-green-600 dark:from-green-900 dark:via-green-800 dark:to-emerald-900">
           <div className="flex items-center justify-between">
             <span className="text-md font-medium">{t("Сонордуулга")}</span>
             <button

@@ -61,7 +61,7 @@ const TipTapEditor = forwardRef(
       defaultValue,
       onChange,
       setContents,
-      height = 400,
+      height = 700,
       placeholder = "",
       readonly = false,
       className = "",

@@ -1741,50 +1741,70 @@ function ZakhialgiinKhyanalt() {
         )}
       </Drawer>
       <Card className="cardgrid col-span-12 ">
-        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
+        <div className="hideScroll flex w-full gap-3 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-4 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className={`border-2 ${
-                  mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                }  cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
-                  mur?.utga === shuult?.utga ? mur.selectedColor : ""
+                className={`group relative w-[67vw] cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 dark:hover:shadow-gray-800 sm:col-span-12 sm:w-auto lg:col-span-2 ${
+                  mur?.utga === shuult?.utga
+                    ? `${mur.selectedColor} ${mur.border} border-2`
+                    : "border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
                 }`}
                 onClick={() => setShuult(mur)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full w-[67vw] rounded-xl sm:w-auto">
-                  <div className="rounded-xl p-3">
-                    <div className="flex">
+                <div
+                  className={`absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-10 ${mur.color.replace(
+                    "text-",
+                    "bg-"
+                  )}`}
+                />
+
+                <div className="relative h-full rounded-2xl p-3 sm:p-2.5">
+                  <div className="flex h-full flex-col justify-between">
+                    <div className="mb-2 flex items-start justify-between">
                       <div>
-                        <div
-                          className={`text-3xl ${
-                            mur?.utga === shuult?.utga
-                              ? mur.color
-                              : "text-green-500"
-                          } font-bold`}
-                        >
+                        <div className="mb-0.5 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-3xl font-bold text-transparent dark:from-gray-100 dark:to-gray-300">
                           {mur.too}
                         </div>
-                        <div className="text-base text-gray-500">
+                        <div
+                          className={`text-xs font-medium transition-colors duration-300 ${
+                            mur?.utga === shuult?.utga
+                              ? mur.color
+                              : "text-gray-600 dark:text-gray-400"
+                          }`}
+                        >
                           {t(mur.utga)}
                         </div>
                       </div>
-                      <div className="ml-auto">
+                      <div
+                        className={`rounded-full p-2 transition-all duration-300 ${
+                          mur?.utga === shuult?.utga
+                            ? `${mur.color.replace("text-", "bg-")}/10`
+                            : "bg-gray-100 dark:bg-gray-700"
+                        }`}
+                      >
                         <div
-                          className={`${
+                          className={`text-xl transition-transform duration-300 group-hover:scale-125 ${
                             mur?.utga === shuult?.utga
                               ? mur.color
-                              : "text-green-500"
-                          } text-2xl`}
+                              : "text-gray-400 dark:text-gray-500"
+                          }`}
                         >
                           {mur.icon}
                         </div>
                       </div>
                     </div>
+
+                    <div
+                      className={`h-0.5 w-0 rounded-full transition-all duration-500 group-hover:w-full ${mur.color.replace(
+                        "text-",
+                        "bg-"
+                      )}`}
+                    />
                   </div>
                 </div>
               </div>

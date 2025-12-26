@@ -189,9 +189,9 @@ function ProfileTovch({
             zIndex: 1000,
           }}
         >
-          <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg bg-gradient-to-r from-green-600  to-green-500 p-3 text-white shadow-sm dark:bg-green-800">
-            <div className="mb-2 flex items-center justify-between">
-              <span className="text-md font-medium">
+          <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-2xl border-b-4 border-green-400 bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 p-4 text-white shadow-lg dark:border-green-600 dark:from-green-900 dark:via-green-800 dark:to-emerald-900">
+            <div className="mb-3 flex items-center justify-between">
+              <span className="text-lg font-bold">
                 {t("Шинэчлэлтийн мэдээ")}
               </span>
               <button
@@ -222,7 +222,7 @@ function ProfileTovch({
               />
             </div>
           </div>
-          <div className="no-transition-initial space-y-2 overflow-y-auto rounded-md bg-white p-3 dark:bg-gray-800">
+          <div className="no-transition-initial space-y-2 overflow-y-auto rounded-b-2xl border-b-4 border-l-2 border-r-2 border-green-400 bg-white p-4 dark:border-green-600 dark:bg-gray-800">
             {filteredNotifications.length > 0 ? (
               <>
                 {mailSearchQuery && (
@@ -269,10 +269,10 @@ function ProfileTovch({
                   return (
                     <div
                       key={`mail${index}`}
-                      className={`w-full overflow-hidden rounded-xl border-2 ${
+                      className={`w-full overflow-hidden rounded-xl border-l-4 transition-all duration-300 ${
                         !mur.kharsanEsekh
-                          ? "border-green-300 bg-white dark:bg-gray-800 "
-                          : "border-gray-200 dark:border-gray-600"
+                          ? "border-b-2 border-r-2 border-t-2 border-blue-300 border-l-blue-500 bg-blue-50 shadow-md hover:shadow-lg dark:border-b-blue-700 dark:border-r-blue-700 dark:border-t-blue-700 dark:bg-gray-800"
+                          : "border-b-2 border-r-2 border-t-2 border-gray-300 border-l-gray-400 bg-white dark:border-b-gray-700 dark:border-r-gray-700 dark:border-t-gray-700 dark:bg-gray-800"
                       }`}
                     >
                       <div

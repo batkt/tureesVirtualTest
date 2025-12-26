@@ -415,7 +415,7 @@ function ZakhialgaNemekh({ token }) {
     >
       <div className=" relative col-span-12 flex grid-cols-12 flex-col-reverse lg:grid ">
         <div
-          style={{ height: "calc(100vh - 7rem)" }}
+          style={{ height: "calc(100vh - 4rem)" }}
           className="col-span-12 overflow-auto p-10 lg:col-span-9"
         >
           {!ashiglaltiinZardal?.isValidating && !kharuulakhExcel && (
@@ -424,7 +424,7 @@ function ZakhialgaNemekh({ token }) {
               value={nekhemjlelZagvar?.nekhemjlekh}
               setContents={nekhemjlelZagvar?.nekhemjlekh}
               ashiglaltiinZardal={ashiglaltiinZardal}
-              height={height}
+              height={700}
             />
           )}
           {kharuulakhExcel && (

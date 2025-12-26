@@ -516,24 +516,29 @@ function EbarimtMedeelel({ token }) {
             return (
               <div
                 key={index}
-                className="zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
+                className={`group relative w-[67vw] cursor-pointer overflow-hidden rounded-2xl 
+                  border-2 border-green-200 bg-green-50/60 transition-all duration-300 ease-out 
+                  hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 dark:border-green-900 
+                  dark:bg-green-950/40 dark:hover:shadow-gray-800 sm:col-span-12 sm:w-auto lg:col-span-2`}
                 data-aos="zoom-out-down"
                 data-aos-duration="1000"
                 data-aos-delay={6 - index + "00"}
               >
-                <div className="h-full w-[67vw] rounded-xl md:w-auto">
-                  <div className="rounded-xl p-3">
-                    <div className="flex">
+                <div className="relative h-full w-[67vw] overflow-hidden rounded-2xl md:w-auto">
+                  <div className="absolute inset-0 bg-green-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10"></div>
+                  <div className="relative h-full rounded-2xl p-3 sm:p-2.5">
+                    <div className="flex h-full flex-col justify-between">
                       <div>
-                        <div className="text-2xl font-bold text-green-600">
+                        <div className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-2xl font-bold text-transparent">
                           {mur.too}
                         </div>
-                        <div className="text-sm text-gray-500">
-                          {t(mur.utga)}
-                        </div>
+                      </div>
+                      <div className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                        {t(mur.utga)}
                       </div>
                     </div>
                   </div>
+                  <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-green-500 transition-all duration-500 group-hover:w-full"></div>
                 </div>
               </div>
             );

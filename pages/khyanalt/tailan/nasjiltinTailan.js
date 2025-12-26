@@ -499,6 +499,7 @@ function nasjiltinTailan({ token }) {
       <div className="col-span-12 grid grid-cols-2 items-center gap-5 px-5 md:px-0 lg:flex">
         <DatePicker
           className="col-span-2"
+          style={{ maxWidth: "100px" }}
           locale={local}
           value={ognoo}
           picker="month"

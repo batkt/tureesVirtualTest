@@ -1558,7 +1558,11 @@ input[type="number"] {
 }
 
 .ant-popover-inner {
-  @apply dark:bg-gray-800 !important;
+  @apply rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800 !important;
+}
+
+.ant-popover-inner-content {
+  @apply text-gray-700 dark:text-gray-200 !important;
 }
 
 .ant-checkbox-wrapper > span {
@@ -1566,7 +1570,7 @@ input[type="number"] {
 }
 
 .ant-popover-arrow-content::before {
-  @apply dark:bg-gray-800 !important;
+  @apply border-gray-200 dark:border-gray-700 !important;
 }
 .ant-drawer-close {
   @apply dark:text-white !important;

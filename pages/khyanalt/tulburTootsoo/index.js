@@ -1171,34 +1171,38 @@ function tulburTootsoo({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3 ${
-                  mur.utga === songogdsonTurul
-                    ? "bg-green-50 dark:bg-gray-900"
-                    : ""
-                }`}
+                className={`group relative w-[65vw] cursor-pointer overflow-hidden rounded-2xl 
+                  transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl 
+                  hover:shadow-gray-300 dark:hover:shadow-gray-800 md:col-span-6 md:w-auto lg:col-span-3 ${
+                    mur.utga === songogdsonTurul
+                      ? "border-2 border-green-500 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
+                      : "border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
+                  }`}
                 onClick={() => turulSongyo(mur.utga)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full w-[65vw] rounded-xl sm:w-auto">
-                  <div className="rounded-xl p-3">
-                    <div className="flex">
+                <div className="relative h-full w-[65vw] overflow-hidden rounded-2xl sm:w-auto">
+                  <div className="absolute inset-0 bg-green-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10"></div>
+                  <div className="relative h-full rounded-2xl p-3 sm:p-2.5">
+                    <div className="flex h-full flex-col justify-between">
                       <div>
-                        <div className="text-3xl font-bold text-green-600">
+                        <div className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-3xl font-bold text-transparent">
                           {mur.too}
                         </div>
-                        <div className="text-base text-gray-500">
+                      </div>
+                      <div className="flex items-end justify-between">
+                        <div className="text-xs font-medium text-gray-500 dark:text-gray-400">
                           {t(mur.utga)}
                         </div>
-                      </div>
-                      <div className="ml-auto">
-                        <div className="text-2xl text-green-600">
+                        <div className="text-2xl text-green-600 dark:text-green-400">
                           {mur.icon}
                         </div>
                       </div>
                     </div>
                   </div>
+                  <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-green-500 transition-all duration-500 group-hover:w-full"></div>
                 </div>
               </div>
             );

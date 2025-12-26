@@ -1680,12 +1680,14 @@ function Zogsool({ token }) {
       loading={isValidating}
     >
       <Card size="small" className="col-span-12 overflow-auto">
-        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
+        <div className="hideScroll flex w-full gap-3 overflow-x-auto border-solid py-3 md:gap-4">
           {toololt.map((a, i) => (
             <div
               key={i}
-              className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2  border-green-600 sm:col-span-3 xl:col-span-2 2xl:col-span-2 ${
-                a.name === shuult?.name ? "bg-green-50 dark:bg-gray-900" : ""
+              className={`group relative min-w-[120px] flex-1 cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 dark:hover:shadow-gray-800 ${
+                a.name === shuult?.name
+                  ? "border-2 border-green-500 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
+                  : "border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
               }`}
               onClick={() => {
                 setShuult({ query: a.query, name: a.name });
@@ -1695,15 +1697,19 @@ function Zogsool({ token }) {
               data-aos-duration="1000"
               data-aos-delay={1 + i + "00"}
             >
-              <div className="h-full w-[67vw] rounded-xl md:w-auto">
-                <div className="rounded-xl p-3">
-                  <div className="flex flex-row items-center space-x-2">
-                    <div className="text-3xl font-bold text-green-600">
+              <div className="relative h-24 w-full overflow-hidden rounded-2xl">
+                <div className="absolute inset-0 bg-green-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10"></div>
+                <div className="relative flex h-full flex-col justify-between rounded-2xl p-3">
+                  <div>
+                    <div className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-3xl font-bold leading-none text-transparent">
                       {a.too || 0}
                     </div>
-                    <div className="text-base text-gray-500">{t(a.name)}</div>
+                  </div>
+                  <div className="line-clamp-2 text-xs font-medium text-gray-500 dark:text-gray-400">
+                    {t(a.name)}
                   </div>
                 </div>
+                <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-green-500 transition-all duration-500 group-hover:w-full"></div>
               </div>
             </div>
           ))}
