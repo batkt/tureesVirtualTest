@@ -100,12 +100,16 @@ function TsagBurtgel(
         const responseData = response?.data;
         console.log("Response Data:", responseData);
         console.log("Response Data Type:", typeof responseData);
-        console.log("Response Data === 'Amjilttai':", responseData === "Amjilttai");
+        console.log(
+          "Response Data === 'Amjilttai':",
+          responseData === "Amjilttai"
+        );
 
         // Check if response is successful - only accept "Amjilttai" string or object with message/success
-        const isSuccess = responseData === "Amjilttai" || 
-                         responseData?.message === "Amjilttai" ||
-                         responseData?.success === true;
+        const isSuccess =
+          responseData === "Amjilttai" ||
+          responseData?.message === "Amjilttai" ||
+          responseData?.success === true;
 
         if (isSuccess) {
           if (baiguullagiinId === "66cd8c682375830948ea46ca")
@@ -120,16 +124,27 @@ function TsagBurtgel(
               duusakhOgnoo: tsag?.duusakhTsag,
             })
             .then(function (response) {
-              toast.warning(response);
+              toast.warning(
+                response?.data?.message || JSON.stringify(response.data)
+              );
             })
             .catch(function (error) {
-              toast.error(error);
+              console.error("QR registration error:", error);
+              toast.error(
+                error?.response?.data?.message ||
+                  error?.message ||
+                  "QR бүртгэх үед алдаа гарлаа"
+              );
             });
         } else {
-          console.error("Unexpected response format. Expected 'Amjilttai' but got:", responseData);
-          const errorMsg = typeof responseData === "object" 
-            ? JSON.stringify(responseData, null, 2) 
-            : String(responseData);
+          console.error(
+            "Unexpected response format. Expected 'Amjilttai' but got:",
+            responseData
+          );
+          const errorMsg =
+            typeof responseData === "object"
+              ? JSON.stringify(responseData, null, 2)
+              : String(responseData);
           toast.error(t("Хадгалахад алдаа гарлаа. Хариу: ") + errorMsg);
           setLoading(false);
         }

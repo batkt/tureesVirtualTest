@@ -8,7 +8,7 @@ const uilchilgee = (token) => {
   };
   if (!!token) headers["Authorization"] = `bearer ${token}`;
   return axios.create({
-    baseURL: "https://zevtabs.mn/api",
+    baseURL: "https://admin.zevtabs.mn/api",
     headers,
   });
 };

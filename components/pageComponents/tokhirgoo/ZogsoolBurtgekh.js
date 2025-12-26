@@ -806,6 +806,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
           <TimePicker.RangePicker
             format="HH:mm"
             placeholder={["Эхлэх", "Дуусах"]}
+            order={false}
           />
         </Form.Item>
       </div>

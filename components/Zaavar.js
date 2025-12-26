@@ -23,7 +23,7 @@ function Zaavar({ token, id }) {
 
   const zaavarKharya = () => {
     const content = getContent();
-    const title = getTitle(); 
+    const title = getTitle();
 
     Modal.info({
       className: "p-0",
