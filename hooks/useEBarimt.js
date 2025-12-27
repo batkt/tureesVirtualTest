@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import moment from "moment";
@@ -49,13 +49,46 @@ function useEBarimt(token, baiguullagiinId, query, order, searchKeys) {
     search: "",
     jagsaalt: [],
   });
+  const queryWithArchive = useMemo(() => {
+    try {
+      if (!query) return query;
+      const createdAt = query.createdAt;
+      if (!createdAt || !createdAt.$gte || !createdAt.$lte) return query;
+      const start = moment(createdAt.$gte);
+      const end = moment(createdAt.$lte);
+      const now = moment();
+
+      if (
+        start.year() === end.year() &&
+        start.month() === end.month() &&
+        !(start.year() === now.year() && start.month() === now.month())
+      ) {
+        const y = start.year();
+        const m = String(start.month() + 1).padStart(2, "0");
+        const archiveName = `ebarimtShine${y}${m}`;
+        console.log("Archive data:", {
+          archiveName,
+          year: y,
+          month: m,
+          startDate: start.format("YYYY-MM-DD"),
+          endDate: end.format("YYYY-MM-DD"),
+          query: { ...query, archiveName },
+        });
+        return { ...query, archiveName };
+      }
+      return query;
+    } catch (e) {
+      console.error("aldaa:", e);
+      return query;
+    }
+  }, [query]);
   const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
       ? [
           "/ebarimtJagsaaltAvya",
           token,
           khuudaslalt,
-          query,
+          queryWithArchive,
           baiguullagiinId,
           barilgiinId,
           order,

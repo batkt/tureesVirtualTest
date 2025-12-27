@@ -25,6 +25,7 @@ import {
   PrinterOutlined,
   CloseCircleOutlined,
   FilterOutlined,
+  MinusCircleOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
@@ -749,7 +750,7 @@ function guilgeeniiTuukh({ token }) {
                 onClick={() => baritsaaUdirdya(row)}
               >
                 <Tooltip
-                  className="flex w-full items-center  justify-center px-[6px] "
+                  className="flex w-full items-center justify-center px-[6px]"
                   title={
                     khuvi < 100
                       ? t("Барьцаа дутуу", {
@@ -759,17 +760,28 @@ function guilgeeniiTuukh({ token }) {
                           ),
                         })
                       : `${formatNumber(row.baritsaaniiUldegdel)} ${t(
-                          t("барьцаа төлөгдсөн байна")
+                          "барьцаа төлөгдсөн байна"
                         )}`
                   }
                 >
-                  <Progress
-                    type="circle"
-                    percent={1 > khuvi ? khuvi?.toFixed(1) : khuvi?.toFixed(0)}
-                    width={22}
-                    strokeColor={strokeColor}
-                    trailColor={khuvi === 0 && "rgba(239, 68, 68,1)"}
-                  />
+                  {row.baritsaaAvakhEsekh === false ? (
+                    <MinusCircleOutlined
+                      style={{
+                        fontSize: "22px",
+                        color: "#ff0000",
+                      }}
+                    />
+                  ) : (
+                    <Progress
+                      type="circle"
+                      percent={
+                        1 > khuvi ? khuvi?.toFixed(1) : khuvi?.toFixed(0)
+                      }
+                      width={22}
+                      strokeColor={strokeColor}
+                      trailColor={khuvi === 0 && "rgba(239, 68, 68,1)"}
+                    />
+                  )}
                 </Tooltip>
               </div>
             </div>

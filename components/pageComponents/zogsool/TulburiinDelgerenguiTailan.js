@@ -329,6 +329,15 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
+          case "Төлбөрийн зөрчилтэй":
+            ugugdul.push({
+              ner: "Төлбөрийн зөрчилтэй",
+              icon: "/exclamation.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
           case "Үнэгүй":
             ugugdul.push({
               ner: "Үнэгүй",
@@ -575,6 +584,7 @@ function TulburiinDelgerenguiTailan(
                     a +
                     (b.ner != "Үнэгүй" &&
                     b.ner != "Зөрчил" &&
+                    b.ner != "Төлбөрийн зөрчилтэй" &&
                     b.ner != "Хөнгөлөлт" &&
                     b.ner != "Фитнес Хөнгөлөлт" &&
                     b.ner != "Хөнгөлөх"
@@ -591,7 +601,12 @@ function TulburiinDelgerenguiTailan(
               {formatNumber(
                 tulburiinMedeelel?.reduce(
                   (a, b) =>
-                    a + (b.ner == "Үнэгүй" || b.ner == "Зөрчил" ? b?.dun : 0),
+                    a +
+                    (b.ner == "Үнэгүй" ||
+                    b.ner == "Зөрчил" ||
+                    b.ner == "Төлбөрийн зөрчилтэй"
+                      ? b?.dun
+                      : 0),
                   0
                 ) || 0
               ) + "₮"}

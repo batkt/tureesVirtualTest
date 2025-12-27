@@ -632,8 +632,8 @@ function Khyanalt({ token }) {
             </div>
           </div>
           <div className=" absolute bottom-1 z-50 flex w-full items-center justify-between space-x-2 p-2">
-            <div className="text-xs font-semibold">{msj.length}/160</div>
-            <div className="flex items-center justify-between space-x-3 bg-fixed ">
+            <div className="!ml-4 text-xs font-semibold">{msj.length}/160</div>
+            <div className="flex items-center justify-between space-x-3 !mr-4">
               <label className="font-medium">
                 {turul} {t("Илгээх")}
               </label>
