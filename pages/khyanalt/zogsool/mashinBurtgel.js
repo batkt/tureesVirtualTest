@@ -97,6 +97,8 @@ function mashinBurtgel({ token }) {
     barilgiinId
   );
 
+  console.log("mashinToololt", mashinToololt);
+
   const { order, onChangeTable } = useOrder({
     createdAt: -1,
   });
@@ -698,11 +700,14 @@ function mashinBurtgel({ token }) {
       {
         name: "Нийт",
         too: formatNumber(
-          mashinToololt?.reduce((a, b) => a + b.too, 0) +
+          mashinToololt
+            ?.filter((a) => a._id !== "Block")
+            .reduce((a, b) => a + b.too, 0) +
             (mashinToololt?.find((a) => a._id === "Block")?.too || 0),
           0
         ),
       },
+
       {
         name: "Гэрээт",
         too: formatNumber(
@@ -768,6 +773,7 @@ function mashinBurtgel({ token }) {
     mashinMutate();
     mashinToololtMutate();
   }
+  console.log("---> mashinToololt", mashinToololt);
 
   function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
     uilchilgee(token)
