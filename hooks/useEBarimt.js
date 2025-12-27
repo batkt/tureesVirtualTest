@@ -58,10 +58,19 @@ function useEBarimt(token, baiguullagiinId, query, order, searchKeys) {
     try {
       if (!query) return query;
       const createdAt = query.createdAt;
+
       if (!createdAt || !createdAt.$gte || !createdAt.$lte) {
+        const now = moment();
+        const defaultQuery = {
+          ...query,
+          createdAt: {
+            $gte: now.clone().startOf("month").toDate(),
+            $lte: now.clone().endOf("month").toDate(),
+          },
+        };
         setCurrentArchiveName(null);
         setIsMultiMonth(false);
-        return query;
+        return defaultQuery;
       }
 
       const start = moment(createdAt.$gte);
