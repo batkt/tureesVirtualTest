@@ -35,6 +35,7 @@ const fetcher = (
     })
     .then((res) => res.data)
     .catch(aldaaBarigch);
+
 const fetcherToololt = (url, token, query) =>
   axios(token)
     .post(url, query)
@@ -49,39 +50,55 @@ function useEBarimt(token, baiguullagiinId, query, order, searchKeys) {
     search: "",
     jagsaalt: [],
   });
+
+  const [currentArchiveName, setCurrentArchiveName] = useState(null);
+  const [isMultiMonth, setIsMultiMonth] = useState(false);
+
   const queryWithArchive = useMemo(() => {
     try {
       if (!query) return query;
       const createdAt = query.createdAt;
-      if (!createdAt || !createdAt.$gte || !createdAt.$lte) return query;
+      if (!createdAt || !createdAt.$gte || !createdAt.$lte) {
+        setCurrentArchiveName(null);
+        setIsMultiMonth(false);
+        return query;
+      }
+
       const start = moment(createdAt.$gte);
       const end = moment(createdAt.$lte);
       const now = moment();
 
-      if (
-        start.year() === end.year() &&
-        start.month() === end.month() &&
-        !(start.year() === now.year() && start.month() === now.month())
-      ) {
+      const isMultiMonthQuery =
+        start.year() !== end.year() || start.month() !== end.month();
+
+      if (isMultiMonthQuery) {
+        setIsMultiMonth(true);
+        setCurrentArchiveName("multi-month");
+
+        return query;
+      }
+
+      setIsMultiMonth(false);
+
+      if (!(start.year() === now.year() && start.month() === now.month())) {
         const y = start.year();
         const m = String(start.month() + 1).padStart(2, "0");
         const archiveName = `ebarimtShine${y}${m}`;
-        console.log("Archive data:", {
-          archiveName,
-          year: y,
-          month: m,
-          startDate: start.format("YYYY-MM-DD"),
-          endDate: end.format("YYYY-MM-DD"),
-          query: { ...query, archiveName },
-        });
+        setCurrentArchiveName(archiveName);
+
         return { ...query, archiveName };
       }
+
+      setCurrentArchiveName(null);
       return query;
     } catch (e) {
       console.error("aldaa:", e);
+      setCurrentArchiveName(null);
+      setIsMultiMonth(false);
       return query;
     }
   }, [query]);
+
   const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
       ? [
@@ -98,13 +115,18 @@ function useEBarimt(token, baiguullagiinId, query, order, searchKeys) {
     fetcher,
     { revalidateOnFocus: false }
   );
+
   return {
     setEBarimtKhuudaslalt,
     eBarimtGaralt: data,
     eBarimtMutate: mutate,
     isValidating,
+    archiveName: data?.archiveName || currentArchiveName,
+    isMultiMonth: data?.archiveName === "multi-month" || isMultiMonth,
+    collections: data?.collections || [],
   };
 }
+
 export function useBarimtToollolt(token, query) {
   const { data, mutate } = useSWR(
     token ? ["/ebarimtToololtAvya", token, query] : null,
