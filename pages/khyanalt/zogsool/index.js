@@ -416,7 +416,7 @@ function Zogsool({ token }) {
                   : "bg-red-500 text-white dark:bg-red-700"
               } flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
             >
-              {v === 1 ? "Төлсөн" : "Төлөөгүй"}
+              {v === 1 ? "Төлсөн" : v === -4 ? "Төлбөртэй" : "Төлөөгүй"}
             </div>
           );
         },
@@ -535,6 +535,9 @@ function Zogsool({ token }) {
           $gt: 0,
         };
         baseQuery["tuukh"] = { $elemMatch: { tulbur: { $eq: [] } } };
+      } else if (tuluv === -4) {
+        baseQuery["tuukh.0.tuluv"] = -4;
+        baseQuery["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: true };
       }
     }
     if (tootsooKhelber === "2") {
@@ -1451,7 +1454,7 @@ function Zogsool({ token }) {
                   ? "bg-green-500 text-white dark:bg-green-700"
                   : // : v[0].tuluv === 0
                   // ? "bg-yellow-500 text-white dark:bg-yellow-700"
-                  v[0].tuluv === -2
+                  v[0].tuluv === -2 || v[0].tuluv === -4
                   ? "bg-red-500 text-white dark:bg-red-700"
                   : v[0].tuluv === 0 && data.niitDun > 0
                   ? "bg-yellow-500 text-white dark:bg-yellow-700"
@@ -1482,6 +1485,8 @@ function Zogsool({ token }) {
                   ? "Төлсөн"
                   : v[0].tuluv === -2
                   ? "Зөрчилтэй"
+                  : v[0].tuluv === -4
+                  ? "Төлбөртэй"
                   : v[0].tuluv === 0 && data.niitDun > 0
                   ? "Төлбөртэй"
                   : v[0]?.tuluv === 0 &&
