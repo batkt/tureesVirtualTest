@@ -188,7 +188,7 @@ function Tailan({ token }) {
 
   const tailan = useTailan(service, token, query);
   const [table, setTable] = useState({});
-  const [SSR, setSSR] = useState(false);
+  const [SSR, setSSR] = useState(true);
   const [selectValue, setSelectValue] = useState(null);
   const ref = useRef(null);
   const zagvarQuery = useMemo(() => {
@@ -286,13 +286,14 @@ function Tailan({ token }) {
 
   const PlotlyRenderers = useMemo(() => {
     if (!SSR) {
+      const createPlotlyRenderers = require("react-pivottable/PlotlyRenderers").default;
       return createPlotlyRenderers(DynamicPlot);
     }
     return undefined;
   }, [SSR]);
-
-  useLayoutEffect(() => {
-    setSSR(typeof window === "undefined");
+  
+  useEffect(() => {
+    setSSR(false);
   }, []);
 
   function zagvarBurtgeye(data) {
