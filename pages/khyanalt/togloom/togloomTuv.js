@@ -568,7 +568,7 @@ function togloom1() {
     };
   }, [ognoo, turul]);
 
-  const togloominTuviinGaralt = useJagsaalt(
+  const { togloominTuviinGaralt, setKhuudaslalt } = useJagsaalt(
     "togloomiinTuv",
     query,
     order,
@@ -1262,7 +1262,7 @@ function togloom1() {
       title="Тоглоомын төв"
       khuudasniiNer="togloomTuv"
       onSearch={(search) =>
-        togloominTuviinGaralt.setKhuudaslalt((a) => ({
+        setKhuudaslalt((a) => ({
           ...a,
           search,
           khuudasniiDugaar: 1,
