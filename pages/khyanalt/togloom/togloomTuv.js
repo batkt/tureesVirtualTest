@@ -1261,10 +1261,10 @@ function togloom1() {
     <Admin
       title="Тоглоомын төв"
       khuudasniiNer="togloomTuv"
-      onSearch={(search) =>
+      onSearch={(value) =>
         setKhuudaslalt((a) => ({
           ...a,
-          search,
+          search: value,
           khuudasniiDugaar: 1,
         }))
       }
