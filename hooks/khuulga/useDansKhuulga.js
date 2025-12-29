@@ -5,43 +5,35 @@ import moment from "moment";
 import _ from "lodash";
 import { useAuth } from "services/auth";
 function getSearch(search, bank) {
-  var fallback = [
+  if (!search || !search.trim()) return null;
+  const or = [
     {
-      [`${
-        bank === "tdb"
-          ? "TxAddInf"
-          : bank === "golomt"
-          ? "tranDesc"
-          : "description"
-      }`]: {
-        $regex: search,
-        $options: "i",
-      },
+      [bank === "tdb"
+        ? "TxAddInf"
+        : bank === "golomt"
+        ? "tranDesc"
+        : "description"]: { $regex: search, $options: "i" },
     },
     {
       kholbosonTalbainId: { $regex: search, $options: "i" },
     },
-  ];
-  fallback.push({
-    [`${
-      bank === "tdb"
+    {
+      [bank === "tdb"
         ? "CtAcntOrg"
         : bank === "golomt"
         ? "accNum"
-        : "relatedAccount"
-    }`]: {
-      $regex: search,
-      $options: "i",
+        : "relatedAccount"]: { $regex: search, $options: "i" },
     },
-  });
+  ];
   if (/^\d+$/.test(search)) {
-    fallback.push({
-      [`${bank === "tdb" ? "Amt" : bank === "tdb" ? "tranAmount" : "amount"}`]:
-        search,
+    or.push({
+      [bank === "tdb" ? "Amt" : "amount"]: Number(search),
     });
   }
-  return fallback;
+  return or;
 }
+
+const searchFilter = getSearch(search, dans?.bank);
 
 const fetcher = (
   url,
@@ -53,7 +45,7 @@ const fetcher = (
   order = {},
   query,
   barilgiinId
-) =>
+) => 
   axios(token)
     .get(url, {
       params: {
@@ -73,7 +65,7 @@ const fetcher = (
             $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
             $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
           },
-          $or: getSearch(search, dans?.bank),
+          ...(searchFilter ? { $or: searchFilter } : {}),
           ...query,
         },
         ...khuudaslalt,
