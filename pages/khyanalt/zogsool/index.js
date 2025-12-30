@@ -64,7 +64,9 @@ export function excelTatajAvya(
   order,
   sheetName
 ) {
-  toastloading(t("Өгөгдөл боловсруулж байна та түр хүлээнэ үү!"), 100000);
+  const loadingToast = toast.loading(
+    t("Өгөгдөл боловсруулж байна та түр хүлээнэ үү!")
+  );
   uilchilgee(token)
     .get(service, {
       params: { query, order, khuudasniiKhemjee: mur, khuudasniiDugaar: 1 },
@@ -78,7 +80,7 @@ export function excelTatajAvya(
         .saveAs(sheetName + ".xlsx");
     })
     .catch(aldaaBarigch)
-    .finally(() => toast.destroy());
+    .finally(() => toast.dismiss(loadingToast));
 }
 
 function tulburKhurvuulekh(v) {
