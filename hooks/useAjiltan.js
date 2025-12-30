@@ -18,11 +18,9 @@ const fetcherJagsaalt = (
           baiguullagiinId,
           barilguud: barilgiinId,
           erkh: { $nin: ["Admin"] },
-          $or: [
-            { ner: { $regex: search, $options: "i" } },
-            { register: { $regex: search, $options: "i" } },
-            { utas: { $regex: search, $options: "i" } },
-          ],
+          $or: ["ner", "register", "utas"].map((key) => ({
+            [key]: { $regex: search, $options: "i" },
+          })),
           ...query,
         },
         select,

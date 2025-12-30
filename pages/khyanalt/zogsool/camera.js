@@ -411,60 +411,32 @@ function camera({ token }) {
 
   const query = useMemo(() => {
     let result = {};
+    const hasSearch =
+      !!khaikh &&
+      !khaikh.includes("\\") &&
+      !khaikh.includes("[") &&
+      !khaikh.includes("]");
+
     if (!!camerVal[1]) {
-      if (
-        !!khaikh &&
-        !khaikh?.includes("\\") &&
-        !khaikh?.includes("[" && !khaikh?.includes("]"))
-      ) {
-        // use uilchilgee search hiih regex querynd daragdsan uhchir queryn dotor search regex bijiw
-        result = {
-          $and: [
-            {
-              $or: [
-                {
-                  "tuukh.0.garsanKhaalga": camerVal[1],
-                  "tuukh.tsagiinTuukh.garsanTsag": {
-                    $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-                    $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-                  },
-                },
-                {
-                  "tuukh.0.garsanKhaalga": { $exists: false },
-                  createdAt: {
-                    $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-                    $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-                  },
-                },
-              ],
+      result = {
+        $or: [
+          {
+            "tuukh.0.garsanKhaalga": camerVal[1],
+            "tuukh.tsagiinTuukh.garsanTsag": {
+              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
             },
-            {
-              $or: [{ mashiniiDugaar: { $regex: khaikh, $options: "i" } }],
+          },
+          {
+            "tuukh.0.garsanKhaalga": { $exists: false },
+            createdAt: {
+              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
             },
-          ],
-          ...result,
-        };
-      } else
-        result = {
-          $or: [
-            {
-              "tuukh.0.garsanKhaalga": camerVal[1],
-              "tuukh.tsagiinTuukh.garsanTsag": {
-                $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-                $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-              },
-            },
-            {
-              "tuukh.0.garsanKhaalga": { $exists: false },
-              createdAt: {
-                $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-                $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-              },
-            },
-          ],
-          ...result,
-        };
-    } else
+          },
+        ],
+      };
+    } else {
       result = {
         $or: [
           {
@@ -481,61 +453,38 @@ function camera({ token }) {
           },
         ],
       };
-    if (
-      !!khaikh &&
-      !khaikh?.includes("\\") &&
-      !khaikh?.includes("[" && !khaikh?.includes("]"))
-    ) {
-      // use uilchilgee search hiih regex querynd daragdsan uhchir queryn dotor search regex bijiw
+    }
+
+    if (hasSearch) {
       result = {
         $and: [
-          {
-            $or: [
-              {
-                "tuukh.tsagiinTuukh.garsanTsag": {
-                  $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-                  $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-                },
-              },
-              {
-                createdAt: {
-                  $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-                  $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-                },
-              },
-            ],
-          },
+          result,
           {
             $or: [{ mashiniiDugaar: { $regex: khaikh, $options: "i" } }],
           },
         ],
-        ...result,
       };
     }
+
+    // Apply payment type filter (Fixed syntax error)
     if (!!khelber) {
       if (khelber === "tuluugui") {
-        result = {
-          "tuukh.tulbur.0": { $exists: false },
-          ...result,
-        };
-      } else
-        result = {
-          "tuukh.tulbur.turul":
-            !!khelber && khelber === "card"
-              ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
-              : khelber,
-          ...result,
-        };
+        result["tuukh.tulbur.0"] = { $exists: false };
+      } else {
+        result["tuukh.tulbur.turul"] =
+          !!khelber && khelber === "card"
+            ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
+            : khelber;
+      }
     }
+
     if (!!dun) {
-      result = {
-        "tuukh.tulukhDun":
-          !!dun && dun === "dunBodson"
-            ? { $gt: 0 }
-            : { $in: [0, null, undefined] },
-        ...result,
-      };
+      result["tuukh.tulukhDun"] =
+        !!dun && dun === "dunBodson"
+          ? { $gt: 0 }
+          : { $in: [0, null, undefined] };
     }
+
     return result;
   }, [ognoo, khelber, dun, camerVal, khaikh]);
 

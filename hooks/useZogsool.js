@@ -37,7 +37,9 @@ const fetcher = (
         ...khuudaslalt,
         query: {
           baiguullagiinId,
-          $or: [{ car_number: { $regex: search, $options: "i" } }],
+          $or: ["car_number"].map((key) => ({
+            [key]: { $regex: search, $options: "i" },
+          })),
           ...query,
         },
         order,

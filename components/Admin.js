@@ -92,7 +92,7 @@ const getPendingPayments = async () => {
   });
 };
 
-var timeout = null;
+
 
 function Admin({
   title,
@@ -148,6 +148,7 @@ function Admin({
   const hasReloadedThisSession = useRef(false);
   const lastSyncTime = useRef(0);
   const syncTimeoutRef = useRef(null);
+  const timeoutRef = useRef(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -914,15 +915,15 @@ function Admin({
                     }}
                     onChange={({ target }) => {
                       if (!!onSearch) {
-                        clearTimeout(timeout);
-                        timeout = setTimeout(function () {
+                        clearTimeout(timeoutRef.current);
+                        timeoutRef.current = setTimeout(function () {
                           if (
                             !target.value?.includes("\\") &&
                             !target.value?.includes("[") &&
                             !target.value?.includes("]")
                           )
                             onSearch(target.value);
-                        }, 300);
+                        }, 800);
                       }
                     }}
                     type="text"
@@ -967,10 +968,10 @@ function Admin({
                                 if (searchUtga) {
                                   searchUtga.current.value = mur.mashiniiDugaar;
                                   if (!!onSearch) {
-                                    clearTimeout(timeout);
-                                    timeout = setTimeout(function () {
+                                    clearTimeout(timeoutRef.current);
+                                    timeoutRef.current = setTimeout(function () {
                                       onSearch(mur.mashiniiDugaar);
-                                    }, 300);
+                                    }, 800);
                                   }
                                   setFocusaasGarsan(true);
                                 }
