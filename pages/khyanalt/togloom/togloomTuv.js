@@ -568,7 +568,7 @@ function togloom1() {
     };
   }, [ognoo, turul]);
 
-  const { togloominTuviinGaralt, setKhuudaslalt } = useJagsaalt(
+  const togloominTuviinGaralt = useJagsaalt(
     "togloomiinTuv",
     query,
     order,
