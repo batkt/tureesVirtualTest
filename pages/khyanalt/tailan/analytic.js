@@ -5,7 +5,6 @@ import TableRenderers from "react-pivottable/TableRenderers";
 import "react-pivottable/pivottable.css";
 import useTailan from "hooks/tailan/useTailan";
 import moment from "moment";
-import createPlotlyRenderers from "react-pivottable/PlotlyRenderers";
 import dynamic from "next/dynamic";
 import _ from "lodash";
 import PivotTableUI from "react-pivottable/PivotTableUI";

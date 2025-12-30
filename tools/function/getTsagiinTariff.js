@@ -59,3 +59,4 @@ export default function getTsagiinTariff(
   // Fallback: first segment
   return pickFrom(normalized[0]);
 }
+

@@ -33,8 +33,6 @@ function getSearch(search, bank) {
   return or;
 }
 
-const searchFilter = getSearch(search, dans?.bank);
-
 const fetcher = (
   url,
   token,
@@ -45,8 +43,9 @@ const fetcher = (
   order = {},
   query,
   barilgiinId
-) => 
-  axios(token)
+) => {
+  const searchFilter = getSearch(search, dans?.bank);
+  return axios(token)
     .get(url, {
       params: {
         order: order,
@@ -73,6 +72,7 @@ const fetcher = (
     })
     .then((res) => res.data)
     .catch(aldaaBarigch);
+};
 
 function useDansKhuulga(token, baiguullagiinId, dans, ognoo, order, query) {
   const { barilgiinId } = useAuth();

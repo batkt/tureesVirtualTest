@@ -420,15 +420,18 @@ function Admin({
     if (typeof document === "undefined") return; // Safety check
     if (mSearch) {
       const search = document.getElementById("search");
-      document.getElementById("mobileSearch").classList.remove("hidden");
+      if (!search) return; // Safety check
+      document.getElementById("mobileSearch")?.classList.remove("hidden");
       search.classList.add("hidden");
-      document.getElementById("garchig").classList.remove("hidden");
-      search.getElementsByTagName("input")[0].value = "";
+      document.getElementById("garchig")?.classList.remove("hidden");
+      const input = search.getElementsByTagName("input")[0];
+      if (input) input.value = "";
       onSearch && onSearch("");
     } else {
-      document.getElementById("mobileSearch").classList.add("hidden");
-      document.getElementById("search").classList.remove("hidden");
-      document.getElementById("garchig").classList.add("hidden");
+      document.getElementById("mobileSearch")?.classList.add("hidden");
+      const searchElement = document.getElementById("search");
+      if (searchElement) searchElement.classList.remove("hidden");
+      document.getElementById("garchig")?.classList.add("hidden");
     }
     setMSearch(!mSearch);
   }
@@ -559,18 +562,18 @@ function Admin({
       </Drawer>
 
       {moment(new Date()).format("MM") === "12" ? (
-        <Snowfall 
-          images={images} 
-          radius={[3, 20]} 
+        <Snowfall
+          images={images}
+          radius={[3, 20]}
           snowflakeCount={100}
           speed={[0.5, 1.5]}
           wind={[-0.3, 0.5]}
           style={{
-            position: 'fixed',
-            width: '100%',
-            height: '100%',
-            pointerEvents: 'none',
-            zIndex: 1000
+            position: "fixed",
+            width: "100%",
+            height: "100%",
+            pointerEvents: "none",
+            zIndex: 1000,
           }}
         />
       ) : null}
@@ -923,7 +926,7 @@ function Admin({
                       }
                     }}
                     type="text"
-                    className="bg-white dark:bg-gray-900 box w-40 px-3 py-1 pr-10 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 xl:w-56"
+                    className="box w-40 bg-white px-3 py-1 pr-10 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:bg-gray-900 xl:w-56"
                     placeholder={`${t("Хайлт")}...`}
                   />
                   {mSearch ? (

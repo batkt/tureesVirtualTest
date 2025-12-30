@@ -410,11 +410,11 @@ function guilgeeniiTuukh({ token }) {
     return {
       gereeniiMedeelel:
         turul === "eneSardTulukh" ? eneSardTuluuguiGereenuud : data,
-      onSearch: (search) => {
-        onSearchMedeelel(search);
+      onSearch: (searchValue) => {
+        onSearchMedeelel(searchValue);
         setEneSardTuluuguiGereenuud((a) => ({
           ...a,
-          search,
+          search: searchValue,
           khuudasniiDugaar: 1,
         }));
       },

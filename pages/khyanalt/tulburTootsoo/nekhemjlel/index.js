@@ -3642,10 +3642,10 @@ function tulburTootsoo({ token }) {
       title="Нэхэмжлэл"
       khuudasniiNer="nekhemjlel"
       className="p-0 pb-12 md:p-4 md:pb-0"
-      onSearch={(search) => {
+      onSearch={(searchValue) => {
         setNekhemjlelKhuudaslalt((a) => ({
           ...a,
-          search,
+          search: searchValue,
           khuudasniiDugaar: 1,
         }));
       }}

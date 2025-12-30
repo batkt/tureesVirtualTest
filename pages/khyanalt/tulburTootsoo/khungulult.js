@@ -1294,11 +1294,11 @@ function tulburTootsoo() {
       title="Хөнгөлөлт"
       khuudasniiNer="khungulult"
       className="p-0 px-3 pb-12 md:p-4 md:px-4 md:pb-0"
-      onSearch={(search) => {
-        setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }));
+      onSearch={(searchValue) => {
+        setKhuudaslalt((a) => ({ ...a, search: searchValue, khuudasniiDugaar: 1 }));
         setGereeniiKhuudaslalt((a) => ({
           ...a,
-          search,
+          search: searchValue,
           khuudasniiDugaar: 1,
         }));
       }}

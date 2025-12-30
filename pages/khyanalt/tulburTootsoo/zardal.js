@@ -64,8 +64,9 @@ const useDansniiKhuulga = (token, barilgiinId, zardliinBulgiinId, ognoo) => {
     token
       ? ["bankniiGuilgee", ognoo, zardliinBulgiinId, khuudaslalt, token]
       : null,
-    (url, ognoo, zardliinBulgiinId, { search, ...khuudaslalt }, token) =>
-      getListMethod(url, token, {
+    (url, ognoo, zardliinBulgiinId, khuudaslaltParam, token) => {
+      const { search: searchValue = "", ...khuudaslalt } = khuudaslaltParam || {};
+      return getListMethod(url, token, {
         ...khuudaslalt,
         query: {
           barilgiinId,
@@ -86,7 +87,8 @@ const useDansniiKhuulga = (token, barilgiinId, zardliinBulgiinId, ognoo) => {
           ],
         },
         select: { TxDt: 1, dansniiDugaar: 1, Amt: 1, CtActnName: 1 },
-      }).then((a) => a.data),
+      }).then((a) => a.data);
+    },
     { revalidateOnFocus: false }
   );
 
@@ -581,10 +583,10 @@ function zardal({ token }) {
       title="Зардлын жагсаалт"
       khuudasniiNer="zardal"
       className="p-4"
-      onSearch={(search) =>
+      onSearch={(searchValue) =>
         setZardalKhuudaslalt((a) => ({
           ...a,
-          search,
+          search: searchValue,
           khuudasniiDugaar: 1,
         }))
       }

@@ -1133,10 +1133,10 @@ function tulburTootsoo({ token }) {
       title="Дансны хуулга"
       khuudasniiNer="khuulga"
       className="p-0 md:p-4"
-      onSearch={(search) => {
+      onSearch={(searchValue) => {
         setDansniiKhuulgaKhuudaslalt((a) => ({
           ...a,
-          search,
+          search: searchValue,
           khuudasniiDugaar: 1,
         }));
       }}
