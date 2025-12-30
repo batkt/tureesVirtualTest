@@ -137,7 +137,7 @@ function mashinBurtgel({ token }) {
           }
           setButsaakh(true);
         } catch (error) {
-          toast.error(error);
+          toast.error(error?.message || "Алдаа гарлаа"); // ✅ Fixed
         }
       };
       fetchData();
@@ -1035,7 +1035,9 @@ function mashinBurtgel({ token }) {
               }`}
               onClick={() => {
                 setTurul(a.name);
-                setKhelber(a.name == "Блок" ? "2" : "1");
+                const newTab = a.name == "Блок" ? "2" : "1";
+                setKhelber(newTab);
+                setActiveTab(newTab); // Add this line
               }}
               data-aos="zoom-out-down"
               data-aos-duration="1000"

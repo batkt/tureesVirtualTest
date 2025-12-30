@@ -419,7 +419,7 @@ function negtgelTailan({ token }) {
         />
         <Select
           bordered={false}
-          className="overflow-y-scroll rounded-md border-[1px] border-gray-400 bg-white md:w-1/4"
+          className="overflow-y-scroll rounded-md  border-gray-400 bg-white md:w-1/4"
           style={{ textOverflow: "ellipsis" }}
           showSearch
           mode="multiple"
@@ -766,100 +766,102 @@ function negtgelTailan({ token }) {
                 </tr>
               </thead>
               <tbody>
-                {(Array.isArray(tailanGaralt) ? tailanGaralt : [])?.map((mur, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <tr className="border-gray-500">
-                        <td
-                          className="border border-gray-400 text-center text-mashJijigiinJijig"
-                          key={index}
-                        >
-                          {index + 1}
-                        </td>
-                        <td className="border border-gray-400 pl-4 text-mashJijigiinJijig">
-                          {mur?._id?.register}
-                        </td>
-                        <td className="border border-gray-400 text-mashJijigiinJijig">
-                          {mur?._id?.ner}
-                        </td>
-                        <td className="border border-gray-400 text-center text-mashJijigiinJijig">
-                          {formatNumber(mur?._id?.talbainKhemjee)}
-                        </td>
-                        <td className="border border-gray-400 text-center text-mashJijigiinJijig">
-                          {formatNumber(mur?._id?.talbainNegjUne)}
-                        </td>
-                        {shineBagana?.map((murShine, index) => {
-                          return (
-                            <React.Fragment key={index}>
-                              <td className="border border-gray-400 text-center text-mashJijigiinJijig">
-                                {JSON.stringify(murShine.dataIndex) ===
-                                JSON.stringify(["_id", "gereeniiDugaar"])
-                                  ? mur?._id?.gereeniiDugaar
-                                  : JSON.stringify(murShine.dataIndex) ===
-                                    JSON.stringify(["_id", "gereeniiOgnoo"])
-                                  ? moment(mur?._id?.gereeniiOgnoo).format(
-                                      "YYYY-MM-DD"
-                                    )
-                                  : JSON.stringify(murShine.dataIndex) ===
-                                    JSON.stringify(["_id", "ovog"])
-                                  ? mur?._id?.ovog
-                                  : JSON.stringify(murShine.dataIndex) ===
-                                    JSON.stringify(["_id", "utas"])
-                                  ? mur?._id?.utas
-                                  : JSON.stringify(murShine.dataIndex) ===
-                                    JSON.stringify(["_id", "mail"])
-                                  ? mur?._id?.mail
-                                  : JSON.stringify(murShine.dataIndex) ===
-                                    JSON.stringify(["_id", "talbainDugaar"])
-                                  ? mur?._id?.talbainDugaar
-                                  : ""}
-                              </td>
-                            </React.Fragment>
-                          );
-                        })}
-                        {avlaga?.map((murAvlaga, index) => {
-                          var tempAvlaga = mur.avlaga?.filter(
-                            (v) =>
-                              moment(v.ognoo).format("YYYY-MM") ===
-                                murAvlaga.ognoo &&
-                              (v.tailbar === murAvlaga.tailbar ||
-                                (murAvlaga.tailbar === "Менежмент нэгж" &&
-                                  v.tailbar?.includes("Менежментийн төлбөр")))
-                          );
-                          var sumTulukhDun = tempAvlaga
-                            .filter((v) => v.tulukhDun > 0)
-                            .reduce((a, b) => a + b.tulukhDun, 0);
-                          return (
-                            <React.Fragment key={index}>
-                              <th className="border border-gray-400 text-mashJijigiinJijig">
-                                {murAvlaga.tailbar === "Менежмент нэгж" ? (
-                                  <div className="flex justify-center truncate">
-                                    {tempAvlaga?.length > 0
-                                      ? formatNumber(
-                                          sumTulukhDun /
-                                            (tempAvlaga[0]?.talbainKhemjee ||
-                                              1) || 0
-                                        )
-                                      : ""}
-                                  </div>
-                                ) : (
-                                  <div className="flex justify-end truncate">
-                                    {sumTulukhDun > 0
-                                      ? formatNumber(sumTulukhDun)
-                                      : ""}
-                                  </div>
-                                )}
-                              </th>
-                            </React.Fragment>
-                          );
-                        })}
-                        <td className="border border-gray-400 text-center text-mashJijigiinJijig">
-                          {formatNumber(mur?.niitTulukhDun)}
-                        </td>
-                      </tr>
-                    </React.Fragment>
-                  );
-                })}
+                {(Array.isArray(tailanGaralt) ? tailanGaralt : [])?.map(
+                  (mur, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <tr className="border-gray-500">
+                          <td
+                            className="border border-gray-400 text-center text-mashJijigiinJijig"
+                            key={index}
+                          >
+                            {index + 1}
+                          </td>
+                          <td className="border border-gray-400 pl-4 text-mashJijigiinJijig">
+                            {mur?._id?.register}
+                          </td>
+                          <td className="border border-gray-400 text-mashJijigiinJijig">
+                            {mur?._id?.ner}
+                          </td>
+                          <td className="border border-gray-400 text-center text-mashJijigiinJijig">
+                            {formatNumber(mur?._id?.talbainKhemjee)}
+                          </td>
+                          <td className="border border-gray-400 text-center text-mashJijigiinJijig">
+                            {formatNumber(mur?._id?.talbainNegjUne)}
+                          </td>
+                          {shineBagana?.map((murShine, index) => {
+                            return (
+                              <React.Fragment key={index}>
+                                <td className="border border-gray-400 text-center text-mashJijigiinJijig">
+                                  {JSON.stringify(murShine.dataIndex) ===
+                                  JSON.stringify(["_id", "gereeniiDugaar"])
+                                    ? mur?._id?.gereeniiDugaar
+                                    : JSON.stringify(murShine.dataIndex) ===
+                                      JSON.stringify(["_id", "gereeniiOgnoo"])
+                                    ? moment(mur?._id?.gereeniiOgnoo).format(
+                                        "YYYY-MM-DD"
+                                      )
+                                    : JSON.stringify(murShine.dataIndex) ===
+                                      JSON.stringify(["_id", "ovog"])
+                                    ? mur?._id?.ovog
+                                    : JSON.stringify(murShine.dataIndex) ===
+                                      JSON.stringify(["_id", "utas"])
+                                    ? mur?._id?.utas
+                                    : JSON.stringify(murShine.dataIndex) ===
+                                      JSON.stringify(["_id", "mail"])
+                                    ? mur?._id?.mail
+                                    : JSON.stringify(murShine.dataIndex) ===
+                                      JSON.stringify(["_id", "talbainDugaar"])
+                                    ? mur?._id?.talbainDugaar
+                                    : ""}
+                                </td>
+                              </React.Fragment>
+                            );
+                          })}
+                          {avlaga?.map((murAvlaga, index) => {
+                            var tempAvlaga = mur.avlaga?.filter(
+                              (v) =>
+                                moment(v.ognoo).format("YYYY-MM") ===
+                                  murAvlaga.ognoo &&
+                                (v.tailbar === murAvlaga.tailbar ||
+                                  (murAvlaga.tailbar === "Менежмент нэгж" &&
+                                    v.tailbar?.includes("Менежментийн төлбөр")))
+                            );
+                            var sumTulukhDun = tempAvlaga
+                              .filter((v) => v.tulukhDun > 0)
+                              .reduce((a, b) => a + b.tulukhDun, 0);
+                            return (
+                              <React.Fragment key={index}>
+                                <th className="border border-gray-400 text-mashJijigiinJijig">
+                                  {murAvlaga.tailbar === "Менежмент нэгж" ? (
+                                    <div className="flex justify-center truncate">
+                                      {tempAvlaga?.length > 0
+                                        ? formatNumber(
+                                            sumTulukhDun /
+                                              (tempAvlaga[0]?.talbainKhemjee ||
+                                                1) || 0
+                                          )
+                                        : ""}
+                                    </div>
+                                  ) : (
+                                    <div className="flex justify-end truncate">
+                                      {sumTulukhDun > 0
+                                        ? formatNumber(sumTulukhDun)
+                                        : ""}
+                                    </div>
+                                  )}
+                                </th>
+                              </React.Fragment>
+                            );
+                          })}
+                          <td className="border border-gray-400 text-center text-mashJijigiinJijig">
+                            {formatNumber(mur?.niitTulukhDun)}
+                          </td>
+                        </tr>
+                      </React.Fragment>
+                    );
+                  }
+                )}
               </tbody>
               <tfoot>
                 <tr>
@@ -888,20 +890,22 @@ function negtgelTailan({ token }) {
                   ></td>
                   {avlaga?.map((murAvlaga, index) => {
                     var niitTulukhDun = 0;
-                    (Array.isArray(tailanGaralt) ? tailanGaralt : [])?.map((mur, index) => {
-                      var tempAvlaga = mur?.avlaga?.filter(
-                        (v) =>
-                          moment(v.ognoo).format("YYYY-MM") ===
-                            murAvlaga.ognoo &&
-                          (v.tailbar === murAvlaga.tailbar ||
-                            (murAvlaga.tailbar === "Менежмент нэгж" &&
-                              v.tailbar?.includes("Менежментийн төлбөр")))
-                      );
-                      var value = tempAvlaga
-                        .filter((v) => v.tulukhDun > 0)
-                        .reduce((a, b) => a + b.tulukhDun, 0);
-                      niitTulukhDun += value || 0;
-                    });
+                    (Array.isArray(tailanGaralt) ? tailanGaralt : [])?.map(
+                      (mur, index) => {
+                        var tempAvlaga = mur?.avlaga?.filter(
+                          (v) =>
+                            moment(v.ognoo).format("YYYY-MM") ===
+                              murAvlaga.ognoo &&
+                            (v.tailbar === murAvlaga.tailbar ||
+                              (murAvlaga.tailbar === "Менежмент нэгж" &&
+                                v.tailbar?.includes("Менежментийн төлбөр")))
+                        );
+                        var value = tempAvlaga
+                          .filter((v) => v.tulukhDun > 0)
+                          .reduce((a, b) => a + b.tulukhDun, 0);
+                        niitTulukhDun += value || 0;
+                      }
+                    );
                     return (
                       <React.Fragment key={index}>
                         <th className="border border-gray-400 text-mashJijigiinJijig">
