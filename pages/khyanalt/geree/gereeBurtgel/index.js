@@ -833,7 +833,7 @@ function ZakhialgiinKhyanalt() {
           : 0,
       icon: <FileExcelOutlined />,
       utga: "Цуцласан",
-      color: "text-gray-800 dark:text-gray-300",
+      color: "bg-gray-200 dark:bg-gray-900",
       selectedColor: "bg-gray-200 dark:bg-gray-900",
       border: "border-gray-800 dark:border-gray-300",
       query: {
