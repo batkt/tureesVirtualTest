@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
@@ -14,25 +14,25 @@ const fetcher = (
   order,
   or
 ) => {
-  var defaultOr = [];
-  if (!!or) {
-    or.forEach((element) => {
-      defaultOr.push(element);
-    });
-  } else defaultOr.push({ mashiniiDugaar: { $regex: search, $options: "i" } });
+  const params = {
+    ...khuudaslalt,
+    query: {
+      baiguullagiinId,
+      barilgiinId,
+      ...query,
+    },
+    order,
+  };
+
+  if (search && search.trim()) {
+    const defaultOr = or || [
+      { mashiniiDugaar: { $regex: search, $options: "i" } },
+    ];
+    params.query.$or = defaultOr;
+  }
+
   return axios(token)
-    .get(url, {
-      params: {
-        ...khuudaslalt,
-        query: {
-          baiguullagiinId,
-          barilgiinId,
-          $or: defaultOr,
-          ...query,
-        },
-        order,
-      },
-    })
+    .get(url, { params })
     .then((res) => res.data)
     .catch(aldaaBarigch);
 };
@@ -52,6 +52,64 @@ function useUilchluulegch(
     search: "",
     jagsaalt: [],
   });
+
+  const [currentArchiveName, setCurrentArchiveName] = useState(null);
+  const [isMultiMonth, setIsMultiMonth] = useState(false);
+
+  const queryWithArchive = useMemo(() => {
+    try {
+      if (!query) return query;
+
+      const createdAt = query.createdAt;
+
+      if (!createdAt || !createdAt.$gte || !createdAt.$lte) {
+        const now = moment();
+        const defaultQuery = {
+          ...query,
+          createdAt: {
+            $gte: now.clone().startOf("month").toDate(),
+            $lte: now.clone().endOf("month").toDate(),
+          },
+        };
+        setCurrentArchiveName(null);
+        setIsMultiMonth(false);
+        return defaultQuery;
+      }
+
+      const start = moment(createdAt.$gte);
+      const end = moment(createdAt.$lte);
+      const now = moment();
+
+      const isMultiMonthQuery =
+        start.year() !== end.year() || start.month() !== end.month();
+
+      if (isMultiMonthQuery) {
+        setIsMultiMonth(true);
+        setCurrentArchiveName("multi-month");
+        return query;
+      }
+
+      setIsMultiMonth(false);
+
+      if (!(start.year() === now.year() && start.month() === now.month())) {
+        const y = start.year();
+        const m = String(start.month() + 1).padStart(2, "0");
+        const archiveName = `Uilchluulegch${y}${m}`;
+        setCurrentArchiveName(archiveName);
+
+        return { ...query, archiveName };
+      }
+
+      setCurrentArchiveName(null);
+      return query;
+    } catch (e) {
+      console.error("aldaa:", e);
+      setCurrentArchiveName(null);
+      setIsMultiMonth(false);
+      return query;
+    }
+  }, [query]);
+
   const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
       ? [
@@ -60,7 +118,7 @@ function useUilchluulegch(
           baiguullagiinId,
           khuudaslalt,
           barilgiinId,
-          query,
+          queryWithArchive,
           order,
           or,
         ]
@@ -68,13 +126,18 @@ function useUilchluulegch(
     fetcher,
     { revalidateOnFocus: false }
   );
+
   return {
     setUilchluulegchKhuudaslalt,
     uilchluulegchGaralt: data,
     uilchluulegchMutate: mutate,
     isValidating,
+    archiveName: data?.archiveName || currentArchiveName,
+    isMultiMonth: data?.archiveName === "multi-month" || isMultiMonth,
+    collections: data?.collections || [],
   };
 }
+
 const fetcherToololt = (url, token, barilgiinId, query) => {
   if (!!barilgiinId)
     return axios(token)
@@ -82,6 +145,7 @@ const fetcherToololt = (url, token, barilgiinId, query) => {
       .then((res) => res.data)
       .catch(aldaaBarigch);
 };
+
 const fetcherDun = (url, token, query) => {
   return axios(token)
     .post(url, { ...query })
@@ -100,6 +164,7 @@ export function useUilchluulegchToololt(token, query) {
   );
   return { uilchiluulegchToololt: data, uilchiluulegchToololtMutate: mutate };
 }
+
 export function useUilchluulegchZogsoolToo(token, query) {
   const { barilgiinId } = useAuth();
   const { data, mutate } = useSWR(
@@ -111,6 +176,7 @@ export function useUilchluulegchZogsoolToo(token, query) {
   );
   return { zogsoolTusBuriinToo: data, zogsoolTusBuriinTooMutate: mutate };
 }
+
 export function useUilchluulegchdiinDunAvay(token, query) {
   const { data, mutate } = useSWR(
     !!token ? ["/zogsoolUilchluulegchdiinDunAvay", token, query] : null,

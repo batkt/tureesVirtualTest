@@ -1,6 +1,12 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
-import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+} from "react";
 import TableRenderers from "react-pivottable/TableRenderers";
 import "react-pivottable/pivottable.css";
 import useTailan from "hooks/tailan/useTailan";
@@ -285,12 +291,12 @@ function Tailan({ token }) {
 
   const PlotlyRenderers = useMemo(() => {
     if (!SSR) {
-      const createPlotlyRenderers = require("react-pivottable/PlotlyRenderers").default;
+      const createPlotlyRenderers = require("react-pivottable/PlotlyRenderers");
       return createPlotlyRenderers(DynamicPlot);
     }
     return undefined;
   }, [SSR]);
-  
+
   useEffect(() => {
     setSSR(false);
   }, []);

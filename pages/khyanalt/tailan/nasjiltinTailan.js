@@ -509,7 +509,7 @@ function nasjiltinTailan({ token }) {
         />
         <Select
           bordered={false}
-          className="overflow-y-scroll rounded-md  border-gray-400 bg-white md:w-1/4"
+          className="overflow-y-scroll rounded-md  border-gray-400  md:w-1/4"
           style={{ textOverflow: "ellipsis" }}
           showSearch
           mode="multiple"

@@ -1180,11 +1180,11 @@ tbody.overflownone {
 }
 
 .ant-select-selector {
-  @apply rounded-lg border-gray-200 bg-white text-gray-700 transition-all duration-200 hover:border-blue-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-blue-500 !important;
+  @apply rounded-lg border-gray-200 bg-white text-gray-700 transition-all duration-200  dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200  !important;
 }
 
 .ant-select-focused .ant-select-selector {
-  @apply border-blue-500 shadow-md dark:border-blue-500 !important;
+  @apply shadow-md  !important;
 }
 
 .ant-select-dropdown {
