@@ -4,6 +4,14 @@ import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import moment from "moment";
 
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
+
 const fetcher = (
   url,
   token,
@@ -23,15 +31,15 @@ const fetcher = (
           register,
           barilgiinId,
           baiguullagiinId,
-          $or: [
-            { register: { $regex: search, $options: "i" } },
-            { customerTin: { $regex: search, $options: "i" } },
-            { talbainDugaar: { $regex: search, $options: "i" } },
-            { gereeniiDugaar: { $regex: search, $options: "i" } },
-            { utas: { $regex: search, $options: "i" } },
-            { ovog: { $regex: search, $options: "i" } },
-            { ner: { $regex: search, $options: "i" } },
-          ],
+          ...searchGenerator(search, [
+            "register",
+            "customerTin",
+            "talbainDugaar",
+            "gereeniiDugaar",
+            "utas",
+            "ovog",
+            "ner",
+          ]),
           ...query,
         },
         order: order,

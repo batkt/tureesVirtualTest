@@ -3,6 +3,14 @@ import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
+
 const fetcher = async (
   url,
   token,
@@ -21,18 +29,10 @@ const fetcher = async (
     ...rest,
   };
 
-  if (search && search.trim() !== "") {
-    body.query = {
-      $or: [
-        { ner: { $regex: search, $options: "i" } },
-        { register: { $regex: search, $options: "i" } },
-        { utas: { $regex: search, $options: "i" } },
-      ],
-      ...query,
-    };
-  } else if (query) {
-    body.query = query;
-  }
+  body.query = {
+    ...searchGenerator(search, ["ner", "register", "utas"]),
+    ...query,
+  };
 
   try {
     const res = await axios(token).post(url, body);

@@ -22,6 +22,14 @@ export function useZogsoolToololt(token, ognoo) {
   return { zogsoolToololt: data, zogsoolToololtMutate: mutate };
 }
 
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
+
 const fetcher = (
   url,
   token,
@@ -37,9 +45,7 @@ const fetcher = (
         ...khuudaslalt,
         query: {
           baiguullagiinId,
-          $or: ["car_number"].map((key) => ({
-            [key]: { $regex: search, $options: "i" },
-          })),
+          ...searchGenerator(search, ["car_number"]),
           ...query,
         },
         order,

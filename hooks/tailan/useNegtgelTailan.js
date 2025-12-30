@@ -2,11 +2,13 @@ import { useState } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
-function searchGenerator(keys, search) {
-  if (keys.length > 0)
-    return keys.map((key) => ({ [key]: { $regex: search, $options: "i" } }));
-  return undefined;
-}
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
 
 const fetcher = (
   url,
@@ -20,7 +22,7 @@ const fetcher = (
       ...khuudaslalt,
       ...query,
       query: {
-        $or: searchGenerator(searchKeys, search),
+        ...searchGenerator(search, searchKeys),
       },
     })
     .then((res) => res.data)

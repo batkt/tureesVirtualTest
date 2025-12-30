@@ -11,6 +11,14 @@ const queryAvya = (davkhar, ilgeekhTurul, turul) => {
   return query;
 };
 
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
+
 const fetcher = (
   url,
   token,
@@ -32,13 +40,13 @@ const fetcher = (
         query: {
           barilgiinId,
           ...queryAvya(davkhar, ilgeekhTurul, turul),
-          $or: [
-            { register: { $regex: search, $options: "i" } },
-            { talbainDugaar: { $regex: search, $options: "i" } },
-            { gereeniiDugaar: { $regex: search, $options: "i" } },
-            { utas: { $regex: search, $options: "i" } },
-            { ner: { $regex: search, $options: "i" } },
-          ],
+          ...searchGenerator(search, [
+            "register",
+            "talbainDugaar",
+            "gereeniiDugaar",
+            "utas",
+            "ner",
+          ]),
         },
         ...khuudaslalt,
       },

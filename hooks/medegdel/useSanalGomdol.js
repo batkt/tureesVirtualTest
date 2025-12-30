@@ -4,6 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "services/auth";
 import _ from "lodash";
 
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
+
 const fetcher = (
   url,
   token,
@@ -18,7 +26,7 @@ const fetcher = (
         ...khuudaslalt,
         query: {
           khariltsagchiinId,
-          $or: [{ khariltsagchiinNer: { $regex: search, $options: "i" } }],
+          ...searchGenerator(search, ["khariltsagchiinNer"]),
           ...query,
         },
         order: { createdAt: -1, ...order },

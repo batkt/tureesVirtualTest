@@ -2,6 +2,14 @@ import { useState } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
+
 const fetcherJagsaalt = (
   url,
   token,
@@ -18,9 +26,7 @@ const fetcherJagsaalt = (
           baiguullagiinId,
           barilguud: barilgiinId,
           erkh: { $nin: ["Admin"] },
-          $or: ["ner", "register", "utas"].map((key) => ({
-            [key]: { $regex: search, $options: "i" },
-          })),
+          ...searchGenerator(search, ["ner", "register", "utas"]),
           ...query,
         },
         select,

@@ -3,6 +3,14 @@ import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
+
 const fetcher = (
   url,
   token,
@@ -19,7 +27,7 @@ const fetcher = (
           baiguullagiinId,
           barilgiinId,
           turul,
-          $or: [{ ner: { $regex: search, $options: "i" } }],
+          ...searchGenerator(search, ["ner"]),
         },
         ...khuudaslalt,
       },

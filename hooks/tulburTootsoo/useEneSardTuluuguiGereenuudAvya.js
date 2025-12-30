@@ -4,6 +4,14 @@ import moment from "moment";
 import { useAuth } from "services/auth";
 import { useState } from "react";
 
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
+
 const fetcher = (
   url,
   token,
@@ -25,15 +33,15 @@ const fetcher = (
         ...khuudaslalt,
         query: {
           barilgiinId,
-          $or: [
-            { register: { $regex: search, $options: "i" } },
-            { customerTin: { $regex: search, $options: "i" } },
-            { talbainDugaar: { $regex: search, $options: "i" } },
-            { gereeniiDugaar: { $regex: search, $options: "i" } },
-            { utas: { $regex: search, $options: "i" } },
-            { ovog: { $regex: search, $options: "i" } },
-            { ner: { $regex: search, $options: "i" } },
-          ],
+          ...searchGenerator(search, [
+            "register",
+            "customerTin",
+            "talbainDugaar",
+            "gereeniiDugaar",
+            "utas",
+            "ovog",
+            "ner",
+          ]),
           ...query,
         },
       },

@@ -28,16 +28,19 @@ function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
     tailbar: "",
   });
 
+  const searchGenerator = (search, fields) => {
+    if (!!search && !!fields)
+      return {
+        $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+      };
+    else return {};
+  };
+
   const requestBody = {
     baiguullagiinId,
     ...query,
     tailbar: "",
-    ...(searchKeys.length > 0 &&
-      khuudaslalt.search.trim() && {
-        $or: searchKeys.map((key) => ({
-          [key]: { $regex: khuudaslalt.search, $options: "i" },
-        })),
-      }),
+    ...searchGenerator(khuudaslalt.search, searchKeys),
   };
 
   const shouldFetch = token && baiguullagiinId;

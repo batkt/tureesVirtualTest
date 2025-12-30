@@ -3,17 +3,18 @@ import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
-function getSearch(search) {
-  var fallback = [
-    { kod: { $regex: search, $options: "i" } },
-    { tailbar: { $regex: search, $options: "i" } },
-    { tooluuriinDugaar: { $regex: search, $options: "i" } },
-  ];
-  if (/^\d+$/.test(search)) {
-    fallback.push({ talbainKhemjee: search });
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields) {
+    const or = fields.map((key) => ({
+      [key]: { $regex: search, $options: "i" },
+    }));
+    if (/^\d+$/.test(search)) {
+      or.push({ talbainKhemjee: search });
+    }
+    return { $or: or };
   }
-  return fallback;
-}
+  return {};
+};
 
 const fetcher = (
   url,
@@ -30,7 +31,7 @@ const fetcher = (
         query: {
           baiguullagiinId,
           barilgiinId,
-          $or: getSearch(search),
+          ...searchGenerator(search, ["kod", "tailbar", "tooluuriinDugaar"]),
           ...query,
         },
         ...khuudaslalt,

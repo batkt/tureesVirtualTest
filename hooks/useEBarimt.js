@@ -4,11 +4,13 @@ import useSWR from "swr";
 import moment from "moment";
 import { useAuth } from "services/auth";
 
-function searchGenerator(keys, search) {
-  if (keys.length > 0)
-    return keys.map((key) => ({ [key]: { $regex: search, $options: "i" } }));
-  return undefined;
-}
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
 
 const fetcher = (
   url,
@@ -27,7 +29,7 @@ const fetcher = (
           baiguullagiinId,
           barilgiinId,
           ...query,
-          $or: searchGenerator(searchKeys, search),
+          ...searchGenerator(search, searchKeys),
         },
         order,
         ...khuudaslalt,

@@ -3,11 +3,13 @@ import { useMemo, useState } from "react";
 import { useAuth } from "services/auth";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
-function searchGenerator(keys, search) {
-  if (keys.length > 0)
-    return keys.map((key) => ({ [key]: { $regex: search, $options: "i" } }));
-  return undefined;
-}
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
 
 function fetcher(
   token,
@@ -23,7 +25,7 @@ function fetcher(
       params: {
         query: {
           ...query,
-          $or: searchGenerator(searchKeys, search),
+          ...searchGenerator(search, searchKeys),
         },
         order,
         select,

@@ -4,6 +4,14 @@ import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import moment from "moment";
 
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
+
 const fetcher = (
   url,
   token,
@@ -25,10 +33,16 @@ const fetcher = (
   };
 
   if (search && search.trim()) {
-    const defaultOr = or || [
-      { mashiniiDugaar: { $regex: search, $options: "i" } },
-    ];
-    params.query.$or = defaultOr;
+    if (or && Array.isArray(or) && or.length > 0) {
+      // If custom or array is provided, use it directly
+      params.query.$or = or;
+    } else {
+      // Otherwise use searchGenerator with default field
+      const searchResult = searchGenerator(search, ["mashiniiDugaar"]);
+      if (searchResult.$or) {
+        params.query.$or = searchResult.$or;
+      }
+    }
   }
 
   return axios(token)

@@ -18,6 +18,14 @@ export function useMashinToololt(token, barilgiinId) {
   return { mashinToololt: data, mashinToololtMutate: mutate };
 }
 
+const searchGenerator = (search, fields) => {
+  if (!!search && !!fields)
+    return {
+      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+    };
+  else return {};
+};
+
 const fetcher = (
   url,
   token,
@@ -34,14 +42,14 @@ const fetcher = (
         query: {
           barilgiinId,
           baiguullagiinId,
-          $or: [
-            { turul: { $regex: search, $options: "i" } },
-            { ezemshigchiinNer: { $regex: search, $options: "i" } },
-            { ezemshigchiinRegister: { $regex: search, $options: "i" } },
-            { ezemshigchiinUtas: { $regex: search, $options: "i" } },
-            { dugaar: { $regex: search, $options: "i" } },
-            { cameraIP: { $regex: search, $options: "i" } },
-          ],
+          ...searchGenerator(search, [
+            "turul",
+            "ezemshigchiinNer",
+            "ezemshigchiinRegister",
+            "ezemshigchiinUtas",
+            "dugaar",
+            "cameraIP",
+          ]),
           ...query,
         },
         order,
