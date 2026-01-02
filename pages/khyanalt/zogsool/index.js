@@ -37,6 +37,9 @@ import { t } from "i18next";
 import useUilchluulegch, {
   useUilchluulegchdiinDunAvay,
 } from "hooks/useUilchluulegch";
+
+import useUilchluulegchZogsool from "hooks/useUilchluulegchZogsool";
+
 import { useUilchluulegchToololt } from "hooks/useUilchluulegch";
 
 import useJagsaalt from "hooks/useJagsaalt";
@@ -579,7 +582,7 @@ function Zogsool({ token }) {
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
-  } = useUilchluulegch(token, baiguullaga?._id, query, order, or, 500);
+  } = useUilchluulegchZogsool(token, baiguullaga?._id, query, order, or, 500);
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
 

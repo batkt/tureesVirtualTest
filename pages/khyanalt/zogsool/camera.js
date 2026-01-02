@@ -1825,7 +1825,7 @@ function camera({ token }) {
           } else if (isActive) {
             currentStatus = "active";
           } else if (
-            (mur.tuluv === 0 ||
+            (mur?.tuluv === 0 ||
               parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
             dunTuluv
           ) {
@@ -1851,7 +1851,7 @@ function camera({ token }) {
               </div>
             );
           } else
-            return (mur.tuluv === 0 ||
+            return (mur?.tuluv === 0 ||
               parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
               dunTuluv ? (
               <Popover
@@ -2064,8 +2064,8 @@ function camera({ token }) {
         width: "2rem",
         align: "center",
         render: (data) => {
-          return data.tuukh[0].tulbur.length === 0 &&
-            data.tuukh[0].tulukhDun !== 0 &&
+          return data.tuukh[0]?.tulbur?.length === 0 &&
+            data.tuukh[0]?.tulukhDun !== 0 &&
             data?.zurchil !== "Гарсан цаг тодорхойгүй!" ? (
             <div className="flex flex-row">
               <a
@@ -3202,7 +3202,7 @@ function camera({ token }) {
       ) {
         currentStatus = "zurchiltei";
       } else if (
-        (mur.tuluv === 0 || parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
+        (mur?.tuluv === 0 || parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
         dunTuluv
       ) {
         currentStatus = "idevekhitei";
@@ -3263,7 +3263,7 @@ function camera({ token }) {
           } else if (isActive) {
             currentStatus = "active";
           } else if (
-            (mur.tuluv === 0 ||
+            (mur?.tuluv === 0 ||
               parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
             dunTuluv
           ) {
@@ -4256,11 +4256,11 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       __style__: { h: "center" },
                                       render: (v) => {
-                                        return v[0].tuluv === 1
+                                        return v[0]?.tuluv === 1
                                           ? "Төлсөн"
-                                          : v[0].tuluv === 0
+                                          : v[0]?.tuluv === 0
                                           ? "Төлөөгүй"
-                                          : v[0].tuluv === -2
+                                          : v[0]?.tuluv === -2
                                           ? "Зөрчилтэй"
                                           : "";
                                       },
