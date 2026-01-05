@@ -21,9 +21,7 @@ const fetcher = (
     .post(url, {
       ...khuudaslalt,
       ...query,
-      query: {
-        ...searchGenerator(search, searchKeys),
-      },
+      ...searchGenerator(search, searchKeys),
     })
     .then((res) => res.data)
     .catch(aldaaBarigch);
