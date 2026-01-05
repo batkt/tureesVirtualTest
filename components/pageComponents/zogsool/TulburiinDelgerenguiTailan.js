@@ -13,6 +13,7 @@ import { useReactToPrint } from "react-to-print";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import { t } from "i18next";
 import { CloseCircleOutlined } from "@ant-design/icons";
+import { FaCar } from "react-icons/fa";
 
 const order = { createdAt: -1 };
 
@@ -125,10 +126,16 @@ function TulburiinDelgerenguiTailan(
       var niitDun = mergedTulbur?.reduce((a, b) => a + b.niitDun, 0) || 0;
 
       mergedTulbur?.forEach((element) => {
-        if (element?._id?.toLowerCase()?.startsWith?.("ugaalga")) {
+        const elementId = element?._id?.toLowerCase() || "";
+        if (elementId.startsWith("ugaalga")) {
+          // Check if it's 24h or 1h variant - look for "24" in the ID
+          const is24h =
+            elementId.includes("24") || element?._id?.includes("24");
+          const IconComponent = FaCar;
           ugugdul.push({
-            ner: "CarWash",
-            icon: "/hongololt.png",
+            ner: is24h ? "Угаалга-24" : "Угаалга-1",
+            icon: is24h ? "REACT_ICON_24H" : "REACT_ICON_1H",
+            iconComponent: IconComponent,
             dun: element.niitDun,
             too: element.niitToo,
             khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -367,9 +374,15 @@ function TulburiinDelgerenguiTailan(
             });
             break;
           case "Ugaalga":
+            // Check if it's 24h or 1h variant (default to 1h if not specified)
+            const is24hUgaalga =
+              element?._id?.includes("24") ||
+              element?._id?.toLowerCase()?.includes("24");
+            const UgaalgaIconComponent = FaCar;
             ugugdul.push({
-              ner: "CarWash",
-              icon: "/hongololt.png",
+              ner: is24hUgaalga ? "CarWash 24h" : "CarWash 1h",
+              icon: is24hUgaalga ? "REACT_ICON_24H" : "REACT_ICON_1H",
+              iconComponent: UgaalgaIconComponent,
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -552,10 +565,19 @@ function TulburiinDelgerenguiTailan(
                   >
                     <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 " />
                   </div>
-                  <img
-                    src={a.icon}
-                    className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
-                  />
+                  {a.iconComponent ? (
+                    <div className="z-10 mx-2 flex h-11 w-12 items-center justify-center overflow-hidden rounded-md">
+                      {React.createElement(a.iconComponent, {
+                        className: "h-8 w-8 text-blue-600",
+                      })}
+                    </div>
+                  ) : (
+                    <img
+                      src={a.icon}
+                      className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
+                      alt={a.ner}
+                    />
+                  )}
                   <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
                     {a.ner}:
                     <div className="flex font-normal">

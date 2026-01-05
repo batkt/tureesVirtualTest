@@ -20,6 +20,7 @@ import {
   VideoCameraOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
+import { FaCar } from "react-icons/fa";
 import { toast } from "sonner";
 import { useReactToPrint } from "react-to-print";
 import moment from "moment";
@@ -487,9 +488,12 @@ function AjiltniiDelgerenguiTailan(
           return;
         }
         if (tulburiinTurul?.startsWith?.("ugaalga")) {
+          // Check if it's 24h or 1h variant
+          const is24h = tulburiinTurul.includes("24");
           ugugdul.push({
-            ner: "CarWash",
-            icon: "/hongololt.png",
+            ner: is24h ? "Угаалга-24" : "Угаалга-1",
+            icon: is24h ? "REACT_ICON_24H" : "REACT_ICON_1H",
+            iconComponent: FaCar,
             dun: element.niitDun,
             too: element.niitToo,
             khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -1119,10 +1123,19 @@ function AjiltniiDelgerenguiTailan(
                   >
                     <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 " />
                   </div>
-                  <img
-                    src={a.icon}
-                    className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
-                  />
+                  {a.iconComponent ? (
+                    <div className="z-10 mx-2 flex h-11 w-12 items-center justify-center overflow-hidden rounded-md">
+                      {React.createElement(a.iconComponent, {
+                        className: "h-8 w-8 text-blue-600",
+                      })}
+                    </div>
+                  ) : (
+                    <img
+                      src={a.icon}
+                      className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
+                      alt={a.ner}
+                    />
+                  )}
                   <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
                     {a.ner}:
                     <div className="flex font-normal">
