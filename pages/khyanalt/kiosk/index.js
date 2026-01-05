@@ -279,11 +279,32 @@ const Kiosk = () => {
         });
       }
     }
-    // Ugaalga (1h + 24h) - time does NOT matter; amounts are always available
     if (
-      ajiltan?._id === "694e6d2d5b0e44bb0cca2945" &&
+      (ajiltan?._id === "694e6d2d5b0e44bb0cca2945" ||
+        ajiltan?._id === "694e260f3f0da03b83ace92b") &&
       songogdsonData?.enter_date &&
-      !songogdsonData?.ugaalgaHungulult &&
+      !songogdsonData?.ugaalgaHungulult
+    ) {
+      setSongogdsonData((prev) => {
+        const undsenUne =
+          getTsagiinTariff(
+            parkingJagsaalt?.[0]?.tulburuud,
+            servereesAvsonOdooTsag,
+            60
+          ) ||
+          parkingJagsaalt?.[0]?.undsenUne ||
+          2000;
+        return {
+          ...prev,
+          ugaalgaHungulult: undsenUne,
+          khungulukhTsag: 1,
+        };
+      });
+    }
+    if (
+      (ajiltan?._id === "694e6d2d5b0e44bb0cca2945" ||
+        ajiltan?._id === "694e260f3f0da03b83ace92b") &&
+      songogdsonData?.enter_date &&
       !songogdsonData?.ugaalgaHungulult24
     ) {
       setSongogdsonData((prev) => {
@@ -295,13 +316,9 @@ const Kiosk = () => {
           ) ||
           parkingJagsaalt?.[0]?.undsenUne ||
           2000;
-        const rawPay = Number(prev?.pay_amount) || 0;
-        const nextPay = rawPay < undsenUne ? 0 : rawPay - undsenUne;
         return {
           ...prev,
-          ugaalgaHungulult: undsenUne,
           ugaalgaHungulult24: undsenUne * 24,
-          pay_amount: nextPay,
         };
       });
     }
@@ -629,6 +646,10 @@ const Kiosk = () => {
     ajiltniiNer,
     ajiltniiId
   ) => {
+    const isUgaalga =
+      ajiltniiId === "694e6d2d5b0e44bb0cca2945" ||
+      ajiltniiId === "694e260f3f0da03b83ace92b";
+
     uilchilgee(token)
       .post("/v1/kioskPay", {
         turul,
@@ -638,6 +659,13 @@ const Kiosk = () => {
         barilgiinId,
         ajiltniiNer,
         ajiltniiId,
+        ...(isUgaalga && {
+          khungulukhTsag: songogdsonData?.khungulukhTsag || 1,
+          zogsoolUndsenUne:
+            songogdsonData?.ugaalgaHungulult ||
+            songogdsonData?.parkingUndsenUne ||
+            2000,
+        }),
       })
       .then((res) => {
         if (res.data === "Amjilttai") {
@@ -950,7 +978,8 @@ const Kiosk = () => {
                       </div>
                     </>
                   )}
-                  {ajiltan?._id === "694e6d2d5b0e44bb0cca2945" && (
+                  {(ajiltan?._id === "694e6d2d5b0e44bb0cca2945" ||
+                    ajiltan?._id === "694e260f3f0da03b83ace92b") && (
                     <>
                       <div className="w-full border border-[#1E1E1E]" />
                       <div className="flex w-full justify-between px-6 ">

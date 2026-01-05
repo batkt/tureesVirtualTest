@@ -486,6 +486,16 @@ function AjiltniiDelgerenguiTailan(
         ) {
           return;
         }
+        if (tulburiinTurul?.startsWith?.("ugaalga")) {
+          ugugdul.push({
+            ner: "CarWash",
+            icon: "/hongololt.png",
+            dun: element.niitDun,
+            too: element.niitToo,
+            khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+          });
+          return;
+        }
         switch (tulburiinTurul) {
           case "khariltsakh":
             ugugdul.push({

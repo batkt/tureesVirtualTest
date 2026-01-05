@@ -125,6 +125,16 @@ function TulburiinDelgerenguiTailan(
       var niitDun = mergedTulbur?.reduce((a, b) => a + b.niitDun, 0) || 0;
 
       mergedTulbur?.forEach((element) => {
+        if (element?._id?.toLowerCase()?.startsWith?.("ugaalga")) {
+          ugugdul.push({
+            ner: "CarWash",
+            icon: "/hongololt.png",
+            dun: element.niitDun,
+            too: element.niitToo,
+            khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+          });
+          return;
+        }
         switch (element?._id) {
           case "khariltsakh":
             ugugdul.push({
@@ -331,7 +341,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "Төлбөрийн зөрчилтэй":
             ugugdul.push({
-              ner: "Төлбөрийн зөрчилтэй",
+              ner: "Зөрчил",
               icon: "/exclamation.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -349,7 +359,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "Fitness":
             ugugdul.push({
-              ner: "Фитнес Хөнгөлөлт",
+              ner: "Фитнес",
               icon: "/hongololt.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -358,7 +368,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "Ugaalga":
             ugugdul.push({
-              ner: "Угаалга Хөнгөлөлт",
+              ner: "CarWash",
               icon: "/hongololt.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -584,9 +594,9 @@ function TulburiinDelgerenguiTailan(
                     a +
                     (b.ner != "Үнэгүй" &&
                     b.ner != "Зөрчил" &&
-                    b.ner != "Төлбөрийн зөрчилтэй" &&
+                    b.ner != "Зөрчилтэй" &&
                     b.ner != "Хөнгөлөлт" &&
-                    b.ner != "Фитнес Хөнгөлөлт" &&
+                    b.ner != "Фитнес" &&
                     b.ner != "Хөнгөлөх"
                       ? b?.dun
                       : 0),
@@ -604,7 +614,7 @@ function TulburiinDelgerenguiTailan(
                     a +
                     (b.ner == "Үнэгүй" ||
                     b.ner == "Зөрчил" ||
-                    b.ner == "Төлбөрийн зөрчилтэй"
+                    b.ner == "Зөрчилтэй"
                       ? b?.dun
                       : 0),
                   0
@@ -620,7 +630,7 @@ function TulburiinDelgerenguiTailan(
                   (a, b) =>
                     a +
                     (b.ner == "Хөнгөлөлт" ||
-                    b.ner == "Фитнес Хөнгөлөлт" ||
+                    b.ner == "Фитнес" ||
                     b.ner == "Хөнгөлөх"
                       ? b?.dun
                       : 0),

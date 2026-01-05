@@ -124,8 +124,8 @@ function tulburKhurvuulekh(v) {
     case "Fitness":
       utga = "Fitness";
       break;
-    case "Ugaalga":
-      utga = "Ugaalga";
+    case "ugaalga":
+      utga = "ugaalga";
       break;
     case "bankQR":
       utga = "Банк QR";

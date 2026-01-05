@@ -51,20 +51,13 @@ function ShineTulbur(
   },
   ref
 ) {
-  const isUgaalgaDiscount = (t) =>
-    typeof t === "string" && t.toLowerCase().startsWith("ugaalga");
-
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
     !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
   );
   const [isProcessing, setIsProcessing] = useState(false);
   const [khaanbank, setTerminal] = React.useState(false);
-  // Note: some kiosk discounts are stored as separate "tulbur" records (e.g. "ugaalga/ 1 цаг").
-  // These should NOT be included in manual payment calculation (otherwise niitDun becomes mismatched).
-  const [tulbur, setTulbur] = React.useState(
-    (data?.tulbur || []).filter((x) => !isUgaalgaDiscount(x?.turul))
-  );
+  const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
   const [irgenEsekh, setIrgenEsekh] = React.useState(true);
@@ -88,9 +81,7 @@ function ShineTulbur(
   const [qpayModalTuluv, setQpayModalTuluv] = React.useState(false);
   const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
     niitDun?.toString() -
-      ((data?.tulbur || [])
-        .filter((x) => !isUgaalgaDiscount(x?.turul))
-        .reduce((a, b) => a + (Number(b?.dun) || 0), 0) || 0)
+      (data?.tulbur?.reduce((a, b) => a + (Number(b?.dun) || 0), 0) || 0)
   );
 
   const khungulultAnkhOrjIrsen = useMemo(() => {
@@ -183,7 +174,10 @@ function ShineTulbur(
     if (alkham === 1) {
       setIsProcessing(true);
 
-      if (tulbur.length === 0) {
+      const currentTotal = tulbur.reduce((a, b) => a + (Number(b?.dun) || 0), 0);
+      const targetAmount = niitDun || data?.tulukhDun || 0;
+
+      if (tulbur.length === 0 || currentTotal < targetAmount) {
         turulruuTooKhiikhFunction("belen");
       }
       batalgaajuulaltKhiiya(null, null, true);
@@ -340,15 +334,21 @@ function ShineTulbur(
       a.burtgesenAjiltaniiNer = ajiltan.ner;
       a.zogsooliinId = data?.zogsooliinId;
     });
-    const tulukhGejBuiNiitDun = tulbur.reduce((a, b) => a + b?.dun, 0);
+    const tulukhGejBuiNiitDun = tulbur.reduce((a, b) => a + (Number(b?.dun) || 0), 0);
     const khungulultDun = tulbur
-      .filter((a) => a.dun && a.dun > 0 && a.turul == "khungulult")
-      .reduce((a, b) => a + b?.dun, 0);
-    if (tulukhGejBuiNiitDun !== niitDun) {
+      .filter((a) => a.dun && Number(a.dun) > 0 && (a.turul == "khungulult" || (typeof a.turul === "string" && a.turul.toLowerCase().startsWith("ugaalga"))))
+      .reduce((a, b) => a + (Number(b?.dun) || 0), 0);
+      
+    const nonDiscountPayments = tulbur
+      .filter((a) => a.dun && Number(a.dun) > 0 && a.turul !== "khungulult" && !(typeof a.turul === "string" && a.turul.toLowerCase().startsWith("ugaalga")))
+      .reduce((a, b) => a + (Number(b?.dun) || 0), 0);
+      
+    const expectedPayAmount = Math.max(0, Number(niitDun) - khungulultDun);
+    
+    if (Math.abs(nonDiscountPayments - expectedPayAmount) > 1) {
       setLoading(false);
       return notification.warn({
         message: "Төлбөр зөрүүтэй байна!",
-        duration: 1,
       });
     }
     //Tuhain tulburiin dun ni too bolon 0 ees ih baih yostoi
@@ -1175,7 +1175,11 @@ function ShineTulbur(
                 <div className="flex flex-col gap-2 font-semibold">
                   <div className="flex w-full justify-between font-semibold dark:text-gray-200">
                     <div>Нийт дүн:</div>
-                    <div>{formatNumber(niitDun)}₮</div>
+                    <div>{formatNumber(
+                      Math.max(0, Number(niitDun) - tulbur
+                        .filter((a) => a.dun && Number(a.dun) > 0 && (a.turul == "khungulult" || (typeof a.turul === "string" && a.turul.toLowerCase().startsWith("ugaalga"))))
+                        .reduce((a, b) => a + (Number(b?.dun) || 0), 0))
+                    )}₮</div>
                   </div>
                 </div>
                 <div

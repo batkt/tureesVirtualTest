@@ -51,10 +51,7 @@ function ZuvhunKhunglukhModalContent(
             : songogdsonData?.fitnessHungulult;
 
         const dun = Number(khungulult) || 0;
-        if (dun <= 0) {
-          toast.error(t("Хөнгөлөлтийн дүн 0 байна"));
-          return;
-        }
+
         uilchilgee(token)
           .post("/v1/kioskPay", {
             turul: "kiosk",
@@ -63,7 +60,10 @@ function ZuvhunKhunglukhModalContent(
             plate_number: songogdsonData?.plate_number,
             barilgiinId,
             ajiltniiNer: ajiltan?.ner,
-            ajiltniiId: ajiltan?._id,
+            ajiltniiId:
+              turul === "ugaalga" ? "694e260f3f0da03b83ace92b" : ajiltan?._id,
+            baiguullagiinId:
+              turul === "ugaalga" ? "612f457d185280db676d0b51" : undefined,
             zogsoolUndsenUne:
               Number(songogdsonData?.ugaalgaHungulult) ||
               Number(songogdsonData?.parkingUndsenUne) ||
