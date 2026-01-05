@@ -236,7 +236,15 @@ function tulburKhurvuulekh(v) {
       utga = "Пос Данс";
       break;
     default:
-      utga = v;
+      if (v && typeof v === "string" && v.toLowerCase().startsWith("ugaalga")) {
+        if (v.includes("24")) {
+          utga = "Угаалга/ 24 цаг";
+        } else {
+          utga = "Угаалга/ 1 цаг";
+        }
+      } else {
+        utga = v;
+      }
       break;
   }
   return utga;

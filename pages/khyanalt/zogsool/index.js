@@ -34,9 +34,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
-import useUilchluulegch, {
-  useUilchluulegchdiinDunAvay,
-} from "hooks/useUilchluulegch";
+import { useUilchluulegchdiinDunAvay } from "hooks/useUilchluulegch";
 
 import useUilchluulegchZogsool from "hooks/useUilchluulegchZogsool";
 
@@ -126,8 +124,8 @@ function tulburKhurvuulekh(v) {
     case "Fitness":
       utga = "Fitness";
       break;
-    case "Ugaalga":
-      utga = "Ugaalga";
+    case "ugaalga":
+      utga = "ugaalga";
       break;
     case "bankQR":
       utga = "Банк QR";
@@ -582,7 +580,7 @@ function Zogsool({ token }) {
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
-  } = useUilchluulegchZogsool(token, baiguullaga?._id, query, order, or, 500);
+  } = useUilchluulegchZogsool(token, baiguullaga?._id, query, order, or, 500, tootsooKhelber);
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
 
