@@ -580,7 +580,15 @@ function Zogsool({ token }) {
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
-  } = useUilchluulegchZogsool(token, baiguullaga?._id, query, order, or, 500, tootsooKhelber);
+  } = useUilchluulegchZogsool(
+    token,
+    baiguullaga?._id,
+    query,
+    order,
+    or,
+    500,
+    tootsooKhelber
+  );
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
 

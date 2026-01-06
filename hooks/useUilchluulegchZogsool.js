@@ -55,7 +55,7 @@ function useUilchluulegchZogsool(
   const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
       ? [
-          "/zogsoolUilchluulegch",
+          "/zogsoolUilchluulegchJagsaalt",
           token,
           baiguullagiinId,
           khuudaslalt,
