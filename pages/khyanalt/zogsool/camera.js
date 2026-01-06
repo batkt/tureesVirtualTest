@@ -514,129 +514,129 @@ function camera({ token }) {
     }
   }, []);
 
-  const syncPendingUpdates = useCallback(async () => {
-    if (typeof window === "undefined") return;
+  // const syncPendingUpdates = useCallback(async () => {
+  //   if (typeof window === "undefined") return;
 
-    const storedUpdates = JSON.parse(
-      localStorage.getItem("cameraPendingUpdates") || "[]"
-    );
-    const storedCars = JSON.parse(
-      localStorage.getItem("cameraPendingCars") || "[]"
-    );
+  //   const storedUpdates = JSON.parse(
+  //     localStorage.getItem("cameraPendingUpdates") || "[]"
+  //   );
+  //   const storedCars = JSON.parse(
+  //     localStorage.getItem("cameraPendingCars") || "[]"
+  //   );
 
-    if (storedUpdates.length === 0 && storedCars.length === 0) return;
+  //   if (storedUpdates.length === 0 && storedCars.length === 0) return;
 
-    setSyncStatus("syncing");
-    const successful = [];
-    const failed = [];
-    const successfulCars = [];
-    const failedCars = [];
+  //   setSyncStatus("syncing");
+  //   const successful = [];
+  //   const failed = [];
+  //   const successfulCars = [];
+  //   const failedCars = [];
 
-    // Sync pending updates
-    for (const update of storedUpdates) {
-      try {
-        if (update.type === "updateUilchluulegch") {
-          const response = await updateMethod(
-            "uilchluulegch",
-            token,
-            update.body
-          );
-          if (response?.data === "Amjilttai") {
-            successful.push(update.id);
-          } else {
-            failed.push(update);
-          }
-        }
-      } catch (error) {
-        failed.push(update);
-      }
-    }
+  //   // Sync pending updates
+  //   for (const update of storedUpdates) {
+  //     try {
+  //       if (update.type === "updateUilchluulegch") {
+  //         const response = await updateMethod(
+  //           "uilchluulegch",
+  //           token,
+  //           update.body
+  //         );
+  //         if (response?.data === "Amjilttai") {
+  //           successful.push(update.id);
+  //         } else {
+  //           failed.push(update);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       failed.push(update);
+  //     }
+  //   }
 
-    // Sync pending cars
-    for (const car of storedCars) {
-      try {
-        if (car.type === "addCar" || car.type === "addCarFromEntry") {
-          const endpoint =
-            car.type === "addCarFromEntry"
-              ? "/zogsoolOrlogoGaraas"
-              : "/zogsoolSdkService";
-          const response = await uilchilgee(token).post(endpoint, car.data);
-          if (response?.status === 200 && !response?.data?.aldaa) {
-            successfulCars.push(car.id);
-          } else {
-            failedCars.push(car);
-          }
-        } else if (car.type === "removeCar") {
-          const response = await uilchilgee(token).post(
-            "/zogsoolSdkService",
-            car.data
-          );
-          if (response?.status === 200 && !response?.data?.aldaa) {
-            successfulCars.push(car.id);
-          } else {
-            failedCars.push(car);
-          }
-        }
-      } catch (error) {
-        failedCars.push(car);
-      }
-    }
+  //   // Sync pending cars
+  //   for (const car of storedCars) {
+  //     try {
+  //       if (car.type === "addCar" || car.type === "addCarFromEntry") {
+  //         const endpoint =
+  //           car.type === "addCarFromEntry"
+  //             ? "/zogsoolOrlogoGaraas"
+  //             : "/zogsoolSdkService";
+  //         const response = await uilchilgee(token).post(endpoint, car.data);
+  //         if (response?.status === 200 && !response?.data?.aldaa) {
+  //           successfulCars.push(car.id);
+  //         } else {
+  //           failedCars.push(car);
+  //         }
+  //       } else if (car.type === "removeCar") {
+  //         const response = await uilchilgee(token).post(
+  //           "/zogsoolSdkService",
+  //           car.data
+  //         );
+  //         if (response?.status === 200 && !response?.data?.aldaa) {
+  //           successfulCars.push(car.id);
+  //         } else {
+  //           failedCars.push(car);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       failedCars.push(car);
+  //     }
+  //   }
 
-    // Remove successful updates
-    const remainingUpdates = storedUpdates.filter(
-      (update) => !successful.includes(update.id)
-    );
-    if (typeof window !== "undefined") {
-      localStorage.setItem(
-        "cameraPendingUpdates",
-        JSON.stringify(remainingUpdates)
-      );
-    }
-    setPendingUpdates(remainingUpdates);
+  //   // Remove successful updates
+  //   const remainingUpdates = storedUpdates.filter(
+  //     (update) => !successful.includes(update.id)
+  //   );
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem(
+  //       "cameraPendingUpdates",
+  //       JSON.stringify(remainingUpdates)
+  //     );
+  //   }
+  //   setPendingUpdates(remainingUpdates);
 
-    // Remove successful cars
-    const remainingCars = storedCars.filter(
-      (car) => !successfulCars.includes(car.id)
-    );
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cameraPendingCars", JSON.stringify(remainingCars));
-      // Trigger UI update to remove synced cars
-      setPendingCarsUpdateTrigger((prev) => prev + 1);
-    }
+  //   // Remove successful cars
+  //   const remainingCars = storedCars.filter(
+  //     (car) => !successfulCars.includes(car.id)
+  //   );
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("cameraPendingCars", JSON.stringify(remainingCars));
+  //     // Trigger UI update to remove synced cars
+  //     setPendingCarsUpdateTrigger((prev) => prev + 1);
+  //   }
 
-    const totalSuccessful = successful.length + successfulCars.length;
-    const totalFailed = failed.length + failedCars.length;
+  //   const totalSuccessful = successful.length + successfulCars.length;
+  //   const totalFailed = failed.length + failedCars.length;
 
-    if (totalSuccessful > 0) {
-      setSyncStatus("success");
-      toast.success(t(`Амжилттай синк хийгдлээ (${totalSuccessful} өгөгдөл)`));
-      onRefresh();
-      setTimeout(() => setSyncStatus("idle"), 3000);
-    }
+  //   if (totalSuccessful > 0) {
+  //     setSyncStatus("success");
+  //     toast.success(t(`Амжилттай синк хийгдлээ (${totalSuccessful} өгөгдөл)`));
+  //     onRefresh();
+  //     setTimeout(() => setSyncStatus("idle"), 3000);
+  //   }
 
-    if (totalFailed > 0 && totalSuccessful === 0) {
-      setSyncStatus("error");
-      toast.error(t("Синк хийхэд алдаа гарлаа"));
-      setTimeout(() => setSyncStatus("idle"), 3000);
-    } else if (totalFailed > 0) {
-      toast.warning(t(`${totalFailed} өгөгдөл синк хийгдсэнгүй`));
-    }
-  }, [token, t, onRefresh]);
+  //   if (totalFailed > 0 && totalSuccessful === 0) {
+  //     setSyncStatus("error");
+  //     toast.error(t("Синк хийхэд алдаа гарлаа"));
+  //     setTimeout(() => setSyncStatus("idle"), 3000);
+  //   } else if (totalFailed > 0) {
+  //     toast.warning(t(`${totalFailed} өгөгдөл синк хийгдсэнгүй`));
+  //   }
+  // }, [token, t, onRefresh]);
 
-  // Sync pending updates when coming back online
-  useEffect(() => {
-    if (!isOfflineMode && isOnline && typeof window !== "undefined") {
-      const storedUpdates = JSON.parse(
-        localStorage.getItem("cameraPendingUpdates") || "[]"
-      );
-      const storedCars = JSON.parse(
-        localStorage.getItem("cameraPendingCars") || "[]"
-      );
-      if (storedUpdates.length > 0 || storedCars.length > 0) {
-        syncPendingUpdates();
-      }
-    }
-  }, [isOfflineMode, isOnline, syncPendingUpdates]);
+  // // Sync pending updates when coming back online
+  // useEffect(() => {
+  //   if (!isOfflineMode && isOnline && typeof window !== "undefined") {
+  //     const storedUpdates = JSON.parse(
+  //       localStorage.getItem("cameraPendingUpdates") || "[]"
+  //     );
+  //     const storedCars = JSON.parse(
+  //       localStorage.getItem("cameraPendingCars") || "[]"
+  //     );
+  //     if (storedUpdates.length > 0 || storedCars.length > 0) {
+  //       syncPendingUpdates();
+  //     }
+  //   }
+  // }, [isOfflineMode, isOnline, syncPendingUpdates]);
 
   useEffect(() => {
     const a1 = generateChild(jagsaalt, "Орох");

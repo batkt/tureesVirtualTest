@@ -19,6 +19,14 @@ export const socket = () =>
 
 export const aldaaBarigch = (e) => {
   if (
+    e?.response?.data?.offline ||
+    e?.message === "Network Error" ||
+    e?.code === "ERR_NETWORK"
+  ) {
+    return;
+  }
+
+  if (
     e?.response?.data?.aldaa === "jwt expired" ||
     e?.response?.data?.aldaa === "jwt malformed"
   )
