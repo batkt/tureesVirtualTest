@@ -339,7 +339,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "Зөрчилтэй":
             ugugdul.push({
-              ner: "Зөрчил",
+              ner: "Зөрчилтэй",
               icon: "/exclamation.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -615,8 +615,8 @@ function TulburiinDelgerenguiTailan(
                   (a, b) =>
                     a +
                     (b.ner != "Үнэгүй" &&
-                    b.ner != "Зөрчил" &&
                     b.ner != "Зөрчилтэй" &&
+                    b.ner != "Төлбөрийн зөрчилтэй" &&
                     b.ner != "Хөнгөлөлт" &&
                     b.ner != "Фитнес" &&
                     b.ner != "Хөнгөлөх"
@@ -635,8 +635,8 @@ function TulburiinDelgerenguiTailan(
                   (a, b) =>
                     a +
                     (b.ner == "Үнэгүй" ||
-                    b.ner == "Зөрчил" ||
-                    b.ner == "Зөрчилтэй"
+                    b.ner == "Зөрчилтэй" ||
+                    b.ner == "Төлбөрийн зөрчилтэй"
                       ? b?.dun
                       : 0),
                   0
