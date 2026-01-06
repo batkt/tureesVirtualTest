@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Form, Input, Switch } from "antd";
 import { useTheme } from "next-themes";
 import Head from "next/head";
@@ -33,19 +33,19 @@ export function useThemeValue() {
 function Ajiltan() {
   const [form] = Form.useForm();
   const [namaigsana, setNamaigsana] = useState(false);
+
   const [isReady, setIsReady] = useState(false);
   const { themeValue, setTheme } = useThemeValue();
   const { newterya } = useAuth();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof window !== "undefined") {
+      setIsReady(true);
       localStorage.removeItem("baiguulgiinErkhiinJagsaalt");
       const nevtrekhNer = localStorage.getItem("newtrekhNerTurees");
       if (nevtrekhNer) {
         form.setFieldsValue({ nevtrekhNer });
       }
-
-      setIsReady(true);
     }
   }, [form]);
 

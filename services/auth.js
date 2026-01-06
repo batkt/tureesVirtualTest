@@ -373,18 +373,20 @@ export const AuthProvider = ({ children }) => {
       },
 
       garya: async () => {
-        try {
-          setCookie(null, "tureestoken", "", { maxAge: -1, path: "/" });
-          setCookie(null, "barilgiinId", "", { maxAge: -1, path: "/" });
-          localStorage.removeItem("baiguulgiinErkhiinJagsaalt");
-          localStorage.removeItem("newtrekhNerTurees");
+        setCookie(null, "tureestoken", "", { maxAge: -1, path: "/" });
+        setCookie(null, "barilgiinId", "", { maxAge: -1, path: "/" });
 
-          setToken(null);
-          setIsOfflineMode(false);
+        localStorage.removeItem("baiguulgiinErkhiinJagsaalt");
+        localStorage.removeItem("newtrekhNerTurees");
 
+        setToken(null);
+        setIsOfflineMode(false);
+
+        clearOfflineAuth().catch(() => {});
+
+        if (typeof window !== "undefined") {
           window.location.href = "/";
-        } catch (error) {
-          window.location.href = "/";
+          return;
         }
       },
 
