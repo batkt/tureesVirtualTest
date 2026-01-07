@@ -97,8 +97,6 @@ function mashinBurtgel({ token }) {
     barilgiinId
   );
 
-  console.log("mashinToololt", mashinToololt);
-
   const { order, onChangeTable } = useOrder({
     createdAt: -1,
   });
@@ -773,7 +771,6 @@ function mashinBurtgel({ token }) {
     mashinMutate();
     mashinToololtMutate();
   }
-  console.log("---> mashinToololt", mashinToololt);
 
   function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
     uilchilgee(token)

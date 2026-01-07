@@ -160,10 +160,7 @@ function Khyanalt({ token }) {
           params: { khariltsagchiinId: khariltsagch._id },
         })
         .then(({ data }) => {
-          console.log("Full Geree Response:", data);
           if (data && data.length > 0) {
-            console.log("First Geree Object:", data[0]);
-            console.log("Geree Keys:", Object.keys(data[0]));
             setGeree(data[0]);
           } else {
             setGeree(null);
@@ -226,8 +223,6 @@ function Khyanalt({ token }) {
     const gereeData = flattenObject(geree || {});
 
     const allData = { ...khariltsagchData, ...gereeData };
-
-    console.log("All available fields:", Object.keys(allData));
 
     for (const [key, value] of Object.entries(allData)) {
       if (value !== null && value !== undefined && value !== "") {

@@ -25,7 +25,7 @@ export async function registerServiceWorker() {
           if (navigator.serviceWorker.controller) {
             // Don't auto-reload - just wait for the new worker to activate
             // The new worker will take control on next page load
-            console.log("Шинэ хувилбар бэлэн болсон. Дараагийн хуудсын ачааллалтад хэрэгжих болно.");
+
             isUpdating = false;
           } else {
             // First install, no need to reload

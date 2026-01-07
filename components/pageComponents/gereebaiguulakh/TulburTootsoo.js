@@ -71,9 +71,6 @@ const Tulbur = ({
       );
     });
 
-    console.log("=== KHUVAARI UUSGEY ===");
-    console.log("khungulultuud:", updatedKhungulult);
-
     uilchilgee(token)
       .post(`/khuvaariUusgey`, {
         dun: value.sariinTurees,

@@ -88,11 +88,7 @@ function KhuviinMedeelel({
   });
 
   const zuragKhadgalakh = (v, turul) => {
-    console.log("zuragKhadgalakh called:", { turul, status: v.file.status });
-
     if (v.file.status === "done") {
-      console.log("File upload done, response:", v.file.response); // Get the file object - prioritize originFileObj
-
       const fileToUse = v.file.originFileObj || v.file;
 
       // We are forcing a Base64 data URL here for local preview
@@ -274,14 +270,7 @@ function KhuviinMedeelel({
   const shouldShowGariinUseg1 = () => {
     return gariinUseg1 || (barilga?.gariinUseg1 && !deleteGariinUseg1);
   };
-  console.log("Current state:", {
-    tamga,
-    gariinUseg,
-    gariinUseg1,
-    barilgaTamga: barilga?.tamga,
-    barilgaGariinUseg: barilga?.gariinUseg,
-    barilgaGariinUseg1: barilga?.gariinUseg1,
-  });
+
   return (
     <>
       <div className="col-span-12 grid grid-cols-1 xl:grid-cols-3 xl:gap-5">

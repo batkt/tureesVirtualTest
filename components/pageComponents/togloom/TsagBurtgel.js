@@ -93,19 +93,11 @@ function TsagBurtgel(
     }
     const tasalbarShirkheg = data.khuukhdiinToo;
     const method = data?._id ? updateMethod : createMethod;
-    console.log("Sending data to API:", JSON.stringify(data, null, 2));
+
     method("togloomiinTuvKhadgalya", token, data)
       .then((response) => {
-        console.log("Full API Response:", response);
         const responseData = response?.data;
-        console.log("Response Data:", responseData);
-        console.log("Response Data Type:", typeof responseData);
-        console.log(
-          "Response Data === 'Amjilttai':",
-          responseData === "Amjilttai"
-        );
 
-        // Check if response is successful - only accept "Amjilttai" string or object with message/success
         const isSuccess =
           responseData === "Amjilttai" ||
           responseData?.message === "Amjilttai" ||

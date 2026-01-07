@@ -772,8 +772,7 @@ function camera({ token }) {
 
     const orohCams = getCams("Орох");
     const garahCams = getCams("Гарах");
-    console.log("orohCams", orohCams);
-    console.log("garahCams", garahCams);
+
     const handleOroh = (data) => {
       if (
         !data ||
@@ -783,7 +782,6 @@ function camera({ token }) {
       )
         return;
 
-      console.log(" ------->> " + data.oruulakhguiEsekh);
       if (!data?.oruulakhguiEsekh) {
         khaalgaNeey(data.cameraIP);
         onRefresh();

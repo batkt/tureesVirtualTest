@@ -123,8 +123,6 @@ async function cleanAllCaches() {
 
     // Update last cleanup time in the new cache
     await updateLastCleanupTime();
-
-    console.log("Cache cleaned at:", new Date().toISOString());
   } catch (error) {
     console.error("Error cleaning caches:", error);
   }

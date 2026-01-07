@@ -50,7 +50,6 @@ function TogloomTile({
                   title="Машин устгах уу?"
                   okText="Тийм"
                   cancelText="Үгүй"
-                  onConfirm={() => console.log("Delete", data)}
                 >
                   <Button
                     type="text"
