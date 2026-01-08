@@ -1258,7 +1258,7 @@ function tulburTootsoo({ token }) {
               (baiguullaga?._id === "695c57511a8a4aebc1d65b02" && (
                 <div className="mb-4 ml-3 flex items-center space-x-2">
                   <Input
-                    placeholder={t("bondogo2")}
+                    placeholder={t("Тест дүн бичих")}
                     value={garDunFormatted}
                     onChange={(e) => {
                       const inputValue = e.target.value;
@@ -1343,7 +1343,7 @@ function tulburTootsoo({ token }) {
                             "_" +
                             new Date().getTime(),
 
-                          description: "bondogo2 tailbar",
+                          description: "Тест дүн бичих tailbar",
                         };
 
                         if (bank === "golomt") payload.tranAmount = mungunDun;
@@ -1357,7 +1357,7 @@ function tulburTootsoo({ token }) {
                           payload.amount = mungunDun;
                         }
 
-                        const desc = "bondogo2 tauilbar";
+                        const desc = "Тест дүн бичих tauilbar";
                         if (bank === "golomt") {
                           payload.tranDesc = desc;
                           // also keep generic description
