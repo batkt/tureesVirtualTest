@@ -84,7 +84,7 @@ function useDansKhuulga(token, baiguullagiinId, dans, ognoo, order, query) {
   const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId && !!dans && !!ognoo
       ? [
-          "/bankniiGuilgee",
+          "/zogsoolBankniiGuilgeeJagsaalt",
           token,
           baiguullagiinId,
           khuudaslalt,
