@@ -1254,148 +1254,149 @@ function tulburTootsoo({ token }) {
               </Select>
             </div>
 
-            {baiguullaga?._id === "612f457d185280db676d0b51" && (
-              <div className="mb-4 ml-3 flex items-center space-x-2">
-                <Input
-                  placeholder={t("Мичка эгчийн тест")}
-                  value={garDunFormatted}
-                  onChange={(e) => {
-                    const inputValue = e.target.value;
+            {baiguullaga?._id === "612f457d185280db676d0b51" ||
+              (baiguullaga?._id === "695c57511a8a4aebc1d65b02" && (
+                <div className="mb-4 ml-3 flex items-center space-x-2">
+                  <Input
+                    placeholder={t("bondogo2")}
+                    value={garDunFormatted}
+                    onChange={(e) => {
+                      const inputValue = e.target.value;
 
-                    const numericValue = inputValue.replace(/[^0-9.]/g, "");
+                      const numericValue = inputValue.replace(/[^0-9.]/g, "");
 
-                    setGarDun(numericValue);
+                      setGarDun(numericValue);
 
-                    if (numericValue === "" || numericValue === ".") {
-                      setGarDunFormatted(numericValue);
-                    } else {
-                      const parsed = parseFloat(numericValue);
-                      if (!isNaN(parsed)) {
-                        setGarDunFormatted(formatNumber(parsed, 0));
-                      } else {
+                      if (numericValue === "" || numericValue === ".") {
                         setGarDunFormatted(numericValue);
-                      }
-                    }
-                  }}
-                  style={{ width: 220 }}
-                />
-                <AntButton
-                  type="primary"
-                  onClick={async () => {
-                    if (!songogdsonDans) {
-                      notification.warning({ message: t("Данс сонгоно уу") });
-                      return;
-                    }
-                    try {
-                      setLoading(true);
-
-                      const bank = songogdsonDans?.bank;
-                      const dugaar =
-                        bank === "khanbank"
-                          ? garDun || ""
-                          : bank === "golomt"
-                          ? garDun || ""
-                          : bank === "bogd"
-                          ? garDun || ""
-                          : bank === "tran"
-                          ? garDun || ""
-                          : bank === "tdb"
-                          ? garDun || ""
-                          : garDun || "";
-
-                      const mungunDun = Number(garDun) || 0;
-
-                      const payload = {
-                        tranDate: new Date(),
-                        balance: 0,
-                        requestId: garDun || undefined,
-
-                        ...(bank === "golomt" ? { tranId: dugaar } : {}),
-                        ...(bank === "khanbank" ? { record: dugaar } : {}),
-                        ...(bank === "bogd" ? { recNum: dugaar } : {}),
-                        ...(bank === "tran" ? { jrno: dugaar } : {}),
-                        ...(bank === "tdb"
-                          ? {
-                              NtryRef: dugaar,
-                              TxDt: new Date().toISOString(),
-                              TxTime: moment().format("HH:mm"),
-                            }
-                          : {}),
-                        drOrCr: bank === "golomt" ? "Credit" : undefined,
-                        tranPostedDate: new Date().toISOString(),
-                        tranCrnCode: songogdsonDans?.currency || "MNT",
-                        exchRate: 1,
-                        accName: songogdsonDans?.accName || "",
-                        accNum: songogdsonDans?.dugaar || "",
-                        kholbosonGereeniiId: [],
-                        kholbosonTalbainId: [],
-                        dansniiDugaar: songogdsonDans?.dugaar,
-                        bank: songogdsonDans?.bank,
-                        baiguullagiinId: baiguullaga?._id,
-                        barilgiinId: barilgiinId,
-                        indexTalbar:
-                          barilgiinId +
-                          (songogdsonDans?.bank || "") +
-                          (songogdsonDans?.dugaar || "") +
-                          (dugaar || "") +
-                          mungunDun.toString() +
-                          "_" +
-                          new Date().getTime(),
-
-                        description: "Мичка эгчийн тест тайлбар",
-                      };
-
-                      if (bank === "golomt") payload.tranAmount = mungunDun;
-                      else if (bank === "khanbank" || bank === "bogd")
-                        payload.amount = mungunDun;
-                      else if (bank === "tdb") payload.Amt = mungunDun;
-                      else if (bank === "tran") {
-                        payload.income = mungunDun;
-                        payload.outcome = 0;
                       } else {
-                        payload.amount = mungunDun;
+                        const parsed = parseFloat(numericValue);
+                        if (!isNaN(parsed)) {
+                          setGarDunFormatted(formatNumber(parsed, 0));
+                        } else {
+                          setGarDunFormatted(numericValue);
+                        }
                       }
-
-                      const desc = "Мичка эгчийн тест тайлбар";
-                      if (bank === "golomt") {
-                        payload.tranDesc = desc;
-                        // also keep generic description
-                        payload.description = desc;
-                      } else if (bank === "tdb") {
-                        payload.TxAddInf = desc;
-                        payload.description = desc;
-                      } else if (bank === "khanbank" || bank === "bogd") {
-                        payload.description = desc;
-                      } else {
-                        payload.description = desc;
+                    }}
+                    style={{ width: 220 }}
+                  />
+                  <AntButton
+                    type="primary"
+                    onClick={async () => {
+                      if (!songogdsonDans) {
+                        notification.warning({ message: t("Данс сонгоно уу") });
+                        return;
                       }
+                      try {
+                        setLoading(true);
 
-                      Object.keys(payload).forEach(
-                        (k) => payload[k] === undefined && delete payload[k]
-                      );
+                        const bank = songogdsonDans?.bank;
+                        const dugaar =
+                          bank === "khanbank"
+                            ? garDun || ""
+                            : bank === "golomt"
+                            ? garDun || ""
+                            : bank === "bogd"
+                            ? garDun || ""
+                            : bank === "tran"
+                            ? garDun || ""
+                            : bank === "tdb"
+                            ? garDun || ""
+                            : garDun || "";
 
-                      await createMethod("bankniiGuilgee", token, payload);
+                        const mungunDun = Number(garDun) || 0;
 
-                      notification.success({
-                        message: t("Амжилттай хадгалагдлаа"),
-                      });
+                        const payload = {
+                          tranDate: new Date(),
+                          balance: 0,
+                          requestId: garDun || undefined,
 
-                      bankniiGuilgeeToololtMutate &&
-                        bankniiGuilgeeToololtMutate();
-                      dansniiKhuulgaMutate && dansniiKhuulgaMutate();
-                      setGarDun("");
-                      setGarDunFormatted("");
-                    } catch (e) {
-                      aldaaBarigch(e);
-                    } finally {
-                      setLoading(false);
-                    }
-                  }}
-                >
-                  {t("Хадгалах")}
-                </AntButton>
-              </div>
-            )}
+                          ...(bank === "golomt" ? { tranId: dugaar } : {}),
+                          ...(bank === "khanbank" ? { record: dugaar } : {}),
+                          ...(bank === "bogd" ? { recNum: dugaar } : {}),
+                          ...(bank === "tran" ? { jrno: dugaar } : {}),
+                          ...(bank === "tdb"
+                            ? {
+                                NtryRef: dugaar,
+                                TxDt: new Date().toISOString(),
+                                TxTime: moment().format("HH:mm"),
+                              }
+                            : {}),
+                          drOrCr: bank === "golomt" ? "Credit" : undefined,
+                          tranPostedDate: new Date().toISOString(),
+                          tranCrnCode: songogdsonDans?.currency || "MNT",
+                          exchRate: 1,
+                          accName: songogdsonDans?.accName || "",
+                          accNum: songogdsonDans?.dugaar || "",
+                          kholbosonGereeniiId: [],
+                          kholbosonTalbainId: [],
+                          dansniiDugaar: songogdsonDans?.dugaar,
+                          bank: songogdsonDans?.bank,
+                          baiguullagiinId: baiguullaga?._id,
+                          barilgiinId: barilgiinId,
+                          indexTalbar:
+                            barilgiinId +
+                            (songogdsonDans?.bank || "") +
+                            (songogdsonDans?.dugaar || "") +
+                            (dugaar || "") +
+                            mungunDun.toString() +
+                            "_" +
+                            new Date().getTime(),
+
+                          description: "bondogo2 tailbar",
+                        };
+
+                        if (bank === "golomt") payload.tranAmount = mungunDun;
+                        else if (bank === "khanbank" || bank === "bogd")
+                          payload.amount = mungunDun;
+                        else if (bank === "tdb") payload.Amt = mungunDun;
+                        else if (bank === "tran") {
+                          payload.income = mungunDun;
+                          payload.outcome = 0;
+                        } else {
+                          payload.amount = mungunDun;
+                        }
+
+                        const desc = "bondogo2 tauilbar";
+                        if (bank === "golomt") {
+                          payload.tranDesc = desc;
+                          // also keep generic description
+                          payload.description = desc;
+                        } else if (bank === "tdb") {
+                          payload.TxAddInf = desc;
+                          payload.description = desc;
+                        } else if (bank === "khanbank" || bank === "bogd") {
+                          payload.description = desc;
+                        } else {
+                          payload.description = desc;
+                        }
+
+                        Object.keys(payload).forEach(
+                          (k) => payload[k] === undefined && delete payload[k]
+                        );
+
+                        await createMethod("bankniiGuilgee", token, payload);
+
+                        notification.success({
+                          message: t("Амжилттай хадгалагдлаа"),
+                        });
+
+                        bankniiGuilgeeToololtMutate &&
+                          bankniiGuilgeeToololtMutate();
+                        dansniiKhuulgaMutate && dansniiKhuulgaMutate();
+                        setGarDun("");
+                        setGarDunFormatted("");
+                      } catch (e) {
+                        aldaaBarigch(e);
+                      } finally {
+                        setLoading(false);
+                      }
+                    }}
+                  >
+                    {t("Хадгалах")}
+                  </AntButton>
+                </div>
+              ))}
 
             {songogdsonDans && (
               <div className="mb-1 ml-5 flex-row space-x-2 p-1 font-medium md:flex">
