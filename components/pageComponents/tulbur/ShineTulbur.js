@@ -41,9 +41,18 @@ function ShineTulbur(
     eBarimtAutomataarShivikh,
     songogdsonZogsool,
     mashiniiDugaar,
+    updateOfflineItem,
+    isActuallyOffline: isActuallyOfflineProp,
   },
   ref
 ) {
+  const isNavigatorOffline =
+    typeof navigator !== "undefined" ? !navigator.onLine : false;
+  const isActuallyOffline =
+    isActuallyOfflineProp !== undefined
+      ? isActuallyOfflineProp
+      : isNavigatorOffline;
+
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
     !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
@@ -329,8 +338,8 @@ function ShineTulbur(
       a.ognoo = new Date();
       a.baiguullagiinId = baiguullaga?._id;
       a.barilgiinId = barilgiinId;
-      a.burtgesenAjiltaniiId = ajiltan._id;
-      a.burtgesenAjiltaniiNer = ajiltan.ner;
+      a.burtgesenAjiltaniiId = ajiltan?._id || "offline_user";
+      a.burtgesenAjiltaniiNer = ajiltan?.ner || "Оффлайн хэрэглэгч";
       a.zogsooliinId = data?.zogsooliinId;
     });
     const tulukhGejBuiNiitDun = tulbur.reduce(
@@ -371,6 +380,40 @@ function ShineTulbur(
     }
     //Tuhain tulburiin dun ni too bolon 0 ees ih baih yostoi
     const yavuulakhTulbur = tulbur.filter((a) => a.dun && a.dun > 0);
+
+    if (isActuallyOffline) {
+      const pendingPayment = {
+        type: "zogsooliinTulburTulye",
+        tulbur: yavuulakhTulbur,
+        id: uilchluugchiinId,
+        timestamp: new Date().toISOString(),
+        pendingId: Date.now(),
+      };
+      try {
+        const stored = JSON.parse(
+          localStorage.getItem("cameraPendingUpdates") || "[]"
+        );
+        stored.push(pendingPayment);
+        localStorage.setItem("cameraPendingUpdates", JSON.stringify(stored));
+      } catch (e) {}
+
+      if (updateOfflineItem && uilchluugchiinId) {
+        updateOfflineItem(uilchluugchiinId, (item) => ({
+          ...item,
+          tuukh: item.tuukh?.map((t, idx) =>
+            idx === 0 ? { ...t, tuluv: 1, tulbur: yavuulakhTulbur } : t
+          ),
+        }));
+      }
+
+      toast.success(
+        t("Оффлайнд хадгаллаа. Сүлжээнд холбогдох үед синк хийгдэнэ.")
+      );
+      ebarimtguiTulburDuusgakh();
+      setLoading(false);
+      return;
+    }
+
     uilchilgee(token)
       .post("/zogsooliinTulburTulye", {
         tulbur: yavuulakhTulbur,

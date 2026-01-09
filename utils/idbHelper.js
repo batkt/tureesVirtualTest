@@ -6,6 +6,7 @@ const DB_VERSION = 9;
 export const STORES = {
   USER: "user",
   PAYMENTS: "offline-payments",
+  CACHE: "cache",
 };
 
 export async function openDB() {

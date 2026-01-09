@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import moment from "moment";
+import { openDB, STORES } from "../utils/indexedDB";
 
 const fetcher = (
   url,
@@ -52,6 +53,7 @@ function useUilchluulegchZogsool(
     search: "",
     jagsaalt: [],
   });
+  const [offlineCacheData, setOfflineCacheData] = useState(null);
   const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
       ? [
@@ -68,9 +70,61 @@ function useUilchluulegchZogsool(
     fetcher,
     { revalidateOnFocus: false }
   );
+
+  
+  const cacheKey = useMemo(() => {
+    const base = "/zogsoolUilchluulegchJagsaalt";
+    const org = baiguullagiinId || "";
+    const bid = barilgiinId || "";
+    const q = query ? JSON.stringify(query) : "";
+    const o = order ? JSON.stringify(order) : "";
+    return `${base}:${org}:${bid}:${q}:${o}`;
+  }, [baiguullagiinId, barilgiinId, query, order]);
+
+ 
+  useEffect(() => {
+    (async () => {
+      try {
+        if (data && Array.isArray(data?.jagsaalt)) {
+          const db = await openDB();
+          await db.put(
+            STORES.CACHE,
+            { value: data, savedAt: new Date().toISOString() },
+            cacheKey
+          );
+        }
+      } catch (e) {
+        
+      }
+    })();
+  }, [data, cacheKey]);
+
+  
+  useEffect(() => {
+    (async () => {
+      try {
+        const isBrowser = typeof navigator !== "undefined";
+        const shouldLoadCache =
+          (!data && isBrowser && !navigator.onLine) || (!data && isBrowser);
+        if (shouldLoadCache) {
+          const db = await openDB();
+          const cached = await db.get(STORES.CACHE, cacheKey);
+          if (cached?.value) {
+            setOfflineCacheData(cached.value);
+          }
+        } else {
+          setOfflineCacheData(null);
+        }
+      } catch (e) {
+        setOfflineCacheData(null);
+      }
+    })();
+  }, [data, cacheKey]);
+
+  const effectiveData = offlineCacheData || data;
   return {
     setUilchluulegchKhuudaslalt,
-    uilchluulegchGaralt: data,
+    uilchluulegchGaralt: effectiveData,
     uilchluulegchMutate: mutate,
     isValidating,
   };

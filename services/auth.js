@@ -10,7 +10,7 @@ import React, {
 import { message } from "antd";
 import { toast } from "sonner";
 import { setCookie, parseCookies } from "nookies";
-import uilchilgee from "./uilchilgee";
+import uilchilgee, { url as API_URL } from "./uilchilgee";
 import { ekhniiTsonkhruuOchyo } from "tools/logic/khereglegchiinErkhiinTokhirgoo";
 import useAjiltan from "hooks/useAjiltan";
 import useBaiguullaga from "hooks/useBaiguullaga";
@@ -31,6 +31,26 @@ const isOnline = () => {
   }
   return navigator.onLine;
 };
+// Heartbeat check to detect real network connectivity using the API server
+const HEARTBEAT_URL = API_URL || "http://103.143.40.175:8081";
+const heartbeatCheck = async (url = HEARTBEAT_URL, timeout = 3000) => {
+  try {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    // Add random query param to bypass cache
+    const checkUrl = `${url}?_t=${Date.now()}`;
+    await fetch(checkUrl, {
+      method: "HEAD",
+      mode: "no-cors",
+      cache: "no-store",
+      signal: controller.signal,
+    });
+    clearTimeout(id);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 
 const AuthContext = createContext({});
 
@@ -43,14 +63,16 @@ export const useBarilga = () => {
       (salbar) => salbar?.salbariinId === id
     );
     if (!tukhainBarilga && ajiltan?.erkh !== "Admin") {
-      return toastwarn("Ажилтанд барилгын тохиргоо хийгдээгүй байна");
+      toast.warning("Ажилтанд барилгын тохиргоо хийгдээгүй байна");
+      return;
     } else {
       if (
         moment(tukhainBarilga?.duusakhOgnoo)
           .startOf("day")
           .isBefore(moment().startOf("day"))
       ) {
-        return toastwarn("Тухайн барилгын лиценз дууссан байна");
+        toast.warning("Тухайн барилгын лиценз дууссан байна");
+        return;
       }
     }
     setBarilgiinId(id);
@@ -85,7 +107,14 @@ export const useBarilga = () => {
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
-  const [isOfflineMode, setIsOfflineMode] = useState(false);
+  // Initialize isOfflineMode based on navigator.onLine immediately
+  const [isOfflineMode, setIsOfflineMode] = useState(() => {
+    if (typeof navigator !== "undefined") {
+      return !navigator.onLine;
+    }
+    return false;
+  });
+  const heartbeatInterval = useRef(null);
   const [isClient, setIsClient] = useState(false);
   const [baiguulgiinErkhiinJagsaalt, setBaiguulgiinErkhiinJagsaalt] = useState(
     []
@@ -99,12 +128,101 @@ export const AuthProvider = ({ children }) => {
   const { barilgaSoliyo, barilgiinId } = useBarilga();
   const { t } = useTranslation();
 
+  const syncOfflineData = useCallback(async () => {
+    if (token) {
+      try {
+        ajiltanMutate();
+        baiguullagaMutate();
+        toast.success("Өгөгдөл шинэчлэгдлээ");
+      } catch (error) {}
+    }
+  }, [token, ajiltanMutate, baiguullagaMutate]);
+
   const hasInitialized = useRef(false);
-  const networkListenersAttached = useRef(false);
+  const isOfflineModeRef = useRef(isOfflineMode);
+
+  useEffect(() => {
+    isOfflineModeRef.current = isOfflineMode;
+  }, [isOfflineMode]);
 
   useEffect(() => {
     setIsClient(true);
+    // Immediately check navigator.onLine on client mount
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      setIsOfflineMode(true);
+    }
   }, []);
+
+  // Heartbeat effect for real network detection
+  useEffect(() => {
+    if (!isClient) return;
+
+    const failureStreakRef = { current: 0 };
+    // Use a health endpoint or a lightweight static asset
+    const check = async () => {
+      const navOnline =
+        typeof navigator !== "undefined" ? navigator.onLine : true;
+
+      if (!navOnline) {
+        if (!isOfflineModeRef.current) {
+          setIsOfflineMode(true);
+          toast.warning(
+            "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
+            0
+          );
+        }
+        return;
+      }
+
+      const online = await heartbeatCheck();
+      if (!online) {
+        failureStreakRef.current += 1;
+        if (failureStreakRef.current >= 1 && !isOfflineModeRef.current) {
+          setIsOfflineMode(true);
+          toast.warning(
+            "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
+            0
+          );
+        }
+      } else {
+        if (isOfflineModeRef.current) {
+          setIsOfflineMode(false);
+          toast.success("Интернэт холбогдлоо");
+          syncOfflineData();
+        }
+        failureStreakRef.current = 0;
+      }
+    };
+
+    // Check purely based on events as well to be responsive
+    const handleOnline = () => {
+      const wasOffline = isOfflineModeRef.current;
+      setIsOfflineMode(false);
+      toast.success("Интернэт холбогдлоо");
+      if (wasOffline) syncOfflineData();
+    };
+
+    const handleOffline = () => {
+      setIsOfflineMode(true);
+      toast.warning(
+        "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
+        0
+      );
+    };
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    const intervalId = setInterval(check, 5000); // every 5 seconds
+    // Run once immediately
+    check();
+
+    return () => {
+      clearInterval(intervalId);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [isClient, syncOfflineData]);
 
   useEffect(() => {
     if (!isClient || hasInitialized.current) return;
@@ -115,8 +233,6 @@ export const AuthProvider = ({ children }) => {
       try {
         await initializeServiceWorker();
         await initializeAuthState();
-        setupNetworkListeners();
-
         try {
           await getCachedPermissionsData();
         } catch (error) {}
@@ -127,13 +243,7 @@ export const AuthProvider = ({ children }) => {
 
     initializeApp();
 
-    return () => {
-      if (networkListenersAttached.current) {
-        window.removeEventListener("online", handleOnline);
-        window.removeEventListener("offline", handleOffline);
-        networkListenersAttached.current = false;
-      }
-    };
+    return () => {};
   }, [isClient]);
 
   const initializeServiceWorker = async () => {
@@ -164,43 +274,6 @@ export const AuthProvider = ({ children }) => {
       setBaiguulgiinErkhiinJagsaalt(JSON.parse(erkh) || []);
     } catch (error) {}
   };
-
-  const setupNetworkListeners = () => {
-    if (networkListenersAttached.current || typeof window === "undefined")
-      return;
-
-    networkListenersAttached.current = true;
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-  };
-
-  const handleOnline = useCallback(() => {
-    const wasOffline = isOfflineMode;
-    setIsOfflineMode(false);
-    toast.success("Интернэт холбогдлоо");
-
-    if (wasOffline) {
-      syncOfflineData();
-    }
-  }, [isOfflineMode]);
-
-  const handleOffline = useCallback(() => {
-    setIsOfflineMode(true);
-    toast.warning(
-      "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
-      0
-    );
-  }, []);
-
-  const syncOfflineData = useCallback(async () => {
-    if (token) {
-      try {
-        ajiltanMutate();
-        baiguullagaMutate();
-        toast.success("Өгөгдөл шинэчлэгдлээ");
-      } catch (error) {}
-    }
-  }, [token, ajiltanMutate, baiguullagaMutate]);
 
   const performOnlineLogin = async (khereglech) => {
     return new Promise((resolve, reject) => {
@@ -343,7 +416,6 @@ export const AuthProvider = ({ children }) => {
           toast.warning("Нууц үгийг бөглөнө үү");
           return;
         }
-
         if (khereglech.namaigsana) {
           localStorage.setItem("newtrekhNerTurees", khereglech.nevtrekhNer);
         }
@@ -417,7 +489,7 @@ export const AuthProvider = ({ children }) => {
       },
 
       isOfflineMode,
-      isOnline: isOnline(),
+      isOnline: !isOfflineMode,
       token,
       ajiltan,
       baiguullaga,

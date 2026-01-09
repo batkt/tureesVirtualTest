@@ -214,13 +214,23 @@ self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(event.request.url);
   let responsePromise;
 
+  // Only cache/sync these camera-related endpoints
+  const cameraApiPaths = [
+    "/zogsoolSdkService",
+    "/zogsoolOrlogoGaraas",
+    "/zurchilteiMashinMsgilgeekh",
+  ];
+  const isCameraApi = cameraApiPaths.some((p) =>
+    requestUrl.pathname.endsWith(p)
+  );
+
   // Never cache upload requests - always use network
   if (requestUrl.pathname.includes("/upload")) {
     event.respondWith(fetch(event.request));
     return;
   }
 
-  if (requestUrl.pathname.startsWith("/api/")) {
+  if (isCameraApi) {
     if (event.request.method === "POST") {
       responsePromise = (async () => {
         try {
@@ -318,14 +328,22 @@ self.addEventListener("fetch", (event) => {
         });
     }
   } else {
-    responsePromise = caches.match(event.request).then((response) => {
-      if (response) {
-        return response;
-      }
-      return fetch(event.request).catch(() => {
+    // Special-case heartbeat asset to always use network, never serve from cache
+    if (requestUrl.pathname === "/robots.txt") {
+      responsePromise = fetch(event.request).catch(() => {
         return new Response("Интернет салсан байна", { status: 503 });
       });
-    });
+    } else {
+      // For all other requests, just try cache first, then network, but do not store for offline
+      responsePromise = caches.match(event.request).then((response) => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request).catch(() => {
+          return new Response("Интернет салсан байна", { status: 503 });
+        });
+      });
+    }
   }
 
   event.respondWith(responsePromise);

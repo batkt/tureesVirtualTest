@@ -59,6 +59,7 @@ import useJagsaalt from "../../../hooks/useJagsaalt";
 import { modal } from "../../../components/ant/Modal";
 import _ from "lodash";
 import updateMethod from "../../../tools/function/crud/updateMethod";
+import { tulburBodoy } from "../../../tools/function/tulburBodyo";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 
 import { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
@@ -259,6 +260,32 @@ function camera({ token }) {
   const { t, i18n } = useTranslation();
   const { baiguullaga, ajiltan, barilgiinId, isOfflineMode, isOnline } =
     useAuth();
+
+  const [browserOnline, setBrowserOnline] = useState(
+    typeof navigator !== "undefined" ? navigator.onLine : true
+  );
+
+  useEffect(() => {
+    const currentOnline =
+      typeof navigator !== "undefined" ? navigator.onLine : true;
+    if (currentOnline !== browserOnline) {
+      setBrowserOnline(currentOnline);
+    }
+
+    const handleOnline = () => setBrowserOnline(true);
+    const handleOffline = () => setBrowserOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  const isActuallyOffline = isOfflineMode || !isOnline || !browserOnline;
+
   const [syncStatus, setSyncStatus] = useState("idle"); // idle, syncing, success, error
   const [pendingUpdates, setPendingUpdates] = useState([]);
   const [pendingCarsUpdateTrigger, setPendingCarsUpdateTrigger] = useState(0);
@@ -415,6 +442,37 @@ function camera({ token }) {
     [tuukhiinKhugatsaaMin, uneguiKhugatsaaMin]
   );
 
+  const calculateParkingFee = useCallback(
+    async (tuukh) => {
+      try {
+        if (!tuukh || !songogdzonZogsool?.tulburuud) {
+          return 0;
+        }
+
+        const orsonTsag = tuukh?.tsagiinTuukh?.[0]?.orsonTsag;
+        const garsanTsag = tuukh?.tsagiinTuukh?.[0]?.garsanTsag || new Date();
+
+        if (!orsonTsag) return 0;
+
+        const fee = await tulburBodoy(
+          songogdzonZogsool.tulburuud,
+          moment(garsanTsag),
+          moment(orsonTsag),
+          songogdzonZogsool.undsenUne || 0,
+          songogdzonZogsool.undsenMin || 0,
+          0, // dotorZogsoolMinut
+          0 // zuruuMinut
+        );
+
+        return fee || 0;
+      } catch (error) {
+        console.error("Error calculating parking fee:", error);
+        return 0;
+      }
+    },
+    [songogdzonZogsool]
+  );
+
   const [isPaying, setIsPaying] = React.useState(false);
 
   const query = useMemo(() => {
@@ -514,129 +572,144 @@ function camera({ token }) {
     }
   }, []);
 
-  // const syncPendingUpdates = useCallback(async () => {
-  //   if (typeof window === "undefined") return;
+  const syncPendingUpdates = React.useCallback(async () => {
+    if (typeof window === "undefined") return;
 
-  //   const storedUpdates = JSON.parse(
-  //     localStorage.getItem("cameraPendingUpdates") || "[]"
-  //   );
-  //   const storedCars = JSON.parse(
-  //     localStorage.getItem("cameraPendingCars") || "[]"
-  //   );
+    const storedUpdates = JSON.parse(
+      localStorage.getItem("cameraPendingUpdates") || "[]"
+    );
+    const storedCars = JSON.parse(
+      localStorage.getItem("cameraPendingCars") || "[]"
+    );
 
-  //   if (storedUpdates.length === 0 && storedCars.length === 0) return;
+    if (storedUpdates.length === 0 && storedCars.length === 0) return;
 
-  //   setSyncStatus("syncing");
-  //   const successful = [];
-  //   const failed = [];
-  //   const successfulCars = [];
-  //   const failedCars = [];
+    setSyncStatus("syncing");
+    const successful = [];
+    const failed = [];
+    const successfulCars = [];
+    const failedCars = [];
 
-  //   // Sync pending updates
-  //   for (const update of storedUpdates) {
-  //     try {
-  //       if (update.type === "updateUilchluulegch") {
-  //         const response = await updateMethod(
-  //           "uilchluulegch",
-  //           token,
-  //           update.body
-  //         );
-  //         if (response?.data === "Amjilttai") {
-  //           successful.push(update.id);
-  //         } else {
-  //           failed.push(update);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       failed.push(update);
-  //     }
-  //   }
+    for (const update of storedUpdates) {
+      try {
+        if (update.type === "updateUilchluulegch") {
+          const response = await updateMethod(
+            "uilchluulegch",
+            token,
+            update.body
+          );
+          if (response?.data === "Amjilttai") {
+            successful.push(update.id);
+          } else {
+            failed.push(update);
+          }
+        } else if (update.type === "zogsooliinTulburTulye") {
+          const response = await uilchilgee(token).post(
+            "/zogsooliinTulburTulye",
+            {
+              tulbur: update.tulbur,
+              id: update.id,
+            }
+          );
+          if (response?.data === "Amjilttai") {
+            successful.push(update.pendingId);
+          } else {
+            failed.push(update);
+          }
+        }
+      } catch (error) {
+        failed.push(update);
+      }
+    }
 
-  //   // Sync pending cars
-  //   for (const car of storedCars) {
-  //     try {
-  //       if (car.type === "addCar" || car.type === "addCarFromEntry") {
-  //         const endpoint =
-  //           car.type === "addCarFromEntry"
-  //             ? "/zogsoolOrlogoGaraas"
-  //             : "/zogsoolSdkService";
-  //         const response = await uilchilgee(token).post(endpoint, car.data);
-  //         if (response?.status === 200 && !response?.data?.aldaa) {
-  //           successfulCars.push(car.id);
-  //         } else {
-  //           failedCars.push(car);
-  //         }
-  //       } else if (car.type === "removeCar") {
-  //         const response = await uilchilgee(token).post(
-  //           "/zogsoolSdkService",
-  //           car.data
-  //         );
-  //         if (response?.status === 200 && !response?.data?.aldaa) {
-  //           successfulCars.push(car.id);
-  //         } else {
-  //           failedCars.push(car);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       failedCars.push(car);
-  //     }
-  //   }
+    for (const car of storedCars) {
+      try {
+        if (car.type === "addCar" || car.type === "addCarFromEntry") {
+          const endpoint =
+            car.type === "addCarFromEntry"
+              ? "/zogsoolOrlogoGaraas"
+              : "/zogsoolSdkService";
+          const response = await uilchilgee(token).post(endpoint, car.data);
+          if (response?.status === 200 && !response?.data?.aldaa) {
+            successfulCars.push(car.id);
+          } else {
+            failedCars.push(car);
+          }
+        } else if (car.type === "removeCar") {
+          const response = await uilchilgee(token).post(
+            "/zogsoolSdkService",
+            car.data
+          );
+          if (response?.status === 200 && !response?.data?.aldaa) {
+            successfulCars.push(car.id);
+          } else {
+            failedCars.push(car);
+          }
+        }
+      } catch (error) {
+        failedCars.push(car);
+      }
+    }
 
-  //   // Remove successful updates
-  //   const remainingUpdates = storedUpdates.filter(
-  //     (update) => !successful.includes(update.id)
-  //   );
-  //   if (typeof window !== "undefined") {
-  //     localStorage.setItem(
-  //       "cameraPendingUpdates",
-  //       JSON.stringify(remainingUpdates)
-  //     );
-  //   }
-  //   setPendingUpdates(remainingUpdates);
+    const remainingUpdates = storedUpdates.filter(
+      (update) =>
+        !successful.includes(update.id) &&
+        !successful.includes(update.pendingId)
+    );
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        "cameraPendingUpdates",
+        JSON.stringify(remainingUpdates)
+      );
+    }
+    setPendingUpdates(remainingUpdates);
 
-  //   // Remove successful cars
-  //   const remainingCars = storedCars.filter(
-  //     (car) => !successfulCars.includes(car.id)
-  //   );
-  //   if (typeof window !== "undefined") {
-  //     localStorage.setItem("cameraPendingCars", JSON.stringify(remainingCars));
-  //     // Trigger UI update to remove synced cars
-  //     setPendingCarsUpdateTrigger((prev) => prev + 1);
-  //   }
+    const remainingCars = storedCars.filter(
+      (car) => !successfulCars.includes(car.id)
+    );
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cameraPendingCars", JSON.stringify(remainingCars));
 
-  //   const totalSuccessful = successful.length + successfulCars.length;
-  //   const totalFailed = failed.length + failedCars.length;
+      setPendingCarsUpdateTrigger((prev) => prev + 1);
+    }
 
-  //   if (totalSuccessful > 0) {
-  //     setSyncStatus("success");
-  //     toast.success(t(`Амжилттай синк хийгдлээ (${totalSuccessful} өгөгдөл)`));
-  //     onRefresh();
-  //     setTimeout(() => setSyncStatus("idle"), 3000);
-  //   }
+    const totalSuccessful = successful.length + successfulCars.length;
+    const totalFailed = failed.length + failedCars.length;
+    const totalAttempted = totalSuccessful + totalFailed;
 
-  //   if (totalFailed > 0 && totalSuccessful === 0) {
-  //     setSyncStatus("error");
-  //     toast.error(t("Синк хийхэд алдаа гарлаа"));
-  //     setTimeout(() => setSyncStatus("idle"), 3000);
-  //   } else if (totalFailed > 0) {
-  //     toast.warning(t(`${totalFailed} өгөгдөл синк хийгдсэнгүй`));
-  //   }
-  // }, [token, t, onRefresh]);
+    if (totalSuccessful > 0) {
+      setSyncStatus("success");
+      toast.success(
+        t(`Амжилттай нэгтгэл хийгдлээ (${totalSuccessful} өгөгдөл)`)
+      );
+      onRefresh && onRefresh();
+      setTimeout(() => setSyncStatus("idle"), 3000);
+    }
 
-  // // Sync pending updates when coming back online
-  // useEffect(() => {
-  //   if (!isOfflineMode && isOnline && typeof window !== "undefined") {
-  //     const storedUpdates = JSON.parse(
-  //       localStorage.getItem("cameraPendingUpdates") || "[]"
-  //     );
-  //     const storedCars = JSON.parse(
-  //       localStorage.getItem("cameraPendingCars") || "[]"
-  //     );
-  //     if (storedUpdates.length > 0 || storedCars.length > 0) {
-  //       syncPendingUpdates();
-  //     }
-  //   }
-  // }, [isOfflineMode, isOnline, syncPendingUpdates]);
+    // if (totalFailed > 0 && totalAttempted > 0) {
+    //   if (totalSuccessful === 0) {
+    //     setSyncStatus("error");
+    //     toast.error(t("Нэгтгэл хийхэд алдаа гарлаа"));
+    //     setTimeout(() => setSyncStatus("idle"), 3000);
+    //   } else {
+    //     toast.warning(t(`${totalFailed} өгөгдөл нэгтгэл хийгдсэнгүй`));
+    //   }
+    // }
+  }, [token, t]);
+
+  useEffect(() => {
+    if (!isOfflineMode && isOnline && typeof window !== "undefined") {
+      const storedUpdates = JSON.parse(
+        localStorage.getItem("cameraPendingUpdates") || "[]"
+      );
+      const storedCars = JSON.parse(
+        localStorage.getItem("cameraPendingCars") || "[]"
+      );
+      if (storedUpdates.length > 0 || storedCars.length > 0) {
+        syncPendingUpdates();
+      }
+    }
+  }, [isOfflineMode, isOnline, syncPendingUpdates]);
 
   useEffect(() => {
     const a1 = generateChild(jagsaalt, "Орох");
@@ -697,7 +770,9 @@ function camera({ token }) {
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
-  } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
+    updateOfflineItem,
+    removeOfflineItem,
+  } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 100);
   useEffect(() => {
     if (
       !baiguullaga?._id ||
@@ -1091,6 +1166,8 @@ function camera({ token }) {
           setModalNeelttei={setModalNeelttei}
           songogdsonZogsool={songogdzonZogsool}
           mashiniiDugaar={mashiniiDugaar}
+          updateOfflineItem={updateOfflineItem}
+          isActuallyOffline={isActuallyOffline}
         />
       ),
       footer: false,
@@ -1702,7 +1779,7 @@ function camera({ token }) {
                 </Popover>
               </div>
             );
-          } else r = tulburKhurvuulekh(v[0]?.tulbur[0]?.turul);
+          } else r = tulburKhurvuulekh(v[0]?.tulbur?.[0]?.turul);
           return (
             r && (
               <div>
@@ -2238,9 +2315,20 @@ function camera({ token }) {
   };
 
   const khadgalakh = () => {
-    uilchilgee(token)
-      .get("ognooAvya")
-      .then(({ data }) => {
+    const getOgnoo = async () => {
+      if (isActuallyOffline) {
+        return new Date().toISOString();
+      }
+      try {
+        const response = await uilchilgee(token).get("ognooAvya");
+        return response?.data || new Date().toISOString();
+      } catch (e) {
+        return new Date().toISOString();
+      }
+    };
+
+    getOgnoo()
+      .then((data) => {
         if (!!data) {
           let body = modalOpen.item;
           if (!!body && body.tuukh?.length > 0) {
@@ -2299,14 +2387,22 @@ function camera({ token }) {
                 );
                 setPendingUpdates(stored);
               }
-              toast.warning(
+
+              if (body?._id && updateOfflineItem) {
+                updateOfflineItem(body._id, (item) => ({
+                  ...item,
+                  ...body,
+                  tuukh: body.tuukh || item.tuukh,
+                }));
+              }
+
+              toast.success(
                 t(
-                  "Оффлайн горимд байна. Хадгалсан өгөгдөл сүлжээнд холбогдох үед синк хийгдэнэ."
+                  "Интернетгүй үед хадгаллаа. Сүлжээнд холбогдох үед нэгтгэл хийгдэнэ."
                 )
               );
               setModalOpen({ bool: false, item: null, type: "" });
               setValue(null);
-              onRefresh();
               return;
             }
 
@@ -2355,7 +2451,7 @@ function camera({ token }) {
                   }
                   toast.warning(
                     t(
-                      "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед синк хийгдэнэ."
+                      "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед нэгтгэл хийгдэнэ."
                     )
                   );
                 }
@@ -2573,9 +2669,6 @@ function camera({ token }) {
       notification.success({ message: t("Амжилттай бүртгэгдлээ (Оффлайн)") });
       setModalOpen({ bool: false, item: null, type: "" });
       form.resetFields();
-
-      // Update UI immediately
-      onRefresh();
       return;
     }
 
@@ -2736,29 +2829,82 @@ function camera({ token }) {
       }
       // Check if offline
       if (isOfflineMode || !isOnline) {
-        // Store as pending car removal
-        const pendingCar = {
-          type: "removeCar",
-          data: {
-            ...yavuulakhData,
-            originalData: data,
-            baiguullagiinId: baiguullaga?._id,
-          },
-          timestamp: new Date().toISOString(),
-          id: Date.now(),
-        };
-        if (typeof window !== "undefined") {
-          const stored = JSON.parse(
-            localStorage.getItem("cameraPendingCars") || "[]"
-          );
-          stored.push(pendingCar);
-          localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
-          // Trigger UI update
-          setPendingCarsUpdateTrigger((prev) => prev + 1);
-        }
+        const checkPaymentRequired = async () => {
+          try {
+            const tuukh = data.tuukh?.[0];
+            if (tuukh) {
+              const fee = await calculateParkingFee(tuukh);
 
-        notification.success({ message: t("Амжилттай бүртгэгдлээ (Оффлайн)") });
-        onRefresh();
+              if (fee > 0) {
+                const haruulakhDun = fee;
+
+                tulburTulyu(
+                  tuukh,
+                  data._id,
+                  data.mashiniiDugaar,
+                  haruulakhDun,
+                  0
+                );
+                return;
+              }
+            }
+
+            proceedWithOfflineExit();
+          } catch (error) {
+            console.error("Error calculating parking fee:", error);
+
+            proceedWithOfflineExit();
+          }
+        };
+
+        const proceedWithOfflineExit = () => {
+          const pendingCar = {
+            type: "removeCar",
+            data: {
+              ...yavuulakhData,
+              originalData: data,
+              baiguullagiinId: baiguullaga?._id,
+            },
+            timestamp: new Date().toISOString(),
+            id: Date.now(),
+          };
+          if (typeof window !== "undefined") {
+            const stored = JSON.parse(
+              localStorage.getItem("cameraPendingCars") || "[]"
+            );
+            stored.push(pendingCar);
+            localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
+            // Trigger UI update
+            setPendingCarsUpdateTrigger((prev) => prev + 1);
+          }
+
+          if (data?._id && updateOfflineItem) {
+            updateOfflineItem(data._id, (item) => ({
+              ...item,
+              tuukh: item.tuukh?.map((t, idx) =>
+                idx === 0
+                  ? {
+                      ...t,
+                      tuluv: -1,
+                      tsagiinTuukh: t.tsagiinTuukh?.map((ts, i) =>
+                        i === 0
+                          ? { ...ts, garsanTsag: new Date().toISOString() }
+                          : ts
+                      ),
+                      garsanKhaalga: camerVal[1],
+                    }
+                  : t
+              ),
+            }));
+          }
+
+          notification.success({
+            message: t("Амжилттай бүртгэгдлээ (Оффлайн)"),
+          });
+          setModalNeelttei(false);
+        };
+
+        checkPaymentRequired();
         return;
       }
 
@@ -3038,7 +3184,7 @@ function camera({ token }) {
           }
           notification.warning(
             t(
-              "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед синк хийгдэнэ."
+              "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед нэгтгэл хийгдэнэ."
             )
           );
           onRefresh();
@@ -3081,13 +3227,30 @@ function camera({ token }) {
         ? JSON.parse(localStorage.getItem("cameraPendingCars") || "[]")
         : [];
 
-    // Filter out pending cars that are already synced (exist in actual data)
-    const unsyncedPending = pendingCars.filter((pending) => {
+    // Filter out pending cars that are already synced (exist in actual data) or duplicates
+    const unsyncedPending = pendingCars.filter((pending, index, arr) => {
       if (pending.type === "addCar" || pending.type === "addCarFromEntry") {
+        const mashinDugaar =
+          pending.data.mashiniiDugaar?.toUpperCase() ||
+          pending.data.mashiniiDugaar;
+
         // Check if this car already exists in actual data
-        return !actual.some(
-          (item) => item.mashiniiDugaar === pending.data.mashiniiDugaar
+        const existsInActual = actual.some(
+          (item) => item.mashiniiDugaar?.toUpperCase() === mashinDugaar
         );
+
+        // Check for duplicates in pending array (keep only the first occurrence)
+        const isDuplicate =
+          arr.findIndex((p) => {
+            if (p.type === "addCar" || p.type === "addCarFromEntry") {
+              const otherDugaar =
+                p.data.mashiniiDugaar?.toUpperCase() || p.data.mashiniiDugaar;
+              return otherDugaar === mashinDugaar;
+            }
+            return false;
+          }) !== index;
+
+        return !existsInActual && !isDuplicate;
       }
       return false; // Remove operations don't need to be shown
     });
@@ -3105,14 +3268,15 @@ function camera({ token }) {
           mashiniiDugaar: mashiniiDugaar,
           baiguullagiinId: carData.baiguullagiinId || baiguullaga?._id,
           barilgiinId: carData.barilgiinId || barilgiinId,
-          turul: carData.turul || "Үнэгүй",
+          turul: carData.turul || "Үйлчлүүлэгч", // Changed from "Үнэгүй" to "Үйлчлүүлэгч"
           isPending: true,
           createdAt: carData.createdAt || p.timestamp,
           niitDun: carData.tulukhDun || 0,
           tuukh: carData.tuukh || [
             {
               tuluv: 0,
-              tulukhDun: carData.tulukhDun || 0,
+              tulukhDun: carData.tulukhDun || 0, // Set to 0 for active status (no amount calculated yet)
+              tulbur: [], // Ensure no payment records for active status
               tsagiinTuukh: [
                 {
                   orsonTsag: new Date(carData.createdAt || p.timestamp),
@@ -3335,7 +3499,9 @@ function camera({ token }) {
       }}
       khailtDoubleClick={khailtDoubleClick}
     >
-      {jagsaalt?.length > 0 ? (
+      {jagsaalt?.length > 0 ||
+      filteredData?.jagsaalt?.length > 0 ||
+      isActuallyOffline ? (
         <div className="col-span-12">
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
             <div className="fixed left-6 top-24 z-[10000] hidden h-[400px] md:block">
@@ -4370,12 +4536,8 @@ function camera({ token }) {
                     {t("Камер")}
                   </Button>
                   {/* Offline/Sync Status Indicator */}
-                  {isOfflineMode || !isOnline ? (
-                    <div className="flex items-center gap-2 rounded-lg bg-yellow-100 px-3 py-1.5 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                      <ExclamationCircleOutlined />
-                      <span className="text-sm font-medium">
-                        {t("Оффлайн горим")}
-                      </span>
+                  {isActuallyOffline ? (
+                    <div>
                       {pendingUpdates.length > 0 && (
                         <span className="text-xs">
                           ({pendingUpdates.length} {t("хүлээгдэж буй")})
@@ -4383,17 +4545,17 @@ function camera({ token }) {
                       )}
                     </div>
                   ) : syncStatus === "syncing" ? (
-                    <div className="flex items-center gap-2 rounded-lg bg-blue-100 px-3 py-1.5 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                      <LoadingOutlined spin />
+                    <div>
+                      {/* <LoadingOutlined spin />
                       <span className="text-sm font-medium">
-                        {t("Синк хийж байна...")}
-                      </span>
+                        {t("Нэгтгэл хийж байна...")}
+                      </span> */}
                     </div>
                   ) : syncStatus === "success" ? (
                     <div className="flex items-center gap-2 rounded-lg bg-green-100 px-3 py-1.5 text-green-800 dark:bg-green-900 dark:text-green-200">
                       <CheckCircleOutlined />
                       <span className="text-sm font-medium">
-                        {t("Синк амжилттай")}
+                        {t("Нэгтгэл амжилттай")}
                       </span>
                     </div>
                   ) : null}

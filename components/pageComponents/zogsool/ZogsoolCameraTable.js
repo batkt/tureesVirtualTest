@@ -1,6 +1,7 @@
 import { Table } from "antd";
 
 import React from "react";
+import { useAuth } from "services/auth";
 
 const ZogsoolCameraTable = ({
   uilchluulegchGaralt,
@@ -10,8 +11,16 @@ const ZogsoolCameraTable = ({
   isValidating,
   summary,
 }) => {
+  const { isOfflineMode, isOnline } = useAuth();
+  const isNavigatorOffline =
+    typeof navigator !== "undefined" ? !navigator.onLine : false;
   return (
     <div className="w-full overflow-x-auto">
+      {isOfflineMode || !isOnline || isNavigatorOffline ? (
+        <div className="mb-2 w-full flex items-center gap-2 rounded-lg  px-3 py-1.5 text-yellow-800  dark:text-yellow-200">
+          <span className="text-sm font-medium">Интернетгүй орчинд ажиллаж байна.</span>
+        </div>
+      ) : null}
       <Table
         className="cameraTable mt-2"
         tableLayout="auto"
