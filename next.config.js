@@ -23,8 +23,10 @@ const nextConfig = {
   },
 
   // env: {
-  //   NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api",
-  //   NEXT_PUBLIC_SOCKET: process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
+  //   NEXT_PUBLIC_URL:
+  //     process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api",
+  //   NEXT_PUBLIC_SOCKET:
+  //     process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
   //   HTTP_URL: process.env.HTTP_URL || "http://103.143.40.230:8081",
   // },
 

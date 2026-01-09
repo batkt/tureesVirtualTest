@@ -3669,6 +3669,17 @@ function camera({ token }) {
                     Camer={camerVal[0]}
                     PORT={554}
                   />
+                ) : // tedy voucher hkvision
+                baiguullaga?._id === "66c2c871597ea1390c3fd830" &&
+                  barilgiinId === "68514b121af1430455676c6d" &&
+                  camerVal[0] === "192.168.1.83" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    ROOT={"live"}
+                    PASSWD={"Tsegts157"}
+                    Camer={camerVal[0]}
+                    PORT={554}
+                  />
                 ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
                     <SocketStream

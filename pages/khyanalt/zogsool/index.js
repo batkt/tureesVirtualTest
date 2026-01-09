@@ -1182,8 +1182,7 @@ function Zogsool({ token }) {
         sorter: () => 0,
         dataIndex: "niitDun",
         render(v, parents) {
-          const total = getPaymentTotal(parents);
-          return formatNumber(total || v || 0, 0);
+          return formatNumber(v || 0, 2);
         },
       },
       {
@@ -2266,8 +2265,7 @@ function Zogsool({ token }) {
                                 __numFmt__: "#,##0.00",
                                 __cellType__: "TypeNumeric",
                                 render: (v, record) => {
-                                  const total = getPaymentTotal(record);
-                                  return total || v || 0;
+                                  return v || 0;
                                 },
                               },
                               {
