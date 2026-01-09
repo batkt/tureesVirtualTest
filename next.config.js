@@ -22,6 +22,15 @@ const nextConfig = {
     optimizeCss: process.env.NODE_ENV === "production",
   },
 
+  async rewrites() {
+    return [
+      {
+        source: "/stream/:path*",
+        destination: "http://127.0.0.1:8083/:path*",
+      },
+    ];
+  },
+
   env: {
     NEXT_PUBLIC_URL:
       process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api",

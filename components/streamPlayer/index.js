@@ -21,7 +21,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
 
   useEffect(() => {
     const newPlayer = new R2WPlayer({
-      serverPath: "http://127.0.0.1:8083",
+      serverPath: window.location.origin + "/stream",
       containerId: `videoContainer${Camer}`,
       crossOriginIsolated: true,
       logEnabled: true,
