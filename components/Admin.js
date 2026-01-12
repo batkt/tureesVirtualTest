@@ -92,8 +92,6 @@ const getPendingPayments = async () => {
   });
 };
 
-
-
 function Admin({
   title,
   khuudasniiNer,
@@ -518,28 +516,6 @@ function Admin({
       }}
       className="relative min-h-screen w-screen overflow-hidden bg-green-600 px-3 pb-5 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4"
     >
-      {syncStatus === "syncing" && (
-        <div className="fixed left-0 right-0 top-16 z-50 mb-4 rounded border-l-4 border-blue-500 bg-blue-100 p-4 text-blue-700">
-          <div className="flex items-center">
-            <svg
-              className="mr-2 h-5 w-5 animate-spin"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              ></path>
-            </svg>
-            <p className="text-sm font-medium">
-              Шинэчлэл хийгдэж байна...Хуудсыг дахин ачаалална уу
-            </p>
-          </div>
-        </div>
-      )}
       {isOffline && (
         <Alert
           style={{ bottom: 20 }}
@@ -969,9 +945,12 @@ function Admin({
                                   searchUtga.current.value = mur.mashiniiDugaar;
                                   if (!!onSearch) {
                                     clearTimeout(timeoutRef.current);
-                                    timeoutRef.current = setTimeout(function () {
-                                      onSearch(mur.mashiniiDugaar);
-                                    }, 800);
+                                    timeoutRef.current = setTimeout(
+                                      function () {
+                                        onSearch(mur.mashiniiDugaar);
+                                      },
+                                      800
+                                    );
                                   }
                                   setFocusaasGarsan(true);
                                 }

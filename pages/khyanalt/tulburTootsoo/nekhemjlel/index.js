@@ -1547,7 +1547,16 @@ function tulburTootsoo({ token }) {
         );
     },
     pageStyle: `@media print {
-      @page { size: A4 ${chiglelAvya()};margin:0;}
+      @page { size: A4 ${chiglelAvya()}; margin:0; }
+       
+      .A5, .A5-portrait, .A5-landscape, .a5 {
+        margin-left: 12mm !important;
+        padding-left: 0 !important;
+      }
+      
+      .print {
+        padding-left: 6mm !important;
+      }
     }`,
   });
   function hevlekh() {
