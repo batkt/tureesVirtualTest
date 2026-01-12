@@ -353,13 +353,5 @@ export function useUilchluulegchZogsoolToo(token, query) {
   return { zogsoolTusBuriinToo: data, zogsoolTusBuriinTooMutate: mutate };
 }
 
-export function useUilchluulegchdiinDunAvay(token, query) {
-  const { data, mutate } = useSWR(
-    !!token ? ["/zogsoolUilchluulegchdiinDunAvay", token, query] : null,
-    fetcherDun,
-    { revalidateOnFocus: false }
-  );
-  return { uilchluulegchdiinDun: data, uilchluulegchdiinDunMutate: mutate };
-}
 
 export default useUilchluulegch;
