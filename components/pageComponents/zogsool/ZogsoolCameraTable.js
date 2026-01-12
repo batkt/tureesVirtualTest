@@ -17,7 +17,7 @@ const ZogsoolCameraTable = ({
   return (
     <div className="w-full overflow-x-auto">
       {isOfflineMode || !isOnline || isNavigatorOffline ? (
-        <div className="mb-2 w-full flex items-center gap-2 rounded-lg  px-3 py-1.5 text-yellow-800  dark:text-yellow-200">
+        <div className="mb-2 w-full flex items-center gap-2 rounded-lg  px-3 py-1.5 bg-red-500 dark:bg-red-700 text-white  dark:text-white">
           <span className="text-sm font-medium">Интернетгүй орчинд ажиллаж байна.</span>
         </div>
       ) : null}

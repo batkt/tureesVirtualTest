@@ -177,7 +177,8 @@ export const AuthProvider = ({ children }) => {
       const online = await heartbeatCheck();
       if (!online) {
         failureStreakRef.current += 1;
-        if (failureStreakRef.current >= 1 && !isOfflineModeRef.current) {
+        // Only show offline after multiple consecutive failures to avoid false positives
+        if (failureStreakRef.current >= 3 && !isOfflineModeRef.current) {
           setIsOfflineMode(true);
           toast.warning(
             "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",

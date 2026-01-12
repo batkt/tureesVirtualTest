@@ -289,6 +289,10 @@ function camera({ token }) {
   const [syncStatus, setSyncStatus] = useState("idle"); // idle, syncing, success, error
   const [pendingUpdates, setPendingUpdates] = useState([]);
   const [pendingCarsUpdateTrigger, setPendingCarsUpdateTrigger] = useState(0);
+  const [wasOffline, setWasOffline] = useState(
+    isOfflineMode || !isOnline || !browserOnline
+  );
+  const [localOfflineData, setLocalOfflineData] = useState([]); // Data from local .NET service
   const [ognoo, setOgnoo] = useState([
     moment().startOf("day"),
     moment().endOf("day"),
@@ -571,6 +575,109 @@ function camera({ token }) {
       setPendingUpdates(stored);
     }
   }, []);
+
+  // Fetch offline data from local .NET service
+  const fetchLocalOfflineData = React.useCallback(async () => {
+    if (!isActuallyOffline) return; // Only fetch when offline
+
+    try {
+      // Try to connect to local .NET service (adjust port as needed)
+      const response = await fetch("http://localhost:5000/api/offline-plates", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        timeout: 5000, // 5 second timeout
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(`Found ${result.count} plates from local .NET service`);
+        console.log("Last updated:", result.lastUpdated);
+
+        // Transform .NET data to match expected format
+        const transformedData = result.data
+          .map((plate, index) => {
+            try {
+              // Helper function to extract string value from array or string
+              const extractValue = (value) => {
+                if (Array.isArray(value)) {
+                  return value.length > 0 ? String(value[0]) : "";
+                }
+                return value ? String(value) : "";
+              };
+
+              // Clean null characters and whitespace
+              const cleanString = (str) => {
+                return str.replace(/\u0000/g, "").trim();
+              };
+
+              // Handle both old and new property names from .NET service
+              const mashiniiDugaar = cleanString(
+                extractValue(plate.mashiniiDugaar)
+              );
+              const cameraIP = cleanString(
+                extractValue(plate.camerA_IP || plate.CAMERA_IP)
+              );
+              const burtgelOgnoo = cleanString(
+                extractValue(plate.burtgelOgnoo)
+              );
+              const color = cleanString(
+                extractValue(plate.color || plate.Color)
+              );
+
+              // Skip empty records
+              if (!mashiniiDugaar || !cameraIP || !burtgelOgnoo) {
+                console.log("Skipping empty plate record:", plate);
+                return null;
+              }
+
+              return {
+                _id: `local-net-${Date.now()}-${index}`,
+                mashiniiDugaar: mashiniiDugaar.toUpperCase(),
+                turul: "Үйлчлүүлэгч",
+                createdAt: burtgelOgnoo,
+                localSource: true,
+                netServiceData: true,
+                cameraIP: cameraIP,
+                color: color,
+                originalData: plate,
+                tuukh: [
+                  {
+                    tuluv: 0,
+                    tulukhDun: 0,
+                    tulbur: [],
+                    orsonKhaalga: cameraIP,
+                    tsagiinTuukh: [
+                      {
+                        orsonTsag: new Date(burtgelOgnoo),
+                      },
+                    ],
+                  },
+                ],
+                mashin: {
+                  temdeglel: `Камер: ${cameraIP}, Өнгө: ${color || "N/A"}`,
+                },
+                baiguullagiinId: baiguullaga?._id,
+                barilgiinId: barilgiinId,
+              };
+            } catch (error) {
+              console.error("Error transforming plate data:", error, plate);
+              return null;
+            }
+          })
+          .filter(Boolean); // Remove null entries
+
+        setLocalOfflineData(transformedData);
+        return transformedData;
+      }
+    } catch (error) {
+      console.log("Local .NET service not available:", error.message);
+      setLocalOfflineData([]);
+    }
+
+    return [];
+  }, [isActuallyOffline, baiguullaga?._id, barilgiinId]);
 
   const syncPendingUpdates = React.useCallback(async () => {
     if (typeof window === "undefined") return;
@@ -965,6 +1072,60 @@ function camera({ token }) {
     parkingJagsaalt,
     songogdzonZogsool?.garakhKhaalgaGarTokhirgoo,
   ]);
+
+  useEffect(() => {
+    if (isActuallyOffline) {
+      if (!wasOffline) {
+        setWasOffline(true);
+      }
+    } else if (wasOffline) {
+      setWasOffline(false);
+
+      setTimeout(() => {
+        uilchluulegchMutate();
+        toololtMutate();
+        parkingMutate();
+
+        setPendingCarsUpdateTrigger((prev) => prev + 1);
+      }, 2000);
+    }
+  }, [
+    isActuallyOffline,
+    wasOffline,
+    uilchluulegchMutate,
+    toololtMutate,
+    parkingMutate,
+  ]);
+
+  useEffect(() => {
+    if (syncStatus === "success" && !isActuallyOffline) {
+      console.log("Sync completed successfully, doing final refresh...");
+      setTimeout(() => {
+        uilchluulegchMutate();
+        setPendingCarsUpdateTrigger((prev) => prev + 1);
+      }, 500);
+    }
+  }, [syncStatus, isActuallyOffline, uilchluulegchMutate]);
+
+  // Poll local .NET service for offline data when offline
+  useEffect(() => {
+    if (!isActuallyOffline) {
+      setLocalOfflineData([]); // Clear when online
+      return;
+    }
+
+    // Initial fetch
+    fetchLocalOfflineData();
+
+    // Set up polling interval (every 30 seconds to match .NET service)
+    const pollInterval = setInterval(() => {
+      fetchLocalOfflineData();
+    }, 30000);
+
+    return () => {
+      clearInterval(pollInterval);
+    };
+  }, [isActuallyOffline, fetchLocalOfflineData]);
 
   const tooQuery = useMemo(() => {
     const todayStart = moment().startOf("day").toDate();
@@ -2868,17 +3029,47 @@ function camera({ token }) {
             timestamp: new Date().toISOString(),
             id: Date.now(),
           };
+
           if (typeof window !== "undefined") {
             const stored = JSON.parse(
               localStorage.getItem("cameraPendingCars") || "[]"
             );
             stored.push(pendingCar);
             localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
+
+            // Handle offline-added cars differently
+            if (data._id && data._id.startsWith("pending_")) {
+              // This is an offline-added car, update it in localStorage
+              const updatedStored = stored.map((item) => {
+                if (item.id && data._id === `pending_${item.id}`) {
+                  return {
+                    ...item,
+                    data: {
+                      ...item.data,
+                      exitTimestamp: new Date().toISOString(),
+                      exitCamera: camerVal[1],
+                      tuluv: -1, // Mark as exited
+                    },
+                  };
+                }
+                return item;
+              });
+              localStorage.setItem(
+                "cameraPendingCars",
+                JSON.stringify(updatedStored)
+              );
+            }
+
             // Trigger UI update
             setPendingCarsUpdateTrigger((prev) => prev + 1);
           }
 
-          if (data?._id && updateOfflineItem) {
+          // Update online data if available
+          if (
+            data?._id &&
+            updateOfflineItem &&
+            !data._id.startsWith("pending_")
+          ) {
             updateOfflineItem(data._id, (item) => ({
               ...item,
               tuukh: item.tuukh?.map((t, idx) =>
@@ -3263,6 +3454,10 @@ function camera({ token }) {
         // Ensure mashiniiDugaar is uppercase to match actual data format
         const mashiniiDugaar =
           carData.mashiniiDugaar?.toUpperCase() || carData.mashiniiDugaar;
+
+        // Check if this car has been exited offline
+        const isExited = carData.exitTimestamp || carData.tuluv === -1;
+
         return {
           _id: `pending_${p.id}`, // Temporary ID
           mashiniiDugaar: mashiniiDugaar,
@@ -3274,12 +3469,16 @@ function camera({ token }) {
           niitDun: carData.tulukhDun || 0,
           tuukh: carData.tuukh || [
             {
-              tuluv: 0,
+              tuluv: isExited ? -1 : 0, // Update status based on exit
               tulukhDun: carData.tulukhDun || 0, // Set to 0 for active status (no amount calculated yet)
               tulbur: [], // Ensure no payment records for active status
+              garsanKhaalga: carData.exitCamera || null, // Add exit camera if available
               tsagiinTuukh: [
                 {
                   orsonTsag: new Date(carData.createdAt || p.timestamp),
+                  garsanTsag: carData.exitTimestamp
+                    ? new Date(carData.exitTimestamp)
+                    : null,
                 },
               ],
             },
@@ -3288,13 +3487,14 @@ function camera({ token }) {
         };
       });
 
-    const merged = [...actual, ...pendingToAdd];
+    const merged = [...actual, ...pendingToAdd, ...localOfflineData];
     return merged;
   }, [
     uilchluulegchGaralt?.jagsaalt,
     baiguullaga?._id,
     barilgiinId,
     pendingCarsUpdateTrigger,
+    localOfflineData, // Add dependency for local .NET service data
   ]);
 
   const filteredJagsaalt = useMemo(() => {
@@ -4549,11 +4749,18 @@ function camera({ token }) {
                   {/* Offline/Sync Status Indicator */}
                   {isActuallyOffline ? (
                     <div>
-                      {pendingUpdates.length > 0 && (
-                        <span className="text-xs">
-                          ({pendingUpdates.length} {t("хүлээгдэж буй")})
-                        </span>
-                      )}
+                      <div className="flex flex-col text-xs">
+                        {pendingUpdates.length > 0 && (
+                          <span>
+                            {/* {pendingUpdates.length} {t("хүлээгдэж буй")} */}
+                          </span>
+                        )}
+                        {localOfflineData.length > 0 && (
+                          <span>
+                            {localOfflineData.length} .NET {t("сервисээс")}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   ) : syncStatus === "syncing" ? (
                     <div>
