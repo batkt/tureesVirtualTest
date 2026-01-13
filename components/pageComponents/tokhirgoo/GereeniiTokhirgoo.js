@@ -725,7 +725,16 @@ function KhuviinMedeelel({
                         </Button>
                       )}
 
-                      <ImgCrop modalTitle="Зураг засах" rotationSlider>
+                      <ImgCrop
+                        key={cropKey.tamga}
+                        modalTitle="Зураг засах"
+                        rotationSlider
+                        quality={1}
+                        fillColor="transparent"
+                        modalProps={{
+                          maskClosable: false,
+                        }}
+                      >
                         <Upload
                           showUploadList={false}
                           multiple={false}

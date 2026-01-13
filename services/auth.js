@@ -33,21 +33,29 @@ const isOnline = () => {
 };
 // Heartbeat check to detect real network connectivity using the API server
 const HEARTBEAT_URL = API_URL || "http://103.143.40.175:8081";
-const heartbeatCheck = async (url = HEARTBEAT_URL, timeout = 3000) => {
+const heartbeatCheck = async (url = HEARTBEAT_URL, timeout = 5000) => {
   try {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
-    // Add random query param to bypass cache
-    const checkUrl = `${url}?_t=${Date.now()}`;
-    await fetch(checkUrl, {
-      method: "HEAD",
-      mode: "no-cors",
+    
+    // Use a proper API endpoint instead of no-cors HEAD request
+    const checkUrl = `${url}/api/health?_t=${Date.now()}`;
+    
+    const response = await fetch(checkUrl, {
+      method: "GET",
       cache: "no-store",
       signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
+    
     clearTimeout(id);
-    return true;
+    
+    // Check if we got a response and it's from our server
+    return response.ok || response.status < 500;
   } catch (error) {
+    // Network error, timeout, or abort - definitely offline
     return false;
   }
 };
@@ -177,8 +185,8 @@ export const AuthProvider = ({ children }) => {
       const online = await heartbeatCheck();
       if (!online) {
         failureStreakRef.current += 1;
-        // Only show offline after multiple consecutive failures to avoid false positives
-        if (failureStreakRef.current >= 3 && !isOfflineModeRef.current) {
+        // Reduce to 2 failures but with longer timeout for better detection
+        if (failureStreakRef.current >= 2 && !isOfflineModeRef.current) {
           setIsOfflineMode(true);
           toast.warning(
             "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
@@ -214,7 +222,7 @@ export const AuthProvider = ({ children }) => {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-    const intervalId = setInterval(check, 5000); // every 5 seconds
+    const intervalId = setInterval(check, 3000); // every 3 seconds for faster detection
     // Run once immediately
     check();
 
