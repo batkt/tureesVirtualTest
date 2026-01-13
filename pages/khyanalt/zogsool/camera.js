@@ -1486,15 +1486,23 @@ function camera({ token }) {
                   {t("Удаан зогссон эхэнд")}
                 </div>
                 <div
-                  onClick={() =>
+                  onClick={() => {
                     setOrder({
+                      "tuukh.tsagiinTuukh.garsanTsag": 1,
+                      niitDun: 1,
+                      "tuukh.tuluv": 1,
                       "tuukh.tsagiinTuukh.orsonTsag": -1,
-                    })
-                  }
+                      zurchil: 1,
+                    });
+                  }}
                   className={`relative ${
                     JSON.stringify(order) ==
                       JSON.stringify({
+                        "tuukh.tsagiinTuukh.garsanTsag": 1,
+                        niitDun: 1,
+                        "tuukh.tuluv": 1,
                         "tuukh.tsagiinTuukh.orsonTsag": -1,
+                        zurchil: 1,
                       }) && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
