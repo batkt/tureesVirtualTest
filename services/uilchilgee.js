@@ -22,6 +22,11 @@ export const socket = () =>
   });
 
 export const aldaaBarigch = (e) => {
+  // Add logging to frontend too!
+  console.log("=== FRONTEND ALDAA BARIGCH ===");
+  console.log("Error:", e);
+  console.log("Response data:", e?.response?.data);
+
   if (
     e?.response?.data?.offline ||
     e?.message === "Network Error" ||
@@ -35,31 +40,24 @@ export const aldaaBarigch = (e) => {
     e?.response?.data?.aldaa === "jwt malformed"
   ) {
     window.location.href = "/";
-    return;
-  }
-
-  if (e?.response?.data?.aldaa) {
+  } else if (!!e?.response?.data?.aldaa) {
+    // CRITICAL FIX: Ensure aldaa is always a string
     let aldaaMsg;
 
     if (typeof e.response.data.aldaa === "string") {
       aldaaMsg = e.response.data.aldaa;
     } else if (typeof e.response.data.aldaa === "object") {
       aldaaMsg =
-        e.response.data.aldaa.message ||
-        e.response.data.aldaa.aldaa ||
-        JSON.stringify(e.response.data.aldaa);
+        e.response.data.aldaa.message || JSON.stringify(e.response.data.aldaa);
     } else {
       aldaaMsg = String(e.response.data.aldaa);
     }
 
+    console.log("Showing notification with message:", aldaaMsg);
+
     notification.warning({
       description: t(aldaaMsg),
       message: t("Анхааруулга"),
-    });
-  } else if (e?.message) {
-    notification.error({
-      description: e.message,
-      message: t("Алдаа"),
     });
   }
 };
