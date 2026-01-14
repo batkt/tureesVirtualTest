@@ -33,13 +33,35 @@ export const aldaaBarigch = (e) => {
   if (
     e?.response?.data?.aldaa === "jwt expired" ||
     e?.response?.data?.aldaa === "jwt malformed"
-  )
+  ) {
     window.location.href = "/";
-  else if (!!e?.response?.data?.aldaa)
+    return;
+  }
+
+  if (e?.response?.data?.aldaa) {
+    let aldaaMsg;
+
+    if (typeof e.response.data.aldaa === "string") {
+      aldaaMsg = e.response.data.aldaa;
+    } else if (typeof e.response.data.aldaa === "object") {
+      aldaaMsg =
+        e.response.data.aldaa.message ||
+        e.response.data.aldaa.aldaa ||
+        JSON.stringify(e.response.data.aldaa);
+    } else {
+      aldaaMsg = String(e.response.data.aldaa);
+    }
+
     notification.warning({
-      description: t(e?.response?.data?.aldaa),
+      description: t(aldaaMsg),
       message: t("Анхааруулга"),
     });
+  } else if (e?.message) {
+    notification.error({
+      description: e.message,
+      message: t("Алдаа"),
+    });
+  }
 };
 
 export const togloomUilchilgee = (token) => {
