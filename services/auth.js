@@ -37,21 +37,21 @@ const heartbeatCheck = async (url = HEARTBEAT_URL, timeout = 5000) => {
   try {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
-    
+
     // Use a proper API endpoint instead of no-cors HEAD request
     const checkUrl = `${url}/api/health?_t=${Date.now()}`;
-    
+
     const response = await fetch(checkUrl, {
       method: "GET",
       cache: "no-store",
       signal: controller.signal,
       headers: {
-        'Content-Type': 'application/json',
-      }
+        "Content-Type": "application/json",
+      },
     });
-    
+
     clearTimeout(id);
-    
+
     // Check if we got a response and it's from our server
     return response.ok || response.status < 500;
   } catch (error) {
@@ -165,50 +165,16 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (!isClient) return;
 
-    const failureStreakRef = { current: 0 };
-    // Use a health endpoint or a lightweight static asset
-    const check = async () => {
-      const navOnline =
-        typeof navigator !== "undefined" ? navigator.onLine : true;
-
-      if (!navOnline) {
-        if (!isOfflineModeRef.current) {
-          setIsOfflineMode(true);
-          toast.warning(
-            "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
-            0
-          );
-        }
-        return;
-      }
-
-      const online = await heartbeatCheck();
-      if (!online) {
-        failureStreakRef.current += 1;
-        // Reduce to 2 failures but with longer timeout for better detection
-        if (failureStreakRef.current >= 2 && !isOfflineModeRef.current) {
-          setIsOfflineMode(true);
-          toast.warning(
-            "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
-            0
-          );
-        }
-      } else {
-        if (isOfflineModeRef.current) {
-          setIsOfflineMode(false);
-          toast.success("Интернэт холбогдлоо");
-          syncOfflineData();
-        }
-        failureStreakRef.current = 0;
-      }
-    };
-
-    // Check purely based on events as well to be responsive
-    const handleOnline = () => {
+    // Network detection based on browser events only - no polling
+    const handleOnline = async () => {
       const wasOffline = isOfflineModeRef.current;
-      setIsOfflineMode(false);
-      toast.success("Интернэт холбогдлоо");
-      if (wasOffline) syncOfflineData();
+      // Verify actual connectivity before switching to online mode
+      const online = await heartbeatCheck();
+      if (online) {
+        setIsOfflineMode(false);
+        toast.success("Интернэт холбогдлоо");
+        if (wasOffline) syncOfflineData();
+      }
     };
 
     const handleOffline = () => {
@@ -222,12 +188,21 @@ export const AuthProvider = ({ children }) => {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-    const intervalId = setInterval(check, 3000); // every 3 seconds for faster detection
-    // Run once immediately
-    check();
+    // Check initial state once only
+    const checkInitialState = async () => {
+      const navOnline =
+        typeof navigator !== "undefined" ? navigator.onLine : true;
+      if (!navOnline && !isOfflineModeRef.current) {
+        setIsOfflineMode(true);
+        toast.warning(
+          "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
+          0
+        );
+      }
+    };
+    checkInitialState();
 
     return () => {
-      clearInterval(intervalId);
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
