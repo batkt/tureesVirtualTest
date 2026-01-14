@@ -533,21 +533,19 @@ function Zogsool({ token }) {
             $gt: new Date(Date.now() - shalgakhTsag * 60 * 60 * 1000),
           };
           break;
+        case 1:
+          baseQuery["tuukh.0.tuluv"] = 1;
+          break;
 
-        case -4:
-          baseQuery.tuluv = -4;
+        case 2:
+          baseQuery["niitDun"] = { $eq: 0 };
           break;
 
         case 5:
-          baseQuery["tuukh.0.tuluv"] = 0;
+          baseQuery["tuukh.0.tuluv"] = -4;
           baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
           baseQuery["niitDun"] = { $gt: 0 };
           baseQuery["tuukh"] = { $elemMatch: { tulbur: { $eq: [] } } };
-          break;
-        case -2:
-        case 1:
-        case 4:
-          baseQuery["tuukh.0.tuluv"] = tuluvValue;
           break;
       }
     }
@@ -1413,7 +1411,7 @@ function Zogsool({ token }) {
                 >
                   {t("Төлбөртэй")}
                 </div>
-                <div
+                {/* <div
                   onClick={() => {
                     setTuluv(4);
                   }}
@@ -1422,17 +1420,7 @@ function Zogsool({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Тодорхойгүй")}
-                </div>
-                <div
-                  onClick={() => {
-                    setTuluv(-2);
-                  }}
-                  className={`relative ${
-                    tuluv === -2 && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                >
-                  {t("Зөрчилтэй")}
-                </div>
+                </div> */}
                 <div
                   onClick={() => {
                     setTuluv(2);
@@ -1469,11 +1457,7 @@ function Zogsool({ token }) {
                 //   :
                 v[0].tuluv === 1 || v[0].tuluv === 2
                   ? "bg-green-500 text-white dark:bg-green-700"
-                  : // : v[0].tuluv === 0
-                  // ? "bg-yellow-500 text-white dark:bg-yellow-700"
-                  v[0].tuluv === -2
-                  ? "bg-red-500 text-white dark:bg-red-700"
-                  : v[0].tuluv === 0 && data.niitDun > 0
+                  : v[0].tuluv === -4 && data.niitDun > 0
                   ? "bg-yellow-500 text-white dark:bg-yellow-700"
                   : v[0]?.tuluv === 0 &&
                     !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
@@ -1500,8 +1484,8 @@ function Zogsool({ token }) {
                 //   :
                 v[0].tuluv === 1 || v[0].tuluv === 2
                   ? "Төлсөн"
-                  : v[0].tuluv === -2
-                  ? "Зөрчилтэй"
+                  : v[0].tuluv === -2 || (v[0].tuluv === -4 && data.niitDun > 0)
+                  ? "Төлбөртэй"
                   : v[0]?.tuluv === 0 &&
                     !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
                     moment
@@ -1516,8 +1500,6 @@ function Zogsool({ token }) {
                   ? "Идэвхтэй"
                   : v[0]?.tuluv === -3
                   ? "Цэвэрлэсэн"
-                  : v[0]?.tuluv === 0 && data.niitDun > 0
-                  ? "Төлбөртэй"
                   : "Үнэгүй"
               }
             </div>
@@ -2061,347 +2043,309 @@ function Zogsool({ token }) {
                               .saveAs("Өдрийн хаалт.xlsx");
                           })
                           .catch((aldaa) => aldaaBarigch(aldaa));
-                      } else
-                        uilchilgee(token)
-                          .get("zogsoolUilchluulegch", {
-                            params: {
-                              order: order,
-                              query: { ...que, ...query },
-                              khuudasniiKhemjee: uilchluulegchGaralt?.niitMur,
-                            },
-                          })
-                          .then(({ data }) => {
-                            const rows = Array.isArray(data?.jagsaalt)
-                              ? data.jagsaalt
+                      } else {
+                        const rows = Array.isArray(
+                          uilchluulegchGaralt?.jagsaalt
+                        )
+                          ? uilchluulegchGaralt.jagsaalt
+                          : [];
+
+                        // Calculate totals
+                        const totals = rows.reduce(
+                          (acc, row) => {
+                            const histories = Array.isArray(row?.tuukh)
+                              ? row.tuukh
                               : [];
-                            const totals = rows.reduce(
-                              (acc, row) => {
-                                const histories = Array.isArray(row?.tuukh)
-                                  ? row.tuukh
-                                  : [];
-                                const firstHistory = histories[0] || {};
-                                const secondHistory = histories[1] || {};
-                                const tulukhValue = Number(
-                                  firstHistory?.tulukhDun ??
-                                    secondHistory?.tulukhDun ??
-                                    0
+                            const firstHistory = histories[0] || {};
+                            const secondHistory = histories[1] || {};
+                            const tulukhValue = Number(
+                              firstHistory?.tulukhDun ??
+                                secondHistory?.tulukhDun ??
+                                0
+                            );
+                            acc.tulukhDun += tulukhValue || 0;
+                            const paymentTotal = getPaymentTotal(row);
+                            acc.niitDun +=
+                              paymentTotal || Number(row?.niitDun) || 0;
+                            acc.ebarimtAvsanDun +=
+                              Number(row?.ebarimtAvsanDun) || 0;
+
+                            const payments = Array.isArray(firstHistory?.tulbur)
+                              ? firstHistory.tulbur
+                              : [];
+                            const { payments: validPayments, discount } =
+                              splitTulbur(payments);
+                            acc.discountTotal += discount || 0;
+                            validPayments.forEach((payment) => {
+                              const type = payment?.turul;
+                              const amount = Number(payment?.dun) || 0;
+                              if (!type) return;
+                              acc.paymentTotals[type] =
+                                (acc.paymentTotals[type] || 0) + amount;
+                            });
+                            return acc;
+                          },
+                          {
+                            niitDun: 0,
+                            tulukhDun: 0,
+                            ebarimtAvsanDun: 0,
+                            discountTotal: 0,
+                            paymentTotals: {},
+                          }
+                        );
+
+                        const summaryPayments = Object.entries(
+                          totals.paymentTotals
+                        ).map(([turul, dun]) => ({ turul, dun }));
+
+                        const summaryRow = {
+                          isSummary: true,
+                          mashiniiDugaar: t("Нийт"),
+                          niitDun: totals.niitDun,
+                          ebarimtAvsanDun: totals.ebarimtAvsanDun,
+                          discountTotal: totals.discountTotal,
+                          tuukh: [
+                            {
+                              tulukhDun: totals.tulukhDun,
+                              tulbur: summaryPayments,
+                              tsagiinTuukh: [],
+                            },
+                          ],
+                        };
+
+                        // Define Excel columns based on table columns
+                        const excelColumns = [
+                          {
+                            title: "№",
+                            align: "center",
+                            dataIndex: "dugaar",
+                            width: "2rem",
+                            render: (text, record, index) => {
+                              if (record?.isSummary) return "";
+                              return (
+                                (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
+                                  (uilchluulegchGaralt?.khuudasniiKhemjee ||
+                                    0) -
+                                (uilchluulegchGaralt?.khuudasniiKhemjee || 0) +
+                                index +
+                                1
+                              );
+                            },
+                          },
+                          {
+                            title: t("Орсон"),
+                            __style__: { h: "center" },
+                            dataIndex: "tuukh.0.tsagiinTuukh.0.orsonTsag",
+                            render(v, record) {
+                              if (record?.isSummary) return "";
+                              const d =
+                                record?.tuukh?.[0]?.tsagiinTuukh?.[0]
+                                  ?.orsonTsag;
+                              return d && moment(d).format("YYYY-MM-DD HH:mm");
+                            },
+                          },
+                          {
+                            title: t("Гарсан"),
+                            __style__: { h: "center" },
+                            dataIndex: "tuukh.0.tsagiinTuukh.0.garsanTsag",
+                            render(v, record) {
+                              if (record?.isSummary) return "";
+                              const d =
+                                record?.tuukh?.[0]?.tsagiinTuukh?.[0]
+                                  ?.garsanTsag ||
+                                record?.tuukh?.[1]?.tsagiinTuukh?.[0]
+                                  ?.garsanTsag;
+                              return d && moment(d).format("YYYY-MM-DD HH:mm");
+                            },
+                          },
+                          {
+                            title: t("Төрөл"),
+                            __style__: { h: "center" },
+                            dataIndex: "turul",
+                            render: (v, record) =>
+                              record?.isSummary ? "" : !!v ? v : "Үйлчлүүлэгч",
+                          },
+                          {
+                            title: t("Дугаар"),
+                            __style__: { h: "center" },
+                            dataIndex: "mashiniiDugaar",
+                            render: (v) => v && String(v).toUpperCase(),
+                          },
+
+                          {
+                            title: t("Хугацаа/мин"),
+                            __style__: { h: "center" },
+                            dataIndex: "tuukh",
+                            render(v, record) {
+                              if (record?.isSummary) return "";
+                              const d1 = moment(
+                                v?.[0]?.tsagiinTuukh?.[0]?.orsonTsag
+                              );
+                              const d2 = moment(
+                                v?.[0]?.tsagiinTuukh?.[0]?.garsanTsag
+                              );
+                              const diff = d2.diff(d1, "minutes");
+                              return diff && diff;
+                            },
+                          },
+                          {
+                            title: t("Бодогдсон"),
+                            __style__: { h: "right" },
+                            __numFmt__: "#,##0.00",
+                            __cellType__: "TypeNumeric",
+                            dataIndex: "niitDun",
+                            render(v) {
+                              return v || 0;
+                            },
+                          },
+                          {
+                            title: t("Төлбөр"),
+                            __style__: { h: "right" },
+                            __numFmt__: "#,##0.00",
+                            __cellType__: "TypeNumeric",
+                            dataIndex: "tuukh",
+                            render(v, record) {
+                              const { payments } = splitTulbur(v?.[0]?.tulbur);
+                              return payments.reduce(
+                                (a, b) => a + (Number(b?.dun) || 0),
+                                0
+                              );
+                            },
+                          },
+                          {
+                            title: t("Хөнгөлөлт"),
+                            __style__: { h: "right" },
+                            __numFmt__: "#,##0.00",
+                            __cellType__: "TypeNumeric",
+                            dataIndex: "tuukh",
+                            render(v, record) {
+                              if (record?.discountTotal)
+                                return record.discountTotal;
+                              const { discount } = splitTulbur(v?.[0]?.tulbur);
+                              return discount || 0;
+                            },
+                          },
+                          {
+                            title: t("И-Баримт"),
+                            __style__: { h: "right" },
+                            __numFmt__: "#,##0.00",
+                            __cellType__: "TypeNumeric",
+                            dataIndex: "ebarimtAvsanDun",
+                            render(v) {
+                              return v || 0;
+                            },
+                          },
+                          {
+                            title: t("Төлөв"),
+                            __style__: { h: "center" },
+                            dataIndex: "tuukh",
+                            render(v, record) {
+                              if (record?.isSummary) return "";
+                              return v[0].tuluv === 1 || v[0].tuluv === 2
+                                ? "Төлсөн"
+                                : v[0].tuluv === -2
+                                ? "Зөрчилтэй"
+                                : v[0]?.tuluv === 0 &&
+                                  !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
+                                  moment
+                                    .duration(
+                                      moment().diff(
+                                        moment(
+                                          v[0]?.tsagiinTuukh?.[0]?.orsonTsag
+                                        )
+                                      )
+                                    )
+                                    .asHours() > shalgakhTsag
+                                ? "Тодорхойгүй"
+                                : v[0]?.tuluv === 0 && !v[0]?.garsanKhaalga
+                                ? "Идэвхтэй"
+                                : v[0]?.tuluv === -3
+                                ? "Цэвэрлэсэн"
+                                : v[0]?.tuluv === 0 && record.niitDun > 0
+                                ? "Төлбөртэй"
+                                : "Үнэгүй";
+                            },
+                          },
+                          {
+                            title: t("Шалтгаан"),
+                            dataIndex: "tuukh",
+                            render: (v, parent) => {
+                              if (parent?.isSummary) return "";
+                              if (
+                                parent.turul === "Үнэгүй" ||
+                                parent.turul === "Дотоод"
+                              ) {
+                                return (
+                                  parent?.mashin?.temdeglel || parent?.zurchil
                                 );
-                                acc.tulukhDun += tulukhValue || 0;
-                                const paymentTotal = getPaymentTotal(row);
-                                acc.niitDun +=
-                                  paymentTotal || Number(row?.niitDun) || 0;
-                                acc.ebarimtAvsanDun +=
-                                  Number(row?.ebarimtAvsanDun) || 0;
-
-                                const payments = Array.isArray(
-                                  firstHistory?.tulbur
-                                )
-                                  ? firstHistory.tulbur
-                                  : [];
-                                const { payments: validPayments, discount } =
-                                  splitTulbur(payments);
-                                acc.discountTotal += discount || 0;
-                                validPayments.forEach((payment) => {
-                                  const type = payment?.turul;
-                                  const amount = Number(payment?.dun) || 0;
-                                  if (!type) return;
-                                  acc.paymentTotals[type] =
-                                    (acc.paymentTotals[type] || 0) + amount;
-                                });
-                                return acc;
-                              },
-                              {
-                                niitDun: 0,
-                                tulukhDun: 0,
-                                ebarimtAvsanDun: 0,
-                                discountTotal: 0,
-                                paymentTotals: {},
+                              } else if (parent.turul === "Гэрээт".trim()) {
+                                return moment(
+                                  parent?.mashin?.duusakhOgnoo
+                                ).format("YYYY-MM-DD");
                               }
-                            );
-                            const summaryPayments = Object.entries(
-                              totals.paymentTotals
-                            ).map(([turul, dun]) => ({
-                              turul,
-                              dun,
-                            }));
-                            const summaryRow = {
-                              isSummary: true,
-                              mashiniiDugaar: t("Нийт"),
-                              niitDun: totals.niitDun,
-                              ebarimtAvsanDun: totals.ebarimtAvsanDun,
-                              discountTotal: totals.discountTotal,
-                              tuukh: [
-                                {
-                                  tulukhDun: totals.tulukhDun,
-                                  tulbur: summaryPayments,
-                                  tsagiinTuukh: [],
-                                },
-                              ],
-                            };
+                              return v?.[0]?.tuluv === -1
+                                ? v[0]?.uneguiGarsan
+                                : parent.zurchil
+                                ? t(parent.zurchil)
+                                : "";
+                            },
+                          },
+                          {
+                            title: t("Бүртгэсэн"),
+                            dataIndex: "tuukh",
+                            render: (v, record) => {
+                              if (record?.isSummary) return "";
+                              return (
+                                v &&
+                                (String(v[0]?.burtgesenAjiltaniiNer).replace(
+                                  /\D/g,
+                                  ""
+                                ).length > 9
+                                  ? ajiltniiNers.find(
+                                      (a) => a.id === v[0]?.burtgesenAjiltaniiId
+                                    )?.ner
+                                  : v[0]?.burtgesenAjiltaniiNer)
+                              );
+                            },
+                          },
+                          {
+                            title: t("Орсон хаалга"),
+                            dataIndex: "tuukh",
+                            render: (v, record) => {
+                              if (record?.isSummary) return "";
+                              return v
+                                ?.map((a) => a?.orsonKhaalga)
+                                .filter(Boolean)
+                                .join(", ");
+                            },
+                          },
+                          {
+                            title: t("Гарсан хаалга"),
+                            dataIndex: "tuukh",
+                            render: (v, record) => {
+                              if (record?.isSummary) return "";
+                              return v
+                                ?.map((a) => a?.garsanKhaalga)
+                                .filter(Boolean)
+                                .join(", ");
+                            },
+                          },
+                        ];
 
-                            const kharagdakhTulbur = Object.entries(
-                              totals.paymentTotals
-                            )
-                              .filter(([_type, sum]) => Number(sum || 0) !== 0)
-                              .map(([type]) => type)
-                              .sort();
+                        // Build Excel file
+                        excel.addSheet("Жагсаалт").addColumns(excelColumns);
+                        excel.addDataSource(rows);
 
-                            const khurvukhBaganuud = kharagdakhTulbur.map(
-                              (type) => ({
-                                title: tulburKhurvuulekh(type),
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render(v, record) {
-                                  const { payments = [] } = splitTulbur(
-                                    record?.tuukh?.[0]?.tulbur
-                                  );
-                                  if (!payments.length) return 0;
-                                  return payments
-                                    .filter((p) => p?.turul === type)
-                                    .reduce(
-                                      (sum, curr) =>
-                                        sum + Number(curr?.dun || 0),
-                                      0
-                                    );
-                                },
-                              })
-                            );
-                            excel.addSheet("Жагсаалт").addColumns([
-                              {
-                                title: "№",
-                                align: "center",
-                                dataIndex: "dugaar",
-                                width: "2rem",
-                                render: (text, record, index) => {
-                                  if (record?.isSummary) {
-                                    return "";
-                                  }
-                                  return (
-                                    (data?.khuudasniiDugaar || 0) *
-                                      (data?.khuudasniiKhemjee || 0) -
-                                    (data?.khuudasniiKhemjee || 0) +
-                                    index +
-                                    1
-                                  );
-                                },
-                              },
-                              {
-                                title: "Дугаар",
-                                __style__: { h: "center" },
-                                dataIndex: "mashiniiDugaar",
-                                render: (v) => {
-                                  return v && String(v).toUpperCase();
-                                },
-                              },
-                              {
-                                title: "Орсон",
-                                __style__: { h: "center" },
-                                dataIndex: "tuukh",
-                                render: (v, record) => {
-                                  if (record?.isSummary) return "";
-                                  const d =
-                                    v?.length > 0 &&
-                                    v[0]?.tsagiinTuukh[0]?.orsonTsag;
-                                  return (
-                                    d && moment(d).format("YYYY-MM-DD HH:mm")
-                                  );
-                                },
-                              },
-                              {
-                                title: "Гарсан",
-                                dataIndex: "tuukh",
-                                __style__: { h: "center" },
-                                render: (v, record) => {
-                                  if (record?.isSummary) return "";
-                                  const d =
-                                    v?.length > 0 &&
-                                    (v[0]?.tsagiinTuukh[0]?.garsanTsag ||
-                                      v[1]?.tsagiinTuukh[0]?.garsanTsag);
-                                  return (
-                                    d && moment(d).format("YYYY-MM-DD HH:mm")
-                                  );
-                                },
-                              },
-                              {
-                                title: "Хугацаа/мин",
-                                __style__: { h: "center" },
-                                dataIndex: "tuukh",
-                                render: (v, record) => {
-                                  if (record?.isSummary) return "";
-                                  const d1 = moment(
-                                    v?.length > 0 &&
-                                      v[0]?.tsagiinTuukh[0]?.orsonTsag
-                                  );
-                                  const d2 = moment(
-                                    v?.length > 0 &&
-                                      v[0]?.tsagiinTuukh[0]?.garsanTsag
-                                  );
-                                  const diff = d2.diff(d1, "minutes");
-                                  return v?.length > 0 && diff && diff;
-                                },
-                              },
-                              {
-                                title: "Төрөл",
-                                dataIndex: "turul",
-                                __style__: { h: "center" },
-                                render: (v, record) =>
-                                  record?.isSummary
-                                    ? ""
-                                    : !!v
-                                    ? v
-                                    : "Үйлчлүүлэгч",
-                              },
-                              {
-                                title: "Дүн",
-                                dataIndex: "tuukh",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render: (v) => {
-                                  return v[0]?.tulukhDun || v[1]?.tulukhDun;
-                                },
-                              },
-                              {
-                                title: "Бодогдсон",
-                                dataIndex: "niitDun",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render: (v, record) => {
-                                  return v || 0;
-                                },
-                              },
-                              {
-                                title: "Төлбөр",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render: (v, data) => {
-                                  const { payments } = splitTulbur(
-                                    data?.tuukh?.[0]?.tulbur
-                                  );
-                                  return payments.reduce(
-                                    (a, b) => a + (Number(b?.dun) || 0),
-                                    0
-                                  );
-                                },
-                              },
-                              {
-                                title: "Хөнгөлөлт",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render: (v, record) => {
-                                  if (record?.discountTotal) {
-                                    return record.discountTotal;
-                                  }
-                                  const { discount } = splitTulbur(
-                                    record?.tuukh?.[0]?.tulbur
-                                  );
-                                  return discount || 0;
-                                },
-                              },
-                              {
-                                title: "И-Баримт",
-                                dataIndex: "ebarimtAvsanDun",
-                                __style__: { h: "right" },
-                                __numFmt__: "#,##0.00",
-                                __cellType__: "TypeNumeric",
-                                render: (v, data) => {
-                                  return v || 0;
-                                },
-                              },
-                              ...khurvukhBaganuud,
-                              {
-                                title: "Төлөв",
-                                dataIndex: "tuukh",
-                                __style__: { h: "center" },
-                                render: (v, record) => {
-                                  if (record?.isSummary) return "";
-                                  return v[0].tuluv === 1
-                                    ? "Төлсөн"
-                                    : v[0].tuluv === 0
-                                    ? "Төлөөгүй"
-                                    : v[0].tuluv === -2
-                                    ? "Зөрчилтэй"
-                                    : v[0].tuluv === -4
-                                    ? "Төлбөртэй"
-                                    : "";
-                                },
-                              },
-                              {
-                                title: "Шалтгаан",
-                                dataIndex: "tuukh",
-                                render: (v, parent) => {
-                                  if (parent?.isSummary) return "";
-                                  return v?.length > 0 && v[0]?.tuluv === -1
-                                    ? v?.length > 0 && v[0]?.uneguiGarsan
-                                    : !!parent.zurchil
-                                    ? parent.zurchil
-                                    : "";
-                                },
-                              },
-                              {
-                                title: t("Бүртгэсэн"),
-                                dataIndex: "tuukh",
-                                render: (v, record) => {
-                                  if (record?.isSummary) return "";
-                                  return (
-                                    v &&
-                                    (String(
-                                      v[0]?.burtgesenAjiltaniiNer
-                                    ).replace(/\D/g, "").length > 9
-                                      ? ajiltniiNers.find(
-                                          (a) =>
-                                            a.id === v[0]?.burtgesenAjiltaniiId
-                                        )?.ner
-                                      : v[0]?.burtgesenAjiltaniiNer)
-                                  );
-                                },
-                              },
-                              {
-                                title: t("Орсон хаалга"),
-                                dataIndex: "tuukh",
-                                render: (v, record) => {
-                                  if (record?.isSummary) return "";
-                                  var khaalguud = "";
-                                  v?.map((a) => {
-                                    khaalguud =
-                                      khaalguud +
-                                      (khaalguud ? ", " : "") +
-                                      (a?.orsonKhaalga || "");
-                                  });
-                                  return khaalguud;
-                                },
-                              },
-                              {
-                                title: t("Гарсан хаалга"),
-                                dataIndex: "tuukh",
-                                render: (v, record) => {
-                                  if (record?.isSummary) return "";
-                                  var khaalguud = "";
-                                  v?.map((a) => {
-                                    khaalguud =
-                                      khaalguud +
-                                      (khaalguud ? ", " : "") +
-                                      (a?.garsanKhaalga || "");
-                                  });
-                                  return khaalguud;
-                                },
-                              },
-                            ]);
-                            excel.addDataSource(rows);
-                            const originalBodyStyle = {
-                              ...excel.defaultTbodyCellStyle,
-                            };
-                            excel.setTBodyStyle({ bold: true });
-                            excel.addDataSource([summaryRow]);
-                            excel.defaultTbodyCellStyle = originalBodyStyle;
-                            excel.saveAs("Жагсаалт.xlsx");
-                          })
-                          .catch((aldaa) => aldaaBarigch(aldaa));
+                        // Add summary row with bold styling
+                        const originalBodyStyle = {
+                          ...excel.defaultTbodyCellStyle,
+                        };
+                        excel.setTBodyStyle({ bold: true });
+                        excel.addDataSource([summaryRow]);
+                        excel.defaultTbodyCellStyle = originalBodyStyle;
+
+                        excel.saveAs("Жагсаалт.xlsx");
+                      }
                     }}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
