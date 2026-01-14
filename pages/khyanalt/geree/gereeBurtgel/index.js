@@ -1841,7 +1841,7 @@ function ZakhialgiinKhyanalt() {
                   ellipsis: true,
                   width: "7rem",
                   render: (talbainKhemjee) => {
-                    return `${talbainKhemjee} м2`;
+                    return `${formatNumber(talbainKhemjee)} м2`;
                   },
                   showSorterTooltip: false,
                   sorter: () => 0,

@@ -713,6 +713,7 @@ function tulburTootsoo({ token }) {
             );
             medeelel.niitUldegdelNuat = formatNumber(medeelel.niitUldegdelNuat);
             medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel);
+            medeelel.talbainKhemjee = formatNumber(medeelel.talbainKhemjee);
             medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne);
             medeelel.talbainNiitUneNuat = (medeelel.talbainNiitUne / 1.1) * 0.1;
             medeelel.talbainNiitUneNuatgui = formatNumber(
@@ -1793,6 +1794,7 @@ function tulburTootsoo({ token }) {
       nekhemjlekh.sariinTurees = formatNumber(nekhemjlekh.sariinTurees);
       nekhemjlekh.eneSardTulukhDun = formatNumber(nekhemjlekh.eneSardTulukhDun);
       nekhemjlekh.niitUldegdel = formatNumber(nekhemjlekh.niitUldegdel);
+      nekhemjlekh.talbainKhemjee = formatNumber(nekhemjlekh.talbainKhemjee);
       nekhemjlekh.talbainNegjUne = formatNumber(nekhemjlekh.talbainNegjUne);
       nekhemjlekh.talbainNiitUne = formatNumber(nekhemjlekh.talbainNiitUne);
       nekhemjlekh.talbainNiitUneNuat = (nekhemjlekh.talbainNiitUne / 1.1) * 0.1;
@@ -2557,6 +2559,7 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.niitUldegdelNuat
         );
         nekhemjlekh.niitUldegdel = formatNumber(nekhemjlekh.niitUldegdel);
+        nekhemjlekh.talbainKhemjee = formatNumber(nekhemjlekh.talbainKhemjee);
         nekhemjlekh.talbainNegjUne = formatNumber(nekhemjlekh.talbainNegjUne);
         nekhemjlekh.talbainNiitUneNuat =
           (nekhemjlekh.talbainNiitUne / 1.1) * 0.1;
@@ -3352,6 +3355,7 @@ function tulburTootsoo({ token }) {
           medeelel.niitAvlagaUldegdel = formatNumber(
             medeelel.niitAvlagaUldegdel || 0
           );
+          medeelel.talbainKhemjee = formatNumber(medeelel.talbainKhemjee);
           medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne);
           medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne);
           medeelel.umnukhSariinUrTulbur = formatNumber(
@@ -3500,6 +3504,7 @@ function tulburTootsoo({ token }) {
       nekhemjlekh.sariinTurees = formatNumber(nekhemjlekh.sariinTurees);
       nekhemjlekh.eneSardTulukhDun = formatNumber(nekhemjlekh.eneSardTulukhDun);
       nekhemjlekh.niitUldegdel = formatNumber(nekhemjlekh.niitUldegdel);
+      nekhemjlekh.talbainKhemjee = formatNumber(nekhemjlekh.talbainKhemjee);
       nekhemjlekh.talbainNegjUne = formatNumber(nekhemjlekh.talbainNegjUne);
       nekhemjlekh.talbainNiitUne = formatNumber(nekhemjlekh.talbainNiitUne);
       nekhemjlekh.umnukhSariinUrTulbur = formatNumber(
