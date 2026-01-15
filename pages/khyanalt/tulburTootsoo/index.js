@@ -30,7 +30,7 @@ import { t } from "i18next";
 import useDans from "hooks/useDans";
 import formatNumber from "tools/function/formatNumber";
 import sorterCompare from "tools/function/sorterCompare";
-import useDansKhuulga from "hooks/khuulga/useDansKhuulga";
+import useDansniiKhuulgaJagsaalt from "hooks/khuulga/useDansniiKhuulgaJagsaalt";
 import useBankniiGuilgeeToololt from "hooks/khuulga/useBankniiGuilgeeToololt";
 import GuilgeeKholbokh from "components/pageComponents/tulbur/GuilgeeNiiluulekh";
 import ZardalKholbokh from "components/pageComponents/tulbur/ZardalKholbokh";
@@ -295,7 +295,7 @@ function tulburTootsoo({ token }) {
     setDansniiKhuulgaKhuudaslalt,
     dansniiKhuulgaMutate,
     isValidating,
-  } = useDansKhuulga(
+  } = useDansniiKhuulgaJagsaalt(
     token,
     baiguullaga?._id,
     songogdsonDans,
