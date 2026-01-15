@@ -2050,7 +2050,6 @@ function Zogsool({ token }) {
                           ? uilchluulegchGaralt.jagsaalt
                           : [];
 
-                        // Calculate totals
                         const totals = rows.reduce(
                           (acc, row) => {
                             const histories = Array.isArray(row?.tuukh)
@@ -2113,7 +2112,6 @@ function Zogsool({ token }) {
                           ],
                         };
 
-                        // Define Excel columns based on table columns
                         const excelColumns = [
                           {
                             title: "№",
@@ -2200,16 +2198,32 @@ function Zogsool({ token }) {
                           },
                           {
                             title: t("Төлбөр"),
-                            __style__: { h: "right" },
-                            __numFmt__: "#,##0.00",
-                            __cellType__: "TypeNumeric",
+                            __style__: { h: "center" },
                             dataIndex: "tuukh",
                             render(v, record) {
-                              const { payments } = splitTulbur(v?.[0]?.tulbur);
-                              return payments.reduce(
-                                (a, b) => a + (Number(b?.dun) || 0),
-                                0
-                              );
+                              if (record?.isSummary) return "";
+
+                              const tulbur = v?.[0]?.tulbur || [];
+                              const { payments } = splitTulbur(tulbur);
+
+                              if (!payments.length) return "";
+
+                              if (payments.length === 1) {
+                                const payment = payments[0];
+                                const paymentType = tulburKhurvuulekh(
+                                  payment.turul
+                                );
+                                return `${paymentType}: ${payment.dun}`;
+                              }
+
+                              return payments
+                                .map((payment) => {
+                                  const paymentType = tulburKhurvuulekh(
+                                    payment.turul
+                                  );
+                                  return `${paymentType}: ${payment.dun}`;
+                                })
+                                .join("\n");
                             },
                           },
                           {
@@ -2332,11 +2346,9 @@ function Zogsool({ token }) {
                           },
                         ];
 
-                        // Build Excel file
                         excel.addSheet("Жагсаалт").addColumns(excelColumns);
                         excel.addDataSource(rows);
 
-                        // Add summary row with bold styling
                         const originalBodyStyle = {
                           ...excel.defaultTbodyCellStyle,
                         };
