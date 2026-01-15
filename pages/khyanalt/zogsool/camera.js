@@ -523,8 +523,39 @@ function camera({ token }) {
           },
         ],
       };
-    }
 
+      if (
+        tuluvFilter !== "" &&
+        tuluvFilter !== null &&
+        tuluvFilter !== undefined
+      ) {
+        switch (tuluvFilter) {
+          case "active":
+            baseQuery["tuukh.0.tuluv"] = 0;
+            baseQuery["tuukh.0.garsanKhaalga"] = { $exists: false };
+            baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
+            baseQuery["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: false };
+            baseQuery["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
+              $gt: new Date(Date.now() - shalgakhTsag * 60 * 60 * 1000),
+            };
+            break;
+          case "tulsun":
+            baseQuery["tuukh.0.tuluv"] = 1;
+            break;
+
+          case "unegui":
+            baseQuery["niitDun"] = { $eq: 0 };
+            break;
+
+          case "tulburtei":
+            baseQuery["tuukh.0.tuluv"] = -4;
+            baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
+            baseQuery["niitDun"] = { $gt: 0 };
+            baseQuery["tuukh"] = { $elemMatch: { tulbur: { $eq: [] } } };
+            break;
+        }
+      }
+    }
     if (hasSearch) {
       result = {
         $and: [
@@ -556,7 +587,7 @@ function camera({ token }) {
     }
 
     return result;
-  }, [ognoo, khelber, dun, camerVal, khaikh]);
+  }, [ognoo, khelber, dun, camerVal, khaikh, tuluvFilter]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -595,7 +626,6 @@ function camera({ token }) {
         console.log(`Found ${result.count} plates from local .NET service`);
         console.log("Last updated:", result.lastUpdated);
 
-        // Transform .NET data to match expected format
         const transformedData = result.data
           .map((plate, index) => {
             try {
@@ -1988,7 +2018,7 @@ function camera({ token }) {
                   {t("Бүгд")}
                 </div>
 
-                <div
+                {/* <div
                   onClick={() => {
                     setTuluvFilter("idevekhitei");
                   }}
@@ -1997,7 +2027,7 @@ function camera({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Төлбөртэй")}
-                </div>
+                </div> */}
                 <div
                   onClick={() => {
                     setTuluvFilter("active");
@@ -2010,7 +2040,7 @@ function camera({ token }) {
                 </div>
                 <div
                   onClick={() => {
-                    setTuluvFilter("tulugsun");
+                    setTuluvFilter("tulsun");
                   }}
                   className={`relative ${
                     tuluvFilter === "tulugsun" && "bg-green-500 text-white"
@@ -2036,7 +2066,7 @@ function camera({ token }) {
                 >
                   {t("Үнэгүй")}
                 </div>
-                <div
+                {/* <div
                   onClick={() => {
                     setTuluvFilter("zurchiltei");
                   }}
@@ -2045,7 +2075,7 @@ function camera({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Зөрчилтэй")}
-                </div>
+                </div> */}
               </div>
             }
           >
