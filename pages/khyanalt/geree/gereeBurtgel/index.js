@@ -77,18 +77,79 @@ function GereeSegmentTile({ zasya, token, ...a }) {
   );
 }
 
-function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
+function excelTatajAvya(
+  token,
+  service,
+  mur,
+  sheet,
+  query,
+  order,
+  sheetName,
+  shuultUtga,
+  select
+) {
   uilchilgee(token)
     .get(service, {
-      params: { query, order, khuudasniiKhemjee: mur, khuudasniiDugaar: 1 },
+      params: {
+        query,
+        order,
+        select,
+        khuudasniiKhemjee: mur,
+        khuudasniiDugaar: 1,
+      },
     })
     .then(({ data }) => {
       const { Excel } = require("antd-table-saveas-excel");
+
+      const processedData = data?.jagsaalt?.map((item) => {
+        const processedItem = { ...item };
+
+        if (shuultUtga === "Цуцласан") {
+          const tsutslyo =
+            item.gereeniiTuukhuud?.filter((a) => a.turul === "Tsutslakh") || [];
+          if (tsutslyo.length > 0) {
+            const latest = tsutslyo.reduce((prev, current) => {
+              return new Date(current.khiisenOgnoo) >
+                new Date(prev.khiisenOgnoo)
+                ? current
+                : prev;
+            });
+            processedItem.gereeniiTuukhuud = latest.khiisenOgnoo
+              ? moment(latest.khiisenOgnoo).format("YYYY-MM-DD")
+              : "-";
+
+            processedItem.tsutslasanShaltgaan =
+              latest.tsutslasanShaltgaan || "-";
+          } else {
+            processedItem.gereeniiTuukhuud = "-";
+            processedItem.tsutslasanShaltgaan = "-";
+          }
+        } else {
+          processedItem.duusakhOgnoo = item.duusakhOgnoo
+            ? moment(item.duusakhOgnoo).format("YYYY-MM-DD")
+            : "-";
+        }
+
+        if (item.gereeniiOgnoo) {
+          processedItem.gereeniiOgnoo = moment(item.gereeniiOgnoo).format(
+            "YYYY-MM-DD"
+          );
+        }
+
+        if (item.sariinTurees) {
+          processedItem.sariinTurees = formatNumber(item.sariinTurees);
+        }
+
+        processedItem.burtgesenAjiltaniiNer = "Админ";
+
+        return processedItem;
+      });
+
       const excel = new Excel();
       excel
         .addSheet(sheetName)
         .addColumns(sheet)
-        .addDataSource(data?.jagsaalt)
+        .addDataSource(processedData)
         .saveAs(sheetName + ".xlsx");
     });
 }
@@ -584,99 +645,102 @@ function ZakhialgiinKhyanalt() {
     }, []);
   }, [shineBagana]);
 
-  const sheet = [
-    {
-      title: t("Гэрээ"),
-      dataIndex: "gereeniiDugaar",
-      className: "text-center",
-      align: "center",
-      ellipsis: true,
-    },
-    {
-      title: t("Нэр"),
-      dataIndex: "ner",
-      className: "text-center",
-      align: "center",
-      ellipsis: true,
-    },
-    {
-      title: t("Регистр"),
-      dataIndex: "register",
-      className: "text-center",
-      align: "center",
-      ellipsis: true,
-    },
-    {
-      title: t("Бүртгэлийн дугаар"),
-      dataIndex: "customerTin",
-      className: "text-center",
-      align: "center",
-      ellipsis: true,
-    },
-    {
-      title: t("Талбай"),
-      dataIndex: "talbainDugaar",
-      className: "text-center",
-      align: "center",
-      ellipsis: true,
-    },
+  const sheet = useMemo(
+    () => [
+      {
+        title: t("Гэрээ"),
+        dataIndex: "gereeniiDugaar",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: t("Нэр"),
+        dataIndex: "ner",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: t("Регистр"),
+        dataIndex: "register",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: t("Бүртгэлийн дугаар"),
+        dataIndex: "customerTin",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: t("Талбай"),
+        dataIndex: "talbainDugaar",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
+      },
 
-    {
-      title: t("Төлбөр"),
-      dataIndex: "sariinTurees",
-      className: "text-center",
-      align: "center",
-      ellipsis: true,
-      render: (sariinTurees) => {
-        return formatNumber(sariinTurees || 0);
+      {
+        title: t("Төлбөр"),
+        dataIndex: "sariinTurees",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
+        showSorterTooltip: false,
       },
-      showSorterTooltip: false,
-    },
 
-    {
-      title: t("Эхлэх"),
-      dataIndex: "gereeniiOgnoo",
-      className: "text-center",
-      align: "center",
-      ellipsis: true,
-      render: (data) => {
-        return moment(data).format("YYYY-MM-DD");
+      {
+        title: t("Эхлэх"),
+        dataIndex: "gereeniiOgnoo",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
       },
-    },
-    {
-      title: "Дуусах хоног",
-      dataIndex: "duusakhOgnoo",
-      className: "text-center",
-      align: "center",
-      ellipsis: true,
-      render: (duusakhOgnoo) => {
-        return moment(duusakhOgnoo).diff(moment(new Date()), "days");
+      {
+        title: "Дуусах хоног",
+        dataIndex: "duusakhOgnoo",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
+        render: (duusakhOgnoo) => {
+          return moment(duusakhOgnoo).diff(moment(new Date()), "days");
+        },
       },
-    },
-    {
-      title: t("Дуусах"),
-      dataIndex: "duusakhOgnoo",
-      className: "text-center",
-      align: "center",
-      ellipsis: true,
-      render: (data) => {
-        return moment(data).format("YYYY-MM-DD");
+      {
+        title: t(shuult.utga === "Цуцласан" ? "Цуцлагдсан" : "Дуусах"),
+        dataIndex:
+          shuult.utga === "Цуцласан" ? "gereeniiTuukhuud" : "duusakhOgnoo",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
+        showSorterTooltip: false,
+        sortOrder: "descend",
       },
-      showSorterTooltip: false,
-      sortOrder: "descend",
-    },
-    {
-      title: "Ажилтан",
-      dataIndex: "burtgesenAjiltaniiNer",
-      className: "text-center",
-      align: "center",
-      ellipsis: true,
-      render: () => {
-        return "Админ";
+      ...(shuult.utga === "Цуцласан"
+        ? [
+            {
+              title: "Цуцлах шалтгаан",
+              dataIndex: "tsutslasanShaltgaan",
+              className: "text-left",
+              align: "left",
+              ellipsis: true,
+            },
+          ]
+        : []),
+      {
+        title: "Ажилтан",
+        dataIndex: "burtgesenAjiltaniiNer",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
       },
-    },
-    ...excelNemekhCol,
-  ];
+      ...excelNemekhCol,
+    ],
+    [shuult.utga, excelNemekhCol, t]
+  );
 
   useEffect(() => {
     if (JSON.stringify(shuult.utga) !== JSON.stringify("Хэвийн")) {
@@ -1697,7 +1761,9 @@ function ZakhialgiinKhyanalt() {
       sheet,
       shuult.query,
       order,
-      "гэрээний жагсаалт"
+      "гэрээний жагсаалт",
+      shuult.utga,
+      select
     );
   }
 
