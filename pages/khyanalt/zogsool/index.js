@@ -162,7 +162,73 @@ function tulburKhurvuulekh(v) {
   }
   return utga;
 }
+function calculatePaymentTotals(rows) {
+  const totals = {};
 
+  paymentTypes.forEach(({ key }) => {
+    totals[`total_${key}`] = 0;
+  });
+  totals.paymentTotal = 0;
+
+  rows.forEach((row) => {
+    const tulbur = row?.tuukh?.[0]?.tulbur || [];
+    const { payments } = splitTulbur(tulbur);
+
+    payments.forEach((payment) => {
+      const key = payment.turul;
+      if (!totals[`total_${key}`]) {
+        totals[`total_${key}`] = 0;
+      }
+      totals[`total_${key}`] += Number(payment?.dun) || 0;
+      totals.paymentTotal += Number(payment?.dun) || 0;
+    });
+  });
+
+  return totals;
+}
+
+const paymentTypes = [
+  { key: "belen", label: "Бэлэн" },
+  { key: "khaan", label: "Хаан" },
+  { key: "khas", label: "Хас" },
+  { key: "khariltsakh", label: "Данс" },
+  { key: "qpay", label: "QPay" },
+  { key: "toki", label: "Токи" },
+  { key: "kiosk", label: "Киоск" },
+  { key: "bankQR", label: "Банк QR" },
+  { key: "GadaaQR", label: "Гадаа QR" },
+  { key: "DotorQR", label: "Дотор QR" },
+  { key: "PosKart", label: "Пос Карт" },
+  { key: "PosBelen", label: "Пос Бэлэн" },
+  { key: "PosKhariltsakh", label: "Пос Данс" },
+  { key: "tseneglelt", label: "Хэтэвч" },
+  { key: "tur", label: "Төр" },
+  { key: "golomt", label: "Голомт" },
+  { key: "tdb", label: "ХХБ" },
+  { key: "kapitron", label: "Капитрон" },
+  { key: "Fitness", label: "Fitness" },
+  { key: "ugaalga", label: "Угаалга" },
+  { key: "Соёолж Ц/Д", label: "Соёолж Ц/Д" },
+];
+
+const paymentColumns = paymentTypes.map(({ key, label }) => ({
+  title: label,
+  __style__: { h: "right" },
+  __numFmt__: "#,##0",
+  __cellType__: "TypeNumeric",
+  dataIndex: "tuukh",
+  render(v, record) {
+    if (record?.isSummary) {
+      return record[`total_${key}`] || 0;
+    }
+
+    const tulbur = v?.[0]?.tulbur || [];
+    const { payments } = splitTulbur(tulbur);
+
+    const payment = payments.find((p) => p.turul === key);
+    return payment ? payment.dun : 0;
+  },
+}));
 const isDiscountPayment = (payment) => {
   if (!payment?.turul) return false;
   const t = String(payment.turul).toLowerCase();
@@ -2044,6 +2110,47 @@ function Zogsool({ token }) {
                           })
                           .catch((aldaa) => aldaaBarigch(aldaa));
                       } else {
+                        const paymentColumns = paymentTypes.map(
+                          ({ key, label }) => ({
+                            title: label,
+                            __style__: { h: "right" },
+                            __numFmt__: "#,##0",
+                            __cellType__: "TypeNumeric",
+                            dataIndex: "tuukh",
+                            render(v, record) {
+                              if (record?.isSummary) {
+                                return record[`total_${key}`] || 0;
+                              }
+
+                              const tulbur = v?.[0]?.tulbur || [];
+                              const { payments } = splitTulbur(tulbur);
+
+                              const payment = payments.find(
+                                (p) => p.turul === key
+                              );
+                              return payment ? payment.dun : 0;
+                            },
+                          })
+                        );
+                        const niitColumn = {
+                          title: t("Нийт төлбөр"),
+                          __style__: { h: "right" },
+                          __numFmt__: "#,##0",
+                          __cellType__: "TypeNumeric",
+                          dataIndex: "tuukh",
+                          render(v, record) {
+                            if (record?.isSummary) {
+                              return record.paymentTotal || 0;
+                            }
+
+                            const tulbur = v?.[0]?.tulbur || [];
+                            const { payments } = splitTulbur(tulbur);
+
+                            return payments.reduce((total, payment) => {
+                              return total + (Number(payment?.dun) || 0);
+                            }, 0);
+                          },
+                        };
                         const rows = Array.isArray(
                           uilchluulegchGaralt?.jagsaalt
                         )
@@ -2096,21 +2203,6 @@ function Zogsool({ token }) {
                         const summaryPayments = Object.entries(
                           totals.paymentTotals
                         ).map(([turul, dun]) => ({ turul, dun }));
-
-                        const summaryRow = {
-                          isSummary: true,
-                          mashiniiDugaar: t("Нийт"),
-                          niitDun: totals.niitDun,
-                          ebarimtAvsanDun: totals.ebarimtAvsanDun,
-                          discountTotal: totals.discountTotal,
-                          tuukh: [
-                            {
-                              tulukhDun: totals.tulukhDun,
-                              tulbur: summaryPayments,
-                              tsagiinTuukh: [],
-                            },
-                          ],
-                        };
 
                         const excelColumns = [
                           {
@@ -2196,6 +2288,10 @@ function Zogsool({ token }) {
                               return v || 0;
                             },
                           },
+                          ...paymentColumns,
+
+                          niitColumn,
+
                           {
                             title: t("Төлбөр"),
                             __style__: { h: "center" },
@@ -2345,7 +2441,22 @@ function Zogsool({ token }) {
                             },
                           },
                         ];
-
+                        const paymentTotals = calculatePaymentTotals(rows);
+                        const summaryRow = {
+                          isSummary: true,
+                          mashiniiDugaar: t("Нийт"),
+                          niitDun: totals.niitDun,
+                          ebarimtAvsanDun: totals.ebarimtAvsanDun,
+                          discountTotal: totals.discountTotal,
+                          ...paymentTotals,
+                          tuukh: [
+                            {
+                              tulukhDun: totals.tulukhDun,
+                              tulbur: summaryPayments,
+                              tsagiinTuukh: [],
+                            },
+                          ],
+                        };
                         excel.addSheet("Жагсаалт").addColumns(excelColumns);
                         excel.addDataSource(rows);
 
