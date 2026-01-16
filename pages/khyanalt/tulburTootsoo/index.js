@@ -1456,8 +1456,7 @@ function tulburTootsoo({ token }) {
                                   },
                                   ...query,
                                 },
-                                khuudasniiKhemjee:
-                                  dansniiKhuulgaGaralt?.niitMur,
+                                khuudasniiKhemjee: 100,
                               },
                             }
                           );
@@ -1659,8 +1658,10 @@ function tulburTootsoo({ token }) {
             onChange={(p, f, s) => sorterCompare(s, setOrder)}
             pagination={{
               current: dansniiKhuulgaGaralt?.khuudasniiDugaar,
-              pageSize: dansniiKhuulgaGaralt?.khuudasniiKhemjee,
               total: dansniiKhuulgaGaralt?.niitMur,
+              pageSizeOptions: [10, 20, 100, 300, 500],
+              defaultPageSize: [500],
+              showSizeChanger: true,
               showSizeChanger: true,
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                 setDansniiKhuulgaKhuudaslalt((kh) => ({

@@ -4,6 +4,7 @@ import useSWR from "swr";
 import moment from "moment";
 import _ from "lodash";
 import { useAuth } from "services/auth";
+
 function getSearch(search, bank) {
   if (!search || !search.trim()) return null;
   const or = [
@@ -45,32 +46,38 @@ const fetcher = (
   barilgiinId
 ) => {
   const searchFilter = getSearch(search, dans?.bank);
+
+  const baseQuery = {
+    dansniiDugaar: dans?.dugaar,
+    barilgiinId,
+    baiguullagiinId,
+    [`${dans?.bank === "tdb" ? "TxDt" : "tranDate"}`]: {
+      $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+      $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+    },
+    ...(searchFilter ? { $or: searchFilter } : {}),
+    ...query,
+  };
+
+  console.log("🔍 Fetcher params:", {
+    url,
+    query: baseQuery,
+    order,
+    khuudaslalt,
+  });
+
   return axios(token)
     .get(url, {
       params: {
         order: order,
-        query: {
-          dansniiDugaar: dans?.dugaar,
-          barilgiinId,
-          baiguullagiinId,
-          [`${
-            dans?.bank === "tdb"
-              ? "Amt"
-              : dans?.bank === "golomt"
-              ? "tranAmount"
-              : "amount"
-          }`]: { $gt: 0 },
-          [`${dans?.bank === "tdb" ? "TxDt" : "tranDate"}`]: {
-            $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-          },
-          ...(searchFilter ? { $or: searchFilter } : {}),
-          ...query,
-        },
+        query: baseQuery,
         ...khuudaslalt,
       },
     })
-    .then((res) => res.data)
+    .then((res) => {
+      console.log("✅ Response:", res.data);
+      return res.data;
+    })
     .catch(aldaaBarigch);
 };
 
@@ -85,7 +92,7 @@ function useDansniiKhuulgaJagsaalt(
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setDansniiKhuulgaKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 100,
+    khuudasniiKhemjee: 500,
     search: "",
   });
   const { data, mutate, isValidating } = useSWR(
