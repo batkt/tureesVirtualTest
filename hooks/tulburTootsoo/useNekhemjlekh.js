@@ -33,9 +33,9 @@ const fetcher = (
     .post(url, {
       barilgiinId,
       olnoorSaraarEsekh,
-      ekhlekhOgnoo: olnoorSaraarEsekh
-        ? moment().startOf("month").format("YYYY-MM-DD 00:00:00")
-        : moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00"),
+      ekhlekhOgnoo: moment(ognoo)
+        .startOf("month")
+        .format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59"),
       nekhemjlekhAvakhOgnoo: ognoo.format("YYYY-MM-DD 23:59:59"),
       query: {
