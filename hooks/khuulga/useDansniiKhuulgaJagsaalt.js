@@ -75,7 +75,7 @@ const fetcher = (
       },
     })
     .then((res) => {
-      console.log("✅ Response:", res.data);
+     
       return res.data;
     })
     .catch(aldaaBarigch);
