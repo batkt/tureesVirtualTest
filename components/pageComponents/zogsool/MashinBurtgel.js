@@ -42,30 +42,30 @@ function MashinBurtgel(
     dotorGadnaTsagEsekh,
     ajiltan,
   },
-  ref
+  ref,
 ) {
   const [form] = Form.useForm();
   const inputRefs = useRef([]);
   const [geree, setGeree] = useState(null);
   const [turulShalgah, setTurulShalgah] = useState(
-    data?.turul ? data?.turul : undefined
+    data?.turul ? data?.turul : undefined,
   );
   const [nemeltTurulShalgah, setNemeltTurulShalgah] = useState(
-    data?.tuluv ? data?.tuluv : undefined
+    data?.tuluv ? data?.tuluv : undefined,
   );
   const [khungululttei, setKhungululttei] = useState(
-    data?.khungulultTurul ? true : false
+    data?.khungulultTurul ? true : false,
   );
   const [khungulultiinTurul, setKhungulultiinTurul] = useState(
-    data?.khungulultTurul ? data?.khungulultTurul : undefined
+    data?.khungulultTurul ? data?.khungulultTurul : undefined,
   );
   const [ognoo, setOgnoo] = useState(
     data?.ekhlekhOgnoo && data?.duusakhOgnoo
       ? [moment(data.ekhlekhOgnoo), moment(data.duusakhOgnoo)]
-      : [moment(new Date()), moment(new Date()).add(1, "months")]
+      : [moment(new Date()), moment(new Date()).add(1, "months")],
   );
   const [gereetTulburBodokhEsekh, setGereetTulburBodokhEsekh] = useState(
-    data?.gereetTulburBodokhEsekh || false
+    data?.gereetTulburBodokhEsekh || false,
   );
   const [gereetTulburBodokhEsekhNemelt, setGereetTulburBodokhEsekhNemelt] =
     useState(!!data?.tulburBodokhTsagEkhlekhNeg || false);
@@ -75,23 +75,23 @@ function MashinBurtgel(
           moment()
             .set(
               "hour",
-              parseInt(data?.tulburBodokhTsagEkhlekh.split(":")[0], 10)
+              parseInt(data?.tulburBodokhTsagEkhlekh.split(":")[0], 10),
             )
             .set(
               "minute",
-              parseInt(data?.tulburBodokhTsagEkhlekh.split(":")[1], 10)
+              parseInt(data?.tulburBodokhTsagEkhlekh.split(":")[1], 10),
             ),
           moment()
             .set(
               "hour",
-              parseInt(data?.tulburBodokhTsagDuusakh.split(":")[0], 10)
+              parseInt(data?.tulburBodokhTsagDuusakh.split(":")[0], 10),
             )
             .set(
               "minute",
-              parseInt(data?.tulburBodokhTsagDuusakh.split(":")[1], 10)
+              parseInt(data?.tulburBodokhTsagDuusakh.split(":")[1], 10),
             ),
         ]
-      : null
+      : null,
   );
 
   const [tulburBodokhTsagNemelt, setTulburBodokhTsagNemelt] = useState(
@@ -100,23 +100,23 @@ function MashinBurtgel(
           moment()
             .set(
               "hour",
-              parseInt(data?.tulburBodokhTsagEkhlekhNeg.split(":")[0], 10)
+              parseInt(data?.tulburBodokhTsagEkhlekhNeg.split(":")[0], 10),
             )
             .set(
               "minute",
-              parseInt(data?.tulburBodokhTsagEkhlekhNeg.split(":")[1], 10)
+              parseInt(data?.tulburBodokhTsagEkhlekhNeg.split(":")[1], 10),
             ),
           moment()
             .set(
               "hour",
-              parseInt(data?.tulburBodokhTsagDuusakhNeg.split(":")[0], 10)
+              parseInt(data?.tulburBodokhTsagDuusakhNeg.split(":")[0], 10),
             )
             .set(
               "minute",
-              parseInt(data?.tulburBodokhTsagDuusakhNeg.split(":")[1], 10)
+              parseInt(data?.tulburBodokhTsagDuusakhNeg.split(":")[1], 10),
             ),
         ]
-      : null
+      : null,
   );
 
   const query = React.useMemo(() => {
@@ -130,7 +130,7 @@ function MashinBurtgel(
     query,
     undefined,
     undefined,
-    order
+    order,
   );
 
   const dataOrjIrsenEsekh = !!data ? true : false;
@@ -146,7 +146,7 @@ function MashinBurtgel(
         destroy();
       },
     }),
-    [form, geree, ognoo]
+    [form, geree, ognoo],
   );
 
   function garya() {
@@ -205,7 +205,7 @@ function MashinBurtgel(
         .then(({ data }) => {
           if (data === "Amjilttai") {
             toast.success(
-              t("Зогсоолд орсон машины мэдээлэл амжилттай өөрчлөгдсөн")
+              t("Зогсоолд орсон машины мэдээлэл амжилттай өөрчлөгдсөн"),
             );
           }
         })
@@ -278,7 +278,7 @@ function MashinBurtgel(
       form.setFieldsValue({
         khungulukhKhugatsaa: data?.khungulukhKhugatsaa ?? 0,
         uldegdelKhungulukhKhugatsaa: form.getFieldValue(
-          "uldegdelKhungulukhKhugatsaa"
+          "uldegdelKhungulukhKhugatsaa",
         ), // leftover
       });
     }
@@ -394,7 +394,10 @@ function MashinBurtgel(
               onChange={(e) => {
                 form.setFieldValue("nemeltTuluv", undefined);
                 form.setFieldValue("khungulultTurul", undefined);
-                form.setFieldValue("khungulult", undefined);
+                form.setFieldValue(
+                  "khungulult",
+                  e === "Үнэгүй" ? 100 : undefined,
+                );
                 form.setFieldValue("tsagiinTurul", undefined);
                 form.setFieldValue("khungulukhKhugatsaa", undefined);
                 setNemeltTurulShalgah(e);
@@ -424,7 +427,10 @@ function MashinBurtgel(
               <Select
                 onChange={(e) => {
                   form.setFieldValue("khungulultTurul", undefined);
-                  form.setFieldValue("khungulult", undefined);
+                  form.setFieldValue(
+                    "khungulult",
+                    e === "Үнэгүй" ? 100 : undefined,
+                  );
                   form.setFieldValue("tsagiinTurul", undefined);
                   form.setFieldValue("khungulukhKhugatsaa", undefined);
                   setKhungulultiinTurul(undefined);
@@ -444,8 +450,7 @@ function MashinBurtgel(
               </Select>
             </Form.Item>
           )}
-          {(nemeltTurulShalgah === "Хөнгөлөлттэй" ||
-            khungululttei === true) && (
+          {nemeltTurulShalgah === "Хөнгөлөлттэй" && (
             <Form.Item
               label={t("Хөнгөлөлт сонгох")}
               name="khungulultTurul"
@@ -548,7 +553,7 @@ function MashinBurtgel(
                         ) {
                           form.setFieldValue(
                             "uldegdelKhungulukhKhugatsaa",
-                            value || 0
+                            value || 0,
                           );
                         }
                       }}
@@ -639,7 +644,7 @@ function MashinBurtgel(
                   ) {
                     form.setFieldValue(
                       "uldegdelKhungulukhKhugatsaa",
-                      value || 0
+                      value || 0,
                     );
                   }
                 }}
@@ -696,7 +701,7 @@ function MashinBurtgel(
               validator: async (_, names) => {
                 if (names?.length < 8 && names?.length > 0) {
                   return Promise.reject(
-                    new Error("Утасны дугаар аа шалгана уу!")
+                    new Error("Утасны дугаар аа шалгана уу!"),
                   );
                 }
               },
@@ -736,7 +741,7 @@ function MashinBurtgel(
               min: 6,
               max: 7,
               pattern: new RegExp(
-                "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
+                "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}",
               ),
               message: t("Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"),
             },
@@ -868,7 +873,7 @@ function MashinBurtgel(
                 validator: async (_, names) => {
                   if (!names || names.length < 1) {
                     return Promise.reject(
-                      new Error(t("Машины дугаар оруулна уу !"))
+                      new Error(t("Машины дугаар оруулна уу !")),
                     );
                   }
                 },
@@ -927,10 +932,10 @@ function MashinBurtgel(
                             min: 6,
                             max: 7,
                             pattern: new RegExp(
-                              "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
+                              "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}",
                             ),
                             message: t(
-                              "Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"
+                              "Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой",
                             ),
                           },
                         ]}
