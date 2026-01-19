@@ -10,14 +10,6 @@ const queryAvya = (davkhar, ilgeekhTurul) => {
   return query;
 };
 
-const searchGenerator = (search, fields) => {
-  if (!!search && !!fields)
-    return {
-      $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
-    };
-  return {};
-};
-
 const fetcher = (
   url,
   token,
@@ -33,21 +25,21 @@ const fetcher = (
     .post(url, {
       barilgiinId,
       olnoorSaraarEsekh,
-      ekhlekhOgnoo: moment(ognoo)
-        .startOf("month")
-        .format("YYYY-MM-DD 00:00:00"),
+      ekhlekhOgnoo: olnoorSaraarEsekh
+        ? moment().startOf("month").format("YYYY-MM-DD 00:00:00")
+        : moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59"),
       nekhemjlekhAvakhOgnoo: ognoo.format("YYYY-MM-DD 23:59:59"),
       query: {
         query: {
           ...queryAvya(davkhar, ilgeekhTurul),
-          ...searchGenerator(search, [
-            "ner",
-            "register",
-            "talbainDugaar",
-            "gereeniiDugaar",
-            "utas",
-          ]),
+          $or: [
+            { ner: { $regex: search, $options: "i" } },
+            { register: { $regex: search, $options: "i" } },
+            { talbainDugaar: { $regex: search, $options: "i" } },
+            { gereeniiDugaar: { $regex: search, $options: "i" } },
+            { utas: { $regex: search, $options: "i" } },
+          ],
           _id,
         },
         ...khuudaslalt,

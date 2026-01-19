@@ -26,12 +26,8 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
       crossOriginIsolated: true,
       logEnabled: true,
       onconnectionstatechange: conntectionSetlekh,
-
-      // onconnectionstatechange: (state) => {
-      //   // if (state === "failed") {
-      //   //   setReset(true);
-      //   // }
-      // },
+      muted: true,
+      autoplay: true,
       style: {
         controls: nemelteer ? true : false,
       },
