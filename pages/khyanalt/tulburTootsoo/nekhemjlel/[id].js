@@ -198,7 +198,7 @@ function ZakhialgaNemekh({ token }) {
   const { width, height } = React.useMemo(() => {
     return getSize(
       nekhemjlelZagvar?.khuudasniiKhemjee,
-      nekhemjlelZagvar?.chiglel
+      nekhemjlelZagvar?.chiglel,
     );
   }, [nekhemjlelZagvar.khuudasniiKhemjee, nekhemjlelZagvar.chiglel]);
 
@@ -335,7 +335,7 @@ function ZakhialgaNemekh({ token }) {
       const method = nekhemjlelZagvar?._id ? updateMethod : createMethod;
       method("nekhemjlekhiinZagvar", token, nekhemjlelZagvar)
         .then(({ data }) => {
-          if (data === "Amjilttai") {
+          if (data === "Amjilttai" || data?._id) {
             toast.success(t("Амжилттай хадгаллаа"));
             router.back();
           }

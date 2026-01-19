@@ -99,6 +99,7 @@ function NekhemjlekhZasvar({
   value,
   ashiglaltiinZardal,
   change,
+  onChange,
   onTextChange,
   buttonListCustom = [],
   otherProps,
@@ -215,32 +216,60 @@ function NekhemjlekhZasvar({
 
     return [
       createButtonWithItems(
-        { name: "undsen", title: "Үндсэн мэдээлэл", innerHTML: renderToString(<SolutionOutlined />) },
-        undsenTalbaruud
+        {
+          name: "undsen",
+          title: "Үндсэн мэдээлэл",
+          innerHTML: renderToString(<SolutionOutlined />),
+        },
+        undsenTalbaruud,
       ),
       createButtonWithItems(
-        { name: "khugatsaa", title: "Хугацаа", innerHTML: renderToString(<ClockCircleOutlined />) },
-        khugatsaaniiTalbaruud
+        {
+          name: "khugatsaa",
+          title: "Хугацаа",
+          innerHTML: renderToString(<ClockCircleOutlined />),
+        },
+        khugatsaaniiTalbaruud,
       ),
       createButtonWithItems(
-        { name: "talbai", title: "Түрээсийн талбай", innerHTML: renderToString(<BankOutlined />) },
-        talbainiiTalbaruud
+        {
+          name: "talbai",
+          title: "Түрээсийн талбай",
+          innerHTML: renderToString(<BankOutlined />),
+        },
+        talbainiiTalbaruud,
       ),
       createButtonWithItems(
-        { name: "baritsaa", title: "Барьцаа", innerHTML: renderToString(<LockOutlined />) },
-        baritsaaniiTalbaruud
+        {
+          name: "baritsaa",
+          title: "Барьцаа",
+          innerHTML: renderToString(<LockOutlined />),
+        },
+        baritsaaniiTalbaruud,
       ),
       createButtonWithItems(
-        { name: "tulbur", title: "Төлбөр", innerHTML: renderToString(<DollarCircleOutlined />) },
-        tulburiinTalbaruud
+        {
+          name: "tulbur",
+          title: "Төлбөр",
+          innerHTML: renderToString(<DollarCircleOutlined />),
+        },
+        tulburiinTalbaruud,
       ),
       createButtonWithItems(
-        { name: "nekhemjlel", title: "Нэхэмжлэл", innerHTML: renderToString(<SnippetsOutlined />) },
-        nekhemjlekhiinTalbaruud
+        {
+          name: "nekhemjlel",
+          title: "Нэхэмжлэл",
+          innerHTML: renderToString(<SnippetsOutlined />),
+        },
+        nekhemjlekhiinTalbaruud,
       ),
       createButtonWithItems(
-        { name: "nekhemjlekhiinNemelt", title: "Нэхэмжлэхийн бусад авлага", innerHTML: renderToString(<DollarCircleOutlined />) },
-        nekhemjlekhiinNemelt
+        {
+          name: "nekhemjlekhiinNemelt",
+          title: "Нэхэмжлэхийн бусад авлага",
+          innerHTML: renderToString(<DollarCircleOutlined />),
+        },
+        nekhemjlekhiinNemelt,
       ),
       createButtonWithItems(zardaluud, songokhTalbaruud),
     ];
@@ -248,7 +277,7 @@ function NekhemjlekhZasvar({
 
   return (
     <TipTapEditor
-      onChange={change}
+      onChange={onChange || change}
       value={value}
       defaultValue={value}
       setContents={value}
