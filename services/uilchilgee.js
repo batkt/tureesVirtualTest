@@ -12,7 +12,7 @@ export const socket = () =>
     process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
     {
       transports: ["websocket"],
-    }
+    },
   );
 // test
 // export const url = "http://103.143.40.175:8081";

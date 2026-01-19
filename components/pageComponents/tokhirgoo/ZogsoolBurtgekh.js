@@ -33,7 +33,7 @@ import { modal } from "components/ant/Modal";
 
 function ZogsoolBurtgekh(
   { data, jagsaalt, barilgiinId, destroy, token, refresh },
-  ref
+  ref,
 ) {
   const { t } = useTranslation();
   const [form] = Form.useForm();
@@ -79,9 +79,7 @@ function ZogsoolBurtgekh(
 
           let body = form.getFieldsValue();
 
-          body.tokiNer = body?.tokiBolonStickerAshiglakhEsekh
-            ? body?.ner
-            : undefined;
+          body.tokiNer = body?.tokiEsekh ? body?.ner : "";
           body.barilgiinId = barilgiinId;
 
           await method("parking", token, body)
@@ -103,7 +101,7 @@ function ZogsoolBurtgekh(
         destroy();
       },
     }),
-    [form]
+    [form],
   );
 
   function cameraTokhirgooOruulya() {
@@ -296,7 +294,7 @@ function ZogsoolBurtgekh(
                       <Select.Option key={i} value={mur?._id}>
                         {mur?.ner}
                       </Select.Option>
-                    )
+                    ),
                   )}
                 </Select>
               </Form.Item>
@@ -432,15 +430,15 @@ function ZogsoolBurtgekh(
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
-                {t("Toki болон гадаа sticker QR ашиглах эсэх")}
+                {t("Toki ашиглах эсэх")}
               </div>
               <div className="text-xs text-gray-400"> </div>
             </div>
             <div className="col-span-2">
-              <Form.Item className="m-0" name="tokiBolonStickerAshiglakhEsekh">
+              <Form.Item className="m-0" name="tokiEsekh">
                 <Switch
                   className="bg-gray-400"
-                  defaultChecked={data?.tokiBolonStickerAshiglakhEsekh}
+                  defaultChecked={data?.tokiEsekh}
                   checkedChildren="Тийм"
                   unCheckedChildren="Үгүй"
                 />
