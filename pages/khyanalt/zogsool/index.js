@@ -64,10 +64,10 @@ export function excelTatajAvya(
   sheet,
   query,
   order,
-  sheetName
+  sheetName,
 ) {
   const loadingToast = toast.loading(
-    t("Өгөгдөл боловсруулж байна та түр хүлээнэ үү!")
+    t("Өгөгдөл боловсруулж байна та түр хүлээнэ үү!"),
   );
   uilchilgee(token)
     .get(service, {
@@ -337,7 +337,7 @@ function Zogsool({ token }) {
     streamQuery,
     orderZurchil,
     null,
-    searchKeysZurchil
+    searchKeysZurchil,
   );
 
   const columnsZurchil = useMemo(() => {
@@ -662,7 +662,7 @@ function Zogsool({ token }) {
     order,
     or,
     1000,
-    tootsooKhelber
+    tootsooKhelber,
   );
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
@@ -696,7 +696,7 @@ function Zogsool({ token }) {
       khaaltOgnoo: -1,
     },
     null,
-    ["ajiltaniiNer"]
+    ["ajiltaniiNer"],
   );
 
   const orlogoQuery = useMemo(() => {
@@ -823,7 +823,7 @@ function Zogsool({ token }) {
         too: formatNumber(
           !!uilchiluulegchToololt &&
             uilchiluulegchToololt[0].turul.find((a) => a._id === null)?.too,
-          0
+          0,
         ),
         query: {
           turul: {
@@ -845,7 +845,7 @@ function Zogsool({ token }) {
           !!uilchiluulegchToololt &&
             uilchiluulegchToololt[0].turul.find((a) => a._id === "Түрээслэгч")
               ?.too,
-          0
+          0,
         ),
         query: {
           turul: "Түрээслэгч",
@@ -856,7 +856,7 @@ function Zogsool({ token }) {
         too: formatNumber(
           !!uilchiluulegchToololt &&
             uilchiluulegchToololt[0].turul.find((a) => a._id === "Гэрээт")?.too,
-          0
+          0,
         ),
         query: {
           turul: "Гэрээт",
@@ -867,7 +867,7 @@ function Zogsool({ token }) {
         too: formatNumber(
           !!uilchiluulegchToololt &&
             uilchiluulegchToololt[0].turul.find((a) => a._id === "Дотоод")?.too,
-          0
+          0,
         ),
         query: {
           turul: "Дотоод",
@@ -878,7 +878,7 @@ function Zogsool({ token }) {
         too: formatNumber(
           !!uilchiluulegchToololt &&
             uilchiluulegchToololt[0].turul.find((a) => a._id === "Дурын")?.too,
-          0
+          0,
         ),
         query: {
           turul: "Дурын",
@@ -889,7 +889,7 @@ function Zogsool({ token }) {
         too: formatNumber(
           !!uilchiluulegchToololt &&
             uilchiluulegchToololt[0].turul.find((a) => a._id === "СӨХ")?.too,
-          0
+          0,
         ),
         query: {
           turul: "СӨХ",
@@ -901,7 +901,7 @@ function Zogsool({ token }) {
           !!uilchiluulegchToololt &&
             uilchiluulegchToololt[0].turul.find((a) => a._id === "Байгууллага")
               ?.too,
-          0
+          0,
         ),
         query: {
           turul: "Байгууллага",
@@ -912,7 +912,7 @@ function Zogsool({ token }) {
         too: formatNumber(
           !!uilchiluulegchToololt &&
             uilchiluulegchToololt[0].turul.find((a) => a._id === "VIP")?.too,
-          0
+          0,
         ),
         query: {
           turul: "VIP",
@@ -924,12 +924,12 @@ function Zogsool({ token }) {
         too: formatNumber(
           !!uilchiluulegchToololt &&
             uilchiluulegchToololt[0].tuluv.find((a) => a._id === -2)?.too,
-          0
+          0,
         ),
         query: { "tuukh.tuluv": -2 },
       },
     ],
-    [uilchiluulegchToololt, uilchluulegchGaralt]
+    [uilchiluulegchToololt, uilchluulegchGaralt],
   );
 
   /*function mashinOruulakhExcel() {
@@ -980,7 +980,7 @@ function Zogsool({ token }) {
               data.jagsaalt.map((a) => ({
                 ner: a.ner,
                 id: a._id,
-              }))
+              })),
             );
           }
         })
@@ -1009,7 +1009,7 @@ function Zogsool({ token }) {
     baiguullaga?._id,
     barilgiinId,
     zogsooAjiltanQuery,
-    undefined
+    undefined,
   );
 
   // Өдрийн хаалтын хүснэгтийн баганууд
@@ -1030,7 +1030,7 @@ function Zogsool({ token }) {
       const minutes = diffMinutes % 60;
       return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
         2,
-        "0"
+        "0",
       )}`;
     };
 
@@ -1530,8 +1530,8 @@ function Zogsool({ token }) {
                     moment
                       .duration(
                         moment().diff(
-                          moment(v[0]?.tsagiinTuukh?.[0]?.orsonTsag)
-                        )
+                          moment(v[0]?.tsagiinTuukh?.[0]?.orsonTsag),
+                        ),
                       )
                       .asHours() > shalgakhTsag
                   ? "bg-purple-500 text-white dark:bg-purple-700"
@@ -1557,8 +1557,8 @@ function Zogsool({ token }) {
                     moment
                       .duration(
                         moment().diff(
-                          moment(v[0]?.tsagiinTuukh?.[0]?.orsonTsag)
-                        )
+                          moment(v[0]?.tsagiinTuukh?.[0]?.orsonTsag),
+                        ),
                       )
                       .asHours() > shalgakhTsag
                   ? "Тодорхойгүй"
@@ -1630,7 +1630,7 @@ function Zogsool({ token }) {
                 {String(v[0]?.burtgesenAjiltaniiNer).replace(/\D/g, "").length >
                 9
                   ? ajiltniiNers.find(
-                      (a) => a.id === v[0]?.burtgesenAjiltaniiId
+                      (a) => a.id === v[0]?.burtgesenAjiltaniiId,
                     )?.ner
                   : v[0]?.burtgesenAjiltaniiNer}
               </div>
@@ -1997,9 +1997,9 @@ function Zogsool({ token }) {
                             const paymentTypes = Array.from(
                               new Set(
                                 rows.flatMap((row) =>
-                                  (row?.tulbur || []).map((item) => item.turul)
-                                )
-                              )
+                                  (row?.tulbur || []).map((item) => item.turul),
+                                ),
+                              ),
                             ).sort();
 
                             const kharagdakhTulbur = paymentTypes.filter(
@@ -2008,9 +2008,9 @@ function Zogsool({ token }) {
                                   (row?.tulbur || []).some(
                                     (p) =>
                                       p?.turul === type &&
-                                      Number(p?.dun || 0) !== 0
-                                  )
-                                )
+                                      Number(p?.dun || 0) !== 0,
+                                  ),
+                                ),
                             );
 
                             const paymentColumns = kharagdakhTulbur.map(
@@ -2027,10 +2027,10 @@ function Zogsool({ token }) {
                                     .reduce(
                                       (sum, curr) =>
                                         sum + Number(curr?.dun || 0),
-                                      0
+                                      0,
                                     );
                                 },
-                              })
+                              }),
                             );
                             const totalPaymentColumn = {
                               title: t("Нийт төлбөр"),
@@ -2042,7 +2042,7 @@ function Zogsool({ token }) {
                                 if (!value || value.length === 0) return 0;
                                 return value.reduce(
                                   (sum, curr) => sum + Number(curr?.dun || 0),
-                                  0
+                                  0,
                                 );
                               },
                             };
@@ -2083,17 +2083,17 @@ function Zogsool({ token }) {
                                     )
                                       return "-";
                                     const diffMinutes = moment(
-                                      record.khaaltOgnoo
+                                      record.khaaltOgnoo,
                                     ).diff(
                                       moment(record.nevtersenOgnoo),
-                                      "minutes"
+                                      "minutes",
                                     );
                                     if (diffMinutes < 0) return "-";
                                     const hours = Math.floor(diffMinutes / 60);
                                     const minutes = diffMinutes % 60;
                                     return `${String(hours).padStart(
                                       2,
-                                      "0"
+                                      "0",
                                     )}:${String(minutes).padStart(2, "0")}`;
                                   },
                                 },
@@ -2126,12 +2126,13 @@ function Zogsool({ token }) {
                               const { payments } = splitTulbur(tulbur);
 
                               const payment = payments.find(
-                                (p) => p.turul === key
+                                (p) => p.turul === key,
                               );
                               return payment ? payment.dun : 0;
                             },
-                          })
+                          }),
                         );
+
                         const niitColumn = {
                           title: t("Нийт төлбөр"),
                           __style__: { h: "right" },
@@ -2151,8 +2152,9 @@ function Zogsool({ token }) {
                             }, 0);
                           },
                         };
+
                         const rows = Array.isArray(
-                          uilchluulegchGaralt?.jagsaalt
+                          uilchluulegchGaralt?.jagsaalt,
                         )
                           ? uilchluulegchGaralt.jagsaalt
                           : [];
@@ -2167,7 +2169,7 @@ function Zogsool({ token }) {
                             const tulukhValue = Number(
                               firstHistory?.tulukhDun ??
                                 secondHistory?.tulukhDun ??
-                                0
+                                0,
                             );
                             acc.tulukhDun += tulukhValue || 0;
                             const paymentTotal = getPaymentTotal(row);
@@ -2197,12 +2199,91 @@ function Zogsool({ token }) {
                             ebarimtAvsanDun: 0,
                             discountTotal: 0,
                             paymentTotals: {},
-                          }
+                          },
                         );
 
+                        const filteredPaymentTypes = paymentTypes.filter(
+                          ({ key }) => {
+                            const hasNonZeroValue = rows.some((row) => {
+                              const tulbur = row?.tuukh?.[0]?.tulbur || [];
+                              const { payments } = splitTulbur(tulbur);
+                              const payment = payments.find(
+                                (p) => p.turul === key,
+                              );
+                              return payment && Number(payment.dun) > 0;
+                            });
+
+                            const hasSummaryValue =
+                              totals.paymentTotals[key] &&
+                              totals.paymentTotals[key] > 0;
+
+                            return hasNonZeroValue || hasSummaryValue;
+                          },
+                        );
+
+                        const filteredPaymentColumns = filteredPaymentTypes.map(
+                          ({ key, label }) => ({
+                            title: label,
+                            __style__: { h: "right" },
+                            __numFmt__: "#,##0",
+                            __cellType__: "TypeNumeric",
+                            dataIndex: "tuukh",
+                            render(v, record) {
+                              if (record?.isSummary) {
+                                return record[`total_${key}`] || 0;
+                              }
+
+                              const tulbur = v?.[0]?.tulbur || [];
+                              const { payments } = splitTulbur(tulbur);
+
+                              const payment = payments.find(
+                                (p) => p.turul === key,
+                              );
+                              return payment ? payment.dun : 0;
+                            },
+                          }),
+                        );
+
+                        const hasNiitColumnData = rows.some((row) => {
+                          const tulbur = row?.tuukh?.[0]?.tulbur || [];
+                          const { payments } = splitTulbur(tulbur);
+                          const total = payments.reduce((total, payment) => {
+                            return total + (Number(payment?.dun) || 0);
+                          }, 0);
+                          return total > 0;
+                        });
+
+                        const hasSummaryPayment = Object.values(
+                          totals.paymentTotals,
+                        ).some((amount) => Number(amount) > 0);
+
+                        const shouldShowNiitColumn =
+                          hasNiitColumnData || hasSummaryPayment;
+
+                        const hasDiscountData =
+                          rows.some((row) => {
+                            const tulbur = row?.tuukh?.[0]?.tulbur || [];
+                            const { discount } = splitTulbur(tulbur);
+                            return discount > 0;
+                          }) || totals.discountTotal > 0;
+
                         const summaryPayments = Object.entries(
-                          totals.paymentTotals
+                          totals.paymentTotals,
                         ).map(([turul, dun]) => ({ turul, dun }));
+
+                        const discountColumn = {
+                          title: t("Хөнгөлөлт"),
+                          __style__: { h: "right" },
+                          __numFmt__: "#,##0.00",
+                          __cellType__: "TypeNumeric",
+                          dataIndex: "tuukh",
+                          render(v, record) {
+                            if (record?.discountTotal)
+                              return record.discountTotal;
+                            const { discount } = splitTulbur(v?.[0]?.tulbur);
+                            return discount || 0;
+                          },
+                        };
 
                         const excelColumns = [
                           {
@@ -2269,10 +2350,10 @@ function Zogsool({ token }) {
                             render(v, record) {
                               if (record?.isSummary) return "";
                               const d1 = moment(
-                                v?.[0]?.tsagiinTuukh?.[0]?.orsonTsag
+                                v?.[0]?.tsagiinTuukh?.[0]?.orsonTsag,
                               );
                               const d2 = moment(
-                                v?.[0]?.tsagiinTuukh?.[0]?.garsanTsag
+                                v?.[0]?.tsagiinTuukh?.[0]?.garsanTsag,
                               );
                               const diff = d2.diff(d1, "minutes");
                               return diff && diff;
@@ -2288,9 +2369,9 @@ function Zogsool({ token }) {
                               return v || 0;
                             },
                           },
-                          ...paymentColumns,
+                          ...filteredPaymentColumns,
 
-                          niitColumn,
+                          ...(shouldShowNiitColumn ? [niitColumn] : []),
 
                           {
                             title: t("Төлбөр"),
@@ -2307,7 +2388,7 @@ function Zogsool({ token }) {
                               if (payments.length === 1) {
                                 const payment = payments[0];
                                 const paymentType = tulburKhurvuulekh(
-                                  payment.turul
+                                  payment.turul,
                                 );
                                 return `${paymentType}: ${payment.dun}`;
                               }
@@ -2315,26 +2396,15 @@ function Zogsool({ token }) {
                               return payments
                                 .map((payment) => {
                                   const paymentType = tulburKhurvuulekh(
-                                    payment.turul
+                                    payment.turul,
                                   );
                                   return `${paymentType}: ${payment.dun}`;
                                 })
                                 .join("\n");
                             },
                           },
-                          {
-                            title: t("Хөнгөлөлт"),
-                            __style__: { h: "right" },
-                            __numFmt__: "#,##0.00",
-                            __cellType__: "TypeNumeric",
-                            dataIndex: "tuukh",
-                            render(v, record) {
-                              if (record?.discountTotal)
-                                return record.discountTotal;
-                              const { discount } = splitTulbur(v?.[0]?.tulbur);
-                              return discount || 0;
-                            },
-                          },
+
+                          ...(hasDiscountData ? [discountColumn] : []),
                           {
                             title: t("И-Баримт"),
                             __style__: { h: "right" },
@@ -2361,9 +2431,9 @@ function Zogsool({ token }) {
                                     .duration(
                                       moment().diff(
                                         moment(
-                                          v[0]?.tsagiinTuukh?.[0]?.orsonTsag
-                                        )
-                                      )
+                                          v[0]?.tsagiinTuukh?.[0]?.orsonTsag,
+                                        ),
+                                      ),
                                     )
                                     .asHours() > shalgakhTsag
                                 ? "Тодорхойгүй"
@@ -2390,7 +2460,7 @@ function Zogsool({ token }) {
                                 );
                               } else if (parent.turul === "Гэрээт".trim()) {
                                 return moment(
-                                  parent?.mashin?.duusakhOgnoo
+                                  parent?.mashin?.duusakhOgnoo,
                                 ).format("YYYY-MM-DD");
                               }
                               return v?.[0]?.tuluv === -1
@@ -2409,10 +2479,11 @@ function Zogsool({ token }) {
                                 v &&
                                 (String(v[0]?.burtgesenAjiltaniiNer).replace(
                                   /\D/g,
-                                  ""
+                                  "",
                                 ).length > 9
                                   ? ajiltniiNers.find(
-                                      (a) => a.id === v[0]?.burtgesenAjiltaniiId
+                                      (a) =>
+                                        a.id === v[0]?.burtgesenAjiltaniiId,
                                     )?.ner
                                   : v[0]?.burtgesenAjiltaniiNer)
                               );
@@ -2441,6 +2512,7 @@ function Zogsool({ token }) {
                             },
                           },
                         ];
+
                         const paymentTotals = calculatePaymentTotals(rows);
                         const summaryRow = {
                           isSummary: true,
@@ -2457,6 +2529,7 @@ function Zogsool({ token }) {
                             },
                           ],
                         };
+
                         excel.addSheet("Жагсаалт").addColumns(excelColumns);
                         excel.addDataSource(rows);
 
@@ -2576,13 +2649,13 @@ function Zogsool({ token }) {
                             e?.reduce(
                               (acc, b) => {
                                 const { payments, discount } = splitTulbur(
-                                  b?.tuukh?.[0]?.tulbur
+                                  b?.tuukh?.[0]?.tulbur,
                                 );
 
                                 acc.niitDun += getPaymentTotal(b);
                                 acc.payment += payments.reduce(
                                   (c, d) => c + (Number(d?.dun) || 0),
-                                  0
+                                  0,
                                 );
                                 acc.discount += discount || 0;
                                 acc.ebarimt += Number(b?.ebarimtAvsanDun) || 0;
@@ -2593,7 +2666,7 @@ function Zogsool({ token }) {
                                 payment: 0,
                                 discount: 0,
                                 ebarimt: 0,
-                              }
+                              },
                             ) || {};
                           const {
                             niitDun = 0,
@@ -2694,13 +2767,13 @@ function Zogsool({ token }) {
                             e?.reduce(
                               (acc, b) => {
                                 const { payments, discount } = splitTulbur(
-                                  b?.tuukh?.[0]?.tulbur
+                                  b?.tuukh?.[0]?.tulbur,
                                 );
 
                                 acc.niitDun += getPaymentTotal(b);
                                 acc.payment += payments.reduce(
                                   (c, d) => c + (Number(d?.dun) || 0),
-                                  0
+                                  0,
                                 );
                                 acc.discount += discount || 0;
                                 acc.ebarimt += Number(b?.ebarimtAvsanDun) || 0;
@@ -2711,7 +2784,7 @@ function Zogsool({ token }) {
                                 payment: 0,
                                 discount: 0,
                                 ebarimt: 0,
-                              }
+                              },
                             ) || {};
                           const {
                             niitDun = 0,
@@ -2856,9 +2929,9 @@ function Zogsool({ token }) {
                                   {formatNumber(
                                     e?.reduce(
                                       (a, b) => a + (b.niitDun || 0),
-                                      0
+                                      0,
                                     ),
-                                    2
+                                    2,
                                   )}
                                 </div>
                               </AntdTable.Summary.Cell>
