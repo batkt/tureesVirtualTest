@@ -328,7 +328,6 @@ function MashinBurtgel(
             "СӨХ",
             "Байгууллага",
             "VIP",
-            "VIP2",
           ].map((a) => (
             <Select.Option key={a} value={a}>
               {t(a)}
