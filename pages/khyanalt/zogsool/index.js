@@ -595,9 +595,7 @@ function Zogsool({ token }) {
           baseQuery["tuukh.0.garsanKhaalga"] = { $exists: false };
           baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
           baseQuery["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: false };
-          baseQuery["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
-            $gt: new Date(Date.now() - shalgakhTsag * 60 * 60 * 1000),
-          };
+
           break;
         case 1:
           baseQuery["tuukh.0.tuluv"] = 1;
