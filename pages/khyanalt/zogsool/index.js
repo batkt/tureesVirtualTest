@@ -319,8 +319,13 @@ function Zogsool({ token }) {
             : moment().format("YYYY-MM-DD 23:59:59"),
       },
     };
-    if (tuluvZurchil === 0) query["tuluv"] = 0;
-    else if (tuluvZurchil === 1) query["tuluv"] = 1;
+    if (tuluvZurchil === 0) {
+      query["tuukh.0.tuluv"] = 0;
+    } else if (tuluvZurchil === 1) {
+      // Төлсөн: Include both tuluv === 1 and tuluv === 2, and require garsanTsag to exist
+      query["tuukh.0.tuluv"] = { $in: [1, 2] };
+      query["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: true };
+    }
     return query;
   }, [baiguullaga?._id, barilgiinId, tuluvZurchil, ognoo]);
 
@@ -565,9 +570,14 @@ function Zogsool({ token }) {
         },
       }),
       ...aa,
-
-      "tuukh.0.tsagiinTuukh.0.garsanTsag": { $exists: true },
     };
+
+    if (tuluv !== "" && tuluv !== null && tuluv !== undefined) {
+      const tuluvValue = Number(tuluv);
+      if (tuluvValue !== 0) {
+        baseQuery["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: true };
+      }
+    } 
 
     if (!!zogsoolId) {
       baseQuery["tuukh.zogsooliinId"] = zogsoolId;
@@ -606,10 +616,8 @@ function Zogsool({ token }) {
           break;
 
         case 5:
-          baseQuery["tuukh.0.tuluv"] = -4;
-          baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
           baseQuery["niitDun"] = { $gt: 0 };
-          baseQuery["tuukh"] = { $elemMatch: { tulbur: { $eq: [] } } };
+          baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
           break;
       }
     }
@@ -642,6 +650,19 @@ function Zogsool({ token }) {
           { niitDun: 0, "tuukh.0.tuluv": { $ne: -2 } },
           { turul: "Үнэгүй" },
           { "tuukh.0.uneguiGarsan": { $exists: true } },
+        ];
+      } else if (tuluv === 5) {
+        nemeh = [
+          {
+            "tuukh.0.tuluv": -4,
+            "tuukh.0.uneguiGarsan": { $exists: false },
+            "tuukh": { $elemMatch: { tulbur: { $eq: [] } } },
+          },
+          {
+            "tuukh.0.tuluv": 0,
+            "tuukh.0.tsagiinTuukh.0.garsanTsag": { $exists: true },
+            "tuukh.0.uneguiGarsan": { $exists: false },
+          },
         ];
       }
     }
@@ -1521,7 +1542,13 @@ function Zogsool({ token }) {
                 //   :
                 v[0].tuluv === 1 || v[0].tuluv === 2
                   ? "bg-green-500 text-white dark:bg-green-700"
+                  : v[0].tuluv === -2
+                  ? "bg-red-500 text-white dark:bg-red-700"
                   : v[0].tuluv === -4 && data.niitDun > 0
+                  ? "bg-yellow-500 text-white dark:bg-yellow-700"
+                  : v[0]?.tuluv === 0 &&
+                    v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
+                    data.niitDun > 0
                   ? "bg-yellow-500 text-white dark:bg-yellow-700"
                   : v[0]?.tuluv === 0 &&
                     !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
@@ -1548,7 +1575,13 @@ function Zogsool({ token }) {
                 //   :
                 v[0].tuluv === 1 || v[0].tuluv === 2
                   ? "Төлсөн"
-                  : v[0].tuluv === -2 || (v[0].tuluv === -4 && data.niitDun > 0)
+                  : v[0].tuluv === -2
+                  ? "Зөрчилтэй"
+                  : v[0].tuluv === -4 && data.niitDun > 0
+                  ? "Төлбөртэй"
+                  : v[0]?.tuluv === 0 &&
+                    v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
+                    data.niitDun > 0
                   ? "Төлбөртэй"
                   : v[0]?.tuluv === 0 &&
                     !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&

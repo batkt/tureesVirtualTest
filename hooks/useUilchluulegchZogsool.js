@@ -16,21 +16,29 @@ const fetcher = (
   or
 ) => {
   var defaultOr = [];
-  if (!!or) {
+  if (!!or && Array.isArray(or) && or.length > 0) {
     or.forEach((element) => {
       defaultOr.push(element);
     });
-  } else defaultOr.push({ mashiniiDugaar: { $regex: search, $options: "i" } });
+  } else if (search && search.trim() !== "") {
+    defaultOr.push({ mashiniiDugaar: { $regex: search, $options: "i" } });
+  }
+  
+  const queryParams = {
+    baiguullagiinId,
+    barilgiinId,
+    ...query,
+  };
+  
+  if (defaultOr.length > 0) {
+    queryParams.$or = defaultOr;
+  }
+  
   return axios(token)
     .get(url, {
       params: {
         ...khuudaslalt,
-        query: {
-          baiguullagiinId,
-          barilgiinId,
-          $or: defaultOr,
-          ...query,
-        },
+        query: queryParams,
         order,
       },
     })

@@ -542,6 +542,9 @@ function camera({ token }) {
           case "tulsun":
             baseQuery["tuukh.0.tuluv"] = 1;
             break;
+          case "tulugdsun":
+            baseQuery["tuukh.0.tuluv"] = 1;
+            break;
 
           case "unegui":
             baseQuery["niitDun"] = { $eq: 0 };
@@ -2040,10 +2043,10 @@ function camera({ token }) {
                 </div>
                 <div
                   onClick={() => {
-                    setTuluvFilter("tulsun");
+                    setTuluvFilter("tulugdsun");
                   }}
                   className={`relative ${
-                    tuluvFilter === "tulugsun" && "bg-green-500 text-white"
+                    tuluvFilter === "tulugdsun" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Төлөгдсөн")}
@@ -2113,7 +2116,7 @@ function camera({ token }) {
           ) {
             currentStatus = "idevekhitei";
           } else if (mur?.tuluv === 1 || mur?.tuluv === 2) {
-            currentStatus = "tulugsun";
+            currentStatus = "tulugdsun";
           } else if (
             !!parent.zurchil &&
             parent.zurchil !== "" &&
@@ -3652,7 +3655,7 @@ function camera({ token }) {
       if (isActive) {
         currentStatus = "active";
       } else if (mur?.tuluv === 1 || mur?.tuluv === 2) {
-        currentStatus = "tulugsun";
+        currentStatus = "tulugdsun";
       } else if (hasPayment) {
         currentStatus = "tulburtei";
       } else if (
@@ -3720,6 +3723,7 @@ function camera({ token }) {
 
           let currentStatus = "";
 
+          const hasPayment = mur?.tulbur?.length > 0;
           const hasExitTime = !!mur?.tsagiinTuukh?.[0]?.garsanTsag;
           const isActive =
             mur?.tuluv === 0 && !hasExitTime && !mur?.garsanKhaalga;
@@ -3735,7 +3739,9 @@ function camera({ token }) {
           ) {
             currentStatus = "idevekhitei";
           } else if (mur?.tuluv === 1 || mur?.tuluv === 2) {
-            currentStatus = "tulugsun";
+            currentStatus = "tulugdsun";
+          } else if (hasPayment) {
+            currentStatus = "tulburtei";
           } else if (
             !!parent.zurchil &&
             parent.zurchil !== "" &&
