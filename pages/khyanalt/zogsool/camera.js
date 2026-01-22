@@ -3032,6 +3032,22 @@ function camera({ token }) {
           try {
             const tuukh = data.tuukh?.[0];
             if (tuukh) {
+ 
+              const mashin = data.mashin;
+              if (
+                mashin?.khungulultTurul === "togtmolTsag" &&
+                mashin?.uldegdelKhungulukhKhugatsaa > 0
+              ) {
+                const remainingDiscountTime = mashin.uldegdelKhungulukhKhugatsaa;
+                const parkingTime = data.niitKhugatsaa || 0;
+                
+                
+                if (remainingDiscountTime >= parkingTime) {
+                  proceedWithOfflineExit();
+                  return;
+                }
+              }
+
               const fee = await calculateParkingFee(tuukh);
 
               if (fee > 0) {
@@ -3163,9 +3179,22 @@ function camera({ token }) {
                     ? moment(garsanTsag).diff(moment(orsonTsag), "minutes")
                     : null;
 
-                const isInFreePeriod =
-                  Number.isFinite(Number(computedMin)) &&
-                  Number(computedMin) <= uneguiKhugatsaaMin;
+              
+                const mashin = data.mashin;
+                let isInFreePeriod = false;
+                
+                if (
+                  mashin?.khungulultTurul === "togtmolTsag" &&
+                  mashin?.uldegdelKhungulukhKhugatsaa > 0
+                ) {
+                  const remainingDiscountTime = mashin.uldegdelKhungulukhKhugatsaa;
+                  const parkingTime = data.niitKhugatsaa || computedMin || 0;
+                  isInFreePeriod = remainingDiscountTime >= parkingTime;
+                } else {
+                  isInFreePeriod =
+                    Number.isFinite(Number(computedMin)) &&
+                    Number(computedMin) <= uneguiKhugatsaaMin;
+                }
 
                 if (!isInFreePeriod) {
                   uilchilgee(token)
@@ -3177,31 +3206,39 @@ function camera({ token }) {
                       if (fresh?.tuukh?.[0] && fresh?._id) {
                         const haruulakhDun =
                           fresh.niitDun ?? fresh.tuukh?.[0]?.tulukhDun ?? 0;
-                        tulburTulyu(
-                          fresh.tuukh[0],
-                          fresh._id,
-                          fresh.mashiniiDugaar,
-                          haruulakhDun,
-                          0
-                        );
+                        if (haruulakhDun > 0) {
+                          tulburTulyu(
+                            fresh.tuukh[0],
+                            fresh._id,
+                            fresh.mashiniiDugaar,
+                            haruulakhDun,
+                            0
+                          );
+                        }
                       } else {
+                        const haruulakhDun = mashinData?.niitDun ?? tuukh?.tulukhDun ?? 0;
+                        if (haruulakhDun > 0) {
+                          tulburTulyu(
+                            tuukh,
+                            mashinData._id,
+                            mashinData.mashiniiDugaar,
+                            haruulakhDun,
+                            0
+                          );
+                        }
+                      }
+                    })
+                    .catch(() => {
+                      const haruulakhDun = mashinData?.niitDun ?? tuukh?.tulukhDun ?? 0;
+                      if (haruulakhDun > 0) {
                         tulburTulyu(
                           tuukh,
                           mashinData._id,
                           mashinData.mashiniiDugaar,
-                          mashinData?.niitDun ?? tuukh?.tulukhDun ?? 0,
+                          haruulakhDun,
                           0
                         );
                       }
-                    })
-                    .catch(() => {
-                      tulburTulyu(
-                        tuukh,
-                        mashinData._id,
-                        mashinData.mashiniiDugaar,
-                        mashinData?.niitDun ?? tuukh?.tulukhDun ?? 0,
-                        0
-                      );
                     });
                 }
               } else if (data?.tuukh?.[0]) {
@@ -3218,9 +3255,22 @@ function camera({ token }) {
                     ? moment(garsanTsag).diff(moment(orsonTsag), "minutes")
                     : null;
 
-                const isInFreePeriod =
-                  Number.isFinite(Number(computedMin)) &&
-                  Number(computedMin) <= uneguiKhugatsaaMin;
+             
+                const mashin = data.mashin;
+                let isInFreePeriod = false;
+                
+                if (
+                  mashin?.khungulultTurul === "togtmolTsag" &&
+                  mashin?.uldegdelKhungulukhKhugatsaa > 0
+                ) {
+                  const remainingDiscountTime = mashin.uldegdelKhungulukhKhugatsaa;
+                  const parkingTime = data.niitKhugatsaa || computedMin || 0;
+                  isInFreePeriod = remainingDiscountTime >= parkingTime;
+                } else {
+                  isInFreePeriod =
+                    Number.isFinite(Number(computedMin)) &&
+                    Number(computedMin) <= uneguiKhugatsaaMin;
+                }
 
                 if (!isInFreePeriod) {
                   uilchilgee(token)
@@ -3239,31 +3289,39 @@ function camera({ token }) {
                       if (found?.tuukh?.[0] && found?._id) {
                         const haruulakhDun =
                           found.niitDun ?? found.tuukh?.[0]?.tulukhDun ?? 0;
-                        tulburTulyu(
-                          found.tuukh[0],
-                          found._id,
-                          found.mashiniiDugaar,
-                          haruulakhDun,
-                          0
-                        );
+                        if (haruulakhDun > 0) {
+                          tulburTulyu(
+                            found.tuukh[0],
+                            found._id,
+                            found.mashiniiDugaar,
+                            haruulakhDun,
+                            0
+                          );
+                        }
                       } else {
+                        const haruulakhDun = data?.niitDun ?? tuukh?.tulukhDun ?? 0;
+                        if (haruulakhDun > 0) {
+                          tulburTulyu(
+                            tuukh,
+                            data._id,
+                            data.mashiniiDugaar,
+                            haruulakhDun,
+                            0
+                          );
+                        }
+                      }
+                    })
+                    .catch(() => {
+                      const haruulakhDun = data?.niitDun ?? tuukh?.tulukhDun ?? 0;
+                      if (haruulakhDun > 0) {
                         tulburTulyu(
                           tuukh,
                           data._id,
                           data.mashiniiDugaar,
-                          data?.niitDun ?? tuukh?.tulukhDun ?? 0,
+                          haruulakhDun,
                           0
                         );
                       }
-                    })
-                    .catch(() => {
-                      tulburTulyu(
-                        tuukh,
-                        data._id,
-                        data.mashiniiDugaar,
-                        data?.niitDun ?? tuukh?.tulukhDun ?? 0,
-                        0
-                      );
                     });
                 }
               }

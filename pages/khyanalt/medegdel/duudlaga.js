@@ -98,7 +98,7 @@ function TaskManagementSystem({ token }) {
           destroy();
         },
       }),
-      [tailbar]
+      [tailbar],
     );
     const handleOk = async () => {
       if (onOk) await onOk();
@@ -187,19 +187,46 @@ function TaskManagementSystem({ token }) {
 
   const query = useMemo(
     () => ({
+      // Broader query to get all sonorduulga records - filter for duudlaga in frontend
+      // Remove ajiltniiId filter so regular users can see duudlaga records where they're involved
       barilgiinId: barilgiinId,
-      ajiltniiId: ajiltan?.erkh === "Admin" ? undefined : ajiltan?._id,
+      // ajiltniiId: ajiltan?.erkh === "Admin" ? undefined : ajiltan?._id, // Removed for duudlaga
       baiguullagiinId: ajiltan?.baiguullagiinId,
 
+      // Date filter
       ...(ekhlekhOgnoo &&
         ekhlekhOgnoo.length === 2 && {
-          startDate: ekhlekhOgnoo[0]?.startOf("day"),
-          endDate: ekhlekhOgnoo[1]?.endOf("day"),
+          createdAt: {
+            $gte: ekhlekhOgnoo[0]?.toDate(),
+            $lte: ekhlekhOgnoo[1]?.toDate(),
+          },
         }),
+
+      // Type filter
       ...(turulFilter !== "Бүгд" && { duudlagiinTurul: turulFilter }),
-      ...(searchTerm && { search: searchTerm }),
+
+      // Search filter (only add if there's actually a search term)
+      ...(searchTerm &&
+        searchTerm.trim() && {
+          $or: [
+            {
+              khariltsagchiinNer: { $regex: searchTerm.trim(), $options: "i" },
+            },
+            {
+              khariltsagchiinRegister: {
+                $regex: searchTerm.trim(),
+                $options: "i",
+              },
+            },
+            {
+              khariltsagchiinUtas: { $regex: searchTerm.trim(), $options: "i" },
+            },
+            { title: { $regex: searchTerm.trim(), $options: "i" } },
+            { message: { $regex: searchTerm.trim(), $options: "i" } },
+          ],
+        }),
     }),
-    [ajiltan, barilgiinId, ekhlekhOgnoo, turulFilter, searchTerm]
+    [ajiltan, barilgiinId, ekhlekhOgnoo, turulFilter, searchTerm],
   );
   const updateTaskStatus = async (taskId, newStatus, reason = null) => {
     try {
@@ -296,21 +323,28 @@ function TaskManagementSystem({ token }) {
     token,
     khariltsagchiinQuery,
     davkhar,
-    tuluv
+    tuluv,
   );
 
+  // Temporarily disable useDuudlaga due to 404 errors - using task.jagsaalt instead
+  const duudlagaGaralt = { jagsaalt: [] };
+  const duudlagaMutate = () => {};
+  const setDuudlagaKhuudaslalt = () => {};
+  const isValidating = false;
+
+  /*
   const {
     duudlagaGaralt,
     duudlagaMutate,
     setDuudlagaKhuudaslalt,
     isValidating,
   } = useDuudlaga(
-    barilgiinId && token,
-    ajiltan?.baiguullagiinId,
-    query,
-    order,
-    searchKeys
+    ajiltan?.baiguullagiinId, // baiguullagiinId
+    query,                    // query object
+    order,                    // sort order
+    searchKeys               // search fields
   );
+  */
   const { duudlagiinToololt } = useDuudlagaToollolt(token, query);
 
   const task = useJagsaalt(ajiltan && "/sonorduulga", query, order);
@@ -319,13 +353,13 @@ function TaskManagementSystem({ token }) {
     () => ({
       duudlagaId: duudlaga?._id,
     }),
-    [duudlaga]
+    [duudlaga],
   );
 
   const duudlagaSetgegdel = useJagsaalt(
     duudlaga && "/setgegdel",
     setgegdeliinQuery,
-    order
+    order,
   );
 
   useEffect(() => {
@@ -369,7 +403,7 @@ function TaskManagementSystem({ token }) {
         }
       }, 300);
     },
-    [setKhariltsagchKhuudaslalt]
+    [setKhariltsagchKhuudaslalt],
   );
 
   function onScroll(e) {
@@ -452,11 +486,27 @@ function TaskManagementSystem({ token }) {
   }, [msj, songogdsonKhariltsagch, barilgiinId, token, t]);
 
   const filteredJagsaalt = useMemo(() => {
-    const dataSource = task?.jagsaalt || jagsaalt || [];
+    // Use task.jagsaalt as primary source (this is what works for ajiltan)
+    // If useDuudlaga is fixed, switch back to duudlagaGaralt?.jagsaalt
+    const dataSource = task?.jagsaalt || duudlagaGaralt?.jagsaalt || [];
 
     if (!dataSource || dataSource.length === 0) return [];
 
     return dataSource.filter((item) => {
+      // First filter: Only duudlaga records
+      if (item.turul !== "duudlaga") return false;
+
+      /* ORIGINAL ROLE-BASED FILTERING - temporarily disabled
+      // Second filter: Role-based filtering
+      // Admin sees all duudlaga records, regular users see only their own
+      if (ajiltan?.erkh !== "Admin") {
+        // Regular user: only show duudlaga where they are khariltsagchiinId
+        if (item.khariltsagchiinId !== ajiltan?._id) return false;
+      }
+      // Admin: show all duudlaga records (no additional filtering needed)
+      */
+
+      // Your existing filter logic...
       let statusMatch = true;
       if (tuluv === "Идэвхтэй") statusMatch = item.tuluv === 0;
       else if (tuluv === "Дууссан") statusMatch = item.tuluv === 1;
@@ -469,7 +519,6 @@ function TaskManagementSystem({ token }) {
       let searchMatch = true;
       if (searchTerm && searchTerm.trim()) {
         const searchTermLower = searchTerm.toLowerCase().trim();
-
         searchMatch = searchKeys.some((key) => {
           const value = item[key];
           if (value && typeof value === "string") {
@@ -504,13 +553,22 @@ function TaskManagementSystem({ token }) {
           ekhlekhOgnoo[0],
           ekhlekhOgnoo[1],
           "day",
-          "[]"
+          "[]",
         );
       }
 
       return statusMatch && typeMatch && searchMatch && dateMatch;
     });
-  }, [task?.jagsaalt, tuluv, turulFilter, searchTerm, ekhlekhOgnoo]);
+  }, [
+    task?.jagsaalt,
+    duudlagaGaralt?.jagsaalt,
+    tuluv,
+    turulFilter,
+    searchTerm,
+    ekhlekhOgnoo,
+    searchKeys,
+    ajiltan?._id,
+  ]);
 
   const allDataQuery = useMemo(
     () => ({
@@ -518,13 +576,13 @@ function TaskManagementSystem({ token }) {
       ajiltniiId: ajiltan?.erkh === "Admin" ? undefined : ajiltan?._id,
       baiguullagiinId: ajiltan?.baiguullagiinId,
     }),
-    [ajiltan, barilgiinId]
+    [ajiltan, barilgiinId],
   );
 
   const allDataTask = useJagsaalt(
     ajiltan && "/sonorduulga",
     allDataQuery,
-    order
+    order,
   );
 
   const turulTranslations = {
@@ -628,9 +686,12 @@ function TaskManagementSystem({ token }) {
     return groupedDuudlaga?.map((khariltsagchGroup) => {
       const statusInfo = getStatusInfo(khariltsagchGroup.tuluv);
       const isExpanded = expandedNames.has(
-        khariltsagchGroup.khariltsagchiinNer
+        khariltsagchGroup.khariltsagchiinNer,
       );
       const hasMultipleDuudlaga = khariltsagchGroup.duudlagaCount > 1;
+
+      // Check if this is the user's own call (they were the caller)
+      const isCallerRecord = khariltsagchGroup.khereglegchiiKhuur === true;
 
       return (
         <div key={khariltsagchGroup?._id} className="mb-2">
@@ -649,27 +710,46 @@ function TaskManagementSystem({ token }) {
               >
                 <div className="flex items-center gap-3">
                   <div className="image-fit relative h-10 w-10 flex-none rounded-full">
+                    {/* Status indicator */}
                     <div
                       className={`absolute -right-1 -top-1 h-4 w-4 rounded-full border-2 border-white bg-${statusInfo.color}-500`}
                       title={statusInfo.text}
                     />
 
+                    {/* Caller indicator - show arrow up for outgoing calls */}
+                    {isCallerRecord && (
+                      <div
+                        className="absolute -left-1 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white"
+                        title={t("Миний дуудлага")}
+                      >
+                        ↗
+                      </div>
+                    )}
+
+                    {/* Multiple duudlaga count */}
                     {khariltsagchGroup.duudlagaCount > 1 && (
                       <div className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
                         {khariltsagchGroup.duudlagaCount}
                       </div>
                     )}
+
                     <img
                       alt="profileZurag"
                       className="rounded-full"
                       src="/profile.svg"
                     />
                   </div>
+
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">
                         {khariltsagchGroup.khariltsagchiinNer}
                       </span>
+                      {isCallerRecord && (
+                        <span className="rounded bg-blue-100 px-1 py-0.5 text-xs text-blue-600">
+                          {t("Миний дуудлага")}
+                        </span>
+                      )}
                     </div>
                     <span className="text-xs text-gray-500">
                       {khariltsagchGroup.khariltsagchiinRegister}
@@ -709,10 +789,13 @@ function TaskManagementSystem({ token }) {
                   </div>
                   {khariltsagchGroup.allDuudlaga
                     .sort(
-                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
                     )
                     .map((duudlaga, index) => {
                       const duudlagaStatusInfo = getStatusInfo(duudlaga.tuluv);
+                      const isDuudlagaCallerRecord =
+                        duudlaga.khereglegchiiKhuur === true;
+
                       return (
                         <div
                           key={duudlaga._id}
@@ -747,8 +830,13 @@ function TaskManagementSystem({ token }) {
                                     {duudlaga.duudlagiinTurul}
                                   </Tag>
                                 )}
-                                {index === 0 && (
+                                {isDuudlagaCallerRecord && (
                                   <span className="rounded bg-blue-100 px-1 py-0.5 text-xs text-blue-600">
+                                    {t("Миний дуудлага")}
+                                  </span>
+                                )}
+                                {index === 0 && (
+                                  <span className="rounded bg-green-100 px-1 py-0.5 text-xs text-green-600">
                                     {t("Сүүлийн")}
                                   </span>
                                 )}
@@ -769,7 +857,7 @@ function TaskManagementSystem({ token }) {
                             <div className="text-right">
                               <div className="text-xs text-gray-500">
                                 {moment(duudlaga.createdAt).format(
-                                  "MM-DD HH:mm"
+                                  "MM-DD HH:mm",
                                 )}
                               </div>
                               <div className="mt-1 text-xs text-gray-400">
@@ -815,7 +903,7 @@ function TaskManagementSystem({ token }) {
 
     const khariltsagchDuudlaga = filteredJagsaalt
       ?.filter(
-        (item) => item.khariltsagchiinNer === duudlaga.khariltsagchiinNer
+        (item) => item.khariltsagchiinNer === duudlaga.khariltsagchiinNer,
       )
       .sort((a, b) => {
         const dateA = a.updatedAt
@@ -951,14 +1039,14 @@ function TaskManagementSystem({ token }) {
                         {moment(
                           item.tuluv === 1 || item.tuluv === -1
                             ? item.updatedAt
-                            : item.createdAt
+                            : item.createdAt,
                         ).format("MM-DD HH:mm")}
                       </div>
                       <div className="text-xs text-gray-400">
                         {moment(
                           item.tuluv === 1 || item.tuluv === -1
                             ? item.updatedAt
-                            : item.createdAt
+                            : item.createdAt,
                         ).fromNow()}
                       </div>
                     </div>

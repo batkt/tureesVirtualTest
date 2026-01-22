@@ -31,7 +31,9 @@ function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
   const searchGenerator = (search, fields) => {
     if (!!search && !!fields)
       return {
-        $or: fields.map((key) => ({ [key]: { $regex: search, $options: "i" } })),
+        $or: fields.map((key) => ({
+          [key]: { $regex: search, $options: "i" },
+        })),
       };
     else return {};
   };
@@ -40,6 +42,7 @@ function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
     baiguullagiinId,
     ...query,
     tailbar: "",
+    // DON'T override turul here, it should come from query
     ...searchGenerator(khuudaslalt.search, searchKeys),
   };
 
@@ -48,7 +51,7 @@ function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
   const { data, mutate, isValidating } = useSWR(
     shouldFetch ? ["/sonorduulga", baiguullagiinId, khuudaslalt, order] : null,
     ([url, id, khuudaslalt, order]) =>
-      fetcher(url + id, token, { ...requestBody, ...khuudaslalt, order }),
+      fetcher(url, token, { ...requestBody, ...khuudaslalt, order }), // Don't concatenate id to url
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: true,
@@ -56,7 +59,7 @@ function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
       errorRetryCount: 3,
       errorRetryInterval: 5000,
       dedupingInterval: 1000,
-    }
+    },
   );
 
   useEffect(() => {
@@ -103,7 +106,7 @@ function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
         throw error;
       }
     },
-    [token, mutate]
+    [token, mutate],
   );
 
   const updateDuudlaga = useCallback(
@@ -119,7 +122,7 @@ function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
         throw error;
       }
     },
-    [token, mutate]
+    [token, mutate],
   );
 
   const updateDuudlagaStatus = useCallback(
@@ -144,7 +147,7 @@ function useDuudlaga(baiguullagiinId, query = {}, order = {}, searchKeys = []) {
         throw err;
       }
     },
-    [token, mutate]
+    [token, mutate],
   );
   const duudlagaMutate = useCallback(() => {
     mutate();

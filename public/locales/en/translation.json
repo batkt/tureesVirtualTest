@@ -733,7 +733,7 @@
   "Барьцааны үлдэгдэл": "Remaining claim",
   "Барьцааны төлөлт": "Claim payment",
   "Талбарын нэр": "Field name",
-  "Устгах уу?":"Are you sure want to delete?",
+  "Устгах уу?": "Are you sure want to delete?",
   "Өмнөх утга": "Previous value",
   "Шинэ утга": "New value",
 
@@ -805,6 +805,7 @@
   "Мессеж": "Message",
   "Сүүлийн дуудлага": "Last service",
   "Бүх дуудлагууд": "All call services",
+  "Миний дуудлага": "My Call",
   "Сүүлийн": "Last",
   "Шүүгдсэн": "Filtered",
   "Дугаар нэмэх": "Add number",

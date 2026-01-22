@@ -68,7 +68,7 @@ const TipTapEditor = forwardRef(
       customButtons = [],
       ...props
     },
-    ref
+    ref,
   ) => {
     const isUpdatingFromProp = useRef(false);
 
@@ -293,6 +293,137 @@ const TipTapEditor = forwardRef(
             <AlignRightOutlined />
           </button>
           <div className="toolbar-separator" />
+
+          {/* Microsoft Office-style Table Dropdown */}
+          <div className="table-dropdown-container">
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: "insert-table",
+                    label: (
+                      <div className="table-grid-container">
+                        <div className="table-grid">
+                          {Array.from({ length: 10 }, (_, row) =>
+                            Array.from({ length: 10 }, (_, col) => (
+                              <div
+                                key={`${row}-${col}`}
+                                className="table-grid-cell"
+                                onMouseEnter={(e) => {
+                                  const cells =
+                                    document.querySelectorAll(
+                                      ".table-grid-cell",
+                                    );
+                                  cells.forEach((cell, index) => {
+                                    const cellRow = Math.floor(index / 10);
+                                    const cellCol = index % 10;
+                                    cell.classList.toggle(
+                                      "highlighted",
+                                      cellRow <= row && cellCol <= col,
+                                    );
+                                  });
+                                  document.querySelector(
+                                    ".table-size-display",
+                                  ).textContent = `${col + 1} x ${
+                                    row + 1
+                                  } Table`;
+                                }}
+                                onClick={() => {
+                                  editor
+                                    .chain()
+                                    .focus()
+                                    .insertTable({
+                                      rows: row + 1,
+                                      cols: col + 1,
+                                      withHeaderRow: true,
+                                    })
+                                    .run();
+                                  // Close dropdown by clicking elsewhere
+                                  document.body.click();
+                                }}
+                              />
+                            )),
+                          ).flat()}
+                        </div>
+                        <div className="table-size-display">1 x 1 Table</div>
+                      </div>
+                    ),
+                  },
+                  { type: "divider" },
+                  {
+                    key: "table-management",
+                    label: "Table Management",
+                    disabled: !editor?.isActive("table"),
+                    children: [
+                      {
+                        key: "add-col-before",
+                        label: "Insert Column Before",
+                        onClick: () =>
+                          editor.chain().focus().addColumnBefore().run(),
+                        disabled: !editor?.isActive("table"),
+                      },
+                      {
+                        key: "add-col-after",
+                        label: "Insert Column After",
+                        onClick: () =>
+                          editor.chain().focus().addColumnAfter().run(),
+                        disabled: !editor?.isActive("table"),
+                      },
+                      {
+                        key: "add-row-before",
+                        label: "Insert Row Before",
+                        onClick: () =>
+                          editor.chain().focus().addRowBefore().run(),
+                        disabled: !editor?.isActive("table"),
+                      },
+                      {
+                        key: "add-row-after",
+                        label: "Insert Row After",
+                        onClick: () =>
+                          editor.chain().focus().addRowAfter().run(),
+                        disabled: !editor?.isActive("table"),
+                      },
+                      { type: "divider" },
+                      {
+                        key: "delete-col",
+                        label: "Delete Column",
+                        onClick: () =>
+                          editor.chain().focus().deleteColumn().run(),
+                        disabled: !editor?.isActive("table"),
+                      },
+                      {
+                        key: "delete-row",
+                        label: "Delete Row",
+                        onClick: () => editor.chain().focus().deleteRow().run(),
+                        disabled: !editor?.isActive("table"),
+                      },
+                      {
+                        key: "delete-table",
+                        label: "Delete Table",
+                        onClick: () =>
+                          editor.chain().focus().deleteTable().run(),
+                        disabled: !editor?.isActive("table"),
+                      },
+                    ],
+                  },
+                ],
+              }}
+              trigger={["click"]}
+              placement="bottomLeft"
+            >
+              <button
+                type="button"
+                className={`table-dropdown-btn ${
+                  editor?.isActive("table") ? "is-active" : ""
+                }`}
+                title="Insert Table"
+              >
+                <TableOutlined />
+                <span style={{ marginLeft: "4px", fontSize: "10px" }}>▼</span>
+              </button>
+            </Dropdown>
+          </div>
+          <div className="toolbar-separator" />
           {customButtons.map((buttonGroup, groupIndex) => (
             <React.Fragment key={groupIndex}>
               {buttonGroup.map((btn, btnIndex) => {
@@ -372,7 +503,7 @@ const TipTapEditor = forwardRef(
         />
       </div>
     );
-  }
+  },
 );
 
 TipTapEditor.displayName = "TipTapEditor";
