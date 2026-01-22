@@ -9,11 +9,13 @@ const fetcher = (
   baiguullagiinId,
   { search, jagsaalt, ...khuudaslalt },
   barilgiinId,
-  query = {}
+  query = {},
+  order,
 ) => {
   return axios(token)
     .get(url, {
       params: {
+        order: order,
         ...khuudaslalt,
         query: {
           baiguullagiinId,
@@ -30,7 +32,8 @@ function useUilchluulegchWithQuery(
   token,
   baiguullagiinId,
   query,
-  orjIrsenBarilgiinId
+  orjIrsenBarilgiinId,
+  order,
 ) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setUilchluulegchKhuudaslalt] = useState({
@@ -48,6 +51,7 @@ function useUilchluulegchWithQuery(
           khuudaslalt,
           orjIrsenBarilgiinId ? orjIrsenBarilgiinId : barilgiinId,
           query,
+          order,
         ]
       : null,
     fetcher,

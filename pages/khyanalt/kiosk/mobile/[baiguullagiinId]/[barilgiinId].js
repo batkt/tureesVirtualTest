@@ -47,6 +47,7 @@ const KioskMobile = ({
   const khungulultRef = React.useRef(null);
   const [servereesAvsonOdooTsag, setServereesAvsonOdooTsag] = useState();
   const [countdown, setCountdown] = useState(100000);
+  const order = { "tuukh.0.tsagiinTuukh.0.garsanTsag": -1 };
 
   const query = useMemo(() => {
     var query = {};
@@ -69,7 +70,8 @@ const KioskMobile = ({
     token,
     baiguullagiinId,
     query,
-    barilgiinId
+    barilgiinId,
+    order,
   );
 
   const { qpayObject } = useQpayObject(token, qpayerTulukh?.id);

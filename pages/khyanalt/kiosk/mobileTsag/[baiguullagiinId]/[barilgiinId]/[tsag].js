@@ -46,6 +46,7 @@ const KioskMobile = ({
   const [cameraIP, setCameraIP] = useState();
   const khungulultRef = React.useRef(null);
   const [servereesAvsonOdooTsag, setServereesAvsonOdooTsag] = useState();
+  const order = { "tuukh.0.tsagiinTuukh.0.orsonTsag": -1 };
 
   const query = useMemo(() => {
     var query = {};
@@ -65,7 +66,8 @@ const KioskMobile = ({
     token,
     baiguullagiinId,
     query,
-    barilgiinId
+    barilgiinId,
+    order
   );
 
   const { qpayObject } = useQpayObject(token, qpayerTulukh?.id);

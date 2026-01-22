@@ -61,6 +61,7 @@ const Kiosk = () => {
 
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const khungulultRef = React.useRef(null);
+  const order = { "tuukh.0.tsagiinTuukh.0.orsonTsag": -1 };
 
   const streamQuery = useMemo(() => {
     return {
@@ -92,7 +93,9 @@ const Kiosk = () => {
   const { uilchluulegchGaralt, isValidating } = useUilchluulegchWithQuery(
     token,
     baiguullaga?._id,
-    query
+    query,
+    barilgiinId,
+    order,
   );
 
   useEffect(() => {

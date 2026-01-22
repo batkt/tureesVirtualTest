@@ -47,6 +47,7 @@ const KioskMobile = ({
   const khungulultRef = React.useRef(null);
   const [servereesAvsonOdooTsag, setServereesAvsonOdooTsag] = useState();
   const [countdown, setCountdown] = useState(100000);
+  const order = { "tuukh.0.tsagiinTuukh.0.garsanTsag": -1, "tuukh.0.tsagiinTuukh.0.orsonTsag": -1 };
 
   const query = useMemo(() => {
     var query = {};
@@ -66,7 +67,8 @@ const KioskMobile = ({
     token,
     baiguullagiinId,
     query,
-    barilgiinId
+    barilgiinId,
+    order
   );
 
   const { qpayObject } = useQpayObject(token, qpayerTulukh?.id);
@@ -312,17 +314,18 @@ const KioskMobile = ({
     }
   };
 
+  const firstId = uilchluulegchGaralt?.jagsaalt?.[0]?._id;
   useEffect(() => {
     if (
       drawerOngoikh &&
       !isValidating &&
       !autoSelectedRef.current &&
-      uilchluulegchGaralt?.jagsaalt?.length === 1
+      firstId
     ) {
       autoSelectedRef.current = true;
-      mashinSongiy(uilchluulegchGaralt.jagsaalt[0]);
+      mashinSongiy(uilchluulegchGaralt?.jagsaalt?.[0]);
     }
-  }, [drawerOngoikh, isValidating, uilchluulegchGaralt?.jagsaalt?.length]);
+  }, [drawerOngoikh, isValidating, firstId]);
 
   useEffect(() => {
     if (!drawerOngoikh) {

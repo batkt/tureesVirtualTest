@@ -1,5 +1,6 @@
 import React, { useImperativeHandle, useRef } from "react";
 import { BsBackspaceFill } from "react-icons/bs";
+import { useEffect } from "react";
 
 const DugaarKeyboardMobile = ({
   handleUrgeljluulekh,
@@ -13,6 +14,9 @@ const DugaarKeyboardMobile = ({
   className,
 }) => {
   const inputRefs = useRef([]);
+  const isSafari =
+  typeof window !== "undefined" &&
+  /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
   useImperativeHandle(
     dugaarRef,
@@ -25,12 +29,18 @@ const DugaarKeyboardMobile = ({
     [dugaar]
   );
 
+  useEffect(() => {
+    if (!shineTurul && dugaar.every((val) => val !== "")) {
+      handleUrgeljluulekh();
+    }
+  }, [dugaar]);
+
   const handleChange = (e, index) => {
     const shineCode = [...dugaar];
     shineCode[index] = e.target.value.slice(-1);
     setDugaar(shineCode);
 
-    if (e.target.value && index < 3) {
+    if (!isSafari && e.target.value && index < 3) {
       inputRefs.current[index + 1].focus();
     }
   };
@@ -99,7 +109,8 @@ const DugaarKeyboardMobile = ({
             <input
               key={index}
               readOnly={true}
-              className="h-[60px] w-[60px] select-none rounded-md border border-zinc-200 bg-[#1E1E1E] text-center text-base font-bold text-zinc-200 caret-transparent focus:outline-none"
+              inputMode="number"
+              className={`${isSafari ? "" : "caret-transparent"} h-[60px] w-[60px] select-none rounded-md border border-zinc-200 bg-[#1E1E1E] text-center text-base font-bold text-zinc-200 caret-transparent focus:outline-none`}
               type="text"
               maxLength="1"
               value={mur}

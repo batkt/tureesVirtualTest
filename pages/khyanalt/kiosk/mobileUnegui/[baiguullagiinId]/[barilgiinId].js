@@ -40,6 +40,7 @@ const KioskMobile = ({
   const [eBarimt, setEbarimt] = useState();
   const [khungulukhDun, setKhungulukhDun] = useState(khungulukh);
   const [cameraIP, setCameraIP] = useState();
+  const order = { "tuukh.0.tsagiinTuukh.0.orsonTsag": -1 };
 
   const query = useMemo(() => {
     var query = {};
@@ -60,7 +61,8 @@ const KioskMobile = ({
     token,
     baiguullagiinId,
     query,
-    barilgiinId
+    barilgiinId,
+    order
   );
 
   const { qpayObject } = useQpayObject(token, qpayerTulukh?.id);
