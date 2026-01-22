@@ -47,6 +47,8 @@ const KioskMobile = ({
   const khungulultRef = React.useRef(null);
   const [servereesAvsonOdooTsag, setServereesAvsonOdooTsag] = useState();
   const [countdown, setCountdown] = useState(100000);
+  const [minutes, setMinutes] = useState(15);
+  const [seconds, setSeconds] = useState(0);
   const order = { "tuukh.0.tsagiinTuukh.0.garsanTsag": -1, };
   const autoSelectedRef = useRef(false);
 
@@ -162,6 +164,37 @@ const KioskMobile = ({
       });
     }
   }, [songogdsonData?.enter_date, servereesAvsonOdooTsag, baiguullagiinId]);
+
+  useEffect(() => {
+    if (!drawerOngoikh) return;
+
+    // Reset timer when drawer opens
+    setMinutes(15);
+    setSeconds(0);
+
+    const timer = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if (prevSeconds > 0) {
+          return prevSeconds - 1;
+        } else {
+          // When seconds reach 0, check minutes
+          setMinutes((prevMinutes) => {
+            if (prevMinutes > 0) {
+              return prevMinutes - 1;
+            } else {
+              // Both minutes and seconds are 0, timeout
+              clearInterval(timer);
+              onTimeout();
+              return 0;
+            }
+          });
+          return 59;
+        }
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [drawerOngoikh]);
 
   function onTimeout() {
     setDrawerOngoikh(false);
@@ -415,6 +448,19 @@ const KioskMobile = ({
         maskClosable={false}
         className="khuviinDrawerMobile bg-transparent text-base font-semibold text-gray-200 dark:bg-transparent"
       >
+        <div className={`absolute right-4 top-4 z-50 flex items-center justify-center rounded-2xl px-5 py-3 shadow-2xl transition-all duration-300 ${
+          minutes === 0 && seconds <= 10 
+            ? "bg-red-700 ring-4 ring-red-400 ring-opacity-75 animate-pulse" 
+            : minutes === 0 && seconds <= 20
+            ? "bg-orange-600 ring-2 ring-orange-400 ring-opacity-50"
+            : "bg-gradient-to-br from-red-600 to-red-700"
+        }`}>
+          <div className={`text-3xl text-white tracking-wider ${
+            minutes === 0 && seconds <= 10 ? "animate-pulse" : ""
+          }`}>
+            {minutes > 0 ? `${minutes}:` : ""}{seconds < 10 ? `0${seconds}` : seconds}
+          </div>
+        </div>
         <div
           className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
             alkham === 0 ? "scale-100 opacity-100" : "scale-0 opacity-0"
