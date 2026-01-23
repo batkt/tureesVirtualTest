@@ -36,7 +36,7 @@ function GuilgeeKhiikh(
     date,
     baiguullaga,
   },
-  ref
+  ref,
 ) {
   const [dun, setDun] = useState(0);
   const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
@@ -125,18 +125,18 @@ function GuilgeeKhiikh(
       turul: { $in: ["кВт", "1м3", "1м2", "кг"] },
       barilgiinId,
     }),
-    [data, barilgiinId]
+    [data, barilgiinId],
   );
   const queryZardal = useMemo(
     () => ({
       barilgiinId,
     }),
-    [data, barilgiinId]
+    [data, barilgiinId],
   );
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
     token,
     data?._id,
-    date
+    date,
   );
   const zardal = useJagsaalt(
     data?.zardluud && "/ashiglaltiinZardluud",
@@ -144,7 +144,7 @@ function GuilgeeKhiikh(
     undefined,
     undefined,
     undefined,
-    token
+    token,
   );
 
   const zardalAll = useJagsaalt(
@@ -153,7 +153,7 @@ function GuilgeeKhiikh(
     undefined,
     undefined,
     undefined,
-    token
+    token,
   );
   React.useImperativeHandle(
     ref,
@@ -418,7 +418,7 @@ function GuilgeeKhiikh(
       niitDunGaz,
       togtmolGaz,
       khadgalyaButtonId,
-    ]
+    ],
   );
 
   const ankhniiUtga = useRef({
@@ -499,7 +499,7 @@ function GuilgeeKhiikh(
         }
       }
     },
-    [turul]
+    [turul],
   );
   function suuliinZaaltFn(v) {
     setSuuliinZaalt(v);
@@ -624,10 +624,10 @@ function GuilgeeKhiikh(
                   placeholder={t("Ашиглалтын зардал")}
                   onChange={(v) => {
                     const tukhainZardal = zardalAll.jagsaalt.find(
-                      (a) => a._id === v
+                      (a) => a._id === v,
                     );
                     var tempTurul = tukhainZardal?.ner?.includes(
-                      "Менежментийн төлбөр"
+                      "Менежментийн төлбөр",
                     )
                       ? "management"
                       : tukhainZardal?.ner === "Дулаан"
@@ -660,7 +660,14 @@ function GuilgeeKhiikh(
                         <div className="flex flex-1 justify-between gap-2 bg-blue-600 bg-opacity-5 px-2">
                           <p className="text-right">{t(a.turul)}</p>
                           <p className="whitespace-nowrap text-right">
-                            {a.turul !== "Дурын" ? `${a.tariff}₮` : "Дурын"}
+                            {a.turul === "Дурын"
+                              ? "Дурын"
+                              : a.ner?.includes("Хүйтэн ус") ||
+                                a.ner?.includes("Халуун ус")
+                              ? `Цэвэр: ${formatNumber(
+                                  a.tseverUsDun || 0,
+                                )}₮ Бохир: ${formatNumber(a.bokhirUsDun || 0)}₮`
+                              : `${formatNumber(a.tariff || 0)}₮`}
                           </p>
                         </div>
                       </div>
@@ -758,7 +765,7 @@ function GuilgeeKhiikh(
               setTsakhilgaanUrjver(
                 utga.ner?.includes("Цахилгаан")
                   ? utga.tsakhilgaanUrjver || 1
-                  : 1
+                  : 1,
               );
               setTogtmolGaz(utga.togtmolUtga || 0);
               setNegjUne(utga.tariff || 0);
@@ -776,7 +783,7 @@ function GuilgeeKhiikh(
                 utga.turul === "кг"
               ) {
                 var suuliinGuilgee = guilgeeniiTuukh.filter(
-                  (x) => x.khemjikhNegj == utga.turul && x.tailbar == utga.ner
+                  (x) => x.khemjikhNegj == utga.turul && x.tailbar == utga.ner,
                 );
                 if (!!suuliinGuilgee && suuliinGuilgee.length > 0)
                   suuliinGuilgee = suuliinGuilgee[suuliinGuilgee.length - 1];
@@ -994,7 +1001,7 @@ function GuilgeeKhiikh(
                         ? niitDunGaz
                         : negjUne * dun * tsakhilgaanUrjver) +
                         (suuriKhuraamj || 0) || 0,
-                      2
+                      2,
                     )}
                   </div>
                 </div>
@@ -1010,7 +1017,7 @@ function GuilgeeKhiikh(
                         : khemjikhNegj === "кг"
                         ? niitDunGaz
                         : negjUne * dun * tsakhilgaanUrjver) +
-                        (suuriKhuraamj || 0) || 0) / 10
+                        (suuriKhuraamj || 0) || 0) / 10,
                     )}
                   </div>
                 </div>
@@ -1030,7 +1037,7 @@ function GuilgeeKhiikh(
                       ? niitDunGaz
                       : negjUne * dun * tsakhilgaanUrjver) +
                       (suuriKhuraamj || 0) || 0,
-                    2
+                    2,
                   )}
                 </div>
               </div>
@@ -1048,7 +1055,7 @@ function GuilgeeKhiikh(
                       : khemjikhNegj === "кг"
                       ? niitDunGaz
                       : negjUne * dun * tsakhilgaanUrjver) +
-                      (suuriKhuraamj || 0) || 0) * 1.1
+                      (suuriKhuraamj || 0) || 0) * 1.1,
                   )}
                 </div>
               </div>
@@ -1091,7 +1098,7 @@ function GuilgeeKhiikh(
                           (tailbar?.includes("Халуун ус")
                             ? usKhalaasniiDun * dun
                             : 0) +
-                          (suuriKhuraamj || 0) || 0) / 10
+                          (suuriKhuraamj || 0) || 0) / 10,
                       )}
                     </div>
                   </div>
@@ -1112,7 +1119,7 @@ function GuilgeeKhiikh(
                           ? usKhalaasniiDun * dun
                           : 0) +
                         (suuriKhuraamj || 0) || 0,
-                      2
+                      2,
                     )}
                   </div>
                 </div>
@@ -1131,7 +1138,7 @@ function GuilgeeKhiikh(
                         (tailbar?.includes("Халуун ус")
                           ? usKhalaasniiDun * dun
                           : 0) +
-                        (suuriKhuraamj || 0) || 0) * 1.1
+                        (suuriKhuraamj || 0) || 0) * 1.1,
                     )}
                   </div>
                 </div>

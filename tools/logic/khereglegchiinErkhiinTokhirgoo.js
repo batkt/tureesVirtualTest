@@ -290,10 +290,10 @@ export function ekhniiTsonkhruuOchyo(ajiltan, token) {
     .then(({ data }) => {
       localStorage.setItem(
         "baiguulgiinErkhiinJagsaalt",
-        JSON.stringify(data?.moduluud)
+        JSON.stringify(data?.moduluud),
       );
       var AdminErkhShalgakh = data?.moduluud?.find(
-        (b) => b.zam === "/khyanalt/barilgaBurtgel"
+        (b) => b.zam === "/khyanalt/barilgaBurtgel",
       );
       var erkhShalgakh = ajiltan.tsonkhniiErkhuud.filter((element) => {
         return data?.moduluud?.find((b) => b.zam === element);
@@ -920,12 +920,12 @@ export const khuudasnuud = [
         href: "/khyanalt/tailan",
         icon: <BsGraphUp style={{ width: "24", height: "24" }} />,
       },
-      {
-        ner: "Аналитик",
-        khuudasniiNer: "analytictailan",
-        href: "/khyanalt/tailan/analytic",
-        icon: <MdOutlineAnalytics style={{ width: "24", height: "24" }} />,
-      },
+      // {
+      //   ner: "Аналитик",
+      //   khuudasniiNer: "analytictailan",
+      //   href: "/khyanalt/tailan/analytic",
+      //   icon: <MdOutlineAnalytics style={{ width: "24", height: "24" }} />,
+      // },
       {
         ner: "Нэгтгэл тайлан",
         khuudasniiNer: "negtgelTailan",
@@ -949,31 +949,31 @@ export const khuudasnuud = [
       },
     ],
   },
-  {
-    ner: "Даалгавар",
-    khuudasniiNer: "daalgavar",
-    href: "/khyanalt/daalgavar",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        icon-name="plus-square"
-        data-lucide="plus-square"
-        className="lucide lucide-plus-square mx-auto block"
-      >
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="12" y1="8" x2="12" y2="16"></line>
-        <line x1="8" y1="12" x2="16" y2="12"></line>
-      </svg>
-    ),
-  },
+  // {
+  //   ner: "Даалгавар",
+  //   khuudasniiNer: "daalgavar",
+  //   href: "/khyanalt/daalgavar",
+  //   icon: (
+  //     <svg
+  //       xmlns="http://www.w3.org/2000/svg"
+  //       width="24"
+  //       height="24"
+  //       viewBox="0 0 24 24"
+  //       fill="none"
+  //       stroke="currentColor"
+  //       strokeWidth="2"
+  //       strokeLinecap="round"
+  //       strokeLinejoin="round"
+  //       icon-name="plus-square"
+  //       data-lucide="plus-square"
+  //       className="lucide lucide-plus-square mx-auto block"
+  //     >
+  //       <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+  //       <line x1="12" y1="8" x2="12" y2="16"></line>
+  //       <line x1="8" y1="12" x2="16" y2="12"></line>
+  //     </svg>
+  //   ),
+  // },
   {
     ner: "Устгасан түүх",
     khuudasniiNer: "ustsanTuukh",
@@ -1046,13 +1046,14 @@ function useErkh(ajiltan, baiguulgiinErkhiinJagsaalt) {
       a.href = "/khyanalt/daalgavar";
     }
     return baiguulgiinErkhiinJagsaalt?.find(
-      (b) => b.zam === a.href || (a.sub && a.sub?.find((c) => c.href === b.zam))
+      (b) =>
+        b.zam === a.href || (a.sub && a.sub?.find((c) => c.href === b.zam)),
     );
   });
   erkhteiTsonkhnuud.forEach((a) => {
     if (a.sub && a.sub.length > 0) {
       a.sub = a.sub.filter((d) =>
-        baiguulgiinErkhiinJagsaalt.find((e) => e.zam === d.href)
+        baiguulgiinErkhiinJagsaalt.find((e) => e.zam === d.href),
       );
     }
   });
@@ -1065,7 +1066,7 @@ function useErkh(ajiltan, baiguulgiinErkhiinJagsaalt) {
         return x;
       } else if (x.sub?.length > 0) {
         x.sub = x.sub.filter(
-          (g) => !!ajiltan?.tsonkhniiErkhuud?.find((a) => a === g.href)
+          (g) => !!ajiltan?.tsonkhniiErkhuud?.find((a) => a === g.href),
         );
         return x;
       } else if (!!ajiltan?.tsonkhniiErkhuud?.find((a) => x.href === a))

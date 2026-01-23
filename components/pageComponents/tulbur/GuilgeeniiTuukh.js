@@ -26,7 +26,7 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
         destroy();
       },
     }),
-    [tailbar]
+    [tailbar],
   );
   return (
     <div>
@@ -54,7 +54,7 @@ const turulAvya = (turul) => {
 
 function GuilgeeniiTuukh(
   { token, data, refreshData, ognoo, ajiltan, barilgiinId },
-  ref
+  ref,
 ) {
   const { t, i18n } = useTranslation();
   const [shineOgnoo, setShineOgnoo] = useState(undefined);
@@ -62,7 +62,7 @@ function GuilgeeniiTuukh(
     token,
     data?._id,
     ognoo,
-    shineOgnoo
+    shineOgnoo,
   );
   const [sortOrders, setSortOrders] = useState({
     ognoo: null,
@@ -214,7 +214,7 @@ function GuilgeeniiTuukh(
         guilgeeniiTuukhMutate();
       },
     }),
-    [printRef, guilgeeniiTuukh]
+    [printRef, guilgeeniiTuukh],
   );
 
   const exceleerTatya = async () => {
@@ -326,7 +326,7 @@ function GuilgeeniiTuukh(
             cellStyles: true,
             bookType: "xlsx",
             type: "binary",
-          }
+          },
         );
       }
     } catch (e) {
@@ -431,7 +431,7 @@ function GuilgeeniiTuukh(
             </td>
             <td
               onClick={() => toggleSortOrder("guilgeeKhiisenOgnoo")}
-              className="min-w-[10rem] p-1 text-center"
+              className="min-w-[10rem] overflow-hidden p-1 text-center"
             >
               {t("Бүртгэсэн огноо")}
             </td>
@@ -439,12 +439,12 @@ function GuilgeeniiTuukh(
           </tr>
         </th>
         <tbody
-          className=" overflownone min-w-[93.4rem]"
+          className="overflownone min-w-[93rem]"
           style={{ height: "calc(100vh - 15rem)" }}
         >
           {sortedData
             ?.map((a, i) => (
-              <tr className="flex min-w-[93rem] divide-x border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+              <tr className="flex min-w-[93rem] divide-x border-b border-gray-200 bg-gray-50 pr-1 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
                 <td className="min-w-[8rem] overflow-hidden p-1 text-center">
                   {moment(a.ognoo).format("YYYY-MM-DD")}
                 </td>
@@ -469,7 +469,7 @@ function GuilgeeniiTuukh(
                   }`}
                 >
                   {formatNumber(
-                    a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel
+                    a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
                   )}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-center">
@@ -479,17 +479,22 @@ function GuilgeeniiTuukh(
                       : t("Банк")
                     : turulAvya(a.turul)}
                 </td>
-                <td className="flex w-full min-w-[8rem] justify-between overflow-hidden p-1">
+                <td className="w-full min-w-[8rem] overflow-hidden p-1">
                   {a.tailbar}
                 </td>
-                <td className="flex min-w-[10rem] justify-center p-1 text-center ">
-                  {a.guilgeeKhiisenOgnoo &&
-                    moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")}
+                <td className="min-w-[10rem] overflow-hidden p-1 text-center">
+                  {a.guilgeeKhiisenOgnoo
+                    ? moment(a.guilgeeKhiisenOgnoo).format(
+                        "YYYY-MM-DD HH:mm:ss",
+                      )
+                    : a.ekhniiUldegdelEsekh && a.ognoo
+                    ? moment(a.ognoo).format("YYYY-MM-DD")
+                    : ""}
                 </td>
-                <td className="flex min-w-[3rem] justify-center border-none">
+                <td className="min-w-[3rem] border-none p-1 text-center">
                   {(ajiltan?.erkh === "Admin" ||
                     !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
-                      (a) => a === barilgiinId
+                      (a) => a === barilgiinId,
                     )) && (
                     <Popconfirm
                       title={t("Төлөлт устгах уу?")}
@@ -497,7 +502,7 @@ function GuilgeeniiTuukh(
                       cancelText={t("Үгүй")}
                       onConfirm={() => tulultUstgaya(a)}
                     >
-                      <div className="hide-on-print flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
+                      <div className="hide-on-print mx-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
                         <DeleteOutlined />
                       </div>
                     </Popconfirm>
