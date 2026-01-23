@@ -330,12 +330,15 @@ const KioskMobile = ({
               </div>
             );
             setUnshijBaina(false);
+            onTimeout();
           }
         } else {
           setUnshijBaina(false);
+          onTimeout();
         }
       }
     } catch (err) {
+      onTimeout();
       setUnshijBaina(false);
       toast.error(err);
     }

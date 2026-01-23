@@ -209,6 +209,23 @@ const KioskMobile = ({
     setAlkham(0);
   }
 
+  const clearObjects = () => {
+    setDrawerOngoikh(false);
+    setSongogdsonData(null);
+    setTulburiinKhelber();
+    setKhuleegdejBuiQpay(null);
+    setDugaar(Array(4).fill(""));
+    setEbarimtTurul("");
+    setEbarimt();
+    setBaiguullagaNer();
+    setRegister("");
+    setAlkham(0);
+    setKhungulukhDun(0);
+    setServereesAvsonOdooTsag();
+    setCustomerTin();
+    setQpayerTulukh(false);
+  }
+
   function qpayAvakh(
     uilchluugchiinId,
     barilgiinId,
@@ -334,12 +351,15 @@ const KioskMobile = ({
               </div>
             );
             setUnshijBaina(false);
+            clearObjects();
           }
         } else {
           setUnshijBaina(false);
+          clearObjects();
         }
       }
     } catch (err) {
+      clearObjects();
       setUnshijBaina(false);
       toast.error(err);
     }

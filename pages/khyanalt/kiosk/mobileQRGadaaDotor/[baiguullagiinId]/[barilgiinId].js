@@ -174,7 +174,26 @@ const KioskMobile = ({
     setBaiguullagaNer();
     setRegister("");
     setAlkham(0);
+    setCustomerTin();
+    setQpayerTulukh(false);
   }, []);
+
+  const clearObjects = () => {
+    setDrawerOngoikh(false);
+    setSongogdsonData(null);
+    setTulburiinKhelber();
+    setKhuleegdejBuiQpay(null);
+    setDugaar(Array(4).fill(""));
+    setEbarimtTurul("");
+    setEbarimt();
+    setBaiguullagaNer();
+    setRegister("");
+    setAlkham(0);
+    setKhungulukhDun(0);
+    setServereesAvsonOdooTsag();
+    setCustomerTin();
+    setQpayerTulukh(false);
+  }
 
   useEffect(() => {
     if (!drawerOngoikh) return;
@@ -336,13 +355,16 @@ const KioskMobile = ({
               </div>
             );
             setUnshijBaina(false);
+            clearObjects();
           }
         } else {
           setUnshijBaina(false);
+          clearObjects();
         }
       }
     } catch (err) {
       setUnshijBaina(false);
+      clearObjects();
       toast.error(err);
     }
   };
@@ -428,7 +450,7 @@ const KioskMobile = ({
       customerTin
     );
   };
-
+  
   return (
     <div className="relative flex h-[calc(100vh-25px)] w-screen flex-col overflow-hidden bg-[#1E1E1E]">
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] text-center text-xs text-[#00D987]">
