@@ -67,7 +67,7 @@ const toWordsOrEmpty = (value) => {
 function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
   const { t } = useTranslation();
   const { baiguullaga, barilgiinId } = useAuth();
-  
+
   // Use tsonkhniiId from props, or fallback to data
   const tsonkhniiId = propTsonkhniiId || data?.tsonkhniiId;
   const songosonBarilgiinHayag = React.useMemo(() => {
@@ -84,18 +84,18 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
     _.cloneDeep(data) || {
       ognoo: new Date(),
       gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
-    }
+    },
   );
 
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState(
-    data?.gereeniiZagvar || {}
+    data?.gereeniiZagvar || {},
   );
   const [aktiinZagvar, setAktiinZagvar] = React.useState();
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
   const { aktiinZagvarGaralt, setAktiinZagvarKhuudaslalt } = useAktiinZagvar(
     token,
-    baiguullaga?._id
+    baiguullaga?._id,
   );
   const [waiting, setWaiting] = useState(false);
   const [gereekharakhTovch, setGereekharakhTovch] = useState(false);
@@ -229,16 +229,17 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
       data.zuvshuurliinZurag =
         _.get(data, "zuvshuurliinZurag.0.response.id") || null;
 
-    createMethod("gereeZasya", token, data).then(({ data }) => {
-      if (data === "Amjilttai") {
-        setKhagalakhGeree({});
-        router.back();
-        setTimeout(() => {
-          window.location.reload();
-        }, 600);
-        toast.success(t("Амжилттай хадгаллаа"));
-      }
-    });
+    createMethod("gereeZasya", token, data)
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          setKhagalakhGeree({});
+          router.back();
+          toast.success(t("Амжилттай хадгаллаа"));
+        }
+      })
+      .finally(() => {
+        setWaiting(false);
+      });
   }
 
   const onChangeGereeniiZagvar = (_id) => {
@@ -289,17 +290,11 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
         okText: t("Тийм"),
         cancelText: t("Үгүй"),
         onOk: () => {
-          router.back(),
-            setTimeout(() => {
-              window.location.reload();
-            }, 600);
+          router.back();
         },
       });
     else {
-      router.back(),
-        setTimeout(() => {
-          window.location.reload();
-        }, 600);
+      router.back();
     }
   }
 
@@ -319,18 +314,18 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
     let butsaakhUtga = _.cloneDeep(aktiinZagvar);
     if (!butsaakhUtga?.dedKhesguud)
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
-        (a) => a.khamaarakhKheseg === steps[current].title
+        (a) => a.khamaarakhKheseg === steps[current].title,
       );
     khadgalakhGeree.sariinNiilberDun = tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
-        "YYYY"
+        "YYYY",
       );
       khadgalakhGeree.ekhelkhSar = moment(khadgalakhGeree.gereeniiOgnoo).format(
-        "MM"
+        "MM",
       );
       khadgalakhGeree.ekhlekhUdur = moment(
-        khadgalakhGeree.gereeniiOgnoo
+        khadgalakhGeree.gereeniiOgnoo,
       ).format("DD");
       if (khadgalakhGeree.khugatsaa > 0) {
         // let duusakhOgnoo = moment(khadgalakhGeree.gereeniiOgnoo).add(
@@ -346,10 +341,10 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
     }
 
     khadgalakhGeree.talbainNegjUneUsgeer = toWordsOrEmpty(
-      khadgalakhGeree.talbainNegjUne
+      khadgalakhGeree.talbainNegjUne,
     );
     khadgalakhGeree.talbainNiitUneUsgeer = toWordsOrEmpty(
-      khadgalakhGeree.talbainNiitUne
+      khadgalakhGeree.talbainNiitUne,
     );
 
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
@@ -365,7 +360,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
                 key === "baritsaaAvakhDun" ||
                 key === "sariinNiilberDun"
               ? formatNumber(value)
-              : value
+              : value,
             // : parseFloat(value) != NaN
             // ? key != "register"
             //   ? value
@@ -375,7 +370,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
         });
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
-        key === "sariinNiilberDun" ? formatNumber(value) : value
+        key === "sariinNiilberDun" ? formatNumber(value) : value,
       );
     }
     return butsaakhUtga;
@@ -386,18 +381,18 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
     if (!butsaakhUtga?.dedKhesguud)
       butsaakhUtga.dedKhesguud = butsaakhUtga?.dedKhesguud?.filter(
-        (a) => a.khamaarakhKheseg === steps[current].title
+        (a) => a.khamaarakhKheseg === steps[current].title,
       );
     khadgalakhGeree.sariinNiilberDun = tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
-        "YYYY"
+        "YYYY",
       );
       khadgalakhGeree.ekhelkhSar = moment(khadgalakhGeree.gereeniiOgnoo).format(
-        "MM"
+        "MM",
       );
       khadgalakhGeree.ekhlekhUdur = moment(
-        khadgalakhGeree.gereeniiOgnoo
+        khadgalakhGeree.gereeniiOgnoo,
       ).format("DD");
       if (khadgalakhGeree.khugatsaa > 0) {
         // let duusakhOgnoo = moment(khadgalakhGeree.gereeniiOgnoo).add(
@@ -413,10 +408,10 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
     }
 
     khadgalakhGeree.talbainNegjUneUsgeer = toWordsOrEmpty(
-      khadgalakhGeree.talbainNegjUne
+      khadgalakhGeree.talbainNegjUne,
     );
     khadgalakhGeree.talbainNiitUneUsgeer = toWordsOrEmpty(
-      khadgalakhGeree.talbainNiitUne
+      khadgalakhGeree.talbainNiitUne,
     );
 
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
@@ -424,12 +419,12 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
         value.map((mur) => {
           butsaakhUtga?.dedKhesguud
             ?.filter(
-              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1
+              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1,
             )
             .map((b) => {
               b.zaalt = b.zaalt.replace(
                 new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"),
-                formatNumber(mur.tariff)
+                formatNumber(mur.tariff),
               );
             });
         });
@@ -437,12 +432,12 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
           butsaakhUtga?.dedKhesguud
             ?.filter(
               (a) =>
-                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
+                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1,
             )
             .map((b) => {
               b.zaalt = b.zaalt.replace(
                 new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"),
-                formatNumber(mur.tulukhDun)
+                formatNumber(mur.tulukhDun),
               );
             });
         });
@@ -450,12 +445,12 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
           butsaakhUtga?.dedKhesguud
             ?.filter(
               (a) =>
-                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariffUsgeer`) !== -1
+                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariffUsgeer`) !== -1,
             )
             .map((b) => {
               b.zaalt = b.zaalt.replace(
                 new RegExp(`&lt;${mur.ner}.tariffUsgeer&gt;`, "g"),
-                mur.tariffUsgeer
+                mur.tariffUsgeer,
               );
             });
         });
@@ -472,7 +467,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
                   key === "baritsaaAvakhDun" ||
                   key === "sariinNiilberDun"
                 ? formatNumber(value)
-                : value
+                : value,
               // : parseFloat(value) != NaN
               // ? key != "register"
               //   ? value
@@ -483,7 +478,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
       }
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
-        key === "sariinNiilberDun" ? formatNumber(value) : value
+        key === "sariinNiilberDun" ? formatNumber(value) : value,
       );
     }
 
@@ -835,7 +830,7 @@ const ugudulAvchirya = async (ctx, session) => {
     gereeniiZagvar = await readMethod(
       "gereeniiZagvar",
       session.tureestoken,
-      data.gereeniiZagvariinId
+      data.gereeniiZagvariinId,
     );
 
   data.gereeniiZagvar = gereeniiZagvar.data;
