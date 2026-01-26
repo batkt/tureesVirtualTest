@@ -286,7 +286,7 @@ const KioskMobile = ({
   const mashinSongiy = async (data) => {
     try {
       setUnshijBaina(true);
-      if (data) {
+      if (data?._id) {
         const response = await uilchilgee().get(
           `/v1/search_car/${data?.mashiniiDugaar}`,
           {
@@ -297,7 +297,7 @@ const KioskMobile = ({
           }
         );
         if (response.data.success == true) {
-          if (response.data?.data?.pay_amount > 0) {
+          if (response.data?.data?.pay_amount > 0 && response.data?.data?.session_id === data?._id) {
             if (
               !!data?.tuukh[0]?.tulbur?.find((x) => x.turul == "qpayKhungulult")
             ) {
@@ -357,6 +357,11 @@ const KioskMobile = ({
           setUnshijBaina(false);
           clearObjects();
         }
+      }
+      else
+      {
+        setUnshijBaina(false);
+        clearObjects();
       }
     } catch (err) {
       clearObjects();
