@@ -23,7 +23,7 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate, barilgiinId }) {
 
   const khariltsagchiinMsjTuukhKharakh = useMemo(() => {
     return { barilgiinId: barilgiinId };
-  });
+  }, [barilgiinId]);
 
   const query = useMemo(() => {
     return {
@@ -35,13 +35,19 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate, barilgiinId }) {
   const msjTuukh = useJagsaalt(
     "/msgTuukh",
     khariltsagchiinMsjTuukhKharakh,
-    order
+    order,
   );
 
   const jagsaalt = useJagsaalt("/zogsoolJagsaalt", query, { createdAt: -1 });
+
   useEffect(() => {
     jagsaalt.setKhuudaslalt((e) => ({ ...e, khuudasniiKhemjee: 10 }));
   }, []);
+
+  useEffect(() => {
+    jagsaalt.refresh();
+    msjTuukh.refresh();
+  }, [baiguullaga._id, barilgiinId]);
   const columns = useMemo(() => [
     {
       title: "№",
@@ -62,7 +68,7 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate, barilgiinId }) {
       align: "center",
     },
     {
-      title: t("Дотор зогоол эсэх"),
+      title: t("Дотор зогсоол эсэх"),
       dataIndex: "ajiltniiNer",
       ellipsis: true,
       width: "7rem",
@@ -218,7 +224,7 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate, barilgiinId }) {
 
   function zogsoolUstgaya(data) {
     deleteMethod("parking", token, data?._id).then(
-      ({ data }) => data === "Amjilttai" && jagsaalt.refresh()
+      ({ data }) => data === "Amjilttai" && jagsaalt.refresh(),
     );
   }
 

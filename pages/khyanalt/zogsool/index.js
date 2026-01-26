@@ -577,7 +577,7 @@ function Zogsool({ token }) {
       if (tuluvValue !== 0) {
         baseQuery["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: true };
       }
-    } 
+    }
 
     if (!!zogsoolId) {
       baseQuery["tuukh.zogsooliinId"] = zogsoolId;
@@ -656,7 +656,7 @@ function Zogsool({ token }) {
           {
             "tuukh.0.tuluv": -4,
             "tuukh.0.uneguiGarsan": { $exists: false },
-            "tuukh": { $elemMatch: { tulbur: { $eq: [] } } },
+            tuukh: { $elemMatch: { tulbur: { $eq: [] } } },
           },
           {
             "tuukh.0.tuluv": 0,
@@ -1369,6 +1369,22 @@ function Zogsool({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Qpay")}
+                </div>
+                <div
+                  onClick={() => setTulbur("GadaaQR")}
+                  className={`relative ${
+                    tulbur === "GadaaQR" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  Гадаа QR
+                </div>
+                <div
+                  onClick={() => setTulbur("DotorQR")}
+                  className={`relative ${
+                    tulbur === "DotorQR" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  Дотор QR
                 </div>
               </div>
             }
