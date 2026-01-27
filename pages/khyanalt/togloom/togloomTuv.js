@@ -177,7 +177,7 @@ const TsagSungakh = React.forwardRef(
       () => ({
         khadgalya() {
           if (!niitDun) {
-            toastwarn("Сунгах хугацаа эсвэл асран хамгаалагчаа нэмнэ үү!");
+            toast.warn("Сунгах хугацаа эсвэл асран хамгаалагчаа нэмнэ үү!");
             setKhugatsaa(false);
             return;
           }
@@ -757,8 +757,8 @@ function togloom1() {
           ),
           footer,
         });
-      } else toastwarn("Цаг дууссан байна!");
-    } else toastwarn("Цаг дууссан байна!");
+      } else toast.warn("Цаг дууссан байна!");
+    } else toast.warn("Цаг дууссан байна!");
   }
 
   const columns = useMemo(() => {
@@ -1254,7 +1254,7 @@ function togloom1() {
     tulburRef.current === null &&
       (!!data
         ? tulburTulyu(data)
-        : toastwarn("Төлбөр төлөх үйлчлүүлэгч байхгүй байна"));
+        : toast.warn("Төлбөр төлөх үйлчлүүлэгч байхгүй байна"));
   });
 
   return (

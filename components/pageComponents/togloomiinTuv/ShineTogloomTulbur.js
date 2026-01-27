@@ -292,11 +292,11 @@ function ShineTogloomTulbur(
   function guilgeeniiTuukhKhadgalya(tulbur, qpayEsekh) {
     if (khungulukhEsekh === true) {
       if (!khunglult.khungulukhDun || khunglult.khungulukhDun === "") {
-        toastwarn(t("Хөнгөлөх дүн оруулна уу"));
+        toast.warn(t("Хөнгөлөх дүн оруулна уу"));
         return;
       }
       if (!khunglult.tailbar || khunglult.tailbar === "") {
-        toastwarn(t("Хөнгөлөх шалтгаан оруулна уу"));
+        toast.warn(t("Хөнгөлөх шалтгаан оруулна уу"));
         return;
       }
     }

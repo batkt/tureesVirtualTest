@@ -998,7 +998,7 @@ function camera({ token }) {
         return;
 
       if (!data?.oruulakhguiEsekh) {
-        khaalgaNeey(data.cameraIP);
+        khaalgaNeey(data.cameraIP, data.turul);
         onRefresh();
       }
 
@@ -2539,7 +2539,7 @@ function camera({ token }) {
           }
           if (modalOpen.type === "zurchil") {
             if (!value || value === "" || value === undefined) {
-              toastwarn("Зөрчлийн шалтгаан оруулна уу!");
+              toast.warn("Зөрчлийн шалтгаан оруулна уу!");
               return;
             }
             body.zurchil = value;
@@ -2661,7 +2661,7 @@ function camera({ token }) {
             setModalOpen({ bool: false, item: null, type: "" });
             setValue(null);
           }
-        } else toastwarn("Уучлаарай дахин оролдоно уу");
+        } else toast.warn("Уучлаарай дахин оролдоно уу");
       })
       .catch((error) => {
         if (!navigator.onLine || isOfflineMode) {
@@ -2754,19 +2754,21 @@ function camera({ token }) {
     });
     return aa;
   };
-  const khaalgaNeey = (ip) => {
+  const khaalgaNeey = (ip, turul = null) => {
     const filterData = zogsoolTusBuriinToo?.filter(
       (mur) => mur?._id?.zogsool === songogdzonZogsoolOrokh?._id
     );
     var sulToo =
       (songogdzonZogsoolOrokh?.too || 0) -
       (filterData?.length > 0 ? filterData[0].too : 0);
+    console.log("VIP --->", turul, ip, camerVal[0], sulToo);
     if (
+      turul !== "VIP" &&
       ip === camerVal[0] &&
       songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh &&
       (sulToo === 0 || sulToo <= -1)
     ) {
-      toastwarn("Зогсоол дүүрсэн байна");
+      toast.warn("Зогсоол дүүрсэн байна");
       return;
     } else {
       // if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
