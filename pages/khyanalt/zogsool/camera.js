@@ -626,9 +626,7 @@ function camera({ token }) {
 
       if (response.ok) {
         const result = await response.json();
-        console.log(`Found ${result.count} plates from local .NET service`);
-        console.log("Last updated:", result.lastUpdated);
-
+        
         const transformedData = result.data
           .map((plate, index) => {
             try {
@@ -661,7 +659,6 @@ function camera({ token }) {
 
               // Skip empty records
               if (!mashiniiDugaar || !cameraIP || !burtgelOgnoo) {
-                console.log("Skipping empty plate record:", plate);
                 return null;
               }
 
@@ -705,7 +702,6 @@ function camera({ token }) {
         return transformedData;
       }
     } catch (error) {
-      console.log("Local .NET service not available:", error.message);
       setLocalOfflineData([]);
     }
 
@@ -1132,7 +1128,6 @@ function camera({ token }) {
 
   useEffect(() => {
     if (syncStatus === "success" && !isActuallyOffline) {
-      console.log("Sync completed successfully, doing final refresh...");
       setTimeout(() => {
         uilchluulegchMutate();
         setPendingCarsUpdateTrigger((prev) => prev + 1);
@@ -2767,11 +2762,9 @@ function camera({ token }) {
       songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh &&
       (sulToo === 0 || sulToo <= -1)
     ) {
-      console.log("VIP Зогсоол дүүрсэн байна --->", turul, ip, camerVal[0], sulToo);
       toast.warning("Зогсоол дүүрсэн байна");
       return;
     } else {
-      console.log("VIP дүүрсэн байсан ч орно --->", turul, ip, camerVal[0], sulToo);
       // if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
       //   let data =
       //     '<?xml version="1.0" encoding="UTF-8"?><BarrierGate><ctrlMode>open</ctrlMode></BarrierGate>';

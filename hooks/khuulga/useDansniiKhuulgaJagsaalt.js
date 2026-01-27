@@ -59,13 +59,6 @@ const fetcher = (
     ...query,
   };
 
-  console.log("🔍 Fetcher params:", {
-    url,
-    query: baseQuery,
-    order,
-    khuudaslalt,
-  });
-
   return axios(token)
     .get(url, {
       params: {
