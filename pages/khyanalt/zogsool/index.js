@@ -306,8 +306,6 @@ function Zogsool({ token }) {
     setSelectedRowkeys(newSelectedRowKeys);
   };
 
-  const shalgakhTsag = 18;
-
   const streamQuery = useMemo(() => {
     var query = {
       baiguullagiinId: baiguullaga?._id,
@@ -325,6 +323,12 @@ function Zogsool({ token }) {
       // Төлсөн: Include both tuluv === 1 and tuluv === 2, and require garsanTsag to exist
       query["tuukh.0.tuluv"] = { $in: [1, 2] };
       query["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: true };
+    } else if (tuluvZurchil === 2) {
+      // Зөрчилтэй
+      query["tuukh.0.tuluv"] = 2;
+    } else if (tuluvZurchil === 3) {
+      // Тодорхойгүй
+      query["tuukh.0.tuluv"] = 3;
     }
     return query;
   }, [baiguullaga?._id, barilgiinId, tuluvZurchil, ognoo]);
@@ -438,6 +442,7 @@ function Zogsool({ token }) {
         title: (
           <Popover
             placement="bottom"
+            trigger="click"
             content={
               <div className="space-y-2">
                 <div
@@ -470,6 +475,26 @@ function Zogsool({ token }) {
                 >
                   {t("Төлөөгүй")}
                 </div>
+                <div
+                  onClick={() => {
+                    setTuluvZurchil(2);
+                  }}
+                  className={`relative ${
+                    tuluvZurchil === 2 && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Зөрчилтэй")}
+                </div>
+                <div
+                  onClick={() => {
+                    setTuluvZurchil(3);
+                  }}
+                  className={`relative ${
+                    tuluvZurchil === 3 && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Тодорхойгүй")}
+                </div>
               </div>
             }
           >
@@ -491,10 +516,22 @@ function Zogsool({ token }) {
               className={`${
                 v === 1
                   ? "bg-green-500 text-white dark:bg-green-700"
+                  : v === 2
+                  ? "bg-orange-500 text-white dark:bg-orange-700"
+                  : v === 3
+                  ? "bg-gray-500 text-white dark:bg-gray-700"
                   : "bg-red-500 text-white dark:bg-red-700"
               } flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
             >
-              {v === 1 ? "Төлсөн" : v === -4 ? "Төлбөртэй" : "Төлөөгүй"}
+              {v === 1
+                ? "Төлсөн"
+                : v === 2
+                ? "Зөрчилтэй"
+                : v === 3
+                ? "Тодорхойгүй"
+                : v === -4
+                ? "Төлбөртэй"
+                : "Төлөөгүй"}
             </div>
           );
         },
@@ -615,6 +652,16 @@ function Zogsool({ token }) {
           baseQuery["niitDun"] = { $eq: 0 };
           break;
 
+        case 3:
+          baseQuery["tuukh.0.tuluv"] = -2;
+          break;
+
+        case 4:
+          // Тодорхойгүй - cars that were marked as unknown when same car entered again
+          baseQuery["tuukh.0.tuluv"] = -4;
+          baseQuery["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: false };
+          break;
+
         case 5:
           baseQuery["niitDun"] = { $gt: 0 };
           baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
@@ -638,7 +685,6 @@ function Zogsool({ token }) {
     shuult,
     tuluv,
     tulbur,
-    shalgakhTsag,
     tootsooKhelber,
   ]);
 
@@ -1512,7 +1558,17 @@ function Zogsool({ token }) {
                 >
                   {t("Төлбөртэй")}
                 </div>
-                {/* <div
+                <div
+                  onClick={() => {
+                    setTuluv(3);
+                  }}
+                  className={`relative ${
+                    tuluv === 3 && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Зөрчилтэй")}
+                </div>
+                <div
                   onClick={() => {
                     setTuluv(4);
                   }}
@@ -1521,7 +1577,7 @@ function Zogsool({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Тодорхойгүй")}
-                </div> */}
+                </div>
                 <div
                   onClick={() => {
                     setTuluv(2);
@@ -1560,23 +1616,13 @@ function Zogsool({ token }) {
                   ? "bg-green-500 text-white dark:bg-green-700"
                   : v[0].tuluv === -2
                   ? "bg-red-500 text-white dark:bg-red-700"
-                  : v[0].tuluv === -4 && data.niitDun > 0
-                  ? "bg-yellow-500 text-white dark:bg-yellow-700"
+                  : v[0].tuluv === -4
+                  ? "bg-purple-500 text-white dark:bg-purple-700"
                   : v[0]?.tuluv === 0 &&
                     v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
                     data.niitDun > 0
                   ? "bg-yellow-500 text-white dark:bg-yellow-700"
-                  : v[0]?.tuluv === 0 &&
-                    !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
-                    moment
-                      .duration(
-                        moment().diff(
-                          moment(v[0]?.tsagiinTuukh?.[0]?.orsonTsag),
-                        ),
-                      )
-                      .asHours() > shalgakhTsag
-                  ? "bg-purple-500 text-white dark:bg-purple-700"
-                  : v[0]?.tuluv === 0 && !v[0]?.garsanKhaalga
+                  : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
                   ? "bg-blue-500 text-white dark:bg-blue-700"
                   : v[0]?.tuluv === -3
                   ? "bg-stone-500 text-white dark:bg-stone-700"
@@ -1593,23 +1639,13 @@ function Zogsool({ token }) {
                   ? "Төлсөн"
                   : v[0].tuluv === -2
                   ? "Зөрчилтэй"
-                  : v[0].tuluv === -4 && data.niitDun > 0
-                  ? "Төлбөртэй"
+                  : v[0].tuluv === -4
+                  ? "Тодорхойгүй"
                   : v[0]?.tuluv === 0 &&
                     v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
                     data.niitDun > 0
                   ? "Төлбөртэй"
-                  : v[0]?.tuluv === 0 &&
-                    !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
-                    moment
-                      .duration(
-                        moment().diff(
-                          moment(v[0]?.tsagiinTuukh?.[0]?.orsonTsag),
-                        ),
-                      )
-                      .asHours() > shalgakhTsag
-                  ? "Тодорхойгүй"
-                  : v[0]?.tuluv === 0 && !v[0]?.garsanKhaalga
+                  : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
                   ? "Идэвхтэй"
                   : v[0]?.tuluv === -3
                   ? "Цэвэрлэсэн"
@@ -1642,6 +1678,14 @@ function Zogsool({ token }) {
               <div>
                 {moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD")}
               </div>
+            );
+          } else if (v?.[0]?.tuluv === -4) {
+            return (
+              <Tooltip placement="top" title={t("Гарсан цаг тодорхойгүй")}>
+                <div className="max-w-[8rem] cursor-help truncate break-words">
+                  {t("Гарсан цаг тодорхойгүй")}
+                </div>
+              </Tooltip>
             );
           } else
             return (
@@ -2472,19 +2516,10 @@ function Zogsool({ token }) {
                                 ? "Төлсөн"
                                 : v[0].tuluv === -2
                                 ? "Зөрчилтэй"
-                                : v[0]?.tuluv === 0 &&
-                                  !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
-                                  moment
-                                    .duration(
-                                      moment().diff(
-                                        moment(
-                                          v[0]?.tsagiinTuukh?.[0]?.orsonTsag,
-                                        ),
-                                      ),
-                                    )
-                                    .asHours() > shalgakhTsag
+                                : v[0].tuluv === -4
                                 ? "Тодорхойгүй"
-                                : v[0]?.tuluv === 0 && !v[0]?.garsanKhaalga
+                                : v[0]?.tuluv === 0 &&
+                                  !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
                                 ? "Идэвхтэй"
                                 : v[0]?.tuluv === -3
                                 ? "Цэвэрлэсэн"
@@ -2509,6 +2544,8 @@ function Zogsool({ token }) {
                                 return moment(
                                   parent?.mashin?.duusakhOgnoo,
                                 ).format("YYYY-MM-DD");
+                              } else if (v?.[0]?.tuluv === -4) {
+                                return t("Гарсан цаг тодорхойгүй");
                               }
                               return v?.[0]?.tuluv === -1
                                 ? v[0]?.uneguiGarsan

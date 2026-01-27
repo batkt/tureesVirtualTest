@@ -440,7 +440,25 @@ const TipTapEditor = forwardRef(
                       const templateValue = item.talbar || item.value;
                       if (templateValue) {
                         const tagText = `<${templateValue}>`;
+                        // Save scroll positions before focus
+                        const editorWrapper =
+                          document.querySelector(".tiptap-content");
+                        const proseMirror = document.querySelector(
+                          ".tiptap-content .ProseMirror",
+                        );
+                        const wrapperScroll = editorWrapper?.scrollTop || 0;
+                        const windowScroll = window.scrollY;
+
                         editor.chain().focus().insertContent(tagText).run();
+
+                        // Restore scroll positions
+                        requestAnimationFrame(() => {
+                          if (editorWrapper)
+                            editorWrapper.scrollTop = wrapperScroll;
+                          if (proseMirror)
+                            proseMirror.scrollTop = wrapperScroll;
+                          window.scrollTo(0, windowScroll);
+                        });
                       }
                     },
                   }));
@@ -480,7 +498,25 @@ const TipTapEditor = forwardRef(
                         const value = btn.value
                           .replace(/&lt;/g, "<")
                           .replace(/&gt;/g, ">");
+                        // Save scroll positions before focus
+                        const editorWrapper =
+                          document.querySelector(".tiptap-content");
+                        const proseMirror = document.querySelector(
+                          ".tiptap-content .ProseMirror",
+                        );
+                        const wrapperScroll = editorWrapper?.scrollTop || 0;
+                        const windowScroll = window.scrollY;
+
                         editor.chain().focus().insertContent(value).run();
+
+                        // Restore scroll positions
+                        requestAnimationFrame(() => {
+                          if (editorWrapper)
+                            editorWrapper.scrollTop = wrapperScroll;
+                          if (proseMirror)
+                            proseMirror.scrollTop = wrapperScroll;
+                          window.scrollTo(0, windowScroll);
+                        });
                       }
                     }}
                     title={btn.title || btn.label}
