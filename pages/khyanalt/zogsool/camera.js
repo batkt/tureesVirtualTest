@@ -2761,16 +2761,17 @@ function camera({ token }) {
     var sulToo =
       (songogdzonZogsoolOrokh?.too || 0) -
       (filterData?.length > 0 ? filterData[0].too : 0);
-    console.log("VIP --->", turul, ip, camerVal[0], sulToo);
     if (
       (!turul || (!!turul && turul !== "VIP")) &&
       ip === camerVal[0] &&
       songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh &&
       (sulToo === 0 || sulToo <= -1)
     ) {
+      console.log("VIP Зогсоол дүүрсэн байна --->", turul, ip, camerVal[0], sulToo);
       toast.warning("Зогсоол дүүрсэн байна");
       return;
     } else {
+      console.log("VIP дүүрсэн байсан ч орно --->", turul, ip, camerVal[0], sulToo);
       // if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
       //   let data =
       //     '<?xml version="1.0" encoding="UTF-8"?><BarrierGate><ctrlMode>open</ctrlMode></BarrierGate>';
