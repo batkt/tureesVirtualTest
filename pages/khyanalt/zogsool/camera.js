@@ -2763,7 +2763,7 @@ function camera({ token }) {
       (filterData?.length > 0 ? filterData[0].too : 0);
     console.log("VIP --->", turul, ip, camerVal[0], sulToo);
     if (
-      turul !== "VIP" &&
+      (!turul || (!!turul && turul !== "VIP")) &&
       ip === camerVal[0] &&
       songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh &&
       (sulToo === 0 || sulToo <= -1)
