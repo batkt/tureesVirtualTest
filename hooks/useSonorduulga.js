@@ -234,7 +234,7 @@ function useSonorduulga(token) {
   //   if (ajiltan?._id) {
   //     socket().on(`ajiltan${ajiltan?._id}`, (res) => {
   //       if (res.type === "logout" && res?.ip) {
-  //         toast.warn(
+  //         toast.warning(
   //           "" +
   //             res.ip +
   //             " IP-тай төхөөрөмжөөс давхар нэвтэрсэн тул таны холболт саллаа.",

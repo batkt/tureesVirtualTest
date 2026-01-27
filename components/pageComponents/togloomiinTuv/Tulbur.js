@@ -141,11 +141,11 @@ function Tulbur(
   function guilgeeniiTuukhKhadgalya(tulbur, qpayEsekh) {
     if (khungulukhEsekh === true) {
       if (!khunglult.khungulukhDun || khunglult.khungulukhDun === "") {
-        toast.warn(t("Хөнгөлөх дүн оруулна уу"));
+        toast.warning(t("Хөнгөлөх дүн оруулна уу"));
         return;
       }
       if (!khunglult.tailbar || khunglult.tailbar === "") {
-        toast.warn(t("Хөнгөлөх шалтгаан оруулна уу"));
+        toast.warning(t("Хөнгөлөх шалтгаан оруулна уу"));
         return;
       }
     }

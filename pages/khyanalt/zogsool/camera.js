@@ -2539,7 +2539,7 @@ function camera({ token }) {
           }
           if (modalOpen.type === "zurchil") {
             if (!value || value === "" || value === undefined) {
-              toast.warn("Зөрчлийн шалтгаан оруулна уу!");
+              toast.warning("Зөрчлийн шалтгаан оруулна уу!");
               return;
             }
             body.zurchil = value;
@@ -2661,7 +2661,7 @@ function camera({ token }) {
             setModalOpen({ bool: false, item: null, type: "" });
             setValue(null);
           }
-        } else toast.warn("Уучлаарай дахин оролдоно уу");
+        } else toast.warning("Уучлаарай дахин оролдоно уу");
       })
       .catch((error) => {
         if (!navigator.onLine || isOfflineMode) {
@@ -2768,7 +2768,7 @@ function camera({ token }) {
       songogdzonZogsoolOrokh?.zogsoolTooKhyazgaarlakhEsekh &&
       (sulToo === 0 || sulToo <= -1)
     ) {
-      toast.warn("Зогсоол дүүрсэн байна");
+      toast.warning("Зогсоол дүүрсэн байна");
       return;
     } else {
       // if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
