@@ -100,335 +100,353 @@ function TulburiinDelgerenguiTailan(
     });
   };
 
-  const { tulburiinMedeelel, hongololtMedeelel, zorchilMedeelel } =
-    useMemo(() => {
-      var tulbur = [];
-      var hongololt = [];
-      var zorchil = [];
+  const {
+    tulburiinMedeelel,
+    hongololtMedeelel,
+    zorchilMedeelel,
+    todorkhoiguiMedeelel,
+  } = useMemo(() => {
+    var tulbur = [];
+    var hongololt = [];
+    var zorchil = [];
+    var todorkhoigui = [];
 
-      const hongololtNames = ["Хөнгөлөлт", "Фитнес", "Хөнгөлөх"];
-      const zorchilNames = ["Үнэгүй", "Зөрчилтэй", "Зөрчил"];
+    const hongololtNames = ["Хөнгөлөлт", "Фитнес", "Хөнгөлөх"];
+    const zorchilNames = ["Үнэгүй", "Зөрчилтэй", "Зөрчил"];
 
-      if (!!zogsoolTulburMedeelel) {
-        const mergedTulbur = Array.from(
-          zogsoolTulburMedeelel
-            .reduce((acc, item) => {
-              const key = item?._id === "PosCard" ? "PosKart" : item?._id;
-              const merged = acc.get(key) || {
-                ...item,
-                _id: key,
-                niitDun: 0,
-                niitToo: 0,
-              };
+    if (!!zogsoolTulburMedeelel) {
+      const mergedTulbur = Array.from(
+        zogsoolTulburMedeelel
+          .reduce((acc, item) => {
+            const key = item?._id === "PosCard" ? "PosKart" : item?._id;
+            const merged = acc.get(key) || {
+              ...item,
+              _id: key,
+              niitDun: 0,
+              niitToo: 0,
+            };
 
-              merged.niitDun += item?.niitDun || 0;
-              merged.niitToo += item?.niitToo || 0;
+            merged.niitDun += item?.niitDun || 0;
+            merged.niitToo += item?.niitToo || 0;
 
-              acc.set(key, merged);
-              return acc;
-            }, new Map())
-            .values(),
-        );
+            acc.set(key, merged);
+            return acc;
+          }, new Map())
+          .values(),
+      );
 
-        var niitDun = mergedTulbur?.reduce((a, b) => a + b.niitDun, 0) || 0;
+      var niitDun = mergedTulbur?.reduce((a, b) => a + b.niitDun, 0) || 0;
 
-        mergedTulbur?.forEach((element) => {
-          const elementId = element?._id?.toLowerCase() || "";
-          let item = null;
-          let category = "tulbur"; // default category
+      mergedTulbur?.forEach((element) => {
+        const elementId = element?._id?.toLowerCase() || "";
+        let item = null;
+        let category = "tulbur"; // default category
 
-          if (elementId.startsWith("ugaalga")) {
-            const is24h =
-              elementId.includes("24") || element?._id?.includes("24");
-            const IconComponent = FaCar;
+        if (elementId.startsWith("ugaalga")) {
+          const is24h =
+            elementId.includes("24") || element?._id?.includes("24");
+          const IconComponent = FaCar;
+          item = {
+            ner: is24h ? "Угаалга-24" : "Угаалга-1",
+            icon: is24h ? "REACT_ICON_24H" : "REACT_ICON_1H",
+            iconComponent: IconComponent,
+            dun: element.niitDun,
+            too: element.niitToo,
+            khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+          };
+          hongololt.push(item);
+          return;
+        }
+
+        switch (element?._id) {
+          case "khariltsakh":
             item = {
-              ner: is24h ? "Угаалга-24" : "Угаалга-1",
-              icon: is24h ? "REACT_ICON_24H" : "REACT_ICON_1H",
-              iconComponent: IconComponent,
+              ner: "Данс",
+              icon: "/transaction.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             };
+            break;
+          case "belen":
+            item = {
+              ner: "Бэлэн",
+              icon: "/Cash.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "khunglukh":
+            item = {
+              ner: "Хөнгөлөх",
+              icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            category = "hongololt";
+            break;
+          case "khungulult":
+            item = {
+              ner: "Хөнгөлөлт",
+              icon: "/hongololt.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            category = "hongololt";
+            break;
+          case "khaan":
+            item = {
+              ner: "Карт",
+              icon: "/card.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "tdb":
+            item = {
+              ner: "TDB банк",
+              icon: "/tdb.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "khas":
+            item = {
+              ner: "Xac банк",
+              icon: "https://cdn6.aptoide.com/imgs/0/6/d/06df97a06fbc7622a775a7c414b69e87_icon.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "golomt":
+            item = {
+              ner: "Голомт банк",
+              icon: "https://play-lh.googleusercontent.com/9tUBesUsI4UIkpgO1MPIMLFvhDa_4vZE75TrVAUHFA7a0bJ7IIgeyh2r1QXs9VlmXmkX",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "kapitron":
+            item = {
+              ner: "Капитрон банк",
+              icon: "https://play-lh.googleusercontent.com/1PMmu0x2x_07XdPtLyTRe_4cffXDLFCG3xEoUTqUpy3eSJeB-C81dbyzZSnJjW907OA=w240-h480-rw",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "tur":
+            item = {
+              ner: "Төрийн банк",
+              icon: "https://play-lh.googleusercontent.com/KYQyVTgP4ZV60gxNOsKYssScNe17NMgHpO_nRY4WRBYj_4YTZ0e8t6zwh38sTFmyCco",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "bankQR":
+            item = {
+              ner: "Банк QR",
+              icon: "/Bank.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "DotorQR":
+            item = {
+              ner: "Дотор QR",
+              icon: "/QR.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "GadaaQR":
+            item = {
+              ner: "Гадаа QR",
+              icon: "/GadaaQR.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "toki":
+            item = {
+              ner: "Токи",
+              icon: "/Group_158.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "kiosk":
+            item = {
+              ner: "Киоск",
+              icon: "/kiosk.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "PosBelen":
+            item = {
+              ner: "ПОС Бэлэн",
+              icon: "/androidPosBelen.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "PosKart":
+            item = {
+              ner: "ПОС Карт",
+              icon: "/androidpooos.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "PosKhariltsakh":
+            item = {
+              ner: "ПОС Данс",
+              icon: "/androidDansPos.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "zeel":
+            item = {
+              ner: "Зээл",
+              icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "pass":
+            item = {
+              ner: "Пасс",
+              icon: "/pass.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "Зөрчилтэй":
+            item = {
+              ner: "Зөрчилтэй",
+              icon: "/exclamation.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            category = "zorchil";
+            break;
+          case "Тодорхойгүй":
+            item = {
+              ner: "Тодорхойгүй",
+              icon: "/exclamation.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            category = "todorkhoigui";
+            break;
+          case "Үнэгүй":
+            item = {
+              ner: "Үнэгүй",
+              icon: "/Unegui.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+          case "Fitness":
+            item = {
+              ner: "Фитнес",
+              icon: "/hongololt.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            category = "hongololt";
+            break;
+          case "qpayUridchilsan":
+          case "Түрээслэгч":
+          case "Гэрээт":
+          case "qpay":
+            // Skip these
+            break;
+          case "Ugaalga":
+            const is24hUgaalga =
+              element?._id?.includes("24") ||
+              element?._id?.toLowerCase()?.includes("24");
+            const UgaalgaIconComponent = FaCar;
+            item = {
+              ner: is24hUgaalga ? "CarWash 24h" : "CarWash 1h",
+              icon: is24hUgaalga ? "REACT_ICON_24H" : "REACT_ICON_1H",
+              iconComponent: UgaalgaIconComponent,
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            category = "hongololt";
+            break;
+          default:
+            item = {
+              ner: element._id,
+              icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
+            break;
+        }
+
+        if (item) {
+          if (category === "hongololt") {
             hongololt.push(item);
-            return;
+          } else if (category === "zorchil") {
+            zorchil.push(item);
+          } else if (category === "todorkhoigui") {
+            todorkhoigui.push(item);
+          } else {
+            tulbur.push(item);
           }
-
-          switch (element?._id) {
-            case "khariltsakh":
-              item = {
-                ner: "Данс",
-                icon: "/transaction.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "belen":
-              item = {
-                ner: "Бэлэн",
-                icon: "/Cash.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "khunglukh":
-              item = {
-                ner: "Хөнгөлөх",
-                icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              category = "hongololt";
-              break;
-            case "khungulult":
-              item = {
-                ner: "Хөнгөлөлт",
-                icon: "/hongololt.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              category = "hongololt";
-              break;
-            case "khaan":
-              item = {
-                ner: "Карт",
-                icon: "/card.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "tdb":
-              item = {
-                ner: "TDB банк",
-                icon: "/tdb.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "khas":
-              item = {
-                ner: "Xac банк",
-                icon: "https://cdn6.aptoide.com/imgs/0/6/d/06df97a06fbc7622a775a7c414b69e87_icon.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "golomt":
-              item = {
-                ner: "Голомт банк",
-                icon: "https://play-lh.googleusercontent.com/9tUBesUsI4UIkpgO1MPIMLFvhDa_4vZE75TrVAUHFA7a0bJ7IIgeyh2r1QXs9VlmXmkX",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "kapitron":
-              item = {
-                ner: "Капитрон банк",
-                icon: "https://play-lh.googleusercontent.com/1PMmu0x2x_07XdPtLyTRe_4cffXDLFCG3xEoUTqUpy3eSJeB-C81dbyzZSnJjW907OA=w240-h480-rw",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "tur":
-              item = {
-                ner: "Төрийн банк",
-                icon: "https://play-lh.googleusercontent.com/KYQyVTgP4ZV60gxNOsKYssScNe17NMgHpO_nRY4WRBYj_4YTZ0e8t6zwh38sTFmyCco",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "bankQR":
-              item = {
-                ner: "Банк QR",
-                icon: "/Bank.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "DotorQR":
-              item = {
-                ner: "Дотор QR",
-                icon: "/QR.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "GadaaQR":
-              item = {
-                ner: "Гадаа QR",
-                icon: "/GadaaQR.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "toki":
-              item = {
-                ner: "Токи",
-                icon: "/Group_158.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "kiosk":
-              item = {
-                ner: "Киоск",
-                icon: "/kiosk.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "PosBelen":
-              item = {
-                ner: "ПОС Бэлэн",
-                icon: "/androidPosBelen.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "PosKart":
-              item = {
-                ner: "ПОС Карт",
-                icon: "/androidpooos.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "PosKhariltsakh":
-              item = {
-                ner: "ПОС Данс",
-                icon: "/androidDansPos.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "zeel":
-              item = {
-                ner: "Зээл",
-                icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "pass":
-              item = {
-                ner: "Пасс",
-                icon: "/pass.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "Зөрчилтэй":
-              item = {
-                ner: "Зөрчилтэй",
-                icon: "/exclamation.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              category = "zorchil";
-              break;
-            case "Төлбөрийн зөрчилтэй":
-              item = {
-                ner: "Төлбөрийн зөрчилтэй",
-                icon: "/exclamation.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              category = "zorchil";
-              break;
-            case "Үнэгүй":
-              item = {
-                ner: "Үнэгүй",
-                icon: "/Unegui.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-            case "Fitness":
-              item = {
-                ner: "Фитнес",
-                icon: "/hongololt.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              category = "hongololt";
-              break;
-            case "qpayUridchilsan":
-            case "Түрээслэгч":
-            case "Гэрээт":
-            case "qpay":
-              // Skip these
-              break;
-            case "Ugaalga":
-              const is24hUgaalga =
-                element?._id?.includes("24") ||
-                element?._id?.toLowerCase()?.includes("24");
-              const UgaalgaIconComponent = FaCar;
-              item = {
-                ner: is24hUgaalga ? "CarWash 24h" : "CarWash 1h",
-                icon: is24hUgaalga ? "REACT_ICON_24H" : "REACT_ICON_1H",
-                iconComponent: UgaalgaIconComponent,
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              category = "hongololt";
-              break;
-            default:
-              item = {
-                ner: element._id,
-                icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
-                dun: element.niitDun,
-                too: element.niitToo,
-                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-              };
-              break;
-          }
-
-          if (item) {
-            if (category === "hongololt") {
-              hongololt.push(item);
-            } else if (category === "zorchil") {
-              zorchil.push(item);
-            } else {
-              tulbur.push(item);
-            }
-          }
-        });
-      }
-      return {
-        tulburiinMedeelel: tulbur,
-        hongololtMedeelel: hongololt,
-        zorchilMedeelel: zorchil,
-      };
-    }, [zogsoolTulburMedeelel]);
+        }
+      });
+    }
+    return {
+      tulburiinMedeelel: tulbur,
+      hongololtMedeelel: hongololt,
+      zorchilMedeelel: zorchil,
+      todorkhoiguiMedeelel: todorkhoigui,
+    };
+  }, [zogsoolTulburMedeelel]);
 
   // Combined list for print and checkbox selection
   const buhMedeelel = useMemo(() => {
-    return [...tulburiinMedeelel, ...hongololtMedeelel, ...zorchilMedeelel];
-  }, [tulburiinMedeelel, hongololtMedeelel, zorchilMedeelel]);
+    return [
+      ...tulburiinMedeelel,
+      ...hongololtMedeelel,
+      ...zorchilMedeelel,
+      ...todorkhoiguiMedeelel,
+    ];
+  }, [
+    tulburiinMedeelel,
+    hongololtMedeelel,
+    zorchilMedeelel,
+    todorkhoiguiMedeelel,
+  ]);
 
   useImperativeHandle(
     ref,
@@ -756,6 +774,59 @@ function TulburiinDelgerenguiTailan(
             </>
           )}
 
+          {todorkhoiguiMedeelel.length > 0 && (
+            <>
+              <div className="mt-4 border-b-2 border-purple-500 pb-1 text-lg font-bold dark:text-gray-200">
+                Тодорхойгүй
+              </div>
+              {todorkhoiguiMedeelel
+                .sort(function (a, b) {
+                  return b.khuvi - a.khuvi;
+                })
+                .map((a, i) => {
+                  return (
+                    <div
+                      className="relative flex h-14 w-full cursor-pointer items-center overflow-hidden rounded-md border-2 p-2"
+                      key={`todorkhoigui-${i}`}
+                      onClick={() => handleDivClick(a)}
+                    >
+                      <Checkbox
+                        checked={songogdson.some((item) => item === a.ner)}
+                      />
+                      <div
+                        style={{ width: `${String(Math.round(a.khuvi))}%` }}
+                        className={`absolute left-0 top-0 z-0 flex h-full items-center bg-purple-100 dark:bg-purple-500 `}
+                      >
+                        <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-purple-100 dark:bg-purple-500 " />
+                      </div>
+                      <img
+                        src={a.icon}
+                        className="z-10 mx-2 h-11 rounded-md object-contain"
+                        alt=""
+                      />
+                      <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
+                        {a.ner}:
+                        <div className="flex font-normal">
+                          {formatNumber(a.dun) || 0}₮
+                          <div className="ml-3 mr-3 flex w-10 items-center justify-center border-x border-purple-600 text-center">
+                            <div className="ml-5 mr-5">{a.too}</div>
+                          </div>
+                          <div className="ml-5 flex w-10 items-center justify-center border-purple-600 pr-5 text-center">
+                            <div className="ml-10 ">
+                              {a.khuvi - Math.floor(a.khuvi) > 0
+                                ? Number(a.khuvi).toFixed(2)
+                                : a.khuvi || 0}
+                            </div>
+                            <div className="mr-10">%</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </>
+          )}
+
           {/* Нийт */}
           <div className="mt-4 border border-dashed bg-gray-600" />
           <div className="mt-2 flex items-center justify-between text-lg font-[600] dark:text-gray-200">
@@ -792,6 +863,16 @@ function TulburiinDelgerenguiTailan(
                 <div>
                   {formatNumber(
                     hongololtMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0,
+                  ) + "₮"}
+                </div>
+              </div>
+            )}
+            {todorkhoiguiMedeelel.length > 0 && (
+              <div className="flex items-center justify-between rounded bg-transparent p-2 text-lg font-[600]  dark:text-gray-200">
+                <div className="flex">Тодорхойгүй:</div>
+                <div>
+                  {formatNumber(
+                    todorkhoiguiMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0,
                   ) + "₮"}
                 </div>
               </div>
