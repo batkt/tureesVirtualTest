@@ -737,15 +737,21 @@ const YurunkhiiMedeele = ({
             InfoComponent={({ data }) => {
               if (data)
                 return (
-                  <div className="flex flex-row items-center space-x-2 p-1 font-medium dark:text-gray-200">
+                  <div className="flex flex-col justify-between  items-center space-x-2 p-1 font-medium dark:text-gray-200">
+                    <div className="flex flex-row items-center space-x-2 p-1 font-medium dark:text-gray-200">
+
                     <img
                       className="h-5 w-5"
                       alt="logo"
                       src={`/${data?.bank}.png`}
                     />
                     <div>{data?.dansniiNer}</div>
+                    </div>
+                  <div className="flex flex-row justify-between items-center space-x-2 p-1 font-medium dark:text-gray-200">
+
                     <div>{data?.dugaar}</div>
                     <div>{data?.valyut}</div>
+                  </div>
                   </div>
                 );
               return null;
