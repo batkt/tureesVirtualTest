@@ -158,8 +158,10 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
                 }
                 parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                 placeholder="Тариф"
-                onChange={(e) =>
+                onChange={(e) => {
+                  
                   inputChange(e, value?.zardluud && value?.zardluud[i])
+                }
                 }
                 className="flex h-7 w-full items-center rounded-l-md pr-4 "
               />
@@ -360,11 +362,22 @@ const Zardal = ({
     const index = value.zardluud.findIndex((object) => {
       return object._id === a._id;
     });
-
+  
     if (index !== -1) {
-      value.zardluud[index].dun = e;
+     
+      const updatedZardluud = [...value.zardluud];
+      updatedZardluud[index] = {
+        ...updatedZardluud[index],
+        dun: e,
+        tariff: e,
+        tulukhDun: e,
+      };
+      
+      onChange({ 
+        ...value, 
+        zardluud: updatedZardluud 
+      });
     }
-    onChange({ ...value });
   };
   return (
     <Form

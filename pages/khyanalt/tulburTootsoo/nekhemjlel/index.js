@@ -45,6 +45,7 @@ import AppSmsZagvar from "components/pageComponents/nekhemjlel/AppSmsZagvar";
 import numberToWords from "tools/function/numberToWords";
 import useDans from "hooks/useDans";
 import useJagsaalt from "hooks/useJagsaalt";
+import useKhariltsagch from "hooks/useKhariltsagch";
 import { useTranslation } from "react-i18next";
 import khatuuZagvar from "tools/zagvar/tur";
 import khatuuZagvarKaidu from "tools/zagvar/turKaidu";
@@ -56,6 +57,12 @@ import khatuuZagvarSoyoljMall from "tools/zagvar/turSoyoljMall";
 import khatuuZagvarIkhNaydTower from "tools/zagvar/turIkhNaydTower";
 
 const ilgeekhTurul = "davkharaar";
+
+/** RegExp matching both &lt;name.field&gt; and &lt;name\.field&gt; for charge placeholders */
+function chargeTagRe(name, field) {
+  const n = String(name ?? "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`&lt;${n}(\\\\\\.|\\\\.)${field}&gt;`, "g");
+}
 
 function tulburTootsoo({ token }) {
   useEffect(() => {
@@ -163,6 +170,11 @@ function tulburTootsoo({ token }) {
     },
     []
   );
+  const { khariltsagchiinGaralt } = useKhariltsagch(
+    token,
+    baiguullaga?._id,
+    1000
+  );
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token);
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([]);
@@ -172,8 +184,36 @@ function tulburTootsoo({ token }) {
   const [unshijBaina, setUnshijBaina] = React.useState(false);
 
   useEffect(() => {
-    if (nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt]);
-  }, [nekhemjlel]);
+    if (!nekhemjlel?.jagsaalt) return;
+    let list = [...nekhemjlel.jagsaalt];
+    const khariltsagchuud = khariltsagchiinGaralt?.jagsaalt || [];
+    if (khariltsagchuud.length > 0) {
+      const byId = new Map(
+        khariltsagchuud.map((k) => [k._id, k])
+      );
+      const byCustomerTin = new Map(
+        khariltsagchuud
+          .filter((k) => k.customerTin)
+          .map((k) => [String(k.customerTin).trim(), k])
+      );
+      list = list.map((n) => {
+        const k =
+          (n.khariltsagchiinId && byId.get(n.khariltsagchiinId)) ||
+          (n.customerTin && byCustomerTin.get(String(n.customerTin).trim()));
+        const khayag =
+          (n.khayag && String(n.khayag).trim()) ||
+          (k?.khayag && String(k.khayag).trim()) ||
+          "";
+        return { ...n, khayag };
+      });
+    } else {
+      list = list.map((n) => ({
+        ...n,
+        khayag: (n.khayag && String(n.khayag).trim()) || "",
+      }));
+    }
+    setNekhemjleliinJagsaalt(list);
+  }, [nekhemjlel, khariltsagchiinGaralt]);
 
   useEffect(() => {
     setBarimt(undefined);
@@ -1082,11 +1122,19 @@ function tulburTootsoo({ token }) {
                 a.tariff = tariffValue ?? 0;
               }
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
+                chargeTagRe(a.tailbar, "tariff"),
                 formatNumber(a.tariff || 0)
               );
+              const tariffUsgeerVal =
+                (a.tariffUsgeer && String(a.tariffUsgeer).trim()) ||
+                numberToWords(a.tariff || 0, { fixed: 2, suffix: "n" }, "төгрөг", "мөнгө") ||
+                "";
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;${a.tailbar}.negj&gt;`, "g"),
+                chargeTagRe(a.tailbar, "tariffUsgeer"),
+                tariffUsgeerVal
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                chargeTagRe(a.tailbar, "negj"),
                 formatNumber(a.negj || 0) || ""
               );
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
@@ -1330,6 +1378,11 @@ function tulburTootsoo({ token }) {
             );
 
             ashiglaltiinZardal?.jagsaalt?.map((a) => {
+              const inZardluud = medeelel?.zardluud?.some(
+                (z) => z.tailbar === a.ner
+              );
+              if (inZardluud) return;
+
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.ner}.khemjikhNegj&gt;`, "g"),
                 ""
@@ -1377,12 +1430,16 @@ function tulburTootsoo({ token }) {
                 0
               );
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;${a.ner}.tariff&gt;`, "g"),
+                chargeTagRe(a.ner, "tariff"),
                 0
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                chargeTagRe(a.ner, "tariffUsgeer"),
+                ""
               );
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;${a.ner}.negj&gt;`, "g"),
+                chargeTagRe(a.ner, "negj"),
                 0
               );
 
@@ -1476,9 +1533,10 @@ function tulburTootsoo({ token }) {
                 a.ognoo = moment(a.ognoo).format("YYYY-MM-DD");
                 a.tulukhDun = formatNumber(a.tulukhDun);
                 for (const [key, value] of Object.entries(a)) {
+                  const val = value !== undefined && value !== null ? value : "";
                   mur = mur?.replace(
                     new RegExp(`&lt;nemeltNekhemjlekh.${key}&gt;`, "g"),
-                    value
+                    val
                   );
                 }
                 nemeltNekhemjlekh += mur;
@@ -1901,12 +1959,20 @@ function tulburTootsoo({ token }) {
           formatNumber(khungulultKhassanTulukhDunNuatgui || 0)
         );
         text = text?.replace(
-          new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
+          chargeTagRe(a.tailbar, "tariff"),
           formatNumber(a.tariff || 0)
+        );
+        const tariffUsgeerMsg =
+          (a.tariffUsgeer && String(a.tariffUsgeer).trim()) ||
+          numberToWords(a.tariff || 0, { fixed: 2, suffix: "n" }, "төгрөг", "мөнгө") ||
+          "";
+        text = text?.replace(
+          chargeTagRe(a.tailbar, "tariffUsgeer"),
+          tariffUsgeerMsg
         );
 
         text = text?.replace(
-          new RegExp(`&lt;${a.tailbar}.negj&gt;`, "g"),
+          chargeTagRe(a.tailbar, "negj"),
           formatNumber(a.negj || 0) || ""
         );
         text = text?.replace(
@@ -1925,6 +1991,11 @@ function tulburTootsoo({ token }) {
       });
 
       ashiglaltiinZardal?.jagsaalt?.map((a) => {
+        const inZardluud = nekhemjlekh?.zardluud?.some(
+          (z) => z.tailbar === a.ner
+        );
+        if (inZardluud) return;
+
         text = text?.replace(
           new RegExp(`&lt;${a.ner}.khemjikhNegj&gt;`, "g"),
           ""
@@ -1944,9 +2015,10 @@ function tulburTootsoo({ token }) {
           0
         );
 
-        text = text?.replace(new RegExp(`&lt;${a.ner}.tariff&gt;`, "g"), 0);
+        text = text?.replace(chargeTagRe(a.ner, "tariff"), 0);
+        text = text?.replace(chargeTagRe(a.ner, "tariffUsgeer"), "");
 
-        text = text?.replace(new RegExp(`&lt;${a.ner}.negj&gt;`, "g"), 0);
+        text = text?.replace(chargeTagRe(a.ner, "negj"), 0);
 
         text = text?.replace(
           new RegExp(`&lt;${a.ner}.suuliinZaalt&gt;`, "g"),
@@ -2855,12 +2927,20 @@ function tulburTootsoo({ token }) {
             formatNumber(khungulultKhassanTulukhDunNuatgui || 0)
           );
           text = text?.replace(
-            new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
+            chargeTagRe(a.tailbar, "tariff"),
             formatNumber(a.tariff || 0)
+          );
+          const tariffUsgeerMail =
+            (a.tariffUsgeer && String(a.tariffUsgeer).trim()) ||
+            numberToWords(a.tariff || 0, { fixed: 2, suffix: "n" }, "төгрөг", "мөнгө") ||
+            "";
+          text = text?.replace(
+            chargeTagRe(a.tailbar, "tariffUsgeer"),
+            tariffUsgeerMail
           );
 
           text = text?.replace(
-            new RegExp(`&lt;${a.tailbar}.negj&gt;`, "g"),
+            chargeTagRe(a.tailbar, "negj"),
             formatNumber(a.negj || 0) || ""
           );
           text = text?.replace(
@@ -3024,6 +3104,11 @@ function tulburTootsoo({ token }) {
         );
 
         ashiglaltiinZardal?.jagsaalt?.map((a) => {
+          const inZardluud = nekhemjlekh?.zardluud?.some(
+            (z) => z.tailbar === a.ner
+          );
+          if (inZardluud) return;
+
           text = text?.replace(
             new RegExp(`&lt;${a.ner}.khemjikhNegj&gt;`, "g"),
             ""
@@ -3046,9 +3131,10 @@ function tulburTootsoo({ token }) {
             0
           );
 
-          text = text?.replace(new RegExp(`&lt;${a.ner}.tariff&gt;`, "g"), 0);
+          text = text?.replace(chargeTagRe(a.ner, "tariff"), 0);
+          text = text?.replace(chargeTagRe(a.ner, "tariffUsgeer"), "");
 
-          text = text?.replace(new RegExp(`&lt;${a.ner}.negj&gt;`, "g"), 0);
+          text = text?.replace(chargeTagRe(a.ner, "negj"), 0);
 
           text = text?.replace(
             new RegExp(`&lt;${a.ner}.suuliinZaalt&gt;`, "g"),
@@ -3395,7 +3481,8 @@ function tulburTootsoo({ token }) {
 
           let body = msj;
           for (const [key, value] of Object.entries(medeelel)) {
-            body = body?.replace(new RegExp(`<${key}>`, "g"), value);
+            const val = value !== undefined && value !== null ? value : "";
+            body = body?.replace(new RegExp(`<${key}>`, "g"), val);
           }
           var garchig = nekhemjlekhiinZagvar?.jagsaalt?.find(
             (a) => a._id === barimt
@@ -3526,7 +3613,8 @@ function tulburTootsoo({ token }) {
 
       var medeelel = nekhemjleliinJagsaalt.find((a) => a._id === mur);
       for (const [key, value] of Object.entries(nekhemjlekh)) {
-        text = text?.replace(new RegExp(`<${key}>`, "g"), value);
+        const val = value !== undefined && value !== null ? value : "";
+        text = text?.replace(new RegExp(`<${key}>`, "g"), val);
       }
       uilchilgee(token)
         .post(`/sonorduulgaIlgeeye`, {

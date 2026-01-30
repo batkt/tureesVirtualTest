@@ -99,7 +99,7 @@ const Tulbur = ({
         );
 
         setKhuvaari(data);
-
+        
         const shineValue = {
           ...value,
           avlaga: {

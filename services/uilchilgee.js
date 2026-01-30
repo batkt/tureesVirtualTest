@@ -6,7 +6,7 @@ import { t } from "i18next";
 
 export const url =
   process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api";
-// production
+//production
 export const socket = () =>
   socketIOClient(
     process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",

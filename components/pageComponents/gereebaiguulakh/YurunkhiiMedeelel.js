@@ -147,7 +147,7 @@ const YurunkhiiMedeele = ({
             params: {
               query: {
                 barilgiinId,
-                baiguullagiinId: baiguullaga._id,
+                baiguullagiinId: baiguullaga?._id,
                 $or: [
                   { register: target.value },
                   { customerTin: target.value },

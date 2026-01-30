@@ -17,6 +17,7 @@ function AvlagaiinKhuvaariUusgekh({
           scroll={{ y: "30vh" }}
           className="mt-2"
           dataSource={ugugdul}
+          
           size="small"
           pagination={false}
           bordered

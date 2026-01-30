@@ -150,7 +150,6 @@ function ZardalBurtgel(
   const keyDowner = useCallback((e) => {
     var valueNer = form.getFieldValue("ner");
     setHideTogtmol(valueNer !== "Газ");
-    setHideCoefficent(!valueNer?.includes("Цахилгаан"));
     setHideKhaluunus(!valueNer?.includes("Халуун ус"));
     setHideKhuitenus(
       !valueNer?.includes("Халуун ус") && !valueNer?.includes("Хүйтэн ус")
