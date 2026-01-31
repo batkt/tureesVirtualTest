@@ -81,10 +81,10 @@ function useUilchluulegch(
         const now = moment();
         const defaultQuery = {
           ...query,
-          createdAt: {
-            $gte: now.clone().startOf("month").toDate(),
-            $lte: now.clone().endOf("month").toDate(),
-          },
+          // createdAt: {
+          //   $gte: now.clone().startOf("month").toDate(),
+          //   $lte: now.clone().endOf("month").toDate(),
+          // },
         };
         setCurrentArchiveName(null);
         setIsMultiMonth(false);
