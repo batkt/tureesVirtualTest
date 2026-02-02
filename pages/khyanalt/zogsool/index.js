@@ -609,13 +609,6 @@ function Zogsool({ token }) {
       ...aa,
     };
 
-    if (tuluv !== "" && tuluv !== null && tuluv !== undefined) {
-      const tuluvValue = Number(tuluv);
-      if (tuluvValue !== 0) {
-        baseQuery["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: true };
-      }
-    }
-
     if (!!zogsoolId) {
       baseQuery["tuukh.zogsooliinId"] = zogsoolId;
     }
@@ -652,18 +645,21 @@ function Zogsool({ token }) {
           baseQuery["niitDun"] = { $eq: 0 };
           baseQuery["tuukh"] = {
             $elemMatch: {
-              tuluv: { $in: [0, -1] }
+              tuluv: { $in: [0, -1] },
+              tsagiinTuukh: {
+                $elemMatch: {
+                  garsanTsag: { $exists: true }
+                }
+              }
             }
           };
           break;
-
-
         case 3:
           baseQuery["tuukh.0.tuluv"] = -2;
           break;
-
+          
         case 4:
-          // Тодорхойгүй - cars that were marked as unknown when same car entered again
+         
           baseQuery["tuukh.0.tuluv"] = -4;
           baseQuery["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: false };
           break;
@@ -1568,7 +1564,7 @@ function Zogsool({ token }) {
                   onClick={() => {
                     setTuluv(3);
                   }}
-                  className={`relative ${
+                  className={`relative ${   
                     tuluv === 3 && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
