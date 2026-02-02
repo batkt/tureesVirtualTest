@@ -650,12 +650,13 @@ function Zogsool({ token }) {
 
        case 2:
           baseQuery["niitDun"] = { $eq: 0 };
-                baseQuery["tuukh"] = {
-              $elemMatch: {
-                tuluv: 0
-          }
+          baseQuery["tuukh"] = {
+            $elemMatch: {
+              tuluv: { $in: [0, -1] }
+            }
           };
           break;
+
 
         case 3:
           baseQuery["tuukh.0.tuluv"] = -2;
