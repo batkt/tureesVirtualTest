@@ -10,21 +10,18 @@ const searchGenerator = (search, fields) => {
   else return {};
 };
 
-const fetcher = (
-  url,
-  token,
-  query,
-  searchKeys,
-  { search = "", ...khuudaslalt }
-) =>
-  axios(token)
+const fetcher = (url, token, query, searchKeys, { search = "", ...khuudaslalt }) => {
+  const searchQuery = searchGenerator(search, searchKeys);
+  
+  return axios(token)
     .post(url, {
       ...khuudaslalt,
       ...query,
-      ...searchGenerator(search, searchKeys),
+      ...(Object.keys(searchQuery).length > 0 ? searchQuery : {}),
     })
     .then((res) => res.data)
     .catch(aldaaBarigch);
+};
 
 function useNegtgelTailan(token, query, searchKeys, khuudasniiKhemjee) {
   const [khuudaslalt, setTailanKhuudaslalt] = useState({

@@ -11,7 +11,7 @@ import { t } from "i18next";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
-
+import numberToWords from "tools/function/numberToWords";
 const formItemLayout = {
   labelCol: {
     span: 10,
@@ -159,7 +159,6 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
                 parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                 placeholder="Тариф"
                 onChange={(e) => {
-                  
                   inputChange(e, value?.zardluud && value?.zardluud[i])
                 }
                 }
@@ -364,15 +363,16 @@ const Zardal = ({
     });
   
     if (index !== -1) {
-     
+
       const updatedZardluud = [...value.zardluud];
       updatedZardluud[index] = {
         ...updatedZardluud[index],
         dun: e,
         tariff: e,
         tulukhDun: e,
+        tariffUsgeer: numberToWords(e, { fixed: 2, suffix: "n" }, "төгрөг", "мөнгө")
       };
-      
+    
       onChange({ 
         ...value, 
         zardluud: updatedZardluud 
