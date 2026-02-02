@@ -2738,7 +2738,7 @@ function Zogsool({ token }) {
                                   b?.tuukh?.[0]?.tulbur,
                                 );
 
-                                acc.niitDun += getPaymentTotal(b);
+                                acc.niitDun += Number(b?.niitDun) || 0;
                                 acc.payment += payments.reduce(
                                   (c, d) => c + (Number(d?.dun) || 0),
                                   0,
