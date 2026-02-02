@@ -456,7 +456,7 @@ function tulburTootsoo() {
             var khymdarsanDun =
               khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
           } else {
-            var khymdarsanDun = parseFloat(tootsoolol?.khunglugdsunDun);
+            var khymdarsanDun = parseFloat(x.khunglugdsunDun);
           }
         } else {
           ugugdul.tailbar = "Хөнгөлөлт";
@@ -521,7 +521,7 @@ function tulburTootsoo() {
             var khymdarsanDun =
               khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
           } else {
-            var khymdarsanDun = parseFloat(tootsoolol?.khunglugdsunDun);
+            var khymdarsanDun = parseFloat(x.khunglugdsunDun);
           }
         }
 
@@ -980,7 +980,7 @@ function tulburTootsoo() {
   }
 
   function khungulukhDunTootsoolyo() {
-    let dun = form?.getFieldValue("khungulukhKhuvi");
+    let dun = Number(form?.getFieldValue("khungulukhKhuvi"));
     if (turul === "turees")
       tootsoolol.niitSariinTurees = songogdsonGereenuud?.reduce(
         (a, b) => a + Number(b?.sariinTurees || 0),
@@ -1272,7 +1272,7 @@ function tulburTootsoo() {
 
           gereeKhunglugdsunDun =
             khungulukh === "khuvi" ? (Number(khymdraaguiDun) * dun) / 100 : dun;
-
+          geree.khunglugdsunDun = gereeKhunglugdsunDun;
           totalKhunglugdsunDun += gereeKhunglugdsunDun;
         });
       }
