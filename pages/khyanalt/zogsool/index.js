@@ -485,7 +485,7 @@ function Zogsool({ token }) {
                 >
                   {t("Зөрчилтэй")}
                 </div>
-                <div
+                {/* <div
                   onClick={() => {
                     setTuluvZurchil(3);
                   }}
@@ -494,7 +494,7 @@ function Zogsool({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Тодорхойгүй")}
-                </div>
+                </div> */}
               </div>
             }
           >
@@ -648,8 +648,13 @@ function Zogsool({ token }) {
           baseQuery["tuukh.0.tuluv"] = 1;
           break;
 
-        case 2:
+       case 2:
           baseQuery["niitDun"] = { $eq: 0 };
+                baseQuery["tuukh"] = {
+              $elemMatch: {
+                tuluv: 0
+          }
+          };
           break;
 
         case 3:
@@ -1568,7 +1573,7 @@ function Zogsool({ token }) {
                 >
                   {t("Зөрчилтэй")}
                 </div>
-                <div
+                {/* <div
                   onClick={() => {
                     setTuluv(4);
                   }}
@@ -1577,7 +1582,7 @@ function Zogsool({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Тодорхойгүй")}
-                </div>
+                </div> */}
                 <div
                   onClick={() => {
                     setTuluv(2);
