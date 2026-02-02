@@ -2897,17 +2897,6 @@ function camera({ token }) {
             if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh) {
               zurchilteiMashinMsgilgeekh(body?.mashiniiDugaar);
             }
-
-            if (!garakhCamera && !searchUtga.current?.value) {
-              const pageSize = uilchluulegchGaralt?.khuudasniiKhemjee || 10;
-              const total = uilchluulegchGaralt?.niitMur || 0;
-              const targetPage = Math.max(1, Math.ceil((total + 1) / pageSize));
-              setUilchluulegchKhuudaslalt((e) => ({
-                ...e,
-                khuudasniiDugaar: targetPage,
-              }));
-            }
-
             onRefresh();
 
             if (garakhCamera) {
@@ -2926,7 +2915,7 @@ function camera({ token }) {
                       .then(({ data: freshData }) => {
                         const fresh = freshData?.jagsaalt?.[0];
                         if (fresh?.tuukh?.[0] && fresh?._id) {
-                          // Don't open payment modal if it's still within free-time window
+                       
                           if (isInUneguiKhugatsaa(fresh.tuukh[0])) {
                             return;
                           }
@@ -3025,7 +3014,7 @@ function camera({ token }) {
       if (barilgiinId) {
         yavuulakhData.barilgiinId = barilgiinId;
       }
-      // Check if offline
+     
       if (isOfflineMode || !isOnline) {
         const checkPaymentRequired = async () => {
           try {
