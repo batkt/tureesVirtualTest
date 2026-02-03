@@ -1618,10 +1618,7 @@ function Zogsool({ token }) {
                   ? "bg-green-500 text-white dark:bg-green-700"
                   : v[0].tuluv === -2
                   ? "bg-red-500 text-white dark:bg-red-700"
-                  : v[0].tuluv === -4
-                  ? "bg-purple-500 text-white dark:bg-purple-700"
-                  : v[0]?.tuluv === 0 &&
-                    v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
+                  : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
                     data.niitDun > 0
                   ? "bg-yellow-500 text-white dark:bg-yellow-700"
                   : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
@@ -1641,11 +1638,7 @@ function Zogsool({ token }) {
                   ? "Төлсөн"
                   : v[0].tuluv === -2
                   ? "Зөрчилтэй"
-                  : v[0].tuluv === -4
-                  ? "Тодорхойгүй"
-                  : v[0]?.tuluv === 0 &&
-                    v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
-                    data.niitDun > 0
+                  : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && data.niitDun > 0
                   ? "Төлбөртэй"
                   : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
                   ? "Идэвхтэй"
@@ -1680,14 +1673,6 @@ function Zogsool({ token }) {
               <div>
                 {moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD")}
               </div>
-            );
-          } else if (v?.[0]?.tuluv === -4) {
-            return (
-              <Tooltip placement="top" title={t("Гарсан цаг тодорхойгүй")}>
-                <div className="max-w-[8rem] cursor-help truncate break-words">
-                  {t("Гарсан цаг тодорхойгүй")}
-                </div>
-              </Tooltip>
             );
           } else
             return (
@@ -2518,14 +2503,13 @@ function Zogsool({ token }) {
                                 ? "Төлсөн"
                                 : v[0].tuluv === -2
                                 ? "Зөрчилтэй"
-                                : v[0].tuluv === -4
-                                ? "Тодорхойгүй"
+
                                 : v[0]?.tuluv === 0 &&
                                   !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
                                 ? "Идэвхтэй"
                                 : v[0]?.tuluv === -3
                                 ? "Цэвэрлэсэн"
-                                : v[0]?.tuluv === 0 && record.niitDun > 0
+                                : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && data.niitDun > 0
                                 ? "Төлбөртэй"
                                 : "Үнэгүй";
                             },
@@ -2546,9 +2530,7 @@ function Zogsool({ token }) {
                                 return moment(
                                   parent?.mashin?.duusakhOgnoo,
                                 ).format("YYYY-MM-DD");
-                              } else if (v?.[0]?.tuluv === -4) {
-                                return t("Гарсан цаг тодорхойгүй");
-                              }
+                              } 
                               return v?.[0]?.tuluv === -1
                                 ? v[0]?.uneguiGarsan
                                 : parent.zurchil
