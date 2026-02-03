@@ -55,7 +55,7 @@ function useUilchluulegchWithQuery(
         ]
       : null,
     fetcher,
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: false },
   );
   return {
     setUilchluulegchKhuudaslalt,

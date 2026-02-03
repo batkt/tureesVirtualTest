@@ -24,7 +24,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 function ZardalBurtgel(
   { data, destroy, baiguullagiinId, barilgiinId, token, togtmolEsekh, refresh },
-  ref
+  ref,
 ) {
   const { t } = useTranslation();
   const [form] = Form.useForm();
@@ -36,10 +36,10 @@ function ZardalBurtgel(
   const [ognoonuud, setOgnoonuud] = useState(
     data?.ognoonuud?.length > 0
       ? [moment(data?.ognoonuud[0]), moment(data?.ognoonuud[1])]
-      : []
+      : [],
   );
   const [nuatBodokhEsekh, setNuatBodokhEsekh] = useState(
-    data?.nuatBodokhEsekh || false
+    data?.nuatBodokhEsekh || false,
   );
 
   function garya() {
@@ -102,7 +102,7 @@ function ZardalBurtgel(
               refresh();
               destroy();
             }
-          }
+          },
         );
         if (data?.ognoonuud?.length > 0 || ognoonuud?.length > 0) {
           uilchilgee(token)
@@ -128,7 +128,7 @@ function ZardalBurtgel(
         garya();
       },
     }),
-    [form, ognoonuud, nuatBodokhEsekh]
+    [form, ognoonuud, nuatBodokhEsekh],
   );
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
@@ -150,16 +150,17 @@ function ZardalBurtgel(
   const keyDowner = useCallback((e) => {
     var valueNer = form.getFieldValue("ner");
     setHideTogtmol(valueNer !== "Газ");
+    !togtmolEsekh ? setHideCoefficent(!valueNer?.includes("Цахилгаан")) : "";
     setHideKhaluunus(!valueNer?.includes("Халуун ус"));
     setHideKhuitenus(
-      !valueNer?.includes("Халуун ус") && !valueNer?.includes("Хүйтэн ус")
+      !valueNer?.includes("Халуун ус") && !valueNer?.includes("Хүйтэн ус"),
     );
   }, []);
 
   function onChangeTariff(e) {
     form.setFieldValue(
       "tariffUsgeer",
-      numberToWords(e, { fixed: 2, suffix: "n" }, "төгрөг", "мөнгө")
+      numberToWords(e, { fixed: 2, suffix: "n" }, "төгрөг", "мөнгө"),
     );
   }
 
@@ -167,7 +168,7 @@ function ZardalBurtgel(
     form.setFieldValue("tariff", e);
     form.setFieldValue(
       "tariffUsgeer",
-      numberToWords(e, { fixed: 2, suffix: "n" }, "төгрөг", "мөнгө")
+      numberToWords(e, { fixed: 2, suffix: "n" }, "төгрөг", "мөнгө"),
     );
   }
 
