@@ -611,241 +611,241 @@ function camera({ token }) {
   }, []);
 
   // Fetch offline data from local .NET service
-  const fetchLocalOfflineData = React.useCallback(async () => {
-    if (!isActuallyOffline) return; // Only fetch when offline
+  // const fetchLocalOfflineData = React.useCallback(async () => {
+  //   if (!isActuallyOffline) return; // Only fetch when offline
 
-    try {
-      // Try to connect to local .NET service (adjust port as needed)
-      const response = await fetch("http://localhost:5000/api/offline-plates", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        timeout: 5000, // 5 second timeout
-      });
+  //   try {
+  //     // Try to connect to local .NET service (adjust port as needed)
+  //     const response = await fetch("http://localhost:5000/api/offline-plates", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       timeout: 5000, // 5 second timeout
+  //     });
 
-      if (response.ok) {
-        const result = await response.json();
+  //     if (response.ok) {
+  //       const result = await response.json();
         
-        const transformedData = result.data
-          .map((plate, index) => {
-            try {
-              // Helper function to extract string value from array or string
-              const extractValue = (value) => {
-                if (Array.isArray(value)) {
-                  return value.length > 0 ? String(value[0]) : "";
-                }
-                return value ? String(value) : "";
-              };
+  //       const transformedData = result.data
+  //         .map((plate, index) => {
+  //           try {
+  //             // Helper function to extract string value from array or string
+  //             const extractValue = (value) => {
+  //               if (Array.isArray(value)) {
+  //                 return value.length > 0 ? String(value[0]) : "";
+  //               }
+  //               return value ? String(value) : "";
+  //             };
 
-              // Clean null characters and whitespace
-              const cleanString = (str) => {
-                return str.replace(/\u0000/g, "").trim();
-              };
+  //             // Clean null characters and whitespace
+  //             const cleanString = (str) => {
+  //               return str.replace(/\u0000/g, "").trim();
+  //             };
 
-              // Handle both old and new property names from .NET service
-              const mashiniiDugaar = cleanString(
-                extractValue(plate.mashiniiDugaar)
-              );
-              const cameraIP = cleanString(
-                extractValue(plate.camerA_IP || plate.CAMERA_IP)
-              );
-              const burtgelOgnoo = cleanString(
-                extractValue(plate.burtgelOgnoo)
-              );
-              const color = cleanString(
-                extractValue(plate.color || plate.Color)
-              );
+  //             // Handle both old and new property names from .NET service
+  //             const mashiniiDugaar = cleanString(
+  //               extractValue(plate.mashiniiDugaar)
+  //             );
+  //             const cameraIP = cleanString(
+  //               extractValue(plate.camerA_IP || plate.CAMERA_IP)
+  //             );
+  //             const burtgelOgnoo = cleanString(
+  //               extractValue(plate.burtgelOgnoo)
+  //             );
+  //             const color = cleanString(
+  //               extractValue(plate.color || plate.Color)
+  //             );
 
-              // Skip empty records
-              if (!mashiniiDugaar || !cameraIP || !burtgelOgnoo) {
-                return null;
-              }
+  //             // Skip empty records
+  //             if (!mashiniiDugaar || !cameraIP || !burtgelOgnoo) {
+  //               return null;
+  //             }
 
-              return {
-                _id: `local-net-${Date.now()}-${index}`,
-                mashiniiDugaar: mashiniiDugaar.toUpperCase(),
-                turul: "Үйлчлүүлэгч",
-                createdAt: burtgelOgnoo,
-                localSource: true,
-                netServiceData: true,
-                cameraIP: cameraIP,
-                color: color,
-                originalData: plate,
-                tuukh: [
-                  {
-                    tuluv: 0,
-                    tulukhDun: 0,
-                    tulbur: [],
-                    orsonKhaalga: cameraIP,
-                    tsagiinTuukh: [
-                      {
-                        orsonTsag: new Date(burtgelOgnoo),
-                      },
-                    ],
-                  },
-                ],
-                mashin: {
-                  temdeglel: `Камер: ${cameraIP}, Өнгө: ${color || "N/A"}`,
-                },
-                baiguullagiinId: baiguullaga?._id,
-                barilgiinId: barilgiinId,
-              };
-            } catch (error) {
-              console.error("Error transforming plate data:", error, plate);
-              return null;
-            }
-          })
-          .filter(Boolean); // Remove null entries
+  //             return {
+  //               _id: `local-net-${Date.now()}-${index}`,
+  //               mashiniiDugaar: mashiniiDugaar.toUpperCase(),
+  //               turul: "Үйлчлүүлэгч",
+  //               createdAt: burtgelOgnoo,
+  //               localSource: true,
+  //               netServiceData: true,
+  //               cameraIP: cameraIP,
+  //               color: color,
+  //               originalData: plate,
+  //               tuukh: [
+  //                 {
+  //                   tuluv: 0,
+  //                   tulukhDun: 0,
+  //                   tulbur: [],
+  //                   orsonKhaalga: cameraIP,
+  //                   tsagiinTuukh: [
+  //                     {
+  //                       orsonTsag: new Date(burtgelOgnoo),
+  //                     },
+  //                   ],
+  //                 },
+  //               ],
+  //               mashin: {
+  //                 temdeglel: `Камер: ${cameraIP}, Өнгө: ${color || "N/A"}`,
+  //               },
+  //               baiguullagiinId: baiguullaga?._id,
+  //               barilgiinId: barilgiinId,
+  //             };
+  //           } catch (error) {
+  //             console.error("Error transforming plate data:", error, plate);
+  //             return null;
+  //           }
+  //         })
+  //         .filter(Boolean); // Remove null entries
 
-        setLocalOfflineData(transformedData);
-        return transformedData;
-      }
-    } catch (error) {
-      setLocalOfflineData([]);
-    }
+  //       setLocalOfflineData(transformedData);
+  //       return transformedData;
+  //     }
+  //   } catch (error) {
+  //     setLocalOfflineData([]);
+  //   }
 
-    return [];
-  }, [isActuallyOffline, baiguullaga?._id, barilgiinId]);
+  //   return [];
+  // }, [isActuallyOffline, baiguullaga?._id, barilgiinId]);
 
-  const syncPendingUpdates = React.useCallback(async () => {
-    if (typeof window === "undefined") return;
+  // const syncPendingUpdates = React.useCallback(async () => {
+  //   if (typeof window === "undefined") return;
 
-    const storedUpdates = JSON.parse(
-      localStorage.getItem("cameraPendingUpdates") || "[]"
-    );
-    const storedCars = JSON.parse(
-      localStorage.getItem("cameraPendingCars") || "[]"
-    );
+  //   const storedUpdates = JSON.parse(
+  //     localStorage.getItem("cameraPendingUpdates") || "[]"
+  //   );
+  //   const storedCars = JSON.parse(
+  //     localStorage.getItem("cameraPendingCars") || "[]"
+  //   );
 
-    if (storedUpdates.length === 0 && storedCars.length === 0) return;
+  //   if (storedUpdates.length === 0 && storedCars.length === 0) return;
 
-    setSyncStatus("syncing");
-    const successful = [];
-    const failed = [];
-    const successfulCars = [];
-    const failedCars = [];
+  //   setSyncStatus("syncing");
+  //   const successful = [];
+  //   const failed = [];
+  //   const successfulCars = [];
+  //   const failedCars = [];
 
-    for (const update of storedUpdates) {
-      try {
-        if (update.type === "updateUilchluulegch") {
-          const response = await updateMethod(
-            "uilchluulegch",
-            token,
-            update.body
-          );
-          if (response?.data === "Amjilttai") {
-            successful.push(update.id);
-          } else {
-            failed.push(update);
-          }
-        } else if (update.type === "zogsooliinTulburTulye") {
-          const response = await uilchilgee(token).post(
-            "/zogsooliinTulburTulye",
-            {
-              tulbur: update.tulbur,
-              id: update.id,
-            }
-          );
-          if (response?.data === "Amjilttai") {
-            successful.push(update.pendingId);
-          } else {
-            failed.push(update);
-          }
-        }
-      } catch (error) {
-        failed.push(update);
-      }
-    }
+  //   for (const update of storedUpdates) {
+  //     try {
+  //       if (update.type === "updateUilchluulegch") {
+  //         const response = await updateMethod(
+  //           "uilchluulegch",
+  //           token,
+  //           update.body
+  //         );
+  //         if (response?.data === "Amjilttai") {
+  //           successful.push(update.id);
+  //         } else {
+  //           failed.push(update);
+  //         }
+  //       } else if (update.type === "zogsooliinTulburTulye") {
+  //         const response = await uilchilgee(token).post(
+  //           "/zogsooliinTulburTulye",
+  //           {
+  //             tulbur: update.tulbur,
+  //             id: update.id,
+  //           }
+  //         );
+  //         if (response?.data === "Amjilttai") {
+  //           successful.push(update.pendingId);
+  //         } else {
+  //           failed.push(update);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       failed.push(update);
+  //     }
+  //   }
 
-    for (const car of storedCars) {
-      try {
-        if (car.type === "addCar" || car.type === "addCarFromEntry") {
-          const endpoint =
-            car.type === "addCarFromEntry"
-              ? "/zogsoolOrlogoGaraas"
-              : "/zogsoolSdkService";
-          const response = await uilchilgee(token).post(endpoint, car.data);
-          if (response?.status === 200 && !response?.data?.aldaa) {
-            successfulCars.push(car.id);
-          } else {
-            failedCars.push(car);
-          }
-        } else if (car.type === "removeCar") {
-          const response = await uilchilgee(token).post(
-            "/zogsoolSdkService",
-            car.data
-          );
-          if (response?.status === 200 && !response?.data?.aldaa) {
-            successfulCars.push(car.id);
-          } else {
-            failedCars.push(car);
-          }
-        }
-      } catch (error) {
-        failedCars.push(car);
-      }
-    }
+  //   for (const car of storedCars) {
+  //     try {
+  //       if (car.type === "addCar" || car.type === "addCarFromEntry") {
+  //         const endpoint =
+  //           car.type === "addCarFromEntry"
+  //             ? "/zogsoolOrlogoGaraas"
+  //             : "/zogsoolSdkService";
+  //         const response = await uilchilgee(token).post(endpoint, car.data);
+  //         if (response?.status === 200 && !response?.data?.aldaa) {
+  //           successfulCars.push(car.id);
+  //         } else {
+  //           failedCars.push(car);
+  //         }
+  //       } else if (car.type === "removeCar") {
+  //         const response = await uilchilgee(token).post(
+  //           "/zogsoolSdkService",
+  //           car.data
+  //         );
+  //         if (response?.status === 200 && !response?.data?.aldaa) {
+  //           successfulCars.push(car.id);
+  //         } else {
+  //           failedCars.push(car);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       failedCars.push(car);
+  //     }
+  //   }
 
-    const remainingUpdates = storedUpdates.filter(
-      (update) =>
-        !successful.includes(update.id) &&
-        !successful.includes(update.pendingId)
-    );
-    if (typeof window !== "undefined") {
-      localStorage.setItem(
-        "cameraPendingUpdates",
-        JSON.stringify(remainingUpdates)
-      );
-    }
-    setPendingUpdates(remainingUpdates);
+  //   const remainingUpdates = storedUpdates.filter(
+  //     (update) =>
+  //       !successful.includes(update.id) &&
+  //       !successful.includes(update.pendingId)
+  //   );
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem(
+  //       "cameraPendingUpdates",
+  //       JSON.stringify(remainingUpdates)
+  //     );
+  //   }
+  //   setPendingUpdates(remainingUpdates);
 
-    const remainingCars = storedCars.filter(
-      (car) => !successfulCars.includes(car.id)
-    );
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cameraPendingCars", JSON.stringify(remainingCars));
+  //   const remainingCars = storedCars.filter(
+  //     (car) => !successfulCars.includes(car.id)
+  //   );
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("cameraPendingCars", JSON.stringify(remainingCars));
 
-      setPendingCarsUpdateTrigger((prev) => prev + 1);
-    }
+  //     setPendingCarsUpdateTrigger((prev) => prev + 1);
+  //   }
 
-    const totalSuccessful = successful.length + successfulCars.length;
-    const totalFailed = failed.length + failedCars.length;
-    const totalAttempted = totalSuccessful + totalFailed;
+  //   const totalSuccessful = successful.length + successfulCars.length;
+  //   const totalFailed = failed.length + failedCars.length;
+  //   const totalAttempted = totalSuccessful + totalFailed;
 
-    if (totalSuccessful > 0) {
-      setSyncStatus("success");
-      toast.success(
-        t(`Амжилттай нэгтгэл хийгдлээ (${totalSuccessful} өгөгдөл)`)
-      );
-      onRefresh && onRefresh();
-      setTimeout(() => setSyncStatus("idle"), 3000);
-    }
+  //   if (totalSuccessful > 0) {
+  //     setSyncStatus("success");
+  //     toast.success(
+  //       t(`Амжилттай нэгтгэл хийгдлээ (${totalSuccessful} өгөгдөл)`)
+  //     );
+  //     onRefresh && onRefresh();
+  //     setTimeout(() => setSyncStatus("idle"), 3000);
+  //   }
 
-    // if (totalFailed > 0 && totalAttempted > 0) {
-    //   if (totalSuccessful === 0) {
-    //     setSyncStatus("error");
-    //     toast.error(t("Нэгтгэл хийхэд алдаа гарлаа"));
-    //     setTimeout(() => setSyncStatus("idle"), 3000);
-    //   } else {
-    //     toast.warning(t(`${totalFailed} өгөгдөл нэгтгэл хийгдсэнгүй`));
-    //   }
-    // }
-  }, [token, t]);
+  //   // if (totalFailed > 0 && totalAttempted > 0) {
+  //   //   if (totalSuccessful === 0) {
+  //   //     setSyncStatus("error");
+  //   //     toast.error(t("Нэгтгэл хийхэд алдаа гарлаа"));
+  //   //     setTimeout(() => setSyncStatus("idle"), 3000);
+  //   //   } else {
+  //   //     toast.warning(t(`${totalFailed} өгөгдөл нэгтгэл хийгдсэнгүй`));
+  //   //   }
+  //   // }
+  // }, [token, t]);
 
-  useEffect(() => {
-    if (!isOfflineMode && isOnline && typeof window !== "undefined") {
-      const storedUpdates = JSON.parse(
-        localStorage.getItem("cameraPendingUpdates") || "[]"
-      );
-      const storedCars = JSON.parse(
-        localStorage.getItem("cameraPendingCars") || "[]"
-      );
-      if (storedUpdates.length > 0 || storedCars.length > 0) {
-        syncPendingUpdates();
-      }
-    }
-  }, [isOfflineMode, isOnline, syncPendingUpdates]);
+  // useEffect(() => {
+  //   if (!isOfflineMode && isOnline && typeof window !== "undefined") {
+  //     const storedUpdates = JSON.parse(
+  //       localStorage.getItem("cameraPendingUpdates") || "[]"
+  //     );
+  //     const storedCars = JSON.parse(
+  //       localStorage.getItem("cameraPendingCars") || "[]"
+  //     );
+  //     if (storedUpdates.length > 0 || storedCars.length > 0) {
+  //       syncPendingUpdates();
+  //     }
+  //   }
+  // }, [isOfflineMode, isOnline, syncPendingUpdates]);
 
   useEffect(() => {
     const a1 = generateChild(jagsaalt, "Орох");
@@ -1136,24 +1136,24 @@ function camera({ token }) {
   }, [syncStatus, isActuallyOffline, uilchluulegchMutate]);
 
   // Poll local .NET service for offline data when offline
-  useEffect(() => {
-    if (!isActuallyOffline) {
-      setLocalOfflineData([]); // Clear when online
-      return;
-    }
+  // useEffect(() => {
+  //   if (!isActuallyOffline) {
+  //     setLocalOfflineData([]); // Clear when online
+  //     return;
+  //   }
 
-    // Initial fetch
-    fetchLocalOfflineData();
+  //   // Initial fetch
+  //   fetchLocalOfflineData();
 
-    // Set up polling interval (every 30 seconds to match .NET service)
-    const pollInterval = setInterval(() => {
-      fetchLocalOfflineData();
-    }, 30000);
+  //   // Set up polling interval (every 30 seconds to match .NET service)
+  //   const pollInterval = setInterval(() => {
+  //     fetchLocalOfflineData();
+  //   }, 30000);
 
-    return () => {
-      clearInterval(pollInterval);
-    };
-  }, [isActuallyOffline, fetchLocalOfflineData]);
+  //   return () => {
+  //     clearInterval(pollInterval);
+  //   };
+  // }, [isActuallyOffline, fetchLocalOfflineData]);
 
   const tooQuery = useMemo(() => {
     const todayStart = moment().startOf("day").toDate();
