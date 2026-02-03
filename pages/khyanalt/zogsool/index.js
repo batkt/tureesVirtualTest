@@ -2509,7 +2509,7 @@ function Zogsool({ token }) {
                                 ? "Идэвхтэй"
                                 : v[0]?.tuluv === -3
                                 ? "Цэвэрлэсэн"
-                                : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && data.niitDun > 0
+                                : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && record.niitDun > 0
                                 ? "Төлбөртэй"
                                 : "Үнэгүй";
                             },
