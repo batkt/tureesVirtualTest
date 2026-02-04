@@ -77,6 +77,7 @@ import StackIkhNaydStream from "./StackIkhNaydStream";
 import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
 import KhungulukhTsonkh from "components/pageComponents/zogsool/KhungulukhTsonkh";
 import { CiDiscount1 } from "react-icons/ci";
+import throttle from "lodash/throttle";
 
 export function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
@@ -337,6 +338,7 @@ function camera({ token }) {
     !!camerVal[1] && songogdsonCameraIP === camerVal[1];
   const searchUtga = useRef(null);
   const socketRef = useRef(null);
+  const refreshRef = useRef();
 
   useEffect(() => {
     setShineBagana([]);
@@ -967,23 +969,21 @@ function camera({ token }) {
   }, [tuluvFilter]);
 
   useEffect(() => {
-    if (!baiguullaga?._id || !parkingJagsaalt) return;
+    refreshRef.current = throttle(() => {
+      onRefresh();
+    }, 1500);
+  }, []);
+
+  useEffect(() => {
     if (!socketRef.current) {
       socketRef.current = socket();
     }
+  }, []);
 
+  useEffect(() => {
+    if (!baiguullaga?._id || !socketRef.current) return;
     const s = socketRef.current;
     const cleanup = [];
-    const getCams = (type) =>
-      parkingJagsaalt?.flatMap((item) =>
-        item?.khaalga
-          ?.filter((k) => k.turul === type)
-          ?.flatMap((k) => k.camera?.map((c) => c.cameraIP) || [])
-      ) || [];
-
-    const orohCams = getCams("Орох");
-    const garahCams = getCams("Гарах");
-
     const handleOroh = (data) => {
       if (
         !data ||
@@ -995,7 +995,7 @@ function camera({ token }) {
 
       if (!data?.oruulakhguiEsekh) {
         khaalgaNeey(data.cameraIP, data.turul);
-        onRefresh();
+        refreshRef.current?.();
       }
 
       const dugaar = data.mashiniiDugaar?.replace("???", "");
@@ -1045,9 +1045,6 @@ function camera({ token }) {
       }
       if (u?.turul === "Үнэгүй" || niit === 0) {
         if (u?.tuukh?.[0]?.garsanKhaalga) {
-          toololtMutate();
-          zogsoolTusBuriinTooMutate();
-
           if (songogdzonZogsool?.garakhKhaalgaGarTokhirgoo !== true) {
             khaalgaNeey(u.tuukh[0].garsanKhaalga);
           }
@@ -1058,7 +1055,7 @@ function camera({ token }) {
           .get(url)
           .catch(() => {});
       }
-      onRefresh();
+      refreshRef.current?.();
     };
     const handleGarahTulsun = (data) => {
       if (
@@ -1078,29 +1075,19 @@ function camera({ token }) {
       }
 
       khaalgaNeey(data.cameraIP);
-      onRefresh();
+      refreshRef.current?.();
     };
-    orohCams.forEach((camIP) => {
-      const eventName = `zogsoolOroh${baiguullaga._id}${camIP}`;
-      s.on(eventName, handleOroh);
-      cleanup.push(() => s.off(eventName, handleOroh));
-    });
-    garahCams.forEach((camIP) => {
-      const e1 = `zogsoolGarah${baiguullaga._id}${camIP}`;
-      const e2 = `zogsoolGarahTulsun${baiguullaga._id}${camIP}`;
-
-      s.on(e1, handleGarah);
-      s.on(e2, handleGarahTulsun);
-
-      cleanup.push(() => s.off(e1, handleGarah));
-      cleanup.push(() => s.off(e2, handleGarahTulsun));
-    });
+    const eventName = "zogsoolOroh";
+    const e1 = "zogsoolGarah";
+    const e2 = "zogsoolGarahTulsun";
+    s.on(eventName, handleOroh);
+    s.on(e1, handleGarah);
+    s.on(e2, handleGarahTulsun);
+    cleanup.push(() => s.off(eventName, handleOroh));
+    cleanup.push(() => s.off(e1, handleGarah));
+    cleanup.push(() => s.off(e2, handleGarahTulsun));
     return () => cleanup.forEach((fn) => fn());
-  }, [
-    baiguullaga,
-    parkingJagsaalt,
-    songogdzonZogsool?.garakhKhaalgaGarTokhirgoo,
-  ]);
+  }, [baiguullaga?._id]);
 
   useEffect(() => {
     if (isActuallyOffline) {
