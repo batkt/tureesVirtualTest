@@ -1319,8 +1319,9 @@ function Zogsool({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "niitDun",
-        render(v, parents) {
-          return formatNumber(v || 0, 2);
+        render(v, data) {
+          const total = (data.tuukh?.[0]?.tulukhDun || 0) + (data.tuukh?.[1]?.tulukhDun || 0) ;
+          return formatNumber(total, 2);
         },
       },
       {
