@@ -497,16 +497,16 @@ function AjiltanBurtgel({ token }) {
     try {
       setWaiting(true);
 
-      // Fetch all customer data without pagination
+     
       const { data } = await getListMethod("khariltsagch", token, {
         query: {
           ...query,
           baiguullagiinId: ajiltan?.baiguullagiinId,
           barilgiinId: barilgiinId,
         },
-        // Don't include pagination parameters to get all records
+        
         khuudasniiDugaar: 1,
-        khuudasniiKhemjee: 999999, // Large number to get all records
+        khuudasniiKhemjee: 999999,
       });
 
       if (data?.jagsaalt) {
@@ -536,6 +536,11 @@ function AjiltanBurtgel({ token }) {
             {
               title: t("Бүртгэлийн дугаар"),
               dataIndex: "customerTin",
+              ellipsis: true,
+            },
+            {
+              title: t("Овог"),
+              dataIndex: "ovog",
               ellipsis: true,
             },
             { title: t("Нэр"), dataIndex: "ner", ellipsis: true },
@@ -1285,6 +1290,7 @@ function AjiltanBurtgel({ token }) {
               pageSize: khariltsagchiinGaralt?.khuudasniiKhemjee,
               total: khariltsagchiinGaralt?.niitMur,
               showSizeChanger: true,
+              pageSizeOptions: ['10', '20', '50', '100', '500', '1000'],
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                 setKhariltsagchKhuudaslalt((kh) => ({
                   ...kh,
