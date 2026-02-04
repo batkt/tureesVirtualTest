@@ -1320,7 +1320,7 @@ function Zogsool({ token }) {
         sorter: () => 0,
         dataIndex: "niitDun",
         render(v, data) {
-          const total = (data.tuukh?.[0]?.tulukhDun || 0) + (data.tuukh?.[1]?.tulukhDun || 0) ;
+          const total = v > 0 ? v : ((data.tuukh?.[0]?.tulukhDun || 0) + (data.tuukh?.[1]?.tulukhDun || 0));
           return formatNumber(total, 2);
         },
       },
@@ -2444,8 +2444,9 @@ function Zogsool({ token }) {
                             __numFmt__: "#,##0.00",
                             __cellType__: "TypeNumeric",
                             dataIndex: "niitDun",
-                            render(v) {
-                              return v || 0;
+                            render(v, data) {
+                              const total = v > 0 ? v : ((data.tuukh?.[0]?.tulukhDun || 0) + (data.tuukh?.[1]?.tulukhDun || 0));
+                              return total || 0;
                             },
                           },
                           ...filteredPaymentColumns,
