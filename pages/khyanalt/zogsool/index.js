@@ -1639,7 +1639,7 @@ function Zogsool({ token }) {
                   ? "Төлсөн"
                   : v[0].tuluv === -2
                   ? "Зөрчилтэй"
-                  : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && data.niitDun > 0
+                  : v[0]?.tuluv === -4 && data.niitDun > 0
                   ? "Төлбөртэй"
                   : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
                   ? "Идэвхтэй"
@@ -2511,7 +2511,7 @@ function Zogsool({ token }) {
                                 ? "Идэвхтэй"
                                 : v[0]?.tuluv === -3
                                 ? "Цэвэрлэсэн"
-                                : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && record.niitDun > 0
+                                : v[0]?.tuluv === -4 && record.niitDun > 0
                                 ? "Төлбөртэй"
                                 : "Үнэгүй";
                             },
