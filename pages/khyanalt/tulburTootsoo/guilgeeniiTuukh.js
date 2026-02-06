@@ -58,8 +58,12 @@ import NekhemjlekhiinTuukhTsonkh from "components/pageComponents/tulbur/Nekhemjl
 
 function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
   const { barilgiinId } = useAuth();
+  const isCancelled = ugugdul?.tuluv === -1;
+  const preCancelUldegdel =
+    ugugdul?.uldegdel ?? ugugdul?.niitUldegdel;
+  const usePreCancel = isCancelled && preCancelUldegdel != null;
   const { data, mutate, isValidating } = useSWR(
-    !!ugugdul?.gereeniiDugaar && !!barilgiinId
+    !usePreCancel && !!ugugdul?.gereeniiDugaar && !!barilgiinId
       ? [
           "/uldegdelBodyo",
           barilgiinId,
@@ -76,15 +80,20 @@ function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
       revalidateOnFocus: false,
     }
   );
-  ugugdul.uldegdel = data?.uldegdel;
+  const displayUldegdel = usePreCancel ? preCancelUldegdel : data?.uldegdel;
+  ugugdul.uldegdel = displayUldegdel ?? data?.uldegdel;
   ugugdul.mutate = mutate;
   return (
     <div
       className={`text-right font-medium ${
-        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+        (displayUldegdel ?? 0) > 0 ? "text-red-500" : "text-green-500"
       }`}
     >
-      {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel, 2)}
+      {!usePreCancel && isValidating ? (
+        <Spin size="small" />
+      ) : (
+        formatNumber(displayUldegdel ?? 0, 2)
+      )}
     </div>
   );
 }
@@ -183,10 +192,17 @@ function TableGuilgee({
       rowKey={(a) => a._id}
       className="t-head"
       onChange={onChange}
-      rowClassName={(record, index) =>
-        index % 2 === 0
-          ? "bg-white dark:bg-gray-600"
-          : "bg-gray-200 dark:bg-gray-800"
+      rowClassName={(record, index) => {
+        const base =
+          index % 2 === 0
+            ? "bg-white dark:bg-gray-600"
+            : "bg-gray-200 dark:bg-gray-800";
+        return record?.tuluv === -1 ? `${base} tsutslagdsan-geree-row` : base;
+      }}
+      rowStyle={(record) =>
+        record?.tuluv === -1
+          ? { borderLeft: "4px solid #ef4444", boxSizing: "border-box" }
+          : undefined
       }
       pagination={{
         current: garalt?.khuudasniiDugaar,
