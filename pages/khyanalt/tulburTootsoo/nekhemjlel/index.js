@@ -55,6 +55,7 @@ import khatuuZagvarGotoMPM from "tools/zagvar/turGotoMPM";
 import khatuuZagvarGotoMT from "tools/zagvar/turGotoMT";
 import khatuuZagvarSoyoljMall from "tools/zagvar/turSoyoljMall";
 import khatuuZagvarIkhNaydTower from "tools/zagvar/turIkhNaydTower";
+import khatuuZagvarGumuda from "tools/zagvar/turGumuda";
 
 const ilgeekhTurul = "davkharaar";
 
@@ -403,6 +404,41 @@ function tulburTootsoo({ token }) {
           const medeelel = _.cloneDeep(
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
+          if (medeelel?.zardluud) {
+            medeelel.zardluud = medeelel.zardluud.map((z) => {
+              if (z.tariff) {
+                const tariff =
+                  parseFloat(
+                    typeof z.tariff === "string"
+                      ? z.tariff.replace(/,/g, "")
+                      : z.tariff || 0
+                  ) || 0;
+                
+                  medeelel[`${z.tailbar}.tariff`] = formatNumber(tariff);
+                  medeelel[`${z.tailbar}.negj`] = formatNumber(z.negj);
+                  medeelel[`${z.tailbar}.umnukhZaalt`] = z.umnukhZaalt;
+                  medeelel[`${z.tailbar}.suuliinZaalt`] = z.suuliinZaalt;
+                  medeelel[`${z.tailbar}.khungulult`] = formatNumber(z.khungulult);
+                  medeelel[`${z.tailbar}.khungulultKhassanTulukhDun`] = formatNumber(z.khungulultKhassanTulukhDun);
+                  medeelel[`${z.tailbar}.chadalDun`] = formatNumber(z.chadalDun);
+                  medeelel[`${z.tailbar}.tsekhDun`] = formatNumber(z.tsekhDun);
+                  medeelel[`${z.tailbar}.sekhDemjikhTulburDun`] = formatNumber(z.sekhDemjikhTulburDun);
+
+                return { ...z, tariff: formatNumber(tariff) };
+              }
+               medeelel[`${z.tailbar}.tariff`] = formatNumber(z.tariff);
+              medeelel[`${z.tailbar}.negj`] = formatNumber(z.negj);
+              medeelel[`${z.tailbar}.umnukhZaalt`] = z.umnukhZaalt;
+              medeelel[`${z.tailbar}.suuliinZaalt`] = z.suuliinZaalt;
+              medeelel[`${z.tailbar}.khungulult`] = formatNumber(z.khungulult);
+              medeelel[`${z.tailbar}.khungulultKhassanTulukhDun`] = formatNumber(z.khungulultKhassanTulukhDun);
+              medeelel[`${z.tailbar}.chadalDun`] = formatNumber(z.chadalDun);
+              medeelel[`${z.tailbar}.tsekhDun`] = formatNumber(z.tsekhDun);
+              medeelel[`${z.tailbar}.sekhDemjikhTulburDun`] = formatNumber(z.sekhDemjikhTulburDun);
+
+              return z;
+            });
+          }
           const barilga = baiguullaga?.barilguud?.find(
             (a) => a._id === medeelel?.barilgiinId
           );
@@ -465,10 +501,7 @@ function tulburTootsoo({ token }) {
               );
             else if (
               (ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d" &&
-                barilgiinId === "6731b43bc23730ac1908da2e") ||
-              (ajiltan?.baiguullagiinId === "612f457d185280db676d0b51" &&
-                barilgiinId === "633e52ba9e57e626978b7c47")
-            )
+                barilgiinId === "6731b43bc23730ac1908da2e"))
               // soyoljMall
               zagvar.nekhemjlekh = khatuuZagvarSoyoljMall(
                 medeelel,
@@ -531,7 +564,76 @@ function tulburTootsoo({ token }) {
                 baiguullaga,
                 barilgiinId
               );
-            } else
+            }else if (ajiltan?.baiguullagiinId === "6937c18083d36cf495dfa855" && barilgiinId === "6937c18083d36cf495dfa856"){ 
+              // gumuda
+              const barilga = baiguullaga?.barilguud?.find(
+                (a) => a._id === barilgiinId
+              );
+              
+              // Set images before calling template
+              if (barilga?.logo) {
+                medeelel.barilgiinlogo = renderToString(
+                  <span>
+                    <img
+                      src={`${url}/file?path=logo/${barilga.logo}`}
+                      style={{
+                        width: 150,
+                        height: 100,
+                        transform: "translate(15%, 15%)",
+                        opacity: 0.65,
+                      }}
+                    />
+                  </span>
+                );
+              } else {
+                medeelel.barilgiinlogo = "";
+              }
+              
+              if (barilga?.tamga) {
+                medeelel.tamga = renderToString(
+                  <span>
+                    <img
+                      src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
+                      style={{
+                        width: 115,
+                        height: 100,
+                        transform: "translate(-10%, 20%)",
+                        opacity: 0.65,
+                      }}
+                    />
+                  </span>
+                );
+              } else {
+                medeelel.tamga = "";
+              }
+              
+              if (barilga?.gariinUseg) {
+                medeelel.gariinUseg = renderToString(
+                  <span style={{ position: "relative", zIndex: 9999 }}>
+                    <img
+                      src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
+                      style={{
+                        width: 100,
+                        height: 50,
+                        transform: "translate(10%, -40%)",
+                      }}
+                    />
+                  </span>
+                );
+              } else {
+                medeelel.gariinUseg = "";
+              }
+              
+              zagvar.nekhemjlekh = khatuuZagvarGumuda(
+                medeelel,
+                ajiltan,
+                baiguullaga,
+                barilga,
+                baiguullaga?._id,
+                barilgiinId
+              );
+            }
+               else
               zagvar.nekhemjlekh = khatuuZagvar(
                 medeelel,
                 ajiltan,
@@ -2237,6 +2339,17 @@ function tulburTootsoo({ token }) {
                 baiguullaga,
                 barilgiinId
               )
+            :  (ajiltan?.baiguullagiinId === "6937c18083d36cf495dfa855" && barilgiinId === "6937c18083d36cf495dfa856") 
+              // gumuda
+            ? khatuuZagvarGumuda(
+                nekhemjlekh,
+                ajiltan,
+                baiguullaga,
+                barilga,
+                baiguullaga?._id,
+                barilgiinId
+              )
+            
             : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
           : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
               ?.nekhemjlekh;
@@ -2376,6 +2489,27 @@ function tulburTootsoo({ token }) {
             </span>
           );
         }
+        //gumuda
+        if (ajiltan?.baiguullagiinId === "6937c18083d36cf495dfa855" && barilgiinId === "6937c18083d36cf495dfa856")
+        { 
+          if (barilga?.logo) {
+            nekhemjlekh.barilgiinlogo = renderToString(
+              <span>
+                <img
+                  src={`${url}/file?path=logo/${barilga.logo}`}
+                  style={{
+                    width: 150,
+                    height: 100,
+                    transform: "translate(15%, 15%)",
+                    opacity: 0.65,
+                  }}
+                />
+              </span>
+            );
+          } else {
+            nekhemjlekh.barilgiinlogo = "";
+          }
+        }
         // urangan
         else
           nekhemjlekh.barilgiinlogo = renderToString(
@@ -2450,19 +2584,23 @@ function tulburTootsoo({ token }) {
             </span>
           );
         else {
-          nekhemjlekh.khuviinTamga = renderToString(
-            <span style={{ position: "absolute", zIndex: 1 }}>
-              <img
-                src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
-                style={{
-                  width: 200,
-                  height: 110,
-                  transform: "translate(-30%, -50%)",
-                  opacity: 0.65,
-                }}
-              />
-            </span>
-          );
+          if (barilga?.tamga) {
+            nekhemjlekh.khuviinTamga = renderToString(
+              <span style={{ position: "absolute", zIndex: 1 }}>
+                <img
+                  src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
+                  style={{
+                    width: 200,
+                    height: 110,
+                    transform: "translate(-30%, -50%)",
+                    opacity: 0.65,
+                  }}
+                />
+              </span>
+            );
+          } else {
+            nekhemjlekh.khuviinTamga = "";
+          }
         }
         if (barilgiinId === "622ec99a8e64e5b4f0c3acb6") {
           nekhemjlekh.gariinUseg = renderToString(
@@ -2505,7 +2643,26 @@ function tulburTootsoo({ token }) {
                 />
               </span>
             );
-        } else {
+        } else if (ajiltan?.baiguullagiinId === "6937c18083d36cf495dfa855" && barilgiinId === "6937c18083d36cf495dfa856"){
+          if (barilga?.gariinUseg) {
+            nekhemjlekh.gariinUseg = renderToString(
+              <span style={{ position: "relative", zIndex: 9999 }}>
+                <img
+                  src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
+                  style={{
+                    width: 100,
+                    height: 50,
+                    transform: "translate(10%, -40%)",
+                  }}
+                />
+              </span>
+            );
+          } else {
+            nekhemjlekh.gariinUseg = "";
+          }
+        }
+        
+        else {
           nekhemjlekh.gariinUseg = renderToString(
             <span style={{ position: "relative", zIndex: 9999 }}>
               <img
@@ -2573,20 +2730,25 @@ function tulburTootsoo({ token }) {
                 />
               </span>
             );
-        } else
-          nekhemjlekh.tamga = renderToString(
-            <span>
-              <img
-                src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
-                style={{
-                  width: 115,
-                  height: 100,
-                  transform: "translate(-10%, 20%)",
-                  opacity: 0.65,
-                }}
-              />
-            </span>
-          );
+        } else {
+          if (barilga?.tamga) {
+            nekhemjlekh.tamga = renderToString(
+              <span>
+                <img
+                  src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
+                  style={{
+                    width: 115,
+                    height: 100,
+                    transform: "translate(-10%, 20%)",
+                    opacity: 0.65,
+                  }}
+                />
+              </span>
+            );
+          } else {
+            nekhemjlekh.tamga = "";
+          }
+        }
 
         nekhemjlekh.baritsaaUldegdel =
           nekhemjlekh.baritsaaAvakhDun - nekhemjlekh.baritsaaniiUldegdel;
