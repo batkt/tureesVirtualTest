@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { AuthProvider } from "../services/auth";
 import { ThemeProvider } from "next-themes";
-import { registerServiceWorker } from "../utils/swHelper";
 import { ConfigProvider } from "antd";
 import mnMN from "antd/lib/locale/mn_MN";
 import moment from "moment";
@@ -56,7 +55,6 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   
   useEffect(() => {
-    registerServiceWorker();
     // Load AOS on client side only
     loadAOS();
   }, []);

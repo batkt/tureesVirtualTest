@@ -53,6 +53,20 @@ export async function registerServiceWorker() {
   }
 }
 
+export async function unregisterServiceWorker() {
+  if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
+    return;
+  }
+  try {
+    const registration = await navigator.serviceWorker.getRegistration();
+    if (registration) {
+      await registration.unregister();
+    }
+  } catch (error) {
+    // ignore
+  }
+}
+
 let syncTimeout = null;
 const SYNC_DEBOUNCE_TIME = 2000;
 

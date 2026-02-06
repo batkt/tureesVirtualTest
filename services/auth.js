@@ -23,7 +23,6 @@ import {
   hasOfflineAuth,
   getCachedPermissionsData,
 } from "../utils/offlineAuth";
-import { registerServiceWorker } from "../utils/swHelper";
 
 const isOnline = () => {
   if (typeof window === "undefined" || typeof navigator === "undefined") {
@@ -216,7 +215,6 @@ export const AuthProvider = ({ children }) => {
 
     const initializeApp = async () => {
       try {
-        await initializeServiceWorker();
         await initializeAuthState();
         try {
           await getCachedPermissionsData();
@@ -231,27 +229,12 @@ export const AuthProvider = ({ children }) => {
     return () => {};
   }, [isClient]);
 
-  const initializeServiceWorker = async () => {
-    if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
-      return;
-    }
-
-    try {
-      await registerServiceWorker();
-    } catch (error) {}
-  };
-
   const initializeAuthState = async () => {
     try {
       const d = parseCookies();
       const storedToken = d?.tureestoken;
 
-      if (!storedToken && !isOnline()) {
-        const hasOfflineCredentials = await hasOfflineAuth();
-        if (hasOfflineCredentials) {
-          toast.info("Оффлайн горимд нэвтрэх боломжтой байна");
-        }
-      } else if (storedToken) {
+      if (storedToken) {
         setToken(storedToken);
       }
 

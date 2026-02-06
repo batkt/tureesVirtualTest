@@ -210,19 +210,20 @@ async function networkWithTimeout(request, timeoutMs = 5000) {
   ]);
 }
 
+const CAMERA_PAGE_PATH = "/khyanalt/zogsool/camera";
+const CAMERA_API_PATHS = [
+  "/zogsoolSdkService",
+  "/zogsoolOrlogoGaraas",
+  "/zurchilteiMashinMsgilgeekh",
+];
+
 self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(event.request.url);
-  let responsePromise;
 
-  // Only cache/sync these camera-related endpoints
-  const cameraApiPaths = [
-    "/zogsoolSdkService",
-    "/zogsoolOrlogoGaraas",
-    "/zurchilteiMashinMsgilgeekh",
-  ];
-  const isCameraApi = cameraApiPaths.some((p) =>
-    requestUrl.pathname.endsWith(p)
-  );
+  // Only intercept when OFFLINE - when online, don't touch requests (avoids sw.js as initiator on every call)
+  if (navigator.onLine) {
+    return;
+  }
 
   // Never cache upload requests - always use network
   if (requestUrl.pathname.includes("/upload")) {
@@ -230,9 +231,32 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (isCameraApi) {
-    if (event.request.method === "POST") {
-      responsePromise = (async () => {
+  const isCameraApi = CAMERA_API_PATHS.some((p) =>
+    requestUrl.pathname.endsWith(p)
+  );
+
+  // Must handle async - check if request is from camera page
+  event.respondWith(
+    (async () => {
+      let isCameraPage = false;
+      if (event.clientId) {
+        try {
+          const client = await self.clients.get(event.clientId);
+          isCameraPage = client?.url?.includes(CAMERA_PAGE_PATH) || false;
+        } catch (e) {
+          isCameraPage = false;
+        }
+      }
+
+      // Only handle camera APIs when on camera page and offline
+      if (!isCameraPage || !isCameraApi) {
+        return fetch(event.request).catch(
+          () => new Response("Интернет салсан байна", { status: 503 })
+        );
+      }
+
+      // Camera page + offline + camera API: handle with cache/IndexedDB
+      if (event.request.method === "POST") {
         try {
           const response = await networkWithTimeout(event.request.clone());
           return response;
@@ -307,46 +331,27 @@ self.addEventListener("fetch", (event) => {
             { status: 200, headers: { "Content-Type": "application/json" } }
           );
         }
-      })();
-    } else {
-      responsePromise = networkWithTimeout(event.request)
-        .then((response) => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches
-              .open(API_CACHE_NAME)
-              .then((cache) => cache.put(event.request, clone));
-          }
-          return response;
-        })
-        .catch(async () => {
-          const cachedResponse = await caches.match(event.request);
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          return new Response("Интернет салсан байна", { status: 503 });
-        });
-    }
-  } else {
-    // Special-case heartbeat asset to always use network, never serve from cache
-    if (requestUrl.pathname === "/robots.txt") {
-      responsePromise = fetch(event.request).catch(() => {
-        return new Response("Интернет салсан байна", { status: 503 });
-      });
-    } else {
-      // For all other requests, just try cache first, then network, but do not store for offline
-      responsePromise = caches.match(event.request).then((response) => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request).catch(() => {
-          return new Response("Интернет салсан байна", { status: 503 });
-        });
-      });
-    }
-  }
-
-  event.respondWith(responsePromise);
+      } else {
+        return networkWithTimeout(event.request)
+          .then((response) => {
+            if (response.ok) {
+              const clone = response.clone();
+              caches
+                .open(API_CACHE_NAME)
+                .then((cache) => cache.put(event.request, clone));
+            }
+            return response;
+          })
+          .catch(async () => {
+            const cachedResponse = await caches.match(event.request);
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            return new Response("Интернет салсан байна", { status: 503 });
+          });
+      }
+    })()
+  );
 });
 
 self.addEventListener("sync", (event) => {
@@ -356,22 +361,24 @@ self.addEventListener("sync", (event) => {
 });
 
 self.addEventListener("message", (event) => {
-  if (event.data?.type === "TRIGGER_SYNC") {
+  const isFromCameraPage =
+    event.source?.url?.includes(CAMERA_PAGE_PATH) || false;
+
+  if (event.data?.type === "TRIGGER_SYNC" && isFromCameraPage) {
     const now = Date.now();
     if (now - lastSyncTime < 5000) {
       return;
     }
     syncPaymentsFromSW();
-  } else if (event.data?.type === "GET_PENDING_PAYMENTS") {
+  } else if (event.data?.type === "GET_PENDING_PAYMENTS" && isFromCameraPage) {
     getPendingPayments()
       .then((payments) => {
-        event.ports[0].postMessage({ payments });
+        event.ports[0]?.postMessage({ payments });
       })
       .catch((error) => {
-        event.ports[0].postMessage({ payments: [], error: error.message });
+        event.ports[0]?.postMessage({ payments: [], error: error.message });
       });
-  } else if (event.data?.type === "CLEAN_CACHE") {
-    // Allow manual cache cleanup
+  } else if (event.data?.type === "CLEAN_CACHE" && isFromCameraPage) {
     checkAndCleanCache();
   }
 });

@@ -64,6 +64,10 @@ import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 
 import { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
 import uilchilgee from "services/uilchilgee";
+import {
+  registerServiceWorker,
+  unregisterServiceWorker,
+} from "utils/swHelper";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
@@ -283,6 +287,15 @@ function camera({ token }) {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+      registerServiceWorker().catch(() => {});
+      return () => {
+        unregisterServiceWorker().catch(() => {});
+      };
+    }
   }, []);
 
   const isActuallyOffline = isOfflineMode || !isOnline || !browserOnline;

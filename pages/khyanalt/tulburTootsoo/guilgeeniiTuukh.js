@@ -60,8 +60,15 @@ function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
   const { barilgiinId } = useAuth();
   const isCancelled =
     ugugdul?.tuluv == -1 || Number(ugugdul?.tuluv) === -1;
-  const preCancelUldegdel =
+  const rawUldegdel =
     ugugdul?.uldegdel ?? ugugdul?.niitUldegdel ?? ugugdul?.tsutslagdsanAvlaga;
+  const rawNum = rawUldegdel != null ? Number(rawUldegdel) : null;
+  const preCancelUldegdel =
+    isCancelled && (rawNum == null || rawNum < 0)
+      ? ugugdul?.tsutsalsanUldegdel ??
+        ugugdul?.tsutslagdsanAvlaga ??
+        0
+      : rawUldegdel;
   const usePreCancel = isCancelled && preCancelUldegdel != null;
   const { data, mutate, isValidating } = useSWR(
     !usePreCancel && !!ugugdul?.gereeniiDugaar && !!barilgiinId
@@ -127,13 +134,19 @@ function TableGuilgee({
       (turul === "eneSardTulukh" || turul === "eneSardTulsun") &&
       showTsutslagdsanAvlagaColumn
         ? (garalt?.jagsaalt || []).reduce(
-            (sum, b) =>
-              sum +
-              (parseFloat(
-                (b.tuluv == -1 || Number(b.tuluv) === -1)
-                  ? b.uldegdel ?? b.tsutslagdsanAvlaga ?? 0
-                  : b.uldegdel ?? 0
-              ) || 0),
+            (sum, b) => {
+              const isCancelled =
+                b.tuluv == -1 || Number(b.tuluv) === -1;
+              const raw =
+                isCancelled
+                  ? b.uldegdel ?? b.niitUldegdel ?? b.tsutslagdsanAvlaga ?? 0
+                  : b.uldegdel ?? 0;
+              const val =
+                isCancelled && (raw == null || Number(raw) < 0)
+                  ? b.tsutsalsanUldegdel ?? b.tsutslagdsanAvlaga ?? 0
+                  : raw;
+              return sum + (parseFloat(val) || 0);
+            },
             0
           )
         : null;
@@ -387,7 +400,7 @@ function guilgeeniiTuukh({ token }) {
           $lte: duusakhOgnoo,
         },
         davkhar,
-        baiguullagiinId: baiguullaga._id,
+        baiguullagiinId: baiguullaga?._id,
         tuluv: {
           $ne: -1,
         },
@@ -395,7 +408,7 @@ function guilgeeniiTuukh({ token }) {
       };
     } else if (turul === "tsutslagdsanAvlaga") {
       query = {
-        baiguullagiinId: baiguullaga._id,
+        baiguullagiinId: baiguullaga?._id,
         davkhar,
         tuluv: -1,
         barilgiinId,

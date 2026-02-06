@@ -114,11 +114,6 @@
   ],
   "iarc_rating_id": "",
   "dir": "ltr",
-  "serviceworker": {
-    "src": "/sw.js",
-    "scope": "/",
-    "update_via_cache": "imports"
-  },
   "offline_capable": true,
   "categories_custom": [
     "rental-management",
