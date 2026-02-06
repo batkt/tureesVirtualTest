@@ -564,7 +564,7 @@ function tulburTootsoo({ token }) {
                 baiguullaga,
                 barilgiinId
               );
-            }else if (ajiltan?.baiguullagiinId === "6937c18083d36cf495dfa855" && barilgiinId === "6937c18083d36cf495dfa856"){ 
+            }else if (ajiltan?.baiguullagiinId === "612f457d185280db676d0b51" && barilgiinId === "633e52ba9e57e626978b7c47"){ 
               // gumuda
               const barilga = baiguullaga?.barilguud?.find(
                 (a) => a._id === barilgiinId
@@ -2339,7 +2339,7 @@ function tulburTootsoo({ token }) {
                 baiguullaga,
                 barilgiinId
               )
-            :  (ajiltan?.baiguullagiinId === "6937c18083d36cf495dfa855" && barilgiinId === "6937c18083d36cf495dfa856") 
+            :  (ajiltan?.baiguullagiinId === "612f457d185280db676d0b51" && barilgiinId === "633e52ba9e57e626978b7c47") 
               // gumuda
             ? khatuuZagvarGumuda(
                 nekhemjlekh,
@@ -2490,7 +2490,7 @@ function tulburTootsoo({ token }) {
           );
         }
         //gumuda
-        if (ajiltan?.baiguullagiinId === "6937c18083d36cf495dfa855" && barilgiinId === "6937c18083d36cf495dfa856")
+        if (ajiltan?.baiguullagiinId === "612f457d185280db676d0b51" && barilgiinId === "633e52ba9e57e626978b7c47")
         { 
           if (barilga?.logo) {
             nekhemjlekh.barilgiinlogo = renderToString(

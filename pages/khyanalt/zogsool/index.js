@@ -883,9 +883,29 @@ function Zogsool({ token }) {
     }
   }
 
-  const ustgakh = () => {
-    
+ const ustgakh = () => {
+  const confirmed = window.confirm(
+    `Та ${selectedRowkeys.length} үйлчлүүлэгчийг устгахдаа итгэлтэй байна уу?`
+  );
+  
+  if (confirmed) {
+    uilchilgee(token)
+      .post("/uilchluulegchUstgay", {
+        ids: selectedRowkeys, 
+      })
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          notification.success({
+            message: `${selectedRowkeys.length} үйлчлүүлэгч амжилттай устгагдлаа`,
+            duration: 2,
+          });
+          setSelectedRowkeys([]);
+          uilchluulegchMutate(); 
+        }
+      })
+      .catch((err) => aldaaBarigch(err));
   }
+};
   const toololt = useMemo(
     () => [
       {
