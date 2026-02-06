@@ -10,7 +10,7 @@ const khatuuZagvarGumuda = (
   baritsaaDugaarlalt = [0]
 ) => {
   
-  
+  console.log(medeelel);
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
       (a) =>
@@ -116,35 +116,33 @@ const khatuuZagvarGumuda = (
     </table>`
       : "";
 
-  // Build all table rows in correct order
+
   const murNemekh = [];
   let currentDugaar = 0;
 
-  // 1. Add management cost first
+
   murNemekh.push(`
     <tr>
       <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++currentDugaar}</td>
       <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Менежментийн зардал</td>
       <td style="border: 1px solid #000; text-align: center; font-size: 12px;">&lt;talbainKhemjee&gt;</td>
       <td style="border: 1px solid #000; text-align: center; font-size: 12px; width: 15%;" colspan="2">&lt;talbainNegjUne&gt;</td>
-      <td style="border: 1px solid #000; text-align: center; font-size: 12px;">&lt;tulukhDun&gt;</td>
+      <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;managementTulukh&gt;</td>
     </tr>
   `);
 
-  // 2. Add aldangi if needed
   if (Number(medeelel.aldangiinUldegdel) > 0) {
     murNemekh.push(`
       <tr>
         <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++currentDugaar}</td>
         <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Алданги</td>
         <td style="border: 1px solid #000; text-align: center; font-size: 12px;"></td>
-        <td style="border: 1px solid #000; text-align: center; font-size: 12px;" colspan="2">&lt;aldangiinUldegdel&gt;</td>
-        <td style="border: 1px solid #000; text-align: center; font-size: 12px;">&lt;tulukhDun&gt;</td>
+        <td style="border: 1px solid #000; text-align: center; font-size: 12px;" colspan="2"></td>
+        <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;aldangiinUldegdel&gt;</td>
       </tr>
     `);
   }
 
-  // 3. Add items with "менежмент"
   medeelel.zardluud
     .sort((a, b) => {
       return a.tailbar.localeCompare(b.tailbar, "en", {
@@ -163,7 +161,7 @@ const khatuuZagvarGumuda = (
       `);
     });
 
-  // 4. Add other items (not "менежмент" and not "Хөнгөлөлт")
+  
   medeelel.zardluud
     .filter(
       (a) => !a.tailbar?.includes("менежмент") && a.tailbar != "Хөнгөлөлт"
@@ -190,7 +188,6 @@ const khatuuZagvarGumuda = (
       `);
     });
 
-  // Update dugaarlalt for external tracking
   dugaarlalt[0] = currentDugaar;
 
   return `
