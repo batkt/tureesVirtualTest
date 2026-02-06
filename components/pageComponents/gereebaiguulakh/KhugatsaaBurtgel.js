@@ -12,7 +12,7 @@ import {
   ArrowRightOutlined,
   ArrowLeftOutlined,
 } from "@ant-design/icons";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import moment from "moment";
 import Aos from "aos";
 import _ from "lodash";
@@ -40,6 +40,24 @@ const YurunkhiiMedeele = ({
   barilgiinId,
 }) => {
   const [form] = Form.useForm();
+  const minKhugatsaaRef = useRef(null);
+  useEffect(() => {
+    if (value?._id && value?.gereeniiOgnoo && value?.duusakhOgnoo) {
+      if (minKhugatsaaRef.current?.id !== value._id) {
+        const currentMonths = moment(value.duusakhOgnoo).diff(
+          moment(value.gereeniiOgnoo),
+          gereeniiZagvar?.turGereeEsekh ? "day" : "month",
+          true
+        );
+        minKhugatsaaRef.current = {
+          id: value._id,
+          min: Math.ceil(currentMonths),
+        };
+      }
+    } else {
+      minKhugatsaaRef.current = null;
+    }
+  }, [value?._id, value?.gereeniiOgnoo, value?.duusakhOgnoo, gereeniiZagvar?.turGereeEsekh]);
   const aldangiGereeTusBur = React.useMemo(() => {
     const songogdsonBarilgaId = value?.barilgiinId || barilgiinId;
     return (
@@ -81,7 +99,8 @@ const YurunkhiiMedeele = ({
         })
         .then(({ data }) => {
           _.set(value, "avlaga.guilgeenuud", data);
-          onChange({ ...value });
+          const formValues = form.getFieldsValue();
+          onChange({ ...value, ...formValues });
         })
         .catch((e) => {
           aldaaBarigch(e);
@@ -302,7 +321,20 @@ const YurunkhiiMedeele = ({
         <Form.Item
           rules={[
             { required: true, message: t("Гэрээний хугацаа бүртгэнэ үү!") },
+            {
+              validator: (_, val) => {
+                if (!value._id || val == null || val === "") return Promise.resolve();
+                const minVal = minKhugatsaaRef.current?.min ?? minKhugatsaaRef.current;
+                if (minVal != null && Number(val) < minVal) {
+                  return Promise.reject(
+                    `${t("Гэрээний хугацаа одоогийн хугацаанаас бага байж болохгүй")} (${t("Багадаа")}: ${minVal} сар)`
+                  );
+                }
+                return Promise.resolve();
+              },
+            },
           ]}
+          validateTrigger={["onBlur", "onChange", "onSubmit"]}
           name="khugatsaa"
           label={t("Гэрээний хугацаа")}
           required={false}
@@ -310,18 +342,12 @@ const YurunkhiiMedeele = ({
           <InputNumber
             onKeyUp={focuser}
             style={{ width: "100%" }}
-            formatter={(value) =>
-              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            formatter={(val) =>
+              `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
             max={480}
-            min={
-              !value._id
-                ? 1
-                : moment(value?.duusakhOgnoo)
-                    .diff(moment(value?.gereeniiOgnoo), "month", true)
-                    .toFixed()
-            }
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            min={!value._id ? 1 : undefined}
+            parser={(val) => val.replace(/\$\s?|(,*)/g, "")}
             placeholder={t(
               `Гэрээний хугацаа ${
                 gereeniiZagvar?.turGereeEsekh === true ? "(өдрөөр)" : "(сараар)"
