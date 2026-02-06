@@ -883,6 +883,9 @@ function Zogsool({ token }) {
     }
   }
 
+  const ustgakh = () => {
+    
+  }
   const toololt = useMemo(
     () => [
       {
@@ -2662,12 +2665,27 @@ function Zogsool({ token }) {
                   selectedRowkeys?.length > 0 &&
                   `(${selectedRowkeys?.length})`}
               </Button>
-              {selectedRowkeys && selectedRowkeys?.length > 0 && (
-                <Button onClick={tseverlekh}>
-                  <CloseSquareFilled />
-                </Button>
-              )}
+             
             </div>
+              {(baiguullaga?._id === "695c57511a8a4aebc1d65b02" &&  ajiltan?.erkh === "Admin") && (
+                <div className="flex items-start justify-center gap-1">
+                  <Button
+                    onClick={ustgakh}
+                    disabled={!selectedRowkeys || selectedRowkeys.length === 0}
+                    type={
+                      selectedRowkeys && selectedRowkeys.length > 0
+                        ? "danger"
+                        : "default"
+                    }
+                    className="dark:bg-gray-800 dark:text-gray-200"
+                  >
+                    {t("Устгах")}
+                    {selectedRowkeys && selectedRowkeys.length > 0 && (
+                      ` (${selectedRowkeys.length})`
+                    )}
+                  </Button>
+                </div>
+              )}
           </div>
         </div>
         <div
