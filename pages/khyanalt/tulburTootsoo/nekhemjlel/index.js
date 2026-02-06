@@ -1603,10 +1603,12 @@ function tulburTootsoo({ token }) {
             //   );
             // }
             let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
-            let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
-            let garaasBodsonNiitDunNuatgui = formatNumber(
-              garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
-            );
+            let garaasBodsonNiitDunNuatgui = garaasBodsonNiitDun / 1.1;
+            let garaasBodsonNiitDunNuat = garaasBodsonNiitDunNuatgui * 0.1;
+            // let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
+            // let garaasBodsonNiitDunNuatgui = formatNumber(
+            //   garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
+            // );
             zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
               new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
               formatNumber(garaasBodsonNiitDun || 0)
@@ -1614,7 +1616,7 @@ function tulburTootsoo({ token }) {
 
             zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
               new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),
-              garaasBodsonNiitDunNuatgui
+              formatNumber(garaasBodsonNiitDunNuatgui || 0)
             );
             zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
               new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
