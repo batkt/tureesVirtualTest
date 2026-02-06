@@ -18,17 +18,21 @@ const fetcher = (
   ognoo,
   barilgiinId,
   { search, ...khuudaslalt },
-  query = {}
+  query = {},
+  showTsutslagdsanAvlaga = false,
+  baiguullagiinId = null
 ) => {
   return axios(token)
     .post(url, {
       barilgiinId,
+      baiguullagiinId: baiguullagiinId || query?.baiguullagiinId,
       ekhlekhOgnoo: moment(ognoo[0])
         .startOf("month")
         .format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: moment(ognoo[1])
         .endOf("month")
         .format("YYYY-MM-DD 23:59:59"),
+      showTsutslagdsanAvlaga,
       query: {
         ...khuudaslalt,
         query: {
@@ -50,8 +54,13 @@ const fetcher = (
     .catch(aldaaBarigch);
 };
 
-function useEneSardTuluuguiGereenuudAvya(token, ognoo, query) {
-  const { barilgiinId } = useAuth();
+function useEneSardTuluuguiGereenuudAvya(
+  token,
+  ognoo,
+  query,
+  showTsutslagdsanAvlaga = false
+) {
+  const { barilgiinId, baiguullaga } = useAuth();
 
   const [khuudaslalt, setEneSardTuluuguiGereenuud] = useState({
     khuudasniiDugaar: 1,
@@ -68,6 +77,8 @@ function useEneSardTuluuguiGereenuudAvya(token, ognoo, query) {
           barilgiinId,
           khuudaslalt,
           query,
+          showTsutslagdsanAvlaga,
+          baiguullaga?._id,
         ]
       : null,
     fetcher,

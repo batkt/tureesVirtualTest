@@ -16,6 +16,7 @@ import {
   Popover,
   Space,
   notification,
+  Checkbox,
 } from "antd";
 import {
   FileExcelOutlined,
@@ -94,7 +95,11 @@ function TableGuilgee({
   setKhuudaslalt,
   setLoadingIndex,
   onChange,
+  turul,
+  showTsutslagdsanAvlagaColumn,
+  setShowTsutslagdsanAvlagaColumn,
 }) {
+  const { t } = useTranslation();
   function UilgelAvya({ garalt, columns }) {
     const [uldegdel, setUldegdel] = useState(0);
     useEffect(() => {
@@ -141,6 +146,20 @@ function TableGuilgee({
                       0
                     )
                   )
+                : mur.dataIndex === "tsutslagdsanAvlaga"
+                ? formatNumber(
+                    (garalt?.jagsaalt || []).reduce(
+                      (acc, b) => {
+                        const existing = acc.seen.has(b.register);
+                        if (!existing) {
+                          acc.seen.add(b.register);
+                          acc.sum += parseFloat(b.tsutslagdsanAvlaga) || 0;
+                        }
+                        return acc;
+                      },
+                      { seen: new Set(), sum: 0 }
+                    ).sum
+                  )
                 : formatNumber(
                     garalt?.jagsaalt?.reduce(
                       (a, b) => a + (parseFloat(b[mur.dataIndex]) || 0),
@@ -175,6 +194,32 @@ function TableGuilgee({
         pageSizeOptions: [10, 20, 100, 300, 500],
         defaultPageSize: [500],
         showSizeChanger: true,
+        className:
+          (turul === "eneSardTulukh" || turul === "eneSardTulsun") &&
+          setShowTsutslagdsanAvlagaColumn
+            ? "[&_.ant-pagination-total-text]:!flex [&_.ant-pagination-total-text]:flex-1 [&_.ant-pagination-total-text]:!justify-start [&_.ant-pagination-total-text]:!items-start"
+            : undefined,
+        showTotal: (total, range) =>
+          (turul === "eneSardTulukh" || turul === "eneSardTulsun") &&
+          setShowTsutslagdsanAvlagaColumn ? (
+            <div className="flex items-start gap-3">
+              <Checkbox
+                checked={showTsutslagdsanAvlagaColumn}
+                onChange={(e) =>
+                  setShowTsutslagdsanAvlagaColumn(e.target.checked)
+                }
+              >
+                {t("Цуцлагдсан авлага")}
+              </Checkbox>
+              <span>
+                {range[0]}-{range[1]} / {total}
+              </span>
+            </div>
+          ) : (
+            <span>
+              {range[0]}-{range[1]} / {total}
+            </span>
+          ),
         onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {
           setLoadingIndex(0);
           setKhuudaslalt((kh) => ({
@@ -220,6 +265,8 @@ function guilgeeniiTuukh({ token }) {
   const [tulukhOgnoo, setTulukhOgnoo] = React.useState();
   const [turul, setTurul] = React.useState("");
   const [neesenEsekh, setNeesenEsekh] = useState(false);
+  const [showTsutslagdsanAvlagaColumn, setShowTsutslagdsanAvlagaColumn] =
+    useState(false);
   const [loadingIndex, setLoadingIndex] = React.useState(0);
   const [davkhar, setDavkhar] = React.useState(undefined);
   const [aldangiBodokhLoading, setAldangiBodokhLoading] = useState(false);
@@ -323,6 +370,9 @@ function guilgeeniiTuukh({ token }) {
           $ne: -1,
         },
       };
+      if (turul === "eneSardTulsun" && showTsutslagdsanAvlagaColumn) {
+        query.showTsutslagdsanAvlaga = true;
+      }
     }
     if (query && !!tulukhOgnoo) {
       const dateStr = tulukhOgnoo.format("YYYY-MM-DD");
@@ -346,7 +396,16 @@ function guilgeeniiTuukh({ token }) {
     }
 
     return { sericeName, query, turulColumns };
-  }, [turul, ognoo, davkhar, barilgiinId, tulukhOgnoo, t, baiguullaga]);
+  }, [
+    turul,
+    ognoo,
+    davkhar,
+    barilgiinId,
+    tulukhOgnoo,
+    t,
+    baiguullaga,
+    showTsutslagdsanAvlagaColumn,
+  ]);
 
   useEffect(() => {
     setShineBagana([]);
@@ -370,7 +429,8 @@ function guilgeeniiTuukh({ token }) {
     useEneSardTuluuguiGereenuudAvya(
       turul === "eneSardTulukh" && token,
       ognoo,
-      query
+      query,
+      showTsutslagdsanAvlagaColumn
     );
 
   const aldangiBodoyo = async () => {
@@ -616,6 +676,41 @@ function guilgeeniiTuukh({ token }) {
         ellipsis: true,
         width: "7rem",
       });
+      if (showTsutslagdsanAvlagaColumn) {
+        jagsaalt.push({
+          title: t("Цуцлагдсан гэрээний авлага"),
+          dataIndex: "tsutslagdsanAvlaga",
+          align: "center",
+          summary: true,
+          render: (tsutslagdsanAvlaga) => {
+            return (
+              <div className="w-full text-right">
+                {formatNumber(tsutslagdsanAvlaga || 0)}
+              </div>
+            );
+          },
+          ellipsis: true,
+          width: "9rem",
+        });
+      }
+    }
+
+    if (turul == "eneSardTulsun" && showTsutslagdsanAvlagaColumn) {
+      jagsaalt.push({
+        title: t("Цуцлагдсан гэрээний авлага"),
+        dataIndex: "tsutslagdsanAvlaga",
+        align: "center",
+        summary: true,
+        render: (tsutslagdsanAvlaga) => {
+          return (
+            <div className="w-full text-right">
+              {formatNumber(tsutslagdsanAvlaga || 0)}
+            </div>
+          );
+        },
+        ellipsis: true,
+        width: "9rem",
+      });
     }
 
     return [
@@ -791,7 +886,15 @@ function guilgeeniiTuukh({ token }) {
         showSorterTooltip: false,
       },
     ];
-  }, [gereeniiMedeelel, loadingIndex, shineBagana, turulColumns, t]);
+  }, [
+    gereeniiMedeelel,
+    loadingIndex,
+    shineBagana,
+    turulColumns,
+    t,
+    turul,
+    showTsutslagdsanAvlagaColumn,
+  ]);
 
   function onChangeTurul(turul) {
     setTurul(turul);
@@ -1647,6 +1750,9 @@ function guilgeeniiTuukh({ token }) {
             }
             setLoadingIndex={setLoadingIndex}
             onChange={khusnegtOrderChange}
+            turul={turul}
+            showTsutslagdsanAvlagaColumn={showTsutslagdsanAvlagaColumn}
+            setShowTsutslagdsanAvlagaColumn={setShowTsutslagdsanAvlagaColumn}
           />
         </div>
         <CardList
