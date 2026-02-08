@@ -1105,29 +1105,29 @@ function camera({ token }) {
     return () => cleanup.forEach((fn) => fn());
   }, [baiguullaga?._id]);
 
-  useEffect(() => {
-    if (isActuallyOffline) {
-      if (!wasOffline) {
-        setWasOffline(true);
-      }
-    } else if (wasOffline) {
-      setWasOffline(false);
+  // useEffect(() => {
+  //   if (isActuallyOffline) {
+  //     if (!wasOffline) {
+  //       setWasOffline(true);
+  //     }
+  //   } else if (wasOffline) {
+  //     setWasOffline(false);
 
-      setTimeout(() => {
-        uilchluulegchMutate();
-        toololtMutate();
-        parkingMutate();
+  //     setTimeout(() => {
+  //       uilchluulegchMutate();
+  //       toololtMutate();
+  //       parkingMutate();
 
-        setPendingCarsUpdateTrigger((prev) => prev + 1);
-      }, 2000);
-    }
-  }, [
-    isActuallyOffline,
-    wasOffline,
-    uilchluulegchMutate,
-    toololtMutate,
-    parkingMutate,
-  ]);
+  //       setPendingCarsUpdateTrigger((prev) => prev + 1);
+  //     }, 2000);
+  //   }
+  // }, [
+  //   isActuallyOffline,
+  //   wasOffline,
+  //   uilchluulegchMutate,
+  //   toololtMutate,
+  //   parkingMutate,
+  // ]);
 
   useEffect(() => {
     if (syncStatus === "success" && !isActuallyOffline) {
