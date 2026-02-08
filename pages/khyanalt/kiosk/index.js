@@ -500,7 +500,7 @@ const Kiosk = () => {
       setUnshijBaina(true);
       if (data) {
         const response = await uilchilgee().get(
-          `/v1/search_car/${data?.mashiniiDugaar}`,
+          `/v1/search_carQR/${data?.mashiniiDugaar}`,
           {
             params: {
               baiguullagiinId: baiguullaga?._id,

@@ -361,12 +361,14 @@ function camera({ token }) {
   const [isHovered2, setIsHovered2] = useState(false);
 
   const que = useMemo(() => {
-    return {
+    const q = {
       baiguullagiinId: baiguullaga?._id,
-      barilgiinId: barilgiinId,
+      barilgiinId,
       "khaalga.ajiltnuud.id": ajiltan?._id,
     };
-  }, [baiguullaga?._id, ajiltan, barilgiinId]);
+    Object.keys(q).forEach(key => q[key] == null && delete q[key]);
+    return q;
+  }, [baiguullaga?._id, ajiltan?._id, barilgiinId]);
 
   const { jagsaalt, mutate: toololtMutate } = useJagsaalt(
     "/zogsoolJagsaalt",
@@ -863,6 +865,7 @@ function camera({ token }) {
   // }, [isOfflineMode, isOnline, syncPendingUpdates]);
 
   useEffect(() => {
+    if (!jagsaalt) return;
     const a1 = generateChild(jagsaalt, "Орох");
     const a2 = generateChild(jagsaalt, "Гарах");
     setCameraData([a1, a2]);

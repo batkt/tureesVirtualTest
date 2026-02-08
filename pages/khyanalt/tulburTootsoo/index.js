@@ -245,6 +245,7 @@ function tulburTootsoo({ token }) {
   const [songogdsonTurul, setSongogdsonTurul] = React.useState(null);
   const [loading, setLoading] = useState(false);
   const [garDunFormatted, setGarDunFormatted] = React.useState("");
+  const [tailbar, setTailbar] = React.useState("");
   const [loadingBaritsaa, setLoadingBaritsaa] = useState(false);
 
   const [khuulgaTurul, setKhuulgaTurul] = React.useState("orlogo");
@@ -1280,6 +1281,12 @@ function tulburTootsoo({ token }) {
                     }}
                     style={{ width: 220 }}
                   />
+                  <Input
+                    placeholder={t("Гүйлгээний утга бичих")}
+                    value={tailbar}
+                    onChange={(e) => { setTailbar(e.target.value); }}
+                    style={{ width: 220 }}
+                  />
                   <AntButton
                     type="primary"
                     onClick={async () => {
@@ -1357,7 +1364,7 @@ function tulburTootsoo({ token }) {
                           payload.amount = mungunDun;
                         }
 
-                        const desc = "Тест дүн бичих tauilbar";
+                        const desc = tailbar || `Тест гүйлгээ`;
                         if (bank === "golomt") {
                           payload.tranDesc = desc;
                           // also keep generic description

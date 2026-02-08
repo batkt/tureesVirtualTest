@@ -291,7 +291,7 @@ const KioskMobile = ({
       setUnshijBaina(true);
       if (data?._id) {
         const response = await uilchilgee().get(
-          `/v1/search_car/${data?.mashiniiDugaar}`,
+          `/v1/search_carQR/${data?.mashiniiDugaar}`,
           {
             params: {
               baiguullagiinId: baiguullagiinId,
