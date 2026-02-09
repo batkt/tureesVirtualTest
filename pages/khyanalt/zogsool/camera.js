@@ -370,7 +370,7 @@ function camera({ token }) {
     return q;
   }, [baiguullaga?._id, ajiltan?._id, barilgiinId]);
 
-  const { jagsaalt, mutate: toololtMutate } = useJagsaalt(
+  const { jagsaalt } = useJagsaalt(
     "/zogsoolJagsaalt",
     que
   );
@@ -1316,7 +1316,7 @@ function camera({ token }) {
   function onRefresh() {
     setModalNeelttei(false);
     uilchluulegchMutate();
-    toololtMutate();
+    // toololtMutate();
     zogsoolTusBuriinTooMutate();
   }
   const minToHour = (m) => {
