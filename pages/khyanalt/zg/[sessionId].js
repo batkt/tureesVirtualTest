@@ -24,7 +24,9 @@ function TulburiinDelgerenguiTailan({ token }) {
     useGuilgeeniiToololtAvya(
       turul === "Turees" && token,
       ognoo,
-      barilgiinId === "All" ? undefined : barilgiinId
+      barilgiinId === "All" ? undefined : barilgiinId,
+      undefined,
+      false
     );
   const { talbainToololt } = useTalbainToololt(
     turul === "Turees" && token,

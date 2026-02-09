@@ -1,3 +1,33 @@
+const parseNum = (v) => {
+  if (v == null || v === "") return 0;
+  return parseFloat(String(v).replace(/,/g, "")) || 0;
+};
+
+const getNiitForZardal = (mur, ashiglaltiinZardal, barilgiinId) => {
+  const tulukhDun = parseNum(mur.tulukhDun);
+  const khungulult = parseNum(mur.khungulult);
+  if (tulukhDun > 0) return tulukhDun - khungulult;
+  if (barilgiinId !== "622ec99a8e64e5b4f0c3acb6") return 0;
+  const tariffItem =
+    ashiglaltiinZardal?.jagsaalt?.find((b) => b.ner === mur.tailbar) ||
+    ashiglaltiinZardal?.jagsaalt?.find((b) => mur.tailbar?.includes(b.ner));
+  const tariff = parseNum(mur.tariff) || parseNum(tariffItem?.tariff);
+  const negj = parseNum(mur.negj);
+  if (tariff > 0) return (negj || 1) * tariff - khungulult;
+  const fromTailbar = parseNum(
+    String(mur.tailbar || "").match(/[\d,]+(?:\.\d+)?/)?.[0]
+  );
+  return fromTailbar >= 1000 ? fromTailbar - khungulult : 0;
+};
+
+const getFromTailbar = (tailbar) => {
+  const m = String(tailbar || "").match(/[\d,]+(?:\.\d+)?/);
+  const val = parseNum(m?.[0]);
+  if (val >= 1000) return val;
+  if (val >= 1 && val < 1000 && /тог\s*\d+/i.test(tailbar || "")) return val * 1000;
+  return 0;
+};
+
 const khatuuZagvarIkhNayd = (
   medeelel,
   ajiltan,
@@ -7,7 +37,8 @@ const khatuuZagvarIkhNayd = (
   barilgiinId,
   dugaarlalt = [0],
   ashiglaltDugaarlalt = [0],
-  baritsaaDugaarlalt = [0]
+  baritsaaDugaarlalt = [0],
+  ashiglaltiinZardal
 ) => {
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
@@ -157,6 +188,8 @@ const khatuuZagvarIkhNayd = (
               : medeelel?.barilgiinId === "657955ac70280a9ebe8f11ef"
               ? "Шинэст"
               : "Их наяд Плаза ХХК"
+              ? "Их наяд Tower"
+              : medeelel?.barilgiinId === "622ec99a8e64e5b4f0c3acb6"
           }
           </span> 
         </div>
@@ -267,6 +300,7 @@ const khatuuZagvarIkhNayd = (
            })
            .filter((a) => a.tailbar?.includes("менежмент"))
            .map((mur, index) => {
+             const niitVal = getNiitForZardal(mur, ashiglaltiinZardal, barilga);
              return `
               <tr key=${index}>
                 <td style="border: 1px solid #000; font-size:12px; text-align: center;">${++dugaarlalt[0]}</td>
@@ -282,9 +316,7 @@ const khatuuZagvarIkhNayd = (
                 <td style="border: 1px solid #000; font-size:12px; text-align: right; ">
                   &lt;${mur.tailbar}.khungulult&gt;
                 </td>
-                <td style="border: 1px solid #000; font-size:12px; text-align: right; font-size: 12px;">&lt;${
-                  mur.tailbar
-                }.khungulultKhassanTulukhDun&gt;</td>
+                <td style="border: 1px solid #000; font-size:12px; text-align: right; font-size: 12px;">${(barilga === "622ec99a8e64e5b4f0c3acb6" ? niitVal : null) != null ? niitVal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "&lt;" + mur.tailbar + ".khungulultKhassanTulukhDun&gt;"}</td>
               </tr>
             `;
            })
@@ -295,28 +327,63 @@ const khatuuZagvarIkhNayd = (
             (a) => !a.tailbar?.includes("менежмент") && a.tailbar != "Хөнгөлөлт"
           )
           .map(
-            (mur, index) => `
+            (mur, index) => {
+              const niitVal = getNiitForZardal(mur, ashiglaltiinZardal, barilga);
+              const displayNiit = barilga === "622ec99a8e64e5b4f0c3acb6" ? niitVal : null;
+              const tariffItem =
+                ashiglaltiinZardal?.jagsaalt?.find((b) => b.ner === mur.tailbar) ||
+                ashiglaltiinZardal?.jagsaalt?.find((b) => mur.tailbar?.includes(b.ner));
+              const tariffForQty = parseNum(mur.tariff) || parseNum(tariffItem?.tariff);
+              const fromTailbar = getFromTailbar(mur.tailbar);
+              const isUtility =
+                mur.tailbar?.includes("Халуун ус") ||
+                mur.tailbar?.includes("Хүйтэн ус") ||
+                mur.tailbar?.includes("Цахилгаан") ||
+                mur.tailbar?.includes("Хаягжилт");
+              const isFixedFee =
+                barilga === "622ec99a8e64e5b4f0c3acb6" &&
+                displayNiit > 0 &&
+                tariffForQty === 0;
+              const isFixedFeeFromTailbar =
+                (mur.tailbar?.includes("Хог") || mur.tailbar?.includes("Хаягжилт")) &&
+                tariffForQty === 0 &&
+                fromTailbar > 0;
+              const displayQty =
+                mur.tailbar.includes("Дулаан")
+                  ? ` &lt;talbainKhemjeeMetrKube&gt;`
+                  : isFixedFee || isFixedFeeFromTailbar
+                  ? "1"
+                  : isUtility
+                  ? `&lt;${mur.tailbar}.negj&gt;`
+                  : `1`;
+              const displayTariff =
+                isFixedFee && displayNiit > 0
+                  ? displayNiit.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  : isFixedFeeFromTailbar
+                  ? fromTailbar.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  : null;
+              return `
           <tr>
             <td style="border: 1px solid #000; font-size:12px; text-align:center;">${++dugaarlalt[0]}</td>
             <td style="border: 1px solid #000; font-size:12px;">${
               mur.tailbar || ""
             }</td>
-            <td style="border: 1px solid #000; font-size:12px; text-align:center;">${
-              mur.tailbar.includes("Дулаан")
-                ? ` &lt;talbainKhemjeeMetrKube&gt;`
-                : `1`
-            }</td>
+            <td style="border: 1px solid #000; font-size:12px; text-align:center;">${displayQty}</td>
             <td style="border: 1px solid #000; font-size:12px; text-align: center;">
-                  &lt;${mur.tailbar}.tariff&gt;
+                  ${displayTariff != null ? displayTariff : `&lt;${mur.tailbar}.tariff&gt;`}
             </td>
             <td style="border: 1px solid #000; font-size:12px; text-align: right; width: 16%;">
               &lt;${mur.tailbar}.khungulult&gt;
             </td>
-            <td style="border: 1px solid #000; font-size:12px; text-align: right; font-size: 12px;">&lt;${
-              mur.tailbar
-            }.khungulultKhassanTulukhDun&gt;
-            </td>
-          </tr>`
+            <td style="border: 1px solid #000; font-size:12px; text-align: right; font-size: 12px;">${displayNiit != null ? displayNiit.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "&lt;" + mur.tailbar + ".khungulultKhassanTulukhDun&gt;"}</td>
+          </tr>`;
+            }
           )
           .join("")}
       </tbody>

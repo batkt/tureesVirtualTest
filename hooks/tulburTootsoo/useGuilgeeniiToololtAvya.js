@@ -3,25 +3,64 @@ import useSWR from "swr";
 import moment from "moment";
 import { useAuth } from "services/auth";
 
-const fetcher = (url, token, ognoo, barilgiinId) => {
+const guilgeeniiToololtFetcher = (
+  url,
+  token,
+  ognoo,
+  barilgiinId,
+  baiguullagiinId,
+  showTsutslagdsanAvlagaColumn
+) => {
   return axios(token)
     .post(url, {
       barilgiinId,
-      ekhlekhOgnoo: moment(ognoo[0])
-        .startOf("month")
-        .format("YYYY-MM-DD 00:00:00"),
-      duusakhOgnoo: moment(ognoo[1])
-        .endOf("month")
-        .format("YYYY-MM-DD 23:59:59"),
+      baiguullagiinId,
+      ekhlekhOgnoo: moment(ognoo?.[0])
+        ?.startOf("month")
+        ?.format("YYYY-MM-DD 00:00:00"),
+      duusakhOgnoo: moment(ognoo?.[1])
+        ?.endOf("month")
+        ?.format("YYYY-MM-DD 23:59:59"),
+      showTsutslagdsanAvlagaColumn: !!showTsutslagdsanAvlagaColumn,
     })
     .then((res) => res.data)
     .catch(aldaaBarigch);
 };
 
-function useGuilgeeniiToololtAvya(token, ognoo, barilgiinId) {
+const eneSardTuluuguiFetcher = (url, token, ognoo, barilgiinId) => {
+  return axios(token)
+    .post(url, {
+      barilgiinId,
+      ekhlekhOgnoo: moment(ognoo?.[0])
+        ?.startOf("month")
+        ?.format("YYYY-MM-DD 00:00:00"),
+      duusakhOgnoo: moment(ognoo?.[1])
+        ?.endOf("month")
+        ?.format("YYYY-MM-DD 23:59:59"),
+    })
+    .then((res) => res.data)
+    .catch(aldaaBarigch);
+};
+
+function useGuilgeeniiToololtAvya(
+  token,
+  ognoo,
+  barilgiinId,
+  baiguullagiinId,
+  showTsutslagdsanAvlagaColumn
+) {
   const { data, mutate } = useSWR(
-    !!token ? ["/guilgeeniiToololtAvya", token, ognoo, barilgiinId] : null,
-    fetcher,
+    !!token && ognoo?.[0] && ognoo?.[1]
+      ? [
+          "/guilgeeniiToololtAvya",
+          token,
+          ognoo,
+          barilgiinId,
+          baiguullagiinId,
+          showTsutslagdsanAvlagaColumn,
+        ]
+      : null,
+    guilgeeniiToololtFetcher,
     { revalidateOnFocus: false }
   );
   return { guilgeeniiToololt: data, guilgeeniiToololtMutate: mutate };
@@ -32,7 +71,7 @@ export function useTuluugiiGereeniiToololtAvya(token, ognoo) {
     !!token
       ? ["/eneSardTuluuguiGereeniiTooAvya", token, ognoo, barilgiinId]
       : null,
-    fetcher,
+    eneSardTuluuguiFetcher,
     { revalidateOnFocus: false }
   );
   return { tolooguiGereeniiToo: data, tolooguiGereeniiTooMutate: mutate };

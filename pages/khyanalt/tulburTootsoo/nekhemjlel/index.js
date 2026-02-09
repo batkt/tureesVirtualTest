@@ -65,6 +65,11 @@ function chargeTagRe(name, field) {
   return new RegExp(`&lt;${n}(\\\\\\.|\\\\.)${field}&gt;`, "g");
 }
 
+function parseNum(v) {
+  if (v == null || v === "") return 0;
+  return parseFloat(String(v).replace(/,/g, "")) || 0;
+}
+
 function tulburTootsoo({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
@@ -578,7 +583,13 @@ function tulburTootsoo({ token }) {
                 medeelel,
                 ajiltan,
                 baiguullaga,
-                barilgiinId
+                barilgiinId,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                ashiglaltiinZardal
               );
             }else if (ajiltan?.baiguullagiinId === "612f457d185280db676d0b51" && barilgiinId === "633e52ba9e57e626978b7c47" || ajiltan?.baiguullagiinId === "6937c18083d36cf495dfa855" && barilgiinId === "6937c18083d36cf495dfa856" ){ 
               // gumuda
@@ -1198,11 +1209,59 @@ function tulburTootsoo({ token }) {
                 (b) => b.ner === a.tailbar
               )?.nuatBodokhEsekh;
 
+              const tariffItem =
+                ashiglaltiinZardal?.jagsaalt?.find(
+                  (b) => b.ner === a.tailbar
+                ) ||
+                ashiglaltiinZardal?.jagsaalt?.find(
+                  (b) => a.tailbar?.includes(b.ner)
+                );
+              const resolvedTariff =
+                parseNum(a.tariff) || parseNum(tariffItem?.tariff);
+              if (a.tailbar === "Цахилгаан нэмэлт") {
+                const ec =
+                  ashiglaltiinZardal?.jagsaalt?.find(
+                    (b) => b.ner === "Цахилгаан"
+                  )?.tariff;
+                if (ec != null) a.tariff = ec;
+              } else {
+                a.tariff = tariffItem?.tariff ?? a.tariff ?? 0;
+              }
+
               let khungulultKhassanTulukhDun = a.tulukhDun
                 ? a.khungulult
                   ? a.tulukhDun - a.khungulult
                   : a.tulukhDun
                 : 0;
+              if (
+                khungulultKhassanTulukhDun === 0 &&
+                barilgiinId === "622ec99a8e64e5b4f0c3acb6"
+              ) {
+                const apiVal = parseNum(a.khungulultKhassanTulukhDun);
+                if (apiVal > 0) {
+                  khungulultKhassanTulukhDun = apiVal;
+                } else {
+                  const negjVal = parseNum(a.negj);
+                  const tariffVal =
+                    resolvedTariff || parseNum(a.tariff);
+                  const khungulultVal = parseNum(a.khungulult);
+                  if (negjVal > 0 && tariffVal > 0) {
+                    khungulultKhassanTulukhDun =
+                      negjVal * tariffVal - khungulultVal;
+                  } else if (tariffVal > 0) {
+                    khungulultKhassanTulukhDun =
+                      (negjVal || 1) * tariffVal - khungulultVal;
+                  } else {
+                    const fromTailbar = parseNum(
+                      String(a.tailbar || "").match(/[\d,]+(?:\.\d+)?/)?.[0]
+                    );
+                    if (fromTailbar > 0) {
+                      khungulultKhassanTulukhDun =
+                        fromTailbar - khungulultVal;
+                    }
+                  }
+                }
+              }
               // zollll
               let khungulultKhassanTulukhDunNuat =
                 nuatBodokhEsekh && a.tulukhDun
@@ -1233,18 +1292,6 @@ function tulburTootsoo({ token }) {
                 ),
                 formatNumber(khungulultKhassanTulukhDunNuatgui || 0)
               );
-              const tariffValue = ashiglaltiinZardal?.jagsaalt?.find(
-                (b) => b.ner === a.tailbar
-              )?.tariff;
-
-              a.tariff = tariffValue ?? 0;
-              if (a.tailbar === "Цахилгаан нэмэлт") {
-                const tariffValue = ashiglaltiinZardal?.jagsaalt?.find(
-                  (b) => b.ner === "Цахилгаан"
-                )?.tariff;
-
-                a.tariff = tariffValue ?? 0;
-              }
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 chargeTagRe(a.tailbar, "tariff"),
                 formatNumber(a.tariff || 0)
@@ -1843,7 +1890,13 @@ function tulburTootsoo({ token }) {
               nekhemjlekh,
               ajiltan,
               baiguullaga,
-              barilgiinId
+              barilgiinId,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              ashiglaltiinZardal
             )
           : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
         : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
@@ -2361,7 +2414,13 @@ function tulburTootsoo({ token }) {
                 nekhemjlekh,
                 ajiltan,
                 baiguullaga,
-                barilgiinId
+                barilgiinId,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                ashiglaltiinZardal
               )
             :  (ajiltan?.baiguullagiinId === "612f457d185280db676d0b51" && barilgiinId === "633e52ba9e57e626978b7c47") || (ajiltan?.baiguullagiinId === "6937c18083d36cf495dfa855" && barilgiinId === "6937c18083d36cf495dfa856") 
               // gumuda
@@ -3081,11 +3140,59 @@ function tulburTootsoo({ token }) {
             (b) => b.ner === a.tailbar
           )?.nuatBodokhEsekh;
 
+          const tariffItemText =
+            ashiglaltiinZardal?.jagsaalt?.find(
+              (b) => b.ner === a.tailbar
+            ) ||
+            ashiglaltiinZardal?.jagsaalt?.find(
+              (b) => a.tailbar?.includes(b.ner)
+            );
+          const resolvedTariffText =
+            parseNum(a.tariff) || parseNum(tariffItemText?.tariff);
+          if (a.tailbar === "Цахилгаан нэмэлт") {
+            const ec =
+              ashiglaltiinZardal?.jagsaalt?.find(
+                (b) => b.ner === "Цахилгаан"
+              )?.tariff;
+            if (ec != null) a.tariff = ec;
+          } else {
+            a.tariff = tariffItemText?.tariff ?? a.tariff ?? 0;
+          }
+
           let khungulultKhassanTulukhDun = a.tulukhDun
             ? a.khungulult
               ? a.tulukhDun - a.khungulult
               : a.tulukhDun
             : 0;
+          if (
+            khungulultKhassanTulukhDun === 0 &&
+            barilgiinId === "622ec99a8e64e5b4f0c3acb6"
+          ) {
+            const apiVal = parseNum(a.khungulultKhassanTulukhDun);
+            if (apiVal > 0) {
+              khungulultKhassanTulukhDun = apiVal;
+            } else {
+              const negjVal = parseNum(a.negj);
+              const tariffVal =
+                resolvedTariffText || parseNum(a.tariff);
+              const khungulultVal = parseNum(a.khungulult);
+              if (negjVal > 0 && tariffVal > 0) {
+                khungulultKhassanTulukhDun =
+                  negjVal * tariffVal - khungulultVal;
+              } else if (tariffVal > 0) {
+                khungulultKhassanTulukhDun =
+                  (negjVal || 1) * tariffVal - khungulultVal;
+              } else {
+                const fromTailbar = parseNum(
+                  String(a.tailbar || "").match(/[\d,]+(?:\.\d+)?/)?.[0]
+                );
+                if (fromTailbar > 0) {
+                  khungulultKhassanTulukhDun =
+                    fromTailbar - khungulultVal;
+                }
+              }
+            }
+          }
           let khungulultKhassanTulukhDunNuat =
             nuatBodokhEsekh && a.tulukhDun
               ? khungulultKhassanTulukhDun

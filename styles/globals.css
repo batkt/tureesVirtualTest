@@ -1495,6 +1495,20 @@ input:-webkit-autofill {
   @apply bg-green-50 dark:bg-gray-700 !important;
 }
 
+/* Cancelled contract rows - red background */
+.t-head .ant-table-row.tsutslagdsan-geree-row > .ant-table-cell {
+  background-color: #fecaca !important;
+}
+html.dark .t-head .ant-table-row.tsutslagdsan-geree-row > .ant-table-cell {
+  background-color: rgba(127, 29, 29, 0.4) !important;
+}
+.t-head .ant-table-row.tsutslagdsan-geree-row:hover > .ant-table-cell {
+  background-color: #fca5a5 !important;
+}
+html.dark .t-head .ant-table-row.tsutslagdsan-geree-row:hover > .ant-table-cell {
+  background-color: rgba(127, 29, 29, 0.6) !important;
+}
+
 .ant-table-row:hover > .ant-table-cell {
   @apply bg-green-200 dark:bg-gray-600 !important;
 }

@@ -64,7 +64,7 @@ function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
     ugugdul?.uldegdel ?? ugugdul?.niitUldegdel ?? ugugdul?.tsutslagdsanAvlaga;
   const rawNum = rawUldegdel != null ? Number(rawUldegdel) : null;
   const preCancelUldegdel =
-    isCancelled && (rawNum == null || rawNum < 0)
+    isCancelled && (rawNum == null || rawNum <= 0)
       ? ugugdul?.tsutsalsanUldegdel ??
         ugugdul?.tsutslagdsanAvlaga ??
         0
@@ -142,7 +142,7 @@ function TableGuilgee({
                   ? b.uldegdel ?? b.niitUldegdel ?? b.tsutslagdsanAvlaga ?? 0
                   : b.uldegdel ?? 0;
               const val =
-                isCancelled && (raw == null || Number(raw) < 0)
+                isCancelled && (raw == null || Number(raw) <= 0)
                   ? b.tsutsalsanUldegdel ?? b.tsutslagdsanAvlaga ?? 0
                   : raw;
               return sum + (parseFloat(val) || 0);
@@ -182,10 +182,18 @@ function TableGuilgee({
                 : mur.dataIndex === "avlagiinUldegdel"
                 ? formatNumber(
                     garalt?.jagsaalt?.reduce(
-                      (a, b) =>
-                        a +
-                        (parseFloat(b["uldegdel"]) || 0) +
-                        (parseFloat(b["aldangiinUldegdel"]) || 0),
+                      (a, b) => {
+                        const isCancelled =
+                          b.tuluv == -1 || Number(b.tuluv) === -1;
+                        const raw = parseFloat(b.uldegdel);
+                        const effUldegdel =
+                          isCancelled && (raw == null || raw <= 0)
+                            ? parseFloat(b.tsutsalsanUldegdel) || 0
+                            : parseFloat(b.uldegdel) || 0;
+                        return (
+                          a + effUldegdel + (parseFloat(b.aldangiinUldegdel) || 0)
+                        );
+                      },
                       0
                     )
                   )
@@ -225,7 +233,10 @@ function TableGuilgee({
       rowStyle={(record) => {
         const isCancelled = record?.tuluv == -1 || Number(record?.tuluv) === -1;
         return isCancelled
-          ? { borderLeft: "4px solid #ef4444", boxSizing: "border-box" }
+          ? {
+              borderLeft: "4px solid #ef4444",
+              boxSizing: "border-box",
+            }
           : undefined;
       }}
       pagination={{
@@ -250,10 +261,7 @@ function TableGuilgee({
                 }
               >
                 {t("Цуцлагдсан гэрээ")}
-              </Checkbox>
-              <span>
-                {range[0]}-{range[1]} / {total}
-              </span>
+              </Checkbox>              
             </div>
           ) : (
             <span>
@@ -317,7 +325,13 @@ function guilgeeniiTuukh({ token }) {
   const [aldangiBodokhLoading, setAldangiBodokhLoading] = useState(false);
   const [aldangiUstgahLoading, setAldangiUstgahLoading] = useState(false);
   const { guilgeeniiToololt, guilgeeniiToololtMutate } =
-    useGuilgeeniiToololtAvya(token, ognoo, barilgiinId);
+    useGuilgeeniiToololtAvya(
+      token,
+      ognoo,
+      barilgiinId,
+      baiguullaga?._id,
+      showTsutslagdsanAvlagaColumn
+    );
   const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
     useTuluugiiGereeniiToololtAvya(token, ognoo);
 
@@ -487,7 +501,7 @@ function guilgeeniiTuukh({ token }) {
       turul === "eneSardTulukh" && token,
       ognoo,
       query,
-      showTsutslagdsanAvlagaColumn
+      showTsutslagdsanAvlagaColumn === true
     );
 
   const aldangiBodoyo = async () => {
@@ -543,6 +557,30 @@ function guilgeeniiTuukh({ token }) {
     onSearchMedeelel,
     setEneSardTuluuguiGereenuud,
   ]);
+
+  const garaltDeduplicated = useMemo(() => {
+    const raw = gereeniiMedeelel;
+    if (!raw?.jagsaalt?.length) return raw;
+    const seen = new Set();
+    let filtered = raw.jagsaalt.filter((x) => {
+      const id = x?._id;
+      if (!id || seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
+    if (turul === "eneSardTulsun") {
+      filtered = filtered.filter((x) => {
+        const isCancelled = x?.tuluv == -1 || Number(x?.tuluv) === -1;
+        const hasNoTulsunDun =
+          x?.tulsunDun == null ||
+          x?.tulsunDun === "" ||
+          (parseFloat(x?.tulsunDun) || 0) <= 0;
+        if (isCancelled && hasNoTulsunDun) return false;
+        return true;
+      });
+    }
+    return { ...raw, jagsaalt: filtered, niitMur: filtered.length };
+  }, [gereeniiMedeelel, turul]);
   useEffect(() => {
     if (gereeniiMedeelel?.jagsaalt) {
     }
@@ -553,25 +591,9 @@ function guilgeeniiTuukh({ token }) {
       {
         title: "№",
         key: "index",
-        width: showTsutslagdsanAvlagaColumn ? "8rem" : "2.5rem",
+        width: "2.5rem",
         align: "center",
-        render: (text, record, index) => {
-          const isCancelled =
-            record?.tuluv == -1 || Number(record?.tuluv) === -1;
-          return (
-            <div className="flex flex-col items-center justify-center gap-0.5">
-              <span>{index + 1}</span>
-              {showTsutslagdsanAvlagaColumn && isCancelled && (
-                <span
-                  className="rounded bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                  title={t("Цуцлагдсан гэрээ")}
-                >
-                  {t("Цуцлагдсан")}
-                </span>
-              )}
-            </div>
-          );
-        },
+        render: (text, record, index) => index + 1,
       },
       {
         width: "7rem",
@@ -667,7 +689,19 @@ function guilgeeniiTuukh({ token }) {
           );
         },
         showSorterTooltip: false,
-        sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
+        sorter: (a, b) => {
+          const effA =
+            (a?.tuluv == -1 || Number(a?.tuluv) === -1) &&
+            (a?.uldegdel == null || Number(a?.uldegdel) <= 0)
+              ? Number(a?.tsutsalsanUldegdel || 0)
+              : Number(a?.uldegdel || 0);
+          const effB =
+            (b?.tuluv == -1 || Number(b?.tuluv) === -1) &&
+            (b?.uldegdel == null || Number(b?.uldegdel) <= 0)
+              ? Number(b?.tsutsalsanUldegdel || 0)
+              : Number(b?.uldegdel || 0);
+          return effA - effB;
+        },
       },
       {
         width: "9rem",
@@ -1334,12 +1368,27 @@ function guilgeeniiTuukh({ token }) {
               __cellType__: "TypeNumeric",
               dataIndex,
               render: (val, data) => {
-                return a.dataIndex === "baritsaaAvakhDun"
-                  ? (val || 0) - (data?.baritsaaniiUldegdel || 0)
-                  : a.dataIndex === "avlagiinUldegdel"
-                  ? (parseFloat(data.uldegdel) || 0) +
-                    (data.aldangiinUldegdel || 0)
-                  : val;
+                if (a.dataIndex === "baritsaaAvakhDun")
+                  return (val || 0) - (data?.baritsaaniiUldegdel || 0);
+                if (a.dataIndex === "avlagiinUldegdel") {
+                  const isCancelled =
+                    data?.tuluv == -1 || Number(data?.tuluv) === -1;
+                  const raw = parseFloat(data?.uldegdel);
+                  const effUldegdel =
+                    isCancelled && (raw == null || raw <= 0)
+                      ? parseFloat(data?.tsutsalsanUldegdel) || 0
+                      : parseFloat(data?.uldegdel) || 0;
+                  return effUldegdel + (data?.aldangiinUldegdel || 0);
+                }
+                if (a.dataIndex === "uldegdel") {
+                  const isCancelled =
+                    data?.tuluv == -1 || Number(data?.tuluv) === -1;
+                  const raw = parseFloat(val);
+                  return isCancelled && (raw == null || raw <= 0)
+                    ? parseFloat(data?.tsutsalsanUldegdel) || 0
+                    : val;
+                }
+                return val;
               },
             })
           : forExcel.push({ title: a.excelHeader || a.title, dataIndex });
@@ -1394,7 +1443,9 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0,
+                eneSardTuluuguiGereenuud?.niitTuluvluguut ??
+                  _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") ??
+                  0,
                 0
               ),
               turul: "eneSardTulukh",
@@ -1489,7 +1540,7 @@ function guilgeeniiTuukh({ token }) {
           data-aos-duration="1000"
           data-aos-delay="200"
         >
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <DatePicker.RangePicker
               picker="month"
               value={ognoo}
@@ -1498,14 +1549,14 @@ function guilgeeniiTuukh({ token }) {
                 setLoadingIndex(0);
               }}
               clearIcon={false}
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto !h-8"
             />
             <div className="w-full sm:ml-5 sm:w-[200px]">
               <Select
                 placeholder={t("Давхар")}
                 onChange={setDavkhar}
                 allowClear
-                className="w-full"
+                className="!h-8 w-full"
               >
                 {baiguullaga?.barilguud
                   ?.find((a) => a._id === barilgiinId)
@@ -1724,11 +1775,17 @@ function guilgeeniiTuukh({ token }) {
                   width: "7rem",
                   summary: true,
                   render(text, data, index) {
+                    const isCancelled =
+                      data?.tuluv == -1 || Number(data?.tuluv) === -1;
+                    const raw = parseFloat(data.uldegdel);
+                    const effUldegdel =
+                      isCancelled && (raw == null || raw <= 0)
+                        ? parseFloat(data.tsutsalsanUldegdel) || 0
+                        : parseFloat(data.uldegdel) || 0;
                     return (
                       <div className="w-full text-right">
                         {formatNumber(
-                          (parseFloat(data.uldegdel) || 0) +
-                            (data.aldangiinUldegdel || 0)
+                          effUldegdel + (data.aldangiinUldegdel || 0)
                         )}
                       </div>
                     );
@@ -1781,11 +1838,7 @@ function guilgeeniiTuukh({ token }) {
         >
           <TableGuilgee
             columns={columns}
-            garalt={
-              turul === "eneSardTulukh"
-                ? eneSardTuluuguiGereenuud
-                : gereeniiMedeelel
-            }
+            garalt={garaltDeduplicated}
             setKhuudaslalt={
               turul === "eneSardTulukh"
                 ? setEneSardTuluuguiGereenuud
@@ -1796,6 +1849,7 @@ function guilgeeniiTuukh({ token }) {
             turul={turul}
             showTsutslagdsanAvlagaColumn={showTsutslagdsanAvlagaColumn}
             setShowTsutslagdsanAvlagaColumn={setShowTsutslagdsanAvlagaColumn}
+            guilgeeniiToololtMutate={guilgeeniiToololtMutate}
           />
         </div>
         <CardList
@@ -1811,12 +1865,12 @@ function guilgeeniiTuukh({ token }) {
           cardListTuluv={"utas"}
           keyValue="guilgeeTuukh"
           className="block w-[200px] overflow-auto md:hidden"
-          jagsaalt={gereeniiMedeelel?.jagsaalt}
+          jagsaalt={garaltDeduplicated?.jagsaalt}
           Component={GuilgeenTuukhTile}
           pagination={{
-            current: gereeniiMedeelel?.khuudasniiDugaar,
-            pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
-            total: gereeniiMedeelel?.niitMur,
+            current: garaltDeduplicated?.khuudasniiDugaar,
+            pageSize: garaltDeduplicated?.khuudasniiKhemjee,
+            total: garaltDeduplicated?.niitMur,
             showSizeChanger: true,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
               setKhuudaslalt((kh) => ({
