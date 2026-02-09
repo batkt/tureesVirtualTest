@@ -364,11 +364,13 @@ function camera({ token }) {
     const q = {
       baiguullagiinId: baiguullaga?._id,
       barilgiinId,
+      "khaalga.ajiltnuud.id": ajiltan?._id,
     };
+    Object.keys(q).forEach(key => q[key] == null && delete q[key]);
     return q;
-  }, [baiguullaga?._id, barilgiinId]);
+  }, [baiguullaga?._id, ajiltan?._id, barilgiinId]);
 
-  const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
+  const { jagsaalt, mutate: toololtMutate } = useJagsaalt("/parking", que);
 
   const streamQuery = useMemo(() => {
     return {
@@ -1311,7 +1313,7 @@ function camera({ token }) {
   function onRefresh() {
     setModalNeelttei(false);
     uilchluulegchMutate();
-    // toololtMutate();
+    toololtMutate();
     zogsoolTusBuriinTooMutate();
   }
   const minToHour = (m) => {
