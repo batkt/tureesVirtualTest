@@ -370,7 +370,7 @@ function camera({ token }) {
     return q;
   }, [baiguullaga?._id, ajiltan?._id, barilgiinId]);
 
-  const { jagsaalt, mutate: toololtMutate } = useJagsaalt("/parking", que);
+  const { jagsaalt, mutate: toololtMutate } = useJagsaalt("/zogsoolJagsaalt", que);
 
   const streamQuery = useMemo(() => {
     return {
