@@ -96,7 +96,23 @@ function tulburTootsoo({ token }) {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const { mailtuukhmailtuukhJagsaalt } = mailtuukh(token, null, null, null);
+  const query = useMemo(() => {
+      return {
+        baiguullagiinId: baiguullaga?._id,
+        barilgiinId: barilgiinId,
+        ognoo:
+          ognooRange?.length > 0
+            ? {
+                $gte: moment(ognooRange[0]).startOf("day").format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(ognooRange[1])
+                  .endOf("day")
+                  .format("YYYY-MM-DD 23:59:59"),
+              }
+            : undefined,
+      };
+    }, [ognooRange, barilgiinId]);
+
+  const { mailtuukhmailtuukhJagsaalt } = mailtuukh(token, query, null, null);
   const filteredMailTuukh = useMemo(() => {
     return (mailtuukhmailtuukhJagsaalt || []).filter((item) => {
       if (
