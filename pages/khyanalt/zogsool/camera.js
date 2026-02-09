@@ -364,11 +364,9 @@ function camera({ token }) {
     const q = {
       baiguullagiinId: baiguullaga?._id,
       barilgiinId,
-      "khaalga.ajiltnuud.id": ajiltan?._id,
     };
-    Object.keys(q).forEach(key => q[key] == null && delete q[key]);
     return q;
-  }, [baiguullaga?._id, ajiltan?._id, barilgiinId]);
+  }, [baiguullaga?._id, barilgiinId]);
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
 

@@ -58,13 +58,13 @@ function index({ token, data }) {
       toast.error(e);
     }
   };
-  const que = useMemo(() => {
-    return {
-      baiguullagiinId: baiguullaga?._id,
-      barilgiinId: { $in: barilgiinErkh },
-    };
-  }, [baiguullaga?._id, barilgiinErkh]);
-  const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
+  // const que = useMemo(() => {
+  //   return {
+  //     baiguullagiinId: baiguullaga?._id,
+  //     barilgiinId: { $in: barilgiinErkh },
+  //   };
+  // }, [baiguullaga?._id, barilgiinErkh]);
+  // const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
 
   return (
     <Admin
