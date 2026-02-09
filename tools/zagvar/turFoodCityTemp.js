@@ -1,9 +1,10 @@
+import formatNumber from "tools/function/formatNumber";
 const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
   const today = new Date();
   const duusakhUdur = 20;
   const duusakhSar = today.getMonth() + 1;
   const duusakhOn = today.getFullYear();
-
+  console.log(medeelel);
   return `
 
       <div style="height: 100%; width: 100%; font-family: 'Arial', serif; font-size: 8pt; line-height: 1.2;">
@@ -262,25 +263,19 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
 
             // Менежмент
             html += menegment
-              .map(
-                (mur) => `
-              <tr>
-                <td style="border: 1px solid #000; text-align: center;">${incrementRow()}</td>
-                <td colspan="4" style="border: 1px solid #000; text-align: left;">Менежментийн төлбөр</td>
-                <td style="border: 1px solid #000; text-align: center;">&lt;talbainKhemjee&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.tariff&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.khungulult&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.khungulultKhassanTulukhDun&gt;</td>
-              </tr>
-            `
-              )
-              .join("");
+                .map(
+                  (mur) => `
+                <tr>
+                  <td style="border: 1px solid #000; text-align: center;">${incrementRow()}</td>
+                  <td colspan="4" style="border: 1px solid #000; text-align: left;">Менежментийн төлбөр</td>
+                  <td style="border: 1px solid #000; text-align: center;">&lt;talbainKhemjee&gt;</td>
+                  <td style="border: 1px solid #000; text-align: right;">${mur.tariff || 111}</td>
+                  <td style="border: 1px solid #000; text-align: right;">${mur.khungulult || 0}</td>
+                  <td style="border: 1px solid #000; text-align: right;">${formatNumber(mur.tulukhDun, 2) || 0}</td>
+                </tr>
+              `
+                )
+                .join("");
 
             // Дулаан / торгууль
             html += dulaan
