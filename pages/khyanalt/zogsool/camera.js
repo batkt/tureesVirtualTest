@@ -370,10 +370,7 @@ function camera({ token }) {
     return q;
   }, [baiguullaga?._id, ajiltan?._id, barilgiinId]);
 
-  const { jagsaalt } = useJagsaalt(
-    "/zogsoolJagsaalt",
-    que
-  );
+  const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
 
   const streamQuery = useMemo(() => {
     return {
