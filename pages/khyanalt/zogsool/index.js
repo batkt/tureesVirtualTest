@@ -1409,22 +1409,30 @@ function Zogsool({ token }) {
                 >
                   Хөнгөлөлт
                 </div>
-                <div
-                  onClick={() => setTulbur("Fitness")}
-                  className={`relative ${
-                    tulbur === "Fitness" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
-                >
-                  Fitness
-                </div>
-                <div
-                  onClick={() => setTulbur("Ugaalga")}
-                  className={`relative ${
-                    tulbur === "Ugaalga" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
-                >
-                  Ugaalga
-                </div>
+               {
+                  baiguullaga?._id === "6115f350b35689cdbf1b9da3" && (
+                    <>
+                      <div
+                        onClick={() => setTulbur("Fitness")}
+                        className={`relative ${
+                          tulbur === "Fitness" ? "bg-green-500 text-white" : ""
+                        } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                      >
+                        Fitness
+                      </div>
+
+                      <div
+                        onClick={() => setTulbur("Ugaalga")}
+                        className={`relative ${
+                          tulbur === "Ugaalga" ? "bg-green-500 text-white" : ""
+                        } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                      >
+                        Угаалга
+                      </div>
+                    </>
+                  )
+                }
+
                 <div
                   onClick={() => setTulbur("Соёолж Ц/Д")}
                   className={`relative ${
