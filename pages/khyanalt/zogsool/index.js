@@ -2687,7 +2687,7 @@ function Zogsool({ token }) {
               </Button>
              
             </div>
-              {(baiguullaga?._id === "695c57511a8a4aebc1d65b02" &&  ajiltan?.erkh === "Admin") && (
+              {(baiguullaga?._id === "662de8c8919a3695ffe51e36" &&  ajiltan?.erkh === "Admin") && (
                 <div className="flex items-start justify-center gap-1">
                   <Button
                     onClick={ustgakh}
