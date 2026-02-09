@@ -884,26 +884,59 @@ function Zogsool({ token }) {
   }
 
  const ustgakh = () => {
-  const confirmed = window.confirm(
-    `Та ${selectedRowkeys.length} үйлчлүүлэгчийг устгахдаа итгэлтэй байна уу?`
-  );
+  const songogdson = [...selectedRowkeys];
   
-  if (confirmed) {
-    uilchilgee(token)
-      .post("/uilchluulegchUstgay", {
-        ids: selectedRowkeys, 
-      })
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
-          notification.success({
-            message: `${selectedRowkeys.length} үйлчлүүлэгч амжилттай устгагдлаа`,
-            duration: 2,
+  if (songogdson && songogdson.length > 0) {
+    confirm({
+      title: t("Анхаар"),
+      okText: t("Тийм"),
+      cancelText: t("Үгүй"),  
+      content: (
+        <div>
+          <div style={{ marginBottom: 8 }}>
+            Та {songogdson.length} үйлчлүүлэгчийг устгахдаа итгэлтэй байна уу?
+          </div>
+        </div>
+      ),
+      onOk: () => {
+        if (!shaltgaan) {
+          notification.warn({ 
+            message: "Устгах шалтгаан оруулна уу", 
+            duration: 2 
           });
-          setSelectedRowkeys([]);
-          uilchluulegchMutate(); 
+          return Promise.reject(); 
         }
-      })
-      .catch((err) => aldaaBarigch(err));
+        
+        return uilchilgee(token)
+          .post("/uilchluulegchUstgay", {
+            ids: songogdson,
+            shaltgaan: shaltgaan,
+          })
+          .then(({ data }) => {
+            if (data === "Amjilttai") {
+              notification.success({
+                message: `${songogdson.length} үйлчлүүлэгч амжилттай устгагдлаа`,
+                duration: 2,
+              });
+              setSelectedRowkeys([]);
+              setShaltgaan("");
+              uilchluulegchMutate();
+            }
+          })
+          .catch((err) => {
+            aldaaBarigch(err);
+            throw err; 
+          });
+      },
+      onCancel: () => {
+        setShaltgaan("");
+      },
+    });
+  } else {
+    notification.warning({
+      message: t("Устгах үйлчлүүлэгч сонгоно уу!"),
+      duration: 1,
+    });
   }
 };
   const toololt = useMemo(
