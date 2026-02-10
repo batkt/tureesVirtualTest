@@ -56,7 +56,7 @@ import khatuuZagvarGotoMT from "tools/zagvar/turGotoMT";
 import khatuuZagvarSoyoljMall from "tools/zagvar/turSoyoljMall";
 import khatuuZagvarIkhNaydTower from "tools/zagvar/turIkhNaydTower";
 import khatuuZagvarGumuda from "tools/zagvar/turGumuda";
-
+import khatuuZagvarBayanzurkh from "tools/zagvar/turBayanzurkh";
 const ilgeekhTurul = "davkharaar";
 
 /** RegExp matching both &lt;name.field&gt; and &lt;name\.field&gt; for charge placeholders */
@@ -375,7 +375,7 @@ function tulburTootsoo({ token }) {
 
   useEffect(() => {
     const fetchDugaar = async () => {
-      if (
+      if (ajiltan?.baiguullagiinId === "696dcd6c527f69e3ea0f7473" ||
         barilgiinId === "622ec99a8e64e5b4f0c3acb6" ||
         barilgiinId === "61d54c5748d9fcf140298137" ||
         barilgiinId === "657955ac70280a9ebe8f11ef" ||
@@ -596,8 +596,6 @@ function tulburTootsoo({ token }) {
               const barilga = baiguullaga?.barilguud?.find(
                 (a) => a._id === barilgiinId
               );
-              
-              // Set images before calling template
               if (barilga?.logo) {
                 medeelel.barilgiinlogo = renderToString(
                   <span>
@@ -659,7 +657,24 @@ function tulburTootsoo({ token }) {
                 baiguullaga?._id,
                 barilgiinId
               );
-            }
+            } 
+            // bayanzurkh
+            else if (ajiltan?.baiguullagiinId === "696dcd6c527f69e3ea0f7473"){
+              if (
+                nekhemjlekhiinDugaarData.dugaarList &&
+                nekhemjlekhiinDugaarData.dugaarList[i]
+              ) {
+                medeelel.nekhemjlekhiinDugaar =
+                  nekhemjlekhiinDugaarData.dugaarList[i];
+              }
+              zagvar.nekhemjlekh = khatuuZagvarBayanzurkh(
+                medeelel,
+                ajiltan,
+                baiguullaga,
+                barilga,
+                barilgiinId
+              );
+              }
                else
               zagvar.nekhemjlekh = khatuuZagvar(
                 medeelel,
@@ -759,8 +774,26 @@ function tulburTootsoo({ token }) {
                 />
               </span>
             );
+            
+          }
+          // bayanzurkh
+            else if (ajiltan?.baiguullagiinId === "696dcd6c527f69e3ea0f7473") {
+            medeelel.barilgiinlogo = renderToString(
+              <span>
+                <img
+                  src={`${url}/file?path=logo/${barilga.logo}`}
+                  style={{
+                    width: 150,
+                    height: 100,
+                    transform: "translate(15%, 15%)",
+                    opacity: 0.65,
+                  }}
+                />
+              </span>
+            );
             // urangan
-          } else {
+          }          
+          else {
             medeelel.barilgiinlogo = renderToString(
               <span>
                 <img
@@ -980,7 +1013,7 @@ function tulburTootsoo({ token }) {
                   </span>
                 );
               }
-            } else if (ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d")
+            } else if (ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d"){
               // soyolj
               medeelel.tamga = renderToString(
                 <span style={{ position: "absolute", zIndex: 1 }}>
@@ -994,8 +1027,22 @@ function tulburTootsoo({ token }) {
                     }}
                   />
                 </span>
-              );
-            else {
+              )}
+              else if (ajiltan?.baiguullagiinId === "696dcd6c527f69e3ea0f7473"){
+              // bayanzurkh
+              medeelel.tamga = renderToString(
+                <span style={{ position: "absolute", zIndex: 1 }}>
+                  <img
+                    src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
+                    style={{
+                      width: 180,
+                      height: 130,
+                      transform: "translate(-10%, -50%)",
+                      opacity: 0.65,
+                    }}
+                  />
+                </span>
+              )} else {
               medeelel.khuviinTamga = renderToString(
                 <span style={{ position: "absolute", zIndex: 1 }}>
                   <img
@@ -2432,7 +2479,16 @@ function tulburTootsoo({ token }) {
                 baiguullaga?._id,
                 barilgiinId
               )
-            
+            :  (ajiltan?.baiguullagiinId === "696dcd6c527f69e3ea0f7473") 
+              // bayanzurkh
+            ? khatuuZagvarBayanzurkh(
+                nekhemjlekh,
+                ajiltan,
+                baiguullaga,
+                barilga,
+                baiguullaga?._id,
+                barilgiinId
+              )
             : khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
           : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
               ?.nekhemjlekh;
