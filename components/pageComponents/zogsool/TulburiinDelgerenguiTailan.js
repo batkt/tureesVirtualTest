@@ -104,12 +104,12 @@ function TulburiinDelgerenguiTailan(
     tulburiinMedeelel,
     hongololtMedeelel,
     zorchilMedeelel,
-    todorkhoiguiMedeelel,
+    tulburteiMedeelel,
   } = useMemo(() => {
     var tulbur = [];
     var hongololt = [];
     var zorchil = [];
-    var todorkhoigui = [];
+    var tulburtei = [];
 
     const hongololtNames = ["Хөнгөлөлт", "Фитнес", "Хөнгөлөх"];
     const zorchilNames = ["Үнэгүй", "Зөрчилтэй", "Зөрчил"];
@@ -351,15 +351,15 @@ function TulburiinDelgerenguiTailan(
             };
             category = "zorchil";
             break;
-          case "Тодорхойгүй":
+          case "Төлбөртэй":
             item = {
-              ner: "Тодорхойгүй",
-              icon: "/exclamation.png",
+              ner: "Төлбөртэй",
+              icon: "/tulburtei.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             };
-            category = "todorkhoigui";
+            category = "tulburtei";
             break;
           case "Үнэгүй":
             item = {
@@ -417,8 +417,8 @@ function TulburiinDelgerenguiTailan(
             hongololt.push(item);
           } else if (category === "zorchil") {
             zorchil.push(item);
-          } else if (category === "todorkhoigui") {
-            todorkhoigui.push(item);
+          } else if (category === "tulburtei") {
+            tulburtei.push(item);
           } else {
             tulbur.push(item);
           }
@@ -429,7 +429,7 @@ function TulburiinDelgerenguiTailan(
       tulburiinMedeelel: tulbur,
       hongololtMedeelel: hongololt,
       zorchilMedeelel: zorchil,
-      todorkhoiguiMedeelel: todorkhoigui,
+      tulburteiMedeelel: tulburtei,
     };
   }, [zogsoolTulburMedeelel]);
 
@@ -439,13 +439,13 @@ function TulburiinDelgerenguiTailan(
       ...tulburiinMedeelel,
       ...hongololtMedeelel,
       ...zorchilMedeelel,
-      ...todorkhoiguiMedeelel,
+      ...tulburteiMedeelel,
     ];
   }, [
     tulburiinMedeelel,
     hongololtMedeelel,
     zorchilMedeelel,
-    todorkhoiguiMedeelel,
+    tulburteiMedeelel,
   ]);
 
   useImperativeHandle(
@@ -774,12 +774,12 @@ function TulburiinDelgerenguiTailan(
             </>
           )}
 
-          {todorkhoiguiMedeelel.length > 0 && (
+          {tulburteiMedeelel.length > 0 && (
             <>
               <div className="mt-4 border-b-2 border-purple-500 pb-1 text-lg font-bold dark:text-gray-200">
-                Тодорхойгүй
+                Төлбөртэй
               </div>
-              {todorkhoiguiMedeelel
+              {tulburteiMedeelel
                 .sort(function (a, b) {
                   return b.khuvi - a.khuvi;
                 })
@@ -787,7 +787,7 @@ function TulburiinDelgerenguiTailan(
                   return (
                     <div
                       className="relative flex h-14 w-full cursor-pointer items-center overflow-hidden rounded-md border-2 p-2"
-                      key={`todorkhoigui-${i}`}
+                      key={`tulburtei-${i}`}
                       onClick={() => handleDivClick(a)}
                     >
                       <Checkbox
@@ -847,12 +847,12 @@ function TulburiinDelgerenguiTailan(
                 </div>
               </div>
             )}
-            {zorchilMedeelel.length > 0 && (
+            {(zorchilMedeelel.length > 0 || tulburteiMedeelel.length > 0) && (
               <div className="flex items-center justify-between rounded bg-transparent p-2 text-lg font-[600]   dark:text-gray-200">
                 <div className="flex">Төлбөр аваагүй:</div>
                 <div>
                   {formatNumber(
-                    zorchilMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0,
+                    (zorchilMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0) + (tulburteiMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0),
                   ) + "₮"}
                 </div>
               </div>
@@ -863,16 +863,6 @@ function TulburiinDelgerenguiTailan(
                 <div>
                   {formatNumber(
                     hongololtMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0,
-                  ) + "₮"}
-                </div>
-              </div>
-            )}
-            {todorkhoiguiMedeelel.length > 0 && (
-              <div className="flex items-center justify-between rounded bg-transparent p-2 text-lg font-[600]  dark:text-gray-200">
-                <div className="flex">Тодорхойгүй:</div>
-                <div>
-                  {formatNumber(
-                    todorkhoiguiMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0,
                   ) + "₮"}
                 </div>
               </div>
