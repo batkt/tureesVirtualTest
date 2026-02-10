@@ -1,3 +1,4 @@
+import formatNumber from "tools/function/formatNumber";
 const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
     console.log(medeelel);
 
@@ -88,53 +89,79 @@ const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
       </div>
     </div>
      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-      <thead>
-        <tr style="background-color: #e5e7eb;">
-          <th style="border: 1px solid #000; padding: 8px; font-size: 11px; text-align: center; width: 40px;">№</th>
-          <th style="border: 1px solid #000; padding: 8px; font-size: 11px; text-align: center;">Барааны нэр үйлчилгээ</th>
-          <th style="border: 1px solid #000; padding: 8px; font-size: 11px; text-align: center; width: 80px;">Тоо ширхэг</th>
-          <th style="border: 1px solid #000; padding: 8px; font-size: 11px; text-align: center; width: 100px;">Нэгж үнэ</th>
-          <th style="border: 1px solid #000; padding: 8px; font-size: 11px; text-align: center; width: 120px;">Нийт үнэ</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="border: 1px solid #000; padding: 6px; font-size: 11px; text-align: center;">1</td>
-          <td style="border: 1px solid #000; padding: 6px; font-size: 11px;">Түрээсийн төлбөр</td>
-          <td style="border: 1px solid #000; padding: 6px; font-size: 11px; text-align: center;">&lt;talbainKhemjee&gt;</td>
-          <td style="border: 1px solid #000; padding: 6px; font-size: 11px; text-align: center;">&lt;talbainNegjUne&gt;</td>
-          <td style="border: 1px solid #000; padding: 6px; font-size: 11px; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
-        </tr>
-        ${medeelel.zardluud.map(
-          (mur, index) => `
-        <tr>
-          <td style="border: 1px solid #000; padding: 6px; font-size: 11px; text-align: center;">${index + 2}</td>
-          <td style="border: 1px solid #000; padding: 6px; font-size: 11px;">${mur.tailbar || ""}</td>
-          <td style="border: 1px solid #000; padding: 6px; font-size: 11px; text-align: center;"></td>
-          <td style="border: 1px solid #000; padding: 6px; font-size: 11px; text-align: center;">${mur.tariff || ""}</td>
-          <td style="border: 1px solid #000; padding: 6px; font-size: 11px; text-align: right;">${mur?.tulukhDun || 0}</td>
-        </tr>`
-        )
-        .join("")}
-        
-        <!-- Summary Rows -->
-        <tr>
-          <td colspan="3" rowspan="3" style="border: 1px solid #000; padding: 8px; font-size: 11px; vertical-align: top;">
-           <p>Мөнгөн дүн үсгээр:&nbsp;&lt;garaasBodsonNiitDunUsgeer&gt; болно</p>
-          </td>
-          <td colspan="0" style="border: 1px solid #000; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">Бүх дүн, НӨАТ-гүй:</td>
-          <td style="border: 1px solid #000; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">&lt;garaasBodsonNiitDunNuatgui&gt;</td>
-        </tr>
-        <tr>
-          <td colspan="0" style="border: 1px solid #000; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">НӨАТ (10%):</td>
-          <td style="border: 1px solid #000; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">&lt;garaasBodsonNiitDunNuat&gt;</td>
-        </tr>
-        <tr>
-          <td colspan="0" style="border: 1px solid #000; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">Нийт дүн:</td>
-          <td style="border: 1px solid #000; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">&lt;garaasBodsonNiitDun&gt;</td>
-        </tr>
-      </tbody>
-    </table>
+  <thead>
+    <tr style="background-color: #e5e7eb;">
+      <th style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; text-align: center; width: 40px;">№</th>
+      <th style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; text-align: center;">Барааны нэр үйлчилгээ</th>
+      <th style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; text-align: center; width: 80px;">Тоо ширхэг</th>
+      <th style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; text-align: center; width: 100px;">Нэгж үнэ</th>
+      <th style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; text-align: center; width: 120px;">Нийт үнэ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #9ca3af; padding: 6px; font-size: 11px; text-align: center;">1</td>
+      <td style="border: 1px solid #9ca3af; padding: 6px; font-size: 11px;">Түрээсийн төлбөр</td>
+      <td style="border: 1px solid #9ca3af; padding: 6px; font-size: 11px; text-align: center;">
+        &lt;talbainKhemjee&gt;
+      </td>
+      <td style="border: 1px solid #9ca3af; padding: 6px; font-size: 11px; text-align: center;">
+        &lt;talbainNegjUne&gt;
+      </td>
+      <td style="border: 1px solid #9ca3af; padding: 6px; font-size: 11px; text-align: right;">
+        &lt;khungulsunTalbainNiitUne&gt;
+      </td>
+    </tr>
+    ${medeelel.zardluud
+      .map(
+        (mur, index) => `
+      <tr>
+        <td style="border: 1px solid #9ca3af; padding: 6px; font-size: 11px; text-align: center;">
+          ${index + 2}
+        </td>
+        <td style="border: 1px solid #9ca3af; padding: 6px; font-size: 11px;">
+          ${mur.tailbar || ""}
+        </td>
+        <td style="border: 1px solid #9ca3af; padding: 6px; font-size: 11px; text-align: center;"></td>
+        <td style="border: 1px solid #9ca3af; padding: 6px; font-size: 11px; text-align: center;">
+          ${mur.tariff || ""}
+        </td>
+        <td style="border: 1px solid #9ca3af; padding: 6px; font-size: 11px; text-align: right;">
+          ${formatNumber(mur?.tulukhDun, 2) || 0}
+        </td>
+      </tr>
+    `
+      )
+      .join("")}
+    <tr>
+      <td colspan="2" rowspan="3" style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; vertical-align: top;">
+        <p>Мөнгөн дүн үсгээр:&nbsp;&lt;garaasBodsonNiitDunUsgeer&gt; болно</p>
+      </td>
+      <td colspan="2" style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">
+        Бүх дүн, НӨАТ-гүй:
+      </td>
+      <td style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">
+        &lt;garaasBodsonNiitDunNuatgui&gt;
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">
+        НӨАТ (10%):
+      </td>
+      <td style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">
+        &lt;garaasBodsonNiitDunNuat&gt;
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">
+        Нийт дүн:
+      </td>
+      <td style="border: 1px solid #9ca3af; padding: 8px; font-size: 11px; text-align: right; font-weight: bold;">
+        &lt;garaasBodsonNiitDun&gt;
+      </td>
+    </tr>
+  </tbody>
+</table>
     <div style="margin-top: 40px;">
       <table style="width: 100%; border-collapse: collapse;">
         <tr>
@@ -146,7 +173,7 @@ const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
           </td>
           <td style="font-size: 11px; padding: 5px;">
             <div style="margin-bottom: 10px;">Гүйлгээ хариуцсан:</div>
-            <div style="border-bottom: 1px dotted #000; width: 300px; display: inline-block; margin-left: 20px;"></div>
+            <div style="border-bottom: 1px dotted #000; width: 150px; display: inline-block; margin-left: 20px;"></div>
           </td>
           <td style="font-size: 11px; padding: 5px; text-align: right;">
             <div>${ajiltan?.ovog?.[0] ? ajiltan?.ovog?.[0] + '.' : ''}${ajiltan?.ner || ''}</div>
@@ -159,7 +186,7 @@ const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
             <div>&lt;gariinUseg&gt;</div>
           </td>
           <td style="font-size: 11px; padding: 5px; text-align: right;">
-            <div>&lt;nyagtlan_ner&gt;</div>
+           
           </td>
         </tr>
       </table>
