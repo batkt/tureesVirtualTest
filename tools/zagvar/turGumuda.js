@@ -27,10 +27,7 @@ const khatuuZagvarGumuda = (
     ashiglaltZardluud.length > 0
       ? `
     <table style="width:100%; border-collapse:collapse;">
-    <tr>
-        <td style="font-size:12px; font-weight:bold; " colspan="4">Тоолуурын заалтын мэдээлэл:</td>
-    </tr>
-      <thead">
+      <thead>
         <tr>
           <td style="border:1px solid #000; text-align: center; font-size:12px; width: 5%;">№</td>
           <td style="border:1px solid #000; text-align: center; font-size:12px; width: 20%;">Утга</td>
@@ -105,7 +102,7 @@ const khatuuZagvarGumuda = (
                 <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">ЦЕХ дэмжих</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${
+                <td style="border: 1px solid #000; text-align: right; width: 16%; font-size:12px">&lt;${
                   mur.tailbar
                 }.sekhDemjikhTulburDun&gt;</td>
                 <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">0</td>
@@ -393,6 +390,7 @@ const khatuuZagvarGumuda = (
 </tfoot>
 
     </table> 
+    <td style="font-size:12px; font-weight:bold; " colspan="4">Тоолуурын заалтын мэдээлэл:</td>
     ${ashiglaltTable}
     <p style="font-size:12px; margin-top: 20px; font-weight: bold;">Жич: Энэхүү нэхэмжлэх нь тооцоо нийлсэн акт биш төлбөр төлөгчийн эцсийн үлдэгдэл биш байж болно.</p>
   </div>`;
