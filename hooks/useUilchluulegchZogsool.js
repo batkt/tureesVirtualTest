@@ -20,20 +20,22 @@ const fetcher = (
     or.forEach((element) => {
       defaultOr.push(element);
     });
-  } else if (search && search.trim() !== "") {
-    defaultOr.push({ mashiniiDugaar: { $regex: search, $options: "i" } });
   }
-  
+
   const queryParams = {
     baiguullagiinId,
     barilgiinId,
     ...query,
   };
-  
+
+  if (search && search.trim() !== "") {
+    queryParams.mashiniiDugaar = { $regex: search, $options: "i" };
+  }
+
   if (defaultOr.length > 0) {
     queryParams.$or = defaultOr;
   }
-  
+
   return axios(token)
     .get(url, {
       params: {
@@ -65,31 +67,32 @@ function useUilchluulegchZogsool(
   const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
       ? [
-          "/zogsoolUilchluulegchJagsaalt",
-          token,
-          baiguullagiinId,
-          khuudaslalt,
-          barilgiinId,
-          query,
-          order,
-          or,
-        ]
+        "/zogsoolUilchluulegchJagsaalt",
+        token,
+        baiguullagiinId,
+        khuudaslalt,
+        barilgiinId,
+        query,
+        order,
+        or,
+      ]
       : null,
     fetcher,
     { revalidateOnFocus: false }
   );
 
-  
+
   const cacheKey = useMemo(() => {
     const base = "/zogsoolUilchluulegchJagsaalt";
     const org = baiguullagiinId || "";
     const bid = barilgiinId || "";
     const q = query ? JSON.stringify(query) : "";
     const o = order ? JSON.stringify(order) : "";
-    return `${base}:${org}:${bid}:${q}:${o}`;
-  }, [baiguullagiinId, barilgiinId, query, order]);
+    const k = khuudaslalt ? JSON.stringify(khuudaslalt) : "";
+    return `${base}:${org}:${bid}:${q}:${o}:${k}`;
+  }, [baiguullagiinId, barilgiinId, query, order, khuudaslalt]);
 
- 
+
   useEffect(() => {
     (async () => {
       try {
@@ -102,33 +105,10 @@ function useUilchluulegchZogsool(
           );
         }
       } catch (e) {
-        
+
       }
     })();
   }, [data, cacheKey]);
-
-  
-  useEffect(() => {
-    (async () => {
-      try {
-        const isBrowser = typeof navigator !== "undefined";
-        const shouldLoadCache =
-          (!data && isBrowser && !navigator.onLine) || (!data && isBrowser);
-        if (shouldLoadCache) {
-          const db = await openDB();
-          const cached = await db.get(STORES.CACHE, cacheKey);
-          if (cached?.value) {
-            setOfflineCacheData(cached.value);
-          }
-        } else {
-          setOfflineCacheData(null);
-        }
-      } catch (e) {
-        setOfflineCacheData(null);
-      }
-    })();
-  }, [data, cacheKey]);
-
   const effectiveData = offlineCacheData || data;
   return {
     setUilchluulegchKhuudaslalt,

@@ -637,16 +637,8 @@ function Zogsool({ token }) {
 
         case 2:
           baseQuery["niitDun"] = { $eq: 0 };
-          baseQuery["tuukh"] = {
-            $elemMatch: {
-              tuluv: { $in: [0, -1] },
-              tsagiinTuukh: {
-                $elemMatch: {
-                  garsanTsag: { $exists: true }
-                }
-              }
-            }
-          };
+          baseQuery["tuukh.0.tuluv"] ={ $in: [0, -1] };
+          baseQuery["tuukh.0.tsagiinTuukh.garsanTsag"] = { $exists: true };
           break;
         case 3:
           baseQuery["tuukh.0.tuluv"] = -2;
@@ -865,7 +857,7 @@ function Zogsool({ token }) {
                     kassCameraKhaaltMutate();
                     tseverlekh();
                     setSelectedRowkeys([]);
-                  }else if(data !== "Amjilttai"){
+                  } else if (data !== "Amjilttai") {
                     notification.warning({
                       message: "Зөвхөн идэвхтэй машины дугаарыг цэвэрлэх боломжтой!",
                       duration: 2,
