@@ -1361,7 +1361,7 @@ function Zogsool({ token }) {
         width: "9rem",
         showSorterTooltip: false,
         sorter: () => 0,
-        dataIndex: "niitDun",
+        dataIndex: "tuukh.0.tulukhDun",
         render(v, data) {
           const total = v > 0 ? v : ((data.tuukh?.[0]?.tulukhDun || 0) + (data.tuukh?.[1]?.tulukhDun || 0));
           return formatNumber(total, 2);
@@ -1646,7 +1646,7 @@ function Zogsool({ token }) {
                 // !!v[0].uneguiGarsan
                 //   ? null
                 //   :
-                v[0].tuluv === 1
+                v[0].tuluv === 1 || v[0].tuluv === 2
                   ? "bg-green-500 text-white dark:bg-green-700"
                   : v[0].tuluv === -2
                     ? "bg-red-500 text-white dark:bg-red-700"
@@ -1666,7 +1666,7 @@ function Zogsool({ token }) {
                 // (!!v[0].uneguiGarsan && v[0].tuluv !== -2)
                 //   ? "Үнэгүй"
                 //   :
-                v[0].tuluv === 1
+                v[0].tuluv === 1 || v[0].tuluv === 2
                   ? "Төлсөн"
                   : v[0].tuluv === -2
                     ? "Зөрчилтэй"
@@ -2473,7 +2473,7 @@ function Zogsool({ token }) {
                             __style__: { h: "right" },
                             __numFmt__: "#,##0.00",
                             __cellType__: "TypeNumeric",
-                            dataIndex: "niitDun",
+                            dataIndex: "tuukh.0.tulukhDun",
                             render(v, data) {
                               const total = v > 0 ? v : ((data.tuukh?.[0]?.tulukhDun || 0) + (data.tuukh?.[1]?.tulukhDun || 0));
                               return total || 0;
@@ -2766,7 +2766,7 @@ function Zogsool({ token }) {
                                   b?.tuukh?.[0]?.tulbur,
                                 );
 
-                                acc.niitDun += Number(b?.niitDun) || 0;
+                                acc.niitDun += Number(b?.tuukh?.[0]?.tulukhDun) || 0;
                                 acc.payment += payments.reduce(
                                   (c, d) => c + (Number(d?.dun) || 0),
                                   0,
