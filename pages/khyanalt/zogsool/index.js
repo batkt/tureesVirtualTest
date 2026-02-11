@@ -865,6 +865,11 @@ function Zogsool({ token }) {
                     kassCameraKhaaltMutate();
                     tseverlekh();
                     setSelectedRowkeys([]);
+                  }else if(data !== "Amjilttai"){
+                    notification.warning({
+                      message: "Зөвхөн идэвхтэй машины дугаарыг цэвэрлэх боломжтой!",
+                      duration: 2,
+                    });
                   }
                 })
                 .catch((err) => aldaaBarigch(err));
