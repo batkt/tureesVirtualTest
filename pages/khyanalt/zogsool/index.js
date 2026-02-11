@@ -632,7 +632,7 @@ function Zogsool({ token }) {
 
           break;
         case 1:
-          baseQuery["tuukh.0.tuluv"] = 1;
+          baseQuery["tuukh.0.tuluv"] = { $in: [1, 2] };
           break;
 
         case 2:
