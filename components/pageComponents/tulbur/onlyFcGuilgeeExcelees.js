@@ -264,15 +264,19 @@ function GuilgeeExceleesOruulakhOlnoor(
       dataIndex: "guidliinKoep",
       key: "guidliinKoep",
 
-      render: (text, record, index) => (
+      render: (text, record) => (
         <InputNumber
           min={0}
           //   step={0.01}
-          value={record.guidliinKoep || 0}
+          value={record.guidliinKoep ?? 0}
           onChange={(value) => {
-            const newData = [...data];
-            newData[index].guidliinKoep = value;
-            setData(newData);
+            setData((prev) =>
+              prev.map((row) =>
+                row.tooluuriinDugaar === record.tooluuriinDugaar
+                  ? { ...row, guidliinKoep: value }
+                  : row
+              )
+            );
           }}
         />
       ),
