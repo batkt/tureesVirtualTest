@@ -162,35 +162,30 @@ const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
     </tr>
   </tbody>
 </table>
-    <div style="margin-top: 40px;">
-      <table style="width: 100%; border-collapse: collapse;">
-        <tr>
-          <td style="width: 80px; font-size: 11px; padding: 5px;">
-            <div style="text-align: center; margin-bottom: 40px;">
-              <div>&lt;tamga&gt;</div>
-            </div>
-            (Тамга)
-          </td>
-          <td style="font-size: 11px; padding: 5px;">
-            <div style="margin-bottom: 10px;">Гүйлгээ хариуцсан:</div>
-            <div style="border-bottom: 1px dotted #000; width: 150px; display: inline-block; margin-left: 20px;"></div>
-          </td>
-          <td style="font-size: 11px; padding: 5px; text-align: right;">
-            <div>${ajiltan?.ovog?.[0] ? ajiltan?.ovog?.[0] + '.' : ''}${ajiltan?.ner || ''}</div>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td style="font-size: 11px; padding: 5px;">
-            <div style="margin-bottom: 10px;">Нягтлан:</div>
-            <div>&lt;gariinUseg&gt;</div>
-          </td>
-          <td style="font-size: 11px; padding: 5px; text-align: right;">
-           
-          </td>
-        </tr>
-      </table>
-    </div>
+   <div style="margin-top: 40px; text-align: center;">
+  <table style="border-collapse: collapse; margin: 0 auto;">
+    <tbody>
+      <tr>
+        <td style="width: 80px;"></td>
+        <td style="text-align: left;">
+        &lt;tamga&gt;
+          <div style="margin-right: 20px;">Гүйцэтгэх захирал:.................</div>
+          <div style="margin-bottom: 10px; font-size: 12px;">
+            Нягтлан:
+            <span style="display: inline-block; width: 180px; border-bottom: 1px dotted #000; text-align: center;">
+              &lt;gariinUseg&gt;
+            </span>
+          </div>
+        </td>
+        <td style="width: 120px; font-size: 11px; padding: 5px;">
+          <div>/М. Баясгалан/</div>
+          <div>Ш. Гүлжан</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
   </div>`;
 };
 

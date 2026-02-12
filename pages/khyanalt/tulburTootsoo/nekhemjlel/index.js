@@ -425,40 +425,6 @@ function tulburTootsoo({ token }) {
           const medeelel = _.cloneDeep(
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
-          if (medeelel?.zardluud) {
-            medeelel.zardluud = medeelel.zardluud.map((z) => {
-              if (z.tariff) {
-                const tariff =
-                  parseFloat(
-                    typeof z.tariff === "string"
-                      ? z.tariff.replace(/,/g, "")
-                      : z.tariff || 0
-                  ) || 0;
-                
-                  medeelel[`${z.tailbar}.tariff`] = formatNumber(tariff);
-                  medeelel[`${z.tailbar}.negj`] = formatNumber(z.negj);
-                  medeelel[`${z.tailbar}.umnukhZaalt`] = z.umnukhZaalt;
-                  medeelel[`${z.tailbar}.suuliinZaalt`] = z.suuliinZaalt;
-                  medeelel[`${z.tailbar}.khungulult`] = formatNumber(z.khungulult);
-                  medeelel[`${z.tailbar}.khungulultKhassanTulukhDun`] = formatNumber(z.khungulultKhassanTulukhDun);
-                  medeelel[`${z.tailbar}.chadalDun`] = formatNumber(z.chadalDun);
-                  medeelel[`${z.tailbar}.tsekhDun`] = formatNumber(z.tsekhDun);
-                  medeelel[`${z.tailbar}.sekhDemjikhTulburDun`] = formatNumber(z.sekhDemjikhTulburDun);
-
-                return { ...z, tariff: formatNumber(tariff) };
-              }
-               medeelel[`${z.tailbar}.tariff`] = formatNumber(z.tariff);
-              medeelel[`${z.tailbar}.negj`] = formatNumber(z.negj);
-              medeelel[`${z.tailbar}.umnukhZaalt`] = z.umnukhZaalt;
-              medeelel[`${z.tailbar}.suuliinZaalt`] = z.suuliinZaalt;
-              medeelel[`${z.tailbar}.khungulult`] = formatNumber(z.khungulult);
-              medeelel[`${z.tailbar}.khungulultKhassanTulukhDun`] = formatNumber(z.khungulultKhassanTulukhDun);
-              medeelel[`${z.tailbar}.chadalDun`] = formatNumber(z.chadalDun);
-              medeelel[`${z.tailbar}.tsekhDun`] = formatNumber(z.tsekhDun);
-              medeelel[`${z.tailbar}.sekhDemjikhTulburDun`] = formatNumber(z.sekhDemjikhTulburDun);
-              return z;
-            });
-          }
           const barilga = baiguullaga?.barilguud?.find(
             (a) => a._id === medeelel?.barilgiinId
           );
@@ -915,14 +881,8 @@ function tulburTootsoo({ token }) {
             );
             medeelel.niitUldegdelNuat = formatNumber(medeelel.niitUldegdelNuat);
             medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel);
-            const talbainKhemjee = Number(medeelel.talbainKhemjee);
-            const talbainNegjUne = Number(medeelel.talbainNegjUne);
-
-            medeelel.managementTulukh = formatNumber(
-              talbainKhemjee * talbainNegjUne
-            );
-            medeelel.talbainKhemjee = formatNumber(talbainKhemjee);
-            medeelel.talbainNegjUne = formatNumber(talbainNegjUne);
+            medeelel.talbainKhemjee = formatNumber(medeelel.talbainKhemjee);
+            medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne);
             medeelel.talbainNiitUneNuat = (medeelel.talbainNiitUne / 1.1) * 0.1;
             medeelel.talbainNiitUneNuatgui = formatNumber(
               medeelel.talbainNiitUne - medeelel.talbainNiitUneNuat
