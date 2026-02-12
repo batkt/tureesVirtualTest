@@ -1358,7 +1358,7 @@ function Zogsool({ token }) {
         width: "9rem",
         showSorterTooltip: false,
         sorter: () => 0,
-        dataIndex: "tuukh.0.tulukhDun",
+        dataIndex: "niitDun",
         render(v, data) {
           const total = v > 0 ? v : ((data.tuukh?.[0]?.tulukhDun || 0) + (data.tuukh?.[1]?.tulukhDun || 0));
           return formatNumber(total, 2);
@@ -2470,7 +2470,7 @@ function Zogsool({ token }) {
                             __style__: { h: "right" },
                             __numFmt__: "#,##0.00",
                             __cellType__: "TypeNumeric",
-                            dataIndex: "tuukh.0.tulukhDun",
+                            dataIndex: "niitDun",
                             render(v, data) {
                               const total = v > 0 ? v : ((data.tuukh?.[0]?.tulukhDun || 0) + (data.tuukh?.[1]?.tulukhDun || 0));
                               return total || 0;
