@@ -298,6 +298,19 @@ function camera({ token }) {
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const now = new Date();
+    const daraaShunu = new Date(now);
+    daraaShunu.setHours(24, 0, 0, 0);
+    const shunuHurtel = daraaShunu - now;
+    if (shunuHurtel <= 0) return;
+    const timeoutId = window.setTimeout(() => {
+      window.location.reload();
+    }, shunuHurtel);
+    return () => clearTimeout(timeoutId);
+  }, []);
+
   const isActuallyOffline = isOfflineMode || !isOnline || !browserOnline;
 
   const [syncStatus, setSyncStatus] = useState("idle"); // idle, syncing, success, error
