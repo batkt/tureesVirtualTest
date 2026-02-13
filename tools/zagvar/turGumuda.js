@@ -1,3 +1,6 @@
+import AshiglaltiinZardal from "components/pageComponents/tokhirgoo/AshiglaltiinZardal";
+import formatNumber from "tools/function/formatNumber";
+
 const khatuuZagvarGumuda = (
   medeelel,
   ajiltan,
@@ -52,12 +55,10 @@ const khatuuZagvarGumuda = (
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">&lt;${
                   mur.tailbar
                 }.suuliinZaalt&gt;</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${
-                  mur.tailbar
-                }.negj&gt;</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${
-                  mur.tailbar
-                }.tariff&gt;</td>
+                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">${formatNumber(mur.negj, 2)}</td>
+                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">${
+                  mur.tariff
+                }</td>
               </tr>`;
           })
           .join("")}
@@ -77,38 +78,6 @@ const khatuuZagvarGumuda = (
               </tr>`;
             })
             .join("")}
-          ${ashiglaltZardluud
-            .filter((a) => a.tailbar === "Цахилгаан")
-            .map((mur, index) => {
-              return `
-              <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;font-size:12px; width: 5%;">${++ashiglaltDugaarlalt[0]}</td>
-                <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">Чадал</td>
-                <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
-                <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${
-                  mur.tailbar
-                }.chadalDun&gt;</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">0</td>
-              </tr>`;
-            })
-            .join("")}
-          ${ashiglaltZardluud
-            .filter((a) => a.tailbar === "Цахилгаан")
-            .map((mur, index) => {
-              return `
-              <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;font-size:12px; width: 5%;">${++ashiglaltDugaarlalt[0]}</td>
-                <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">ЦЕХ дэмжих</td>
-                <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
-                <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
-                <td style="border: 1px solid #000; text-align: right; width: 16%; font-size:12px">&lt;${
-                  mur.tailbar
-                }.sekhDemjikhTulburDun&gt;</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">0</td>
-              </tr>`;
-            })
-            .join("")}
       </tbody>
     </table>`
       : "";
@@ -124,7 +93,7 @@ const khatuuZagvarGumuda = (
       <td style="border: 1px solid #000; text-align: left; font-size: 12px;">Менежментийн зардал</td>
       <td style="border: 1px solid #000; text-align: center; font-size: 12px;">&lt;talbainKhemjee&gt;</td>
       <td style="border: 1px solid #000; text-align: center; font-size: 12px; width: 15%;" colspan="2">&lt;talbainNegjUne&gt;</td>
-      <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;managementTulukh&gt;</td>
+      <td style="border: 1px solid #000; text-align: right; font-size: 12px;">${formatNumber(medeelel?.tukhainSariinTureesiinTulukhDun, 2)}</td>
     </tr>
   `);
 
@@ -176,7 +145,7 @@ const khatuuZagvarGumuda = (
               : `1`
           }</td>
           <td style="border: 1px solid #000; font-size:12px; text-align: center;" colspan="2">
-                &lt;${mur.tailbar}.tariff&gt;
+                ${mur.tariff}
           </td>
           <td style="border: 1px solid #000; font-size:12px; text-align: center;" colspan="2">
                 &lt;${mur.tailbar}.tulukhDun&gt;
@@ -390,7 +359,7 @@ const khatuuZagvarGumuda = (
 </tfoot>
 
     </table> 
-    <td style="font-size:12px; font-weight:bold; " colspan="4">Тоолуурын заалтын мэдээлэл:</td>
+    ${ashiglaltTable ? `<td style="font-size:12px; font-weight:bold; " colspan="4">Тоолуурын заалтын мэдээлэл:</td>` : ""}
     ${ashiglaltTable}
     <p style="font-size:12px; margin-top: 20px; font-weight: bold;">Жич: Энэхүү нэхэмжлэх нь тооцоо нийлсэн акт биш төлбөр төлөгчийн эцсийн үлдэгдэл биш байж болно.</p>
   </div>`;
