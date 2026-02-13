@@ -284,8 +284,8 @@ function nasjiltinTailan({ token }) {
             gereeniiDugaar: r._id?.gereeniiDugaar || "-",
             talbainDugaar: r._id?.talbainDugaar || "-",
             ner: r._id?.ner || "-",
-            register: r._id?.register || "-", 
-            duusakhOgnoo: r._id?.duusakhOgnoo || "",    
+            register: r._id?.register || "-",
+            duusakhOgnoo: r._id?.duusakhOgnoo || "",
             gereeniiOgnoo: r._id?.gereeniiOgnoo || "",
             khugatsaa: r._id?.khugatsaa || 0,
             turul: r._id?.turul || "",
@@ -296,7 +296,7 @@ function nasjiltinTailan({ token }) {
             talbainKhemjee: r._id?.talbainKhemjee || 0,
             talbainKhemjeeMetrKube: r._id?.talbainKhemjeeMetrKube || 0,
             baritsaaAvakhDun: r._id?.baritsaaAvakhDun || 0,
-            baritsaaniiAvsan: r._id?.baritsaaniiAvsan || 0, 
+            baritsaaniiAvsan: r._id?.baritsaaniiAvsan || 0,
             baritsaaniiUldegdel: r._id?.baritsaaniiUldegdel || 0,
             baritsaaAvakhKhugatsaa: r._id?.baritsaaAvakhKhugatsaa || 0,
             aldangiinUldegdel: r._id?.aldangiinUldegdel || 0,
@@ -324,7 +324,7 @@ function nasjiltinTailan({ token }) {
       // 5. Эхний мөр: merged header (сар бүр)
       const headerRow1 = worksheet.addRow([]);
       headerRow1.height = 25;
-      
+
       // Баз баганууд (4 багана)
       headerRow1.getCell(1).value = "Харилцагч";
       headerRow1.getCell(2).value = "Регистр";
@@ -348,13 +348,13 @@ function nasjiltinTailan({ token }) {
       headerRow1.getCell(20).value = "Зориулалт";
       headerRow1.getCell(21).value = "Тусгай зориулалт";
       headerRow1.getCell(22).value = "Нэршил";
-      
+
       // Сар бүрийн merged header
       let colIndex = 23;
       saruud.forEach((sar) => {
         const startCol = colIndex;
         const endCol = colIndex + 3; // 4 багана (Төлөх, Төлсөн, Хөнгөлөлт, Үлдэгдэл)
-        
+
         worksheet.mergeCells(1, startCol, 1, endCol);
         const mergedCell = headerRow1.getCell(startCol);
         mergedCell.value = sar;
@@ -396,7 +396,7 @@ function nasjiltinTailan({ token }) {
       // 6. Хоёр дахь мөр: дэд header (Төлөх, Төлсөн, Хөнгөлөлт, Үлдэгдэл)
       const headerRow2 = worksheet.addRow([]);
       headerRow2.height = 20;
-      
+
       // Баз баганууд хоёр дахь мөрөнд хоосон
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].forEach((col) => {
         const cell = headerRow2.getCell(col);
@@ -478,7 +478,7 @@ function nasjiltinTailan({ token }) {
       // 7. Өгөгдлийн мөрүүд
       excelData.forEach((row) => {
         const dataRow = worksheet.addRow([]);
-        
+
         // Баз баганууд
         dataRow.getCell(1).value = row.ner;
         dataRow.getCell(2).value = row.register;
@@ -487,7 +487,7 @@ function nasjiltinTailan({ token }) {
         dataRow.getCell(5).value = row.gereeniiOgnoo ? new Date(row.gereeniiOgnoo) : null;
         dataRow.getCell(5).numFmt = 'yyyy-mm-dd';
         dataRow.getCell(6).value = row.duusakhOgnoo ? new Date(row.duusakhOgnoo) : null;
-        dataRow.getCell(6).numFmt = 'yyyy-mm-dd';  
+        dataRow.getCell(6).numFmt = 'yyyy-mm-dd';
         dataRow.getCell(7).value = row.khugatsaa || 0;
         dataRow.getCell(8).value = row.turul || "";
         dataRow.getCell(9).value = row.davkhar || 0;
@@ -497,7 +497,7 @@ function nasjiltinTailan({ token }) {
         dataRow.getCell(12).value = row.talbainNiitUne || 0;
         dataRow.getCell(12).numFmt = "#,##0.00";
         dataRow.getCell(13).value = row.talbainKhemjee || 0;
-        dataRow.getCell(13).numFmt = "#,##0.00";    
+        dataRow.getCell(13).numFmt = "#,##0.00";
         dataRow.getCell(14).value = row.talbainKhemjeeMetrKube || 0;
         dataRow.getCell(14).numFmt = "#,##0.00";
         dataRow.getCell(15).value = row.baritsaaAvakhDun || 0;
@@ -514,7 +514,7 @@ function nasjiltinTailan({ token }) {
         dataRow.getCell(21).value = row.tusgaiZoriulalt || "";
         dataRow.getCell(22).value = row.khariltsagchiinNershil || "";
 
-      
+
 
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].forEach((col) => {
           const cell = dataRow.getCell(col);
@@ -637,6 +637,110 @@ function nasjiltinTailan({ token }) {
       setExcelUnshijBaina(false);
     }
   }
+
+  async function tatakhMsgTuukh() {
+    setExcelUnshijBaina(true);
+    try {
+      const ekhlekhOgnoo = ognoo
+        ? moment(ognoo).startOf("year").format("YYYY-MM-DD")
+        : moment().startOf("year").format("YYYY-MM-DD");
+      const duusakhOgnoo = ognoo
+        ? moment(ognoo).endOf("year").format("YYYY-MM-DD")
+        : moment().endOf("year").format("YYYY-MM-DD");
+
+      const res = await axios(token).post("/msgTuukhEBarimtZogsoolSarBur", {
+        ekhlekhOgnoo,
+        duusakhOgnoo,
+      });
+      const data = res.data;
+
+
+      let allMonths = new Set();
+      data.forEach((row) => {
+        if (row.monthly && Array.isArray(row.monthly)) {
+          row.monthly.forEach((m) => {
+            if (m._id && m._id.year && m._id.month) {
+              allMonths.add(`${m._id.year}-${String(m._id.month).padStart(2, '0')}`);
+            }
+          });
+        }
+      });
+      const sortedMonths = Array.from(allMonths).sort();
+
+
+      const excelCol = [
+        { title: "Регистр", dataIndex: "register", width: 15 },
+        { title: "Байгууллага", dataIndex: "ner", width: 30 },
+        { title: "Дотоод нэр", dataIndex: "dotoodNer", width: 20 },
+      ];
+
+      sortedMonths.forEach((m) => {
+        excelCol.push({
+          title: m,
+          dataIndex: m,
+          width: 15,
+          style: { alignment: { horizontal: 'right' } }
+        });
+      });
+
+      const excelData = data.map((row) => {
+        const rowData = {
+          register: row.register,
+          ner: row.ner,
+          dotoodNer: row.dotoodNer || "",
+        };
+        sortedMonths.forEach(m => rowData[m] = 0);
+
+        if (row.monthly && Array.isArray(row.monthly)) {
+          row.monthly.forEach((m) => {
+            if (m._id && m._id.year && m._id.month) {
+              const key = `${m._id.year}-${String(m._id.month).padStart(2, '0')}`;
+              rowData[key] = m.count || 0;
+            }
+          });
+        }
+        return rowData;
+      });
+
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Авлага Excel");
+
+      const headerRow = worksheet.addRow(excelCol.map(c => c.title));
+      headerRow.font = { bold: true };
+      headerRow.eachCell((cell, colNumber) => {
+        cell.alignment = { horizontal: 'center' };
+        cell.border = { bottom: { style: 'thin' } };
+      });
+
+      excelData.forEach(rowData => {
+        const row = [];
+        excelCol.forEach(col => {
+          row.push(rowData[col.dataIndex]);
+        });
+        worksheet.addRow(row);
+      });
+
+      worksheet.columns = excelCol.map(c => ({ width: c.width }));
+
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Avlaga_Excel_${ekhlekhOgnoo}_${duusakhOgnoo}.xlsx`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setExcelUnshijBaina(false);
+    }
+  }
+
   const columns = useMemo(() => {
     var jagsaalt = [
       {
@@ -963,12 +1067,22 @@ function nasjiltinTailan({ token }) {
                     >
                       Тайлан татах
                     </Menu.Item>
-                    {baiguullaga?._id === "612f457d185280db676d0b51" ? (<Menu.Item
-                      key="ExcelTatakh"
-                      onClick={() => exceleerTatyaCopy()}
-                    >
-                      Тайлан татах (саруудаар)
-                    </Menu.Item>) : ""}
+                    {baiguullaga?._id === "612f457d185280db676d0b51" ? (
+                      <Menu.Item
+                        key="ExcelTatakhCopy"
+                        onClick={() => tatakhMsgTuukh()}
+                      >
+                        Авлага тайлан татах
+                      </Menu.Item>
+                    ) : null}
+                    {ajiltan?.khereglechiinNer === "CAdmin1" ? (
+                      <Menu.Item
+                        key="MsgTuukhTatakh"
+                        onClick={() => tatakhMsgTuukh()}
+                      >
+                        Авлага Excel
+                      </Menu.Item>
+                    ) : null}
                   </Menu>
                 }
                 trigger="click"
@@ -1142,11 +1256,10 @@ function nasjiltinTailan({ token }) {
                     {columns.slice(1).map((col, idx) => (
                       <td
                         key={idx}
-                        className={`border border-gray-400 px-2 py-1 text-mashJijigiinJijig ${
-                          isNumberColumn(col.dataIndex)
-                            ? "text-right"
-                            : "text-center"
-                        }`}
+                        className={`border border-gray-400 px-2 py-1 text-mashJijigiinJijig ${isNumberColumn(col.dataIndex)
+                          ? "text-right"
+                          : "text-center"
+                          }`}
                         style={{
                           whiteSpace:
                             col.dataIndex === "talbainDugaar"
