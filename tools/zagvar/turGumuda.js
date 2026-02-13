@@ -14,7 +14,8 @@ const khatuuZagvarGumuda = (
 ) => {
   
   console.log(medeelel);
-  const ashiglaltZardluud = medeelel.zardluud
+  const ashiglaltZardluud =
+  medeelel.zardluud
     ?.filter(
       (a) =>
         a.tailbar?.includes("Цахилгаан") ||
@@ -22,71 +23,76 @@ const khatuuZagvarGumuda = (
         a.tailbar?.includes("Хүйтэн ус") ||
         a.tailbar?.includes("Газ")
     )
-    .sort((a, b) =>
-      a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
-    );
+    ?.sort((a, b) =>
+      a.tailbar.localeCompare(b.tailbar, "mn", { sensitivity: "base" })
+    ) || [];
 
-  const ashiglaltTable =
-    ashiglaltZardluud.length > 0
-      ? `
-    <table style="width:100%; border-collapse:collapse;">
-      <thead>
+const ashiglaltTable =
+  ashiglaltZardluud.length > 0
+    ? `
+<table style="width:100%; border-collapse:collapse;">
+  <thead>
+    <tr>
+      <td style="border:1px solid #000; text-align:center; font-size:12px; width:5%;">№</td>
+      <td style="border:1px solid #000; text-align:center; font-size:12px; width:20%;">Утга</td>
+      <td style="border:1px solid #000; text-align:center; font-size:12px;">Өмнөх заалт</td>
+      <td style="border:1px solid #000; text-align:center; font-size:12px;">Одоогийн заалт</td>
+      <td style="border:1px solid #000; text-align:center; font-size:12px;">Хэрэглээ</td>
+      <td style="border:1px solid #000; text-align:center; font-size:12px;">Нэгж үнэ</td>
+    </tr>
+  </thead>
+  <tbody>
+    ${ashiglaltZardluud
+      .map((mur, index) => `
         <tr>
-          <td style="border:1px solid #000; text-align: center; font-size:12px; width: 5%;">№</td>
-          <td style="border:1px solid #000; text-align: center; font-size:12px; width: 20%;">Утга</td>
-          <td style="border:1px solid #000; text-align: center; font-size:12px;">Өмнөх заалт</td>
-          <td style="border:1px solid #000; text-align: center; font-size:12px;">Одоогийн заалт</td>
-          <td style="border:1px solid #000; text-align: center; font-size:12px;">Хэрэглээ</td>
-          <td style="border:1px solid #000; text-align: center; font-size:12px;">Нэгж үнэ</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${++ashiglaltDugaarlalt[0]}</td>
+          <td style="border:1px solid #000; text-align:left; font-size:12px;">${mur.tailbar ?? ""}</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${mur.umnukhZaalt ?? 0}</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${mur.suuliinZaalt ?? 0}</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${formatNumber(mur.negj ?? 0, 2)}</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${mur.tariff ?? 0}</td>
         </tr>
-      </thead>
-      <tbody>
-        ${ashiglaltZardluud
-          .map((mur, index) => {
-            return `
-              <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center; font-size:12px; width: 5%;">${++ashiglaltDugaarlalt[0]}</td>
-                <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">${
-                  mur.tailbar
-                }</td>
-                <td style="border: 1px solid #000; text-align: center; font-size:12px">&lt;${
-                  mur.tailbar
-                }.umnukhZaalt&gt;</td>
-                <td style="border: 1px solid #000; text-align: center; font-size:12px">&lt;${
-                  mur.tailbar
-                }.suuliinZaalt&gt;</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">${formatNumber(mur.negj, 2)}</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">${
-                  mur.tariff
-                }</td>
-              </tr>`;
-          })
-          .join("")}
-          ${ashiglaltZardluud
-            .filter((a) => a.tailbar === "Цахилгаан")
-            .map((mur, index) => {
-              return `
-              <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center;font-size:12px">${++ashiglaltDugaarlalt[0]}</td>
-                <td style="border: 1px solid #000; text-align: left; font-size:12px; width: 20%;">ЦЕХ</td>
-                <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
-                <td style="border: 1px solid #000; text-align: center; font-size:12px">0</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${
-                  mur.tailbar
-                }.tsekhDun&gt;</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">0</td>
-              </tr>`;
-            })
-            .join("")}
-      </tbody>
-    </table>`
-      : "";
+      `)
+      .join("")}
 
+    ${ashiglaltZardluud
+      .filter((a) => a.tailbar?.includes("Цахилгаан"))
+      .map((mur) => `
+        <tr>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${++ashiglaltDugaarlalt[0]}</td>
+          <td style="border:1px solid #000; text-align:left; font-size:12px;">ЦЕХ</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${formatNumber(mur.tsekhDun ?? 0, 2)}</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
+        </tr>
+
+        <tr>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${++ashiglaltDugaarlalt[0]}</td>
+          <td style="border:1px solid #000; text-align:left; font-size:12px;">Чадал</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${formatNumber(mur.chadalDun ?? 0, 2)}</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
+        </tr>
+
+        <tr>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${++ashiglaltDugaarlalt[0]}</td>
+          <td style="border:1px solid #000; text-align:left; font-size:12px;">ЦЕХ дэмжих</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${formatNumber(mur.sekhDemjikhTulburDun ?? 0, 2)}</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
+        </tr>
+      `)
+      .join("")}
+  </tbody>
+</table>
+`
+    : "";
 
   const murNemekh = [];
   let currentDugaar = 0;
-
-
   murNemekh.push(`
     <tr>
       <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${++currentDugaar}</td>
