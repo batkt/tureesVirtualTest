@@ -164,25 +164,31 @@ const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
 </table>
    <div style="margin-top: 40px; text-align: center;">
   <table style="border-collapse: collapse; margin: 0 auto;">
-    <tbody>
-      <tr>
-        <td style="width: 80px;"></td>
-        <td style="text-align: left;">
-        &lt;tamga&gt;
-          <div style="margin-right: 20px;">Гүйцэтгэх захирал:.................</div>
-          <div style="margin-bottom: 10px; font-size: 12px;">
-            Нягтлан:
-            <span style="display: inline-block; width: 180px; border-bottom: 1px dotted #000; text-align: center;">
-              &lt;gariinUseg&gt;
-            </span>
-          </div>
-        </td>
-        <td style="width: 120px; font-size: 11px; padding: 5px;">
-          <div>/М. Баясгалан/</div>
-          <div>Ш. Гүлжан</div>
-        </td>
-      </tr>
-    </tbody>
+ <tbody>
+  <tr>
+    <td style="width: 80px;"></td>
+    <td style="text-align: left;">
+      <div style="display: flex; align-items: center; margin-right: 20px;">
+        <span>Гүйцэтгэх захирал:</span>
+        <span style="flex: 1; border-bottom: 1px dotted #000; margin: 0 10px; position: relative; min-width: 100px; height: 30px;">
+          <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: white; padding: 0 10px; min-width: 300px; text-align: center;">
+            &lt;tamga&gt;
+          </span>
+        </span>
+      </div>
+      <div style="margin-bottom: 10px; font-size: 12px;">
+        Нягтлан:
+        <span style="display: inline-block; width: 180px; border-bottom: 1px dotted #000; text-align: center;">
+          &lt;gariinUseg&gt;
+        </span>
+      </div>
+    </td>
+    <td style="width: 120px; font-size: 11px; padding: 5px;">
+      <div>/М. Баясгалан/</div>
+      <div>Ш. Гүлжан</div>
+    </td>
+  </tr>
+</tbody>
   </table>
 </div>
 
