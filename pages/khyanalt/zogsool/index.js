@@ -2762,7 +2762,9 @@ function Zogsool({ token }) {
                                 const { payments, discount } = splitTulbur(
                                   b?.tuukh?.[0]?.tulbur,
                                 );
-
+                                if(tulbur === "GadaaQR"){
+                                  acc.niitDun += Number(b?.niitDun) || 0;  
+                                }else
                                 acc.niitDun += Number(b?.tuukh?.[0]?.tulukhDun) || 0;
                                 acc.payment += payments.reduce(
                                   (c, d) => c + (Number(d?.dun) || 0),

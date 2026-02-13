@@ -49,7 +49,7 @@ const ashiglaltTable =
           <td style="border:1px solid #000; text-align:left; font-size:12px;">${mur.tailbar ?? ""}</td>
           <td style="border:1px solid #000; text-align:center; font-size:12px;">${mur.umnukhZaalt ?? 0}</td>
           <td style="border:1px solid #000; text-align:center; font-size:12px;">${mur.suuliinZaalt ?? 0}</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">${formatNumber(mur.negj ?? 0, 2)}</td>
+          <td style="border:1px solid #000; text-align:right; font-size:12px;">${formatNumber(mur.negj ?? 0, 2)}</td>
           <td style="border:1px solid #000; text-align:center; font-size:12px;">${mur.tariff ?? 0}</td>
         </tr>
       `)
@@ -151,9 +151,9 @@ const ashiglaltTable =
               : `1`
           }</td>
           <td style="border: 1px solid #000; font-size:12px; text-align: center;" colspan="2">
-                ${mur.tariff}
+                ${formatNumber(mur.tariff ?? 0, 2)}
           </td>
-          <td style="border: 1px solid #000; font-size:12px; text-align: center;" colspan="2">
+          <td style="border: 1px solid #000; font-size:12px; text-align: right;" colspan="2">
                 &lt;${mur.tailbar}.tulukhDun&gt;
           </td>
         </tr>
