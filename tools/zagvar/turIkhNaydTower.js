@@ -1,3 +1,4 @@
+import formatNumber from "tools/function/formatNumber";
 const parseNum = (v) => {
   if (v == null || v === "") return 0;
   return parseFloat(String(v).replace(/,/g, "")) || 0;
@@ -35,7 +36,7 @@ const khatuuZagvarIkhNayd = (
   barilga,
   baiguullagiinId,
   barilgiinId,
-  dugaarlalt = [0],
+  
   ashiglaltDugaarlalt = [0],
   baritsaaDugaarlalt = [0],
   ashiglaltiinZardal
@@ -52,7 +53,7 @@ const khatuuZagvarIkhNayd = (
       a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
     );
   const murNemekh = [];
-
+const dugaarlalt = [0];
   const ashiglaltTable =
     ashiglaltZardluud.length > 0
       ? `
@@ -85,12 +86,8 @@ const khatuuZagvarIkhNayd = (
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">&lt;${
                   mur.tailbar
                 }.suuliinZaalt&gt;</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${
-                  mur.tailbar
-                }.negj&gt;</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">&lt;${
-                  mur.tailbar
-                }.tariff&gt;</td>
+                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">${formatNumber(mur?.negj || 0)}</td>
+                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">${formatNumber(mur?.tariff || 0)}</td>
               </tr>`;
           })
           .join("")}
@@ -311,7 +308,7 @@ const khatuuZagvarIkhNayd = (
                   &lt;talbainKhemjee&gt;
                 </td>
                 <td style="border: 1px solid #000; font-size:12px; text-align: center; width: 16%;">
-                  &lt;${mur.tailbar}.tariff&gt;
+                  ${mur?.tariff || 0}
                 </td>
                 <td style="border: 1px solid #000; font-size:12px; text-align: right; ">
                   &lt;${mur.tailbar}.khungulult&gt;
@@ -354,7 +351,7 @@ const khatuuZagvarIkhNayd = (
                   : isFixedFee || isFixedFeeFromTailbar
                   ? "1"
                   : isUtility
-                  ? `&lt;${mur.tailbar}.negj&gt;`
+                  ? `${mur?.negj || 0}`
                   : `1`;
               const displayTariff =
                 isFixedFee && displayNiit > 0
@@ -376,7 +373,7 @@ const khatuuZagvarIkhNayd = (
             }</td>
             <td style="border: 1px solid #000; font-size:12px; text-align:center;">${displayQty}</td>
             <td style="border: 1px solid #000; font-size:12px; text-align: center;">
-                  ${displayTariff != null ? displayTariff : `&lt;${mur.tailbar}.tariff&gt;`}
+                  ${displayTariff != null ? displayTariff : formatNumber(mur?.tariff || 0)}
             </td>
             <td style="border: 1px solid #000; font-size:12px; text-align: right; width: 16%;">
               &lt;${mur.tailbar}.khungulult&gt;
