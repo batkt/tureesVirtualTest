@@ -842,7 +842,7 @@ function TulburiinDelgerenguiTailan(
                 <div className="flex">Төлбөр авсан:</div>
                 <div>
                   {formatNumber(
-                    tulburiinMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0,
+                    tulburiinMedeelel?.filter((a) => a?.ner !== "Үнэгүй")?.reduce((a, b) => a + b?.dun, 0) || 0,
                   ) + "₮"}
                 </div>
               </div>
@@ -852,7 +852,8 @@ function TulburiinDelgerenguiTailan(
                 <div className="flex">Төлбөр аваагүй:</div>
                 <div>
                   {formatNumber(
-                    (zorchilMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0) + (tulburteiMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0),
+                    (zorchilMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0) + (tulburteiMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0) 
+                     + (tulburiinMedeelel?.filter((a) => a?.ner === "Үнэгүй")?.reduce((a, b) => a + b?.dun, 0) || 0),
                   ) + "₮"}
                 </div>
               </div>

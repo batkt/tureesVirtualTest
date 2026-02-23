@@ -462,6 +462,21 @@ function ZogsoolBurtgekh(
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
+                {t("VIP машин тоолох эсэх")}
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item className="m-0" name="vipMashinToolokhEsekh">
+                <Switch
+                  className="bg-gray-400"
+                  defaultChecked={data?.vipMashinToolokhEsekh}
+                  checkedChildren="Тийм"
+                  unCheckedChildren="Үгүй"
+                />
+              </Form.Item>
+            </div>
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
                 {t("Дурын төрөлтэй машинд тогтмол төлбөр бодогдох эсэх")}
               </div>
             </div>

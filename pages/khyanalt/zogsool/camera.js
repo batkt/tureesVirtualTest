@@ -1293,8 +1293,9 @@ function camera({ token }) {
       duusakhOgnoo: moment().endOf("day").format("YYYY-MM-DD 23:59:59"),
       "tuukh.tsagiinTuukh.garsanTsag": { $exists: false },
       "tuukh.tuluv": { $ne: -2 },
+      ...(songogdzonZogsool?.vipMashinToolokhEsekh && { turul: { $ne: "VIP" } })
     };
-  }, [uilchluulegchGaralt]);
+  }, [uilchluulegchGaralt, songogdzonZogsool]);
 
   const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } =
     useUilchluulegchZogsoolToo(token, tooQue);
