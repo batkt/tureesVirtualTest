@@ -637,7 +637,7 @@ function Zogsool({ token }) {
 
         case 2:
           baseQuery["niitDun"] = { $eq: 0 };
-          baseQuery["tuukh.0.tuluv"] ={ $in: [0, -1] };
+          baseQuery["tuukh.0.tuluv"] = { $in: [0, -1] };
           baseQuery["tuukh.0.tsagiinTuukh.garsanTsag"] = { $exists: true };
           break;
         case 3:
@@ -1367,6 +1367,12 @@ function Zogsool({ token }) {
           return getTotal(a) - getTotal(b);
         },
         render(v, data) {
+          const hasZeroTulukhDun = data.tuukh?.some((t) => t?.tulukhDun === 0);
+
+          if (hasZeroTulukhDun) {
+            return formatNumber(data.niitDun || 0, 2);
+          }
+
           const total =
             v > 0
               ? v
@@ -1469,7 +1475,7 @@ function Zogsool({ token }) {
                   className={`relative ${tulbur?.toLowerCase() === "qpay" &&
                     "bg-green-500 text-white"
                     } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                > 
+                >
                   {t("Qpay")}
                 </div>
                 <div
@@ -2773,42 +2779,42 @@ function Zogsool({ token }) {
                             shuult?.name === "Түрээслэгч" ? 2 : 0;
                           const summaryColSpan = 7 + shinecolLength;
                           const totals =
-                              e?.reduce(
-                                (acc, b) => {
-                                  const { payments, discount } = splitTulbur(
-                                    b?.tuukh?.[0]?.tulbur,
-                                  );
-                                  const paidTotal =
-                                    b?.tuukh
-                                      ?.filter(t => Number(t?.tulukhDun) > 0)
-                                      ?.reduce((sum, t) => sum + Number(t?.tulukhDun || 0), 0) || 0;
-                                  const amount = paidTotal > 0 ? paidTotal : Number(b?.niitDun || 0);
-                                  acc.niitDun += amount;
+                            e?.reduce(
+                              (acc, b) => {
+                                const { payments, discount } = splitTulbur(
+                                  b?.tuukh?.[0]?.tulbur,
+                                );
+                                const paidTotal =
+                                  b?.tuukh
+                                    ?.filter(t => Number(t?.tulukhDun) > 0)
+                                    ?.reduce((sum, t) => sum + Number(t?.tulukhDun || 0), 0) || 0;
+                                const amount = paidTotal > 0 ? paidTotal : Number(b?.niitDun || 0);
+                                acc.niitDun += amount;
 
-                                  acc.payment += payments?.reduce(
-                                    (c, d) => c + (Number(d?.dun) || 0),
-                                    0,
-                                  ) || 0;
+                                acc.payment += payments?.reduce(
+                                  (c, d) => c + (Number(d?.dun) || 0),
+                                  0,
+                                ) || 0;
 
-                                  acc.discount += Number(discount) || 0;
-                                  acc.ebarimt += Number(b?.ebarimtAvsanDun) || 0;
+                                acc.discount += Number(discount) || 0;
+                                acc.ebarimt += Number(b?.ebarimtAvsanDun) || 0;
 
-                                     return acc;
-                                },
-                                {
-                                  niitDun: 0,
-                                  payment: 0,
-                                  discount: 0,
-                                  ebarimt: 0,
-                                },
-                              ) || {};
+                                return acc;
+                              },
+                              {
+                                niitDun: 0,
+                                payment: 0,
+                                discount: 0,
+                                ebarimt: 0,
+                              },
+                            ) || {};
 
-                            const {
-                              niitDun = 0,
-                              payment = 0,
-                              discount = 0,
-                              ebarimt = 0,
-                            } = totals;
+                          const {
+                            niitDun = 0,
+                            payment = 0,
+                            discount = 0,
+                            ebarimt = 0,
+                          } = totals;
 
 
                           return (
