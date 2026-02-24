@@ -1356,14 +1356,27 @@ function Zogsool({ token }) {
         title: t("Бодогдсон"),
         align: "right",
         width: "9rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        dataIndex: "niitDun",
+        showSorterTooltip: true,
+        sorter: (a, b) => {
+          const getTotal = (data) =>
+            data.niitDun > 0
+              ? data.niitDun
+              : ((data.tuukh?.[0]?.tulukhDun || 0) +
+                (data.tuukh?.[1]?.tulukhDun || 0));
+
+          return getTotal(a) - getTotal(b);
+        },
         render(v, data) {
-          const total = v > 0 ? v : ((data.tuukh?.[0]?.tulukhDun || 0) + (data.tuukh?.[1]?.tulukhDun || 0));
+          const total =
+            v > 0
+              ? v
+              : ((data.tuukh?.[0]?.tulukhDun || 0) +
+                (data.tuukh?.[1]?.tulukhDun || 0));
+
           return formatNumber(total, 2);
         },
       },
+
       {
         title: (
           <Popover
@@ -1440,20 +1453,23 @@ function Zogsool({ token }) {
                     </>
                   )
                 }
-
-                <div
-                  onClick={() => setTulbur("Соёолж Ц/Д")}
-                  className={`relative ${tulbur === "Соёолж Ц/Д" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
-                >
-                  Соёолж Ц/Д
-                </div>
+                {
+                  baiguullaga?._id === "6731b43bc23730ac1908da2d" && (
+                    <div
+                      onClick={() => setTulbur("Соёолж Ц/Д")}
+                      className={`relative ${tulbur === "Соёолж Ц/Д" && "bg-green-500 text-white"
+                        } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                    >
+                      Соёолж Ц/Д
+                    </div>
+                  )
+                }
                 <div
                   onClick={() => setTulbur("qpay")}
                   className={`relative ${tulbur?.toLowerCase() === "qpay" &&
                     "bg-green-500 text-white"
                     } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                >
+                > 
                   {t("Qpay")}
                 </div>
                 <div
@@ -1667,7 +1683,7 @@ function Zogsool({ token }) {
                   ? "Төлсөн"
                   : v[0].tuluv === -2
                     ? "Зөрчилтэй"
-                    : v[0]?.tuluv === 0 && data.niitDun > 0
+                    : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && data.niitDun > 0
                       ? "Төлбөртэй"
                       : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
                         ? "Идэвхтэй"
@@ -2757,36 +2773,43 @@ function Zogsool({ token }) {
                             shuult?.name === "Түрээслэгч" ? 2 : 0;
                           const summaryColSpan = 7 + shinecolLength;
                           const totals =
-                            e?.reduce(
-                              (acc, b) => {
-                                const { payments, discount } = splitTulbur(
-                                  b?.tuukh?.[0]?.tulbur,
-                                );
-                                if((tulbur === "GadaaQR" || tulbur === "DotorQR") && b?.niitDun > 0){
-                                  acc.niitDun += Number(b?.niitDun) || 0;  
-                                } 
-                                else acc.niitDun += Number(b?.tuukh?.[0]?.tulukhDun) || 0;
-                                acc.payment += payments.reduce(
-                                  (c, d) => c + (Number(d?.dun) || 0),
-                                  0,
-                                );
-                                acc.discount += discount || 0;
-                                acc.ebarimt += Number(b?.ebarimtAvsanDun) || 0;
-                                return acc;
-                              },
-                              {
-                                niitDun: 0,
-                                payment: 0,
-                                discount: 0,
-                                ebarimt: 0,
-                              },
-                            ) || {};
-                          const {
-                            niitDun = 0,
-                            payment = 0,
-                            discount = 0,
-                            ebarimt = 0,
-                          } = totals || {};
+                              e?.reduce(
+                                (acc, b) => {
+                                  const { payments, discount } = splitTulbur(
+                                    b?.tuukh?.[0]?.tulbur,
+                                  );
+                                  const paidTotal =
+                                    b?.tuukh
+                                      ?.filter(t => Number(t?.tulukhDun) > 0)
+                                      ?.reduce((sum, t) => sum + Number(t?.tulukhDun || 0), 0) || 0;
+                                  const amount = paidTotal > 0 ? paidTotal : Number(b?.niitDun || 0);
+                                  acc.niitDun += amount;
+
+                                  acc.payment += payments?.reduce(
+                                    (c, d) => c + (Number(d?.dun) || 0),
+                                    0,
+                                  ) || 0;
+
+                                  acc.discount += Number(discount) || 0;
+                                  acc.ebarimt += Number(b?.ebarimtAvsanDun) || 0;
+
+                                     return acc;
+                                },
+                                {
+                                  niitDun: 0,
+                                  payment: 0,
+                                  discount: 0,
+                                  ebarimt: 0,
+                                },
+                              ) || {};
+
+                            const {
+                              niitDun = 0,
+                              payment = 0,
+                              discount = 0,
+                              ebarimt = 0,
+                            } = totals;
+
 
                           return (
                             <>
