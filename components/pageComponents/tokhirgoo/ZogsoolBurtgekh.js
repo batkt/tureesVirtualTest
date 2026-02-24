@@ -462,7 +462,7 @@ function ZogsoolBurtgekh(
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
-                {t("VIP машин тоолох эсэх")}
+                {t("VIP машин тоолохгүй эсэх")}
               </div>
             </div>
             <div className="col-span-2">
