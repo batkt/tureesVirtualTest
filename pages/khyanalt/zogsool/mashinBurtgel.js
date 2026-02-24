@@ -174,73 +174,70 @@ function mashinBurtgel({ token }) {
     const shinecol =
       turul === "Гэрээт"
         ? [
-            {
-              title: (
-                <Popover
-                  placement="bottom"
-                  content={
-                    <div className="space-y-2">
-                      <div
-                        onClick={() => setUdurShuult("niit")}
-                        className={`relative flex ${
-                          udurShuult === "niit" ? "bg-green-500 text-white" : ""
+          {
+            title: (
+              <Popover
+                placement="bottom"
+                content={
+                  <div className="space-y-2">
+                    <div
+                      onClick={() => setUdurShuult("niit")}
+                      className={`relative flex ${udurShuult === "niit" ? "bg-green-500 text-white" : ""
                         } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                      >
-                        {t("Нийт")}
-                      </div>
-                      <div
-                        onClick={() => setUdurShuult("idevkhitei")}
-                        className={`relative flex ${
-                          udurShuult === "idevkhitei"
-                            ? "bg-green-500 text-white"
-                            : ""
-                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                      >
-                        {t("Идэвхтэй")}
-                      </div>
-                      <div
-                        onClick={() => setUdurShuult("idevkhigui")}
-                        className={`relative flex ${
-                          udurShuult === "idevkhigui"
-                            ? "bg-green-500 text-white"
-                            : ""
-                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                      >
-                        {t("Идэвхгүй")}
-                      </div>
+                    >
+                      {t("Нийт")}
                     </div>
-                  }
+                    <div
+                      onClick={() => setUdurShuult("idevkhitei")}
+                      className={`relative flex ${udurShuult === "idevkhitei"
+                        ? "bg-green-500 text-white"
+                        : ""
+                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                    >
+                      {t("Идэвхтэй")}
+                    </div>
+                    <div
+                      onClick={() => setUdurShuult("idevkhigui")}
+                      className={`relative flex ${udurShuult === "idevkhigui"
+                        ? "bg-green-500 text-white"
+                        : ""
+                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                    >
+                      {t("Идэвхгүй")}
+                    </div>
+                  </div>
+                }
+              >
+                <div
+                  className={`flex cursor-pointer items-center justify-center gap-3`}
                 >
-                  <div
-                    className={`flex cursor-pointer items-center justify-center gap-3`}
-                  >
-                    <FilterOutlined className="text-lg text-green-600" />
-                    {t("Өдөр")}
-                  </div>
-                </Popover>
-              ),
-              align: "center",
-              dataIndex: "duusakhOgnoo",
-              width: "7rem",
-              render: (duusakhOgnoo) =>
-                moment(duusakhOgnoo)?.diff(moment(new Date()), "days"),
+                  <FilterOutlined className="text-lg text-green-600" />
+                  {t("Өдөр")}
+                </div>
+              </Popover>
+            ),
+            align: "center",
+            dataIndex: "duusakhOgnoo",
+            width: "7rem",
+            render: (duusakhOgnoo) =>
+              moment(duusakhOgnoo)?.diff(moment(new Date()), "days"),
+          },
+          {
+            title: "Цаг",
+            align: "center",
+            width: "7rem",
+            render: (data) => {
+              return (
+                <div>
+                  {data?.tulburBodokhTsagEkhlekh} -{" "}
+                  {data?.tulburBodokhTsagDuusakh}
+                </div>
+              );
             },
-            {
-              title: "Цаг",
-              align: "center",
-              width: "7rem",
-              render: (data) => {
-                return (
-                  <div>
-                    {data?.tulburBodokhTsagEkhlekh} -{" "}
-                    {data?.tulburBodokhTsagDuusakh}
-                  </div>
-                );
-              },
-            },
-          ]
+          },
+        ]
         : turul === "Түрээслэгч"
-        ? [
+          ? [
             {
               title: t("Талбайн дугаар"),
               align: "center",
@@ -256,37 +253,33 @@ function mashinBurtgel({ token }) {
                     <div className="space-y-2">
                       <div
                         onClick={() => setTuluv("")}
-                        className={`relative flex ${
-                          tuluv === "" ? "bg-green-500 text-white" : ""
-                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                        className={`relative flex ${tuluv === "" ? "bg-green-500 text-white" : ""
+                          } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                       >
                         {t("Нийт")}
                       </div>
                       <div
                         onClick={() => setTuluv("togtmolTsag")}
-                        className={`relative flex ${
-                          tuluv === "togtmolTsag"
-                            ? "bg-green-500 text-white"
-                            : ""
-                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                        className={`relative flex ${tuluv === "togtmolTsag"
+                          ? "bg-green-500 text-white"
+                          : ""
+                          } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                       >
                         {t("Тогтмол цаг")}
                       </div>
                       <div
                         onClick={() => setTuluv("khuviKhungulult")}
-                        className={`relative ${
-                          tuluv == "khuviKhungulult"
-                            ? "bg-green-500 text-white"
-                            : ""
-                        } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                        className={`relative ${tuluv == "khuviKhungulult"
+                          ? "bg-green-500 text-white"
+                          : ""
+                          } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                       >
                         {t("Хувь хөнгөлөлт")}
                       </div>
                       <div
                         onClick={() => setTuluv("Үнэгүй")}
-                        className={`relative ${
-                          tuluv == "Үнэгүй" ? "bg-green-500 text-white" : ""
-                        } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                        className={`relative ${tuluv == "Үнэгүй" ? "bg-green-500 text-white" : ""
+                          } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                       >
                         {t("Үнэгүй")}
                       </div>
@@ -312,14 +305,13 @@ function mashinBurtgel({ token }) {
                       <div className="flex items-center justify-center">
                         {a && (
                           <div
-                            className={`flex w-[6rem] items-center justify-center rounded-lg px-2 py-1 font-[600] text-white ${
-                              b.uldegdelKhungulukhKhugatsaa ===
+                            className={`flex w-[6rem] items-center justify-center rounded-lg px-2 py-1 font-[600] text-white ${b.uldegdelKhungulukhKhugatsaa ===
                               b.khungulukhKhugatsaa
-                                ? "bg-green-400 dark:bg-green-700"
-                                : b.uldegdelKhungulukhKhugatsaa > 0
+                              ? "bg-green-400 dark:bg-green-700"
+                              : b.uldegdelKhungulukhKhugatsaa > 0
                                 ? "bg-yellow-400 dark:bg-yellow-700"
                                 : "bg-red-400 dark:bg-red-700"
-                            }`}
+                              }`}
                           >
                             {b.khungulukhKhugatsaa}
                             {"/"}
@@ -355,7 +347,7 @@ function mashinBurtgel({ token }) {
               },
             },
           ]
-        : [];
+          : [];
     return [
       {
         title: "№",
@@ -364,7 +356,7 @@ function mashinBurtgel({ token }) {
         width: "2rem",
         render: (text, record, index) =>
           (mashinGaralt?.khuudasniiDugaar || 0) *
-            (mashinGaralt?.khuudasniiKhemjee || 0) -
+          (mashinGaralt?.khuudasniiKhemjee || 0) -
           (mashinGaralt?.khuudasniiKhemjee || 0) +
           index +
           1,
@@ -472,9 +464,7 @@ function mashinBurtgel({ token }) {
             return (
               <div className="flex justify-center">
                 <div className="flex h-[1.5rem] w-[4rem] items-center justify-center rounded-lg bg-green-400 px-2 py-1 font-[600] text-white">
-                  {record?.uldegdelKhungulukhKhugatsaa
-                    ? record?.uldegdelKhungulukhKhugatsaa
-                    : record?.khungulukhKhugatsaa}
+                  {record?.uldegdelKhungulukhKhugatsaa || 0}
                 </div>
               </div>
             );
@@ -597,7 +587,7 @@ function mashinBurtgel({ token }) {
         width: "2rem",
         render: (text, record, index) =>
           (blockMashinGaralt?.khuudasniiDugaar || 0) *
-            (blockMashinGaralt?.khuudasniiKhemjee || 0) -
+          (blockMashinGaralt?.khuudasniiKhemjee || 0) -
           (blockMashinGaralt?.khuudasniiKhemjee || 0) +
           index +
           1,
@@ -701,7 +691,7 @@ function mashinBurtgel({ token }) {
           mashinToololt
             ?.filter((a) => a._id !== "Block")
             .reduce((a, b) => a + b.too, 0) +
-            (mashinToololt?.find((a) => a._id === "Block")?.too || 0),
+          (mashinToololt?.find((a) => a._id === "Block")?.too || 0),
           0
         ),
       },
@@ -1018,18 +1008,17 @@ function mashinBurtgel({ token }) {
           khuudasniiDugaar: 1,
         }));
       }}
-      // loading={isValidating}
+    // loading={isValidating}
     >
       <Card size="small" className="col-span-12 overflow-auto">
         <div className="hideScroll flex w-full gap-3 overflow-x-auto border-solid py-3 md:gap-4">
           {toololt.map((a, i) => (
             <div
               key={i}
-              className={`group relative min-w-[120px] flex-1 cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 dark:hover:shadow-gray-800 ${
-                a.name === turul
-                  ? "border-2 border-green-500 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
-                  : "border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
-              }`}
+              className={`group relative min-w-[120px] flex-1 cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 dark:hover:shadow-gray-800 ${a.name === turul
+                ? "border-2 border-green-500 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
+                : "border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
+                }`}
               onClick={() => {
                 setTurul(a.name);
                 const newTab = a.name == "Блок" ? "2" : "1";
@@ -1119,89 +1108,89 @@ function mashinBurtgel({ token }) {
                       onClick={() =>
                         khelber === "1"
                           ? excelTatajAvya(
-                              token,
-                              "/mashin",
-                              mashinGaralt?.niitMur,
-                              [
-                                {
-                                  title: t("Бүртгэсэн"),
-                                  dataIndex: "createdAt",
-                                  render(date) {
-                                    return moment(date).format(
-                                      "YYYY-MM-DD HH:mm"
-                                    );
-                                  },
+                            token,
+                            "/mashin",
+                            mashinGaralt?.niitMur,
+                            [
+                              {
+                                title: t("Бүртгэсэн"),
+                                dataIndex: "createdAt",
+                                render(date) {
+                                  return moment(date).format(
+                                    "YYYY-MM-DD HH:mm"
+                                  );
                                 },
-                                {
-                                  title: t("Нэр"),
-                                  dataIndex: "ezemshigchiinNer",
-                                },
-                                {
-                                  title: t("Утас"),
-                                  dataIndex: "ezemshigchiinUtas",
-                                },
-                                {
-                                  title: t("Дугаар"),
-                                  dataIndex: "dugaar",
-                                },
-                                {
-                                  title: t("Төрөл"),
-                                  dataIndex: "turul",
-                                },
+                              },
+                              {
+                                title: t("Нэр"),
+                                dataIndex: "ezemshigchiinNer",
+                              },
+                              {
+                                title: t("Утас"),
+                                dataIndex: "ezemshigchiinUtas",
+                              },
+                              {
+                                title: t("Дугаар"),
+                                dataIndex: "dugaar",
+                              },
+                              {
+                                title: t("Төрөл"),
+                                dataIndex: "turul",
+                              },
 
-                                {
-                                  title: "Хөнгөлөлт",
-                                  dataIndex: "khungulultTurul",
-                                  render: (a, b) => {
-                                    return b.tuluv !== "Үнэгүй"
-                                      ? a === "togtmolTsag"
-                                        ? b.uldegdelKhungulukhKhugatsaa + "мин"
-                                        : a === "khuviKhungulult"
+                              {
+                                title: "Хөнгөлөлт",
+                                dataIndex: "khungulultTurul",
+                                render: (a, b) => {
+                                  return b.tuluv !== "Үнэгүй"
+                                    ? a === "togtmolTsag"
+                                      ? b.uldegdelKhungulukhKhugatsaa + "мин"
+                                      : a === "khuviKhungulult"
                                         ? b.khungulult
                                         : ""
-                                      : b.tuluv;
-                                  },
+                                    : b.tuluv;
                                 },
-                                {
-                                  title: t("Тайлбар"),
-                                  dataIndex: "temdeglel",
-                                },
-                              ],
-                              query,
-                              undefined,
-                              "Машин бүртгэл"
-                            )
+                              },
+                              {
+                                title: t("Тайлбар"),
+                                dataIndex: "temdeglel",
+                              },
+                            ],
+                            query,
+                            undefined,
+                            "Машин бүртгэл"
+                          )
                           : excelTatajAvya(
-                              token,
-                              "/blockMashin",
-                              blockMashinGaralt?.niitMur,
-                              [
-                                {
-                                  title: t("Дугаар"),
-                                  dataIndex: "dugaar",
+                            token,
+                            "/blockMashin",
+                            blockMashinGaralt?.niitMur,
+                            [
+                              {
+                                title: t("Дугаар"),
+                                dataIndex: "dugaar",
+                              },
+                              {
+                                title: t("Тайлбар"),
+                                dataIndex: "tailbar",
+                              },
+                              {
+                                title: t("Бүртгэсэн"),
+                                dataIndex: "createdAt",
+                                render(date) {
+                                  return moment(date).format(
+                                    "YYYY-MM-DD HH:mm"
+                                  );
                                 },
-                                {
-                                  title: t("Тайлбар"),
-                                  dataIndex: "tailbar",
-                                },
-                                {
-                                  title: t("Бүртгэсэн"),
-                                  dataIndex: "createdAt",
-                                  render(date) {
-                                    return moment(date).format(
-                                      "YYYY-MM-DD HH:mm"
-                                    );
-                                  },
-                                },
-                                {
-                                  title: t("Бүртгэсэн ажилтан"),
-                                  dataIndex: "burtgesenAjiltaniiNer",
-                                },
-                              ],
-                              query,
-                              undefined,
-                              "Блок машины бүртгэл"
-                            )
+                              },
+                              {
+                                title: t("Бүртгэсэн ажилтан"),
+                                dataIndex: "burtgesenAjiltaniiNer",
+                              },
+                            ],
+                            query,
+                            undefined,
+                            "Блок машины бүртгэл"
+                          )
                       }
                     >
                       <DownloadOutlined style={{ fontSize: "18px" }} />

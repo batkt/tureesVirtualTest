@@ -505,11 +505,10 @@ function ZogsoolBurtgekh(
               >
                 {({ getFieldValue }) => (
                   <div
-                    className={`flex flex-row justify-between overflow-hidden transition-all duration-300 ease-in-out ${
-                      getFieldValue("togtmolTulburEsekh")
-                        ? "max-h-20 translate-y-0 transform opacity-100"
-                        : "max-h-0 -translate-y-2 transform opacity-0"
-                    }`}
+                    className={`flex flex-row justify-between overflow-hidden transition-all duration-300 ease-in-out ${getFieldValue("togtmolTulburEsekh")
+                      ? "max-h-20 translate-y-0 transform opacity-100"
+                      : "max-h-0 -translate-y-2 transform opacity-0"
+                      }`}
                   >
                     <div className="col-span-2 border-l-2 border-green-500 pl-4">
                       <div className="font-medium dark:text-white">
@@ -700,7 +699,7 @@ function Khaalga({
       className="relative mb-2 rounded-md border bg-yellow-50 px-5 py-4 shadow-md dark:bg-gray-700"
     >
       <div className="mb-2 flex justify-center text-base font-bold dark:text-white">
-        {t("Хаалга")} {fieldKey + 1}
+        {t("Хаалга")} {name + 1}
       </div>
 
       <div className="grid w-full grid-cols-1 items-center gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -796,7 +795,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
       className="relative mb-5 rounded-md border bg-green-50 px-5 py-4 shadow-md dark:bg-gray-700"
     >
       <div className="mb-2 flex justify-center text-base font-bold dark:text-white">
-        {t("Тариф")} {fieldKey + 1}
+        {t("Тариф")} {name + 1}
       </div>
 
       {/* TIME GRID */}
