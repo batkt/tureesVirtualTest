@@ -637,7 +637,6 @@ function Zogsool({ token }) {
 
         case 2:
           baseQuery["niitDun"] = { $eq: 0 };
-          baseQuery["tuukh.0.tuluv"] = { $in: [0, -1] };
           baseQuery["tuukh.0.tsagiinTuukh.garsanTsag"] = { $exists: true };
           break;
         case 3:
