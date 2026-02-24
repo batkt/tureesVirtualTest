@@ -49,43 +49,12 @@ const ashiglaltTable =
           <td style="border:1px solid #000; text-align:left; font-size:12px;">${mur.tailbar ?? ""}</td>
           <td style="border:1px solid #000; text-align:center; font-size:12px;">${mur.umnukhZaalt ?? 0}</td>
           <td style="border:1px solid #000; text-align:center; font-size:12px;">${mur.suuliinZaalt ?? 0}</td>
-          <td style="border:1px solid #000; text-align:right; font-size:12px;">${formatNumber(mur.negj ?? 0, 2)}</td>
+          <td style="border:1px solid #000; text-align:center; font-size:12px;">${formatNumber(mur.negj ?? 0, 2)}</td>
           <td style="border:1px solid #000; text-align:center; font-size:12px;">${mur.tariff ?? 0}</td>
         </tr>
       `)
       .join("")}
 
-    ${ashiglaltZardluud
-      .filter((a) => a.tailbar?.includes("Цахилгаан"))
-      .map((mur) => `
-        <tr>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">${++ashiglaltDugaarlalt[0]}</td>
-          <td style="border:1px solid #000; text-align:left; font-size:12px;">ЦЕХ</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">${formatNumber(mur.tsekhDun ?? 0, 2)}</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
-        </tr>
-
-        <tr>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">${++ashiglaltDugaarlalt[0]}</td>
-          <td style="border:1px solid #000; text-align:left; font-size:12px;">Чадал</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">${formatNumber(mur.chadalDun ?? 0, 2)}</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
-        </tr>
-
-        <tr>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">${++ashiglaltDugaarlalt[0]}</td>
-          <td style="border:1px solid #000; text-align:left; font-size:12px;">ЦЕХ дэмжих</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">${formatNumber(mur.sekhDemjikhTulburDun ?? 0, 2)}</td>
-          <td style="border:1px solid #000; text-align:center; font-size:12px;">0</td>
-        </tr>
-      `)
-      .join("")}
   </tbody>
 </table>
 `
@@ -134,11 +103,40 @@ const ashiglaltTable =
     });
 
   
+  // Эхлээд цахилгааны бүх дүнг тооцоолох
+  const tsahilgaaniiMur = ashiglaltZardluud.find((a) => a.tailbar?.includes("Цахилгаан"));
+  let tsahilgaaniiMurToo = 1; // Цахилгааны зардал мөр
+  let tsahilgaaniiNiitUneSum = 0;
+  
+  if (tsahilgaaniiMur) {
+    // Цахилгааны үндсэн зардлын дүн
+    const tsahilgaaniiZardal = medeelel.zardluud.find((a) => a.tailbar?.includes("Цахилгаан"));
+    if (tsahilgaaniiZardal) {
+      tsahilgaaniiNiitUneSum += Number(tsahilgaaniiZardal.tulukhDun ?? 0) || 0;
+    }
+    
+    // Нэмэлт зардлууд
+    if (tsahilgaaniiMur.tsekhDun) {
+      tsahilgaaniiMurToo++;
+      tsahilgaaniiNiitUneSum += Number(tsahilgaaniiMur.tsekhDun ?? 0) || 0;
+    }
+    if (tsahilgaaniiMur.chadalDun) {
+      tsahilgaaniiMurToo++;
+      tsahilgaaniiNiitUneSum += Number(tsahilgaaniiMur.chadalDun ?? 0) || 0;
+    }
+    if (tsahilgaaniiMur.sekhDemjikhTulburDun) {
+      tsahilgaaniiMurToo++;
+      tsahilgaaniiNiitUneSum += Number(tsahilgaaniiMur.sekhDemjikhTulburDun ?? 0) || 0;
+    }
+  }
+
   medeelel.zardluud
     .filter(
       (a) => !a.tailbar?.includes("менежмент") && a.tailbar != "Хөнгөлөлт"
     )
     .forEach((mur) => {
+      const isTsahilgaan = mur.tailbar?.includes("Цахилгаан");
+
       murNemekh.push(`
         <tr>
           <td style="border: 1px solid #000; font-size:12px; text-align:center;">${++currentDugaar}</td>
@@ -153,11 +151,61 @@ const ashiglaltTable =
           <td style="border: 1px solid #000; font-size:12px; text-align: center;" colspan="2">
                 ${formatNumber(mur.tariff ?? 0, 2)}
           </td>
-          <td style="border: 1px solid #000; font-size:12px; text-align: right;" colspan="2">
-                &lt;${mur.tailbar}.tulukhDun&gt;
-          </td>
+          ${
+            isTsahilgaan
+              ? `<td style="border: 1px solid #000; font-size:12px; text-align: right;" rowspan="${tsahilgaaniiMurToo}">
+                    ${formatNumber(tsahilgaaniiNiitUneSum, 2)}
+                  </td>`
+              : `<td style="border: 1px solid #000; font-size:12px; text-align: right;" colspan="2">
+                    &lt;${mur.tailbar}.tulukhDun&gt;
+                  </td>`
+          }
         </tr>
       `);
+    });
+
+  // Цахилгааны нэмэлт зардлуудыг (ЦЕХ, Чадал, СЭХ дэмжих) үндсэн хүснэгт рүү шилжүүлэх
+  ashiglaltZardluud
+    .filter((a) => a.tailbar?.includes("Цахилгаан"))
+    .forEach((mur) => {
+      if (mur.tsekhDun) {
+        murNemekh.push(`
+          <tr>
+            <td style="border: 1px solid #000; font-size:12px; text-align:center;">${++currentDugaar}</td>
+            <td style="border: 1px solid #000; font-size:12px;">ЦЕХ</td>
+            <td style="border: 1px solid #000; font-size:12px; text-align:center;">1</td>
+            <td style="border: 1px solid #000; font-size:12px; text-align: center;" colspan="2">
+                  ${formatNumber(mur.tsekhDun ?? 0, 2)}
+            </td>
+          </tr>
+        `);
+      }
+
+      if (mur.chadalDun) {
+        murNemekh.push(`
+          <tr>
+            <td style="border: 1px solid #000; font-size:12px; text-align:center;">${++currentDugaar}</td>
+            <td style="border: 1px solid #000; font-size:12px;">Чадал</td>
+            <td style="border: 1px solid #000; font-size:12px; text-align:center;">1</td>
+            <td style="border: 1px solid #000; font-size:12px; text-align: center;" colspan="2">
+                  ${formatNumber(mur.chadalDun ?? 0, 2)}
+            </td>
+          </tr>
+        `);
+      }
+
+      if (mur.sekhDemjikhTulburDun) {
+        murNemekh.push(`
+          <tr>
+            <td style="border: 1px solid #000; font-size:12px; text-align:center;">${++currentDugaar}</td>
+            <td style="border: 1px solid #000; font-size:12px;">СЭХ дэмжих</td>
+            <td style="border: 1px solid #000; font-size:12px; text-align:center;">1</td>
+            <td style="border: 1px solid #000; font-size:12px; text-align: center;" colspan="2">
+                  ${formatNumber(mur.sekhDemjikhTulburDun ?? 0, 2)}
+            </td>
+          </tr>
+        `);
+      }
     });
 
   dugaarlalt[0] = currentDugaar;
@@ -268,7 +316,7 @@ const ashiglaltTable =
           <th style="border: 1px solid #000; font-size:12px">Гүйлгээний утга</th>
           <th style="border: 1px solid #000; font-size:12px">Тоо хэмжээ</th>
           <th style="border: 1px solid #000; font-size:12px" colspan="2">Нэгж үнэ</th>
-          <th style="border: 1px solid #000; font-size:12px"></th>
+          <th style="border: 1px solid #000; font-size:12px">Нийт үнэ</th>
         </tr>
       </thead>
       <tbody>
