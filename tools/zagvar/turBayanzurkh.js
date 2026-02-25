@@ -1,9 +1,7 @@
 import formatNumber from "tools/function/formatNumber";
 const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
-    console.log(medeelel);
-
-     let currentDugaar = 0;
-     const rows = [];
+  let currentDugaar = 0;
+  const rows = [];
   return `
   <div style="height: 100%; width: 100%; font-family: Arial, sans-serif; padding: 20px;">
     <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
@@ -30,27 +28,41 @@ const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
             <td style="font-size: 11px; padding: 3px 5px;">Байгууллагын нэр:</td>
-            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${baiguullaga?.ner || ''}</td>
+            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
+              baiguullaga?.ner || ""
+            }</td>
           </tr>
           <tr>
             <td style="font-size: 11px; padding: 3px 5px;">НӨАТ төлөгчийн дугаар:</td>
-            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${baiguullaga?.register || ''}</td>
+            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
+              baiguullaga?.register || ""
+            }</td>
           </tr>
           <tr>
             <td style="font-size: 11px; padding: 3px 5px;">Хаяг:</td>
-            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${baiguullaga?.khayag || ''}</td>
+            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
+              baiguullaga?.khayag || ""
+            }</td>
           </tr>
            <tr>
             <td style="font-size: 11px; padding: 3px 5px;">Утас, Факс:</td>
-            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${baiguullaga?.utas?.join(", ") || ''}</td>
+            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
+              baiguullaga?.utas?.join(", ") || ""
+            }</td>
           </tr>
           <tr>
             <td style="font-size: 11px; padding: 3px 5px;">Электрон шуудан:</td>
-            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${ajiltan?.mail || ''}</td>
+            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
+              ajiltan?.mail || ""
+            }</td>
           </tr>
           <tr>
             <td style="font-size: 11px; padding: 3px 5px;">Төлбөр хийх хугацаа:</td>
-            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;</td>
+            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
+              !!medeelel?.tulukhUdur
+                ? medeelel?.nekhemjlekhUdur
+                : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
+            }</td>
           </tr>
           <tr>
             <td style="font-size: 11px; padding: 3px 5px;">Банкны нэр:</td>
@@ -63,19 +75,27 @@ const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
             <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999;">Байгууллагын нэр:</td>
-            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${medeelel?.ner || ''}</td>
+            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
+              medeelel?.ner || ""
+            }</td>
           </tr> 
           <tr>
             <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999;">НӨАТ төлөгчийн дугаар:</td>
-            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${medeelel?.register || ''}</td>
+            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
+              medeelel?.register || ""
+            }</td>
           </tr>
           <tr>
             <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999;">Хаяг:</td>
-            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${medeelel?.khayag || ''}</td>
+            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
+              medeelel?.khayag || ""
+            }</td>
           </tr>
           <tr>
             <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999;">Гэрээний дугаар:</td>
-            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${medeelel?.gereeniiDugaar || ''}</td>
+            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
+              medeelel?.gereeniiDugaar || ""
+            }</td>
           </tr>
           <tr>
             <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999;">Нэхэмжилсэн огноо:</td>
@@ -130,7 +150,7 @@ const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
           ${formatNumber(mur?.tulukhDun, 2) || 0}
         </td>
       </tr>
-    `
+    `,
       )
       .join("")}
     <tr>

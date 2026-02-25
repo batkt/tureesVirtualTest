@@ -1,5 +1,4 @@
-const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
-  console.log(baiguullaga);
+const khatuuZagvarTestAdmin = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
   return `
   <div style="height: 100%; width: 100%; font-family: Arial, sans-serif;">
     <div style="display: flex; justify-content: space-between;">
@@ -30,31 +29,35 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         <p style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">Нэхэмжлэгч:</p>
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
           <span style="color: #4b5563; font-size: 12px;">Байгууллагын нэр:</span>
-          <span style="font-weight: bold; font-size: 12px;">${barilgiinId === "6735c77a7fc60cd66deb290a"
-      ? "Мастер Түншлэл ХХК"
-      : baiguullaga?.ner
-    }</span>
+          <span style="font-weight: bold; font-size: 12px;">${
+            barilgiinId === "6735c77a7fc60cd66deb290a"
+              ? "Мастер Түншлэл ХХК"
+              : baiguullaga?.ner
+          }</span>
         </div>
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
           <span style="color: #4b5563; font-size: 12px;">Хаяг:</span>
-          <span style="font-weight: bold; font-size: 12px;">${baiguullaga?.khayag || ""
-    }</span>
+          <span style="font-weight: bold; font-size: 12px;">${
+            baiguullaga?.khayag || ""
+          }</span>
         </div>
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
           <span style="color: #4b5563; font-size: 12px;">Утас, Факс:</span>
-          <span style="font-weight: bold; font-size: 12px;">${barilgiinId === "6735c77a7fc60cd66deb290a"
-      ? "90088007"
-      : barilgiinId === "67512183c60497546f59513a"
-        ? "90611148"
-        : baiguullaga?.utas?.join(",")
-    }</span>
+          <span style="font-weight: bold; font-size: 12px;">${
+            barilgiinId === "6735c77a7fc60cd66deb290a"
+              ? "90088007"
+              : barilgiinId === "67512183c60497546f59513a"
+              ? "90611148"
+              : baiguullaga?.utas?.join(",")
+          }</span>
         </div>
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
           <span style="color: #4b5563; font-size: 12px;">И-мэйл:</span>
-          <span style="font-weight: bold; font-size: 12px;">${barilgiinId === "67512183c60497546f59513a"
-      ? "gotofinance@master.mn"
-      : baiguullaga?.mail?.join(",")
-    }</span>
+          <span style="font-weight: bold; font-size: 12px;">${
+            barilgiinId === "67512183c60497546f59513a"
+              ? "gotofinance@master.mn"
+              : baiguullaga?.mail?.join(",")
+          }</span>
         </div>
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
           <span style="color: #4b5563; font-size: 12px;">Банкны нэр:</span>
@@ -73,8 +76,9 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         </div>
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
           <span style="color: #4b5563; font-size: 12px;">Хаяг:</span>
-          <span style="font-weight: bold; font-size: 12px;">${medeelel?.khayag || ""
-    }</span>
+          <span style="font-weight: bold; font-size: 12px;">${
+            medeelel?.khayag || ""
+          }</span>
         </div>
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
           <span style="color: #4b5563; font-size: 12px;">Гэрээний №:</span>
@@ -145,39 +149,47 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;khungulsunTalbainNiitUne&gt;</td>
         </tr>
         ${medeelel.zardluud
-      .filter((a) => a.tailbar != "Хөнгөлөлт")
-      .sort((a, b) => {
-        return a.tailbar.localeCompare(b.tailbar, "en", {
-          sensitivity: "base",
-        });
-      })
-      .map((mur, index) => {
-        return `
+          .filter((a) => a.tailbar != "Хөнгөлөлт")
+          .sort((a, b) => {
+            return a.tailbar.localeCompare(b.tailbar, "en", {
+              sensitivity: "base",
+            });
+          })
+          .map((mur, index) => {
+            return `
               <tr key=${index}>
-                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${index + 5
-          }</td>
-                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${mur.tailbar
-          }</td>
-                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${mur.umnukhZaalt === null ? "" : mur.umnukhZaalt
-          }</td>
-                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
-          }</td>
-                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">${mur.nuatBodokh === 1
-            ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;`
-            : ""
-          }</td>
-                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">${mur.nuatBodokh === 1
-            ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;`
-            : ""
-          }</td>
-                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;${mur.tailbar
-          }.khungulult&gt;</td>
-                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;${mur.tailbar
-          }.khungulultKhassanTulukhDun&gt;</td>
+                <td style="border: 1px solid #000; text-align: center; font-size: 12px;">${
+                  index + 5
+                }</td>
+                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
+                  mur.tailbar
+                }</td>
+                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
+                  mur.umnukhZaalt === null ? "" : mur.umnukhZaalt
+                }</td>
+                <td style="border: 1px solid #000; text-align: left; font-size: 12px;">${
+                  mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
+                }</td>
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">${
+                  mur.nuatBodokh === 1
+                    ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuat&gt;`
+                    : ""
+                }</td>
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">${
+                  mur.nuatBodokh === 1
+                    ? `&lt;${mur.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;`
+                    : ""
+                }</td>
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;${
+                  mur.tailbar
+                }.khungulult&gt;</td>
+                <td style="border: 1px solid #000; text-align: right; font-size: 12px;">&lt;${
+                  mur.tailbar
+                }.khungulultKhassanTulukhDun&gt;</td>
               </tr>
             `;
-      })
-      .join("")} 
+          })
+          .join("")} 
       </tbody>
       <tfoot style="border: none;">
         <tr style="background-color: #d1d5db; font-weight: bold; border: none;">
@@ -202,8 +214,9 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: none;"></td>
           <td style="border: none;"><p style="font-size: 12px;">Хүлээн авсан</p></td>
           <td style="border: none;"></td>
-          <td style="border: none;"><p style="font-size: 12px;">/${medeelel?.ovog?.[0] ? medeelel?.ovog?.[0] : ""
-    }${medeelel?.ovog?.[0] ? "." : ""} ${medeelel?.ner}/</p></td>
+          <td style="border: none;"><p style="font-size: 12px;">/${
+            medeelel?.ovog?.[0] ? medeelel?.ovog?.[0] : ""
+          }${medeelel?.ovog?.[0] ? "." : ""} ${medeelel?.ner}/</p></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
@@ -213,8 +226,9 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: none;"></td>
           <td style="border: none;"><p style="font-size: 12px;">Нэхэмжлэл бичсэн</p></td>
           <td style="border: none;"></td>
-          <td style="border: none;"><p style="font-size: 12px;">/${ajiltan?.ovog?.[0] ? ajiltan?.ovog?.[0] : ""
-    }${ajiltan?.ovog?.[0] ? "." : ""} ${ajiltan?.ner}/</p></td>
+          <td style="border: none;"><p style="font-size: 12px;">/${
+            ajiltan?.ovog?.[0] ? ajiltan?.ovog?.[0] : ""
+          }${ajiltan?.ovog?.[0] ? "." : ""} ${ajiltan?.ner}/</p></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
@@ -224,10 +238,11 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none; position: relative;">
-            ${ajiltan?.baiguullagiinId !== "64e855ce37fdc9b105f936e0"
-      ? "&lt;gariinUseg&gt;"
-      : ""
-    }
+            ${
+              ajiltan?.baiguullagiinId !== "64e855ce37fdc9b105f936e0"
+                ? "&lt;gariinUseg&gt;"
+                : ""
+            }
           </td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
@@ -239,10 +254,11 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           <td style="border: none;"></td>
           <td style="border: none;"></td>
           <td style="border: none; position: relative;">
-            ${ajiltan?.baiguullagiinId !== "64e855ce37fdc9b105f936e0"
-      ? "&lt;tamga&gt;"
-      : ""
-    }
+            ${
+              ajiltan?.baiguullagiinId !== "64e855ce37fdc9b105f936e0"
+                ? "&lt;tamga&gt;"
+                : ""
+            }
           </td>
           <td style="border: none;"></td>
           <td style="border: none;"></td>
@@ -256,4 +272,4 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
     </table>
   </div>`;
 };
-export default khatuuZagvar;
+export default khatuuZagvarTestAdmin;

@@ -70,6 +70,9 @@ function BarilgiinTokhirgoo({
         eBarimtBugdShivikh: barilga?.tokhirgoo?.eBarimtBugdShivikh
           ? barilga?.tokhirgoo?.eBarimtBugdShivikh
           : undefined,
+        nekhemjlekhTulukhUdur: barilga?.tokhirgoo?.nekhemjlekhTulukhUdur
+          ? barilga?.tokhirgoo?.nekhemjlekhTulukhUdur
+          : undefined,
       });
       setSongogdsonDuuregKod(barilga?.tokhirgoo?.districtCode?.substring(0, 2));
 
@@ -517,10 +520,27 @@ function BarilgiinTokhirgoo({
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">{t("Нэхэмжлэх төлөх өдөр")}</div>
+              </div>
+              <div className="ml-auto w-20">
+                <Input
+                  value={barilgaTokhirgoo?.nekhemjlekhTulukhUdur}
+                  onChange={({ target }) =>
+                    setBarilgaTokhirgoo((a) => ({
+                      ...(a || {}),
+                      nekhemjlekhTulukhUdur: target.value,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
           <div
-            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
-              !!barilgaTokhirgoo ? "flex" : "hidden"
-            }`}
+            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${!!barilgaTokhirgoo ? "flex" : "hidden"
+              }`}
           >
             <Button type="primary" onClick={barilgaTokhirgooKhadgalya}>
               {t("Хадгалах")}
