@@ -632,7 +632,30 @@ function Zogsool({ token }) {
 
           break;
         case 1:
-          baseQuery["tuukh.0.tuluv"] = { $in: [1, 2] };
+          baseQuery.$and = [
+            { "tuukh.0.tuluv": { $in: [1, 2] } },
+
+            {
+              $or: [
+                { "tuukh.0.tulbur.0.turul": { $ne: "khungulult" } },
+                {
+                  $and: [
+                    { "tuukh.0.tulbur.0.turul": "khungulult" },
+                    {
+                      $expr: {
+                        $ne: [
+                          { $arrayElemAt: [{ $arrayElemAt: ["$tuukh.tulbur.dun", 0] }, 0] },
+                          { $arrayElemAt: ["$tuukh.tulukhDun", 0] },
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ];
+
+
           break;
 
         case 2:
@@ -683,6 +706,19 @@ function Zogsool({ token }) {
           { niitDun: 0, "tuukh.0.tuluv": { $ne: -2 } },
           { turul: "Үнэгүй" },
           { "tuukh.0.uneguiGarsan": { $exists: true } },
+          {
+            $expr: {
+              $and: [
+                { $eq: [{ $arrayElemAt: [{ $arrayElemAt: ["$tuukh.tulbur.turul", 0] }, 0] }, "khungulult"] },
+                {
+                  $eq: [
+                    { $arrayElemAt: [{ $arrayElemAt: ["$tuukh.tulbur.dun", 0] }, 0] },
+                    { $arrayElemAt: ["$tuukh.tulukhDun", 0] },
+                  ]
+                },
+              ],
+            },
+          },
         ];
       } else if (tuluv === 5) {
         nemeh = [
