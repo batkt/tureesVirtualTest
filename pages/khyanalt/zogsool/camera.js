@@ -64,10 +64,7 @@ import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 
 import { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
 import uilchilgee from "services/uilchilgee";
-import {
-  registerServiceWorker,
-  unregisterServiceWorker,
-} from "utils/swHelper";
+import { registerServiceWorker, unregisterServiceWorker } from "utils/swHelper";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
@@ -267,7 +264,7 @@ function camera({ token }) {
     useAuth();
 
   const [browserOnline, setBrowserOnline] = useState(
-    typeof navigator !== "undefined" ? navigator.onLine : true
+    typeof navigator !== "undefined" ? navigator.onLine : true,
   );
 
   useEffect(() => {
@@ -291,9 +288,9 @@ function camera({ token }) {
 
   useEffect(() => {
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
-      registerServiceWorker().catch(() => { });
+      registerServiceWorker().catch(() => {});
       return () => {
-        unregisterServiceWorker().catch(() => { });
+        unregisterServiceWorker().catch(() => {});
       };
     }
   }, []);
@@ -317,7 +314,7 @@ function camera({ token }) {
   const [pendingUpdates, setPendingUpdates] = useState([]);
   const [pendingCarsUpdateTrigger, setPendingCarsUpdateTrigger] = useState(0);
   const [wasOffline, setWasOffline] = useState(
-    isOfflineMode || !isOnline || !browserOnline
+    isOfflineMode || !isOnline || !browserOnline,
   );
   const [localOfflineData, setLocalOfflineData] = useState([]); // Data from local .NET service
   const [ognoo, setOgnoo] = useState([
@@ -379,11 +376,14 @@ function camera({ token }) {
       barilgiinId,
       "khaalga.ajiltnuud.id": ajiltan?._id,
     };
-    Object.keys(q).forEach(key => q[key] == null && delete q[key]);
+    Object.keys(q).forEach((key) => q[key] == null && delete q[key]);
     return q;
   }, [baiguullaga?._id, ajiltan?._id, barilgiinId]);
 
-  const { jagsaalt, mutate: toololtMutate } = useJagsaalt("/zogsoolJagsaalt", que);
+  const { jagsaalt, mutate: toololtMutate } = useJagsaalt(
+    "/zogsoolJagsaalt",
+    que,
+  );
 
   const streamQuery = useMemo(() => {
     return {
@@ -394,7 +394,7 @@ function camera({ token }) {
 
   const { jagsaalt: parkingJagsaalt, mutate: parkingMutate } = useJagsaalt(
     "/parking",
-    streamQuery
+    streamQuery,
   );
 
   const zurchilteiMashinMsgilgeekh = (mashiniiDugaar) => {
@@ -470,7 +470,7 @@ function camera({ token }) {
         Number(minutes) <= uneguiKhugatsaaMin
       );
     },
-    [tuukhiinKhugatsaaMin, uneguiKhugatsaaMin]
+    [tuukhiinKhugatsaaMin, uneguiKhugatsaaMin],
   );
 
   const calculateParkingFee = useCallback(
@@ -492,7 +492,7 @@ function camera({ token }) {
           songogdzonZogsool.undsenUne || 0,
           songogdzonZogsool.undsenMin || 0,
           0, // dotorZogsoolMinut
-          0 // zuruuMinut
+          0, // zuruuMinut
         );
 
         return fee || 0;
@@ -501,7 +501,7 @@ function camera({ token }) {
         return 0;
       }
     },
-    [songogdzonZogsool]
+    [songogdzonZogsool],
   );
 
   const [isPaying, setIsPaying] = React.useState(false);
@@ -629,7 +629,7 @@ function camera({ token }) {
     // Load pending updates
     if (typeof window !== "undefined") {
       const stored = JSON.parse(
-        localStorage.getItem("cameraPendingUpdates") || "[]"
+        localStorage.getItem("cameraPendingUpdates") || "[]",
       );
       setPendingUpdates(stored);
     }
@@ -952,7 +952,7 @@ function camera({ token }) {
       parkingJagsaalt?.flatMap((item) =>
         item?.khaalga
           ?.filter((k) => k.turul === type)
-          ?.flatMap((k) => k.camera?.map((c) => c.cameraIP) || [])
+          ?.flatMap((k) => k.camera?.map((c) => c.cameraIP) || []),
       ) || [];
     const garahCams = getCams("Гарах");
     const handleGarahTulsun = (data) => {
@@ -1025,12 +1025,12 @@ function camera({ token }) {
       const dugaar = data.mashiniiDugaar?.replace("???", "");
       if (!!dugaar) {
         const url = `/sambar/${data.cameraIP}/${dugaar}/${moment().format(
-          "HH:mm:ss"
+          "HH:mm:ss",
         )}`;
 
         zogsoolUilchilgee()
           .get(url)
-          .catch(() => { });
+          .catch(() => {});
       }
       if (baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh)
         zurchilteiMashinMsgilgeekh(dugaar);
@@ -1052,7 +1052,7 @@ function camera({ token }) {
           u.niitDun -
           u.tuukh.reduce(
             (s, t) => s + t?.tulbur?.reduce((a, b) => a + (b?.dun || 0), 0),
-            0
+            0,
           );
       }
       if (niit < 0) niit = 0;
@@ -1077,7 +1077,7 @@ function camera({ token }) {
       if (!!dugaar) {
         zogsoolUilchilgee()
           .get(url)
-          .catch(() => { });
+          .catch(() => {});
       }
       refreshRef.current?.();
     };
@@ -1093,9 +1093,11 @@ function camera({ token }) {
       if (!!dugaar) {
         zogsoolUilchilgee()
           .get(
-            `/sambar/${data?.cameraIP}/${dugaar}/${moment().format("HH:mm:ss")}`
+            `/sambar/${data?.cameraIP}/${dugaar}/${moment().format(
+              "HH:mm:ss",
+            )}`,
           )
-          .catch(() => { });
+          .catch(() => {});
       }
 
       khaalgaNeey(data.cameraIP);
@@ -1293,7 +1295,9 @@ function camera({ token }) {
       duusakhOgnoo: moment().endOf("day").format("YYYY-MM-DD 23:59:59"),
       "tuukh.tsagiinTuukh.garsanTsag": { $exists: false },
       "tuukh.tuluv": { $ne: -2 },
-      ...(songogdzonZogsool?.vipMashinToolokhEsekh && { turul: { $ne: "VIP" } })
+      ...(songogdzonZogsool?.vipMashinToolokhEsekh && {
+        turul: { $ne: "VIP" },
+      }),
     };
   }, [uilchluulegchGaralt, songogdzonZogsool]);
 
@@ -1319,7 +1323,7 @@ function camera({ token }) {
       moment().subtract(30, "days").format("YYYY-MM-DD 00:00:00"),
       moment().format("YYYY-MM-DD 23:59:59"),
     ],
-    { createdAt: -1 }
+    { createdAt: -1 },
   );
 
   function onRefresh() {
@@ -1381,7 +1385,7 @@ function camera({ token }) {
       element.tuukh[0]?.burtgesenAjiltaniiId &&
         !ajiltnuud.find(
           (a) =>
-            a.burtgesenAjiltaniiId === element.tuukh[0]?.burtgesenAjiltaniiId
+            a.burtgesenAjiltaniiId === element.tuukh[0]?.burtgesenAjiltaniiId,
         ) &&
         ajiltnuud.push(element.tuukh[0]?.burtgesenAjiltaniiId);
     });
@@ -1395,7 +1399,7 @@ function camera({ token }) {
             setAjiltniiNers(
               data?.jagsaalt?.map((a) => {
                 return { ner: a?.ner, id: a?._id };
-              })
+              }),
             );
           }
         });
@@ -1416,7 +1420,7 @@ function camera({ token }) {
         ),
       },
     ],
-    [t]
+    [t],
   );
   const columns = useMemo(() => {
     const col = [
@@ -1427,7 +1431,7 @@ function camera({ token }) {
         width: "2rem",
         render: (text, record, index) =>
           (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
-          (uilchluulegchGaralt?.khuudasniiKhemjee || 0) -
+            (uilchluulegchGaralt?.khuudasniiKhemjee || 0) -
           (uilchluulegchGaralt?.khuudasniiKhemjee || 0) +
           index +
           1,
@@ -1469,8 +1473,9 @@ function camera({ token }) {
           }
           return (
             <div
-              className={`flex w-full items-center justify-center rounded-lg px-2 py-1 font-[500] text-gray-600 dark:text-gray-200 ${zogsojBuiTuluv === "Дотор" ? "bg-blue-300" : "bg-green-300"
-                } `}
+              className={`flex w-full items-center justify-center rounded-lg px-2 py-1 font-[500] text-gray-600 dark:text-gray-200 ${
+                zogsojBuiTuluv === "Дотор" ? "bg-blue-300" : "bg-green-300"
+              } `}
             >
               {zogsojBuiTuluv}
             </div>
@@ -1516,10 +1521,11 @@ function camera({ token }) {
                       "tuukh.0.niitKhugatsaa": -1,
                     })
                   }
-                  className={`relative flex ${JSON.stringify(order) ==
-                    JSON.stringify({ "tuukh.0.niitKhugatsaa": -1 }) &&
+                  className={`relative flex ${
+                    JSON.stringify(order) ==
+                      JSON.stringify({ "tuukh.0.niitKhugatsaa": -1 }) &&
                     "bg-green-500 text-white"
-                    } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Удаан зогссон эхэнд")}
                 </div>
@@ -1533,15 +1539,16 @@ function camera({ token }) {
                       zurchil: 1,
                     });
                   }}
-                  className={`relative ${JSON.stringify(order) ==
-                    JSON.stringify({
-                      "tuukh.tsagiinTuukh.garsanTsag": 1,
-                      niitDun: 1,
-                      "tuukh.tuluv": 1,
-                      "tuukh.tsagiinTuukh.orsonTsag": -1,
-                      zurchil: 1,
-                    }) && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    JSON.stringify(order) ==
+                      JSON.stringify({
+                        "tuukh.tsagiinTuukh.garsanTsag": 1,
+                        niitDun: 1,
+                        "tuukh.tuluv": 1,
+                        "tuukh.tsagiinTuukh.orsonTsag": -1,
+                        zurchil: 1,
+                      }) && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Сүүлд орсон эхэнд")}
                 </div>
@@ -1551,11 +1558,12 @@ function camera({ token }) {
                       "tuukh.0.tsagiinTuukh.0.garsanTsag": -1,
                     })
                   }
-                  className={`relative ${JSON.stringify(order) ==
-                    JSON.stringify({
-                      "tuukh.0.tsagiinTuukh.0.garsanTsag": -1,
-                    }) && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    JSON.stringify(order) ==
+                      JSON.stringify({
+                        "tuukh.0.tsagiinTuukh.0.garsanTsag": -1,
+                      }) && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Сүүлд гарсан эхэнд")}
                 </div>
@@ -1575,7 +1583,7 @@ function camera({ token }) {
         dataIndex: "tuukh.0.niitKhugatsaa",
         render(v, parents) {
           const d2 = tsagTootsoolur(
-            parents?.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag
+            parents?.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag,
           );
           if (parents?.zurchil === "Гарсан цаг тодорхойгүй!") {
             return (
@@ -1586,12 +1594,13 @@ function camera({ token }) {
           } else
             return !!parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag ? (
               <div
-                className={`rounded px-3 py-1 text-slate-700 ${!!parents.zurchil &&
+                className={`rounded px-3 py-1 text-slate-700 ${
+                  !!parents.zurchil &&
                   parents.zurchil !== "" &&
                   parents?.tuukh[0]?.tuluv === -2
-                  ? "bg-red-200"
-                  : "bg-green-200"
-                  }`}
+                    ? "bg-red-200"
+                    : "bg-green-200"
+                }`}
               >
                 {minToHour(parents?.niitKhugatsaa || 0)}
               </div>
@@ -1614,16 +1623,18 @@ function camera({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setTurul(undefined)}
-                  className={`relative ${turul === undefined && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    turul === undefined && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бүгд")}
                 </div>
 
                 <div
                   onClick={() => setTurul("Төлбөртэй")}
-                  className={`relative ${turul === "Төлбөртэй" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    turul === "Төлбөртэй" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Төлбөртэй")}
                 </div>
@@ -1654,11 +1665,11 @@ function camera({ token }) {
         render: (a, b) => {
           var ekhlekhOgnoo = moment(b?.mashin?.ekhlekhOgnoo).diff(
             new Date(),
-            "d"
+            "d",
           );
           var duusakhOgnoo = moment(b?.mashin?.duusakhOgnoo).diff(
             new Date(),
-            "d"
+            "d",
           );
 
           // If turul is "Үнэгүй", always show "Үнэгүй"
@@ -1697,24 +1708,26 @@ function camera({ token }) {
             a === "Гэрээт" ? (
               <Tooltip
                 title={`${moment(b.mashin.ekhlekhOgnoo).format(
-                  "YYYY-MM-DD"
+                  "YYYY-MM-DD",
                 )}-/аас⁴/ ${moment(b.mashin.duusakhOgnoo).format(
-                  "YYYY-MM-DD"
-                )} хүртэл гэрээ байгуулсан ба гэрээ ${duusakhOgnoo < 0
-                  ? "дууссан"
-                  : ekhlekhOgnoo > 0
+                  "YYYY-MM-DD",
+                )} хүртэл гэрээ байгуулсан ба гэрээ ${
+                  duusakhOgnoo < 0
+                    ? "дууссан"
+                    : ekhlekhOgnoo > 0
                     ? "эхлээгүй"
                     : "идэвхтэй"
-                  } байна.`}
+                } байна.`}
               >
                 <div className="flex items-center justify-center">
                   <div
-                    className={`flex cursor-help rounded-md border-white px-3 ${a === "Гэрээт" && duusakhOgnoo < 0
-                      ? " border bg-red-400 font-medium text-white"
-                      : ekhlekhOgnoo > 0
+                    className={`flex cursor-help rounded-md border-white px-3 ${
+                      a === "Гэрээт" && duusakhOgnoo < 0
+                        ? " border bg-red-400 font-medium text-white"
+                        : ekhlekhOgnoo > 0
                         ? " border bg-blue-400 font-medium text-white"
                         : ""
-                      }`}
+                    }`}
                   >
                     {a}
                   </div>
@@ -1744,10 +1757,11 @@ function camera({ token }) {
               <div className="flex items-center justify-center">
                 {a && (
                   <div
-                    className={`flex w-[8rem] items-center justify-center rounded-lg px-2 py-1 font-[600] text-white ${a?.uldegdelKhungulukhKhugatsaa > 0
-                      ? "bg-green-400 dark:bg-green-700"
-                      : "bg-yellow-400 dark:bg-yellow-700"
-                      }`}
+                    className={`flex w-[8rem] items-center justify-center rounded-lg px-2 py-1 font-[600] text-white ${
+                      a?.uldegdelKhungulukhKhugatsaa > 0
+                        ? "bg-green-400 dark:bg-green-700"
+                        : "bg-yellow-400 dark:bg-yellow-700"
+                    }`}
                   >
                     {a?.uldegdelKhungulukhKhugatsaa}
                     {"/"}
@@ -1829,22 +1843,25 @@ function camera({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setDun("")}
-                  className={`relative ${dun === "" && "bg-green-500 text-white"
-                    } flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium  hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    dun === "" && "bg-green-500 text-white"
+                  } flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium  hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бүгд1")}
                 </div>
                 <div
                   onClick={() => setDun("dunBodson")}
-                  className={`relative ${dun === "dunBodson" && "bg-green-500 text-white"
-                    } flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium  hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    dun === "dunBodson" && "bg-green-500 text-white"
+                  } flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium  hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Дүн бодсон")}
                 </div>
                 <div
                   onClick={() => setDun("dunBodoogui")}
-                  className={`relative ${dun === "dunBodoogui" && "bg-green-500 text-white"
-                    } flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    dun === "dunBodoogui" && "bg-green-500 text-white"
+                  } flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Дүн бодоогүй")}
                 </div>
@@ -1875,57 +1892,65 @@ function camera({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setKhelber("")}
-                  className={`relative ${khelber === "" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    khelber === "" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бүгд")}
                 </div>
                 <div
                   onClick={() => setKhelber("belen")}
-                  className={`relative ${khelber === "belen" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    khelber === "belen" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бэлэн")}
                 </div>
                 <div
                   onClick={() => setKhelber("card")}
-                  className={`relative ${khelber === "card" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    khelber === "card" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Карт")}
                 </div>
                 <div
                   onClick={() => setKhelber("khariltsakh")}
-                  className={`relative ${khelber === "khariltsakh" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                  className={`relative ${
+                    khelber === "khariltsakh" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   {t("Дансаар")}
                 </div>
                 <div
                   onClick={() => setKhelber("tuluugui")}
-                  className={`relative ${khelber === "tuluugui" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                  className={`relative ${
+                    khelber === "tuluugui" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   {t("Төлөөгүй")}
                 </div>
                 <div
                   onClick={() => setKhelber("toki")}
-                  className={`relative ${khelber === "toki" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                  className={`relative ${
+                    khelber === "toki" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   {t("Токи")}
                 </div>
                 <div
                   onClick={() => setKhelber("khungulult")}
-                  className={`relative ${khelber === "khungulult" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                  className={`relative ${
+                    khelber === "khungulult" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   {t("Хөнгөлөлт")}
                 </div>
                 <div
                   onClick={() => setKhelber("qpay")}
-                  className={`relative ${khelber === "qpay" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                  className={`relative ${
+                    khelber === "qpay" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   {t("qpay")}
                 </div>
@@ -2000,8 +2025,9 @@ function camera({ token }) {
                   onClick={() => {
                     setTuluvFilter("");
                   }}
-                  className={`relative ${tuluvFilter === "" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    tuluvFilter === "" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бүгд")}
                 </div>
@@ -2020,8 +2046,9 @@ function camera({ token }) {
                   onClick={() => {
                     setTuluvFilter("active");
                   }}
-                  className={`relative ${tuluvFilter === "active" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    tuluvFilter === "active" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Идэвхтэй")}
                 </div>
@@ -2029,8 +2056,9 @@ function camera({ token }) {
                   onClick={() => {
                     setTuluvFilter("tulugdsun");
                   }}
-                  className={`relative ${tuluvFilter === "tulugdsun" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    tuluvFilter === "tulugdsun" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Төлөгдсөн")}
                 </div>
@@ -2046,8 +2074,9 @@ function camera({ token }) {
                   onClick={() => {
                     setTuluvFilter("unegui");
                   }}
-                  className={`relative ${tuluvFilter === "unegui" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    tuluvFilter === "unegui" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Үнэгүй")}
                 </div>
@@ -2105,11 +2134,27 @@ function camera({ token }) {
             mur?.tuluv === -2
           ) {
             currentStatus = "zurchiltei";
+          } else if (
+            mur?.tulbur?.[0]?.turul === "khungulult" &&
+            mur?.tulbur?.[0]?.dun === mur?.tulukhDun
+          ) {
+            currentStatus = "unegui";
           } else if (mur?.tuluv === -1) {
             currentStatus = "unegui";
           }
 
           if (parent.turul === "Үнэгүй") {
+            return (
+              <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
+                <div className="flex items-center justify-center">
+                  {t("Үнэгүй")}
+                </div>
+              </div>
+            );
+          } else if (
+            mur?.tulbur?.[0]?.turul === "khungulult" &&
+            mur?.tulbur?.[0]?.dun === mur?.tulukhDun
+          ) {
             return (
               <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
                 <div className="flex items-center justify-center">
@@ -2144,7 +2189,7 @@ function camera({ token }) {
                           parent._id,
                           parent?.mashiniiDugaar,
                           parent?.niitDun,
-                          index
+                          index,
                         );
 
                         setTimeout(() => {
@@ -2199,18 +2244,18 @@ function camera({ token }) {
                   <div className="flex flex-col items-center justify-center gap-2">
                     {(ajiltan?.tokhirgoo?.zogsooliinKhungulultEsekh === true ||
                       ajiltan?.erkh === "Admin") && (
-                        <div
-                          onClick={() => khungulyu(parent, parent?._id)}
-                          className="flex w-28 cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
-                        >
-                          <div className="flex items-center justify-center">
-                            <CiDiscount1 />
-                          </div>
-                          <div className="flex items-center justify-center">
-                            Хөнгөлөх
-                          </div>
+                      <div
+                        onClick={() => khungulyu(parent, parent?._id)}
+                        className="flex w-28 cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
+                      >
+                        <div className="flex items-center justify-center">
+                          <CiDiscount1 />
                         </div>
-                      )}
+                        <div className="flex items-center justify-center">
+                          Хөнгөлөх
+                        </div>
+                      </div>
+                    )}
                     <div
                       onClick={() => {
                         dugaarGaraasBurtgekh(parent);
@@ -2241,7 +2286,7 @@ function camera({ token }) {
                       mur,
                       parent?._id,
                       parent?.mashiniiDugaar,
-                      parent?.niitDun
+                      parent?.niitDun,
                     )
                   }
                   className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white"
@@ -2269,6 +2314,13 @@ function camera({ token }) {
               <div className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-lime-500 px-3 text-white">
                 <div className="flex items-center justify-center">
                   {t("Төлөгдсөн")}
+                </div>
+              </div>
+            ) : mur?.tulbur?.[0]?.turul === "khungulult" &&
+              mur?.tulbur?.[0]?.dun === mur?.tulukhDun ? (
+              <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
+                <div className="flex items-center justify-center">
+                  {t("Үнэгүй")}
                 </div>
               </div>
             ) : (
@@ -2303,6 +2355,15 @@ function camera({ token }) {
                   : parent?.mashin?.temdeglel}
               </div>
             );
+          } else if (
+            v?.[0]?.tulbur?.[0]?.turul === "khungulult" &&
+            v?.[0]?.tulbur?.[0]?.dun === v?.[0]?.tulukhDun
+          ) {
+            return (
+              <div className="max-w-[8rem] truncate break-words">
+                {t("Хөнгөлөлт")}
+              </div>
+            );
           } else
             return (
               v && (
@@ -2316,8 +2377,8 @@ function camera({ token }) {
                     {v[0]?.tuluv === -1
                       ? v[0]?.uneguiGarsan
                       : !!parent.zurchil
-                        ? t(parent.zurchil)
-                        : ""}
+                      ? t(parent.zurchil)
+                      : ""}
                   </div>
                 </Tooltip>
               )
@@ -2448,8 +2509,8 @@ function camera({ token }) {
               e?.description
                 ? e?.description
                 : e?.TxAddInf
-                  ? e?.TxAddInf
-                  : e?.tranDesc
+                ? e?.TxAddInf
+                : e?.tranDesc
             }
             mouseLeaveDelay={0}
             mouseEnterDelay={1}
@@ -2458,8 +2519,8 @@ function camera({ token }) {
               {e?.description
                 ? e?.description
                 : e?.TxAddInf
-                  ? e?.TxAddInf
-                  : e?.tranDesc}
+                ? e?.TxAddInf
+                : e?.tranDesc}
             </div>
           </Tooltip>
         );
@@ -2476,7 +2537,7 @@ function camera({ token }) {
             <div className="text-right">
               {formatNumber(
                 e?.amount ? e?.amount : e?.Amt ? e?.Amt : e?.tranAmount,
-                0
+                0,
               )}{" "}
               ₮
             </div>
@@ -2531,7 +2592,7 @@ function camera({ token }) {
               body.tuukh[0].tsagiinTuukh[0].garsanTsag = data;
               body.tuukh[0].niitKhugatsaa = moment(data).diff(
                 body.tuukh[0].tsagiinTuukh[0].orsonTsag,
-                "minutes"
+                "minutes",
               );
             }
           } else if (
@@ -2562,12 +2623,12 @@ function camera({ token }) {
               };
               if (typeof window !== "undefined") {
                 const stored = JSON.parse(
-                  localStorage.getItem("cameraPendingUpdates") || "[]"
+                  localStorage.getItem("cameraPendingUpdates") || "[]",
                 );
                 stored.push(pendingUpdate);
                 localStorage.setItem(
                   "cameraPendingUpdates",
-                  JSON.stringify(stored)
+                  JSON.stringify(stored),
                 );
                 setPendingUpdates(stored);
               }
@@ -2582,8 +2643,8 @@ function camera({ token }) {
 
               toast.success(
                 t(
-                  "Интернетгүй үед хадгаллаа. Сүлжээнд холбогдох үед нэгтгэл хийгдэнэ."
-                )
+                  "Интернетгүй үед хадгаллаа. Сүлжээнд холбогдох үед нэгтгэл хийгдэнэ.",
+                ),
               );
               setModalOpen({ bool: false, item: null, type: "" });
               setValue(null);
@@ -2624,19 +2685,19 @@ function camera({ token }) {
                   };
                   if (typeof window !== "undefined") {
                     const stored = JSON.parse(
-                      localStorage.getItem("cameraPendingUpdates") || "[]"
+                      localStorage.getItem("cameraPendingUpdates") || "[]",
                     );
                     stored.push(pendingUpdate);
                     localStorage.setItem(
                       "cameraPendingUpdates",
-                      JSON.stringify(stored)
+                      JSON.stringify(stored),
                     );
                     setPendingUpdates(stored);
                   }
                   toast.warning(
                     t(
-                      "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед нэгтгэл хийгдэнэ."
-                    )
+                      "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед нэгтгэл хийгдэнэ.",
+                    ),
                   );
                 }
               });
@@ -2738,7 +2799,7 @@ function camera({ token }) {
   };
   const khaalgaNeey = (ip, turul = null) => {
     const filterData = zogsoolTusBuriinToo?.filter(
-      (mur) => mur?._id?.zogsool === songogdzonZogsoolOrokh?._id
+      (mur) => mur?._id?.zogsool === songogdzonZogsoolOrokh?._id,
     );
     var sulToo =
       (songogdzonZogsoolOrokh?.too || 0) -
@@ -2780,8 +2841,8 @@ function camera({ token }) {
       // } else
       zogsoolUilchilgee()
         .get("/neeye/" + ip + "")
-        .then(function (response) { })
-        .catch(function (error) { });
+        .then(function (response) {})
+        .catch(function (error) {});
     }
   };
 
@@ -2805,8 +2866,8 @@ function camera({ token }) {
         moment.isMoment(tsag) && tsag?.isValid()
           ? tsag
           : typeof tsag === "string" && tsag
-            ? moment(tsag, "HH:mm")
-            : null;
+          ? moment(tsag, "HH:mm")
+          : null;
       if (tsagMoment?.isValid()) {
         datetime.set({
           hour: tsagMoment.hour(),
@@ -2843,7 +2904,7 @@ function camera({ token }) {
       };
       if (typeof window !== "undefined") {
         const stored = JSON.parse(
-          localStorage.getItem("cameraPendingCars") || "[]"
+          localStorage.getItem("cameraPendingCars") || "[]",
         );
         stored.push(pendingCar);
         localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
@@ -2902,7 +2963,6 @@ function camera({ token }) {
                       .then(({ data: freshData }) => {
                         const fresh = freshData?.jagsaalt?.[0];
                         if (fresh?.tuukh?.[0] && fresh?._id) {
-
                           if (isInUneguiKhugatsaa(fresh.tuukh[0])) {
                             return;
                           }
@@ -2914,7 +2974,7 @@ function camera({ token }) {
                             fresh._id,
                             fresh.mashiniiDugaar,
                             haruulakhDun,
-                            0
+                            0,
                           );
                         } else {
                           notification.warn({
@@ -2954,7 +3014,7 @@ function camera({ token }) {
                             found._id,
                             found.mashiniiDugaar,
                             haruulakhDun,
-                            0
+                            0,
                           );
                         } else {
                           notification.warn({
@@ -3007,15 +3067,14 @@ function camera({ token }) {
           try {
             const tuukh = data.tuukh?.[0];
             if (tuukh) {
-
               const mashin = data.mashin;
               if (
                 mashin?.khungulultTurul === "togtmolTsag" &&
                 mashin?.uldegdelKhungulukhKhugatsaa > 0
               ) {
-                const remainingDiscountTime = mashin.uldegdelKhungulukhKhugatsaa;
+                const remainingDiscountTime =
+                  mashin.uldegdelKhungulukhKhugatsaa;
                 const parkingTime = data.niitKhugatsaa || 0;
-
 
                 if (remainingDiscountTime >= parkingTime) {
                   proceedWithOfflineExit();
@@ -3033,7 +3092,7 @@ function camera({ token }) {
                   data._id,
                   data.mashiniiDugaar,
                   haruulakhDun,
-                  0
+                  0,
                 );
                 return;
               }
@@ -3061,7 +3120,7 @@ function camera({ token }) {
 
           if (typeof window !== "undefined") {
             const stored = JSON.parse(
-              localStorage.getItem("cameraPendingCars") || "[]"
+              localStorage.getItem("cameraPendingCars") || "[]",
             );
             stored.push(pendingCar);
             localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
@@ -3085,7 +3144,7 @@ function camera({ token }) {
               });
               localStorage.setItem(
                 "cameraPendingCars",
-                JSON.stringify(updatedStored)
+                JSON.stringify(updatedStored),
               );
             }
 
@@ -3104,16 +3163,16 @@ function camera({ token }) {
               tuukh: item.tuukh?.map((t, idx) =>
                 idx === 0
                   ? {
-                    ...t,
-                    tuluv: -1,
-                    tsagiinTuukh: t.tsagiinTuukh?.map((ts, i) =>
-                      i === 0
-                        ? { ...ts, garsanTsag: new Date().toISOString() }
-                        : ts
-                    ),
-                    garsanKhaalga: camerVal[1],
-                  }
-                  : t
+                      ...t,
+                      tuluv: -1,
+                      tsagiinTuukh: t.tsagiinTuukh?.map((ts, i) =>
+                        i === 0
+                          ? { ...ts, garsanTsag: new Date().toISOString() }
+                          : ts,
+                      ),
+                      garsanKhaalga: camerVal[1],
+                    }
+                  : t,
               ),
             }));
           }
@@ -3148,12 +3207,11 @@ function camera({ token }) {
                   tuukh?.tsagiinTuukh?.[0]?.garsanTsag || new Date();
                 const computedMin =
                   Number.isFinite(Number(niitKhugatsaa)) &&
-                    Number(niitKhugatsaa) >= 0
+                  Number(niitKhugatsaa) >= 0
                     ? Number(niitKhugatsaa)
                     : orsonTsag
-                      ? moment(garsanTsag).diff(moment(orsonTsag), "minutes")
-                      : null;
-
+                    ? moment(garsanTsag).diff(moment(orsonTsag), "minutes")
+                    : null;
 
                 const mashin = data.mashin;
                 let isInFreePeriod = false;
@@ -3162,7 +3220,8 @@ function camera({ token }) {
                   mashin?.khungulultTurul === "togtmolTsag" &&
                   mashin?.uldegdelKhungulukhKhugatsaa > 0
                 ) {
-                  const remainingDiscountTime = mashin.uldegdelKhungulukhKhugatsaa;
+                  const remainingDiscountTime =
+                    mashin.uldegdelKhungulukhKhugatsaa;
                   const parkingTime = data.niitKhugatsaa || computedMin || 0;
                   isInFreePeriod = remainingDiscountTime >= parkingTime;
                 } else {
@@ -3187,31 +3246,33 @@ function camera({ token }) {
                             fresh._id,
                             fresh.mashiniiDugaar,
                             haruulakhDun,
-                            0
+                            0,
                           );
                         }
                       } else {
-                        const haruulakhDun = mashinData?.niitDun ?? tuukh?.tulukhDun ?? 0;
+                        const haruulakhDun =
+                          mashinData?.niitDun ?? tuukh?.tulukhDun ?? 0;
                         if (haruulakhDun > 0) {
                           tulburTulyu(
                             tuukh,
                             mashinData._id,
                             mashinData.mashiniiDugaar,
                             haruulakhDun,
-                            0
+                            0,
                           );
                         }
                       }
                     })
                     .catch(() => {
-                      const haruulakhDun = mashinData?.niitDun ?? tuukh?.tulukhDun ?? 0;
+                      const haruulakhDun =
+                        mashinData?.niitDun ?? tuukh?.tulukhDun ?? 0;
                       if (haruulakhDun > 0) {
                         tulburTulyu(
                           tuukh,
                           mashinData._id,
                           mashinData.mashiniiDugaar,
                           haruulakhDun,
-                          0
+                          0,
                         );
                       }
                     });
@@ -3224,12 +3285,11 @@ function camera({ token }) {
                   tuukh?.tsagiinTuukh?.[0]?.garsanTsag || new Date();
                 const computedMin =
                   Number.isFinite(Number(niitKhugatsaa)) &&
-                    Number(niitKhugatsaa) >= 0
+                  Number(niitKhugatsaa) >= 0
                     ? Number(niitKhugatsaa)
                     : orsonTsag
-                      ? moment(garsanTsag).diff(moment(orsonTsag), "minutes")
-                      : null;
-
+                    ? moment(garsanTsag).diff(moment(orsonTsag), "minutes")
+                    : null;
 
                 const mashin = data.mashin;
                 let isInFreePeriod = false;
@@ -3238,7 +3298,8 @@ function camera({ token }) {
                   mashin?.khungulultTurul === "togtmolTsag" &&
                   mashin?.uldegdelKhungulukhKhugatsaa > 0
                 ) {
-                  const remainingDiscountTime = mashin.uldegdelKhungulukhKhugatsaa;
+                  const remainingDiscountTime =
+                    mashin.uldegdelKhungulukhKhugatsaa;
                   const parkingTime = data.niitKhugatsaa || computedMin || 0;
                   isInFreePeriod = remainingDiscountTime >= parkingTime;
                 } else {
@@ -3270,31 +3331,33 @@ function camera({ token }) {
                             found._id,
                             found.mashiniiDugaar,
                             haruulakhDun,
-                            0
+                            0,
                           );
                         }
                       } else {
-                        const haruulakhDun = data?.niitDun ?? tuukh?.tulukhDun ?? 0;
+                        const haruulakhDun =
+                          data?.niitDun ?? tuukh?.tulukhDun ?? 0;
                         if (haruulakhDun > 0) {
                           tulburTulyu(
                             tuukh,
                             data._id,
                             data.mashiniiDugaar,
                             haruulakhDun,
-                            0
+                            0,
                           );
                         }
                       }
                     })
                     .catch(() => {
-                      const haruulakhDun = data?.niitDun ?? tuukh?.tulukhDun ?? 0;
+                      const haruulakhDun =
+                        data?.niitDun ?? tuukh?.tulukhDun ?? 0;
                       if (haruulakhDun > 0) {
                         tulburTulyu(
                           tuukh,
                           data._id,
                           data.mashiniiDugaar,
                           haruulakhDun,
-                          0
+                          0,
                         );
                       }
                     });
@@ -3383,7 +3446,7 @@ function camera({ token }) {
       };
       if (typeof window !== "undefined") {
         const stored = JSON.parse(
-          localStorage.getItem("cameraPendingCars") || "[]"
+          localStorage.getItem("cameraPendingCars") || "[]",
         );
         stored.push(pendingCar);
         localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
@@ -3414,10 +3477,10 @@ function camera({ token }) {
               res.data._id,
               res.data.mashiniiDugaar,
               res.data?.niitDun ??
-              res.data?.tuukh?.[0]?.tulukhDun ??
-              res.data?.tulukhDun ??
+                res.data?.tuukh?.[0]?.tulukhDun ??
+                res.data?.tulukhDun ??
+                0,
               0,
-              0
             );
           }
         }
@@ -3437,7 +3500,7 @@ function camera({ token }) {
           };
           if (typeof window !== "undefined") {
             const stored = JSON.parse(
-              localStorage.getItem("cameraPendingCars") || "[]"
+              localStorage.getItem("cameraPendingCars") || "[]",
             );
             stored.push(pendingCar);
             localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
@@ -3446,8 +3509,8 @@ function camera({ token }) {
           }
           notification.warning(
             t(
-              "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед нэгтгэл хийгдэнэ."
-            )
+              "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед нэгтгэл хийгдэнэ.",
+            ),
           );
           onRefresh();
         } else {
@@ -3498,7 +3561,7 @@ function camera({ token }) {
 
         // Check if this car already exists in actual data
         const existsInActual = actual.some(
-          (item) => item.mashiniiDugaar?.toUpperCase() === mashinDugaar
+          (item) => item.mashiniiDugaar?.toUpperCase() === mashinDugaar,
         );
 
         // Check for duplicates in pending array (keep only the first occurrence)
@@ -3626,6 +3689,11 @@ function camera({ token }) {
 
       if (isActive) {
         currentStatus = "active";
+      } else if (
+        mur?.tulbur?.[0]?.turul === "khungulult" &&
+        mur?.tulbur?.[0]?.dun === mur?.tulukhDun
+      ) {
+        currentStatus = "unegui";
       } else if (mur?.tuluv === 1 || mur?.tuluv === 2) {
         currentStatus = "tulugdsun";
       } else if (hasPayment) {
@@ -3687,45 +3755,50 @@ function camera({ token }) {
 
     const nemekhData = tuluvFilter
       ? uilchluulegchGaralt?.jagsaalt?.filter((parent) => {
-        let dunTuluv = false;
-        parent?.tuukh?.forEach((mur) => {
-          if (mur.tulukhDun > 0) dunTuluv = true;
-        });
-        const mur = parent.tuukh[0];
+          let dunTuluv = false;
+          parent?.tuukh?.forEach((mur) => {
+            if (mur.tulukhDun > 0) dunTuluv = true;
+          });
+          const mur = parent.tuukh[0];
 
-        let currentStatus = "";
+          let currentStatus = "";
 
-        const hasPayment = mur?.tulbur?.length > 0;
-        const hasExitTime = !!mur?.tsagiinTuukh?.[0]?.garsanTsag;
-        const isActive =
-          mur?.tuluv === 0 && !hasExitTime && !mur?.garsanKhaalga;
+          const hasPayment = mur?.tulbur?.length > 0;
+          const hasExitTime = !!mur?.tsagiinTuukh?.[0]?.garsanTsag;
+          const isActive =
+            mur?.tuluv === 0 && !hasExitTime && !mur?.garsanKhaalga;
 
-        if (parent.turul === "Үнэгүй" || mur?.tuluv === -1) {
-          currentStatus = "unegui";
-        } else if (isActive) {
-          currentStatus = "active";
-        } else if (
-          (mur?.tuluv === 0 ||
-            parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
-          dunTuluv
-        ) {
-          currentStatus = "idevekhitei";
-        } else if (mur?.tuluv === 1 || mur?.tuluv === 2) {
-          currentStatus = "tulugdsun";
-        } else if (hasPayment) {
-          currentStatus = "tulburtei";
-        } else if (
-          !!parent.zurchil &&
-          parent.zurchil !== "" &&
-          mur?.tuluv === -2
-        ) {
-          currentStatus = "zurchiltei";
-        } else if (mur?.tuluv === 0 && !dunTuluv) {
-          currentStatus = "unegui";
-        }
+          if (parent.turul === "Үнэгүй" || mur?.tuluv === -1) {
+            currentStatus = "unegui";
+          } else if (
+            mur?.tulbur?.[0]?.turul === "khungulult" &&
+            mur?.tulbur?.[0]?.dun === mur?.tulukhDun
+          ) {
+            currentStatus = "unegui";
+          } else if (isActive) {
+            currentStatus = "active";
+          } else if (
+            (mur?.tuluv === 0 ||
+              parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
+            dunTuluv
+          ) {
+            currentStatus = "idevekhitei";
+          } else if (mur?.tuluv === 1 || mur?.tuluv === 2) {
+            currentStatus = "tulugdsun";
+          } else if (hasPayment) {
+            currentStatus = "tulburtei";
+          } else if (
+            !!parent.zurchil &&
+            parent.zurchil !== "" &&
+            mur?.tuluv === -2
+          ) {
+            currentStatus = "zurchiltei";
+          } else if (mur?.tuluv === 0 && !dunTuluv) {
+            currentStatus = "unegui";
+          }
 
-        return currentStatus === tuluvFilter;
-      })
+          return currentStatus === tuluvFilter;
+        })
       : uilchluulegchGaralt?.jagsaalt;
 
     if (!nemekhData || nemekhData.length === 0) return null;
@@ -3774,8 +3847,8 @@ function camera({ token }) {
       khailtDoubleClick={khailtDoubleClick}
     >
       {jagsaalt?.length > 0 ||
-        filteredData?.jagsaalt?.length > 0 ||
-        isActuallyOffline ? (
+      filteredData?.jagsaalt?.length > 0 ||
+      isActuallyOffline ? (
         <div className="col-span-12">
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
             <div className="fixed left-6 top-24 z-[10000] hidden h-[400px] md:block">
@@ -3807,8 +3880,9 @@ function camera({ token }) {
                 >
                   <div className="absolute right-4 top-3">
                     <Button
-                      className={`${guilgeeKharakh === false ? "mr-0" : "mr-8"
-                        }`}
+                      className={`${
+                        guilgeeKharakh === false ? "mr-0" : "mr-8"
+                      }`}
                       type="tertiary"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -3835,23 +3909,25 @@ function camera({ token }) {
               onClick={() => {
                 setCamerKharakh(false);
               }}
-              className={`w-full ${cameraKharakh === 1 &&
+              className={`w-full ${
+                cameraKharakh === 1 &&
                 "fixed right-0 top-0 z-10 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2 md:py-[10%]"
-                }`}
+              }`}
             >
               <div
                 onClick={(e) => {
                   e.stopPropagation();
                   setCamerKharakh(1);
                 }}
-                className={`w-full rounded-md bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${cameraKharakh === 1
-                  ? "sm:h-[80vh] sm:w-[80%]"
-                  : "sm:h-[450px]"
-                  }`}
+                className={`w-full rounded-md bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${
+                  cameraKharakh === 1
+                    ? "sm:h-[80vh] sm:w-[80%]"
+                    : "sm:h-[450px]"
+                }`}
               >
                 {baiguullaga?._id === "6115f350b35689cdbf1b9da3" &&
-                  (camerVal[0] === "192.168.1.128" ||
-                    camerVal[0] === "192.168.1.232") ? (
+                (camerVal[0] === "192.168.1.128" ||
+                  camerVal[0] === "192.168.1.232") ? (
                   <R2WPlayerComponent
                     USER={"admin"}
                     ROOT={"live"}
@@ -3902,19 +3978,19 @@ function camera({ token }) {
                 ) : baiguullaga?._id === "671f0d5d53b82cbedf0f81a3" &&
                   barilgiinId === "671f0d5d53b82cbedf0f81a4" ? (
                   camerVal[0] === "192.168.1.155" ||
-                    camerVal[0] === "192.168.1.156" ||
-                    camerVal[0] === "192.168.1.157" ||
-                    camerVal[0] === "192.168.1.158" ||
-                    camerVal[0] === "192.168.1.159" ||
-                    camerVal[0] === "192.168.1.160" ||
-                    camerVal[0] === "192.168.1.206" ||
-                    camerVal[0] === "192.168.1.108" ? (
+                  camerVal[0] === "192.168.1.156" ||
+                  camerVal[0] === "192.168.1.157" ||
+                  camerVal[0] === "192.168.1.158" ||
+                  camerVal[0] === "192.168.1.159" ||
+                  camerVal[0] === "192.168.1.160" ||
+                  camerVal[0] === "192.168.1.206" ||
+                  camerVal[0] === "192.168.1.108" ? (
                     <R2WPlayerComponent
                       USER={"admin"}
                       ROOT={"live"}
                       PASSWD={
                         camerVal[0] === "192.168.1.206" ||
-                          camerVal[0] === "192.168.1.108"
+                        camerVal[0] === "192.168.1.108"
                           ? "Admin123@"
                           : "admin123"
                       }
@@ -3941,38 +4017,38 @@ function camera({ token }) {
                     PORT={554}
                   />
                 ) : // tedy voucher hkvision
-                  baiguullaga?._id === "66c2c871597ea1390c3fd830" &&
-                    barilgiinId === "68514b121af1430455676c6d" &&
-                    camerVal[0] === "192.168.1.83" ? (
-                    <R2WPlayerComponent
-                      USER={"admin"}
-                      ROOT={"live"}
-                      PASSWD={"Tsegts157"}
-                      Camer={camerVal[0]}
-                      PORT={554}
+                baiguullaga?._id === "66c2c871597ea1390c3fd830" &&
+                  barilgiinId === "68514b121af1430455676c6d" &&
+                  camerVal[0] === "192.168.1.83" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    ROOT={"live"}
+                    PASSWD={"Tsegts157"}
+                    Camer={camerVal[0]}
+                    PORT={554}
+                  />
+                ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
+                  parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
+                    <SocketStream
+                      ip={camerVal[0]}
+                      CHANNEL={parkingJagsaalt?.[0]?.tokhirgoo?.CHANNEL}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                      TOKEN={parkingJagsaalt?.[0]?.tokhirgoo?.TOKEN}
                     />
-                  ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
-                    parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
-                      <SocketStream
-                        ip={camerVal[0]}
-                        CHANNEL={parkingJagsaalt?.[0]?.tokhirgoo?.CHANNEL}
-                        PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
-                        TOKEN={parkingJagsaalt?.[0]?.tokhirgoo?.TOKEN}
-                      />
-                    ) : parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === false ? (
-                      <R2WPlayerComponent
-                        USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
-                        ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
-                        PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
-                        Camer={camerVal[0]}
-                        PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
-                      />
-                    ) : (
-                      ""
-                    )
+                  ) : parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === false ? (
+                    <R2WPlayerComponent
+                      USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                      Camer={camerVal[0]}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                    />
                   ) : (
                     ""
-                  )}
+                  )
+                ) : (
+                  ""
+                )}
               </div>
               {cameraKharakh === 1 && (
                 <div className="absolute right-5 top-5 text-3xl text-white">
@@ -3985,8 +4061,9 @@ function camera({ token }) {
                 </div>
               )}
               <div
-                className={`mt-3 flex flex-col justify-between gap-3 sm:flex-row ${cameraKharakh === 1 && "absolute bottom-5 w-40"
-                  }`}
+                className={`mt-3 flex flex-col justify-between gap-3 sm:flex-row ${
+                  cameraKharakh === 1 && "absolute bottom-5 w-40"
+                }`}
               >
                 <div className="flex gap-3">
                   <div className="relative inline-block">
@@ -4004,8 +4081,9 @@ function camera({ token }) {
                     </Button>
 
                     <div
-                      className={`pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 transform whitespace-nowrap rounded-md bg-zinc-700 px-3 py-2 text-sm text-white shadow-md transition-opacity duration-200 ease-in-out ${isHovered ? "opacity-100" : "opacity-0"
-                        }`}
+                      className={`pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 transform whitespace-nowrap rounded-md bg-zinc-700 px-3 py-2 text-sm text-white shadow-md transition-opacity duration-200 ease-in-out ${
+                        isHovered ? "opacity-100" : "opacity-0"
+                      }`}
                     >
                       Орох хаалт нээх
                       <div className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-x-transparent border-t-zinc-700"></div>
@@ -4038,19 +4116,21 @@ function camera({ token }) {
               onClick={() => {
                 setCamerKharakh(false);
               }}
-              className={`w-full ${cameraKharakh === 2 &&
+              className={`w-full ${
+                cameraKharakh === 2 &&
                 "fixed right-0 top-0 z-10 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2"
-                }`}
+              }`}
             >
               <div
                 onClick={(e) => {
                   e.stopPropagation();
                   setCamerKharakh(2);
                 }}
-                className={`w-full rounded-md bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${cameraKharakh === 2
-                  ? "sm:h-[80vh] sm:w-[80%]"
-                  : "sm:h-[450px]"
-                  }`}
+                className={`w-full rounded-md bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${
+                  cameraKharakh === 2
+                    ? "sm:h-[80vh] sm:w-[80%]"
+                    : "sm:h-[450px]"
+                }`}
               >
                 {/*baiguullagiin id ni FoodCity.iin id */}
                 {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
@@ -4165,8 +4245,9 @@ function camera({ token }) {
                 </div>
               )}
               <div
-                className={`mt-3 flex flex-col justify-between gap-3 sm:flex-row ${cameraKharakh === 2 && "absolute bottom-5 w-40"
-                  }`}
+                className={`mt-3 flex flex-col justify-between gap-3 sm:flex-row ${
+                  cameraKharakh === 2 && "absolute bottom-5 w-40"
+                }`}
               >
                 <div className="flex gap-3">
                   <div className="relative inline-block">
@@ -4184,8 +4265,9 @@ function camera({ token }) {
                     </Button>
 
                     <div
-                      className={`pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 transform whitespace-nowrap rounded-md bg-zinc-700 px-3 py-2 text-sm text-white shadow-md transition-opacity duration-200 ease-in-out ${isHovered2 ? "opacity-100" : "opacity-0"
-                        }`}
+                      className={`pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 transform whitespace-nowrap rounded-md bg-zinc-700 px-3 py-2 text-sm text-white shadow-md transition-opacity duration-200 ease-in-out ${
+                        isHovered2 ? "opacity-100" : "opacity-0"
+                      }`}
                     >
                       Гарах хаалт нээх
                       <div className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-x-transparent border-t-zinc-700"></div>
@@ -4267,15 +4349,15 @@ function camera({ token }) {
                 </Button>
                 {(ajiltan?.tokhirgoo?.zogsoolNegtgelDunKharakhEsekh === true ||
                   ajiltan?.erkh === "Admin") && (
-                    <Button
-                      onClick={() => tulburiinDelgerengui()}
-                      className="mr-3 !w-full text-ellipsis"
-                      icon={<PrinterOutlined />}
-                      type="primary"
-                    >
-                      {t("Орлого тайлан")}
-                    </Button>
-                  )}
+                  <Button
+                    onClick={() => tulburiinDelgerengui()}
+                    className="mr-3 !w-full text-ellipsis"
+                    icon={<PrinterOutlined />}
+                    type="primary"
+                  >
+                    {t("Орлого тайлан")}
+                  </Button>
+                )}
 
                 <div className="flex w-full items-center justify-center">
                   <div className="relative inline-block">
@@ -4349,7 +4431,7 @@ function camera({ token }) {
                                       __style__: { h: "center" },
                                       render: (text, record, index) =>
                                         (data?.khuudasniiDugaar || 0) *
-                                        (data?.khuudasniiKhemjee || 0) -
+                                          (data?.khuudasniiKhemjee || 0) -
                                         (data?.khuudasniiKhemjee || 0) +
                                         index +
                                         1,
@@ -4395,10 +4477,10 @@ function camera({ token }) {
                                       __style__: { h: "center" },
                                       render(v) {
                                         const d1 = moment(
-                                          v?.[0]?.tsagiinTuukh[0]?.orsonTsag
+                                          v?.[0]?.tsagiinTuukh[0]?.orsonTsag,
                                         );
                                         const d2 = moment(
-                                          v?.[0]?.tsagiinTuukh[0]?.garsanTsag
+                                          v?.[0]?.tsagiinTuukh[0]?.garsanTsag,
                                         );
                                         const diff = d2.diff(d1, "minutes");
                                         return diff && diff;
@@ -4434,14 +4516,14 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) => e.turul === "belen"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) => e.turul === "belen",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4456,14 +4538,14 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) => e.turul === "zeel"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) => e.turul === "zeel",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4478,15 +4560,15 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) =>
-                                                  e.turul === "khariltsakh"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul === "khariltsakh",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4501,20 +4583,20 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) =>
-                                                  e.turul === "khaan" ||
-                                                  e.turul === "tdb" ||
-                                                  e.turul === "khas" ||
-                                                  e.turul === "golomt" ||
-                                                  e.turul === "kapitron" ||
-                                                  e.turul === "tur"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul === "khaan" ||
+                                                    e.turul === "tdb" ||
+                                                    e.turul === "khas" ||
+                                                    e.turul === "golomt" ||
+                                                    e.turul === "kapitron" ||
+                                                    e.turul === "tur",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4529,14 +4611,14 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) => e.turul === "toki"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) => e.turul === "toki",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4551,14 +4633,14 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) => e.turul === "kiosk"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) => e.turul === "kiosk",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4573,15 +4655,15 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) =>
-                                                  e.turul === "khungulult"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul === "khungulult",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4596,14 +4678,14 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) => e.turul === "qpay"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) => e.turul === "qpay",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4618,16 +4700,16 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) =>
-                                                  e.turul ===
-                                                  "qpayUridchilsan"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul ===
+                                                    "qpayUridchilsan",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4642,14 +4724,14 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) => e.turul === "PosBelen"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) => e.turul === "PosBelen",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4664,14 +4746,14 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) => e.turul === "PosCard"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) => e.turul === "PosCard",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4686,15 +4768,16 @@ function camera({ token }) {
                                         return (
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
-                                              ?.filter(
-                                                (e) =>
-                                                  e.turul === "PosKhariltsakh"
-                                              )
-                                              .reduce(
-                                                (a, b) =>
-                                                  a + Number(b.dun || 0),
-                                                0
-                                              )
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul ===
+                                                    "PosKhariltsakh",
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0,
+                                                )
                                             : 0) || 0
                                         );
                                       },
@@ -4707,10 +4790,10 @@ function camera({ token }) {
                                         return v[0]?.tuluv === 1
                                           ? "Төлсөн"
                                           : v[0]?.tuluv === 0
-                                            ? "Төлөөгүй"
-                                            : v[0]?.tuluv === -2
-                                              ? "Зөрчилтэй"
-                                              : "";
+                                          ? "Төлөөгүй"
+                                          : v[0]?.tuluv === -2
+                                          ? "Зөрчилтэй"
+                                          : "";
                                       },
                                     },
                                     {
@@ -4723,14 +4806,14 @@ function camera({ token }) {
                                           return v?.[0]?.tuluv === -1
                                             ? v?.[0]?.uneguiGarsan
                                             : !!v?.[0]?.tsagiinTuukh[0]
-                                              ?.garsanTsag &&
+                                                ?.garsanTsag &&
                                               Number.isFinite(
-                                                Number(v?.[0]?.niitKhugatsaa)
+                                                Number(v?.[0]?.niitKhugatsaa),
                                               ) &&
                                               Number(v?.[0]?.niitKhugatsaa) <=
-                                              uneguiKhugatsaaMin
-                                              ? minToHour(uneguiKhugatsaaMin)
-                                              : t(parent.zurchil);
+                                                uneguiKhugatsaaMin
+                                            ? minToHour(uneguiKhugatsaaMin)
+                                            : t(parent.zurchil);
                                       },
                                     },
                                     {
@@ -4740,13 +4823,13 @@ function camera({ token }) {
                                         return (
                                           v &&
                                           (String(
-                                            v[0]?.burtgesenAjiltaniiNer
+                                            v[0]?.burtgesenAjiltaniiNer,
                                           ).replace(/\D/g, "").length > 9
                                             ? ajiltniiNers.find(
-                                              (a) =>
-                                                a.id ===
-                                                v[0]?.burtgesenAjiltaniiId
-                                            )?.ner
+                                                (a) =>
+                                                  a.id ===
+                                                  v[0]?.burtgesenAjiltaniiId,
+                                              )?.ner
                                             : v[0]?.burtgesenAjiltaniiNer)
                                         );
                                       },
@@ -4945,7 +5028,7 @@ function camera({ token }) {
           >
             <Space direction="vertical" className="w-full">
               {modalOpen.type !== "dugaarBurtgekh" &&
-                modalOpen.type !== "orlogo" ? (
+              modalOpen.type !== "orlogo" ? (
                 <>
                   <Radio.Group onChange={onChange} value={value}>
                     {modalOpen.type !== "zurchil" ? (
@@ -5048,10 +5131,10 @@ function camera({ token }) {
                         min: 6,
                         max: 7,
                         pattern: new RegExp(
-                          "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
+                          "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}",
                         ),
                         message: t(
-                          "Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"
+                          "Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой",
                         ),
                       },
                     ]}
@@ -5062,7 +5145,7 @@ function camera({ token }) {
                           .readText()
                           .then(
                             (v) =>
-                              !!v && form.setFieldValue("mashiniiDugaar", v)
+                              !!v && form.setFieldValue("mashiniiDugaar", v),
                           )
                       }
                       maxLength={7}
@@ -5128,16 +5211,16 @@ function camera({ token }) {
                           {
                             required:
                               form.getFieldValue("mashiniiDugaar")?.length >
-                              0 &&
+                                0 &&
                               !garahCameraSongogdson &&
                               true,
                             min: 6,
                             max: 7,
                             pattern: new RegExp(
-                              "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
+                              "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}",
                             ),
                             message: t(
-                              "Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой"
+                              "Машины дугаар 4 тоо 2 эсвэл 3 үсэг байх ёстой",
                             ),
                           },
                         ]}
@@ -5148,7 +5231,8 @@ function camera({ token }) {
                               .readText()
                               .then(
                                 (v) =>
-                                  !!v && form.setFieldValue("mashiniiDugaar", v)
+                                  !!v &&
+                                  form.setFieldValue("mashiniiDugaar", v),
                               )
                           }
                           maxLength={7}
@@ -5219,7 +5303,7 @@ function camera({ token }) {
                             >
                               {n}
                             </a>
-                          )
+                          ),
                         )}
                       </div>
                       {usguud.map((useg) => (

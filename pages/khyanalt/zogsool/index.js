@@ -1656,15 +1656,14 @@ function Zogsool({ token }) {
         showSorterTooltip: false,
         dataIndex: "tuukh",
         render(v, data) {
+          const isKhungulult =
+            v[0]?.tulbur?.[0]?.turul === "khungulult" &&
+            v[0]?.tulbur?.[0]?.dun === v[0]?.tulukhDun;
           return (
             <div
-              className={`${
-                // (data.niitDun === 0 && v[0].tuluv !== -2) ||
-                // data.turul === "Үнэгүй" ||
-                // !!v[0].uneguiGarsan
-                //   ? null
-                //   :
-                v[0].tuluv === 1 || v[0].tuluv === 2
+              className={`${isKhungulult
+                ? "bg-gray-500 text-white dark:bg-gray-700"
+                : v[0].tuluv === 1 || v[0].tuluv === 2
                   ? "bg-green-500 text-white dark:bg-green-700"
                   : v[0].tuluv === -2
                     ? "bg-red-500 text-white dark:bg-red-700"
@@ -1679,22 +1678,19 @@ function Zogsool({ token }) {
                 } flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
             >
               {
-                // (data.niitDun === 0 && v[0].tuluv !== -2) ||
-                // (data.turul === "Үнэгүй" && v[0].tuluv !== -2) ||
-                // (!!v[0].uneguiGarsan && v[0].tuluv !== -2)
-                //   ? "Үнэгүй"
-                //   :
-                v[0].tuluv === 1 || v[0].tuluv === 2
-                  ? "Төлсөн"
-                  : v[0].tuluv === -2
-                    ? "Зөрчилтэй"
-                    : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && data.niitDun > 0
-                      ? "Төлбөртэй"
-                      : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
-                        ? "Идэвхтэй"
-                        : v[0]?.tuluv === -3
-                          ? "Цэвэрлэсэн"
-                          : "Үнэгүй"
+                isKhungulult
+                  ? "Үнэгүй"
+                  : v[0].tuluv === 1 || v[0].tuluv === 2
+                    ? "Төлсөн"
+                    : v[0].tuluv === -2
+                      ? "Зөрчилтэй"
+                      : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && data.niitDun > 0
+                        ? "Төлбөртэй"
+                        : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
+                          ? "Идэвхтэй"
+                          : v[0]?.tuluv === -3
+                            ? "Цэвэрлэсэн"
+                            : "Үнэгүй"
               }
             </div>
           );
@@ -1722,6 +1718,15 @@ function Zogsool({ token }) {
             return (
               <div>
                 {moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD")}
+              </div>
+            );
+          } else if (
+            v?.[0]?.tulbur?.[0]?.turul === "khungulult" &&
+            v?.[0]?.tulbur?.[0]?.dun === v?.[0]?.tulukhDun
+          ) {
+            return (
+              <div className="max-w-[8rem] truncate break-words">
+                {t("Хөнгөлөлт")}
               </div>
             );
           } else
