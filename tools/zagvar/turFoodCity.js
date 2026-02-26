@@ -90,7 +90,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
           <p style="width: 100%; text-align: left; font-weight: 600;">
             <b>&nbsp;${
               !!medeelel?.nekhemjlekhTulukhUdur
-                ? "&lt;tulukhUdur&gt;"
+                ? "&lt;nekhemjlekhTulukhUdur&gt;"
                 : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
             }</b>
           </p>

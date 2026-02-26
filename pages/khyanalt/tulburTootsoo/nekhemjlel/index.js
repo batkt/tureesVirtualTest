@@ -1331,13 +1331,7 @@ function tulburTootsoo({ token }) {
                 ),
                 formatNumber(khungulultKhassanTulukhDunNuat || 0),
               );
-              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(
-                  `&lt;${a.nekhemjlekhTulukhUdur}.nekhemjlekhTulukhUdur&gt;`,
-                  "g",
-                ),
-                medeelel?.nekhemjlekhTulukhUdur || "",
-              );
+
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(
                   `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;`,
@@ -1506,7 +1500,17 @@ function tulburTootsoo({ token }) {
             medeelel.niilberDunUranganNUAT = (niilberDunUrangan / 1.1) * 0.1;
             medeelel.niilberDunUranganNUATgui =
               niilberDunUrangan - medeelel.niilberDunUranganNUAT;
-
+            // medeelel.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+            //   new RegExp(
+            //     `&lt;${medeelel.nekhemjlekhTulukhUdur}.nekhemjlekhTulukhUdur&gt;`,
+            //     "g",
+            //   ),
+            //   medeelel?.nekhemjlekhTulukhUdur || "",
+            // );
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;nekhemjlekhTulukhUdur&gt;`, "g"),
+              medeelel?.nekhemjlekhTulukhUdur || "",
+            );
             zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
               new RegExp(`&lt;niilberDunUranganUsgeer&gt;`, "g"),
               capitalize(
@@ -2914,7 +2918,32 @@ function tulburTootsoo({ token }) {
             nekhemjlekh.tamga = "";
           }
         }
+        const nekhemjlekhTulukhUdur = Number(
+          barilga?.tokhirgoo?.nekhemjlekhTulukhUdur,
+        );
+        const dayOfMonth = nekhemjlekh.tulukhUdur?.[0];
 
+        if (dayOfMonth && nekhemjlekhTulukhUdur) {
+          const now = new Date();
+
+          let baseDate = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            dayOfMonth,
+          );
+
+          baseDate.setDate(baseDate.getDate() + nekhemjlekhTulukhUdur);
+
+          const month = String(baseDate.getMonth() + 1).padStart(2, "0");
+          const day = String(baseDate.getDate()).padStart(2, "0");
+          const year = baseDate.getFullYear();
+
+          nekhemjlekh.nekhemjlekhTulukhUdur = `${month}/${day}/${year}`;
+        }
+        nekhemjlekh = nekhemjlekh?.replace(
+          new RegExp(`&lt;nekhemjlekhTulukhUdur&gt;`, "g"),
+          nekhemjlekh?.nekhemjlekhTulukhUdur || "",
+        );
         nekhemjlekh.baritsaaUldegdel =
           nekhemjlekh.baritsaaAvakhDun - nekhemjlekh.baritsaaniiUldegdel;
         nekhemjlekh.baritsaaUldegdel = formatNumber(

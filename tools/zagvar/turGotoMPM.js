@@ -29,7 +29,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 2px;">
       <p style="white-space: nowrap; margin: 0;">Төлбөр хийх хугацаа: ${
         !!medeelel?.nekhemjlekhTulukhUdur
-          ? "&lt;nekhemjlekhTulukhUdur&gt;"
+          ? medeelel.nekhemjlekhTulukhUdur
           : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
       }</p>
     </div>

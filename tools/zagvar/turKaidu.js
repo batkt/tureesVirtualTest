@@ -98,7 +98,7 @@ const khatuuZagvar = (
           <span style="color: #4b5563; font-size: 12px;">Төлбөр хийх хугацаа:</span>
           <span style="font-weight: bold; font-size: 12px;">${
             !!medeelel?.nekhemjlekhTulukhUdur
-              ? "&lt;tulukhUdur&gt;"
+              ? "&lt;nekhemjlekhTulukhUdur&gt;"
               : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
           }</span>
         </div>
