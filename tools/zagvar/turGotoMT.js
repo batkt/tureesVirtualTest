@@ -59,7 +59,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
       <p style="white-space: nowrap; margin: 0;"></p>
       <p style="width: 100%; text-align: left; font-weight: 600; margin: 0;">
         ${
-          !!medeelel?.tulukhUdur
+          !!medeelel?.nekhemjlekhTulukhUdur
             ? "&lt;tulukhUdur&gt;"
             : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
         }

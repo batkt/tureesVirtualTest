@@ -1110,27 +1110,28 @@ function tulburTootsoo({ token }) {
             medeelel.niitAshiglaltiinZardal =
               formatNumber(medeelel.niitAshiglaltiinZardal) || "";
             // gumuda tulukh udur
-            if (ajiltan?.baiguullagiinId === "6937c18083d36cf495dfa855") {
-              const nekhemjlekhTulukhUdur =
-                barilga?.tokhirgoo?.nekhemjlekhTulukhUdur;
 
-              const dayCount = Number(nekhemjlekhTulukhUdur);
+            const nekhemjlekhTulukhUdur = Number(
+              barilga?.tokhirgoo?.nekhemjlekhTulukhUdur,
+            );
+            const dayOfMonth = medeelel.tulukhUdur?.[0]; // e.g. 25
 
-              if (dayCount) {
-                const today = new Date();
-                const dueDate = new Date(today);
-                dueDate.setDate(today.getDate() + dayCount);
+            if (dayOfMonth && nekhemjlekhTulukhUdur) {
+              const now = new Date();
 
-                const dueDateOnly = `${String(dueDate.getMonth() + 1).padStart(
-                  2,
-                  "0",
-                )}/${String(dueDate.getDate()).padStart(
-                  2,
-                  "0",
-                )}/${dueDate.getFullYear()}`;
+              let baseDate = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                dayOfMonth,
+              );
 
-                medeelel.tulukhUdur = dueDateOnly;
-              }
+              baseDate.setDate(baseDate.getDate() + nekhemjlekhTulukhUdur);
+
+              const month = String(baseDate.getMonth() + 1).padStart(2, "0");
+              const day = String(baseDate.getDate()).padStart(2, "0");
+              const year = baseDate.getFullYear();
+
+              medeelel.nekhemjlekhTulukhUdur = `${month}/${day}/${year}`;
             }
 
             medeelel.sar = moment().format("MM");
@@ -1331,8 +1332,11 @@ function tulburTootsoo({ token }) {
                 formatNumber(khungulultKhassanTulukhDunNuat || 0),
               );
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;${a.tulukhUdur}.tulukhUdur&gt;`, "g"),
-                medeelel?.tulukhUdur || "",
+                new RegExp(
+                  `&lt;${a.nekhemjlekhTulukhUdur}.nekhemjlekhTulukhUdur&gt;`,
+                  "g",
+                ),
+                medeelel?.nekhemjlekhTulukhUdur || "",
               );
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(

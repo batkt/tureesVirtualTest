@@ -3,7 +3,7 @@ const khatuuZagvarUranGan = (
   ajiltan,
   baiguullaga,
   barilga,
-  barilgiinId
+  barilgiinId,
 ) => {
   return `
   <div style="display: block; height: 100%; width: 100%; page-break-after: always; h-[5.845in]; font-size: 0.75rem; line-height: 1;">
@@ -45,14 +45,14 @@ const khatuuZagvarUranGan = (
     <div style="margin-bottom: 4px; display: flex; justify-content: space-between; line-height: 1.2;">
       <p style="color: #4b5563; font-size: 12px;margin: 0;">Утас, Факс:</p>
       <p style="font-weight: bold; font-size: 12px;margin: 0;">${baiguullaga?.utas?.join(
-        ","
+        ",",
       )}</p>
     </div>
 
     <div style="margin-bottom: 4px; display: flex; justify-content: space-between; line-height: 1.2;">
       <p style="color: #4b5563; font-size: 12px;margin: 0;">И-мэйл:</p>
       <p style="font-weight: bold; font-size: 12px;margin: 0;">${baiguullaga?.mail?.join(
-        ","
+        ",",
       )}</p>
     </div>
 
@@ -293,13 +293,13 @@ const khatuuZagvarUranGan = (
     <div style="margin-bottom: 0px; display: flex; justify-content: space-between; line-height: 1.2;">
       <p style="color: #4b5563;font-size: 12px;  margin: 0">Утас, Факс:</p>
       <p style="font-weight: bold;  margin: 0">${baiguullaga?.utas?.join(
-        ","
+        ",",
       )}</p>
     </div>
     <div style="margin-bottom: 0px; display: flex; justify-content: space-between; line-height: 1.2;">
       <p style="color: #4b5563;  margin: 0">И-мэйл:</p>
       <p style="font-weight: bold;  margin: 0">${baiguullaga?.mail?.join(
-        ","
+        ",",
       )}</p>
     </div>
     <div style="margin-bottom: 0px; display: flex; justify-content: space-between; line-height: 1.2;">

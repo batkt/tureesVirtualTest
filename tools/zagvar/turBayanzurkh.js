@@ -61,7 +61,7 @@ const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
           <tr>
             <td style="font-size: 11px; padding: 3px 5px;">Төлбөр хийх хугацаа:</td>
             <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
-              !!medeelel?.tulukhUdur
+              !!medeelel?.nekhemjlekhTulukhUdur
                 ? "&lt;tulukhUdur&gt;"
                 : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
             }

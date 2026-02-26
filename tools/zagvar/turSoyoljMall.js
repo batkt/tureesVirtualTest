@@ -178,7 +178,7 @@ const khatuuZagvarSoyoljMall = (
         <div style="display: flex; justify-content: space-between;">
           <span style="">Төлбөр хийх хугацаа:</span>
           <span style="">${
-            !!medeelel?.tulukhUdur
+            !!medeelel?.nekhemjlekhTulukhUdur
               ? "&lt;tulukhUdur&gt;"
               : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
           }</span>

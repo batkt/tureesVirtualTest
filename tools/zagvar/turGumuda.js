@@ -12,6 +12,7 @@ const khatuuZagvarGumuda = (
   ashiglaltDugaarlalt = [0],
   baritsaaDugaarlalt = [0],
 ) => {
+  console.log(medeelel);
   const ashiglaltZardluud =
     medeelel.zardluud
       ?.filter(
@@ -293,7 +294,7 @@ const khatuuZagvarGumuda = (
         <div style="display: flex; font-size:12px; justify-content: space-between;">
           <span style="">Төлбөр хийх хугацаа:</span>
           <span style="">${
-            !!medeelel?.tulukhUdur
+            !!medeelel?.nekhemjlekhTulukhUdur
               ? "&lt;tulukhUdur&gt;"
               : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
           }</span>
