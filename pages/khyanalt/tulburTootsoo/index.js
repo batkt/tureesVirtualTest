@@ -1483,9 +1483,8 @@ function tulburTootsoo({ token }) {
                               {
                                 title: t("Цаг"),
                                 dataIndex: "TxTime",
-                                render(a) {
-                                  if (_.isString(a)) return `${a}`;
-                                  return "";
+                                render(a, data) {
+                                  return a && _.isString(a) ? `${a}` : moment(data.TxDt).format("HH:mm");
                                 },
                               },
                               {
