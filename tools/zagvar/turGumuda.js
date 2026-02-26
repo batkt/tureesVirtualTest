@@ -295,7 +295,7 @@ const khatuuZagvarGumuda = (
           <span style="">Төлбөр хийх хугацаа:</span>
           <span style="">${
             !!medeelel?.nekhemjlekhTulukhUdur
-              ? "&lt;tulukhUdur&gt;"
+              ? "&lt;nekhemjlekhTulukhUdur&gt;"
               : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
           }</span>
         </div>
