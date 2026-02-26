@@ -682,6 +682,22 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
                     </div>
                   );
                 })}
+                {current === 0 && gereeniiZagvar?.ner && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4 ">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: gereeniiZagvar?.zuuKhul,
+                        }}
+                      />
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: gereeniiZagvar?.baruunKhul,
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
               </div>
 
               {khadgalakhGeree?.talbainuud?.length > 0 &&

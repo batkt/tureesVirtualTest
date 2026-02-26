@@ -53,7 +53,7 @@ function ZakhialgaNemekh({ token }) {
         }
       });
   }, [id]);
-
+  console.log(gereeniiZagvar);
   function onFinish(values) {
     setTowchTuluv(true);
     if (!gereeniiZagvar?._id) {
@@ -321,7 +321,9 @@ function ZakhialgaNemekh({ token }) {
               <Input placeholder={t("Гэрээний загварын нэр")} />
             </Form.Item>
             <div className="flex justify-end gap-2">
-              <p className="mt-1 text-gray-900 dark:text-white">{t("Түр гэрээ эсэх")} :</p>
+              <p className="mt-1 text-gray-900 dark:text-white">
+                {t("Түр гэрээ эсэх")} :
+              </p>
               <Form.Item name="turGereeEsekh" valuePropName="checked">
                 <Switch />
               </Form.Item>

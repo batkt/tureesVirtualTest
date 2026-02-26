@@ -91,7 +91,7 @@ function GereeBaiguulakh({ token }) {
     useGereeniiZagvar(token, baiguullaga?._id);
   const { aktiinZagvarGaralt, setAktiinZagvarKhuudaslalt } = useAktiinZagvar(
     token,
-    baiguullaga?._id
+    baiguullaga?._id,
   );
   const next = (data) => {
     if (current === 0 && !gereeniiZagvar) {
@@ -182,7 +182,7 @@ function GereeBaiguulakh({ token }) {
       if (!!data?.gerchilgeeniiZurag)
         data.gerchilgeeniiZurag = _.get(
           data,
-          "gerchilgeeniiZurag.0.response.id"
+          "gerchilgeeniiZurag.0.response.id",
         );
 
       if (!!data?.zuvshuurliinZurag)
@@ -198,7 +198,7 @@ function GereeBaiguulakh({ token }) {
               baritsaaAvakhKhugatsaa: 1,
               baritsaaAvakhSar: _.get(
                 baiguullaga,
-                "tokhirgoo.baritsaaAvakhSar"
+                "tokhirgoo.baritsaaAvakhSar",
               ),
               barilgiinKhayag: songosonBarilgiinHayag,
             });
@@ -284,18 +284,18 @@ function GereeBaiguulakh({ token }) {
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
     if (!butsaakhUtga?.dedKhesguud)
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud?.filter(
-        (a) => a.khamaarakhKheseg === steps[current].title
+        (a) => a.khamaarakhKheseg === steps[current].title,
       );
     khadgalakhGeree.sariinNiilberDun = tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
-        "YYYY"
+        "YYYY",
       );
       khadgalakhGeree.ekhelkhSar = moment(khadgalakhGeree.gereeniiOgnoo).format(
-        "MM"
+        "MM",
       );
       khadgalakhGeree.ekhlekhUdur = moment(
-        khadgalakhGeree.gereeniiOgnoo
+        khadgalakhGeree.gereeniiOgnoo,
       ).format("DD");
       if (khadgalakhGeree.khugatsaa > 0) {
         // let duusakhOgnoo = moment(khadgalakhGeree.gereeniiOgnoo).add(
@@ -311,16 +311,16 @@ function GereeBaiguulakh({ token }) {
     }
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.gereeniiOgnoo = moment(
-        khadgalakhGeree.gereeniiOgnoo
+        khadgalakhGeree.gereeniiOgnoo,
       ).format("YYYY/MM/DD");
     }
-
+    console.log(butsaakhUtga.dedKhesguud);
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
       if (key === "zardluud") {
         value.map((mur) => {
           butsaakhUtga.dedKhesguud
             ?.filter(
-              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1
+              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1,
             )
             .map((b) => {
               b.zaalt = b.zaalt.replace(
@@ -328,10 +328,10 @@ function GereeBaiguulakh({ token }) {
                 key === "utas"
                   ? mur.tariff || mur.dun
                   : parseFloat(mur.tariff || mur.dun) != NaN
-                  ? key != "register"
-                    ? formatNumber(mur.tariff || mur.dun)
-                    : mur.tariff || mur.dun
-                  : formatNumber(mur.tariff || mur.dun)
+                    ? key != "register"
+                      ? formatNumber(mur.tariff || mur.dun)
+                      : mur.tariff || mur.dun
+                    : formatNumber(mur.tariff || mur.dun),
               );
             });
         });
@@ -340,12 +340,12 @@ function GereeBaiguulakh({ token }) {
           butsaakhUtga?.dedKhesguud
             ?.filter(
               (a) =>
-                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
+                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1,
             )
             .map((b) => {
               b.zaalt = b.zaalt.replace(
                 new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"),
-                formatNumber(mur.tulukhDun)
+                formatNumber(mur.tulukhDun),
               );
             });
         });
@@ -354,23 +354,23 @@ function GereeBaiguulakh({ token }) {
           butsaakhUtga?.dedKhesguud
             ?.filter(
               (a) =>
-                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariffUsgeer`) !== -1
+                !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariffUsgeer`) !== -1,
             )
             .map((b) => {
               b.zaalt = b.zaalt.replace(
                 new RegExp(`&lt;${mur.ner}.tariffUsgeer&gt;`, "g"),
-                mur.tariffUsgeer
+                mur.tariffUsgeer,
               );
             });
         });
 
         butsaakhUtga.zuunKhul = butsaakhUtga.zuunKhul?.replace(
           new RegExp(`&lt;${key}&gt;`, "g"),
-          value
+          value,
         );
         butsaakhUtga.baruunKhul = butsaakhUtga.baruunKhul?.replace(
           new RegExp(`&lt;${key}&gt;`, "g"),
-          value
+          value,
         );
       } else {
         butsaakhUtga.dedKhesguud
@@ -380,13 +380,21 @@ function GereeBaiguulakh({ token }) {
               key === "sariinNiilberDun" ? formatNumber(value) : value;
             b.zaalt = b.zaalt.replace(
               new RegExp(`&lt;${key}&gt;`, "g"),
-              orluulakhUtga
+              orluulakhUtga,
             );
           });
+        butsaakhUtga.zuunKhul = butsaakhUtga.zuunKhul?.replace(
+          new RegExp(`&lt;${key}&gt;`, "g"),
+          key === "sariinNiilberDun" ? formatNumber(value) : value,
+        );
+        butsaakhUtga.baruunKhul = butsaakhUtga.baruunKhul?.replace(
+          new RegExp(`&lt;${key}&gt;`, "g"),
+          key === "sariinNiilberDun" ? formatNumber(value) : value,
+        );
       }
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
-        key === "sariinNiilberDun" ? formatNumber(value) : value
+        key === "sariinNiilberDun" ? formatNumber(value) : value,
       );
     }
     return butsaakhUtga;
@@ -397,18 +405,18 @@ function GereeBaiguulakh({ token }) {
     let butsaakhUtga = _.cloneDeep(aktiinZagvar);
     if (!butsaakhUtga?.dedKhesguud)
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
-        (a) => a.khamaarakhKheseg === steps[current].title
+        (a) => a.khamaarakhKheseg === steps[current].title,
       );
     khadgalakhGeree.sariinNiilberDun = tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
-        "YYYY"
+        "YYYY",
       );
       khadgalakhGeree.ekhelkhSar = moment(khadgalakhGeree.gereeniiOgnoo).format(
-        "MM"
+        "MM",
       );
       khadgalakhGeree.ekhlekhUdur = moment(
-        khadgalakhGeree.gereeniiOgnoo
+        khadgalakhGeree.gereeniiOgnoo,
       ).format("DD");
       if (khadgalakhGeree.khugatsaa > 0) {
         // let duusakhOgnoo = moment(khadgalakhGeree.gereeniiOgnoo).add(
@@ -431,15 +439,15 @@ function GereeBaiguulakh({ token }) {
         });
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
-        value
+        value,
       );
       butsaakhUtga.zuunKhul = butsaakhUtga.zuunKhul?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
-        value
+        value,
       );
       butsaakhUtga.baruunKhul = butsaakhUtga.baruunKhul?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
-        value
+        value,
       );
     }
     return butsaakhUtga;
@@ -491,6 +499,7 @@ function GereeBaiguulakh({ token }) {
   const onChange = (value) => {
     alkhamSoliyo(value);
   };
+
   return (
     <Admin
       khuudasniiNer="gereeBaiguulakh"
@@ -554,11 +563,10 @@ function GereeBaiguulakh({ token }) {
           </div>
           {!!gereeniiZagvar && (
             <div
-              className={`${
-                gereekharakhTovch !== true
-                  ? "bottom-20 right-5"
-                  : "bottom-[72vh] right-1"
-              } fixed z-50 rounded-full border-2 bg-green-600 p-2 text-2xl text-white transition-all duration-300 md:hidden`}
+              className={`${gereekharakhTovch !== true
+                ? "bottom-20 right-5"
+                : "bottom-[72vh] right-1"
+                } fixed z-50 rounded-full border-2 bg-green-600 p-2 text-2xl text-white transition-all duration-300 md:hidden`}
             >
               {gereekharakhTovch !== true ? (
                 <FileTextOutlined
@@ -577,11 +585,9 @@ function GereeBaiguulakh({ token }) {
             </div>
           )}
           <div
-            className={`fixed top-40 col-span-12 mt-3 w-[91vw] transition-all duration-300 md:w-auto ${
-              gereekharakhTovch !== true ? " -right-full" : " right-4"
-            } border-2 border-green-600 bg-gray-50 p-2 dark:bg-gray-900 md:static md:border-0 ${
-              gereekharakhTovch !== true ? "hidden md:block" : ""
-            } lg:col-span-6 2xl:col-span-8`}
+            className={`fixed top-40 col-span-12 mt-3 w-[91vw] transition-all duration-300 md:w-auto ${gereekharakhTovch !== true ? " -right-full" : " right-4"
+              } border-2 border-green-600 bg-gray-50 p-2 dark:bg-gray-900 md:static md:border-0 ${gereekharakhTovch !== true ? "hidden md:block" : ""
+              } lg:col-span-6 2xl:col-span-8`}
             style={{
               maxHeight: "calc(100vh - 17rem)",
               overflow: "auto",
@@ -654,14 +660,14 @@ function GereeBaiguulakh({ token }) {
                         mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
                           ? "erunkhiiMedeelel"
                           : mur.khamaarakhKheseg === "Гэрээний хугацаа"
-                          ? "gereeniiKhugatsaa"
-                          : mur.khamaarakhKheseg === "Түрээсийн талбай"
-                          ? "tureesiinTalbai"
-                          : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
-                          ? "baritsaaBurtgel"
-                          : mur.khamaarakhKheseg === "Төлбөр тооцоо"
-                          ? "tulburToostoo"
-                          : ""
+                            ? "gereeniiKhugatsaa"
+                            : mur.khamaarakhKheseg === "Түрээсийн талбай"
+                              ? "tureesiinTalbai"
+                              : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
+                                ? "baritsaaBurtgel"
+                                : mur.khamaarakhKheseg === "Төлбөр тооцоо"
+                                  ? "tulburToostoo"
+                                  : ""
                       }
                       key={`alkhamiinGereeniiZagvar${index}`}
                       className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -766,14 +772,14 @@ function GereeBaiguulakh({ token }) {
                           mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
                             ? "erunkhiiMedeelel"
                             : mur.khamaarakhKheseg === "Гэрээний хугацаа"
-                            ? "gereeniiKhugatsaa"
-                            : mur.khamaarakhKheseg === "Түрээсийн талбай"
-                            ? "tureesiinTalbai"
-                            : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
-                            ? "baritsaaBurtgel"
-                            : mur.khamaarakhKheseg === "Төлбөр тооцоо"
-                            ? "tulburToostoo"
-                            : ""
+                              ? "gereeniiKhugatsaa"
+                              : mur.khamaarakhKheseg === "Түрээсийн талбай"
+                                ? "tureesiinTalbai"
+                                : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
+                                  ? "baritsaaBurtgel"
+                                  : mur.khamaarakhKheseg === "Төлбөр тооцоо"
+                                    ? "tulburToostoo"
+                                    : ""
                         }
                         key={`alkhamiinAktiinZagvar${index}`}
                         className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
