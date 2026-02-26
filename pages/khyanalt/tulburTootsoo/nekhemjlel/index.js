@@ -1128,9 +1128,11 @@ function tulburTootsoo({ token }) {
                   2,
                   "0",
                 )}/${dueDate.getFullYear()}`;
+
                 medeelel.tulukhUdur = dueDateOnly;
               }
             }
+
             medeelel.sar = moment().format("MM");
             medeelel.ekhlekhOn = moment(ognoo).format("YYYY");
             medeelel.ekhelkhSar = moment(ognoo).format("MM");
@@ -1320,12 +1322,17 @@ function tulburTootsoo({ token }) {
                 ),
                 formatNumber(khungulultKhassanTulukhDun || 0),
               );
+
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(
                   `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuat&gt;`,
                   "g",
                 ),
                 formatNumber(khungulultKhassanTulukhDunNuat || 0),
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.tulukhUdur}.tulukhUdur&gt;`, "g"),
+                medeelel?.tulukhUdur || "",
               );
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(
