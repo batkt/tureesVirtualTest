@@ -3,7 +3,7 @@ const khatuuZagvar = (
   ajiltan,
   baiguullaga,
   barilgiinId,
-  dugaarlalt = [0]
+  dugaarlalt = [0],
 ) => {
   return `
   <div style="height: 100%; width: 100%; font-family: Arial, sans-serif;">
@@ -96,7 +96,11 @@ const khatuuZagvar = (
         </div>
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
           <span style="color: #4b5563; font-size: 12px;">Төлбөр хийх хугацаа:</span>
-          <span style="font-weight: bold; font-size: 12px;">&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;</span>
+          <span style="font-weight: bold; font-size: 12px;">${
+            !!medeelel?.tulukhUdur
+              ? "&lt;tulukhUdur&gt;"
+              : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
+          }</span>
         </div>
       </div>
     </div>
@@ -326,7 +330,7 @@ const khatuuZagvar = (
               !a.tailbar?.includes("ус") &&
               !a.tailbar?.includes("Менежмент") &&
               !a.tailbar?.includes("Дулаан") &&
-              !a.tailbar?.includes("Цахилгаан")
+              !a.tailbar?.includes("Цахилгаан"),
           )
           .map((mur, index) => {
             return `

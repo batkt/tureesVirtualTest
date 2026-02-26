@@ -58,7 +58,11 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
     <div style="display: flex; align-items: flex-start; justify-content: space-between;">
       <p style="white-space: nowrap; margin: 0;"></p>
       <p style="width: 100%; text-align: left; font-weight: 600; margin: 0;">
-        &lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;
+        ${
+          !!medeelel?.tulukhUdur
+            ? "&lt;tulukhUdur&gt;"
+            : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
+        }
       </p>
     </div>
   </div>
@@ -125,7 +129,7 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
             (a) =>
               a.tailbar === "Тавилга түрээс" ||
               a.tailbar === "Худалдааны менежмент" ||
-              a.tailbar === "Түрээсийн төлбөр нэмэлт"
+              a.tailbar === "Түрээсийн төлбөр нэмэлт",
           )
           .map((mur, index) => {
             return `

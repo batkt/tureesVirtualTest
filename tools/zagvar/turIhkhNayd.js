@@ -4,7 +4,7 @@ const khatuuZagvarIkhNayd = (
   baiguullaga,
   barilga,
   baiguullagiinId,
-  barilgiinId
+  barilgiinId,
 ) => {
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
@@ -12,10 +12,10 @@ const khatuuZagvarIkhNayd = (
         a.tailbar?.includes("Цахилгаан") ||
         a.tailbar?.includes("Халуун ус") ||
         a.tailbar?.includes("Хүйтэн ус") ||
-        a.tailbar?.includes("Газ")
+        a.tailbar?.includes("Газ"),
     )
     .sort((a, b) =>
-      a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+      a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" }),
     );
 
   const ashiglaltTable =
@@ -178,7 +178,11 @@ const khatuuZagvarIkhNayd = (
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span style="">Төлбөр хийх хугацаа:</span>
-          <span style="">&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;</span>
+          <span style="">${
+            !!medeelel?.tulukhUdur
+              ? "&lt;tulukhUdur&gt;"
+              : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
+          }</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span>&nbsp;&nbsp;&nbsp;</span>
@@ -261,7 +265,8 @@ const khatuuZagvarIkhNayd = (
 
         ${medeelel.zardluud
           .filter(
-            (a) => !a.tailbar?.includes("менежмент") && a.tailbar != "Хөнгөлөлт"
+            (a) =>
+              !a.tailbar?.includes("менежмент") && a.tailbar != "Хөнгөлөлт",
           )
           .map(
             (mur, index) => `
@@ -281,7 +286,7 @@ const khatuuZagvarIkhNayd = (
               mur.tailbar
             }.khungulultKhassanTulukhDun&gt;
             </td>
-          </tr>`
+          </tr>`,
           )
           .join("")}
       </tbody>

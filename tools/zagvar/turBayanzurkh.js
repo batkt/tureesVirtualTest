@@ -60,7 +60,11 @@ const khatuuZagvarBayanzurkh = (medeelel, ajiltan, baiguullaga) => {
           </tr>
           <tr>
             <td style="font-size: 11px; padding: 3px 5px;">Төлбөр хийх хугацаа:</td>
-            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;</td>
+            <td style="font-size: 11px; padding: 3px 5px; border-bottom: 1px dotted #999; text-align: right;">${
+              !!medeelel?.tulukhUdur
+                ? "&lt;tulukhUdur&gt;"
+                : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
+            }
           </tr>
           <tr>
             <td style="font-size: 11px; padding: 3px 5px;">Банкны нэр:</td>

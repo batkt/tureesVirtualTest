@@ -12,7 +12,6 @@ const khatuuZagvarGumuda = (
   ashiglaltDugaarlalt = [0],
   baritsaaDugaarlalt = [0],
 ) => {
-  console.log(medeelel?.tulukhUdur);
   const ashiglaltZardluud =
     medeelel.zardluud
       ?.filter(

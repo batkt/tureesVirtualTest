@@ -16,7 +16,7 @@ const getNiitForZardal = (mur, ashiglaltiinZardal, barilgiinId) => {
   const negj = parseNum(mur.negj);
   if (tariff > 0) return (negj || 1) * tariff - khungulult;
   const fromTailbar = parseNum(
-    String(mur.tailbar || "").match(/[\d,]+(?:\.\d+)?/)?.[0]
+    String(mur.tailbar || "").match(/[\d,]+(?:\.\d+)?/)?.[0],
   );
   return fromTailbar >= 1000 ? fromTailbar - khungulult : 0;
 };
@@ -25,7 +25,8 @@ const getFromTailbar = (tailbar) => {
   const m = String(tailbar || "").match(/[\d,]+(?:\.\d+)?/);
   const val = parseNum(m?.[0]);
   if (val >= 1000) return val;
-  if (val >= 1 && val < 1000 && /тог\s*\d+/i.test(tailbar || "")) return val * 1000;
+  if (val >= 1 && val < 1000 && /тог\s*\d+/i.test(tailbar || ""))
+    return val * 1000;
   return 0;
 };
 
@@ -36,10 +37,10 @@ const khatuuZagvarIkhNayd = (
   barilga,
   baiguullagiinId,
   barilgiinId,
-  
+
   ashiglaltDugaarlalt = [0],
   baritsaaDugaarlalt = [0],
-  ashiglaltiinZardal
+  ashiglaltiinZardal,
 ) => {
   const ashiglaltZardluud = medeelel.zardluud
     ?.filter(
@@ -47,13 +48,13 @@ const khatuuZagvarIkhNayd = (
         a.tailbar?.includes("Цахилгаан") ||
         a.tailbar?.includes("Халуун ус") ||
         a.tailbar?.includes("Хүйтэн ус") ||
-        a.tailbar?.includes("Газ")
+        a.tailbar?.includes("Газ"),
     )
     .sort((a, b) =>
-      a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" })
+      a.tailbar.localeCompare(b.tailbar, "en", { sensitivity: "base" }),
     );
   const murNemekh = [];
-const dugaarlalt = [0];
+  const dugaarlalt = [0];
   const ashiglaltTable =
     ashiglaltZardluud.length > 0
       ? `
@@ -86,8 +87,12 @@ const dugaarlalt = [0];
                 <td style="border: 1px solid #000; text-align: center; font-size:12px">&lt;${
                   mur.tailbar
                 }.suuliinZaalt&gt;</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">${formatNumber(mur?.negj || 0)}</td>
-                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">${formatNumber(mur?.tariff || 0)}</td>
+                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">${formatNumber(
+                  mur?.negj || 0,
+                )}</td>
+                <td style="border: 1px solid #000; text-align: center; width: 16%; font-size:12px">${formatNumber(
+                  mur?.tariff || 0,
+                )}</td>
               </tr>`;
           })
           .join("")}
@@ -241,7 +246,11 @@ const dugaarlalt = [0];
         </div>
         <div style="display: flex; font-size:12px; justify-content: space-between;">
           <span style="">Төлбөр хийх хугацаа:</span>
-          <span style="">&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;</span>
+          <span style="">${
+            !!medeelel?.tulukhUdur
+              ? "&lt;tulukhUdur&gt;"
+              : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
+          }</span>
         </div>
         <div style="display: flex; font-size:12px; justify-content: space-between;">
           <span>&nbsp;&nbsp;&nbsp;</span>
@@ -313,7 +322,15 @@ const dugaarlalt = [0];
                 <td style="border: 1px solid #000; font-size:12px; text-align: right; ">
                   &lt;${mur.tailbar}.khungulult&gt;
                 </td>
-                <td style="border: 1px solid #000; font-size:12px; text-align: right; font-size: 12px;">${(barilga === "622ec99a8e64e5b4f0c3acb6" ? niitVal : null) != null ? niitVal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "&lt;" + mur.tailbar + ".khungulultKhassanTulukhDun&gt;"}</td>
+                <td style="border: 1px solid #000; font-size:12px; text-align: right; font-size: 12px;">${
+                  (barilga === "622ec99a8e64e5b4f0c3acb6" ? niitVal : null) !=
+                  null
+                    ? niitVal.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })
+                    : "&lt;" + mur.tailbar + ".khungulultKhassanTulukhDun&gt;"
+                }</td>
               </tr>
             `;
            })
@@ -321,51 +338,57 @@ const dugaarlalt = [0];
 
         ${medeelel.zardluud
           .filter(
-            (a) => !a.tailbar?.includes("менежмент") && a.tailbar != "Хөнгөлөлт"
+            (a) =>
+              !a.tailbar?.includes("менежмент") && a.tailbar != "Хөнгөлөлт",
           )
-          .map(
-            (mur, index) => {
-              const niitVal = getNiitForZardal(mur, ashiglaltiinZardal, barilga);
-              const displayNiit = barilga === "622ec99a8e64e5b4f0c3acb6" ? niitVal : null;
-              const tariffItem =
-                ashiglaltiinZardal?.jagsaalt?.find((b) => b.ner === mur.tailbar) ||
-                ashiglaltiinZardal?.jagsaalt?.find((b) => mur.tailbar?.includes(b.ner));
-              const tariffForQty = parseNum(mur.tariff) || parseNum(tariffItem?.tariff);
-              const fromTailbar = getFromTailbar(mur.tailbar);
-              const isUtility =
-                mur.tailbar?.includes("Халуун ус") ||
-                mur.tailbar?.includes("Хүйтэн ус") ||
-                mur.tailbar?.includes("Цахилгаан") ||
-                mur.tailbar?.includes("Хаягжилт");
-              const isFixedFee =
-                barilga === "622ec99a8e64e5b4f0c3acb6" &&
-                displayNiit > 0 &&
-                tariffForQty === 0;
-              const isFixedFeeFromTailbar =
-                (mur.tailbar?.includes("Хог") || mur.tailbar?.includes("Хаягжилт")) &&
-                tariffForQty === 0 &&
-                fromTailbar > 0;
-              const displayQty =
-                mur.tailbar.includes("Дулаан")
-                  ? ` &lt;talbainKhemjeeMetrKube&gt;`
-                  : isFixedFee || isFixedFeeFromTailbar
-                  ? "1"
-                  : isUtility
-                  ? `${mur?.negj || 0}`
-                  : `1`;
-              const displayTariff =
-                isFixedFee && displayNiit > 0
-                  ? displayNiit.toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  : isFixedFeeFromTailbar
-                  ? fromTailbar.toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  : null;
-              return `
+          .map((mur, index) => {
+            const niitVal = getNiitForZardal(mur, ashiglaltiinZardal, barilga);
+            const displayNiit =
+              barilga === "622ec99a8e64e5b4f0c3acb6" ? niitVal : null;
+            const tariffItem =
+              ashiglaltiinZardal?.jagsaalt?.find(
+                (b) => b.ner === mur.tailbar,
+              ) ||
+              ashiglaltiinZardal?.jagsaalt?.find((b) =>
+                mur.tailbar?.includes(b.ner),
+              );
+            const tariffForQty =
+              parseNum(mur.tariff) || parseNum(tariffItem?.tariff);
+            const fromTailbar = getFromTailbar(mur.tailbar);
+            const isUtility =
+              mur.tailbar?.includes("Халуун ус") ||
+              mur.tailbar?.includes("Хүйтэн ус") ||
+              mur.tailbar?.includes("Цахилгаан") ||
+              mur.tailbar?.includes("Хаягжилт");
+            const isFixedFee =
+              barilga === "622ec99a8e64e5b4f0c3acb6" &&
+              displayNiit > 0 &&
+              tariffForQty === 0;
+            const isFixedFeeFromTailbar =
+              (mur.tailbar?.includes("Хог") ||
+                mur.tailbar?.includes("Хаягжилт")) &&
+              tariffForQty === 0 &&
+              fromTailbar > 0;
+            const displayQty = mur.tailbar.includes("Дулаан")
+              ? ` &lt;talbainKhemjeeMetrKube&gt;`
+              : isFixedFee || isFixedFeeFromTailbar
+              ? "1"
+              : isUtility
+              ? `${mur?.negj || 0}`
+              : `1`;
+            const displayTariff =
+              isFixedFee && displayNiit > 0
+                ? displayNiit.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                : isFixedFeeFromTailbar
+                ? fromTailbar.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                : null;
+            return `
           <tr>
             <td style="border: 1px solid #000; font-size:12px; text-align:center;">${++dugaarlalt[0]}</td>
             <td style="border: 1px solid #000; font-size:12px;">${
@@ -373,15 +396,25 @@ const dugaarlalt = [0];
             }</td>
             <td style="border: 1px solid #000; font-size:12px; text-align:center;">${displayQty}</td>
             <td style="border: 1px solid #000; font-size:12px; text-align: center;">
-                  ${displayTariff != null ? displayTariff : formatNumber(mur?.tariff || 0)}
+                  ${
+                    displayTariff != null
+                      ? displayTariff
+                      : formatNumber(mur?.tariff || 0)
+                  }
             </td>
             <td style="border: 1px solid #000; font-size:12px; text-align: right; width: 16%;">
               &lt;${mur.tailbar}.khungulult&gt;
             </td>
-            <td style="border: 1px solid #000; font-size:12px; text-align: right; font-size: 12px;">${displayNiit != null ? displayNiit.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "&lt;" + mur.tailbar + ".khungulultKhassanTulukhDun&gt;"}</td>
+            <td style="border: 1px solid #000; font-size:12px; text-align: right; font-size: 12px;">${
+              displayNiit != null
+                ? displayNiit.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                : "&lt;" + mur.tailbar + ".khungulultKhassanTulukhDun&gt;"
+            }</td>
           </tr>`;
-            }
-          )
+          })
           .join("")}
       </tbody>
        <tfoot style="border: none;">

@@ -27,7 +27,11 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
       <p style="white-space: nowrap; margin: 0;">Нэхэмжилсэн огноо:</p>
     </div>
     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 2px;">
-      <p style="white-space: nowrap; margin: 0;">Төлбөр хийх хугацаа:</p>
+      <p style="white-space: nowrap; margin: 0;">Төлбөр хийх хугацаа: ${
+        !!medeelel?.tulukhUdur
+          ? "&lt;tulukhUdur&gt;"
+          : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
+      }</p>
     </div>
   </div>
 
@@ -129,7 +133,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           medeelel.zardluud.filter(
             (a) =>
               a.tailbar?.includes("Хөрөнгийн менежмент") ||
-              a.tailbar === "Худалдааны менежмент"
+              a.tailbar === "Худалдааны менежмент",
           ).length > 0
             ? ""
             : `
@@ -164,7 +168,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
           .filter(
             (a) =>
               a.tailbar?.includes("Хөрөнгийн менежмент") ||
-              a.tailbar?.includes("Худалдааны менежмент")
+              a.tailbar?.includes("Худалдааны менежмент"),
           )
           .map((mur, index) => {
             return `
@@ -224,7 +228,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
               a.tailbar === "Эрүүл ахуйч" ||
               a.tailbar === "Харуул хамгаалалт, ОБЕГ, ХАБ" ||
               a.tailbar === "Дулаан" ||
-              a.tailbar === "Ус"
+              a.tailbar === "Ус",
           )
           .map((mur, index) => {
             return `

@@ -88,7 +88,11 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;"><b>Төлбөр хийх хугацаа:</b></p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            <b>&nbsp;&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;</b>
+            <b>&nbsp;${
+              !!medeelel?.tulukhUdur
+                ? "&lt;tulukhUdur&gt;"
+                : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
+            }</b>
           </p>
         </div>
       </div>
@@ -126,7 +130,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               (a) =>
                 a.tailbar?.includes("Менежментийн төлбөр") ||
                 a.tailbar === "Менежментийн зардал" ||
-                a.tailbar === "Менежмент"
+                a.tailbar === "Менежмент",
             )
             .map((mur, index) => {
               return `
