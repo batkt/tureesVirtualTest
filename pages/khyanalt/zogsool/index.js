@@ -719,7 +719,10 @@ function Zogsool({ token }) {
           {
             niitDun: 0,
             "tuukh.0.tuluv": { $ne: -2 },
-            "tuukh.0.tulbur.dun": { $eq: 0 },
+            $or: [
+              { "tuukh.0.tulbur.dun": 0 },
+              { "tuukh.0.tulbur": { $size: 0 } },
+            ],
           },
           { turul: "Үнэгүй" },
           { "tuukh.0.uneguiGarsan": { $exists: true } },
