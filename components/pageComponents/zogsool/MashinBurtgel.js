@@ -545,11 +545,9 @@ function MashinBurtgel(
                       className="w-full"
                       min={0}
                       placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
+                      value={form.getFieldValue("uldegdelKhungulukhKhugatsaa")}
                       onChange={(value) => {
-                        if (
-                          !data?.khungulukhKhugatsaa ||
-                          data?.uldegdelKhungulukhKhugatsaa === 0
-                        ) {
+                        if (data?.uldegdelKhungulukhKhugatsaa) {
                           form.setFieldValue(
                             "uldegdelKhungulukhKhugatsaa",
                             value || 0,
@@ -567,7 +565,9 @@ function MashinBurtgel(
                       type="number"
                       className="w-full"
                       min={0}
-                      value={10}
+                      value={
+                        form.getFieldValue("uldegdelKhungulukhKhugatsaa") || 0
+                      }
                     />
                   </Form.Item>
                 </React.Fragment>
