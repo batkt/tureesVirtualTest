@@ -22,7 +22,7 @@ function BarilgiinTokhirgoo({
 }) {
   const { t } = useTranslation();
   const [songogdsonBarilga, setSongogdsonBarilga] = useState(
-    barilgiinId || null
+    barilgiinId || null,
   );
   const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState();
 
@@ -33,7 +33,7 @@ function BarilgiinTokhirgoo({
 
   const barilga = useMemo(
     () => baiguullaga?.barilguud?.find((a) => a._id === songogdsonBarilga),
-    [songogdsonBarilga]
+    [songogdsonBarilga],
   );
 
   const duurguud = useJagsaalt("/tatvariinAlba");
@@ -70,16 +70,13 @@ function BarilgiinTokhirgoo({
         eBarimtBugdShivikh: barilga?.tokhirgoo?.eBarimtBugdShivikh
           ? barilga?.tokhirgoo?.eBarimtBugdShivikh
           : undefined,
-        nekhemjlekhTulukhUdur: barilga?.tokhirgoo?.nekhemjlekhTulukhUdur
-          ? barilga?.tokhirgoo?.nekhemjlekhTulukhUdur
-          : undefined,
       });
       setSongogdsonDuuregKod(barilga?.tokhirgoo?.districtCode?.substring(0, 2));
 
       setSongogdsonDuureg(
         duurguud?.jagsaalt?.find(
-          (e) => e.kod === barilga?.tokhirgoo?.districtCode?.substring(0, 2)
-        )
+          (e) => e.kod === barilga?.tokhirgoo?.districtCode?.substring(0, 2),
+        ),
       );
 
       setSongogdsonHorooKod(barilga?.tokhirgoo?.districtCode?.substring(2));
@@ -90,7 +87,7 @@ function BarilgiinTokhirgoo({
     const yavuulakhData = { ...baiguullaga };
     const barilguudCopy = [...yavuulakhData?.barilguud];
     const tukhainBarilgiinIndex = barilguudCopy.findIndex(
-      (a) => a._id === songogdsonBarilga
+      (a) => a._id === songogdsonBarilga,
     );
 
     if (tukhainBarilgiinIndex !== -1) {
@@ -207,7 +204,7 @@ function BarilgiinTokhirgoo({
                     <div className="font-medium">{t("Алдангийн хувь")}</div>
                     <div className="text-gray-600">
                       {t(
-                        "Гэрээний төлөлт хугацаа хэтэрсэн үед тооцох алдангийн хувь"
+                        "Гэрээний төлөлт хугацаа хэтэрсэн үед тооцох алдангийн хувь",
                       )}
                     </div>
                   </div>
@@ -235,7 +232,7 @@ function BarilgiinTokhirgoo({
                     </div>
                     <div className="text-gray-600">
                       {t(
-                        "Алданги хугацаа хэтэрсэн хоногоос хэд хоногийн дараагаас бодож эхлэх хоног"
+                        "Алданги хугацаа хэтэрсэн хоногоос хэд хоногийн дараагаас бодож эхлэх хоног",
                       )}
                     </div>
                   </div>
@@ -380,7 +377,7 @@ function BarilgiinTokhirgoo({
                       value={songogdsonDuuregKod}
                       onChange={(v) => {
                         setSongogdsonDuureg(
-                          duurguud?.jagsaalt?.find((e) => e.kod === v)
+                          duurguud?.jagsaalt?.find((e) => e.kod === v),
                         );
                         setSongogdsonDuuregKod(v);
                         setSongogdsonHoroo();
@@ -414,7 +411,7 @@ function BarilgiinTokhirgoo({
                       value={songogdsonHorooKod}
                       onChange={(v) => {
                         setSongogdsonHoroo(
-                          songogdsonDuureg?.ded?.find((e) => e.kod === v)
+                          songogdsonDuureg?.ded?.find((e) => e.kod === v),
                         );
                         setSongogdsonHorooKod(v);
                         setBarilgaTokhirgoo((a) => ({
@@ -503,7 +500,7 @@ function BarilgiinTokhirgoo({
                 <div className="font-medium">{t("Corporate ашиглах үед")}</div>
                 <div className="text-gray-600">
                   {t(
-                    "И Баримтын сугалааны дугаар болон төлсөн дүнг хэрэглэгч руу мессежээр илгээх эсэх"
+                    "И Баримтын сугалааны дугаар болон төлсөн дүнг хэрэглэгч руу мессежээр илгээх эсэх",
                   )}
                 </div>
               </div>
@@ -520,27 +517,10 @@ function BarilgiinTokhirgoo({
               </div>
             </div>
           </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Нэхэмжлэх төлөх өдөр")}</div>
-              </div>
-              <div className="ml-auto w-20">
-                <Input
-                  value={barilgaTokhirgoo?.nekhemjlekhTulukhUdur}
-                  onChange={({ target }) =>
-                    setBarilgaTokhirgoo((a) => ({
-                      ...(a || {}),
-                      nekhemjlekhTulukhUdur: target.value,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
           <div
-            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${!!barilgaTokhirgoo ? "flex" : "hidden"
-              }`}
+            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
+              !!barilgaTokhirgoo ? "flex" : "hidden"
+            }`}
           >
             <Button type="primary" onClick={barilgaTokhirgooKhadgalya}>
               {t("Хадгалах")}

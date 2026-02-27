@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   Button,
   Form,
@@ -29,7 +29,7 @@ function KhuviinMedeelel({
   const { t } = useTranslation();
   const { ajilchdiinGaralt, ajiltniiJagsaaltMutate } = useAjiltniiJagsaalt(
     token,
-    ajiltan?.baiguullagiinId
+    ajiltan?.baiguullagiinId,
   );
   const [cropKey, setCropKey] = useState({
     tamga: Date.now(),
@@ -51,7 +51,7 @@ function KhuviinMedeelel({
 
   const barilga = useMemo(
     () => baiguullaga.barilguud.find((a) => a._id === barilgiinId),
-    [barilgiinId]
+    [barilgiinId, baiguullaga],
   );
   const [kharakhZurgiinZam, setKharakhZurgiinZam] = useState(false);
   const [gariinUsegKharakhZam, setGariinUsegKharakhZam] = useState(false);
@@ -78,14 +78,7 @@ function KhuviinMedeelel({
     udruurBodokhEsekh: baiguullaga?.tokhirgoo?.udruurBodokhEsekh,
   });
 
-  const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState({
-    jilBurTalbaiTulburNemekhEsekh:
-      barilga?.tokhirgoo?.jilBurTalbaiTulburNemekhEsekh,
-    jilBurTulbur: barilga?.tokhirgoo?.jilBurTulbur,
-    gereeDuusakhTalbaiTulburNemekhEsekh:
-      barilga?.tokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
-    gereeDuusakhTulbur: barilga?.tokhirgoo?.gereeDuusakhTulbur,
-  });
+  const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState(null);
 
   const zuragKhadgalakh = (v, turul) => {
     if (v.file.status === "done") {
@@ -178,14 +171,6 @@ function KhuviinMedeelel({
         bichiltKhonog: gereeTokhirgoo?.bichiltKhonog,
 
         udruurBodokhEsekh: gereeTokhirgoo?.udruurBodokhEsekh,
-
-        jilBurTalbaiTulburNemekhEsekh:
-          barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh,
-        jilBurTulbur: barilgaTokhirgoo?.jilBurTulbur,
-        gereeDuusakhTalbaiTulburNemekhEsekh:
-          barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
-        gereeDuusakhTulbur: barilgaTokhirgoo?.gereeDuusakhTulbur,
-        qpayShimtgelTusdaa: gereeTokhirgoo?.qpayShimtgelTusdaa,
       },
     };
 
@@ -199,7 +184,42 @@ function KhuviinMedeelel({
         }
       });
   };
+  const barilgaTokhirgooKhadgalya = () => {
+    const payload = {
+      baiguullagiinId: baiguullaga?._id,
+      barilgaId: barilga?._id,
+      tokhirgoo: {
+        jilBurTalbaiTulburNemekhEsekh:
+          barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh,
+        jilBurTulbur: barilgaTokhirgoo?.jilBurTulbur,
+        gereeDuusakhTalbaiTulburNemekhEsekh:
+          barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh,
+        gereeDuusakhTulbur: barilgaTokhirgoo?.gereeDuusakhTulbur,
+        nekhemjlekhTulukhUdur: barilgaTokhirgoo?.nekhemjlekhTulukhUdur,
+      },
+    };
 
+    uilchilgee(token)
+      .post("/barilgaTokhirgooZasya", payload)
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          baiguullagaMutate();
+        }
+      });
+  };
+  useEffect(() => {
+    if (barilga?.tokhirgoo) {
+      setBarilgaTokhirgoo({
+        jilBurTalbaiTulburNemekhEsekh:
+          barilga.tokhirgoo.jilBurTalbaiTulburNemekhEsekh,
+        jilBurTulbur: barilga.tokhirgoo.jilBurTulbur,
+        gereeDuusakhTalbaiTulburNemekhEsekh:
+          barilga.tokhirgoo.gereeDuusakhTalbaiTulburNemekhEsekh,
+        gereeDuusakhTulbur: barilga.tokhirgoo.gereeDuusakhTulbur,
+        nekhemjlekhTulukhUdur: barilga.tokhirgoo.nekhemjlekhTulukhUdur,
+      });
+    }
+  }, [barilga]);
   function khadgalakh() {
     const index = baiguullaga.barilguud.findIndex((a) => a._id === barilgiinId);
 
@@ -222,6 +242,10 @@ function KhuviinMedeelel({
     }
 
     if (!!barilgaTokhirgoo) {
+      console.log("orloo");
+      if (!baiguullaga.barilguud[index].tokhirgoo) {
+        baiguullaga.barilguud[index].tokhirgoo = {};
+      }
       baiguullaga.barilguud[index].tokhirgoo.jilBurTalbaiTulburNemekhEsekh =
         barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh;
       baiguullaga.barilguud[index].tokhirgoo.jilBurTulbur =
@@ -232,6 +256,8 @@ function KhuviinMedeelel({
         barilgaTokhirgoo?.gereeDuusakhTalbaiTulburNemekhEsekh;
       baiguullaga.barilguud[index].tokhirgoo.gereeDuusakhTulbur =
         barilgaTokhirgoo?.gereeDuusakhTulbur;
+      // baiguullaga.barilguud[index].tokhirgoo.nekhemjlekhTulukhUdur =
+      //   barilgaTokhirgoo?.nekhemjlekhTulukhUdur;
     }
     _.set(baiguullaga, `barilguud.${index}`, baiguullaga.barilguud[index]);
     updateMethod("baiguullaga", token, baiguullaga).then(({ data }) => {
@@ -327,7 +353,7 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
-          <div className="box">
+          {/* <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">
@@ -335,7 +361,7 @@ function KhuviinMedeelel({
                 </div>
                 <div className="text-gray-600">
                   {t(
-                    "Урт хугацааны гэрээтэй үед автоматаар жил бүр сарын талбайн төлбөр идэвхжүүлэх эсэх"
+                    "Урт хугацааны гэрээтэй үед автоматаар жил бүр сарын талбайн төлбөр идэвхжүүлэх эсэх",
                   )}{" "}
                 </div>
               </div>
@@ -353,8 +379,8 @@ function KhuviinMedeelel({
                 />
               </div>
             </div>
-          </div>
-          {barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh ? (
+          </div> */}
+          {/* {barilgaTokhirgoo?.jilBurTalbaiTulburNemekhEsekh ? (
             <div className="box">
               <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">
@@ -384,18 +410,18 @@ function KhuviinMedeelel({
             </div>
           ) : (
             ""
-          )}
-          <div className="box">
+          )} */}
+          {/* <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">
                   {t(
-                    "Гэрээ дуусах үед түрээсийн үнэ тогтмол төлбөр нэмэх эсэх"
+                    "Гэрээ дуусах үед түрээсийн үнэ тогтмол төлбөр нэмэх эсэх",
                   )}
                 </div>
                 <div className="text-gray-600">
                   {t(
-                    "Гэрээ дуусах үед автоматаар жил бүр сарын талбайн төлбөр идэвхжүүлэх эсэх"
+                    "Гэрээ дуусах үед автоматаар жил бүр сарын талбайн төлбөр идэвхжүүлэх эсэх",
                   )}{" "}
                 </div>
               </div>
@@ -408,6 +434,24 @@ function KhuviinMedeelel({
                     setBarilgaTokhirgoo((a) => ({
                       ...(a || {}),
                       gereeDuusakhTalbaiTulburNemekhEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div> */}
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">{t("Нэхэмжлэх төлөх өдөр")}</div>
+              </div>
+              <div className="w-15 ml-auto">
+                <InputNumber
+                  value={barilgaTokhirgoo?.nekhemjlekhTulukhUdur}
+                  onChange={(value) =>
+                    setBarilgaTokhirgoo((a) => ({
+                      ...(a || {}),
+                      nekhemjlekhTulukhUdur: value,
                     }))
                   }
                 />
@@ -645,7 +689,7 @@ function KhuviinMedeelel({
                 </div>
                 <div className="text-gray-600">
                   {t(
-                    "Талбайн үнэ засах үед түрээсийн үнэ барьцаа үнэтэй адилтгах идэвхжүүлэх"
+                    "Талбайн үнэ засах үед түрээсийн үнэ барьцаа үнэтэй адилтгах идэвхжүүлэх",
                   )}
                 </div>
               </div>
@@ -693,7 +737,32 @@ function KhuviinMedeelel({
             }`}
           >
             <div className="dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2">
-              <Button onClick={gereeTokhirgooKhadgalya} type="primary">
+              {/* <Button
+                onClick={() => {
+                  gereeTokhirgooKhadgalya();
+                  if (
+                    barilgaTokhirgoo?.nekhemjlekhTulukhUdur !==
+                    barilga?.tokhirgoo?.nekhemjlekhTulukhUdur
+                  ) {
+                    khadgalakh();
+                  }
+                }}
+                type="primary"
+              >
+                {t("Хадгалах")}
+              </Button> */}
+              <Button
+                onClick={() => {
+                  gereeTokhirgooKhadgalya();
+                  if (
+                    barilgaTokhirgoo?.nekhemjlekhTulukhUdur !==
+                    barilga?.tokhirgoo?.nekhemjlekhTulukhUdur
+                  ) {
+                    barilgaTokhirgooKhadgalya();
+                  }
+                }}
+                type="primary"
+              >
                 {t("Хадгалах")}
               </Button>
             </div>
