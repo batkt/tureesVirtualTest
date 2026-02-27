@@ -1415,12 +1415,13 @@ function Zogsool({ token }) {
         align: "center",
         width: "8rem",
         ellipsis: true,
-        dataIndex: "tuukh",
+        dataIndex: "tuukh.0.niitKhugatsaa",
         render(v) {
-          const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
-          const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
-          const diff = d2.diff(d1, "minutes");
-          return diff && diff;
+          // const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
+          // const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
+          // const diff = d2.diff(d1, "minutes");
+          // return diff && diff;
+          return v;
         },
       },
       {
@@ -2567,17 +2568,18 @@ function Zogsool({ token }) {
                           {
                             title: t("Хугацаа/мин"),
                             __style__: { h: "center" },
-                            dataIndex: "tuukh",
+                            dataIndex: "tuukh.0.niitKhugatsaa",
                             render(v, record) {
-                              if (record?.isSummary) return "";
-                              const d1 = moment(
-                                v?.[0]?.tsagiinTuukh?.[0]?.orsonTsag,
-                              );
-                              const d2 = moment(
-                                v?.[0]?.tsagiinTuukh?.[0]?.garsanTsag,
-                              );
-                              const diff = d2.diff(d1, "minutes");
-                              return diff && diff;
+                              // if (record?.isSummary) return "";
+                              // const d1 = moment(
+                              //   v?.[0]?.tsagiinTuukh?.[0]?.orsonTsag,
+                              // );
+                              // const d2 = moment(
+                              //   v?.[0]?.tsagiinTuukh?.[0]?.garsanTsag,
+                              // );
+                              // const diff = d2.diff(d1, "minutes");
+                              // return diff && diff;
+                              return v;
                             },
                           },
                           {
