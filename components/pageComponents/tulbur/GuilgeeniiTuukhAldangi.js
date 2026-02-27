@@ -79,7 +79,8 @@ function GuilgeeniiTuukhAldangi(
     undefined,
     undefined,
     undefined,
-    token
+    token,
+    1000
   );
   const { guilgeeniiAldangiTuukh, guilgeeniiAldangiTuukhMutate } =
     useGereeAldangiGuilgee(token, data?._id, ognoo, shineOgnoo);
