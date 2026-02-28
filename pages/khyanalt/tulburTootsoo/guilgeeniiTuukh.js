@@ -106,6 +106,34 @@ function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
   );
 }
 
+function GereeniiAshiglakhUldegdel({ token, gereeniiId, record }) {
+  const { data, isValidating } = useSWR(
+    gereeniiId ? [`/baritsaaTulultAvya/${gereeniiId}`] : null,
+    () =>
+      uilchilgee(token)
+        .get(`/baritsaaTulultAvya/${gereeniiId}`)
+        .then(({ data }) => data),
+    { revalidateOnFocus: false }
+  );
+
+  const ashiglakhUldegdel = useMemo(() => {
+    if (!data?.length) return 0;
+    return data.reduce(
+      (sum, item) => sum + (item.orlogo || 0) - (item.zarlaga || 0),
+      0
+    );
+  }, [data]);
+
+ 
+  if (record) record.ashiglakhUldegdel = ashiglakhUldegdel;
+
+  return (
+    <div className="w-full text-right">
+      {isValidating ? <Spin size="small" /> : formatNumber(ashiglakhUldegdel)}
+    </div>
+  );
+}
+
 function TableGuilgee({
   columns,
   garalt,
@@ -172,6 +200,13 @@ function TableGuilgee({
                         0
                       ) || 0)
                   )
+                  : mur.dataIndex === "ashiglakhUldegdel" && turul === "eneSardTulukh"
+                  ? formatNumber(
+                      garalt?.jagsaalt?.reduce(
+                        (a, b) => a + (parseFloat(b.ashiglakhUldegdel) || 0),
+                        0
+                      )
+                    )
                 : mur.dataIndex === "baritsaaniiUldegdel"
                 ? formatNumber(
                     garalt?.jagsaalt?.reduce(
@@ -1403,7 +1438,8 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
             a.dataIndex === "niitTulsunAldangi" ||
             a.dataIndex === "baritsaaAvakhDun" ||
             a.dataIndex === "avlagiinUldegdel" ||
-            a.dataIndex === "baritsaaniiUldegdel"
+            a.dataIndex === "baritsaaniiUldegdel" ||
+            a.dataIndex === "ashiglakhUldegdel"
           ? forExcel.push({
               title: a.excelHeader || a.title,
               __numFmt__: "#,##0.00",
@@ -1865,31 +1901,37 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                   },
                 },
                 {
-  title: t("Барьцаа төлөлт"),
-  dataIndex: "baritsaaAshiglasanDun",
-  summary: true,
-  width: "7rem",
-  align: "center",
-  render: (v) => (
-    <div className="w-full text-right">{formatNumber(v || 0)}</div>
-  ),
-},
-                {
-                  title: t("Барьцаа ашиглалт"),
-                  dataIndex: "ashiglasanDun",
+                  title: t("Барьцаа төлөлт"),
+                  dataIndex: "baritsaaniiUldegdel",
                   className: "text-center",
                   align: "center",
                   ellipsis: true,
                   width: "7rem",
                   summary: true,
-                  render: (zarlaga) => {
+                  render: (baritsaaniiUldegdel) => {
                     return (
                       <div className="w-full text-right">
-                        {formatNumber(zarlaga || 0)}
+                        {formatNumber(baritsaaniiUldegdel || 0)}
                       </div>
                     );
                   },
                 },
+                {
+  title: t("Барьцаа ашиглалт"),
+  dataIndex: "ashiglakhUldegdel",
+  className: "text-center",
+  align: "center",
+  ellipsis: true,
+  width: "7rem",
+  summary: true,
+  render: (_, record) => (
+  <GereeniiAshiglakhUldegdel
+    token={token}
+    gereeniiId={record._id}
+    record={record}   
+  />
+),
+},
                 
               ]}
             />
