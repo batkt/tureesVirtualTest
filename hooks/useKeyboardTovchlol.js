@@ -10,6 +10,7 @@ export const useKeyboardTovchlol = (tovch, callback) => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
+      if (event.repeat) return;
       if (
         event.key === "F4" ||
         event.key === "F1" ||
