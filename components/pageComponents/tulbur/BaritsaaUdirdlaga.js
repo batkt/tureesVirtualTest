@@ -25,6 +25,9 @@ function labelTurul(guilgeeTurul) {
     case "ashiglakh":
       text = "Барьцаа ашиглах";
       break;
+    case "butsaalt":
+      text = "Барьцаа буцаалт";
+      break;
     default:
       text = "Барьцаа төлөх";
       break;
@@ -66,7 +69,7 @@ function BaritsaaUdirdlaga(
           return;
         }
 
-        if (turul === "ashiglakh" && dun > data?.baritsaaniiUldegdel) {
+        if ((turul === "ashiglakh" || turul === "butsaalt") && dun > data?.baritsaaniiUldegdel) {
           notification.warning({
             message: t("Барьцаа үлдэгдлээс их дүнгээр гүйлгээ хийж болохгүй!"),
           });
@@ -89,7 +92,7 @@ function BaritsaaUdirdlaga(
           return;
         }
 
-        if (turul === "ashiglakh" && !tailbar) {
+        if ((turul === "ashiglakh" || turul === "butsaalt") && !tailbar) {
           notification.warning({ message: t("Тайлбар оруулна уу!") });
           return;
         }
@@ -100,8 +103,9 @@ function BaritsaaUdirdlaga(
           orlogo: 0,
           zarlaga: 0,
           tailbar,
+          turul,
         };
-        if (turul === "ashiglakh") baritsaaniiGuilgee["zarlaga"] = dun;
+        if (turul === "ashiglakh" || turul === "butsaalt") baritsaaniiGuilgee["zarlaga"] = dun;
         else baritsaaniiGuilgee["orlogo"] = dun;
 
         uilchilgee(token)
@@ -198,11 +202,17 @@ function BaritsaaUdirdlaga(
           onChange={(e) => {
             setTurul(e.target.value);
             setOgnoo(moment());
+            if (e.target.value === "butsaalt") {
+              setTailbar(t("Барьцаа буцаан олголт ") + moment().format("YYYY-MM-DD"));
+            } else {
+              setTailbar("");
+            }
           }}
           value={turul}
         >
           <Radio value={"tululkh"}>{t("Барьцаа төлөх")}</Radio>
           <Radio value={"ashiglakh"}>{t("Барьцаа ашиглах")}</Radio>
+          <Radio value={"butsaalt"}>{t("Барьцаа буцаалт")}</Radio>
         </Radio.Group>
       </div>
       <Divider />
@@ -210,7 +220,7 @@ function BaritsaaUdirdlaga(
         <div>{t(labelTurul(turul))}</div>
         <div className="ml-auto">
           {formatNumber(
-            turul === "ashiglakh" ? ashiglakhUldegdel : tulukhUldegdel
+            turul === "ashiglakh" || turul === "butsaalt" ? ashiglakhUldegdel : tulukhUldegdel
           )}
         </div>
       </div>
@@ -219,6 +229,9 @@ function BaritsaaUdirdlaga(
         value={ognoo}
         onChange={(v) => {
           setOgnoo(v);
+          if (turul === "butsaalt") {
+            setTailbar(t("Барьцаа буцаан олголт ") + moment(v).format("YYYY-MM-DD"));
+          }
           document.getElementById("dunInputNumber").focus();
         }}
       />
@@ -234,7 +247,7 @@ function BaritsaaUdirdlaga(
         onChange={setDun}
         onDoubleClick={() =>
           setDun(
-            turul === "ashiglakh"
+            turul === "ashiglakh" || turul === "butsaalt"
               ? data.baritsaaniiUldegdel
               : (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
           )

@@ -1831,7 +1831,7 @@ function guilgeeniiTuukh({ token }) {
                   },
                 },
                 {
-                  title: t("Барьцааны төлөлт"),
+                  title: t("Барьцаа ашиглалт"),
                   dataIndex: "baritsaaAvakhDun",
                   className: "text-center",
                   align: "center",
@@ -1850,7 +1850,7 @@ function guilgeeniiTuukh({ token }) {
                   },
                 },
                 {
-                  title: t("Барьцааны үлдэгдэл"),
+                  title: t("Барьцаа үлдэгдэл"),
                   dataIndex: "baritsaaniiUldegdel",
                   className: "text-center",
                   align: "center",
