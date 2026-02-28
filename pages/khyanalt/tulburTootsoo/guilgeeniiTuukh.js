@@ -395,13 +395,23 @@ function guilgeeniiTuukh({ token }) {
       case "tsutslagdsanAvlaga":
         turulColumns.push({
           dataIndex: "sariinTurees",
-          title: t("Сарны түрээс"),
+          title: t("Сарын түрээс"),
           summary: true,
           width: "8rem",
           align: "center",
-          render: (v) => (
-            <div className="w-full text-right">{formatNumber(v || 0)}</div>
-          ),
+          render: (v, record) => {
+            const amount =
+              record.tuluv === -1 &&
+              record.tsutsalsanTuluvluguut != null &&
+              record.tsutsalsanTuluvluguut > 0
+                ? record.tsutsalsanTuluvluguut
+                : v;
+            return (
+              <div className="w-full text-right">
+                {formatNumber(amount || 0)}
+              </div>
+            );
+          },
         });
         break;
       default:
@@ -778,11 +788,15 @@ function guilgeeniiTuukh({ token }) {
         dataIndex: "tuluvluguut",
         align: "center",
         summary: true,
-        render: (tuluvluguut) => {
+        render: (tuluvluguut, record) => {
+          const amount =
+            (record.tuluv === -1 || Number(record.tuluv) === -1) &&
+            record.tsutsalsanTuluvluguut != null &&
+            record.tsutsalsanTuluvluguut > 0
+              ? record.tsutsalsanTuluvluguut
+              : tuluvluguut;
           return (
-            <div className="w-full text-right">
-              {formatNumber(tuluvluguut || 0)}
-            </div>
+            <div className="w-full text-right">{formatNumber(amount || 0)}</div>
           );
         },
         ellipsis: true,
@@ -1386,6 +1400,18 @@ function guilgeeniiTuukh({ token }) {
                   const raw = parseFloat(val);
                   return isCancelled && (raw == null || raw <= 0)
                     ? parseFloat(data?.tsutsalsanUldegdel) || 0
+                    : val;
+                }
+                if (
+                  a.dataIndex === "sariinTurees" ||
+                  a.dataIndex === "tuluvluguut"
+                ) {
+                  const isCancelled =
+                    data?.tuluv == -1 || Number(data?.tuluv) === -1;
+                  return isCancelled &&
+                    data?.tsutsalsanTuluvluguut != null &&
+                    data?.tsutsalsanTuluvluguut > 0
+                    ? data?.tsutsalsanTuluvluguut
                     : val;
                 }
                 return val;
