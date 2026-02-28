@@ -25,10 +25,10 @@ const buildBody = (
   baiguullagiinId: baiguullagiinId || query?.baiguullagiinId,
   ekhlekhOgnoo: moment(ognoo[0])
     .startOf("month")
-    .format("YYYY-MM-DD 00:00:00"),
+    .toISOString(),
   duusakhOgnoo: moment(ognoo[1])
     .endOf("month")
-    .format("YYYY-MM-DD 23:59:59"),
+    .toISOString(),
   showTsutslagdsanAvlaga: showTsutslagdsanAvlaga === true,
   query: {
     ...khuudaslalt,
@@ -83,7 +83,7 @@ const mergeFetcher = async (
   baiguullagiinId
 ) => {
   const { search, ...rest } = khuudaslalt || {};
-  const pagination = { ...rest, search };
+  const pagination = rest;
   const [activeRes, withCancelledRes] = await Promise.all([
     axios(token)
       .post(

@@ -136,8 +136,14 @@ function excelTatajAvya(
           );
         }
 
-        if (item.sariinTurees) {
-          processedItem.sariinTurees = formatNumber(item.sariinTurees);
+        const amount =
+          item.tuluv === -1 &&
+          item.tsutsalsanTuluvluguut != null &&
+          item.tsutsalsanTuluvluguut > 0
+            ? item.tsutsalsanTuluvluguut
+            : item.sariinTurees;
+        if (amount) {
+          processedItem.sariinTurees = formatNumber(amount);
         }
 
         processedItem.burtgesenAjiltaniiNer = "Админ";
@@ -528,6 +534,7 @@ const select = {
   khugatsaa: 1,
   duusakhOgnoo: 1,
   sariinTurees: 1,
+  tsutsalsanTuluvluguut: 1,
   zuvshuurliinZurag: 1,
   talbainDugaar: 1,
   talbainNegjUne: 1,
@@ -1072,8 +1079,14 @@ function ZakhialgiinKhyanalt() {
         align: "right",
         ellipsis: true,
         width: "7rem",
-        render: (sariinTurees) => {
-          return formatNumber(sariinTurees || 0);
+        render: (sariinTurees, record) => {
+          const amount =
+            record.tuluv === -1 &&
+            record.tsutsalsanTuluvluguut != null &&
+            record.tsutsalsanTuluvluguut > 0
+              ? record.tsutsalsanTuluvluguut
+              : sariinTurees;
+          return formatNumber(amount || 0);
         },
         sortOrder: sortOrderShalgakh(order.sariinTurees),
         showSorterTooltip: false,
