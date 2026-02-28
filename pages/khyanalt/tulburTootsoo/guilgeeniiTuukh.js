@@ -405,6 +405,19 @@ function guilgeeniiTuukh({ token }) {
           ),
         });
         break;
+        case "baritsaaAshiglasanDun":
+  sericeName = null;
+        turulColumns.push({
+          dataIndex: "baritsaaAshiglasanDun",
+          title: t("Барьцаа ашиглалт"),
+          summary: true,
+          width: "7rem",
+          align: "center",
+          render: (v) => (
+            <div className="w-full text-right">{formatNumber(v)}</div>
+          ),
+        });
+        break;
       case "tsutslagdsanAvlaga":
         turulColumns.push({
           dataIndex: "sariinTurees",
@@ -450,12 +463,12 @@ function guilgeeniiTuukh({ token }) {
         tuluv: -1,
         barilgiinId,
       };
-    } else if (turul === "eneSardTulukh") {
-      sericeName = null;
-      query = {
-        davkhar,
-      };
-    } else {
+} else if (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun") {
+  sericeName = null;
+  query = {
+    davkhar,
+  };
+} else {
       query = {
         davkhar,
         baiguullagiinId: baiguullaga?._id,
@@ -519,9 +532,9 @@ function guilgeeniiTuukh({ token }) {
     }
   }, [tulukhOgnoo, mutate]);
 
-  const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
-    useEneSardTuluuguiGereenuudAvya(
-      turul === "eneSardTulukh" && token,
+const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
+  useEneSardTuluuguiGereenuudAvya(
+    (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun") && token,
       ognoo,
       query,
       showTsutslagdsanAvlagaColumn === true
@@ -563,7 +576,9 @@ function guilgeeniiTuukh({ token }) {
   const { gereeniiMedeelel, onSearch } = useMemo(() => {
     return {
       gereeniiMedeelel:
-        turul === "eneSardTulukh" ? eneSardTuluuguiGereenuud : data,
+        (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun")
+  ? eneSardTuluuguiGereenuud
+  : data,
       onSearch: (searchValue) => {
         onSearchMedeelel(searchValue);
         setEneSardTuluuguiGereenuud((a) => ({
@@ -1831,7 +1846,7 @@ function guilgeeniiTuukh({ token }) {
                   },
                 },
                 {
-                  title: t("Барьцаа ашиглалт"),
+                  title: t("Барьцаа үлдэгдэл"),
                   dataIndex: "baritsaaAvakhDun",
                   className: "text-center",
                   align: "center",
@@ -1850,37 +1865,32 @@ function guilgeeniiTuukh({ token }) {
                   },
                 },
                 {
-                  title: t("Барьцаа үлдэгдэл"),
-                  dataIndex: "baritsaaniiUldegdel",
-                  className: "text-center",
-                  align: "center",
-                  ellipsis: true,
-                  width: "7rem",
-                  summary: true,
-                  render: (baritsaaniiUldegdel) => {
-                    return (
-                      <div className="w-full text-right">
-                        {formatNumber(baritsaaniiUldegdel || 0)}
-                      </div>
-                    );
-                  },
-                },
+  title: t("Барьцаа төлөлт"),
+  dataIndex: "baritsaaAshiglasanDun",
+  summary: true,
+  width: "7rem",
+  align: "center",
+  render: (v) => (
+    <div className="w-full text-right">{formatNumber(v || 0)}</div>
+  ),
+},
                 {
-                  title: t("Барьцаа төлөлт"),
-                  dataIndex: "baritsaaTulsunDun",
+                  title: t("Барьцаа ашиглалт"),
+                  dataIndex: "ashiglasanDun",
                   className: "text-center",
                   align: "center",
                   ellipsis: true,
                   width: "7rem",
                   summary: true,
-                  render: (baritsaaTulsunDun) => {
+                  render: (zarlaga) => {
                     return (
                       <div className="w-full text-right">
-                        {formatNumber(baritsaaTulsunDun || 0)}
+                        {formatNumber(zarlaga || 0)}
                       </div>
                     );
                   },
                 },
+                
               ]}
             />
           </div>
@@ -1895,10 +1905,10 @@ function guilgeeniiTuukh({ token }) {
             columns={columns}
             garalt={garaltDeduplicated}
             setKhuudaslalt={
-              turul === "eneSardTulukh"
-                ? setEneSardTuluuguiGereenuud
-                : setKhuudaslalt
-            }
+  (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun")
+    ? setEneSardTuluuguiGereenuud
+    : setKhuudaslalt
+}
             setLoadingIndex={setLoadingIndex}
             onChange={khusnegtOrderChange}
             turul={turul}
