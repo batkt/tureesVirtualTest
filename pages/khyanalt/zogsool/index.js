@@ -673,7 +673,6 @@ function Zogsool({ token }) {
           break;
 
         case 2:
-          baseQuery["niitDun"] = { $eq: 0 };
           baseQuery["tuukh.0.tsagiinTuukh.garsanTsag"] = { $exists: true };
           break;
         case 3:
@@ -692,13 +691,13 @@ function Zogsool({ token }) {
       }
     }
 
-    if (tootsooKhelber === "2") {
-      delete baseQuery.createdAt;
-      baseQuery["tuukh.tulbur.ognoo"] = {
-        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-      };
-    }
+    // if (tootsooKhelber === "2") {
+    //   delete baseQuery.createdAt;
+    //   baseQuery["tuukh.tulbur.ognoo"] = {
+    //     $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+    //     $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+    //   };
+    // }
 
     return baseQuery;
   }, [
@@ -726,6 +725,7 @@ function Zogsool({ token }) {
           },
           { turul: "Үнэгүй" },
           { "tuukh.0.uneguiGarsan": { $exists: true } },
+          { "tuukh.0.tuluv": -1 },
           {
             $expr: {
               $and: [
@@ -946,7 +946,6 @@ function Zogsool({ token }) {
       });
     }
   }
-  console.log(selectedRowkeys);
   const ustgakh = () => {
     const songogdson = [...selectedRowkeys];
 
@@ -1415,7 +1414,7 @@ function Zogsool({ token }) {
         align: "center",
         width: "8rem",
         ellipsis: true,
-        dataIndex: "tuukh.0.niitKhugatsaa",
+        dataIndex: "niitKhugatsaa",
         render(v) {
           // const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
           // const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
@@ -2568,7 +2567,7 @@ function Zogsool({ token }) {
                           {
                             title: t("Хугацаа/мин"),
                             __style__: { h: "center" },
-                            dataIndex: "tuukh.0.niitKhugatsaa",
+                            dataIndex: "niitKhugatsaa",
                             render(v, record) {
                               // if (record?.isSummary) return "";
                               // const d1 = moment(
@@ -2771,16 +2770,17 @@ function Zogsool({ token }) {
             >
               <div className="flex items-center gap-2">
                 {(ajiltan?.tokhirgoo?.zogsoolNegtgelDunKharakhEsekh === true ||
-                  ajiltan?.erkh === "Admin") && tootsooKhelber === "2" && (
-                  <Button
-                    onClick={() => tulburiinDelgerengui()}
-                    className="mr-3 w-auto text-ellipsis"
-                    icon={<PrinterOutlined />}
-                    type="primary"
-                  >
-                    {t("Төлбөрийн дэлгэрэнгүй")}
-                  </Button>
-                )}
+                  ajiltan?.erkh === "Admin") &&
+                  tootsooKhelber === "2" && (
+                    <Button
+                      onClick={() => tulburiinDelgerengui()}
+                      className="mr-3 w-auto text-ellipsis"
+                      icon={<PrinterOutlined />}
+                      type="primary"
+                    >
+                      {t("Төлбөрийн дэлгэрэнгүй")}
+                    </Button>
+                  )}
 
                 <Button
                   type="primary"
@@ -2860,7 +2860,7 @@ function Zogsool({ token }) {
                     pagination={{
                       current: uilchluulegchGaralt?.khuudasniiDugaar,
                       total: uilchluulegchGaralt?.niitMur,
-                      pageSizeOptions: [100, 300, 500, 1000],
+                      pageSizeOptions: [100, 300, 500, 1000, 5000],
                       defaultPageSize: [500],
                       showSizeChanger: true,
                       onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
@@ -2882,14 +2882,29 @@ function Zogsool({ token }) {
                                 const { payments, discount } = splitTulbur(
                                   b?.tuukh?.[0]?.tulbur,
                                 );
+                                const paidTotal =
+                                  b?.tuukh
+                                    ?.filter((t) => Number(t?.tulukhDun) > 0)
+                                    ?.reduce(
+                                      (sum, t) =>
+                                        sum + Number(t?.tulukhDun || 0),
+                                      0,
+                                    ) || 0;
+                                const amount =
+                                  paidTotal > 0
+                                    ? paidTotal
+                                    : Number(b?.niitDun || 0);
+                                acc.niitDun += amount;
 
-                                acc.niitDun += getPaymentTotal(b);
-                                acc.payment += payments.reduce(
-                                  (c, d) => c + (Number(d?.dun) || 0),
-                                  0,
-                                );
-                                acc.discount += discount || 0;
+                                acc.payment +=
+                                  payments?.reduce(
+                                    (c, d) => c + (Number(d?.dun) || 0),
+                                    0,
+                                  ) || 0;
+
+                                acc.discount += Number(discount) || 0;
                                 acc.ebarimt += Number(b?.ebarimtAvsanDun) || 0;
+
                                 return acc;
                               },
                               {
