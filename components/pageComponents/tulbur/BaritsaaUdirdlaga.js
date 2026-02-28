@@ -48,7 +48,7 @@ function BaritsaaUdirdlaga(
     (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
   );
   const [ashiglakhUldegdel, setAshiglakhUldegdel] = useState(
-    data.baritsaaniiUldegdel
+    data.ashiglakhUldegdel
   );
   const [tailbar, setTailbar] = useState("");
   const [baritsaaKhuulga, setBaritsaaKhuulga] = useState([]);

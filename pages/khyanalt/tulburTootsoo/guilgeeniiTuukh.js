@@ -106,6 +106,34 @@ function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
   );
 }
 
+function GereeniiAshiglakhUldegdel({ token, gereeniiId, record }) {
+  const { data, isValidating } = useSWR(
+    gereeniiId ? [`/baritsaaTulultAvya/${gereeniiId}`] : null,
+    () =>
+      uilchilgee(token)
+        .get(`/baritsaaTulultAvya/${gereeniiId}`)
+        .then(({ data }) => data),
+    { revalidateOnFocus: false }
+  );
+
+  const ashiglakhUldegdel = useMemo(() => {
+    if (!data?.length) return 0;
+    return data.reduce(
+      (sum, item) => sum + (item.orlogo || 0) - (item.zarlaga || 0),
+      0
+    );
+  }, [data]);
+
+ 
+  if (record) record.ashiglakhUldegdel = ashiglakhUldegdel;
+
+  return (
+    <div className="w-full text-right">
+      {isValidating ? <Spin size="small" /> : formatNumber(ashiglakhUldegdel)}
+    </div>
+  );
+}
+
 function TableGuilgee({
   columns,
   garalt,
@@ -172,6 +200,13 @@ function TableGuilgee({
                         0
                       ) || 0)
                   )
+                  : mur.dataIndex === "ashiglakhUldegdel" && turul === "eneSardTulukh"
+                  ? formatNumber(
+                      garalt?.jagsaalt?.reduce(
+                        (a, b) => a + (parseFloat(b.ashiglakhUldegdel) || 0),
+                        0
+                      )
+                    )
                 : mur.dataIndex === "baritsaaniiUldegdel"
                 ? formatNumber(
                     garalt?.jagsaalt?.reduce(
@@ -405,6 +440,19 @@ function guilgeeniiTuukh({ token }) {
           ),
         });
         break;
+        case "baritsaaAshiglasanDun":
+  sericeName = null;
+        turulColumns.push({
+          dataIndex: "baritsaaAshiglasanDun",
+          title: t("Барьцаа ашиглалт"),
+          summary: true,
+          width: "7rem",
+          align: "center",
+          render: (v) => (
+            <div className="w-full text-right">{formatNumber(v)}</div>
+          ),
+        });
+        break;
       case "tsutslagdsanAvlaga":
         turulColumns.push({
           dataIndex: "sariinTurees",
@@ -450,12 +498,12 @@ function guilgeeniiTuukh({ token }) {
         tuluv: -1,
         barilgiinId,
       };
-    } else if (turul === "eneSardTulukh") {
-      sericeName = null;
-      query = {
-        davkhar,
-      };
-    } else {
+} else if (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun") {
+  sericeName = null;
+  query = {
+    davkhar,
+  };
+} else {
       query = {
         davkhar,
         baiguullagiinId: baiguullaga?._id,
@@ -519,9 +567,9 @@ function guilgeeniiTuukh({ token }) {
     }
   }, [tulukhOgnoo, mutate]);
 
-  const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
-    useEneSardTuluuguiGereenuudAvya(
-      turul === "eneSardTulukh" && token,
+const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
+  useEneSardTuluuguiGereenuudAvya(
+    (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun") && token,
       ognoo,
       query,
       showTsutslagdsanAvlagaColumn === true
@@ -563,7 +611,9 @@ function guilgeeniiTuukh({ token }) {
   const { gereeniiMedeelel, onSearch } = useMemo(() => {
     return {
       gereeniiMedeelel:
-        turul === "eneSardTulukh" ? eneSardTuluuguiGereenuud : data,
+        (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun")
+  ? eneSardTuluuguiGereenuud
+  : data,
       onSearch: (searchValue) => {
         onSearchMedeelel(searchValue);
         setEneSardTuluuguiGereenuud((a) => ({
@@ -1388,7 +1438,8 @@ function guilgeeniiTuukh({ token }) {
             a.dataIndex === "niitTulsunAldangi" ||
             a.dataIndex === "baritsaaAvakhDun" ||
             a.dataIndex === "avlagiinUldegdel" ||
-            a.dataIndex === "baritsaaniiUldegdel"
+            a.dataIndex === "baritsaaniiUldegdel" ||
+            a.dataIndex === "ashiglakhUldegdel"
           ? forExcel.push({
               title: a.excelHeader || a.title,
               __numFmt__: "#,##0.00",
@@ -1831,7 +1882,7 @@ function guilgeeniiTuukh({ token }) {
                   },
                 },
                 {
-                  title: t("Барьцаа ашиглалт"),
+                  title: t("Барьцаа үлдэгдэл"),
                   dataIndex: "baritsaaAvakhDun",
                   className: "text-center",
                   align: "center",
@@ -1850,7 +1901,7 @@ function guilgeeniiTuukh({ token }) {
                   },
                 },
                 {
-                  title: t("Барьцаа үлдэгдэл"),
+                  title: t("Барьцаа төлөлт"),
                   dataIndex: "baritsaaniiUldegdel",
                   className: "text-center",
                   align: "center",
@@ -1866,21 +1917,22 @@ function guilgeeniiTuukh({ token }) {
                   },
                 },
                 {
-                  title: t("Барьцаа төлөлт"),
-                  dataIndex: "baritsaaTulsunDun",
-                  className: "text-center",
-                  align: "center",
-                  ellipsis: true,
-                  width: "7rem",
-                  summary: true,
-                  render: (baritsaaTulsunDun) => {
-                    return (
-                      <div className="w-full text-right">
-                        {formatNumber(baritsaaTulsunDun || 0)}
-                      </div>
-                    );
-                  },
-                },
+  title: t("Барьцаа ашиглалт"),
+  dataIndex: "ashiglakhUldegdel",
+  className: "text-center",
+  align: "center",
+  ellipsis: true,
+  width: "7rem",
+  summary: true,
+  render: (_, record) => (
+  <GereeniiAshiglakhUldegdel
+    token={token}
+    gereeniiId={record._id}
+    record={record}   
+  />
+),
+},
+                
               ]}
             />
           </div>
@@ -1895,10 +1947,10 @@ function guilgeeniiTuukh({ token }) {
             columns={columns}
             garalt={garaltDeduplicated}
             setKhuudaslalt={
-              turul === "eneSardTulukh"
-                ? setEneSardTuluuguiGereenuud
-                : setKhuudaslalt
-            }
+  (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun")
+    ? setEneSardTuluuguiGereenuud
+    : setKhuudaslalt
+}
             setLoadingIndex={setLoadingIndex}
             onChange={khusnegtOrderChange}
             turul={turul}
