@@ -392,6 +392,19 @@ function guilgeeniiTuukh({ token }) {
           ),
         });
         break;
+        case "shiljuulsenBaritsaa":
+        sericeName = `/baritsaaniiGuilgeeKhiie/${ekhlekhOgnoo}/${duusakhOgnoo}`;
+        turulColumns.push({
+          dataIndex: "tulsunDun",
+          title: t("Барьцаа"),
+          summary: true,
+          width: "7rem",
+          align: "center",
+          render: (v) => (
+            <div className="w-full text-right">{formatNumber(v)}</div>
+          ),
+        });
+        break;
       case "tsutslagdsanAvlaga":
         turulColumns.push({
           dataIndex: "sariinTurees",
@@ -1818,7 +1831,7 @@ function guilgeeniiTuukh({ token }) {
                   },
                 },
                 {
-                  title: t("Барьцааны үлдэгдэл"),
+                  title: t("Барьцааны төлөлт"),
                   dataIndex: "baritsaaAvakhDun",
                   className: "text-center",
                   align: "center",
@@ -1837,7 +1850,7 @@ function guilgeeniiTuukh({ token }) {
                   },
                 },
                 {
-                  title: t("Барьцааны төлөлт"),
+                  title: t("Барьцааны үлдэгдэл"),
                   dataIndex: "baritsaaniiUldegdel",
                   className: "text-center",
                   align: "center",
