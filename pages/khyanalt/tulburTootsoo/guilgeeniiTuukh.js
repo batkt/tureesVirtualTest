@@ -1865,6 +1865,22 @@ function guilgeeniiTuukh({ token }) {
                     );
                   },
                 },
+                {
+                  title: t("Барьцаа төлөлт"),
+                  dataIndex: "baritsaaTulsunDun",
+                  className: "text-center",
+                  align: "center",
+                  ellipsis: true,
+                  width: "7rem",
+                  summary: true,
+                  render: (baritsaaTulsunDun) => {
+                    return (
+                      <div className="w-full text-right">
+                        {formatNumber(baritsaaTulsunDun || 0)}
+                      </div>
+                    );
+                  },
+                },
               ]}
             />
           </div>

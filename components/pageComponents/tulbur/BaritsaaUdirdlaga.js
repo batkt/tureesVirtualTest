@@ -51,6 +51,30 @@ function BaritsaaUdirdlaga(
     data.baritsaaniiUldegdel
   );
   const [tailbar, setTailbar] = useState("");
+  const [baritsaaKhuulga, setBaritsaaKhuulga] = useState([]);
+
+  useEffect(() => {
+    uilchilgee(token)
+      .get(`/baritsaaTulultAvya/${data?._id}`)
+      .then((res) => {
+        setBaritsaaKhuulga(res.data);
+      });
+  }, [data?._id, token]);
+
+  useEffect(() => {
+    if (baritsaaKhuulga?.length > 0) {
+      const balanceAtDate = baritsaaKhuulga
+        .filter((item) => moment(item.ognoo).isSameOrBefore(ognoo, "day"))
+        .reduce((sum, item) => sum + (item.orlogo || 0) - (item.zarlaga || 0), 0);
+      
+      setAshiglakhUldegdel(balanceAtDate);
+      setTulukhUldegdel((data.baritsaaAvakhDun || 0) - balanceAtDate);
+      
+      if (turul === "butsaalt") {
+        setDun(balanceAtDate);
+      }
+    }
+  }, [ognoo, baritsaaKhuulga, turul, data.baritsaaAvakhDun]);
 
   React.useImperativeHandle(
     ref,
@@ -69,26 +93,24 @@ function BaritsaaUdirdlaga(
           return;
         }
 
-        if ((turul === "ashiglakh" || turul === "butsaalt") && dun > data?.baritsaaniiUldegdel) {
+        if ((turul === "ashiglakh" || turul === "butsaalt") && dun > ashiglakhUldegdel) {
           notification.warning({
             message: t("Барьцаа үлдэгдлээс их дүнгээр гүйлгээ хийж болохгүй!"),
           });
-          setDun(data?.baritsaaniiUldegdel);
+          setDun(ashiglakhUldegdel);
           return;
         }
 
         if (
           turul === "tululkh" &&
-          dun > (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
+          dun > tulukhUldegdel
         ) {
           notification.warning({
             message: t(
               "Барьцаа төлөх дүнгээс их дүнгээр гүйлгээ хийж болохгүй!"
             ),
           });
-          setDun(
-            (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
-          );
+          setDun(tulukhUldegdel);
           return;
         }
 
@@ -248,8 +270,8 @@ function BaritsaaUdirdlaga(
         onDoubleClick={() =>
           setDun(
             turul === "ashiglakh" || turul === "butsaalt"
-              ? data.baritsaaniiUldegdel
-              : (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
+              ? ashiglakhUldegdel
+              : tulukhUldegdel
           )
         }
       />

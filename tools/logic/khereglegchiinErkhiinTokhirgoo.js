@@ -2,11 +2,11 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { BiBellPlus, BiDesktop, BiCommentError, BiUser } from "react-icons/bi";
 import { BsGraphUp, BsPcDisplay } from "react-icons/bs";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
-import { MdOutlineAnalytics } from "react-icons/md";
+import { MdOutlineAnalytics, MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { TbReportMoney } from "react-icons/tb";
 import { FiHome } from "react-icons/fi";
-import { FaSteam } from "react-icons/fa";
-import { SiRiotgames } from "react-icons/si";
+import { ProductFilled } from "@ant-design/icons";
+import { SiSteam } from "react-icons/si";
 import { TbLego } from "react-icons/tb";
 import useKhuudasniiJagsaalt from "hooks/useKhuudasniiJagsaalt";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
@@ -244,8 +244,29 @@ export const tsonknuud = [
     tokhirgoo: [],
   },
   {
-    key: "/khyanalt/todorkhoilolt",
-    ner: "Тодорхойлолт",
+    key: "/khyanalt/uilchilgee/baraaMaterial",
+    ner: "Бараа материал",
+    tokhirgoo: [],
+  },
+  {
+    key: "/khyanalt/uilchilgee/khynalt",
+    ner: "Үйлчилгээний хяналт",
+    tokhirgoo: [],
+  },
+  {
+    key: "/khyanalt/uilchilgee/tuluvluguu",
+    ner: "Үйлчилгээний төлөвлөгөө",
+    tokhirgoo: [],
+  },
+  {
+    key: "/khyanalt/uilchilgee/kpi",
+    ner: "KPI",
+    tokhirgoo: [],
+  },
+  {
+    key: "/khyanalt/uilchilgee/uilchluulegch",
+    ner: "Үйлчлүүлэгч",
+    tokhirgoo: [],
   },
 ];
 
@@ -551,6 +572,44 @@ export const khuudasnuud = [
         khuudasniiNer: "sanalKhuselt",
         href: "/khyanalt/medegdel/sanalKhuselt",
         icon: <BiCommentError style={{ width: "24", height: "24" }} />,
+      },
+    ],
+  },
+  {
+    ner: "Үйлчилгээ",
+    khuudasniiNer: "uilchilgee",
+    href: "/khyanalt/uilchilgee",
+    icon: <SiSteam className="text-2xl" />,
+    sub: [
+      {
+        ner: "Бараа материал",
+        khuudasniiNer: "baraaMaterial",
+        href: "/khyanalt/uilchilgee/baraaMaterial",
+        icon: <ProductFilled style={{ width: "24", height: "24" }} />,
+      },
+      {
+        ner: "Хяналт",
+        khuudasniiNer: "khynalt",
+        href: "/khyanalt/uilchilgee/khynalt",
+        icon: <BsPcDisplay style={{ width: "24", height: "24" }} />,
+      },
+      {
+        ner: "Төлөвлөгөө",
+        khuudasniiNer: "tuluvluguu",
+        href: "/khyanalt/uilchilgee/tuluvluguu",
+        icon: <BiDesktop style={{ width: "24", height: "24" }} />,
+      },
+      {
+        ner: "KPI",
+        khuudasniiNer: "kpi",
+        href: "/khyanalt/uilchilgee/kpi",
+        icon: <BsGraphUp style={{ width: "24", height: "24" }} />,
+      },
+      {
+        ner: "Үйлчлүүлэгч",
+        khuudasniiNer: "uilchluulegch",
+        href: "/khyanalt/uilchilgee/uilchluulegch",
+        icon: <BiUser style={{ width: "24", height: "24" }} />,
       },
     ],
   },
@@ -1037,6 +1096,7 @@ export const khuudasnuud = [
     //   },
     // ],
   },
+  
 ];
 
 function useErkh(ajiltan, baiguulgiinErkhiinJagsaalt) {
