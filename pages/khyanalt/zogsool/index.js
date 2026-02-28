@@ -540,7 +540,7 @@ function Zogsool({ token }) {
   }, [tuluvZurchil]);
 
   const [shaltgaan, setShaltgaan] = useState("Цэвэрлэсэн");
-  const [tootsooKhelber, setTootsooKhelber] = useState("1");
+  const [tootsooKhelber, setTootsooKhelber] = useState("2");
   const ZURCHIL_TAB_KEY = "4";
   const DAILY_CLOSING_TAB_KEY = "3";
 
@@ -2771,7 +2771,7 @@ function Zogsool({ token }) {
             >
               <div className="flex items-center gap-2">
                 {(ajiltan?.tokhirgoo?.zogsoolNegtgelDunKharakhEsekh === true ||
-                  ajiltan?.erkh === "Admin") && (
+                  ajiltan?.erkh === "Admin") && tootsooKhelber === "2" && (
                   <Button
                     onClick={() => tulburiinDelgerengui()}
                     className="mr-3 w-auto text-ellipsis"
@@ -2839,8 +2839,120 @@ function Zogsool({ token }) {
           data-aos-anchor-placement="top-bottom"
         >
           <Tabs
-            defaultActiveKey="1"
+            defaultActiveKey="2"
             items={[
+              {
+                key: "2",
+                label: t("Мөнгөн дүнгээр"),
+                children: (
+                  <Table
+                    className="mt-8 hidden overflow-auto md:block"
+                    tableLayout="auto"
+                    loading={!uilchluulegchGaralt}
+                    dataSource={uilchluulegchGaralt?.jagsaalt}
+                    scroll={{ y: "calc(100vh - 30rem)" }}
+                    size="small"
+                    bordered
+                    rowSelection={rowSelection}
+                    rowKey={"_id"}
+                    columns={columns}
+                    onChange={onChangeTable}
+                    pagination={{
+                      current: uilchluulegchGaralt?.khuudasniiDugaar,
+                      total: uilchluulegchGaralt?.niitMur,
+                      pageSizeOptions: [100, 300, 500, 1000],
+                      defaultPageSize: [500],
+                      showSizeChanger: true,
+                      onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                        setUilchluulegchKhuudaslalt((kh) => ({
+                          ...kh,
+                          khuudasniiDugaar,
+                          khuudasniiKhemjee,
+                        })),
+                    }}
+                    summary={(e) => (
+                      <AntdTable.Summary className="border " fixed={"bottom"}>
+                        {(() => {
+                          const shinecolLength =
+                            shuult?.name === "Түрээслэгч" ? 2 : 0;
+                          const summaryColSpan = 7 + shinecolLength;
+                          const totals =
+                            e?.reduce(
+                              (acc, b) => {
+                                const { payments, discount } = splitTulbur(
+                                  b?.tuukh?.[0]?.tulbur,
+                                );
+
+                                acc.niitDun += getPaymentTotal(b);
+                                acc.payment += payments.reduce(
+                                  (c, d) => c + (Number(d?.dun) || 0),
+                                  0,
+                                );
+                                acc.discount += discount || 0;
+                                acc.ebarimt += Number(b?.ebarimtAvsanDun) || 0;
+                                return acc;
+                              },
+                              {
+                                niitDun: 0,
+                                payment: 0,
+                                discount: 0,
+                                ebarimt: 0,
+                              },
+                            ) || {};
+                          const {
+                            niitDun = 0,
+                            payment = 0,
+                            discount = 0,
+                            ebarimt = 0,
+                          } = totals || {};
+
+                          return (
+                            <>
+                              <AntdTable.Summary.Cell colSpan={summaryColSpan}>
+                                <div className="space-x-2 truncate text-base font-bold ">
+                                  {t("Нийт")}
+                                </div>
+                              </AntdTable.Summary.Cell>
+                              <AntdTable.Summary.Cell>
+                                <div className="truncate text-right font-bold ">
+                                  {formatNumber(niitDun, 2)}
+                                </div>
+                              </AntdTable.Summary.Cell>
+                              <AntdTable.Summary.Cell>
+                                <div className="truncate text-right font-bold ">
+                                  {formatNumber(payment, 2)}
+                                </div>
+                              </AntdTable.Summary.Cell>
+                              <AntdTable.Summary.Cell>
+                                <div className="truncate text-right font-bold ">
+                                  {formatNumber(discount, 2)}
+                                </div>
+                              </AntdTable.Summary.Cell>
+                              <AntdTable.Summary.Cell>
+                                <div className="truncate text-right font-bold ">
+                                  {formatNumber(ebarimt, 2)}
+                                </div>
+                              </AntdTable.Summary.Cell>
+                              <AntdTable.Summary.Cell>
+                                <div className="truncate text-right font-bold "></div>
+                              </AntdTable.Summary.Cell>
+                              <AntdTable.Summary.Cell>
+                                <div className="truncate text-right font-bold "></div>
+                              </AntdTable.Summary.Cell>
+                              <AntdTable.Summary.Cell>
+                                <div className="truncate text-right font-bold "></div>
+                              </AntdTable.Summary.Cell>
+                              <AntdTable.Summary.Cell>
+                                <div className="truncate text-right font-bold "></div>
+                              </AntdTable.Summary.Cell>
+                            </>
+                          );
+                        })()}
+                      </AntdTable.Summary>
+                    )}
+                  />
+                ),
+              },
               {
                 key: "1",
                 label: t("Машинаар"),
@@ -2955,118 +3067,6 @@ function Zogsool({ token }) {
                               </AntdTable.Summary.Cell>
                               <AntdTable.Summary.Cell>
                                 <div className="truncate text-right font-bold "></div>
-                              </AntdTable.Summary.Cell>
-                              <AntdTable.Summary.Cell>
-                                <div className="truncate text-right font-bold "></div>
-                              </AntdTable.Summary.Cell>
-                              <AntdTable.Summary.Cell>
-                                <div className="truncate text-right font-bold "></div>
-                              </AntdTable.Summary.Cell>
-                              <AntdTable.Summary.Cell>
-                                <div className="truncate text-right font-bold "></div>
-                              </AntdTable.Summary.Cell>
-                              <AntdTable.Summary.Cell>
-                                <div className="truncate text-right font-bold "></div>
-                              </AntdTable.Summary.Cell>
-                            </>
-                          );
-                        })()}
-                      </AntdTable.Summary>
-                    )}
-                  />
-                ),
-              },
-              {
-                key: "2",
-                label: t("Мөнгөн дүнгээр"),
-                children: (
-                  <Table
-                    className="mt-8 hidden overflow-auto md:block"
-                    tableLayout="auto"
-                    loading={!uilchluulegchGaralt}
-                    dataSource={uilchluulegchGaralt?.jagsaalt}
-                    scroll={{ y: "calc(100vh - 30rem)" }}
-                    size="small"
-                    bordered
-                    rowSelection={rowSelection}
-                    rowKey={"_id"}
-                    columns={columns}
-                    onChange={onChangeTable}
-                    pagination={{
-                      current: uilchluulegchGaralt?.khuudasniiDugaar,
-                      total: uilchluulegchGaralt?.niitMur,
-                      pageSizeOptions: [100, 300, 500, 1000],
-                      defaultPageSize: [500],
-                      showSizeChanger: true,
-                      onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                        setUilchluulegchKhuudaslalt((kh) => ({
-                          ...kh,
-                          khuudasniiDugaar,
-                          khuudasniiKhemjee,
-                        })),
-                    }}
-                    summary={(e) => (
-                      <AntdTable.Summary className="border " fixed={"bottom"}>
-                        {(() => {
-                          const shinecolLength =
-                            shuult?.name === "Түрээслэгч" ? 2 : 0;
-                          const summaryColSpan = 7 + shinecolLength;
-                          const totals =
-                            e?.reduce(
-                              (acc, b) => {
-                                const { payments, discount } = splitTulbur(
-                                  b?.tuukh?.[0]?.tulbur,
-                                );
-
-                                acc.niitDun += getPaymentTotal(b);
-                                acc.payment += payments.reduce(
-                                  (c, d) => c + (Number(d?.dun) || 0),
-                                  0,
-                                );
-                                acc.discount += discount || 0;
-                                acc.ebarimt += Number(b?.ebarimtAvsanDun) || 0;
-                                return acc;
-                              },
-                              {
-                                niitDun: 0,
-                                payment: 0,
-                                discount: 0,
-                                ebarimt: 0,
-                              },
-                            ) || {};
-                          const {
-                            niitDun = 0,
-                            payment = 0,
-                            discount = 0,
-                            ebarimt = 0,
-                          } = totals || {};
-
-                          return (
-                            <>
-                              <AntdTable.Summary.Cell colSpan={summaryColSpan}>
-                                <div className="space-x-2 truncate text-base font-bold ">
-                                  {t("Нийт")}
-                                </div>
-                              </AntdTable.Summary.Cell>
-                              <AntdTable.Summary.Cell>
-                                <div className="truncate text-right font-bold ">
-                                  {formatNumber(niitDun, 2)}
-                                </div>
-                              </AntdTable.Summary.Cell>
-                              <AntdTable.Summary.Cell>
-                                <div className="truncate text-right font-bold ">
-                                  {formatNumber(payment, 2)}
-                                </div>
-                              </AntdTable.Summary.Cell>
-                              <AntdTable.Summary.Cell>
-                                <div className="truncate text-right font-bold ">
-                                  {formatNumber(discount, 2)}
-                                </div>
-                              </AntdTable.Summary.Cell>
-                              <AntdTable.Summary.Cell>
-                                <div className="truncate text-right font-bold ">
-                                  {formatNumber(ebarimt, 2)}
-                                </div>
                               </AntdTable.Summary.Cell>
                               <AntdTable.Summary.Cell>
                                 <div className="truncate text-right font-bold "></div>
