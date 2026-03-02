@@ -1773,7 +1773,9 @@ function Zogsool({ token }) {
                 ? "Төлсөн"
                 : v[0].tuluv === -2
                 ? "Зөрчилтэй"
-                : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && data.niitDun > 0
+                : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) &&
+                  data.niitDun > 0 &&
+                  !v[0]?.tulbur
                 ? "Төлбөртэй"
                 : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
                 ? "Идэвхтэй"
