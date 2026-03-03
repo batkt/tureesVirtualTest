@@ -281,7 +281,7 @@ function MashinBurtgel(
 
   useEffect(() => {
     if (!data?.khungulukhKhugatsaa) {
-      form.setFieldsValues({
+      form.setFieldsValue({
         khungulukhKhugatsaa: data?.khungulukhKhugatsaa ?? 0,
         uldegdelKhungulukhKhugatsaa: form.getFieldValue(
           "uldegdelKhungulukhKhugatsaa",
