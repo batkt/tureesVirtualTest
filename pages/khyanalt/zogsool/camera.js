@@ -1763,8 +1763,7 @@ function camera({ token }) {
                         : "bg-yellow-400 dark:bg-yellow-700"
                     }`}
                   >
-                    {a?.uldegdelKhungulukhKhugatsaa}
-                    {"/"}
+                    {a?.uldegdelKhungulukhKhugatsaa || 0} /{" "}
                     {a?.khungulukhKhugatsaa}
                     {t("мин")}
                   </div>

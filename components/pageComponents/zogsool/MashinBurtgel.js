@@ -160,6 +160,12 @@ function MashinBurtgel(
     lastData.duusakhOgnoo = ognoo[1]?.format("YYYY-MM-DD 23:59:59");
     lastData.barilgiinId = barilgiinId;
     lastData.burtgesenAjiltaniiNer = ajiltan?.ner;
+    if (
+      lastData.khungulukhKhugatsaa !== undefined &&
+      lastData.uldegdelKhungulukhKhugatsaa === undefined
+    ) {
+      lastData.uldegdelKhungulukhKhugatsaa = lastData.khungulukhKhugatsaa;
+    }
 
     if (!!geree) {
       lastData.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;
@@ -275,11 +281,11 @@ function MashinBurtgel(
 
   useEffect(() => {
     if (!data?.khungulukhKhugatsaa) {
-      form.setFieldsValue({
+      form.setFieldsValues({
         khungulukhKhugatsaa: data?.khungulukhKhugatsaa ?? 0,
         uldegdelKhungulukhKhugatsaa: form.getFieldValue(
           "uldegdelKhungulukhKhugatsaa",
-        ), // leftover
+        ),
       });
     }
   }, [data, form]);
@@ -545,34 +551,23 @@ function MashinBurtgel(
                       className="w-full"
                       min={0}
                       placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
-                      value={form.getFieldValue("uldegdelKhungulukhKhugatsaa")}
                       onChange={(value) => {
-                        if (data?.uldegdelKhungulukhKhugatsaa) {
-                          form.setFieldValue(
-                            "uldegdelKhungulukhKhugatsaa",
-                            value || 0,
-                          );
-                        }
+                        form.setFieldValue(
+                          "uldegdelKhungulukhKhugatsaa",
+                          value || 0,
+                        );
                       }}
                     />
                   </Form.Item>
+
                   <Form.Item
-                    name={"uldegdelKhungulukhKhugatsaa"}
+                    name="uldegdelKhungulukhKhugatsaa"
                     label={t("Үлдэгдэл хугацаа/мин")}
                   >
-                    <InputNumber
-                      disabled={true}
-                      type="number"
-                      className="w-full"
-                      min={0}
-                      value={
-                        form.getFieldValue("uldegdelKhungulukhKhugatsaa") || 0
-                      }
-                    />
+                    <InputNumber disabled={true} min={0} className="w-full" />
                   </Form.Item>
                 </React.Fragment>
               )}
-
               {dotorGadnaTsagEsekh && (
                 <Form.Item label={t("Зогсоолын төрөл")} name="zogsooliinTurul">
                   <Select placeholder={t("Зогсоолын төрөл сонгоно уу!")}>
@@ -637,10 +632,7 @@ function MashinBurtgel(
                 min={0}
                 placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
                 onChange={(value) => {
-                  if (
-                    !data?.khungulukhKhugatsaa ||
-                    data?.uldegdelKhungulukhKhugatsaa === 0
-                  ) {
+                  if (!data?.uldegdelKhungulukhKhugatsaa) {
                     form.setFieldValue(
                       "uldegdelKhungulukhKhugatsaa",
                       value || 0,
@@ -671,10 +663,7 @@ function MashinBurtgel(
             min={0}
             placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
             onChange={(value) => {
-              if (
-                !data?.khungulukhKhugatsaa ||
-                data?.uldegdelKhungulukhKhugatsaa === 0
-              ) {
+              if (!data?.uldegdelKhungulukhKhugatsaa) {
                 form.setFieldValue("uldegdelKhungulukhKhugatsaa", value || 0);
               }
             }}
