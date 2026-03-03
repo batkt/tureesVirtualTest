@@ -1395,9 +1395,7 @@ function Zogsool({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
         render(v, parents) {
-          const d =
-            parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag ||
-            parents?.tuukh[1]?.tsagiinTuukh[0]?.garsanTsag;
+          const d = parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag || "";
           return d && moment(d).format("YYYY-MM-DD HH:mm");
         },
       },
