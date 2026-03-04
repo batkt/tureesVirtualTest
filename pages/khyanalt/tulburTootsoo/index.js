@@ -1254,8 +1254,8 @@ function tulburTootsoo({ token }) {
               </Select>
             </div>
 
-            {baiguullaga?._id === "612f457d185280db676d0b51" ||
-              (baiguullaga?._id === "695c57511a8a4aebc1d65b02" && (
+            {(baiguullaga?._id === "612f457d185280db676d0b51" ||
+              baiguullaga?._id === "695c57511a8a4aebc1d65b02") && (
                 <div className="mb-4 ml-3 flex items-center space-x-2">
                   <Input
                     placeholder={t("Тест дүн бичих")}
@@ -1402,7 +1402,7 @@ function tulburTootsoo({ token }) {
                     {t("Хадгалах")}
                   </AntButton>
                 </div>
-              ))}
+              )}
 
             {songogdsonDans && (
               <div className="mb-1 ml-5 flex-row space-x-2 p-1 font-medium md:flex">
