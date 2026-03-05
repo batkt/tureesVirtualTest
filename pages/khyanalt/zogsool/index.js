@@ -358,7 +358,7 @@ function Zogsool({ token }) {
         width: "3rem",
         render: (text, record, index) =>
           (zurchilteiJagsaalt?.khuudasniiDugaar || 0) *
-            (zurchilteiJagsaalt?.khuudasniiKhemjee || 0) -
+          (zurchilteiJagsaalt?.khuudasniiKhemjee || 0) -
           (zurchilteiJagsaalt?.khuudasniiKhemjee || 0) +
           index +
           1,
@@ -449,9 +449,8 @@ function Zogsool({ token }) {
                   onClick={() => {
                     setTuluvZurchil("");
                   }}
-                  className={`relative ${
-                    tuluvZurchil === "" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tuluvZurchil === "" && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бүгд")}
                 </div>
@@ -459,9 +458,8 @@ function Zogsool({ token }) {
                   onClick={() => {
                     setTuluvZurchil(1);
                   }}
-                  className={`relative ${
-                    tuluvZurchil === 1 && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tuluvZurchil === 1 && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Төлсөн")}
                 </div>
@@ -469,9 +467,8 @@ function Zogsool({ token }) {
                   onClick={() => {
                     setTuluvZurchil(0);
                   }}
-                  className={`relative ${
-                    tuluvZurchil === 0 && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tuluvZurchil === 0 && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Төлөөгүй")}
                 </div>
@@ -479,9 +476,8 @@ function Zogsool({ token }) {
                   onClick={() => {
                     setTuluvZurchil(2);
                   }}
-                  className={`relative ${
-                    tuluvZurchil === 2 && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tuluvZurchil === 2 && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Зөрчилтэй")}
                 </div>
@@ -513,25 +509,24 @@ function Zogsool({ token }) {
         render(v) {
           return (
             <div
-              className={`${
-                v === 1
-                  ? "bg-green-500 text-white dark:bg-green-700"
-                  : v === 2
+              className={`${v === 1
+                ? "bg-green-500 text-white dark:bg-green-700"
+                : v === 2
                   ? "bg-orange-500 text-white dark:bg-orange-700"
                   : v === 3
-                  ? "bg-gray-500 text-white dark:bg-gray-700"
-                  : "bg-red-500 text-white dark:bg-red-700"
-              } flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
+                    ? "bg-gray-500 text-white dark:bg-gray-700"
+                    : "bg-red-500 text-white dark:bg-red-700"
+                } flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
             >
               {v === 1
                 ? "Төлсөн"
                 : v === 2
-                ? "Зөрчилтэй"
-                : v === 3
-                ? "Тодорхойгүй"
-                : v === -4
-                ? "Төлбөртэй"
-                : "Төлөөгүй"}
+                  ? "Зөрчилтэй"
+                  : v === 3
+                    ? "Тодорхойгүй"
+                    : v === -4
+                      ? "Төлбөртэй"
+                      : "Төлөөгүй"}
             </div>
           );
         },
@@ -626,8 +621,10 @@ function Zogsool({ token }) {
         tulbur === "card"
           ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
           : tulbur?.toLowerCase() === "qpay"
-          ? { $in: ["qpay", "qpayUridchilsan", "Qpay"] }
-          : tulbur;
+            ? { $in: ["qpay", "qpayUridchilsan", "Qpay"] }
+            : tulbur?.toLowerCase() === "ugaalga"
+              ? { $regex: "^ugaalga", $options: "i" }
+              : tulbur;
     }
 
     if (tuluv !== "" && tuluv !== null && tuluv !== undefined) {
@@ -689,25 +686,59 @@ function Zogsool({ token }) {
           baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
           break;
       }
-      if (tootsooKhelber === "2") {
-        switch (tuluvValue) {
-          case 1:
-            baseQuery["tuukh.tulbur.ognoo"] = {
-              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-            };
-            break;
-          case 2:
-            baseQuery["tuukh.tsagiinTuukh.orsonTsag"] = {
-              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-            };
-          case 3:
-            baseQuery["tuukh.tsagiinTuukh.garsanTsag"] = {
-              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-            };
-        }
+    }
+
+    if (tootsooKhelber === "2") {
+      delete baseQuery.createdAt;
+      console.log(moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"), moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"));
+      if (tuluv === 2) {
+        // Only if the user EXPLICITLY filters by "Үнэгүй" (tuluv === 2), include those records.
+        // Otherwise, "Үнэгүй" records shouldn't appear randomly when filtering by "Угаалга".
+        if (!baseQuery.$and) baseQuery.$and = [];
+        baseQuery.$and.push({
+          $or: [
+            {
+              "tuukh.tulbur.ognoo": {
+                $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+              },
+            },
+            {
+              "tuukh.tsagiinTuukh.garsanTsag": {
+                $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+              },
+              "tuukh.tuluv": -1,
+              "niitDun": { $gt: 0 },
+            },
+          ],
+        });
+      } else {
+        // Normal behavior for other filters (like Ugaalga), must have a payment date.
+        baseQuery["tuukh.tulbur.ognoo"] = {
+          $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+          $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+        };
       }
     }
+    // if (tootsooKhelber === "2") {
+    //   // switch (tuluvValue) {
+    //   //   case 1:
+    //   //     baseQuery["tuukh.tulbur.ognoo"] = {
+    //   //       $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+    //   //     };
+    //   //     break;
+    //   //   case 2:
+    //   //     baseQuery["tuukh.tsagiinTuukh.orsonTsag"] = {
+    //   //       $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+    //   //     };
+    //   //   case 3:
+    //   //     baseQuery["tuukh.tsagiinTuukh.garsanTsag"] = {
+    //   //       $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+    //   //       $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+    //   //     };
+    //   // }
+    // }
 
     return baseQuery;
   }, [
@@ -725,14 +756,14 @@ function Zogsool({ token }) {
     if (tuluv !== "") {
       if (tuluv === 2) {
         nemeh = [
-          {
+          ...(tootsooKhelber !== "2" ? [{
             niitDun: 0,
             "tuukh.0.tuluv": { $ne: -2 },
             $or: [
               { "tuukh.0.tulbur.dun": 0 },
               { "tuukh.0.tulbur": { $size: 0 } },
             ],
-          },
+          }] : []),
           { turul: "Үнэгүй" },
           { "tuukh.0.uneguiGarsan": { $exists: true } },
           { "tuukh.0.tuluv": -1 },
@@ -781,7 +812,7 @@ function Zogsool({ token }) {
       }
     }
     return nemeh;
-  }, [ognoo, zogsoolId, shuult, tuluv, tulbur]);
+  }, [ognoo, zogsoolId, shuult, tuluv, tulbur, tootsooKhelber]);
 
   const {
     uilchluulegchGaralt,
@@ -1009,7 +1040,7 @@ function Zogsool({ token }) {
         name: "Үйлчлүүлэгч",
         too: formatNumber(
           !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].turul.find((a) => a._id === null)?.too,
+          uilchiluulegchToololt[0].turul.find((a) => a._id === null)?.too,
           0,
         ),
         query: {
@@ -1030,8 +1061,8 @@ function Zogsool({ token }) {
         name: "Түрээслэгч",
         too: formatNumber(
           !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].turul.find((a) => a._id === "Түрээслэгч")
-              ?.too,
+          uilchiluulegchToololt[0].turul.find((a) => a._id === "Түрээслэгч")
+            ?.too,
           0,
         ),
         query: {
@@ -1042,7 +1073,7 @@ function Zogsool({ token }) {
         name: "Гэрээт",
         too: formatNumber(
           !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].turul.find((a) => a._id === "Гэрээт")?.too,
+          uilchiluulegchToololt[0].turul.find((a) => a._id === "Гэрээт")?.too,
           0,
         ),
         query: {
@@ -1053,7 +1084,7 @@ function Zogsool({ token }) {
         name: "Дотоод",
         too: formatNumber(
           !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].turul.find((a) => a._id === "Дотоод")?.too,
+          uilchiluulegchToololt[0].turul.find((a) => a._id === "Дотоод")?.too,
           0,
         ),
         query: {
@@ -1064,7 +1095,7 @@ function Zogsool({ token }) {
         name: "Дурын",
         too: formatNumber(
           !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].turul.find((a) => a._id === "Дурын")?.too,
+          uilchiluulegchToololt[0].turul.find((a) => a._id === "Дурын")?.too,
           0,
         ),
         query: {
@@ -1075,7 +1106,7 @@ function Zogsool({ token }) {
         name: "СӨХ",
         too: formatNumber(
           !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].turul.find((a) => a._id === "СӨХ")?.too,
+          uilchiluulegchToololt[0].turul.find((a) => a._id === "СӨХ")?.too,
           0,
         ),
         query: {
@@ -1086,8 +1117,8 @@ function Zogsool({ token }) {
         name: "Байгууллага",
         too: formatNumber(
           !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].turul.find((a) => a._id === "Байгууллага")
-              ?.too,
+          uilchiluulegchToololt[0].turul.find((a) => a._id === "Байгууллага")
+            ?.too,
           0,
         ),
         query: {
@@ -1098,7 +1129,7 @@ function Zogsool({ token }) {
         name: "VIP",
         too: formatNumber(
           !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].turul.find((a) => a._id === "VIP")?.too,
+          uilchiluulegchToololt[0].turul.find((a) => a._id === "VIP")?.too,
           0,
         ),
         query: {
@@ -1110,7 +1141,7 @@ function Zogsool({ token }) {
         name: "Зөрчилтэй",
         too: formatNumber(
           !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].tuluv.find((a) => a._id === -2)?.too,
+          uilchiluulegchToololt[0].tuluv.find((a) => a._id === -2)?.too,
           0,
         ),
         query: { "tuukh.tuluv": -2 },
@@ -1342,25 +1373,25 @@ function Zogsool({ token }) {
     const shinecol =
       shuult.name === "Түрээслэгч"
         ? [
-            {
-              title: t("Талбай"),
-              align: "center",
-              width: "6rem",
-              dataIndex: "mashin",
-              render(v) {
-                return v && v.ezemshigchiinTalbainDugaar;
-              },
+          {
+            title: t("Талбай"),
+            align: "center",
+            width: "6rem",
+            dataIndex: "mashin",
+            render(v) {
+              return v && v.ezemshigchiinTalbainDugaar;
             },
-            {
-              title: t("Утас"),
-              align: "center",
-              width: "8rem",
-              dataIndex: "mashin",
-              render(v) {
-                return v && v.ezemshigchiinUtas;
-              },
+          },
+          {
+            title: t("Утас"),
+            align: "center",
+            width: "8rem",
+            dataIndex: "mashin",
+            render(v) {
+              return v && v.ezemshigchiinUtas;
             },
-          ]
+          },
+        ]
         : [];
     return [
       {
@@ -1370,7 +1401,7 @@ function Zogsool({ token }) {
         width: "3rem",
         render: (text, record, index) =>
           (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
-            (uilchluulegchGaralt?.khuudasniiKhemjee || 0) -
+          (uilchluulegchGaralt?.khuudasniiKhemjee || 0) -
           (uilchluulegchGaralt?.khuudasniiKhemjee || 0) +
           index +
           1,
@@ -1441,7 +1472,7 @@ function Zogsool({ token }) {
             data.niitDun > 0
               ? data.niitDun
               : (data.tuukh?.[0]?.tulukhDun || 0) +
-                (data.tuukh?.[1]?.tulukhDun || 0);
+              (data.tuukh?.[1]?.tulukhDun || 0);
 
           return getTotal(a) - getTotal(b);
         },
@@ -1456,7 +1487,7 @@ function Zogsool({ token }) {
             v > 0
               ? v
               : (data.tuukh?.[0]?.tulukhDun || 0) +
-                (data.tuukh?.[1]?.tulukhDun || 0);
+              (data.tuukh?.[1]?.tulukhDun || 0);
 
           return formatNumber(total, 2);
         },
@@ -1470,57 +1501,50 @@ function Zogsool({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setTulbur("")}
-                  className={`relative ${
-                    tulbur === "" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tulbur === "" && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бүгд")}
                 </div>
                 <div
                   onClick={() => setTulbur("belen")}
-                  className={`relative ${
-                    tulbur === "belen" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tulbur === "belen" && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бэлэн")}
                 </div>
                 <div
                   onClick={() => setTulbur("card")}
-                  className={`relative ${
-                    tulbur === "card" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tulbur === "card" && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Карт")}
                 </div>
                 <div
                   onClick={() => setTulbur("khariltsakh")}
-                  className={`relative ${
-                    tulbur === "khariltsakh" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                  className={`relative ${tulbur === "khariltsakh" && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   {t("Данс")}
                 </div>
                 <div
                   onClick={() => setTulbur("toki")}
-                  className={`relative ${
-                    tulbur === "toki" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                  className={`relative ${tulbur === "toki" && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   Токи
                 </div>
                 <div
                   onClick={() => setTulbur("kiosk")}
-                  className={`relative ${
-                    tulbur === "kiosk" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                  className={`relative ${tulbur === "kiosk" && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   Киоск
                 </div>
                 <div
                   onClick={() => setTulbur("khungulult")}
-                  className={`relative ${
-                    tulbur === "khungulult" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                  className={`relative ${tulbur === "khungulult" && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   Хөнгөлөлт
                 </div>
@@ -1528,18 +1552,16 @@ function Zogsool({ token }) {
                   <>
                     <div
                       onClick={() => setTulbur("Fitness")}
-                      className={`relative ${
-                        tulbur === "Fitness" ? "bg-green-500 text-white" : ""
-                      } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                      className={`relative ${tulbur === "Fitness" ? "bg-green-500 text-white" : ""
+                        } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                     >
                       Fitness
                     </div>
 
                     <div
                       onClick={() => setTulbur("Ugaalga")}
-                      className={`relative ${
-                        tulbur === "Ugaalga" ? "bg-green-500 text-white" : ""
-                      } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                      className={`relative ${tulbur === "Ugaalga" ? "bg-green-500 text-white" : ""
+                        } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                     >
                       Угаалга
                     </div>
@@ -1548,35 +1570,31 @@ function Zogsool({ token }) {
                 {baiguullaga?._id === "6731b43bc23730ac1908da2d" && (
                   <div
                     onClick={() => setTulbur("Соёолж Ц/Д")}
-                    className={`relative ${
-                      tulbur === "Соёолж Ц/Д" && "bg-green-500 text-white"
-                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                    className={`relative ${tulbur === "Соёолж Ц/Д" && "bg-green-500 text-white"
+                      } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                   >
                     Соёолж Ц/Д
                   </div>
                 )}
                 <div
                   onClick={() => setTulbur("qpay")}
-                  className={`relative ${
-                    tulbur?.toLowerCase() === "qpay" &&
+                  className={`relative ${tulbur?.toLowerCase() === "qpay" &&
                     "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Qpay")}
                 </div>
                 <div
                   onClick={() => setTulbur("GadaaQR")}
-                  className={`relative ${
-                    tulbur === "GadaaQR" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tulbur === "GadaaQR" && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   Гадаа QR
                 </div>
                 <div
                   onClick={() => setTulbur("DotorQR")}
-                  className={`relative ${
-                    tulbur === "DotorQR" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tulbur === "DotorQR" && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   Дотор QR
                 </div>
@@ -1627,9 +1645,8 @@ function Zogsool({ token }) {
           return (
             r && (
               <div
-                className={`flex items-center ${
-                  d ? "justify-between" : "justify-center"
-                } `}
+                className={`flex items-center ${d ? "justify-between" : "justify-center"
+                  } `}
               >
                 <div>{r}</div>
                 {d && <div>{d}</div>}
@@ -1670,9 +1687,8 @@ function Zogsool({ token }) {
                   onClick={() => {
                     setTuluv("");
                   }}
-                  className={`relative ${
-                    tuluv === "" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tuluv === "" && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бүгд")}
                 </div>
@@ -1680,9 +1696,8 @@ function Zogsool({ token }) {
                   onClick={() => {
                     setTuluv(1);
                   }}
-                  className={`relative ${
-                    tuluv === 1 && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tuluv === 1 && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Төлсөн")}
                 </div>
@@ -1690,9 +1705,8 @@ function Zogsool({ token }) {
                   onClick={() => {
                     setTuluv(0);
                   }}
-                  className={`relative ${
-                    tuluv === 0 && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tuluv === 0 && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Идэвхтэй")}
                 </div>
@@ -1700,9 +1714,8 @@ function Zogsool({ token }) {
                   onClick={() => {
                     setTuluv(5);
                   }}
-                  className={`relative ${
-                    tuluv === 5 && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tuluv === 5 && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Төлбөртэй")}
                 </div>
@@ -1710,9 +1723,8 @@ function Zogsool({ token }) {
                   onClick={() => {
                     setTuluv(3);
                   }}
-                  className={`relative ${
-                    tuluv === 3 && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tuluv === 3 && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Зөрчилтэй")}
                 </div>
@@ -1730,9 +1742,8 @@ function Zogsool({ token }) {
                   onClick={() => {
                     setTuluv(2);
                   }}
-                  className={`relative ${
-                    tuluv === 2 && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${tuluv === 2 && "bg-green-500 text-white"
+                    } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Үнэгүй")}
                 </div>
@@ -1757,37 +1768,36 @@ function Zogsool({ token }) {
             v[0]?.tulbur?.[0]?.dun === v[0]?.tulukhDun;
           return (
             <div
-              className={`${
-                isKhungulult
-                  ? "bg-gray-500 text-white dark:bg-gray-700"
-                  : v[0].tuluv === 1 || v[0].tuluv === 2
+              className={`${isKhungulult
+                ? "bg-gray-500 text-white dark:bg-gray-700"
+                : v[0].tuluv === 1 || v[0].tuluv === 2
                   ? "bg-green-500 text-white dark:bg-green-700"
                   : v[0].tuluv === -2
-                  ? "bg-red-500 text-white dark:bg-red-700"
-                  : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) &&
-                    v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
-                    data.niitDun > 0
-                  ? "bg-yellow-500 text-white dark:bg-yellow-700"
-                  : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
-                  ? "bg-blue-500 text-white dark:bg-blue-700"
-                  : v[0]?.tuluv === -3
-                  ? "bg-stone-500 text-white dark:bg-stone-700"
-                  : "bg-gray-500 text-white dark:bg-gray-700"
-              } flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
+                    ? "bg-red-500 text-white dark:bg-red-700"
+                    : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) &&
+                      v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
+                      data.niitDun > 0
+                      ? "bg-yellow-500 text-white dark:bg-yellow-700"
+                      : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
+                        ? "bg-blue-500 text-white dark:bg-blue-700"
+                        : v[0]?.tuluv === -3
+                          ? "bg-stone-500 text-white dark:bg-stone-700"
+                          : "bg-gray-500 text-white dark:bg-gray-700"
+                } flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
             >
               {isKhungulult
                 ? "Үнэгүй"
                 : v[0].tuluv === 1 || v[0].tuluv === 2
-                ? "Төлсөн"
-                : v[0].tuluv === -2
-                ? "Зөрчилтэй"
-                : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && data.niitDun > 0
-                ? "Төлбөртэй"
-                : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
-                ? "Идэвхтэй"
-                : v[0]?.tuluv === -3
-                ? "Цэвэрлэсэн"
-                : "Үнэгүй"}
+                  ? "Төлсөн"
+                  : v[0].tuluv === -2
+                    ? "Зөрчилтэй"
+                    : (v[0]?.tuluv === 0 || v[0]?.tuluv === -4) && data.niitDun > 0
+                      ? "Төлбөртэй"
+                      : v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
+                        ? "Идэвхтэй"
+                        : v[0]?.tuluv === -3
+                          ? "Цэвэрлэсэн"
+                          : "Үнэгүй"}
             </div>
           );
         },
@@ -1838,8 +1848,8 @@ function Zogsool({ token }) {
                     {v[0]?.tuluv === -1
                       ? v[0]?.uneguiGarsan
                       : !!parent.zurchil
-                      ? t(parent.zurchil)
-                      : ""}
+                        ? t(parent.zurchil)
+                        : ""}
                   </div>
                 </Tooltip>
               )
@@ -1857,10 +1867,10 @@ function Zogsool({ token }) {
             v && (
               <div>
                 {String(v[0]?.burtgesenAjiltaniiNer).replace(/\D/g, "").length >
-                9
+                  9
                   ? ajiltniiNers.find(
-                      (a) => a.id === v[0]?.burtgesenAjiltaniiId,
-                    )?.ner
+                    (a) => a.id === v[0]?.burtgesenAjiltaniiId,
+                  )?.ner
                   : v[0]?.burtgesenAjiltaniiNer}
               </div>
             )
@@ -1993,11 +2003,10 @@ function Zogsool({ token }) {
           {toololt.map((a, i) => (
             <div
               key={i}
-              className={`group relative min-w-[120px] flex-1 cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 dark:hover:shadow-gray-800 ${
-                a.name === shuult?.name
-                  ? "border-2 border-green-500 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
-                  : "border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
-              }`}
+              className={`group relative min-w-[120px] flex-1 cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 dark:hover:shadow-gray-800 ${a.name === shuult?.name
+                ? "border-2 border-green-500 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
+                : "border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
+                }`}
               onClick={() => {
                 setShuult({ query: a.query, name: a.name });
                 setTuluv("");
@@ -2397,8 +2406,8 @@ function Zogsool({ token }) {
                             const secondHistory = histories[1] || {};
                             const tulukhValue = Number(
                               firstHistory?.tulukhDun ??
-                                secondHistory?.tulukhDun ??
-                                0,
+                              secondHistory?.tulukhDun ??
+                              0,
                             );
                             acc.tulukhDun += tulukhValue || 0;
                             const paymentTotal = getPaymentTotal(row);
@@ -2524,8 +2533,8 @@ function Zogsool({ token }) {
                               if (record?.isSummary) return "";
                               return (
                                 (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
-                                  (uilchluulegchGaralt?.khuudasniiKhemjee ||
-                                    0) -
+                                (uilchluulegchGaralt?.khuudasniiKhemjee ||
+                                  0) -
                                 (uilchluulegchGaralt?.khuudasniiKhemjee || 0) +
                                 index +
                                 1
@@ -2600,7 +2609,7 @@ function Zogsool({ token }) {
                                 v > 0
                                   ? v
                                   : (data.tuukh?.[0]?.tulukhDun || 0) +
-                                    (data.tuukh?.[1]?.tulukhDun || 0);
+                                  (data.tuukh?.[1]?.tulukhDun || 0);
                               return total || 0;
                             },
                           },
@@ -2659,15 +2668,15 @@ function Zogsool({ token }) {
                               return v[0].tuluv === 1 || v[0].tuluv === 2
                                 ? "Төлсөн"
                                 : v[0].tuluv === -2
-                                ? "Зөрчилтэй"
-                                : v[0]?.tuluv === 0 &&
-                                  !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
-                                ? "Идэвхтэй"
-                                : v[0]?.tuluv === -3
-                                ? "Цэвэрлэсэн"
-                                : v[0]?.tuluv === -4 && record.niitDun > 0
-                                ? "Төлбөртэй"
-                                : "Үнэгүй";
+                                  ? "Зөрчилтэй"
+                                  : v[0]?.tuluv === 0 &&
+                                    !v[0]?.tsagiinTuukh?.[0]?.garsanTsag
+                                    ? "Идэвхтэй"
+                                    : v[0]?.tuluv === -3
+                                      ? "Цэвэрлэсэн"
+                                      : v[0]?.tuluv === -4 && record.niitDun > 0
+                                        ? "Төлбөртэй"
+                                        : "Үнэгүй";
                             },
                           },
                           {
@@ -2690,8 +2699,8 @@ function Zogsool({ token }) {
                               return v?.[0]?.tuluv === -1
                                 ? v[0]?.uneguiGarsan
                                 : parent.zurchil
-                                ? t(parent.zurchil)
-                                : "";
+                                  ? t(parent.zurchil)
+                                  : "";
                             },
                           },
                           {
@@ -2706,9 +2715,9 @@ function Zogsool({ token }) {
                                   "",
                                 ).length > 9
                                   ? ajiltniiNers.find(
-                                      (a) =>
-                                        a.id === v[0]?.burtgesenAjiltaniiId,
-                                    )?.ner
+                                    (a) =>
+                                      a.id === v[0]?.burtgesenAjiltaniiId,
+                                  )?.ner
                                   : v[0]?.burtgesenAjiltaniiNer)
                               );
                             },
@@ -2805,11 +2814,10 @@ function Zogsool({ token }) {
                 disabled={
                   selectedRowkeys && selectedRowkeys?.length > 0 ? false : true
                 }
-                type={`${
-                  selectedRowkeys && selectedRowkeys?.length > 0
-                    ? "tertiary"
-                    : "default"
-                }`}
+                type={`${selectedRowkeys && selectedRowkeys?.length > 0
+                  ? "tertiary"
+                  : "default"
+                  }`}
                 className="dark:bg-gray-800 dark:text-gray-200"
               >
                 {t("Цэвэрлэх")}
@@ -2996,7 +3004,7 @@ function Zogsool({ token }) {
                     pagination={{
                       current: uilchluulegchGaralt?.khuudasniiDugaar,
                       total: uilchluulegchGaralt?.niitMur,
-                      pageSizeOptions: [100, 300, 500, 1000],
+                      pageSizeOptions: [100, 300, 500, 1000, 5000],
                       defaultPageSize: [500],
                       showSizeChanger: true,
                       onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
@@ -3153,65 +3161,65 @@ function Zogsool({ token }) {
               },
               baiguullaga?.tokhirgoo?.zurchulMsgeerSanuulakh
                 ? {
-                    key: ZURCHIL_TAB_KEY,
-                    label: "Зөрчил сануулах",
-                    children: (
-                      <div className="mt-8 overflow-x-auto">
-                        <Table
-                          className="overflow-auto"
-                          tableLayout="auto"
-                          loading={!zurchilteiJagsaalt}
-                          dataSource={zurchilteiJagsaalt}
-                          scroll={{
-                            y: "calc(100vh - 30rem)",
-                            x: "max-content",
-                          }}
-                          size="small"
-                          bordered
-                          rowSelection={rowSelection}
-                          rowKey={"_id"}
-                          columns={columnsZurchil}
-                          onChange={onChangeTable}
-                          pagination={{
-                            current: zurchilteiData?.khuudasniiDugaar,
-                            total: zurchilteiData?.niitMur,
-                            pageSizeOptions: [100, 300, 500],
-                            defaultPageSize: [500],
-                            showSizeChanger: true,
-                            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                              setZurchilKhuudaslalt((kh) => ({
-                                ...kh,
-                                khuudasniiDugaar,
-                                khuudasniiKhemjee,
-                              })),
-                          }}
-                          summary={(e) => (
-                            <AntdTable.Summary
-                              className="border "
-                              fixed={"bottom"}
-                            >
-                              <AntdTable.Summary.Cell colSpan={9}>
-                                <div className="space-x-2 truncate text-base font-bold ">
-                                  {t("Нийт")}
-                                </div>
-                              </AntdTable.Summary.Cell>
-                              <AntdTable.Summary.Cell>
-                                <div className="truncate text-right font-bold ">
-                                  {formatNumber(
-                                    e?.reduce(
-                                      (a, b) => a + (b.niitDun || 0),
-                                      0,
-                                    ),
-                                    2,
-                                  )}
-                                </div>
-                              </AntdTable.Summary.Cell>
-                            </AntdTable.Summary>
-                          )}
-                        />
-                      </div>
-                    ),
-                  }
+                  key: ZURCHIL_TAB_KEY,
+                  label: "Зөрчил сануулах",
+                  children: (
+                    <div className="mt-8 overflow-x-auto">
+                      <Table
+                        className="overflow-auto"
+                        tableLayout="auto"
+                        loading={!zurchilteiJagsaalt}
+                        dataSource={zurchilteiJagsaalt}
+                        scroll={{
+                          y: "calc(100vh - 30rem)",
+                          x: "max-content",
+                        }}
+                        size="small"
+                        bordered
+                        rowSelection={rowSelection}
+                        rowKey={"_id"}
+                        columns={columnsZurchil}
+                        onChange={onChangeTable}
+                        pagination={{
+                          current: zurchilteiData?.khuudasniiDugaar,
+                          total: zurchilteiData?.niitMur,
+                          pageSizeOptions: [100, 300, 500],
+                          defaultPageSize: [500],
+                          showSizeChanger: true,
+                          onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                            setZurchilKhuudaslalt((kh) => ({
+                              ...kh,
+                              khuudasniiDugaar,
+                              khuudasniiKhemjee,
+                            })),
+                        }}
+                        summary={(e) => (
+                          <AntdTable.Summary
+                            className="border "
+                            fixed={"bottom"}
+                          >
+                            <AntdTable.Summary.Cell colSpan={9}>
+                              <div className="space-x-2 truncate text-base font-bold ">
+                                {t("Нийт")}
+                              </div>
+                            </AntdTable.Summary.Cell>
+                            <AntdTable.Summary.Cell>
+                              <div className="truncate text-right font-bold ">
+                                {formatNumber(
+                                  e?.reduce(
+                                    (a, b) => a + (b.niitDun || 0),
+                                    0,
+                                  ),
+                                  2,
+                                )}
+                              </div>
+                            </AntdTable.Summary.Cell>
+                          </AntdTable.Summary>
+                        )}
+                      />
+                    </div>
+                  ),
+                }
                 : null,
             ]}
             onChange={(v) => setTootsooKhelber(v)}
