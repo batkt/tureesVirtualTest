@@ -48,6 +48,9 @@ function Uilchluulegch() {
   const [clientProjects, setClientProjects] = useState([]);
   const [clientTasks, setClientTasks] = useState([]);
   
+  const [searchText, setSearchText] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+  
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const tutorialSteps = [
     { targetId: "cust-stats", title: "Статистик", description: "Үйлчлүүлэгчдийн нийт тоо, шинэ бүртгэл болон нийт орлогын мэдээллийг хурдан харах боломжтой." },
@@ -172,6 +175,19 @@ function Uilchluulegch() {
     { title: "Дундаж үнэлгээ", value: (users.length > 0 ? (users.reduce((acc, curr) => acc + (Number(curr.rating) || 0), 0) / users.length).toFixed(1) : "0") },
   ];
 
+  const filteredUsers = useMemo(() => {
+    return users.filter(user => {
+      const matchSearch = !searchText || 
+        user.ner?.toLowerCase().includes(searchText.toLowerCase()) || 
+        user.utas?.toString().includes(searchText) || 
+        user.mail?.toLowerCase().includes(searchText.toLowerCase());
+      
+      const matchStatus = filterStatus === "all" || user.tuluv === filterStatus;
+      
+      return matchSearch && matchStatus;
+    });
+  }, [users, searchText, filterStatus]);
+
 
   return (
     <Admin title="Үйлчлүүлэгч"
@@ -219,10 +235,14 @@ function Uilchluulegch() {
              <Input 
                placeholder="Үйлчлүүлэгч хайх..." 
                prefix={<UserOutlined className="text-gray-400" />}
+               value={searchText}
+               onChange={(e) => setSearchText(e.target.value)}
                className="h-10 rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800 w-full md:w-72"
              />
              <Select
                placeholder="Төлөв"
+               value={filterStatus}
+               onChange={(val) => setFilterStatus(val)}
                className="h-10 w-32 [&>.ant-select-selector]:!h-10 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!flex [&>.ant-select-selector]:!items-center"
                options={[
                  { label: "Бүгд", value: "all" },
@@ -280,8 +300,14 @@ function Uilchluulegch() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 mt-2 relative">
-          {users.length === 0 && <div id="cust-list" className="hidden" />}
-          {users.map((user, idx) => (
+          {filteredUsers.length === 0 && (
+            <div className="col-span-full py-20 text-center">
+              <div className="text-gray-400 font-medium tracking-wide">
+                Үр дүн олдсонгүй
+              </div>
+            </div>
+          )}
+          {filteredUsers.map((user, idx) => (
             <div key={idx} id={idx === 0 ? "cust-list" : undefined} className="bg-white border border-gray-200 dark:bg-gray-900/50 dark:border-[#2d3748]/50 rounded-[18px] p-5 shadow-md hover:shadow-lg transition-transform hover:-translate-y-1 flex flex-col gap-4">
               
               <div className="flex items-center justify-between gap-3 border-b border-gray-300 dark:border-gray-800 rounded-lg">

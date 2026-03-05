@@ -363,19 +363,26 @@ function Khynalt() {
 
                 <DashboardCard title="Сүүлийн бараанууд" icon={<PlusOutlined/>} headerClass="border-cyan-500">
                   <div className="flex flex-col gap-3">
-                    {baraas.slice(0, 5).map(item => (
-                      <div key={item._id} className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
+                    {baraas.map(item => (
+                      <div key={item._id} className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2 last:border-b-0">
                         <div className="flex flex-col min-w-0 flex-1">
                            <span className="text-gray-800 dark:text-gray-200 text-[13px] font-extrabold truncate">{item.ner}</span>
                            <span className="text-[10px] text-gray-500">{item.niiluulegch || "--"}</span>
                         </div>
-                        <div className="flex flex-col items-end">
+                        <div className="flex flex-col items-end shrink-0 ml-2">
                            <span className="text-[13px] font-black text-cyan-600 dark:text-cyan-400">{item.uldegdel || 0}</span>
                            <span className="text-[9px] text-gray-400 uppercase font-bold tracking-tighter">Үлдэгдэл</span>
                         </div>
                       </div>
                     ))}
+                    {baraas.length === 0 && (
+                      <div className="flex flex-col items-center justify-center py-6 text-gray-400 gap-1 text-[10px] font-bold uppercase tracking-widest">
+                        <PlusOutlined className="text-2xl opacity-20" />
+                        Бараа байхгүй
+                      </div>
+                    )}
                   </div>
+
                 </DashboardCard>
 
               <DashboardCard id="khyanalt-activity-chart" title="Гүйцэтгэлийн явц" icon={<AreaChartOutlined/>} headerClass="border-sky-500" rightActions={<span className="text-gray-400 dark:text-gray-300 text-[11px] font-black uppercase tracking-tighter flex items-center gap-1.5 cursor-pointer hover:text-sky-500 transition-colors bg-sky-500/5 px-2 py-0.5 rounded-full">7 хоног</span>}>

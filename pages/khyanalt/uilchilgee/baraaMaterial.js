@@ -144,6 +144,8 @@ function BaraaMaterial() {
         barcode: values.barcode || "",
         zurgiinId: values.zurgiinId || "",
         brand: values.brand || "",
+        negjUne: Number(values.negjUrtug) || 0,
+        niitUrtug: Number(values.niitUne) || 0,
         niiluulegch: values.niiluulegch || "",
         idevhtei: values.idevhtei !== undefined ? values.idevhtei : true,
         baiguullagiinId,
@@ -254,6 +256,9 @@ function BaraaMaterial() {
     setEditingBaraa(item);
     form.setFieldsValue({
       ...item,
+      // map API field names → form field names
+      negjUrtug: item.negjUne ?? 0,
+      niitUne:   item.niitUrtug ?? 0,
       idevhtei: item.idevhtei !== undefined ? item.idevhtei : true
     });
     setIsAddModalOpen(true);
