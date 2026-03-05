@@ -58,17 +58,22 @@ import {
   DatePicker
 } from "antd";
 import { useFsmSocket } from "hooks/useFsmSocket";
+import { useRouter } from "next/router";
+import { TbBoxSeam } from "react-icons/tb";
 
 function DashboardCard({ id, title, icon, rightActions, children, headerClass="border-emerald-500" }) {
   return (
-    <div id={id} className={`bg-white dark:bg-gray-900/50 rounded-xl overflow-hidden shadow-sm border-t-[3px] ${headerClass} hover:shadow-emerald-500 dark:hover:shadow-emerald-500/10 flex flex-col relative min-h-[300px] h-[340px]`}>
-      <div className="flex justify-between items-center px-4 py-3 bg-blue-900/10 dark:bg-[#1b212f] border-b border-gray-100 dark:border-[#2d3748]/50 shrink-0">
-        <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-extrabold text-[12.5px] tracking-wide">
-          <span className="text-gray-400 dark:text-gray-300">{icon}</span> {title}
+    <div id={id} className={`bg-white dark:bg-[#1a1f2e]/60 backdrop-blur-xl rounded-2xl overflow-hidden shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] dark:shadow-none border border-gray-100 dark:border-gray-800/50 flex flex-col relative transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:hover:border-gray-700/50 h-full`}>
+      <div className="flex justify-between items-center px-5 py-4 shrink-0">
+        <div className="flex items-center gap-2.5 text-gray-800 dark:text-gray-100 font-bold text-[13px] tracking-tight">
+          <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border border-gray-100 dark:border-gray-700/30">
+            {icon}
+          </span> 
+          {title}
         </div>
-        
+        {rightActions && <div>{rightActions}</div>}
       </div>
-      <div className="p-4 flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
+      <div className="px-5 pb-5 pt-1 overflow-y-auto custom-scrollbar flex-1">
         {children}
       </div>
     </div>
@@ -76,7 +81,7 @@ function DashboardCard({ id, title, icon, rightActions, children, headerClass="b
 }
 
 function Khynalt() {
-  
+  const router = useRouter();
   const [isRightPanelExpanded, setIsRightPanelExpanded] = useState(typeof window !== 'undefined' ? window.innerWidth >= 1280 : true);
   const { t } = useTranslation();
   const [tasks, setTasks] = useState([]);
@@ -222,35 +227,28 @@ function Khynalt() {
           <div className="flex justify-between items-center mb-4 px-1">
           
         </div>
-          <div id="khyanalt-stats" className="hideScroll grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
+          <div id="khyanalt-stats" className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-8 shrink-0">
             {statCards.map((card, index) => (
               <div
                 key={index}
-                className={`group relative cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10 border-2 border-emerald-200 bg-emerald-50/60 dark:border-emerald-900 dark:bg-emerald-950/40 col-span-1 animate-entrance-stagger-${Math.min(index + 1, 5)}`}
+                className="group relative bg-white dark:bg-[#1a1f2e]/40 border border-gray-100 dark:border-gray-800/50 rounded-2xl p-4 transition-all duration-300 hover:border-emerald-500/30 dark:hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/5 animate-entrance"
+                style={{ animationDelay: `${index * 50}ms` }}
               >
-                <div className="absolute inset-0 bg-emerald-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
-
-                <div className="relative h-full rounded-2xl p-3 sm:p-2.5">
-                  <div className="flex h-full flex-col justify-between">
-                    <div className="mb-2 flex items-start justify-between">
-                      <div>
-                        <div className="mb-0.5 bg-gradient-to-r from-emerald-900 to-emerald-700 bg-clip-text text-3xl font-bold text-transparent dark:from-emerald-100 dark:to-emerald-300">
-                          {card.value}
-                        </div>
-                        <div className="text-sm font-medium text-emerald-600 transition-colors duration-300 dark:text-emerald-400">
-                          {card.title}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="h-0.5 w-0 rounded-full bg-emerald-500 transition-all duration-500 group-hover:w-full" />
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{card.title}</span>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-black text-gray-900 dark:text-gray-50 tabular-nums tracking-tight">{card.value}</span>
                   </div>
+                </div>
+                <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                   <RiseOutlined className="text-emerald-500 text-xl" />
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="flex-1 overflow-y-auto pr-2 pb-8 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-100 dark:[&::-webkit-scrollbar-thumb]:bg-slate-800">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          <div className="flex-1 overflow-y-auto pr-2 pb-8 custom-scrollbar">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 auto-rows-fr">
               
               <DashboardCard id="khyanalt-status-chart" title="Даалгаврын төлөв" icon={<CheckSquareOutlined/>} headerClass="border-indigo-500">
                 {(() => {
@@ -331,29 +329,32 @@ function Khynalt() {
                 })()}
                 </DashboardCard>
 
-                <DashboardCard id="khyanalt-tasks" title="Даалгаврууд" icon={<CheckSquareOutlined/>} headerClass="border-blue-500" rightActions={<span className="text-emerald-500 text-[11px] font-bold cursor-pointer hover:underline">Надад оноогдсон <DownOutlined className="text-[8px]"/></span>}>
+                <DashboardCard id="khyanalt-tasks" title="Ажилууд" icon={<CheckSquareOutlined/>} headerClass="border-blue-500" rightActions={<span className="text-emerald-500 text-[11px] font-bold cursor-pointer hover:underline">Надад оноогдсон <DownOutlined className="text-[8px]"/></span>}>
                   <div className="flex flex-col gap-3">
                     {tasks.slice(0, 5).map(task => (
-                      <div key={task._id} className="flex flex-col gap-1 border-b border-gray-100 dark:border-gray-800 pb-2">
-                        <div className="flex items-center gap-2">
-                           <CheckSquareOutlined className={task.tuluv === "duussan" ? "text-emerald-500" : "text-gray-400"} />
-                           <span className="text-gray-800 dark:text-gray-200 text-[13px] font-extrabold flex-1 truncate">{task.ner}</span>
+                      <div 
+                        key={task._id} 
+                        onClick={() => router.push(`/khyanalt/uilchilgee/tuluvluguu?taskId=${task._id}`)}
+                        className="flex items-center justify-between gap-3 border-b border-gray-100 dark:border-gray-800 pb-2.5 last:border-b-0 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 transition-all group/item"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                           <CheckSquareOutlined className={task.tuluv === "duussan" ? "text-emerald-500" : "text-gray-300"} />
+                           <span className="text-gray-800 dark:text-gray-200 text-[12px] font-bold truncate leading-none group-hover/item:text-blue-500 transition-colors shrink-0">{task.ner}</span>
                         </div>
-                         <div className="flex items-center gap-2 ml-6 text-[10px] text-gray-500 font-medium tracking-tight">
-                            <span className={`px-1.5 py-0.5 rounded uppercase font-black ${
-                               task.zereglel === "yaraltai" || task.zereglel === "nen yaraltai" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
-                               task.zereglel === "engiin" ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                               "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                            }`}>
-                               {task.zereglel === "yaraltai" ? "Яаралтай" : 
-                                task.zereglel === "nen yaraltai" ? "Нэн яаралтай" : 
-                                task.zereglel === "engiin" ? "Энгийн" : "Бага"}
-                            </span>
-                            <span className="flex items-center gap-1">
-                               <CalendarOutlined className="text-[10px] opacity-70" />
-                               {task.duusakhTsag ? moment(task.duusakhTsag).format("YYYY-MM-DD") : "--"}
-                            </span>
-                         </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                           <span className={`px-1.5 py-0.5 rounded-[4px] text-[8px] uppercase font-black min-w-[60px] text-center ${
+                              task.zereglel === "yaraltai" || task.zereglel === "nen yaraltai" ? "bg-red-50 text-red-500 dark:bg-red-950/30 dark:text-red-400" :
+                              task.zereglel === "engiin" ? "bg-yellow-50 text-yellow-600 dark:bg-yellow-950/30 dark:text-yellow-400" :
+                              "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+                           }`}>
+                              {task.zereglel === "yaraltai" ? "Яаралтай" : 
+                               task.zereglel === "nen yaraltai" ? "Нэн" : 
+                               task.zereglel === "engiin" ? "Энгийн" : "Бага"}
+                           </span>
+                           <span className="flex items-center gap-1 text-[9px] text-gray-400 font-bold tabular-nums">
+                              {task.duusakhTsag ? moment(task.duusakhTsag).format("MM/DD") : "--"}
+                           </span>
+                        </div>
                       </div>
                     ))}
                     
@@ -361,7 +362,7 @@ function Khynalt() {
                   </div>
                 </DashboardCard>
 
-                <DashboardCard title="Сүүлийн бараанууд" icon={<PlusOutlined/>} headerClass="border-cyan-500">
+                <DashboardCard title="Сүүлийн бараанууд" icon={<TbBoxSeam/>} headerClass="border-cyan-500">
                   <div className="flex flex-col gap-3">
                     {baraas.map(item => (
                       <div key={item._id} className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2 last:border-b-0">

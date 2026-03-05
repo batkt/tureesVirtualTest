@@ -1970,34 +1970,52 @@ useEffect(() => {
       >
         <div className="flex h-full w-full bg-white dark:bg-[#111827] flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
           <div className="w-full lg:w-1/2 flex flex-col h-auto lg:h-full overflow-y-auto p-4 md:p-8 custom-scrollbar">
-            <div className="flex items-center justify-between border-b pb-6 dark:border-gray-800">
-              <div className="flex items-center space-x-4">
-              <Tag color="cyan" className="rounded-md px-3 py-1 font-bold uppercase text-[10px] bg-teal-500/10 text-teal-600 border border-teal-500/20">
-                {selectedTask?.taskId}
-              </Tag>
-                <span className={`font-bold text-sm ${
-                  selectedTask?.tuluv === 'duussan' ? 'text-green-500' : 
-                  selectedTask?.tuluv === 'khiigdej bui' ? 'text-yellow-500' : 
-                  selectedTask?.tuluv === 'khugatsaa khetersen' ? 'text-red-500' :
-                  selectedTask?.tuluv === 'shalga' ? 'text-blue-500' : 'text-teal-500'
-                }`}>
-                  {
-                    selectedTask?.tuluv === 'duussan' ? 'Дууссан' : 
-                    selectedTask?.tuluv === 'khiigdej bui' ? 'Хийгдэж буй' : 
-                    selectedTask?.tuluv === 'khugatsaa khetersen' ? 'Хугацаа хэтэрсэн' :
-                    selectedTask?.tuluv === 'shalga' ? 'Шалгах' : 'Шинэ'
-                  }
-                </span>
-            </div>
-          </div>
+            <div className="flex items-start justify-between border-b pb-6 dark:border-gray-800">
+               <div className="flex flex-col gap-3 min-w-0">
+                  <div className="flex items-center gap-2 text-[11px] font-bold text-gray-500 dark:text-gray-400">
+                    <CalendarOutlined className="text-[12px]" />
+                    <span>{selectedTask?.ekhlekhTsag ? dayjs(selectedTask.ekhlekhTsag).format("YYYY/MM/DD HH:mm") : "—"}</span>
+                    <span className="text-gray-300 dark:text-gray-600">→</span> 
+                    <span>{selectedTask?.duusakhTsag ? dayjs(selectedTask.duusakhTsag).format("YYYY/MM/DD HH:mm") : "—"}</span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    {selectedTask?.taskId && (
+                      <span className="text-[10px] font-black text-teal-600 dark:text-teal-400 uppercase tracking-tighter bg-teal-50 dark:bg-teal-500/10 px-1.5 py-0.5 rounded w-fit">
+                        ID: {selectedTask.taskId}
+                      </span>
+                    )}
+                    <h1 className="text-2xl font-black m-0 dark:text-white leading-tight truncate">{selectedTask?.title}</h1>
+                  </div>
+               </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center space-x-4">
-                <h1 className="text-2xl font-bold m-0 dark:text-white">{selectedTask?.title}</h1>
+               <div className="flex flex-col items-end gap-2 shrink-0">
+                  <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase shadow-sm ${
+                    selectedTask?.zereglel === 'nen yaraltai' || selectedTask?.zereglel === 'yaraltai' ? 'bg-red-500 text-white' : 
+                    selectedTask?.zereglel === 'engiin' ? 'bg-yellow-500 text-white' : 'bg-teal-500 text-white'
+                  }`}>
+                    {selectedTask?.zereglel === "nen yaraltai" ? "🔴 Нэн Яаралтай" : selectedTask?.zereglel === "yaraltai" ? "🟠 Яаралтай" : selectedTask?.zereglel === "engiin" ? "🟢 Энгийн" : "🔵 Бага"}
+                  </span>
+                  <span className={`font-bold text-[11px] px-2 py-0.5 rounded-full border ${
+                    selectedTask?.tuluv === 'duussan' ? 'text-green-500 border-green-500/20 bg-green-500/5' : 
+                    selectedTask?.tuluv === 'khiigdej bui' ? 'text-yellow-500 border-yellow-500/20 bg-yellow-500/5' : 
+                    selectedTask?.tuluv === 'khugatsaa khetersen' ? 'text-red-500 border-red-500/20 bg-red-500/5' :
+                    selectedTask?.tuluv === 'shalga' ? 'text-blue-500 border-blue-500/20 bg-blue-500/5' : 'text-teal-500 border-teal-500/20 bg-teal-500/5'
+                  }`}>
+                    {
+                      selectedTask?.tuluv === 'duussan' ? 'Дууссан' : 
+                      selectedTask?.tuluv === 'khiigdej bui' ? 'Хийгдэж буй' : 
+                      selectedTask?.tuluv === 'khugatsaa khetersen' ? 'Хугацаа хэтэрсэн' :
+                      selectedTask?.tuluv === 'shalga' ? 'Шалгах' : 'Шинэ'
+                    }
+                  </span>
+               </div>
             </div>
-            <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-6">
-              {selectedTask?.description || "No description provided."}
-            </p>
+
+            <div className="py-6">
+              <p className="text-gray-500 dark:text-gray-400 text-[13px] leading-relaxed m-0">
+                {selectedTask?.description || "No description provided."}
+              </p>
+            </div>
 
             {((selectedTask?.hariutsagchZurag?.length > 0) || (selectedTask?.zurag?.length > 0)) && (
               <div className="space-y-3 mb-8">
@@ -2028,64 +2046,45 @@ useEffect(() => {
                 </div>
               </div>
             )}
-          </div>
 
-          <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-8">
-              <div className="flex flex-col space-y-3">
-                <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Ажилтнууд</span>
-                <div className="flex items-center space-x-2">
-                  {selectedTask?.ajiltnuud?.map((aId, i) => {
-                    const member = allEmployees.find(m => m._id === aId);
-                    return (
-                      <Tooltip key={aId || i} title={member?.ner || member?.nevtrekhNer || "Ажилтан"}>
-                        <Avatar className="bg-teal-500 font-black">
-                          {(member?.ner || member?.nevtrekhNer || "У")?.charAt(0)?.toUpperCase()}
-                        </Avatar>
-                      </Tooltip>
-                    );
-                  })}
-                  {(!selectedTask?.ajiltnuud || selectedTask?.ajiltnuud?.length === 0) && (
-                    <Avatar className="bg-gray-500 font-black">?</Avatar>
-                  )}
-                  {ajiltan?.erkh === "Admin" && (
-                    <Dropdown
-                      menu={{
-                        items: allEmployees
-                          .filter(emp => !selectedTask?.ajiltnuud?.includes(emp._id))
-                          .map(emp => ({
-                            key: emp._id,
-                            label: emp.ner || emp.nevtrekhNer,
-                            onClick: () => handleAddMemberToTask(emp._id)
-                          })),
-                      }}
-                      trigger={['click']}
-                    >
-                      <div className="w-8 h-8 rounded-full border-2 border-dashed border-gray-700 flex items-center justify-center text-gray-500 hover:border-teal-500 hover:text-teal-500 cursor-pointer transition-all">
-                        <PlusOutlined style={{ fontSize: '12px' }} />
-                      </div>
-                    </Dropdown>
-                  )}
-                </div>
-              </div>
-
-             
-
-              <div className="flex flex-col space-y-3">
-                <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Хугацаа</span>
-                <div className="space-y-1">
-                  <div className="text-[13px] font-bold text-gray-800 dark:text-gray-300">
-                    {selectedTask?.ekhlekhTsag ? dayjs(selectedTask.ekhlekhTsag).format("YYYY/MM/DD HH:mm") : "—"} 
-                    <span className="mx-2 text-gray-400">→</span> 
-                    {selectedTask?.duusakhTsag ? dayjs(selectedTask.duusakhTsag).format("YYYY/MM/DD HH:mm") : "—"}
-                  </div>
-                  <div className={`text-[11px] font-black uppercase ${selectedTask?.zereglel === 'yaraltai' || selectedTask?.zereglel === 'nen yaraltai' ? 'text-red-500' : selectedTask?.zereglel === 'engiin' ? 'text-yellow-500' : 'text-teal-500'}`}>
-                    {selectedTask?.zereglel === "nen yaraltai" ? "🔴 Нэн Яаралтай" : selectedTask?.zereglel === "yaraltai" ? "🟠 Яаралтай" : selectedTask?.zereglel === "engiin" ? "🟢 Энгийн" : selectedTask?.zereglel === "baga" ? "🔵 Бага" : selectedTask?.zereglel || "Энгийн"}
+            <div className="grid grid-cols-2 gap-8 mb-8">
+                <div className="flex flex-col space-y-3">
+                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Ажилтнууд</span>
+                  <div className="flex items-center space-x-2">
+                    {selectedTask?.ajiltnuud?.map((aId, i) => {
+                      const member = allEmployees.find(m => m._id === aId);
+                      return (
+                        <Tooltip key={aId || i} title={member?.ner || member?.nevtrekhNer || "Ажилтан"}>
+                          <Avatar className="bg-teal-500 font-black">
+                            {(member?.ner || member?.nevtrekhNer || "У")?.charAt(0)?.toUpperCase()}
+                          </Avatar>
+                        </Tooltip>
+                      );
+                    })}
+                    {(!selectedTask?.ajiltnuud || selectedTask?.ajiltnuud?.length === 0) && (
+                      <Avatar className="bg-gray-500 font-black">?</Avatar>
+                    )}
+                    {ajiltan?.erkh === "Admin" && (
+                      <Dropdown
+                        menu={{
+                          items: allEmployees
+                            .filter(emp => !selectedTask?.ajiltnuud?.includes(emp._id))
+                            .map(emp => ({
+                              key: emp._id,
+                              label: emp.ner || emp.nevtrekhNer,
+                              onClick: () => handleAddMemberToTask(emp._id)
+                            })),
+                        }}
+                        trigger={['click']}
+                      >
+                        <div className="w-8 h-8 rounded-full border-2 border-dashed border-gray-700 flex items-center justify-center text-gray-500 hover:border-teal-500 hover:text-teal-500 cursor-pointer transition-all">
+                          <PlusOutlined style={{ fontSize: '12px' }} />
+                        </div>
+                      </Dropdown>
+                    )}
                   </div>
                 </div>
-              </div>
             </div>
-          </div>
 
           <div className="pt-8 mt-8 border-t dark:border-gray-700">
               {(() => {
