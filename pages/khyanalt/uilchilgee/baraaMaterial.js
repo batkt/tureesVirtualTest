@@ -364,7 +364,7 @@ function BaraaMaterial() {
           <div id="mat-table" className="border border-slate-300 dark:border-slate-700/60 rounded-xl overflow-hidden bg-white dark:bg-gray-800 h-fit max-h-[70vh] flex flex-col shadow-inner mb-6 animate-entrance-stagger-7">
             <div className="overflow-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar]:h-1.5 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full">
               <table className="w-full text-left text-[11.5px] text-gray-800 dark:text-gray-300 border-collapse whitespace-nowrap min-w-max">
-                <thead className="bg-gray-100 dark:bg-gray-800 dark:text-white text-black sticky top-0 z-10">
+                <thead className="bg-gray-100 dark:bg-gray-900 dark:text-white text-black sticky top-0 z-10">
                   <tr>
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center w-8">
                        №
@@ -505,7 +505,7 @@ function BaraaMaterial() {
         
                 <div className="border-b border-slate-200 dark:border-slate-700/50"></div>
                 
-                <div className="flex flex-col space-y-3 shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50">
+                <div className="flex h-[calc(40vh-200px)] overflow-y-auto flex-col space-y-3 shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50">
                 <div className="flex items-center justify-between px-1">
                   <div className="flex items-center space-x-1.5 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">
                     <span>Төслүүд </span>
@@ -548,7 +548,7 @@ function BaraaMaterial() {
                 )}
               </div>
                 
-                <div id="mat-team" className="pt-4 shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50 overflow-y-auto max-h-[400px]">
+                <div id="mat-team" className="pt-4 h-[calc(60vh-200px)] overflow-y-auto shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50 overflow-y-auto max-h-[400px]">
                   <div className="text-[11px] font-extrabold text-gray-400 mb-4 px-1 flex items-center tracking-wide uppercase opacity-70">
                     <span>Ажилчид</span>
                   </div>
@@ -570,7 +570,7 @@ function BaraaMaterial() {
                 </div>
                 
               </div>
-              <div className="p-4 shrink-0 mt-auto">
+              <div className="p-4 shrink-0 mb-8">
                   <div 
                     className="bg-white dark:bg-gray-800/60 dark:hover:bg-emerald-500/10 hover:bg-emerald-500 group transition-all cursor-pointer rounded-2xl px-4 py-3 flex items-center justify-center gap-2.5 border border-slate-200 dark:border-slate-700/50 shadow-sm"
                     onClick={() => setIsTutorialOpen(true)}

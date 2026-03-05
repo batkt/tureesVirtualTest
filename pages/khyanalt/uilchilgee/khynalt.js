@@ -42,7 +42,11 @@ import {
   LikeOutlined,
   SmileOutlined,
   RiseOutlined,
-  RightOutlined
+  RightOutlined,
+  SettingOutlined,
+  AreaChartOutlined,
+  CheckCircleOutlined,
+  LoadingOutlined
 } from "@ant-design/icons";
 import { 
   Button, 
@@ -170,8 +174,23 @@ function Khynalt() {
       days.push(moment().subtract(i, 'days').format('YYYY-MM-DD'));
     }
     return days.map(day => {
-      const count = tasks.filter(t => (t.tuluv === 'duussan' || t.tuluv === 'duussan') && moment(t.updatedAt || t.createdAt).isSame(day, 'day')).length;
+      const count = tasks.filter(t => (t.tuluv === 'duussan') && moment(t.updatedAt || t.createdAt).isSame(day, 'day')).length;
       return { label: moment(day).format('M/D'), count };
+    });
+  }, [tasks]);
+
+  // 3-series chart data: done (green), active (blue), overdue (red)
+  const multiChartData = useMemo(() => {
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      days.push(moment().subtract(i, 'days').format('YYYY-MM-DD'));
+    }
+    return days.map(day => {
+      const dayMoment = moment(day);
+      const done = tasks.filter(t => t.tuluv === 'duussan' && dayMoment.isSame(t.updatedAt || t.createdAt, 'day')).length;
+      const active = tasks.filter(t => t.tuluv === 'khiigdej bui' && dayMoment.isSame(t.updatedAt || t.createdAt, 'day')).length;
+      const overdue = tasks.filter(t => t.tuluv !== 'duussan' && t.duusakhTsag && moment(t.duusakhTsag).isBefore(dayMoment, 'day')).length;
+      return { label: dayMoment.format('M/D'), done, active, overdue };
     });
   }, [tasks]);
 
@@ -234,67 +253,82 @@ function Khynalt() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               
               <DashboardCard id="khyanalt-status-chart" title="Даалгаврын төлөв" icon={<CheckSquareOutlined/>} headerClass="border-indigo-500">
-                  <div className="flex justify-center items-center h-full relative p-4">
-                    {tasks.length > 0 ? (
-                      (() => {
-                        const doneCount = tasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'duussan').length;
-                        const totalCount = tasks.length;
-                        const pendingCount = totalCount - doneCount;
-                        const percent = (doneCount / totalCount) * 100;
-                        const dashArray = 251.2; 
-                        const dashOffset = dashArray - (dashArray * percent) / 100;
+                {(() => {
+                  const done    = tasks.filter(t => t.tuluv === 'duussan').length;
+                  const active  = tasks.filter(t => t.tuluv === 'khiigdej bui').length;
+                  const overdue = tasks.filter(t => t.tuluv !== 'duussan' && t.duusakhTsag && moment(t.duusakhTsag).isBefore(moment(), 'day')).length;
+                  const total   = tasks.length || 1;
+                  const pct     = Math.round((done / total) * 100);
 
-                        return (
-                          <div className="flex items-center gap-12">
-                            <div className="relative">
-                              <svg viewBox="0 0 100 100" className="w-[180px] h-[180px] drop-shadow-2xl">
-                                {/* Indigo Segment (Pending/In Progress) */}
-                                <circle 
-                                  cx="50" cy="50" r="40" 
-                                  fill="transparent" 
-                                  stroke="#6366f1" 
-                                  strokeWidth="10" 
-                                />
-                                {/* Emerald Segment (Done) */}
-                                <circle 
-                                  cx="50" 
-                                  cy="50" 
-                                  r="40" 
-                                  fill="transparent" 
-                                  stroke="#10b981" 
-                                  strokeWidth="10" 
-                                  strokeDasharray={dashArray} 
-                                  strokeDashoffset={dashOffset} 
-                                  strokeLinecap="round"
-                                  transform="rotate(-90 50 50)"
-                                  className="transition-all duration-1000 ease-out"
-                                />
-                                <text x="50" y="52" fill="currentColor" className="text-gray-800 dark:text-white" fontSize="18" fontWeight="900" textAnchor="middle">{totalCount}</text>
-                                <text x="50" y="65" fill="currentColor" className="text-gray-400" fontSize="7" fontWeight="bold" textAnchor="middle">НИЙТ</text>
-                              </svg>
-                            </div>
-                            
-                            <div className="flex flex-col gap-6">
-                              <div className="flex flex-col items-start">
-                                <span className="text-[10px] text-white font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-indigo-500 mb-1 leading-none shadow-lg shadow-indigo-500/20">Хийгдэж байгаа</span>
-                                <span className="text-3xl font-black text-indigo-500 dark:text-indigo-400 leading-none ml-1">{pendingCount}</span>
-                              </div>
-                              
-                              <div className="flex flex-col items-start">
-                                <span className="text-[10px] text-white font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-emerald-500 mb-1 leading-none shadow-lg shadow-emerald-500/20">Дууссан</span>
-                                <span className="text-3xl font-black text-emerald-500 dark:text-emerald-400 leading-none ml-1">{doneCount}</span>
-                              </div>
+                  // ring segments — circumference of r=36 circle
+                  const C = 2 * Math.PI * 36; // ≈ 226.2
+                  const doneDash   = (done   / total) * C;
+                  const activeDash = (active / total) * C;
+                  const overdueDash= (overdue / total) * C;
+
+                  const statuses = [
+                    { label: 'Дууссан',          count: done,    color: '#22c55e', offset: 0 },
+                    { label: 'Идэвхтэй',          count: active,  color: '#6366f1', offset: doneDash },
+                    { label: 'Хугацаа хэтэрсэн', count: overdue, color: '#ef4444', offset: doneDash + activeDash },
+                  ];
+
+                  return tasks.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-2 text-[10px] font-bold uppercase tracking-widest">
+                      <CheckSquareOutlined className="text-3xl opacity-20" />
+                      Мэдээлэл байхгүй
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-around h-full px-2">
+                      {/* Ring */}
+                      <div className="relative shrink-0">
+                        <svg viewBox="0 0 80 80" className="w-[150px] h-[150px]">
+                          <defs>
+                            <filter id="ringShadow" x="-20%" y="-20%" width="140%" height="140%">
+                              <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor="#6366f1" floodOpacity="0.25"/>
+                            </filter>
+                          </defs>
+                          {/* track */}
+                          <circle cx="40" cy="40" r="36" fill="none" stroke="currentColor"
+                            strokeWidth="7" className="text-gray-100 dark:text-gray-800" />
+                          {/* segments */}
+                          {statuses.map((s, i) => (
+                            <circle key={i}
+                              cx="40" cy="40" r="36"
+                              fill="none"
+                              stroke={s.color}
+                              strokeWidth="7"
+                              strokeLinecap="butt"
+                              strokeDasharray={`${(s.count / total) * C} ${C}`}
+                              strokeDashoffset={-s.offset}
+                              transform="rotate(-90 40 40)"
+                              style={{ transition: 'stroke-dasharray 0.9s ease' }}
+                            />
+                          ))}
+                          {/* center */}
+                          <text x="40" y="36" fill="currentColor" fontSize="16" fontWeight="900"
+                            textAnchor="middle" className="text-gray-800 dark:text-white">{pct}%</text>
+                          <text x="40" y="47" fill="currentColor" fontSize="5.5" fontWeight="700"
+                            textAnchor="middle" className="text-gray-400 dark:text-gray-500">ГҮЙЦЭТГЭЛ</text>
+                          <text x="40" y="56" fill="currentColor" fontSize="5" fontWeight="600"
+                            textAnchor="middle" className="text-gray-400">{total} нийт</text>
+                        </svg>
+                      </div>
+
+                      {/* Stats column */}
+                      <div className="flex flex-col gap-3">
+                        {statuses.map((s, i) => (
+                          <div key={i} className="flex items-center gap-2.5">
+                            <div className="w-2 h-2 rounded-full shrink-0" style={{ background: s.color, boxShadow: `0 0 6px ${s.color}60` }} />
+                            <div className="flex flex-col">
+                              <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400">{s.label}</span>
+                              <span className="text-xl font-black leading-none" style={{ color: s.color }}>{s.count}</span>
                             </div>
                           </div>
-                        );
-                      })()
-                    ) : (
-                      <div className="flex flex-col items-center justify-center text-gray-400 gap-2 font-bold uppercase tracking-widest text-[10px]">
-                         <CheckSquareOutlined className="text-3xl opacity-20 mb-1" />
-                         Мэдээлэл байхгүй
+                        ))}
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  );
+                })()}
                 </DashboardCard>
 
                 <DashboardCard id="khyanalt-tasks" title="Даалгаврууд" icon={<CheckSquareOutlined/>} headerClass="border-blue-500" rightActions={<span className="text-emerald-500 text-[11px] font-bold cursor-pointer hover:underline">Надад оноогдсон <DownOutlined className="text-[8px]"/></span>}>
@@ -331,50 +365,164 @@ function Khynalt() {
                   <div className="flex flex-col gap-3">
                     {baraas.slice(0, 5).map(item => (
                       <div key={item._id} className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
-                        <div className="flex flex-col">
+                        <div className="flex flex-col min-w-0 flex-1">
                            <span className="text-gray-800 dark:text-gray-200 text-[13px] font-extrabold truncate">{item.ner}</span>
                            <span className="text-[10px] text-gray-500">{item.niiluulegch || "--"}</span>
                         </div>
-                        
+                        <div className="flex flex-col items-end">
+                           <span className="text-[13px] font-black text-cyan-600 dark:text-cyan-400">{item.uldegdel || 0}</span>
+                           <span className="text-[9px] text-gray-400 uppercase font-bold tracking-tighter">Үлдэгдэл</span>
+                        </div>
                       </div>
                     ))}
                   </div>
                 </DashboardCard>
 
-              <DashboardCard id="khyanalt-activity-chart" title="Даалгаврын гүйцэтгэл" icon={<FileTextOutlined/>} headerClass="border-sky-400" rightActions={<span className="text-gray-400 dark:text-gray-300 text-[11.5px] font-extrabold flex items-center gap-1.5 cursor-pointer hover:text-black dark:hover:text-white transition-colors">7 хоног <DownOutlined className="text-[8px]"/></span>}>
-                  <div className="flex justify-center items-center h-full relative py-2">
-                     <svg viewBox="0 0 200 110" className="w-full h-full drop-shadow-lg">
-                       <defs>
-                         <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                           <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.3" />
-                           <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0" />
-                         </linearGradient>
-                       </defs>
-                       <path d={chartPath} fill="url(#chartGradient)" />
-                       <line x1="20" y1="10" x2="20" y2="90" stroke="#374151" strokeWidth="0.5" strokeDasharray="3" />
-                       <line x1="20" y1="90" x2="190" y2="90" stroke="#374151" strokeWidth="0.5" strokeDasharray="3" />
-                       <polyline fill="none" stroke="#0ea5e9" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" points={chartPoints} />
-                       {chartData.map((d, i) => {
-                         const x = 30 + (i * 24);
-                         const y = 90 - (d.count / maxCount * 70);
-                         return (
-                           <g key={i}>
-                             <circle cx={x} cy={y} r="3" fill="#0ea5e9" stroke="#fff" strokeWidth="1" />
-                             <text x={x} y="103" fill="#6b7280" fontSize="7" fontWeight="bold" textAnchor="middle">{d.label}</text>
-                             {d.count > 0 && <text x={x} y={y - 6} fill="#0ea5e9" fontSize="6" fontWeight="bold" textAnchor="middle">{d.count}</text>}
-                           </g>
-                         );
-                       })}
-                       <text x="10" y="22" fill="#6b7280" fontSize="7" fontWeight="bold">{maxCount}</text>
-                       <text x="10" y="55" fill="#6b7280" fontSize="7" fontWeight="bold">{Math.round(maxCount/2)}</text>
-                       <text x="10" y="93" fill="#6b7280" fontSize="7" fontWeight="bold">0</text>
-                     </svg>
-                  </div>
+              <DashboardCard id="khyanalt-activity-chart" title="Гүйцэтгэлийн явц" icon={<AreaChartOutlined/>} headerClass="border-sky-500" rightActions={<span className="text-gray-400 dark:text-gray-300 text-[11px] font-black uppercase tracking-tighter flex items-center gap-1.5 cursor-pointer hover:text-sky-500 transition-colors bg-sky-500/5 px-2 py-0.5 rounded-full">7 хоног</span>}>
+                  {(() => {
+                    const W = 200, H = 90, PAD_L = 8, PAD_R = 8, BASE = H;
+                    const N = multiChartData.length;
+                    const step = (W - PAD_L - PAD_R) / Math.max(N - 1, 1);
+
+                    const doneTotal   = tasks.filter(t => t.tuluv === 'duussan').length;
+                    const activeTotal  = tasks.filter(t => t.tuluv === 'khiigdej bui').length;
+                    const overdueTotal = tasks.filter(t => t.tuluv !== 'duussan' && t.duusakhTsag && moment(t.duusakhTsag).isBefore(moment(), 'day')).length;
+                    const effPct = Math.round((doneTotal / (tasks.length || 1)) * 100);
+
+                    // compute scaled y for each series
+                    const allVals = multiChartData.flatMap(d => [d.done, d.active, d.overdue]);
+                    const seriesMax = Math.max(...allVals, 1);
+
+                    const mkPts = (key) => multiChartData.map((d, i) => ({
+                      x: PAD_L + i * step,
+                      y: BASE - (d[key] / seriesMax) * (BASE - 10),
+                      v: d[key]
+                    }));
+
+                    const mkSmooth = (pts) => pts.length < 2
+                      ? `M${pts[0]?.x ?? 0},${pts[0]?.y ?? BASE}`
+                      : pts.reduce((acc, pt, i) => {
+                          if (i === 0) return `M${pt.x},${pt.y}`;
+                          const prev = pts[i - 1];
+                          const cpx = (prev.x + pt.x) / 2;
+                          return `${acc} C${cpx},${prev.y} ${cpx},${pt.y} ${pt.x},${pt.y}`;
+                        }, '');
+
+                    const mkArea = (pts) => {
+                      const line = mkSmooth(pts);
+                      return `${line} L${pts[pts.length-1].x},${BASE} L${pts[0].x},${BASE} Z`;
+                    };
+
+                    const series = [
+                      { key: 'overdue', color: '#ef4444', gradId: 'gradRed',   glowId: 'glowRed',   label: 'Хугацаа хэтэрсэн', count: overdueTotal },
+                      { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: 'Идэвхтэй',         count: activeTotal  },
+                      { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: 'Дууссан',          count: doneTotal    },
+                    ];
+
+                    return (
+                      <div className="flex flex-col h-full">
+                        {/* stat chips */}
+                        <div className="flex items-center gap-2 mb-3 flex-wrap">
+                          {series.map(s => (
+                            <div key={s.key} className="flex items-baseline gap-1 px-2.5 py-1 rounded-lg"
+                              style={{ background: `${s.color}14`, border: `1px solid ${s.color}30` }}>
+                              <span className="text-base font-black leading-none" style={{ color: s.color }}>{s.count}</span>
+                              <span className="text-[8px] font-bold uppercase tracking-wide" style={{ color: s.color, opacity: 0.75 }}>{s.label}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* chart */}
+                        <div className="flex-1 relative min-h-[100px]">
+                          <svg viewBox={`0 0 ${W} ${H + 12}`} className="w-full h-full overflow-visible">
+                            <defs>
+                              {series.map(s => (
+                                <React.Fragment key={s.gradId}>
+                                  <linearGradient id={s.gradId} x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%"  stopColor={s.color} stopOpacity="0.55" />
+                                    <stop offset="100%" stopColor={s.color} stopOpacity="0.02" />
+                                  </linearGradient>
+                                  <filter id={s.glowId} x="-30%" y="-80%" width="160%" height="260%">
+                                    <feGaussianBlur stdDeviation="2" result="blur" />
+                                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                  </filter>
+                                </React.Fragment>
+                              ))}
+                            </defs>
+
+                            {/* grid */}
+                            {[H * 0.25, H * 0.5, H * 0.75].map((yg, gi) => (
+                              <line key={gi} x1={PAD_L} y1={yg} x2={W - PAD_R} y2={yg}
+                                stroke="currentColor" strokeWidth="0.35" strokeDasharray="3 5"
+                                className="text-gray-200 dark:text-gray-700/50" />
+                            ))}
+
+                            {/* areas + lines, drawn back-to-front */}
+                            {series.map(s => {
+                              const pts = mkPts(s.key);
+                              return (
+                                <g key={s.key}>
+                                  <path d={mkArea(pts)} fill={`url(#${s.gradId})`} />
+                                  <path
+                                    d={mkSmooth(pts)}
+                                    fill="none"
+                                    stroke={s.color}
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    filter={`url(#${s.glowId})`}
+                                  />
+                                  {/* dots */}
+                                  {pts.map((pt, i) => (
+                                    <g key={i} className="group/pt">
+                                      <circle cx={pt.x} cy={pt.y} r="5" fill={s.color} fillOpacity="0"
+                                        className="transition-all duration-150 group-hover/pt:fill-opacity-20" />
+                                      <circle cx={pt.x} cy={pt.y} r="2.5" fill="#fff" stroke={s.color} strokeWidth="1.8" />
+                                      {/* tooltip */}
+                                      <g className="opacity-0 group-hover/pt:opacity-100 transition-opacity duration-100" style={{ pointerEvents: 'none' }}>
+                                        <rect x={pt.x - 8} y={pt.y - 16} width="16" height="11" rx="2.5"
+                                          fill="#0f172a" fillOpacity="0.9" />
+                                        <text x={pt.x} y={pt.y - 8} fill={s.color} fontSize="5.5" fontWeight="900" textAnchor="middle">{pt.v}</text>
+                                      </g>
+                                    </g>
+                                  ))}
+                                </g>
+                              );
+                            })}
+
+                            {/* x-axis labels (use first series for days) */}
+                            {mkPts('done').map((pt, i) => (
+                              <text key={i} x={pt.x} y={H + 10} fill="currentColor" fontSize="5.5" fontWeight="700"
+                                textAnchor="middle" className="text-gray-400 dark:text-gray-500">
+                                {multiChartData[i].label}
+                              </text>
+                            ))}
+                          </svg>
+                        </div>
+
+                        {/* legend footer */}
+                        <div className="mt-2 pt-2.5 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            {series.map(s => (
+                              <div key={s.key} className="flex items-center gap-1.5">
+                                <div className="w-2 h-2 rounded-full" style={{ background: s.color, boxShadow: `0 0 5px ${s.color}` }} />
+                                <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">{s.label}</span>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)' }}>
+                            <RiseOutlined style={{ color: '#22c55e', fontSize: 9 }} />
+                            <span className="text-[9px] font-black" style={{ color: '#22c55e' }}>{effPct}%</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
               </DashboardCard>
 
               <DashboardCard title="Сүүлийн үйлчлүүлэгчид" icon={<UserOutlined/>} headerClass="border-blue-400">
                   <div className="flex flex-col gap-3">
-                    {uilchluulegchid.slice(0, 5).map(user => (
+                    {uilchluulegchid.map(user => (
                       <div key={user._id} className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-400 pb-2">
                         <Avatar size="small" icon={<UserOutlined />} className="bg-gradient-to-tr from-green-300 to-gray-400 dark:from-green-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-500 shadow-xl" />
                         <div className="flex flex-col min-w-0 flex-1">
@@ -386,28 +534,75 @@ function Khynalt() {
                   </div>
                 </DashboardCard>
 
-                <DashboardCard title="Баримтууд" icon={<FileTextOutlined/>} headerClass="border-cyan-600" rightActions={<span className="text-emerald-500 text-[11px] font-extrabold cursor-pointer flex items-center gap-1 hover:underline"><PlusOutlined className="text-[10px]"/> Баримт үүсгэх</span>}>
+                <DashboardCard title="Ажилтны гүйцэтгэл" icon={<TeamOutlined/>} headerClass="border-indigo-500">
                   <div className="flex flex-col gap-2">
-                    {[
-                      { title: "Гарын авлага", date: "2-р сар 23, 2026" },
-                      { title: "Багаа хэрхэн зохион байгуулах вэ?", date: "2-р сар 23, 2026" },
-                      { title: "Төслөө хэрхэн импортлох вэ?", date: "2-р сар 23, 2026" }
-                    ].map((doc, i) => (
-                      <div key={i} className="flex gap-4 cursor-pointer group hover:bg-gray-50 dark:hover:bg-[#202736] p-3 -mx-2 rounded-xl transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700/50">
-                         <div className="w-[46px] h-[46px] bg-gray-100 dark:bg-[#1b212f] rounded-lg flex items-center justify-center shadow-inner border border-gray-200 dark:border-gray-700/50 shrink-0">
-                            <FileTextOutlined className="text-[#0ea5e9] text-[22px]" />
-                         </div>
-                         <div className="flex flex-col gap-1 flex-1 min-w-0 justify-center pb-1">
-                            <div className="text-[12.5px] font-extrabold text-gray-800 dark:text-gray-200 truncate dark:group-hover:text-white transition-colors tracking-wide">{doc.title}</div>
-                            <div className="text-[10px] text-gray-500 flex flex-col gap-[3px] font-semibold mt-0.5">
-                               <div className="flex items-center gap-1.5"><UserOutlined className="text-[10px] text-gray-400"/> Таны үзсэн: {doc.date}</div>
-                               <div className="flex items-center gap-1.5"><ClockCircleOutlined className="text-[10px] text-gray-400"/> Шинэчлэгдсэн: {doc.date}</div>
-                               <div className="text-emerald-500 mt-1 flex items-center gap-1.5 font-extrabold hover:underline w-fit"><span className="w-3 h-3 border border-emerald-500 rounded-full flex items-center justify-center"><PlusOutlined className="text-[7px]"/></span> Таг нэмэх</div>
+                    {teamMembers.slice(0, 5).map((member, i) => {
+                      const memberTasks = tasks.filter(t =>
+                        t.hariutsagchId === member.id || (Array.isArray(t.ajiltnuud) && t.ajiltnuud.includes(member.id))
+                      );
+                      const total     = memberTasks.length;
+                      const done      = memberTasks.filter(t => t.tuluv === 'duussan').length;
+                      const active    = memberTasks.filter(t => t.tuluv === 'khiigdej bui').length;
+                      const overdue   = memberTasks.filter(t => t.tuluv !== 'duussan' && t.duusakhTsag && moment(t.duusakhTsag).isBefore(moment(), 'day')).length;
+                      const remaining = Math.max(total - done - active - overdue, 0);
+                      const pct       = total > 0 ? Math.round((done / total) * 100) : 0;
+
+                      const avatarColors = ['#0096FF','#0096FF','#0096FF','#0096FF','#0096FF'];
+                      const ac = avatarColors[i % avatarColors.length];
+
+                      return (
+                        <div key={member.id} className="group flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
+                          {/* avatar */}
+                          <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-[11px] font-black"
+                            style={{ background: `${ac}22`, border: `1.5px solid ${ac}50`, color: ac }}>
+                            {member.name?.charAt(0).toUpperCase()}
+                          </div>
+
+                          {/* content */}
+                          <div className="flex flex-col flex-1 min-w-0 gap-1.5">
+                            <div className="flex items-center justify-between gap-1">
+                              <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200 truncate leading-none">{member.name}</span>
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                {overdue > 0 && (
+                                  <span className="text-[8px] font-black px-1.5 py-0.5 rounded-full"
+                                    style={{ background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' }}>
+                                    {overdue} хэтэрсэн
+                                  </span>
+                                )}
+                                <span className="text-[10px] font-black tabular-nums" style={{ color: ac }}>{pct}%</span>
+                              </div>
                             </div>
-                         </div>
-                         <div className="w-[24px] h-[24px] rounded bg-[#df5cf9] flex items-center justify-center text-white text-[11px] shrink-0 mt-1 shadow-sm"><RightOutlined/></div>
+
+                            {/* segmented bar: green=done, blue=active, red=overdue */}
+                            <div className="h-[5px] w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden flex">
+                              {total > 0 ? (
+                                <>
+                                  <div style={{ width: `${(done / total) * 100}%`, background: '#22c55e', transition: 'width 0.6s ease' }} className="h-full" />
+                                  <div style={{ width: `${(active / total) * 100}%`, background: '#0096FF', transition: 'width 0.6s ease 0.1s' }} className="h-full" />
+                                  <div style={{ width: `${(overdue / total) * 100}%`, background: '#ef4444', transition: 'width 0.6s ease 0.2s' }} className="h-full" />
+                                </>
+                              ) : (
+                                <div className="h-full w-full bg-gray-200 dark:bg-gray-700 rounded-full" />
+                              )}
+                            </div>
+
+                            {/* micro counts */}
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-[8px] font-bold" style={{ color: '#22c55e' }}>{done} дууссан</span>
+                              {active > 0 && <span className="text-[8px] font-bold" style={{ color: '#0096FF' }}>{active} идэвхтэй</span>}
+                              {overdue > 0 && <span className="text-[8px] font-bold" style={{ color: '#ef4444' }}>{overdue} хэтэрсэн</span>}
+                              {remaining > 0 && <span className="text-[8px] font-bold text-gray-400">{remaining} хүлээгдэж буй</span>}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {teamMembers.length === 0 && (
+                      <div className="flex flex-col items-center justify-center py-6 text-gray-400 gap-1 text-[10px] font-bold uppercase tracking-widest">
+                        <TeamOutlined className="text-2xl opacity-20" />
+                        Ажилтан байхгүй
                       </div>
-                    ))}
+                    )}
                   </div>
                 </DashboardCard>
             </div>
@@ -462,7 +657,7 @@ function Khynalt() {
                 <div className="flex-1 flex flex-col p-4 space-y-6">
                   
                   <div className="border-b border-slate-200 dark:border-slate-700/50"></div>
-                  <div className="flex flex-col space-y-3 shrink-0 bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-3 border border-slate-200 dark:border-slate-700/50 shadow-sm">
+                  <div className="flex h-[calc(40vh-200px)] overflow-y-auto flex-col space-y-3 shrink-0 bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-3 border border-slate-200 dark:border-slate-700/50 shadow-sm">
                     <div className="flex items-center justify-between px-1">
                       <div className="flex items-center space-x-1.5 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">
                         <span>Төслүүд</span>
@@ -488,7 +683,7 @@ function Khynalt() {
                     )}
                   </div>
                   
-                    <div className="pt-4 shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50 overflow-y-auto max-h-[400px]">
+                    <div className="pt-4 h-[calc(50vh-200px)] overflow-y-auto shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50">
                       <div className="text-[11px] font-extrabold text-gray-400 mb-4 px-1 flex items-center tracking-wide uppercase opacity-70">
                         <span>Ажилчид</span>
                       </div>

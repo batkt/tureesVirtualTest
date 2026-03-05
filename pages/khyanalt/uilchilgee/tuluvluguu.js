@@ -770,8 +770,7 @@ useEffect(() => {
       setIsAddingSubtask(false);
       setNewSubtaskTitle("");
     }
-  }, [isTaskDetailVisible, fetchSubtasks, fetchTaskDetail]); // Note: removing selectedTask dependency to avoid loops if only ID matters
-
+  }, [isTaskDetailVisible, fetchSubtasks, fetchTaskDetail]); 
   const handleCreateSubtask = async () => {
     if (!newSubtaskTitle.trim() || !selectedTask) return;
     try {
@@ -824,7 +823,7 @@ useEffect(() => {
     try {
       const res = await api.get("/chats", { params: { projectId, taskId, baiguullagiinId, barilgiinId } });
       const msgs = res.data?.data || res.data || [];
-      setChatMessages(Array.isArray(msgs) ? msgs.reverse() : []);
+      setChatMessages(Array.isArray(msgs) ? msgs : []);
     } catch (err) {
     } finally {
       setLoadingChat(false);
@@ -941,7 +940,7 @@ useEffect(() => {
     try {
       const res = await api.get("/chats", { params: { projectId, baiguullagiinId, barilgiinId } });
       const msgs = res.data?.data || res.data || [];
-      setProjectChatMessages(Array.isArray(msgs) ? msgs.reverse() : []);
+      setProjectChatMessages(Array.isArray(msgs) ? msgs : []);
     } catch (err) {
       console.error('Project chat fetch error:', err);
     } finally {
@@ -1573,7 +1572,7 @@ useEffect(() => {
             <div className="flex-1 flex flex-col p-4 space-y-6">
               
               <div className="border-b border-slate-200 dark:border-slate-700/50"></div>
-              <div className="flex flex-col space-y-3 shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50">
+              <div className="h-[calc(40vh-200px)] overflow-y-auto flex flex-col space-y-3 shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50">
                 <div className="flex items-center justify-between px-1">
                   <div className="flex items-center space-x-1.5 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">
                     <span>Төслүүд </span>
@@ -1619,7 +1618,7 @@ useEffect(() => {
                 )}
               </div>
               
-              <div className="pt-4 shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50 overflow-y-auto max-h-[400px]">
+              <div className="pt-4 h-[calc(50vh-200px)] overflow-y-auto shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50 overflow-y-auto max-h-[400px]">
                 <div className="text-[11px] font-extrabold text-gray-400 mb-4 px-1 flex items-center tracking-wide">
                   <span>Ажилчид</span>
                 </div>

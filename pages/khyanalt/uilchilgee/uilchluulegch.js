@@ -137,9 +137,6 @@ function Uilchluulegch() {
     if (!userId) return;
     setLoadingHistory(true);
     try {
-      // Fetch all projects and tasks to filter. 
-      // Ideally, the backend would have a /uilchluulegch/:id/history endpoint, 
-      // but for now, we aggregate on the frontend based on the new uilchluulegchId field.
       const [pRes, tRes] = await Promise.all([
         api.get("/projects", { params: { barilgiinId, baiguullagiinId } }),
         api.get("/tasks", { params: { barilgiinId, baiguullagiinId } })
