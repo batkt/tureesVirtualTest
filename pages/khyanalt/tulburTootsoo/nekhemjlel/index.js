@@ -2940,9 +2940,9 @@ function tulburTootsoo({ token }) {
 
           nekhemjlekh.nekhemjlekhTulukhUdur = `${month}/${day}/${year}`;
         }
-        nekhemjlekh = nekhemjlekh?.replace(
+        text = text?.replace(
           new RegExp(`&lt;nekhemjlekhTulukhUdur&gt;`, "g"),
-          nekhemjlekh?.nekhemjlekhTulukhUdur || "",
+          formatNumber(nekhemjlekh?.nekhemjlekhTulukhUdur || ""),
         );
         nekhemjlekh.baritsaaUldegdel =
           nekhemjlekh.baritsaaAvakhDun - nekhemjlekh.baritsaaniiUldegdel;
