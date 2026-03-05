@@ -2942,7 +2942,7 @@ function tulburTootsoo({ token }) {
         }
         text = text?.replace(
           new RegExp(`&lt;nekhemjlekhTulukhUdur&gt;`, "g"),
-          formatNumber(nekhemjlekh?.nekhemjlekhTulukhUdur || ""),
+          nekhemjlekh?.nekhemjlekhTulukhUdur || "",
         );
         nekhemjlekh.baritsaaUldegdel =
           nekhemjlekh.baritsaaAvakhDun - nekhemjlekh.baritsaaniiUldegdel;
