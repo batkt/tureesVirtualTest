@@ -15,6 +15,8 @@ import {
   Dropdown,
   Menu
 } from "antd";
+import dayjs from "dayjs";
+import { useFsmSocket } from "hooks/useFsmSocket";
 import { 
   PlusOutlined,
   MailOutlined,
@@ -42,12 +44,16 @@ function Uilchluulegch() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [form] = Form.useForm();
+  const [loadingHistory, setLoadingHistory] = useState(false);
+  const [clientProjects, setClientProjects] = useState([]);
+  const [clientTasks, setClientTasks] = useState([]);
   
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const tutorialSteps = [
     { targetId: "cust-stats", title: "Статистик", description: "Үйлчлүүлэгчдийн нийт тоо, шинэ бүртгэл болон нийт орлогын мэдээллийг хурдан харах боломжтой." },
-    { targetId: "cust-actions", title: "Шүүлтүүр ба Үйлдэл", description: "Үйлчлүүлэгчдийг төрлөөр нь шүүх болон шинээр үйлчлүүлэгч бүртгэх хэсэг." },
-    { targetId: "cust-list", title: "Үйлчлүүлэгчдийн жагсаалт", description: "Бүх үйлчлүүлэгчдийн карт хэлбэртэй жагсаалт. Карт бүр дээрх 'Дэлгэрэнгүй' товчоор түүхийг нь харна уу." },
+    { targetId: "cust-search-filter", title: "Хайлт ба Шүүлтүүр", description: "Үйлчлүүлэгчдийг нэр, утсаар хайх болон төрөл болон төлөвөөр нь шүүх хэсэг." },
+    { targetId: "cust-add-btn", title: "Үйлчлүүлэгч бүртгэх", description: "Шинэ үйлчлүүлэгч системд бүртгэх товч." },
+    { targetId: "cust-list", title: "Үйлчлүүлэгчдийн жагсаалт", description: "Бүх үйлчлүүлэгчдийн карт жагсаалт. Карт бүр дээрх 'Дэлгэрэнгүй харах' товчоор түүхийг нь харна уу." },
   ];
   
   const { token, barilgiinId, ajiltan } = useAuth();
@@ -63,7 +69,6 @@ function Uilchluulegch() {
       });
       setUsers(res.data?.data || res.data || []);
     } catch (err) {
-      // message.error("Алдаа гарлаа");
     } finally {
       setLoading(false);
     }
@@ -73,6 +78,13 @@ function Uilchluulegch() {
     fetchUsers();
   }, [fetchUsers]);
 
+  const { isConnected } = useFsmSocket();
+
+  useEffect(() => {
+    if (isConnected) {
+    }
+  }, [isConnected]);
+
   const handleSaveUser = async (values) => {
     if (!barilgiinId) { message.warning("Барилгын мэдээлэл байхгүй байна"); return; }
     try {
@@ -80,7 +92,6 @@ function Uilchluulegch() {
         ...values,
         barilgiinId,
         baiguullagiinId,
-        // tuluv: editingUser ? editingUser.tuluv : "shine"
       };
       
       let res;
@@ -122,9 +133,38 @@ function Uilchluulegch() {
     setIsAddModalOpen(true);
   };
 
+  const fetchUserHistoryData = async (userId) => {
+    if (!userId) return;
+    setLoadingHistory(true);
+    try {
+      // Fetch all projects and tasks to filter. 
+      // Ideally, the backend would have a /uilchluulegch/:id/history endpoint, 
+      // but for now, we aggregate on the frontend based on the new uilchluulegchId field.
+      const [pRes, tRes] = await Promise.all([
+        api.get("/projects", { params: { barilgiinId, baiguullagiinId } }),
+        api.get("/tasks", { params: { barilgiinId, baiguullagiinId } })
+      ]);
+      
+      const allProjects = pRes.data?.data || pRes.data || [];
+      const allTasks = tRes.data?.data || tRes.data || [];
+      
+      const filteredProjects = allProjects.filter(p => p.uilchluulegchId === userId);
+      const projectIds = filteredProjects.map(p => p._id);
+      const filteredTasks = allTasks.filter(t => projectIds.includes(t.projectId || t.project));
+      
+      setClientProjects(filteredProjects);
+      setClientTasks(filteredTasks);
+    } catch (err) {
+      console.error("Failed to fetch client history:", err);
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
+
   const handleOpenModal = (user) => {
     setSelectedUser(user);
     setIsDetailModalOpen(true);
+    fetchUserHistoryData(user._id);
   };
 
   const statCards = [
@@ -139,22 +179,26 @@ function Uilchluulegch() {
   return (
     <Admin title="Үйлчлүүлэгч"
       khuudasniiNer="uilchluulegch">
-      <div className="col-span-12 flex h-H8HalfRem w-[calc(100%+0.5rem)] text-black overflow-hidden rounded-2xl shadow-2xl relative">
+      <div className="col-span-12 flex flex-col h-auto xl:h-H8HalfRem w-full text-black overflow-hidden lg:rounded-2xl shadow-2xl relative animate-entrance">
+        <GuidedTour 
+          steps={tutorialSteps} 
+          isOpen={isTutorialOpen} 
+          onClose={() => setIsTutorialOpen(false)} 
+        />
         <div className="flex-1 flex flex-col p-4 overflow-x-hidden overflow-y-auto relative min-w-0">
+          
         
-        {/* Stat Cards */}
-        <div id="cust-stats" className="hideScroll flex grid w-full grid-cols-1 gap-3 overflow-hidden overflow-x-auto border-solid py-3 sm:grid-cols-6 sm:p-0 md:gap-4 2xl:grid-cols-10 mb-6 shrink-0 px-1 pt-1">
+        <div id="cust-stats" className="hideScroll grid w-full grid-cols-1 gap-3 overflow-hidden overflow-x-auto py-3 sm:grid-cols-6 sm:p-0 md:gap-4 2xl:grid-cols-10 mb-6 shrink-0 px-1 pt-1 opacity-100">
           {statCards.map((card, index) => (
               <div
                 key={index}
-                className={`group relative w-[70vw] cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 dark:hover:shadow-gray-800 sm:col-span-12 sm:w-auto lg:col-span-2 border-2 border-emerald-200 bg-emerald-50/60 dark:border-emerald-900 dark:bg-emerald-950/40`}
+                id={index === 0 ? "cust-stats" : undefined}
+                className={`group relative w-full sm:w-auto cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 dark:hover:shadow-gray-800 sm:col-span-12 lg:col-span-2 border-2 border-emerald-200 bg-emerald-50/60 dark:border-emerald-900 dark:bg-emerald-950/40 animate-entrance-stagger-${Math.min(index + 1, 5)}`}
               >
-                {/* Background gradient overlay */}
                 <div className="absolute inset-0 bg-emerald-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
 
                 <div className="relative h-full rounded-2xl p-3 sm:p-2.5">
                   <div className="flex h-full flex-col justify-between">
-                    {/* Top section with data */}
                     <div className="mb-2 flex items-start justify-between">
                       <div>
                         <div className="mb-0.5 bg-gradient-to-r from-emerald-900 to-emerald-700 bg-clip-text text-xl xl:text-3xl font-bold text-transparent dark:from-emerald-100 dark:to-emerald-300">
@@ -166,7 +210,6 @@ function Uilchluulegch() {
                       </div>
                     </div>
 
-                    {/* Bottom accent bar */}
                     <div className="h-0.5 w-9 rounded-full bg-emerald-500 transition-all duration-500 group-hover:w-full" />
                   </div>
                 </div>
@@ -174,16 +217,33 @@ function Uilchluulegch() {
           ))}
         </div>
 
-        {/* Actions Row */}
-        <div id="cust-actions" className="flex justify-end items-center shrink-0">
-          <div className="flex flex-col gap-1 w-48">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 shrink-0 px-1">
+          <div id="cust-search-filter" className="flex flex-1 items-center gap-4 w-full md:w-auto">
+             <Input 
+               placeholder="Үйлчлүүлэгч хайх..." 
+               prefix={<UserOutlined className="text-gray-400" />}
+               className="h-10 rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800 w-full md:w-72"
+             />
+             <Select
+               placeholder="Төлөв"
+               className="h-10 w-32 [&>.ant-select-selector]:!h-10 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!flex [&>.ant-select-selector]:!items-center"
+               options={[
+                 { label: "Бүгд", value: "all" },
+                 { label: "Шинэ", value: "shine" },
+                 { label: "Идэвхтэй", value: "active" },
+               ]}
+             />
+          </div>
+          
+          <div id="cust-add-btn" className="shrink-0 w-full md:w-auto">
             <Button
-            type="primary"
-            icon={<PlusOutlined />} onClick={() => setIsAddModalOpen(true)}
-            className="text-white bg-emerald-500 hover:!bg-emerald-400 border-none !rounded-lg text-[11px] font-bold shadow-md h-[36px] mt-4"
-          >
-            Үйлчлүүлэгч нэмэх
-          </Button>
+              type="primary"
+              icon={<PlusOutlined />} 
+              onClick={() => setIsAddModalOpen(true)}
+              className="text-white bg-emerald-500 hover:!bg-emerald-400 border-none !rounded-xl text-[12px] font-bold shadow-lg shadow-emerald-500/20 h-[40px] px-6 w-full md:w-auto"
+            >
+              Үйлчлүүлэгч нэмэх
+            </Button>
           </div>
           <Modal
             title={editingUser ? "Үйлчлүүлэгч засах" : "Үйлчлүүлэгч нэмэх"}
@@ -222,12 +282,11 @@ function Uilchluulegch() {
 
         </div>
 
-        {/* Customer Grid */}
-        <div id="cust-list" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 mt-2 relative">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 mt-2 relative">
+          {users.length === 0 && <div id="cust-list" className="hidden" />}
           {users.map((user, idx) => (
-            <div key={idx} className="bg-white border border-gray-200 dark:bg-gray-900/50 dark:border-[#2d3748]/50 rounded-[18px] p-5 shadow-md hover:shadow-lg transition-transform hover:-translate-y-1 flex flex-col gap-4">
+            <div key={idx} id={idx === 0 ? "cust-list" : undefined} className="bg-white border border-gray-200 dark:bg-gray-900/50 dark:border-[#2d3748]/50 rounded-[18px] p-5 shadow-md hover:shadow-lg transition-transform hover:-translate-y-1 flex flex-col gap-4">
               
-              {/* Header: Avatar and Name */}
               <div className="flex items-center justify-between gap-3 border-b border-gray-300 dark:border-gray-800 rounded-lg">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-800 shadow-xl">
@@ -235,9 +294,7 @@ function Uilchluulegch() {
                   </Avatar>
                   <div className="flex flex-col min-w-0">
                     <span className="text-black dark:text-gray-200 font-extrabold text-[13px] tracking-wide truncate">{user.ner}</span>
-                    <span className="text-gray-500 text-[10px] dark:text-gray-400 font-medium tracking-wide">Гэрээний дугаар: {user.gereeNomer || "-"}</span>
-              
-                    
+                    <span className="text-gray-500 text-[10px] dark:text-gray-400 font-medium tracking-wide">Гэрээний дугаар: {user.gereeNomer || "-"}</span>              
                   </div>
                 </div>
                 <Dropdown
@@ -262,7 +319,6 @@ function Uilchluulegch() {
                 </Dropdown>
               </div>
 
-              {/* Contact Info */}
               
               <div className="grid grid-cols-2 gap-2.5 text-[10.5px] text-gray-600 dark:text-gray-400 font-medium tracking-wide mt-1 ">
                 
@@ -283,8 +339,6 @@ function Uilchluulegch() {
               </div>
               
               
-
-              {/* Stats Row */}
               <div className="flex justify-between items-center px-1 mt-4 border-b dark:border-gray-800 rounded-xl border-gray-300 shadow-md">
                 <div className="flex flex-col items-center">
                   <span className="text-black dark:text-white font-extrabold text-sm tracking-wide">{user.jobs || "0"}</span>
@@ -300,10 +354,6 @@ function Uilchluulegch() {
                 </div>
               </div>
 
-              {/* Last Service */}
-              
-
-              {/* Action Button */}
               <Button 
                 type="primary" 
                 className="w-full bg-emerald-500 hover:!bg-emerald-400 border-none !rounded-md font-extrabold tracking-wide mt-2 shadow h-[34px] text-[11px]"
@@ -315,7 +365,6 @@ function Uilchluulegch() {
           ))}
         </div>
 
-        {/* Detail Modal */}
         <Modal
           open={isDetailModalOpen}
           onCancel={() => setIsDetailModalOpen(false)}
@@ -325,8 +374,7 @@ function Uilchluulegch() {
           className="[&_.ant-modal-content]:!bg-white dark:[&_.ant-modal-content]:!bg-gray-800 [&_.ant-modal-content]:!p-0 [&_.ant-modal-close]:!text-gray-400"
         >
           <div className="p-8 flex flex-col">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-6">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-6">
               <div className="flex items-center gap-6">
                 <div>
                   <Avatar size="medium" className="h-[32px] w-[32px] bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-800 shadow-xl">
@@ -341,7 +389,7 @@ function Uilchluulegch() {
               
               <div className="bg-white dark:bg-gray-900/40 rounded-xl p-4 w-full md:w-[400px] shadow-inner shrink-0 leading-tight">
                 <div className="flex justify-between border-b border-gray-200 pb-3 mb-3">
-                  <div className="flex flex-col gap-1 w-1/2 border-r border-gray-200">
+                    <div className="flex flex-col gap-1 w-1/2 border-r border-gray-200">
                     <span className="dark:text-gray-200 text-gray-400 text-[10px] flex items-center gap-1.5"><MailOutlined /> Email</span>
                     <span className="text-gray-800 dark:text-gray-200 text-[11px] font-bold truncate pr-2">{selectedUser?.mail || "мэйл байхгүй"}</span>
                   </div>
@@ -359,40 +407,68 @@ function Uilchluulegch() {
 
             <div className="w-full h-px bg-gray-500/30 mb-8"></div>
 
-            {/* Timeline entries */}
+          
             <div 
               className="flex flex-col gap-5 pr-4 pb-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gray-600 [&::-webkit-scrollbar-thumb]:rounded-full"
               style={{ maxHeight: '55vh', overflowY: 'auto', overscrollBehavior: 'contain' }}
             >
-              {selectedUser?.history?.length > 0 ? (
-                selectedUser.history.map((item, idx) => (
-                  <div key={idx} className="bg-white dark:bg-gray-900 rounded-[14px] p-5 relative shadow">
-                    <div className="flex items-center gap-2 mb-4 text-gray-800 dark:text-gray-200 font-extrabold text-sm border-b border-gray-300 pb-3">
-                       <CalendarOutlined className="text-gray-400 dark:text-gray-200" /> Түүх
+              {loadingHistory ? (
+                <div className="flex justify-center p-12">
+                  <Space direction="vertical" align="center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500" />
+                    <span className="text-gray-400 text-xs">Түүх ачаалж байна...</span>
+                  </Space>
+                </div>
+              ) : (clientProjects.length > 0 || clientTasks.length > 0) ? (
+                <>
+                  {clientProjects.map((proj, idx) => (
+                    <div key={`proj-${idx}`} className="bg-emerald-50/30 dark:bg-emerald-950/20 rounded-[14px] p-5 relative shadow border border-emerald-100/50 dark:border-emerald-900/30">
+                      <div className="flex items-center justify-between mb-4 border-b border-emerald-200/50 dark:border-emerald-800/50 pb-3">
+                         <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-200 font-extrabold text-sm uppercase tracking-tight">
+                            <PlusOutlined className="text-emerald-400" /> Төсөл: {proj.ner}
+                         </div>
+                         <span className="bg-emerald-100 text-emerald-600 text-[10px] px-2.5 py-0.5 rounded-full font-bold">{proj.tuluv || "идэвхтэй"}</span>
+                      </div>
+                      <div className="relative pl-6">
+                         <div className="absolute left-0 top-1 w-[12px] h-[12px] rounded-full bg-emerald-400 shadow-[0_0_0_3px_white]"></div>
+                         <div className="flex flex-col gap-2 text-[11px] text-gray-500 font-semibold">
+                           <div className="flex items-center gap-2.5"><CalendarOutlined className="text-gray-400" /> {proj.ekhlekhOgnoo ? dayjs(proj.ekhlekhOgnoo).format("YYYY/MM/DD") : "-"} - {proj.duusakhOgnoo ? dayjs(proj.duusakhOgnoo).format("YYYY/MM/DD") : "-"}</div>
+                           {proj.tailbar && <div className="text-gray-400 italic">"{proj.tailbar}"</div>}
+                         </div>
+                      </div>
                     </div>
-                    <div className="relative pl-6 before:content-[''] before:absolute before:left-[5px] before:top-4 before:bottom-0 before:w-[2px] before:bg-gray-100">
-                       <div className="absolute left-0 top-1 w-[12px] h-[12px] rounded-full bg-[#df5cf9] shadow-[0_0_0_3px_white]"></div>
-                       
-                       <div className="flex justify-between items-start">
-                         <div>
-                           <div className="flex items-center gap-2">
-                             <span className="text-gray-800 dark:text-gray-200 font-extrabold text-[13px]">{item.ner || "Үйлчилгээ"}</span>
-                             <span className="bg-blue-100 text-blue-500 text-[10px] px-2.5 py-0.5 rounded-full font-bold">{item.tuluv || "хийгдсэн"}</span>
+                  ))}
+                  
+                  {clientTasks.map((task, idx) => (
+                    <div key={`task-${idx}`} className="bg-white dark:bg-gray-900 rounded-[14px] p-5 relative shadow">
+                      <div className="flex items-center gap-2 mb-4 text-gray-800 dark:text-gray-200 font-extrabold text-sm border-b border-gray-300 dark:border-gray-800 pb-3">
+                         <CalendarOutlined className="text-gray-400 dark:text-gray-200" /> Даалгавар
+                      </div>
+                      <div className="relative pl-6 before:content-[''] before:absolute before:left-[5px] before:top-4 before:bottom-0 before:w-[2px] before:bg-gray-100 dark:before:bg-gray-800">
+                         <div className="absolute left-0 top-1 w-[12px] h-[12px] rounded-full bg-[#df5cf9] shadow-[0_0_0_3px_white] dark:shadow-[0_0_0_3px_#1a202c]"></div>
+                         
+                         <div className="flex justify-between items-start">
+                           <div>
+                             <div className="flex items-center gap-2">
+                               <span className="text-gray-800 dark:text-gray-200 font-extrabold text-[13px]">{task.ner || task.title || "Үйлчилгээ"}</span>
+                               <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold ${
+                                 task.tuluv === 'duussan' ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-500'
+                               }`}>
+                                 {task.tuluv === 'duussan' ? 'дууссан' : (task.tuluv || 'хийгдэж буй')}
+                               </span>
+                             </div>
+                             <div className="text-gray-500 text-[10px] font-bold mt-1">ID: {task._id}</div>
                            </div>
-                           <div className="text-gray-500 text-[11px] font-bold mt-1">{item._id}</div>
                          </div>
-                         <div className="text-right">
-                           <div className="text-gray-800 dark:text-gray-200 font-extrabold text-sm">{item.dun?.toLocaleString()}₮</div>
-                         </div>
-                       </div>
 
-                       <div className="mt-4 flex flex-col gap-2.5 text-[11px] text-gray-500 font-semibold">
-                         <div className="flex items-center gap-2.5"><CalendarOutlined className="text-gray-400" /> {item.ognoo}</div>
-                         <div className="flex items-center gap-2.5"><EnvironmentOutlined className="text-gray-400" /> {item.khayag}</div>
-                       </div>
+                         <div className="mt-4 flex flex-col gap-2.5 text-[11px] text-gray-500 font-semibold">
+                           <div className="flex items-center gap-2.5"><CalendarOutlined className="text-gray-400" /> {task.ekhlekhTsag ? dayjs(task.ekhlekhTsag).format("YYYY/MM/DD HH:mm") : "-"}</div>
+                           <div className="flex items-center gap-2.5"><EnvironmentOutlined className="text-gray-400" /> {task.tailbar || "тайлбаргүй"}</div>
+                         </div>
+                      </div>
                     </div>
-                  </div>
-                ))
+                  ))}
+                </>
               ) : (
                 <div className="flex flex-col items-center justify-center p-12 bg-gray-50 dark:bg-gray-900/40 rounded-3xl border border-dashed border-gray-300 dark:border-gray-700">
                    <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
@@ -403,7 +479,7 @@ function Uilchluulegch() {
               )}
             </div>
 
-            {/* Footer */}
+            
             <div className="flex justify-end items-center gap-3 mt-6 pt-5 rounded-b-xl border-t border-gray-600/30 shrink-0">
               <Button type="primary" icon={<DownloadOutlined />} className="!bg-[#10b981] border-none !text-white hover:!bg-[#059669] !rounded-md font-bold text-[11.5px] h-[36px] flex items-center px-4 shadow">
                 Татах
@@ -422,7 +498,7 @@ function Uilchluulegch() {
           </div>
         </Modal>
 
-        {/* Help Button */}
+         
         <div className="fixed bottom-8 right-8 z-[100]">
            <Button
              type="primary"
@@ -433,11 +509,7 @@ function Uilchluulegch() {
            />
         </div>
 
-        <GuidedTour 
-          steps={tutorialSteps} 
-          isOpen={isTutorialOpen} 
-          onClose={() => setIsTutorialOpen(false)} 
-        />
+        
       </div>
       </div>
     </Admin>

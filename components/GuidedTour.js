@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Button } from 'antd';
 import { LeftOutlined, RightOutlined, CloseOutlined } from '@ant-design/icons';
 
@@ -126,14 +127,18 @@ const GuidedTour = ({ steps, isOpen, onClose, currentStep: externalStep, onStepC
       updateSpotlight();
   }, [currentStep, steps, updateSpotlight, isOpen, cleanupTutorialStyles]);
 
-  if (!isOpen || !spotlightRect) return null;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted || !isOpen || !spotlightRect) return null;
   const step = steps[currentStep];
 
   const { top, left, right, bottom } = spotlightRect;
+  // Create a polygon that covers the whole screen but has a hole in it
   const clipPath = `polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%, 0% 0%, ${left}px ${top}px, ${right}px ${top}px, ${right}px ${bottom}px, ${left}px ${bottom}px, ${left}px ${top}px)`;
 
-  return (
-    <div className="fixed inset-0 z-[100000] pointer-events-none">
+  const content = (
+    <div className="fixed inset-0 z-[200000] pointer-events-none">
       <div 
         className="fixed inset-0 bg-black/60 backdrop-blur-[4px] pointer-events-auto transition-all duration-300"
         style={{ clipPath, WebkitClipPath: clipPath }}
@@ -141,7 +146,7 @@ const GuidedTour = ({ steps, isOpen, onClose, currentStep: externalStep, onStepC
       />
       
       <div 
-        className="fixed bg-white dark:bg-[#1e293b] p-6 rounded-2xl shadow-[0_30px_70px_rgba(0,0,0,0.8)] w-[340px] pointer-events-auto z-[200000] border border-emerald-500/40"
+        className="fixed bg-white dark:bg-[#1e293b] p-6 rounded-2xl shadow-[0_30px_70px_rgba(0,0,0,0.8)] w-[340px] pointer-events-auto z-[200001] border border-emerald-500/40"
         style={{ top: tooltipPos.top, left: tooltipPos.left, transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
       >
         <div className="flex justify-between items-start mb-4">
@@ -198,6 +203,8 @@ const GuidedTour = ({ steps, isOpen, onClose, currentStep: externalStep, onStepC
       `}</style>
     </div>
   );
+
+  return createPortal(content, document.body);
 };
 
 export default GuidedTour;

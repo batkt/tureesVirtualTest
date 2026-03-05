@@ -1,7 +1,10 @@
 import Admin from "components/Admin";
 import GuidedTour from "components/GuidedTour";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { createPortal } from 'react-dom';
 import dayjs from "dayjs";
+import "dayjs/locale/mn";
+dayjs.locale("mn");
 import fsmApi from "services/fsmApi";
 import { useAuth } from "services/auth";
 import { message, Form, Input, InputNumber, Modal, DatePicker, Tooltip, Popconfirm, Spin } from "antd";
@@ -30,6 +33,7 @@ import {
   Space,
   Avatar
 } from "antd";
+import { useFsmSocket } from "hooks/useFsmSocket";
 
 
 function BaraaMaterial() {
@@ -51,7 +55,7 @@ function BaraaMaterial() {
     bagaj: "Багаж",
     busad: "Бусад"
   };
-  const [isRightPanelExpanded, setIsRightPanelExpanded] = useState(true);
+  const [isRightPanelExpanded, setIsRightPanelExpanded] = useState(typeof window !== 'undefined' ? window.innerWidth >= 1280 : true);
   const [baraas, setBaraas] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -113,6 +117,13 @@ function BaraaMaterial() {
     fetchBaraas();
     fetchProjects();
   }, [fetchBaraas, fetchProjects]);
+
+  const { isConnected } = useFsmSocket();
+
+  useEffect(() => {
+    if (isConnected) {
+        }
+  }, [isConnected]);
     
   const filteredBaraas = useMemo(() => {
     if (filterType === "all") return baraas;
@@ -123,10 +134,20 @@ function BaraaMaterial() {
     if (!barilgiinId) { message.warning("Барилгын мэдээлэл байхгүй байна"); return; }
     try {
       const payload = {
-        ...values,
-        barilgiinId,
+        ner: values.ner,
+        turul: values.turul || "tseverlegch",
+        tailbar: values.tailbar || "",
+        negj: values.negj || "shirheg",
+        une: Number(values.une) || 0,
+        uldegdel: Number(values.uldegdel) || 0,
+        doodUldegdel: Number(values.doodUldegdel) || 0,
+        barcode: values.barcode || "",
+        zurgiinId: values.zurgiinId || "",
+        brand: values.brand || "",
+        niiluulegch: values.niiluulegch || "",
+        idevhtei: values.idevhtei !== undefined ? values.idevhtei : true,
         baiguullagiinId,
-        tuluv: editingBaraa ? editingBaraa.tuluv : "alga"
+        barilgiinId
       };
       
       let res;
@@ -233,6 +254,7 @@ function BaraaMaterial() {
     setEditingBaraa(item);
     form.setFieldsValue({
       ...item,
+      idevhtei: item.idevhtei !== undefined ? item.idevhtei : true
     });
     setIsAddModalOpen(true);
   };
@@ -268,23 +290,21 @@ function BaraaMaterial() {
 
   return (
     <Admin title="Бараа материал" khuudasniiNer="baraaMaterial">
-      <div className="col-span-12 flex h-fit min-h-[calc(100vh-120px)] w-[calc(100%+0.5rem)] -mx-1 -mt-2 text-black overflow-hidden rounded-2xl shadow-2xl relative">
+      <div className="col-span-12 flex flex-col xl:flex-row h-auto xl:h-[calc(100vh-120px)] w-full -mx-0 xl:-mx-1 -mt-2 text-black overflow-hidden lg:rounded-2xl shadow-2xl relative transition-all duration-300 animate-entrance">
         
-        {/* LEFT MAIN CONTENT */}
         <div className="flex-1 flex flex-col p-4 overflow-x-hidden relative min-w-0">
           
-          <div id="mat-stats" className="hideScroll grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 shrink-0 pt-1">
+          
+          <div id="mat-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
             {statCards.map((card, index) => (
               <div
                 key={index}
-                className={`group relative cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10 border-2 border-emerald-200 bg-emerald-50/60 dark:border-emerald-900 dark:bg-emerald-950/40 col-span-1`}
+                className={`group relative cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10 border-2 border-emerald-200 bg-emerald-50/60 dark:border-emerald-900 dark:bg-emerald-950/40 col-span-1 animate-entrance-stagger-${Math.min(index + 1, 5)}`}
               >
-                {/* Background gradient overlay */}
                 <div className="absolute inset-0 bg-emerald-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
 
                 <div className="relative h-full rounded-2xl p-3 sm:p-2.5">
                   <div className="flex h-full flex-col justify-between">
-                    {/* Top section with data */}
                     <div className="mb-2 flex items-start justify-between">
                       <div>
                         <div className="mb-0.5 bg-gradient-to-r from-emerald-900 to-emerald-700 bg-clip-text text-3xl font-bold text-transparent dark:from-emerald-100 dark:to-emerald-300">
@@ -296,7 +316,6 @@ function BaraaMaterial() {
                       </div>
                     </div>
 
-                    {/* Bottom accent bar */}
                     <div className="h-0.5 w-0 rounded-full bg-emerald-500 transition-all duration-500 group-hover:w-full" />
                   </div>
                 </div>
@@ -304,13 +323,11 @@ function BaraaMaterial() {
             ))}
           </div>
 
-          {/* Actions Row */}
-          <div id="mat-actions" className="flex justify-between items-center mb-4 shrink-0">
+          <div id="mat-actions" className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-4 shrink-0 animate-entrance-stagger-6">
             <Select
               value={filterType}
               onChange={setFilterType}
-              className="w-48 [&>.ant-select-selector]:!bg-white dark:[&>.ant-select-selector]:!bg-[#222a38] dark:[&>.ant-select-selector]:!border-[#2d3748]/50 [&>.ant-select-selector]:!border-gray-200 dark:[&>.ant-select-selector]:!text-gray-300 [&>.ant-select-selector]:!rounded-lg [&>.ant-select-selector]:!h-[36px] [&>.ant-select-selector]:!flex [&>.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!text-xs"
-              popupClassName="dark:[&_.ant-select-item-option-selected]:!bg-emerald-500/20 dark:[&_.ant-select-item]:!text-gray-300 dark:!bg-[#222a38] dark:!border-[#2d3748]"
+              className="w-full sm:w-48 [&>.ant-select-selector]:!bg-white dark:[&>.ant-select-selector]:!bg-[#222a38] dark:[&>.ant-select-selector]:!border-[#2d3748]/50 [&>.ant-select-selector]:!border-gray-200 dark:[&>.ant-select-selector]:!text-gray-300 [&>.ant-select-selector]:!rounded-lg [&>.ant-select-selector]:!h-[36px] [&>.ant-select-selector]:!flex [&>.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!text-xs"
             >
                 <Select.Option value="all">Бүх төрөл</Select.Option>
                 {Object.entries(typeMap).map(([key, value]) => (
@@ -318,7 +335,7 @@ function BaraaMaterial() {
                 ))}
              </Select>
 
-            <Space>
+            <Space className="w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0" wrap={false}>
               <Button
                 type="primary"
                 icon={<PlusOutlined />}
@@ -344,47 +361,46 @@ function BaraaMaterial() {
             </Space>
           </div>
 
-          {/* Tailwind Table */}
-          <div id="mat-table" className="border border-slate-300 dark:border-slate-700/60 rounded-xl overflow-hidden bg-white dark:bg-gray-800 h-fit max-h-[70vh] flex flex-col shadow-inner mb-6">
+          <div id="mat-table" className="border border-slate-300 dark:border-slate-700/60 rounded-xl overflow-hidden bg-white dark:bg-gray-800 h-fit max-h-[70vh] flex flex-col shadow-inner mb-6 animate-entrance-stagger-7">
             <div className="overflow-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar]:h-1.5 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full">
               <table className="w-full text-left text-[11.5px] text-gray-800 dark:text-gray-300 border-collapse whitespace-nowrap min-w-max">
                 <thead className="bg-gray-100 dark:bg-gray-800 dark:text-white text-black sticky top-0 z-10">
                   <tr>
-                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center w-10">
-                      <Checkbox className="[&_.ant-checkbox-inner]:border-gray-300 dark:[&_.ant-checkbox-inner]:border-gray-500 [&_.ant-checkbox-inner]:bg-transparent [&_.ant-checkbox-checked_.ant-checkbox-inner]:bg-emerald-500 [&_.ant-checkbox-checked_.ant-checkbox-inner]:border-emerald-500" />
+                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center w-8">
+                       №
                     </th>
+                    
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium">Нэр</th>
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center">Код</th>
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium">Үлдэгдэл</th>
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium">Брэнд</th>
-                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium">Нэгж өртөг</th>
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium w-16">Х/нэгж</th>
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center">Төрөл</th>
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center">Нийлүүлэгч</th>
-                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium">Худалдах үнэ</th>
-                    <th className="px-3 py-2.5 border-b border-slate-300 dark:border-slate-700/60 text-center font-medium border-r">Нийт өртөг</th>
+                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium">Нэгж үнэ</th>
+                    <th className="px-3 py-2.5 border-b border-slate-300 dark:border-slate-700/60 text-center font-medium border-r">Нийт үнэ</th>
                     <th className="px-2 py-2.5 border-b border-slate-300 dark:border-slate-700/60 text-center font-medium w-10">
                       <SettingOutlined className="text-black dark:text-gray-400" />
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredBaraas.map((row) => (
+                  {filteredBaraas.map((row, i) => (
                     <tr key={row._id} className="hover:bg-slate-100 dark:hover:bg-slate-700/40 transition-colors border-b border-slate-300 dark:border-slate-700/60 last:border-b-0 group">
-                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center w-10">
-                         <Checkbox className="[&_.ant-checkbox-inner]:border-gray-400 dark:[&_.ant-checkbox-inner]:border-gray-500 [&_.ant-checkbox-inner]:bg-transparent [&_.ant-checkbox-checked_.ant-checkbox-inner]:bg-emerald-500 [&_.ant-checkbox-checked_.ant-checkbox-inner]:border-emerald-500" />
+                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center w-8 text-gray-400 font-bold">
+                        {i + 1}
                       </td>
+                      
                       <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 font-medium">{row.ner}</td>
                       <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-600 dark:text-gray-400">{row.barcode || row.kod}</td>
                       <td className={`px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center ${row.uldegdel < row.doodUldegdel ? 'text-red-500 dark:text-red-400 font-bold' : ''}`}>{row.uldegdel || 0}</td>
                       <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center">{row.brand || "—"}</td>
-                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-right">{row.negjUrtug?.toLocaleString() || "0"}</td>
-                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-600 dark:text-gray-400">{unitMap[row.negj] || row.negj}</td>
+                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-600 dark:text-gray-400">{row.negjM ? unitMap[row.negjM] : unitMap[row.negj] || row.negj}</td>
                       <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-600 dark:text-gray-400">{typeMap[row.turul] || row.turul}</td>
                       <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-600 dark:text-gray-400">{row.niiluulegch || "—"}</td>
                       <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-right font-medium">{row.une?.toLocaleString() || "0"}</td>
-                      <td className={`px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-right font-bold tracking-wide ${(row.uldegdel * row.negjUrtug) < 0 ? 'text-red-600 dark:text-red-500' : 'text-emerald-600 dark:text-emerald-500'}`}>
-                        {(row.uldegdel * row.negjUrtug)?.toLocaleString() || "0"}
+                      <td className={`px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-right font-bold tracking-wide ${((row.uldegdel || 0) * (row.une || 0)) < 0 ? 'text-red-600 dark:text-red-500' : 'text-emerald-600 dark:text-emerald-500'}`}>
+                        {((row.uldegdel || 0) * (row.une || 0))?.toLocaleString() || "0"}
                       </td>
                       <td className="px-2 py-2 text-center w-10">
                         <Dropdown
@@ -414,22 +430,22 @@ function BaraaMaterial() {
               </table>
             </div>
 
-            {/* Sticky Table Footer Summary */}
             <div className="dark:bg-gray-800 border-t border-slate-300 dark:border-slate-700/60 text-black dark:text-white font-bold shrink-0 sticky bottom-0">
               <table className="w-full text-left text-[12.5px] whitespace-nowrap">
                 <tbody>
                   <tr>
+                    <td className="px-3 py-3 w-8 text-center"></td>
                     <td className="px-3 py-3 w-10 text-center"></td>
                     
                     <td className="px-3 py-3"></td>
-                 
-                    <td className="px-3 py-3 text-right"></td>
-                    <td className="px-3 py-3 text-right"></td>
                     <td className="px-3 py-3 text-center"></td>
-                    <td className="px-3 py-3"></td>
-                    <td className="px-3 py-3"></td>
+                    <td className="px-3 py-3 text-center"></td>
+                    <td className="px-3 py-3 text-center"></td>
+                    <td className="px-3 py-3 text-center"></td>
+                    <td className="px-3 py-3 text-center"></td>
+                    <td className="px-3 py-3 text-center"></td>
                     <td className="px-3 py-3 text-right"></td>
-                    <td className="px-3 py-3 text-right text-white dark:text-emerald-400">{filteredBaraas.reduce((acc, curr) => acc + ((Number(curr.uldegdel) || 0) * (Number(curr.negjUrtug) || 0)), 0).toLocaleString()}</td>
+                    <td className="px-3 py-3 text-right text-white dark:text-emerald-400">{filteredBaraas.reduce((acc, curr) => acc + ((Number(curr.uldegdel) || 0) * (Number(curr.une) || 0)), 0).toLocaleString()}</td>
                     <td className="px-2 py-3 text-center w-10"></td>
                   </tr>
                 </tbody>
@@ -438,12 +454,10 @@ function BaraaMaterial() {
           </div>
         </div>
 
-        {/* RIGHT SIDEBAR PANEL */}
-        <div className={`transition-all duration-300 ease-in-out ${isRightPanelExpanded ? "w-[340px] opacity-100" : 'w-0 opacity-0 whitespace-nowrap'} shrink-0 h-[calc(102vh-6rem)] flex flex-col relative z-20`}>  
+        <div className={`transition-all duration-300 ease-in-out animate-entrance-stagger-8 ${isRightPanelExpanded ? "w-full xl:w-[340px] opacity-100" : 'w-0 opacity-0 whitespace-nowrap overflow-hidden'} shrink-0 h-auto xl:h-[calc(102vh-6rem)] flex flex-col relative z-20`}>  
           <div className="flex-1 m-3 bg-white dark:bg-[#1f2636] rounded-[2rem] border border-slate-100 dark:border-slate-800/60 shadow-2xl flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-none w-full flex flex-col [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
-              {/* Top Activity Section */}
-              <div className="flex flex-col shrink-0 m-4 mb-2 bg-white dark:bg-gray-900/40 rounded-2xl border border-slate-200 dark:border-slate-700/30 overflow-hidden shadow-lg">
+              <div className="max-h-[200px] overflow-y-auto flex flex-col shrink-0 m-4 mb-2 bg-white dark:bg-gray-900/40 rounded-2xl border border-slate-200 dark:border-slate-700/30 overflow-hidden shadow-lg">
                             <div className="flex items-center justify-between p-4 pb-3 shrink-0">
                               <div className="flex items-center space-x-2">
                                 <div className="w-6 h-6 rounded flex items-center justify-center">
@@ -451,7 +465,7 @@ function BaraaMaterial() {
                                 </div>
                                 <span className="font-extrabold text-black dark:text-white text-[11px] tracking-wide">Түүх</span>
                               </div>
-                              <Button type="text" size="small" className="hover:!bg-slate-600/50 hover:text-white transition-all rounded-md px-1 w-6 h-6 border border-slate-700/50" icon={<CloseOutlined className="text-gray-400 text-[10px]" />} onClick={() => setIsRightPanelExpanded(false)} />
+                              <Button type="text" size="small" className="hover:!bg-slate-600/50 hover:text-white dark:hover:!bg-white/10 transition-all rounded-md px-1 w-6 h-6 border border-slate-700/50 flex items-center justify-center" icon={<CloseOutlined className="text-gray-400 dark:text-gray-300 text-[10px]" />} onClick={() => setIsRightPanelExpanded(false)} />
                             </div>
                                           <div className="px-5 py-3 space-y-5">
                               {loadingHistory ? (
@@ -464,11 +478,21 @@ function BaraaMaterial() {
                                     <div className="absolute left-0 top-1 w-3 h-3 rounded-full bg-[#10b981] border-2 border-[#262c3d] z-10 shadow-sm"></div>
                                     <div className="text-[11.5px] leading-relaxed">
                                       {act.ajiltniiNer && <span className="text-gray-500 dark:text-gray-400 font-bold">{act.ajiltniiNer} </span>}
-                                      <span className="text-gray-400 font-medium">{act.uildelText || act.uildel || 'үйлдэл хийлээ'}</span>
+                                      <span className="text-gray-400 font-medium">
+                                        {act.uildelText || (
+                                          act.uildel === "created task" || act.uildel === "created" ? "даалгавар үүсгэлээ" :
+                                          act.uildel === "updated task" || act.uildel === "updated" ? "даалгавар шинэчиллээ" :
+                                          act.uildel === "added member" || act.uildel === "added" ? "гишүүн нэмлээ" :
+                                          act.uildel === "deleted task" || act.uildel === "deleted" ? "даалгавар устгалаа" :
+                                          act.uildel === "completed task" || act.uildel === "completed" ? "даалгавар дуусгалаа" :
+                                          act.uildel === "message sent" ? "зурвас илгээлээ" :
+                                          (act.uildel || 'үйлдэл хийлээ')
+                                        )}
+                                      </span>
                                       {act.taskNer && <span className="text-emerald-500 font-extrabold ml-1">{act.taskNer}</span>}
                                     </div>
                                     <div className="text-[10px] text-gray-500 mt-1 font-medium tracking-wide">
-                                      {dayjs(act.createdAt).format("MMM DD, h:mm A")}
+                                      {act.createdAt ? dayjs(act.createdAt).format("YYYY-MM-DD HH:mm") : "--:--"}
                                     </div>
                                   </div>
                                 ))
@@ -476,29 +500,11 @@ function BaraaMaterial() {
                             </div>
                           </div>
               
-              {/* Workspace / Projects / Members Section */}
               <div id="mat-sidebar" className="flex-1 flex flex-col p-4 space-y-6">
                  
-                 {/* Search Input */}
-                 {/* <div className="relative shrink-0 w-full group">
-                  <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                     <SearchOutlined className="text-gray-500 text-xs group-focus-within:text-emerald-500 transition-colors" />
-                  </div>
-                  <input 
-                    placeholder="Хайх..." 
-                    className="w-full bg-gray-50 dark:bg-gray-800/60 border border-slate-200 dark:border-slate-700/50 text-gray-800 dark:text-gray-200 pl-9 pr-8 py-2.5 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 placeholder-gray-500 font-semibold shadow-inner transition-all"
-                  />
-                  <Button 
-                    type="text" 
-                    size="small"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-slate-600 hover:bg-emerald-500 !border-none w-5 h-5 flex items-center justify-center p-0 rounded-md shadow transition-colors" 
-                    icon={<PlusOutlined className="text-gray-300 text-[10px]" />}
-                  />
-                </div> */}
-
+        
                 <div className="border-b border-slate-200 dark:border-slate-700/50"></div>
                 
-                {/* General Categories */}
                 <div className="flex flex-col space-y-3 shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50">
                 <div className="flex items-center justify-between px-1">
                   <div className="flex items-center space-x-1.5 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">
@@ -542,7 +548,6 @@ function BaraaMaterial() {
                 )}
               </div>
                 
-                {/* Team Members */}
                 <div id="mat-team" className="pt-4 shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50 overflow-y-auto max-h-[400px]">
                   <div className="text-[11px] font-extrabold text-gray-400 mb-4 px-1 flex items-center tracking-wide uppercase opacity-70">
                     <span>Ажилчид</span>
@@ -578,15 +583,19 @@ function BaraaMaterial() {
           </div>
         </div>
 
-        {/* Float Open Button for Sidebar */}
-        {!isRightPanelExpanded && (
-                           <div 
-                             className="absolute right-0 top-1/3 -translate-y-1/2 bg-green-600 dark:bg-green-900 border border-r-0 border-green-700/60 w-8 h-12 rounded-l-lg flex flex-col items-center justify-center cursor-pointer shadow-xl dark:hover:bg-green-600 hover:bg-green-400 hover:-translate-x-1 transition-all z-[100]"
-                             onClick={() => setIsRightPanelExpanded(true)}
-                           >
-                             <RightOutlined className="text-gray-800 dark:text-gray-400 text-[10px] rotate-180" />
-                           </div>
-                        )}
+        {typeof window !== 'undefined' && !isRightPanelExpanded && createPortal(
+          <button 
+            className="fixed right-0 top-1/2 -translate-y-1/2 bg-green-600 dark:bg-green-900 border border-green-700/60 w-8 h-12 rounded-l-lg flex flex-col items-center justify-center cursor-pointer shadow-xl hover:bg-green-500 hover:-translate-x-1 transition-all z-[99999]"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsRightPanelExpanded(true);
+            }}
+          >
+            <RightOutlined className="text-white dark:text-gray-300 text-[10px] rotate-180" />
+          </button>,
+          document.body
+        )}
 
         <Modal
             title={editingBaraa ? "Бараа засах" : "Бараа бүртгэх"}
@@ -624,7 +633,7 @@ function BaraaMaterial() {
               </Form.Item>
               <div className="grid grid-cols-2 gap-4">
                 <Form.Item name="negj" label="Хэмжих нэгж" initialValue="shirheg">
-                  <Select placeholder="Сонгох" popupClassName="dark:!bg-gray-800 dark:!border-gray-700 dark:[&_.ant-select-item]:!text-gray-300">
+                  <Select placeholder="Сонгох">
                       <Select.Option value="shirheg">Ширхэг</Select.Option>
                       <Select.Option value="litr">Литр</Select.Option>
                       <Select.Option value="kg">Кг</Select.Option>
@@ -634,7 +643,7 @@ function BaraaMaterial() {
                   </Select>
                 </Form.Item>
                 <Form.Item name="turul" label="Төрөл" initialValue="busad">
-                  <Select placeholder="Сонгох" popupClassName="dark:!bg-gray-800 dark:!border-gray-700 dark:[&_.ant-select-item]:!text-gray-300">
+                  <Select placeholder="Сонгох">
                       <Select.Option value="tseverlegch">Цэвэрлэгч</Select.Option>
                       <Select.Option value="ugaalgiin">Угаалгын</Select.Option>
                       <Select.Option value="ariutgagch">Ариутгагч</Select.Option>
@@ -671,9 +680,20 @@ function BaraaMaterial() {
               <Form.Item name="brand" label="Брэнд / Групп">
                  <Input placeholder="Брэнд" />
               </Form.Item>
-              <Form.Item name="niiluulegch" label="Нийлүүлэгч">
-                 <Input placeholder="Нийлүүлэгч" />
-              </Form.Item>
+               <Form.Item name="niiluulegch" label="Нийлүүлэгч">
+                  <Input placeholder="Нийлүүлэгч" />
+               </Form.Item>
+               <div className="grid grid-cols-2 gap-4">
+                 <Form.Item name="zurgiinId" label="Зургийн ID">
+                    <Input placeholder="Зургийн ID" />
+                 </Form.Item>
+                 <Form.Item name="idevhtei" label="Идэвхтэй" valuePropName="checked" initialValue={true}>
+                    <Checkbox>Тийм</Checkbox>
+                 </Form.Item>
+               </div>
+               <Form.Item name="tailbar" label="Тайлбар">
+                  <Input.TextArea placeholder="Төслийн дэлгэрэнгүй тайлбар..." className="rounded-xl" rows={2} />
+               </Form.Item>
             </Form>
           </Modal>
 
@@ -688,7 +708,7 @@ function BaraaMaterial() {
           >
             <Form form={incomeForm} layout="vertical" onFinish={handleCreateIncome}>
               <Form.Item name="baraa" label="Бараа сонгох" rules={[{ required: true }]}>
-                 <Select placeholder="Бараа сонгох" popupClassName="dark:!bg-gray-800 dark:!border-gray-700 dark:[&_.ant-select-item]:!text-gray-300">
+                 <Select placeholder="Бараа сонгох">
                    {baraas.map(b => (
                       <Select.Option key={b._id} value={b._id}>{b.ner} </Select.Option>
                    ))}
@@ -700,7 +720,6 @@ function BaraaMaterial() {
             </Form>
           </Modal>
 
-          {/* Add Project Modal */}
           <Modal
             title={editingProject ? t("Төсөл засах") : t("Шинэ төсөл эхлүүлэх")}
             open={isProjectModalVisible}

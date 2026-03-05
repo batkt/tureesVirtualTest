@@ -7,6 +7,7 @@ import { TbReportMoney } from "react-icons/tb";
 import { FiHome } from "react-icons/fi";
 import { ProductFilled } from "@ant-design/icons";
 import { SiSteam } from "react-icons/si";
+import { GrPlan } from "react-icons/gr";
 import { TbLego } from "react-icons/tb";
 import useKhuudasniiJagsaalt from "hooks/useKhuudasniiJagsaalt";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
@@ -18,7 +19,13 @@ import {
   PhoneOutlined,
   HourglassOutlined,
 } from "@ant-design/icons";
-
+import { 
+  TbBoxSeam, 
+  TbChartBar, 
+  TbSmartHome, 
+  TbUsers 
+} from "react-icons/tb";
+import { MdMonitorHeart } from "react-icons/md";
 export const tsonknuud = [
   {
     key: "/khyanalt/ajiltan/tokhirgoo",
@@ -579,38 +586,41 @@ export const khuudasnuud = [
     ner: "Үйлчилгээ",
     khuudasniiNer: "uilchilgee",
     href: "/khyanalt/uilchilgee",
-    icon: <SiSteam className="text-2xl" />,
+    icon: <TbSmartHome className="text-2xl" />,
     sub: [
-      {
-        ner: "Бараа материал",
-        khuudasniiNer: "baraaMaterial",
-        href: "/khyanalt/uilchilgee/baraaMaterial",
-        icon: <ProductFilled style={{ width: "24", height: "24" }} />,
-      },
       {
         ner: "Хяналт",
         khuudasniiNer: "khynalt",
         href: "/khyanalt/uilchilgee/khynalt",
-        icon: <BsPcDisplay style={{ width: "24", height: "24" }} />,
+        icon: <MdMonitorHeart style={{ width: "24", height: "24" }} />,
       },
+      
+      
       {
         ner: "Төлөвлөгөө",
         khuudasniiNer: "tuluvluguu",
         href: "/khyanalt/uilchilgee/tuluvluguu",
-        icon: <BiDesktop style={{ width: "24", height: "24" }} />,
+        icon: <GrPlan style={{ width: "24", height: "24" }} />,
       },
+      
       {
-        ner: "KPI",
-        khuudasniiNer: "kpi",
-        href: "/khyanalt/uilchilgee/kpi",
-        icon: <BsGraphUp style={{ width: "24", height: "24" }} />,
+        ner: "Бараа материал",
+        khuudasniiNer: "baraaMaterial",
+        href: "/khyanalt/uilchilgee/baraaMaterial",
+        icon: <TbBoxSeam style={{ width: "24", height: "24" }} />,
       },
       {
         ner: "Үйлчлүүлэгч",
         khuudasniiNer: "uilchluulegch",
         href: "/khyanalt/uilchilgee/uilchluulegch",
-        icon: <BiUser style={{ width: "24", height: "24" }} />,
+        icon: <TbUsers style={{ width: "24", height: "24" }} />,
       },
+      // {
+      //   ner: "KPI",
+      //   khuudasniiNer: "kpi",
+      //   href: "/khyanalt/uilchilgee/kpi",
+      //   icon: <TbChartBar style={{ width: "24", height: "24" }} />,
+      // },
     ],
   },
   {

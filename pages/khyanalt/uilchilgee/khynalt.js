@@ -1,12 +1,15 @@
 import Admin from "components/Admin";
 import GuidedTour from "components/GuidedTour";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { createPortal } from 'react-dom';
 import fsmApi from "services/fsmApi";
 import { useAuth } from "services/auth";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
 import useJagsaalt from "hooks/useJagsaalt";
 import moment from "moment";
+import "moment/locale/mn";
+moment.locale("mn");
 import { 
   PlusOutlined,
   MailOutlined,
@@ -50,10 +53,11 @@ import {
   Modal,
   DatePicker
 } from "antd";
+import { useFsmSocket } from "hooks/useFsmSocket";
 
 function DashboardCard({ id, title, icon, rightActions, children, headerClass="border-emerald-500" }) {
   return (
-    <div id={id} className={`bg-white dark:bg-gray-900/50 rounded-xl overflow-hidden shadow-sm border-t-[3px] ${headerClass} hover:shadow-emerald-500 dark:hover:shadow-emerald-500/10 flex flex-col relative h-[340px]`}>
+    <div id={id} className={`bg-white dark:bg-gray-900/50 rounded-xl overflow-hidden shadow-sm border-t-[3px] ${headerClass} hover:shadow-emerald-500 dark:hover:shadow-emerald-500/10 flex flex-col relative min-h-[300px] h-[340px]`}>
       <div className="flex justify-between items-center px-4 py-3 bg-blue-900/10 dark:bg-[#1b212f] border-b border-gray-100 dark:border-[#2d3748]/50 shrink-0">
         <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-extrabold text-[12.5px] tracking-wide">
           <span className="text-gray-400 dark:text-gray-300">{icon}</span> {title}
@@ -69,7 +73,7 @@ function DashboardCard({ id, title, icon, rightActions, children, headerClass="b
 
 function Khynalt() {
   
-  const [isRightPanelExpanded, setIsRightPanelExpanded] = useState(true);
+  const [isRightPanelExpanded, setIsRightPanelExpanded] = useState(typeof window !== 'undefined' ? window.innerWidth >= 1280 : true);
   const { t } = useTranslation();
   const [tasks, setTasks] = useState([]);
   const [baraas, setBaraas] = useState([]);
@@ -117,10 +121,18 @@ function Khynalt() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+  const { isConnected } = useFsmSocket();
+
+  useEffect(() => {
+    if (isConnected) {
+      const handleRefresh = () => fetchData();
+      
+    }
+  }, [isConnected, fetchData]);
   
   const statCards = [
     { title: "Нийт ажил", value: tasks.length.toString() },
-    { title: "Дууссан ажил", value: tasks.filter(t => t.tuluv === "duussaan" || t.tuluv === "duussan").length.toString() },
+    { title: "Дууссан ажил", value: tasks.filter(t => t.tuluv === "duussan" || t.tuluv === "duussan").length.toString() },
     { title: "Нийт үйлчлүүлэгч", value: uilchluulegchid.length.toString() },
     { title: "Бараа материал", value: baraas.length.toString() },
     { title: "Яаралтай", value: tasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
@@ -158,7 +170,7 @@ function Khynalt() {
       days.push(moment().subtract(i, 'days').format('YYYY-MM-DD'));
     }
     return days.map(day => {
-      const count = tasks.filter(t => (t.tuluv === 'duussan' || t.tuluv === 'duussaan') && moment(t.updatedAt || t.createdAt).isSame(day, 'day')).length;
+      const count = tasks.filter(t => (t.tuluv === 'duussan' || t.tuluv === 'duussan') && moment(t.updatedAt || t.createdAt).isSame(day, 'day')).length;
       return { label: moment(day).format('M/D'), count };
     });
   }, [tasks]);
@@ -186,21 +198,21 @@ function Khynalt() {
 
   return (
     <Admin title="Хяналтын самбар" khuudasniiNer="khynalt">
-      <div className="col-span-12 flex h-H8HalfRem w-[calc(100%+0.5rem)] -mx-1 -mt-2 text-black overflow-hidden rounded-2xl shadow-2xl relative">
-        <div className="flex-1 flex flex-col p-4 overflow-x-hidden relative min-w-0">
+      <div className="col-span-12 flex flex-col xl:flex-row h-auto xl:h-H8HalfRem w-full -mx-0 xl:-mx-1 -mt-2 text-black overflow-hidden lg:rounded-2xl shadow-2xl relative animate-entrance">
+        <div className="flex-1 flex flex-col p-3 md:p-4 overflow-x-hidden relative min-w-0">
+          <div className="flex justify-between items-center mb-4 px-1">
           
-          <div id="khyanalt-stats" className="hideScroll grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6 shrink-0 pt-1">
+        </div>
+          <div id="khyanalt-stats" className="hideScroll grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
             {statCards.map((card, index) => (
               <div
                 key={index}
-                className={`group relative cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10 border-2 border-emerald-200 bg-emerald-50/60 dark:border-emerald-900 dark:bg-emerald-950/40 col-span-1`}
+                className={`group relative cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10 border-2 border-emerald-200 bg-emerald-50/60 dark:border-emerald-900 dark:bg-emerald-950/40 col-span-1 animate-entrance-stagger-${Math.min(index + 1, 5)}`}
               >
-                {/* Background gradient overlay */}
                 <div className="absolute inset-0 bg-emerald-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
 
                 <div className="relative h-full rounded-2xl p-3 sm:p-2.5">
                   <div className="flex h-full flex-col justify-between">
-                    {/* Top section with data */}
                     <div className="mb-2 flex items-start justify-between">
                       <div>
                         <div className="mb-0.5 bg-gradient-to-r from-emerald-900 to-emerald-700 bg-clip-text text-3xl font-bold text-transparent dark:from-emerald-100 dark:to-emerald-300">
@@ -211,8 +223,6 @@ function Khynalt() {
                         </div>
                       </div>
                     </div>
-
-                    {/* Bottom accent bar */}
                     <div className="h-0.5 w-0 rounded-full bg-emerald-500 transition-all duration-500 group-hover:w-full" />
                   </div>
                 </div>
@@ -220,38 +230,69 @@ function Khynalt() {
             ))}
           </div>
 
-          {/* <div className="flex justify-between items-center mb-4 shrink-0">
-            <DatePicker.RangePicker
-              className="font-medium"
-              placeholder={["Эхлэх огноо", "Дуусах огноо"]}
-              disabledDate={disabledDate}
-              value={tsutslakhOgnoo}
-              onChange={(e) => setTsutslakhOgnoo(e)}
-            />
-          </div> */}
-
-          {/* DASHBOARD GRID */}
           <div className="flex-1 overflow-y-auto pr-2 pb-8 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-100 dark:[&::-webkit-scrollbar-thumb]:bg-slate-800">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               
-              <DashboardCard id="khyanalt-status-chart" title="Даалгаврын төлөв" icon={<CheckSquareOutlined/>} headerClass="border-green-500">
-                  <div className="flex justify-center items-center h-full relative">
+              <DashboardCard id="khyanalt-status-chart" title="Даалгаврын төлөв" icon={<CheckSquareOutlined/>} headerClass="border-indigo-500">
+                  <div className="flex justify-center items-center h-full relative p-4">
                     {tasks.length > 0 ? (
-                      <>
-                        <svg viewBox="0 0 100 100" className="w-[160px] h-[160px]">
-                          <circle cx="50" cy="50" r="40" fill="transparent" stroke="#c1b518ff" strokeWidth="16" />
-                          <circle cx="50" cy="50" r="40" fill="transparent" stroke="#02c927ff" strokeWidth="16" strokeDasharray="250" strokeDashoffset={250 - (250 * (tasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'duussaan').length / tasks.length))} className="opacity-[0.85]" />
-                          <text x="50" y="55" fill="currentColor" className="text-gray-800 dark:text-white" fontSize="24" fontWeight="bold" textAnchor="middle">{tasks.length}</text>
-                        </svg>
-                        <div className="absolute top-8 right-2 flex flex-col items-end gap-1 font-bold tracking-tight">
-                           <div className="text-[11px] text-[#f59e0b]">Хийгдэж буй <div className="text-gray-500 font-medium">{tasks.filter(t => t.tuluv === 'khiigdej bui').length}</div></div>
-                        </div>
-                        <div className="absolute bottom-6 left-2 flex flex-col items-start gap-1 font-bold tracking-tight">
-                           <div className="text-[11px] text-green-500">Дууссан <div className="text-gray-500 font-medium">{tasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'duussaan').length}</div></div>
-                        </div>
-                      </>
+                      (() => {
+                        const doneCount = tasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'duussan').length;
+                        const totalCount = tasks.length;
+                        const pendingCount = totalCount - doneCount;
+                        const percent = (doneCount / totalCount) * 100;
+                        const dashArray = 251.2; 
+                        const dashOffset = dashArray - (dashArray * percent) / 100;
+
+                        return (
+                          <div className="flex items-center gap-12">
+                            <div className="relative">
+                              <svg viewBox="0 0 100 100" className="w-[180px] h-[180px] drop-shadow-2xl">
+                                {/* Indigo Segment (Pending/In Progress) */}
+                                <circle 
+                                  cx="50" cy="50" r="40" 
+                                  fill="transparent" 
+                                  stroke="#6366f1" 
+                                  strokeWidth="10" 
+                                />
+                                {/* Emerald Segment (Done) */}
+                                <circle 
+                                  cx="50" 
+                                  cy="50" 
+                                  r="40" 
+                                  fill="transparent" 
+                                  stroke="#10b981" 
+                                  strokeWidth="10" 
+                                  strokeDasharray={dashArray} 
+                                  strokeDashoffset={dashOffset} 
+                                  strokeLinecap="round"
+                                  transform="rotate(-90 50 50)"
+                                  className="transition-all duration-1000 ease-out"
+                                />
+                                <text x="50" y="52" fill="currentColor" className="text-gray-800 dark:text-white" fontSize="18" fontWeight="900" textAnchor="middle">{totalCount}</text>
+                                <text x="50" y="65" fill="currentColor" className="text-gray-400" fontSize="7" fontWeight="bold" textAnchor="middle">НИЙТ</text>
+                              </svg>
+                            </div>
+                            
+                            <div className="flex flex-col gap-6">
+                              <div className="flex flex-col items-start">
+                                <span className="text-[10px] text-white font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-indigo-500 mb-1 leading-none shadow-lg shadow-indigo-500/20">Хийгдэж байгаа</span>
+                                <span className="text-3xl font-black text-indigo-500 dark:text-indigo-400 leading-none ml-1">{pendingCount}</span>
+                              </div>
+                              
+                              <div className="flex flex-col items-start">
+                                <span className="text-[10px] text-white font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-emerald-500 mb-1 leading-none shadow-lg shadow-emerald-500/20">Дууссан</span>
+                                <span className="text-3xl font-black text-emerald-500 dark:text-emerald-400 leading-none ml-1">{doneCount}</span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })()
                     ) : (
-                      <div className="text-gray-500 text-xs font-bold">Мэдээлэл байхгүй</div>
+                      <div className="flex flex-col items-center justify-center text-gray-400 gap-2 font-bold uppercase tracking-widest text-[10px]">
+                         <CheckSquareOutlined className="text-3xl opacity-20 mb-1" />
+                         Мэдээлэл байхгүй
+                      </div>
                     )}
                   </div>
                 </DashboardCard>
@@ -261,13 +302,24 @@ function Khynalt() {
                     {tasks.slice(0, 5).map(task => (
                       <div key={task._id} className="flex flex-col gap-1 border-b border-gray-100 dark:border-gray-800 pb-2">
                         <div className="flex items-center gap-2">
-                           <CheckSquareOutlined className={task.tuluv === "duussaan" ? "text-emerald-500" : "text-gray-400"} />
+                           <CheckSquareOutlined className={task.tuluv === "duussan" ? "text-emerald-500" : "text-gray-400"} />
                            <span className="text-gray-800 dark:text-gray-200 text-[13px] font-extrabold flex-1 truncate">{task.ner}</span>
                         </div>
-                        <div className="flex items-center gap-2 ml-6 text-[10px] text-gray-500 font-medium">
-                           <span className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded uppercase">{task.zereglel}</span>
-                           <span>{task.duusakhTsag}</span>
-                        </div>
+                         <div className="flex items-center gap-2 ml-6 text-[10px] text-gray-500 font-medium tracking-tight">
+                            <span className={`px-1.5 py-0.5 rounded uppercase font-black ${
+                               task.zereglel === "yaraltai" || task.zereglel === "nen yaraltai" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
+                               task.zereglel === "engiin" ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                               "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                            }`}>
+                               {task.zereglel === "yaraltai" ? "Яаралтай" : 
+                                task.zereglel === "nen yaraltai" ? "Нэн яаралтай" : 
+                                task.zereglel === "engiin" ? "Энгийн" : "Бага"}
+                            </span>
+                            <span className="flex items-center gap-1">
+                               <CalendarOutlined className="text-[10px] opacity-70" />
+                               {task.duusakhTsag ? moment(task.duusakhTsag).format("YYYY-MM-DD") : "--"}
+                            </span>
+                         </div>
                       </div>
                     ))}
                     
@@ -287,7 +339,7 @@ function Khynalt() {
                       </div>
                     ))}
                   </div>
-              </DashboardCard>
+                </DashboardCard>
 
               <DashboardCard id="khyanalt-activity-chart" title="Даалгаврын гүйцэтгэл" icon={<FileTextOutlined/>} headerClass="border-sky-400" rightActions={<span className="text-gray-400 dark:text-gray-300 text-[11.5px] font-extrabold flex items-center gap-1.5 cursor-pointer hover:text-black dark:hover:text-white transition-colors">7 хоног <DownOutlined className="text-[8px]"/></span>}>
                   <div className="flex justify-center items-center h-full relative py-2">
@@ -323,8 +375,8 @@ function Khynalt() {
               <DashboardCard title="Сүүлийн үйлчлүүлэгчид" icon={<UserOutlined/>} headerClass="border-blue-400">
                   <div className="flex flex-col gap-3">
                     {uilchluulegchid.slice(0, 5).map(user => (
-                      <div key={user._id} className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-800 pb-2">
-                        <Avatar size="small" icon={<UserOutlined />} className="bg-emerald-100 text-emerald-600" />
+                      <div key={user._id} className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-400 pb-2">
+                        <Avatar size="small" icon={<UserOutlined />} className="bg-gradient-to-tr from-green-300 to-gray-400 dark:from-green-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-500 shadow-xl" />
                         <div className="flex flex-col min-w-0 flex-1">
                            <span className="text-gray-800 dark:text-gray-200 text-[12.5px] font-extrabold truncate">{user.ner}</span>
                            <span className="text-[10px] text-gray-500 truncate">{user.mail || user.utas?.[0]}</span>
@@ -362,13 +414,10 @@ function Khynalt() {
           </div>
         </div>
 
-        {/* RIGHT PANEL (Team & Activity) */}
-        <div id="khyanalt-team" className={`transition-all duration-300 flex flex-col shrink-0 z-20 ${isRightPanelExpanded ? 'w-[340px] opacity-100 h-[calc(101vh-5rem)]' : 'w-0 opacity-0 whitespace-nowrap'}`}>  
+        <div id="khyanalt-team" className={`transition-all duration-300 flex flex-col shrink-0 z-20 ${isRightPanelExpanded ? 'w-full xl:w-[340px] opacity-100 h-auto xl:h-[calc(101vh-5rem)]' : 'w-0 opacity-0 whitespace-nowrap overflow-hidden'}`}>  
             <div className="flex-1 m-3 bg-white dark:bg-[#1f2636] rounded-[2rem] border border-slate-100 dark:border-slate-800/60 shadow-2xl flex flex-col overflow-hidden">
               <div className="flex-1 overflow-y-auto w-full flex flex-col [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
-                
-                {/* Top History Section */}
-                <div className="flex flex-col shrink-0 m-4 mb-2 bg-gray-50/50 dark:bg-gray-900/40 rounded-2xl border border-slate-200 dark:border-slate-700/30 overflow-hidden shadow-sm">
+                <div className="flex max-h-[200px] overflow-y-auto flex-col shrink-0 m-4 mb-2 bg-gray-50/50 dark:bg-gray-900/40 rounded-2xl border border-slate-200 dark:border-slate-700/30 overflow-hidden shadow-sm">
                   <div className="flex items-center justify-between p-4 pb-3 shrink-0">
                     <div className="flex items-center space-x-2">
                       <div className="w-6 h-6 rounded flex items-center justify-center">
@@ -376,7 +425,7 @@ function Khynalt() {
                       </div>
                       <span className="font-extrabold text-black dark:text-white text-[11px] tracking-wide uppercase opacity-70">Түүх</span>
                     </div>
-                    <Button type="text" size="small" className="hover:!bg-slate-600/50 hover:text-white transition-all rounded-md px-1 w-6 h-6 border border-slate-700/50" icon={<CloseOutlined className="text-gray-400 text-[10px]" />} onClick={() => setIsRightPanelExpanded(false)} />
+                     <Button type="text" size="small" className="hover:!bg-slate-600/50 hover:text-white dark:hover:!bg-white/10 transition-all rounded-md px-1 w-6 h-6 border border-slate-700/50 flex items-center justify-center" icon={<CloseOutlined className="text-gray-400 dark:text-gray-300 text-[10px]" />} onClick={() => setIsRightPanelExpanded(false)} />
                   </div>
                   
                   <div className="px-5 py-3 space-y-5">
@@ -390,30 +439,28 @@ function Khynalt() {
                           <div className="absolute left-0 top-1 w-3 h-3 rounded-full bg-[#10b981] border-2 border-[#262c3d] z-10 shadow-sm"></div>
                             <div className="text-[11.5px] leading-relaxed">
                               {act.ajiltniiNer && <span className="text-gray-800 dark:text-gray-200 font-extrabold">{act.ajiltniiNer} </span>}
-                              <span className="text-gray-400 font-medium">{act.uildelText || act.uildel || 'үйлдэл хийлээ'}</span>
+                              <span className="text-gray-400 font-medium">
+                                 {act.uildelText || (
+                                  act.uildel === "created task" || act.uildel === "created" ? "даалгавар үүсгэлээ" :
+                                  act.uildel === "updated task" || act.uildel === "updated" ? "даалгавар шинэчиллээ" :
+                                  act.uildel === "added member" || act.uildel === "added" ? "гишүүн нэмлээ" :
+                                  act.uildel === "deleted task" || act.uildel === "deleted" ? "даалгавар устгалаа" :
+                                  act.uildel === "completed task" || act.uildel === "completed" ? "даалгавар дуусгалаа" :
+                                  act.uildel === "message sent" ? "зурвас илгээлээ" :
+                                  (act.uildel || 'үйлдэл хийлээ')
+                                )}
+                              </span>
                             </div>
                             <div className="text-[10px] text-gray-500 mt-1 font-medium tracking-wide">
-                              {moment(act.createdAt).format("MMM DD, h:mm A")}
+                              {act.createdAt ? moment(act.createdAt).format("YYYY-MM-DD HH:mm") : "--:--"}
                             </div>
                         </div>
                       ))
                     )}
                   </div>
                 </div>
-                
-                {/* Workspace / Projects / Members Section */}
                 <div className="flex-1 flex flex-col p-4 space-y-6">
                   
-                  {/* Search Input */}
-                  {/* <div className="relative shrink-0 w-full group">
-                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                       <SearchOutlined className="text-gray-500 text-xs group-focus-within:text-emerald-500 transition-colors" />
-                    </div>
-                    <input 
-                      placeholder="Хайх..." 
-                      className="w-full bg-gray-50 dark:bg-gray-800/60 border border-slate-200 dark:border-slate-700/50 text-gray-800 dark:text-gray-200 pl-9 pr-8 py-2.5 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 placeholder-gray-500 font-semibold shadow-inner transition-all"
-                    />
-                  </div> */}
                   <div className="border-b border-slate-200 dark:border-slate-700/50"></div>
                   <div className="flex flex-col space-y-3 shrink-0 bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-3 border border-slate-200 dark:border-slate-700/50 shadow-sm">
                     <div className="flex items-center justify-between px-1">
@@ -478,13 +525,18 @@ function Khynalt() {
         </div>
       </div>
       
-      {!isRightPanelExpanded && (
-        <div 
-          className="absolute right-0 top-1/3 -translate-y-1/2 bg-green-600 dark:bg-green-900 border border-r-0 border-green-700/60 w-8 h-12 rounded-l-lg flex flex-col items-center justify-center cursor-pointer shadow-xl dark:hover:bg-green-600 hover:bg-green-400 hover:-translate-x-1 transition-all z-[100]"
-          onClick={() => setIsRightPanelExpanded(true)}
+      {typeof window !== 'undefined' && !isRightPanelExpanded && createPortal(
+        <button 
+          className="fixed right-0 top-1/2 -translate-y-1/2 bg-green-600 dark:bg-green-900 border border-green-700/60 w-8 h-12 rounded-l-lg flex flex-col items-center justify-center cursor-pointer shadow-xl hover:bg-green-500 hover:-translate-x-1 transition-all z-[99999]"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsRightPanelExpanded(true);
+          }}
         >
-          <RightOutlined className="text-gray-800 dark:text-gray-400 text-[10px] rotate-180" />
-        </div>
+          <RightOutlined className="text-white dark:text-gray-300 text-[10px] rotate-180" />
+        </button>,
+        document.body
       )}
 
       <GuidedTour 

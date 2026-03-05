@@ -22,6 +22,7 @@ import useSonorduulga from "hooks/useSonorduulga";
 import useAdminMedegdel from "hooks/useAdminMedegdel";
 import { FiSend } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
+import useFsmNotifications from "hooks/useFsmNotifications";
 import NotificationModal from "./MedegdelModal";
 
 const SonorduulgaDropdown = lazy(() => import("./SonorduulgaDropdown"));
@@ -64,6 +65,14 @@ function ProfileTovch({
     handleMessageClick,
     formatDate,
   } = useAdminMedegdel(token, ajiltan?._id);
+
+  const {
+     notifications: fsmNotifications,
+     unreadCount: fsmUnreadCount,
+     isLoading: fsmLoading,
+     markAsRead: markFsmAsRead,
+     markAllAsRead: markAllFsmAsRead
+  } = useFsmNotifications(token, ajiltan);
 
   const { t } = useTranslation();
 
@@ -535,7 +544,15 @@ function ProfileTovch({
                 isInitialLoading={isInitialLoading}
                 loadMore={loadMore}
                 isVisible={sonorduulgaDropdownVisible}
+                permanentlyDismissed={permanentlyDismissed}
+                setPermanentlyDismissed={setPermanentlyDismissed}
+                onDontShowAgain={handleDontShowAgain}
                 onClose={handleSonorduulgaDropdownClose}
+                fsmNotifications={fsmNotifications}
+                fsmUnreadCount={fsmUnreadCount}
+                fsmLoading={fsmLoading}
+                markFsmAsRead={markFsmAsRead}
+                markAllFsmAsRead={markAllFsmAsRead}
               />
             </Suspense>
           }
@@ -551,7 +568,7 @@ function ProfileTovch({
           getPopupContainer={(trigger) => trigger.parentNode}
         >
           <button className="flex h-8 w-8 items-center justify-center rounded-full transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-white dark:hover:bg-gray-700">
-            <Badge count={kharaaguiToo} dot>
+            <Badge count={(kharaaguiToo || 0) + (fsmUnreadCount || 0)} dot>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

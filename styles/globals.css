@@ -26,6 +26,41 @@
   .large-size {
     width: calc(100vw - 11rem);
   }
+
+  /* Performance-optimized animations */
+  .animate-entrance {
+    animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+
+  .animate-entrance-delayed {
+    animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+    opacity: 0;
+  }
+
+  .animate-entrance-stagger-1 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards; opacity: 0; }
+  .animate-entrance-stagger-2 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards; opacity: 0; }
+  .animate-entrance-stagger-3 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; opacity: 0; }
+  .animate-entrance-stagger-4 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards; opacity: 0; }
+  .animate-entrance-stagger-5 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards; opacity: 0; }
+  .animate-entrance-stagger-6 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards; opacity: 0; }
+  .animate-entrance-stagger-7 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; opacity: 0; }
+  .animate-entrance-stagger-8 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards; opacity: 0; }
+  .animate-entrance-stagger-9 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards; opacity: 0; }
+  .animate-entrance-stagger-10 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards; opacity: 0; }
+  .animate-entrance-stagger-11 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards; opacity: 0; }
+  .animate-entrance-stagger-12 { animation: entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards; opacity: 0; }
+
+  @keyframes entrance {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 @keyframes swipeAnimation {
@@ -380,39 +415,40 @@
   fill: #e5e7eb !important;
 }
 
-.pvtDropdownCurrent {
-  @apply dark:bg-gray-800 dark:text-gray-200 !important;
+.dark .pvtDropdownCurrent {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
 }
 
-.pvtAxisContainer li span.pvtAttr {
-  @apply dark:bg-gray-800 dark:text-gray-200 !important;
+.dark .pvtAxisContainer li span.pvtAttr {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
 }
 
-.pvtDropdownMenu {
-  @apply dark:bg-gray-800 dark:text-gray-200 !important;
+.dark .pvtDropdownMenu {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
 }
 
-.pvtDropdownActiveValue {
-  @apply dark:bg-gray-900 !important;
+.dark .pvtDropdownActiveValue {
+  background-color: #111827 !important;
 }
 
-.pvtFilterBox {
-  @apply dark:bg-gray-800 dark:text-gray-200;
+.dark .pvtFilterBox {
+  background-color: #1f2937;
+  color: #e5e7eb;
 }
 
-.pvtFilterBox h4 {
-  @apply dark:text-gray-200;
+.dark .pvtFilterBox h4 {
+  color: #e5e7eb;
 }
 
-.pvtCheckContainer p.selected {
-  @apply dark:bg-gray-900;
+.dark .pvtCheckContainer p.selected {
+  background-color: #111827;
 }
 
-.ant-collapse
-  > .ant-collapse-item
-  > .ant-collapse-header
-  .ant-collapse-header-text {
-  @apply dark:text-gray-100;
+.dark .ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-header-text {
+  color: #f3f4f6;
 }
 
 .khuviinDrawer .ant-drawer-content {
@@ -777,6 +813,56 @@ audio::-webkit-media-controls-volume-control-container {
   box-shadow: 0 3px 20px rgb(0 0 0 / 4%);
   background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
   @apply dark:bg-gray-900;
+}
+
+/* Ant Design Dropdown & Select Dark Mode Fixes */
+html.dark .ant-select-dropdown,
+html.dark .ant-dropdown-menu {
+  background-color: #1f2937 !important;
+  border: 1px solid #374151 !important;
+}
+
+html.dark .ant-select-item-option,
+html.dark .ant-dropdown-menu-item {
+  color: #e5e7eb !important;
+}
+
+/* Ant 4 Select item hover/active */
+html.dark .ant-select-item-option-active:not(.ant-select-item-option-disabled),
+html.dark .ant-select-item-option-hover:not(.ant-select-item-option-disabled),
+html.dark .ant-select-item-option:hover:not(.ant-select-item-option-disabled),
+/* Ant 4 Dropdown item hover/active */
+html.dark .ant-dropdown-menu-item:hover,
+html.dark .ant-dropdown-menu-item-active,
+html.dark .ant-dropdown-menu-item.ant-dropdown-menu-item-active {
+  background-color: #374151 !important;
+  color: #ffffff !important;
+}
+
+html.dark .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: #111827 !important;
+  color: #10b981 !important;
+}
+
+/* X Button Global Dark Mode Support */
+.dark .ant-btn-text:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .ant-btn-text .anticon-close {
+  color: #9ca3af;
+}
+
+.dark .ant-btn-text:hover .anticon-close {
+  color: #f3f4f6 !important;
+}
+
+/* Modal Close Button */
+.dark .ant-modal-close-x {
+  color: #9ca3af !important;
+}
+.dark .ant-modal-close:hover .ant-modal-close-x {
+  color: #ffffff !important;
 }
 
 .ant-empty-description {
@@ -1342,6 +1428,33 @@ input:-webkit-autofill {
 
 .ant-picker-suffix {
   @apply dark:bg-transparent dark:text-gray-50 !important;
+}
+
+/* Ant Design TimePicker Dark Mode Support */
+html.dark .ant-picker-time-panel-column {
+  border-left-color: #374151 !important;
+}
+
+html.dark .ant-picker-time-panel-column > li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner {
+  color: #9ca3af !important;
+}
+
+html.dark .ant-picker-time-panel-column > li.ant-picker-time-panel-cell:hover .ant-picker-time-panel-cell-inner {
+  background-color: #374151 !important;
+  color: #f3f4f6 !important;
+}
+
+html.dark .ant-picker-time-panel-column > li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner {
+  background-color: #111827 !important;
+  color: #10b981 !important;
+}
+
+html.dark .ant-picker-now > a {
+  color: #10b981 !important;
+}
+
+html.dark .ant-picker-now > a:hover {
+  color: #34d399 !important;
 }
 
 .ant-radio-wrapper {

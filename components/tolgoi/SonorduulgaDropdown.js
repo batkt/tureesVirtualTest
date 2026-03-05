@@ -11,6 +11,28 @@ import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
+const formatMessage = (msg) => {
+  if (!msg) return "";
+  let formatted = msg;
+  // Translate priorities
+  formatted = formatted.replace(/\bengiin\b/gi, "Энгийн");
+  formatted = formatted.replace(/\byaraltai\b/gi, "Яаралтай");
+  formatted = formatted.replace(/\bnen yaraltai\b/gi, "Нэн яаралтай");
+  formatted = formatted.replace(/\bbaga\b/gi, "Бага");
+  
+  // Format ISO dates (pattern: YYYY-MM-DDTHH:mm:ss.sssZ)
+  const isoDateRegex = /\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\b/g;
+  formatted = formatted.replace(isoDateRegex, (match) => {
+    try {
+      return format(new Date(match), "yyyy-MM-dd");
+    } catch (e) {
+      return match;
+    }
+  });
+
+  return formatted;
+};
+
 const idAwyaa = (mur) => {
   switch (mur.turul) {
     case "setgegdel":
@@ -109,9 +131,17 @@ const SonorduulgaDropdown = React.memo(
     loadMore,
     isVisible,
     permanentlyDismissed = new Set(),
+    setPermanentlyDismissed,
+    onDontShowAgain,
+    fsmNotifications = [],
+    fsmUnreadCount = 0,
+    fsmLoading = false,
+    markFsmAsRead,
+    markAllFsmAsRead,
     onClose,
   }) => {
     const { t } = useTranslation();
+    const [activeTab, setActiveTab] = useState("system"); // system or service
     const scrollRef = useRef(null);
     const [dontShowAgainStates, setDontShowAgainStates] = useState(new Map());
     const [previousScrollTop, setPreviousScrollTop] = useState(0);
@@ -252,14 +282,28 @@ const SonorduulgaDropdown = React.memo(
             zIndex: 1000,
           }}
         >
-          <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-2xl border-b-4 border-green-400 bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 p-4 text-white shadow-lg dark:border-green-600 dark:from-green-900 dark:via-green-800 dark:to-emerald-900">
-            <div className="flex items-center justify-between">
+          <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-2xl border-b-2 border-green-400 bg-white p-0 text-white shadow-lg dark:border-green-600 dark:bg-gray-800">
+            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 rounded-t-lg">
               <span className="text-md font-medium">{t("Сонордуулга")}</span>
               <button
                 onClick={onClose}
                 className="flex h-6 w-6 items-center justify-center rounded-full hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50"
               >
                 <CloseOutlined className="text-sm text-white" />
+              </button>
+            </div>
+            <div className="flex w-full border-b dark:border-gray-700">
+              <button 
+                onClick={() => setActiveTab("system")}
+                className={`flex-1 py-2.5 text-xs font-bold transition-all ${activeTab === 'system' ? 'text-green-600 border-b-2 border-green-600 dark:text-green-400' : 'text-gray-400 hover:text-gray-600'}`}
+              >
+                Систем ({allNotifications?.length || 0})
+              </button>
+              <button 
+                onClick={() => setActiveTab("service")}
+                className={`flex-1 py-2.5 text-xs font-bold transition-all ${activeTab === 'service' ? 'text-green-600 border-b-2 border-green-600 dark:text-green-400' : 'text-gray-400 hover:text-gray-600'}`}
+              >
+                {t("Үйлчилгээ сонордуулга")} ({fsmUnreadCount})
               </button>
             </div>
           </div>
@@ -278,8 +322,8 @@ const SonorduulgaDropdown = React.memo(
           zIndex: 1000,
         }}
       >
-        <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg border-green-400 bg-gradient-to-r from-green-600 via-green-500 to-emerald-500  p-3 text-white shadow-lg dark:border-green-600 dark:from-green-900 dark:via-green-800 dark:to-emerald-900">
-          <div className="flex items-center justify-between">
+        <div className="mail-dropdown-header sticky top-0 z-10 rounded-t-lg border-b-2 border-green-400 bg-white p-0 text-white shadow-lg dark:border-green-600 dark:bg-gray-800">
+          <div className="flex items-center justify-between p-3 bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 rounded-t-lg">
             <span className="text-md font-medium">{t("Сонордуулга")}</span>
             <button
               onClick={onClose}
@@ -288,13 +332,29 @@ const SonorduulgaDropdown = React.memo(
               <CloseOutlined className="text-sm text-white" />
             </button>
           </div>
+          <div className="flex w-full border-b dark:border-gray-700">
+              <button 
+                onClick={() => setActiveTab("system")}
+                className={`flex-1 py-2.5 text-xs font-bold transition-all ${activeTab === 'system' ? 'text-green-600 border-b-2 border-green-600 dark:text-green-400' : 'text-gray-400 hover:text-gray-600'}`}
+              >
+                Систем
+              </button>
+              <button 
+                onClick={() => setActiveTab("service")}
+                className={`flex-1 py-2.5 text-xs font-bold transition-all ${activeTab === 'service' ? 'text-green-600 border-b-2 border-green-600 dark:text-green-400' : 'text-gray-400 hover:text-gray-600'}`}
+              >
+                {t("Үйлчилгээ сонордуулга")}
+                {fsmUnreadCount > 0 && <span className="ml-1 bg-red-500 text-white rounded-full px-1.5 py-0.5 text-[9px]">{fsmUnreadCount}</span>}
+              </button>
+          </div>
         </div>
         <div
           ref={scrollRef}
           onScroll={handleScroll}
           className="no-transition-initial space-y-2 overflow-y-auto rounded-md bg-white p-3 dark:bg-gray-800"
         >
-          {optimizedSonorduulga.length > 0 ? (
+          {activeTab === "system" ? (
+            optimizedSonorduulga.length > 0 ? (
             <>
               {optimizedSonorduulga.map((mur, index) => {
                 const isExpanded = expandedNotifications === index;
@@ -434,6 +494,97 @@ const SonorduulgaDropdown = React.memo(
             <div className="flex h-full items-center justify-center transition-opacity duration-200">
               <Empty description={t("Хоосон байна")} />
             </div>
+          )
+        ) : (
+          <>
+              {!fsmLoading && fsmUnreadCount > 0 && (
+                <div className="flex justify-end pb-2">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (markAllFsmAsRead) markAllFsmAsRead();
+                    }}
+                    className="text-xs text-blue-500 hover:text-blue-700 font-medium transition-colors"
+                  >
+                    {t("Бүгдийг уншсан")}
+                  </button>
+                </div>
+              )}
+              {fsmLoading && fsmNotifications.length === 0 ? (
+                <SonorduulgaLoading />
+              ) : fsmNotifications.length > 0 ? (
+                fsmNotifications.map((notif, index) => (
+                  <div
+                    key={`fsm-${notif._id}`}
+                    className={`w-full overflow-hidden rounded-xl border-2 cursor-pointer transition-all hover:bg-gray-50 dark:hover:bg-gray-700 ${
+                      !notif.kharsanEsekh
+                        ? "border-green-300 bg-white dark:bg-gray-800"
+                        : "border-gray-200 dark:border-gray-600"
+                    }`}
+                    onClick={async () => {
+                      if (markFsmAsRead) await markFsmAsRead(notif._id);
+                      
+                      // Priority 1: Direct URL from notification
+                      if (notif.url) {
+                        router.push(notif.url);
+                      } 
+                      // Priority 2: Structured data (taskId, projectId)
+                      else if (notif.taskId || (notif.data && notif.data.taskId)) {
+                        const tId = notif.taskId || notif.data.taskId;
+                        router.push(`/khyanalt/uilchilgee/tuluvluguu?taskId=${tId}${notif.turul === 'chat' ? '&chat=open' : ''}`);
+                      }
+                      else if (notif.projectId || (notif.data && notif.data.projectId)) {
+                        const pId = notif.projectId || notif.data.projectId;
+                        router.push(`/khyanalt/uilchilgee/tuluvluguu?projectId=${pId}`);
+                      }
+                      // Priority 3: Fallback map based on type
+                      else {
+                        const pathMap = {
+                          taskCompleted: "/khyanalt/uilchilgee/tuluvluguu",
+                          newTask: "/khyanalt/uilchilgee/tuluvluguu",
+                          taskAdded: "/khyanalt/uilchilgee/tuluvluguu",
+                          taskUpdated: "/khyanalt/uilchilgee/tuluvluguu",
+                          chat: "/khyanalt/uilchilgee/tuluvluguu",
+                          message: "/khyanalt/uilchilgee/tuluvluguu",
+                          inventoryLow: "/khyanalt/uilchilgee/baraaMaterial",
+                          newCustomer: "/khyanalt/uilchilgee/uilchluulegch"
+                        };
+                        router.push(pathMap[notif.turul] || "/khyanalt/uilchilgee/khynalt");
+                      }
+                      onClose?.();
+                    }}
+                  >
+                    <div className="flex items-center justify-between p-4">
+                      <div className="flex flex-1 items-center space-x-3">
+                        <div className="relative">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
+                            <BellOutlined className="text-sm text-blue-500 dark:text-blue-300" />
+                          </div>
+                          {!notif.kharsanEsekh && (
+                            <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-white bg-red-500"></div>
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-xs font-bold text-gray-800 dark:text-gray-200">
+                            {formatMessage(notif.title)}
+                          </h3>
+                          <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5 whitespace-pre-wrap line-clamp-3">
+                             {formatMessage(notif.message)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-[10px] text-gray-400 shrink-0 ml-2">
+                         {format(new Date(notif.createdAt), "MM/dd HH:mm")}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="flex h-full items-center justify-center p-10">
+                   <Empty description={t("Мэдэгдэл байхгүй")} />
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

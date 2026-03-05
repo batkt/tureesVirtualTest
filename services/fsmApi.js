@@ -1,4 +1,5 @@
 import axios from "axios";
+import { io } from "socket.io-client";
 
 export const FSM_BASE_URL = "http://103.143.40.175:8000";
 
@@ -19,6 +20,12 @@ fsmApi.withAuth = (token) =>
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
+  });
+
+/** FSM Socket.IO client */
+export const fsmSocket = () =>
+  io(FSM_BASE_URL, {
+    transports: ["websocket", "polling"],
   });
 
 export default fsmApi;
