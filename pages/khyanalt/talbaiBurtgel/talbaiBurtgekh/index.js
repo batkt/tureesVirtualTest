@@ -78,6 +78,76 @@ function TalbaiSegment({ token, ...a }) {
     </div>
   );
 }
+
+// Outside talbaiBurtgekh component
+const TuukhPopover = ({ kod, token, baiguullagiinId, t }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState(null);
+
+  // Own independent data fetch - no stale closure issue
+  const { gereeniiMedeelel } = useGereeniiJagsaalt(
+    token,
+    baiguullagiinId,
+    undefined,
+    query,
+  );
+
+  const handleOpenChange = (open) => {
+    setIsOpen(open);
+    if (open) {
+      setQuery({ talbainDugaar: kod });
+    }
+  };
+
+  return (
+    <div className="flex flex-row justify-center">
+      <Popover
+        trigger="click"
+        placement="topLeft"
+        open={isOpen}
+        onOpenChange={handleOpenChange}
+        content={
+          <Table
+            rowKey="_id"
+            style={{ minWidth: 600 }}
+            pagination={false}
+            size="small"
+            loading={isOpen && !gereeniiMedeelel}
+            dataSource={gereeniiMedeelel?.jagsaalt}
+            columns={[
+              { title: `${t("Гэрээ")} №`, dataIndex: "gereeniiDugaar" },
+              { title: t("Овог"), dataIndex: "ovog" },
+              { title: t("Нэр"), dataIndex: "ner" },
+              { title: t("Регистр"), dataIndex: "register" },
+              { title: t("Төрөл"), dataIndex: "turul" },
+              {
+                title: t("Гэрээний огноо"),
+                dataIndex: "gereeniiOgnoo",
+                render: (v) => moment(v).format("YYYY-MM-DD"),
+              },
+              {
+                title: t("Дуусах огноо"),
+                dataIndex: "duusakhOgnoo",
+                render: (v) => moment(v).format("YYYY-MM-DD"),
+              },
+              { title: t("Хугацаа"), dataIndex: "khugatsaa" },
+              {
+                title: t("Сарын түрээс"),
+                dataIndex: "sariinTurees",
+                align: "center",
+                render: (v) => formatNumber(v) + "₮",
+              },
+            ]}
+          />
+        }
+      >
+        <a className="flex items-center justify-center hover:scale-150">
+          <GiBackwardTime className="text-2xl" />
+        </a>
+      </Popover>
+    </div>
+  );
+};
 function talbaiBurtgekh({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
@@ -339,7 +409,7 @@ function talbaiBurtgekh({ token }) {
     }
     if (talbar === "khurunguUne") {
       talbaiState.talbainNiitUne = (utga * talbaiState.talbainKhemjee).toFixed(
-        2
+        2,
       );
       formRef.current.setFieldsValue({});
     }
@@ -350,10 +420,10 @@ function talbaiBurtgekh({ token }) {
     talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId;
     talbaiState.barilgiinId = barilgiinId;
     talbaiState.talbainKhemjee = parseFloat(
-      talbaiState.talbainKhemjee?.toFixed(2)
+      talbaiState.talbainKhemjee?.toFixed(2),
     );
     talbaiState.talbainKhemjeeMetrKube = parseFloat(
-      talbaiState.talbainKhemjeeMetrKube?.toFixed(2)
+      talbaiState.talbainKhemjeeMetrKube?.toFixed(2),
     );
 
     if (khurunguud?.khurunguud?.length > 0) {
@@ -362,7 +432,7 @@ function talbaiBurtgekh({ token }) {
         talbaiState.khurunguud.map(
           (x) =>
             x.zurgiinId[0]?.response?.id &&
-            (x.zurgiinId = x.zurgiinId[0].response.id)
+            (x.zurgiinId = x.zurgiinId[0].response.id),
         );
       }
     }
@@ -378,7 +448,7 @@ function talbaiBurtgekh({ token }) {
             formRef.current.resetFields();
             talbainiiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
-              true
+              true,
             );
           }
         })
@@ -395,7 +465,7 @@ function talbaiBurtgekh({ token }) {
             formRef.current.resetFields();
             talbainiiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
-              true
+              true,
             );
           }
         })
@@ -620,86 +690,14 @@ function talbaiBurtgekh({ token }) {
                     title: t("Түүх"),
                     width: "1rem",
                     align: "center",
-                    render: (data) => {
-                      return (
-                        <div className="flex flex-row justify-center">
-                          <Popover
-                            trigger="click"
-                            placement="topLeft"
-                            content={
-                              <Table
-                                style={{
-                                  display: "flex",
-                                }}
-                                pagination={false}
-                                size="small"
-                                dataSource={gereeniiMedeelel?.jagsaalt}
-                                columns={[
-                                  {
-                                    title: `${t("Гэрээ")} №`,
-                                    dataIndex: "gereeniiDugaar",
-                                  },
-                                  {
-                                    title: t("Овог"),
-                                    dataIndex: "ovog",
-                                  },
-                                  {
-                                    title: t("Нэр"),
-                                    dataIndex: "ner",
-                                  },
-                                  {
-                                    title: t("Регистр"),
-                                    dataIndex: "register",
-                                  },
-                                  {
-                                    title: t("Төрөл"),
-                                    dataIndex: "turul",
-                                  },
-                                  {
-                                    title: t("Гэрээний огноо"),
-                                    dataIndex: "gereeniiOgnoo",
-                                    render: (data) => {
-                                      return moment(data).format("YYYY-MM-DD");
-                                    },
-                                  },
-                                  {
-                                    title: t("Дуусах огноо"),
-                                    dataIndex: "duusakhOgnoo",
-                                    render: (data) => {
-                                      return moment(data).format("YYYY-MM-DD");
-                                    },
-                                  },
-                                  {
-                                    title: t("Хугацаа"),
-                                    dataIndex: "khugatsaa",
-                                  },
-                                  {
-                                    title: t("Сарын түрээс"),
-                                    dataIndex: "sariinTurees",
-                                    align: "center",
-                                    render: (data) => {
-                                      return formatNumber(data) + "₮";
-                                    },
-                                  },
-                                ]}
-                              ></Table>
-                            }
-                          >
-                            <a className="flex items-center justify-center hover:scale-150">
-                              <GiBackwardTime
-                                className="text-2xl"
-                                onClick={() =>
-                                  setShuult((a) => ({
-                                    ...a,
-                                    query: { talbainDugaar: data.kod },
-                                  }))
-                                }
-                              />
-                            </a>
-                          </Popover>
-                        </div>
-                      );
-                    },
+                    render: (data) => (
+                      <TuukhPopover
+                        kod={data.kod}
+                        token={token}
+                        baiguullagiinId={baiguullaga?._id}
+                        t={t}
+                      />
+                    ),
                   },
                 ]}
               />
