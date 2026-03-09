@@ -1999,7 +1999,7 @@ useEffect(() => {
           </div>
           
           <div className="grid grid-cols-2 gap-6 mt-6">
-            <Form.Item label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Зургууд (заавал биш)</span>} className="!mb-0">
+            <Form.Item label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Зураг (заавал биш)</span>} className="!mb-0">
             <Upload
               listType="picture-card"
               fileList={taskImages}
