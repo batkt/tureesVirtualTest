@@ -268,7 +268,7 @@ function KPI() {
                       </div>
                     </div>
                     <div className="flex flex-col gap-1 px-2">
-                      {topUsers.slice(0, 3).map((user, i) => (
+                      {topUsers.slice(0, 5).map((user, i) => (
                         <div key={user._id} className="flex items-center justify-between text-[10px] font-bold">
                           <span className="text-gray-500 truncate max-w-[100px]">{user.ner || user.nevtrekhNer}</span>
                           <span className="text-gray-800 dark:text-gray-100">{user.kpiHuvv}%</span>
