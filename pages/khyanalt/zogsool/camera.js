@@ -1617,51 +1617,14 @@ function camera({ token }) {
       },
       {
         title: (
-          <Popover
-            placement="bottom"
-            content={
-              <div className="space-y-2">
-                <div
-                  onClick={() => setTurul(undefined)}
-                  className={`relative ${
-                    turul === undefined && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                >
-                  {t("Бүгд")}
-                </div>
-
-                <div
-                  onClick={() => setTurul("Төлбөртэй")}
-                  className={`relative ${
-                    turul === "Төлбөртэй" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                >
-                  {t("Төлбөртэй")}
-                </div>
-                {/* <div
-                  onClick={() => setTurul("Идэвхтэй")}
-                  className={`relative ${
-                    turul === "Идэвхтэй" && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                >
-                  {t("Идэвхтэй")}
-                </div> */}
-              </div>
-            }
-          >
-            <div
-              className={`flex cursor-pointer items-center justify-center gap-3`}
-            >
-              <FilterOutlined className="text-lg text-green-600" />
-              {t("Төрөл")}
-            </div>
-          </Popover>
+          <div className={`flex  items-center justify-center gap-3`}>
+            {t("Төрөл")}
+          </div>
         ),
         align: "center",
         width: "10rem",
         dataIndex: "turul",
         showSorterTooltip: false,
-        sorter: () => 0,
         render: (a, b) => {
           var ekhlekhOgnoo = moment(b?.mashin?.ekhlekhOgnoo).diff(
             new Date(),
