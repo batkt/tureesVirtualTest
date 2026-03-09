@@ -60,6 +60,7 @@ function ToolTip({ pointer, baiguullaga, token }) {
       talbainIdnuud: { $in: [pointer?._id] },
       baiguullagiinId: baiguullaga._id,
       barilgiinId: pointer?.barilgiinId,
+      tuluv: "1",
     };
   }, [pointer?._id, pointer?.barilgiinId, baiguullaga._id]);
 
@@ -69,7 +70,7 @@ function ToolTip({ pointer, baiguullaga, token }) {
     undefined,
     select,
     undefined,
-    token
+    token,
   );
   return (
     <Group>
@@ -237,7 +238,7 @@ class App extends Component {
             {talbainuud?.map((mur) => {
               const flattenedPoints = mur.bairshil.reduce(
                 (a, b) => a.concat(b),
-                []
+                [],
               );
               return (
                 <Line
