@@ -22,7 +22,9 @@ import {
   MessageOutlined,
   PaperClipOutlined,
   FileOutlined,
-  RollbackOutlined
+  RollbackOutlined,
+  StarOutlined,
+  TrophyOutlined
 } from "@ant-design/icons";
 import { 
   Button, 
@@ -1997,36 +1999,7 @@ useEffect(() => {
           </div>
           
           <div className="grid grid-cols-2 gap-6 mt-6">
-            <Form.Item name="hariutsagchId" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Хариуцагч</span>} className="!mb-0">
-               <Select 
-                 placeholder="Хариуцагч сонгох"
-                 className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
-                 allowClear
-                 showSearch
-                 optionFilterProp="label"
-               >
-                 {(ajilchdiinGaralt?.jagsaalt || []).map(u => ({ label: u.ner || u.nevtrekhNer, value: u._id })).map(opt => (
-                   <Select.Option key={opt.value} value={opt.value} label={opt.label}>{opt.label}</Select.Option>
-                 ))}
-               </Select>
-            </Form.Item>
-            <Form.Item name="ajiltnuud" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Хамтрах ажилчид</span>} className="!mb-0">
-               <Select 
-                 mode="multiple"
-                 placeholder="Ажилчид сонгох"
-                 className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
-                 allowClear
-                 showSearch
-                 optionFilterProp="label"
-               >
-                 {(ajilchdiinGaralt?.jagsaalt || []).map(u => ({ label: u.ner || u.nevtrekhNer, value: u._id })).map(opt => (
-                   <Select.Option key={opt.value} value={opt.value} label={opt.label}>{opt.label}</Select.Option>
-                 ))}
-               </Select>
-            </Form.Item>
-          </div>
-          
-          <Form.Item label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Зургууд (заавал биш)</span>} className="!mb-0">
+            <Form.Item label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Зургууд (заавал биш)</span>} className="!mb-0">
             <Upload
               listType="picture-card"
               fileList={taskImages}
@@ -2043,8 +2016,26 @@ useEffect(() => {
               )}
             </Upload>
           </Form.Item>
+            
+            <Form.Item name="ajiltnuud" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Хамтрах ажилчид</span>} className="!mb-0">
+               <Select 
+                 mode="multiple"
+                 placeholder="Ажилчид сонгох"
+                 className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
+                 allowClear
+                 showSearch
+                 optionFilterProp="label"
+               >
+                 {(ajilchdiinGaralt?.jagsaalt || []).map(u => ({ label: u.ner || u.nevtrekhNer, value: u._id })).map(opt => (
+                   <Select.Option key={opt.value} value={opt.value} label={opt.label}>{opt.label}</Select.Option>
+                 ))}
+               </Select>
+            </Form.Item>
+          </div>
+          
+          
 
-          <Divider orientation="left" className="!mt-0 !mb-4"><span className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em]">Бараа материал</span></Divider>
+          <Divider orientation="left" className="!mt-0 !mb-4"><span className="text-gray-400 text-[10px] font-black uppercase">Бараа материал</span></Divider>
           
           <Form.List name="baraa">
             {(fields, { add, remove }) => (
@@ -2272,7 +2263,7 @@ useEffect(() => {
 
             {((selectedTask?.hariutsagchZurag?.length > 0) || (selectedTask?.zurag?.length > 0)) && (
               <div className="space-y-3 mb-8">
-                <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] block pl-1">Хавсаргасан зургууд</span>
+                <span className="text-[10px] font-black text-gray-400 uppercase  block pl-1">Хавсаргасан зургууд</span>
                 <div className="bg-gray-50 dark:bg-gray-800/40 p-3 rounded-2xl border border-gray-100 dark:border-gray-700/50">
                   <Image.PreviewGroup>
                     <div className="flex flex-wrap gap-2">
@@ -2302,7 +2293,7 @@ useEffect(() => {
 
             <div className="grid grid-cols-2 gap-8 mb-8">
                 <div className="flex flex-col space-y-3">
-                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Ажилтнууд</span>
+                  <span className="text-[10px] font-black text-gray-500 uppercase  block pl-1">Ажилтнууд</span>
                   <div className="flex items-center space-x-2">
                     {selectedTask?.ajiltnuud?.map((aId, i) => {
                       const member = allEmployees.find(m => m._id === aId);
@@ -2339,7 +2330,7 @@ useEffect(() => {
                 </div>
             </div>
 
-          <div className="pt-8 mt-8 border-t dark:border-gray-700">
+          <div className="pt-2 border-t dark:border-gray-700">
               {(() => {
                 const getMinutesFromISO = (tsag) => {
                   if (tsag == null) return null;
@@ -2434,7 +2425,7 @@ useEffect(() => {
                 return (
                   <div className="flex flex-col space-y-4 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">{t("Цаг бүртгэл")}</span>
+                      <span className="text-[10px] font-black text-gray-500 uppercase">{t("Цаг бүртгэл")}</span>
                       {isInProgress && (
                         <div className="flex items-center bg-teal-500/10 px-2 py-1 rounded-lg">
                           <Badge status="processing" color="#10b981" />
@@ -2488,10 +2479,10 @@ useEffect(() => {
           {selectedTask?.tuluv === 'duussan' && (ajiltan?.erkh === 'Admin' || ajiltan?.erkh === 'Manager') && (
             <div className="pt-8 mt-8 border-t dark:border-gray-700">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Оноо өгөх</span>
+                <span className="text-[10px] font-black text-gray-500 uppercase ">Админы үнэлгээ</span>
                 {taskScore?.onooson != null && (
                   <span className="text-[11px] font-black text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20 px-2 py-0.5 rounded-lg">
-                    Одоогийн оноо: {taskScore.onooson}/10
+                    Үнэлгээ: {taskScore.onooson}/10
                   </span>
                 )}
               </div>
@@ -2512,7 +2503,8 @@ useEffect(() => {
                     step={0.5}
                     value={scorePoints}
                     onChange={e => setScorePoints(Number(e.target.value))}
-                    className="w-full accent-teal-500 h-2 rounded-full"
+                    className={`w-full h-2 rounded-full ${taskScore?.onooson != null ? 'accent-gray-400 opacity-50 cursor-not-allowed' : 'accent-teal-500'}`}
+                    disabled={taskScore?.onooson != null}
                   />
                   <Input.TextArea
                     placeholder="Тайлбар (заавал биш)"
@@ -2520,6 +2512,7 @@ useEffect(() => {
                     onChange={e => setScoreNote(e.target.value)}
                     rows={2}
                     className="rounded-xl"
+                    disabled={taskScore?.onooson != null}
                   />
                   <Button
                     type="primary"
@@ -2533,12 +2526,58 @@ useEffect(() => {
                   </Button>
                 </div>
               )}
+
+              {/* Client Rating Section - New */}
+              <div className="mt-8 pt-8 border-t dark:border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-black text-gray-500 uppercase">Үйлчлүүлэгчийн үнэлгээ</span>
+                  {taskScore?.uilchluulegchOnooson != null && (
+                    <span className="text-[11px] font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded-lg">
+                      Үнэлгээ: {taskScore.uilchluulegchOnooson}/10
+                    </span>
+                  )}
+                </div>
+                <div className="bg-amber-50/10 dark:bg-amber-900/10 rounded-2xl p-5 border border-amber-200/50 dark:border-amber-700/30 space-y-4">
+                   <div className="flex items-center justify-between">
+                     <span className="text-[12px] font-bold text-amber-600 dark:text-amber-400">Оноо: <span className="text-2xl font-black ml-1">{clientScorePoints}</span> / 10</span>
+                     <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm ${
+                       clientScorePoints >= 7 ? 'bg-amber-500' : clientScorePoints >= 4 ? 'bg-orange-500' : 'bg-red-500'
+                     }`}>{clientScorePoints}</div>
+                   </div>
+                   <input
+                     type="range" min={0} max={10} step={1}
+                     value={clientScorePoints}
+                     onChange={e => setClientScorePoints(Number(e.target.value))}
+                     className={`w-full h-2 rounded-full ${taskScore?.uilchluulegchOnooson != null ? 'accent-gray-400 opacity-50 cursor-not-allowed' : 'accent-amber-500'}`}
+                     disabled={taskScore?.uilchluulegchOnooson != null}
+                   />
+                   <Input.TextArea
+                     placeholder="Үйлчлүүлэгчийн тайлбар..."
+                     value={clientScoreNote}
+                     onChange={e => setClientScoreNote(e.target.value)}
+                     rows={2}
+                     className="rounded-xl border-amber-200/50 dark:border-amber-700/30"
+                     disabled={taskScore?.uilchluulegchOnooson != null}
+                   />
+                   <Button
+                     type="primary"
+                     block
+                     loading={savingClientScore}
+                     disabled={taskScore?.uilchluulegchOnooson != null}
+                     onClick={handleSubmitClientScore}
+                     className={`h-10 rounded-xl border-none font-black ${taskScore?.uilchluulegchOnooson != null ? 'bg-gray-300 outline-none' : 'bg-amber-500 hover:bg-amber-400 shadow-lg shadow-amber-500/20'}`}
+                   >
+                     {savingClientScore ? 'Хадгалж байна...' : taskScore?.uilchluulegchOnooson != null ? 'Үнэлгээ хадгалагдсан' : 'Үнэлгээ хадгалах'}
+                   </Button>
+                </div>
+              </div>
             </div>
           )}
 
 
 
-          <div className="pt-8 border-t dark:border-gray-700 mt-8">
+
+          <div className="pt-2 border-t dark:border-gray-700 mt-8">
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-bold text-gray-500 uppercase">
                 Дэд ажил ({completedSubtasksCount} / {totalSubtasksCount})
@@ -2830,6 +2869,8 @@ useEffect(() => {
               <div className="flex flex-col min-w-0 flex-1">
                 <span className="truncate">{task.title}</span>
                 <span className="text-[9px] text-gray-400 mt-0.5">{task.projectName}</span>
+                <span className="text-[9px] text-gray-400 mt-0.5">{task.gereeNomer}</span>
+                <span className="text-[9px] text-gray-400 mt-0.5">{task.taskId}</span>
               </div>
             </div>
           )}
