@@ -22,6 +22,7 @@ import {
   MessageOutlined,
   PaperClipOutlined,
   FileOutlined,
+  RollbackOutlined
 } from "@ant-design/icons";
 import { 
   Button, 
@@ -120,6 +121,24 @@ function Tuluvluguu() {
   const [uploadingProjectChatFile, setUploadingProjectChatFile] = useState(false);
   const [selectedProjectChatFile, setSelectedProjectChatFile] = useState(null);
   const [currentTime, setCurrentTime] = useState(dayjs());
+  // Chat: reply, edit
+  const [replyTo, setReplyTo] = useState(null);
+  const [editingMsg, setEditingMsg] = useState(null); // { _id, medeelel }
+  const [editMsgText, setEditMsgText] = useState("");
+  // Project Chat: reply, edit
+  const [replyToProject, setReplyToProject] = useState(null);
+  const [editingProjectMsg, setEditingProjectMsg] = useState(null);
+  const [editProjectMsgText, setEditProjectMsgText] = useState("");
+  // Task score (onoo)
+  const [taskScore, setTaskScore] = useState(null); // { onooson, onoosonTailbar, ... }
+  const [scorePoints, setScorePoints] = useState(5);
+  const [scoreNote, setScoreNote] = useState("");
+  const [savingScore, setSavingScore] = useState(false);
+  const [loadingScore, setLoadingScore] = useState(false);
+
+  const [clientScorePoints, setClientScorePoints] = useState(5);
+  const [clientScoreNote, setClientScoreNote] = useState("");
+  const [savingClientScore, setSavingClientScore] = useState(false);
 
   useEffect(() => {
     const ticker = setInterval(() => {
@@ -457,7 +476,9 @@ function Tuluvluguu() {
         startDate: baseStart,
         dueDate: baseDue,
         startTime: null,
-        endTime: null
+        endTime: null,
+        hariutsagchId: null,
+        ajiltnuud: []
       });
     }
   }, [isTaskModalVisible, selectedDay, taskForm]);
@@ -537,8 +558,8 @@ function Tuluvluguu() {
         tailbar: values.description || '',
         zereglel: values.zereglel || 'engiin',
         tuluv: 'shine',
-        hariutsagchId: ajiltan?._id,
-        ajiltnuud: ajiltan?._id ? [ajiltan._id] : [],
+        hariutsagchId: values.hariutsagchId || null,
+        ajiltnuud: values.ajiltnuud || [],
         ekhlekhTsag,
         duusakhTsag,
         ekhlekhMinute,
@@ -758,19 +779,132 @@ useEffect(() => {
     }
   }, [api, barilgiinId, baiguullagiinId]);
 
+  const fetchTaskScore = useCallback(async (taskId) => {
+    if (!taskId) return;
+    setLoadingScore(true);
+    try {
+      const res = await api.get(`/tasks/${taskId}/onoo`);
+      if (res.data?.success && res.data?.data) {
+        setTaskScore(res.data.data);
+        if (res.data.data?.onooson != null) {
+          setScorePoints(res.data.data.onooson);
+        } else {
+          setScorePoints(5);
+        }
+        setScoreNote(res.data.data?.onoosonTailbar ?? "");
+
+        if (res.data.data?.uilchluulegchOnooson != null) {
+          setClientScorePoints(res.data.data.uilchluulegchOnooson);
+        } else {
+          setClientScorePoints(5);
+        }
+        setClientScoreNote(res.data.data?.uilchluulegchOnoosonTailbar ?? "");
+      } else {
+        // No data, reset to default
+        throw new Error("No data");
+      }
+    } catch (err) {
+      setTaskScore(null);
+      setScorePoints(5);
+      setScoreNote("");
+      setClientScorePoints(5);
+      setClientScoreNote("");
+    } finally {
+      setLoadingScore(false);
+    }
+  }, [api]);
+
+  const handleSubmitScore = async () => {
+    if (!selectedTask) return;
+    const taskId = selectedTask._id || selectedTask.id;
+    setSavingScore(true);
+    try {
+      const res = await api.post(`/tasks/${taskId}/onoo`, {
+        onooson: scorePoints,
+        onoosonTailbar: scoreNote,
+      });
+      if (res.data?.success) {
+        message.success(res.data.message || `Оноо амжилттай хадгалагдлаа (${scorePoints}/10)`);
+        setTaskScore(res.data.data || { onooson: scorePoints, onoosonTailbar: scoreNote });
+        // Update selected task to reflect change
+        setSelectedTask(prev => ({ 
+          ...prev, 
+          onooson: scorePoints, 
+          onoosonTailbar: scoreNote 
+        }));
+      }
+    } catch (err) {
+      message.error(err?.response?.data?.message || "Оноо хадгалахад алдаа гарлаа");
+    } finally {
+      setSavingScore(false);
+    }
+  };
+
+  const handleSubmitClientScore = async () => {
+    if (!selectedTask) return;
+    const taskId = selectedTask._id || selectedTask.id;
+    setSavingClientScore(true);
+    try {
+      const res = await api.post(`/tasks/${taskId}/client-onoo`, {
+        uilchluulegchOnooson: clientScorePoints,
+        uilchluulegchOnoosonTailbar: clientScoreNote,
+        uilchluulegchId: selectedTask.uilchluulegchId || selectedTask?.project?.uilchluulegchId || ""
+      });
+      if (res.data?.success) {
+        message.success(res.data.message || `Үйлчлүүлэгчийн оноо хадгалагдлаа (${clientScorePoints}/10)`);
+        
+        let nt = res.data.data?.niitOnooson ?? res.data.data?.onooson ?? clientScorePoints;
+        
+        setTaskScore(res.data.data || { 
+          ...taskScore,
+          uilchluulegchOnooson: clientScorePoints, 
+          uilchluulegchOnoosonTailbar: clientScoreNote,
+          niitOnooson: nt
+        });
+        
+        setSelectedTask(prev => ({ 
+          ...prev, 
+          uilchluulegchOnooson: clientScorePoints, 
+          uilchluulegchOnoosonTailbar: clientScoreNote,
+          niitOnooson: nt
+        }));
+      }
+    } catch (err) {
+      message.error(err?.response?.data?.message || "Үнэлгээ хадгалахад алдаа гарлаа");
+    } finally {
+      setSavingClientScore(false);
+    }
+  };
+
+
   useEffect(() => {
     if (selectedTask && isTaskDetailVisible) {
       const tid = selectedTask._id || selectedTask.id;
       if (tid) {
+        // Reset score states immediately when opening a new task
+        setTaskScore(null);
+        setScorePoints(5);
+        setScoreNote("");
+        setClientScorePoints(5);
+        setClientScoreNote("");
+        
         fetchSubtasks(tid);
         fetchTaskDetail(tid);
+        if (selectedTask.tuluv === 'duussan') fetchTaskScore(tid);
       }
     } else {
       setSubtasks([]);
       setIsAddingSubtask(false);
       setNewSubtaskTitle("");
+      setTaskScore(null);
+      setScorePoints(5);
+      setScoreNote("");
+      setClientScorePoints(5);
+      setClientScoreNote("");
+      setReplyTo(null);
+      setEditingMsg(null);
     }
-  }, [isTaskDetailVisible, fetchSubtasks, fetchTaskDetail]); 
+  }, [isTaskDetailVisible, fetchSubtasks, fetchTaskDetail, fetchTaskScore]); 
   const handleCreateSubtask = async () => {
     if (!newSubtaskTitle.trim() || !selectedTask) return;
     try {
@@ -846,17 +980,34 @@ useEffect(() => {
       const mTaskId = msg.taskId || msg.task;
       const mProjId = msg.projectId || msg.project;
       if (mTaskId === taskId && mProjId === projectId) {
-        setChatMessages(prev => [...prev, msg]);
+        setChatMessages(prev => {
+          const exists = prev.some(m => m._id === msg._id);
+          return exists ? prev : [...prev, msg];
+        });
         setTimeout(() => {
           messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
         }, 100);
       }
     };
 
+    const handleMsgDeleted = ({ chatId }) => {
+      setChatMessages(prev =>
+        prev.map(m => m._id === chatId ? { ...m, isDeleted: true, medeelel: "" } : m)
+      );
+    };
+
+    const handleMsgEdited = (updated) => {
+      setChatMessages(prev => prev.map(m => m._id === updated._id ? { ...m, ...updated } : m));
+    };
+
     fsmSocket.on("new_message", handleNewMessage);
+    fsmSocket.on("message_deleted", handleMsgDeleted);
+    fsmSocket.on("message_edited", handleMsgEdited);
 
     return () => {
       fsmSocket.off("new_message", handleNewMessage);
+      fsmSocket.off("message_deleted", handleMsgDeleted);
+      fsmSocket.off("message_edited", handleMsgEdited);
     };
   }, [isTaskDetailVisible, selectedTask, fsmSocket, fetchChatHistory]);
 
@@ -887,7 +1038,8 @@ useEffect(() => {
           medeelel: chatInput.trim() || fileInfo.ner || fileInfo.filename || selectedChatFile.name,
           fileZam: remotePath,
           fileNer: fileInfo.ner || fileInfo.filename || selectedChatFile.name,
-          turul: selectedChatFile.type.startsWith("image/") ? "zurag" : "file"
+          turul: selectedChatFile.type.startsWith("image/") ? "zurag" : "file",
+          ...(replyTo ? { replyTo } : {}),
         });
       } else {
         const payload = {
@@ -899,6 +1051,7 @@ useEffect(() => {
           ajiltniiNer: ajiltan?.ner || ajiltan?.nevtrekhNer || "Unknown",
           medeelel: chatInput.trim(),
           turul: "text",
+          ...(replyTo ? { replyTo } : {}),
         };
         sentRes = await api.post("/chats", payload);
       }
@@ -919,7 +1072,8 @@ useEffect(() => {
           ajiltniiNer: ajiltan?.ner || ajiltan?.nevtrekhNer || "Unknown",
           medeelel: chatInput.trim(),
           turul: "text",
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          ...(replyTo ? { replyTo } : {}),
         };
         setChatMessages(prev => [...prev, tempMsg]);
         setTimeout(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, 100);
@@ -927,12 +1081,45 @@ useEffect(() => {
 
       setChatInput("");
       setSelectedChatFile(null);
+      setReplyTo(null);
     } catch (err) {
       message.error("Зурвас илгээхэд алдаа гарлаа");
     } finally {
       setUploadingFile(false);
     }
   };
+
+  const handleDeleteChatMsg = async (msgId) => {
+    if (!window.confirm("Устгах уу?")) return;
+    try {
+      const res = await api.delete(`/chats/${msgId}`);
+      if (res.data?.success || res.status === 200 || res.status === 204) {
+        setChatMessages(prev =>
+          prev.map(m => m._id === msgId ? { ...m, isDeleted: true, medeelel: "" } : m)
+        );
+      }
+    } catch (err) {
+      message.error(err?.response?.data?.message || "Зурвас устгахад алдаа гарлаа");
+    }
+  };
+
+  const handleEditChatMsg = async (msgId, newText) => {
+    if (!newText.trim()) return;
+    try {
+      const res = await api.patch(`/chats/${msgId}`, { medeelel: newText.trim() });
+      if (res.data?.success || res.status === 200) {
+        setChatMessages(prev =>
+          prev.map(m => m._id === msgId ? { ...m, medeelel: newText.trim(), isEdited: true } : m)
+        );
+        setEditingMsg(null);
+        setEditMsgText("");
+      }
+    } catch (err) {
+      message.error(err?.response?.data?.message || "Зурвас засахад алдаа гарлаа");
+    }
+  };
+
+
 
   const fetchProjectChatHistory = useCallback(async (projectId) => {
     if (!projectId) return;
@@ -953,14 +1140,36 @@ useEffect(() => {
     if (!isProjectChatVisible || !selectedProjectForChat || !fsmSocket) return;
     const pId = selectedProjectForChat.id || selectedProjectForChat._id;
     fetchProjectChatHistory(pId);
+
     const handleNewMsg = (msg) => {
       if (msg.projectId === pId && !msg.taskId) {
-        setProjectChatMessages(prev => [...prev, msg]);
+        setProjectChatMessages(prev => {
+          const exists = prev.some(m => m._id === msg._id);
+          return exists ? prev : [...prev, msg];
+        });
         setTimeout(() => { projectChatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, 100);
       }
     };
+
+    const handleMsgDeleted = ({ chatId }) => {
+      setProjectChatMessages(prev =>
+        prev.map(m => m._id === chatId ? { ...m, isDeleted: true, medeelel: "" } : m)
+      );
+    };
+
+    const handleMsgEdited = (updated) => {
+      setProjectChatMessages(prev => prev.map(m => m._id === updated._id ? { ...m, ...updated } : m));
+    };
+
     fsmSocket.on('new_message', handleNewMsg);
-    return () => fsmSocket.off('new_message', handleNewMsg);
+    fsmSocket.on("message_deleted", handleMsgDeleted);
+    fsmSocket.on("message_edited", handleMsgEdited);
+
+    return () => {
+      fsmSocket.off('new_message', handleNewMsg);
+      fsmSocket.off('message_deleted', handleMsgDeleted);
+      fsmSocket.off('message_edited', handleMsgEdited);
+    };
   }, [isProjectChatVisible, selectedProjectForChat, fsmSocket, fetchProjectChatHistory]);
 
   const handleSendProjectMessage = async () => {
@@ -988,7 +1197,8 @@ useEffect(() => {
           medeelel: projectChatInput.trim() || fileInfo.ner || fileInfo.filename || selectedProjectChatFile.name,
           fileZam: remotePath,
           fileNer: fileInfo.ner || fileInfo.filename || selectedProjectChatFile.name,
-          turul: selectedProjectChatFile.type.startsWith('image/') ? 'zurag' : 'file'
+          turul: selectedProjectChatFile.type.startsWith('image/') ? 'zurag' : 'file',
+          ...(replyToProject ? { replyTo: replyToProject } : {}),
         });
       } else {
         sentRes = await api.post('/chats', {
@@ -996,9 +1206,10 @@ useEffect(() => {
           baiguullagiinId,
           barilgiinId,
           ajiltniiId: ajiltan?._id,
-          ajiltniiNer: ajiltan?.ner || ajiltan?.nevtrekhNer || 'Unknown',
+          ajiltniiNer: ajiltan?.ner || ajiltan?._id,
           medeelel: projectChatInput.trim(),
           turul: 'text',
+          ...(replyToProject ? { replyTo: replyToProject } : {}),
         });
       }
       const newMsg = sentRes.data?.data || sentRes.data;
@@ -1025,10 +1236,37 @@ useEffect(() => {
 
       setProjectChatInput('');
       setSelectedProjectChatFile(null);
+      setReplyToProject(null);
     } catch (err) {
       message.error('Зурвас илгээхэд алдаа гарлаа');
     } finally {
       setUploadingProjectChatFile(false);
+    }
+  };
+
+  const handleDeleteProjectChatMsg = async (msgId) => {
+    if (!window.confirm("Устгах уу?")) return;
+    try {
+      const res = await api.delete(`/chats/${msgId}`);
+      if (res.data?.success || res.status === 200 || res.status === 204) {
+        setProjectChatMessages(prev => prev.map(m => m._id === msgId ? { ...m, isDeleted: true, medeelel: "" } : m));
+      }
+    } catch (err) {
+      message.error("Зурвас устгахад алдаа гарлаа");
+    }
+  };
+
+  const handleEditProjectChatMsg = async (msgId, newText) => {
+    if (!newText.trim()) return;
+    try {
+      const res = await api.patch(`/chats/${msgId}`, { medeelel: newText.trim() });
+      if (res.data?.success || res.status === 200) {
+        setProjectChatMessages(prev => prev.map(m => m._id === msgId ? { ...m, medeelel: newText.trim(), isEdited: true } : m));
+        setEditingProjectMsg(null);
+        setEditProjectMsgText("");
+      }
+    } catch (err) {
+      message.error("Зурвас засахад алдаа гарлаа");
     }
   };
 
@@ -1758,6 +1996,36 @@ useEffect(() => {
             </Form.Item>
           </div>
           
+          <div className="grid grid-cols-2 gap-6 mt-6">
+            <Form.Item name="hariutsagchId" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Хариуцагч</span>} className="!mb-0">
+               <Select 
+                 placeholder="Хариуцагч сонгох"
+                 className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
+                 allowClear
+                 showSearch
+                 optionFilterProp="label"
+               >
+                 {(ajilchdiinGaralt?.jagsaalt || []).map(u => ({ label: u.ner || u.nevtrekhNer, value: u._id })).map(opt => (
+                   <Select.Option key={opt.value} value={opt.value} label={opt.label}>{opt.label}</Select.Option>
+                 ))}
+               </Select>
+            </Form.Item>
+            <Form.Item name="ajiltnuud" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Хамтрах ажилчид</span>} className="!mb-0">
+               <Select 
+                 mode="multiple"
+                 placeholder="Ажилчид сонгох"
+                 className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
+                 allowClear
+                 showSearch
+                 optionFilterProp="label"
+               >
+                 {(ajilchdiinGaralt?.jagsaalt || []).map(u => ({ label: u.ner || u.nevtrekhNer, value: u._id })).map(opt => (
+                   <Select.Option key={opt.value} value={opt.value} label={opt.label}>{opt.label}</Select.Option>
+                 ))}
+               </Select>
+            </Form.Item>
+          </div>
+          
           <Form.Item label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Зургууд (заавал биш)</span>} className="!mb-0">
             <Upload
               listType="picture-card"
@@ -1896,22 +2164,7 @@ useEffect(() => {
             <Input.TextArea placeholder="Төслийн дэлгэрэнгүй тайлбар..." className="rounded-xl" rows={2} />
           </Form.Item>
           
-          <div className="grid grid-cols-2 gap-4">
-            <Form.Item 
-              name="ekhlekhOgnoo" 
-              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Эхлэх өдөр</span>}
-              initialValue={dayjs()}
-            >
-              <DatePicker className="w-full h-12 rounded-xl" format="YYYY-MM-DD" />
-            </Form.Item>
-            <Form.Item 
-              name="duusakhOgnoo" 
-              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Дуусах өдөр</span>}
-              initialValue={dayjs().add(30, "day")}
-            >
-              <DatePicker className="w-full h-12 rounded-xl" format="YYYY-MM-DD" />
-            </Form.Item>
-          </div>
+          
 
           <Form.Item 
             name="color" 
@@ -2103,41 +2356,55 @@ useEffect(() => {
                 const budgetedSeconds = budgetedMinutes * 60;
                 let spentSeconds = 0;
                 
-                // 1. Process session-based actual time
-                if (selectedTask?.ajiltanTsag && Array.isArray(selectedTask.ajiltanTsag)) {
+                const isFinished = selectedTask?.tuluv === 'duussan' || selectedTask?.tuluv === 'shalga';
+                const isInProgress = selectedTask?.tuluv === 'khiigdej bui';
+                
+                
+                let hasLogs = false;
+                
+                if (selectedTask?.ajiltanTsag && Array.isArray(selectedTask.ajiltanTsag) && selectedTask.ajiltanTsag.length > 0) {
+                  hasLogs = true;
                   selectedTask.ajiltanTsag.forEach(tsag => {
                     if (!tsag) return;
                     
-                    // Manual minutes entry
+                    // Prefer calculating from actual timestamps
+                    if (tsag.ekhlekhTsag) {
+                      const start = dayjs(tsag.ekhlekhTsag);
+                      if (start.isValid()) {
+                        let end = currentTime;
+                        if (tsag.duusakhTsag) {
+                          end = dayjs(tsag.duusakhTsag);
+                        } else if (isFinished) {
+                          end = dayjs(selectedTask.duussanOgnoo || selectedTask.updatedAt || selectedTask.duusakhTsag);
+                        }
+                        
+                        if (end.isValid()) {
+                          const diff = end.diff(start, 'second');
+                          if (diff > 0) {
+                            spentSeconds += diff;
+                            return;
+                          }
+                        }
+                      }
+                    }
+                    
+                    // Fallback to tsagMinute only if timestamps aren't available 
                     const manualMin = Number(tsag.tsagMinute);
                     if (!isNaN(manualMin) && manualMin > 0) {
                       spentSeconds += Math.round(manualMin * 60);
-                    } 
-                    // Session timestamps
-                    else if (tsag.ekhlekhTsag) {
-                      const start = dayjs(tsag.ekhlekhTsag);
-                      if (start.isValid()) {
-                        const end = tsag.duusakhTsag ? dayjs(tsag.duusakhTsag) : currentTime;
-                        if (end.isValid()) {
-                          const diff = end.diff(start, 'second');
-                          if (diff > 0) spentSeconds += diff;
-                        }
-                      }
                     }
                   });
                 } 
                 
                 // 2. Sum with existing top-level field if it exists independent of detailed logs
-                // Or if spentSeconds is still 0, use it as fallback
+                // Or if spentSeconds is still 0 AND we have no logs, use it as fallback
                 const topLevelSpent = Number(selectedTask?.zartsuulsanKhugatsaa);
                 if (!isNaN(topLevelSpent) && topLevelSpent > 0 && spentSeconds === 0) {
                   spentSeconds = topLevelSpent; // In seconds based on context
                 }
                 
                 // 3. Last resort fallback for timers without detailed logs
-                if (spentSeconds === 0) {
-                  const isFinished = selectedTask?.tuluv === 'duussan' || selectedTask?.tuluv === 'shalga';
-                  const isInProgress = selectedTask?.tuluv === 'khiigdej bui';
+                if (spentSeconds === 0 && !hasLogs && isNaN(topLevelSpent)) {
                   
                   if (isInProgress) {
                     const startMarker = selectedTask.khuleejAvsanOgnoo || selectedTask.updatedAt || selectedTask.createdAt;
@@ -2150,7 +2417,7 @@ useEffect(() => {
                     }
                   } else if (isFinished) {
                     // For closed tasks, if no logs exist, calculate total lifetime duration
-                    const end = dayjs(selectedTask.updatedAt || selectedTask.duusakhTsag);
+                    const end = dayjs(selectedTask.duussanOgnoo || selectedTask.updatedAt || selectedTask.duusakhTsag);
                     const start = dayjs(selectedTask.khuleejAvsanOgnoo || selectedTask.createdAt || selectedTask.ekhlekhTsag);
                     if (start.isValid() && end.isValid()) {
                       const diff = end.diff(start, 'second');
@@ -2162,7 +2429,7 @@ useEffect(() => {
                 const remainingSeconds = Math.max(0, budgetedSeconds - spentSeconds);
                 const isExceeded = budgetedSeconds > 0 && spentSeconds > budgetedSeconds;
                 const progress = budgetedSeconds > 0 ? Math.min(100, (spentSeconds / budgetedSeconds) * 100) : 0;
-                const isInProgress = selectedTask?.tuluv === 'khiigdej bui';
+
                 
                 return (
                   <div className="flex flex-col space-y-4 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
@@ -2216,6 +2483,60 @@ useEffect(() => {
                 );
               })()}
           </div>
+
+          {/* Admin Score Panel — only for completed tasks */}
+          {selectedTask?.tuluv === 'duussan' && (ajiltan?.erkh === 'Admin' || ajiltan?.erkh === 'Manager') && (
+            <div className="pt-8 mt-8 border-t dark:border-gray-700">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Оноо өгөх</span>
+                {taskScore?.onooson != null && (
+                  <span className="text-[11px] font-black text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20 px-2 py-0.5 rounded-lg">
+                    Одоогийн оноо: {taskScore.onooson}/10
+                  </span>
+                )}
+              </div>
+              {loadingScore ? (
+                <div className="flex justify-center py-4"><Spin size="small" /></div>
+              ) : (
+                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[12px] font-bold text-gray-500">Оноо: <span className="text-2xl font-black text-gray-800 dark:text-white ml-1">{scorePoints}</span> / 10</span>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm ${
+                      scorePoints >= 7 ? 'bg-green-500' : scorePoints >= 4 ? 'bg-yellow-500' : 'bg-red-500'
+                    }`}>{scorePoints}</div>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={10}
+                    step={0.5}
+                    value={scorePoints}
+                    onChange={e => setScorePoints(Number(e.target.value))}
+                    className="w-full accent-teal-500 h-2 rounded-full"
+                  />
+                  <Input.TextArea
+                    placeholder="Тайлбар (заавал биш)"
+                    value={scoreNote}
+                    onChange={e => setScoreNote(e.target.value)}
+                    rows={2}
+                    className="rounded-xl"
+                  />
+                  <Button
+                    type="primary"
+                    block
+                    loading={savingScore}
+                    disabled={taskScore?.onooson != null}
+                    onClick={handleSubmitScore}
+                    className={`h-10 rounded-xl border-none font-black ${taskScore?.onooson != null ? 'bg-gray-300' : 'bg-teal-500 hover:bg-teal-400'}`}
+                  >
+                    {savingScore ? 'Хадгалж байна...' : taskScore?.onooson != null ? 'Оноо хадгалагдсан' : 'Оноо хадгалах'}
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+
+
 
           <div className="pt-8 border-t dark:border-gray-700 mt-8">
             <div className="flex items-center justify-between mb-4">
@@ -2288,65 +2609,141 @@ useEffect(() => {
                </div>
              ) : (
                <div className="flex flex-col space-y-5">
-                 {chatMessages.map((msg, idx) => (
-                   <div key={idx} className="flex space-x-3 group">
-                     <Avatar className="bg-teal-500 font-bold shrink-0">
-                       {msg.ajiltniiNer?.charAt(0)?.toUpperCase()}
-                     </Avatar>
-                     <div className="flex flex-col flex-1 min-w-0">
-                       <div className="flex justify-between items-baseline mb-1">
-                         <span className="text-[12px] font-bold text-gray-800 dark:text-gray-300 truncate">
-                           {msg.ajiltniiNer}
-                         </span>
-                         <span className="text-[10px] text-gray-400 ml-2 shrink-0">
-                           {dayjs(msg.createdAt).format("MMM DD, h:mm A")}
-                         </span>
-                       </div>
-                       <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/50 rounded-xl rounded-tl-none p-3 shadow-sm text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed break-words overflow-hidden">
-                         {msg.turul === 'zurag' && msg.fileZam ? (
-                           <div className="flex flex-col space-y-2">
-                             {msg.medeelel && msg.medeelel.trim() !== "" && msg.medeelel !== msg.fileNer && (
-                               <span className="text-[13px] whitespace-pre-wrap">{msg.medeelel}</span>
-                             )}
-                             <img 
-                               src={msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`} 
-                               alt="uploaded image" 
-                               className="max-w-[200px] max-h-[200px] object-cover rounded-md cursor-pointer border border-gray-100 dark:border-gray-700/50 hover:opacity-90 transition-opacity"
-                               onClick={() => window.open(msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`, '_blank')}
-                             />
+                 {chatMessages.map((msg, idx) => {
+                   const isOwn = msg.ajiltniiId === ajiltan?._id;
+                   if (msg.isDeleted) {
+                     return (
+                       <div key={msg._id || idx} className="flex space-x-3">
+                         <Avatar className="bg-gray-400 font-bold shrink-0">{msg.ajiltniiNer?.charAt(0)?.toUpperCase()}</Avatar>
+                         <div className="flex flex-col flex-1 min-w-0">
+                           <span className="text-[12px] font-bold text-gray-500 dark:text-gray-400 mb-1">{msg.ajiltniiNer}</span>
+                           <div className="bg-gray-100 dark:bg-gray-800/60 border border-dashed border-gray-300 dark:border-gray-700 rounded-xl rounded-tl-none px-3 py-2">
+                             <em className="text-[12px] text-gray-400 italic">Мессеж устгагдлаа</em>
                            </div>
-                         ) : msg.turul === 'file' && msg.fileZam ? (
-                           <div className="flex flex-col space-y-2">
-                             {msg.medeelel && msg.medeelel.trim() !== "" && msg.medeelel !== msg.fileNer && (
-                               <span className="text-[13px] whitespace-pre-wrap">{msg.medeelel}</span>
-                             )}
-                             <a 
-                               href={msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`} 
-                               target="_blank" 
-                               rel="noopener noreferrer"
-                               className="flex items-center space-x-2 text-teal-600 dark:text-teal-400 hover:text-teal-500 bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg border border-gray-100 dark:border-gray-700/50"
-                             >
-                               <div className="w-8 h-8 rounded-md bg-teal-50 dark:bg-teal-500/10 flex items-center justify-center shrink-0">
-                                 <FileOutlined className="text-lg" />
-                               </div>
-                               <span className="truncate max-w-[150px] font-medium text-xs text-gray-700 dark:text-gray-300">
-                                 {msg.fileNer || "Хавсаргасан файл (Татах)"}
-                               </span>
-                             </a>
+                         </div>
+                       </div>
+                     );
+                   }
+                   return (
+                     <div key={msg._id || idx} className="flex space-x-3 group">
+                       <Avatar className="bg-teal-500 font-bold shrink-0">
+                         {msg.ajiltniiNer?.charAt(0)?.toUpperCase()}
+                       </Avatar>
+                       <div className="flex flex-col flex-1 min-w-0">
+                         <div className="flex justify-between items-baseline mb-1">
+                           <span className="text-[12px] font-bold text-gray-800 dark:text-gray-300 truncate">
+                             {msg.ajiltniiNer}
+                           </span>
+                           <span className="text-[10px] text-gray-400 ml-2 shrink-0">
+                             {dayjs(msg.createdAt).format("MMM DD, h:mm A")}
+                             {msg.isEdited && <span className="ml-1 text-gray-400 italic">(засварлагдсан)</span>}
+                           </span>
+                         </div>
+                         {msg.replyTo?.chatId && (
+                           <div className="mb-1 ml-0 pl-3 border-l-2 border-teal-400/60 bg-teal-50 dark:bg-teal-900/20 rounded-r-lg py-1 pr-2">
+                             <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400">{msg.replyTo.ajiltniiNer}</span>
+                             <p className="text-[11px] text-gray-500 dark:text-gray-400 truncate m-0">{msg.replyTo.medeelel || "(медиа)"}</p>
+                           </div>
+                         )}
+                         {editingMsg?._id === msg._id ? (
+                           <div className="flex items-center space-x-2 mt-1">
+                             <Input
+                               autoFocus
+                               value={editMsgText}
+                               onChange={e => setEditMsgText(e.target.value)}
+                               onPressEnter={() => handleEditChatMsg(msg._id, editMsgText)}
+                               className="rounded-xl text-sm h-9 flex-1"
+                             />
+                             <Button size="small" type="primary" className="rounded-lg h-9" onClick={() => handleEditChatMsg(msg._id, editMsgText)}>Хадгалах</Button>
+                             <Button size="small" className="rounded-lg h-9" onClick={() => { setEditingMsg(null); setEditMsgText(""); }}>Болих</Button>
                            </div>
                          ) : (
-                           <span className="whitespace-pre-wrap">{msg.medeelel}</span>
+                           <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/50 rounded-xl rounded-tl-none p-3 shadow-sm text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed break-words overflow-hidden">
+                             {msg.turul === 'zurag' && msg.fileZam ? (
+                               <div className="flex flex-col space-y-2">
+                                 {msg.medeelel && msg.medeelel.trim() !== "" && msg.medeelel !== msg.fileNer && (
+                                   <span className="text-[13px] whitespace-pre-wrap">{msg.medeelel}</span>
+                                 )}
+                                 <img 
+                                   src={msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`} 
+                                   alt="uploaded image" 
+                                   className="max-w-[200px] max-h-[200px] object-cover rounded-md cursor-pointer border border-gray-100 dark:border-gray-700/50 hover:opacity-90 transition-opacity"
+                                   onClick={() => window.open(msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`, '_blank')}
+                                 />
+                               </div>
+                             ) : msg.turul === 'file' && msg.fileZam ? (
+                               <div className="flex flex-col space-y-2">
+                                 {msg.medeelel && msg.medeelel.trim() !== "" && msg.medeelel !== msg.fileNer && (
+                                   <span className="text-[13px] whitespace-pre-wrap">{msg.medeelel}</span>
+                                 )}
+                                 <a 
+                                   href={msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`} 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   className="flex items-center space-x-2 text-teal-600 dark:text-teal-400 hover:text-teal-500 bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg border border-gray-100 dark:border-gray-700/50"
+                                 >
+                                   <div className="w-8 h-8 rounded-md bg-teal-50 dark:bg-teal-500/10 flex items-center justify-center shrink-0">
+                                     <FileOutlined className="text-lg" />
+                                   </div>
+                                   <span className="truncate max-w-[150px] font-medium text-xs text-gray-700 dark:text-gray-300">
+                                     {msg.fileNer || "Хавсаргасан файл (Татах)"}
+                                   </span>
+                                 </a>
+                               </div>
+                             ) : (
+                               <span className="whitespace-pre-wrap">{msg.medeelel}</span>
+                             )}
+                           </div>
                          )}
+                         <div className="flex items-center gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                           <Tooltip title="Хариулах">
+                             <button
+                               onClick={() => setReplyTo({ chatId: msg._id, medeelel: msg.medeelel, ajiltniiNer: msg.ajiltniiNer, turul: msg.turul })}
+                               className="w-6 h-6 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-teal-500 rounded-lg hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-colors"
+                             >
+                               <RollbackOutlined style={{ fontSize: '12px' }} />
+                             </button>
+                           </Tooltip>
+                           {isOwn && (
+                             <>
+                                <Tooltip title="Засах">
+                                  <button
+                                    onClick={() => { setEditingMsg(msg); setEditMsgText(msg.medeelel); }}
+                                    className="w-6 h-6 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-blue-500 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                                  >
+                                    <EditOutlined style={{ fontSize: '12px' }} />
+                                  </button>
+                                </Tooltip>
+                                <Tooltip title="Устгах">
+                                  <button
+                                    onClick={() => handleDeleteChatMsg(msg._id)}
+                                    className="w-6 h-6 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                  >
+                                    <DeleteOutlined style={{ fontSize: '12px' }} />
+                                  </button>
+                                </Tooltip>
+                             </>
+                           )}
+                         </div>
                        </div>
                      </div>
-                   </div>
-                 ))}
+                   );
+                 })}
                  <div ref={messagesEndRef} />
                </div>
              )}
           </div>
 
           <div className="p-6 bg-white dark:bg-[#111827] border-t border-gray-200 dark:border-gray-800 shrink-0">
+             {replyTo && (
+               <div className="mb-2 flex items-center justify-between px-3 py-2 bg-teal-50 dark:bg-teal-900/20 border border-teal-400/40 rounded-xl">
+                 <div className="flex flex-col min-w-0 flex-1">
+                   <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400">{replyTo.ajiltniiNer}-д хариулж байна</span>
+                   <span className="text-[11px] text-gray-500 dark:text-gray-400 truncate">{replyTo.medeelel || "(медиа)"}</span>
+                 </div>
+                 <Button type="text" size="small" icon={<CloseOutlined className="text-gray-400 text-[10px]" />} onClick={() => setReplyTo(null)} />
+               </div>
+             )}
              {selectedChatFile && (
                <div className="mb-3 flex items-center pt-2 pb-2 pl-3 pr-8 border border-teal-500 bg-teal-50 dark:bg-teal-900/20 rounded-xl relative w-max shadow-sm">
                  <PaperClipOutlined className="text-teal-500 mr-2 text-lg" />
@@ -2451,32 +2848,32 @@ useEffect(() => {
         width={typeof window !== 'undefined' && window.innerWidth < 768 ? '100%' : 480}
         placement="right"
         className="project-chat-drawer !p-0"
-        bodyStyle={{ padding: 0, display: 'flex', flexDirection: 'column', height: '100%' }}
+        bodyStyle={{ padding: 0, display: 'flex', flexDirection: 'column', height: '100%', background: 'transparent' }}
       >
         <style>{`
-          .project-chat-drawer .ant-drawer-body { background: #111827 !important; }
-          .project-chat-drawer .ant-drawer-content { background: #111827 !important; }
+          .project-chat-drawer .ant-drawer-body { background: transparent; }
+          .project-chat-drawer .ant-drawer-content { background: transparent; }
           .pchat-me { background: linear-gradient(135deg,#0d9488,#0f766e); border-radius:1.2rem 1.2rem 0.25rem 1.2rem; }
-          .pchat-other { background:#1f2937; border-radius:1.2rem 1.2rem 1.2rem 0.25rem; border:1px solid rgba(75,85,99,0.4); }
+          .pchat-other { border-radius:1.2rem 1.2rem 1.2rem 0.25rem; }
         `}</style>
         <div className="flex flex-col h-full bg-white dark:bg-gray-900">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800 shrink-0 bg-green-800 dark:bg-gray-900">
+          <div className="flex items-center justify-between px-5 py-4 border-b dark:border-gray-800 shrink-0 bg-teal-600 dark:bg-gray-900">
             <div className="flex items-center space-x-3">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-extrabold text-white shadow-lg" style={{ backgroundColor: selectedProjectForChat?.color || '#10B981' }}>
                 {(selectedProjectForChat?.name || '').slice(0, 2).toUpperCase()}
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-bold text-white leading-tight">{selectedProjectForChat?.name}</span>
-                <span className="text-[10px] text-teal-400 font-semibold uppercase tracking-wide">Төслийн чат</span>
+                <span className="text-[10px] text-teal-100 dark:text-teal-400 font-semibold uppercase tracking-wide">Төслийн чат</span>
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <Badge count={projectChatMessages.length} size="small" />
-              <Button type="text" shape="circle" icon={<CloseOutlined className="text-gray-400 hover:text-red-400" />} onClick={() => setIsProjectChatVisible(false)} />
+              <Button type="text" shape="circle" icon={<CloseOutlined className="text-white md:text-gray-400 hover:text-red-400" />} onClick={() => setIsProjectChatVisible(false)} />
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-4 py-5 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gray-700 [&::-webkit-scrollbar-thumb]:rounded-full">
+          <div className="flex-1 overflow-y-auto px-4 py-5 bg-gray-50 dark:bg-gray-900 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700 [&::-webkit-scrollbar-thumb]:rounded-full">
             {loadingProjectChat ? (
               <div className="flex flex-col items-center justify-center h-full space-y-3">
                 <Spin size="large" />
@@ -2484,40 +2881,94 @@ useEffect(() => {
               </div>
             ) : projectChatMessages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full space-y-4 opacity-50">
-                <div className="w-16 h-16 rounded-2xl bg-gray-800 flex items-center justify-center">
-                  <MessageOutlined style={{ fontSize: 28 }} className="text-gray-500" />
+                <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                  <MessageOutlined style={{ fontSize: 28 }} className="text-gray-400 dark:text-gray-500" />
                 </div>
                 <div className="text-center">
-                  <p className="text-gray-400 text-sm font-semibold">Зурвас байхгүй байна</p>
-                  <p className="text-gray-600 text-xs mt-1">Санаагаа, тэмдэглэл, эсвэл дурын зүйл бичнэ үү</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm font-semibold">Зурвас байхгүй байна</p>
+                  <p className="text-gray-400 dark:text-gray-600 text-xs mt-1">Санаагаа, тэмдэглэл, эсвэл дурын зүйл бичнэ үү</p>
                 </div>
               </div>
             ) : (
               <div className="flex flex-col space-y-4">
                 {projectChatMessages.map((msg, idx) => {
                   const isMe = msg.ajiltniiId === ajiltan?._id;
+                  if (msg.isDeleted) {
+                    return (
+                      <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-end gap-2`}>
+                         <div className={`px-4 py-2 bg-gray-800/50 border border-dashed border-gray-700 rounded-xl text-[11px] text-gray-500 italic`}>
+                           Мессеж устгагдлаа
+                         </div>
+                      </div>
+                    );
+                  }
                   return (
-                    <div key={idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-end gap-2`}>
+                    <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-end gap-2 group`}>
                       {!isMe && (
                         <Avatar className="bg-gradient-to-br from-teal-500 to-emerald-600 font-bold shrink-0 text-xs shadow-lg">
                           {msg.ajiltniiNer?.charAt(0)?.toUpperCase()}
                         </Avatar>
                       )}
-                      <div className={`flex flex-col max-w-[72%] ${isMe ? 'items-end' : 'items-start'}`}>
+                      <div className={`flex flex-col max-w-[80%] ${isMe ? 'items-end' : 'items-start'}`}>
                         {!isMe && <span className="text-[10px] font-bold text-gray-400 mb-1 ml-1">{msg.ajiltniiNer}</span>}
-                        <div className={`px-4 py-2.5 shadow-md ${isMe ? 'pchat-me' : 'pchat-other'}`}>
-                          {msg.turul === 'zurag' && msg.fileZam ? (
-                            <img src={msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`} alt="img" className="max-w-[200px] max-h-[200px] object-cover rounded-xl cursor-pointer" onClick={() => window.open(msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`, '_blank')} />
-                          ) : msg.turul === 'file' && msg.fileZam ? (
-                            <a href={msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-teal-300 bg-white/5 p-2 rounded-lg border border-white/10">
-                              <FileOutlined className="text-teal-400" />
-                              <span className="truncate max-w-[140px] text-xs text-gray-200">{msg.fileNer || 'Файл'}</span>
-                            </a>
-                          ) : (
-                            <span className="text-[13px] text-white whitespace-pre-wrap leading-relaxed">{msg.medeelel}</span>
-                          )}
-                        </div>
-                        <span className={`text-[9px] text-gray-600 mt-1 ${isMe ? 'mr-1' : 'ml-1'}`}>{dayjs(msg.createdAt).format('MM/DD HH:mm')}</span>
+                        
+                        {/* Reply content */}
+                        {msg.replyTo?.chatId && (
+                           <div className={`mb-1 px-3 py-1 bg-gray-100 dark:bg-gray-800/50 border-l-2 border-teal-500 rounded-r-lg text-[10px] truncate max-w-full ${isMe ? 'mr-1' : 'ml-1'}`}>
+                             <span className="text-teal-600 dark:text-teal-400 font-bold mr-1">{msg.replyTo.ajiltniiNer}:</span>
+                             <span className="text-gray-500 dark:text-gray-400">{msg.replyTo.medeelel || "(медиа)"}</span>
+                           </div>
+                        )}
+
+                        {editingProjectMsg?._id === msg._id ? (
+                           <div className="flex flex-col gap-2 w-full min-w-[200px]">
+                             <Input.TextArea autoFocus value={editProjectMsgText} onChange={e => setEditProjectMsgText(e.target.value)} rows={2} className="rounded-xl text-xs bg-gray-800 text-white border-gray-700" />
+                             <div className="flex justify-end gap-2">
+                               <Button size="small" type="primary" onClick={() => handleEditProjectChatMsg(msg._id, editProjectMsgText)}>Zasakh</Button>
+                               <Button size="small" onClick={() => setEditingProjectMsg(null)}>Cancel</Button>
+                             </div>
+                           </div>
+                        ) : (
+                          <div className={`px-4 py-2.5 shadow-md relative group/bubble ${isMe ? 'pchat-me' : 'bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-gray-200 pchat-other'}`}>
+                            {msg.turul === 'zurag' && msg.fileZam ? (
+                              <img src={msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`} alt="img" className="max-w-[240px] max-h-[300px] object-cover rounded-xl cursor-pointer" onClick={() => window.open(msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`, '_blank')} />
+                            ) : msg.turul === 'file' && msg.fileZam ? (
+                              <a href={msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-teal-300 bg-white/5 p-2 rounded-lg border border-white/10">
+                                <FileOutlined className="text-teal-400" />
+                                <span className="truncate max-w-[140px] text-xs text-gray-200">{msg.fileNer || 'Файл'}</span>
+                              </a>
+                            ) : (
+                              <span className="text-[13px] text-white whitespace-pre-wrap leading-relaxed">{msg.medeelel}</span>
+                            )}
+                            
+                            {/* Actions overlay for project chat */}
+                            <div className={`absolute top-0 ${isMe ? '-left-8' : '-right-8'} opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-1`}>
+                               <Tooltip title="Хариулах" placement={isMe ? "left" : "right"}>
+                                 <button onClick={() => setReplyToProject({ chatId: msg._id, medeelel: msg.medeelel, ajiltniiNer: msg.ajiltniiNer, turul: msg.turul })} className="w-7 h-7 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-gray-700 shadow-md border border-gray-100 dark:border-gray-700">
+                                   <RollbackOutlined style={{ fontSize: '11px' }} />
+                                 </button>
+                               </Tooltip>
+                               {isMe && (
+                                 <>
+                                   <Tooltip title="Засах" placement={isMe ? "left" : "right"}>
+                                     <button onClick={() => { setEditingProjectMsg(msg); setEditProjectMsgText(msg.medeelel); }} className="w-7 h-7 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-blue-500 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 shadow-md border border-gray-100 dark:border-gray-700">
+                                       <EditOutlined style={{ fontSize: '11px' }} />
+                                     </button>
+                                   </Tooltip>
+                                   <Tooltip title="Устгах" placement={isMe ? "left" : "right"}>
+                                     <button onClick={() => handleDeleteProjectChatMsg(msg._id)} className="w-7 h-7 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 shadow-md border border-gray-100 dark:border-gray-700">
+                                       <DeleteOutlined style={{ fontSize: '11px' }} />
+                                     </button>
+                                   </Tooltip>
+                                 </>
+                               )}
+                            </div>
+                          </div>
+                        )}
+                        <span className={`text-[9px] text-gray-600 mt-1 ${isMe ? 'mr-1' : 'ml-1'}`}>
+                          {dayjs(msg.createdAt).format('MM/DD HH:mm')}
+                          {msg.isEdited && <span className="ml-1 italic text-gray-700">(edited)</span>}
+                        </span>
                       </div>
                     </div>
                   );
@@ -2528,6 +2979,15 @@ useEffect(() => {
           </div>
 
           <div className="shrink-0 bg-white dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700/60 px-4 py-3">
+            {replyToProject && (
+              <div className="mb-2 flex items-center justify-between px-3 py-1.5 bg-teal-900/30 border border-teal-700/40 rounded-xl relative">
+                <div className="flex flex-col overflow-hidden">
+                   <span className="text-[9px] font-bold text-teal-400 uppercase">{replyToProject.ajiltniiNer}-д хариулах</span>
+                   <span className="text-[10px] text-gray-400 truncate max-w-[300px]">{replyToProject.medeelel || "(медиа)"}</span>
+                </div>
+                <Button type="text" size="small" icon={<CloseOutlined className="text-[10px] text-gray-500" />} onClick={() => setReplyToProject(null)} />
+              </div>
+            )}
             {selectedProjectChatFile && (
               <div className="mb-2 flex items-center px-3 py-1.5 bg-teal-900/30 border border-teal-700/40 rounded-xl relative w-max">
                 <PaperClipOutlined className="text-teal-400 mr-2" />

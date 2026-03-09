@@ -615,12 +615,12 @@ export const khuudasnuud = [
         href: "/khyanalt/uilchilgee/uilchluulegch",
         icon: <TbUsers style={{ width: "24", height: "24" }} />,
       },
-      // {
-      //   ner: "KPI",
-      //   khuudasniiNer: "kpi",
-      //   href: "/khyanalt/uilchilgee/kpi",
-      //   icon: <TbChartBar style={{ width: "24", height: "24" }} />,
-      // },
+      {
+        ner: "KPI",
+        khuudasniiNer: "kpi",
+        href: "/khyanalt/uilchilgee/kpi",
+        icon: <TbChartBar style={{ width: "24", height: "24" }} />,
+      },
     ],
   },
   {

@@ -113,10 +113,25 @@ function BaraaMaterial() {
     }
   }, [barilgiinId, baiguullagiinId, api]);
 
+  const fetchHistory = useCallback(async () => {
+    if (!barilgiinId) return;
+    setLoadingHistory(true);
+    try {
+      const res = await api.get("/task-tuukh", { params: { barilgiinId } });
+      const list = res.data?.data || res.data || [];
+      setHistory(Array.isArray(list) ? list : []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingHistory(false);
+    }
+  }, [barilgiinId, api]);
+
   useEffect(() => {
     fetchBaraas();
     fetchProjects();
-  }, [fetchBaraas, fetchProjects]);
+    fetchHistory();
+  }, [fetchBaraas, fetchProjects, fetchHistory]);
 
   const { isConnected } = useFsmSocket();
 
@@ -162,6 +177,7 @@ function BaraaMaterial() {
       if (res.data?.success || res.status === 200) {
         message.success(`Бараа амжилттай ${editingBaraa ? 'шинэчлэгдлээ' : 'бүртгэгдлээ'}`);
         await fetchBaraas();
+        await fetchHistory();
         setIsAddModalOpen(false);
         setEditingBaraa(null);
         form.resetFields();
@@ -198,6 +214,7 @@ function BaraaMaterial() {
       if (res.data?.success || res.status === 200 || res.status === 201) {
         message.success(`Төсөл амжилттай ${editingProject ? 'засагдлаа' : 'нэмэгдлээ'}`);
         await fetchProjects();
+        await fetchHistory();
         setIsProjectModalVisible(false);
         projectForm.resetFields();
         setEditingProject(null);
@@ -228,6 +245,7 @@ function BaraaMaterial() {
         message.success("Төсөл амжилттай устгагдлаа");
         setSelectedProjectIds(prev => prev.filter(pId => pId !== id));
         await fetchProjects();
+        await fetchHistory();
       }
     } catch (err) {
       message.error(err?.response?.data?.message || "Төсөл устгахад алдаа гарлаа");
@@ -246,6 +264,7 @@ function BaraaMaterial() {
       if (res.data?.success || res.status === 200) {
         message.success("Бараа амжилттай устгагдлаа");
         await fetchBaraas();
+        await fetchHistory();
       }
     } catch (err) {
       message.error(err?.response?.data?.message || "Бараа устгахад алдаа гарлаа");
@@ -553,7 +572,7 @@ function BaraaMaterial() {
                 )}
               </div>
                 
-                <div id="mat-team" className="pt-4 h-[calc(60vh-200px)] overflow-y-auto shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50 overflow-y-auto max-h-[400px]">
+                <div id="mat-team" className="pt-4 h-[calc(50vh-200px)] overflow-y-auto shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50 overflow-y-auto max-h-[400px]">
                   <div className="text-[11px] font-extrabold text-gray-400 mb-4 px-1 flex items-center tracking-wide uppercase opacity-70">
                     <span>Ажилчид</span>
                   </div>

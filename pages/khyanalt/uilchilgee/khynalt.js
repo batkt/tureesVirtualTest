@@ -59,6 +59,8 @@ import {
 } from "antd";
 import { useFsmSocket } from "hooks/useFsmSocket";
 import { useRouter } from "next/router";
+import { SiMaterialdesign } from "react-icons/si";
+import { TbBoxSeam } from "react-icons/tb";
 
 function DashboardCard({ id, title, icon, rightActions, children, headerClass="border-emerald-500" }) {
   return (
@@ -148,7 +150,9 @@ function Khynalt() {
     return ajiltanJagsaalt?.jagsaalt?.map(a => ({
       id: a._id,
       name: a.ner || a.nevtrekhNer,
-      role: a.erkh || "Ажилтан"
+      role: a.erkh || "Ажилтан",
+      kpi: a.kpiHuvv || 0,
+      kpiOnoo: a.kpiOnoo || 0,
     })) || [];
   }, [ajiltanJagsaalt?.jagsaalt]);
 
@@ -163,7 +167,6 @@ function Khynalt() {
 
   const tutorialSteps = [
     { targetId: "khyanalt-stats", title: "Статистик", description: "Дээд хэсэгт байрлах картууд нь таны бизнесийн гол үзүүлэлтүүдийг (нийт ажил, дууссан ажил, бараа материал) шууд харуулна." },
-    { targetId: "khyanalt-status-chart", title: "Даалгаврын төлөв", description: "Дугуй диаграмм нь нийт гүйцэтгэлийг харуулна. Цэнхэр өнгөөр дууссан ажлуудыг, харанхуй өнгөөр үлдсэн ажлуудыг харж болно." },
     { targetId: "khyanalt-activity-chart", title: "Гүйцэтгэлийн график", description: "Сүүлийн 7 хоногийн ажлын гүйцэтгэлийг өдрөөр нь харьцуулан харах боломжтой." },
     { targetId: "khyanalt-tasks", title: "Ажлын жагсаалт", description: "Хамгийн сүүлд нэмэгдсэн болон хийгдэж буй ажлуудыг эндээс хянах боломжтой." },
     { targetId: "khyanalt-team", title: "Баг хамт олон", description: "Танай багийн гишүүдийн жагсаалт энд харагдах бөгөөд тэдний үүргийг хянах боломжтой." },
@@ -179,8 +182,6 @@ function Khynalt() {
       return { label: moment(day).format('M/D'), count };
     });
   }, [tasks]);
-
-  // 3-series chart data: done (green), active (blue), overdue (red)
   const multiChartData = useMemo(() => {
     const days = [];
     for (let i = 6; i >= 0; i--) {
@@ -253,90 +254,139 @@ function Khynalt() {
 
           <div className="flex-1 overflow-y-auto pr-2 pb-8 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-100 dark:[&::-webkit-scrollbar-thumb]:bg-slate-800">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-              
-              <DashboardCard id="khyanalt-status-chart" title="Даалгаврын төлөв" icon={<CheckSquareOutlined/>} headerClass="border-indigo-500">
-                {(() => {
-                  const done    = tasks.filter(t => t.tuluv === 'duussan').length;
-                  const active  = tasks.filter(t => t.tuluv === 'khiigdej bui').length;
-                  const waiting = tasks.filter(t => t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine').length;
-                  const overdue = tasks.filter(t => t.tuluv !== 'duussan' && t.duusakhTsag && moment(t.duusakhTsag).isBefore(moment(), 'day')).length;
-                  const total   = tasks.length || 1;
-                  const pct     = Math.round((done / total) * 100);
+              <DashboardCard id="khyanalt-activity-chart" title="Гүйцэтгэлийн явц" icon={<AreaChartOutlined/>} headerClass="border-sky-500" rightActions={<span className="text-gray-400 dark:text-gray-300 text-[11px] font-black uppercase tracking-tighter flex items-center gap-1.5 cursor-pointer hover:text-sky-500 transition-colors bg-sky-500/5 px-2 py-0.5 rounded-full">7 хоног</span>}>
+                  {(() => {
+                    const W = 200, H = 90, PAD_L = 8, PAD_R = 8, BASE = H;
+                    const N = multiChartData.length;
+                    const step = (W - PAD_L - PAD_R) / Math.max(N - 1, 1);
 
-                  // ring segments — circumference of r=36 circle
-                  const C = 2 * Math.PI * 36; // ≈ 226.2
-                  const doneDash    = (done    / total) * C;
-                  const activeDash  = (active  / total) * C;
-                  const waitingDash = (waiting / total) * C;
-                  const overdueDash = (overdue / total) * C;
+                    const doneTotal   = tasks.filter(t => t.tuluv === 'duussan').length;
+                    const activeTotal  = tasks.filter(t => t.tuluv === 'khiigdej bui').length;
+                    const waitingTotal = tasks.filter(t => t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine').length;
+                    const overdueTotal = tasks.filter(t => t.tuluv !== 'duussan' && t.duusakhTsag && moment(t.duusakhTsag).isBefore(moment(), 'day')).length;
+                    const effPct = Math.round((doneTotal / (tasks.length || 1)) * 100);
 
-                  const statuses = [
-                    { label: 'Дууссан',          count: done,    color: '#22c55e', offset: 0 },
-                    { label: 'Идэвхтэй',          count: active,  color: '#6366f1', offset: doneDash },
-                    { label: 'Хүлээгдэж буй',    count: waiting, color: '#f59e0b', offset: doneDash + activeDash },
-                    { label: 'Хугацаа хэтэрсэн', count: overdue, color: '#ef4444', offset: doneDash + activeDash + waitingDash },
-                  ];
+                    const allVals = multiChartData.flatMap(d => [d.done, d.active, d.waiting, d.overdue]);
+                    const seriesMax = Math.max(...allVals, 1);
 
-                  return tasks.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-2 text-[10px] font-bold uppercase tracking-widest">
-                      <CheckSquareOutlined className="text-3xl opacity-20" />
-                      Мэдээлэл байхгүй
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-around h-full px-2">
-                      {/* Ring */}
-                      <div className="relative shrink-0">
-                        <svg viewBox="0 0 80 80" className="w-[150px] h-[150px]">
-                          <defs>
-                            <filter id="ringShadow" x="-20%" y="-20%" width="140%" height="140%">
-                              <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor="#6366f1" floodOpacity="0.25"/>
-                            </filter>
-                          </defs>
-                          {/* track */}
-                          <circle cx="40" cy="40" r="36" fill="none" stroke="currentColor"
-                            strokeWidth="7" className="text-gray-100 dark:text-gray-800" />
-                          {/* segments */}
-                          {statuses.map((s, i) => (
-                            <circle key={i}
-                              cx="40" cy="40" r="36"
-                              fill="none"
-                              stroke={s.color}
-                              strokeWidth="7"
-                              strokeLinecap="butt"
-                              strokeDasharray={`${(s.count / total) * C} ${C}`}
-                              strokeDashoffset={-s.offset}
-                              transform="rotate(-90 40 40)"
-                              style={{ transition: 'stroke-dasharray 0.9s ease' }}
-                            />
-                          ))}
-                          {/* center */}
-                          <text x="40" y="36" fill="currentColor" fontSize="16" fontWeight="900"
-                            textAnchor="middle" className="text-gray-800 dark:text-white">{pct}%</text>
-                          <text x="40" y="47" fill="currentColor" fontSize="5.5" fontWeight="700"
-                            textAnchor="middle" className="text-gray-400 dark:text-gray-500">ГҮЙЦЭТГЭЛ</text>
-                          <text x="40" y="56" fill="currentColor" fontSize="5" fontWeight="600"
-                            textAnchor="middle" className="text-gray-400">{total} нийт</text>
-                        </svg>
-                      </div>
+                    const mkPts = (key) => multiChartData.map((d, i) => ({
+                      x: PAD_L + i * step,
+                      y: BASE - (d[key] / seriesMax) * (BASE - 10),
+                      v: d[key]
+                    }));
 
-                      {/* Stats column */}
-                      <div className="flex flex-col gap-3">
-                        {statuses.map((s, i) => (
-                          <div key={i} className="flex items-center gap-2.5">
-                            <div className="w-2 h-2 rounded-full shrink-0" style={{ background: s.color, boxShadow: `0 0 6px ${s.color}60` }} />
-                            <div className="flex flex-col">
-                              <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400">{s.label}</span>
-                              <span className="text-xl font-black leading-none" style={{ color: s.color }}>{s.count}</span>
+                    const mkSmooth = (pts) => pts.length < 2
+                      ? `M${pts[0]?.x ?? 0},${pts[0]?.y ?? BASE}`
+                      : pts.reduce((acc, pt, i) => {
+                          if (i === 0) return `M${pt.x},${pt.y}`;
+                          const prev = pts[i - 1];
+                          const cpx = (prev.x + pt.x) / 2;
+                          return `${acc} C${cpx},${prev.y} ${cpx},${pt.y} ${pt.x},${pt.y}`;
+                        }, '');
+
+                    const mkArea = (pts) => {
+                      const line = mkSmooth(pts);
+                      return `${line} L${pts[pts.length-1].x},${BASE} L${pts[0].x},${BASE} Z`;
+                    };
+
+                    const series = [
+                      { key: 'overdue', color: '#ef4444', gradId: 'gradRed',   glowId: 'glowRed',   label: 'Хэтэрсэн', count: overdueTotal },
+                      { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: 'Идэвхтэй', count: activeTotal  },
+                      { key: 'waiting', color: '#f59e0b', gradId: 'gradAmber', glowId: 'glowAmber', label: 'Хүлээгдэж буй', count: waitingTotal },
+                      { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: 'Дууссан', count: doneTotal    },
+                    ];
+
+                    return (
+                      <div className="flex flex-col h-full">
+                        <div className="flex items-center gap-2 mb-3 flex-wrap">
+                          {series.map(s => (
+                            <div key={s.key} className="flex items-baseline gap-1 px-2.5 py-1 rounded-lg"
+                              style={{ background: `${s.color}14`, border: `1px solid ${s.color}30` }}>
+                              <span className="text-base font-black leading-none" style={{ color: s.color }}>{s.count}</span>
+                              <span className="text-[8px] font-bold uppercase tracking-wide" style={{ color: s.color, opacity: 0.75 }}>{s.label}</span>
                             </div>
+                          ))}
+                        </div>
+                        <div className="flex-1 relative min-h-[100px]">
+                          <svg viewBox={`0 0 ${W} ${H + 12}`} className="w-full h-full overflow-visible">
+                            <defs>
+                              {series.map(s => (
+                                <React.Fragment key={s.gradId}>
+                                  <linearGradient id={s.gradId} x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%"  stopColor={s.color} stopOpacity="0.55" />
+                                    <stop offset="100%" stopColor={s.color} stopOpacity="0.02" />
+                                  </linearGradient>
+                                  <filter id={s.glowId} x="-30%" y="-80%" width="160%" height="260%">
+                                    <feGaussianBlur stdDeviation="2" result="blur" />
+                                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                  </filter>
+                                </React.Fragment>
+                              ))}
+                            </defs>
+                            {[H * 0.25, H * 0.5, H * 0.75].map((yg, gi) => (
+                              <line key={gi} x1={PAD_L} y1={yg} x2={W - PAD_R} y2={yg}
+                                stroke="currentColor" strokeWidth="0.35" strokeDasharray="3 5"
+                                className="text-gray-200 dark:text-gray-700/50" />
+                            ))}
+                            {series.map(s => {
+                              const pts = mkPts(s.key);
+                              return (
+                                <g key={s.key}>
+                                  <path d={mkArea(pts)} fill={`url(#${s.gradId})`} />
+                                  <path
+                                    d={mkSmooth(pts)}
+                                    fill="none"
+                                    stroke={s.color}
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    filter={`url(#${s.glowId})`}
+                                  />
+                                  {pts.map((pt, i) => (
+                                    <g key={i} className="group/pt">
+                                      <circle cx={pt.x} cy={pt.y} r="5" fill={s.color} fillOpacity="0"
+                                        className="transition-all duration-150 group-hover/pt:fill-opacity-20" />
+                                      <circle cx={pt.x} cy={pt.y} r="2.5" fill="#fff" stroke={s.color} strokeWidth="1.8" />
+                                      <g className="opacity-0 group-hover/pt:opacity-100 transition-opacity duration-100" style={{ pointerEvents: 'none' }}>
+                                        <rect x={pt.x - 8} y={pt.y - 16} width="16" height="11" rx="2.5"
+                                          fill="#0f172a" fillOpacity="0.9" />
+                                        <text x={pt.x} y={pt.y - 8} fill={s.color} fontSize="5.5" fontWeight="900" textAnchor="middle">{pt.v}</text>
+                                      </g>
+                                    </g>
+                                  ))}
+                                </g>
+                              );
+                            })}
+                            {mkPts('done').map((pt, i) => (
+                              <text key={i} x={pt.x} y={H + 10} fill="currentColor" fontSize="5.5" fontWeight="700"
+                                textAnchor="middle" className="text-gray-400 dark:text-gray-500">
+                                {multiChartData[i].label}
+                              </text>
+                            ))}
+                          </svg>
+                        </div>
+                        <div className="mt-2 pt-2.5 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            {series.map(s => (
+                              <div key={s.key} className="flex items-center gap-1.5">
+                                <div className="w-2 h-2 rounded-full" style={{ background: s.color, boxShadow: `0 0 5px ${s.color}` }} />
+                                <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">{s.label}</span>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                          <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)' }}>
+                            <RiseOutlined style={{ color: '#22c55e', fontSize: 9 }} />
+                            <span className="text-[9px] font-black" style={{ color: '#22c55e' }}>{effPct}%</span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })()}
-                </DashboardCard>
+                    );
+                  })()}
+              </DashboardCard>
+              
+              
 
-                <DashboardCard id="khyanalt-tasks" title="Даалгаврууд" icon={<CheckSquareOutlined/>} headerClass="border-blue-500" rightActions={<span className="text-emerald-500 text-[11px] font-bold cursor-pointer hover:underline" onClick={() => router.push('/khyanalt/uilchilgee/tuluvluguu')}>Бүгдийг үзэх <DownOutlined className="text-[8px]"/></span>}>
+                <DashboardCard id="khyanalt-tasks" title="Хуваарилагдсан ажилууд" icon={<CheckSquareOutlined/>} headerClass="border-blue-500" rightActions={<span className="text-emerald-500 text-[11px] font-bold cursor-pointer hover:underline" onClick={() => router.push('/khyanalt/uilchilgee/tuluvluguu')}>Бүгдийг үзэх <DownOutlined className="text-[8px]"/></span>}>
                   <div className="flex flex-col gap-2">
                     {tasks.slice(0, 7).map(task => (
                       <div 
@@ -373,7 +423,7 @@ function Khynalt() {
                   </div>
                 </DashboardCard>
 
-                <DashboardCard title="Сүүлийн бараанууд" icon={<PlusOutlined/>} headerClass="border-cyan-500">
+                <DashboardCard title="Хангамж" icon={<TbBoxSeam/>} headerClass="border-cyan-500">
                   <div className="flex flex-col gap-3">
                     {baraas.map(item => (
                       <div key={item._id} className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2 last:border-b-0">
@@ -396,164 +446,14 @@ function Khynalt() {
                   </div>
 
                 </DashboardCard>
+                </div>
 
-              <DashboardCard id="khyanalt-activity-chart" title="Гүйцэтгэлийн явц" icon={<AreaChartOutlined/>} headerClass="border-sky-500" rightActions={<span className="text-gray-400 dark:text-gray-300 text-[11px] font-black uppercase tracking-tighter flex items-center gap-1.5 cursor-pointer hover:text-sky-500 transition-colors bg-sky-500/5 px-2 py-0.5 rounded-full">7 хоног</span>}>
-                  {(() => {
-                    const W = 200, H = 90, PAD_L = 8, PAD_R = 8, BASE = H;
-                    const N = multiChartData.length;
-                    const step = (W - PAD_L - PAD_R) / Math.max(N - 1, 1);
+                <div className="grid grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-5 mt-5">
+            
 
-                    const doneTotal   = tasks.filter(t => t.tuluv === 'duussan').length;
-                    const activeTotal  = tasks.filter(t => t.tuluv === 'khiigdej bui').length;
-                    const waitingTotal = tasks.filter(t => t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine').length;
-                    const overdueTotal = tasks.filter(t => t.tuluv !== 'duussan' && t.duusakhTsag && moment(t.duusakhTsag).isBefore(moment(), 'day')).length;
-                    const effPct = Math.round((doneTotal / (tasks.length || 1)) * 100);
-
-                    // compute scaled y for each series
-                    const allVals = multiChartData.flatMap(d => [d.done, d.active, d.waiting, d.overdue]);
-                    const seriesMax = Math.max(...allVals, 1);
-
-                    const mkPts = (key) => multiChartData.map((d, i) => ({
-                      x: PAD_L + i * step,
-                      y: BASE - (d[key] / seriesMax) * (BASE - 10),
-                      v: d[key]
-                    }));
-
-                    const mkSmooth = (pts) => pts.length < 2
-                      ? `M${pts[0]?.x ?? 0},${pts[0]?.y ?? BASE}`
-                      : pts.reduce((acc, pt, i) => {
-                          if (i === 0) return `M${pt.x},${pt.y}`;
-                          const prev = pts[i - 1];
-                          const cpx = (prev.x + pt.x) / 2;
-                          return `${acc} C${cpx},${prev.y} ${cpx},${pt.y} ${pt.x},${pt.y}`;
-                        }, '');
-
-                    const mkArea = (pts) => {
-                      const line = mkSmooth(pts);
-                      return `${line} L${pts[pts.length-1].x},${BASE} L${pts[0].x},${BASE} Z`;
-                    };
-
-                    const series = [
-                      { key: 'overdue', color: '#ef4444', gradId: 'gradRed',   glowId: 'glowRed',   label: 'Хэтэрсэн', count: overdueTotal },
-                      { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: 'Идэвхтэй', count: activeTotal  },
-                      { key: 'waiting', color: '#f59e0b', gradId: 'gradAmber', glowId: 'glowAmber', label: 'Хүлээгдэж буй', count: waitingTotal },
-                      { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: 'Дууссан', count: doneTotal    },
-                    ];
-
-                    return (
-                      <div className="flex flex-col h-full">
-                        {/* stat chips */}
-                        <div className="flex items-center gap-2 mb-3 flex-wrap">
-                          {series.map(s => (
-                            <div key={s.key} className="flex items-baseline gap-1 px-2.5 py-1 rounded-lg"
-                              style={{ background: `${s.color}14`, border: `1px solid ${s.color}30` }}>
-                              <span className="text-base font-black leading-none" style={{ color: s.color }}>{s.count}</span>
-                              <span className="text-[8px] font-bold uppercase tracking-wide" style={{ color: s.color, opacity: 0.75 }}>{s.label}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* chart */}
-                        <div className="flex-1 relative min-h-[100px]">
-                          <svg viewBox={`0 0 ${W} ${H + 12}`} className="w-full h-full overflow-visible">
-                            <defs>
-                              {series.map(s => (
-                                <React.Fragment key={s.gradId}>
-                                  <linearGradient id={s.gradId} x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%"  stopColor={s.color} stopOpacity="0.55" />
-                                    <stop offset="100%" stopColor={s.color} stopOpacity="0.02" />
-                                  </linearGradient>
-                                  <filter id={s.glowId} x="-30%" y="-80%" width="160%" height="260%">
-                                    <feGaussianBlur stdDeviation="2" result="blur" />
-                                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                                  </filter>
-                                </React.Fragment>
-                              ))}
-                            </defs>
-
-                            {/* grid */}
-                            {[H * 0.25, H * 0.5, H * 0.75].map((yg, gi) => (
-                              <line key={gi} x1={PAD_L} y1={yg} x2={W - PAD_R} y2={yg}
-                                stroke="currentColor" strokeWidth="0.35" strokeDasharray="3 5"
-                                className="text-gray-200 dark:text-gray-700/50" />
-                            ))}
-
-                            {/* areas + lines, drawn back-to-front */}
-                            {series.map(s => {
-                              const pts = mkPts(s.key);
-                              return (
-                                <g key={s.key}>
-                                  <path d={mkArea(pts)} fill={`url(#${s.gradId})`} />
-                                  <path
-                                    d={mkSmooth(pts)}
-                                    fill="none"
-                                    stroke={s.color}
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    filter={`url(#${s.glowId})`}
-                                  />
-                                  {/* dots */}
-                                  {pts.map((pt, i) => (
-                                    <g key={i} className="group/pt">
-                                      <circle cx={pt.x} cy={pt.y} r="5" fill={s.color} fillOpacity="0"
-                                        className="transition-all duration-150 group-hover/pt:fill-opacity-20" />
-                                      <circle cx={pt.x} cy={pt.y} r="2.5" fill="#fff" stroke={s.color} strokeWidth="1.8" />
-                                      {/* tooltip */}
-                                      <g className="opacity-0 group-hover/pt:opacity-100 transition-opacity duration-100" style={{ pointerEvents: 'none' }}>
-                                        <rect x={pt.x - 8} y={pt.y - 16} width="16" height="11" rx="2.5"
-                                          fill="#0f172a" fillOpacity="0.9" />
-                                        <text x={pt.x} y={pt.y - 8} fill={s.color} fontSize="5.5" fontWeight="900" textAnchor="middle">{pt.v}</text>
-                                      </g>
-                                    </g>
-                                  ))}
-                                </g>
-                              );
-                            })}
-
-                            {/* x-axis labels (use first series for days) */}
-                            {mkPts('done').map((pt, i) => (
-                              <text key={i} x={pt.x} y={H + 10} fill="currentColor" fontSize="5.5" fontWeight="700"
-                                textAnchor="middle" className="text-gray-400 dark:text-gray-500">
-                                {multiChartData[i].label}
-                              </text>
-                            ))}
-                          </svg>
-                        </div>
-
-                        {/* legend footer */}
-                        <div className="mt-2 pt-2.5 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            {series.map(s => (
-                              <div key={s.key} className="flex items-center gap-1.5">
-                                <div className="w-2 h-2 rounded-full" style={{ background: s.color, boxShadow: `0 0 5px ${s.color}` }} />
-                                <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">{s.label}</span>
-                              </div>
-                            ))}
-                          </div>
-                          <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)' }}>
-                            <RiseOutlined style={{ color: '#22c55e', fontSize: 9 }} />
-                            <span className="text-[9px] font-black" style={{ color: '#22c55e' }}>{effPct}%</span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })()}
-              </DashboardCard>
-
-              <DashboardCard title="Сүүлийн үйлчлүүлэгчид" icon={<UserOutlined/>} headerClass="border-blue-400">
-                  <div className="flex flex-col gap-3">
-                    {uilchluulegchid.map(user => (
-                      <div key={user._id} className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-400 pb-2">
-                        <Avatar size="small" icon={<UserOutlined />} className="bg-gradient-to-tr from-green-300 to-gray-400 dark:from-green-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-500 shadow-xl" />
-                        <div className="flex flex-col min-w-0 flex-1">
-                           <span className="text-gray-800 dark:text-gray-200 text-[12.5px] font-extrabold truncate">{user.ner}</span>
-                           <span className="text-[10px] text-gray-500 truncate">{user.mail || user.utas?.[0]}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </DashboardCard>
+              
+             
+                
 
                 <DashboardCard title="Ажилтны гүйцэтгэл" icon={<TeamOutlined/>} headerClass="border-indigo-500">
                   <div className="flex flex-col gap-2">
@@ -573,14 +473,11 @@ function Khynalt() {
 
                       return (
                         <div key={member.id} className="group flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
-                          {/* avatar */}
                           <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-[11px] font-black"
                             style={{ background: `${ac}22`, border: `1.5px solid ${ac}50`, color: ac }}>
                             {member.name?.charAt(0).toUpperCase()}
                           </div>
-
-                          {/* content */}
-                          <div className="flex flex-col flex-1 min-w-0 gap-1.5">
+                            <div className="flex flex-col flex-1 min-w-0 gap-1.5">
                             <div className="flex items-center justify-between gap-1">
                               <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200 truncate leading-none">{member.name}</span>
                               <div className="flex items-center gap-1.5 shrink-0">
@@ -590,11 +487,12 @@ function Khynalt() {
                                     {overdue} хэтэрсэн
                                   </span>
                                 )}
+                                <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 tracking-wider">
+                                  {member.kpi} KPI
+                                </span>
                                 <span className="text-[10px] font-black tabular-nums" style={{ color: ac }}>{pct}%</span>
                               </div>
                             </div>
-
-                            {/* segmented bar: green=done, blue=active, red=overdue */}
                             <div className="h-[5px] w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden flex">
                               {total > 0 ? (
                                 <>
@@ -606,8 +504,6 @@ function Khynalt() {
                                 <div className="h-full w-full bg-gray-200 dark:bg-gray-700 rounded-full" />
                               )}
                             </div>
-
-                            {/* micro counts */}
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="text-[8px] font-bold" style={{ color: '#22c55e' }}>{done} дууссан</span>
                               {active > 0 && <span className="text-[8px] font-bold" style={{ color: '#0096FF' }}>{active} идэвхтэй</span>}
@@ -626,7 +522,22 @@ function Khynalt() {
                     )}
                   </div>
                 </DashboardCard>
-            </div>
+
+                 <DashboardCard title="Сүүлийн үйлчлүүлэгчид" icon={<UserOutlined/>} headerClass="border-blue-400">
+                  <div className="flex flex-col gap-3">
+                    {uilchluulegchid.map(user => (
+                      <div key={user._id} className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <Avatar size="small" icon={<UserOutlined />} className="bg-gradient-to-tr from-green-300 to-gray-400 dark:from-green-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-500 shadow-xl" />
+                        <div className="flex flex-col min-w-0 flex-1">
+                           <span className="text-gray-800 dark:text-gray-200 text-[12.5px] font-extrabold truncate">{user.ner}</span>
+                           <span className="text-[10px] text-gray-500 truncate">{user.mail || user.utas?.[0]}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </DashboardCard>
+                </div>
+            
           </div>
         </div>
 
@@ -717,7 +628,10 @@ function Khynalt() {
                               </Avatar>
                               <div className="flex flex-col min-w-0 flex-1 justify-center">
                                 <div className="text-[11.5px] font-extrabold text-gray-600 dark:text-gray-200 group-hover:text-emerald-500 transition-colors truncate leading-tight">{member.name}</div>
-                                <div className="text-[10px] text-gray-400 font-medium leading-tight mt-0.5">{member.role}</div>
+                                <div className="text-[10px] text-gray-400 font-medium leading-tight mt-0.5 flex justify-between items-center w-full">
+                                  <span>{member.role}</span>
+                                  <span className="font-extrabold text-emerald-500">{member.kpi} KPI</span>
+                                </div>
                               </div>
                             </div>
                           </div>

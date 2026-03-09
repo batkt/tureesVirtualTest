@@ -48,6 +48,11 @@ function Uilchluulegch() {
   const [clientProjects, setClientProjects] = useState([]);
   const [clientTasks, setClientTasks] = useState([]);
   
+  const [ratingTaskId, setRatingTaskId] = useState(null);
+  const [clientScorePoints, setClientScorePoints] = useState(5);
+  const [clientScoreNote, setClientScoreNote] = useState("");
+  const [savingClientScore, setSavingClientScore] = useState(false);
+  
   const [searchText, setSearchText] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   
@@ -161,6 +166,32 @@ function Uilchluulegch() {
     }
   };
 
+  const handleSubmitClientScore = async (taskId) => {
+    setSavingClientScore(true);
+    try {
+      const payload = {
+        uilchluulegchOnooson: clientScorePoints,
+        uilchluulegchOnoosonTailbar: clientScoreNote,
+        uilchluulegchId: selectedUser?._id
+      };
+      const res = await api.post(`/tasks/${taskId}/client-onoo`, payload);
+      if (res.data?.success) {
+        message.success("Үнэлгээ амжилттай хадгалагдлаа");
+        const updatedOnooson = res.data.data?.uilchluulegchOnooson ?? clientScorePoints;
+        const updatedOnoosonTailbar = res.data.data?.uilchluulegchOnoosonTailbar ?? clientScoreNote;
+        
+        setClientTasks(prev => prev.map(t => 
+           t._id === taskId ? { ...t, ...res.data.data, uilchluulegchOnooson: updatedOnooson, uilchluulegchOnoosonTailbar: updatedOnoosonTailbar } : t
+        ));
+        setRatingTaskId(null);
+      }
+    } catch (err) {
+      message.error(err?.response?.data?.message || "Оноо хадгалахад алдаа гарлаа");
+    } finally {
+      setSavingClientScore(false);
+    }
+  };
+
   const handleOpenModal = (user) => {
     setSelectedUser(user);
     setIsDetailModalOpen(true);
@@ -192,7 +223,7 @@ function Uilchluulegch() {
   return (
     <Admin title="Үйлчлүүлэгч"
       khuudasniiNer="uilchluulegch">
-      <div className="col-span-12 flex flex-col h-auto xl:h-H8HalfRem w-full text-black overflow-hidden lg:rounded-2xl shadow-2xl relative animate-entrance">
+      <div className="col-span-12 flex flex-col h-auto xl:h-H7HalfRem w-full text-black overflow-hidden lg:rounded-2xl shadow-2xl relative animate-entrance">
         <GuidedTour 
           steps={tutorialSteps} 
           isOpen={isTutorialOpen} 
@@ -237,7 +268,7 @@ function Uilchluulegch() {
                prefix={<UserOutlined className="text-gray-400" />}
                value={searchText}
                onChange={(e) => setSearchText(e.target.value)}
-               className="h-10 rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800 w-full md:w-72"
+               className="h-10 rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 w-full md:w-72"
              />
              <Select
                placeholder="Төлөв"
@@ -488,6 +519,74 @@ function Uilchluulegch() {
                            <div className="flex items-center gap-2.5"><CalendarOutlined className="text-gray-400" /> {task.ekhlekhTsag ? dayjs(task.ekhlekhTsag).format("YYYY/MM/DD HH:mm") : "-"}</div>
                            <div className="flex items-center gap-2.5"><EnvironmentOutlined className="text-gray-400" /> {task.tailbar || "тайлбаргүй"}</div>
                          </div>
+                         
+                         {task.tuluv === 'duussan' && (
+                           <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                             {task.uilchluulegchOnooson != null ? (
+                               <div className="flex items-center justify-between">
+                                 <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">Таны үнэлгээ</span>
+                                 <span className="text-[12px] font-bold text-gray-800 dark:text-gray-200 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-xl">
+                                   {task.uilchluulegchOnooson} / 10
+                                 </span>
+                               </div>
+                             ) : ratingTaskId === task._id ? (
+                               <div className="bg-blue-50 dark:bg-gray-800/50 rounded-2xl p-4 border border-blue-200 dark:border-gray-700 space-y-4">
+                                 <div className="flex items-center justify-between">
+                                   <span className="text-[11px] font-bold text-gray-500">Үнэлгээ өгөх: <span className="text-xl font-black text-gray-800 dark:text-white ml-1">{clientScorePoints}</span> / 10</span>
+                                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-black text-sm ${
+                                     clientScorePoints >= 7 ? 'bg-green-500' : clientScorePoints >= 4 ? 'bg-yellow-500' : 'bg-red-500'
+                                   }`}>{clientScorePoints}</div>
+                                 </div>
+                                 <input
+                                   type="range"
+                                   min={0}
+                                   max={10}
+                                   step={0.5}
+                                   value={clientScorePoints}
+                                   onChange={e => setClientScorePoints(Number(e.target.value))}
+                                   className="w-full accent-blue-500 h-2 rounded-full"
+                                 />
+                                 <Input.TextArea
+                                   placeholder="Тайлбар (заавал биш)"
+                                   value={clientScoreNote}
+                                   onChange={e => setClientScoreNote(e.target.value)}
+                                   rows={2}
+                                   className="rounded-xl text-[14px]"
+                                 />
+                                 <div className="flex gap-2">
+                                   <Button
+                                     type="default"
+                                     className="flex-1 rounded-xl font-bold border-gray-300 h-9"
+                                     onClick={() => setRatingTaskId(null)}
+                                   >
+                                     Буцах
+                                   </Button>
+                                   <Button
+                                     type="primary"
+                                     loading={savingClientScore}
+                                     onClick={() => handleSubmitClientScore(task._id)}
+                                     className="flex-1 rounded-xl font-bold bg-blue-500 hover:bg-blue-400 border-none h-9"
+                                   >
+                                     Хадгалах
+                                   </Button>
+                                 </div>
+                               </div>
+                             ) : (
+                               <Button
+                                 type="dashed"
+                                 block
+                                 className="rounded-xl text-blue-500 border-blue-300 dark:border-blue-900 font-bold hover:text-blue-600 hover:border-blue-400 text-[11px] h-9"
+                                 onClick={() => {
+                                   setRatingTaskId(task._id);
+                                   setClientScorePoints(5);
+                                   setClientScoreNote("");
+                                 }}
+                               >
+                                 Үнэлгээ өгөх
+                               </Button>
+                             )}
+                           </div>
+                         )}
                       </div>
                     </div>
                   ))}
