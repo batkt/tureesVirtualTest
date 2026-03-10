@@ -531,20 +531,16 @@ function ShineTulbur(
             data?.status == true &&
             data?.response?.response_code !== "000"
           ) {
-            toast.success(data?.response?.response_msg, {
+            toast.error(data?.response?.response_msg, {
               duration: 4000,
             });
-          } else if (
-            data.status === true &&
-            data?.response?.response_code === "366"
-          ) {
-            tulbur.find((a) => a.turul === "khaan").msg =
-              data?.response?.response_msg;
-            setTulbur(tulbur);
-            toast.warning(data?.response?.response_msg, {
-              duration: 4000,
-            });
-            setLoading(false);
+            const index = tulbur.findIndex((a) => a.turul === "khaan");
+            if (index !== -1) {
+              setTurulruuKhiikhDun(tulbur[index].dun.toString());
+              tulbur.splice(index, 1);
+              setTulbur([...tulbur]);
+              setRefreshdekhEsekh(true);
+            }
           }
           setSongogdsonBank(null);
           setTerminal(false);

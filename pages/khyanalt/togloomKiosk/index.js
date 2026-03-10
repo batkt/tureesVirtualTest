@@ -187,15 +187,9 @@ const TogloomKiosk = () => {
             data?.status == true &&
             data?.response?.response_code !== "000"
           ) {
-            toast.success(data?.response?.response_msg);
-          } else if (
-            data.status === true &&
-            data?.response?.response_code === "366"
-          ) {
-            tulbur.find((a) => a.turul === "khaan").msg =
-              data?.response?.response_msg;
-            setTulbur(tulbur);
-            toast.warning(data?.response?.response_msg);
+            toast.error(data?.response?.response_msg);
+            setAlkham(1);
+            setTulbur([]);
             setLoading(false);
           }
           setTerminal(false);

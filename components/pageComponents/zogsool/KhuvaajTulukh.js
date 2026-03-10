@@ -223,13 +223,15 @@ function KhuvaajTulukh({
           if (data.status === true && data?.response?.response_code === "000") {
             batalgaajuulya("khaan", data?.response);
           } else if (
-            data.status === true &&
-            data?.response?.response_code === "366"
+            data?.status == true &&
+            data?.response?.response_code !== "000"
           ) {
-            tulbur.find((a) => a.turul === "khaan").msg =
-              data?.response?.response_msg;
-            setTulbur(tulbur);
-            toast.warning(data?.response?.response_msg);
+            toast.error(data?.response?.response_msg);
+            const index = tulbur.findIndex((a) => a.turul === "khaan");
+            if (index !== -1) {
+              tulbur.splice(index, 1);
+              setTulbur([...tulbur]);
+            }
             setLoading(false);
             setTerminal(false);
           }
