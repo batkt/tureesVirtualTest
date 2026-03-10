@@ -466,7 +466,7 @@ const KioskMobile = ({
 
   return (
     <div
-      className="relative flex h-[calc(100vh-25px)] w-screen flex-col overflow-hidden bg-[#1E1E1E]"
+      className="relative flex h-[100dvh] w-screen flex-col overflow-hidden bg-[#1E1E1E]"
       style={{ touchAction: "manipulation" }}
     >
       <div className="pointer-events-none fixed top-0 z-[9999] flex bg-[#1E1E1E] text-center text-xs text-[#00D987]">
@@ -486,13 +486,13 @@ const KioskMobile = ({
       <Drawer
         placement="bottom"
         open={drawerOngoikh}
-        height={"78vh"}
+        height={"88dvh"}
         closable={false}
         maskClosable={false}
         className="khuviinDrawerMobile bg-transparent text-base font-semibold text-gray-200 dark:bg-transparent"
       >
         <div
-          className={`absolute right-4 top-4 z-50 flex items-center justify-center rounded-2xl px-5 py-3 shadow-2xl transition-all duration-300 ${
+          className={`absolute right-3 top-3 z-50 flex items-center justify-center rounded-xl px-3 py-1.5 shadow-2xl transition-all duration-300 ${
             minutes === 0 && seconds <= 10
               ? "animate-pulse bg-red-700 ring-4 ring-red-400 ring-opacity-75"
               : minutes === 0 && seconds <= 20
@@ -501,7 +501,7 @@ const KioskMobile = ({
           }`}
         >
           <div
-            className={`text-3xl tracking-wider text-white ${
+            className={`text-xl tracking-wider text-white text-white sm:text-3xl ${
               minutes === 0 && seconds <= 10 ? "animate-pulse" : ""
             }`}
           >
@@ -581,12 +581,12 @@ const KioskMobile = ({
           <>
             {songogdsonData && (
               <div className="relative m-4 flex flex-col items-center justify-center rounded-xl bg-[#414143] p-2 py-4">
-                <div className="flex w-full justify-between px-6">
+                <div className="flex w-full justify-between px-3 text-sm sm:px-6 sm:text-base">
                   <div>Улсын дугаар</div>
                   <div>{songogdsonData.plate_number}</div>
                 </div>
                 <div className="h-[1px] w-full bg-black dark:bg-black" />
-                <div className="flex w-full justify-between px-6">
+                <div className="flex w-full justify-between px-3 text-sm sm:px-6 sm:text-base">
                   <div>Орсон </div>
                   <div>
                     {moment(songogdsonData.enter_date).format(
@@ -595,7 +595,7 @@ const KioskMobile = ({
                   </div>
                 </div>
                 <div className="h-[1px] w-full bg-black dark:bg-black" />
-                <div className="flex w-full justify-between px-6">
+                <div className="flex w-full justify-between px-3 text-sm sm:px-6 sm:text-base">
                   <div>Гарсан</div>
                   <div>
                     {songogdsonData.garsanTsag
@@ -606,7 +606,7 @@ const KioskMobile = ({
                   </div>
                 </div>
                 <div className="h-[1px] w-full bg-black dark:bg-black" />
-                <div className="flex w-full justify-between px-6">
+                <div className="flex w-full justify-between px-3 text-sm sm:px-6 sm:text-base">
                   <div>Зогссон хугацаа </div>
                   <div>
                     {(() => {
@@ -624,7 +624,7 @@ const KioskMobile = ({
                   </div>
                 </div>
                 <div className="h-[1px] w-full bg-black dark:bg-black" />
-                <div className="flex w-full justify-between px-6 text-red-400">
+                <div className="flex w-full justify-between px-3 text-sm sm:px-6 sm:text-base">
                   <div>Төлбөр</div>
                   <div>{formatNumber(songogdsonData.pay_amount, 0)}₮</div>
                 </div>
@@ -632,7 +632,7 @@ const KioskMobile = ({
                   <div className="h-[1px] w-full bg-black dark:bg-black" />
                 )}
                 {khungulukhDun > 0 && (
-                  <div className="flex w-full justify-between px-6 text-red-400">
+                  <div className="flex w-full justify-between px-3 text-sm sm:px-6 sm:text-base">
                     <div>Хөнгөлөлт</div>
                     <div>{formatNumber(khungulukhDun, 0)}₮</div>
                   </div>
@@ -640,7 +640,7 @@ const KioskMobile = ({
                 {baiguullagiinId === "673d88133987e97992f77c02" && (
                   <>
                     <div className="w-full border border-[#1E1E1E]" />
-                    <div className="flex w-full justify-between px-6 ">
+                    <div className="flex w-full justify-between px-3 text-sm sm:px-6 sm:text-base">
                       <div className="text-red-400">Хөнгөлөлт</div>
                       <div className="flex gap-4">
                         Энд дар
@@ -843,15 +843,15 @@ const KioskMobile = ({
           )}
         </div>
       </Drawer>
-      <div className="flex h-1/3 w-full flex-col items-center justify-center gap-8">
-        <div className="mt-24 h-36 w-36 rounded-lg">
+      <div className="flex h-[28%] w-full flex-col items-center justify-center gap-3 pt-8">
+        <div className="xs:h-28 xs:w-28 h-20 w-20 rounded-lg sm:h-36 sm:w-36">
           <img className="h-full w-full" src="/ParkEaseLogoShine.png" alt="" />
         </div>
-        <div className="text-center text-lg font-bold text-zinc-200">
+        <div className="px-4 text-center text-sm font-bold text-zinc-200 sm:text-lg">
           Зогсоолын төлбөрөө энд төлөн хугацаагаа хэмнээрэй
         </div>
       </div>
-      <div className="mt-auto flex h-2/3 w-full flex-col items-center justify-center text-white">
+      <div className="flex w-full flex-1 flex-col items-center justify-center overflow-hidden text-white">
         <DugaarKeyboardMobile
           dugaar={dugaar}
           setDugaar={setDugaar}

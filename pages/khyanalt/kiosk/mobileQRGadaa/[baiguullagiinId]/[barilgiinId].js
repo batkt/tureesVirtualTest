@@ -454,7 +454,7 @@ const KioskMobile = ({
 
   return (
     <div
-      className="pointer-events-none relative flex h-[calc(100vh-25px)] w-screen flex-col overflow-hidden bg-[#1E1E1E]"
+      className="relative flex h-[100dvh] w-screen flex-col overflow-hidden bg-[#1E1E1E]"
       style={{ touchAction: "manipulation" }}
     >
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] text-center text-xs text-[#00D987]">
@@ -474,7 +474,7 @@ const KioskMobile = ({
       <Drawer
         placement="bottom"
         open={drawerOngoikh}
-        height={"78vh"}
+        height={"88dvh"}
         closable={false}
         maskClosable={false}
         className="khuviinDrawerMobile bg-transparent text-base font-semibold text-gray-200 dark:bg-transparent"
@@ -831,15 +831,15 @@ const KioskMobile = ({
           )}
         </div>
       </Drawer>
-      <div className="flex h-1/3 w-full flex-col items-center justify-center gap-8">
-        <div className="mt-24 h-36 w-36 rounded-lg">
+      <div className="flex h-[28%] w-full flex-col items-center justify-center gap-3 pt-8">
+        <div className="xs:h-28 xs:w-28 h-20 w-20 rounded-lg sm:h-36 sm:w-36">
           <img className="h-full w-full" src="/ParkEaseLogoShine.png" alt="" />
         </div>
-        <div className="text-center text-lg font-bold text-zinc-200">
+        <div className="px-4 text-center text-sm font-bold text-zinc-200 sm:text-lg">
           Зогсоолын төлбөрөө энд төлөн хугацаагаа хэмнээрэй
         </div>
       </div>
-      <div className="mt-auto flex h-2/3 w-full flex-col items-center justify-center text-white">
+      <div className="flex w-full flex-1 flex-col items-center justify-center overflow-hidden text-white">
         <DugaarKeyboardMobile
           dugaar={dugaar}
           setDugaar={setDugaar}
