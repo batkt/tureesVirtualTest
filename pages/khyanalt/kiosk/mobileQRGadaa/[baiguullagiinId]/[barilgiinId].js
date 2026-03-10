@@ -49,7 +49,7 @@ const KioskMobile = ({
   const [countdown, setCountdown] = useState(100000);
   const [minutes, setMinutes] = useState(15);
   const [seconds, setSeconds] = useState(0);
-  const order = { "tuukh.0.tsagiinTuukh.0.garsanTsag": -1, };
+  const order = { "tuukh.0.tsagiinTuukh.0.garsanTsag": -1 };
   const autoSelectedRef = useRef(false);
 
   const query = useMemo(() => {
@@ -72,7 +72,7 @@ const KioskMobile = ({
     baiguullagiinId,
     query,
     barilgiinId,
-    order
+    order,
   );
 
   const { qpayObject } = useQpayObject(token, qpayerTulukh?.id);
@@ -128,7 +128,7 @@ const KioskMobile = ({
       if (khungulukhDun > 0)
         khungulultKhadgalya(
           songogdsonData.session_id,
-          songogdsonData.parking_id
+          songogdsonData.parking_id,
         );
     }
   }, [qpayObject]);
@@ -224,16 +224,18 @@ const KioskMobile = ({
     setServereesAvsonOdooTsag();
     setCustomerTin();
     setQpayerTulukh(false);
-  }
+  };
 
   function qpayAvakh(
     uilchluugchiinId,
     barilgiinId,
     ilgeekhDun,
     mashiniiDugaar,
-    garsanCameraIP
+    garsanCameraIP,
   ) {
     setUnshijBaina(true);
+    const safetyTimeout = setTimeout(() => setUnshijBaina(false), 15000);
+
     if (uilchluugchiinId && ilgeekhDun) {
       setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
       let yavuulakhBody = {
@@ -255,10 +257,12 @@ const KioskMobile = ({
       uilchilgee(token)
         .post("/qpayGargaya", yavuulakhBody)
         .then(({ data }) => {
+          clearTimeout(safetyTimeout);
           setQpayerTulukh(data);
           setUnshijBaina(false);
         })
         .catch((e) => {
+          clearTimeout(safetyTimeout);
           aldaaBarigch(e);
           setUnshijBaina(false);
           setTulburiinKhelber();
@@ -294,10 +298,13 @@ const KioskMobile = ({
               baiguullagiinId: baiguullagiinId,
               freeze: true,
             },
-          }
+          },
         );
         if (response.data.success == true) {
-          if (response.data?.data?.pay_amount > 0 && response.data?.data?.session_id === data?._id) {
+          if (
+            response.data?.data?.pay_amount > 0 &&
+            response.data?.data?.session_id === data?._id
+          ) {
             if (
               !!data?.tuukh[0]?.tulbur?.find((x) => x.turul == "qpayKhungulult")
             ) {
@@ -316,7 +323,7 @@ const KioskMobile = ({
                   barilgiinId,
                   response.data?.data?.pay_amount - khungulukhDun,
                   response.data?.data?.plate_number,
-                  response.data?.data?.garsanCameraIP
+                  response.data?.data?.garsanCameraIP,
                 );
                 setUnshijBaina(false);
               } else {
@@ -335,7 +342,7 @@ const KioskMobile = ({
                 barilgiinId,
                 response.data?.data?.pay_amount,
                 response.data?.data?.plate_number,
-                response.data?.data?.garsanCameraIP
+                response.data?.data?.garsanCameraIP,
               );
               setUnshijBaina(false);
             }
@@ -348,7 +355,7 @@ const KioskMobile = ({
                 <div className="text-base">
                   Тухайн машинд төлбөр бодогдоогүй байна.
                 </div>
-              </div>
+              </div>,
             );
             setUnshijBaina(false);
             clearObjects();
@@ -357,9 +364,7 @@ const KioskMobile = ({
           setUnshijBaina(false);
           clearObjects();
         }
-      }
-      else
-      {
+      } else {
         setUnshijBaina(false);
         clearObjects();
       }
@@ -372,12 +377,7 @@ const KioskMobile = ({
 
   const firstId = uilchluulegchGaralt?.jagsaalt?.[0]?._id;
   useEffect(() => {
-    if (
-      drawerOngoikh &&
-      !isValidating &&
-      !autoSelectedRef.current &&
-      firstId
-    ) {
+    if (drawerOngoikh && !isValidating && !autoSelectedRef.current && firstId) {
       autoSelectedRef.current = true;
       mashinSongiy(uilchluulegchGaralt?.jagsaalt?.[0]);
     }
@@ -394,7 +394,7 @@ const KioskMobile = ({
     customer_no,
     individual,
     paid_amount,
-    customerTin
+    customerTin,
   ) => {
     uilchilgee(token)
       .post("/v1/kioskEbarimtAvya", {
@@ -448,18 +448,24 @@ const KioskMobile = ({
       register,
       register !== "" ? false : true,
       songogdsonData?.pay_amount,
-      customerTin
+      customerTin,
     );
   };
 
   return (
-    <div className="relative flex h-[calc(100vh-25px)] w-screen flex-col overflow-hidden bg-[#1E1E1E]">
+    <div
+      className="pointer-events-none relative flex h-[calc(100vh-25px)] w-screen flex-col overflow-hidden bg-[#1E1E1E]"
+      style={{ touchAction: "manipulation" }}
+    >
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] text-center text-xs text-[#00D987]">
         Төлбөр төлснөөс хойш {zogsool?.garakhTsag || 30} минут дотор та
         зогсоолоос гараагүй бол төлбөр нэмэгдэж бодогдохыг анхаарна уу!
       </div>
       {unshijBaina && (
-        <div className="fixed left-0 top-0 z-[9999] flex h-full w-full items-center justify-center bg-white bg-opacity-40">
+        <div
+          className="fixed left-0 top-0 z-[9999] flex h-full w-full items-center justify-center bg-white bg-opacity-40"
+          style={{ pointerEvents: "all" }}
+        >
           <Spin
             indicator={<LoadingOutlined style={{ fontSize: 128 }} spin />}
           />
@@ -473,17 +479,22 @@ const KioskMobile = ({
         maskClosable={false}
         className="khuviinDrawerMobile bg-transparent text-base font-semibold text-gray-200 dark:bg-transparent"
       >
-        <div className={`absolute right-4 top-4 z-50 flex items-center justify-center rounded-2xl px-5 py-3 shadow-2xl transition-all duration-300 ${
-          minutes === 0 && seconds <= 10 
-            ? "bg-red-700 ring-4 ring-red-400 ring-opacity-75 animate-pulse" 
-            : minutes === 0 && seconds <= 20
-            ? "bg-orange-600 ring-2 ring-orange-400 ring-opacity-50"
-            : "bg-gradient-to-br from-red-600 to-red-700"
-        }`}>
-          <div className={`text-3xl text-white tracking-wider ${
-            minutes === 0 && seconds <= 10 ? "animate-pulse" : ""
-          }`}>
-            {minutes > 0 ? `${minutes}:` : ""}{seconds < 10 ? `0${seconds}` : seconds}
+        <div
+          className={`absolute right-4 top-4 z-50 flex items-center justify-center rounded-2xl px-5 py-3 shadow-2xl transition-all duration-300 ${
+            minutes === 0 && seconds <= 10
+              ? "animate-pulse bg-red-700 ring-4 ring-red-400 ring-opacity-75"
+              : minutes === 0 && seconds <= 20
+              ? "bg-orange-600 ring-2 ring-orange-400 ring-opacity-50"
+              : "bg-gradient-to-br from-red-600 to-red-700"
+          }`}
+        >
+          <div
+            className={`text-3xl tracking-wider text-white ${
+              minutes === 0 && seconds <= 10 ? "animate-pulse" : ""
+            }`}
+          >
+            {minutes > 0 ? `${minutes}:` : ""}
+            {seconds < 10 ? `0${seconds}` : seconds}
           </div>
         </div>
         <div
@@ -567,7 +578,7 @@ const KioskMobile = ({
                   <div>Орсон </div>
                   <div>
                     {moment(songogdsonData.enter_date).format(
-                      "DD/MM/YYYY HH:mm"
+                      "DD/MM/YYYY HH:mm",
                     )}
                   </div>
                 </div>
@@ -577,7 +588,7 @@ const KioskMobile = ({
                   <div>
                     {songogdsonData.garsanTsag
                       ? moment(songogdsonData.garsanTsag).format(
-                          "DD/MM/YYYY HH:mm"
+                          "DD/MM/YYYY HH:mm",
                         )
                       : moment().format("DD/MM/YYYY HH:mm")}
                   </div>
@@ -591,11 +602,11 @@ const KioskMobile = ({
                         ? moment(songogdsonData.garsanTsag)
                         : moment();
                       const diff = garsanTsag.diff(
-                        moment(songogdsonData.enter_date)
+                        moment(songogdsonData.enter_date),
                       );
                       const dur = moment.duration(diff);
                       return `${String(dur.hours()).padStart(2, "0")}:${String(
-                        dur.minutes()
+                        dur.minutes(),
                       ).padStart(2, "0")}`;
                     })()}
                   </div>
@@ -667,7 +678,7 @@ const KioskMobile = ({
                   onClick={() =>
                     khungulultKhadgalya(
                       songogdsonData.session_id,
-                      songogdsonData.parking_id
+                      songogdsonData.parking_id,
                     )
                   }
                   className="my-4 flex items-center justify-center gap-1 rounded-xl border border-green-400 bg-green-800 bg-opacity-70 px-4 py-2 text-base font-bold text-green-400 focus:outline-none"
@@ -778,9 +789,9 @@ const KioskMobile = ({
                 <div>
                   {formatNumber(
                     Number(
-                      eBarimt?.amount ? eBarimt?.amount : eBarimt?.totalAmount
+                      eBarimt?.amount ? eBarimt?.amount : eBarimt?.totalAmount,
                     ),
-                    0
+                    0,
                   )}
                   ₮
                 </div>
@@ -804,9 +815,9 @@ const KioskMobile = ({
                 <div>
                   {formatNumber(
                     Number(
-                      eBarimt?.amount ? eBarimt?.amount : eBarimt?.totalAmount
+                      eBarimt?.amount ? eBarimt?.amount : eBarimt?.totalAmount,
                     ),
-                    0
+                    0,
                   )}
                   ₮
                 </div>
