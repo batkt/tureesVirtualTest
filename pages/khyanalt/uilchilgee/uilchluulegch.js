@@ -21,7 +21,8 @@ import {
   TrophyOutlined,
   StarOutlined,
   InfoCircleOutlined,
-  QuestionCircleOutlined
+  QuestionCircleOutlined,
+  SearchOutlined
 } from "@ant-design/icons";
 import { 
   Button, 
@@ -124,6 +125,30 @@ function Uilchluulegch() {
     }
   };
 
+  const formatSpentTime = (task) => {
+    let spentSeconds = 0;
+    if (task.ajiltanTsag && Array.isArray(task.ajiltanTsag)) {
+      task.ajiltanTsag.forEach(tsag => {
+        if (tsag.ekhlekhTsag && tsag.duusakhTsag) {
+          const diff = dayjs(tsag.duusakhTsag).diff(dayjs(tsag.ekhlekhTsag), 'second');
+          if (diff > 0) spentSeconds += diff;
+        } else if (tsag.tsagMinute) {
+          spentSeconds += Math.round(Number(tsag.tsagMinute) * 60);
+        }
+      });
+    }
+    if (spentSeconds === 0 && task.zartsuulsanKhugatsaa) {
+      spentSeconds = Number(task.zartsuulsanKhugatsaa);
+    }
+    if (spentSeconds <= 0) return null;
+    const h = Math.floor(spentSeconds / 3600);
+    const m = Math.floor((spentSeconds % 3600) / 60);
+    const s = spentSeconds % 60;
+    if (h > 0) return `${h}цаг ${m}мин ${s}сек`;
+    if (m > 0) return `${m}мин ${s}сек`;
+    return `${s}сек`;
+  };
+
   const openEditModal = (user) => {
     setEditingUser(user);
     form.setFieldsValue({
@@ -182,6 +207,37 @@ function Uilchluulegch() {
     fetchUserHistoryData(user._id);
   };
 
+  const { on, off, emit } = useFsmSocket();
+
+  useEffect(() => {
+    if (barilgiinId && emit) {
+      emit('join_barilga', { barilgiinId });
+    }
+  }, [barilgiinId, emit]);
+
+  useEffect(() => {
+    if (!on) return;
+
+    const handleKpiUpdate = (data) => {
+      setUsers(prev => prev.map(u => {
+        if (u._id === data.uilchluulegchId) {
+          return { ...u, ...data };
+        }
+        return u;
+      }));
+      
+      setSelectedUser(prev => {
+        if (prev?._id === data.uilchluulegchId) {
+          return { ...prev, ...data };
+        }
+        return prev;
+      });
+    };
+
+    on('client_kpi_updated', handleKpiUpdate);
+    return () => off('client_kpi_updated', handleKpiUpdate);
+  }, [on, off]);
+
   const statCards = [
     { title: "Нийт үйлчлүүлэгч", value: users.length.toString() },
     { title: "Шинэ", value: users.filter(u => u.tuluv === 'shine').length.toString() },
@@ -195,7 +251,10 @@ function Uilchluulegch() {
         user.ner?.toLowerCase().includes(searchText.toLowerCase()) || 
         user.utas?.some(u => u.includes(searchText)) ||
         user.mail?.toLowerCase().includes(searchText.toLowerCase());
-      const matchStatus = filterStatus === "all" || user.tuluv === filterStatus;
+        
+      const finalTuluv = (user.kpiDaalgavarToo > 0) ? user.tuluv : 'idevhgui';
+      const matchStatus = filterStatus === "all" || finalTuluv === filterStatus;
+      
       return matchSearch && matchStatus;
     });
   }, [users, searchText, filterStatus]);
@@ -238,10 +297,26 @@ function Uilchluulegch() {
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 shrink-0 px-1">
             <div id="cust-search-filter" className="flex flex-1 items-center gap-4 w-full md:w-auto">
-               
-               
+               <Input 
+                 placeholder="Нэр, утас, э-мэйлээр хайх..." 
+                 prefix={<SearchOutlined className="text-gray-400" />}
+                 value={searchText}
+                 onChange={(e) => setSearchText(e.target.value)}
+                 className="h-[40px] rounded-xl max-w-md shadow-sm border-gray-200 dark:border-gray-700"
+                 allowClear
+               />
+               <Select
+                 placeholder="Төлөв"
+                 value={filterStatus}
+                 onChange={(val) => setFilterStatus(val)}
+                 className="h-[40px] w-32 [&>.ant-select-selector]:!h-[40px] [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!flex [&>.ant-select-selector]:!items-center"
+                 options={[
+                   { label: "Бүгд", value: "all" },
+                   { label: "Идэвхтэй", value: "idevhtei" },
+                   { label: "Идэвхгүй", value: "idevhgui" },
+                 ]}
+               />
             </div>
-            
             <div id="cust-add-btn" className="shrink-0 w-full md:w-auto">
               <Button
                 type="primary"
@@ -253,17 +328,8 @@ function Uilchluulegch() {
               </Button>
               
             </div>
-            <Select
-                 placeholder="Төлөв"
-                 value={filterStatus}
-                 onChange={(val) => setFilterStatus(val)}
-                 className="h-10 w-32 [&>.ant-select-selector]:!h-10 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!flex [&>.ant-select-selector]:!items-center"
-                 options={[
-                   { label: "Бүгд", value: "all" },
-                   { label: "Шинэ", value: "shine" },
-                   { label: "Идэвхтэй", value: "idevhtei" },
-                 ]}
-               />
+            
+            
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 mt-2 relative">
@@ -283,7 +349,22 @@ function Uilchluulegch() {
                     </Avatar>
                     <div className="flex flex-col min-w-0">
                       <span className="text-black dark:text-gray-200 font-extrabold text-[13px] tracking-wide truncate">{user.ner}</span>
-                      <span className="text-gray-500 text-[10px] dark:text-gray-400 font-medium tracking-wide">Гэрээний дугаар: {user.gereeNomer || "-"}</span>              
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-500 text-[10px] dark:text-gray-400 font-medium tracking-wide">Гэрээний дугаар: {user.gereeNomer || "-"}</span>
+                        {(() => {
+                          const finalTuluv = (user.kpiDaalgavarToo > 0) ? user.tuluv : 'idevhgui';
+                          return (
+                            <div className={`px-1.5 py-0.5 rounded-lg text-[8px] font-black uppercase ${
+                              finalTuluv === 'shine' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' :
+                              finalTuluv === 'idevhtei' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' :
+                              finalTuluv === 'idevhgui' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' :
+                              'bg-gray-100 text-gray-600 dark:bg-gray-800'
+                            }`}>
+                              {finalTuluv === 'shine' ? 'Шинэ' : finalTuluv === 'idevhtei' ? 'Идэвхтэй' : finalTuluv === 'idevhgui' ? 'Идэвхгүй' : finalTuluv}
+                            </div>
+                          );
+                        })()}
+                      </div>
                     </div>
                   </div>
                   <Dropdown
@@ -357,10 +438,23 @@ function Uilchluulegch() {
                 <div className="flex items-center gap-4">
                   <Avatar size={64} icon={<UserOutlined />} className="bg-emerald-500" />
                   <div>
-                    <h2 className="text-2xl font-bold">{selectedUser?.ner}</h2>
-                    <div className="flex gap-2 mt-1">
-                       <span className="text-xs text-gray-400">Ажлууд: {selectedUser?.kpiDaalgavarToo || 0}</span>
-                       <span className="text-xs text-gray-400">Үнэлгээ: {selectedUser?.kpiDundaj || "-"}</span>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{selectedUser?.ner}</h2>
+                    <div className="flex gap-4 mt-2 items-center">
+                       {(() => {
+                         const selTuluv = (selectedUser?.kpiDaalgavarToo > 0) ? selectedUser.tuluv : 'idevhgui';
+                         return (
+                           <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase shadow-sm ${
+                              selTuluv === 'shine' ? 'bg-blue-500 text-white' : 
+                              selTuluv === 'idevhtei' ? 'bg-emerald-500 text-white' : 
+                              selTuluv === 'idevhgui' ? 'bg-red-500 text-white' : 
+                              'bg-gray-500 text-white'
+                            }`}>
+                             {selTuluv === 'shine' ? 'Шинэ' : selTuluv === 'idevhtei' ? 'Идэвхтэй' : selTuluv === 'idevhgui' ? 'Идэвхгүй' : selTuluv}
+                           </span>
+                         );
+                       })()}
+                       <span className="text-xs font-bold text-gray-500">Ажлууд: {selectedUser?.kpiDaalgavarToo || 0}</span>
+                       <span className="text-xs font-bold text-gray-500">Үнэлгээ: {selectedUser?.kpiDundaj || "-"}</span>
                     </div>
                   </div>
                 </div>
@@ -376,28 +470,55 @@ function Uilchluulegch() {
                 ) : (
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-lg font-bold mb-4 border-b pb-2">Төслүүд</h3>
+                      <h3 className="text-lg font-bold mb-4 border-b pb-2 text-slate-800 dark:text-slate-100">Төслүүд</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {clientProjects.map(proj => (
                           <div key={proj._id} className="p-4 border rounded-xl bg-gray-50 dark:bg-gray-800">
                             <div className="font-bold">{proj.ner}</div>
                             <div className="text-xs text-gray-500 mt-1">{dayjs(proj.ekhlekhOgnoo).format("YYYY.MM.DD")} - {dayjs(proj.duusakhOgnoo).format("YYYY.MM.DD")}</div>
-                            <div className="text-xs mt-2 text-emerald-500">{proj.tuluv}</div>
+                            <div className={`text-xs mt-2 font-bold ${
+                              proj.tuluv === 'duussan' ? 'text-emerald-500' : 
+                              proj.tuluv === 'khiigdej bui' ? 'text-amber-500' : 
+                              proj.tuluv === 'shine' ? 'text-blue-500' : 'text-gray-500'
+                            }`}>
+                              {proj.tuluv === 'duussan' ? 'Дууссан' : 
+                               proj.tuluv === 'khiigdej bui' ? 'Хийгдэж буй' : 
+                               proj.tuluv === 'shine' ? 'Шинэ' : proj.tuluv}
+                            </div>
                           </div>
                         ))}
                       </div>
                     </div>
                     
                     <div>
-                      <h3 className="text-lg font-bold mb-4 border-b pb-2">Ажлууд</h3>
+                      <h3 className="text-lg font-bold mb-4 border-b pb-2 text-slate-800 dark:text-slate-100">Ажлууд</h3>
                       <div className="space-y-3">
                         {clientTasks.map(task => (
                           <div key={task._id} className="p-4 border rounded-xl bg-white dark:bg-gray-900 shadow-sm">
                             <div className="flex justify-between items-center mb-2">
                               <div className="font-bold">{task.ner}</div>
-                              <div className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">{task.tuluv}</div>
+                              <div className={`text-[10px] font-black px-2 py-0.5 rounded border ${
+                                task.tuluv === 'duussan' ? 'text-emerald-500 border-emerald-500/20 bg-emerald-500/5' : 
+                                task.tuluv === 'khiigdej bui' ? 'text-blue-500 border-blue-500/20 bg-blue-500/5' : 
+                                task.tuluv === 'khugatsaa khetersen' ? 'text-red-500 border-red-500/20 bg-red-500/5' :
+                                task.tuluv === 'shalga' ? 'text-blue-500 border-blue-500/20 bg-blue-500/5' :
+                                'text-gray-500 bg-gray-100 dark:bg-gray-800 border-transparent'
+                              }`}>
+                                {task.tuluv === 'duussan' ? 'Дууссан' : 
+                                 task.tuluv === 'khiigdej bui' ? 'Хийгдэж буй' : 
+                                 task.tuluv === 'khugatsaa khetersen' ? 'Хугацаа хэтэрсэн' :
+                                 task.tuluv === 'shalga' ? 'Шалгах' : 
+                                 task.tuluv === 'shine' ? 'Шинэ' : task.tuluv}
+                              </div>
                             </div>
-                            <div className="text-xs text-gray-500">{dayjs(task.ekhlekhTsag).format("YYYY.MM.DD HH:mm")}</div>
+                            <div className="text-[11px] text-gray-500 font-medium flex items-center gap-2">
+                              <span>{dayjs(task.ekhlekhTsag).format("YYYY.MM.DD HH:mm:ss")} - {dayjs(task.duusakhTsag).format("HH:mm:ss")}</span>
+                              {formatSpentTime(task) && (
+                                <span className="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded text-[10px] font-black">
+                                  Зарцуулсан: {formatSpentTime(task)}
+                                </span>
+                              )}
+                            </div>
                             <div className="text-xs mt-2 text-gray-600">{task.tailbar}</div>
                             
                             {task.tuluv === 'duussan' && (
@@ -432,7 +553,7 @@ function Uilchluulegch() {
                                   </div>
                                 ) : (
                                   <Button
-                                    block size="small" icon={<StarOutlined />}
+                                    block size="small" className="text-yellow-500" icon={<StarOutlined />}
                                     onClick={() => { setRatingTaskId(task._id); setClientScorePoints(8); setClientScoreNote(""); }}
                                   >
                                     Үнэлгээ өгөх

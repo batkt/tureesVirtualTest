@@ -62,7 +62,7 @@ dayjs.extend(isoWeek);
 import _ from "lodash";
 import fsmApi, { FSM_BASE_URL } from "services/fsmApi";
 import { useAuth } from "services/auth";
-import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
+import useJagsaalt from "hooks/useJagsaalt";
 
 import "dayjs/locale/mn";
 dayjs.locale("mn");
@@ -78,6 +78,22 @@ function Tuluvluguu() {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [view, setView] = useState("Month"); // Month, Week, Day, Agenda
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
+  
+  const openAddTaskModal = (date = dayjs()) => {
+    if (projects.length === 0) {
+      message.warning("Эхлээд төсөл нэмэх шаардлагатай");
+      setIsProjectModalVisible(true);
+      return;
+    }
+    
+    taskForm.resetFields();
+    if (projects.length === 1) {
+      taskForm.setFieldsValue({ projectId: projects[0].id });
+    }
+    
+    setSelectedDay(date);
+    setIsTaskModalVisible(true);
+  };
   const [isTaskDetailVisible, setIsTaskDetailVisible] = useState(false);
   const [isProjectModalVisible, setIsProjectModalVisible] = useState(false);
   const [isRightPanelExpanded, setIsRightPanelExpanded] = useState(typeof window !== 'undefined' ? window.innerWidth >= 1280 : true);
@@ -123,16 +139,13 @@ function Tuluvluguu() {
   const [uploadingProjectChatFile, setUploadingProjectChatFile] = useState(false);
   const [selectedProjectChatFile, setSelectedProjectChatFile] = useState(null);
   const [currentTime, setCurrentTime] = useState(dayjs());
-  // Chat: reply, edit
   const [replyTo, setReplyTo] = useState(null);
-  const [editingMsg, setEditingMsg] = useState(null); // { _id, medeelel }
+  const [editingMsg, setEditingMsg] = useState(null);  
   const [editMsgText, setEditMsgText] = useState("");
-  // Project Chat: reply, edit
   const [replyToProject, setReplyToProject] = useState(null);
   const [editingProjectMsg, setEditingProjectMsg] = useState(null);
   const [editProjectMsgText, setEditProjectMsgText] = useState("");
-  // Task score (onoo)
-  const [taskScore, setTaskScore] = useState(null); // { onooson, onoosonTailbar, ... }
+  const [taskScore, setTaskScore] = useState(null); 
   const [scorePoints, setScorePoints] = useState(5);
   const [scoreNote, setScoreNote] = useState("");
   const [savingScore, setSavingScore] = useState(false);
@@ -270,8 +283,8 @@ function Tuluvluguu() {
     { targetId: "cal-main", title: "Хуанли", description: "Ажлуудаа хуанли дээр хянах, шинэ ажил нэмэх үндсэн хэсэг. Тухайн өдөр дээр дарж шинэ ажил үүсгэнэ үү." },
   ];
 
-  const { ajilchdiinGaralt } = useAjiltniiJagsaalt(token, baiguullagiinId, barilgiinId);
-  const allEmployees = useMemo(() => ajilchdiinGaralt?.jagsaalt || [], [ajilchdiinGaralt]);
+  const ajiltanJagsaalt = useJagsaalt("/ajiltan");
+  const allEmployees = useMemo(() => ajiltanJagsaalt?.jagsaalt || [], [ajiltanJagsaalt?.jagsaalt]);
 
   const { isConnected, socket: fsmSocket, onlineUsers: onlineUsersFromHook } = useFsmSocket(
     selectedTask ? (selectedTask.projectId || selectedTask.project) : null,
@@ -291,7 +304,7 @@ function Tuluvluguu() {
         online: onlineUsers[emp._id] === 'online'
       }));
     }
-    return ajiltan ? [{ id: ajiltan._id, name: ajiltan.ner || ajiltan.nevtrekhNer, role: ajiltan.erkh || "Ажилтан", online: true }] : [];
+    return ajiltan ? [{ id: ajiltan._id, name: ajiltan.ner || ajiltan.nevtrekhNer, role: ajiltan.albanTushaal || ajiltan.erkh || "Ажилтан", online: true }] : [];
   }, [allEmployees, ajiltan, onlineUsers]);
 
 
@@ -572,6 +585,8 @@ function Tuluvluguu() {
         zurag: uploadedImages, 
         hariutsagchZurag: uploadedImages,
         ajiltanZurag: [],
+        bairshil: values.bairshil || '',
+        davkhar: values.davkhar || '',
         baraa: (values.baraa || []).map(b => {
           const item = baraas.find(i => i._id === b.baraaId);
           const une = b.une || item?.zarakhUne || 0;
@@ -1189,7 +1204,9 @@ useEffect(() => {
         
         const uploadRes = await api.post('/chats/upload', formData);
         const fileInfo = uploadRes.data?.data || uploadRes.data;
-        const remotePath = fileInfo.zam || fileInfo.path || fileInfo.fileZam || fileInfo.zamNer || "";
+        const remotePath = fileInfo.fileZam || fileInfo.zam || fileInfo.path || fileInfo.fileUrl || fileInfo.zamNer || "";
+        const finalFileNer = fileInfo.fileNer || fileInfo.ner || fileInfo.filename || selectedProjectChatFile.name;
+        
         sentRes = await api.post('/chats', {
           projectId,
           baiguullagiinId,
@@ -1493,8 +1510,7 @@ useEffect(() => {
                         }`}
                         onClick={() => {
                           if (!isPast) {
-                            setSelectedDay(date);
-                            setIsTaskModalVisible(true);
+                            openAddTaskModal(date);
                           }
                         }}
                       >
@@ -1729,8 +1745,7 @@ useEffect(() => {
                     })}
                     
                     <div
-                      onClick={() => {
-                         setSelectedDay(dayjs()); setIsTaskModalVisible(true); }}
+                      onClick={() => openAddTaskModal()}
                       className="flex items-center gap-3 px-5 py-3 text-gray-400 dark:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/10 cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-800"
                     >
                       <PlusOutlined className="text-[11px]" />
@@ -1758,65 +1773,24 @@ useEffect(() => {
                 </div>
               );
             })()}
+            </div>
+          </div>
         </div>
-      </div>  
-      </div> 
-      </div> 
+      </div>
 
         <div className={`transition-all duration-300 flex flex-col shrink-0 z-20 ${isRightPanelExpanded ? 'w-full xl:w-[340px] opacity-100 h-auto xl:h-[calc(102vh-6rem)]' : 'w-0 opacity-0 whitespace-nowrap overflow-hidden'}`}>  
           <div className="flex-1 m-3 bg-white dark:bg-[#1f2636] rounded-[2rem] border border-slate-100 dark:border-slate-800/60 shadow-2xl flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-auto w-full flex flex-col [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
-            <div className="flex  max-h-[200px] overflow-y-auto flex-col shrink-0 m-4 mb-2 bg-white dark:bg-gray-900/40 rounded-2xl border border-slate-200 dark:border-slate-700/30 overflow-hidden shadow-lg">
-              <div className="flex items-center justify-between p-4 pb-3 shrink-0">
-                <div className="flex items-center space-x-2">
-                  <div className="w-6 h-6 rounded flex items-center justify-center">
-                     <ClockCircleOutlined className="dark:text-gray-400 text-gray-800 text-[10px]" />
-                  </div>
-                  <span className="font-extrabold text-black dark:text-white text-[11px] tracking-wide">Түүх</span>
-                </div>
+              
+              <div className="flex items-center justify-end p-4 pb-0 shrink-0">
                 <Button type="text" size="small" className="hover:!bg-slate-600/50 hover:text-white transition-all rounded-md px-1 w-6 h-6 border border-slate-700/50" icon={<CloseOutlined className="text-gray-400 text-[10px]" />} onClick={() => setIsRightPanelExpanded(false)} />
               </div>
-                            <div className="px-5 py-3 space-y-5">
-                {loadingHistory ? (
-                  <div className="flex justify-center py-4"><Spin size="small" /></div>
-                ) : history.length === 0 ? (
-                  <div className="text-center text-gray-400 text-[11px]">Түүх байхгүй байна</div>
-                ) : (
-                  history.slice(0, 10).map((act) => (
-                    <div key={act._id || act.id} className="hover:scale-105 relative pl-6 before:content-[''] before:absolute before:left-[5px] before:top-4 before:w-[2px] before:h-[130%] before:bg-slate-400/60 dark:before:bg-slate-600/60 last:before:hidden">
-                      <div className="absolute left-0 top-1 w-3 h-3 rounded-full bg-[#10b981] border-2 border-[#262c3d] z-10 shadow-sm"></div>
-                      <div className="text-[11.5px] leading-relaxed">
-                        {act.ajiltniiNer && <span className="text-gray-500 dark:text-gray-400 font-bold">{act.ajiltniiNer} </span>}
-                        <span className="text-gray-400 font-medium">
-                          {act.uildelText || (
-                            act.uildel === "created task" || act.uildel === "created" ? "даалгавар үүсгэлээ" :
-                            act.uildel === "updated task" || act.uildel === "updated" ? "даалгавар шинэчиллээ" :
-                            act.uildel === "added member" || act.uildel === "added" ? "гишүүн нэмлээ" :
-                            act.uildel === "deleted task" || act.uildel === "deleted" ? "даалгавар устгалаа" :
-                            act.uildel === "completed task" || act.uildel === "completed" ? "даалгавар дуусгалаа" :
-                            act.uildel === "message sent" ? "зурвас илгээлээ" :
-                            (act.uildel || 'үйлдэл хийлээ')
-                          )}
-                        </span>
-                        {act.taskNer && <span className="text-emerald-500 font-extrabold ml-1">{act.taskNer}</span>}
-                      </div>
-                      <div className="text-[10px] text-gray-500 mt-1 font-medium tracking-wide">
-                        {act.createdAt ? dayjs(act.createdAt).format("YYYY-MM-DD HH:mm") : "--:--"}
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-            
-            <div className="flex-1 flex flex-col p-4 space-y-6">
-              
-              <div className="border-b border-slate-200 dark:border-slate-700/50"></div>
-              <div className="h-[calc(40vh-200px)] overflow-y-auto flex flex-col space-y-3 shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50">
+
+              {/* 1. Projects Section */}
+              <div className="flex flex-col p-4 space-y-3 shrink-0">
                 <div className="flex items-center justify-between px-1">
-                  <div className="flex items-center space-x-1.5 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">
-                    <span>Төслүүд </span>
-                    <DownOutlined className="text-[8px] text-gray-500 cursor-pointer hover:text-white transition-colors" />
+                  <div className="text-[11px] font-extrabold text-gray-400 mb-2 flex items-center tracking-wide uppercase opacity-70">
+                    <span>Төслүүд</span>
                   </div>
                   <Button
                     type="text"
@@ -1829,56 +1803,102 @@ useEffect(() => {
                   </Button>
                 </div>
                 
-                {loadingProjects ? (
-                  <div className="flex justify-center py-4"><Spin size="small" /></div>
-                ) : projects.length === 0 ? (
-                  <div className="text-center text-gray-400 text-[11px] py-4 font-medium">Төсөл байхгүй байна</div>
-                ) : (
-                  projects.map(p => (
-                    <div key={p.id} className="flex items-center space-x-3 cursor-pointer group hover:bg-gray-300 dark:hover:bg-gray-900 px-3 py-2 rounded-xl transition-colors border border-transparent">
-                      <div className="w-5 h-5 flex items-center justify-center rounded-md text-[10px] font-extrabold text-white shadow-lg" style={{ backgroundColor: p.color || "#10B981" }}>
-                        {(p.name || "").slice(0, 2).toUpperCase()}
+                <div className="max-h-[300px] overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
+                  {loadingProjects ? (
+                    <div className="flex justify-center py-4"><Spin size="small" /></div>
+                  ) : projects.length === 0 ? (
+                    <div className="text-center text-gray-400 text-[11px] py-4 font-medium">Төсөл байхгүй байна</div>
+                  ) : (
+                    projects.map(p => (
+                      <div key={p.id} className="flex items-center space-x-3 cursor-pointer group hover:bg-emerald-50 dark:hover:bg-emerald-500/10 px-3 py-2.5 rounded-2xl transition-all duration-300 border border-transparent hover:border-emerald-200/50 dark:hover:border-emerald-500/20 shadow-sm hover:shadow-md">
+                        <div className="w-8 h-8 flex items-center justify-center rounded-xl text-[11px] font-extrabold text-white shadow-lg shrink-0 transform group-hover:scale-110 transition-transform" style={{ backgroundColor: p.color || "#10B981" }}>
+                          {(p.name || "").slice(0, 2).toUpperCase()}
+                        </div>
+                        <div className="flex flex-col flex-1 min-w-0">
+                          <span className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate transition-colors">{p.name}</span>
+                        </div>
+                        <div className="opacity-0 group-hover:opacity-100 flex items-center space-x-1 shrink-0 transition-opacity">
+                          <Tooltip title="Чат">
+                            <Button type="text" size="small" icon={<MessageOutlined className="text-gray-400 hover:text-emerald-500 text-[12px]" />} onClick={(e) => openProjectChat(p, e)} />
+                          </Tooltip>
+                          <Tooltip title="Засах">
+                            <Button type="text" size="small" icon={<EditOutlined className="text-gray-400 hover:text-blue-500 text-[12px]" />} onClick={(e) => { e.stopPropagation(); handleEditProject(p); }} />
+                          </Tooltip>
+                          <Popconfirm title="Төслийг устгах уу?" onConfirm={(e) => { e.stopPropagation(); handleDeleteProject(p.id); }} onCancel={(e) => e.stopPropagation()}>
+                            <Button type="text" size="small" icon={<DeleteOutlined className="text-gray-400 hover:text-red-500 text-[12px]" />} onClick={(e) => e.stopPropagation()} />
+                          </Popconfirm>
+                        </div>
                       </div>
-                      <div className="flex flex-col flex-1 min-w-0">
-                        <span className="text-[12px] font-bold text-gray-500 dark:text-gray-200 group-hover:text-white truncate">{p.name}</span>
-                      </div>
-                      <div className="opacity-0 group-hover:opacity-100 flex items-center space-x-1 shrink-0">
-                        <Tooltip title="Чат">
-                          <Button type="text" size="small" icon={<MessageOutlined className="text-gray-400 hover:text-teal-500 text-[10px]" />} onClick={(e) => openProjectChat(p, e)} />
-                        </Tooltip>
-                        <Tooltip title="Засах">
-                          <Button type="text" size="small" icon={<EditOutlined className="text-gray-400 hover:text-blue-500 text-[10px]" />} onClick={(e) => { e.stopPropagation(); handleEditProject(p); }} />
-                        </Tooltip>
-                        <Popconfirm title="Төслийг устгах уу?" onConfirm={(e) => { e.stopPropagation(); handleDeleteProject(p.id); }} onCancel={(e) => e.stopPropagation()}>
-                          <Button type="text" size="small" icon={<DeleteOutlined className="text-gray-400 hover:text-red-500 text-[10px]" />} onClick={(e) => e.stopPropagation()} />
-                        </Popconfirm>
-                      </div>
-                    </div>
-                  ))
-                )}
+                    ))
+                  )}
+                </div>
               </div>
-              
-              <div className="pt-4 h-[calc(50vh-200px)] overflow-y-auto shrink-0 dark:bg-gray-900/40 rounded-lg p-2 shadow-md border dark:border-slate-700/50 overflow-y-auto max-h-[400px]">
-                <div className="text-[11px] font-extrabold text-gray-400 mb-4 px-1 flex items-center tracking-wide">
+
+              <div className="border-b border-slate-200 dark:border-slate-700/50 mx-4"></div>
+
+              {/* 2. Team Section */}
+              <div className="flex flex-col p-4 shrink-0">
+                <div className="text-[11px] font-extrabold text-gray-400 mb-3 px-1 flex items-center tracking-wide uppercase opacity-70">
                   <span>Ажилчид</span>
                 </div>
-                <div className="space-y-1.5">
+                <div className="max-h-[300px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                   {teamMembers.map((member, i) => (
-                    <div key={i} className="flex items-center group cursor-pointer transition-colors px-3 py-2 rounded-xl hover:bg-gray-300 dark:hover:bg-gray-900 border border-transparent">
-                      <div className="flex items-center space-x-3 w-full">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-green-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-800 shadow-xl">
-                          <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
+                    <div key={i} className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md">
+                      <div className="flex items-center space-x-4 w-full">
+                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-400 to-teal-600 dark:from-emerald-700 dark:to-teal-900 text-white text-[12px] font-black border-2 border-white dark:border-gray-800 shadow-xl shrink-0">
+                          {(member.name || "").slice(0, 1).toUpperCase()}
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1 justify-center">
-                          <div className="text-[11.5px] font-bold text-gray-500 dark:text-gray-300 group-hover:text-white truncate leading-tight">{member.name}</div>
-                          <div className="text-[10px] text-gray-500 font-medium leading-tight mt-0.5">{member.role}</div>
+                          <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
+                          <div className="text-[10px] text-gray-500 font-medium leading-tight mt-1 opacity-70 uppercase tracking-widest">{member.role}</div>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-              
+
+              <div className="border-b border-slate-200 dark:border-slate-700/50 mx-4"></div>
+
+              {/* 3. History Section */}
+              <div className="flex flex-col p-4 shrink-0">
+                <div className="flex items-center justify-between mb-3 px-1">
+                  <div className="text-[11px] font-extrabold text-gray-400 flex items-center tracking-wide uppercase opacity-70">
+                    <span>Түүх</span>
+                  </div>
+                </div>
+                <div className="max-h-[300px] overflow-y-auto space-y-4 px-2 custom-scrollbar">
+                  {loadingHistory ? (
+                    <div className="flex justify-center py-4"><Spin size="small" /></div>
+                  ) : history.length === 0 ? (
+                    <div className="text-center text-gray-400 text-[11px]">Түүх байхгүй байна</div>
+                  ) : (
+                    history.slice(0, 10).map((act) => (
+                      <div key={act._id || act.id} className="hover:scale-105 relative pl-5 before:content-[''] before:absolute before:left-[5px] before:top-4 before:w-[1px] before:h-[130%] before:bg-slate-400/30 dark:before:bg-slate-600/30 last:before:hidden transition-all">
+                        <div className="absolute left-0 top-1 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-800 z-10 shadow-sm"></div>
+                        <div className="text-[10px] leading-relaxed">
+                          {act.ajiltniiNer && <span className="text-gray-500 dark:text-gray-400 font-bold">{act.ajiltniiNer} </span>}
+                          <span className="text-gray-400 font-medium">
+                            {act.uildelText || (
+                              act.uildel === "created task" || act.uildel === "created" ? "даалгавар үүсгэлээ" :
+                              act.uildel === "updated task" || act.uildel === "updated" ? "даалгавар шинэчиллээ" :
+                              act.uildel === "added member" || act.uildel === "added" ? "гишүүн нэмлээ" :
+                              act.uildel === "deleted task" || act.uildel === "deleted" ? "даалгавар устгалаа" :
+                              act.uildel === "completed task" || act.uildel === "completed" ? "даалгавар дуусгалаа" :
+                              act.uildel === "message sent" ? "зурвас илгээлээ" :
+                              (act.uildel || 'үйлдэл хийлээ')
+                            )}
+                          </span>
+                          {act.taskNer && <span className="text-emerald-500 font-extrabold ml-1">{act.taskNer}</span>}
+                        </div>
+                        <div className="text-[9px] text-gray-500 mt-0.5 font-medium opacity-70">
+                          {act.createdAt ? dayjs(act.createdAt).format("MM/DD HH:mm") : "--:--"}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
             <div className="p-4 shrink-0 mt-auto">
                 <div 
@@ -1888,7 +1908,6 @@ useEffect(() => {
                     <QuestionCircleOutlined className="text-gray-700 dark:text-gray-300 text-[14px] group-hover:text-white transition-colors" />
                     <span className="text-gray-700 dark:text-gray-300 text-[11px] font-bold group-hover:text-white transition-colors">Тусламж</span>
                 </div>
-            </div>
             </div>
           </div>
         </div>
@@ -1916,7 +1935,7 @@ useEffect(() => {
         width={680}
         centered
       >
-        <Form form={taskForm} layout="vertical" onFinish={handleCreateTask} className="space-y-6">
+        <Form form={taskForm} layout="vertical" onFinish={handleCreateTask} className="space-y-4">
           <Form.Item 
             name="title" 
             label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Ажлын нэр</span>} 
@@ -1926,11 +1945,11 @@ useEffect(() => {
           >
             <Input placeholder="Ажлын нэр оруулна уу" className="h-12 rounded-xl" />
           </Form.Item>
-          
-          <Form.Item name="description" label={<span className="text-gray-400  text-[12px]  font-bold block pl-1">Дэлгэрэнгүй</span>} className="!mb-0">
-            <Input.TextArea placeholder="Ажлын дэлгэрэнгүй тайлбар..." className="rounded-xl" rows={3} />
+
+          <Form.Item name="description" label={<span className="text-gray-400 text-[12px] font-bold block pl-1 dark:border-gray-700 border-gray-300">Дэлгэрэнгүй тайлбар</span>} className="!mb-0">
+            <Input.TextArea placeholder="Ажлын дэлгэрэнгүй тайлбар..." className="dark:border-gray-700 border-gray-300 rounded-xl" rows={3} />
           </Form.Item>
-          
+
           <div className="grid grid-cols-2 gap-6">
             <Form.Item 
               name="projectId" 
@@ -1962,34 +1981,15 @@ useEffect(() => {
             </Form.Item>
           </div>
 
-          {/* <div className="grid grid-cols-2 gap-6">
-             <Form.Item name="startDate" label={<span className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] block pl-1">Эхлэх өдөр</span>} className="!mb-0">
-               <DatePicker 
-                 className="w-full h-12 rounded-xl" 
-                 placeholder="Эхлэх өдөр"
-                 format="YYYY-MM-DD"
-                 disabledDate={disabledDate}
-               />
-             </Form.Item>
-             <Form.Item name="dueDate" label={<span className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] block pl-1">Дуусах өдөр</span>} className="!mb-0">
-               <DatePicker 
-                 className="w-full h-12 rounded-xl" 
-                 placeholder="Дуусах өдөр"
-                 format="YYYY-MM-DD"
-                 disabledDate={disabledDate}
-               />
-             </Form.Item>
-          </div> */}
-
-          <div className="grid grid-cols-2 gap-6 mt-6">
-            <Form.Item name="startTime" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Эхлэх цаг (Минут)</span>} className="!mb-0">
+          <div className="grid grid-cols-2 gap-6">
+            <Form.Item name="startTime" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Эхлэх цаг</span>} className="!mb-0">
                <TimePicker 
                  className="w-full h-12 rounded-xl" 
                  placeholder="Эхлэх цаг"
                  format="HH:mm"
                />
             </Form.Item>
-            <Form.Item name="endTime" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Дуусах цаг (Минут)</span>} className="!mb-0">
+            <Form.Item name="endTime" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Дуусах цаг</span>} className="!mb-0">
                <TimePicker 
                  className="w-full h-12 rounded-xl" 
                  placeholder="Дуусах цаг"
@@ -1997,26 +1997,16 @@ useEffect(() => {
                />
             </Form.Item>
           </div>
-          
-          <div className="grid grid-cols-2 gap-6 mt-6">
-            <Form.Item label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Зураг (заавал биш)</span>} className="!mb-0">
-            <Upload
-              listType="picture-card"
-              fileList={taskImages}
-              onChange={({ fileList }) => setTaskImages(fileList)}
-              beforeUpload={() => false}
-              accept="image/*"
-              multiple
-            >
-              {taskImages.length < 8 && (
-                <div className="flex flex-col items-center justify-center text-gray-400 text-xs">
-                  <PlusOutlined />
-                  <div className="mt-1">Зураг</div>
-                </div>
-              )}
-            </Upload>
-          </Form.Item>
-            
+          <div className="grid grid-cols-2 gap-6">
+            <Form.Item name="bairshil" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Байршил</span>} className="!mb-0">
+              <Input placeholder="Байршил оруулна уу" className="h-12 rounded-xl" />
+            </Form.Item>
+            <Form.Item name="davkhar" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Давхар</span>} className="!mb-0">
+              <Input placeholder="Давхар оруулна уу" className="h-12 rounded-xl" />
+            </Form.Item>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
             <Form.Item name="ajiltnuud" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Хамтрах ажилчид</span>} className="!mb-0">
                <Select 
                  mode="multiple"
@@ -2026,10 +2016,28 @@ useEffect(() => {
                  showSearch
                  optionFilterProp="label"
                >
-                 {(ajilchdiinGaralt?.jagsaalt || []).map(u => ({ label: u.ner || u.nevtrekhNer, value: u._id })).map(opt => (
+                 {(allEmployees || []).map(u => ({ label: u.name || u.ner || u.nevtrekhNer, value: u.id || u._id })).map(opt => (
                    <Select.Option key={opt.value} value={opt.value} label={opt.label}>{opt.label}</Select.Option>
                  ))}
                </Select>
+            </Form.Item>
+
+            <Form.Item label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Зураг хавсаргах</span>} className="!mb-0">
+              <Upload
+                listType="picture-card"
+                fileList={taskImages}
+                onChange={({ fileList }) => setTaskImages(fileList)}
+                beforeUpload={() => false}
+                accept="image/*"
+                multiple
+              >
+                {taskImages.length < 8 && (
+                  <div className="flex flex-col items-center justify-center text-gray-400 text-xs">
+                    <PlusOutlined />
+                    <div className="mt-1">Зураг</div>
+                  </div>
+                )}
+              </Upload>
             </Form.Item>
           </div>
           
@@ -2075,11 +2083,20 @@ useEffect(() => {
                               }
                             }}
                           >
-                            {baraas.map(i => (
-                              <Select.Option key={i._id} value={i._id}>
-                                {i.ner} ({i.ulg_lekh_too || 0} {i.negj}) - {i.zarakhUne?.toLocaleString()}₮
-                              </Select.Option>
-                            ))}
+                            {baraas.map(i => {
+                              const negj = i.negj === 'shirheg' ? 'ширхэг' :
+                                           i.negj === 'haire' || i.negj === 'hairtsag' ? 'хайрцаг' :
+                                           i.negj === 'kg' ? 'кг' :
+                                           i.negj === 'l' || i.negj === 'litr' ? 'литр' :
+                                           i.negj === 'gr' ? 'гр' :
+                                           i.negj === 'm' ? 'метр' :
+                                           i.negj || '';
+                              return (
+                                <Select.Option key={i._id} value={i._id}>
+                                  {i.ner} ({i.uldegdel || 0} {negj})
+                                </Select.Option>
+                              );
+                            })}
                           </Select>
                         </Form.Item>
                       </div>
@@ -2182,6 +2199,7 @@ useEffect(() => {
               loading={loadingUilchluulegchid}
               className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
               allowClear
+              disabled={!!editingProject}
             >
               {uilchluulegchid.map(u => (
                 <Select.Option key={u._id} value={u._id}>
@@ -2255,10 +2273,27 @@ useEffect(() => {
                </div>
             </div>
 
-            <div className="py-6">
+            <div className="py-6 space-y-4">
               <p className="text-gray-500 dark:text-gray-400 text-[13px] leading-relaxed m-0">
                 {selectedTask?.description || "No description provided."}
               </p>
+              
+              {(selectedTask?.bairshil || selectedTask?.davkhar) && (
+                <div className="flex bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 gap-6">
+                  {selectedTask?.bairshil && (
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-black text-gray-400 uppercase">Байршил</span>
+                      <span className="text-[13px] font-bold text-gray-700 dark:text-gray-200">{selectedTask.bairshil}</span>
+                    </div>
+                  )}
+                  {selectedTask?.davkhar && (
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-black text-gray-400 uppercase">Давхар</span>
+                      <span className="text-[13px] font-bold text-gray-700 dark:text-gray-200">{selectedTask.davkhar}</span>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {((selectedTask?.hariutsagchZurag?.length > 0) || (selectedTask?.zurag?.length > 0)) && (
@@ -2274,14 +2309,19 @@ useEffect(() => {
                         if (!src) return null;
                         
                         return (
-                          <div key={idx} className="relative group overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
+                          <div key={idx} className="relative group overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all w-[100px] h-[100px]">
                             <Image
                               width={100}
                               height={100}
-                              className="object-cover"
+                              className="object-cover w-[100px] h-[100px]"
                               src={src}
                               fallback="/placeholder-error.png"
                             />
+                            {img.ajiltniiNer && (
+                              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] font-semibold px-1 py-1 text-center truncate z-10 pointer-events-none">
+                                {img.ajiltniiNer}
+                              </div>
+                            )}
                           </div>
                         );
                       })}
@@ -2625,6 +2665,45 @@ useEffect(() => {
               )}
             </div>
           </div>
+          
+          {selectedTask?.ajiltanZurag?.length > 0 && (
+            <div className="pt-8 mt-8 border-t dark:border-gray-700">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-bold text-gray-500 uppercase">
+                  Ажилтны оруулсан зургууд ({selectedTask.ajiltanZurag.length})
+                </span>
+              </div>
+              <div className="bg-gray-50 dark:bg-gray-800/40 p-3 rounded-2xl border border-gray-100 dark:border-gray-700/50">
+                <Image.PreviewGroup>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedTask.ajiltanZurag.map((img, idx) => {
+                      const path = typeof img === 'string' ? img : (img.zamNer || img.fileZam || img.path || img.zam);
+                      const src = path ? (path.startsWith('http') ? path : `${FSM_BASE_URL}/${path}`) : null;
+                      
+                      if (!src) return null;
+                      
+                      return (
+                        <div key={idx} className="relative group overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all w-[100px] h-[100px]">
+                          <Image
+                            width={100}
+                            height={100}
+                            className="object-cover w-[100px] h-[100px]"
+                            src={src}
+                            fallback="/placeholder-error.png"
+                          />
+                          {img.ajiltniiNer && (
+                            <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] font-semibold px-1 py-1 text-center truncate z-10 pointer-events-none">
+                              {img.ajiltniiNer}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Image.PreviewGroup>
+              </div>
+            </div>
+          )}
         </div>
         <div className="w-full lg:w-1/2 flex flex-col h-screen lg:h-full bg-gray-50 dark:bg-[#161d2d] border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-gray-800 relative snap-start">
           
@@ -2652,7 +2731,7 @@ useEffect(() => {
                    const isOwn = msg.ajiltniiId === ajiltan?._id;
                    if (msg.isDeleted) {
                      return (
-                       <div key={msg._id || idx} className="flex space-x-3">
+                       <div key={msg._id || idx} className="flex items-center space-x-3">
                          <Avatar className="bg-gray-400 font-bold shrink-0">{msg.ajiltniiNer?.charAt(0)?.toUpperCase()}</Avatar>
                          <div className="flex flex-col flex-1 min-w-0">
                            <span className="text-[12px] font-bold text-gray-500 dark:text-gray-400 mb-1">{msg.ajiltniiNer}</span>
@@ -2664,7 +2743,7 @@ useEffect(() => {
                      );
                    }
                    return (
-                     <div key={msg._id || idx} className="flex space-x-3 group">
+                     <div key={msg._id || idx} className="flex items-center space-x-3 group">
                        <Avatar className="bg-teal-500 font-bold shrink-0">
                          {msg.ajiltniiNer?.charAt(0)?.toUpperCase()}
                        </Avatar>
@@ -2909,8 +2988,8 @@ useEffect(() => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge count={projectChatMessages.length} size="small" />
-              <Button type="text" shape="circle" icon={<CloseOutlined className="text-white md:text-gray-400 hover:text-red-400" />} onClick={() => setIsProjectChatVisible(false)} />
+              {/* <Badge count={projectChatMessages.length} size="small" /> */}
+              <Button type="text" shape="circle" icon={<CloseOutlined className="text-white md:text-white hover:text-red-400" />} onClick={() => setIsProjectChatVisible(false)} />
             </div>
           </div>
 
@@ -2936,7 +3015,7 @@ useEffect(() => {
                   const isMe = msg.ajiltniiId === ajiltan?._id;
                   if (msg.isDeleted) {
                     return (
-                      <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-end gap-2`}>
+                      <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2`}>
                          <div className={`px-4 py-2 bg-gray-800/50 border border-dashed border-gray-700 rounded-xl text-[11px] text-gray-500 italic`}>
                            Мессеж устгагдлаа
                          </div>
@@ -2944,10 +3023,10 @@ useEffect(() => {
                     );
                   }
                   return (
-                    <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-end gap-2 group`}>
+                    <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2 group`}>
                       {!isMe && (
-                        <Avatar className="bg-gradient-to-br from-teal-500 to-emerald-600 font-bold shrink-0 text-xs shadow-lg">
-                          {msg.ajiltniiNer?.charAt(0)?.toUpperCase()}
+                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-green-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-800 shadow-xl">
+                          <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
                         </Avatar>
                       )}
                       <div className={`flex flex-col max-w-[80%] ${isMe ? 'items-end' : 'items-start'}`}>
@@ -2963,23 +3042,36 @@ useEffect(() => {
 
                         {editingProjectMsg?._id === msg._id ? (
                            <div className="flex flex-col gap-2 w-full min-w-[200px]">
-                             <Input.TextArea autoFocus value={editProjectMsgText} onChange={e => setEditProjectMsgText(e.target.value)} rows={2} className="rounded-xl text-xs bg-gray-800 text-white border-gray-700" />
+                             <Input.TextArea autoFocus value={editProjectMsgText} onChange={e => setEditProjectMsgText(e.target.value)} rows={2} className="rounded-xl text-xs bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-300" />
                              <div className="flex justify-end gap-2">
-                               <Button size="small" type="primary" onClick={() => handleEditProjectChatMsg(msg._id, editProjectMsgText)}>Zasakh</Button>
-                               <Button size="small" onClick={() => setEditingProjectMsg(null)}>Cancel</Button>
+                               <Button size="small" type="primary" onClick={() => handleEditProjectChatMsg(msg._id, editProjectMsgText)}>Засах</Button>
+                               <Button size="small" onClick={() => setEditingProjectMsg(null)}>Болих</Button>
                              </div>
                            </div>
                         ) : (
-                          <div className={`px-4 py-2.5 shadow-md relative group/bubble ${isMe ? 'pchat-me' : 'bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-gray-200 pchat-other'}`}>
-                            {msg.turul === 'zurag' && msg.fileZam ? (
-                              <img src={msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`} alt="img" className="max-w-[240px] max-h-[300px] object-cover rounded-xl cursor-pointer" onClick={() => window.open(msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`, '_blank')} />
-                            ) : msg.turul === 'file' && msg.fileZam ? (
-                              <a href={msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-teal-300 bg-white/5 p-2 rounded-lg border border-white/10">
-                                <FileOutlined className="text-teal-400" />
-                                <span className="truncate max-w-[140px] text-xs text-gray-200">{msg.fileNer || 'Файл'}</span>
-                              </a>
-                            ) : (
-                              <span className="text-[13px] text-white whitespace-pre-wrap leading-relaxed">{msg.medeelel}</span>
+                          <div className={`px-4 py-2.5 shadow-md relative group/bubble ${isMe ? 'pchat-me' : 'bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-black dark:text-gray-200 pchat-other'}`}>
+                            {msg.turul === 'zurag' && (msg.fileZam || msg.fileUrl || msg.path) ? (() => {
+                              const path = msg.fileZam || msg.fileUrl || msg.path || "";
+                              const url = path.startsWith('http') ? path : (path.startsWith('/') ? `${FSM_BASE_URL}${path}` : `${FSM_BASE_URL}/${path}`);
+                              return (
+                                <Image 
+                                  src={url} 
+                                  alt="img" 
+                                  className="max-w-[240px] max-h-[300px] object-cover rounded-xl cursor-pointer" 
+                                  preview={{ mask: <div className="text-[10px]">Томруулах</div> }}
+                                />
+                              );
+                            })() : msg.turul === 'file' && (msg.fileZam || msg.fileUrl || msg.path) ? (() => {
+                              const path = msg.fileZam || msg.fileUrl || msg.path || "";
+                              const url = path.startsWith('http') ? path : (path.startsWith('/') ? `${FSM_BASE_URL}${path}` : `${FSM_BASE_URL}/${path}`);
+                              return (
+                                <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-teal-300 bg-white/5 p-2 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
+                                  <FileOutlined className="text-teal-400" />
+                                  <span className="truncate max-w-[140px] text-xs text-gray-200">{msg.fileNer || 'Файл'}</span>
+                                </a>
+                              );
+                            })() : (
+                              <span className={`text-[13px] ${isMe ? 'text-white' : 'text-gray-800 dark:text-white'} whitespace-pre-wrap leading-relaxed`}>{msg.medeelel}</span>
                             )}
                             
                             {/* Actions overlay for project chat */}
