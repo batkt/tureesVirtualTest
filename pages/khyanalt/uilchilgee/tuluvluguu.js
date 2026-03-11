@@ -420,25 +420,61 @@ function Tuluvluguu() {
   useEffect(() => {
     if (!fsmSocket) return;
 
+    const mergeTask = (current, incoming) => {
+      // 1. If we don't have a current task, just use incoming
+      if (!current) return incoming;
+
+      const merged = { ...current, ...incoming };
+
+      // 2. Protect ajiltanTsag (Time Logs)
+      // Never overwrite a task's logs with an empty or significantly smaller array
+      // unless the incoming one has more closed sessions.
+      const currLogs = current.ajiltanTsag || [];
+      const incLogs  = incoming.ajiltanTsag || [];
+      
+      const currClosed = currLogs.filter(s => s.duusakhTsag).length;
+      const incClosed  = incLogs.filter(s => s.duusakhTsag).length;
+
+      // If incoming logs are missing or shortened, but our current state has valid logs,
+      // preserve our logs unless the incoming update is explicitly closing sessions.
+      if (currLogs.length > 0 && incLogs.length < currLogs.length && incClosed <= currClosed) {
+          merged.ajiltanTsag = current.ajiltanTsag;
+      }
+
+      // 3. Status Transition Protection
+      const currentIsFinished  = current.tuluv === 'duussan' || current.tuluv === 'shalga';
+      const incomingIsFinished = incoming.tuluv === 'duussan' || incoming.tuluv === 'shalga';
+
+      if (currentIsFinished) {
+        // If it was already finished, never lose the end markers
+        if (!merged.duussanOgnoo && current.duussanOgnoo) {
+          merged.duussanOgnoo = current.duussanOgnoo;
+        }
+        // Prefer already closed sessions
+        if (currClosed > incClosed) {
+          merged.ajiltanTsag = current.ajiltanTsag;
+        }
+      }
+
+      return merged;
+    };
+
     const handleSocketTaskUpdate = (updatedTask) => {
       if (!updatedTask || !updatedTask._id) return;
       
       setTasks(prev => prev.map(t => {
         if (t._id === updatedTask._id || t.id === updatedTask._id) {
-          return { ...t, ...updatedTask };
+          return mergeTask(t, updatedTask);
         }
         return t;
       }));
 
       setSelectedTask(prev => {
         if (prev && (prev._id === updatedTask._id || prev.id === updatedTask._id)) {
-          return { ...prev, ...updatedTask };
+          return mergeTask(prev, updatedTask);
         }
         return prev;
       });
-      
-      if (updatedTask.tuluv === 'khiigdej bui' && updatedTask.ner) {
-      }
     };
 
     fsmSocket.on("task_updated", handleSocketTaskUpdate);
@@ -505,31 +541,19 @@ function Tuluvluguu() {
       const getISOValue = (dateObj, timeObj, isEnd = false) => {
         const d = dayjs(dateObj || selectedDay || dayjs());
         const t = (timeObj && dayjs(timeObj).isValid()) ? dayjs(timeObj) : null;
-        const y = d.get('year');
-        const m = d.get('month');
-        const day = d.get('date');
-        let h = isEnd ? 23 : 0;
-        let min = isEnd ? 59 : 0;
-        
-        if (t) {
-          h = parseInt(t.format('H'));
-          min = parseInt(t.format('m'));
-        }
-        return new Date(y, m, day, h, min, 0, 0).toISOString();
+        const h   = t ? t.hour()   : (isEnd ? 23 : 0);
+        const min = t ? t.minute() : (isEnd ? 59 : 0);
+        return new Date(d.year(), d.month(), d.date(), h, min, 0, 0).toISOString();
       };
 
       const ekhlekhTsag = getISOValue(values.startDate, values.startTime, false);
-      const duusakhTsag = getISOValue(values.dueDate, values.endTime, true);
+      const duusakhTsag = getISOValue(values.dueDate,   values.endTime,   true);
       const hasImages = taskImages.length > 0;
       let res;
-      const getMinutes = (dateObj, timeObj) => {
-        const d = dayjs(dateObj || selectedDay || dayjs());
-        const t = (timeObj && dayjs(timeObj).isValid()) ? dayjs(timeObj) : null;
-        if (!t) return 0;
-        return t.hour() * 60 + t.minute();
-      };
-      const ekhlekhMinute = getMinutes(values.startDate, values.startTime);
-      const duusakhMinute = getMinutes(values.dueDate, values.endTime);
+      const startDj = values.startTime && dayjs(values.startTime).isValid() ? dayjs(values.startTime) : null;
+      const endDj   = values.endTime   && dayjs(values.endTime).isValid()   ? dayjs(values.endTime)   : null;
+      const ekhlekhMinute = startDj ? startDj.hour() * 60 + startDj.minute() : 0;
+      const duusakhMinute = endDj   ? endDj.hour()   * 60 + endDj.minute()   : 0;
       let uploadedImages = [];
       if (hasImages) {
         for (const f of taskImages) {
@@ -1982,19 +2006,29 @@ useEffect(() => {
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-            <Form.Item name="startTime" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Эхлэх цаг</span>} className="!mb-0">
-               <TimePicker 
-                 className="w-full h-12 rounded-xl" 
-                 placeholder="Эхлэх цаг"
-                 format="HH:mm"
-               />
+            <Form.Item
+              name="startTime"
+              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Эхлэх цаг</span>}
+              className="!mb-0"
+            >
+              <TimePicker
+                className="w-full h-12 rounded-xl"
+                placeholder="09:00"
+                format="HH:mm"
+                minuteStep={5}
+              />
             </Form.Item>
-            <Form.Item name="endTime" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Дуусах цаг</span>} className="!mb-0">
-               <TimePicker 
-                 className="w-full h-12 rounded-xl" 
-                 placeholder="Дуусах цаг"
-                 format="HH:mm"
-               />
+            <Form.Item
+              name="endTime"
+              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Дуусах цаг</span>}
+              className="!mb-0"
+            >
+              <TimePicker
+                className="w-full h-12 rounded-xl"
+                placeholder="18:00"
+                format="HH:mm"
+                minuteStep={5}
+              />
             </Form.Item>
           </div>
           <div className="grid grid-cols-2 gap-6">
@@ -2393,6 +2427,11 @@ useEffect(() => {
                 
                 let hasLogs = false;
                 
+                // For finished tasks, cap the clock at the task's completion time
+                const taskEndTime = isFinished
+                  ? dayjs(selectedTask.duussanOgnoo || selectedTask.updatedAt || selectedTask.duusakhTsag)
+                  : currentTime;
+
                 if (selectedTask?.ajiltanTsag && Array.isArray(selectedTask.ajiltanTsag) && selectedTask.ajiltanTsag.length > 0) {
                   hasLogs = true;
                   selectedTask.ajiltanTsag.forEach(tsag => {
@@ -2402,12 +2441,8 @@ useEffect(() => {
                     if (tsag.ekhlekhTsag) {
                       const start = dayjs(tsag.ekhlekhTsag);
                       if (start.isValid()) {
-                        let end = currentTime;
-                        if (tsag.duusakhTsag) {
-                          end = dayjs(tsag.duusakhTsag);
-                        } else if (isFinished) {
-                          end = dayjs(selectedTask.duussanOgnoo || selectedTask.updatedAt || selectedTask.duusakhTsag);
-                        }
+                        // Use logged end time; for open sessions use taskEndTime (capped for finished tasks)
+                        const end = tsag.duusakhTsag ? dayjs(tsag.duusakhTsag) : taskEndTime;
                         
                         if (end.isValid()) {
                           const diff = end.diff(start, 'second');
@@ -2442,7 +2477,7 @@ useEffect(() => {
                     if (startMarker) {
                       const sm = dayjs(startMarker);
                       if (sm.isValid()) {
-                        const diff = currentTime.diff(sm, 'second');
+                        const diff = taskEndTime.diff(sm, 'second');
                         if (diff > 0) spentSeconds = diff;
                       }
                     }
