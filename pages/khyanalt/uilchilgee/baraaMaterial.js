@@ -134,7 +134,8 @@ function BaraaMaterial() {
     setLoading(true);
     try {
       const res = await api.get("/baraas", { params: { barilgiinId, baiguullagiinId } });
-      setBaraas(res.data?.data || res.data || []);
+      const data = res.data?.data || res.data || [];
+      setBaraas(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -430,6 +431,27 @@ function BaraaMaterial() {
 
   const { socket } = useFsmSocket();
 
+  const usageMap = useMemo(() => {
+    const map = {};
+    if (Array.isArray(usageStats)) {
+      usageStats.forEach(s => {
+        // Only include if material still exists in the list
+        if (s.ner && baraas.some(b => b.ner === s.ner)) {
+          map[s.ner] = s.too;
+        }
+      });
+    }
+    return map;
+  }, [usageStats, baraas]);
+
+  const filteredTodayUsage = useMemo(() => {
+    return todayUsageStats.filter(s => baraas.some(b => b.ner === s.ner));
+  }, [todayUsageStats, baraas]);
+
+  const filteredOverallUsage = useMemo(() => {
+    return usageStats.filter(s => baraas.some(b => b.ner === s.ner));
+  }, [usageStats, baraas]);
+
   useEffect(() => {
     if (isConnected && socket) {
       const handler = () => {
@@ -572,29 +594,22 @@ function BaraaMaterial() {
           
           
           {/* <div id="mat-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
-            {filteredStatCards.map((card, index) => (
+            {[
+              { title: "Нийт бараа", value: baraas.length, type: 'all', color: 'bg-emerald-50/60', border: 'border-emerald-200', text: 'text-emerald-600' },
+              { title: "Цэвэрлэгээний", value: baraas.filter(b => ['tseverlegch', 'Цэвэрлэгч', 'ugaalgiin', 'Угаалгын', 'ariutgagch', 'Ариутгагч'].includes(b.turul)).length, type: 'tseverlegch', color: 'bg-blue-50/60', border: 'border-blue-200', text: 'text-blue-600' },
+              { title: "Багаж хэрэгсэл", value: baraas.filter(b => ['bagaj', 'Багаж'].includes(b.turul)).length, type: 'bagaj', color: 'bg-amber-50/60', border: 'border-amber-200', text: 'text-amber-600' },
+              { title: "Дууссан", value: baraas.filter(b => (b.uldegdel || 0) <= 0).length, type: 'out-of-stock', color: 'bg-red-50/60', border: 'border-red-200', text: 'text-red-600' },
+            ].map((card, index) => (
               <div
                 key={index}
-                onClick={() => setFilterType(card.type)}
-                className={`group relative cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10 border-2 ${filterType === card.type ? 'ring-1 ring-emerald-500 ring-offset-1' : ''} ${card.border} ${card.color} dark:border-emerald-900 dark:bg-emerald-950/40 col-span-1 animate-entrance-stagger-${Math.min(index + 1, 5)}`}
+                className={`group relative overflow-hidden rounded-2xl transition-all duration-300 ease-out border-2 ${card.border} ${card.color} dark:border-slate-800 dark:bg-slate-900/40 col-span-1 shadow-sm`}
               >
-                <div className="absolute inset-0 bg-emerald-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
-
-                <div className="relative h-full rounded-2xl p-3 sm:p-2.5">
-                  <div className="flex h-full flex-col justify-between">
-                    <div className="mb-2 flex items-start justify-between">
-                      <div>
-                        <div className={`mb-0.5 bg-gradient-to-r from-emerald-900 to-emerald-700 bg-clip-text text-3xl font-bold text-transparent dark:from-emerald-100 dark:to-emerald-300`}>
-                          {card.value}
-                        </div>
-                        <div className={`text-sm font-medium ${card.text} transition-colors duration-300 dark:text-emerald-400`}>
-                          {card.title}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={`h-0.5 w-0 rounded-full ${filterType === card.type ? 'w-full' : ''} bg-emerald-500 transition-all duration-500 group-hover:w-full`} />
+                <div className="relative h-full p-4 flex flex-col justify-between">
+                  <div>
+                    <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">{card.title}</div>
+                    <div className="text-2xl font-black text-slate-800 dark:text-white">{card.value}</div>
                   </div>
+                  <div className={`h-1 w-8 rounded-full bg-emerald-500 mt-2 opacity-30 group-hover:w-full transition-all`} />
                 </div>
               </div>
             ))}
@@ -613,7 +628,6 @@ function BaraaMaterial() {
              </Select>
 
             <Space className="w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0" wrap={false}>
-              
               <Button
                 type="primary"
                 icon={<PlusOutlined />}
@@ -631,24 +645,18 @@ function BaraaMaterial() {
             </Space>
           </div>
 
-          <div id="mat-table" className="border border-slate-300 dark:border-slate-700/60 rounded-xl overflow-hidden bg-white dark:bg-gray-800 h-fit max-h-[70vh] flex flex-col shadow-inner mb-6 animate-entrance-stagger-7">
-            <div className="overflow-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar]:h-1.5 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full">
+          <div id="mat-table" className="border border-slate-300 dark:border-slate-700/60 rounded-xl bg-white dark:bg-gray-800 h-auto max-h-[320px] flex flex-col shadow-sm mb-6 animate-entrance-stagger-7 relative overflow-hidden shrink-0">
+            <div className="overflow-auto flex-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full">
               <table className="w-full text-left text-[11.5px] text-gray-800 dark:text-gray-300 border-collapse whitespace-nowrap min-w-max">
                 <thead className="bg-gray-100 dark:bg-gray-900 dark:text-white text-black sticky top-0 z-10">
                   <tr>
-                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center w-8">
-                       №
-                    </th>
-                    
+                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center w-8">№</th>
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium">Нэр</th>
-                    {/* <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center">Код</th> */}
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium">Үлдэгдэл</th>
-                    {/* <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium">Брэнд</th> */}
+                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium">Ашиглалт</th>
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium w-16">Х/нэгж</th>
                     <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center">Төрөл</th>
-                    {/* <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center">Нийлүүлэгч</th> */}
-                    {/* <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium">Нэгж үнэ</th> */}
-                    {/* <th className="px-3 py-2.5 border-b border-slate-300 dark:border-slate-700/60 text-center font-medium border-r">Нийт үнэ</th> */}
+                    {/* <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center">Статус</th> */}
                     <th className="px-2 py-2.5 border-b border-slate-300 dark:border-slate-700/60 text-center font-medium w-10">
                       <SettingOutlined className="text-black dark:text-gray-400" />
                     </th>
@@ -656,25 +664,22 @@ function BaraaMaterial() {
                 </thead>
                 <tbody>
                   {filteredBaraas.map((row, i) => {
-                    const rowColor = (row.turul === 'tseverlegch' || row.turul === 'ugaalgiin' || row.turul === 'ariutgagch') ? 'bg-white-100/50 dark:bg-white-900/20' : 
-                                   row.turul === 'bagaj' ? 'bg-white-100/50 dark:bg-white-900/20' : 
-                                   'bg-white-100/50 dark:bg-white-900/20';
+                    const usage = usageMap[row.ner] || 0;
+                    const isOut = (row.uldegdel || 0) <= 0;
                     return (
-                    <tr key={row._id} className={`hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border-b border-slate-300 dark:border-slate-700/60 last:border-b-0 group ${filterType !== 'all' ? rowColor : ''}`}>
-                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center w-8 text-gray-400 font-bold">
-                        {i + 1}
-                      </td>
-                      
+                    <tr key={row._id} className={`hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors border-b border-slate-300 dark:border-slate-700/60 last:border-b-0 group`}>
+                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center w-8 text-gray-400 font-bold">{i + 1}</td>
                       <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 font-medium">{row.ner}</td>
-                      {/* <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-600 dark:text-gray-400">{row.barcode || row.kod}</td> */}
-                      <td className={`px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center ${row.uldegdel < 0 ? 'text-red-500 font-black' : (row.uldegdel < row.doodUldegdel ? 'text-red-500 dark:text-red-400 font-bold' : '')}`}>{row.uldegdel || 0}</td>
-                      {/* <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center">{row.brand || "—"}</td> */}
-                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-600 dark:text-gray-400">{row.negjM ? unitMap[row.negjM] : unitMap[row.negj] || row.negj}</td>
-                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-600 dark:text-gray-400">{typeMap[row.turul] || row.turul}</td>
-                      {/* <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-600 dark:text-gray-400">{row.niiluulegch || "—"}</td> */}
-                      {/* <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-right font-medium">{row.une?.toLocaleString() || "0"}₮</td> */}
-                      {/* <td className={`px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-right font-bold ${((row.uldegdel || 0) * (row.une || 0)) < 0 ? 'text-red-600 dark:text-red-500' : 'text-emerald-600 dark:text-emerald-500'}`}>
-                        {((row.uldegdel || 0) * (row.une || 0))?.toLocaleString() || "0"}₮
+                      <td className={`px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center font-bold ${isOut ? 'text-red-500' : 'text-emerald-600'}`}>{row.uldegdel || 0}</td>
+                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center font-semibold text-blue-500">{usage}</td>
+                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-500">{row.negjM ? unitMap[row.negjM] : unitMap[row.negj] || row.negj}</td>
+                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-500">{typeMap[row.turul] || row.turul}</td>
+                      {/* <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center">
+                        {isOut ? (
+                          <span className="px-2 py-0.5 bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded-full text-[9px] font-black uppercase">Дууссан</span>
+                        ) : (
+                          <span className="px-2 py-0.5 bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400 rounded-full text-[9px] font-black uppercase">Үлдэгдэлтэй</span>
+                        )}
                       </td> */}
                       <td className="px-2 py-2 text-center w-10">
                         <Dropdown
@@ -711,135 +716,134 @@ function BaraaMaterial() {
                   <tr>
                     <td className="px-3 py-3 w-8 text-center"></td>
                     <td className="px-3 py-3 w-10 text-center"></td>
-                    
                     <td className="px-3 py-3"></td>
                     <td className="px-3 py-3 text-center"></td>
                     <td className="px-3 py-3 text-center"></td>
                     <td className="px-3 py-3 text-center"></td>
                     <td className="px-3 py-3 text-center"></td>
                     <td className="px-3 py-3 text-center"></td>
-                    <td className="px-3 py-3 text-center"></td>
-                    <td className="px-3 py-3 text-right"></td>
-                    {/* <td className="px-3 py-3 text-right text-white dark:text-emerald-400">{filteredBaraas.reduce((acc, curr) => acc + ((Number(curr.uldegdel) || 0) * (Number(curr.une) || 0)), 0).toLocaleString()}</td> */}
                     <td className="px-2 py-3 text-center w-10"></td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-          <div id="mat-usage-dashboard" className="grid grid-cols-1 lg:grid-cols-2 gap-4 animate-entrance-stagger-8">
-            {/* Panel 1: Today's Usage Chart */}
-            <div className="bg-white dark:bg-[#1a1f2e] rounded-3xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm min-h-[170px] flex flex-col">
-              <div className="flex items-center justify-between mb-2">
+          <div id="mat-usage-dashboard" className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-entrance-stagger-8 flex-1 min-h-0 mb-4">
+            {/* Panel 1: Today's Usage Graphic */}
+            <div className="bg-white dark:bg-gray-900/40 rounded-[2rem] p-6 border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-col min-h-[250px] xl:h-auto group">
+              <div className="flex items-center justify-between mb-6">
                  <div>
-                    <h3 className="text-[12px] font-black text-slate-800 dark:text-slate-100 uppercase tracking-widest">Өнөөдрийн ашиглалт</h3>
-                    <p className="text-[10px] text-slate-400 font-medium">Өнөөдөр ашиглагдсан материалууд</p>
+                    <h3 className="text-[14px] font-black text-slate-800 dark:text-slate-100 uppercase flex items-center gap-2">
+                       {/* <AreaChartOutlined className="text-emerald-500" /> */}
+                       Өнөөдрийн ашиглалт
+                    </h3>
+                    {/* <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Today Performance</p> */}
                  </div>
-                 <div className="bg-emerald-50 dark:bg-emerald-500/10 p-1.5 rounded-xl">
-                    <AreaChartOutlined className="text-emerald-500 text-sm" />
+                 <div className="text-right">
+                    <span className="text-2xl font-black text-slate-800 dark:text-white tabular-nums">{filteredTodayUsage.reduce((acc, s) => acc + (s.too || 0), 0)}</span>
+                    <span className="text-[10px] text-slate-400 font-bold block">Нийт ширхэг</span>
                  </div>
               </div>
-              <div className="flex-1 w-full relative min-h-[100px]">
+              
+              <div className="flex-1 flex items-center justify-center relative min-h-0">
                 {loadingStats ? (
-                  <div className="absolute inset-0 flex items-center justify-center"><Spin /></div>
-                ) : todayUsageStats.length > 0 ? (
-                  <Doughnut 
-                    data={{
-                      labels: todayUsageStats.slice(0, 6).map(s => s.ner),
-                      datasets: [{
-                        data: todayUsageStats.slice(0, 6).map(s => s.too),
-                        backgroundColor: [
-                          '#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'
-                        ],
-                        borderWidth: 0,
-                        hoverOffset: 10,
-                        cutout: '70%'
-                      }]
-                    }}
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: { 
-                        datalabels: {
-                          color: '#fff',
-                          font: { weight: 'bold', size: 9 },
-                          formatter: (value) => {
-                            return value > 0 ? value + " ш" : null;
-                          },
-                          display: 'auto',
-                          align: 'center',
-                          anchor: 'center'
-                        },
-                        legend: { 
-                          position: 'right',
-                          labels: {
-                            usePointStyle: true,
-                            font: { size: 9, weight: '600' },
-                            padding: 10,
-                            color: '#94a3b8'
-                          }
-                        },
-                        tooltip: {
-                          backgroundColor: '#1e293b',
-                          padding: 10,
-                          titleFont: { size: 10, weight: 'bold' },
-                          bodyFont: { size: 10 },
-                          cornerRadius: 8,
-                          displayColors: true
-                        }
-                      }
-                    }}
-                  />
+                  <Spin size="large" />
+                ) : filteredTodayUsage.length > 0 ? (
+                  <div className="w-full h-full flex items-center gap-4">
+                    <div className="w-1/2 h-full relative">
+                      <Doughnut 
+                        data={{
+                          labels: filteredTodayUsage.map(s => s.ner),
+                          datasets: [{
+                            data: filteredTodayUsage.map(s => s.too),
+                            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'],
+                            borderWidth: 2,
+                            cutout: '70%',
+                          }]
+                        }}
+                        options={{
+                          plugins: { legend: { display: false }, datalabels: { display: false } },
+                          maintainAspectRatio: false,
+                        }}
+                      />
+                      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                         <span className="text-xl font-black text-emerald-500">{filteredTodayUsage.length}</span>
+                         <span className="text-[8px] font-black text-slate-400 uppercase tracking-tighter">Төрөл</span>
+                      </div>
+                    </div>
+                    <div className="w-1/2 flex flex-col gap-2 overflow-y-auto max-h-full pr-2 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-200">
+                      {filteredTodayUsage.map((s, idx) => (
+                        <div key={idx} className="flex items-center justify-between group/item">
+                           <div className="flex items-center gap-2 min-w-0">
+                              <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'][idx % 7] }}></div>
+                              <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 truncate">{s.ner}</span>
+                           </div>
+                           <span className="text-[10px] font-black text-slate-800 dark:text-gray-400 tabular-nums">{s.too}ш</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 ) : (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 opacity-30">
-                    <PieChartOutlined className="text-4xl mb-2" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-center">Өнөөдөр материал<br/>ашиглаагүй байна</span>
+                  <div className="flex flex-col items-center justify-center text-slate-300 dark:text-slate-700 opacity-50">
+                    <PieChartOutlined className="text-5xl mb-2" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-center leading-tight">Дата олдсонгүй</span>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Panel 2: Overall Top Materials List */}
-            <div className="bg-white dark:bg-[#1a1f2e] rounded-3xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm min-h-[170px] flex flex-col">
-               <div className="flex items-center justify-between mb-2">
+            {/* Panel 2: Overall Top Materials Graphic */}
+            <div className="bg-white dark:bg-gray-900/40 rounded-[2rem] p-6 border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-col min-h-[250px] xl:h-auto group">
+               <div className="flex items-center justify-between mb-6">
                  <div>
-                    <h3 className="text-[12px] font-black text-slate-800 dark:text-slate-100 uppercase tracking-widest">Их ашиглалт</h3>
-                    <p className="text-[10px] text-slate-400 font-medium">Хамгийн их ашиглагдсан топууд</p>
+                    <h3 className="text-[14px] font-black text-slate-800 dark:text-slate-100 uppercase flex items-center gap-2">
+                       {/* <ThunderboltOutlined className="text-amber-500" /> */}
+                       Их ашиглалт
+                    </h3>
+                    {/* <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Top Consumers</p> */}
                  </div>
-                 <div className="bg-blue-50 dark:bg-blue-500/10 p-1.5 rounded-xl">
-                    <BarChartOutlined className="text-blue-500 text-sm" />
-                 </div>
+                 {/* <div className="bg-amber-50 dark:bg-amber-500/10 px-3 py-1 rounded-full">
+                    <span className="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-tighter italic">Hot List</span>
+                 </div> */}
               </div>
-              <div className="flex-1 flex flex-col gap-1.5 overflow-y-auto pr-1 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-200 dark:[&::-webkit-scrollbar-thumb]:bg-slate-700">
-                {usageStats.length > 0 ? (
-                  usageStats.slice(0, 10).map((s, idx) => (
-                    <div key={idx} className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition-all group border border-transparent hover:border-slate-100 dark:hover:border-slate-800">
-                       <div className="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center font-black text-[10px] text-slate-400 group-hover:bg-blue-500 group-hover:text-white transition-all shadow-sm">
-                          {idx + 1}
-                       </div>
-                       <div className="flex-1 min-w-0">
-                          <div className="flex justify-between items-center mb-1">
-                            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200 truncate pr-2">{s.ner}</span>
-                            <span className="text-[10px] font-black text-blue-500 tabular-nums">{s.too} ш</span>
+
+              <div className="flex-1 min-h-0 relative">
+                {filteredOverallUsage.length > 0 ? (
+                  <div className="w-full h-full flex flex-col gap-4 mt-2">
+                    {filteredOverallUsage.slice(0, 5).map((s, idx) => {
+                      const maxVal = Math.max(...filteredOverallUsage.map(i => i.too || 1));
+                      const percent = ((s.too || 0) / maxVal) * 100;
+                      return (
+                        <div key={idx} className="flex flex-col gap-1.5 group/usage">
+                          <div className="flex justify-between items-center pr-2">
+                            <span className="text-[12px] font-black text-slate-700 dark:text-slate-200 truncate">{s.ner}</span>
+                            <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 tabular-nums">{s.too}ш</span>
                           </div>
-                          <div className="flex items-center gap-3">
-                             <div className="h-1 bg-slate-100 dark:bg-slate-800 rounded-full flex-1 overflow-hidden">
-                                <div className="h-full bg-blue-500 rounded-full transition-all duration-1000" style={{ width: `${Math.min((s.too / (usageStats[0]?.too || 1)) * 100, 100)}%` }}></div>
-                             </div>
+                          <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800/50 rounded-full overflow-hidden relative">
+                            <div 
+                              className="h-full rounded-full transition-all duration-700 ease-out shadow-sm"
+                              style={{ 
+                                width: `${percent}%`, 
+                                background: idx === 0 ? 'linear-gradient(90deg, #3b82f6, #60a5fa)' : 'linear-gradient(90deg, #94a3b8, #cbd5e1)',
+                                boxShadow: idx === 0 ? '0 0 12px rgba(59, 130, 246, 0.3)' : 'none'
+                              }}
+                            />
                           </div>
-                       </div>
-                    </div>
-                  ))
+                        </div>
+                      );
+                    })}
+                  </div>
                 ) : (
-                  <div className="flex-1 flex flex-col items-center justify-center text-slate-400 opacity-30">
-                    <BarChartOutlined className="text-4xl mb-2" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Түүх олдсонгүй</span>
+                  <div className="h-full flex flex-col items-center justify-center text-slate-300 dark:text-slate-700 opacity-50">
+                    <BarChartOutlined className="text-5xl mb-2" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">Түүх олдсонгүй</span>
                   </div>
                 )}
               </div>
             </div>
           </div>
         </div>
+      
 
 
 
