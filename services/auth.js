@@ -31,8 +31,8 @@ const isOnline = () => {
   return navigator.onLine;
 };
 // Heartbeat check to detect real network connectivity using the API server
-const HEARTBEAT_URL = API_URL || "http://103.143.40.175:8081";
-// const HEARTBEAT_URL = API_URL || "https://turees.zevtabs.mn/api";
+// const HEARTBEAT_URL = API_URL || "http://103.143.40.175:8081";
+const HEARTBEAT_URL = API_URL || "https://turees.zevtabs.mn/api";
 const heartbeatCheck = async (url = HEARTBEAT_URL, timeout = 5000) => {
   try {
     const controller = new AbortController();
@@ -68,7 +68,7 @@ export const useBarilga = () => {
 
   const barilgaSoliyo = useCallback((id, ajiltan) => {
     const tukhainBarilga = ajiltan?.salbaruud?.find(
-      (salbar) => salbar?.salbariinId === id
+      (salbar) => salbar?.salbariinId === id,
     );
     if (!tukhainBarilga && ajiltan?.erkh !== "Admin") {
       toast.warning("Ажилтанд барилгын тохиргоо хийгдээгүй байна");
@@ -125,13 +125,13 @@ export const AuthProvider = ({ children }) => {
   const heartbeatInterval = useRef(null);
   const [isClient, setIsClient] = useState(false);
   const [baiguulgiinErkhiinJagsaalt, setBaiguulgiinErkhiinJagsaalt] = useState(
-    []
+    [],
   );
 
   const { ajiltan, ajiltanMutate } = useAjiltan(token);
   const { baiguullaga, baiguullagaMutate } = useBaiguullaga(
     token,
-    ajiltan?.baiguullagiinId
+    ajiltan?.baiguullagiinId,
   );
   const { barilgaSoliyo, barilgiinId } = useBarilga();
   const { t } = useTranslation();
@@ -181,7 +181,7 @@ export const AuthProvider = ({ children }) => {
       setIsOfflineMode(true);
       toast.warning(
         "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
-        0
+        0,
       );
     };
 
@@ -196,7 +196,7 @@ export const AuthProvider = ({ children }) => {
         setIsOfflineMode(true);
         toast.warning(
           "Таны интернэт тасарсан байна. Интернетгүй орчинд ажиллаж байна.",
-          0
+          0,
         );
       }
     };
@@ -358,7 +358,7 @@ export const AuthProvider = ({ children }) => {
             result,
             loginToken,
             setBaiguulgiinErkhiinJagsaalt,
-            offlinePermissions
+            offlinePermissions,
           );
         }
       }
@@ -370,7 +370,7 @@ export const AuthProvider = ({ children }) => {
         });
       }
     },
-    [ajiltanMutate, barilgaSoliyo]
+    [ajiltanMutate, barilgaSoliyo],
   );
 
   const auth = useMemo(
@@ -391,7 +391,7 @@ export const AuthProvider = ({ children }) => {
         try {
           const loginResult = await attemptLogin(
             khereglech,
-            performOnlineLogin
+            performOnlineLogin,
           );
 
           if (loginResult.success) {
@@ -480,7 +480,7 @@ export const AuthProvider = ({ children }) => {
       syncOfflineData,
       ajiltanMutate,
       baiguullagaMutate,
-    ]
+    ],
   );
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
