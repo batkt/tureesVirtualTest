@@ -47,9 +47,9 @@ ChartJS.register(
 
 function DashboardCard({ id, title, icon, rightActions, children, headerClass="border-emerald-500", noScroll=false }) {
   return (
-    <div id={id} className={`bg-white dark:bg-gray-900/50 rounded-xl overflow-hidden shadow-sm border-t-[3px] ${headerClass} hover:shadow-emerald-500 dark:hover:shadow-emerald-500/10 flex flex-col relative min-h-[260px] h-[400px]`}>
+    <div id={id} className={`bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm border-t-[3px] ${headerClass} hover:shadow-emerald-500 dark:hover:shadow-emerald-500/10 flex flex-col relative min-h-[260px] h-[400px]`}>
       <div className="flex justify-between items-center px-4 py-3 bg-blue-900/10 dark:bg-gray-900 border-b border-gray-100 dark:border-[#2d3748]/50 shrink-0">
-        <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-extrabold text-[12.5px] tracking-wide uppercase">
+        <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-bold text-[12.5px]  uppercase">
           <span className="text-gray-400 dark:text-gray-300">{icon}</span> {title}
         </div>
         {rightActions && <div className="flex items-center">{rightActions}</div>}
@@ -231,7 +231,7 @@ function KPI() {
                         <div className="mb-0.5 bg-gradient-to-r from-emerald-900 to-emerald-700 bg-clip-text text-3xl font-bold text-transparent dark:from-emerald-100 dark:to-emerald-300 lining-nums">
                           {card.value}
                         </div>
-                        <div className="text-[11px] font-extrabold text-emerald-600 transition-colors duration-300 dark:text-emerald-400 uppercase tracking-tighter">
+                        <div className="text-[12px] font-bold text-emerald-600 transition-colors duration-300 dark:text-emerald-400 uppercase tracking-tighter">
                           {card.title}
                         </div>
                       </div>
@@ -251,7 +251,7 @@ function KPI() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               
               <div className="md:col-span-2 xl:col-span-1">
-                <DashboardCard title="KPI Тархалт" icon={<BarChartOutlined />} headerClass="border-sky-500" noScroll={true}>
+                <DashboardCard title="KPI хуваарилалт" icon={<BarChartOutlined />} headerClass="border-sky-500" noScroll={true}>
                   <div className="h-full w-full">
                     <Bar key={`dist-${users.length}`} data={distributionData} options={chartOptions} />
                   </div>
@@ -259,18 +259,18 @@ function KPI() {
               </div>
 
               <div className="md:col-span-1 xl:col-span-1">
-                <DashboardCard title="Топ 5 Гүйцэтгэл" icon={<PieChartOutlined />} headerClass="border-amber-500" noScroll={true}>
+                <DashboardCard title="Шилдэг гүйцэтгэл" icon={<PieChartOutlined />} headerClass="border-amber-500" noScroll={true}>
                   <div className="h-full flex flex-col justify-center gap-4">
                     <div className="h-44 w-full relative">
                       <Doughnut key={`top5-${topUsers.length}`} data={doughnutData} options={{...chartOptions, cutout: '70%'}} />
                       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                        <span className="text-xl font-black text-gray-800 dark:text-gray-100 lining-nums">{avgKpi}%</span>
-                        <span className="text-[8px] font-bold text-gray-400 uppercase">Дундаж</span>
+                        <span className="text-xl font-bold text-gray-800 dark:text-gray-100 lining-nums">{avgKpi}%</span>
+                        <span className="text-[12px] font-bold text-gray-400 uppercase">ДУНДАЖ</span>
                       </div>
                     </div>
                     <div className="flex flex-col gap-1 px-2">
                       {topUsers.slice(0, 5).map((user, i) => (
-                        <div key={user._id} className="flex items-center justify-between text-[10px] font-bold">
+                        <div key={user._id} className="flex items-center justify-between text-[12px] font-bold">
                           <span className="text-gray-500 truncate max-w-[100px]">{user.ner || user.nevtrekhNer}</span>
                           <span className="text-gray-800 dark:text-gray-100">{user.kpiHuvv}%</span>
                         </div>
@@ -282,14 +282,14 @@ function KPI() {
 
               <div className="md:col-span-2 xl:col-span-1">
                 <DashboardCard 
-                  title="Ажилтнуудын гүйцэтгэл" 
+                  title="Ажилчдын үзүүлэлт" 
                   icon={<TeamOutlined/>}
                   headerClass="border-indigo-500"
                 >
                   {loading && users.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-24 gap-4">
                       <Spin size="large" />
-                      <span className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">Уншиж байна...</span>
+                      <span className="text-[12px] font-bold text-gray-400 uppercase tracking-[0.2em]">УНШИЖ БАЙНА</span>
                     </div>
                   ) : (
                     <div className="flex flex-col gap-2">
@@ -299,7 +299,7 @@ function KPI() {
                         
                         return (
                           <div key={user._id} className="group flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all w-full">
-                            <div className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-[11px] font-black shadow-sm"
+                            <div className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-[12px] font-bold shadow-sm"
                               style={{ background: `${color}15`, border: `1.5px solid ${color}40`, color: color }}>
                               {i < 3 ? (i + 1) : (user.ner || "?").charAt(0).toUpperCase()}
                             </div>
@@ -310,7 +310,7 @@ function KPI() {
                                   {user.ner || user.nevtrekhNer}
                                 </span>
                                 <div className="flex items-center gap-2 shrink-0">
-                                  <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md border tabular-nums"
+                                  <span className="text-[12px] font-bold px-1.5 py-0.5 rounded-md border tabular-nums"
                                     style={{ 
                                       backgroundColor: `${color}15`, 
                                       color: color, 
@@ -331,7 +331,7 @@ function KPI() {
                                 />
                               </div>
 
-                              <div className="flex items-center gap-3 text-[8px] font-bold text-gray-400 uppercase tracking-tight">
+                              <div className="flex items-center gap-3 text-[12px] font-bold text-gray-400 uppercase tracking-tight">
                                 <span className="flex items-center gap-1"><CheckSquareOutlined /> {user.kpiDaalgavarToo || 0} ажил</span>
                                 <span className="flex items-center gap-1" style={{ color }}><TrophyOutlined /> {user.kpiOnoo || 0} оноо</span>
                                 <span className="ml-auto opacity-60">{user.albanTushaal || user.erkh}</span>
@@ -352,14 +352,14 @@ function KPI() {
                     <div className="p-3 rounded-xl bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/50">
                       <div className="flex items-center gap-2 mb-2 text-indigo-700 dark:text-indigo-300">
                         <StarOutlined className="text-[12px]" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Шилдэг ажилтан</span>
+                        <span className="text-[12px] font-bold uppercase ">Шилдэг ажилтан</span>
                       </div>
                       {topUsers[0] ? (
                         <div className="flex items-center gap-3">
-                          <Avatar size="small" className="bg-indigo-500 text-white font-black text-[10px]">{topUsers[0].ner?.charAt(0)}</Avatar>
+                          <Avatar size="small" className="bg-indigo-500 text-white font-bold text-[12px]">{topUsers[0].ner?.charAt(0)}</Avatar>
                           <div className="flex flex-col min-w-0">
-                            <span className="text-[11px] font-black text-gray-800 dark:text-gray-100 truncate">{topUsers[0].ner}</span>
-                            <span className="text-[9px] font-bold text-indigo-500">{topUsers[0].kpiHuvv}% амжилт</span>
+                            <span className="text-[12px] font-bold text-gray-800 dark:text-gray-100 truncate">{topUsers[0].ner}</span>
+                            <span className="text-[12px] font-bold text-indigo-500">{topUsers[0].kpiHuvv}% амжилт</span>
                           </div>
                         </div>
                       ) : "--"}
@@ -370,7 +370,7 @@ function KPI() {
                         <div className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500 shrink-0">
                           <RiseOutlined className="text-[12px]" />
                         </div>
-                        <p className="text-[10px] font-bold text-gray-600 dark:text-gray-400 leading-tight">
+                        <p className="text-[12px] font-bold text-gray-600 dark:text-gray-400 leading-tight">
                           Багийн дундаж KPI {avgKpi}% байна. Гүйцэтгэл тогтвортой байна.
                         </p>
                       </div>
@@ -378,7 +378,7 @@ function KPI() {
                         <div className="p-1.5 rounded-lg bg-sky-50 dark:bg-sky-900/20 text-sky-500 shrink-0">
                           <InfoCircleOutlined className="text-[12px]" />
                         </div>
-                        <p className="text-[10px] font-bold text-gray-600 dark:text-gray-400 leading-tight">
+                        <p className="text-[12px] font-bold text-gray-600 dark:text-gray-400 leading-tight">
                           {users.filter(u => (u.kpiHuvv ?? 0) >= 80).length} ажилтан 80%-иас дээш амжилттай байна.
                         </p>
                       </div>
@@ -390,7 +390,7 @@ function KPI() {
                       icon={<ReloadOutlined />}
                       onClick={handleManualRefresh}
                       loading={isRefreshing}
-                      className="mt-2 text-[10px] font-black uppercase tracking-[0.2em] h-8 rounded-lg border-gray-200 dark:border-gray-700 dark:bg-gray-800"
+                      className="mt-2 text-[12px] font-bold uppercase tracking-[0.2em] h-8 rounded-lg border-gray-200 dark:border-gray-700 dark:bg-gray-800"
                     >
                       Шинэчлэх
                     </Button>
@@ -400,50 +400,50 @@ function KPI() {
 
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-              <div className="col-span-1 bg-white dark:bg-gray-900/50 rounded-2xl p-4 border border-gray-100 dark:border-gray-700/50 shadow-sm flex flex-col justify-between hover:border-b-emerald-600 hover:border-l-emerald-600 group hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all">
+              <div className="col-span-1 bg-white dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-700/50 shadow-sm flex flex-col justify-between hover:border-b-emerald-600 hover:border-l-emerald-600 group hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all">
                 
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
                     <CrownOutlined className="text-yellow-400 text-xl" />
-                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Шилдэг Гүйцэтгэл</span>
+                    <span className="text-[12px] font-bold text-gray-400 uppercase ">Шилдэг гүйцэтгэгч</span>
                   </div>
                   {topUsers[0] ? (
                     <div className="flex items-center gap-4">
-                     <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-800 shadow-xl">
+                     <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
                                            <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
                                          </Avatar>
                       <div className="flex flex-col min-w-0">
-                        <span className="text-lg font-black dark:text-white truncate leading-tight">{topUsers[0].ner || topUsers[0].nevtrekhNer}</span>
-                        <span className="text-[11px] font-bold opacity-80 dark:text-gray-500">{topUsers[0].albanTushaal || "Ажилтан"}</span>
+                        <span className="text-lg font-bold dark:text-white truncate leading-tight">{topUsers[0].ner || topUsers[0].nevtrekhNer}</span>
+                        <span className="text-[12px] font-bold opacity-80 dark:text-gray-500">{topUsers[0].albanTushaal || "Ажилтан"}</span>
                       </div>
                     </div>
                   ) : <span className="text-sm font-bold">Одоогоор байхгүй</span>}
                 </div>
                 <div className="relative z-10 mt-6 flex items-end justify-between ">
                   <div className="flex flex-col">
-                    <span className="text-2xl font-black tabular-nums dark:text-green-500 text-green-600">{topUsers[0]?.kpiHuvv || 0}%</span>
-                    <span className="text-[8px] font-bold uppercase opacity-60 dark:text-gray-500 text-gray-600">KPI Амжилт</span>
+                    <span className="text-2xl font-bold tabular-nums dark:text-green-500 text-green-600">{topUsers[0]?.kpiHuvv || 0}%</span>
+                    <span className="text-[12px] font-bold uppercase opacity-60 dark:text-gray-500 text-gray-600">KPI {t("Гүйцэтгэл")}</span>
                   </div>
-                  {/* <Button size="small" ghost className="border-white/40 hover:bg-white/10 text-[9px] font-black uppercase tracking-widest h-7 rounded-lg">Профайл</Button> */}
+                  {/* <Button size="small" ghost className="border-white/40 hover:bg-white/10 text-[12px] font-bold uppercase  h-7 rounded-lg">Профайл</Button> */}
                 </div>
               </div>
 
-              <div className="col-span-1 bg-white dark:bg-gray-900/50 rounded-2xl p-4 border border-gray-100 dark:border-gray-700/50 shadow-sm flex flex-col justify-between group transition-all hover:border-b-emerald-600 hover:border-l-emerald-600 hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10">
+              <div className="col-span-1 bg-white dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-700/50 shadow-sm flex flex-col justify-between group transition-all hover:border-b-emerald-600 hover:border-l-emerald-600 hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10">
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <CheckSquareOutlined className="text-emerald-500 text-xl" />
-                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Ажлын Мастер</span>
+                    <span className="text-[12px] font-bold text-gray-400 uppercase ">Ажлын мастер</span>
                   </div>
                   {(() => {
                     const master = [...users].sort((a,b) => (b.kpiDaalgavarToo || 0) - (a.kpiDaalgavarToo || 0))[0];
                     return master ? (
                       <div className="flex items-center gap-4">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-800 shadow-xl">
+                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
                           <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
                         </Avatar>
                         <div className="flex flex-col min-w-0">
-                          <span className="text-lg font-black dark:text-white truncate leading-tight">{master.ner || master.nevtrekhNer}</span>
-                          <span className="text-[11px] font-bold opacity-80 dark:text-gray-500">{master.albanTushaal || "Ажилтан"}</span>
+                          <span className="text-lg font-bold dark:text-white truncate leading-tight">{master.ner || master.nevtrekhNer}</span>
+                          <span className="text-[12px] font-bold opacity-80 dark:text-gray-500">{master.albanTushaal || "Ажилтан"}</span>
                         </div>
                       </div>
                     ) : (
@@ -456,30 +456,30 @@ function KPI() {
                     const master = [...users].sort((a,b) => (b.kpiDaalgavarToo || 0) - (a.kpiDaalgavarToo || 0))[0];
                     return (
                       <>
-                        <span className="text-2xl font-black tabular-nums text-emerald-500">{master?.kpiDaalgavarToo || 0}</span>
-                        <span className="text-[8px] font-bold uppercase opacity-60 dark:text-gray-500 text-gray-600">Нийт дуусгасан ажил</span>
+                        <span className="text-2xl font-bold tabular-nums text-emerald-500">{master?.kpiDaalgavarToo || 0}</span>
+                        <span className="text-[12px] font-bold uppercase opacity-60 dark:text-gray-500 text-gray-600">Нийт дууссан ажил</span>
                       </>
                     );
                   })()}
                 </div>
               </div>
 
-              <div className="col-span-1 bg-white dark:bg-gray-900/50 rounded-2xl p-4 border border-gray-100 dark:border-gray-700/50 shadow-sm flex flex-col justify-between hover:border-b-emerald-600 hover:border-l-emerald-600 group hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all">
+              <div className="col-span-1 bg-white dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-700/50 shadow-sm flex flex-col justify-between hover:border-b-emerald-600 hover:border-l-emerald-600 group hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all">
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <ThunderboltOutlined className="text-amber-500 text-xl" />
-                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Онооны Лидер</span>
+                    <span className="text-[12px] font-bold text-gray-400 uppercase ">Онооны тэргүүлэгч</span>
                   </div>
                   {(() => {
                     const leader = [...users].sort((a,b) => (b.kpiOnoo || 0) - (a.kpiOnoo || 0))[0];
                     return leader ? (
                       <div className="flex items-center gap-4">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800  text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-800 shadow-xl">
+                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800  text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
                           <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
                         </Avatar>
                         <div className="flex flex-col min-w-0">
-                          <span className="text-lg font-black dark:text-white truncate leading-tight">{leader.ner || leader.nevtrekhNer}</span>
-                          <span className="text-[11px] font-bold opacity-80 dark:text-gray-500">{leader.albanTushaal || "Ажилтан"}</span>
+                          <span className="text-lg font-bold dark:text-white truncate leading-tight">{leader.ner || leader.nevtrekhNer}</span>
+                          <span className="text-[12px] font-bold opacity-80 dark:text-gray-500">{leader.albanTushaal || "Ажилтан"}</span>
                         </div>
                       </div>
                     ) : (
@@ -492,31 +492,31 @@ function KPI() {
                     const leader = [...users].sort((a,b) => (b.kpiOnoo || 0) - (a.kpiOnoo || 0))[0];
                     return (
                       <>
-                        <span className="text-2xl font-black tabular-nums text-amber-500">{leader?.kpiOnoo || 0}</span>
-                        <span className="text-[8px] font-bold uppercase opacity-60 dark:text-gray-500 text-gray-600">Нийт цуглуулсан оноо</span>
+                        <span className="text-2xl font-bold tabular-nums text-amber-500">{leader?.kpiOnoo || 0}</span>
+                        <span className="text-[12px] font-bold uppercase opacity-60 dark:text-gray-500 text-gray-600">Нийт оноо</span>
                       </>
                     );
                   })()}
                 </div>
               </div>
 
-              <div className="col-span-1 bg-white dark:bg-gray-900/50 rounded-2xl p-4 border border-gray-100 dark:border-gray-700/50 shadow-sm flex flex-col justify-between group hover:-translate-y-2 hover:scale-105 hover:border-b-emerald-600 hover:border-l-emerald-600 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all relative overflow-hidden">
+              <div className="col-span-1 bg-white dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-700/50 shadow-sm flex flex-col justify-between group hover:-translate-y-2 hover:scale-105 hover:border-b-emerald-600 hover:border-l-emerald-600 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all relative overflow-hidden">
                 
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <RiseOutlined className="text-blue-500 text-xl" />
-                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Багийн Төлөв</span>
+                    <span className="text-[12px] font-bold text-gray-400 uppercase ">Багийн Төлөв</span>
                   </div>
                   <div className="flex flex-col">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-black text-blue-500 tabular-nums">{users.filter(u => (u.kpiHuvv || 0) >= avgKpi).length}</span>
+                      <span className="text-2xl font-bold text-blue-500 tabular-nums">{users.filter(u => (u.kpiHuvv || 0) >= avgKpi).length}</span>
                       <span className="text-sm font-bold text-gray-400">/ {users.length}</span>
                     </div>
-                    <span className="text-[9px] font-bold text-gray-400 uppercase mt-1">Дундажаас дээш ажилтан</span>
-                  </div>
+                    <span className="text-[12px] font-bold text-gray-400 uppercase mt-1">Дундажаас дээш ажилтан</span>
+                    </div>
                 </div>
                 <div className="mt-4 flex flex-col gap-1.5">
-                   <div className="flex items-center justify-between text-[10px] font-black">
+                   <div className="flex items-center justify-between text-[12px] font-bold">
                      <span className="text-gray-400 uppercase">Тогтвортой байдал</span>
                      <span className="text-blue-500">Үр дүнтэй</span>
                    </div>

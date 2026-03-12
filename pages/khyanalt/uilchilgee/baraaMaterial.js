@@ -7,7 +7,7 @@ import "dayjs/locale/mn";
 dayjs.locale("mn");
 import fsmApi, { FSM_BASE_URL } from "services/fsmApi";
 import { useAuth } from "services/auth";
-import { message, Form, Input, InputNumber, Modal, DatePicker, Tooltip, Popconfirm, Spin, AutoComplete } from "antd";
+import { message, Form, Input, InputNumber, Modal, DatePicker, Tooltip, Popconfirm, Spin, AutoComplete, Table, Card, Tag } from "antd";
 import { useTranslation } from "react-i18next";
 import useJagsaalt from "hooks/useJagsaalt";
 import { 
@@ -75,18 +75,18 @@ ChartJS.register(
 
 function BaraaMaterial() {
   const { t } = useTranslation();
-
+  
   const unitMap = {
-    shirheg: "Ширхэг",
-    litr: "Литр",
-    kg: "Кг",
-    haire: "Хайрцаг",
-    bogts: "Богц",
-    dana: "Дана"
+    shirheg: "ш",
+    litr: "литр",
+    kg: "кг",
+    haire: "хайрцаг",
+    bogts: "богц",
+    dana: "дан"
   };
 
   const typeMap = {
-    tseverlegch: "Цэвэрлэгч",
+    tseverlegch: "Цэвэрлэгээ",
     ugaalgiin: "Угаалгын",
     ariutgagch: "Ариутгагч",
     bagaj: "Багаж",
@@ -204,6 +204,95 @@ function BaraaMaterial() {
     }
   }, [api, token, barilgiinId]);
 
+  const columns = [
+    {
+      title: '№',
+      dataIndex: 'index',
+      key: 'index',
+      width: 50,
+      align: 'center',
+      render: (text, record, index) => <span className="text-gray-400 font-bold">{index + 1}</span>
+    },
+    {
+      title: 'Барааны нэр',
+      dataIndex: 'ner',
+      key: 'ner',
+      className: 'font-medium text-[12px]',
+      render: (text) => <span className="text-gray-800 dark:text-gray-200">{text}</span>
+    },
+    {
+      title: 'Үлдэгдэл',
+      dataIndex: 'uldegdel',
+      key: 'uldegdel',
+      align: 'center',
+      width: 100,
+      render: (val) => (
+        <span className={`font-bold text-[12px] ${val <= 0 ? 'text-red-500' : 'text-emerald-600'}`}>
+          {val || 0}
+        </span>
+      )
+    },
+    {
+      title: 'Зарцуулалт',
+      key: 'usage',
+      align: 'center',
+      width: 100,
+      render: (row) => (
+        <span className="font-semibold text-blue-500 text-[12px]">
+          {usageMap[row.ner] || 0}
+        </span>
+      )
+    },
+    {
+      title: 'Нэгж',
+      key: 'negj',
+      align: 'center',
+      width: 80,
+      render: (row) => (
+        <span className="text-gray-500 dark:text-gray-400 text-[12px]">
+          {row.negjM ? unitMap[row.negjM] : unitMap[row.negj] || row.negj}
+        </span>
+      )
+    },
+    {
+      title: 'Төрөл',
+      dataIndex: 'turul',
+      key: 'turul',
+      align: 'center',
+      width: 120,
+      render: (val) => <span className="text-gray-500 dark:text-gray-400 text-[12px]">{typeMap[val] || val}</span>
+    },
+    {
+      title: () => <SettingOutlined />,
+      key: 'action',
+      align: 'center',
+      fixed: 'right',
+      width: 60,
+      render: (row) => (
+        <Dropdown
+          menu={{
+            items: [
+              { key: '1', label: 'Засах', icon: <EditOutlined className="text-blue-500"/>, onClick: () => openEditModal(row) },
+              { key: '2', label: 'Устгах', icon: <DeleteOutlined className="text-red-500"/>, danger: true, onClick: () => {
+                Modal.confirm({
+                  title: "Устгах",
+                  content: "Та устгахдаа итгэлтэй байна уу?",
+                  okText: "Устгах",
+                  cancelText: "Цуцлах",
+                  okButtonProps: { danger: true },
+                  onOk: () => handleDeleteBaraa(row._id)
+                });
+              }},
+            ]
+          }}
+          trigger={['click']}
+        >
+          <MoreOutlined className="rotate-90 text-gray-500 cursor-pointer hover:text-black dark:hover:text-white" />
+        </Dropdown>
+      )
+    }
+  ];
+
   useEffect(() => {
     fetchBaraas();
     fetchProjects();
@@ -236,7 +325,7 @@ function BaraaMaterial() {
       }
       
       if (res.data?.success) {
-        message.success(`Төсөл амжилттай ${editingProject ? 'засагдлаа' : 'нэмэгдлээ'}`);
+        message.success(t("Амжилттай хадгаллаа"));
         await fetchProjects();
         setIsProjectModalVisible(false);
         projectForm.resetFields();
@@ -265,7 +354,7 @@ function BaraaMaterial() {
     try {
       const res = await api.delete(`/projects/${id}`);
       if (res.data?.success || res.status === 200 || res.status === 204) {
-        message.success("Төсөл амжилттай устгагдлаа");
+        message.success(t("Амжилттай устгалаа."));
         setSelectedProjectIds(prev => prev.filter(pId => pId !== id));
         await fetchProjects();
       }
@@ -443,6 +532,7 @@ function BaraaMaterial() {
     }
     return map;
   }, [usageStats, baraas]);
+  
 
   const filteredTodayUsage = useMemo(() => {
     return todayUsageStats.filter(s => baraas.some(b => b.ner === s.ner));
@@ -451,6 +541,8 @@ function BaraaMaterial() {
   const filteredOverallUsage = useMemo(() => {
     return usageStats.filter(s => baraas.some(b => b.ner === s.ner));
   }, [usageStats, baraas]);
+
+  
 
   useEffect(() => {
     if (isConnected && socket) {
@@ -518,7 +610,7 @@ function BaraaMaterial() {
       }
 
       if (res.data?.success || res.status === 200) {
-        message.success(`Бараа амжилттай ${editingBaraa ? 'шинэчлэгдлээ' : 'бүртгэгдлээ'}`);
+        message.success(t("Амжилттай хадгаллаа"));
         await fetchBaraas();
         await fetchHistory();
         setIsAddModalOpen(false);
@@ -535,7 +627,7 @@ function BaraaMaterial() {
     try {
       const res = await api.delete(`/baraas/${id}`);
       if (res.data?.success || res.status === 200) {
-        message.success("Бараа амжилттай устгагдлаа");
+        message.success(t("Амжилттай устгалаа."));
         await fetchBaraas();
         await fetchHistory();
       }
@@ -606,8 +698,8 @@ function BaraaMaterial() {
               >
                 <div className="relative h-full p-4 flex flex-col justify-between">
                   <div>
-                    <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">{card.title}</div>
-                    <div className="text-2xl font-black text-slate-800 dark:text-white">{card.value}</div>
+                    <div className="text-[12px] font-bold uppercase  text-slate-500 mb-1">{card.title}</div>
+                    <div className="text-2xl font-bold text-slate-800 dark:text-white">{card.value}</div>
                   </div>
                   <div className={`h-1 w-8 rounded-full bg-emerald-500 mt-2 opacity-30 group-hover:w-full transition-all`} />
                 </div>
@@ -631,179 +723,101 @@ function BaraaMaterial() {
               <Button
                 type="primary"
                 icon={<PlusOutlined />}
-                className="bg-emerald-500 hover:bg-emerald-600 border-none !rounded-lg text-xs font-bold shadow-md h-[36px]"
+                className="bg-green-500 hover:bg-emerald-600 border-none !rounded-lg text-xs font-bold shadow-md h-[36px]"
                 onClick={() => setIsAddModalOpen(true)}
               >
                 Бараа бүртгэх
               </Button>
               <Button
                 type="primary"
-                className="bg-emerald-500 hover:bg-emerald-600 border-none !rounded-lg text-xs font-bold shadow-md h-[36px] flex items-center gap-1"
+                className="bg-green-500 hover:bg-green-600 border-none !rounded-lg text-xs font-bold shadow-md h-[36px] flex items-center gap-1"
               >
-                <FileExcelOutlined /> Excel <DownOutlined className="text-[10px]" />
+                <FileExcelOutlined /> Excel <DownOutlined className="text-[12px]" />
               </Button>
             </Space>
           </div>
 
-          <div id="mat-table" className="border border-slate-300 dark:border-slate-700/60 rounded-xl bg-white dark:bg-gray-800 h-auto max-h-[320px] flex flex-col shadow-sm mb-6 animate-entrance-stagger-7 relative overflow-hidden shrink-0">
-            <div className="overflow-auto flex-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full">
-              <table className="w-full text-left text-[11.5px] text-gray-800 dark:text-gray-300 border-collapse whitespace-nowrap min-w-max">
-                <thead className="bg-gray-100 dark:bg-gray-900 dark:text-white text-black sticky top-0 z-10">
-                  <tr>
-                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center w-8">№</th>
-                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium">Нэр</th>
-                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium">Үлдэгдэл</th>
-                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium">Ашиглалт</th>
-                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 text-center font-medium w-16">Х/нэгж</th>
-                    <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center">Төрөл</th>
-                    {/* <th className="px-3 py-2.5 border-b border-r border-slate-300 dark:border-slate-700/60 font-medium text-center">Статус</th> */}
-                    <th className="px-2 py-2.5 border-b border-slate-300 dark:border-slate-700/60 text-center font-medium w-10">
-                      <SettingOutlined className="text-black dark:text-gray-400" />
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredBaraas.map((row, i) => {
-                    const usage = usageMap[row.ner] || 0;
-                    const isOut = (row.uldegdel || 0) <= 0;
-                    return (
-                    <tr key={row._id} className={`hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors border-b border-slate-300 dark:border-slate-700/60 last:border-b-0 group`}>
-                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center w-8 text-gray-400 font-bold">{i + 1}</td>
-                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 font-medium">{row.ner}</td>
-                      <td className={`px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center font-bold ${isOut ? 'text-red-500' : 'text-emerald-600'}`}>{row.uldegdel || 0}</td>
-                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center font-semibold text-blue-500">{usage}</td>
-                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-500">{row.negjM ? unitMap[row.negjM] : unitMap[row.negj] || row.negj}</td>
-                      <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center text-gray-500">{typeMap[row.turul] || row.turul}</td>
-                      {/* <td className="px-3 py-2 border-r border-slate-300 dark:border-slate-700/60 text-center">
-                        {isOut ? (
-                          <span className="px-2 py-0.5 bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded-full text-[9px] font-black uppercase">Дууссан</span>
-                        ) : (
-                          <span className="px-2 py-0.5 bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400 rounded-full text-[9px] font-black uppercase">Үлдэгдэлтэй</span>
-                        )}
-                      </td> */}
-                      <td className="px-2 py-2 text-center w-10">
-                        <Dropdown
-                          menu={{
-                            items: [
-                              { key: '1', label: 'Засах', icon: <EditOutlined className="text-blue-500"/>, onClick: () => openEditModal(row) },
-                              { key: '2', label: 'Устгах', icon: <DeleteOutlined className="text-red-500"/>, danger: true, onClick: () => {
-                                Modal.confirm({
-                                  title: 'Бараа устгах',
-                                  content: 'Та энэ барааг устгахдаа итгэлтэй байна уу?',
-                                  okText: 'Устгах',
-                                  cancelText: 'Цуцлах',
-                                  okButtonProps: { danger: true },
-                                  onOk: () => handleDeleteBaraa(row._id)
-                                });
-                              }},
-                            ]
-                          }}
-                          trigger={['click']}
-                        >
-                          <MoreOutlined className="rotate-90 text-gray-500 cursor-pointer group-hover:text-black dark:group-hover:text-white" />
-                        </Dropdown>
-                      </td>
-                    </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+          <Card size="small" className="shadow-sm border-gray-200 dark:border-gray-800 dark:bg-gray-800 rounded-xl overflow-hidden animate-entrance-stagger-7">
+            <div className="overflow-x-auto">
+              <Table
+                columns={columns}
+                dataSource={filteredBaraas}
+                rowKey="_id"
+                size="small"
+                bordered
+                scroll={{ x: 'max-content', y: 400 }}
+                loading={loading}
+                className="ant-table-custom"
+                rowClassName="hover:bg-slate-50 dark:hover:bg-slate-700/40"
+              />
             </div>
-
-            <div className="dark:bg-gray-800 border-t border-slate-300 dark:border-slate-700/60 text-black dark:text-white font-bold shrink-0 sticky bottom-0">
-              <table className="w-full text-left text-[12.5px] whitespace-nowrap">
-                <tbody>
-                  <tr>
-                    <td className="px-3 py-3 w-8 text-center"></td>
-                    <td className="px-3 py-3 w-10 text-center"></td>
-                    <td className="px-3 py-3"></td>
-                    <td className="px-3 py-3 text-center"></td>
-                    <td className="px-3 py-3 text-center"></td>
-                    <td className="px-3 py-3 text-center"></td>
-                    <td className="px-3 py-3 text-center"></td>
-                    <td className="px-3 py-3 text-center"></td>
-                    <td className="px-2 py-3 text-center w-10"></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          </Card>
           <div id="mat-usage-dashboard" className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-entrance-stagger-8 flex-1 min-h-0 mb-4">
             {/* Panel 1: Today's Usage Graphic */}
-            <div className="bg-white dark:bg-gray-900/40 rounded-[2rem] p-6 border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-col min-h-[250px] xl:h-auto group">
-              <div className="flex items-center justify-between mb-6">
-                 <div>
-                    <h3 className="text-[14px] font-black text-slate-800 dark:text-slate-100 uppercase flex items-center gap-2">
-                       {/* <AreaChartOutlined className="text-emerald-500" /> */}
-                       Өнөөдрийн ашиглалт
-                    </h3>
-                    {/* <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Today Performance</p> */}
-                 </div>
-                 <div className="text-right">
-                    <span className="text-2xl font-black text-slate-800 dark:text-white tabular-nums">{filteredTodayUsage.reduce((acc, s) => acc + (s.too || 0), 0)}</span>
-                    <span className="text-[10px] text-slate-400 font-bold block">Нийт ширхэг</span>
-                 </div>
+            {/* Panel 1: Today's Usage Graphic */}
+<div className="bg-white dark:bg-gray-900 rounded-[2rem] p-6 border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-col min-h-[250px] xl:h-auto group">
+  <div className="flex items-center justify-between mb-6">
+    <div>
+      <h3 className="text-[14px] font-bold text-slate-800 dark:text-slate-100 uppercase flex items-center gap-2">
+        Өнөөдрийн зарцуулалт
+      </h3>
+    </div>
+
+  </div>
+
+  <div className="flex-1 min-h-0 relative">
+    {loadingStats ? (
+      <Spin size="large" />
+    ) : filteredTodayUsage.length > 0 ? (
+      <div className="w-full h-full flex flex-col gap-4 mt-2">
+        {filteredTodayUsage.slice(0, 5).map((s, idx) => {
+          const maxVal = Math.max(...filteredTodayUsage.map(i => i.too || 1));
+          const percent = ((s.too || 0) / maxVal) * 100;
+          const colors = [
+            { from: '#10b981', to: '#34d399' },
+          ];
+          const color = colors[idx % colors.length];
+          return (
+            <div key={idx} className="flex flex-col gap-1.5 group/usage">
+              <div className="flex justify-between items-center pr-2">
+                <span className="text-[12px] font-bold text-slate-700 dark:text-slate-200 truncate">{s.ner}</span>
+                <span className="text-[12px] font-bold text-slate-400 dark:text-slate-500 tabular-nums">{s.too}ш</span>
               </div>
-              
-              <div className="flex-1 flex items-center justify-center relative min-h-0">
-                {loadingStats ? (
-                  <Spin size="large" />
-                ) : filteredTodayUsage.length > 0 ? (
-                  <div className="w-full h-full flex items-center gap-4">
-                    <div className="w-1/2 h-full relative">
-                      <Doughnut 
-                        data={{
-                          labels: filteredTodayUsage.map(s => s.ner),
-                          datasets: [{
-                            data: filteredTodayUsage.map(s => s.too),
-                            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'],
-                            borderWidth: 2,
-                            cutout: '70%',
-                          }]
-                        }}
-                        options={{
-                          plugins: { legend: { display: false }, datalabels: { display: false } },
-                          maintainAspectRatio: false,
-                        }}
-                      />
-                      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                         <span className="text-xl font-black text-emerald-500">{filteredTodayUsage.length}</span>
-                         <span className="text-[8px] font-black text-slate-400 uppercase tracking-tighter">Төрөл</span>
-                      </div>
-                    </div>
-                    <div className="w-1/2 flex flex-col gap-2 overflow-y-auto max-h-full pr-2 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-200">
-                      {filteredTodayUsage.map((s, idx) => (
-                        <div key={idx} className="flex items-center justify-between group/item">
-                           <div className="flex items-center gap-2 min-w-0">
-                              <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'][idx % 7] }}></div>
-                              <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 truncate">{s.ner}</span>
-                           </div>
-                           <span className="text-[10px] font-black text-slate-800 dark:text-gray-400 tabular-nums">{s.too}ш</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center text-slate-300 dark:text-slate-700 opacity-50">
-                    <PieChartOutlined className="text-5xl mb-2" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-center leading-tight">Дата олдсонгүй</span>
-                  </div>
-                )}
+              <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800/50 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-700 ease-out shadow-sm"
+                  style={{
+                    width: `${percent}%`,
+                    background: `linear-gradient(90deg, ${color.from}, ${color.to})`,
+                    boxShadow: idx === 0 ? `0 0 12px ${color.from}4d` : 'none'
+                  }}
+                />
               </div>
             </div>
+          );
+        })}
+      </div>
+    ) : (
+      <div className="h-full flex flex-col items-center justify-center text-slate-300 dark:text-slate-700 opacity-50">
+        <PieChartOutlined className="text-5xl mb-2" />
+        <span className="text-[12px] font-bold uppercase  text-center leading-tight">Дата олдсонгүй</span>
+      </div>
+    )}
+  </div>
+</div>
 
             {/* Panel 2: Overall Top Materials Graphic */}
-            <div className="bg-white dark:bg-gray-900/40 rounded-[2rem] p-6 border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-col min-h-[250px] xl:h-auto group">
+            <div className="bg-white dark:bg-gray-900 rounded-[2rem] p-6 border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-col min-h-[250px] xl:h-auto group">
                <div className="flex items-center justify-between mb-6">
                  <div>
-                    <h3 className="text-[14px] font-black text-slate-800 dark:text-slate-100 uppercase flex items-center gap-2">
+                    <h3 className="text-[14px] font-bold text-slate-800 dark:text-slate-100 uppercase flex items-center gap-2">
                        {/* <ThunderboltOutlined className="text-amber-500" /> */}
-                       Их ашиглалт
+                       Их ашиглалттай бараа материал
                     </h3>
-                    {/* <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Top Consumers</p> */}
+                    {/* <p className="text-[12px] text-slate-400 font-bold uppercase r mt-0.5">Top Consumers</p> */}
                  </div>
                  {/* <div className="bg-amber-50 dark:bg-amber-500/10 px-3 py-1 rounded-full">
-                    <span className="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-tighter italic">Hot List</span>
+                    <span className="text-[12px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-tighter italic">Hot List</span>
                  </div> */}
               </div>
 
@@ -816,15 +830,15 @@ function BaraaMaterial() {
                       return (
                         <div key={idx} className="flex flex-col gap-1.5 group/usage">
                           <div className="flex justify-between items-center pr-2">
-                            <span className="text-[12px] font-black text-slate-700 dark:text-slate-200 truncate">{s.ner}</span>
-                            <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 tabular-nums">{s.too}ш</span>
+                            <span className="text-[12px] font-bold text-slate-700 dark:text-slate-200 truncate">{s.ner}</span>
+                            <span className="text-[12px] font-bold text-slate-400 dark:text-slate-500 tabular-nums">{s.too}ш</span>
                           </div>
                           <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800/50 rounded-full overflow-hidden relative">
                             <div 
                               className="h-full rounded-full transition-all duration-700 ease-out shadow-sm"
                               style={{ 
                                 width: `${percent}%`, 
-                                background: idx === 0 ? 'linear-gradient(90deg, #3b82f6, #60a5fa)' : 'linear-gradient(90deg, #94a3b8, #cbd5e1)',
+                                background: idx === 0 ? 'linear-gradient(90deg, #3b82f6, #60a5fa)' : 'linear-gradient(90deg, #3b82f6, #cbd5e1)',
                                 boxShadow: idx === 0 ? '0 0 12px rgba(59, 130, 246, 0.3)' : 'none'
                               }}
                             />
@@ -836,7 +850,7 @@ function BaraaMaterial() {
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center text-slate-300 dark:text-slate-700 opacity-50">
                     <BarChartOutlined className="text-5xl mb-2" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Түүх олдсонгүй</span>
+                    <span className="text-[12px] font-bold uppercase ">Түүх олдсонгүй</span>
                   </div>
                 )}
               </div>
@@ -848,25 +862,23 @@ function BaraaMaterial() {
 
 
         <div className={`transition-all duration-300 flex flex-col shrink-0 z-20 ${isRightPanelExpanded ? 'w-full xl:w-[340px] opacity-100 h-auto xl:h-[calc(102vh-6rem)]' : 'w-0 opacity-0 whitespace-nowrap overflow-hidden'}`}>  
-          <div className="flex-1 m-3 bg-white dark:bg-[#1f2636] rounded-[2rem] border border-slate-100 dark:border-slate-800/60 shadow-2xl flex flex-col overflow-hidden">
+          <div className="flex-1 m-3 bg-white dark:bg-gray-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/60 shadow-2xl flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-auto w-full flex flex-col [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
               
-              <div className="flex items-center justify-end p-4 pb-0 shrink-0">
-                <Button type="text" size="small" className="hover:!bg-slate-600/50 hover:text-white transition-all rounded-md px-1 w-6 h-6 border border-slate-700/50" icon={<CloseOutlined className="text-gray-400 text-[10px]" />} onClick={() => setIsRightPanelExpanded(false)} />
-              </div>
+
 
               {/* 1. Projects Section */}
               <div className="flex flex-col p-4 space-y-3 shrink-0">
                 <div className="flex items-center justify-between px-1">
-                  <div className="text-[11px] font-extrabold text-gray-400 mb-2 flex items-center tracking-wide uppercase opacity-70">
+                  <div className="text-[12px] font-bold text-gray-400 mb-2 flex items-center  uppercase opacity-70">
                     <span>Төслүүд</span>
                   </div>
                   <Button
                     type="text"
                     size="small"
                     onClick={() => setIsProjectModalVisible(true)}
-                    icon={<PlusOutlined className="text-emerald-400 text-[10px]" />}
-                    className="!text-emerald-400 text-[10px] font-bold hover:!bg-emerald-500/10 rounded-lg"
+                    icon={<PlusOutlined className="text-white text-[12px]" />}
+                    className="!text-white text-[12px] bg-green-500 font-bold hover:!bg-emerald-500/10 rounded-lg"
                   >
                     Нэмэх
                   </Button>
@@ -876,11 +888,11 @@ function BaraaMaterial() {
                   {loadingProjects ? (
                     <div className="flex justify-center py-4"><Spin size="small" /></div>
                   ) : projects.length === 0 ? (
-                    <div className="text-center text-gray-400 text-[11px] py-4 font-medium">Төсөл байхгүй байна</div>
+                    <div className="text-center text-gray-400 text-[12px] py-4 font-medium">Төсөл байхгүй байна</div>
                   ) : (
                     projects.map(p => (
                       <div key={p.id} className="flex items-center space-x-3 cursor-pointer group hover:bg-emerald-50 dark:hover:bg-emerald-500/10 px-3 py-2.5 rounded-2xl transition-all duration-300 border border-transparent hover:border-emerald-200/50 dark:hover:border-emerald-500/20 shadow-sm hover:shadow-md">
-                        <div className="w-8 h-8 flex items-center justify-center rounded-xl text-[11px] font-extrabold text-white shadow-lg shrink-0 transform group-hover:scale-110 transition-transform" style={{ backgroundColor: p.color || "#10B981" }}>
+                        <div className="w-8 h-8 flex items-center justify-center rounded-xl text-[12px] font-bold text-white shadow-lg shrink-0 transform group-hover:scale-110 transition-transform" style={{ backgroundColor: p.color || "#10B981" }}>
                           {(p.name || "").slice(0, 2).toUpperCase()}
                         </div>
                         <div className="flex flex-col flex-1 min-w-0">
@@ -907,19 +919,19 @@ function BaraaMaterial() {
 
               {/* 2. Team Section */}
               <div className="flex flex-col p-4 shrink-0">
-                <div className="text-[11px] font-extrabold text-gray-400 mb-3 px-1 flex items-center tracking-wide uppercase opacity-70">
+                <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center  uppercase opacity-70">
                   <span>Ажилчид</span>
                 </div>
                 <div className="max-h-[300px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                   {teamMembers.map((member, i) => (
                     <div key={i} className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md">
                       <div className="flex items-center space-x-4 w-full">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-400 to-teal-600 dark:from-emerald-700 dark:to-teal-900 text-white text-[12px] font-black border-2 border-white dark:border-gray-800 shadow-xl shrink-0">
+                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-400 to-teal-600 dark:from-emerald-700 dark:to-teal-900 text-white text-[12px] font-bold border-2 border-white dark:border-gray-800 shadow-xl shrink-0">
                           {(member.name || "").slice(0, 1).toUpperCase()}
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1 justify-center">
                           <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
-                          <div className="text-[10px] text-gray-500 font-medium leading-tight mt-1 opacity-70 uppercase tracking-widest">{member.role}</div>
+                          <div className="text-[12px] text-gray-500 font-medium leading-tight mt-1 opacity-70 uppercase ">{member.role}</div>
                         </div>
                       </div>
                     </div>
@@ -932,7 +944,7 @@ function BaraaMaterial() {
               {/* 3. History Section */}
               <div className="flex flex-col p-4 shrink-0">
                 <div className="flex items-center justify-between mb-3 px-1">
-                  <div className="text-[11px] font-extrabold text-gray-400 flex items-center tracking-wide uppercase opacity-70">
+                  <div className="text-[12px] font-bold text-gray-400 flex items-center  uppercase opacity-70">
                     <span>Түүх</span>
                   </div>
                 </div>
@@ -940,12 +952,12 @@ function BaraaMaterial() {
                   {loadingHistory ? (
                     <div className="flex justify-center py-4"><Spin size="small" /></div>
                   ) : history.length === 0 ? (
-                    <div className="text-center text-gray-400 text-[11px]">Түүх байхгүй байна</div>
+                    <div className="text-center text-gray-400 text-[12px]">Түүх байхгүй байна</div>
                   ) : (
                     history.slice(0, 10).map((act) => (
                       <div key={act._id || act.id} className="hover:scale-105 relative pl-5 before:content-[''] before:absolute before:left-[5px] before:top-4 before:w-[1px] before:h-[130%] before:bg-slate-400/30 dark:before:bg-slate-600/30 last:before:hidden transition-all">
                         <div className="absolute left-0 top-1 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-800 z-10 shadow-sm"></div>
-                        <div className="text-[10px] leading-relaxed">
+                        <div className="text-[12px] leading-relaxed">
                           {act.ajiltniiNer && <span className="text-gray-500 dark:text-gray-400 font-bold">{act.ajiltniiNer} </span>}
                           <span className="text-gray-400 font-medium">
                             {act.uildelText || (
@@ -958,9 +970,9 @@ function BaraaMaterial() {
                               (act.uildel || 'үйлдэл хийлээ')
                             )}
                           </span>
-                          {act.taskNer && <span className="text-emerald-500 font-extrabold ml-1">{act.taskNer}</span>}
+                          {act.taskNer && <span className="text-emerald-500 font-bold ml-1">{act.taskNer}</span>}
                         </div>
-                        <div className="text-[9px] text-gray-500 mt-0.5 font-medium opacity-70">
+                        <div className="text-[12px] text-gray-500 mt-0.5 font-medium opacity-70">
                           {act.createdAt ? dayjs(act.createdAt).format("MM/DD HH:mm") : "--:--"}
                         </div>
                       </div>
@@ -975,22 +987,22 @@ function BaraaMaterial() {
                   onClick={() => setIsTutorialOpen(true)}
                 >
                     <QuestionCircleOutlined className="text-gray-700 dark:text-gray-300 text-[14px] group-hover:text-white transition-colors" />
-                    <span className="text-gray-700 dark:text-gray-300 text-[11px] font-bold group-hover:text-white transition-colors">Тусламж</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-[12px] font-bold group-hover:text-white transition-colors">Тусламж</span>
                 </div>
             </div>
           </div>
         </div>
 
-        {typeof window !== 'undefined' && !isRightPanelExpanded && createPortal(
+        {typeof window !== 'undefined' && createPortal(
           <button 
-            className="fixed right-0 top-1/2 -translate-y-1/2 bg-green-600 dark:bg-green-900 border border-green-700/60 w-8 h-12 rounded-l-lg flex flex-col items-center justify-center cursor-pointer shadow-xl hover:bg-green-500 hover:-translate-x-1 transition-all z-[99999]"
+            className="fixed right-0 top-1/2 -translate-y-1/2 bg-green-600 dark:bg-green-900 border border-green-700/60 w-8 h-12 rounded-l-lg flex flex-col items-center justify-center cursor-pointer shadow-xl hover:bg-green-500 transition-all z-[99999]"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              setIsRightPanelExpanded(true);
+              setIsRightPanelExpanded(!isRightPanelExpanded);
             }}
           >
-            <RightOutlined className="text-white dark:text-gray-300 text-[10px] rotate-180" />
+            <RightOutlined className={`text-white dark:text-gray-300 text-[12px] transition-transform duration-300 ${isRightPanelExpanded ? "rotate-0" : "rotate-180"}`} />
           </button>,
           document.body
         )}
@@ -1005,7 +1017,7 @@ function BaraaMaterial() {
             }}
             onOk={() => form.submit()}
             okText="Хадгалах"
-            cancelText="Цуцлах"
+            cancelText="Болих"
             okButtonProps={{ className: "bg-emerald-500 hover:bg-emerald-400 border-none" }}
           >
             <Form 
@@ -1021,7 +1033,7 @@ function BaraaMaterial() {
                 <Form.Item name="turul" label="Төрөл">
                   <AutoComplete
                     options={[
-                      { value: "Цэвэрлэгч" },
+                      { value: "Цэвэрлэгээ" },
                       { value: "Угаалгын" },
                       { value: "Ариутгагч" },
                       { value: "Багаж" },
@@ -1031,19 +1043,19 @@ function BaraaMaterial() {
                       option.value.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                     }
                   >
-                    <Input className="rounded-lg" placeholder="Төрөл бичих эсвэл сонгох" />
+                    <Input className="rounded-lg" placeholder="Төрөл бичих..." />
                   </AutoComplete>
                 </Form.Item>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <Form.Item name="negj" label="Хэмжих нэгж" initialValue="shirheg">
+                <Form.Item name="negj" label="Нэгж" initialValue="shirheg">
                   <Select placeholder="Сонгох">
-                      <Select.Option value="shirheg">Ширхэг</Select.Option>
-                      <Select.Option value="litr">Литр</Select.Option>
-                      <Select.Option value="kg">Кг</Select.Option>
-                      <Select.Option value="haire">Хайрцаг</Select.Option>
-                      <Select.Option value="bogts">Богц</Select.Option>
-                      <Select.Option value="dana">Дана</Select.Option>
+                      <Select.Option value="shirheg">ш</Select.Option>
+                      <Select.Option value="litr">литр</Select.Option>
+                      <Select.Option value="kg">кг</Select.Option>
+                      <Select.Option value="haire">хайрцаг</Select.Option>
+                      <Select.Option value="bogts">богц</Select.Option>
+                      <Select.Option value="dana">дан</Select.Option>
                   </Select>
                 </Form.Item>
                 <Form.Item name="uldegdel" label="Үлдэгдэл" initialValue={0}>
@@ -1075,30 +1087,30 @@ function BaraaMaterial() {
             <Form form={projectForm} layout="vertical" onFinish={handleCreateProject} className="space-y-6">
               <Form.Item 
                 name="name" 
-                label={<span className="text-gray-400 text-[10px] font-black uppercase pl-1">Төслийн нэр</span>}
+                label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">{t("uilchilgee.project_name")}</span>}
                 required
-                rules={[{ required: true, message: 'Төслийн нэр оруулна уу' }]}
+                rules={[{ required: true, message: t("uilchilgee.project_name") + ' ' + t("Нэр оруулна уу!") }]}
               >
-                <Input placeholder="Жишээ нь: Барилга А засвар" className="h-12 rounded-xl" />
+                <Input placeholder={t("uilchilgee.project_placeholder")} className="h-12 rounded-xl" />
               </Form.Item>
     
               <Form.Item 
                 name="tailbar" 
-                label={<span className="text-gray-400 text-[10px] font-black uppercase pl-1">Тайлбар</span>}
+                label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">{t("uilchilgee.description")}</span>}
               >
-                <Input.TextArea placeholder="Төслийн дэлгэрэнгүй тайлбар..." className="rounded-xl" rows={2} />
+                <Input.TextArea placeholder={t("uilchilgee.desc_placeholder")} className="rounded-xl" rows={2} />
               </Form.Item>
               
               <div className="grid grid-cols-2 gap-4">
                 <Form.Item 
                   name="ekhlekhOgnoo" 
-                  label={<span className="text-gray-400 text-[10px] font-black uppercase pl-1">Эхлэх өдөр</span>}
+                  label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">{t("uilchilgee.start_date")}</span>}
                 >
                   <DatePicker className="w-full h-12 rounded-xl" format="YYYY-MM-DD" />
                 </Form.Item>
                 <Form.Item 
                   name="duusakhOgnoo" 
-                  label={<span className="text-gray-400 text-[10px] font-black uppercase  pl-1">Дуусах өдөр</span>}
+                  label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">{t("uilchilgee.end_date")}</span>}
                 >
                   <DatePicker className="w-full h-12 rounded-xl" format="YYYY-MM-DD" />
                 </Form.Item>
@@ -1106,7 +1118,7 @@ function BaraaMaterial() {
     
               <Form.Item 
                 name="color" 
-                label={<span className="text-gray-400 text-[10px] font-black uppercase  pl-1">Өнгө</span>}
+                label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">Өнгө</span>}
                 initialValue="#10B981"
               >
                 <Select className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex [&_.ant-select-selection-item]:!flex [&_.ant-select-selection-item]:!items-center">
@@ -1154,12 +1166,12 @@ function BaraaMaterial() {
         <div className="flex flex-col h-full bg-white dark:bg-[#1b212f]">
           <div className="flex items-center justify-between px-5 py-4 border-b dark:border-gray-800 shrink-0 bg-emerald-600 dark:bg-[#1b212f]">
             <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-extrabold text-white shadow-lg" style={{ backgroundColor: selectedProjectForChat?.color || '#10B981' }}>
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[12px] font-bold text-white shadow-lg" style={{ backgroundColor: selectedProjectForChat?.color || '#10B981' }}>
                 {(selectedProjectForChat?.name || selectedProjectForChat?.ner || '').slice(0, 2).toUpperCase()}
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-bold text-white leading-tight">{selectedProjectForChat?.name || selectedProjectForChat?.ner}</span>
-                <span className="text-[10px] text-emerald-100 dark:text-emerald-400 font-semibold uppercase tracking-wide">Төслийн чат</span>
+                <span className="text-[12px] text-emerald-100 dark:text-emerald-400 font-semibold uppercase ">Төслийн чат</span>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -1171,7 +1183,7 @@ function BaraaMaterial() {
             {loadingProjectChat ? (
               <div className="flex flex-col items-center justify-center h-full space-y-3">
                 <Spin size="large" />
-                <span className="text-xs font-semibold uppercase tracking-widest animate-pulse text-gray-500">Уншиж байна...</span>
+                <span className="text-xs font-semibold uppercase  animate-pulse text-gray-500">Уншиж байна...</span>
               </div>
             ) : projectChatMessages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full space-y-4 opacity-50">
@@ -1190,7 +1202,7 @@ function BaraaMaterial() {
                   if (msg.isDeleted) {
                     return (
                       <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2`}>
-                         <div className={`px-4 py-2 bg-gray-800/50 border border-dashed border-gray-700 rounded-xl text-[11px] text-gray-500 italic`}>
+                         <div className={`px-4 py-2 bg-gray-800/50 border border-dashed border-gray-700 rounded-xl text-[12px] text-gray-500 italic`}>
                            Мессеж устгагдлаа
                          </div>
                       </div>
@@ -1199,16 +1211,16 @@ function BaraaMaterial() {
                   return (
                     <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2 group`}>
                       {!isMe && (
-                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-300 to-gray-500 dark:from-emerald-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-800 shadow-xl">
+                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-300 to-gray-500 dark:from-emerald-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
                           <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
                         </Avatar>
                       )}
                       <div className={`flex flex-col max-w-[80%] ${isMe ? 'items-end' : 'items-start'}`}>
-                        {!isMe && <span className="text-[10px] font-bold text-gray-400 mb-1 ml-1">{msg.ajiltniiNer}</span>}
+                        {!isMe && <span className="text-[12px] font-bold text-gray-400 mb-1 ml-1">{msg.ajiltniiNer}</span>}
                         
                         {/* Reply content */}
                         {msg.replyTo?.chatId && (
-                           <div className={`mb-1 px-3 py-1 bg-gray-100 dark:bg-gray-800/50 border-l-2 border-emerald-500 rounded-r-lg text-[10px] truncate max-w-full ${isMe ? 'mr-1' : 'ml-1'}`}>
+                           <div className={`mb-1 px-3 py-1 bg-gray-100 dark:bg-gray-800/50 border-l-2 border-emerald-500 rounded-r-lg text-[12px] truncate max-w-full ${isMe ? 'mr-1' : 'ml-1'}`}>
                              <span className="text-emerald-600 dark:text-emerald-400 font-bold mr-1">{msg.replyTo.ajiltniiNer}:</span>
                              <span className="text-gray-500 dark:text-gray-400">{msg.replyTo.medeelel || "(медиа)"}</span>
                            </div>
@@ -1228,7 +1240,7 @@ function BaraaMaterial() {
                               const path = msg.fileZam || msg.fileUrl || msg.path || "";
                               const url = path.startsWith('http') ? path : (path.startsWith('/') ? `${FSM_BASE_URL}${path}` : `${FSM_BASE_URL}/${path}`);
                               return (
-                                <Image src={url} alt="img" className="max-w-[240px] max-h-[300px] object-cover rounded-xl cursor-pointer" preview={{ mask: <div className="text-[10px]">Томруулах</div> }} />
+                                <Image src={url} alt="img" className="max-w-[240px] max-h-[300px] object-cover rounded-xl cursor-pointer" preview={{ mask: <div className="text-[12px]">Томруулах</div> }} />
                               );
                             })() : msg.turul === 'file' && (msg.fileZam || msg.fileUrl || msg.path) ? (() => {
                               const path = msg.fileZam || msg.fileUrl || msg.path || "";
@@ -1267,7 +1279,7 @@ function BaraaMaterial() {
                             </div>
                           </div>
                         )}
-                        <span className={`text-[9px] text-gray-600 mt-1 ${isMe ? 'mr-1' : 'ml-1'}`}>
+                        <span className={`text-[12px] text-gray-600 mt-1 ${isMe ? 'mr-1' : 'ml-1'}`}>
                           {dayjs(msg.createdAt).format('MM/DD HH:mm')}
                           {msg.isEdited && <span className="ml-1 italic text-gray-500">(зассан)</span>}
                         </span>
@@ -1284,17 +1296,17 @@ function BaraaMaterial() {
             {replyToProject && (
               <div className="mb-2 flex items-center justify-between px-3 py-1.5 bg-emerald-900/30 border border-emerald-700/40 rounded-xl relative">
                 <div className="flex flex-col overflow-hidden">
-                   <span className="text-[9px] font-bold text-emerald-400 uppercase">{replyToProject.ajiltniiNer}-д хариулах</span>
-                   <span className="text-[10px] text-gray-400 truncate max-w-[300px]">{replyToProject.medeelel || "(медиа)"}</span>
+                   <span className="text-[12px] font-bold text-emerald-400 uppercase">{replyToProject.ajiltniiNer}-д хариулах</span>
+                   <span className="text-[12px] text-gray-400 truncate max-w-[300px]">{replyToProject.medeelel || "(медиа)"}</span>
                 </div>
-                <Button type="text" size="small" icon={<CloseOutlined className="text-[10px] text-gray-500" />} onClick={() => setReplyToProject(null)} />
+                <Button type="text" size="small" icon={<CloseOutlined className="text-[12px] text-gray-500" />} onClick={() => setReplyToProject(null)} />
               </div>
             )}
             {selectedProjectChatFile && (
               <div className="mb-2 flex items-center px-3 py-1.5 bg-emerald-900/30 border border-emerald-700/40 rounded-xl relative w-max">
                 <PaperClipOutlined className="text-emerald-400 mr-2" />
                 <span className="text-xs font-semibold text-emerald-300 truncate max-w-[200px]">{selectedProjectChatFile.name}</span>
-                <Button type="text" size="small" icon={<CloseOutlined className="text-[10px] text-gray-500" />} className="absolute right-1" onClick={() => setSelectedProjectChatFile(null)} />
+                <Button type="text" size="small" icon={<CloseOutlined className="text-[12px] text-gray-500" />} className="absolute right-1" onClick={() => setSelectedProjectChatFile(null)} />
               </div>
             )}
             <div className="relative flex items-center bg-[#f3f4f6] dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700/60 shadow-inner overflow-hidden">

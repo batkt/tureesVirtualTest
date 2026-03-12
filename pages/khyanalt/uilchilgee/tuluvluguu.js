@@ -184,7 +184,7 @@ function Tuluvluguu() {
     const rowHeight = 48;
     
     const colWidth = 100 / totalCols;
-    const margin = 2;
+    const margin = 1;
 
     return {
       position: 'absolute',
@@ -277,10 +277,10 @@ function Tuluvluguu() {
   };
 
   const tutorialSteps = [
-    { targetId: "cal-stats", title: "Статистик", description: "Нийт төсөл болон ажлын явцыг эндээс нэгдсэн байдлаар харж болно." },
-    { targetId: "cal-sidebar", title: "Төслүүд", description: "Төслүүдээ төрөлжүүлэн харах, шинэ төсөл нэмэх болон хайлт хийх хэсэг." },
-    { targetId: "cal-views", title: "Харагдац", description: "Сар, долоо хоног, өдрөөрх харагдацыг эндээс хурдан сольж болно." },
-    { targetId: "cal-main", title: "Хуанли", description: "Ажлуудаа хуанли дээр хянах, шинэ ажил нэмэх үндсэн хэсэг. Тухайн өдөр дээр дарж шинэ ажил үүсгэнэ үү." },
+    { targetId: "cal-stats", title: t("Статистик"), description: t("Нийт төсөл болон ажлын явцыг эндээс нэгдсэн байдлаар харж болно.") },
+    { targetId: "cal-sidebar", title: t("Төслүүд"), description: t("Төслүүдээ төрөлжүүлэн харах, шинэ төсөл нэмэх болон хайлт хийх хэсэг.") },
+    { targetId: "cal-views", title: t("Харагдац"), description: t("Сар, долоо хоног, өдрөөрх харагдацыг эндээс хурдан сольж болно.") },
+    { targetId: "cal-main", title: t("Хуанли"), description: t("Ажлуудаа хуанли дээр хянах, шинэ ажил нэмэх үндсэн хэсэг. Тухайн өдөр дээр дарж шинэ ажил үүсгэнэ үү.") },
   ];
 
   const ajiltanJagsaalt = useJagsaalt("/ajiltan");
@@ -614,7 +614,7 @@ function Tuluvluguu() {
         baraa: (values.baraa || []).map(b => {
           const item = baraas.find(i => i._id === b.baraaId);
           const une = b.une || item?.zarakhUne || 0;
-          const too = b.too || 0;
+          const too = Math.abs(Number(b.too) || 0);
           return {
             baraaId: b.baraaId,
             ner: b.ner || item?.ner || "",
@@ -1402,11 +1402,11 @@ useEffect(() => {
         </div>
 
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 min-h-0">
-          <div id="cal-sidebar" className="flex w-full lg:w-64 flex-col border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1f2937] p-4 shrink-0 max-h-[300px] lg:max-h-none animate-entrance-stagger-6">
+          <div id="cal-sidebar" className="flex w-full lg:w-64 flex-col border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4 shrink-0 max-h-[300px] lg:max-h-none animate-entrance-stagger-6">
           
-          <div className="flex-1 border-r border-gray-200 dark:border-gray-700 rounded-lg border-b overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700 [&::-webkit-scrollbar-thumb]:rounded-full">
+          <div className="flex-1 dark:bg-gray-900 p-2 border-r border-l border-t border-white dark:border-gray-900 rounded-lg border-b overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700 [&::-webkit-scrollbar-thumb]:rounded-full">
             <div className="flex items-center justify-between mb-4 px-1">
-              <div className="flex items-center space-x-2 text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+              <div className="flex items-center space-x-2 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase ">
                 <Checkbox 
                   checked={projects.length > 0 && selectedProjectIds.length === projects.length} 
                   indeterminate={selectedProjectIds.length > 0 && selectedProjectIds.length < projects.length}
@@ -1423,10 +1423,10 @@ useEffect(() => {
                     type="text"
                     size="small"
                     onClick={() => setIsProjectModalVisible(true)}
-                    icon={<PlusOutlined className="text-emerald-400 text-[10px]" />}
-                    className="!text-emerald-400  text-[10px] font-bold hover:!bg-emerald-500/10 rounded-lg mt-1"
+                    icon={<PlusOutlined className="text-white text-[12px]" />}
+                    className="!text-white text-[12px] font-bold hover:!bg-emerald-500/10 bg-green-500 rounded-lg mt-1"
                   >
-                    Нэмэх
+                    
                   </Button>
             </div>
             <div className="space-y-2 ml-6">
@@ -1441,13 +1441,13 @@ useEffect(() => {
                   <span className="flex-1 truncate font-bold text-xs">{p.name}</span>
                    <div className="opacity-0 group-hover:opacity-100 flex items-center space-x-1 shrink-0">
                      <Tooltip title="Чат">
-                       <Button type="text" size="small" icon={<MessageOutlined className="text-gray-400 hover:text-teal-500 text-[10px]" />} onClick={(e) => openProjectChat(p, e)} />
+                       <Button type="text" size="small" icon={<MessageOutlined className="text-gray-400 hover:text-teal-500 text-[12px]" />} onClick={(e) => openProjectChat(p, e)} />
                      </Tooltip>
                      <Tooltip title="Засах">
-                       <Button type="text" size="small" icon={<EditOutlined className="text-gray-400 hover:text-blue-500 text-[10px]" />} onClick={(e) => { e.stopPropagation(); handleEditProject(p); }} />
+                       <Button type="text" size="small" icon={<EditOutlined className="text-gray-400 hover:text-blue-500 text-[12px]" />} onClick={(e) => { e.stopPropagation(); handleEditProject(p); }} />
                      </Tooltip>
                      <Popconfirm title="Төслийг устгах уу?" onConfirm={(e) => { e.stopPropagation(); handleDeleteProject(p.id); }} onCancel={(e) => e.stopPropagation()}>
-                       <Button type="text" size="small" icon={<DeleteOutlined className="text-gray-400 hover:text-red-500 text-[10px]" />} onClick={(e) => e.stopPropagation()} />
+                       <Button type="text" size="small" icon={<DeleteOutlined className="text-gray-400 hover:text-red-500 text-[12px]" />} onClick={(e) => e.stopPropagation()} />
                      </Popconfirm>
                    </div>
                 </div>
@@ -1456,20 +1456,20 @@ useEffect(() => {
           </div>
         </div>
         <div className="flex flex-1 flex-col bg-white dark:bg-gray-800 min-w-0 animate-entrance-stagger-7">
-          <div className="flex flex-col lg:flex-row items-center lg:justify-between border-b border-gray-200 dark:border-gray-700 p-2 lg:p-4 shadow-sm z-20 h-auto lg:h-16 shrink-0 gap-2">
+          <div className="flex flex-col lg:flex-row items-center dark:bg-gray-900 lg:justify-between border-b border-gray-200 dark:border-gray-700 p-2 lg:p-4 shadow-sm z-20 h-auto lg:h-16 shrink-0 gap-2">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <Button 
-                  className="bg-gray-100 dark:bg-[#374151] border-none text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 font-black rounded-xl px-4 h-10 shadow-sm"
+                  className="bg-gray-100 dark:bg-[#374151] border-none text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 font-bold rounded-xl px-4 h-10 shadow-sm"
                   onClick={goToday}
                 >
-                  Өнөөдөр
+                  {t("Өнөөдөр")}
                 </Button>
                 <div className="flex items-center bg-gray-100 dark:bg-[#374151] rounded-xl p-0.5 shrink-0">
                   <Button type="text" size="small" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white p-0 flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-lg" onClick={prev}>
                     <LeftOutlined style={{ fontSize: '10px' }} />
                   </Button>
-                  <span className="font-black text-[10px] md:text-[12px] min-w-[100px] md:min-w-[150px] text-center text-gray-800 dark:text-gray-100 px-2 select-none uppercase tracking-tight">
+                  <span className="font-bold text-[12px] md:text-[12px] min-w-[100px] md:min-w-[150px] text-center text-gray-800 dark:text-gray-100 px-2 select-none uppercase tracking-tight">
                     {view === "Month" ? currentDate.format("YYYY - MMMM") : 
                      view === "Week" ? `${currentDate.startOf('week').format("MM/DD")} - ${currentDate.endOf('week').format("MM/DD")}` :
                      currentDate.format("YYYY/MM/DD")}
@@ -1482,19 +1482,19 @@ useEffect(() => {
               <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} title={isConnected ? 'Connected' : 'Disconnected'} />
             </div>
             
-            <div id="cal-views" className="flex items-center bg-gray-100 dark:bg-[#1f2937] rounded-xl p-0.5 md:p-1 border border-gray-200 dark:border-gray-700 shadow-inner shrink-0 w-full lg:w-auto justify-center z-10">
+            <div id="cal-views" className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-0.5 md:p-1 border border-gray-200 dark:border-gray-700 shadow-inner shrink-0 w-full lg:w-auto justify-center z-10">
               {[
-                { label: "Сар", value: "Month" },
-                { label: "7-хоног", value: "Week" },
-                { label: "Өдөр", value: "Day" },
-                { label: "Нэгтгэл", value: "Agenda" },
+                { label: t("Сар"), value: "Month" },
+                { label: t("Долоо хоног"), value: "Week" },
+                { label: t("Өдөр"), value: "Day" },
+                { label: t("Агенда"), value: "Agenda" },
               ].map(({ label, value }) => (
                 <button
                   key={value}
                   onClick={() => setView(value)}
-                  className={`flex-1 lg:flex-none px-2 lg:px-5 py-2 lg:py-1.5 rounded-lg text-[10px] md:text-[11px] font-black tracking-widest transition-all duration-200 uppercase ${
+                  className={`flex-1 lg:flex-none px-2 lg:px-5 py-2 lg:py-1.5 rounded-lg text-[12px] md:text-[12px] font-bold  transition-all duration-200 uppercase ${
                     view === value 
-                      ? "bg-teal-500 text-white shadow-md transform scale-105" 
+                      ? "bg-green-500 text-white shadow-md transform scale-105" 
                       : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                   }`}
                 >
@@ -1508,7 +1508,7 @@ useEffect(() => {
               <div className="flex flex-col h-[calc(100vh-320px)] min-h-[500px] bg-white dark:bg-gray-800 overflow-hidden shadow-inner">
                 <div className="grid grid-cols-7 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 sticky top-0 z-10 shadow-sm shrink-0">
                   {["ДАВАА", "МЯГМАР", "ЛХАГВА", "ПҮРЭВ", "БААСАН", "БЯМБА", "НЯМ"].map(day => (
-                    <div key={day} className="p-3 text-center text-[10px] font-black text-gray-400 dark:text-gray-500 tracking-widest border-r border-gray-100 dark:border-gray-800 uppercase last:border-r-0">
+                    <div key={day} className="p-3 text-center text-[12px] font-bold text-gray-400 dark:text-gray-500  border-r border-gray-100 dark:border-gray-800 uppercase last:border-r-0">
                       {day}
                     </div>
                   ))}
@@ -1539,7 +1539,7 @@ useEffect(() => {
                         }}
                       >
                         <div className="flex items-center justify-end mb-2">
-                          <span className={`text-[12px] font-black rounded-full w-7 h-7 flex items-center justify-center transition-all ${
+                          <span className={`text-[12px] font-bold rounded-full w-7 h-7 flex items-center justify-center transition-all ${
                             isToday ? "bg-teal-500 text-white shadow-lg transform scale-110" : 
                             isPast ? "text-gray-300 dark:text-gray-700" :
                             "text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-gray-300"
@@ -1553,7 +1553,7 @@ useEffect(() => {
                             <Tooltip key={task.id} title={`${task.projectName}: ${task.title}`}>
                               <div 
                                 onClick={(e) => handleTaskClick(task, e)}
-                                className="flex items-center space-x-1.5 px-1.5 py-1 rounded-md text-[9px] font-bold border-l-2 hover:opacity-80 transition-opacity cursor-pointer text-gray-800 dark:text-gray-200 uppercase tracking-tight"
+                                className="flex items-center space-x-1.5 px-1.5 py-1 rounded-md text-[12px] font-bold border-l-2 hover:opacity-80 transition-opacity cursor-pointer text-gray-800 dark:text-gray-200 uppercase tracking-tight"
                                 style={{ 
                                   borderLeftColor: task.projectColor || "#14b8a6",
                                   backgroundColor: (task.projectColor || "#14b8a6") + "20"
@@ -1573,7 +1573,7 @@ useEffect(() => {
                                 e.stopPropagation();
                                 setDayTasksModal({ visible: true, date, tasks: dayTasks });
                               }}
-                              className="text-[9px] font-black text-teal-600 dark:text-teal-400 px-1.5 cursor-pointer hover:text-teal-500 transition-colors"
+                              className="text-[12px] font-bold text-teal-600 dark:text-teal-400 px-1.5 cursor-pointer hover:text-teal-500 transition-colors"
                             >
                               +{dayTasks.length - 3} дэлгэрэнгүй
                             </div>
@@ -1584,7 +1584,7 @@ useEffect(() => {
                           <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all scale-90 translate-y-2 group-hover:translate-y-0">
                             <Button 
                               size="small" 
-                              className="bg-teal-500 !border-none text-white flex items-center justify-center rounded-lg shadow-lg"
+                              className="bg-green-500 !border-none text-white flex items-center justify-center rounded-lg shadow-lg"
                               icon={<PlusOutlined />}
                             />
                           </div>
@@ -1599,18 +1599,18 @@ useEffect(() => {
             {view === "Week" && (
               <div className="flex flex-col h-[calc(100vh-320px)] min-h-[500px] bg-white dark:bg-gray-800  overflow-hidden shadow-inner">
                 <div className="grid grid-cols-8 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111827] sticky top-0 z-10 shadow-sm shrink-0">
-                  <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">ЦАГ</div>
+                  <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">ЦАГ</div>
                   {weekData.map(date => (
                     <div key={date.toString()} className="p-3 text-center border-r border-gray-100 dark:border-gray-900 last:border-r-0">
-                      <div className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase mb-1">{date.format("ddd")}</div>
-                      <div className={`text-[12px] font-black ${date.isSame(dayjs(), 'day') ? "text-teal-500" : "text-gray-700 dark:text-gray-300"}`}>{date.format("DD")}</div>
+                      <div className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{date.format("ddd")}</div>
+                      <div className={`text-[12px] font-bold ${date.isSame(dayjs(), 'day') ? "text-teal-500" : "text-gray-700 dark:text-gray-300"}`}>{date.format("DD")}</div>
                     </div>
                   ))}
                 </div>
                 <div className="flex-1 grid grid-cols-8 overflow-y-auto">
                   <div className="flex flex-col border-r border-gray-100 dark:border-gray-900 bg-gray-50 dark:bg-gray-950/20">
                     {Array.from({length: 24}).map((_, i) => (
-                      <div key={i} className="h-12 border-b border-gray-100 dark:border-gray-900/40 p-2 text-[10px] font-black text-gray-400 dark:text-gray-600 flex items-start justify-center uppercase">
+                      <div key={i} className="h-12 border-b border-gray-100 dark:border-gray-900/40 p-2 text-[12px] font-bold text-gray-400 dark:text-gray-600 flex items-start justify-center uppercase">
                         {i < 10 ? `0${i}:00` : `${i}:00`}
                       </div>
                     ))}
@@ -1628,7 +1628,7 @@ useEffect(() => {
                             <div 
                               key={task.id || task._id} 
                               onClick={(e) => handleTaskClick(task, e)}
-                              className="border-l-4 rounded-xl p-2 text-[10px] font-black text-gray-800 dark:text-gray-100 shadow-xl border border-gray-100 dark:border-gray-700/50 uppercase tracking-tighter cursor-pointer hover:scale-[1.02] transition-transform overflow-hidden"
+                              className="border-l-[3px] rounded-lg p-1 text-[12px] font-bold text-gray-800 dark:text-gray-100 shadow-xl border border-gray-100 dark:border-gray-700/50 uppercase tracking-tighter cursor-pointer hover:scale-[1.02] transition-transform overflow-hidden"
                               style={{ 
                                 borderLeftColor: task.projectColor || "#14b8a6",
                                 backgroundColor: (task.projectColor || "#14b8a6") + "15",
@@ -1649,16 +1649,16 @@ useEffect(() => {
             {view === "Day" && (
               <div className="flex flex-col h-[calc(100vh-320px)] min-h-[500px] bg-white dark:bg-gray-800 overflow-hidden shadow-inner">
                 <div className="grid grid-cols-8 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111827] sticky top-0 z-10 shadow-sm shrink-0">
-                  <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">ЦАГ</div>
+                  <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">ЦАГ</div>
                   <div className="col-span-7 p-3 text-center">
-                    <div className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase mb-1">{currentDate.format("dddd")}</div>
-                    <div className="text-[12px] font-black text-teal-500">{currentDate.format("YYYY оны MMMM DD")}</div>
+                    <div className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{currentDate.format("dddd")}</div>
+                    <div className="text-[12px] font-bold text-teal-500">{currentDate.format("YYYY оны MMMM DD")}</div>
                   </div>
                 </div>
                 <div className="flex-1 grid grid-cols-8 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700">
                   <div className="flex flex-col border-r border-gray-100 dark:border-gray-900 bg-gray-50 dark:bg-gray-950/20 shrink-0">
                     {Array.from({length: 24}).map((_, i) => (
-                      <div key={i} className="h-12 border-b border-gray-100 dark:border-gray-900/40 p-2 text-[10px] font-black text-gray-400 dark:text-gray-600 flex items-start justify-center uppercase">
+                      <div key={i} className="h-12 border-b border-gray-100 dark:border-gray-900/40 p-2 text-[12px] font-bold text-gray-400 dark:text-gray-600 flex items-start justify-center uppercase">
                         {i < 10 ? `0${i}:00` : `${i}:00`}
                       </div>
                     ))}
@@ -1673,7 +1673,7 @@ useEffect(() => {
                         <div 
                           key={task.id || task._id} 
                           onClick={(e) => handleTaskClick(task, e)}
-                          className="border-l-4 rounded-xl p-3 text-[11px] font-black text-gray-800 dark:text-gray-100 shadow-2xl border border-gray-100 dark:border-gray-700/50 uppercase tracking-tighter cursor-pointer hover:scale-[1.01] transition-transform overflow-hidden"
+                          className="border-l-[3px] rounded-lg p-1.5 text-[12px] font-bold text-gray-800 dark:text-gray-100 shadow-2xl border border-gray-100 dark:border-gray-700/50 uppercase tracking-tighter cursor-pointer hover:scale-[1.01] transition-transform overflow-hidden"
                           style={{ 
                             borderLeftColor: task.projectColor || "#14b8a6",
                             backgroundColor: (task.projectColor || "#14b8a6") + "15",
@@ -1681,7 +1681,7 @@ useEffect(() => {
                           }}
                         >
                           <div className="flex items-center justify-between mb-1">
-                             <span className="text-[9px] font-extrabold" style={{ color: task.projectColor || "#94a3b8" }}>{task.projectName}</span>
+                             <span className="text-[12px] font-bold" style={{ color: task.projectColor || "#94a3b8" }}>{task.projectName}</span>
                              {task.completed && <CheckOutlined style={{ color: task.projectColor || "#14b8a6" }} className="scale-75" />}
                           </div>
                           <div className="truncate">{task.title}</div>
@@ -1713,9 +1713,9 @@ useEffect(() => {
               const statusLabel = (tuluv) => {
                 if (tuluv === "duussan") return "Дууссан";
                 if (tuluv === "khiigdej bui") return "Хийгдэж буй";
-                if (tuluv === "khugatsaa khetersen") return "Хэтэрсэн";
+                if (tuluv === "khugatsaa khetersen") return "Хугацаа хэтэрсэн";
                 if (tuluv === "shalga") return "Шалгах";
-                return "Шинэ";
+                return "Шинэ ажил";
               };
               const priorityDot = (z) => z === "nen yaraltai" ? "bg-red-500" : z === "yaraltai" ? "bg-orange-400" : z === "engiin" ? "bg-yellow-400" : "bg-green-500";
 
@@ -1725,15 +1725,15 @@ useEffect(() => {
                   <div>
                   
                     <div className="flex items-center gap-3 px-5 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50/60 dark:bg-[#111827]/50 sticky top-0 z-10">
-                      <span className={`text-[11px] font-black uppercase tracking-widest ${labelCls}`}>{label}</span>
-                      <span className={`min-w-[20px] h-5 px-1.5 rounded-full ${countBg} text-white text-[10px] font-black flex items-center justify-center`}>{groupTasks.length}</span>
+                      <span className={`text-[12px] font-bold uppercase  ${labelCls}`}>{label}</span>
+                      <span className={`min-w-[20px] h-5 px-1.5 rounded-full ${countBg} text-white text-[12px] font-bold flex items-center justify-center`}>{groupTasks.length}</span>
                     </div>
                     
                     <div className="grid grid-cols-12 px-5 py-2 border-b  border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800">
-                      <div className="col-span-5 text-[10px]  font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">Ажил</div>
-                      <div className="col-span-2 text-[10px]  font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">Төлөв</div>
-                      <div className="col-span-3 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">Төсөл</div>
-                      <div className="col-span-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">Дуусах</div>
+                      <div className="col-span-5 text-[12px]  font-bold text-gray-400 dark:text-gray-600 uppercase ">Ажил</div>
+                      <div className="col-span-2 text-[12px]  font-bold text-gray-400 dark:text-gray-600 uppercase ">Төлөв</div>
+                      <div className="col-span-3 text-[12px] font-bold text-gray-400 dark:text-gray-600 uppercase ">Төсөл</div>
+                      <div className="col-span-2 text-[12px] font-bold text-gray-400 dark:text-gray-600 uppercase ">Огноо</div>
                     </div>
                                         {groupTasks.map(task => {
                       const proj = projects.find(p => p.id === task.projectId || p.id === task.project || p._id === task.projectId);
@@ -1751,16 +1751,16 @@ useEffect(() => {
                             </span>
                           </div>
                           <div className="col-span-2">
-                            <span className={`text-[10px] font-black px-2 py-1 rounded-lg ${statusColor(task.tuluv)}`}>
+                            <span className={`text-[12px] font-bold px-2 py-1 rounded-lg ${statusColor(task.tuluv)}`}>
                               {statusLabel(task.tuluv)}
                             </span>
                           </div>
                           <div className="col-span-3 flex items-center gap-2 min-w-0">
                             {proj && <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: proj.color || "#10B981" }} />}
-                            <span className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 truncate">{proj?.name || "—"}</span>
+                            <span className="text-[12px] font-semibold text-gray-500 dark:text-gray-400 truncate">{proj?.name || "—"}</span>
                           </div>
                           <div className="col-span-2">
-                            <span className={`text-[11px] font-bold ${task.date < today && !task.completed ? "text-red-500" : "text-gray-500 dark:text-gray-400"}`}>
+                            <span className={`text-[12px] font-bold ${task.date < today && !task.completed ? "text-red-500" : "text-gray-500 dark:text-gray-400"}`}>
                               {task.date ? dayjs(task.date).format("YYYY-MM-DD") : "—"}
                             </span>
                           </div>
@@ -1772,8 +1772,8 @@ useEffect(() => {
                       onClick={() => openAddTaskModal()}
                       className="flex items-center gap-3 px-5 py-3 text-gray-400 dark:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/10 cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-800"
                     >
-                      <PlusOutlined className="text-[11px]" />
-                      <span className="text-[12px] font-semibold">Ажил нэмэх</span>
+                      <PlusOutlined className="text-[12px]" />
+                      <span className="text-[12px] font-semibold">Шинэ ажил эхлүүлэх</span>
                     </div>
                   </div>
                 );
@@ -1785,13 +1785,13 @@ useEffect(() => {
                     <div className="flex-1 flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 py-20 space-y-3">
                       <CalendarOutlined style={{ fontSize: '40px' }} />
                       <div className="text-[13px] font-bold">Ажил байхгүй байна</div>
-                      <div className="text-[11px]">Шинэ ажил нэмэхийн тулд тэмдэглэсэн өдөр дарна уу</div>
+                      <div className="text-[12px]">Уг огноонд ажил байхгүй байна.</div>
                     </div>
                   ) : (
                     <>
                       <AgendaGroup label={`Хугацаа хэтэрсэн (${overdue.length})`} tasks={overdue} labelCls="text-red-500" countBg="bg-red-500" />
                       <AgendaGroup label={`Өнөөдөр дуусах (${dueToday.length})`} tasks={dueToday} labelCls="text-yellow-500" countBg="bg-yellow-400" />
-                      <AgendaGroup label={`Ирэх ажлууд (${upcoming.length})`} tasks={upcoming} labelCls="text-blue-500" countBg="bg-blue-500" />
+                      <AgendaGroup label={`Хүлээгдэж буй ажлууд (${upcoming.length})`} tasks={upcoming} labelCls="text-blue-500" countBg="bg-blue-500" />
                     </>
                   )}
                 </div>
@@ -1803,27 +1803,25 @@ useEffect(() => {
       </div>
 
         <div className={`transition-all duration-300 flex flex-col shrink-0 z-20 ${isRightPanelExpanded ? 'w-full xl:w-[340px] opacity-100 h-auto xl:h-[calc(102vh-6rem)]' : 'w-0 opacity-0 whitespace-nowrap overflow-hidden'}`}>  
-          <div className="flex-1 m-3 bg-white dark:bg-[#1f2636] rounded-[2rem] border border-slate-100 dark:border-slate-800/60 shadow-2xl flex flex-col overflow-hidden">
+          <div className="flex-1 m-3 bg-white dark:bg-gray-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/60 shadow-2xl flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-auto w-full flex flex-col [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
               
-              <div className="flex items-center justify-end p-4 pb-0 shrink-0">
-                <Button type="text" size="small" className="hover:!bg-slate-600/50 hover:text-white transition-all rounded-md px-1 w-6 h-6 border border-slate-700/50" icon={<CloseOutlined className="text-gray-400 text-[10px]" />} onClick={() => setIsRightPanelExpanded(false)} />
-              </div>
+
 
               {/* 1. Projects Section */}
               <div className="flex flex-col p-4 space-y-3 shrink-0">
                 <div className="flex items-center justify-between px-1">
-                  <div className="text-[11px] font-extrabold text-gray-400 mb-2 flex items-center tracking-wide uppercase opacity-70">
-                    <span>Төслүүд</span>
+                  <div className="text-[12px] font-bold text-gray-400 mb-2 flex items-center  uppercase opacity-70">
+                    <span>Төсөл</span>
                   </div>
                   <Button
                     type="text"
                     size="small"
                     onClick={() => setIsProjectModalVisible(true)}
-                    icon={<PlusOutlined className="text-emerald-400 text-[10px]" />}
-                    className="!text-emerald-400 text-[10px] font-bold hover:!bg-emerald-500/10 rounded-lg"
+                    icon={<PlusOutlined className="text-white text-[12px]" />}
+                    className="!text-white text-[12px] font-bold hover:!bg-emerald-500/10 dark:bg-green-500 bg-green-500 rounded-lg"
                   >
-                    Нэмэх
+                    {t("Нэмэх")}
                   </Button>
                 </div>
                 
@@ -1831,11 +1829,11 @@ useEffect(() => {
                   {loadingProjects ? (
                     <div className="flex justify-center py-4"><Spin size="small" /></div>
                   ) : projects.length === 0 ? (
-                    <div className="text-center text-gray-400 text-[11px] py-4 font-medium">Төсөл байхгүй байна</div>
+                    <div className="text-center text-gray-400 text-[12px] py-4 font-medium">Мэдээлэл байхгүй</div>
                   ) : (
                     projects.map(p => (
                       <div key={p.id} className="flex items-center space-x-3 cursor-pointer group hover:bg-emerald-50 dark:hover:bg-emerald-500/10 px-3 py-2.5 rounded-2xl transition-all duration-300 border border-transparent hover:border-emerald-200/50 dark:hover:border-emerald-500/20 shadow-sm hover:shadow-md">
-                        <div className="w-8 h-8 flex items-center justify-center rounded-xl text-[11px] font-extrabold text-white shadow-lg shrink-0 transform group-hover:scale-110 transition-transform" style={{ backgroundColor: p.color || "#10B981" }}>
+                        <div className="w-8 h-8 flex items-center justify-center rounded-xl text-[12px] font-bold text-white shadow-lg shrink-0 transform group-hover:scale-110 transition-transform" style={{ backgroundColor: p.color || "#10B981" }}>
                           {(p.name || "").slice(0, 2).toUpperCase()}
                         </div>
                         <div className="flex flex-col flex-1 min-w-0">
@@ -1862,19 +1860,19 @@ useEffect(() => {
 
               {/* 2. Team Section */}
               <div className="flex flex-col p-4 shrink-0">
-                <div className="text-[11px] font-extrabold text-gray-400 mb-3 px-1 flex items-center tracking-wide uppercase opacity-70">
-                  <span>Ажилчид</span>
+                <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center  uppercase opacity-70">
+                  <span>Ажилтан</span>
                 </div>
                 <div className="max-h-[300px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                   {teamMembers.map((member, i) => (
                     <div key={i} className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md">
                       <div className="flex items-center space-x-4 w-full">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-400 to-teal-600 dark:from-emerald-700 dark:to-teal-900 text-white text-[12px] font-black border-2 border-white dark:border-gray-800 shadow-xl shrink-0">
+                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-400 to-teal-600 dark:from-emerald-700 dark:to-teal-900 text-white text-[12px] font-bold border-2 border-white dark:border-gray-800 shadow-xl shrink-0">
                           {(member.name || "").slice(0, 1).toUpperCase()}
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1 justify-center">
                           <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
-                          <div className="text-[10px] text-gray-500 font-medium leading-tight mt-1 opacity-70 uppercase tracking-widest">{member.role}</div>
+                          <div className="text-[12px] text-gray-500 font-medium leading-tight mt-1 opacity-70 uppercase ">{member.role}</div>
                         </div>
                       </div>
                     </div>
@@ -1887,20 +1885,20 @@ useEffect(() => {
               {/* 3. History Section */}
               <div className="flex flex-col p-4 shrink-0">
                 <div className="flex items-center justify-between mb-3 px-1">
-                  <div className="text-[11px] font-extrabold text-gray-400 flex items-center tracking-wide uppercase opacity-70">
-                    <span>Түүх</span>
+                  <div className="text-[12px] font-bold text-gray-400 flex items-center  uppercase opacity-70">
+                    <span>{t("Түүх")}</span>
                   </div>
                 </div>
                 <div className="max-h-[300px] overflow-y-auto space-y-4 px-2 custom-scrollbar">
                   {loadingHistory ? (
                     <div className="flex justify-center py-4"><Spin size="small" /></div>
                   ) : history.length === 0 ? (
-                    <div className="text-center text-gray-400 text-[11px]">Түүх байхгүй байна</div>
+                    <div className="text-center text-gray-400 text-[12px]">Түүх байхгүй</div>
                   ) : (
                     history.slice(0, 10).map((act) => (
                       <div key={act._id || act.id} className="hover:scale-105 relative pl-5 before:content-[''] before:absolute before:left-[5px] before:top-4 before:w-[1px] before:h-[130%] before:bg-slate-400/30 dark:before:bg-slate-600/30 last:before:hidden transition-all">
                         <div className="absolute left-0 top-1 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-800 z-10 shadow-sm"></div>
-                        <div className="text-[10px] leading-relaxed">
+                        <div className="text-[12px] leading-relaxed">
                           {act.ajiltniiNer && <span className="text-gray-500 dark:text-gray-400 font-bold">{act.ajiltniiNer} </span>}
                           <span className="text-gray-400 font-medium">
                             {act.uildelText || (
@@ -1913,9 +1911,9 @@ useEffect(() => {
                               (act.uildel || 'үйлдэл хийлээ')
                             )}
                           </span>
-                          {act.taskNer && <span className="text-emerald-500 font-extrabold ml-1">{act.taskNer}</span>}
+                          {act.taskNer && <span className="text-emerald-500 font-bold ml-1">{act.taskNer}</span>}
                         </div>
-                        <div className="text-[9px] text-gray-500 mt-0.5 font-medium opacity-70">
+                        <div className="text-[12px] text-gray-500 mt-0.5 font-medium opacity-70">
                           {act.createdAt ? dayjs(act.createdAt).format("MM/DD HH:mm") : "--:--"}
                         </div>
                       </div>
@@ -1930,29 +1928,28 @@ useEffect(() => {
                   onClick={() => setIsTutorialOpen(true)}
                 >
                     <QuestionCircleOutlined className="text-gray-700 dark:text-gray-300 text-[14px] group-hover:text-white transition-colors" />
-                    <span className="text-gray-700 dark:text-gray-300 text-[11px] font-bold group-hover:text-white transition-colors">Тусламж</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-[12px] font-bold group-hover:text-white transition-colors">Тусламж</span>
                 </div>
             </div>
           </div>
         </div>
-        {typeof window !== 'undefined' && !isRightPanelExpanded && createPortal(
+        {typeof window !== 'undefined' && createPortal(
           <button 
-            style={{ position: 'fixed', right: 0, top: '50%', transform: 'translateY(-50%)', zIndex: 99999 }}
-            className="bg-green-600 dark:bg-green-900 border border-green-700/60 w-8 h-12 rounded-l-lg flex flex-col items-center justify-center cursor-pointer shadow-xl hover:bg-green-500 hover:-translate-x-1 transition-all"
+            className="fixed right-0 top-1/2 -translate-y-1/2 bg-green-600 dark:bg-green-900 border border-green-700/60 w-8 h-12 rounded-l-lg flex flex-col items-center justify-center cursor-pointer shadow-xl hover:bg-green-500 transition-all z-[99999]"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              setIsRightPanelExpanded(true);
+              setIsRightPanelExpanded(!isRightPanelExpanded);
             }}
           >
-            <RightOutlined className="text-white dark:text-gray-300 text-[10px] rotate-180" />
+            <RightOutlined className={`text-white dark:text-gray-300 text-[12px] transition-transform duration-300 ${isRightPanelExpanded ? "rotate-0" : "rotate-180"}`} />
           </button>,
           document.body
         )}
       </div>
 
       <Modal
-        title={t("Ажил нэмэх")}
+        title="Шинэ ажил эхлүүлэх"
         visible={isTaskModalVisible}
         onCancel={() => setIsTaskModalVisible(false)}
         footer={null}
@@ -1962,23 +1959,23 @@ useEffect(() => {
         <Form form={taskForm} layout="vertical" onFinish={handleCreateTask} className="space-y-4">
           <Form.Item 
             name="title" 
-            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Ажлын нэр</span>} 
+            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Даалгаврын нэр</span>} 
             required 
-            rules={[{ required: true, message: 'Ажлын нэр оруулна уу' }]}
+            rules={[{ required: true, message: "Даалгаврын нэр оруулах" }]}
             className="!mb-0"
           >
-            <Input placeholder="Ажлын нэр оруулна уу" className="h-12 rounded-xl" />
+            <Input placeholder="Даалгаврын нэр оруулах" className="h-12 rounded-xl" />
           </Form.Item>
 
-          <Form.Item name="description" label={<span className="text-gray-400 text-[12px] font-bold block pl-1 dark:border-gray-700 border-gray-300">Дэлгэрэнгүй тайлбар</span>} className="!mb-0">
-            <Input.TextArea placeholder="Ажлын дэлгэрэнгүй тайлбар..." className="dark:border-gray-700 border-gray-300 rounded-xl" rows={3} />
+          <Form.Item name="description" label={<span className="text-gray-400 text-[12px] font-bold block pl-1 dark:border-gray-700 border-gray-300">Тайлбар</span>} className="!mb-0">
+            <Input.TextArea placeholder="Дэлгэрэнгүй тайлбар бичих..." className="dark:border-gray-700 border-gray-300 rounded-xl" rows={3} />
           </Form.Item>
 
           <div className="grid grid-cols-2 gap-6">
             <Form.Item 
               name="projectId" 
               label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Төсөл</span>}
-              rules={[{ required: true, message: 'Төсөл сонгоно уу' }]}
+              rules={[{ required: true, message: "Төсөл сонгох" }]}
               className="!mb-0"
             >
               <Select 
@@ -1997,9 +1994,9 @@ useEffect(() => {
               className="!mb-0"
             >
               <Select className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex">
-                <Select.Option value="nen yaraltai">🔴 Нэн Яаралтай</Select.Option>
-                <Select.Option value="yaraltai">🟠 Яаралтай</Select.Option>
-                <Select.Option value="engiin">🟢 Энгийн</Select.Option>
+                <Select.Option value="nen yaraltai">🔴 Яаралтай</Select.Option>
+                <Select.Option value="yaraltai">🟠 Өндөр</Select.Option>
+                <Select.Option value="engiin">🟢 Дунд</Select.Option>
                 <Select.Option value="baga">🔵 Бага</Select.Option>
               </Select>
             </Form.Item>
@@ -2033,18 +2030,18 @@ useEffect(() => {
           </div>
           <div className="grid grid-cols-2 gap-6">
             <Form.Item name="bairshil" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Байршил</span>} className="!mb-0">
-              <Input placeholder="Байршил оруулна уу" className="h-12 rounded-xl" />
+              <Input placeholder="Байршил оруулах" className="h-12 rounded-xl" />
             </Form.Item>
             <Form.Item name="davkhar" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Давхар</span>} className="!mb-0">
-              <Input placeholder="Давхар оруулна уу" className="h-12 rounded-xl" />
+              <Input placeholder="Давхар оруулах" className="h-12 rounded-xl" />
             </Form.Item>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-            <Form.Item name="ajiltnuud" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Хамтрах ажилчид</span>} className="!mb-0">
+            <Form.Item name="ajiltnuud" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Хамтрах ажилтнууд</span>} className="!mb-0">
                <Select 
                  mode="multiple"
-                 placeholder="Ажилчид сонгох"
+                 placeholder="Ажилтан сонгох"
                  className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
                  allowClear
                  showSearch
@@ -2077,7 +2074,7 @@ useEffect(() => {
           
           
 
-          <Divider orientation="left" className="!mt-0 !mb-4"><span className="text-gray-400 text-[10px] font-black uppercase">Бараа материал</span></Divider>
+          <Divider orientation="left" className="!mt-0 !mb-4"><span className="text-gray-400 text-[12px] font-bold uppercase">Бараа материал</span></Divider>
           
           <Form.List name="baraa">
             {(fields, { add, remove }) => (
@@ -2086,7 +2083,7 @@ useEffect(() => {
                   <div key={key} className="bg-gray-50 dark:bg-gray-800/40 p-4 rounded-2xl border border-gray-100 dark:border-gray-700/50 relative group/item">
                     <Button 
                       type="text" 
-                      icon={<CloseOutlined className="text-[10px]" />} 
+                      icon={<CloseOutlined className="text-[12px]" />} 
                       onClick={() => remove(name)}
                       className="absolute -top-2 -right-2 bg-white dark:bg-gray-800 shadow-md !rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-opacity"
                     />
@@ -2095,7 +2092,7 @@ useEffect(() => {
                         <Form.Item
                           {...restField}
                           name={[name, 'baraaId']}
-                          rules={[{ required: true, message: 'Бараа сонгоно уу' }]}
+                          rules={[{ required: true, message: "Бараа сонгох" }]}
                           className="!mb-0"
                         >
                           <Select
@@ -2118,12 +2115,12 @@ useEffect(() => {
                             }}
                           >
                             {baraas.map(i => {
-                              const negj = i.negj === 'shirheg' ? 'ширхэг' :
-                                           i.negj === 'haire' || i.negj === 'hairtsag' ? 'хайрцаг' :
-                                           i.negj === 'kg' ? 'кг' :
-                                           i.negj === 'l' || i.negj === 'litr' ? 'литр' :
-                                           i.negj === 'gr' ? 'гр' :
-                                           i.negj === 'm' ? 'метр' :
+                              const negj = i.negj === 'shirheg' ? "ш" :
+                                           i.negj === 'haire' || i.negj === 'hairtsag' ? "хайрцаг" :
+                                           i.negj === 'kg' ? "кг" :
+                                           i.negj === 'l' || i.negj === 'litr' ? "литр" :
+                                           i.negj === 'gr' ? "гр" :
+                                           i.negj === 'm' ? "м" :
                                            i.negj || '';
                               return (
                                 <Select.Option key={i._id} value={i._id}>
@@ -2138,10 +2135,10 @@ useEffect(() => {
                         <Form.Item
                           {...restField}
                           name={[name, 'too']}
-                          rules={[{ required: true, message: '?' }]}
+                          rules={[{ required: true, message: "Тоо ширхэг" }]}
                           className="!mb-0"
                         >
-                          <Input type="number" placeholder="Тоо" className="h-10 rounded-xl" />
+                          <Input type="number" placeholder="Тоо ширхэг" className="h-10 rounded-xl" />
                         </Form.Item>
                       </div>
                       <div className="col-span-8 md:col-span-4">
@@ -2172,17 +2169,17 @@ useEffect(() => {
           <div className="flex items-end justify-end pt-6 border-t dark:border-slate-700/50 border-gray-300">
              <Space size="middle">
                <Button onClick={() => { setIsTaskModalVisible(false); setTaskImages([]); }} disabled={savingTask}>
-                 {t("Цуцлах")}
+                 Цуцлах
                </Button>
                <Button type="primary" htmlType="submit" loading={savingTask}>
-                 {t("Үүсгэх")}
+                 Үүсгэх
                </Button>
              </Space>
           </div>
         </Form>
       </Modal>
       <Modal
-        title={editingProject ? t("Төсөл засах") : t("Шинэ ажил эхлүүлэх")}
+        title={editingProject ? "Төсөл засах" : "Төсөл үүсгэх"}
         visible={isProjectModalVisible}
         onCancel={() => { setIsProjectModalVisible(false); setEditingProject(null); projectForm.resetFields(); }}
         footer={null}
@@ -2194,16 +2191,16 @@ useEffect(() => {
             name="name" 
             label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Төслийн нэр</span>}
             required
-            rules={[{ required: true, message: 'Төслийн нэр оруулна уу' }]}
+            rules={[{ required: true, message: "Төслийн нэр оруулах" }]}
           >
-            <Input placeholder="Жишээ нь: Барилга А засвар" className="h-12 rounded-xl" />
+            <Input placeholder="Төслийн нэр" className="h-12 rounded-xl" />
           </Form.Item>
 
           <Form.Item 
             name="tailbar" 
             label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Тайлбар</span>}
           >
-            <Input.TextArea placeholder="Төслийн дэлгэрэнгүй тайлбар..." className="rounded-xl" rows={2} />
+            <Input.TextArea placeholder="Тайлбар бичих" className="rounded-xl" rows={2} />
           </Form.Item>
           
           
@@ -2224,11 +2221,11 @@ useEffect(() => {
 
           <Form.Item 
             name="uilchluulegchId" 
-            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Үйлчлүүлэгч</span>}
+            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("uilchilgee.client")}</span>}
           >
             <Select 
               showSearch
-              placeholder="Үйлчлүүлэгч сонгох"
+              placeholder={t("uilchilgee.select_client")}
               optionFilterProp="children"
               loading={loadingUilchluulegchid}
               className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
@@ -2245,10 +2242,10 @@ useEffect(() => {
           
           <div className="flex justify-end space-x-4 pt-4">
             <Button onClick={() => { setIsProjectModalVisible(false); setEditingProject(null); projectForm.resetFields(); }} disabled={savingProject}>
-              {t("Цуцлах")}
+              {t("uilchilgee.cancel")}
             </Button>
             <Button type="primary" htmlType="submit" loading={savingProject}>
-              {editingProject ? t("Хадгалах") : t("Үүсгэх")}
+              {editingProject ? t("uilchilgee.save") : t("uilchilgee.create")}
             </Button>
           </div>
         </Form>
@@ -2268,7 +2265,7 @@ useEffect(() => {
           <div className="w-full lg:w-1/2 flex flex-col h-auto lg:h-full overflow-y-auto p-4 md:p-8 custom-scrollbar">
             <div className="flex items-start justify-between border-b pb-6 dark:border-gray-800">
                <div className="flex flex-col gap-3 min-w-0">
-                  <div className="flex items-center gap-2 text-[11px] font-bold text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center gap-2 text-[12px] font-bold text-gray-500 dark:text-gray-400">
                     <CalendarOutlined className="text-[12px]" />
                     <span>{selectedTask?.ekhlekhTsag ? dayjs(selectedTask.ekhlekhTsag).format("YYYY/MM/DD HH:mm") : "—"}</span>
                     <span className="text-gray-300 dark:text-gray-600">→</span> 
@@ -2276,24 +2273,24 @@ useEffect(() => {
                   </div>
                   <div className="flex flex-col gap-1">
                     {selectedTask?.taskId && (
-                      <span className="text-[10px] font-black text-teal-600 dark:text-teal-400 uppercase tracking-tighter bg-teal-50 dark:bg-teal-500/10 px-1.5 py-0.5 rounded w-fit">
+                      <span className="text-[12px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-tighter bg-teal-50 dark:bg-teal-500/10 px-1.5 py-0.5 rounded w-fit">
                         ID: {selectedTask.taskId}
                       </span>
                     )}
-                    <h1 className="text-2xl font-black m-0 dark:text-white leading-tight truncate">{selectedTask?.title}</h1>
+                    <h1 className="text-2xl font-bold m-0 dark:text-white leading-tight truncate">{selectedTask?.title}</h1>
                   </div>
                </div>
 
                <div className="flex flex-col items-end gap-2 shrink-0">
-                  <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase shadow-sm ${
+                  <span className={`px-2.5 py-1 rounded-lg text-[12px] font-bold uppercase shadow-sm ${
                     selectedTask?.zereglel === 'nen yaraltai' || selectedTask?.zereglel === 'yaraltai' ? 'bg-red-500 text-white' : 
-                    selectedTask?.zereglel === 'engiin' ? 'bg-yellow-500 text-white' : 'bg-teal-500 text-white'
+                    selectedTask?.zereglel === 'engiin' ? 'bg-green-500 text-white' : 'bg-teal-500 text-white'
                   }`}>
                     {selectedTask?.zereglel === "nen yaraltai" ? "🔴 Нэн Яаралтай" : selectedTask?.zereglel === "yaraltai" ? "🟠 Яаралтай" : selectedTask?.zereglel === "engiin" ? "🟢 Энгийн" : "🔵 Бага"}
                   </span>
-                  <span className={`font-bold text-[11px] px-2 py-0.5 rounded-full border ${
+                  <span className={`font-bold text-[12px] px-2 py-0.5 rounded-full border ${
                     selectedTask?.tuluv === 'duussan' ? 'text-green-500 border-green-500/20 bg-green-500/5' : 
-                    selectedTask?.tuluv === 'khiigdej bui' ? 'text-yellow-500 border-yellow-500/20 bg-yellow-500/5' : 
+                    selectedTask?.tuluv === 'khiigdej bui' ? 'text-blue-500 border-blue-500/20 bg-blue-500/5' : 
                     selectedTask?.tuluv === 'khugatsaa khetersen' ? 'text-red-500 border-red-500/20 bg-red-500/5' :
                     selectedTask?.tuluv === 'shalga' ? 'text-blue-500 border-blue-500/20 bg-blue-500/5' : 'text-teal-500 border-teal-500/20 bg-teal-500/5'
                   }`}>
@@ -2307,80 +2304,117 @@ useEffect(() => {
                </div>
             </div>
 
-            <div className="py-6 space-y-4">
+            <div className="py-2 space-y-4">
               <p className="text-gray-500 dark:text-gray-400 text-[13px] leading-relaxed m-0">
-                {selectedTask?.description || "No description provided."}
+                <span className="text-[12px] font-bold text-gray-400 uppercase">Тайлбар</span>
+                <div>
+                {selectedTask?.description || "-"}
+                </div>
               </p>
               
-              {(selectedTask?.bairshil || selectedTask?.davkhar) && (
-                <div className="flex bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 gap-6">
+              {(selectedTask?.bairshil || selectedTask?.davkhar || selectedTask?.baraa?.length > 0) && (
+                <div className="flex flex-wrap bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 gap-6">
                   {selectedTask?.bairshil && (
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-black text-gray-400 uppercase">Байршил</span>
+                      <span className="text-[12px] font-bold text-gray-400 uppercase">Байршил</span>
                       <span className="text-[13px] font-bold text-gray-700 dark:text-gray-200">{selectedTask.bairshil}</span>
                     </div>
                   )}
                   {selectedTask?.davkhar && (
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-black text-gray-400 uppercase">Давхар</span>
+                      <span className="text-[12px] font-bold text-gray-400 uppercase">Давхар</span>
                       <span className="text-[13px] font-bold text-gray-700 dark:text-gray-200">{selectedTask.davkhar}</span>
                     </div>
                   )}
+                  {selectedTask?.baraa?.length > 0 && (
+                <div className="flex flex-col">
+                  <span className="text-[12px] font-bold text-gray-400 uppercase">Ашигласан материал</span>
+                  <div className="flex flex-col gap-1 mt-1">
+                    {selectedTask.baraa.map((b, idx) => {
+                      const negjMap = {
+                        shirheg: 'ширхэг',
+                        litr: 'литр',
+                        kg: 'кг',
+                        haire: 'хайрцаг',
+                        hairtsag: 'хайрцаг',
+                        bogts: 'богц',
+                        dana: 'дана',
+                        gr: 'гр',
+                        m: 'метр',
+                        l: 'литр',
+                      };
+                      const negjLabel = negjMap[b.negj] || b.negj || 'ш';
+                      return (
+                        <span key={idx} className="text-[13px] font-bold text-gray-700 dark:text-gray-200">
+                          {b.ner} — {b.too} {negjLabel}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
                 </div>
               )}
             </div>
 
             {((selectedTask?.hariutsagchZurag?.length > 0) || (selectedTask?.zurag?.length > 0)) && (
-              <div className="space-y-3 mb-8">
-                <span className="text-[10px] font-black text-gray-400 uppercase  block pl-1">Хавсаргасан зургууд</span>
-                <div className="bg-gray-50 dark:bg-gray-800/40 p-3 rounded-2xl border border-gray-100 dark:border-gray-700/50">
-                  <Image.PreviewGroup>
-                    <div className="flex flex-wrap gap-2">
-                      {[...(selectedTask.hariutsagchZurag || []), ...(selectedTask.zurag || [])].map((img, idx) => {
-                        const path = typeof img === 'string' ? img : (img.zamNer || img.fileZam || img.path || img.zam);
-                        const src = path ? (path.startsWith('http') ? path : `${FSM_BASE_URL}/${path}`) : null;
-                        
-                        if (!src) return null;
-                        
-                        return (
-                          <div key={idx} className="relative group overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all w-[100px] h-[100px]">
-                            <Image
-                              width={100}
-                              height={100}
-                              className="object-cover w-[100px] h-[100px]"
-                              src={src}
-                              fallback="/placeholder-error.png"
-                            />
-                            {img.ajiltniiNer && (
-                              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] font-semibold px-1 py-1 text-center truncate z-10 pointer-events-none">
-                                {img.ajiltniiNer}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </Image.PreviewGroup>
-                </div>
+  <div className="space-y-3 mb-8">
+    <span className="text-[12px] font-bold text-gray-400 uppercase block pl-1">Хавсаргасан зургууд</span>
+    <div className="bg-gray-50 dark:bg-gray-800/40 p-3 rounded-2xl border border-gray-100 dark:border-gray-700/50">
+      <Image.PreviewGroup>
+        <div className="flex flex-wrap gap-2">
+          {(() => {
+            const all = [...(selectedTask.hariutsagchZurag || []), ...(selectedTask.zurag || [])];
+            const seen = new Set();
+            return all.filter(img => {
+              const path = typeof img === 'string' ? img : (img.zamNer || img.fileZam || img.path || img.zam);
+              if (!path || seen.has(path)) return false;
+              seen.add(path);
+              return true;
+            });
+          })().map((img, idx) => {
+            const path = typeof img === 'string' ? img : (img.zamNer || img.fileZam || img.path || img.zam);
+            const src = path ? (path.startsWith('http') ? path : `${FSM_BASE_URL}/${path}`) : null;
+            if (!src) return null;
+            return (
+              <div key={idx} className="relative group overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all w-[100px] h-[100px]">
+                <Image
+                  width={100}
+                  height={100}
+                  className="object-cover w-[100px] h-[100px]"
+                  src={src}
+                  fallback="/placeholder-error.png"
+                />
+                {img.ajiltniiNer && (
+                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[12px] font-semibold px-1 py-1 text-center truncate z-10 pointer-events-none">
+                    {img.ajiltniiNer}
+                  </div>
+                )}
               </div>
-            )}
+            );
+          })}
+        </div>
+      </Image.PreviewGroup>
+    </div>
+  </div>
+)}
 
             <div className="grid grid-cols-2 gap-8 mb-8">
                 <div className="flex flex-col space-y-3">
-                  <span className="text-[10px] font-black text-gray-500 uppercase  block pl-1">Ажилтнууд</span>
+                  <span className="text-[12px] font-bold text-gray-500 uppercase  block pl-1">Ажилтнууд</span>
                   <div className="flex items-center space-x-2">
                     {selectedTask?.ajiltnuud?.map((aId, i) => {
                       const member = allEmployees.find(m => m._id === aId);
                       return (
                         <Tooltip key={aId || i} title={member?.ner || member?.nevtrekhNer || "Ажилтан"}>
-                          <Avatar className="bg-teal-500 font-black">
+                          <Avatar className="bg-teal-500 font-bold">
                             {(member?.ner || member?.nevtrekhNer || "У")?.charAt(0)?.toUpperCase()}
                           </Avatar>
                         </Tooltip>
                       );
                     })}
                     {(!selectedTask?.ajiltnuud || selectedTask?.ajiltnuud?.length === 0) && (
-                      <Avatar className="bg-gray-500 font-black">?</Avatar>
+                      <Avatar className="bg-gray-500 font-bold">?</Avatar>
                     )}
                     {ajiltan?.erkh === "Admin" && (
                       <Dropdown
@@ -2500,11 +2534,11 @@ useEffect(() => {
                 return (
                   <div className="flex flex-col space-y-4 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black text-gray-500 uppercase">{t("Цаг бүртгэл")}</span>
+                      <span className="text-[12px] font-bold text-gray-500 uppercase">{t("Цаг бүртгэл")}</span>
                       {isInProgress && (
                         <div className="flex items-center bg-teal-500/10 px-2 py-1 rounded-lg">
                           <Badge status="processing" color="#10b981" />
-                          <span className="text-[10px] font-black text-teal-500 uppercase ml-1 animate-pulse">Хийгдэж байна</span>
+                          <span className="text-[12px] font-bold text-teal-500 uppercase ml-1 animate-pulse">Хийгдэж байна</span>
                         </div>
                       )}
                     </div>
@@ -2515,7 +2549,7 @@ useEffect(() => {
                           <div className="text-[12px] font-bold text-gray-400">
                             Төсөвлөсөн: <span className="text-gray-600 dark:text-gray-300 ml-1">{budgetedMinutes} мин</span>
                           </div>
-                          <div className={`text-[12px] font-black ${isExceeded ? 'text-red-500' : 'text-teal-500'}`}>
+                          <div className={`text-[12px] font-bold ${isExceeded ? 'text-red-500' : 'text-teal-500'}`}>
                             {isExceeded ? `Хэтэрсэн: ${formatTimer(spentSeconds - budgetedSeconds)}` : `Үлдсэн: ${formatTimer(remainingSeconds)}`}
                           </div>
                         </div>
@@ -2533,14 +2567,14 @@ useEffect(() => {
                     
                     <div className="flex items-center justify-between pt-2">
                       <div className="flex flex-col">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">Зарцуулсан</span>
+                        <span className="text-[12px] font-bold text-gray-400 uppercase mb-1">Зарцуулсан</span>
                         <div className={`text-3xl font-mono font-bold tabular-nums ${isExceeded ? 'text-red-500' : 'text-gray-800 dark:text-white'}`}>
                           {formatTimer(spentSeconds)}
                         </div>
                       </div>
                       
                       {selectedTask?.tuluv === 'duussan' && budgetedMinutes > 0 && (
-                        <div className={`px-4 py-2 rounded-xl font-black text-[11px] shadow-sm uppercase tracking-wide ${isExceeded ? 'bg-red-500 text-white' : 'bg-teal-500/10 text-teal-600 border border-teal-500/20'}`}>
+                        <div className={`px-4 py-2 rounded-xl font-bold text-[12px] shadow-sm uppercase  ${isExceeded ? 'bg-red-500 text-white' : 'bg-teal-500/10 text-teal-600 border border-teal-500/20'}`}>
                           {isExceeded ? "ЦАГ ХЭТЭРСЭН" : "ХУГАЦААНДАА"}
                         </div>
                       )}
@@ -2554,9 +2588,9 @@ useEffect(() => {
           {selectedTask?.tuluv === 'duussan' && (ajiltan?.erkh === 'Admin' || ajiltan?.erkh === 'Manager') && (
             <div className="pt-8 mt-8 border-t dark:border-gray-700">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[10px] font-black text-gray-500 uppercase ">Админы үнэлгээ</span>
+                <span className="text-[12px] font-bold text-gray-500 uppercase ">Админы үнэлгээ</span>
                 {taskScore?.onooson != null && (
-                  <span className="text-[11px] font-black text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20 px-2 py-0.5 rounded-lg">
+                  <span className="text-[12px] font-bold text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20 px-2 py-0.5 rounded-lg">
                     Үнэлгээ: {taskScore.onooson}/10
                   </span>
                 )}
@@ -2566,8 +2600,8 @@ useEffect(() => {
               ) : (
                 <div className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700 space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[12px] font-bold text-gray-500">Оноо: <span className="text-2xl font-black text-gray-800 dark:text-white ml-1">{scorePoints}</span> / 10</span>
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm ${
+                    <span className="text-[12px] font-bold text-gray-500">Оноо: <span className="text-2xl font-bold text-gray-800 dark:text-white ml-1">{scorePoints}</span> / 10</span>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${
                       scorePoints >= 7 ? 'bg-green-500' : scorePoints >= 4 ? 'bg-yellow-500' : 'bg-red-500'
                     }`}>{scorePoints}</div>
                   </div>
@@ -2595,7 +2629,7 @@ useEffect(() => {
                     loading={savingScore}
                     disabled={taskScore?.onooson != null}
                     onClick={handleSubmitScore}
-                    className={`h-10 rounded-xl border-none font-black ${taskScore?.onooson != null ? 'bg-gray-300' : 'bg-teal-500 hover:bg-teal-400'}`}
+                    className={`h-10 rounded-xl border-none font-bold ${taskScore?.onooson != null ? 'bg-gray-300' : 'bg-teal-500 hover:bg-teal-400'}`}
                   >
                     {savingScore ? 'Хадгалж байна...' : taskScore?.onooson != null ? 'Оноо хадгалагдсан' : 'Оноо хадгалах'}
                   </Button>
@@ -2605,17 +2639,17 @@ useEffect(() => {
               {/* Client Rating Section - New */}
               <div className="mt-8 pt-8 border-t dark:border-gray-700">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-black text-gray-500 uppercase">Үйлчлүүлэгчийн үнэлгээ</span>
+                  <span className="text-[12px] font-bold text-gray-500 uppercase">Үйлчлүүлэгчийн үнэлгээ</span>
                   {taskScore?.uilchluulegchOnooson != null && (
-                    <span className="text-[11px] font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded-lg">
+                    <span className="text-[12px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded-lg">
                       Үнэлгээ: {taskScore.uilchluulegchOnooson}/10
                     </span>
                   )}
                 </div>
                 <div className="bg-amber-50/10 dark:bg-amber-900/10 rounded-2xl p-5 border border-amber-200/50 dark:border-amber-700/30 space-y-4">
                    <div className="flex items-center justify-between">
-                     <span className="text-[12px] font-bold text-amber-600 dark:text-amber-400">Оноо: <span className="text-2xl font-black ml-1">{clientScorePoints}</span> / 10</span>
-                     <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm ${
+                     <span className="text-[12px] font-bold text-amber-600 dark:text-amber-400">Оноо: <span className="text-2xl font-bold ml-1">{clientScorePoints}</span> / 10</span>
+                     <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${
                        clientScorePoints >= 7 ? 'bg-amber-500' : clientScorePoints >= 4 ? 'bg-orange-500' : 'bg-red-500'
                      }`}>{clientScorePoints}</div>
                    </div>
@@ -2640,7 +2674,7 @@ useEffect(() => {
                      loading={savingClientScore}
                      disabled={taskScore?.uilchluulegchOnooson != null}
                      onClick={handleSubmitClientScore}
-                     className={`h-10 rounded-xl border-none font-black ${taskScore?.uilchluulegchOnooson != null ? 'bg-gray-300 outline-none' : 'bg-amber-500 hover:bg-amber-400 shadow-lg shadow-amber-500/20'}`}
+                     className={`h-10 rounded-xl border-none font-bold ${taskScore?.uilchluulegchOnooson != null ? 'bg-gray-300 outline-none' : 'bg-amber-500 hover:bg-amber-400 shadow-lg shadow-amber-500/20'}`}
                    >
                      {savingClientScore ? 'Хадгалж байна...' : taskScore?.uilchluulegchOnooson != null ? 'Үнэлгээ хадгалагдсан' : 'Үнэлгээ хадгалах'}
                    </Button>
@@ -2727,7 +2761,7 @@ useEffect(() => {
                             fallback="/placeholder-error.png"
                           />
                           {img.ajiltniiNer && (
-                            <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] font-semibold px-1 py-1 text-center truncate z-10 pointer-events-none">
+                            <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[12px] font-semibold px-1 py-1 text-center truncate z-10 pointer-events-none">
                               {img.ajiltniiNer}
                             </div>
                           )}
@@ -2758,7 +2792,7 @@ useEffect(() => {
              ) : chatMessages.length === 0 ? (
                <div className="flex flex-col items-center justify-center text-gray-400 h-full opacity-50 space-y-3">
                  <MessageOutlined className="text-4xl" />
-                 <p className="text-xs font-semibold uppercase tracking-widest">Одоогоор мессеж байхгүй байна</p>
+                 <p className="text-xs font-semibold uppercase ">Одоогоор мессеж байхгүй байна</p>
                </div>
              ) : (
                <div className="flex flex-col space-y-5">
@@ -2787,15 +2821,15 @@ useEffect(() => {
                            <span className="text-[12px] font-bold text-gray-800 dark:text-gray-300 truncate">
                              {msg.ajiltniiNer}
                            </span>
-                           <span className="text-[10px] text-gray-400 ml-2 shrink-0">
+                           <span className="text-[12px] text-gray-400 ml-2 shrink-0">
                              {dayjs(msg.createdAt).format("MMM DD, h:mm A")}
                              {msg.isEdited && <span className="ml-1 text-gray-400 italic">(засварлагдсан)</span>}
                            </span>
                          </div>
                          {msg.replyTo?.chatId && (
                            <div className="mb-1 ml-0 pl-3 border-l-2 border-teal-400/60 bg-teal-50 dark:bg-teal-900/20 rounded-r-lg py-1 pr-2">
-                             <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400">{msg.replyTo.ajiltniiNer}</span>
-                             <p className="text-[11px] text-gray-500 dark:text-gray-400 truncate m-0">{msg.replyTo.medeelel || "(медиа)"}</p>
+                             <span className="text-[12px] font-bold text-teal-600 dark:text-teal-400">{msg.replyTo.ajiltniiNer}</span>
+                             <p className="text-[12px] text-gray-500 dark:text-gray-400 truncate m-0">{msg.replyTo.medeelel || "(медиа)"}</p>
                            </div>
                          )}
                          {editingMsg?._id === msg._id ? (
@@ -2891,10 +2925,10 @@ useEffect(() => {
              {replyTo && (
                <div className="mb-2 flex items-center justify-between px-3 py-2 bg-teal-50 dark:bg-teal-900/20 border border-teal-400/40 rounded-xl">
                  <div className="flex flex-col min-w-0 flex-1">
-                   <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400">{replyTo.ajiltniiNer}-д хариулж байна</span>
-                   <span className="text-[11px] text-gray-500 dark:text-gray-400 truncate">{replyTo.medeelel || "(медиа)"}</span>
+                   <span className="text-[12px] font-bold text-teal-600 dark:text-teal-400">{replyTo.ajiltniiNer}-д хариулж байна</span>
+                   <span className="text-[12px] text-gray-500 dark:text-gray-400 truncate">{replyTo.medeelel || "(медиа)"}</span>
                  </div>
-                 <Button type="text" size="small" icon={<CloseOutlined className="text-gray-400 text-[10px]" />} onClick={() => setReplyTo(null)} />
+                 <Button type="text" size="small" icon={<CloseOutlined className="text-gray-400 text-[12px]" />} onClick={() => setReplyTo(null)} />
                </div>
              )}
              {selectedChatFile && (
@@ -2973,7 +3007,7 @@ useEffect(() => {
                 handleTaskClick(task, e);
                 setDayTasksModal({ ...dayTasksModal, visible: false });
               }}
-              className="flex items-center space-x-3 p-3 mb-2 rounded-xl text-[11px] font-bold border-l-4 shadow-sm hover:shadow-md transition-all cursor-pointer bg-gray-50 dark:bg-gray-800 dark:text-gray-200 uppercase tracking-tight"
+              className="flex items-center space-x-3 p-3 mb-2 rounded-xl text-[12px] font-bold border-l-4 shadow-sm hover:shadow-md transition-all cursor-pointer bg-gray-50 dark:bg-gray-800 dark:text-gray-200 uppercase tracking-tight"
               style={{ borderLeftColor: task.projectColor || "#14b8a6" }}
             >
               {task.completed ? 
@@ -2982,9 +3016,9 @@ useEffect(() => {
               }
               <div className="flex flex-col min-w-0 flex-1">
                 <span className="truncate">{task.title}</span>
-                <span className="text-[9px] text-gray-400 mt-0.5">{task.projectName}</span>
-                <span className="text-[9px] text-gray-400 mt-0.5">{task.gereeNomer}</span>
-                <span className="text-[9px] text-gray-400 mt-0.5">{task.taskId}</span>
+                <span className="text-[12px] text-gray-400 mt-0.5">{task.projectName}</span>
+                <span className="text-[12px] text-gray-400 mt-0.5">{task.gereeNomer}</span>
+                <span className="text-[12px] text-gray-400 mt-0.5">{task.taskId}</span>
               </div>
             </div>
           )}
@@ -3014,12 +3048,12 @@ useEffect(() => {
         <div className="flex flex-col h-full bg-white dark:bg-gray-900">
           <div className="flex items-center justify-between px-5 py-4 border-b dark:border-gray-800 shrink-0 bg-teal-600 dark:bg-gray-900">
             <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-extrabold text-white shadow-lg" style={{ backgroundColor: selectedProjectForChat?.color || '#10B981' }}>
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[12px] font-bold text-white shadow-lg" style={{ backgroundColor: selectedProjectForChat?.color || '#10B981' }}>
                 {(selectedProjectForChat?.name || '').slice(0, 2).toUpperCase()}
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-bold text-white leading-tight">{selectedProjectForChat?.name}</span>
-                <span className="text-[10px] text-teal-100 dark:text-teal-400 font-semibold uppercase tracking-wide">Төслийн чат</span>
+                <span className="text-[12px] text-teal-100 dark:text-teal-400 font-semibold uppercase ">Төслийн чат</span>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -3032,7 +3066,7 @@ useEffect(() => {
             {loadingProjectChat ? (
               <div className="flex flex-col items-center justify-center h-full space-y-3">
                 <Spin size="large" />
-                <span className="text-xs font-semibold uppercase tracking-widest animate-pulse text-gray-500">Уншиж байна...</span>
+                <span className="text-xs font-semibold uppercase  animate-pulse text-gray-500">Уншиж байна...</span>
               </div>
             ) : projectChatMessages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full space-y-4 opacity-50">
@@ -3051,7 +3085,7 @@ useEffect(() => {
                   if (msg.isDeleted) {
                     return (
                       <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2`}>
-                         <div className={`px-4 py-2 bg-gray-800/50 border border-dashed border-gray-700 rounded-xl text-[11px] text-gray-500 italic`}>
+                         <div className={`px-4 py-2 bg-gray-800/50 border border-dashed border-gray-700 rounded-xl text-[12px] text-gray-500 italic`}>
                            Мессеж устгагдлаа
                          </div>
                       </div>
@@ -3060,16 +3094,16 @@ useEffect(() => {
                   return (
                     <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2 group`}>
                       {!isMe && (
-                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-green-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-800 shadow-xl">
+                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-green-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
                           <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
                         </Avatar>
                       )}
                       <div className={`flex flex-col max-w-[80%] ${isMe ? 'items-end' : 'items-start'}`}>
-                        {!isMe && <span className="text-[10px] font-bold text-gray-400 mb-1 ml-1">{msg.ajiltniiNer}</span>}
+                        {!isMe && <span className="text-[12px] font-bold text-gray-400 mb-1 ml-1">{msg.ajiltniiNer}</span>}
                         
                         {/* Reply content */}
                         {msg.replyTo?.chatId && (
-                           <div className={`mb-1 px-3 py-1 bg-gray-100 dark:bg-gray-800/50 border-l-2 border-teal-500 rounded-r-lg text-[10px] truncate max-w-full ${isMe ? 'mr-1' : 'ml-1'}`}>
+                           <div className={`mb-1 px-3 py-1 bg-gray-100 dark:bg-gray-800/50 border-l-2 border-teal-500 rounded-r-lg text-[12px] truncate max-w-full ${isMe ? 'mr-1' : 'ml-1'}`}>
                              <span className="text-teal-600 dark:text-teal-400 font-bold mr-1">{msg.replyTo.ajiltniiNer}:</span>
                              <span className="text-gray-500 dark:text-gray-400">{msg.replyTo.medeelel || "(медиа)"}</span>
                            </div>
@@ -3079,8 +3113,8 @@ useEffect(() => {
                            <div className="flex flex-col gap-2 w-full min-w-[200px]">
                              <Input.TextArea autoFocus value={editProjectMsgText} onChange={e => setEditProjectMsgText(e.target.value)} rows={2} className="rounded-xl text-xs bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-300" />
                              <div className="flex justify-end gap-2">
-                               <Button size="small" type="primary" onClick={() => handleEditProjectChatMsg(msg._id, editProjectMsgText)}>Засах</Button>
-                               <Button size="small" onClick={() => setEditingProjectMsg(null)}>Болих</Button>
+                               <Button size="small" type="primary" onClick={() => handleEditProjectChatMsg(msg._id, editProjectMsgText)}>{t("Засах")}</Button>
+                               <Button size="small" onClick={() => setEditingProjectMsg(null)}>{t("Болих")}</Button>
                              </div>
                            </div>
                         ) : (
@@ -3093,7 +3127,7 @@ useEffect(() => {
                                   src={url} 
                                   alt="img" 
                                   className="max-w-[240px] max-h-[300px] object-cover rounded-xl cursor-pointer" 
-                                  preview={{ mask: <div className="text-[10px]">Томруулах</div> }}
+                                  preview={{ mask: <div className="text-[12px]">Томруулах</div> }}
                                 />
                               );
                             })() : msg.turul === 'file' && (msg.fileZam || msg.fileUrl || msg.path) ? (() => {
@@ -3133,7 +3167,7 @@ useEffect(() => {
                             </div>
                           </div>
                         )}
-                        <span className={`text-[9px] text-gray-600 mt-1 ${isMe ? 'mr-1' : 'ml-1'}`}>
+                        <span className={`text-[12px] text-gray-600 mt-1 ${isMe ? 'mr-1' : 'ml-1'}`}>
                           {dayjs(msg.createdAt).format('MM/DD HH:mm')}
                           {msg.isEdited && <span className="ml-1 italic text-gray-700">(edited)</span>}
                         </span>
@@ -3150,17 +3184,17 @@ useEffect(() => {
             {replyToProject && (
               <div className="mb-2 flex items-center justify-between px-3 py-1.5 bg-teal-900/30 border border-teal-700/40 rounded-xl relative">
                 <div className="flex flex-col overflow-hidden">
-                   <span className="text-[9px] font-bold text-teal-400 uppercase">{replyToProject.ajiltniiNer}-д хариулах</span>
-                   <span className="text-[10px] text-gray-400 truncate max-w-[300px]">{replyToProject.medeelel || "(медиа)"}</span>
+                   <span className="text-[12px] font-bold text-teal-400 uppercase">{replyToProject.ajiltniiNer}-д хариулах</span>
+                   <span className="text-[12px] text-gray-400 truncate max-w-[300px]">{replyToProject.medeelel || "(медиа)"}</span>
                 </div>
-                <Button type="text" size="small" icon={<CloseOutlined className="text-[10px] text-gray-500" />} onClick={() => setReplyToProject(null)} />
+                <Button type="text" size="small" icon={<CloseOutlined className="text-[12px] text-gray-500" />} onClick={() => setReplyToProject(null)} />
               </div>
             )}
             {selectedProjectChatFile && (
               <div className="mb-2 flex items-center px-3 py-1.5 bg-teal-900/30 border border-teal-700/40 rounded-xl relative w-max">
                 <PaperClipOutlined className="text-teal-400 mr-2" />
                 <span className="text-xs font-semibold text-teal-300 truncate max-w-[200px]">{selectedProjectChatFile.name}</span>
-                <Button type="text" size="small" icon={<CloseOutlined className="text-[10px] text-gray-500" />} className="absolute right-1" onClick={() => setSelectedProjectChatFile(null)} />
+                <Button type="text" size="small" icon={<CloseOutlined className="text-[12px] text-gray-500" />} className="absolute right-1" onClick={() => setSelectedProjectChatFile(null)} />
               </div>
             )}
              <div className="relative flex items-center bg-[#f3f4f6] dark:bg-[#1f2937] rounded-2xl border border-gray-200 dark:border-gray-700/60 shadow-inner overflow-hidden">
@@ -3168,7 +3202,7 @@ useEffect(() => {
                 <Button type="text" shape="circle" icon={uploadingProjectChatFile ? <LoadingOutlined className="text-teal-500" /> : <PaperClipOutlined className="text-gray-500 hover:text-teal-400 text-lg" />} disabled={uploadingProjectChatFile} className="p-0 border-none" />
               </Upload>
                <Input.TextArea
-                placeholder="Зурвас бичих..."
+                placeholder={t("Зурвас бичих...")}
                 autoSize={{ minRows: 1, maxRows: 5 }}
                 value={projectChatInput}
                 onChange={(e) => setProjectChatInput(e.target.value)}

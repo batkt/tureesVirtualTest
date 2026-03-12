@@ -80,12 +80,12 @@ function DashboardCard({ id, title, icon, rightActions, children, headerClass="b
   return (
     <div id={id} className={`bg-white dark:bg-gray-900/50 rounded-xl overflow-hidden shadow-sm border-t-[3px] ${headerClass} hover:shadow-emerald-500 dark:hover:shadow-emerald-500/10 flex flex-col relative min-h-[300px] h-[340px]`}>
       <div className="flex justify-between items-center px-4 py-3 bg-blue-900/10 dark:bg-[#1b212f] border-b border-gray-100 dark:border-[#2d3748]/50 shrink-0">
-        <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-extrabold text-[12.5px] tracking-wide">
+        <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-bold text-[12.5px] ">
           <span className="text-gray-400 dark:text-gray-300">{icon}</span> {title}
         </div>
         
       </div>
-      <div className="p-4 flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
+      <div className="p-4 dark:bg-gray-900 flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
         {children}
       </div>
     </div>
@@ -400,9 +400,9 @@ function Khynalt() {
   }, [ajiltanJagsaalt?.jagsaalt]);
 
   const statCards = [
-    { title: "Нийт ажил", value: tasks.length.toString() },
+    { title: "Нийт даалгавар", value: tasks.length.toString() },
     { title: "Дууссан ажил", value: tasks.filter(t => t.tuluv === "duussan" || t.tuluv === "duussan").length.toString() },
-    { title: "Нийт үйлчлүүлэгч", value: uilchluulegchid.length.toString() },
+    { title: "Нийт харилцагч", value: uilchluulegchid.length.toString() },
     { title: "Бараа материал", value: baraas.length.toString() },
     { title: "Яаралтай", value: tasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
     { title: "Идэвхтэй ажилтан", value: teamMembers.length.toString() },
@@ -492,7 +492,7 @@ function Khynalt() {
     <Admin title="Хяналтын самбар" khuudasniiNer="khynalt">
       <div className="col-span-12 flex flex-col xl:flex-row h-auto xl:h-H8HalfRem w-full -mx-0 xl:-mx-1 -mt-2 text-black lg:rounded-2xl shadow-2xl relative animate-entrance">
         <div className="flex-1 flex flex-col p-3 md:p-4 overflow-hidden relative min-w-0">
-          <div className="flex justify-between items-center mb-4 px-1">
+          <div className="flex justify-between items-center px-1">
           
         </div>
           <div id="khyanalt-stats" className="hideScroll grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
@@ -524,13 +524,13 @@ function Khynalt() {
 
           <div className="flex-1 overflow-y-auto pr-2 pb-8 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-100 dark:[&::-webkit-scrollbar-thumb]:bg-slate-800">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-5">
-              <DashboardCard id="khyanalt-activity-chart" title="Гүйцэтгэлийн явц" icon={<AreaChartOutlined/>} headerClass="border-sky-500" rightActions={
+              <DashboardCard id="khyanalt-activity-chart" title="Гүйцэтгэлийн хандлага" icon={<AreaChartOutlined/>} headerClass="border-sky-500" rightActions={
                 <div className="flex gap-1.5 bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg border border-gray-200 dark:border-gray-700">
                   {[7, 14, 30].map(r => (
                     <button
                       key={r}
                       onClick={() => setChartRange(r)}
-                      className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-md transition-all ${chartRange === r ? 'bg-sky-500 text-white shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'}`}
+                      className={`text-[12px] font-bold uppercase px-2 py-0.5 rounded-md transition-all ${chartRange === r ? 'bg-sky-500 text-white shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'}`}
                     >
                       {r}д
                     </button>
@@ -572,10 +572,10 @@ function Khynalt() {
                     };
 
                     const series = [
-                      { key: 'overdue', color: '#ef4444', gradId: 'gradRed',   glowId: 'glowRed',   label: 'Хугацаа хэтэрсэн', count: overdueTotal },
-                      { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: 'Идэвхтэй', count: activeTotal  },
-                      { key: 'waiting', color: '#f59e0b', gradId: 'gradAmber', glowId: 'glowAmber', label: 'Хүлээгдэж буй', count: waitingTotal },
-                      { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: 'Дууссан', count: doneTotal    },
+                      { key: 'overdue', color: '#ef4444', gradId: 'gradRed',   glowId: 'glowRed',   label: t('uilchilgee.overdue'), count: overdueTotal },
+                      { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: t('uilchilgee.active'), count: activeTotal  },
+                      { key: 'waiting', color: '#f59e0b', gradId: 'gradAmber', glowId: 'glowAmber', label: t('Хүлээгдэж буй'), count: waitingTotal },
+                      { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: t('uilchilgee.completed_tasks'), count: doneTotal    },
                     ];
 
                     return (
@@ -584,8 +584,8 @@ function Khynalt() {
                           {series.map(s => (
                             <div key={s.key} className="flex items-baseline gap-1 px-2.5 py-1 rounded-lg"
                               style={{ background: `${s.color}14`, border: `1px solid ${s.color}30` }}>
-                              <span className="text-base font-black leading-none" style={{ color: s.color }}>{s.count}</span>
-                              <span className="text-[8px] font-bold uppercase tracking-wide" style={{ color: s.color, opacity: 0.75 }}>{s.label}</span>
+                              <span className="text-base font-bold leading-none" style={{ color: s.color }}>{s.count}</span>
+                              <span className="text-[8px] font-bold uppercase " style={{ color: s.color, opacity: 0.75 }}>{s.label}</span>
                             </div>
                           ))}
                         </div>
@@ -665,13 +665,13 @@ function Khynalt() {
                             {series.map(s => (
                               <div key={s.key} className="flex items-center gap-1.5">
                                 <div className="w-2 h-2 rounded-full" style={{ background: s.color, boxShadow: `0 0 5px ${s.color}` }} />
-                                <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">{s.label}</span>
+                                <span className="text-[8px] font-bold text-gray-400 uppercase ">{s.label}</span>
                               </div>
                             ))}
                           </div>
                           {/* <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)' }}>
                             <RiseOutlined style={{ color: '#22c55e', fontSize: 9 }} />
-                            <span className="text-[9px] font-black" style={{ color: '#22c55e' }}>{effPct}%</span>
+                            <span className="text-[12px] font-bold" style={{ color: '#22c55e' }}>{effPct}%</span>
                           </div> */}
                         </div>
                       </div>
@@ -681,7 +681,7 @@ function Khynalt() {
               
               
 
-                <DashboardCard id="khyanalt-tasks" title="Хуваарилагдсан ажилууд" icon={<CheckSquareOutlined/>} headerClass="border-blue-500" rightActions={<span className="text-emerald-500 text-[11px] font-bold cursor-pointer hover:underline" onClick={() => router.push('/khyanalt/uilchilgee/tuluvluguu')}>Бүгдийг үзэх <DownOutlined className="text-[8px]"/></span>}>
+                <DashboardCard id="khyanalt-tasks" title="Олгогдсон ажлууд" icon={<CheckSquareOutlined/>} headerClass="border-blue-500" rightActions={<span className="text-emerald-500 text-[12px] font-bold cursor-pointer hover:underline" onClick={() => router.push('/khyanalt/uilchilgee/tuluvluguu')}>Бүгдийг харах <DownOutlined className="text-[8px]"/></span>}>
                   <div className="flex flex-col gap-2">
                     {tasks.slice(0, 7).map(task => (
                       <div 
@@ -693,7 +693,7 @@ function Khynalt() {
                          <span className="text-gray-800 dark:text-gray-200 text-[12px] font-bold flex-1 truncate group-hover:text-blue-500 transition-colors">{task.ner}</span>
                          
                          <div className="flex items-center gap-2 shrink-0">
-                            <span className={`px-1.5 py-0.5 rounded text-[9px] uppercase font-black ${
+                            <span className={`px-1.5 py-0.5 mr-32 rounded text-[12px] uppercase font-bold ${
                                task.zereglel === "yaraltai"  ? "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400" :
                                task.zereglel === "nen yaraltai" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
                                task.zereglel === "engiin" ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400" :
@@ -703,15 +703,15 @@ function Khynalt() {
                                 task.zereglel === "nen yaraltai" ? "Нэн яаралтай" : 
                                 task.zereglel === "engiin" ? "Энгийн" : "Бага"}
                             </span>
-                            <span className="flex items-center gap-1 text-[9px] text-gray-400 font-bold w-16 justify-end">
-                               <CalendarOutlined className="text-[9px] opacity-50" />
+                            <span className="flex items-center gap-1 text-[12px] text-gray-400 font-bold w-16 justify-end">
+                               <CalendarOutlined className="text-[12px] opacity-50" />
                                {task.duusakhTsag ? moment(task.duusakhTsag).format("MM/DD") : "--"}
                             </span>
                          </div>
                       </div>
                     ))}
                     {tasks.length === 0 && (
-                      <div className="flex flex-col items-center justify-center py-10 text-gray-400 uppercase font-black text-[10px] tracking-widest gap-2">
+                      <div className="flex flex-col items-center justify-center py-10 text-gray-400 uppercase font-bold text-[12px]  gap-2">
                         <CheckSquareOutlined className="text-2xl opacity-20" />
                         Даалгавар байхгүй
                       </div>
@@ -747,7 +747,7 @@ function Khynalt() {
 
                       return (
                         <div key={member.id} className="group flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
-                          <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-[11px] font-black"
+                          <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-[12px] font-bold"
                             style={{ background: `${ac}22`, border: `1.5px solid ${ac}50`, color: ac }}>
                             {member.name?.charAt(0).toUpperCase()}
                           </div>
@@ -756,15 +756,15 @@ function Khynalt() {
                               <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200 truncate leading-none">{member.name}</span>
                               <div className="flex items-center gap-1.5 shrink-0">
                                 {overdue > 0 && (
-                                  <span className="text-[8px] font-black px-1.5 py-0.5 rounded-full"
+                                  <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full"
                                     style={{ background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' }}>
                                     {overdue} Хугацаа хэтэрсэн
                                   </span>
                                 )}
-                                <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 tracking-wider">
+                                <span className="text-[12px] font-bold px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 r">
                                   {member.kpi} KPI
                                 </span>
-                                <span className="text-[10px] font-black tabular-nums" style={{ color: ac }}>{pct}%</span>
+                                <span className="text-[12px] font-bold tabular-nums" style={{ color: ac }}>{pct}%</span>
                               </div>
                             </div>
                             <div className="h-[5px] w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden flex">
@@ -789,7 +789,7 @@ function Khynalt() {
                       );
                     })}
                     {teamMembers.length === 0 && (
-                      <div className="flex flex-col items-center justify-center py-6 text-gray-400 gap-1 text-[10px] font-bold uppercase tracking-widest">
+                      <div className="flex flex-col items-center justify-center py-6 text-gray-400 gap-1 text-[12px] font-bold uppercase ">
                         <TeamOutlined className="text-2xl opacity-20" />
                         Ажилтан байхгүй
                       </div>
@@ -797,14 +797,14 @@ function Khynalt() {
                   </div>
                 </DashboardCard>
 
-                 <DashboardCard title="Сүүлийн үйлчлүүлэгчид" icon={<UserOutlined/>} headerClass="border-blue-400">
+                 <DashboardCard title="Сүүлийн харилцагчид" icon={<UserOutlined/>} headerClass="border-blue-400">
                   <div className="flex flex-col gap-3">
                     {uilchluulegchid.map(user => (
                       <div key={user._id} className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-700 pb-2">
-                        <Avatar size="small" icon={<UserOutlined />} className="bg-gradient-to-tr from-green-300 to-gray-400 dark:from-green-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-500 shadow-xl" />
+                        <Avatar size="small" icon={<UserOutlined />} className="bg-gradient-to-tr from-green-300 to-gray-400 dark:from-green-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-500 shadow-xl" />
                         <div className="flex flex-col min-w-0 flex-1">
-                           <span className="text-gray-800 dark:text-gray-200 text-[12.5px] font-extrabold truncate">{user.ner}</span>
-                           <span className="text-[10px] text-gray-500 truncate">{user.mail || user.utas?.[0]}</span>
+                           <span className="text-gray-800 dark:text-gray-200 text-[12.5px] font-bold truncate">{user.ner}</span>
+                           <span className="text-[12px] text-gray-500 truncate">{user.mail || user.utas?.[0]}</span>
                         </div>
                       </div>
                     ))}
@@ -816,19 +816,19 @@ function Khynalt() {
                     {baraas.map(item => (
                       <div key={item._id} className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2 last:border-b-0">
                         <div className="flex flex-col min-w-0 flex-1">
-                           <span className="text-gray-800 dark:text-gray-200 text-[13px] font-extrabold truncate">{item.ner}</span>
-                           <span className="text-[10px] text-gray-500">{item.niiluulegch || "--"}</span>
+                           <span className="text-gray-800 dark:text-gray-200 text-[13px] font-bold truncate">{item.ner}</span>
+                           <span className="text-[12px] text-gray-500">{item.niiluulegch || "--"}</span>
                         </div>
                         <div className="flex flex-col items-end shrink-0 ml-2">
-                           <span className="text-[13px] font-black text-cyan-600 dark:text-cyan-400">{item.uldegdel || 0}</span>
-                           <span className="text-[9px] text-gray-400 uppercase font-bold tracking-tighter">Үлдэгдэл</span>
+                           <span className="text-[13px] font-bold text-cyan-600 dark:text-cyan-400">{item.uldegdel || 0}</span>
+                           <span className="text-[10px] text-gray-400 font-bold tracking-tighter">Үлдэгдэл</span>
                         </div>
                       </div>
                     ))}
                     {baraas.length === 0 && (
-                      <div className="flex flex-col items-center justify-center py-6 text-gray-400 gap-1 text-[10px] font-bold uppercase tracking-widest">
+                      <div className="flex flex-col items-center justify-center py-6 text-gray-400 gap-1 text-[12px] font-bold uppercase ">
                         <PlusOutlined className="text-2xl opacity-20" />
-                        Бараа байхгүй
+                        Мэдээлэл байхгүй
                       </div>
                     )}
                   </div>
@@ -840,34 +840,32 @@ function Khynalt() {
         </div>
 
         <div className={`transition-all duration-300 flex flex-col shrink-0 z-20 ${isRightPanelExpanded ? 'w-full xl:w-[340px] opacity-100 h-auto xl:h-[calc(102vh-6rem)]' : 'w-0 opacity-0 whitespace-nowrap overflow-hidden'}`}>  
-          <div className="flex-1 m-3 bg-white dark:bg-[#1f2636] rounded-[2rem] border border-slate-100 dark:border-slate-800/60 shadow-2xl flex flex-col overflow-hidden">
+          <div className="flex-1 m-3 bg-white dark:bg-gray-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/60 shadow-2xl flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-auto w-full flex flex-col [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
               
-              <div className="flex items-center justify-end p-4 pb-0 shrink-0">
-                <Button type="text" size="small" className="hover:!bg-slate-600/50 hover:text-white transition-all rounded-md px-1 w-6 h-6 border border-slate-700/50" icon={<CloseOutlined className="text-gray-400 text-[10px]" />} onClick={() => setIsRightPanelExpanded(false)} />
-              </div>
+
 
               {/* 1. Projects Section */}
               <div className="flex flex-col p-4 space-y-3 shrink-0">
                 <div className="flex items-center justify-between px-1">
-                                  <div className="text-[11px] font-extrabold text-gray-400 mb-2 flex items-center tracking-wide uppercase opacity-70">
-                                    <span>Төслүүд</span>
+                                  <div className="text-[12px] font-bold text-gray-400 mb-2 flex items-center  uppercase opacity-70">
+                                    <span>Төсөл</span>
                                   </div>
                                   <Button
                                     type="text"
                                     size="small"
                                     onClick={() => setIsProjectModalVisible(true)}
-                                    icon={<PlusOutlined className="text-emerald-400 text-[10px]" />}
-                                    className="!text-emerald-400 text-[10px] font-bold hover:!bg-emerald-500/10 rounded-lg"
+                                    icon={<PlusOutlined className="text-white text-[12px]" />}
+                                    className="!text-white bg-green-500 text-[12px] font-bold hover:!bg-emerald-500/10 rounded-lg dark:bg-green-500 dark:text-white"
                                   >
-                                    Нэмэх
+                                    {t("Нэмэх")}
                                   </Button>
                                 </div>
                 <div className="flex-1 overflow-y-auto w-full px-3 py-1 space-y-1.5 custom-scrollbar">
                   {loadingProjects ? (
                     <div className="flex justify-center py-4"><Spin size="small" /></div>
                   ) : projects.length === 0 ? (
-                    <div className="text-center text-gray-400 text-[11px] py-4 font-medium italic">Төсөл байхгүй байна</div>
+                    <div className="text-center text-gray-400 text-[12px] py-4 font-medium italic">Мэдээлэл байхгүй</div>
                   ) : (
                     projects.map(p => (
                       <div 
@@ -876,16 +874,16 @@ function Khynalt() {
                         onClick={() => toggleProject(p.id)}
                       >
                         <div 
-                          className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-black shadow-lg transition-transform group-hover:scale-110 ${!selectedProjectIds.includes(p.id) && 'grayscale-[0.5] opacity-70'}`} 
+                          className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold shadow-lg transition-transform group-hover:scale-110 ${!selectedProjectIds.includes(p.id) && 'grayscale-[0.5] opacity-70'}`} 
                           style={{ backgroundColor: p.color || "#10B981" }}
                         >
                           {(p.name || p.ner || "P").slice(0, 2).toUpperCase()}
                         </div>
                         <div className="flex flex-col flex-1 min-w-0">
-                          <span className="text-[13px] font-extrabold text-gray-800 dark:text-gray-100 truncate group-hover:text-emerald-500 transition-colors leading-tight">
+                          <span className="text-[13px] font-bold text-gray-800 dark:text-gray-100 truncate group-hover:text-emerald-500 transition-colors leading-tight">
                             {p.name || p.ner}
                           </span>
-                          <span className="text-[9px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest mt-1 opacity-70">
+                          <span className="text-[12px] text-gray-500 dark:text-gray-400 font-bold uppercase  mt-1 opacity-70">
                             {p.folder || "Ерөнхий"}
                           </span>
                         </div>
@@ -910,19 +908,19 @@ function Khynalt() {
 
               {/* 2. Team Section */}
               <div className="flex flex-col p-4 shrink-0">
-                <div className="text-[11px] font-extrabold text-gray-400 mb-3 px-1 flex items-center tracking-wide uppercase opacity-70">
-                  <span>Ажилчид</span>
+                <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center  uppercase opacity-70">
+                  <span>Ажилтан</span>
                 </div>
                 <div className="max-h-[300px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                   {teamMembers.map((member, i) => (
                     <div key={i} className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md">
                       <div className="flex items-center space-x-4 w-full">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-400 to-teal-600 dark:from-emerald-700 dark:to-teal-900 text-white text-[12px] font-black border-2 border-white dark:border-gray-800 shadow-xl shrink-0">
+                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-400 to-teal-600 dark:from-emerald-700 dark:to-teal-900 text-white text-[12px] font-bold border-2 border-white dark:border-gray-800 shadow-xl shrink-0">
                           {(member.name || "").slice(0, 1).toUpperCase()}
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1 justify-center">
                           <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
-                          <div className="text-[10px] text-gray-500 font-medium leading-tight mt-1 opacity-70 uppercase tracking-widest">{member.role}</div>
+                          <div className="text-[12px] text-gray-500 font-medium leading-tight mt-1 opacity-70 uppercase ">{member.role}</div>
                         </div>
                       </div>
                     </div>
@@ -935,20 +933,20 @@ function Khynalt() {
               {/* 3. History Section */}
               <div className="flex flex-col p-4 shrink-0">
                 <div className="flex items-center justify-between mb-3 px-1">
-                  <div className="text-[11px] font-extrabold text-gray-400 flex items-center tracking-wide uppercase opacity-70">
-                    <span>Түүх</span>
+                  <div className="text-[12px] font-bold text-gray-400 flex items-center  uppercase opacity-70">
+                    <span>{t("Түүх")}</span>
                   </div>
                 </div>
                 <div className="max-h-[300px] overflow-y-auto space-y-4 px-2 custom-scrollbar">
                   {loadingHistory ? (
                     <div className="flex justify-center py-4"><Spin size="small" /></div>
                   ) : history.length === 0 ? (
-                    <div className="text-center text-gray-400 text-[11px]">Түүх байхгүй байна</div>
+                    <div className="text-center text-gray-400 text-[12px]">Түүх байхгүй</div>
                   ) : (
                     history.slice(0, 10).map((act) => (
                       <div key={act._id || act.id} className="hover:scale-105 relative pl-5 before:content-[''] before:absolute before:left-[5px] before:top-4 before:w-[1px] before:h-[130%] before:bg-slate-400/30 dark:before:bg-slate-600/30 last:before:hidden transition-all">
                         <div className="absolute left-0 top-1 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-800 z-10 shadow-sm"></div>
-                        <div className="text-[10px] leading-relaxed">
+                        <div className="text-[12px] leading-relaxed">
                           {act.ajiltniiNer && <span className="text-gray-500 dark:text-gray-400 font-bold">{act.ajiltniiNer} </span>}
                           <span className="text-gray-400 font-medium">
                             {act.uildelText || (
@@ -961,9 +959,9 @@ function Khynalt() {
                               (act.uildel || 'үйлдэл хийлээ')
                             )}
                           </span>
-                          {act.taskNer && <span className="text-emerald-500 font-extrabold ml-1">{act.taskNer}</span>}
+                          {act.taskNer && <span className="text-emerald-500 font-bold ml-1">{act.taskNer}</span>}
                         </div>
-                        <div className="text-[9px] text-gray-500 mt-0.5 font-medium opacity-70">
+                        <div className="text-[12px] text-gray-500 mt-0.5 font-medium opacity-70">
                           {act.createdAt ? dayjs(act.createdAt).format("MM/DD HH:mm") : "--:--"}
                         </div>
                       </div>
@@ -978,23 +976,23 @@ function Khynalt() {
                   onClick={() => setIsTutorialOpen(true)}
                 >
                     <QuestionCircleOutlined className="text-gray-700 dark:text-gray-300 text-[14px] group-hover:text-white transition-colors" />
-                    <span className="text-gray-700 dark:text-gray-300 text-[11px] font-bold group-hover:text-white transition-colors">Тусламж</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-[12px] font-bold group-hover:text-white transition-colors">Тусламж</span>
                 </div>
             </div>
           </div>
         </div>
         </div>
       
-      {typeof window !== 'undefined' && !isRightPanelExpanded && createPortal(
+      {typeof window !== 'undefined' && createPortal(
         <button 
-          className="fixed right-0 top-1/2 -translate-y-1/2 bg-green-600 dark:bg-green-900 border border-green-700/60 w-8 h-12 rounded-l-lg flex flex-col items-center justify-center cursor-pointer shadow-xl hover:bg-green-500 hover:-translate-x-1 transition-all z-[99999]"
+          className="fixed right-0 top-1/2 -translate-y-1/2 bg-green-600 dark:bg-green-900 border border-green-700/60 w-8 h-12 rounded-l-lg flex flex-col items-center justify-center cursor-pointer shadow-xl hover:bg-green-500 transition-all z-[99999]"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            setIsRightPanelExpanded(true);
+            setIsRightPanelExpanded(!isRightPanelExpanded);
           }}
         >
-          <RightOutlined className="text-white dark:text-gray-300 text-[10px] rotate-180" />
+          <RightOutlined className={`text-white dark:text-gray-300 text-[12px] transition-transform duration-300 ${isRightPanelExpanded ? "rotate-0" : "rotate-180"}`} />
         </button>,
         document.body
       )}
@@ -1010,7 +1008,7 @@ function Khynalt() {
         <Form form={projectForm} layout="vertical" onFinish={handleCreateProject} className="space-y-6">
           <Form.Item 
             name="name" 
-            label={<span className="text-gray-400 text-[10px] font-black uppercase pl-1">Төслийн нэр</span>}
+            label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">Төслийн нэр</span>}
             required
             rules={[{ required: true, message: 'Төслийн нэр оруулна уу' }]}
           >
@@ -1019,7 +1017,7 @@ function Khynalt() {
 
           <Form.Item 
             name="tailbar" 
-            label={<span className="text-gray-400 text-[10px] font-black uppercase pl-1">Тайлбар</span>}
+            label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">Тайлбар</span>}
           >
             <Input.TextArea placeholder="Төслийн дэлгэрэнгүй тайлбар..." className="rounded-xl" rows={2} />
           </Form.Item>
@@ -1027,13 +1025,13 @@ function Khynalt() {
           <div className="grid grid-cols-2 gap-4">
             <Form.Item 
               name="ekhlekhOgnoo" 
-              label={<span className="text-gray-400 text-[10px] font-black uppercase pl-1">Эхлэх өдөр</span>}
+              label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">Эхлэх өдөр</span>}
             >
               <DatePicker className="w-full h-12 rounded-xl" format="YYYY-MM-DD" />
             </Form.Item>
             <Form.Item 
               name="duusakhOgnoo" 
-              label={<span className="text-gray-400 text-[10px] font-black uppercase  pl-1">Дуусах өдөр</span>}
+              label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">Дуусах өдөр</span>}
             >
               <DatePicker className="w-full h-12 rounded-xl" format="YYYY-MM-DD" />
             </Form.Item>
@@ -1041,7 +1039,7 @@ function Khynalt() {
 
           <Form.Item 
             name="color" 
-            label={<span className="text-gray-400 text-[10px] font-black uppercase  pl-1">Өнгө</span>}
+            label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">Өнгө</span>}
             initialValue="#10B981"
           >
             <Select className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex [&_.ant-select-selection-item]:!flex [&_.ant-select-selection-item]:!items-center">
@@ -1055,10 +1053,10 @@ function Khynalt() {
           
           <div className="flex justify-end space-x-4 pt-4">
             <Button onClick={() => { setIsProjectModalVisible(false); setEditingProject(null); projectForm.resetFields(); }}>
-              {t("Цуцлах")}
+              Болих
             </Button>
             <Button type="primary" htmlType="submit" loading={savingProject}>
-              {editingProject ? t("Хадгалах") : t("Үүсгэх")}
+              {editingProject ? "Хадгалах" : "Үүсгэх"}
             </Button>
           </div>
         </Form>
@@ -1083,12 +1081,12 @@ function Khynalt() {
         <div className="flex flex-col h-full bg-white dark:bg-[#1b212f]">
           <div className="flex items-center justify-between px-5 py-4 border-b dark:border-gray-800 shrink-0 bg-emerald-600 dark:bg-[#1b212f]">
             <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-extrabold text-white shadow-lg" style={{ backgroundColor: selectedProjectForChat?.color || '#10B981' }}>
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[12px] font-bold text-white shadow-lg" style={{ backgroundColor: selectedProjectForChat?.color || '#10B981' }}>
                 {(selectedProjectForChat?.name || selectedProjectForChat?.ner || '').slice(0, 2).toUpperCase()}
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-bold text-white leading-tight">{selectedProjectForChat?.name || selectedProjectForChat?.ner}</span>
-                <span className="text-[10px] text-emerald-100 dark:text-emerald-400 font-semibold uppercase tracking-wide">Төслийн чат</span>
+                <span className="text-[12px] text-emerald-100 dark:text-emerald-400 font-semibold uppercase ">Төслийн чат</span>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -1100,7 +1098,7 @@ function Khynalt() {
             {loadingProjectChat ? (
               <div className="flex flex-col items-center justify-center h-full space-y-3">
                 <Spin size="large" />
-                <span className="text-xs font-semibold uppercase tracking-widest animate-pulse text-gray-500">Уншиж байна...</span>
+                <span className="text-xs font-semibold uppercase  animate-pulse text-gray-500">Уншиж байна...</span>
               </div>
             ) : projectChatMessages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full space-y-4 opacity-50">
@@ -1119,7 +1117,7 @@ function Khynalt() {
                   if (msg.isDeleted) {
                     return (
                       <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2`}>
-                         <div className={`px-4 py-2 bg-gray-800/50 border border-dashed border-gray-700 rounded-xl text-[11px] text-gray-500 italic`}>
+                         <div className={`px-4 py-2 bg-gray-800/50 border border-dashed border-gray-700 rounded-xl text-[12px] text-gray-500 italic`}>
                            Мессеж устгагдлаа
                          </div>
                       </div>
@@ -1128,16 +1126,16 @@ function Khynalt() {
                   return (
                     <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2 group`}>
                       {!isMe && (
-                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-300 to-gray-500 dark:from-emerald-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-black border border-white dark:border-gray-800 shadow-xl">
+                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-300 to-gray-500 dark:from-emerald-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
                           <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
                         </Avatar>
                       )}
                       <div className={`flex flex-col max-w-[80%] ${isMe ? 'items-end' : 'items-start'}`}>
-                        {!isMe && <span className="text-[10px] font-bold text-gray-400 mb-1 ml-1">{msg.ajiltniiNer}</span>}
+                        {!isMe && <span className="text-[12px] font-bold text-gray-400 mb-1 ml-1">{msg.ajiltniiNer}</span>}
                         
                         {/* Reply content */}
                         {msg.replyTo?.chatId && (
-                           <div className={`mb-1 px-3 py-1 bg-gray-100 dark:bg-gray-800/50 border-l-2 border-emerald-500 rounded-r-lg text-[10px] truncate max-w-full ${isMe ? 'mr-1' : 'ml-1'}`}>
+                           <div className={`mb-1 px-3 py-1 bg-gray-100 dark:bg-gray-800/50 border-l-2 border-emerald-500 rounded-r-lg text-[12px] truncate max-w-full ${isMe ? 'mr-1' : 'ml-1'}`}>
                              <span className="text-emerald-600 dark:text-emerald-400 font-bold mr-1">{msg.replyTo.ajiltniiNer}:</span>
                              <span className="text-gray-500 dark:text-gray-400">{msg.replyTo.medeelel || "(медиа)"}</span>
                            </div>
@@ -1157,7 +1155,7 @@ function Khynalt() {
                               const path = msg.fileZam || msg.fileUrl || msg.path || "";
                               const url = path.startsWith('http') ? path : (path.startsWith('/') ? `${FSM_BASE_URL}${path}` : `${FSM_BASE_URL}/${path}`);
                               return (
-                                <Image src={url} alt="img" className="max-w-[240px] max-h-[300px] object-cover rounded-xl cursor-pointer" preview={{ mask: <div className="text-[10px]">Томруулах</div> }} />
+                                <Image src={url} alt="img" className="max-w-[240px] max-h-[300px] object-cover rounded-xl cursor-pointer" preview={{ mask: <div className="text-[12px]">Томруулах</div> }} />
                               );
                             })() : msg.turul === 'file' && (msg.fileZam || msg.fileUrl || msg.path) ? (() => {
                               const path = msg.fileZam || msg.fileUrl || msg.path || "";
@@ -1196,7 +1194,7 @@ function Khynalt() {
                             </div>
                           </div>
                         )}
-                        <span className={`text-[9px] text-gray-600 mt-1 ${isMe ? 'mr-1' : 'ml-1'}`}>
+                        <span className={`text-[12px] text-gray-600 mt-1 ${isMe ? 'mr-1' : 'ml-1'}`}>
                           {dayjs(msg.createdAt).format('MM/DD HH:mm')}
                           {msg.isEdited && <span className="ml-1 italic text-gray-500">(зассан)</span>}
                         </span>
@@ -1213,17 +1211,17 @@ function Khynalt() {
             {replyToProject && (
               <div className="mb-2 flex items-center justify-between px-3 py-1.5 bg-emerald-900/30 border border-emerald-700/40 rounded-xl relative">
                 <div className="flex flex-col overflow-hidden">
-                   <span className="text-[9px] font-bold text-emerald-400 uppercase">{replyToProject.ajiltniiNer}-д хариулах</span>
-                   <span className="text-[10px] text-gray-400 truncate max-w-[300px]">{replyToProject.medeelel || "(медиа)"}</span>
+                   <span className="text-[12px] font-bold text-emerald-400 uppercase">{replyToProject.ajiltniiNer}-д хариулах</span>
+                   <span className="text-[12px] text-gray-400 truncate max-w-[300px]">{replyToProject.medeelel || "(медиа)"}</span>
                 </div>
-                <Button type="text" size="small" icon={<CloseOutlined className="text-[10px] text-gray-500" />} onClick={() => setReplyToProject(null)} />
+                <Button type="text" size="small" icon={<CloseOutlined className="text-[12px] text-gray-500" />} onClick={() => setReplyToProject(null)} />
               </div>
             )}
             {selectedProjectChatFile && (
               <div className="mb-2 flex items-center px-3 py-1.5 bg-emerald-900/30 border border-emerald-700/40 rounded-xl relative w-max">
                 <PaperClipOutlined className="text-emerald-400 mr-2" />
                 <span className="text-xs font-semibold text-emerald-300 truncate max-w-[200px]">{selectedProjectChatFile.name}</span>
-                <Button type="text" size="small" icon={<CloseOutlined className="text-[10px] text-gray-500" />} className="absolute right-1" onClick={() => setSelectedProjectChatFile(null)} />
+                <Button type="text" size="small" icon={<CloseOutlined className="text-[12px] text-gray-500" />} className="absolute right-1" onClick={() => setSelectedProjectChatFile(null)} />
               </div>
             )}
             <div className="relative flex items-center bg-[#f3f4f6] dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700/60 shadow-inner overflow-hidden">
