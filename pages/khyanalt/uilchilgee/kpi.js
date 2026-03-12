@@ -94,6 +94,12 @@ function KPI() {
     fetchInitialKpis();
   }, [fetchInitialKpis]);
 
+  useEffect(() => {
+    if (isConnected && fsmSocket && baiguullagiinId) {
+      fsmSocket.emit("join_baiguullaga", { baiguullagiinId });
+    }
+  }, [isConnected, fsmSocket, baiguullagiinId]);
+
   const handleManualRefresh = async () => {
     setIsRefreshing(true);
     await Promise.all([
@@ -104,6 +110,26 @@ function KPI() {
       setIsRefreshing(false);
       message.success("Мэдээлэл шинэчлэгдлээ");
     }, 500);
+  };
+
+  const handleSystemRefresh = async () => {
+    if (!baiguullagiinId) return;
+    setIsRefreshing(true);
+    try {
+      const res = await api.post(`/baiguullaga/${baiguullagiinId}/kpi/refresh`);
+      if (res.data?.success) {
+        await Promise.all([
+          fetchInitialKpis(),
+          ajiltniiJagsaaltMutate()
+        ]);
+        message.success(res.data.message || "Гүйцэтгэлийн үзүүлэлтүүд бүрэн шинэчлэгдлээ");
+      }
+    } catch (err) {
+      console.error("System refresh failed:", err);
+      message.error("Шинэчлэл хийхэд алдаа гарлаа");
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   const users = useMemo(() => {
@@ -285,6 +311,16 @@ function KPI() {
                   title="Ажилчдын үзүүлэлт" 
                   icon={<TeamOutlined/>}
                   headerClass="border-indigo-500"
+                  rightActions={
+                    <Button 
+                      size="small"
+                      className="bg-emerald-500 text-white border-none font-bold text-[11px] h-7 px-3 rounded-lg shadow-lg hover:bg-emerald-600 transition-all uppercase"
+                      onClick={handleSystemRefresh}
+                      loading={isRefreshing}
+                    >
+                      Бүрэн шинэчлэл
+                    </Button>
+                  }
                 >
                   {loading && users.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-24 gap-4">

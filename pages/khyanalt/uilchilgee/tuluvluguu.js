@@ -627,7 +627,20 @@ function Tuluvluguu() {
           };
         })
       };
-      
+
+      // Check stock uldegdel
+      const baraaList = values.baraa || [];
+      for (const b of baraaList) {
+        if (!b.baraaId) continue;
+        const item = baraas.find(i => i._id === b.baraaId);
+        const reqQty = Math.abs(Number(b.too) || 0);
+        if (item && reqQty > (item.uldegdel || 0)) {
+          message.warning(`${item.ner} барааны үлдэгдэл хүрэлцэхгүй байна. (Боломжит: ${item.uldegdel || 0})`);
+          setSavingTask(false);
+          return;
+        }
+      }
+
       res = await api.post('/tasks', payload);
 
       if (res.data?.success) {
@@ -1329,6 +1342,21 @@ useEffect(() => {
 
   const handleUpdateTask = async (taskId, updates) => {
     try {
+      if (updates.baraa) {
+        for (const b of updates.baraa) {
+          const item = baraas.find(i => i._id === b.baraaId);
+          const existingTask = tasks.find(t => t.id === taskId || t._id === taskId);
+          const oldBaraa = existingTask?.baraa?.find(ob => ob.baraaId === b.baraaId);
+          const oldQty = oldBaraa ? Number(oldBaraa.too) : 0;
+          const reqQty = Math.abs(Number(b.too) || 0);
+          const delta = reqQty - oldQty;
+
+          if (item && delta > (item.uldegdel || 0)) {
+            message.warning(`${item.ner} барааны үлдэгдэл хүрэлцэхгүй байна. (Боломжит: ${item.uldegdel || 0})`);
+            return false;
+          }
+        }
+      }
       const res = await api.put(`/tasks/${taskId}`, updates);
       if (res.data?.success || res.status === 200) {
         setTasks(prev => prev.map(t => (t.id === taskId || t._id === taskId) ? { ...t, ...updates } : t));
@@ -1553,7 +1581,7 @@ useEffect(() => {
                             <Tooltip key={task.id} title={`${task.projectName}: ${task.title}`}>
                               <div 
                                 onClick={(e) => handleTaskClick(task, e)}
-                                className="flex items-center space-x-1.5 px-1.5 py-1 rounded-md text-[12px] font-bold border-l-2 hover:opacity-80 transition-opacity cursor-pointer text-gray-800 dark:text-gray-200 uppercase tracking-tight"
+                                className="flex items-center space-x-1.5 px-1.5 py-1 rounded-md text-[12px] font-bold border-l-2 hover:opacity-80 transition-opacity cursor-pointer text-gray-800 dark:text-gray-200 tracking-tight"
                                 style={{ 
                                   borderLeftColor: task.projectColor || "#14b8a6",
                                   backgroundColor: (task.projectColor || "#14b8a6") + "20"
@@ -1628,7 +1656,7 @@ useEffect(() => {
                             <div 
                               key={task.id || task._id} 
                               onClick={(e) => handleTaskClick(task, e)}
-                              className="border-l-[3px] rounded-lg p-1 text-[12px] font-bold text-gray-800 dark:text-gray-100 shadow-xl border border-gray-100 dark:border-gray-700/50 uppercase tracking-tighter cursor-pointer hover:scale-[1.02] transition-transform overflow-hidden"
+                              className="border-l-[3px] rounded-lg p-1 text-[12px] font-bold text-gray-800 dark:text-gray-100 shadow-xl border border-gray-100 dark:border-gray-700/50 tracking-tighter cursor-pointer hover:scale-[1.02] transition-transform overflow-hidden"
                               style={{ 
                                 borderLeftColor: task.projectColor || "#14b8a6",
                                 backgroundColor: (task.projectColor || "#14b8a6") + "15",
@@ -1673,7 +1701,7 @@ useEffect(() => {
                         <div 
                           key={task.id || task._id} 
                           onClick={(e) => handleTaskClick(task, e)}
-                          className="border-l-[3px] rounded-lg p-1.5 text-[12px] font-bold text-gray-800 dark:text-gray-100 shadow-2xl border border-gray-100 dark:border-gray-700/50 uppercase tracking-tighter cursor-pointer hover:scale-[1.01] transition-transform overflow-hidden"
+                          className="border-l-[3px] rounded-lg p-1.5 text-[12px] font-bold text-gray-800 dark:text-gray-100 shadow-2xl border border-gray-100 dark:border-gray-700/50 tracking-tighter cursor-pointer hover:scale-[1.01] transition-transform overflow-hidden"
                           style={{ 
                             borderLeftColor: task.projectColor || "#14b8a6",
                             backgroundColor: (task.projectColor || "#14b8a6") + "15",
@@ -1725,7 +1753,7 @@ useEffect(() => {
                   <div>
                   
                     <div className="flex items-center gap-3 px-5 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50/60 dark:bg-[#111827]/50 sticky top-0 z-10">
-                      <span className={`text-[12px] font-bold uppercase  ${labelCls}`}>{label}</span>
+                      <span className={`text-[12px] font-bold  ${labelCls}`}>{label}</span>
                       <span className={`min-w-[20px] h-5 px-1.5 rounded-full ${countBg} text-white text-[12px] font-bold flex items-center justify-center`}>{groupTasks.length}</span>
                     </div>
                     
@@ -1994,8 +2022,8 @@ useEffect(() => {
               className="!mb-0"
             >
               <Select className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex">
-                <Select.Option value="nen yaraltai">🔴 Яаралтай</Select.Option>
-                <Select.Option value="yaraltai">🟠 Өндөр</Select.Option>
+                <Select.Option value="nen yaraltai">🔴 Нэн яаралтай</Select.Option>
+                <Select.Option value="yaraltai">🟠 Яаралтай</Select.Option>
                 <Select.Option value="engiin">🟢 Дунд</Select.Option>
                 <Select.Option value="baga">🔵 Бага</Select.Option>
               </Select>
@@ -3007,7 +3035,7 @@ useEffect(() => {
                 handleTaskClick(task, e);
                 setDayTasksModal({ ...dayTasksModal, visible: false });
               }}
-              className="flex items-center space-x-3 p-3 mb-2 rounded-xl text-[12px] font-bold border-l-4 shadow-sm hover:shadow-md transition-all cursor-pointer bg-gray-50 dark:bg-gray-800 dark:text-gray-200 uppercase tracking-tight"
+              className="flex items-center space-x-3 p-3 mb-2 rounded-xl text-[12px] font-bold border-l-4 shadow-sm hover:shadow-md transition-all cursor-pointer bg-gray-50 dark:bg-gray-800 dark:text-gray-200 tracking-tight"
               style={{ borderLeftColor: task.projectColor || "#14b8a6" }}
             >
               {task.completed ? 

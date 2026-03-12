@@ -774,7 +774,7 @@ function BaraaMaterial() {
           const maxVal = Math.max(...filteredTodayUsage.map(i => i.too || 1));
           const percent = ((s.too || 0) / maxVal) * 100;
           const colors = [
-            { from: '#10b981', to: '#34d399' },
+            { from: '#10b981', to: '#b1fdb4ff' },
           ];
           const color = colors[idx % colors.length];
           return (
@@ -1050,7 +1050,7 @@ function BaraaMaterial() {
               <div className="grid grid-cols-2 gap-4">
                 <Form.Item name="negj" label="Нэгж" initialValue="shirheg">
                   <Select placeholder="Сонгох">
-                      <Select.Option value="shirheg">ш</Select.Option>
+                      <Select.Option value="shirheg">ширхэг</Select.Option>
                       <Select.Option value="litr">литр</Select.Option>
                       <Select.Option value="kg">кг</Select.Option>
                       <Select.Option value="haire">хайрцаг</Select.Option>
