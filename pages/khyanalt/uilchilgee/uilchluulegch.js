@@ -5,6 +5,7 @@ import fsmApi from "services/fsmApi";
 import { useAuth } from "services/auth";
 import { message, Form, Input, Spin } from "antd";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { 
   PlusOutlined,
   MailOutlined,
@@ -86,7 +87,7 @@ function Uilchluulegch() {
   }, [fetchUsers]);
 
   const handleSaveUser = async (values) => {
-    if (!barilgiinId) { message.warning("Барилгын мэдээлэл байхгүй байна"); return; }
+    if (!barilgiinId) { toast.warning("Барилгын мэдээлэл байхгүй байна"); return; }
     try {
       const payload = {
         ...values,
@@ -102,14 +103,14 @@ function Uilchluulegch() {
       }
 
       if (res.data?.success || res.status === 200) {
-        message.success(`Үйлчлүүлэгч амжилттай ${editingUser ? 'шинэчлэгдлээ' : 'нэмэгдлээ'}`);
+        toast.success(`Үйлчлүүлэгч амжилттай ${editingUser ? 'шинэчлэгдлээ' : 'нэмэгдлээ'}`);
         await fetchUsers();
         setIsAddModalOpen(false);
         setEditingUser(null);
         form.resetFields();
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || `Үйлчлүүлэгч ${editingUser ? 'шинэчлэхэд' : 'нэмэхэд'} алдаа гарлаа`);
+      toast.error(err?.response?.data?.message || `Үйлчлүүлэгч ${editingUser ? 'шинэчлэхэд' : 'нэмэхэд'} алдаа гарлаа`);
     }
   };
 
@@ -117,11 +118,11 @@ function Uilchluulegch() {
     try {
       const res = await api.delete(`/uilchluulegch/${id}`);
       if (res.data?.success || res.status === 200) {
-        message.success("Үйлчлүүлэгч амжилттай устгагдлаа");
+        toast.success("Үйлчлүүлэгч амжилттай устгагдлаа");
         await fetchUsers();
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || "Үйлчлүүлэгч устгахад алдаа гарлаа");
+      toast.error(err?.response?.data?.message || "Үйлчлүүлэгч устгахад алдаа гарлаа");
     }
   };
 
@@ -184,7 +185,7 @@ function Uilchluulegch() {
       };
       const res = await api.post(`/tasks/${taskId}/client-onoo`, payload);
       if (res.data?.success) {
-        message.success("Үнэлгээ амжилттай хадгалагдлаа");
+        toast.success("Үнэлгээ амжилттай хадгалагдлаа");
         const updatedTask = res.data.data;
         setClientTasks(prev => prev.map(t => t._id === taskId ? { ...t, ...updatedTask } : t));
         if (res.data.clientKpi) {
@@ -195,7 +196,7 @@ function Uilchluulegch() {
         setRatingTaskId(null);
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || "Оноо хадгалахад алдаа гарлаа");
+      toast.error(err?.response?.data?.message || "Оноо хадгалахад алдаа гарлаа");
     } finally {
       setSavingClientScore(false);
     }
@@ -317,7 +318,7 @@ function Uilchluulegch() {
                  ]}
                />
             </div>
-            <div id="cust-add-btn" className="shrink-0 w-full md:w-auto">
+            <div id="cust-add-btn" className="shrink-0 w-full md:w-auto flex items-center gap-2">
               <Button
                 type="primary"
                 icon={<PlusOutlined />} 
@@ -326,7 +327,13 @@ function Uilchluulegch() {
               >
                 Шинэ харилцагч
               </Button>
-              
+              <Button
+                shape="circle"
+                icon={<QuestionCircleOutlined />}
+                onClick={() => setIsTutorialOpen(true)}
+                className="text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border-none shadow-sm flex items-center justify-center shrink-0 transition-colors bg-white dark:bg-gray-800"
+                title={t("Тусламж")}
+              />
             </div>
             
             

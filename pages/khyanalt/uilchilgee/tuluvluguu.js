@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom';
 import { io } from "socket.io-client";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { 
   PlusOutlined, 
   LeftOutlined, 
@@ -156,6 +157,21 @@ function Tuluvluguu() {
   const [savingClientScore, setSavingClientScore] = useState(false);
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+      if (e.altKey && (e.code === 'KeyA' || e.key === 'a' || e.key === 'A')) {
+        e.preventDefault();
+        openAddTaskModal();
+      } else if (e.altKey && (e.code === 'KeyP' || e.key === 'p' || e.key === 'P')) {
+        e.preventDefault();
+        setIsProjectModalVisible(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  useEffect(() => {
     const ticker = setInterval(() => {
       setCurrentTime(dayjs());
     }, 1000);
@@ -279,7 +295,7 @@ function Tuluvluguu() {
   const tutorialSteps = [
     { targetId: "cal-stats", title: t("Статистик"), description: t("Нийт төсөл болон ажлын явцыг эндээс нэгдсэн байдлаар харж болно.") },
     { targetId: "cal-sidebar", title: t("Төслүүд"), description: t("Төслүүдээ төрөлжүүлэн харах, шинэ төсөл нэмэх болон хайлт хийх хэсэг.") },
-    { targetId: "cal-views", title: t("Харагдац"), description: t("Сар, долоо хоног, өдрөөрх харагдацыг эндээс хурдан сольж болно.") },
+    { targetId: "cal-views", title: t("Харагдац"), description: t("Сар, долоо хоног, өдрөөр  эндээс хурдан сольж болно.") },
     { targetId: "cal-main", title: t("Хуанли"), description: t("Ажлуудаа хуанли дээр хянах, шинэ ажил нэмэх үндсэн хэсэг. Тухайн өдөр дээр дарж шинэ ажил үүсгэнэ үү.") },
   ];
 
@@ -535,7 +551,7 @@ function Tuluvluguu() {
   }, [isTaskModalVisible, selectedDay, taskForm]);
 
   const handleCreateTask = async (values) => {
-    if (!barilgiinId) { message.warning("Барилгын мэдээлэл байхгүй байна"); return; }
+    if (!barilgiinId) { toast.warning("Барилгын мэдээлэл байхгүй байна"); return; }
     setSavingTask(true);
     try {
       const getISOValue = (dateObj, timeObj, isEnd = false) => {
@@ -635,7 +651,7 @@ function Tuluvluguu() {
         const item = baraas.find(i => i._id === b.baraaId);
         const reqQty = Math.abs(Number(b.too) || 0);
         if (item && reqQty > (item.uldegdel || 0)) {
-          message.warning(`${item.ner} барааны үлдэгдэл хүрэлцэхгүй байна. (Боломжит: ${item.uldegdel || 0})`);
+          toast.warning(`${item.ner} барааны үлдэгдэл хүрэлцэхгүй байна. (Боломжит: ${item.uldegdel || 0})`);
           setSavingTask(false);
           return;
         }
@@ -644,21 +660,21 @@ function Tuluvluguu() {
       res = await api.post('/tasks', payload);
 
       if (res.data?.success) {
-        message.success("Ажил амжилттай нэмэгдлээ");
+        toast.success("Ажил амжилттай нэмэгдлээ");
         await fetchTasks();
         setIsTaskModalVisible(false);
         taskForm.resetFields();
         setTaskImages([]);
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || "Ажил нэмэхэд алдаа гарлаа");
+      toast.error(err?.response?.data?.message || "Ажил нэмэхэд алдаа гарлаа");
     } finally {
       setSavingTask(false);
     }
   };
 
   const handleCreateProject = async (values) => {
-    if (!barilgiinId) { message.warning("Барилгын мэдээлэл байхгүй байна"); return; }
+    if (!barilgiinId) { toast.warning("Барилгын мэдээлэл байхгүй байна"); return; }
     setSavingProject(true);
     try {
       const payload = {
@@ -683,14 +699,14 @@ function Tuluvluguu() {
       }
       
       if (res.data?.success) {
-        message.success(`Төсөл амжилттай ${editingProject ? 'засагдлаа' : 'нэмэгдлээ'}`);
+        toast.success(`Төсөл амжилттай ${editingProject ? 'засагдлаа' : 'нэмэгдлээ'}`);
         await fetchProjects();
         setIsProjectModalVisible(false);
         projectForm.resetFields();
         setEditingProject(null);
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || `Төсөл ${editingProject ? 'засахад' : 'нэмэхэд'} алдаа гарлаа`);
+      toast.error(err?.response?.data?.message || `Төсөл ${editingProject ? 'засахад' : 'нэмэхэд'} алдаа гарлаа`);
     } finally {
       setSavingProject(false);
     }
@@ -713,7 +729,7 @@ function Tuluvluguu() {
     try {
       const res = await api.delete(`/projects/${id}`);
       if (res.data?.success || res.status === 200 || res.status === 204) {
-        message.success("Төсөл амжилттай устгагдлаа");
+        toast.success("Төсөл амжилттай устгагдлаа");
         setSelectedProjectIds(prev => prev.filter(pId => pId !== id));
         
         
@@ -726,7 +742,7 @@ function Tuluvluguu() {
         await fetchTasks();
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || "Төсөл устгахад алдаа гарлаа");
+      toast.error(err?.response?.data?.message || "Төсөл устгахад алдаа гарлаа");
     }
   };
 
@@ -878,7 +894,7 @@ useEffect(() => {
         onoosonTailbar: scoreNote,
       });
       if (res.data?.success) {
-        message.success(res.data.message || `Оноо амжилттай хадгалагдлаа (${scorePoints}/10)`);
+        toast.success(res.data.message || `Оноо амжилттай хадгалагдлаа (${scorePoints}/10)`);
         setTaskScore(res.data.data || { onooson: scorePoints, onoosonTailbar: scoreNote });
         // Update selected task to reflect change
         setSelectedTask(prev => ({ 
@@ -888,7 +904,7 @@ useEffect(() => {
         }));
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || "Оноо хадгалахад алдаа гарлаа");
+      toast.error(err?.response?.data?.message || "Оноо хадгалахад алдаа гарлаа");
     } finally {
       setSavingScore(false);
     }
@@ -905,7 +921,7 @@ useEffect(() => {
         uilchluulegchId: selectedTask.uilchluulegchId || selectedTask?.project?.uilchluulegchId || ""
       });
       if (res.data?.success) {
-        message.success(res.data.message || `Үйлчлүүлэгчийн оноо хадгалагдлаа (${clientScorePoints}/10)`);
+        toast.success(res.data.message || `Үйлчлүүлэгчийн оноо хадгалагдлаа (${clientScorePoints}/10)`);
         
         let nt = res.data.data?.niitOnooson ?? res.data.data?.onooson ?? clientScorePoints;
         
@@ -924,7 +940,7 @@ useEffect(() => {
         }));
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || "Үнэлгээ хадгалахад алдаа гарлаа");
+      toast.error(err?.response?.data?.message || "Үнэлгээ хадгалахад алдаа гарлаа");
     } finally {
       setSavingClientScore(false);
     }
@@ -977,7 +993,7 @@ useEffect(() => {
         fetchSubtasks(selectedTask.id || selectedTask._id);
       }
     } catch (err) {
-      message.error("Дэд даалгавар нэмэхэд алдаа гарлаа");
+      toast.error("Дэд даалгавар нэмэхэд алдаа гарлаа");
     }
   };
 
@@ -986,7 +1002,7 @@ useEffect(() => {
       setSubtasks((prev) => prev.map(s => s._id === subtaskId ? { ...s, ...updates } : s));
       await api.put(`/subtasks/${subtaskId}`, updates);
     } catch (err) {
-      message.error("Дэд даалгавар шинэчлэхэд алдаа гарлаа");
+      toast.error("Дэд даалгавар шинэчлэхэд алдаа гарлаа");
     }
   };
 
@@ -995,10 +1011,10 @@ useEffect(() => {
       const res = await api.delete(`/subtasks/${subtaskId}`);
       if (res.data?.success || res.status === 200 || res.status === 204) {
         setSubtasks((prev) => prev.filter(s => s._id !== subtaskId));
-        message.success("Дэд даалгавар амжилттай устгагдлаа");
+        toast.success("Дэд даалгавар амжилттай устгагдлаа");
       }
     } catch (err) {
-      message.error("Дэд даалгавар устгахад алдаа гарлаа");
+      toast.error("Дэд даалгавар устгахад алдаа гарлаа");
     }
   };
 
@@ -1900,7 +1916,7 @@ useEffect(() => {
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1 justify-center">
                           <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
-                          <div className="text-[12px] text-gray-500 font-medium leading-tight mt-1 opacity-70 uppercase ">{member.role}</div>
+                          <div className="text-[12px] text-gray-400 dark:text-gray-600 font-medium leading-tight mt-1 ">{member.role}</div>
                         </div>
                       </div>
                     </div>
@@ -2228,7 +2244,7 @@ useEffect(() => {
             name="tailbar" 
             label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Тайлбар</span>}
           >
-            <Input.TextArea placeholder="Тайлбар бичих" className="rounded-xl" rows={2} />
+            <Input.TextArea placeholder="Тайлбар бичих" className="rounded-xl dark:border-gray-700 border-gray-200" rows={2} />
           </Form.Item>
           
           
@@ -2256,7 +2272,7 @@ useEffect(() => {
               placeholder={t("uilchilgee.select_client")}
               optionFilterProp="children"
               loading={loadingUilchluulegchid}
-              className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
+              // className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
               allowClear
               disabled={!!editingProject}
             >
@@ -2689,11 +2705,11 @@ useEffect(() => {
                      disabled={taskScore?.uilchluulegchOnooson != null}
                    />
                    <Input.TextArea
-                     placeholder="Үйлчлүүлэгчийн тайлбар..."
+                     placeholder="Үйлчлүүлэгчийн тайлбар"
                      value={clientScoreNote}
                      onChange={e => setClientScoreNote(e.target.value)}
                      rows={2}
-                     className="rounded-xl border-amber-200/50 dark:border-amber-700/30"
+                     
                      disabled={taskScore?.uilchluulegchOnooson != null}
                    />
                    <Button
@@ -2873,17 +2889,17 @@ useEffect(() => {
                              <Button size="small" className="rounded-lg h-9" onClick={() => { setEditingMsg(null); setEditMsgText(""); }}>Болих</Button>
                            </div>
                          ) : (
-                           <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/50 rounded-xl rounded-tl-none p-3 shadow-sm text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed break-words overflow-hidden">
+                           <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/50 rounded-xl rounded-tl-none p-3 shadow-sm text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed break-words overflow-hidden w-fit max-w-full">
                              {msg.turul === 'zurag' && msg.fileZam ? (
                                <div className="flex flex-col space-y-2">
                                  {msg.medeelel && msg.medeelel.trim() !== "" && msg.medeelel !== msg.fileNer && (
                                    <span className="text-[13px] whitespace-pre-wrap">{msg.medeelel}</span>
                                  )}
-                                 <img 
+                                 <Image 
                                    src={msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`} 
                                    alt="uploaded image" 
                                    className="max-w-[200px] max-h-[200px] object-cover rounded-md cursor-pointer border border-gray-100 dark:border-gray-700/50 hover:opacity-90 transition-opacity"
-                                   onClick={() => window.open(msg.fileZam.startsWith('http') ? msg.fileZam : `${FSM_BASE_URL}/${msg.fileZam}`, '_blank')}
+                                   preview={{ mask: <div className="text-[12px]">Томруулах</div> }}
                                  />
                                </div>
                              ) : msg.turul === 'file' && msg.fileZam ? (

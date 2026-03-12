@@ -60,6 +60,7 @@ import {
   Legend,
   ArcElement
 } from 'chart.js';
+import { toast } from "sonner";
 
 ChartJS.register(
   CategoryScale,
@@ -159,7 +160,6 @@ function BaraaMaterial() {
       setProjects(normalized);
       setSelectedProjectIds(normalized.map(p => p.id));
     } catch (err) {
-      // If backend not reachable, keep empty
     } finally {
       setLoadingProjects(false);
     }
@@ -183,14 +183,11 @@ function BaraaMaterial() {
     if (!token || !barilgiinId) return;
     setLoadingStats(true);
     try {
-      // Overall stats
       const res = await api.get(`/baraas/usage-stats`, { params: { barilgiinId } });
       if (res.data?.success) {
         setUsageStats(res.data.data);
       }
-
-      // Today's stats
-      const startOfToday = dayjs().startOf('day').toISOString();
+   const startOfToday = dayjs().startOf('day').toISOString();
       const resToday = await api.get(`/baraas/usage-stats`, { 
         params: { barilgiinId, startDate: startOfToday } 
       });
@@ -301,7 +298,7 @@ function BaraaMaterial() {
   }, [fetchBaraas, fetchProjects, fetchHistory, fetchUsageStats]);
 
   const handleCreateProject = async (values) => {
-    if (!barilgiinId) { message.warning("Барилгын мэдээлэл байхгүй байна"); return; }
+    if (!barilgiinId) { toast.warning("Барилгын мэдээлэл байхгүй байна"); return; }
     setSavingProject(true);
     try {
       const payload = {
@@ -325,14 +322,14 @@ function BaraaMaterial() {
       }
       
       if (res.data?.success) {
-        message.success(t("Амжилттай хадгаллаа"));
+        toast.success(t("Амжилттай хадгаллаа"));
         await fetchProjects();
         setIsProjectModalVisible(false);
         projectForm.resetFields();
         setEditingProject(null);
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || `Төсөл ${editingProject ? 'засахад' : 'нэмэхэд'} алдаа гарлаа`);
+      toast.error(err?.response?.data?.message || `Төсөл ${editingProject ? 'засахад' : 'нэмэхэд'} алдаа гарлаа`);
     } finally {
       setSavingProject(false);
     }
@@ -354,12 +351,12 @@ function BaraaMaterial() {
     try {
       const res = await api.delete(`/projects/${id}`);
       if (res.data?.success || res.status === 200 || res.status === 204) {
-        message.success(t("Амжилттай устгалаа."));
+        toast.success(t("Амжилттай устгалаа."));
         setSelectedProjectIds(prev => prev.filter(pId => pId !== id));
         await fetchProjects();
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || "Төсөл устгахад алдаа гарлаа");
+      toast.error(err?.response?.data?.message || "Төсөл устгахад алдаа гарлаа");
     }
   };
 
@@ -485,7 +482,7 @@ function BaraaMaterial() {
       setSelectedProjectChatFile(null);
       setReplyToProject(null);
     } catch (err) {
-      message.error('Зурвас илгээхэд алдаа гарлаа');
+      toast.error('Зурвас илгээхэд алдаа гарлаа');
     } finally {
       setUploadingProjectChatFile(false);
     }
@@ -500,7 +497,7 @@ function BaraaMaterial() {
         setEditingProjectMsg(null);
       }
     } catch (err) {
-      message.error('Засахад алдаа гарлаа');
+      toast.error('Засахад алдаа гарлаа');
     }
   };
 
@@ -509,7 +506,7 @@ function BaraaMaterial() {
       await api.delete(`/chats/${msgId}`);
       setProjectChatMessages(prev => prev.map(m => m._id === msgId ? { ...m, isDeleted: true } : m));
     } catch (err) {
-      message.error('Устгахад алдаа гарлаа');
+      toast.error('Устгахад алдаа гарлаа');
     }
   };
 
@@ -524,7 +521,6 @@ function BaraaMaterial() {
     const map = {};
     if (Array.isArray(usageStats)) {
       usageStats.forEach(s => {
-        // Only include if material still exists in the list
         if (s.ner && baraas.some(b => b.ner === s.ner)) {
           map[s.ner] = s.too;
         }
@@ -573,25 +569,20 @@ function BaraaMaterial() {
     if (filterType === "all") return baraas;
     
     return baraas.filter(b => {
-      // 1. Grouped "Cleaning" filter
       if (filterType === "tseverlegch") {
         return ['tseverlegch', 'Цэвэрлэгч'].includes(b.turul);
       }
-      
-      // 2. Others or custom typed values
       if (filterType === "busad") {
         const cleaningKeys = ['tseverlegch', 'Цэвэрлэгч', 'ugaalgiin', 'Угаалгын', 'ariutgagch', 'Ариутгагч', 'bagaj', 'Багаж'];
         return !cleaningKeys.includes(b.turul);
       }
-      
-      // 3. For any other key in typeMap (like 'bagaj', 'ugaalgiin', etc.)
       const label = typeMap[filterType];
       return b.turul === filterType || b.turul === label;
     });
   }, [baraas, filterType]);
 
   const handleSaveBaraa = async (values) => {
-    if (!barilgiinId) { message.warning("Барилгын мэдээлэл байхгүй байна"); return; }
+    if (!barilgiinId) { toast.warning("Барилгын мэдээлэл байхгүй байна"); return; }
     try {
       const payload = {
         ner: values.ner,
@@ -610,7 +601,7 @@ function BaraaMaterial() {
       }
 
       if (res.data?.success || res.status === 200) {
-        message.success(t("Амжилттай хадгаллаа"));
+        toast.success(t("Амжилттай хадгаллаа"));
         await fetchBaraas();
         await fetchHistory();
         setIsAddModalOpen(false);
@@ -618,7 +609,7 @@ function BaraaMaterial() {
         form.resetFields();
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || `Бараа ${editingBaraa ? 'шинэчлэхэд' : 'бүртгэхэд'} алдаа гарлаа`);
+      toast.error(err?.response?.data?.message || `Бараа ${editingBaraa ? 'шинэчлэхэд' : 'бүртгэхэд'} алдаа гарлаа`);
     }
   };
 
@@ -627,12 +618,12 @@ function BaraaMaterial() {
     try {
       const res = await api.delete(`/baraas/${id}`);
       if (res.data?.success || res.status === 200) {
-        message.success(t("Амжилттай устгалаа."));
+        toast.success(t("Амжилттай устгалаа."));
         await fetchBaraas();
         await fetchHistory();
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || "Бараа устгахад алдаа гарлаа");
+      toast.error(err?.response?.data?.message || "Бараа устгахад алдаа гарлаа");
     }
   };
 
@@ -650,7 +641,7 @@ function BaraaMaterial() {
   };
 
   const handleCreateIncome = async (values) => {
-     message.info("Орлого бүртгэх функц удахгүй нэмэгдэнэ");
+     toast.info("Орлого бүртгэх функц удахгүй нэмэгдэнэ");
      setIsIncomeModalOpen(false);
   };
 
@@ -671,12 +662,27 @@ function BaraaMaterial() {
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const tutorialSteps = [
-    { targetId: "mat-stats", title: "Нийт статистик", description: "Энд бараа материалын нийт төрөл, үлдэгдэл болон үнэ цэнийг нэгдсэн байдлаар харна." },
+    { targetId: "mat-usage-dashboard", title: "Нийт статистик", description: "Энд бараа материалын нийт төрөл, үлдэгдэл болон үнэ цэнийг нэгдсэн байдлаар харна." },
     { targetId: "mat-actions", title: "Үйлдлүүд", description: "Шинээр бараа бүртгэх, барааны орлого авах болон Excel файл татаж авах үйлдлүүдийг эндээс хийнэ." },
     { targetId: "mat-table", title: "Барааны жагсаалт", description: "Бүх бараа материалын дэлгэрэнгүй жагсаалт, үлдэгдэл, нэгж өртөг зэргийг эндээс хянах боломжтой." },
-    { targetId: "mat-sidebar", title: "Хайлт", description: "Төслүүд болон бараа материалыг хурдан хайх хайлтын хэсэг." },
+    { targetId: "mat-sidebar", title: "Хайлт", description: "Бараа материалыг хурдан нэмэх хэсэг." },
     { targetId: "mat-team", title: "Баг хамт олон", description: "Материал хариуцсан багийн гишүүдийг эндээс харна." },
   ];
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+      if (e.altKey && (e.code === 'KeyA' || e.key === 'a' || e.key === 'A')) {
+        e.preventDefault();
+        setIsAddModalOpen(true);
+      } else if (e.altKey && (e.code === 'KeyP' || e.key === 'p' || e.key === 'P')) {
+        e.preventDefault();
+        setIsProjectModalVisible(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <Admin title="Бараа материал" khuudasniiNer="baraaMaterial">
@@ -737,7 +743,7 @@ function BaraaMaterial() {
             </Space>
           </div>
 
-          <Card size="small" className="shadow-sm border-gray-200 dark:border-gray-800 dark:bg-gray-800 rounded-xl overflow-hidden animate-entrance-stagger-7">
+          <Card id="mat-table" size="small" className="shadow-sm border-gray-200 dark:border-gray-800 dark:bg-gray-800 rounded-xl overflow-hidden animate-entrance-stagger-7">
             <div className="overflow-x-auto">
               <Table
                 columns={columns}
@@ -753,8 +759,7 @@ function BaraaMaterial() {
             </div>
           </Card>
           <div id="mat-usage-dashboard" className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-entrance-stagger-8 flex-1 min-h-0 mb-4">
-            {/* Panel 1: Today's Usage Graphic */}
-            {/* Panel 1: Today's Usage Graphic */}
+      
 <div className="bg-white dark:bg-gray-900 rounded-[2rem] p-6 border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-col min-h-[250px] xl:h-auto group">
   <div className="flex items-center justify-between mb-6">
     <div>
@@ -868,7 +873,7 @@ function BaraaMaterial() {
 
 
               {/* 1. Projects Section */}
-              <div className="flex flex-col p-4 space-y-3 shrink-0">
+              <div id="mat-sidebar" className="flex flex-col p-4 space-y-3 shrink-0">
                 <div className="flex items-center justify-between px-1">
                   <div className="text-[12px] font-bold text-gray-400 mb-2 flex items-center  uppercase opacity-70">
                     <span>Төслүүд</span>
@@ -918,7 +923,7 @@ function BaraaMaterial() {
               <div className="border-b border-slate-200 dark:border-slate-700/50 mx-4"></div>
 
               {/* 2. Team Section */}
-              <div className="flex flex-col p-4 shrink-0">
+              <div id="mat-team" className="flex flex-col p-4 shrink-0">
                 <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center  uppercase opacity-70">
                   <span>Ажилчид</span>
                 </div>
@@ -931,7 +936,7 @@ function BaraaMaterial() {
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1 justify-center">
                           <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
-                          <div className="text-[12px] text-gray-500 font-medium leading-tight mt-1 opacity-70 uppercase ">{member.role}</div>
+                          <div className="text-[12px] text-gray-400 dark:text-gray-600 font-medium leading-tight mt-1">{member.role}</div>
                         </div>
                       </div>
                     </div>
@@ -1050,12 +1055,12 @@ function BaraaMaterial() {
               <div className="grid grid-cols-2 gap-4">
                 <Form.Item name="negj" label="Нэгж" initialValue="shirheg">
                   <Select placeholder="Сонгох">
-                      <Select.Option value="shirheg">ширхэг</Select.Option>
-                      <Select.Option value="litr">литр</Select.Option>
-                      <Select.Option value="kg">кг</Select.Option>
-                      <Select.Option value="haire">хайрцаг</Select.Option>
-                      <Select.Option value="bogts">богц</Select.Option>
-                      <Select.Option value="dana">дан</Select.Option>
+                      <Select.Option value="shirheg">Ширхэг</Select.Option>
+                      <Select.Option value="litr">Литр</Select.Option>
+                      <Select.Option value="kg">Кг</Select.Option>
+                      <Select.Option value="haire">Хайрцаг</Select.Option>
+                      <Select.Option value="bogts">Богц</Select.Option>
+                      <Select.Option value="dana">Дан</Select.Option>
                   </Select>
                 </Form.Item>
                 <Form.Item name="uldegdel" label="Үлдэгдэл" initialValue={0}>

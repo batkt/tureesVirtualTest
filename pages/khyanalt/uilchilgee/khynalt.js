@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import useJagsaalt from "hooks/useJagsaalt";
 import moment from "moment";
 import "moment/locale/mn";
+import { toast } from "sonner";
 moment.locale("mn");
 import { 
   PlusOutlined,
@@ -52,6 +53,7 @@ import {
   FileOutlined
 } from "@ant-design/icons";
 import dayjs from "dayjs";
+
 import { 
   Button, 
   Select, 
@@ -269,7 +271,7 @@ function Khynalt() {
       setSelectedProjectChatFile(null);
       setReplyToProject(null);
     } catch (err) {
-      message.error('Зурвас илгээхэд алдаа гарлаа');
+      toast.error('Зурвас илгээхэд алдаа гарлаа');
     } finally {
       setUploadingProjectChatFile(false);
     }
@@ -284,7 +286,7 @@ function Khynalt() {
         setEditingProjectMsg(null);
       }
     } catch (err) {
-      message.error('Засахад алдаа гарлаа');
+      toast.error('Засахад алдаа гарлаа');
     }
   };
 
@@ -293,7 +295,7 @@ function Khynalt() {
       await api.delete(`/chats/${msgId}`);
       setProjectChatMessages(prev => prev.map(m => m._id === msgId ? { ...m, isDeleted: true } : m));
     } catch (err) {
-      message.error('Устгахад алдаа гарлаа');
+      toast.error('Устгахад алдаа гарлаа');
     }
   };
 
@@ -310,7 +312,7 @@ function Khynalt() {
   }, [isConnected, fetchData]);
 
   const handleCreateProject = async (values) => {
-    if (!barilgiinId) { message.warning("Барилгын мэдээлэл байхгүй байна"); return; }
+    if (!barilgiinId) { toast.warning("Барилгын мэдээлэл байхгүй байна"); return; }
     setSavingProject(true);
     try {
       const payload = {
@@ -334,14 +336,14 @@ function Khynalt() {
       }
       
       if (res.data?.success) {
-        message.success(`Төсөл амжилттай ${editingProject ? 'засагдлаа' : 'нэмэгдлээ'}`);
+        toast.success(`Төсөл амжилттай ${editingProject ? 'засагдлаа' : 'нэмэгдлээ'}`);
         await fetchData();
         setIsProjectModalVisible(false);
         projectForm.resetFields();
         setEditingProject(null);
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || `Төсөл ${editingProject ? 'засахад' : 'нэмэхэд'} алдаа гарлаа`);
+      toast.error(err?.response?.data?.message || `Төсөл ${editingProject ? 'засахад' : 'нэмэхэд'} алдаа гарлаа`);
     } finally {
       setSavingProject(false);
     }
@@ -363,12 +365,12 @@ function Khynalt() {
     try {
       const res = await api.delete(`/projects/${id}`);
       if (res.data?.success || res.status === 200 || res.status === 204) {
-        message.success("Төсөл амжилттай устгагдлаа");
+        toast.success("Төсөл амжилттай устгагдлаа");
         setSelectedProjectIds(prev => prev.filter(pId => pId !== id));
         await fetchData();
       }
     } catch (err) {
-      message.error(err?.response?.data?.message || "Төсөл устгахад алдаа гарлаа");
+      toast.error(err?.response?.data?.message || "Төсөл устгахад алдаа гарлаа");
     }
   };
 
@@ -524,7 +526,7 @@ function Khynalt() {
 
           <div className="flex-1 overflow-y-auto pr-2 pb-8 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-100 dark:[&::-webkit-scrollbar-thumb]:bg-slate-800">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-5">
-              <DashboardCard id="khyanalt-activity-chart" title="Гүйцэтгэлийн хандлага" icon={<AreaChartOutlined/>} headerClass="border-sky-500" rightActions={
+              <DashboardCard id="khyanalt-activity-chart" title="Гүйцэтгэлийн хандлага" icon={<AreaChartOutlined/>} headerClass="border-green-500" rightActions={
                 <div className="flex gap-1.5 bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg border border-gray-200 dark:border-gray-700">
                   {[7, 14, 30].map(r => (
                     <button
@@ -681,7 +683,7 @@ function Khynalt() {
               
               
 
-                <DashboardCard id="khyanalt-tasks" title="Олгогдсон ажлууд" icon={<CheckSquareOutlined/>} headerClass="border-blue-500" rightActions={<span className="text-emerald-500 text-[12px] font-bold cursor-pointer hover:underline" onClick={() => router.push('/khyanalt/uilchilgee/tuluvluguu')}>Бүгдийг харах <DownOutlined className="text-[8px]"/></span>}>
+                <DashboardCard id="khyanalt-tasks" title="Олгогдсон ажлууд" icon={<CheckSquareOutlined/>} headerClass="border-green-500" rightActions={<span className="text-emerald-500 text-[12px] font-bold cursor-pointer hover:underline" onClick={() => router.push('/khyanalt/uilchilgee/tuluvluguu')}>Бүгдийг харах <DownOutlined className="text-[8px]"/></span>}>
                   <div className="flex flex-col gap-2">
                     {tasks.slice(0, 7).map(task => (
                       <div 
@@ -729,9 +731,9 @@ function Khynalt() {
              
                 
 
-                <DashboardCard title="Ажилтны гүйцэтгэл" icon={<TeamOutlined/>} headerClass="border-indigo-500">
+                <DashboardCard title="Ажилтны гүйцэтгэл" icon={<TeamOutlined/>} headerClass="border-green-500">
                   <div className="flex flex-col gap-2">
-                    {teamMembers.slice(0, 5).map((member, i) => {
+                    {teamMembers.map((member, i) => {
                       const memberTasks = tasks.filter(t =>
                         t.hariutsagchId === member.id || (Array.isArray(t.ajiltnuud) && t.ajiltnuud.includes(member.id))
                       );
@@ -797,7 +799,7 @@ function Khynalt() {
                   </div>
                 </DashboardCard>
 
-                 <DashboardCard title="Сүүлийн харилцагчид" icon={<UserOutlined/>} headerClass="border-blue-400">
+                 <DashboardCard title="Сүүлийн харилцагчид" icon={<UserOutlined/>} headerClass="border-green-400">
                   <div className="flex flex-col gap-3">
                     {uilchluulegchid.map(user => (
                       <div key={user._id} className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-700 pb-2">
@@ -811,7 +813,7 @@ function Khynalt() {
                   </div>
                 </DashboardCard>
 
-                <DashboardCard title="Бараа материал" icon={<TbBoxSeam/>} headerClass="border-cyan-500">
+                <DashboardCard title="Бараа материал" icon={<TbBoxSeam/>} headerClass="border-green-500">
                   <div className="flex flex-col gap-3">
                     {baraas.map(item => (
                       <div key={item._id} className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2 last:border-b-0">
@@ -907,7 +909,7 @@ function Khynalt() {
               <div className="border-b border-slate-200 dark:border-slate-700/50 mx-4"></div>
 
               {/* 2. Team Section */}
-              <div className="flex flex-col p-4 shrink-0">
+              <div id="khyanalt-team" className="flex flex-col p-4 shrink-0">
                 <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center  uppercase opacity-70">
                   <span>Ажилтан</span>
                 </div>
@@ -920,7 +922,7 @@ function Khynalt() {
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1 justify-center">
                           <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
-                          <div className="text-[12px] text-gray-500 font-medium leading-tight mt-1 opacity-70 uppercase ">{member.role}</div>
+                          <div className="text-[10px] text-gray-400 dark:text-gray-600 font-medium leading-tight mt-1 ">{member.role}</div>
                         </div>
                       </div>
                     </div>

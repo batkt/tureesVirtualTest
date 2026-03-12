@@ -1,4 +1,5 @@
 import Admin from "components/Admin";
+import GuidedTour from "components/GuidedTour";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useFsmSocket } from "hooks/useFsmSocket";
@@ -21,7 +22,8 @@ import {
   ThunderboltOutlined,
   CrownOutlined,
   FireOutlined,
-  InfoCircleOutlined
+  InfoCircleOutlined,
+  QuestionCircleOutlined
 } from "@ant-design/icons";
 import { Bar, Doughnut } from "react-chartjs-2";
 import {
@@ -34,6 +36,7 @@ import {
   Legend,
   ArcElement,
 } from 'chart.js';
+import { toast } from "sonner";
 
 ChartJS.register(
   CategoryScale,
@@ -45,7 +48,7 @@ ChartJS.register(
   ArcElement
 );
 
-function DashboardCard({ id, title, icon, rightActions, children, headerClass="border-emerald-500", noScroll=false }) {
+function DashboardCard({ id, title, icon, rightActions, children, headerClass="border-green-500", noScroll=false }) {
   return (
     <div id={id} className={`bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm border-t-[3px] ${headerClass} hover:shadow-emerald-500 dark:hover:shadow-emerald-500/10 flex flex-col relative min-h-[260px] h-[400px]`}>
       <div className="flex justify-between items-center px-4 py-3 bg-blue-900/10 dark:bg-gray-900 border-b border-gray-100 dark:border-[#2d3748]/50 shrink-0">
@@ -73,6 +76,14 @@ function KPI() {
   const { jagsaalt: usersList, isValidating: loading, mutate: ajiltniiJagsaaltMutate } = ajiltanJagsaalt;
   const [realtimeKpi, setRealtimeKpi] = useState({});
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+  const tutorialSteps = [
+    { targetId: "khyanalt-stats", title: t("Нийт статистик"), description: "Танай байгууллагын нийт ажилтнуудын хангасан онооны дундаж болон тэргүүлж буй ажилтныг энд харуулна." },
+    { targetId: "kpi-distribution", title: t("Хуваарилалт"), description: "Нийт ажилчдын KPI хэрхэн хуваарилагдаж байгааг эндээс харах боломжтой." },
+    { targetId: "kpi-top-users", title: t("Шилдэг гүйцэтгэл"), description: "Хамгийн өндөр KPI-тай шилдэг ажилчдын мэдээлэл." },
+    { targetId: "kpi-users-list", title: t("Ажилчдын жагсаалт"), description: "Танай багийн бүх гишүүд болон тэдний дэлгэрэнгүй KPI-г эндээс харна." }
+  ];
 
   const fetchInitialKpis = useCallback(async () => {
     if (!token || !baiguullagiinId) return;
@@ -108,7 +119,7 @@ function KPI() {
     ]);
     setTimeout(() => {
       setIsRefreshing(false);
-      message.success("Мэдээлэл шинэчлэгдлээ");
+      toast.success("Мэдээлэл шинэчлэгдлээ");
     }, 500);
   };
 
@@ -122,11 +133,11 @@ function KPI() {
           fetchInitialKpis(),
           ajiltniiJagsaaltMutate()
         ]);
-        message.success(res.data.message || "Гүйцэтгэлийн үзүүлэлтүүд бүрэн шинэчлэгдлээ");
+        toast.success(res.data.message || "Гүйцэтгэлийн үзүүлэлтүүд бүрэн шинэчлэгдлээ");
       }
     } catch (err) {
       console.error("System refresh failed:", err);
-      message.error("Шинэчлэл хийхэд алдаа гарлаа");
+      toast.error("Шинэчлэл хийхэд алдаа гарлаа");
     } finally {
       setIsRefreshing(false);
     }
@@ -239,9 +250,24 @@ function KPI() {
   return (
     <Admin title="KPI гүйцэтгэл" khuudasniiNer="kpi">
       <div className="col-span-12 flex flex-col xl:flex-row h-auto xl:h-[calc(100vh-110px)] w-full -mx-0 xl:-mx-1 -mt-2 text-black overflow-hidden lg:rounded-2xl shadow-2xl relative animate-entrance">
-        
+        <GuidedTour 
+          steps={tutorialSteps} 
+          isOpen={isTutorialOpen} 
+          onClose={() => setIsTutorialOpen(false)} 
+        />
         <div className="flex-1 flex flex-col p-3 md:p-4 overflow-x-hidden relative min-w-0">
           
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-[14px] font-bold text-gray-800 dark:text-gray-200 uppercase tracking-tight"></h2>
+            <Button
+                shape="circle"
+                icon={<QuestionCircleOutlined />}
+                onClick={() => setIsTutorialOpen(true)}
+                className="text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border-none shadow-sm flex items-center justify-center shrink-0 transition-colors"
+                title={t("Тусламж")}
+              />
+          </div>
+
           <div id="khyanalt-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
             {statCards.map((card, index) => (
               <div
@@ -276,16 +302,16 @@ function KPI() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               
-              <div className="md:col-span-2 xl:col-span-1">
-                <DashboardCard title="KPI хуваарилалт" icon={<BarChartOutlined />} headerClass="border-sky-500" noScroll={true}>
+              <div className="md:col-span-2 xl:col-span-1" id="kpi-distribution">
+                <DashboardCard title="KPI хуваарилалт" icon={<BarChartOutlined />} headerClass="border-green-500" noScroll={true}>
                   <div className="h-full w-full">
                     <Bar key={`dist-${users.length}`} data={distributionData} options={chartOptions} />
                   </div>
                 </DashboardCard>
               </div>
 
-              <div className="md:col-span-1 xl:col-span-1">
-                <DashboardCard title="Шилдэг гүйцэтгэл" icon={<PieChartOutlined />} headerClass="border-amber-500" noScroll={true}>
+              <div className="md:col-span-1 xl:col-span-1" id="kpi-top-users">
+                <DashboardCard title="Шилдэг гүйцэтгэл" icon={<PieChartOutlined />} headerClass="border-green-500" noScroll={true}>
                   <div className="h-full flex flex-col justify-center gap-4">
                     <div className="h-44 w-full relative">
                       <Doughnut key={`top5-${topUsers.length}`} data={doughnutData} options={{...chartOptions, cutout: '70%'}} />
@@ -306,11 +332,11 @@ function KPI() {
                 </DashboardCard>
               </div>
 
-              <div className="md:col-span-2 xl:col-span-1">
+              <div className="md:col-span-2 xl:col-span-1" id="kpi-users-list">
                 <DashboardCard 
                   title="Ажилчдын үзүүлэлт" 
                   icon={<TeamOutlined/>}
-                  headerClass="border-indigo-500"
+                  headerClass="border-green-500"
                   rightActions={
                     <Button 
                       size="small"
@@ -325,7 +351,7 @@ function KPI() {
                   {loading && users.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-24 gap-4">
                       <Spin size="large" />
-                      <span className="text-[12px] font-bold text-gray-400 uppercase tracking-[0.2em]">УНШИЖ БАЙНА</span>
+                      <span className="text-[12px] font-bold text-gray-40">Уншиж байна</span>
                     </div>
                   ) : (
                     <div className="flex flex-col gap-2">
