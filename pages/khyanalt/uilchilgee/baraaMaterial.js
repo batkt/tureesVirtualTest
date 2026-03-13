@@ -678,6 +678,11 @@ function BaraaMaterial() {
       } else if (e.altKey && (e.code === 'KeyP' || e.key === 'p' || e.key === 'P')) {
         e.preventDefault();
         setIsProjectModalVisible(true);
+      } else if (e.key === '+' || e.code === 'NumpadAdd' || (e.shiftKey && e.code === 'Equal')) {
+        // Only if not in an input
+        if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+        e.preventDefault();
+        setIsAddModalOpen(true);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -729,18 +734,31 @@ function BaraaMaterial() {
               <Button
                 type="primary"
                 icon={<PlusOutlined />}
-                className="bg-green-500 hover:bg-emerald-600 border-none !rounded-lg text-xs font-bold shadow-md h-[36px]"
+                className="bg-emerald-500 hover:bg-emerald-600 border-none !rounded-xl text-xs font-bold shadow-lg shadow-emerald-500/20 h-[40px] px-6 transition-all hover:scale-105 active:scale-95"
                 onClick={() => setIsAddModalOpen(true)}
               >
                 Бараа бүртгэх
               </Button>
               <Button
-                type="primary"
-                className="bg-green-500 hover:bg-green-600 border-none !rounded-lg text-xs font-bold shadow-md h-[36px] flex items-center gap-1"
+                type="default"
+                className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 !rounded-xl text-xs font-bold shadow-sm h-[40px] px-4 flex items-center gap-2 hover:border-emerald-500 group"
               >
-                <FileExcelOutlined /> Excel <DownOutlined className="text-[12px]" />
+                <FileExcelOutlined className="text-emerald-500 group-hover:scale-110 transition-transform" /> 
+                <span className="text-slate-600 dark:text-slate-300">Excel</span>
+                <DownOutlined className="text-[10px] text-slate-400" />
               </Button>
             </Space>
+          </div>
+
+          {/* Floating Action Button */}
+          <div className="fixed bottom-8 right-8 z-50 xl:hidden">
+             <Button
+               type="primary"
+               shape="circle"
+               icon={<PlusOutlined style={{ fontSize: '24px' }} />}
+               className="w-14 h-14 bg-emerald-500 hover:bg-emerald-600 border-none shadow-2xl shadow-emerald-500/40 flex items-center justify-center animate-bounce hover:animate-none"
+               onClick={() => setIsAddModalOpen(true)}
+             />
           </div>
 
           <Card id="mat-table" size="small" className="shadow-sm border-gray-200 dark:border-gray-800 dark:bg-gray-800 rounded-xl overflow-hidden animate-entrance-stagger-7">
@@ -1082,7 +1100,11 @@ function BaraaMaterial() {
     const negj = getFieldValue('negj');
     const isWhole = negj === 'shirheg' || negj === 'haire' || negj === 'bogts' || negj === 'dana';
     return (
-      <Form.Item name="uldegdel" label="Үлдэгдэл" initialValue={0}>
+      <Form.Item name="uldegdel" label="Үлдэгдэл" initialValue={0}
+      rules={[
+    { required: true, message: "Тоо оруулна уу" },
+    { type: 'number', min: 1, message: "0-ээс их байх ёстой" }
+  ]}>
         <InputNumber
           className="w-full rounded-md dark:border-gray-700"
           placeholder="Үлдэгдэл"

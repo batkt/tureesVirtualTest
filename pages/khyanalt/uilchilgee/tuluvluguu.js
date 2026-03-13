@@ -247,6 +247,8 @@ function Tuluvluguu() {
     const result = [];
     clusters.forEach(cluster => {
       const columns = [];
+      const taskColumnMap = new Map();
+
       cluster.forEach(task => {
         let colIndex = -1;
         const taskStart = dayjs(task.ekhlekhTsag || task.duusakhTsag);
@@ -261,17 +263,17 @@ function Tuluvluguu() {
 
         if (colIndex === -1) {
           columns.push([task]);
-          task.computedColIndex = columns.length - 1;
+          taskColumnMap.set(task.id || task._id, columns.length - 1);
         } else {
           columns[colIndex].push(task);
-          task.computedColIndex = colIndex;
+          taskColumnMap.set(task.id || task._id, colIndex);
         }
       });
       
       cluster.forEach(task => {
         result.push({
           ...task,
-          colIndex: task.computedColIndex,
+          colIndex: taskColumnMap.get(task.id || task._id),
           totalCols: columns.length
         });
       });
@@ -325,13 +327,6 @@ function Tuluvluguu() {
   }, [allEmployees, ajiltan, onlineUsers]);
 
 
-  const statCards = [
-    { title: "Нийт төсөл", value: projects.length.toString() },
-    { title: "Нийт ажил", value: tasks.length.toString() },
-    { title: "Дууссан ажил", value: tasks.filter(t => t.tuluv === "duussan").length.toString() },
-    { title: "Яаралтай ажил", value: tasks.filter(t => t.zereglel === "yaraltai").length.toString() },
-  ];
-
   const fetchProjects = useCallback(async () => {
     if (!barilgiinId) return;
     setLoadingProjects(true);
@@ -376,7 +371,7 @@ function Tuluvluguu() {
           completed: task.tuluv === "duussan",
           zereglel: task.zereglel,
           tuluv: task.tuluv,
-          ...task,
+          ...task,  
         };
       });
       setTasks(normalized);
@@ -773,6 +768,13 @@ function Tuluvluguu() {
       return selectedProjectIds.some(selectedId => selectedId === pId);
     });
   }, [enrichedTasks, selectedProjectIds]);
+
+  const statCards = useMemo(() => [
+    { title: t("Нийт төсөл"), value: projects.length.toString() },
+    { title: t("Сонгосон ажил"), value: filteredTasks.length.toString() },
+    { title: t("Дууссан"), value: filteredTasks.filter(t => t.tuluv === "duussan").length.toString() },
+    { title: t("Яаралтай"), value: filteredTasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
+  ], [projects.length, filteredTasks, t, projects]);
 useEffect(() => {
     if (router.isReady && enrichedTasks.length > 0) {
       const { taskId, projectId } = router.query;
@@ -1041,8 +1043,8 @@ useEffect(() => {
   useEffect(() => {
     if (!isTaskDetailVisible || !selectedTask || !fsmSocket) return;
 
-    const projectId = selectedTask.projectId || selectedTask.project;
-    const taskId = selectedTask.id || selectedTask._id;
+    const projectId = selectedTask?.projectId || selectedTask?.project;
+    const taskId = selectedTask?.id || selectedTask?._id;
     if (!projectId || !taskId) return;
 
     fetchChatHistory(taskId, projectId);
@@ -1080,7 +1082,7 @@ useEffect(() => {
       fsmSocket.off("message_deleted", handleMsgDeleted);
       fsmSocket.off("message_edited", handleMsgEdited);
     };
-  }, [isTaskDetailVisible, selectedTask, fsmSocket, fetchChatHistory]);
+  }, [isTaskDetailVisible, selectedTask?._id, selectedTask?.id, fsmSocket, fetchChatHistory]);
 
   const handleSendMessage = async () => {
     if ((!chatInput.trim() && !selectedChatFile) || !selectedTask) return;
@@ -1241,7 +1243,7 @@ useEffect(() => {
       fsmSocket.off('message_deleted', handleMsgDeleted);
       fsmSocket.off('message_edited', handleMsgEdited);
     };
-  }, [isProjectChatVisible, selectedProjectForChat, fsmSocket, fetchProjectChatHistory]);
+  }, [isProjectChatVisible, selectedProjectForChat?._id, selectedProjectForChat?.id, fsmSocket, fetchProjectChatHistory]);
 
   const handleSendProjectMessage = async () => {
     if ((!projectChatInput.trim() && !selectedProjectChatFile) || !selectedProjectForChat) return;
@@ -1567,13 +1569,13 @@ useEffect(() => {
                     const isPast = date.startOf('day').isBefore(dayjs().startOf('day'));
                     
                     if (!isCurrentMonth) {
-                      return <div key={idx} className="min-h-[140px] border-b border-r border-gray-300 dark:border-gray-900 bg-gray-50/50 dark:bg-gray-950/20 opacity-30" />;
+                      return <div key={idx} className="h-[160px] border-b border-r border-gray-300 dark:border-gray-900 bg-gray-50/50 dark:bg-gray-950/20 opacity-30" />;
                     }
 
                     return (
                       <div 
                         key={idx} 
-                        className={`min-h-[140px] border-b border-r border-gray-300 dark:border-gray-900 p-2 transition-all relative flex flex-col group ${
+                        className={`h-[160px] border-b border-r border-gray-300 dark:border-gray-900 p-2 transition-all relative flex flex-col group ${
                           isPast ? "bg-gray-100/50 dark:bg-gray-900/40 cursor-not-allowed opacity-50" : 
                           "bg-white dark:bg-gray-800 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-900/10"
                         }`}
@@ -1598,7 +1600,7 @@ useEffect(() => {
                             <Tooltip key={task.id} title={`${task.projectName}: ${task.title}`}>
                               <div 
                                 onClick={(e) => handleTaskClick(task, e)}
-                                className="flex items-center space-x-1.5 px-1.5 py-1 rounded-md text-[12px] font-bold border-l-2 hover:opacity-80 transition-opacity cursor-pointer text-gray-800 dark:text-gray-200 tracking-tight"
+                                className="flex items-center space-x-1.5 px-1.5 py-1 rounded-md text-[12px] font-bold border-l-2 hover:opacity-80 transition-opacity cursor-pointer text-gray-800 dark:text-gray-200 tracking-tight shrink-0"
                                 style={{ 
                                   borderLeftColor: task.projectColor || "#14b8a6",
                                   backgroundColor: (task.projectColor || "#14b8a6") + "20"
@@ -1618,9 +1620,9 @@ useEffect(() => {
                                 e.stopPropagation();
                                 setDayTasksModal({ visible: true, date, tasks: dayTasks });
                               }}
-                              className="text-[12px] font-bold text-teal-600 dark:text-teal-400 px-1.5 cursor-pointer hover:text-teal-500 transition-colors"
+                              className="text-[12px] font-bold text-teal-600 dark:text-teal-400 px-1.5 cursor-pointer hover:text-teal-500 transition-colors mt-1"
                             >
-                              +{dayTasks.length - 3} дэлгэрэнгүй
+                              +{dayTasks.length - 3} {t("дэлгэрэнгүй")}
                             </div>
                           )}
                         </div>
@@ -2212,7 +2214,10 @@ useEffect(() => {
         <Form.Item
           {...restField}
           name={[name, 'too']}
-          rules={[{ required: true, message: "Тоо ширхэг" }]}
+          rules={[
+    { required: true, message: "Тоо оруулна уу" },
+    { type: 'number', min: 1, message: "0-ээс их байх ёстой" }
+  ]}
           className="!mb-0"
         >
           <InputNumber
