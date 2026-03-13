@@ -571,8 +571,15 @@ function KPI() {
                   </div>
                   <div className="flex flex-col">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-bold text-blue-500 tabular-nums">{users.filter(u => (u.kpiHuvv || 0) >= avgKpi).length}</span>
-                      <span className="text-sm font-bold text-gray-400">/ {users.length}</span>
+                      {(() => {
+                        const aboveAvgCount = users.filter(u => (u.kpiDaalgavarToo || 0) > 0 && (u.kpiHuvv || 0) >= avgKpi).length;
+                        return (
+                          <>
+                            <span className="text-2xl font-bold text-blue-500 tabular-nums">{aboveAvgCount}</span>
+                            <span className="text-sm font-bold text-gray-400">/ {users.length}</span>
+                          </>
+                        );
+                      })()}
                     </div>
                     <span className="text-[12px] font-bold text-gray-400 uppercase mt-1">Дундажаас дээш ажилтан</span>
                     </div>
@@ -580,9 +587,11 @@ function KPI() {
                 <div className="mt-4 flex flex-col gap-1.5">
                    <div className="flex items-center justify-between text-[12px] font-bold">
                      <span className="text-gray-400 uppercase">Тогтвортой байдал</span>
-                     <span className="text-blue-500">Үр дүнтэй</span>
+                     <span className="text-blue-500">
+                      {avgKpi === 0 ? "Одоогоор үнэлгээгүй" : (avgKpi >= 80 ? "Маш сайн" : avgKpi >= 50 ? "Үр дүнтэй" : "Сайжруулах")}
+                     </span>
                    </div>
-                   <Progress percent={75} size="small" showInfo={false} strokeColor="#3b82f6" trailColor="rgba(59, 130, 246, 0.1)" />
+                   <Progress percent={avgKpi} size="small" showInfo={false} strokeColor="#3b82f6" trailColor="rgba(59, 130, 246, 0.1)" />
                 </div>
               </div>
             </div>

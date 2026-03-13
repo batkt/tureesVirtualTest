@@ -45,7 +45,8 @@ import {
   Space,
   Drawer,
   Upload,
-  Avatar
+  Avatar,
+  Image
 } from "antd";
 import { useFsmSocket } from "hooks/useFsmSocket";
 import { Bar, Doughnut } from "react-chartjs-2";

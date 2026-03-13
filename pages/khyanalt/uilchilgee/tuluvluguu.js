@@ -112,6 +112,9 @@ function Tuluvluguu() {
   const [loadingSubtasks, setLoadingSubtasks] = useState(false);
   const [newSubtaskTitle, setNewSubtaskTitle] = useState("");
   const [isAddingSubtask, setIsAddingSubtask] = useState(false);
+  const [companyKpis, setCompanyKpis] = useState([]);
+  const [isKpiModalVisible, setIsKpiModalVisible] = useState(false);
+  const [selectedMemberForKpi, setSelectedMemberForKpi] = useState(null);
   const socketRef = useRef(null);
   const messagesEndRef = useRef(null);
   const projectChatEndRef = useRef(null);
@@ -315,16 +318,21 @@ function Tuluvluguu() {
   }, [onlineUsersFromHook]);
 
   const teamMembers = useMemo(() => {
-    if (allEmployees.length > 0) {
-      return allEmployees.map(emp => ({
-        id: emp._id,
-        name: emp.ner || emp.nevtrekhNer,
-        role: emp.albanTushaal || emp.erkh || "Ажилтан",
-        online: onlineUsers[emp._id] === 'online'
-      }));
-    }
-    return ajiltan ? [{ id: ajiltan._id, name: ajiltan.ner || ajiltan.nevtrekhNer, role: ajiltan.albanTushaal || ajiltan.erkh || "Ажилтан", online: true }] : [];
-  }, [allEmployees, ajiltan, onlineUsers]);
+    return allEmployees.map(a => {
+      const kpiInfo = companyKpis.find(k => k._id === a._id || k.ajiltniiId === a._id);
+      return {
+        id: a._id,
+        name: a.ner || a.nevtrekhNer,
+        role: a.albanTushaal || a.erkh || "Ажилтан",
+        online: onlineUsers[a._id] === 'online',
+        kpi: kpiInfo?.kpiHuvv || 0,
+        kpiOnoo: kpiInfo?.kpiOnoo || 0,
+        kpiDaalgavarToo: kpiInfo?.kpiDaalgavarToo || 0,
+        kpiDundaj: kpiInfo?.kpiDundaj || 0,
+        lastShineelsn: kpiInfo?.kpiShineelsenOgnoo
+      };
+    });
+  }, [allEmployees, onlineUsers, companyKpis]);
 
 
   const fetchProjects = useCallback(async () => {
@@ -351,10 +359,12 @@ function Tuluvluguu() {
     if (!barilgiinId) return;
     setLoadingTasks(true);
     try {
-      const res = await api.get("/tasks", { 
-        params: { baiguullagiinId, barilgiinId } 
-      });
-      let list = res.data?.data || res.data || [];
+      const [tRes, kRes] = await Promise.all([
+        api.get("/tasks", { params: { baiguullagiinId, barilgiinId } }),
+        api.get(`/baiguullaga/${baiguullagiinId}/kpi`)
+      ]);
+      setCompanyKpis(kRes.data?.data || []);
+      let list = tRes.data?.data || tRes.data || [];
       const normalized = list.map(task => {
         const pId = task.projectId || task.project;
         const taskDate = task.ekhlekhTsag || task.duusakhTsag || dayjs();
@@ -420,6 +430,11 @@ function Tuluvluguu() {
       setLoadingBaraas(false);
     }
   }, [barilgiinId, baiguullagiinId, api]);
+
+  const handleMemberClick = (member) => {
+    setSelectedMemberForKpi(member);
+    setIsKpiModalVisible(true);
+  };
 
   useEffect(() => {
     fetchProjects();
@@ -771,9 +786,10 @@ function Tuluvluguu() {
 
   const statCards = useMemo(() => {
     const overdueCount = filteredTasks.filter(t => {
-      if (!t.duusakhTsag) return false;
-      const deadline = dayjs(t.duusakhTsag);
-      if (t.tuluv === 'duussan') {
+      const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag;
+      if (!deadlineAt) return false;
+      const deadline = dayjs(deadlineAt);
+      if (t.tuluv === 'duussan' || t.tuluv === 'shalga') {
         return dayjs(t.duussanOgnoo || t.updatedAt).isAfter(deadline);
       }
       return deadline.isBefore(dayjs());
@@ -782,9 +798,15 @@ function Tuluvluguu() {
     return [
       { title: t("Нийт төсөл"), value: projects.length.toString() },
       { title: t("Сонгосон ажил"), value: filteredTasks.length.toString() },
-      { title: t("Дууссан"), value: filteredTasks.filter(t => t.tuluv === "duussan").length.toString() },
+      { title: t("Дууссан"), value: filteredTasks.filter(t => t.tuluv === "duussan" || t.tuluv === "shalga").length.toString() },
       { title: t("Хэтэрсэн"), value: overdueCount.toString() },
       { title: t("Яаралтай"), value: filteredTasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
+      { 
+        title: t("Гүйцэтгэл"), 
+        value: companyKpis.length > 0 
+          ? (Math.round(companyKpis.reduce((acc, k) => acc + (k.kpiHuvv || 0), 0) / companyKpis.length)) + "%"
+          : "0%" 
+      },
     ];
   }, [projects.length, filteredTasks, t]);
 useEffect(() => {
@@ -1434,7 +1456,7 @@ useEffect(() => {
       <div className="col-span-12 flex flex-col xl:flex-row h-auto xl:h-H8HalfRem w-full -mx-0 xl:-mx-1 -mt-2 text-black lg:rounded-2xl shadow-2xl relative animate-entrance">
         <div className="flex-1 flex flex-col p-4 overflow-hidden relative min-w-0">
         
-        <div id="cal-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
+        <div id="cal-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
           {statCards.map((card, index) => (
             <div
               key={index}
@@ -1924,14 +1946,22 @@ useEffect(() => {
                 </div>
                 <div className="max-h-[300px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                   {teamMembers.map((member, i) => (
-                    <div key={i} className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md">
+                    <div key={i} 
+                      onClick={() => handleMemberClick(member)}
+                      className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md"
+                    >
                       <div className="flex items-center space-x-4 w-full">
                         <Avatar size="medium" className="bg-gradient-to-tr from-emerald-400 to-teal-600 dark:from-emerald-700 dark:to-teal-900 text-white text-[12px] font-bold border-2 border-white dark:border-gray-800 shadow-xl shrink-0">
                           {(member.name || "").slice(0, 1).toUpperCase()}
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1 justify-center">
                           <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
-                          <div className="text-[12px] text-gray-400 dark:text-gray-600 font-medium leading-tight mt-1 ">{member.role}</div>
+                          <div className="text-[12px] text-gray-400 dark:text-gray-600 font-medium leading-tight mt-1 items-center flex justify-between">
+                            <span>{member.role}</span>
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                              {member.kpi}%
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -3328,6 +3358,69 @@ useEffect(() => {
           </div>
         </div>
       </Drawer>
+      <Modal
+        title={null}
+        visible={isKpiModalVisible}
+        onCancel={() => setIsKpiModalVisible(false)}
+        footer={null}
+        closeIcon={<CloseOutlined className="text-gray-400 hover:text-white transition-colors" />}
+        bodyStyle={{ padding: 0 }}
+        className="kpi-custom-modal"
+        width={400}
+        centered
+      >
+        <div className="bg-gradient-to-br from-emerald-600 to-teal-700 p-8 text-white rounded-t-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl" />
+          <div className="relative z-10 flex flex-col items-center">
+             <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold mb-3 border-2 border-white/30">
+               {selectedMemberForKpi?.name?.charAt(0).toUpperCase()}
+             </div>
+             <h2 className="text-xl font-bold mb-1">{selectedMemberForKpi?.name}</h2>
+             <p className="text-white/70 text-sm font-medium">{selectedMemberForKpi?.role}</p>
+          </div>
+        </div>
+        
+        <div className="p-6 bg-white dark:bg-gray-900 rounded-b-2xl">
+           <div className="flex justify-center mb-8 -mt-12 relative z-20">
+              <div className="bg-white dark:bg-gray-800 p-3 rounded-full shadow-2xl border-4 border-emerald-50 dark:border-emerald-950">
+                <Progress 
+                  type="circle" 
+                  percent={selectedMemberForKpi?.kpi} 
+                  strokeColor={{ '0%': '#10b981', '100%': '#0d9488' }}
+                  width={100}
+                  strokeWidth={10}
+                  format={(p) => (
+                    <div className="flex flex-col">
+                      <span className="text-2xl font-black text-emerald-600 leading-none">{p}%</span>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase mt-1">KPI</span>
+                    </div>
+                  )}
+                />
+              </div>
+           </div>
+
+           <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center">
+                 <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">Гүйцэтгэсэн</span>
+                 <span className="text-xl font-black text-gray-800 dark:text-gray-100">{selectedMemberForKpi?.kpiDaalgavarToo}</span>
+                 <span className="text-[10px] font-medium text-gray-500 mt-0.5">даалгавар</span>
+              </div>
+              <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center">
+                 <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">Дундаж оноо</span>
+                 <span className="text-xl font-black text-emerald-500">{selectedMemberForKpi?.kpiDundaj}</span>
+                 <span className="text-[10px] font-medium text-gray-500 mt-0.5">оноо</span>
+              </div>
+           </div>
+
+           <div className="text-center">
+              <span className="text-[10px] font-bold text-gray-400 uppercase block mb-3">Хамгийн сүүлд шинэчлэгдсэн</span>
+              <div className="inline-flex items-center px-4 py-2 bg-emerald-50 dark:bg-emerald-900/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-xs font-bold border border-emerald-100 dark:border-emerald-800">
+                <ClockCircleOutlined className="mr-2" />
+                {selectedMemberForKpi?.lastShineelsn ? dayjs(selectedMemberForKpi.lastShineelsn).format("YYYY-MM-DD HH:mm") : "Мэдээлэл байхгүй"}
+              </div>
+           </div>
+        </div>
+      </Modal>
     </Admin>
   );
 }

@@ -4,7 +4,6 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from "react"
 import { createPortal } from 'react-dom';
 import fsmApi, { FSM_BASE_URL } from "services/fsmApi";
 import { useAuth } from "services/auth";
-import { message } from "antd";
 import { useTranslation } from "react-i18next";
 import useJagsaalt from "hooks/useJagsaalt";
 import moment from "moment";
@@ -63,6 +62,7 @@ import {
   Modal,
   DatePicker,
   Spin,
+  Progress,
   Popconfirm,
   Tooltip,
   Form,
@@ -71,7 +71,8 @@ import {
   InputNumber,
   Drawer,
   Divider,
-  Upload
+  Upload,
+  Image
 } from "antd";
 import { useFsmSocket } from "hooks/useFsmSocket";
 import { useRouter } from "next/router";
@@ -106,7 +107,10 @@ function Khynalt() {
   const [history, setHistory] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [loadingProjects, setLoadingProjects] = useState(false);
+  const [companyKpis, setCompanyKpis] = useState([]);
   const [isProjectModalVisible, setIsProjectModalVisible] = useState(false);
+  const [isKpiModalVisible, setIsKpiModalVisible] = useState(false);
+  const [selectedMemberForKpi, setSelectedMemberForKpi] = useState(null);
   const [editingProject, setEditingProject] = useState(null);
   const [chartRange, setChartRange] = useState(7); // 7, 14, 30 days
   const [selectedProjectIds, setSelectedProjectIds] = useState([]);
@@ -136,12 +140,13 @@ function Khynalt() {
     setLoadingHistory(true);
     setLoadingProjects(true);
     try {
-      const [tRes, bRes, uRes, pRes, hRes] = await Promise.all([
+      const [tRes, bRes, uRes, pRes, hRes, kRes] = await Promise.all([
         api.get("/tasks", { params: { barilgiinId, baiguullagiinId } }),
         api.get("/baraas", { params: { barilgiinId, baiguullagiinId } }),
         api.get("/uilchluulegch", { params: { barilgiinId, baiguullagiinId } }),
         api.get("/projects", { params: { barilgiinId, baiguullagiinId } }),
-        api.get("/task-tuukh", { params: { barilgiinId } })
+        api.get("/task-tuukh", { params: { barilgiinId } }),
+        api.get(`/baiguullaga/${baiguullagiinId}/kpi`)
       ]);
       setTasks(tRes.data?.data || (Array.isArray(tRes.data) ? tRes.data : []));
       setBaraas(bRes.data?.data || (Array.isArray(bRes.data) ? bRes.data : []));
@@ -151,6 +156,7 @@ function Khynalt() {
       setProjects(normalized);
       setSelectedProjectIds(normalized.map(p => p.id));
       setHistory(hRes.data?.data || (Array.isArray(hRes.data) ? hRes.data : []));
+      setCompanyKpis(kRes.data?.data || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -398,33 +404,34 @@ function Khynalt() {
     setSelectedProjectChatFile(null);
     setIsProjectChatVisible(true);
   };
+
+  const handleMemberClick = (member) => {
+    setSelectedMemberForKpi(member);
+    setIsKpiModalVisible(true);
+  };
   
   
 
   const teamMembers = useMemo(() => {
-    return ajiltanJagsaalt?.jagsaalt?.map(a => ({
-      id: a._id,
-      name: a.ner || a.nevtrekhNer,
-      role: a.albanTushaal || a.erkh || "Ажилтан",
-      kpi: a.kpiHuvv || 0,
-      kpiOnoo: a.kpiOnoo || 0,
-    })) || [];
-  }, [ajiltanJagsaalt?.jagsaalt]);
+    return ajiltanJagsaalt?.jagsaalt?.map(a => {
+      const kpiInfo = companyKpis.find(k => k._id === a._id || k.ajiltniiId === a._id);
+      return {
+        id: a._id,
+        name: a.ner || a.nevtrekhNer,
+        role: a.albanTushaal || a.erkh || "Ажилтан",
+        kpi: kpiInfo?.kpiHuvv || 0,
+        kpiOnoo: kpiInfo?.kpiOnoo || 0,
+        kpiDaalgavarToo: kpiInfo?.kpiDaalgavarToo || 0,
+        kpiDundaj: kpiInfo?.kpiDundaj || 0,
+        lastShineelsn: kpiInfo?.kpiShineelsenOgnoo
+      };
+    }) || [];
+  }, [ajiltanJagsaalt?.jagsaalt, companyKpis]);
 
   const statCards = useMemo(() => {
-    const overdueCount = tasks.filter(t => {
-      if (!t.duusakhTsag) return false;
-      const deadline = moment(t.duusakhTsag);
-      if (t.tuluv === 'duussan') {
-        return moment(t.duussanOgnoo || t.updatedAt).isAfter(deadline);
-      }
-      return deadline.isBefore(moment());
-    }).length;
-
     return [
       { title: "Нийт ажил", value: tasks.length.toString() },
-      { title: "Дууссан ажил", value: tasks.filter(t => t.tuluv === "duussan").length.toString() },
-      { title: "Хугацаа хэтэрсэн", value: overdueCount.toString() },
+      { title: "Дууссан ажил", value: tasks.filter(t => t.tuluv === "duussan" || t.tuluv === "shalga").length.toString() },
       { title: "Бараа материал", value: baraas.length.toString() },
       { title: "Яаралтай", value: tasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
       { title: "Идэвхтэй баг", value: teamMembers.length.toString() },
@@ -459,39 +466,43 @@ function Khynalt() {
   }, [tasks]);
   const multiChartData = useMemo(() => {
     const days = [];
-    for (let i = chartRange - 1; i >= 0; i--) {
+    // From (chartRange-1) days ago to 3 days in the future
+    for (let i = chartRange - 1; i >= -3; i--) {
       days.push(moment().subtract(i, 'days').format('YYYY-MM-DD'));
     }
     return days.map(day => {
       const dayMoment = moment(day);
       const done = tasks.filter(t => {
-        if (t.tuluv !== 'duussan') return false;
+        if (t.tuluv !== 'duussan' && t.tuluv !== 'shalga') return false;
         const completeDate = t.duussanOgnoo || t.updatedAt;
         return moment(completeDate).isSame(dayMoment, 'day');
       }).length;
 
-      const active = tasks.filter(t => 
-        t.tuluv === 'khiigdej bui' && 
-        moment(t.updatedAt).isSame(dayMoment, 'day')
-      ).length;
+      const active = tasks.filter(t => {
+        const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag || t.ekhlekhTsag;
+        if (!deadlineAt) return false;
+        const scheduledDay = moment(deadlineAt);
+        return t.tuluv === 'khiigdej bui' && scheduledDay.isSame(dayMoment, 'day');
+      }).length;
       
-      const waiting = tasks.filter(t => 
-        (t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine') && 
-        moment(t.createdAt).isSame(dayMoment, 'day')
-      ).length;
+      const waiting = tasks.filter(t => {
+        const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag || t.ekhlekhTsag;
+        if (!deadlineAt) return false;
+        const scheduledDay = moment(deadlineAt);
+        return (t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine') && scheduledDay.isSame(dayMoment, 'day');
+      }).length;
 
       const overdue = tasks.filter(t => {
-        if (!t.duusakhTsag) return false;
-        const deadline = moment(t.duusakhTsag);
+        const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag;
+        if (!deadlineAt) return false;
+        const deadline = moment(deadlineAt);
         
-        // Show on the day it was supposed to be finished
         if (!deadline.isSame(dayMoment, 'day')) return false;
 
-        if (t.tuluv === 'duussan') {
+        if (t.tuluv === 'duussan' || t.tuluv === 'shalga') {
           return moment(t.duussanOgnoo || t.updatedAt).isAfter(deadline);
         }
         
-        // If not finished, is it currently past deadline?
         return deadline.isBefore(moment());
       }).length;
 
@@ -574,27 +585,37 @@ function Khynalt() {
                     const N = multiChartData.length;
                     const step = (W - PAD_L - PAD_R) / Math.max(N - 1, 1);
 
-                    const doneTotal   = tasks.filter(t => t.tuluv === 'duussan').length;
-                    const activeTotal  = tasks.filter(t => t.tuluv === 'khiigdej bui').length;
-                    const waitingTotal = tasks.filter(t => t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine').length;
+                    const doneTotal   = tasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'shalga').length;
                     const overdueTotal = tasks.filter(t => {
-                        if (!t.duusakhTsag) return false;
-                        const deadline = moment(t.duusakhTsag);
-                        if (t.tuluv === 'duussan') {
+                        const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag;
+                        if (!deadlineAt) return false;
+                        const deadline = moment(deadlineAt);
+                        if (t.tuluv === 'duussan' || t.tuluv === 'shalga') {
                             return moment(t.duussanOgnoo || t.updatedAt).isAfter(deadline);
                         }
                         return deadline.isBefore(moment());
                     }).length;
+                    
+                    // To make them sum to total tasks in the UI, we'll show distributions of Current Status
+                    const activeTotal  = tasks.filter(t => t.tuluv === 'khiigdej bui').length;
+                    const waitingTotal = tasks.filter(t => t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine' || t.tuluv === 'khugatsaa khetersen').length;
                     // const effPct = Math.round((doneTotal / (tasks.length || 1)) * 100);
 
-                    const allVals = multiChartData.flatMap(d => [d.done, d.active, d.waiting, d.overdue]);
-                    const seriesMax = Math.max(...allVals, 1);
+                    // Calculate max based on stacked sum (Done + Active + Waiting) to fit SVG
+                    const seriesMax = Math.max(...multiChartData.map(d => Math.max(d.done + d.active + d.waiting, d.overdue, 1)));
 
-                    const mkPts = (key) => multiChartData.map((d, i) => ({
-                      x: PAD_L + i * step,
-                      y: BASE - (d[key] / seriesMax) * (BASE - 10),
-                      v: d[key]
-                    }));
+                    const mkPts = (key) => multiChartData.map((d, i) => {
+                      let val = d[key];
+                      // Stack Done -> Active -> Waiting
+                      if (key === 'active') val += d.done;
+                      if (key === 'waiting') val += (d.done + d.active);
+                      
+                      return {
+                        x: PAD_L + i * step,
+                        y: BASE - (val / seriesMax) * (BASE - 10),
+                        v: d[key]
+                      };
+                    });
 
                     const mkSmooth = (pts) => pts.length < 2
                       ? `M${pts[0]?.x ?? 0},${pts[0]?.y ?? BASE}`
@@ -611,10 +632,10 @@ function Khynalt() {
                     };
 
                     const series = [
-                      { key: 'overdue', color: '#ef4444', gradId: 'gradRed',   glowId: 'glowRed',   label: t('uilchilgee.overdue'), count: overdueTotal },
-                      { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: t('uilchilgee.active'), count: activeTotal  },
-                      { key: 'waiting', color: '#f59e0b', gradId: 'gradAmber', glowId: 'glowAmber', label: t('Хүлээгдэж буй'), count: waitingTotal },
-                      { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: t('uilchilgee.completed_tasks'), count: doneTotal    },
+                      { key: 'waiting', color: '#f59e0b', gradId: 'gradAmber', glowId: 'glowAmber', label: t('Хүлээгдэж буй'), count: waitingTotal, isArea: true },
+                      { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: t('uilchilgee.active'), count: activeTotal, isArea: true  },
+                      { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: t('uilchilgee.completed_tasks'), count: doneTotal, isArea: true    },
+                      { key: 'overdue', color: '#ef4444', gradId: 'gradRed',   glowId: 'glowRed',   label: t('uilchilgee.overdue'), count: overdueTotal, isArea: false },
                     ];
 
                     return (
@@ -653,14 +674,15 @@ function Khynalt() {
                               const pts = mkPts(s.key);
                               return (
                                 <g key={s.key}>
-                                  <path d={mkArea(pts)} fill={`url(#${s.gradId})`} />
+                                  {s.isArea && <path d={mkArea(pts)} fill={`url(#${s.gradId})`} />}
                                   <path
                                     d={mkSmooth(pts)}
                                     fill="none"
                                     stroke={s.color}
-                                    strokeWidth="2"
+                                    strokeWidth={s.key === 'overdue' ? "3" : "2"}
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
+                                    strokeDasharray={s.key === 'overdue' ? "4 2" : "none"}
                                     filter={`url(#${s.glowId})`}
                                   />
                                   {pts.map((pt, i) => (
@@ -731,7 +753,7 @@ function Khynalt() {
                          <span className="text-gray-800 dark:text-gray-200 text-[12px] font-bold flex-1 truncate group-hover:text-blue-500 transition-colors">{task.ner}</span>
                          
                          <div className="flex items-center gap-2 shrink-0">
-                            <span className={`px-1.5 py-0.5 mr-32 rounded text-[12px] uppercase font-bold ${
+                            <span className={`px-1.5 py-0.5 rounded text-[12px] uppercase font-bold ${
                                task.zereglel === "yaraltai"  ? "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400" :
                                task.zereglel === "nen yaraltai" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
                                task.zereglel === "engiin" ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400" :
@@ -740,6 +762,17 @@ function Khynalt() {
                                {task.zereglel === "yaraltai" ? "Яаралтай" : 
                                 task.zereglel === "nen yaraltai" ? "Нэн яаралтай" : 
                                 task.zereglel === "engiin" ? "Энгийн" : "Бага"}
+                            </span>
+                            <span className={`px-1.5 py-0.5 w-20 text-center rounded text-[12px] uppercase font-bold ${
+                               task.tuluv === "duussan" || task.tuluv === "shalga" ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" :
+                               task.tuluv === "khiigdej bui" ? "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400" :
+                               task.tuluv === "khugatsaa khetersen" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
+                               "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
+                            }`}>
+                               {task.tuluv === "duussan" || task.tuluv === "shalga" ? "Дууссан" :
+                                task.tuluv === "khiigdej bui" ? "Идэвхтэй" :
+                                task.tuluv === "khugatsaa khetersen" ? "Хэтэрсэн" :
+                                "Хүлээгдэж буй"}
                             </span>
                             <span className="flex items-center gap-1 text-[12px] text-gray-400 font-bold w-16 justify-end">
                                <CalendarOutlined className="text-[12px] opacity-50" />
@@ -784,7 +817,10 @@ function Khynalt() {
                       const ac = avatarColors[i % avatarColors.length];
 
                       return (
-                        <div key={member.id} className="group flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
+                        <div key={member.id} 
+                          onClick={() => handleMemberClick(member)}
+                          className="group flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white dark:hover:bg-white/10 hover:shadow-md cursor-pointer transition-all border border-transparent hover:border-emerald-500/20"
+                        >
                           <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-[12px] font-bold"
                             style={{ background: `${ac}22`, border: `1.5px solid ${ac}50`, color: ac }}>
                             {member.name?.charAt(0).toUpperCase()}
@@ -1280,6 +1316,70 @@ function Khynalt() {
           </div>
         </div>
       </Drawer>
+
+      <Modal
+        title={null}
+        visible={isKpiModalVisible}
+        onCancel={() => setIsKpiModalVisible(false)}
+        footer={null}
+        closeIcon={<CloseOutlined className="text-gray-400 hover:text-white transition-colors" />}
+        bodyStyle={{ padding: 0 }}
+        className="kpi-custom-modal"
+        width={400}
+        centered
+      >
+        <div className="bg-gradient-to-br from-emerald-600 to-teal-700 p-8 text-white rounded-t-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl" />
+          <div className="relative z-10 flex flex-col items-center">
+             <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold mb-3 border-2 border-white/30">
+               {selectedMemberForKpi?.name?.charAt(0).toUpperCase()}
+             </div>
+             <h2 className="text-xl font-bold mb-1">{selectedMemberForKpi?.name}</h2>
+             <p className="text-white/70 text-sm font-medium">{selectedMemberForKpi?.role}</p>
+          </div>
+        </div>
+        
+        <div className="p-6 bg-white dark:bg-gray-900 rounded-b-2xl">
+           <div className="flex justify-center mb-8 -mt-12 relative z-20">
+              <div className="bg-white dark:bg-gray-800 p-3 rounded-full shadow-2xl border-4 border-emerald-50 dark:border-emerald-950">
+                <Progress 
+                  type="circle" 
+                  percent={selectedMemberForKpi?.kpi} 
+                  strokeColor={{ '0%': '#10b981', '100%': '#0d9488' }}
+                  width={100}
+                  strokeWidth={10}
+                  format={(p) => (
+                    <div className="flex flex-col">
+                      <span className="text-2xl font-black text-emerald-600 leading-none">{p}%</span>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase mt-1">KPI</span>
+                    </div>
+                  )}
+                />
+              </div>
+           </div>
+
+           <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center">
+                 <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">Гүйцэтгэсэн</span>
+                 <span className="text-xl font-black text-gray-800 dark:text-gray-100">{selectedMemberForKpi?.kpiDaalgavarToo}</span>
+                 <span className="text-[10px] font-medium text-gray-500 mt-0.5">даалгавар</span>
+              </div>
+              <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center">
+                 <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">Дундаж оноо</span>
+                 <span className="text-xl font-black text-emerald-500">{selectedMemberForKpi?.kpiDundaj}</span>
+                 <span className="text-[10px] font-medium text-gray-500 mt-0.5">оноо</span>
+              </div>
+           </div>
+
+           <div className="text-center">
+              <span className="text-[10px] font-bold text-gray-400 uppercase block mb-3">Хамгийн сүүлд шинэчлэгдсэн</span>
+              <div className="inline-flex items-center px-4 py-2 bg-emerald-50 dark:bg-emerald-900/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-xs font-bold border border-emerald-100 dark:border-emerald-800">
+                <ClockCircleOutlined className="mr-2" />
+                {selectedMemberForKpi?.lastShineelsn ? moment(selectedMemberForKpi.lastShineelsn).format("YYYY-MM-DD HH:mm") : "Мэдээлэл байхгүй"}
+              </div>
+           </div>
+        </div>
+      </Modal>
 
       <GuidedTour 
         steps={tutorialSteps} 
