@@ -694,14 +694,14 @@ function Zogsool({ token }) {
     }
 
     if (tootsooKhelber === "2") {
+      console.log("mongon dunger");
       delete baseQuery.createdAt;
       console.log(
         moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
         moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
       );
-      if (tuluv === 2) {
-        // Only if the user EXPLICITLY filters by "Үнэгүй" (tuluv === 2), include those records.
-        // Otherwise, "Үнэгүй" records shouldn't appear randomly when filtering by "Угаалга".
+      console.log("tuluv:", tuluv, typeof tuluv);
+      if (Number(tuluv) === 2) {
         if (!baseQuery.$and) baseQuery.$and = [];
         baseQuery.$and.push({
           $or: [
@@ -721,8 +721,28 @@ function Zogsool({ token }) {
             },
           ],
         });
+      } else if (Number(tuluv) === 5) {
+        baseQuery["niitDun"] = { $gt: 0 };
+        baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
+        baseQuery["$or"] = [
+          {
+            "tuukh.0.tuluv": -4,
+            "tuukh.0.tulbur.ognoo": {
+              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+            },
+            "tuukh.0.uneguiGarsan": { $exists: false },
+          },
+          {
+            "tuukh.0.tuluv": 0,
+            "tuukh.0.tsagiinTuukh.0.garsanTsag": {
+              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+            },
+            "tuukh.0.uneguiGarsan": { $exists: false },
+          },
+        ];
       } else {
-        // Normal behavior for other filters (like Ugaalga), must have a payment date.
         baseQuery["tuukh.tulbur.ognoo"] = {
           $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
           $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
