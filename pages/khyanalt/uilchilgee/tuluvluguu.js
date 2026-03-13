@@ -1456,7 +1456,7 @@ useEffect(() => {
       <div className="col-span-12 flex flex-col xl:flex-row h-auto xl:h-H8HalfRem w-full -mx-0 xl:-mx-1 -mt-2 text-black lg:rounded-2xl shadow-2xl relative animate-entrance">
         <div className="flex-1 flex flex-col p-4 overflow-hidden relative min-w-0">
         
-        <div id="cal-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
+        <div id="cal-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-6 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
           {statCards.map((card, index) => (
             <div
               key={index}
@@ -1798,7 +1798,7 @@ useEffect(() => {
                 if (tuluv === "shalga") return "Шалгах";
                 return "Шинэ ажил";
               };
-              const priorityDot = (z) => z === "nen yaraltai" ? "bg-red-500" : z === "yaraltai" ? "bg-orange-400" : z === "engiin" ? "bg-yellow-400" : "bg-green-500";
+              const priorityDot = (z) => z === "nen yaraltai" ? "bg-red-500" : z === "yaraltai" ? "bg-amber-500" : z === "engiin" ? "bg-yellow-400" : "bg-green-500";
 
               const AgendaGroup = ({ label, tasks: groupTasks, labelCls, countBg }) => {
                 if (groupTasks.length === 0) return null;
@@ -2416,7 +2416,8 @@ useEffect(() => {
 
                <div className="flex flex-col items-end gap-2 shrink-0">
                   <span className={`px-2.5 py-1 rounded-lg text-[12px] font-bold uppercase shadow-sm ${
-                    selectedTask?.zereglel === 'nen yaraltai' || selectedTask?.zereglel === 'yaraltai' ? 'bg-red-500 text-white' : 
+                    selectedTask?.zereglel === 'nen yaraltai' ? 'bg-red-500 text-white' : 
+                    selectedTask?.zereglel === 'yaraltai' ? 'bg-amber-500 text-white' :
                     selectedTask?.zereglel === 'engiin' ? 'bg-green-500 text-white' : 'bg-teal-500 text-white'
                   }`}>
                     {selectedTask?.zereglel === "nen yaraltai" ? "🔴 Нэн Яаралтай" : selectedTask?.zereglel === "yaraltai" ? "🟠 Яаралтай" : selectedTask?.zereglel === "engiin" ? "🟢 Энгийн" : "🔵 Бага"}

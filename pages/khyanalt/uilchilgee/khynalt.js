@@ -538,7 +538,7 @@ function Khynalt() {
           <div className="flex justify-between items-center px-1">
           
         </div>
-          <div id="khyanalt-stats" className="hideScroll grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
+          <div id="khyanalt-stats" className="hideScroll grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
             {statCards.map((card, index) => (
               <div
                 key={index}
@@ -635,7 +635,7 @@ function Khynalt() {
                       { key: 'waiting', color: '#f59e0b', gradId: 'gradAmber', glowId: 'glowAmber', label: t('Хүлээгдэж буй'), count: waitingTotal, isArea: true },
                       { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: t('uilchilgee.active'), count: activeTotal, isArea: true  },
                       { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: t('uilchilgee.completed_tasks'), count: doneTotal, isArea: true    },
-                      { key: 'overdue', color: '#ef4444', gradId: 'gradRed',   glowId: 'glowRed',   label: t('uilchilgee.overdue'), count: overdueTotal, isArea: false },
+                      // { key: 'overdue', color: '#ef4444', gradId: 'gradRed',   glowId: 'glowRed',   label: t('uilchilgee.overdue'), count: overdueTotal, isArea: false },
                     ];
 
                     return (
@@ -753,7 +753,7 @@ function Khynalt() {
                          <span className="text-gray-800 dark:text-gray-200 text-[12px] font-bold flex-1 truncate group-hover:text-blue-500 transition-colors">{task.ner}</span>
                          
                          <div className="flex items-center gap-2 shrink-0">
-                            <span className={`px-1.5 py-0.5 rounded text-[12px] uppercase font-bold ${
+                            <span className={`px-1.5 py-0.5 rounded text-[12px]  font-bold ${
                                task.zereglel === "yaraltai"  ? "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400" :
                                task.zereglel === "nen yaraltai" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
                                task.zereglel === "engiin" ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400" :
@@ -763,7 +763,7 @@ function Khynalt() {
                                 task.zereglel === "nen yaraltai" ? "Нэн яаралтай" : 
                                 task.zereglel === "engiin" ? "Энгийн" : "Бага"}
                             </span>
-                            <span className={`px-1.5 py-0.5 w-20 text-center rounded text-[12px] uppercase font-bold ${
+                            <span className={`px-1.5 py-0.5 w-20 text-center rounded text-[12px]  font-bold ${
                                task.tuluv === "duussan" || task.tuluv === "shalga" ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" :
                                task.tuluv === "khiigdej bui" ? "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400" :
                                task.tuluv === "khugatsaa khetersen" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
@@ -784,7 +784,7 @@ function Khynalt() {
                     {tasks.length === 0 && (
                       <div className="flex flex-col items-center justify-center py-10 text-gray-400 uppercase font-bold text-[12px]  gap-2">
                         <CheckSquareOutlined className="text-2xl opacity-20" />
-                        Даалгавар байхгүй
+                        Ажил хуваарилаагүй
                       </div>
                     )}
                   </div>
