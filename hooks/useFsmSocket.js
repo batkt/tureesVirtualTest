@@ -3,7 +3,7 @@ import { fsmSocket } from 'services/fsmApi';
 import { useAuth } from 'services/auth';
 import { toast } from 'sonner';
 
-export const useFsmSocket = (projectId = null, taskId = null) => {
+export const useFsmSocket = (projectId = null, taskId = null, barilgiinId = null) => {
   const { ajiltan } = useAuth();
   const socketRef = useRef(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -28,6 +28,11 @@ export const useFsmSocket = (projectId = null, taskId = null) => {
       socket.emit('join_notifications', {
         userId: ajiltan._id
       });
+
+      // Join building room if provided
+      if (barilgiinId) {
+        socket.emit('join_barilga', { barilgiinId });
+      }
 
       // Join project/task rooms if IDs are provided
       if (projectId) {

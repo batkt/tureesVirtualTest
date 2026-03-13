@@ -2619,6 +2619,12 @@ useEffect(() => {
 
                 const remainingSeconds = Math.max(0, budgetedSeconds - spentSeconds);
                 const isExceeded = budgetedSeconds > 0 && spentSeconds > budgetedSeconds;
+                
+                // Clock-based deadline check
+                const isLateByDeadline = (duusakhMin != null) ? (getMinutesFromISO(taskEndTime) > duusakhMin) : false;
+                
+                // Final determination for 'OVERDUE' vs 'ON TIME'
+                const showOverdueLabel = isExceeded || isLateByDeadline;
                 const progress = budgetedSeconds > 0 ? Math.min(100, (spentSeconds / budgetedSeconds) * 100) : 0;
 
                 
@@ -2640,15 +2646,15 @@ useEffect(() => {
                           <div className="text-[12px] font-bold text-gray-400">
                             Төсөвлөсөн: <span className="text-gray-600 dark:text-gray-300 ml-1">{budgetedMinutes} мин</span>
                           </div>
-                          <div className={`text-[12px] font-bold ${isExceeded ? 'text-red-500' : 'text-teal-500'}`}>
-                            {isExceeded ? `Хэтэрсэн: ${formatTimer(spentSeconds - budgetedSeconds)}` : `Үлдсэн: ${formatTimer(remainingSeconds)}`}
+                          <div className={`text-[12px] font-bold ${showOverdueLabel ? 'text-red-500' : 'text-teal-500'}`}>
+                            {showOverdueLabel ? `Хэтэрсэн: ${formatTimer(spentSeconds - budgetedSeconds)}` : `Үлдсэн: ${formatTimer(remainingSeconds)}`}
                           </div>
                         </div>
                         <Progress 
                           percent={progress} 
-                          status={isExceeded ? 'exception' : (isInProgress ? 'active' : 'normal')} 
+                          status={showOverdueLabel ? 'exception' : (isInProgress ? 'active' : 'normal')} 
                           showInfo={false}
-                          strokeColor={isExceeded ? '#ef4444' : '#14b8a6'}
+                          strokeColor={showOverdueLabel ? '#ef4444' : '#14b8a6'}
                           trailColor="rgba(0,0,0,0.1)"
                           strokeWidth={10}
                           className="!m-0"
@@ -2659,14 +2665,14 @@ useEffect(() => {
                     <div className="flex items-center justify-between pt-2">
                       <div className="flex flex-col">
                         <span className="text-[12px] font-bold text-gray-400 uppercase mb-1">Зарцуулсан</span>
-                        <div className={`text-3xl font-mono font-bold tabular-nums ${isExceeded ? 'text-red-500' : 'text-gray-800 dark:text-white'}`}>
+                        <div className={`text-3xl font-mono font-bold tabular-nums ${showOverdueLabel ? 'text-red-500' : 'text-gray-800 dark:text-white'}`}>
                           {formatTimer(spentSeconds)}
                         </div>
                       </div>
                       
                       {selectedTask?.tuluv === 'duussan' && budgetedMinutes > 0 && (
-                        <div className={`px-4 py-2 rounded-xl font-bold text-[12px] shadow-sm uppercase  ${isExceeded ? 'bg-red-500 text-white' : 'bg-teal-500/10 text-teal-600 border border-teal-500/20'}`}>
-                          {isExceeded ? "ЦАГ ХЭТЭРСЭН" : "ХУГАЦААНДАА"}
+                        <div className={`px-4 py-2 rounded-xl font-bold text-[12px] shadow-sm uppercase  ${showOverdueLabel ? 'bg-red-500 text-white' : 'bg-teal-500/10 text-teal-600 border border-teal-500/20'}`}>
+                          {showOverdueLabel ? "ЦАГ ХЭТЭРСЭН" : "ХУГАЦААНДАА"}
                         </div>
                       )}
                     </div>

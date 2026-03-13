@@ -165,7 +165,9 @@ function Khynalt() {
   }, [fetchData]);
 
   const { isConnected, socket: fsmSocket } = useFsmSocket(
-    selectedProjectForChat ? (selectedProjectForChat.id || selectedProjectForChat._id) : null
+    selectedProjectForChat ? (selectedProjectForChat.id || selectedProjectForChat._id) : null,
+    null,
+    barilgiinId
   );
 
   const fetchProjectChatHistory = useCallback(async (projectId) => {
@@ -305,11 +307,19 @@ function Khynalt() {
   };
 
   useEffect(() => {
-    if (isConnected) {
-      const handleRefresh = () => fetchData();
-      
+    if (fsmSocket) {
+      const handleTaskUpdate = () => fetchData();
+      const handleProjectUpdate = () => fetchData();
+
+      fsmSocket.on("task_updated", handleTaskUpdate);
+      fsmSocket.on("project_updated", handleProjectUpdate);
+
+      return () => {
+        fsmSocket.off("task_updated", handleTaskUpdate);
+        fsmSocket.off("project_updated", handleProjectUpdate);
+      };
     }
-  }, [isConnected, fetchData]);
+  }, [fsmSocket, fetchData]);
 
   const handleCreateProject = async (values) => {
     if (!barilgiinId) { toast.warning("Барилгын мэдээлэл байхгүй байна"); return; }
@@ -641,22 +651,21 @@ function Khynalt() {
                                 </g>
                               );
                             })}
-                            {mkPts('done').filter((_, i) => {
+                            {multiChartData.filter((_, idx) => {
                               if (chartRange <= 7) return true;
-                              if (chartRange <= 14) return i % 2 === 0;
-                              return i % 5 === 0;
-                            }).map((pt, i, arr) => {
-                              // Find original index in multiChartData
-                              const originalIdx = multiChartData.findIndex(d => d.label === multiChartData.filter((_, idx) => {
+                              if (chartRange <= 14) return idx % 2 === 0;
+                              return idx % 5 === 0;
+                            }).map((d, i) => {
+                              const pt = mkPts('done').filter((_, idx) => {
                                 if (chartRange <= 7) return true;
                                 if (chartRange <= 14) return idx % 2 === 0;
                                 return idx % 5 === 0;
-                              })[i].label);
+                              })[i];
                               
                               return (
                                 <text key={i} x={pt.x} y={H + 10} fill="currentColor" fontSize="5.5" fontWeight="700"
                                   textAnchor="middle" className="text-gray-400 dark:text-gray-500">
-                                  {multiChartData[originalIdx].label}
+                                  {d.label}
                                 </text>
                               );
                             })}
