@@ -411,14 +411,25 @@ function Khynalt() {
     })) || [];
   }, [ajiltanJagsaalt?.jagsaalt]);
 
-  const statCards = [
-    { title: "Нийт даалгавар", value: tasks.length.toString() },
-    { title: "Дууссан ажил", value: tasks.filter(t => t.tuluv === "duussan" || t.tuluv === "duussan").length.toString() },
-    { title: "Нийт харилцагч", value: uilchluulegchid.length.toString() },
-    { title: "Бараа материал", value: baraas.length.toString() },
-    { title: "Яаралтай", value: tasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
-    { title: "Идэвхтэй ажилтан", value: teamMembers.length.toString() },
-  ];
+  const statCards = useMemo(() => {
+    const overdueCount = tasks.filter(t => {
+      if (!t.duusakhTsag) return false;
+      const deadline = moment(t.duusakhTsag);
+      if (t.tuluv === 'duussan') {
+        return moment(t.duussanOgnoo || t.updatedAt).isAfter(deadline);
+      }
+      return deadline.isBefore(moment());
+    }).length;
+
+    return [
+      { title: "Нийт ажил", value: tasks.length.toString() },
+      { title: "Дууссан ажил", value: tasks.filter(t => t.tuluv === "duussan").length.toString() },
+      { title: "Хугацаа хэтэрсэн", value: overdueCount.toString() },
+      { title: "Бараа материал", value: baraas.length.toString() },
+      { title: "Яаралтай", value: tasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
+      { title: "Идэвхтэй баг", value: teamMembers.length.toString() },
+    ];
+  }, [tasks, uilchluulegchid, baraas, teamMembers]);
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const [currentTutorialStep, setCurrentTutorialStep] = useState(0);
@@ -458,7 +469,7 @@ function Khynalt() {
         const completeDate = t.duussanOgnoo || t.updatedAt;
         return moment(completeDate).isSame(dayMoment, 'day');
       }).length;
-      
+
       const active = tasks.filter(t => 
         t.tuluv === 'khiigdej bui' && 
         moment(t.updatedAt).isSame(dayMoment, 'day')
@@ -469,11 +480,20 @@ function Khynalt() {
         moment(t.createdAt).isSame(dayMoment, 'day')
       ).length;
 
-      const overdue = tasks.filter(t => 
-        t.tuluv !== 'duussan' && 
-        t.duusakhTsag && 
-        moment(t.duusakhTsag).isBefore(dayMoment, 'day')
-      ).length;
+      const overdue = tasks.filter(t => {
+        if (!t.duusakhTsag) return false;
+        const deadline = moment(t.duusakhTsag);
+        
+        // Show on the day it was supposed to be finished
+        if (!deadline.isSame(dayMoment, 'day')) return false;
+
+        if (t.tuluv === 'duussan') {
+          return moment(t.duussanOgnoo || t.updatedAt).isAfter(deadline);
+        }
+        
+        // If not finished, is it currently past deadline?
+        return deadline.isBefore(moment());
+      }).length;
 
       return { label: dayMoment.format('M/D'), done, active, waiting, overdue };
     });
@@ -557,7 +577,14 @@ function Khynalt() {
                     const doneTotal   = tasks.filter(t => t.tuluv === 'duussan').length;
                     const activeTotal  = tasks.filter(t => t.tuluv === 'khiigdej bui').length;
                     const waitingTotal = tasks.filter(t => t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine').length;
-                    const overdueTotal = tasks.filter(t => t.tuluv !== 'duussan' && t.duusakhTsag && moment(t.duusakhTsag).isBefore(moment(), 'day')).length;
+                    const overdueTotal = tasks.filter(t => {
+                        if (!t.duusakhTsag) return false;
+                        const deadline = moment(t.duusakhTsag);
+                        if (t.tuluv === 'duussan') {
+                            return moment(t.duussanOgnoo || t.updatedAt).isAfter(deadline);
+                        }
+                        return deadline.isBefore(moment());
+                    }).length;
                     // const effPct = Math.round((doneTotal / (tasks.length || 1)) * 100);
 
                     const allVals = multiChartData.flatMap(d => [d.done, d.active, d.waiting, d.overdue]);

@@ -769,12 +769,24 @@ function Tuluvluguu() {
     });
   }, [enrichedTasks, selectedProjectIds]);
 
-  const statCards = useMemo(() => [
-    { title: t("Нийт төсөл"), value: projects.length.toString() },
-    { title: t("Сонгосон ажил"), value: filteredTasks.length.toString() },
-    { title: t("Дууссан"), value: filteredTasks.filter(t => t.tuluv === "duussan").length.toString() },
-    { title: t("Яаралтай"), value: filteredTasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
-  ], [projects.length, filteredTasks, t, projects]);
+  const statCards = useMemo(() => {
+    const overdueCount = filteredTasks.filter(t => {
+      if (!t.duusakhTsag) return false;
+      const deadline = dayjs(t.duusakhTsag);
+      if (t.tuluv === 'duussan') {
+        return dayjs(t.duussanOgnoo || t.updatedAt).isAfter(deadline);
+      }
+      return deadline.isBefore(dayjs());
+    }).length;
+
+    return [
+      { title: t("Нийт төсөл"), value: projects.length.toString() },
+      { title: t("Сонгосон ажил"), value: filteredTasks.length.toString() },
+      { title: t("Дууссан"), value: filteredTasks.filter(t => t.tuluv === "duussan").length.toString() },
+      { title: t("Хэтэрсэн"), value: overdueCount.toString() },
+      { title: t("Яаралтай"), value: filteredTasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
+    ];
+  }, [projects.length, filteredTasks, t]);
 useEffect(() => {
     if (router.isReady && enrichedTasks.length > 0) {
       const { taskId, projectId } = router.query;
@@ -2534,6 +2546,10 @@ useEffect(() => {
                 const getMinutesFromISO = (tsag) => {
                   if (tsag == null) return null;
                   if (typeof tsag === 'number') return tsag;
+                  // Handle dayjs objects
+                  if (tsag.toDate && typeof tsag.toDate === 'function') {
+                    return Math.floor(tsag.valueOf() / 60000);
+                  }
                   const d = new Date(tsag);
                   if (isNaN(d.getTime())) return null;
                   if (d.getFullYear() === 1970) return d.getTime();
