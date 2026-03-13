@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { io } from "socket.io-client";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { InputNumber } from "antd";
 import { 
   PlusOutlined, 
   LeftOutlined, 
@@ -2047,31 +2048,54 @@ useEffect(() => {
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-            <Form.Item
-              name="startTime"
-              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Эхлэх цаг</span>}
-              className="!mb-0"
-            >
-              <TimePicker
-                className="w-full h-12 rounded-xl"
-                placeholder="09:00"
-                format="HH:mm"
-                minuteStep={5}
-              />
-            </Form.Item>
-            <Form.Item
-              name="endTime"
-              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Дуусах цаг</span>}
-              className="!mb-0"
-            >
-              <TimePicker
-                className="w-full h-12 rounded-xl"
-                placeholder="18:00"
-                format="HH:mm"
-                minuteStep={5}
-              />
-            </Form.Item>
-          </div>
+  <Form.Item
+    name="startTime"
+    label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Эхлэх цаг</span>}
+    className="!mb-0"
+  >
+    <TimePicker
+      className="w-full h-12 rounded-xl"
+      placeholder="09:00"
+      format="HH:mm"
+      minuteStep={5}
+      onChange={() => {
+        // Clear end time if it's now invalid
+        const endTime = taskForm.getFieldValue('endTime');
+        const startTime = taskForm.getFieldValue('startTime');
+        if (endTime && startTime && dayjs(endTime).isBefore(dayjs(startTime))) {
+          taskForm.setFieldValue('endTime', null);
+        }
+      }}
+    />
+  </Form.Item>
+  <Form.Item
+    name="endTime"
+    label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Дуусах цаг</span>}
+    className="!mb-0"
+  >
+    <TimePicker
+      className="w-full h-12 rounded-xl"
+      placeholder="18:00"
+      format="HH:mm"
+      minuteStep={5}
+      disabledTime={() => {
+        const startTime = taskForm.getFieldValue('startTime');
+        if (!startTime) return {};
+        const startHour = dayjs(startTime).hour();
+        const startMinute = dayjs(startTime).minute();
+        return {
+          disabledHours: () => Array.from({ length: startHour }, (_, i) => i),
+          disabledMinutes: (selectedHour) => {
+            if (selectedHour === startHour) {
+              return Array.from({ length: startMinute + 1 }, (_, i) => i);
+            }
+            return [];
+          },
+        };
+      }}
+    />
+  </Form.Item>
+</div>
           <div className="grid grid-cols-2 gap-6">
             <Form.Item name="bairshil" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Байршил</span>} className="!mb-0">
               <Input placeholder="Байршил оруулах" className="h-12 rounded-xl" />
@@ -2176,15 +2200,33 @@ useEffect(() => {
                         </Form.Item>
                       </div>
                       <div className="col-span-4 md:col-span-2">
-                        <Form.Item
-                          {...restField}
-                          name={[name, 'too']}
-                          rules={[{ required: true, message: "Тоо ширхэг" }]}
-                          className="!mb-0"
-                        >
-                          <Input type="number" placeholder="Тоо ширхэг" className="h-10 rounded-xl" />
-                        </Form.Item>
-                      </div>
+  <Form.Item
+    noStyle
+    shouldUpdate
+  >
+    {({ getFieldValue }) => {
+      const baraaId = getFieldValue(['baraa', name, 'baraaId']);
+      const item = baraas.find(i => i._id === baraaId);
+      const isWhole = !item || ['shirheg', 'haire', 'hairtsag', 'bogts', 'dana'].includes(item.negj);
+      return (
+        <Form.Item
+          {...restField}
+          name={[name, 'too']}
+          rules={[{ required: true, message: "Тоо ширхэг" }]}
+          className="!mb-0"
+        >
+          <InputNumber
+            placeholder="Тоо"
+            className="w-full h-10 dark:border-gray-700 rounded-lg"
+            precision={isWhole ? 0 : 2}
+            step={isWhole ? 1 : 0.1}
+            min={0}
+          />
+        </Form.Item>
+      );
+    }}
+  </Form.Item>
+</div>
                       <div className="col-span-8 md:col-span-4">
                         <Form.Item
                           {...restField}

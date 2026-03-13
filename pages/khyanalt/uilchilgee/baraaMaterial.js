@@ -1054,18 +1054,46 @@ function BaraaMaterial() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <Form.Item name="negj" label="Нэгж" initialValue="shirheg">
-                  <Select placeholder="Сонгох">
-                      <Select.Option value="shirheg">Ширхэг</Select.Option>
-                      <Select.Option value="litr">Литр</Select.Option>
-                      <Select.Option value="kg">Кг</Select.Option>
-                      <Select.Option value="haire">Хайрцаг</Select.Option>
-                      <Select.Option value="bogts">Богц</Select.Option>
-                      <Select.Option value="dana">Дан</Select.Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item name="uldegdel" label="Үлдэгдэл" initialValue={0}>
-                   <InputNumber className="w-full rounded-md dark:border-gray-700" placeholder="Үлдэгдэл" />
-                </Form.Item>
+  <Select 
+    placeholder="Сонгох"
+    onChange={() => {
+      // Reset uldegdel when unit changes to avoid invalid values
+      const currentVal = form.getFieldValue('uldegdel');
+      const negj = form.getFieldValue('negj');
+      if (negj === 'shirheg' && currentVal % 1 !== 0) {
+        form.setFieldValue('uldegdel', Math.floor(currentVal));
+      }
+    }}
+  >
+    <Select.Option value="shirheg">Ширхэг</Select.Option>
+    <Select.Option value="litr">Литр</Select.Option>
+    <Select.Option value="kg">Кг</Select.Option>
+    <Select.Option value="haire">Хайрцаг</Select.Option>
+    <Select.Option value="bogts">Богц</Select.Option>
+    <Select.Option value="dana">Дан</Select.Option>
+  </Select>
+</Form.Item>
+
+<Form.Item
+  noStyle
+  shouldUpdate={(prev, curr) => prev.negj !== curr.negj}
+>
+  {({ getFieldValue }) => {
+    const negj = getFieldValue('negj');
+    const isWhole = negj === 'shirheg' || negj === 'haire' || negj === 'bogts' || negj === 'dana';
+    return (
+      <Form.Item name="uldegdel" label="Үлдэгдэл" initialValue={0}>
+        <InputNumber
+          className="w-full rounded-md dark:border-gray-700"
+          placeholder="Үлдэгдэл"
+          precision={isWhole ? 0 : 2}
+          step={isWhole ? 1 : 0.1}
+          min={0}
+        />
+      </Form.Item>
+    );
+  }}
+</Form.Item>
                 
               </div>
 
