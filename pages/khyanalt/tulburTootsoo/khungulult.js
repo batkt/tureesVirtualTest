@@ -1114,7 +1114,10 @@ function tulburTootsoo() {
               const totalDaysInMonth = moment(ehlel).daysInMonth();
               const actualDays = moment(duusah).diff(moment(ehlel), "days") + 1;
               const dailyRate = khymdraaguiDun / totalDaysInMonth;
-              const dailyDiscount = (dailyRate * khungulultKhuvi) / 100;
+              const dailyDiscount =
+                khungulukh === "khuvi"
+                  ? (dailyRate * khungulultKhuvi) / 100
+                  : khungulultKhuvi / totalDaysInMonth;
               gereeKhunglugdsunDun = dailyDiscount * actualDays;
             } else {
               const ehlelMonthEnd = moment(ehlel).endOf("month");
@@ -1151,9 +1154,12 @@ function tulburTootsoo() {
           }
         } else if (khungulultKhuvi && khungulultKhuvi > 0) {
           var negOdriinTolokh = khymdraaguiDun / 30;
+          const dailyDiscount =
+            khungulukh === "khuvi"
+              ? (negOdriinTolokh * khungulultKhuvi) / 100
+              : khungulultKhuvi / 30;
           gereeKhunglugdsunDun =
-            ((negOdriinTolokh * khungulultKhuvi) / 100) *
-            form.getFieldValue("khungulultKhonog");
+            dailyDiscount * form.getFieldValue("khungulultKhonog");
         } else {
           gereeKhunglugdsunDun =
             (form.getFieldValue("khungulultKhonog") * khymdraaguiDun) /
@@ -1205,56 +1211,10 @@ function tulburTootsoo() {
             else khymdraaguiDun = gereeZardal.tariff;
           }
 
-          if (!geree.guchKhonogOruulakhEsekh && dun && dun > 0) {
-            const ehlel = ognoonuud?.[0];
-            const duusah = ognoonuud?.[1];
-
-            if (ehlel && duusah) {
-              const ehlelMonth = moment(ehlel).format("YYYY-MM");
-              const duusahMonth = moment(duusah).format("YYYY-MM");
-              const isSameMonth = ehlelMonth === duusahMonth;
-
-              if (isSameMonth) {
-                const totalDaysInMonth = moment(ehlel).daysInMonth();
-                const actualDays =
-                  moment(duusah).diff(moment(ehlel), "days") + 1;
-                const dailyRate = khymdraaguiDun / totalDaysInMonth;
-                const dailyDiscount = (dailyRate * dun) / 100;
-                gereeKhunglugdsunDun = dailyDiscount * actualDays;
-              } else {
-                const ehlelMonthEnd = moment(ehlel).endOf("month");
-                const duusahMonthStart = moment(duusah).startOf("month");
-
-                const firstMonthDays =
-                  moment(ehlelMonthEnd).diff(moment(ehlel), "days") + 1;
-                const firstMonthTotalDays = moment(ehlel).daysInMonth();
-                const firstMonthDailyRate =
-                  khymdraaguiDun / firstMonthTotalDays;
-                const firstMonthDiscount = (firstMonthDailyRate * dun) / 100;
-                const firstMonthTotal = firstMonthDiscount * firstMonthDays;
-
-                const secondMonthDays =
-                  moment(duusah).diff(duusahMonthStart, "days") + 1;
-                const secondMonthTotalDays = moment(duusah).daysInMonth();
-                const secondMonthDailyRate =
-                  khymdraaguiDun / secondMonthTotalDays;
-                const secondMonthDiscount = (secondMonthDailyRate * dun) / 100;
-                const secondMonthTotal = secondMonthDiscount * secondMonthDays;
-
-                gereeKhunglugdsunDun = firstMonthTotal + secondMonthTotal;
-              }
-            } else {
-              gereeKhunglugdsunDun =
-                khungulukh === "khuvi"
-                  ? (Number(khymdraaguiDun) * dun) / 100
-                  : dun;
-            }
-          } else {
-            gereeKhunglugdsunDun =
-              khungulukh === "khuvi"
-                ? (Number(khymdraaguiDun) * dun) / 100
-                : dun;
-          }
+          gereeKhunglugdsunDun =
+            khungulukh === "khuvi"
+              ? (Number(khymdraaguiDun) * dun) / 100
+              : dun;
 
           geree.khunglugdsunDun = gereeKhunglugdsunDun;
           totalKhunglugdsunDun += gereeKhunglugdsunDun;
