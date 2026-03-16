@@ -384,7 +384,13 @@ function TulburiinDelgerenguiTailan(
           case "Түрээслэгч":
           case "Гэрээт":
           case "qpay":
-            // Skip these
+            item = {
+              ner: "QPay",
+              icon: "/qpay.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            };
             break;
           case "Ugaalga":
             const is24hUgaalga =
@@ -842,7 +848,9 @@ function TulburiinDelgerenguiTailan(
                 <div className="flex">Төлбөр авсан:</div>
                 <div>
                   {formatNumber(
-                    tulburiinMedeelel?.filter((a) => a?.ner !== "Үнэгүй")?.reduce((a, b) => a + b?.dun, 0) || 0,
+                    tulburiinMedeelel
+                      ?.filter((a) => a?.ner !== "Үнэгүй")
+                      ?.reduce((a, b) => a + b?.dun, 0) || 0,
                   ) + "₮"}
                 </div>
               </div>
@@ -852,8 +860,12 @@ function TulburiinDelgerenguiTailan(
                 <div className="flex">Төлбөр аваагүй:</div>
                 <div>
                   {formatNumber(
-                    (zorchilMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0) + (tulburteiMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0) 
-                     + (tulburiinMedeelel?.filter((a) => a?.ner === "Үнэгүй")?.reduce((a, b) => a + b?.dun, 0) || 0),
+                    (zorchilMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0) +
+                      (tulburteiMedeelel?.reduce((a, b) => a + b?.dun, 0) ||
+                        0) +
+                      (tulburiinMedeelel
+                        ?.filter((a) => a?.ner === "Үнэгүй")
+                        ?.reduce((a, b) => a + b?.dun, 0) || 0),
                   ) + "₮"}
                 </div>
               </div>
