@@ -571,10 +571,10 @@ function BaraaMaterial() {
     
     return baraas.filter(b => {
       if (filterType === "tseverlegch") {
-        return ['tseverlegch', 'Цэвэрлэгч'].includes(b.turul);
+        return ['tseverlegch', 'Цэвэрлэгч', 'Цэвэрлэгээ'].includes(b.turul);
       }
       if (filterType === "busad") {
-        const cleaningKeys = ['tseverlegch', 'Цэвэрлэгч', 'ugaalgiin', 'Угаалгын', 'ariutgagch', 'Ариутгагч', 'bagaj', 'Багаж'];
+        const cleaningKeys = ['tseverlegch', 'Цэвэрлэгч', 'Цэвэрлэгээ', 'ugaalgiin', 'Угаалгын', 'ariutgagch', 'Ариутгагч', 'bagaj', 'Багаж'];
         return !cleaningKeys.includes(b.turul);
       }
       const label = typeMap[filterType];
@@ -700,7 +700,7 @@ function BaraaMaterial() {
           {/* <div id="mat-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
             {[
               { title: "Нийт бараа", value: baraas.length, type: 'all', color: 'bg-emerald-50/60', border: 'border-emerald-200', text: 'text-emerald-600' },
-              { title: "Цэвэрлэгээний", value: baraas.filter(b => ['tseverlegch', 'Цэвэрлэгч', 'ugaalgiin', 'Угаалгын', 'ariutgagch', 'Ариутгагч'].includes(b.turul)).length, type: 'tseverlegch', color: 'bg-blue-50/60', border: 'border-blue-200', text: 'text-blue-600' },
+              { title: "Цэвэрлэгээний", value: baraas.filter(b => ['tseverlegch', 'Цэвэрлэгч', 'Цэвэрлэгээ', 'ugaalgiin', 'Угаалгын', 'ariutgagch', 'Ариутгагч'].includes(b.turul)).length, type: 'tseverlegch', color: 'bg-blue-50/60', border: 'border-blue-200', text: 'text-blue-600' },
               { title: "Багаж хэрэгсэл", value: baraas.filter(b => ['bagaj', 'Багаж'].includes(b.turul)).length, type: 'bagaj', color: 'bg-amber-50/60', border: 'border-amber-200', text: 'text-amber-600' },
               { title: "Дууссан", value: baraas.filter(b => (b.uldegdel || 0) <= 0).length, type: 'out-of-stock', color: 'bg-red-50/60', border: 'border-red-200', text: 'text-red-600' },
             ].map((card, index) => (
@@ -944,14 +944,14 @@ function BaraaMaterial() {
               {/* 2. Team Section */}
               <div id="mat-team" className="flex flex-col p-4 shrink-0">
                 <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center  uppercase opacity-70">
-                  <span>Ажилчид</span>
+                  <span>Ажилтан</span>
                 </div>
                 <div className="max-h-[300px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                   {teamMembers.map((member, i) => (
                     <div key={i} className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md">
                       <div className="flex items-center space-x-4 w-full">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-400 to-teal-600 dark:from-emerald-700 dark:to-teal-900 text-white text-[12px] font-bold border-2 border-white dark:border-gray-800 shadow-xl shrink-0">
-                          {(member.name || "").slice(0, 1).toUpperCase()}
+                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
+                          <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1 justify-center">
                           <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>

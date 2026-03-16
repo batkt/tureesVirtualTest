@@ -74,6 +74,8 @@ function KPI() {
 
   const ajiltanJagsaalt = useJagsaalt("/ajiltan");
   const { jagsaalt: usersList, isValidating: loading, mutate: ajiltniiJagsaaltMutate } = ajiltanJagsaalt;
+  const [tasks, setTasks] = useState([]);
+  const [loadingTasks, setLoadingTasks] = useState(false);
   const [realtimeKpi, setRealtimeKpi] = useState({});
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -101,9 +103,33 @@ function KPI() {
     }
   }, [api, token, baiguullagiinId]);
 
+  const fetchTasks = useCallback(async () => {
+    if (!barilgiinId || !baiguullagiinId) return;
+    setLoadingTasks(true);
+    try {
+      const res = await api.get("/tasks", { params: { barilgiinId, baiguullagiinId } });
+      const rawList = res.data?.data || res.data || [];
+      
+      // Unique tasks by sourceTaskId or _id
+      const tasksMap = new Map();
+      rawList.forEach(task => {
+        const id = task.sourceTaskId || task._id;
+        if (!tasksMap.has(id) || new Date(task.updatedAt) > new Date(tasksMap.get(id).updatedAt)) {
+          tasksMap.set(id, task);
+        }
+      });
+      setTasks(Array.from(tasksMap.values()));
+    } catch (err) {
+      console.error("Fetch tasks failed:", err);
+    } finally {
+      setLoadingTasks(false);
+    }
+  }, [api, barilgiinId, baiguullagiinId]);
+
   useEffect(() => {
     fetchInitialKpis();
-  }, [fetchInitialKpis]);
+    fetchTasks();
+  }, [fetchInitialKpis, fetchTasks]);
 
   useEffect(() => {
     if (isConnected && fsmSocket && baiguullagiinId) {
@@ -115,6 +141,7 @@ function KPI() {
     setIsRefreshing(true);
     await Promise.all([
       fetchInitialKpis(),
+      fetchTasks(),
       ajiltniiJagsaaltMutate()
     ]);
     setTimeout(() => {
@@ -131,6 +158,7 @@ function KPI() {
       if (res.data?.success) {
         await Promise.all([
           fetchInitialKpis(),
+          fetchTasks(),
           ajiltniiJagsaaltMutate()
         ]);
         toast.success(res.data.message || "Гүйцэтгэлийн үзүүлэлтүүд бүрэн шинэчлэгдлээ");
@@ -145,23 +173,56 @@ function KPI() {
 
   const users = useMemo(() => {
     const list = usersList || [];
-    return list.map(u => ({
-      ...u,
-      ...(realtimeKpi[u._id] || {})
-    }));
-  }, [usersList, realtimeKpi]);
+    return list.map(u => {
+      const backendKpi = realtimeKpi[u._id] || {};
+      
+      // Calculate LOCAL metrics for accuracy if tasks are loaded
+      const userTasks = tasks.filter(t => 
+        t.hariutsagchId === u._id || (t.ajiltnuud && t.ajiltnuud.includes(u._id))
+      );
+      
+      const doneTotal = userTasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'shalga').length;
+      const totalPoints = userTasks.reduce((sum, t) => sum + (t.onoo || 0), 0);
+      const calculatedKpiHuvv = userTasks.length > 0 
+        ? Math.round((doneTotal / userTasks.length) * 100) 
+        : 0;
+
+      return {
+        ...u,
+        ...backendKpi,
+        // Override with local calculation for "Completed Tasks" to be consistent with dashboard
+        kpiDaalgavarToo: doneTotal,
+        kpiOnoo: totalPoints > 0 ? totalPoints : (backendKpi.kpiOnoo || 0),
+        kpiHuvv: userTasks.length > 0 ? calculatedKpiHuvv : (backendKpi.kpiHuvv || 0)
+      };
+    });
+  }, [usersList, realtimeKpi, tasks]);
 
   useEffect(() => {
     if (!fsmSocket) return;
-    const handler = (data) => {
+    const kpiHandler = (data) => {
       setRealtimeKpi(prev => ({
         ...prev,
         [data.userId]: { ...prev[data.userId], ...data }
       }));
     };
-    fsmSocket.on("kpi_updated", handler);
-    return () => fsmSocket.off("kpi_updated", handler);
-  }, [fsmSocket]);
+    
+    const taskHandler = () => {
+      fetchTasks();
+    };
+
+    fsmSocket.on("kpi_updated", kpiHandler);
+    fsmSocket.on("task_updated", taskHandler);
+    fsmSocket.on("task_created", taskHandler);
+    fsmSocket.on("task_deleted", taskHandler);
+    
+    return () => {
+      fsmSocket.off("kpi_updated", kpiHandler);
+      fsmSocket.off("task_updated", taskHandler);
+      fsmSocket.off("task_created", taskHandler);
+      fsmSocket.off("task_deleted", taskHandler);
+    };
+  }, [fsmSocket, fetchTasks]);
 
   const avgKpi = useMemo(() => {
     const withKpi = users.filter((u) => (u.kpiDaalgavarToo ?? 0) > 0);

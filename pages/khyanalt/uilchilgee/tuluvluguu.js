@@ -364,8 +364,19 @@ function Tuluvluguu() {
         api.get(`/baiguullaga/${baiguullagiinId}/kpi`)
       ]);
       setCompanyKpis(kRes.data?.data || []);
-      let list = tRes.data?.data || tRes.data || [];
-      const normalized = list.map(task => {
+      let rawList = tRes.data?.data || tRes.data || [];
+      
+      // Unique tasks by sourceTaskId or _id, keeping the latest update
+      const tasksMap = new Map();
+      rawList.forEach(task => {
+        const id = task.sourceTaskId || task._id;
+        if (!tasksMap.has(id) || dayjs(task.updatedAt).isAfter(dayjs(tasksMap.get(id).updatedAt))) {
+          tasksMap.set(id, task);
+        }
+      });
+      const uniqueTasksList = Array.from(tasksMap.values());
+
+      const normalized = uniqueTasksList.map(task => {
         const pId = task.projectId || task.project;
         const taskDate = task.ekhlekhTsag || task.duusakhTsag || dayjs();
         return {
@@ -1552,7 +1563,7 @@ useEffect(() => {
                   </Button>
                   <span className="font-bold text-[12px] md:text-[12px] min-w-[100px] md:min-w-[150px] text-center text-gray-800 dark:text-gray-100 px-2 select-none uppercase tracking-tight">
                     {view === "Month" ? currentDate.format("YYYY - MMMM") : 
-                     view === "Week" ? `${currentDate.startOf('week').format("MM/DD")} - ${currentDate.endOf('week').format("MM/DD")}` :
+                     view === "Week" ? `${currentDate.startOf('isoWeek').format("MM/DD")} - ${currentDate.endOf('isoWeek').format("MM/DD")}` :
                      currentDate.format("YYYY/MM/DD")}
                    </span>
                   <Button type="text" size="small" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white p-0 flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-lg" onClick={next}>
@@ -1775,7 +1786,7 @@ useEffect(() => {
             )}
 
             {view === "Agenda" && (() => {
-              const today = dayjs().format("YYYY-MM-DD");
+              const today = currentDate.format("YYYY-MM-DD");
               const overdue = filteredTasks.filter(t => t.date < today && !t.completed);
               const dueToday = filteredTasks.filter(t => 
                 (t.date === today || (t.startDate <= today && t.date >= today)) && !overdue.includes(t)
@@ -1825,7 +1836,7 @@ useEffect(() => {
                           className="grid grid-cols-12 items-center px-5 py-3.5 border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/20 cursor-pointer transition-colors"
                         >
                           <div className="col-span-5 flex items-center gap-2.5 min-w-0">
-                            <Checkbox checked={task.completed} onClick={e => e.stopPropagation()} className="shrink-0" />
+                            {/* <Checkbox checked={task.completed} onClick={e => e.stopPropagation()} className="shrink-0" /> */}
                             <div className={`w-2 h-2 rounded-full shrink-0 ${priorityDot(task.zereglel)}`} />
                             <span className={`text-[13px] font-semibold truncate ${task.completed ? "line-through text-gray-400" : "text-gray-800 dark:text-gray-200"}`}>
                               {task.title}
@@ -1951,8 +1962,8 @@ useEffect(() => {
                       className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md"
                     >
                       <div className="flex items-center space-x-4 w-full">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-400 to-teal-600 dark:from-emerald-700 dark:to-teal-900 text-white text-[12px] font-bold border-2 border-white dark:border-gray-800 shadow-xl shrink-0">
-                          {(member.name || "").slice(0, 1).toUpperCase()}
+                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
+                          <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1 justify-center">
                           <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>

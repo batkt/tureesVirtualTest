@@ -148,7 +148,18 @@ function Khynalt() {
         api.get("/task-tuukh", { params: { barilgiinId } }),
         api.get(`/baiguullaga/${baiguullagiinId}/kpi`)
       ]);
-      setTasks(tRes.data?.data || (Array.isArray(tRes.data) ? tRes.data : []));
+      const rawTasks = tRes.data?.data || (Array.isArray(tRes.data) ? tRes.data : []);
+      // Unique tasks by sourceTaskId or _id, keeping the latest update
+      const tasksMap = new Map();
+      rawTasks.forEach(task => {
+        const id = task.sourceTaskId || task._id;
+        if (!tasksMap.has(id) || moment(task.updatedAt).isAfter(moment(tasksMap.get(id).updatedAt))) {
+          tasksMap.set(id, task);
+        }
+      });
+      const uniqueTasksList = Array.from(tasksMap.values());
+      
+      setTasks(uniqueTasksList);
       setBaraas(bRes.data?.data || (Array.isArray(bRes.data) ? bRes.data : []));
       setUilchluulegchid(uRes.data?.data || (Array.isArray(uRes.data) ? uRes.data : []));
       const pList = pRes.data?.data || (Array.isArray(pRes.data) ? pRes.data : []);
@@ -415,18 +426,44 @@ function Khynalt() {
   const teamMembers = useMemo(() => {
     return ajiltanJagsaalt?.jagsaalt?.map(a => {
       const kpiInfo = companyKpis.find(k => k._id === a._id || k.ajiltniiId === a._id);
+      
+      const memberTasks = tasks.filter(t =>
+        t.hariutsagchId === a._id || (Array.isArray(t.ajiltnuud) && t.ajiltnuud.includes(a._id))
+      );
+      
+      const doneCount = memberTasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'shalga').length;
+      const activeCount = memberTasks.filter(t => t.tuluv === 'khiigdej bui').length;
+      const overdueCount = memberTasks.filter(t => 
+        t.tuluv !== 'duussan' && 
+        t.tuluv !== 'shalga' &&
+        t.duusakhTsag && 
+        moment(t.duusakhTsag).isBefore(moment(), 'day')
+      ).length;
+      const remainingCount = Math.max(memberTasks.length - doneCount - activeCount - overdueCount, 0);
+      
+      // Calculate average score if scores are available in task history
+      const scoredTasks = memberTasks.filter(t => t.onooson != null);
+      const dynamicAvg = scoredTasks.length > 0 
+        ? (scoredTasks.reduce((acc, t) => acc + t.onooson, 0) / scoredTasks.length).toFixed(2)
+        : (kpiInfo?.kpiDundaj || 0);
+
       return {
         id: a._id,
         name: a.ner || a.nevtrekhNer,
         role: a.albanTushaal || a.erkh || "Ажилтан",
         kpi: kpiInfo?.kpiHuvv || 0,
         kpiOnoo: kpiInfo?.kpiOnoo || 0,
-        kpiDaalgavarToo: kpiInfo?.kpiDaalgavarToo || 0,
-        kpiDundaj: kpiInfo?.kpiDundaj || 0,
-        lastShineelsn: kpiInfo?.kpiShineelsenOgnoo
+        kpiDaalgavarToo: doneCount,
+        kpiDundaj: dynamicAvg,
+        lastShineelsn: kpiInfo?.kpiShineelsenOgnoo,
+        doneCount,
+        activeCount,
+        overdueCount,
+        remainingCount,
+        totalTasks: memberTasks.length
       };
     }) || [];
-  }, [ajiltanJagsaalt?.jagsaalt, companyKpis]);
+  }, [ajiltanJagsaalt?.jagsaalt, companyKpis, tasks]);
 
   const statCards = useMemo(() => {
     return [
@@ -466,47 +503,48 @@ function Khynalt() {
   }, [tasks]);
   const multiChartData = useMemo(() => {
     const days = [];
-    // From (chartRange-1) days ago to 3 days in the future
-    for (let i = chartRange - 1; i >= -3; i--) {
+    // From (chartRange-1) days ago to today
+    for (let i = chartRange - 1; i >= 0; i--) {
       days.push(moment().subtract(i, 'days').format('YYYY-MM-DD'));
     }
     return days.map(day => {
       const dayMoment = moment(day);
-      const done = tasks.filter(t => {
+      const doneTasks = tasks.filter(t => {
         if (t.tuluv !== 'duussan' && t.tuluv !== 'shalga') return false;
         const completeDate = t.duussanOgnoo || t.updatedAt;
         return moment(completeDate).isSame(dayMoment, 'day');
-      }).length;
+      });
 
-      const active = tasks.filter(t => {
+      const activeTasks = tasks.filter(t => {
         const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag || t.ekhlekhTsag;
         if (!deadlineAt) return false;
         const scheduledDay = moment(deadlineAt);
         return t.tuluv === 'khiigdej bui' && scheduledDay.isSame(dayMoment, 'day');
-      }).length;
+      });
       
-      const waiting = tasks.filter(t => {
+      const waitingTasks = tasks.filter(t => {
         const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag || t.ekhlekhTsag;
         if (!deadlineAt) return false;
         const scheduledDay = moment(deadlineAt);
-        return (t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine') && scheduledDay.isSame(dayMoment, 'day');
-      }).length;
-
-      const overdue = tasks.filter(t => {
-        const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag;
-        if (!deadlineAt) return false;
-        const deadline = moment(deadlineAt);
+        const isWaitingOrOverdue = t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine' || t.tuluv === 'khugatsaa khetersen';
         
-        if (!deadline.isSame(dayMoment, 'day')) return false;
-
-        if (t.tuluv === 'duussan' || t.tuluv === 'shalga') {
-          return moment(t.duussanOgnoo || t.updatedAt).isAfter(deadline);
+        const isTodayOrFuture = dayMoment.isSameOrAfter(moment(), 'day');
+        if (isTodayOrFuture) {
+          return isWaitingOrOverdue && scheduledDay.isSameOrBefore(dayMoment, 'day');
         }
-        
-        return deadline.isBefore(moment());
-      }).length;
+        return isWaitingOrOverdue && scheduledDay.isSame(dayMoment, 'day');
+      });
 
-      return { label: dayMoment.format('M/D'), done, active, waiting, overdue };
+      return { 
+        label: dayMoment.format('M/D'), 
+        done: doneTasks.length, 
+        active: activeTasks.length, 
+        waiting: waitingTasks.length, 
+        overdue: 0,
+        doneTasks: doneTasks.map(t => t.ner || t.title),
+        activeTasks: activeTasks.map(t => t.ner || t.title),
+        waitingTasks: waitingTasks.map(t => t.ner || t.title)
+      };
     });
   }, [tasks, chartRange]);
 
@@ -586,7 +624,7 @@ function Khynalt() {
                     const step = (W - PAD_L - PAD_R) / Math.max(N - 1, 1);
 
                     const doneTotal   = tasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'shalga').length;
-                    const overdueTotal = tasks.filter(t => {
+                    const overdueCalc = tasks.filter(t => {
                         const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag;
                         if (!deadlineAt) return false;
                         const deadline = moment(deadlineAt);
@@ -601,19 +639,18 @@ function Khynalt() {
                     const waitingTotal = tasks.filter(t => t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine' || t.tuluv === 'khugatsaa khetersen').length;
                     // const effPct = Math.round((doneTotal / (tasks.length || 1)) * 100);
 
-                    // Calculate max based on stacked sum (Done + Active + Waiting) to fit SVG
-                    const seriesMax = Math.max(...multiChartData.map(d => Math.max(d.done + d.active + d.waiting, d.overdue, 1)));
+                    // Calculate max based on raw values (stops "1 waiting higher than 6 completed")
+                    const seriesMax = Math.max(...multiChartData.map(d => Math.max(d.done, d.active, d.waiting, d.overdue, 1)));
 
                     const mkPts = (key) => multiChartData.map((d, i) => {
                       let val = d[key];
-                      // Stack Done -> Active -> Waiting
-                      if (key === 'active') val += d.done;
-                      if (key === 'waiting') val += (d.done + d.active);
+                      // Removed stacking to show absolute values (stops "1 waiting higher than 6 completed")
                       
                       return {
                         x: PAD_L + i * step,
                         y: BASE - (val / seriesMax) * (BASE - 10),
-                        v: d[key]
+                        v: d[key],
+                        tasks: d[`${key}Tasks`] || []
                       };
                     });
 
@@ -632,10 +669,9 @@ function Khynalt() {
                     };
 
                     const series = [
-                      { key: 'waiting', color: '#f59e0b', gradId: 'gradAmber', glowId: 'glowAmber', label: t('Хүлээгдэж буй'), count: waitingTotal, isArea: true },
-                      { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: t('uilchilgee.active'), count: activeTotal, isArea: true  },
-                      { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: t('uilchilgee.completed_tasks'), count: doneTotal, isArea: true    },
-                      // { key: 'overdue', color: '#ef4444', gradId: 'gradRed',   glowId: 'glowRed',   label: t('uilchilgee.overdue'), count: overdueTotal, isArea: false },
+                      { key: 'waiting', color: '#f59e0b', gradId: 'gradAmber', glowId: 'glowAmber', label: "Хүлээгдэж буй", count: waitingTotal, isArea: true },
+                      { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: "Идэвхтэй", count: activeTotal, isArea: true  },
+                      { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: "Дууссан", count: doneTotal, isArea: true    },
                     ];
 
                     return (
@@ -686,16 +722,37 @@ function Khynalt() {
                                     filter={`url(#${s.glowId})`}
                                   />
                                   {pts.map((pt, i) => (
-                                    <g key={i} className="group/pt">
-                                      <circle cx={pt.x} cy={pt.y} r="5" fill={s.color} fillOpacity="0"
-                                        className="transition-all duration-150 group-hover/pt:fill-opacity-20" />
-                                      <circle cx={pt.x} cy={pt.y} r="2.5" fill="#fff" stroke={s.color} strokeWidth="1.8" />
-                                      <g className="opacity-0 group-hover/pt:opacity-100 transition-opacity duration-100" style={{ pointerEvents: 'none' }}>
-                                        <rect x={pt.x - 8} y={pt.y - 16} width="16" height="11" rx="2.5"
-                                          fill="#0f172a" fillOpacity="0.9" />
-                                        <text x={pt.x} y={pt.y - 8} fill={s.color} fontSize="5.5" fontWeight="900" textAnchor="middle">{pt.v}</text>
+                                    <Tooltip 
+                                      key={i} 
+                                      title={
+                                        <div className="flex flex-col gap-1">
+                                          <div className="font-bold border-b border-white/20 pb-1 mb-1">{s.label} ({pt.v})</div>
+                                          {pt.tasks.length > 0 ? (
+                                            pt.tasks.map((name, idx) => (
+                                              <div key={idx} className="text-[11px] flex items-center gap-2">
+                                                <div className="w-1 h-1 rounded-full shrink-0" style={{ background: s.color }} />
+                                                <span className="truncate max-w-[150px]">{name}</span>
+                                              </div>
+                                            ))
+                                          ) : (
+                                            <div className="text-[10px] opacity-60 italic">Ажил байхгүй</div>
+                                          )}
+                                        </div>
+                                      }
+                                      placement="top"
+                                      color="#1e293b"
+                                    >
+                                      <g className="group/pt cursor-pointer">
+                                        <circle cx={pt.x} cy={pt.y} r="8" fill={s.color} fillOpacity="0"
+                                          className="transition-all duration-150 group-hover/pt:fill-opacity-20" />
+                                        <circle cx={pt.x} cy={pt.y} r="2.5" fill="#fff" stroke={s.color} strokeWidth="1.8" />
+                                        <g className="opacity-0 group-hover/pt:opacity-100 transition-opacity duration-100" style={{ pointerEvents: 'none' }}>
+                                          <rect x={pt.x - 8} y={pt.y - 16} width="16" height="11" rx="2.5"
+                                            fill="#0f172a" fillOpacity="0.9" />
+                                          <text x={pt.x} y={pt.y - 8} fill={s.color} fontSize="5.5" fontWeight="900" textAnchor="middle">{pt.v}</text>
+                                        </g>
                                       </g>
-                                    </g>
+                                    </Tooltip>
                                   ))}
                                 </g>
                               );
@@ -743,7 +800,7 @@ function Khynalt() {
 
                 <DashboardCard id="khyanalt-tasks" title="Олгогдсон ажлууд" icon={<CheckSquareOutlined/>} headerClass="border-green-500" rightActions={<span className="text-emerald-500 text-[12px] font-bold cursor-pointer hover:underline" onClick={() => router.push('/khyanalt/uilchilgee/tuluvluguu')}>Бүгдийг харах <DownOutlined className="text-[8px]"/></span>}>
                   <div className="flex flex-col gap-2">
-                    {tasks.slice(0, 7).map(task => (
+                    {[...tasks].sort((a, b) => moment(b.createdAt).diff(moment(a.createdAt))).slice(0, 10).map(task => (
                       <div 
                         key={task._id} 
                         className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-800 pb-2 last:border-0 hover:bg-gray-50/50 dark:hover:bg-white/5 cursor-pointer transition-colors px-1 rounded-lg group"
@@ -803,14 +860,11 @@ function Khynalt() {
                 <DashboardCard title="Ажилтны гүйцэтгэл" icon={<TeamOutlined/>} headerClass="border-green-500">
                   <div className="flex flex-col gap-2">
                     {teamMembers.map((member, i) => {
-                      const memberTasks = tasks.filter(t =>
-                        t.hariutsagchId === member.id || (Array.isArray(t.ajiltnuud) && t.ajiltnuud.includes(member.id))
-                      );
-                      const total     = memberTasks.length;
-                      const done      = memberTasks.filter(t => t.tuluv === 'duussan').length;
-                      const active    = memberTasks.filter(t => t.tuluv === 'khiigdej bui').length;
-                      const overdue   = memberTasks.filter(t => t.tuluv !== 'duussan' && t.duusakhTsag && moment(t.duusakhTsag).isBefore(moment(), 'day')).length;
-                      const remaining = Math.max(total - done - active - overdue, 0);
+                      const total     = member.totalTasks;
+                      const done      = member.doneCount;
+                      const active    = member.activeCount;
+                      const overdue   = member.overdueCount;
+                      const remaining = member.remainingCount;
                       const pct       = total > 0 ? Math.round((done / total) * 100) : 0;
 
                       const avatarColors = ['#0096FF','#0096FF','#0096FF','#0096FF','#0096FF'];
@@ -989,8 +1043,8 @@ function Khynalt() {
                   {teamMembers.map((member, i) => (
                     <div key={i} className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md">
                       <div className="flex items-center space-x-4 w-full">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-400 to-teal-600 dark:from-emerald-700 dark:to-teal-900 text-white text-[12px] font-bold border-2 border-white dark:border-gray-800 shadow-xl shrink-0">
-                          {(member.name || "").slice(0, 1).toUpperCase()}
+                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
+                          <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1 justify-center">
                           <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
