@@ -65,14 +65,30 @@ const fetcher = async (token, id, turul) => {
       );
 
       for (const [key, value] of Object.entries(geree)) {
-        data.dedKhesguud
-          .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-          .map((b) => {
-            b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+        if (key === "segmentuud" && Array.isArray(value)) {
+          value.forEach((seg) => {
+            data.dedKhesguud
+              .filter((a) => !!a.zaalt && a.zaalt?.indexOf(seg.ner) !== -1)
+              .map((b) => {
+                b.zaalt = b.zaalt.replace(
+                  new RegExp(`&lt;${seg.ner}&gt;`, "g"),
+                  seg.utga
+                );
+              });
           });
+        } else {
+          data.dedKhesguud
+            .filter((a) => !!a.zaalt && a.zaalt?.toLowerCase().indexOf(key.toLowerCase()) !== -1)
+            .map((b) => {
+              b.zaalt = b.zaalt.replace(
+                new RegExp(`&lt;${key}&gt;`, "gi"),
+                value
+              );
+            });
+        }
         if (!!data?.baruunTolgoi)
           data.baruunTolgoi = data.baruunTolgoi?.replace(
-            new RegExp(`&lt;${key}&gt;`, "g"),
+            new RegExp(`&lt;${key}&gt;`, "gi"),
             value
           );
       }

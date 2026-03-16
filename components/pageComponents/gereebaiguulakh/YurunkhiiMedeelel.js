@@ -163,6 +163,7 @@ const YurunkhiiMedeele = ({
                 zakhirliinNer: 1,
                 khayag: 1,
                 customerTin: 1,
+                albanTushaal: 1,
               },
             },
           })
@@ -177,6 +178,7 @@ const YurunkhiiMedeele = ({
                 zakhirliinNer,
                 khayag,
                 customerTin,
+                albanTushaal,
               } = data?.jagsaalt[0];
               if (value.baiguullagaEsekh) {
                 var onookhKhariltsagch = {
@@ -188,6 +190,7 @@ const YurunkhiiMedeele = ({
                   register: target.value,
                   ner,
                   customerTin,
+                  albanTushaal,
                 };
               } else {
                 var onookhKhariltsagch = {
@@ -198,6 +201,7 @@ const YurunkhiiMedeele = ({
                   khayag,
                   register: target.value,
                   customerTin,
+                  albanTushaal,
                 };
               }
               form.setFieldsValue(onookhKhariltsagch);
@@ -255,6 +259,9 @@ const YurunkhiiMedeele = ({
             form.getFieldInstance("zakhirliinNer").focus();
             break;
           case "validate_other_zakhirliinNer":
+            form.getFieldInstance("albanTushaal").focus();
+            break;
+          case "validate_other_albanTushaal":
             form.getFieldInstance("utas").focus();
             break;
           case "validate_other_ner":
@@ -262,7 +269,7 @@ const YurunkhiiMedeele = ({
               if (value.baiguullagaEsekh === true) {
                 form.getFieldInstance("register").focus();
               } else {
-                form.getFieldInstance("utas").focus();
+                form.getFieldInstance("albanTushaal").focus();
               }
             }
             break;
@@ -541,6 +548,16 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
+      <div data-aos="fade-right">
+        <Form.Item name="albanTushaal" label={t("Албан тушаал")}>
+          <Input
+            onKeyUp={focuser}
+            allowClear
+            placeholder={t("Албан тушаал")}
+            prefix={<SolutionOutlined />}
+          />
+        </Form.Item>
+      </div>
       {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="700">
           <Form.Item

@@ -602,6 +602,9 @@ function AjiltanBurtgel({ token }) {
           formRef.current.getFieldInstance("customerTin").focus();
           break;
         case "control-ref_customerTin":
+          formRef.current.getFieldInstance("albanTushaal")?.focus();
+          break;
+        case "control-ref_albanTushaal":
           if (khariltsagchState?.turul === "ААН") {
             formRef.current.getFieldInstance("zakhirliinOvog")?.focus();
             break;
@@ -914,6 +917,22 @@ function AjiltanBurtgel({ token }) {
                   placeholder={t("Бүртгэлийн дугаар")}
                   value={khariltsagchState.customerTin}
                   onChange={(e) => onChange("customerTin", e.target.value)}
+                  prefix={<SolutionOutlined style={iconColor} />}
+                ></Input>
+              </Form.Item>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="600"
+            >
+              <Form.Item name="albanTushaal">
+                <Input
+                  onKeyUp={focuser}
+                  allowClear
+                  placeholder={t("Албан тушаал")}
+                  value={khariltsagchState.albanTushaal}
+                  onChange={(e) => onChange("albanTushaal", e.target.value)}
                   prefix={<SolutionOutlined style={iconColor} />}
                 ></Input>
               </Form.Item>

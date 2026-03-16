@@ -1669,12 +1669,29 @@ function ZakhialgiinKhyanalt() {
                     );
                   });
               });
+            } else if (key === "segmentuud" && Array.isArray(value)) {
+              value.forEach((seg) => {
+                data.dedKhesguud
+                  .filter(
+                    (a) =>
+                      !!a.zaalt &&
+                      a.zaalt
+                        ?.toLowerCase()
+                        .indexOf(seg.ner.toLowerCase()) !== -1
+                  )
+                  .map((b) => {
+                    return (b.zaalt = b.zaalt.replace(
+                      new RegExp(`&lt;${seg.ner}&gt;`, "gi"),
+                      seg.utga
+                    ));
+                  });
+              });
             } else {
               data.dedKhesguud
                 .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
                 .map((b) => {
                   return (b.zaalt = b.zaalt.replace(
-                    new RegExp(`&lt;${key}&gt;`, "g"),
+                    new RegExp(`&lt;${key}&gt;`, "gi"),
                     key === "utas"
                       ? value[0]
                       : key === "talbainNegjUne" ||
@@ -1686,19 +1703,19 @@ function ZakhialgiinKhyanalt() {
                 });
             }
             data.baruunTolgoi = data.baruunTolgoi?.replace(
-              new RegExp(`&lt;${key}&gt;`, "g"),
+              new RegExp(`&lt;${key}&gt;`, "gi"),
               value
             );
             data.zuunTolgoi = data.zuunTolgoi?.replace(
-              new RegExp(`&lt;${key}&gt;`, "g"),
+              new RegExp(`&lt;${key}&gt;`, "gi"),
               value
             );
             data.zuunKhul = data.zuunKhul?.replace(
-              new RegExp(`&lt;${key}&gt;`, "g"),
+              new RegExp(`&lt;${key}&gt;`, "gi"),
               value
             );
             data.baruunKhul = data.baruunKhul?.replace(
-              new RegExp(`&lt;${key}&gt;`, "g"),
+              new RegExp(`&lt;${key}&gt;`, "gi"),
               value
             );
           }

@@ -30,22 +30,37 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
         .then(({ data }) => {
           if (!!data) {
             for (const [key, value] of Object.entries(gereeMedeelel || {})) {
-              data.dedKhesguud
-                .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-                .map((b) => {
-                  b.zaalt = b.zaalt.replace(
-                    new RegExp(`&lt;${key}&gt;`, "g"),
-                    key === "utas"
-                      ? value[0]
-                      : parseFloat(value) != NaN
-                      ? key != "register"
-                        ? value
-                        : formatNumber(value)
-                      : value
-                  );
-                });
+                if (key === "segmentuud" && Array.isArray(value)) {
+                  value.forEach((seg) => {
+                    data.dedKhesguud
+                      .filter(
+                        (a) => !!a.zaalt && a.zaalt?.toLowerCase().indexOf(seg.ner.toLowerCase()) !== -1
+                      )
+                      .map((b) => {
+                        return (b.zaalt = b.zaalt.replace(
+                          new RegExp(`&lt;${seg.ner}&gt;`, "gi"),
+                          seg.utga
+                        ));
+                      });
+                  });
+                } else {
+                  data.dedKhesguud
+                    .filter((a) => !!a.zaalt && a.zaalt?.toLowerCase().indexOf(key.toLowerCase()) !== -1)
+                    .map((b) => {
+                      b.zaalt = b.zaalt.replace(
+                        new RegExp(`&lt;${key}&gt;`, "gi"),
+                        key === "utas"
+                          ? value[0]
+                          : parseFloat(value) != NaN
+                          ? key != "register"
+                            ? value
+                            : formatNumber(value)
+                          : value
+                      );
+                    });
+                }
               data.baruunTolgoi = data.baruunTolgoi?.replace(
-                new RegExp(`&lt;${key}&gt;`, "g"),
+                new RegExp(`&lt;${key}&gt;`, "gi"),
                 key === "utas"
                   ? value[0]
                   : parseFloat(value) != NaN
@@ -56,18 +71,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               );
 
               data.baruunKhul = data.baruunKhul?.replace(
-                new RegExp(`&lt;${key}&gt;`, "g"),
-                key === "utas"
-                  ? value[0]
-                  : parseFloat(value) != NaN
-                  ? key != "register"
-                    ? value
-                    : formatNumber(value)
-                  : value
-              );
-
-              data.baruunTolgoi = data.baruunTolgoi?.replace(
-                new RegExp(`&lt;${key}&gt;`, "g"),
+                new RegExp(`&lt;${key}&gt;`, "gi"),
                 key === "utas"
                   ? value[0]
                   : parseFloat(value) != NaN
@@ -78,7 +82,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               );
 
               data.zuunKhul = data.zuunKhul?.replace(
-                new RegExp(`&lt;${key}&gt;`, "g"),
+                new RegExp(`&lt;${key}&gt;`, "gi"),
                 key === "utas"
                   ? value[0]
                   : parseFloat(value) != NaN
@@ -89,7 +93,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               );
 
               data.zuunTolgoi = data.zuunTolgoi?.replace(
-                new RegExp(`&lt;${key}&gt;`, "g"),
+                new RegExp(`&lt;${key}&gt;`, "gi"),
                 key === "utas"
                   ? value[0]
                   : parseFloat(value) != NaN
