@@ -584,6 +584,7 @@ function tulburTootsoo({ token }) {
           dataIndex: "CtAcntOrg",
           align: "center",
           width: "10rem",
+          
         },
         {
           title: t("Холбосон"),
@@ -1228,7 +1229,7 @@ function tulburTootsoo({ token }) {
                     className={`cursor-pointer rounded-md p-2 ${
                       khuulgaTurul === text
                         ? "dark bg-green-500 text-gray-50"
-                        : "bg-gray-200 dark:bg-gray-700"
+                        : "bg-gray-100 dark:bg-gray-700"
                     }`}
                     onClick={() => setKhuulgaTurul(text)}
                   >
@@ -1258,6 +1259,7 @@ function tulburTootsoo({ token }) {
               baiguullaga?._id === "695c57511a8a4aebc1d65b02") && (
                 <div className="mb-4 ml-3 flex items-center space-x-2">
                   <Input
+                    className="rounded-md mb-2"
                     placeholder={t("Тест дүн бичих")}
                     value={garDunFormatted}
                     onChange={(e) => {
@@ -1282,12 +1284,14 @@ function tulburTootsoo({ token }) {
                   />
                   <Input
                     placeholder={t("Гүйлгээний утга бичих")}
+                    className="rounded-md mb-2"
                     value={tailbar}
                     onChange={(e) => { setTailbar(e.target.value); }}
                     style={{ width: 220 }}
                   />
                   <AntButton
                     type="primary"
+                    className="mb-2"
                     onClick={async () => {
                       if (!songogdsonDans) {
                         notification.warning({ message: t("Данс сонгоно уу") });
