@@ -9,6 +9,7 @@ import useJagsaalt from "hooks/useJagsaalt";
 import moment from "moment";
 import "moment/locale/mn";
 import { toast } from "sonner";
+import { useThemeValue } from "pages";
 moment.locale("mn");
 import { 
   PlusOutlined,
@@ -81,14 +82,14 @@ import { TbBoxSeam } from "react-icons/tb";
 
 function DashboardCard({ id, title, icon, rightActions, children, headerClass="border-emerald-500" }) {
   return (
-    <div id={id} className={`bg-white dark:bg-gray-900/50 rounded-xl overflow-hidden shadow-sm border-t-[3px] ${headerClass} hover:shadow-emerald-500 dark:hover:shadow-emerald-500/10 flex flex-col relative min-h-[300px] h-[340px]`}>
-      <div className="flex justify-between items-center px-4 py-3 bg-blue-900/10 dark:bg-[#1b212f] border-b border-gray-100 dark:border-[#2d3748]/50 shrink-0">
+    <div id={id} className={`bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm border-t-[3px] ${headerClass} hover:shadow-emerald-500 dark:hover:shadow-emerald-500/10 flex flex-col relative min-h-[300px] h-[340px]`}>
+      <div className="flex justify-between items-center px-4 py-3 bg-blue-900/10 dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-800 shrink-0">
         <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-bold text-[12.5px] ">
           <span className="text-gray-400 dark:text-gray-300">{icon}</span> {title}
         </div>
         
       </div>
-      <div className="p-4 dark:bg-gray-900 flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
+      <div className="p-4 dark:bg-gray-900/40 flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
         {children}
       </div>
     </div>
@@ -97,6 +98,34 @@ function DashboardCard({ id, title, icon, rightActions, children, headerClass="b
 
 function Khynalt() {
   const router = useRouter();
+
+  const isTaskOnDay = useCallback((task, day) => {
+    if (!task || !day) return false;
+    const targetDay = moment(day).startOf('day');
+    
+    // Check if it's a looping task (Daily)
+    const isLoop = task.isLoop === true || task.isLoop === 'true';
+    const startOgnoo = task.ekhlekhOgnoo || task.ekhlekhTsag;
+    const endOgnoo   = task.duusakhOgnoo || task.duusakhTsag;
+    
+    if (isLoop && startOgnoo && endOgnoo) {
+      const start = moment(startOgnoo).startOf('day');
+      const end   = moment(endOgnoo).startOf('day');
+      return targetDay.isSameOrAfter(start) && targetDay.isSameOrBefore(end);
+    }
+    
+    // Check if it's a multi-day task
+    if (startOgnoo && endOgnoo) {
+      const start = moment(startOgnoo).startOf('day');
+      const end   = moment(endOgnoo).startOf('day');
+      return targetDay.isSameOrAfter(start) && targetDay.isSameOrBefore(end);
+    }
+    
+    // Fallback to single date
+    const taskDate = task.ekhlekhTsag || task.ekhlekhOgnoo || task.createdAt;
+    return moment(taskDate).isSame(targetDay, 'day');
+  }, []);
+  const { themeValue } = useThemeValue();
   const [isRightPanelExpanded, setIsRightPanelExpanded] = useState(typeof window !== 'undefined' ? window.innerWidth >= 1280 : true);
   const { t } = useTranslation();
   const [tasks, setTasks] = useState([]);
@@ -466,14 +495,18 @@ function Khynalt() {
   }, [ajiltanJagsaalt?.jagsaalt, companyKpis, tasks]);
 
   const statCards = useMemo(() => {
+    const today = moment();
+    const tasksToday = tasks.filter(t => isTaskOnDay(t, today));
+    const doneToday = tasksToday.filter(t => t.tuluv === "duussan" || t.tuluv === "shalga").length;
+    
     return [
-      { title: "Нийт ажил", value: tasks.length.toString() },
-      { title: "Дууссан ажил", value: tasks.filter(t => t.tuluv === "duussan" || t.tuluv === "shalga").length.toString() },
+      { title: "Өнөөдрийн ажил", value: tasksToday.length.toString() },
+      { title: "Дууссан ажил", value: doneToday.toString() },
       { title: "Бараа материал", value: baraas.length.toString() },
-      { title: "Яаралтай", value: tasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
-      { title: "Идэвхтэй баг", value: teamMembers.length.toString() },
+      { title: "Яаралтай", value: tasksToday.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
+      { title: "Нийт ажил", value: tasks.length.toString() },
     ];
-  }, [tasks, uilchluulegchid, baraas, teamMembers]);
+  }, [tasks, baraas, isTaskOnDay]);
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const [currentTutorialStep, setCurrentTutorialStep] = useState(0);
@@ -509,6 +542,7 @@ function Khynalt() {
     }
     return days.map(day => {
       const dayMoment = moment(day);
+      
       const doneTasks = tasks.filter(t => {
         if (t.tuluv !== 'duussan' && t.tuluv !== 'shalga') return false;
         const completeDate = t.duussanOgnoo || t.updatedAt;
@@ -516,23 +550,14 @@ function Khynalt() {
       });
 
       const activeTasks = tasks.filter(t => {
-        const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag || t.ekhlekhTsag;
-        if (!deadlineAt) return false;
-        const scheduledDay = moment(deadlineAt);
-        return t.tuluv === 'khiigdej bui' && scheduledDay.isSame(dayMoment, 'day');
+        return t.tuluv === 'khiigdej bui' && isTaskOnDay(t, dayMoment);
       });
       
       const waitingTasks = tasks.filter(t => {
-        const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag || t.ekhlekhTsag;
-        if (!deadlineAt) return false;
-        const scheduledDay = moment(deadlineAt);
         const isWaitingOrOverdue = t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine' || t.tuluv === 'khugatsaa khetersen';
+        if (!isWaitingOrOverdue) return false;
         
-        const isTodayOrFuture = dayMoment.isSameOrAfter(moment(), 'day');
-        if (isTodayOrFuture) {
-          return isWaitingOrOverdue && scheduledDay.isSameOrBefore(dayMoment, 'day');
-        }
-        return isWaitingOrOverdue && scheduledDay.isSame(dayMoment, 'day');
+        return isTaskOnDay(t, dayMoment);
       });
 
       return { 
@@ -546,7 +571,7 @@ function Khynalt() {
         waitingTasks: waitingTasks.map(t => t.ner || t.title)
       };
     });
-  }, [tasks, chartRange]);
+  }, [tasks, chartRange, isTaskOnDay]);
 
   const maxCount = Math.max(...chartData.map(d => d.count), 5);
   const chartPoints = chartData.map((d, i) => {
@@ -605,7 +630,7 @@ function Khynalt() {
 
           <div className="flex-1 overflow-y-auto pr-2 pb-8 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-100 dark:[&::-webkit-scrollbar-thumb]:bg-slate-800">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-5">
-              <DashboardCard id="khyanalt-activity-chart" title="Гүйцэтгэлийн хандлага" icon={<AreaChartOutlined/>} headerClass="border-green-500" rightActions={
+              <DashboardCard id="khyanalt-activity-chart" title={<div className="flex flex-col"><span className="leading-tight">Гүйцэтгэлийн хандлага</span><span className="text-[10px] text-gray-400 font-normal uppercase mt-0.5">Өнөөдрийн төлөв байдал</span></div>} icon={<AreaChartOutlined/>} headerClass="border-green-500" rightActions={
                 <div className="flex gap-1.5 bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg border border-gray-200 dark:border-gray-700">
                   {[7, 14, 30].map(r => (
                     <button
@@ -623,7 +648,13 @@ function Khynalt() {
                     const N = multiChartData.length;
                     const step = (W - PAD_L - PAD_R) / Math.max(N - 1, 1);
 
-                    const doneTotal   = tasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'shalga').length;
+                    const today = moment();
+                    const tasksForToday = tasks.filter(t => isTaskOnDay(t, today));
+                    
+                    const doneTotal   = tasksForToday.filter(t => t.tuluv === 'duussan' || t.tuluv === 'shalga').length;
+                    const activeTotal  = tasksForToday.filter(t => t.tuluv === 'khiigdej bui').length;
+                    const waitingTotal = tasksForToday.filter(t => t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine' || t.tuluv === 'khugatsaa khetersen').length;
+                    
                     const overdueCalc = tasks.filter(t => {
                         const deadlineAt = t.khugatsaaDuusakhOgnoo || t.duusakhTsag;
                         if (!deadlineAt) return false;
@@ -633,11 +664,6 @@ function Khynalt() {
                         }
                         return deadline.isBefore(moment());
                     }).length;
-                    
-                    // To make them sum to total tasks in the UI, we'll show distributions of Current Status
-                    const activeTotal  = tasks.filter(t => t.tuluv === 'khiigdej bui').length;
-                    const waitingTotal = tasks.filter(t => t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine' || t.tuluv === 'khugatsaa khetersen').length;
-                    // const effPct = Math.round((doneTotal / (tasks.length || 1)) * 100);
 
                     // Calculate max based on raw values (stops "1 waiting higher than 6 completed")
                     const seriesMax = Math.max(...multiChartData.map(d => Math.max(d.done, d.active, d.waiting, d.overdue, 1)));
@@ -709,7 +735,7 @@ function Khynalt() {
                             {series.map(s => {
                               const pts = mkPts(s.key);
                               return (
-                                <g key={s.key}>
+                                 <g key={s.key}>
                                   {s.isArea && <path d={mkArea(pts)} fill={`url(#${s.gradId})`} />}
                                   <path
                                     d={mkSmooth(pts)}
@@ -721,17 +747,17 @@ function Khynalt() {
                                     strokeDasharray={s.key === 'overdue' ? "4 2" : "none"}
                                     filter={`url(#${s.glowId})`}
                                   />
-                                  {pts.map((pt, i) => (
-                                    <Tooltip 
-                                      key={i} 
+                                   {pts.map((pt, i) => (
+                                    <Tooltip
+                                      key={i}
                                       title={
-                                        <div className="flex flex-col gap-1">
-                                          <div className="font-bold border-b border-white/20 pb-1 mb-1">{s.label} ({pt.v})</div>
+                                        <div className={`flex flex-col gap-1 ${themeValue ? 'text-gray-100' : 'text-gray-900'}`}>
+                                          <div className={`font-bold border-b ${themeValue ? 'border-white/10' : 'border-gray-100'} pb-1 mb-1 text-[13px]`}>{s.label} ({pt.v})</div>
                                           {pt.tasks.length > 0 ? (
                                             pt.tasks.map((name, idx) => (
                                               <div key={idx} className="text-[11px] flex items-center gap-2">
-                                                <div className="w-1 h-1 rounded-full shrink-0" style={{ background: s.color }} />
-                                                <span className="truncate max-w-[150px]">{name}</span>
+                                                <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: s.color }} />
+                                                <span className="truncate max-w-[150px] font-medium">{name}</span>
                                               </div>
                                             ))
                                           ) : (
@@ -740,16 +766,21 @@ function Khynalt() {
                                         </div>
                                       }
                                       placement="top"
-                                      color="#1e293b"
+                                      color={themeValue ? "#111827" : "#ffffff"}
+                                      overlayInnerStyle={{ 
+                                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)',
+                                        border: themeValue ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.08)',
+                                        borderRadius: '12px'
+                                      }}
                                     >
                                       <g className="group/pt cursor-pointer">
                                         <circle cx={pt.x} cy={pt.y} r="8" fill={s.color} fillOpacity="0"
                                           className="transition-all duration-150 group-hover/pt:fill-opacity-20" />
                                         <circle cx={pt.x} cy={pt.y} r="2.5" fill="#fff" stroke={s.color} strokeWidth="1.8" />
                                         <g className="opacity-0 group-hover/pt:opacity-100 transition-opacity duration-100" style={{ pointerEvents: 'none' }}>
-                                          <rect x={pt.x - 8} y={pt.y - 16} width="16" height="11" rx="2.5"
-                                            fill="#0f172a" fillOpacity="0.9" />
-                                          <text x={pt.x} y={pt.y - 8} fill={s.color} fontSize="5.5" fontWeight="900" textAnchor="middle">{pt.v}</text>
+                                          <rect x={pt.x - 8} y={pt.y - 16} width="16" height="11" rx="3"
+                                            fill={themeValue ? "#111827" : "#fff"} stroke={s.color} strokeWidth="0.5" />
+                                          <text x={pt.x} y={pt.y - 8} fill={s.color} fontSize="6" fontWeight="900" textAnchor="middle">{pt.v}</text>
                                         </g>
                                       </g>
                                     </Tooltip>
@@ -767,7 +798,7 @@ function Khynalt() {
                                 if (chartRange <= 14) return idx % 2 === 0;
                                 return idx % 5 === 0;
                               })[i];
-                              
+
                               return (
                                 <text key={i} x={pt.x} y={H + 10} fill="currentColor" fontSize="5.5" fontWeight="700"
                                   textAnchor="middle" className="text-gray-400 dark:text-gray-500">
@@ -795,49 +826,75 @@ function Khynalt() {
                     );
                   })()}
               </DashboardCard>
-              
-              
+
+
 
                 <DashboardCard id="khyanalt-tasks" title="Олгогдсон ажлууд" icon={<CheckSquareOutlined/>} headerClass="border-green-500" rightActions={<span className="text-emerald-500 text-[12px] font-bold cursor-pointer hover:underline" onClick={() => router.push('/khyanalt/uilchilgee/tuluvluguu')}>Бүгдийг харах <DownOutlined className="text-[8px]"/></span>}>
                   <div className="flex flex-col gap-2">
-                    {[...tasks].sort((a, b) => moment(b.createdAt).diff(moment(a.createdAt))).slice(0, 10).map(task => (
-                      <div 
-                        key={task._id} 
-                        className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-800 pb-2 last:border-0 hover:bg-gray-50/50 dark:hover:bg-white/5 cursor-pointer transition-colors px-1 rounded-lg group"
-                        onClick={() => router.push(`/khyanalt/uilchilgee/tuluvluguu?taskId=${task._id}`)}
-                      >
-                         <CheckSquareOutlined className={`${task.tuluv === "duussan" ? "text-emerald-500" : "text-gray-400"} shrink-0`} />
-                         <span className="text-gray-800 dark:text-gray-200 text-[12px] font-bold flex-1 truncate group-hover:text-blue-500 transition-colors">{task.ner}</span>
-                         
-                         <div className="flex items-center gap-2 shrink-0">
-                            <span className={`px-1.5 py-0.5 rounded text-[12px]  font-bold ${
-                               task.zereglel === "yaraltai"  ? "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400" :
-                               task.zereglel === "nen yaraltai" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
-                               task.zereglel === "engiin" ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400" :
-                               "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                            }`}>
-                               {task.zereglel === "yaraltai" ? "Яаралтай" : 
-                                task.zereglel === "nen yaraltai" ? "Нэн яаралтай" : 
-                                task.zereglel === "engiin" ? "Энгийн" : "Бага"}
-                            </span>
-                            <span className={`px-1.5 py-0.5 w-20 text-center rounded text-[12px]  font-bold ${
-                               task.tuluv === "duussan" || task.tuluv === "shalga" ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" :
-                               task.tuluv === "khiigdej bui" ? "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400" :
-                               task.tuluv === "khugatsaa khetersen" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
-                               "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
-                            }`}>
-                               {task.tuluv === "duussan" || task.tuluv === "shalga" ? "Дууссан" :
-                                task.tuluv === "khiigdej bui" ? "Идэвхтэй" :
-                                task.tuluv === "khugatsaa khetersen" ? "Хэтэрсэн" :
-                                "Хүлээгдэж буй"}
-                            </span>
-                            <span className="flex items-center gap-1 text-[12px] text-gray-400 font-bold w-16 justify-end">
-                               <CalendarOutlined className="text-[12px] opacity-50" />
-                               {task.duusakhTsag ? moment(task.duusakhTsag).format("MM/DD") : "--"}
-                            </span>
-                         </div>
-                      </div>
-                    ))}
+                    {(() => {
+                      const today = moment();
+                      const sortedTasks = [...tasks].sort((a, b) => {
+                        const aIsToday = isTaskOnDay(a, today);
+                        const bIsToday = isTaskOnDay(b, today);
+                        if (aIsToday && !bIsToday) return -1;
+                        if (!aIsToday && bIsToday) return 1;
+                        return moment(b.createdAt).diff(moment(a.createdAt));
+                      }).slice(0, 10);
+
+                      return sortedTasks.map(task => {
+                        const isToday = isTaskOnDay(task, today);
+                        const start = task.ekhlekhOgnoo || task.ekhlekhTsag;
+                        const isStartingToday = start && moment(start).isSame(today, 'day');
+
+                        return (
+                          <div
+                            key={task._id}
+                            className={`flex items-center gap-3 border-b border-gray-100 dark:border-gray-800 pb-2 last:border-0 hover:bg-gray-50/50 dark:hover:bg-white/5 cursor-pointer transition-colors px-1 rounded-lg group ${isToday ? 'bg-emerald-50/30 dark:bg-emerald-500/5' : ''}`}
+                            onClick={() => router.push(`/khyanalt/uilchilgee/tuluvluguu?taskId=${task._id}`)}
+                          >
+                             <CheckSquareOutlined className={`${task.tuluv === "duussan" ? "text-emerald-500" : "text-gray-400"} shrink-0`} />
+                             <span className="text-gray-800 dark:text-gray-200 text-[12px] font-bold flex-1 truncate group-hover:text-blue-500 transition-colors">
+                               {task.ner}
+                               {(task.isLoop === true || task.isLoop === 'true') && (
+                                 <Tooltip title="Өдөр бүр давтагдах">
+                                   <RollbackOutlined className="ml-2 text-purple-500 text-[10px]" />
+                                 </Tooltip>
+                               )}
+                             </span>
+
+                             <div className="flex items-center gap-2 shrink-0">
+                                <span className={`px-1.5 py-0.5 rounded text-[12px]  font-bold ${
+                                   task.zereglel === "yaraltai"  ? "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400" :
+                                   task.zereglel === "nen yaraltai" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
+                                   task.zereglel === "engiin" ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400" :
+                                   "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                                }`}>
+                                   {task.zereglel === "yaraltai" ? "Яаралтай" :
+                                    task.zereglel === "nen yaraltai" ? "Нэн яаралтай" :
+                                    task.zereglel === "engiin" ? "Энгийн" : "Бага"}
+                                </span>
+                                <span className={`px-1.5 py-0.5 w-20 text-center rounded text-[12px]  font-bold ${
+                                   task.tuluv === "duussan" || task.tuluv === "shalga" ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" :
+                                   task.tuluv === "khiigdej bui" ? "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400" :
+                                   task.tuluv === "khugatsaa khetersen" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
+                                   "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
+                                }`}>
+                                   {task.tuluv === "duussan" || task.tuluv === "shalga" ? "Дууссан" :
+                                    task.tuluv === "khiigdej bui" ? "Идэвхтэй" :
+                                    task.tuluv === "khugatsaa khetersen" ? "Хэтэрсэн" :
+                                    "Хүлээгдэж буй"}
+                                </span>
+                                <span className="flex items-center gap-1 text-[12px] text-gray-400 font-bold w-16 justify-end">
+                                   <CalendarOutlined className="text-[12px] opacity-50" />
+                                   <span className={isToday ? "text-emerald-500" : ""}>
+                                      {start ? moment(start).format("MM/DD") : (task.duusakhTsag ? moment(task.duusakhTsag).format("MM/DD") : "--")}
+                                   </span>
+                                </span>
+                             </div>
+                          </div>
+                        );
+                      });
+                    })()}
                     {tasks.length === 0 && (
                       <div className="flex flex-col items-center justify-center py-10 text-gray-400 uppercase font-bold text-[12px]  gap-2">
                         <CheckSquareOutlined className="text-2xl opacity-20" />
@@ -847,15 +904,13 @@ function Khynalt() {
                   </div>
                 </DashboardCard>
 
-                
+
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-5 mt-5">
-            
 
-              
-             
-                
+
+
 
                 <DashboardCard title="Ажилтны гүйцэтгэл" icon={<TeamOutlined/>} headerClass="border-green-500">
                   <div className="flex flex-col gap-2">
@@ -871,7 +926,7 @@ function Khynalt() {
                       const ac = avatarColors[i % avatarColors.length];
 
                       return (
-                        <div key={member.id} 
+                        <div key={member.id}
                           onClick={() => handleMemberClick(member)}
                           className="group flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white dark:hover:bg-white/10 hover:shadow-md cursor-pointer transition-all border border-transparent hover:border-emerald-500/20"
                         >
@@ -963,14 +1018,14 @@ function Khynalt() {
 
                 </DashboardCard>
                 </div>
-            
+
           </div>
         </div>
 
-        <div className={`transition-all duration-300 flex flex-col shrink-0 z-20 ${isRightPanelExpanded ? 'w-full xl:w-[340px] opacity-100 h-auto xl:h-[calc(102vh-6rem)]' : 'w-0 opacity-0 whitespace-nowrap overflow-hidden'}`}>  
+        <div className={`transition-all duration-300 flex flex-col shrink-0 z-20 ${isRightPanelExpanded ? 'w-full xl:w-[340px] opacity-100 h-auto xl:h-[calc(102vh-6rem)]' : 'w-0 opacity-0 whitespace-nowrap overflow-hidden'}`}>
           <div className="flex-1 m-3 bg-white dark:bg-gray-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/60 shadow-2xl flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-auto w-full flex flex-col [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
-              
+
 
 
               {/* 1. Projects Section */}
@@ -996,13 +1051,13 @@ function Khynalt() {
                     <div className="text-center text-gray-400 text-[12px] py-4 font-medium italic">Мэдээлэл байхгүй</div>
                   ) : (
                     projects.map(p => (
-                      <div 
-                        key={p.id} 
+                      <div
+                        key={p.id}
                         className={`flex items-center space-x-3 cursor-pointer group px-3 py-2.5 rounded-2xl transition-all border shadow-sm hover:shadow-md ${selectedProjectIds.includes(p.id) ? 'bg-white dark:bg-gray-800 border-emerald-500/30' : 'bg-gray-50/50 dark:bg-gray-900/40 border-transparent opacity-60 hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-900'}`}
                         onClick={() => toggleProject(p.id)}
                       >
-                        <div 
-                          className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold shadow-lg transition-transform group-hover:scale-110 ${!selectedProjectIds.includes(p.id) && 'grayscale-[0.5] opacity-70'}`} 
+                        <div
+                          className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold shadow-lg transition-transform group-hover:scale-110 ${!selectedProjectIds.includes(p.id) && 'grayscale-[0.5] opacity-70'}`}
                           style={{ backgroundColor: p.color || "#10B981" }}
                         >
                           {(p.name || p.ner || "P").slice(0, 2).toUpperCase()}
@@ -1099,7 +1154,7 @@ function Khynalt() {
               </div>
             </div>
             <div className="p-4 shrink-0 mt-auto">
-                <div 
+                <div
                   className="bg-white dark:bg-gray-800 dark:hover:bg-emerald-500/10 hover:bg-emerald-600 transition-all cursor-pointer rounded-xl px-4 py-3 flex items-center justify-center gap-2.5 border border-slate-700/50 shadow-md group"
                   onClick={() => setIsTutorialOpen(true)}
                 >
@@ -1110,9 +1165,9 @@ function Khynalt() {
           </div>
         </div>
         </div>
-      
+
       {typeof window !== 'undefined' && createPortal(
-        <button 
+        <button
           className="fixed right-0 top-1/2 -translate-y-1/2 bg-green-600 dark:bg-green-900 border border-green-700/60 w-8 h-12 rounded-l-lg flex flex-col items-center justify-center cursor-pointer shadow-xl hover:bg-green-500 transition-all z-[99999]"
           onClick={(e) => {
             e.preventDefault();
@@ -1134,8 +1189,8 @@ function Khynalt() {
         centered
       >
         <Form form={projectForm} layout="vertical" onFinish={handleCreateProject} className="space-y-6">
-          <Form.Item 
-            name="name" 
+          <Form.Item
+            name="name"
             label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">Төслийн нэр</span>}
             required
             rules={[{ required: true, message: 'Төслийн нэр оруулна уу' }]}
@@ -1143,30 +1198,30 @@ function Khynalt() {
             <Input placeholder="Жишээ нь: Барилга А засвар" className="h-12 rounded-xl" />
           </Form.Item>
 
-          <Form.Item 
-            name="tailbar" 
+          <Form.Item
+            name="tailbar"
             label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">Тайлбар</span>}
           >
             <Input.TextArea placeholder="Төслийн дэлгэрэнгүй тайлбар..." className="rounded-xl" rows={2} />
           </Form.Item>
-          
+
           <div className="grid grid-cols-2 gap-4">
-            <Form.Item 
-              name="ekhlekhOgnoo" 
+            <Form.Item
+              name="ekhlekhOgnoo"
               label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">Эхлэх өдөр</span>}
             >
               <DatePicker className="w-full h-12 rounded-xl" format="YYYY-MM-DD" />
             </Form.Item>
-            <Form.Item 
-              name="duusakhOgnoo" 
+            <Form.Item
+              name="duusakhOgnoo"
               label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">Дуусах өдөр</span>}
             >
               <DatePicker className="w-full h-12 rounded-xl" format="YYYY-MM-DD" />
             </Form.Item>
           </div>
 
-          <Form.Item 
-            name="color" 
+          <Form.Item
+            name="color"
             label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">Өнгө</span>}
             initialValue="#10B981"
           >
@@ -1178,7 +1233,7 @@ function Khynalt() {
               <Select.Option value="#F59E0B"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#F59E0B] shadow-sm"></div><span className="font-bold">Шар</span></div></Select.Option>
             </Select>
           </Form.Item>
-          
+
           <div className="flex justify-end space-x-4 pt-4">
             <Button onClick={() => { setIsProjectModalVisible(false); setEditingProject(null); projectForm.resetFields(); }}>
               Болих
@@ -1254,13 +1309,13 @@ function Khynalt() {
                   return (
                     <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2 group`}>
                       {!isMe && (
-                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-300 to-gray-500 dark:from-emerald-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
+                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
                           <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
                         </Avatar>
                       )}
                       <div className={`flex flex-col max-w-[80%] ${isMe ? 'items-end' : 'items-start'}`}>
                         {!isMe && <span className="text-[12px] font-bold text-gray-400 mb-1 ml-1">{msg.ajiltniiNer}</span>}
-                        
+
                         {/* Reply content */}
                         {msg.replyTo?.chatId && (
                            <div className={`mb-1 px-3 py-1 bg-gray-100 dark:bg-gray-800/50 border-l-2 border-emerald-500 rounded-r-lg text-[12px] truncate max-w-full ${isMe ? 'mr-1' : 'ml-1'}`}>
@@ -1297,7 +1352,7 @@ function Khynalt() {
                             })() : (
                               <span className={`text-[13px] ${isMe ? 'text-white' : 'text-gray-800 dark:text-white'} whitespace-pre-wrap leading-relaxed`}>{msg.medeelel}</span>
                             )}
-                            
+
                             {/* Actions overlay */}
                             <div className={`absolute top-0 ${isMe ? '-left-8' : '-right-8'} opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-1`}>
                                <Tooltip title="Хариулах" placement={isMe ? "left" : "right"}>
@@ -1388,11 +1443,11 @@ function Khynalt() {
              <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold mb-3 border-2 border-white/30">
                {selectedMemberForKpi?.name?.charAt(0).toUpperCase()}
              </div>
-             <h2 className="text-xl font-bold mb-1">{selectedMemberForKpi?.name}</h2>
+             <h2 className="text-xl font-bold mb-1 text-white">{selectedMemberForKpi?.name}</h2>
              <p className="text-white/70 text-sm font-medium">{selectedMemberForKpi?.role}</p>
           </div>
         </div>
-        
+
         <div className="p-6 bg-white dark:bg-gray-900 rounded-b-2xl">
            <div className="flex justify-center mb-8 -mt-12 relative z-20">
               <div className="bg-white dark:bg-gray-800 p-3 rounded-full shadow-2xl border-4 border-emerald-50 dark:border-emerald-950">

@@ -37,6 +37,7 @@ import {
   Tag, 
   Dropdown,
   Drawer,
+  Switch,
   List, 
   Checkbox,
   Tooltip,
@@ -89,6 +90,7 @@ function Tuluvluguu() {
     }
     
     taskForm.resetFields();
+    setEditingTask(null);
     if (projects.length === 1) {
       taskForm.setFieldsValue({ projectId: projects[0].id });
     }
@@ -108,6 +110,7 @@ function Tuluvluguu() {
   const [savingProject, setSavingProject] = useState(false);
   const [savingTask, setSavingTask] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
+  const [editingTask, setEditingTask] = useState(null);
   const [subtasks, setSubtasks] = useState([]);
   const [loadingSubtasks, setLoadingSubtasks] = useState(false);
   const [newSubtaskTitle, setNewSubtaskTitle] = useState("");
@@ -159,6 +162,18 @@ function Tuluvluguu() {
   const [clientScorePoints, setClientScorePoints] = useState(5);
   const [clientScoreNote, setClientScoreNote] = useState("");
   const [savingClientScore, setSavingClientScore] = useState(false);
+
+  const isDayWatch = Form.useWatch('isDay', taskForm);
+
+  useEffect(() => {
+    if (isDayWatch) {
+      taskForm.setFieldsValue({
+        startTime: dayjs().startOf('day'),
+        endTime: dayjs().endOf('day')
+      });
+    }
+  }, [isDayWatch, taskForm]);
+  const isLoopWatch = Form.useWatch('isLoop', taskForm);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -286,8 +301,13 @@ function Tuluvluguu() {
   };
 
   const isTaskOnDay = (task, day) => {
-    const taskStart = dayjs(task.ekhlekhTsag || task.duusakhTsag).startOf('day');
-    const taskEnd = dayjs(task.duusakhTsag || task.ekhlekhTsag).endOf('day');
+    const start = task.ekhlekhOgnoo || task.ekhlekhTsag || task.duusakhTsag;
+    const end = task.duusakhOgnoo || task.duusakhTsag || task.ekhlekhTsag;
+    
+    if (!start || !end) return false;
+    
+    const taskStart = dayjs(start).startOf('day');
+    const taskEnd = dayjs(end).endOf('day');
     const checkDay = dayjs(day).startOf('day');
     
     return (checkDay.isSame(taskStart) || checkDay.isAfter(taskStart)) && 
@@ -557,20 +577,18 @@ function Tuluvluguu() {
   const goToday = () => setCurrentDate(dayjs());
 
   useEffect(() => {
-    if (isTaskModalVisible && selectedDay) {
-      const baseStart = dayjs(selectedDay);
-      const baseDue = dayjs(selectedDay);
-      
+    if (isTaskModalVisible && selectedDay && !editingTask) {
       taskForm.setFieldsValue({ 
-        startDate: baseStart,
-        dueDate: baseDue,
-        startTime: null,
-        endTime: null,
+        dateRange: [dayjs(selectedDay), dayjs(selectedDay)],
+        startTime: dayjs().set('hour', 9).set('minute', 0),
+        endTime: dayjs().set('hour', 18).set('minute', 0),
         hariutsagchId: null,
-        ajiltnuud: []
+        ajiltnuud: [],
+        isDay: false,
+        isLoop: false
       });
     }
-  }, [isTaskModalVisible, selectedDay, taskForm]);
+  }, [isTaskModalVisible, selectedDay, taskForm, editingTask]);
 
   const handleCreateTask = async (values) => {
     if (!barilgiinId) { toast.warning("Барилгын мэдээлэл байхгүй байна"); return; }
@@ -584,14 +602,15 @@ function Tuluvluguu() {
         return new Date(d.year(), d.month(), d.date(), h, min, 0, 0).toISOString();
       };
 
-      const ekhlekhTsag = getISOValue(values.startDate, values.startTime, false);
-      const duusakhTsag = getISOValue(values.dueDate,   values.endTime,   true);
+      const isDay = values.isDay || false;
+      const ekhlekhTsag = getISOValue(values.dateRange?.[0], isDay ? null : values.startTime, false);
+      const duusakhTsag = getISOValue(values.dateRange?.[1], isDay ? null : values.endTime,   true);
       const hasImages = taskImages.length > 0;
       let res;
       const startDj = values.startTime && dayjs(values.startTime).isValid() ? dayjs(values.startTime) : null;
       const endDj   = values.endTime   && dayjs(values.endTime).isValid()   ? dayjs(values.endTime)   : null;
-      const ekhlekhMinute = startDj ? startDj.hour() * 60 + startDj.minute() : 0;
-      const duusakhMinute = endDj   ? endDj.hour()   * 60 + endDj.minute()   : 0;
+      const ekhlekhMinute = isDay ? 0 : (startDj ? (startDj.hour() * 60 + startDj.minute()) : 0);
+      const duusakhMinute = isDay ? 1440 : (endDj ? (endDj.hour() * 60 + endDj.minute()) : 0);
       let uploadedImages = [];
       if (hasImages) {
         for (const f of taskImages) {
@@ -644,6 +663,10 @@ function Tuluvluguu() {
         khugatsaaDuusakhOgnoo: duusakhTsag,
         barilgiinId,
         baiguullagiinId,
+        ekhlekhOgnoo: values.dateRange?.[0] ? values.dateRange[0].toISOString() : ekhlekhTsag,
+        duusakhOgnoo: values.dateRange?.[1] ? values.dateRange[1].toISOString() : duusakhTsag,
+        isDay: values.isDay || false,
+        isLoop: values.isLoop || false,
         zurag: uploadedImages, 
         hariutsagchZurag: uploadedImages,
         ajiltanZurag: [],
@@ -679,12 +702,17 @@ function Tuluvluguu() {
         }
       }
 
-      res = await api.post('/tasks', payload);
+      if (editingTask) {
+        res = await api.put(`/tasks/${editingTask._id || editingTask.id}`, payload);
+      } else {
+        res = await api.post('/tasks', payload);
+      }
 
-      if (res.data?.success) {
-        toast.success("Ажил амжилттай нэмэгдлээ");
+      if (res.data?.success || res.status === 200) {
+        toast.success(editingTask ? "Ажил амжилттай шинэчлэгдлээ" : "Ажил амжилттай нэмэгдлээ");
         await fetchTasks();
         setIsTaskModalVisible(false);
+        setEditingTask(null);
         taskForm.resetFields();
         setTaskImages([]);
       }
@@ -745,6 +773,35 @@ function Tuluvluguu() {
       uilchluulegchId: proj.uilchluulegchId
     });
     setIsProjectModalVisible(true);
+  };
+
+  const handleEditTask = (task) => {
+    setEditingTask(task);
+    const start = task.ekhlekhOgnoo || task.ekhlekhTsag;
+    const end = task.duusakhOgnoo || task.duusakhTsag;
+    
+    taskForm.setFieldsValue({
+      projectId: task.projectId || task.project,
+      title: task.title || task.ner,
+      description: task.description || task.tailbar || "",
+      zereglel: task.zereglel || "engiin",
+      hariutsagchId: task.hariutsagchId || null,
+      ajiltnuud: task.ajiltnuud || [],
+      dateRange: [dayjs(start), dayjs(end)],
+      startTime: dayjs(start),
+      endTime: dayjs(end),
+      isDay: !!task.isDay,
+      isLoop: !!task.isLoop,
+      bairshil: task.bairshil || "",
+      davkhar: task.davkhar || "",
+      baraa: (task.baraa || []).map(b => ({
+        baraaId: b.baraaId,
+        too: b.too,
+        une: b.une,
+        tailbar: b.tailbar || ""
+      }))
+    });
+    setIsTaskModalVisible(true);
   };
 
   const handleDeleteProject = async (id) => {
@@ -1653,7 +1710,10 @@ useEffect(() => {
                               >
                                 {task.completed ? 
                                   <CheckOutlined style={{ color: task.projectColor || "#14b8a6", fontSize: 8 }} /> : 
-                                  <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: task.projectColor || "#14b8a6" }}></div>
+                                  <div className="flex items-center gap-1">
+                                    <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: task.projectColor || "#14b8a6" }}></div>
+                                    {task.isLoop && <RollbackOutlined style={{ fontSize: '10px', color: '#8B5CF6' }} />}
+                                  </div>
                                 }
                                 <span className="truncate flex-1">{task.title}</span>
                               </div>
@@ -2049,7 +2109,7 @@ useEffect(() => {
       </div>
 
       <Modal
-        title="Шинэ ажил эхлүүлэх"
+        title={editingTask ? "Ажил засах" : "Шинэ ажил эхлүүлэх"}
         visible={isTaskModalVisible}
         onCancel={() => setIsTaskModalVisible(false)}
         footer={null}
@@ -2102,55 +2162,80 @@ useEffect(() => {
             </Form.Item>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
-  <Form.Item
-    name="startTime"
-    label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Эхлэх цаг</span>}
-    className="!mb-0"
-  >
-    <TimePicker
-      className="w-full h-12 rounded-xl"
-      placeholder="09:00"
-      format="HH:mm"
-      minuteStep={5}
-      onChange={() => {
-        // Clear end time if it's now invalid
-        const endTime = taskForm.getFieldValue('endTime');
-        const startTime = taskForm.getFieldValue('startTime');
-        if (endTime && startTime && dayjs(endTime).isBefore(dayjs(startTime))) {
-          taskForm.setFieldValue('endTime', null);
-        }
-      }}
-    />
-  </Form.Item>
-  <Form.Item
-    name="endTime"
-    label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Дуусах цаг</span>}
-    className="!mb-0"
-  >
-    <TimePicker
-      className="w-full h-12 rounded-xl"
-      placeholder="18:00"
-      format="HH:mm"
-      minuteStep={5}
-      disabledTime={() => {
-        const startTime = taskForm.getFieldValue('startTime');
-        if (!startTime) return {};
-        const startHour = dayjs(startTime).hour();
-        const startMinute = dayjs(startTime).minute();
-        return {
-          disabledHours: () => Array.from({ length: startHour }, (_, i) => i),
-          disabledMinutes: (selectedHour) => {
-            if (selectedHour === startHour) {
-              return Array.from({ length: startMinute + 1 }, (_, i) => i);
-            }
-            return [];
-          },
-        };
-      }}
-    />
-  </Form.Item>
-</div>
+          <div className="bg-gray-50 dark:bg-gray-800/40 p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-gray-400 text-[12px] font-bold uppercase pl-1">Хугацаа</span>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-[12px] font-bold text-gray-500">Бүтэн өдөр</span>
+                  <Form.Item name="isDay" valuePropName="checked" className="!mb-0">
+                    <Switch size="small" />
+                  </Form.Item>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Tooltip title="Өдөр бүр давтагдах">
+                    <span className="text-[12px] font-bold text-gray-500">Өдөр бүр</span>
+                  </Tooltip>
+                  <Form.Item name="isLoop" valuePropName="checked" className="!mb-0">
+                    <Switch size="small" />
+                  </Form.Item>
+                </div>
+              </div>
+            </div>
+
+            <Form.Item 
+              name="dateRange" 
+              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Огноо сонгох</span>}
+              initialValue={[dayjs(selectedDay), dayjs(selectedDay)]}
+              className="!mb-0"
+            >
+              <DatePicker.RangePicker className="w-full h-12 rounded-xl" format="YYYY-MM-DD" />
+            </Form.Item>
+            
+            <div className="grid grid-cols-2 gap-6">
+                <Form.Item
+                  name="startTime"
+                  label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Эхлэх цаг</span>}
+                  className="!mb-0"
+                >
+                  <TimePicker
+                    className="w-full h-12 rounded-xl"
+                    placeholder="09:00"
+                    format="HH:mm"
+                    minuteStep={5}
+                    disabled={isDayWatch}
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="endTime"
+                  label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Дуусах цаг</span>}
+                  className="!mb-0"
+                  rules={[
+                    {
+                      validator: async (_, value) => {
+                        const start = taskForm.getFieldValue('startTime');
+                        const range = taskForm.getFieldValue('dateRange');
+                        const isLoop = taskForm.getFieldValue('isLoop');
+                        if (value && start && range?.[0] && range?.[1]) {
+                          const isSameDay = range[0].isSame(range[1], 'day');
+                          if ((isSameDay || isLoop) && (value.hour() < start.hour() || (value.hour() === start.hour() && value.minute() <= start.minute()))) {
+                            throw new Error('Дуусах цаг эхлэх цагаас хойш байх ёстой');
+                          }
+                        }
+                      }
+                    }
+                  ]}
+                >
+                  <TimePicker
+                    className="w-full h-12 rounded-xl"
+                    placeholder="18:00"
+                    format="HH:mm"
+                    minuteStep={5}
+                    disabled={isDayWatch}
+                  />
+                </Form.Item>
+              </div>
+          </div>
           <div className="grid grid-cols-2 gap-6">
             <Form.Item name="bairshil" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Байршил</span>} className="!mb-0">
               <Input placeholder="Байршил оруулах" className="h-12 rounded-xl" />
@@ -2411,9 +2496,9 @@ useEffect(() => {
                <div className="flex flex-col gap-3 min-w-0">
                   <div className="flex items-center gap-2 text-[12px] font-bold text-gray-500 dark:text-gray-400">
                     <CalendarOutlined className="text-[12px]" />
-                    <span>{selectedTask?.ekhlekhTsag ? dayjs(selectedTask.ekhlekhTsag).format("YYYY/MM/DD HH:mm") : "—"}</span>
+                    <span>{selectedTask?.ekhlekhOgnoo ? dayjs(selectedTask.ekhlekhOgnoo).format("YYYY/MM/DD") : (selectedTask?.ekhlekhTsag ? dayjs(selectedTask.ekhlekhTsag).format("YYYY/MM/DD HH:mm") : "—")}</span>
                     <span className="text-gray-300 dark:text-gray-600">→</span> 
-                    <span>{selectedTask?.duusakhTsag ? dayjs(selectedTask.duusakhTsag).format("YYYY/MM/DD HH:mm") : "—"}</span>
+                    <span>{selectedTask?.duusakhOgnoo ? dayjs(selectedTask.duusakhOgnoo).format("YYYY/MM/DD") : (selectedTask?.duusakhTsag ? dayjs(selectedTask.duusakhTsag).format("YYYY/MM/DD HH:mm") : "—")}</span>
                   </div>
                   <div className="flex flex-col gap-1">
                     {selectedTask?.taskId && (
@@ -2421,19 +2506,27 @@ useEffect(() => {
                         ID: {selectedTask.taskId}
                       </span>
                     )}
-                    <h1 className="text-2xl font-bold m-0 dark:text-white leading-tight truncate">{selectedTask?.title}</h1>
+                    <div className="flex items-center gap-3">
+                      <h1 className="text-2xl font-bold m-0 dark:text-white leading-tight truncate">{selectedTask?.title}</h1>
+                      <Button 
+                        type="text" 
+                        size="small" 
+                        icon={<EditOutlined className="text-gray-400 hover:text-blue-500 text-[16px]" />} 
+                        onClick={() => handleEditTask(selectedTask)}
+                      />
+                    </div>
                   </div>
                </div>
 
                <div className="flex flex-col items-end gap-2 shrink-0">
-                  <span className={`px-2.5 py-1 rounded-lg text-[12px] font-bold uppercase shadow-sm ${
+                  <span className={`px-2.5 py-1 rounded-lg text-[12px] font-bold italic underline uppercase shadow-sm ${
                     selectedTask?.zereglel === 'nen yaraltai' ? 'bg-red-500 text-white' : 
                     selectedTask?.zereglel === 'yaraltai' ? 'bg-amber-500 text-white' :
                     selectedTask?.zereglel === 'engiin' ? 'bg-green-500 text-white' : 'bg-teal-500 text-white'
                   }`}>
                     {selectedTask?.zereglel === "nen yaraltai" ? "🔴 Нэн Яаралтай" : selectedTask?.zereglel === "yaraltai" ? "🟠 Яаралтай" : selectedTask?.zereglel === "engiin" ? "🟢 Энгийн" : "🔵 Бага"}
                   </span>
-                  <span className={`font-bold text-[12px] px-2 py-0.5 rounded-full border ${
+                  <span className={`font-bold italic underline text-[12px] px-2 py-0.5 rounded-full border ${
                     selectedTask?.tuluv === 'duussan' ? 'text-green-500 border-green-500/20 bg-green-500/5' : 
                     selectedTask?.tuluv === 'khiigdej bui' ? 'text-blue-500 border-blue-500/20 bg-blue-500/5' : 
                     selectedTask?.tuluv === 'khugatsaa khetersen' ? 'text-red-500 border-red-500/20 bg-red-500/5' :
@@ -2451,11 +2544,26 @@ useEffect(() => {
 
             <div className="py-2 space-y-4">
               <p className="text-gray-500 dark:text-gray-400 text-[13px] leading-relaxed m-0">
-                <span className="text-[12px] font-bold text-gray-400 uppercase">Тайлбар</span>
                 <div>
                 {selectedTask?.description || "-"}
                 </div>
               </p>
+
+              {/* Day/Loop Status Indicators */}
+              {(selectedTask?.isDay || selectedTask?.isLoop) && (
+                <div className="flex gap-2 pb-2">
+                  {selectedTask?.isDay && (
+                    <Tag color="cyan" className="rounded-lg font-bold italic underline border-none px-3 py-1 flex items-center gap-2 m-0 shadow-sm">
+                      <ClockCircleOutlined /> Бүтэн өдөр
+                    </Tag>
+                  )}
+                  {selectedTask?.isLoop && (
+                    <Tag color="purple" className="rounded-lg font-bold italic underline border-none px-3 py-1 flex items-center gap-2 m-0 shadow-sm">
+                      <RollbackOutlined /> Өдөр бүр давтагдах
+                    </Tag>
+                  )}
+                </div>
+              )}
               
               {(selectedTask?.bairshil || selectedTask?.davkhar || selectedTask?.baraa?.length > 0) && (
                 <div className="flex flex-wrap bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 gap-6">
@@ -2600,7 +2708,32 @@ useEffect(() => {
                 
                 const ekhlekhMin = getMinutesFromISO(selectedTask?.ekhlekhTsag);
                 const duusakhMin = getMinutesFromISO(selectedTask?.duusakhTsag);
-                const budgetedMinutes = (ekhlekhMin != null && duusakhMin != null) ? Math.max(0, duusakhMin - ekhlekhMin) : 0;
+                
+                let budgetedMinutes = 0;
+                const isLoopTask = selectedTask?.isLoop === true || selectedTask?.isLoop === 'true';
+                
+                if (isLoopTask) {
+                  // For loops, show daily budget
+                  const eMin = selectedTask.ekhlekhMinute !== undefined ? Number(selectedTask.ekhlekhMinute) : null;
+                  const dMin = selectedTask.duusakhMinute !== undefined ? Number(selectedTask.duusakhMinute) : null;
+                  
+                  if (eMin !== null && dMin !== null && !isNaN(eMin) && !isNaN(dMin)) {
+                    budgetedMinutes = Math.max(0, dMin - eMin);
+                  } else {
+                    // Fallback to daily time difference from the ISO strings
+                    const eTsag = dayjs(selectedTask.ekhlekhTsag);
+                    const dTsag = dayjs(selectedTask.duusakhTsag);
+                    if (eTsag.isValid() && dTsag.isValid()) {
+                      const startDaily = eTsag.hour() * 60 + eTsag.minute();
+                      const endDaily = dTsag.hour() * 60 + dTsag.minute();
+                      budgetedMinutes = Math.max(0, endDaily - startDaily);
+                    }
+                  }
+                } else if (selectedTask?.isDay) {
+                  budgetedMinutes = 1440;
+                } else {
+                  budgetedMinutes = (ekhlekhMin != null && duusakhMin != null) ? Math.max(0, duusakhMin - ekhlekhMin) : 0;
+                }
                 const budgetedSeconds = budgetedMinutes * 60;
                 let spentSeconds = 0;
                 
@@ -2620,6 +2753,14 @@ useEffect(() => {
                   selectedTask.ajiltanTsag.forEach(tsag => {
                     if (!tsag) return;
                     
+                    // For loops, only count logs from the selected day
+                    if (isLoopTask && selectedDay) {
+                      const logDate = tsag.ekhlekhTsag || tsag.ognoo;
+                      if (!logDate || !dayjs(logDate).isSame(dayjs(selectedDay), 'day')) {
+                        return;
+                      }
+                    }
+
                     // Prefer calculating from actual timestamps
                     if (tsag.ekhlekhTsag) {
                       const start = dayjs(tsag.ekhlekhTsag);
@@ -2646,14 +2787,14 @@ useEffect(() => {
                 } 
                 
                 // 2. Sum with existing top-level field if it exists independent of detailed logs
-                // Or if spentSeconds is still 0 AND we have no logs, use it as fallback
+                // Only if NOT a loop, or if the log filtering above yielded 0 (though top-level is usually total)
                 const topLevelSpent = Number(selectedTask?.zartsuulsanKhugatsaa);
-                if (!isNaN(topLevelSpent) && topLevelSpent > 0 && spentSeconds === 0) {
+                if (!selectedTask?.isLoop && !isNaN(topLevelSpent) && topLevelSpent > 0 && spentSeconds === 0) {
                   spentSeconds = topLevelSpent; // In seconds based on context
                 }
                 
                 // 3. Last resort fallback for timers without detailed logs
-                if (spentSeconds === 0 && !hasLogs && isNaN(topLevelSpent)) {
+                if (spentSeconds === 0 && !hasLogs && !isNaN(topLevelSpent) && !selectedTask?.isLoop) {
                   
                   if (isInProgress) {
                     const startMarker = selectedTask.khuleejAvsanOgnoo || selectedTask.updatedAt || selectedTask.createdAt;

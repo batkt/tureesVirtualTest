@@ -171,16 +171,44 @@ function KPI() {
     }
   };
 
+  const isTaskOnDay = useCallback((task, day) => {
+    if (!task || !day) return false;
+    const targetDay = dayjs(day).startOf('day');
+    
+    // Check if it's a looping task (Daily)
+    const isLoop = task.isLoop === true || task.isLoop === 'true';
+    const startOgnoo = task.ekhlekhOgnoo || task.ekhlekhTsag;
+    const endOgnoo   = task.duusakhOgnoo || task.duusakhTsag;
+    
+    if (isLoop && startOgnoo && endOgnoo) {
+      const start = dayjs(startOgnoo).startOf('day');
+      const end   = dayjs(endOgnoo).startOf('day');
+      return targetDay.isSameOrAfter(start) && targetDay.isSameOrBefore(end);
+    }
+    
+    // Check if it's a multi-day task
+    if (startOgnoo && endOgnoo) {
+      const start = dayjs(startOgnoo).startOf('day');
+      const end   = dayjs(endOgnoo).startOf('day');
+      return targetDay.isSameOrAfter(start) && targetDay.isSameOrBefore(end);
+    }
+    
+    // Fallback to single date
+    const taskDate = task.ekhlekhTsag || task.ekhlekhOgnoo || task.createdAt;
+    return dayjs(taskDate).isSame(targetDay, 'day');
+  }, []);
+
   const users = useMemo(() => {
     const list = usersList || [];
+    const today = dayjs();
     return list.map(u => {
       const backendKpi = realtimeKpi[u._id] || {};
       
-      // Calculate LOCAL metrics for accuracy if tasks are loaded
       const userTasks = tasks.filter(t => 
         t.hariutsagchId === u._id || (t.ajiltnuud && t.ajiltnuud.includes(u._id))
       );
       
+      const todayTasks = userTasks.filter(t => isTaskOnDay(t, today));
       const doneTotal = userTasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'shalga').length;
       const totalPoints = userTasks.reduce((sum, t) => sum + (t.onoo || 0), 0);
       const calculatedKpiHuvv = userTasks.length > 0 
@@ -190,7 +218,7 @@ function KPI() {
       return {
         ...u,
         ...backendKpi,
-        // Override with local calculation for "Completed Tasks" to be consistent with dashboard
+        todayTaskCount: todayTasks.length,
         kpiDaalgavarToo: doneTotal,
         kpiOnoo: totalPoints > 0 ? totalPoints : (backendKpi.kpiOnoo || 0),
         kpiHuvv: userTasks.length > 0 ? calculatedKpiHuvv : (backendKpi.kpiHuvv || 0)
@@ -455,7 +483,8 @@ function KPI() {
                               </div>
 
                               <div className="flex items-center gap-3 text-[12px] font-bold text-gray-400 uppercase tracking-tight">
-                                <span className="flex items-center gap-1"><CheckSquareOutlined /> {user.kpiDaalgavarToo || 0} ажил</span>
+                                <span className="flex items-center gap-1"><CheckSquareOutlined /> {user.todayTaskCount || 0} өнөөдөр</span>
+                                <span className="flex items-center gap-1"><CheckCircleOutlined className="text-[10px]" /> {user.kpiDaalgavarToo || 0} нийт</span>
                                 <span className="flex items-center gap-1" style={{ color }}><TrophyOutlined /> {user.kpiOnoo || 0} оноо</span>
                                 <span className="ml-auto opacity-60">{user.albanTushaal || user.erkh}</span>
                               </div>
