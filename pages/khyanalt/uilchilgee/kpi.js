@@ -7,6 +7,11 @@ import { useAuth } from "services/auth";
 import fsmApi from "services/fsmApi";
 import useJagsaalt from "hooks/useJagsaalt";
 import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 import { Button, Spin, message, Tooltip, Progress, Avatar } from "antd";
 import { 
   ReloadOutlined, 
@@ -15,6 +20,7 @@ import {
   CloseOutlined, 
   CheckSquareOutlined, 
   AreaChartOutlined,
+  CheckCircleOutlined,
   TeamOutlined,
   BarChartOutlined,
   PieChartOutlined,
