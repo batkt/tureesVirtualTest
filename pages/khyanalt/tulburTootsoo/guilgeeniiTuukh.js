@@ -58,20 +58,8 @@ import NekhemjlekhiinTuukhTsonkh from "components/pageComponents/tulbur/Nekhemjl
 
 function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
   const { barilgiinId } = useAuth();
-  const isCancelled =
-    ugugdul?.tuluv == -1 || Number(ugugdul?.tuluv) === -1;
-  const rawUldegdel =
-    ugugdul?.uldegdel ?? ugugdul?.niitUldegdel ?? ugugdul?.tsutslagdsanAvlaga;
-  const rawNum = rawUldegdel != null ? Number(rawUldegdel) : null;
-  const preCancelUldegdel =
-    isCancelled && (rawNum == null || rawNum <= 0)
-      ? ugugdul?.tsutsalsanUldegdel ??
-        ugugdul?.tsutslagdsanAvlaga ??
-        0
-      : rawUldegdel;
-  const usePreCancel = isCancelled && preCancelUldegdel != null;
   const { data, mutate, isValidating } = useSWR(
-    !usePreCancel && !!ugugdul?.gereeniiDugaar && !!barilgiinId
+    !!ugugdul?.gereeniiDugaar && !!barilgiinId
       ? [
           "/uldegdelBodyo",
           barilgiinId,
@@ -88,7 +76,8 @@ function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
       revalidateOnFocus: false,
     }
   );
-  const displayUldegdel = usePreCancel ? preCancelUldegdel : data?.uldegdel;
+  
+  const displayUldegdel = data?.uldegdel ?? ugugdul?.uldegdel ?? ugugdul?.niitUldegdel ?? ugugdul?.tsutslagdsanAvlaga ?? (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
   ugugdul.uldegdel = displayUldegdel ?? data?.uldegdel;
   ugugdul.mutate = mutate;
   return (
@@ -167,12 +156,9 @@ function TableGuilgee({
                 b.tuluv == -1 || Number(b.tuluv) === -1;
               const raw =
                 isCancelled
-                  ? b.uldegdel ?? b.niitUldegdel ?? b.tsutslagdsanAvlaga ?? 0
+                  ? b.uldegdel ?? b.niitUldegdel ?? b.tsutslagdsanAvlaga ?? b.tsutsalsanUldegdel ?? 0
                   : b.uldegdel ?? 0;
-              const val =
-                isCancelled && (raw == null || Number(raw) <= 0)
-                  ? b.tsutsalsanUldegdel ?? b.tsutslagdsanAvlaga ?? 0
-                  : raw;
+              const val = raw;
               return sum + (parseFloat(val) || 0);
             },
             0
@@ -222,7 +208,7 @@ function TableGuilgee({
                           b.tuluv == -1 || Number(b.tuluv) === -1;
                         const raw = parseFloat(b.uldegdel);
                         const effUldegdel =
-                          isCancelled && (raw == null || raw <= 0)
+                          isCancelled && raw == null 
                             ? parseFloat(b.tsutsalsanUldegdel) || 0
                             : parseFloat(b.uldegdel) || 0;
                         return (
@@ -764,15 +750,9 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
         showSorterTooltip: false,
         sorter: (a, b) => {
           const effA =
-            (a?.tuluv == -1 || Number(a?.tuluv) === -1) &&
-            (a?.uldegdel == null || Number(a?.uldegdel) <= 0)
-              ? Number(a?.tsutsalsanUldegdel || 0)
-              : Number(a?.uldegdel || 0);
+             Number(a?.uldegdel ?? (a?.tuluv == -1 ? a?.tsutsalsanUldegdel : 0));
           const effB =
-            (b?.tuluv == -1 || Number(b?.tuluv) === -1) &&
-            (b?.uldegdel == null || Number(b?.uldegdel) <= 0)
-              ? Number(b?.tsutsalsanUldegdel || 0)
-              : Number(b?.uldegdel || 0);
+             Number(b?.uldegdel ?? (b?.tuluv == -1 ? b?.tsutsalsanUldegdel : 0));
           return effA - effB;
         },
       },
