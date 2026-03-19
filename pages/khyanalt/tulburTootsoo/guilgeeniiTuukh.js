@@ -86,7 +86,7 @@ function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
         (displayUldegdel ?? 0) > 0 ? "text-red-500" : "text-green-500"
       }`}
     >
-      {!usePreCancel && isValidating ? (
+      {isValidating ? (
         <Spin size="small" />
       ) : (
         formatNumber(displayUldegdel ?? 0, 2)
