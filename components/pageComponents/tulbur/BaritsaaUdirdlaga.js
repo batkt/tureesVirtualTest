@@ -63,9 +63,9 @@ function BaritsaaUdirdlaga(
 
   useEffect(() => {
     if (baritsaaKhuulga?.length > 0) {
-      const balanceAtDate = baritsaaKhuulga
+      const balanceAtDate = Math.round(baritsaaKhuulga
         .filter((item) => moment(item.ognoo).isSameOrBefore(ognoo, "day"))
-        .reduce((sum, item) => sum + (item.orlogo || 0) - (item.zarlaga || 0), 0);
+        .reduce((sum, item) => sum + (item.orlogo || 0) - (item.zarlaga || 0), 0) * 100) / 100;
       
       setAshiglakhUldegdel(balanceAtDate);
       setTulukhUldegdel((data.baritsaaAvakhDun || 0) - balanceAtDate);
@@ -262,7 +262,12 @@ function BaritsaaUdirdlaga(
         autoFocus="true"
         id="dunInputNumber"
         value={dun}
-        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        formatter={(value) => {
+          if (!value && value !== 0) return "";
+          const parts = value.toString().split(".");
+          parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          return parts.join(".");
+        }}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         placeholder={t("Дүн")}
         style={{ width: "100%" }}
