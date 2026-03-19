@@ -253,14 +253,19 @@ function GuilgeeNiiluulekh(
         setLoading(true);
         undsenGuilgee?.forEach((mur) => {
           let prefix = "";
+          let prefixParts = [];
           if (Array.isArray(mur.avlaguud) && mur.avlaguud.length > 0) {
             const months = Array.from(
               new Set(
                 mur.avlaguud.map((a) => moment(a.ognoo).format("YYYY-MM"))
               )
             );
-            prefix = months.join(", ") + " " + t("төлөлт");
+            prefixParts.push(months.join(", ") + " " + t("төлөлт"));
           }
+          if (mur.tulsunAldangi > 0) {
+            prefixParts.push(t("алданги төлөлт"));
+          }
+          prefix = prefixParts.join(", ");
           mur.tailbar =
             (guilgeeniiTailbar || "") +
             (guilgeeniiTailbar && prefix ? " (" : "") +
