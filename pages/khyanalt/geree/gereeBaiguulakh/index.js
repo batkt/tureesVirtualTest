@@ -280,9 +280,9 @@ function GereeBaiguulakh({ token }) {
   };
 
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
-    if (gereeniiZagvar === undefined) return;
+    if (!gereeniiZagvar || typeof gereeniiZagvar !== "object") return;
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
-    if (!butsaakhUtga?.dedKhesguud)
+    if (butsaakhUtga?.dedKhesguud)
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud?.filter(
         (a) => a.khamaarakhKheseg === steps[current].title,
       );
@@ -373,9 +373,9 @@ function GereeBaiguulakh({ token }) {
           value,
         );
       } else {
-        butsaakhUtga.dedKhesguud
+        butsaakhUtga?.dedKhesguud
           ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-          .map((b) => {
+          ?.map((b) => {
             const orluulakhUtga =
               key === "sariinNiilberDun" ? formatNumber(value) : value;
             b.zaalt = b.zaalt.replace(
@@ -401,9 +401,9 @@ function GereeBaiguulakh({ token }) {
   }, [gereeniiZagvar, khadgalakhGeree, current]);
 
   const alkhamiinAktiinZagvar = React.useMemo(() => {
-    if (aktiinZagvar === undefined) return;
+    if (!aktiinZagvar || typeof aktiinZagvar !== "object") return;
     let butsaakhUtga = _.cloneDeep(aktiinZagvar);
-    if (!butsaakhUtga?.dedKhesguud)
+    if (butsaakhUtga?.dedKhesguud)
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
         (a) => a.khamaarakhKheseg === steps[current].title,
       );
@@ -432,9 +432,9 @@ function GereeBaiguulakh({ token }) {
     }
 
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
-      butsaakhUtga.dedKhesguud
-        .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-        .map((b) => {
+      butsaakhUtga?.dedKhesguud
+        ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+        ?.map((b) => {
           b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
         });
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
