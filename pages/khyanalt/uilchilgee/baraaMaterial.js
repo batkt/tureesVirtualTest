@@ -1051,7 +1051,7 @@ function BaraaMaterial() {
             >
               <div className="grid grid-cols-2 gap-4">
               <Form.Item name="ner" label="Барааны нэр" rules={[{ required: true }]}>
-                 <Input className="rounded-lg" placeholder="Нэр" />
+                <Input className="rounded-lg" placeholder="Нэр" autoComplete="off" />
               </Form.Item>
               
                 <Form.Item name="turul" label="Төрөл">

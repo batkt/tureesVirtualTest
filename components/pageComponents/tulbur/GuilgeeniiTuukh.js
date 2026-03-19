@@ -480,7 +480,13 @@ function GuilgeeniiTuukh(
                     : turulAvya(a.turul)}
                 </td>
                 <td className="w-full min-w-[8rem] overflow-hidden p-1">
-                  {a.tailbar}
+                  {a.tailbar?.includes("төлөлт") ? (
+                    <span className="font-semibold text-red-500">
+                      {a.tailbar}
+                    </span>
+                  ) : (
+                    a.tailbar
+                  )}
                 </td>
                 <td className="min-w-[10rem] overflow-hidden p-1 text-center">
                   {a.guilgeeKhiisenOgnoo

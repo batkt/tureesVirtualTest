@@ -2116,6 +2116,7 @@ useEffect(() => {
         width={680}
         centered
       >
+        <div className="max-h-[70vh] overflow-y-auto px-2 custom-scrollbar overflow-x-hidden">
         <Form form={taskForm} layout="vertical" onFinish={handleCreateTask} className="space-y-4">
           <Form.Item 
             name="title" 
@@ -2406,6 +2407,7 @@ useEffect(() => {
              </Space>
           </div>
         </Form>
+        </div>
       </Modal>
       <Modal
         title={editingProject ? "Төсөл засах" : "Төсөл үүсгэх"}
@@ -2442,7 +2444,7 @@ useEffect(() => {
             <Select className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex [&_.ant-select-selection-item]:!flex [&_.ant-select-selection-item]:!items-center">
               <Select.Option value="#10B981"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#10B981] shadow-sm"></div><span className="font-bold">Ногоон</span></div></Select.Option>
               <Select.Option value="#3B82F6"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#3B82F6] shadow-sm"></div><span className="font-bold">Цэнхэр</span></div></Select.Option>
-              <Select.Option value="#8B5CF6"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#8B5CF6] shadow-sm"></div><span className="font-bold">Ягаан</span></div></Select.Option>
+              <Select.Option value="#8B5CF6"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#8B5CF6] shadow-sm"></div><span className="font-bold">Нил ягаан</span></div></Select.Option>
               <Select.Option value="#EF4444"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#EF4444] shadow-sm"></div><span className="font-bold">Улаан</span></div></Select.Option>
               <Select.Option value="#F59E0B"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#F59E0B] shadow-sm"></div><span className="font-bold">Шар</span></div></Select.Option>
             </Select>

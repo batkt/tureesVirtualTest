@@ -433,16 +433,7 @@ function KPI() {
                   title="Ажилчдын үзүүлэлт" 
                   icon={<TeamOutlined/>}
                   headerClass="border-green-500"
-                  rightActions={
-                    <Button 
-                      size="small"
-                      className="bg-emerald-500 text-white border-none font-bold text-[11px] h-7 px-3 rounded-lg shadow-lg hover:bg-emerald-600 transition-all uppercase"
-                      onClick={handleSystemRefresh}
-                      loading={isRefreshing}
-                    >
-                      Бүрэн шинэчлэл
-                    </Button>
-                  }
+                  
                 >
                   {loading && users.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-24 gap-4">

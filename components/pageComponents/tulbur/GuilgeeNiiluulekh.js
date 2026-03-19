@@ -42,6 +42,17 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         dansniiDugaar: guilgee.dansniiDugaar,
         tulukhAldangi: mur.aldangiinUldegdel,
         tulsunAldangi: mur.tulsunAldangi,
+        avlaguud: mur.avlaguud,
+        talbainId: mur.talbainIdnuud && mur.talbainIdnuud[0],
+        talbainDugaar: mur.talbainDugaar,
+        register: mur.register,
+        gereeniiDugaar: mur.gereeniiDugaar,
+        baiguullagiinId: mur.baiguullagiinId,
+        barilgiinId: mur.barilgiinId,
+        bankniiGuilgeeniiDun:
+          dans.bank === "tdb"
+            ? guilgee.Amt
+            : guilgee.amount || guilgee.tranAmount,
       };
 
       switch (dans.bank) {
@@ -157,6 +168,7 @@ function GuilgeeNiiluulekh(
 ) {
   const [gereenuud, setGereenuud] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [isSelecting, setIsSelecting] = useState(false);
   const [khaagdsanGereeEsekh, setKhaagdsanGereeEsekh] = useState(false);
   const [guilgeeniiTailbar, setGuilgeeniiTailbar] = useState();
   const [magadlaltaiGereenuud, setMagadlaltaiGereenuud] = React.useState([]);
@@ -239,10 +251,22 @@ function GuilgeeNiiluulekh(
           setLoadingBaritsaa(false);
         }
         setLoading(true);
-        if (!!guilgeeniiTailbar)
-          undsenGuilgee?.forEach((mur) => {
-            mur.tailbar = guilgeeniiTailbar;
-          });
+        undsenGuilgee?.forEach((mur) => {
+          let prefix = "";
+          if (Array.isArray(mur.avlaguud) && mur.avlaguud.length > 0) {
+            const months = Array.from(
+              new Set(
+                mur.avlaguud.map((a) => moment(a.ognoo).format("YYYY-MM"))
+              )
+            );
+            prefix = months.join(", ") + " " + t("төлөлт");
+          }
+          mur.tailbar =
+            (guilgeeniiTailbar || "") +
+            (guilgeeniiTailbar && prefix ? " (" : "") +
+            prefix +
+            (guilgeeniiTailbar && prefix ? ")" : "");
+        });
 
         if (undsenGuilgee.length > 0)
           uilchilgee(token)
@@ -303,13 +327,14 @@ function GuilgeeNiiluulekh(
             className="grid cursor-pointer grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
             key={`gereeniisongolt${i}`}
             onClick={() => {
-              if (gereenuud.find((a) => a._id === mur._id)) {
+              if (isSelecting || gereenuud.find((a) => a._id === mur._id)) {
                 notification.warning({
                   message: t("Анхаар"),
-                  description: t("Гэрээ сонгогдсон байна"),
+                  description: t("Гэрээ сонгогдсон байна. Түр хүлээнэ үү."),
                 });
                 return;
               }
+              setIsSelecting(true);
               uilchilgee(token)
                 .post("/uldegdelBodyo", {
                   barilgiinId,
@@ -318,14 +343,91 @@ function GuilgeeNiiluulekh(
                 .then(({ data }) => {
                   if (!!data) {
                     mur.uldegdel = data.uldegdel;
-                    setGereenuud((a) => {
-                      a.push(mur);
-                      return [...a];
-                    });
-                    setVisible(false);
+
+                    // Fetch full history to build breakdown
+                    uilchilgee(token)
+                      .get(
+                        `/gereeniiTulultAvya/${
+                          mur._id
+                        }?duusakhOgnoo=${moment().add(10, "year").toISOString()}`,
+                      )
+                      .then(({ data: history }) => {
+                        // Correct FIFO Breakdown Logic
+                        const poolOfMoney = (history || []).reduce(
+                          (acc, x) =>
+                            acc + (x.tulsunDun || 0) + (x.khyamdral || 0),
+                          0,
+                        );
+                        const allInvoices = (history || [])
+                          .filter(
+                            (x) =>
+                              (x.tulukhDun || 0) > 0 &&
+                              !["aldangi", "baritsaa"].includes(x.turul),
+                          )
+                          .sort(
+                            (a, b) => new Date(a.ognoo) - new Date(b.ognoo),
+                          );
+
+                        let remainingPool = poolOfMoney;
+                        const unpaidLines = [];
+
+                        allInvoices.forEach((inv) => {
+                          if (remainingPool >= inv.tulukhDun) {
+                            remainingPool -= inv.tulukhDun;
+                          } else {
+                            const unpaidAmount = inv.tulukhDun - remainingPool;
+                            remainingPool = 0;
+                            unpaidLines.push({
+                              ...inv,
+                              debt: unpaidAmount,
+                            });
+                          }
+                        });
+
+                        // Group by month
+                        const monthsMap = {};
+                        unpaidLines.forEach((line) => {
+                          const mKey = moment(line.ognoo).format("YYYY-MM");
+                          if (!monthsMap[mKey]) {
+                            monthsMap[mKey] = {
+                              year: moment(line.ognoo).year(),
+                              month: moment(line.ognoo).month() + 1,
+                              debt: 0,
+                              ognoo: line.ognoo,
+                              turul: t("Сарын нийт"),
+                            };
+                          }
+                          monthsMap[mKey].debt += line.debt;
+                        });
+
+                        mur.sarUldegdel = Object.values(monthsMap).sort(
+                          (a, b) => new Date(a.ognoo) - new Date(b.ognoo),
+                        );
+
+                        // Fetch allocation history
+                        uilchilgee(token)
+                          .get(
+                            `/avlagaTulsunTuukh?query={"gereeniiId":"${mur._id}"}`,
+                          )
+                          .then(({ data: tData }) => {
+                            mur.pastAllocations = tData.jagsaalt || [];
+                            setGereenuud((a) => {
+                              if (a.find((x) => x._id === mur._id)) return a;
+                              return [...a, mur];
+                            });
+                            setVisible(false);
+                            setIsSelecting(false);
+                          });
+                      })
+                      .catch(() => setIsSelecting(false));
+                  } else {
+                    setIsSelecting(false);
                   }
                 })
-                .catch(aldaaBarigch);
+                .catch((e) => {
+                  setIsSelecting(false);
+                  aldaaBarigch(e);
+                });
             }}
           >
             <div className="truncate px-2">{mur.talbainDugaar}</div>
@@ -709,6 +811,110 @@ function GuilgeeNiiluulekh(
                     </div>
                   </div>
                 )}
+              </div>
+            )}
+
+           
+            {geree.sarUldegdel && geree.sarUldegdel.length > 0 && (
+              <div className="mt-2 w-full rounded-md border border-gray-300 bg-gray-50 p-2 text-sm dark:bg-gray-800 dark:border-gray-600">
+                <div className="mb-2 font-semibold uppercase text-gray-600 dark:text-gray-300">
+                  {t("Төлбөр хуваарилалт")}
+                </div>
+                {(() => {
+                  let remainingPayment = geree.tureesiinTulbur || 0;
+                  const currentAllocations = [];
+                  const rows = geree.sarUldegdel.map((monthDebt, mi) => {
+                    let allocate = Math.min(remainingPayment, monthDebt.debt);
+                    if (allocate < 0) allocate = 0;
+                    remainingPayment -= allocate;
+                    let finalUldegdel = monthDebt.debt - allocate;
+
+                    if (allocate > 0) {
+                      currentAllocations.push({
+                        tulukhDun: monthDebt.debt,
+                        tulsunDun: allocate,
+                        ognoo: monthDebt.ognoo,
+                        turul: monthDebt.turul,
+                      });
+                    }
+
+                      return (
+                        <div
+                          key={mi}
+                          className="flex flex-col space-y-1 border-b border-gray-200 pb-2 pt-2 last:border-0 dark:border-gray-600"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-gray-800 dark:text-gray-100">
+                              {monthDebt.year}-{monthDebt.month} ({monthDebt.turul})
+                            </span>
+                            {finalUldegdel <= 0 ? (
+                              <span className="rounded bg-green-100 px-1 text-[10px] text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                                {t("Бүрэн төлөгдөнө")}
+                              </span>
+                            ) : allocate > 0 ? (
+                              <span className="rounded bg-blue-100 px-1 text-[10px] text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                                {t("Хэсэгчилсэн")}
+                              </span>
+                            ) : null}
+                          </div>
+                          <div className="flex flex-wrap gap-x-4 text-[13px]">
+                            <span className="text-gray-500 dark:text-gray-400">
+                              {t("Хуримтлагдсан өр")}:{" "}
+                              <b className="text-gray-700 dark:text-gray-200">
+                                {formatNumber(monthDebt.debt, 2)}
+                              </b>
+                            </span>
+                            <span className="text-blue-500">
+                              {t("Төлөх")}:{" "}
+                              <b className="text-blue-600 font-bold">
+                                {formatNumber(allocate, 2)}
+                              </b>
+                            </span>
+                            <span className="text-red-500">
+                              {t("Үлдэгдэл")}:{" "}
+                              <b className="font-bold">
+                                {formatNumber(finalUldegdel, 2)}
+                              </b>
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    });
+                  // Store current calculated allocations in the geree object for later saving
+                  geree.avlaguud = currentAllocations;
+                  return rows;
+                })()}
+              </div>
+            )}
+
+            {geree.pastAllocations && geree.pastAllocations.length > 0 && (
+              <div className="mt-2 w-full rounded-md border border-blue-200 bg-blue-50/50 p-2 text-xs dark:bg-blue-900/10 dark:border-blue-800">
+                <div className="mb-1 font-semibold uppercase text-blue-600 dark:text-blue-400">
+                  {t("Өмнөх хуваарилалтын түүх")}
+                </div>
+                {geree.pastAllocations.slice(0, 5).map((p, pi) => (
+                  <div
+                    key={pi}
+                    className="mb-1 border-b border-blue-100 pb-1 last:border-0 dark:border-blue-900/30"
+                  >
+                    <div className="flex justify-between font-medium">
+                      <span>{moment(p.tulsunOgnoo).format("YYYY-MM-DD")}</span>
+                      <span className="text-blue-700 dark:text-blue-400">
+                        {formatNumber(p.tulsunDun)}₮
+                      </span>
+                    </div>
+                    <div className="space-y-0.5 pl-2 text-[10px] text-gray-500">
+                      {p.avlaguud?.map((a, ai) => (
+                        <div key={ai} className="flex justify-between">
+                          <span>
+                            • {moment(a.ognoo).format("YYYY-MM")} ({a.turul})
+                          </span>
+                          <span>{formatNumber(a.tulsunDun)}₮</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>
