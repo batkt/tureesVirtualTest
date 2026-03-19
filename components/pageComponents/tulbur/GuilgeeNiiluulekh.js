@@ -260,7 +260,7 @@ function GuilgeeNiiluulekh(
                 mur.avlaguud.map((a) => moment(a.ognoo).format("YYYY-MM"))
               )
             );
-            prefixParts.push(months.join(", ") + " " + t("төлөлт"));
+            prefixParts.push(months.join(", ") + " " + t("түрээс төлөлт"));
           }
           if (mur.tulsunAldangi > 0) {
             prefixParts.push(t("алданги төлөлт"));
