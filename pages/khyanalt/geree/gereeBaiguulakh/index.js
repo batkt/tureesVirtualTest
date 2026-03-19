@@ -545,6 +545,7 @@ function GereeBaiguulakh({ token }) {
               current={current}
               setAktiinZagvar={setAktiinZagvar}
               prev={prev}
+              waiting={waiting}
               alkhamErkh={alkhamSoliyo}
               onChange={setKhagalakhGeree}
               value={khadgalakhGeree}

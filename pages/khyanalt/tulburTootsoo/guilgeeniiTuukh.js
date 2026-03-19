@@ -345,6 +345,7 @@ function guilgeeniiTuukh({ token }) {
   const [davkhar, setDavkhar] = React.useState(undefined);
   const [aldangiBodokhLoading, setAldangiBodokhLoading] = useState(false);
   const [aldangiUstgahLoading, setAldangiUstgahLoading] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
   const { guilgeeniiToololt, guilgeeniiToololtMutate } =
     useGuilgeeniiToololtAvya(
       token,
@@ -1054,7 +1055,19 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
       <Button
         type="primary"
         id={baritsaaUdirdanKhadgalyaaId}
-        onClick={() => baritsaaref.current.khadgalya()}
+        loading={modalLoading}
+        onClick={async (e) => {
+          if (modalLoading) return;
+          setModalLoading(true);
+          const btn = e.currentTarget;
+          if (btn) btn.setAttribute("disabled", "true");
+          try {
+            await baritsaaref.current.khadgalya();
+          } finally {
+            setModalLoading(false);
+            if (btn) btn.removeAttribute("disabled");
+          }
+        }}
       >
         {t("Хадгалах")}
       </Button>,
@@ -1103,7 +1116,19 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
       <Button
         type="primary"
         id={khadgalyaButtonId}
-        onClick={() => ref.current.khadgalya()}
+        loading={modalLoading}
+        onClick={async (e) => {
+          if (modalLoading) return;
+          setModalLoading(true);
+          const btn = e.currentTarget;
+          if (btn) btn.setAttribute("disabled", "true");
+          try {
+            await ref.current.khadgalya();
+          } finally {
+            setModalLoading(false);
+            if (btn) btn.removeAttribute("disabled");
+          }
+        }}
       >
         {t("Хадгалах")}
       </Button>,

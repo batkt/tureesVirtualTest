@@ -391,11 +391,26 @@ function tulburTootsoo({ token }) {
           </Button>
 
           <Button
+            id="guilgee-submit-button"
             type="primary"
-            onClick={() => {
-              if (!loading && !loadingBaritsaa && !isSavingRef.current) {
-                isSavingRef.current = true;
-                refGuilgee.current.khadgalya();
+            loading={loading || loadingBaritsaa}
+            onClick={async (e) => {
+              if (loading || loadingBaritsaa || isSavingRef.current) return;
+              isSavingRef.current = true;
+
+              // Force-disable the button via DOM since modal root won't re-render for 'loading' prop change
+              const btn = e.currentTarget;
+              btn.setAttribute("disabled", "true");
+
+              try {
+                await refGuilgee.current.khadgalya();
+              } catch (e) {
+                aldaaBarigch(e);
+                btn.removeAttribute("disabled");
+              } finally {
+                isSavingRef.current = false;
+                // Button usually unmounts after successful save/close, but if not:
+                setTimeout(() => btn.removeAttribute("disabled"), 1000);
               }
             }}
           >
@@ -424,7 +439,6 @@ function tulburTootsoo({ token }) {
             baiguullagiinId={baiguullaga?._id}
             onFinish={() => {
               refreshData();
-              isSavingRef.current = false;
             }}
             setLoading={setLoading}
             setLoadingBaritsaa={setLoadingBaritsaa}

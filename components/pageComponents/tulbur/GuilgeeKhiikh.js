@@ -64,6 +64,7 @@ function GuilgeeKhiikh(
     React.useState(false);
   const [ashiglaltiinId, setAshiglaltiinId] = React.useState(undefined);
   const [ashiglaltiinNer, setAshiglaltiinNer] = React.useState(undefined);
+  const [loading, setLoading] = useState(false);
 
   const [busadTurul, setBusadTurul] = useState();
   const [zardliinTurul, setZardliinTurul] = useState();
@@ -375,7 +376,9 @@ function GuilgeeKhiikh(
         }
         const saveButton = document.getElementById(khadgalyaButtonId);
         saveButton?.setAttribute("disabled", true);
-        uilchilgee(token)
+        if (loading) return; 
+        setLoading(true);
+        return uilchilgee(token)
           .post("/gereeniiGuilgeeKhadgalya", {
             guilgee: guilgee,
           })
@@ -391,8 +394,10 @@ function GuilgeeKhiikh(
           .catch((error) => {
             saveButton?.removeAttribute("disabled");
             aldaaBarigch(error);
-          });
+          })
+          .finally(() => setLoading(false));
       },
+      loading,
     }),
     [
       dun,

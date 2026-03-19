@@ -229,28 +229,33 @@ function GuilgeeNiiluulekh(
         }
         if (baritsaa.length > 0) {
           setLoadingBaritsaa(true);
-          const baritsaaniiGuilgee = await baritsaaniiGuilgeeKhiiya(
-            token,
-            baritsaa
-          );
-          if (baritsaaniiGuilgee.aldaa.length > 0) {
-            notification.warning({
-              message: t("Анхаар"),
-              description: baritsaaniiGuilgee.aldaa.join(","),
-            });
-            return;
+          try {
+            const baritsaaniiGuilgee = await baritsaaniiGuilgeeKhiiya(
+              token,
+              baritsaa
+            );
+            if (baritsaaniiGuilgee.aldaa.length > 0) {
+              notification.warning({
+                message: t("Анхаар"),
+                description: baritsaaniiGuilgee.aldaa.join(","),
+              });
+              return;
+            }
+            if (undsenGuilgee.length === 0) {
+              notification.success({
+                message: t("Амжилттай"),
+                description: t("Гүйлгээ амжилттай холбогдлоо"),
+              });
+              _.isFunction(onFinish) && onFinish();
+              destroy();
+              return; // End here if only baritsaa was meant to be saved
+            }
+          } finally {
+            setLoadingBaritsaa(false);
           }
-          if (undsenGuilgee.length === 0) {
-            notification.success({
-              message: t("Амжилттай"),
-              description: t("Гүйлгээ амжилттай холбогдлоо"),
-            });
-            _.isFunction(onFinish) && onFinish();
-            destroy();
-          }
-          setLoadingBaritsaa(false);
         }
         setLoading(true);
+        try {
         undsenGuilgee?.forEach((mur) => {
           let prefix = "";
           let prefixParts = [];
@@ -274,7 +279,7 @@ function GuilgeeNiiluulekh(
         });
 
         if (undsenGuilgee.length > 0)
-          uilchilgee(token)
+          return uilchilgee(token)
             .post("/tulultOlnoorKhadgalya", { guilgeenuud: undsenGuilgee })
             .then(({ data }) => {
               if (data === "Amjilttai") {
@@ -288,6 +293,11 @@ function GuilgeeNiiluulekh(
             })
             .catch(aldaaBarigch)
             .finally(() => setLoading(false));
+        } finally {
+          // If we reach here without returning above (e.g. no undsenGuilgee), we should ensure loading is off
+          // though typically it is handled in the promise chain or baritsaa block
+          if (undsenGuilgee.length === 0) setLoading(false);
+        }
       },
     }),
     [gereenuud]

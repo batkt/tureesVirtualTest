@@ -31,6 +31,7 @@ const Tulbur = ({
   token,
   gereeniiZagvar,
   formSubmit,
+  waiting,
 }) => {
   const [form] = Form.useForm();
   const zasvarEsekh = typeof zasvar === "boolean" ? zasvar : !!value?._id;
@@ -367,7 +368,7 @@ const Tulbur = ({
             {!zasvarEsekh && (
               <Button
                 type="primary"
-                gereeniiZagvar
+                loading={waiting}
                 id="khadgalakhButton"
                 onClick={() => form.submit()}
                 icon={<SaveOutlined />}

@@ -50,6 +50,7 @@ function BaritsaaUdirdlaga(
   const [ashiglakhUldegdel, setAshiglakhUldegdel] = useState(
     data.ashiglakhUldegdel
   );
+  const [loading, setLoading] = useState(false);
   const [tailbar, setTailbar] = useState("");
   const [baritsaaKhuulga, setBaritsaaKhuulga] = useState([]);
 
@@ -130,7 +131,10 @@ function BaritsaaUdirdlaga(
         if (turul === "ashiglakh" || turul === "butsaalt") baritsaaniiGuilgee["zarlaga"] = dun;
         else baritsaaniiGuilgee["orlogo"] = dun;
 
-        uilchilgee(token)
+        if (loading) return; 
+        setLoading(true);
+
+        return uilchilgee(token)
           .post("/baritsaaniiGuilgeeKhiie", baritsaaniiGuilgee)
           .then(() => {
             notification.success({
@@ -138,10 +142,13 @@ function BaritsaaUdirdlaga(
             });
             _.isFunction(onFinish) && onFinish();
             destroy();
-          });
+          })
+          .catch(aldaaBarigch)
+          .finally(() => setLoading(false));
       },
+      loading,
     }),
-    [dun, turul, tailbar, ognoo]
+    [dun, turul, tailbar, ognoo, loading]
   );
 
   function tuukhKharya() {

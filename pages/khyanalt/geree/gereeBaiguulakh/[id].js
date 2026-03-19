@@ -540,6 +540,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
               t={t}
               next={next}
               prev={prev}
+              waiting={waiting}
               onChange={setKhagalakhGeree}
               setAktiinZagvar={setAktiinZagvar}
               value={khadgalakhGeree}
@@ -558,8 +559,9 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
               JSON.stringify(data) !== JSON.stringify(khadgalakhGeree) && (
                 <Button
                   type="primary"
+                  loading={waiting}
                   style={{ width: "100%", marginTop: 10 }}
-                  onClick={() => khadgalya(khadgalakhGeree)}
+                  onClick={() => !waiting && khadgalya(khadgalakhGeree)}
                 >
                   Хадгалах
                 </Button>
