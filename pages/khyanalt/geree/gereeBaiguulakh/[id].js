@@ -348,9 +348,9 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
     );
 
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
-      butsaakhUtga.dedKhesguud
-        .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-        .map((b) => {
+      butsaakhUtga?.dedKhesguud
+        ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+        ?.map((b) => {
           b.zaalt = b.zaalt.replace(
             new RegExp(`&lt;${key}&gt;`, "g"),
             key === "utas"
@@ -455,9 +455,9 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
             });
         });
       } else {
-        butsaakhUtga.dedKhesguud
+        butsaakhUtga?.dedKhesguud
           ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-          .map((b) => {
+          ?.map((b) => {
             b.zaalt = b.zaalt.replace(
               new RegExp(`&lt;${key}&gt;`, "g"),
               key === "utas"
