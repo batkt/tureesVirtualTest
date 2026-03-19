@@ -32,7 +32,7 @@ import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh";
 import deleteMethod from "tools/function/crud/deleteMethod";
 import createMethod from "tools/function/crud/createMethod";
 import useSWR from "swr";
-import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, url, socket } from "services/uilchilgee";
 import { modal } from "components/ant/Modal";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
@@ -128,10 +128,47 @@ function Khyanalt({ token }) {
     turul
   );
   const [neesenEsekh, setNeesenEsekh] = useState(false);
+  const [progress, setProgress] = useState(null);
+
+  useEffect(() => {
+    if (baiguullaga?._id) {
+       const clientSocket = socket();
+       clientSocket.on(`mailProgress-${baiguullaga._id}`, (data) => {
+         setProgress(data);
+       });
+       return () => clientSocket.disconnect();
+    }
+  }, [baiguullaga]);
 
   useEffect(() => {
     setSongogdsonKhariltsagch([]);
   }, [tuluv]);
+
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      if (loading) {
+        if (!window.confirm(t("Мэдэгдэл илгээгдэж дуусаагүй байна. Та хуудсаа солихдоо итгэлтэй байна уу?"))) {
+          router.events.emit('routeChangeError');
+          throw `Route change to ${url} was aborted.`;
+        }
+      }
+    };
+
+    const handleBeforeUnload = (e) => {
+      if (loading) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [loading, t]);
 
   const query = useMemo(() => {
     return {
@@ -491,6 +528,7 @@ function Khyanalt({ token }) {
           return;
         }
 
+        setProgress(null);
         setLoading(true);
         uilchilgee(token)
           .post(`/mailOlnoorIlgeeye`, {
@@ -499,8 +537,25 @@ function Khyanalt({ token }) {
             turul: "Mail",
           })
           .then(({ data }) => {
-            if (data === "Amjilttai") {
-              toast.success(t("И-мэйл Амжилттай илгээлээ"));
+            if (data === "Amjilttai" || data?.result === "Amjilttai") {
+              if (data?.failedMails && data.failedMails.length > 0) {
+                toast.error(
+                  <div>
+                    <div className="font-bold">Амжилтгүй илгээлт: {data.failedMails.length}</div>
+                    <div className="mt-1 max-h-40 overflow-y-auto text-xs">
+                      {data.failedMails.map((a, i) => (
+                        <div key={i} className="mb-1 border-b border-gray-300 pb-1 text-gray-800 dark:border-gray-600 dark:text-gray-200">
+                          <div className="font-semibold">{a.ner} ({a.mail})</div>
+                          <div className="text-red-500">{a.aldaa}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>,
+                  { duration: 10000 }
+                );
+              } else {
+                toast.success(t("И-мэйл Амжилттай илгээлээ"));
+              }
 
               if (khariltsagch && songogdsonKhariltsagch.length === 1) {
                 medegdelAvya.jagsaalt.unshift({
@@ -1298,12 +1353,17 @@ function Khyanalt({ token }) {
           <div className="absolute bottom-3 z-50 flex w-full items-center justify-between space-x-2 p-4">
             <div className="text-xs font-semibold ">{msj.length}/160</div>
             <div className="flex items-center justify-between space-x-3">
+              {progress && loading && turul === "Mail" && (
+                <div className="mr-2 font-semibold text-green-600">
+                   {progress.sent} / {progress.total}
+                </div>
+              )}
               <label className="font-medium dark:!text-white">
                 {turul} {t("Илгээх")}
               </label>
               <div
-                onClick={send}
-                className={`h-8 w-8 cursor-pointer sm:h-8 sm:w-8 bg-green-${
+                onClick={loading ? undefined : send}
+                className={`h-8 w-8 ${loading ? "cursor-not-allowed" : "cursor-pointer"} sm:h-8 sm:w-8 bg-green-${
                   loading ? "200" : "600"
                 } flex flex-none items-center justify-center rounded-full text-white `}
               >

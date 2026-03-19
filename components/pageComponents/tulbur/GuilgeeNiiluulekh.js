@@ -400,9 +400,12 @@ function GuilgeeNiiluulekh(
                           monthsMap[mKey].debt += line.debt;
                         });
 
-                        mur.sarUldegdel = Object.values(monthsMap).sort(
-                          (a, b) => new Date(a.ognoo) - new Date(b.ognoo),
-                        );
+                        const currentMonthEnd = moment().endOf("month");
+                        mur.sarUldegdel = Object.values(monthsMap)
+                          .filter((a) => moment(a.ognoo).isSameOrBefore(currentMonthEnd))
+                          .sort(
+                            (a, b) => new Date(a.ognoo) - new Date(b.ognoo),
+                          );
 
                         // Fetch allocation history
                         uilchilgee(token)

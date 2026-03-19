@@ -312,7 +312,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
   const alkhamiinAktiinZagvar = React.useMemo(() => {
     if (aktiinZagvar === undefined) return;
     let butsaakhUtga = _.cloneDeep(aktiinZagvar);
-    if (!butsaakhUtga?.dedKhesguud)
+    if (butsaakhUtga?.dedKhesguud)
       butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
         (a) => a.khamaarakhKheseg === steps[current].title,
       );
@@ -379,7 +379,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
     if (gereeniiZagvar === undefined) return;
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
-    if (!butsaakhUtga?.dedKhesguud)
+    if (butsaakhUtga?.dedKhesguud)
       butsaakhUtga.dedKhesguud = butsaakhUtga?.dedKhesguud?.filter(
         (a) => a.khamaarakhKheseg === steps[current].title,
       );
