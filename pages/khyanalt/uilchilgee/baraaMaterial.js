@@ -740,14 +740,14 @@ function BaraaMaterial() {
               >
                 Бараа бүртгэх
               </Button>
-              <Button
+              {/* <Button
                 type="default"
                 className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 !rounded-xl text-xs font-bold shadow-sm h-[40px] px-4 flex items-center gap-2 hover:border-emerald-500 group"
               >
                 <FileExcelOutlined className="text-emerald-500 group-hover:scale-110 transition-transform" /> 
                 <span className="text-slate-600 dark:text-slate-300">Excel</span>
                 <DownOutlined className="text-[10px] text-slate-400" />
-              </Button>
+              </Button> */}
             </Space>
           </div>
 

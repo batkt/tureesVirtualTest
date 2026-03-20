@@ -214,7 +214,7 @@ function KPI() {
       const url = window.URL.createObjectURL(blob);
       const anchor = document.createElement('a');
       anchor.href = url;
-      anchor.download = `KPI_Report_${dayjs().format('YYYY_MM_DD')}.xlsx`;
+      anchor.download = `KPI_TAILAN${dayjs().format('YYYY_MM_DD')}.xlsx`;
       anchor.click();
       window.URL.revokeObjectURL(url);
       toast.success("Excel файл амжилттай татагдлаа");
@@ -407,7 +407,7 @@ function KPI() {
                   onClick={handleExportExcel}
                   className="text-[12px] font-bold uppercase tracking-wider bg-emerald-500 text-white hover:bg-emerald-600 border-none rounded-lg h-8 flex items-center shadow-lg shadow-emerald-500/20"
                 >
-                  Excel Татах
+                  Excel
               </Button>
               <Button
                   shape="circle"
