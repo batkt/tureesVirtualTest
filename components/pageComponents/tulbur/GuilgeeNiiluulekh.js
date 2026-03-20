@@ -543,7 +543,7 @@ function GuilgeeNiiluulekh(
   }
 
   return (
-    <div className="flex w-full flex-col space-y-2">
+    <div className="flex w-full flex-col space-y-2 overflow-hidden" style={{ height: "calc(100vh - 250px)" }}>
       {magadlaltaiGereenuud?.length > 0 && (
         <div>
           <div className="py-2 text-lg font-medium">
@@ -669,7 +669,8 @@ function GuilgeeNiiluulekh(
           </div>
         </div>
       </div>
-      <div className="space-y-2 px-2" style={{ height: "25rem" }}>
+      <div className="flex flex-1 flex-col space-y-2 px-2 overflow-hidden">
+        <div className="flex-1 overflow-y-auto pr-2 space-y-2">
         {gereenuud.map((geree, index) => (
           <div
             key={`${index}geree-kholbolt`}
@@ -937,9 +938,10 @@ function GuilgeeNiiluulekh(
             )}
           </div>
         ))}
-        <Divider />
+        </div>
+        <Divider className="my-1" />
 
-        <div className="grid w-full grid-cols-2 divide-x-2 px-2">
+        <div className="sticky bottom-0 z-10 grid w-full grid-cols-2 divide-x-2 bg-white px-2 py-2 items-center border-t dark:bg-gray-900">
           <div className="flex flex-col justify-between pr-2 lg:flex-row">
             <div className="dark:text-gray-200">{t("Холбосон дүн")}:</div>
             <div className="text-right text-xl text-green-600">
@@ -953,7 +955,6 @@ function GuilgeeNiiluulekh(
             </div>
           </div>
         </div>
-        <Divider />
       </div>
     </div>
   );
