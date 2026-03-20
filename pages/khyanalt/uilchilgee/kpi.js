@@ -22,6 +22,7 @@ import {
   AreaChartOutlined,
   CheckCircleOutlined,
   TeamOutlined,
+  DownloadOutlined,
   BarChartOutlined,
   PieChartOutlined,
   StarOutlined,
@@ -81,6 +82,7 @@ function KPI() {
 
   const ajiltanJagsaalt = useJagsaalt("/ajiltan");
   const { jagsaalt: usersList, isValidating: loading, mutate: ajiltniiJagsaaltMutate } = ajiltanJagsaalt;
+  const { jagsaalt: projects } = useJagsaalt("/projects", { barilgiinId, baiguullagiinId });
   const [tasks, setTasks] = useState([]);
   const [loadingTasks, setLoadingTasks] = useState(false);
   const [realtimeKpi, setRealtimeKpi] = useState({});
@@ -175,6 +177,50 @@ function KPI() {
       toast.error("Шинэчлэл хийхэд алдаа гарлаа");
     } finally {
       setIsRefreshing(false);
+    }
+  };
+
+  const handleExportExcel = async () => {
+    try {
+      const ExcelJS = require('exceljs');
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('KPI Тайлан');
+
+      worksheet.columns = [
+        { header: 'Ажилтны нэр', key: 'name', width: 25 },
+        { header: 'Албан тушаал', key: 'role', width: 20 },
+        { header: 'KPI %', key: 'kpi_pct', width: 12 },
+        { header: 'Дууссан даалгавар', key: 'done', width: 18 },
+        { header: 'Нийт оноо', key: 'score', width: 12 },
+      ];
+
+      // Add rows
+      topUsers.forEach(u => {
+        worksheet.addRow({
+          name: u.ner || u.nevtrekhNer,
+          role: u.albanTushaal || u.erkh,
+          kpi_pct: `${u.kpiHuvv ?? 0}%`,
+          done: u.kpiDaalgavarToo || 0,
+          score: u.kpiOnoo || 0,
+        });
+      });
+
+      // Formatting
+      worksheet.getRow(1).font = { bold: true };
+      
+      // Generate buffer
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `KPI_Report_${dayjs().format('YYYY_MM_DD')}.xlsx`;
+      anchor.click();
+      window.URL.revokeObjectURL(url);
+      toast.success("Excel файл амжилттай татагдлаа");
+    } catch (err) {
+      console.error("Excel export error:", err);
+      toast.error("Excel татахад алдаа гарлаа");
     }
   };
 
@@ -355,13 +401,22 @@ function KPI() {
           
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-[14px] font-bold text-gray-800 dark:text-gray-200 uppercase tracking-tight"></h2>
-            <Button
-                shape="circle"
-                icon={<QuestionCircleOutlined />}
-                onClick={() => setIsTutorialOpen(true)}
-                className="text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border-none shadow-sm flex items-center justify-center shrink-0 transition-colors"
-                title={t("Тусламж")}
-              />
+            <div className="flex items-center gap-2">
+              <Button
+                  icon={<DownloadOutlined />}
+                  onClick={handleExportExcel}
+                  className="text-[12px] font-bold uppercase tracking-wider bg-emerald-500 text-white hover:bg-emerald-600 border-none rounded-lg h-8 flex items-center shadow-lg shadow-emerald-500/20"
+                >
+                  Excel Татах
+              </Button>
+              <Button
+                  shape="circle"
+                  icon={<QuestionCircleOutlined />}
+                  onClick={() => setIsTutorialOpen(true)}
+                  className="text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border-none shadow-sm flex items-center justify-center shrink-0 transition-colors"
+                  title={t("Тусламж")}
+                />
+            </div>
           </div>
 
           <div id="khyanalt-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 shrink-0 pt-1">

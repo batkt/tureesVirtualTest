@@ -630,9 +630,10 @@ function AjiltanBurtgel({ token }) {
     }
   }, []);
 
-  function checkRegister() {
-    var value1 = khariltsagchState.register?.substring(0, 2);
-    var value2 = khariltsagchState.register?.substring(2, 10);
+  function checkRegister(value) {
+    if (!value) return "";
+    var value1 = value?.substring(0, 2);
+    var value2 = value?.substring(2, 10);
     var error = 0;
     for (var i = 0; i < 2; i++) {
       var c = value1?.charCodeAt(i);
@@ -660,27 +661,21 @@ function AjiltanBurtgel({ token }) {
         }
       }
     }
-    if (
-      khariltsagchState.register?.length <= 2 ||
-      khariltsagchState.register?.length > 10 ||
-      error > 0
-    ) {
-      khariltsagchState.register = value1.toUpperCase() + value2;
-    }
-    if (khariltsagchState.register?.length === 10) {
-      var year = parseInt(khariltsagchState.register.substring(2, 4));
-      var month = parseInt(khariltsagchState.register.substring(4, 6));
+    
+    let res = value1.toUpperCase() + value2;
+    
+    if (res.length === 10) {
+      var year = parseInt(res.substring(2, 4));
+      var month = parseInt(res.substring(4, 6));
       month = month - 1;
-      var day = parseInt(khariltsagchState.register.substring(6, 8));
+      var day = parseInt(res.substring(6, 8));
       var nowYear = new Date().getFullYear().toString().substring(2, 4);
       if (month > 32 || (12 < month && month < 20)) {
         toast.warning("Регистерийн дугаарын сар буруу байна!");
-        khariltsagchState.register = "";
-        return;
+        return "";
       } else if (year > nowYear && 21 <= month && month <= 32) {
         toast.warning("Регистерийн дугаарын жил, сарын хослол буруу байна!");
-        khariltsagchState.register = "";
-        return;
+        return "";
       }
 
       var jil = month <= 32 && month >= 21 ? 2000 + year : 1900 + year;
@@ -690,9 +685,10 @@ function AjiltanBurtgel({ token }) {
       var nowDay = shine.getDate();
       if (nowDay < day) {
         toast.warning("Регистерийн дугаарын өдөр буруу байна!");
-        return;
+        return res; // Return whatever we have but warn
       }
     }
+    return res;
   }
   function turulSongokh(value) {
     onChange("turul", value);
@@ -861,26 +857,35 @@ function AjiltanBurtgel({ token }) {
             >
               <Form.Item
                 name="register"
+                dependencies={["customerTin"]}
                 rules={[
-                  {
-                    required: !khariltsagchState.customerTin,
-                    len: formNuukh === "ААН" ? 7 : 10,
-                    pattern:
-                      formNuukh === "ААН"
-                        ? new RegExp("(\\d{7})")
-                        : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
-                    message: t("Регистр бүртгэнэ үү!"),
-                  },
-                  {
-                    validator: async (_, value) => {
-                      if (
-                        value &&
-                        value.length === (formNuukh === "ААН" ? 7 : 10)
-                      ) {
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      const tin = getFieldValue("customerTin");
+                      if (!value && !tin) {
+                        return Promise.reject(new Error(t("Регистр эсвэл Бүртгэлийн дугаар оруулна уу!")));
+                      }
+                      
+                      if (value) {
+                        const isOrg = formNuukh === "ААН";
+                        const expectedLen = isOrg ? 7 : 10;
+                        if (value.length !== expectedLen) {
+                          return Promise.reject(new Error(t(`Регистр ${expectedLen} оронтой байх ёстой`)));
+                        }
+                        
+                        const regex = isOrg 
+                          ? new RegExp("^\\d{7}$")
+                          : new RegExp("^[А-ЯӨҮ]{2}\\d{8}$");
+                        if (!regex.test(value)) {
+                          return Promise.reject(new Error(t("Регистр формат буруу байна")));
+                        }
+                        
                         return registerShalgakh(value);
                       }
+                      
+                      return Promise.resolve();
                     },
-                  },
+                  }),
                 ]}
               >
                 <Input
@@ -889,11 +894,19 @@ function AjiltanBurtgel({ token }) {
                   maxLength={10}
                   placeholder={t("Регистр")}
                   value={khariltsagchState.register}
-                  onChange={(e) =>
-                    onChange("register", e?.target?.value?.toUpperCase())
-                  }
+                  onChange={(e) => {
+                    const value = e.target.value.toUpperCase();
+                    onChange("register", value);
+                    formRef.current.setFieldsValue({ register: value });
+                  }}
                   prefix={<SolutionOutlined style={iconColor} />}
-                  onBlur={() => (formNuukh === "ААН" ? "" : checkRegister())}
+                  onBlur={(e) => {
+                    if (formNuukh !== "ААН" && e.target.value) {
+                      const cleaned = checkRegister(e.target.value);
+                      onChange("register", cleaned);
+                      formRef.current.setFieldsValue({ register: cleaned });
+                    }
+                  }}
                 ></Input>
               </Form.Item>
             </div>
@@ -904,11 +917,17 @@ function AjiltanBurtgel({ token }) {
             >
               <Form.Item
                 name="customerTin"
+                dependencies={["register"]}
                 rules={[
-                  {
-                    required: !khariltsagchState.register,
-                    message: t("Бүртгэлийн дугаар бүртгэнэ үү!"),
-                  },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      const reg = getFieldValue("register");
+                      if (!value && !reg) {
+                        return Promise.reject(new Error(t("Бүртгэлийн дугаар оруулна уу!")));
+                      }
+                      return Promise.resolve();
+                    },
+                  }),
                 ]}
               >
                 <Input
@@ -916,7 +935,11 @@ function AjiltanBurtgel({ token }) {
                   allowClear
                   placeholder={t("Бүртгэлийн дугаар")}
                   value={khariltsagchState.customerTin}
-                  onChange={(e) => onChange("customerTin", e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^0-9]/g, "");
+                    onChange("customerTin", value);
+                    formRef.current.setFieldsValue({ customerTin: value });
+                  }}
                   prefix={<SolutionOutlined style={iconColor} />}
                 ></Input>
               </Form.Item>
@@ -1372,7 +1395,18 @@ function AjiltanBurtgel({ token }) {
               {
                 title: t("Нэр"),
                 width: "8rem",
-                dataIndex: "ner",
+                render: (text, record) => {
+                  return (
+                    <div className="flex flex-col">
+                      {record.ovog && (
+                        <span className="text-xs text-gray-400">
+                          {record.ovog}
+                        </span>
+                      )}
+                      <span>{record.ner}</span>
+                    </div>
+                  );
+                },
                 showSorterTooltip: false,
                 sorter: () => 0,
               },

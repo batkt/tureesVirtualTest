@@ -573,6 +573,23 @@ function Khynalt() {
     });
   }, [tasks, chartRange, isTaskOnDay]);
 
+  const projectStats = useMemo(() => {
+    return projects.map(p => {
+      const pTasks = tasks.filter(t => t.projectId === p.id || t.projectId === p._id);
+      const done = pTasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'shalga').length;
+      const total = pTasks.length;
+      
+      return {
+        id: p.id || p._id,
+        name: p.name || p.ner,
+        color: p.color || '#10B981',
+        total,
+        done,
+        pct: total > 0 ? Math.round((done / total) * 100) : 0
+      };
+    }).sort((a, b) => b.total - a.total).slice(0, 10);
+  }, [projects, tasks]);
+
   const maxCount = Math.max(...chartData.map(d => d.count), 5);
   const chartPoints = chartData.map((d, i) => {
     const x = 30 + (i * 24);
@@ -980,17 +997,30 @@ function Khynalt() {
                   </div>
                 </DashboardCard>
 
-                 <DashboardCard title="Сүүлийн харилцагчид" icon={<UserOutlined/>} headerClass="border-green-400">
-                  <div className="flex flex-col gap-3">
-                    {uilchluulegchid.map(user => (
-                      <div key={user._id} className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-700 pb-2">
-                        <Avatar size="small" icon={<UserOutlined />} className="bg-gradient-to-tr from-green-300 to-gray-400 dark:from-green-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-500 shadow-xl" />
-                        <div className="flex flex-col min-w-0 flex-1">
-                           <span className="text-gray-800 dark:text-gray-200 text-[12.5px] font-bold truncate">{user.ner}</span>
-                           <span className="text-[12px] text-gray-500 truncate">{user.mail || user.utas?.[0]}</span>
+                 <DashboardCard title="Төслүүдийн гүйцэтгэл" icon={<SiMaterialdesign/>} headerClass="border-emerald-500">
+                  <div className="flex flex-col gap-4">
+                    {projectStats.map(p => (
+                      <div key={p.id} className="flex flex-col gap-1.5">
+                        <div className="flex justify-between items-center text-[12px] font-bold">
+                          <span className="text-gray-700 dark:text-gray-200 truncate pr-2">{p.name}</span>
+                          <span className="text-gray-400 shrink-0">{p.done} / {p.total}</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden flex shadow-inner">
+                           {p.total > 0 && (
+                             <div 
+                               className="h-full rounded-full transition-all duration-1000 shadow-[0_0_8px_rgba(34,197,94,0.3)]"
+                               style={{ width: `${p.pct}%`, background: p.color }} 
+                             />
+                           )}
                         </div>
                       </div>
                     ))}
+                    {projectStats.length === 0 && (
+                      <div className="flex flex-col items-center justify-center py-10 text-gray-400 uppercase font-bold text-[12px] gap-2">
+                        <SiMaterialdesign className="text-2xl opacity-20" />
+                        Төсөл байхгүй
+                      </div>
+                    )}
                   </div>
                 </DashboardCard>
 
@@ -1057,7 +1087,7 @@ function Khynalt() {
                         onClick={() => toggleProject(p.id)}
                       >
                         <div
-                          className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold shadow-lg transition-transform group-hover:scale-110 ${!selectedProjectIds.includes(p.id) && 'grayscale-[0.5] opacity-70'}`}
+                          className={`w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold shadow-lg transition-transform group-hover:scale-110 ${!selectedProjectIds.includes(p.id) && 'grayscale-[0.5] opacity-70'}`}
                           style={{ backgroundColor: p.color || "#10B981" }}
                         >
                           {(p.name || p.ner || "P").slice(0, 2).toUpperCase()}
