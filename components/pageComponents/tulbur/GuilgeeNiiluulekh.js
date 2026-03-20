@@ -42,7 +42,26 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         dansniiDugaar: guilgee.dansniiDugaar,
         tulukhAldangi: mur.aldangiinUldegdel,
         tulsunAldangi: mur.tulsunAldangi,
-        avlaguud: mur.avlaguud,
+        avlaguud:
+          mur.avlaguud ||
+          (() => {
+            let remainingPayment = mur.tureesiinTulbur || 0;
+            const currentAllocations = [];
+            mur.sarUldegdel?.forEach((monthDebt) => {
+              let allocate = Math.min(remainingPayment, monthDebt.debt);
+              if (allocate < 0) allocate = 0;
+              remainingPayment -= allocate;
+              if (allocate > 0) {
+                currentAllocations.push({
+                  tulukhDun: monthDebt.debt,
+                  tulsunDun: allocate,
+                  ognoo: monthDebt.ognoo,
+                  turul: monthDebt.turul,
+                });
+              }
+            });
+            return currentAllocations;
+          })(),
         talbainId: mur.talbainIdnuud && mur.talbainIdnuud[0],
         talbainDugaar: mur.talbainDugaar,
         register: mur.register,
@@ -108,25 +127,24 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         );
       baritsaa.push(baritsaaniiMur);
     }
-    var aldangiDun =
+    var baritsaaUldegdel =
       Math.round(
-        ((dans.bank === "tdb"
-          ? guilgee.Amt
-          : guilgee.amount || guilgee.tranAmount) +
+        ((mur?.baritsaaAvakhDun || 0) -
+          (mur?.baritsaaniiUldegdel || 0) +
           Number.EPSILON) *
           10000
       ) / 10000;
     var aldangiinUldegdel =
       Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
-    if (
-      aldangiinUldegdel > (mur.tulsunAldangi || 0) &&
-      (mur.tulsunAldangi || 0) < aldangiDun - guilgee.kholbosonDun
-    ) {
-      aldaa.push(
-        t("талбайн холбох гүйлгээний алдангийн дүнг түрүүлж төлнө үү", {
-          too: mur.talbainDugaar,
-        })
-      );
+
+    if (mur.tureesiinTulbur > 0 || mur.baritsaaTulbur > 0) {
+      if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
+        aldaa.push(
+          t("талбайн алдангийн үлдэгдлийг түрүүлж төлнө үү", {
+            too: mur.talbainDugaar,
+          })
+        );
+      }
     }
   });
 
@@ -489,6 +507,61 @@ function GuilgeeNiiluulekh(
   }, [dans, data]);
 
   function onChangeKholbokhDun(target, index, talbar) {
+    if (talbar === "tureesiinTulbur") {
+      const mur = gereenuud[index];
+      const aldangiinUldegdel =
+        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
+      const baritsaaUldegdel =
+        Math.round(
+          ((mur?.baritsaaAvakhDun || 0) -
+            (mur?.baritsaaniiUldegdel || 0) +
+            Number.EPSILON) *
+            10000
+        ) / 10000;
+
+      if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
+        notification.warning({
+          message: t("Анхаар"),
+          description: t("талбайн алдангийн үлдэгдлийг түрүүлж төлнө үү", {
+            too: mur.talbainDugaar,
+          }),
+        });
+        target.value = 0;
+        return;
+      }
+    }
+    if (talbar === "baritsaaTulbur") {
+      const mur = gereenuud[index];
+      const aldangiinUldegdel =
+        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
+
+      if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
+        notification.warning({
+          message: t("Анхаар"),
+          description: t("талбайн алдангийн үлдэгдлийг түрүүлж төлнө үү", {
+            too: mur.talbainDugaar,
+          }),
+        });
+        target.value = 0;
+        return;
+      }
+    }
+    if (talbar === "baritsaaTulbur") {
+      const mur = gereenuud[index];
+      const aldangiinUldegdel =
+        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
+
+      if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
+        notification.warning({
+          message: t("Анхаар"),
+          description: t("талбайн алдангийн үлдэгдлийг түрүүлж төлнө үү", {
+            too: mur.talbainDugaar,
+          }),
+        });
+        target.value = 0;
+        return;
+      }
+    }
     let sum = zuruuZun(index, talbar);
     if (sum + _.toNumber(parser(target.value)) > guilgeeniiDun) {
       target.value = formatter(guilgeeniiDun - sum);
@@ -504,6 +577,45 @@ function GuilgeeNiiluulekh(
   }
 
   function onDoubleClickKholbokhDun(target, index, talbar) {
+    if (talbar === "tureesiinTulbur") {
+      const mur = gereenuud[index];
+      const aldangiinUldegdel =
+        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
+      const baritsaaUldegdel =
+        Math.round(
+          ((mur?.baritsaaAvakhDun || 0) -
+            (mur?.baritsaaniiUldegdel || 0) +
+            Number.EPSILON) *
+            10000
+        ) / 10000;
+
+      if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
+        notification.warning({
+          message: t("Анхаар"),
+          description: t("талбайн алдангийн үлдэгдлийг түрүүлж төлнө үү", {
+            too: mur.talbainDugaar,
+          }),
+        });
+        target.value = 0;
+        return;
+      }
+    }
+    if (talbar === "baritsaaTulbur") {
+      const mur = gereenuud[index];
+      const aldangiinUldegdel =
+        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
+
+      if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
+        notification.warning({
+          message: t("Анхаар"),
+          description: t("талбайн алдангийн үлдэгдлийг түрүүлж төлнө үү", {
+            too: mur.talbainDugaar,
+          }),
+        });
+        target.value = 0;
+        return;
+      }
+    }
     let sum = zuruuZun(index, talbar);
 
     if (

@@ -58,6 +58,7 @@ import NekhemjlekhiinTuukhTsonkh from "components/pageComponents/tulbur/Nekhemjl
 
 function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
   const { barilgiinId } = useAuth();
+  const { t } = useTranslation();
   const { data, mutate, isValidating } = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
       ? [
@@ -76,10 +77,53 @@ function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
       revalidateOnFocus: false,
     }
   );
-  
-  const displayUldegdel = data?.uldegdel ?? ugugdul?.uldegdel ?? ugugdul?.niitUldegdel ?? ugugdul?.tsutslagdsanAvlaga ?? (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
+
+  const displayUldegdel =
+    data?.uldegdel ??
+    ugugdul?.uldegdel ??
+    ugugdul?.niitUldegdel ??
+    ugugdul?.tsutslagdsanAvlaga ??
+    (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
   ugugdul.uldegdel = displayUldegdel ?? data?.uldegdel;
   ugugdul.mutate = mutate;
+
+  const content = (
+    <div className="space-y-1 p-1 text-xs">
+      {(data?.uldegdel > 0 || data?.tureesiinUldegdel > 0) && (
+        <div className="flex justify-between gap-4">
+          <span className="text-gray-500">{t("Түрээсийн үлдэгдэл")}:</span>
+          <span className="font-bold text-red-500">
+            {formatNumber(data?.tureesiinUldegdel ?? data?.uldegdel)}
+          </span>
+        </div>
+      )}
+      {data?.aldangiinUldegdel > 0 && (
+        <div className="flex justify-between gap-4">
+          <span className="text-gray-500">{t("Алдангийн үлдэгдэл")}:</span>
+          <span className="font-bold text-red-500">
+            {formatNumber(data.aldangiinUldegdel)}
+          </span>
+        </div>
+      )}
+      {data?.baritsaaniiUldegdel > 0 && (
+        <div className="flex justify-between gap-4">
+          <span className="text-gray-500">{t("Барьцааны үлдэгдэл")}:</span>
+          <span className="font-bold text-red-500">
+            {formatNumber(data.baritsaaniiUldegdel)}
+          </span>
+        </div>
+      )}
+      {data?.khyamdral > 0 && (
+        <div className="flex justify-between gap-4">
+          <span className="text-gray-500">{t("Хямдрал")}:</span>
+          <span className="font-bold text-green-500">
+            {formatNumber(data.khyamdral)}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div
       className={`text-right font-medium ${
@@ -88,6 +132,12 @@ function GereeniiUldegdel({ ugugdul, token, ognoo, tsutsalsanTurul }) {
     >
       {isValidating ? (
         <Spin size="small" />
+      ) : (displayUldegdel ?? 0) > 0 && !!data ? (
+        <Popover content={content} title={t("Үлдэгдлийн дэлгэрэнгүй")}>
+          <span className="cursor-pointer">
+            {formatNumber(displayUldegdel ?? 0, 2)}
+          </span>
+        </Popover>
       ) : (
         formatNumber(displayUldegdel ?? 0, 2)
       )}

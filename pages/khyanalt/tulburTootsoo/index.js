@@ -231,9 +231,12 @@ function GuilgeeniiDun({
 
 function tulburTootsoo({ token }) {
   const { t } = useTranslation();
+  
+
+
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   const refGuilgee = React.useRef(null);
   const zardalRef = React.useRef(null);
   const isSavingRef = React.useRef(false);
@@ -304,6 +307,22 @@ function tulburTootsoo({ token }) {
     order,
     query
   );
+
+  const unlinkedCount = React.useMemo(() => {
+    return (
+      Number(bankniiGuilgeeToololt?.niit || 0) -
+      Number(bankniiGuilgeeToololt?.kholboson || 0)
+    );
+  }, [bankniiGuilgeeToololt?.niit, bankniiGuilgeeToololt?.kholboson]);
+
+  React.useEffect(() => {
+    if (dansniiKhuulgaGaralt?.jagsaalt.length > 0 && unlinkedCount > 0) {
+      notification.error({
+        message: t("Холболт хийгдээгүй гэрээ байна", { too: unlinkedCount }),
+        key: "unlinked_contracts_notif",
+      });
+    }
+  }, [unlinkedCount, dansniiKhuulgaGaralt?.jagsaalt.length, t]);
 
   function refreshData() {
     dansniiKhuulgaMutate();
@@ -1158,17 +1177,6 @@ function tulburTootsoo({ token }) {
       tsonkhniiId="61c2c6a51c2830c4e6f90cad"
       loading={isValidating}
     >
-      {dansniiKhuulgaGaralt?.jagsaalt.length > 0 &&
-        Number(bankniiGuilgeeToololt?.niit || 0) -
-          Number(bankniiGuilgeeToololt?.kholboson || 0) >
-          0 &&
-        notification.error({
-          message: t("Холболт хийгдээгүй гэрээ байна", {
-            too:
-              Number(bankniiGuilgeeToololt?.niit || 0) -
-              Number(bankniiGuilgeeToololt?.kholboson || 0),
-          }),
-        })}
       <Card className="cardgrid col-span-12 md:p-5">
         <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:py-0 md:gap-6 2xl:grid-cols-12">
           {[
