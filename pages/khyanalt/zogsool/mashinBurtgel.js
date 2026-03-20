@@ -465,12 +465,15 @@ function mashinBurtgel({ token }) {
         title: t("Үлдэгдэл хугацаа"),
         align: "center",
         width: "6rem",
-        dataIndex: "uldegdelKhungulukhKhugatsaa",
+        dataIndex: "tsenegleltTuukh",
         showSorterTooltip: false,
         render: (value, record) => {
+          const uldegdel =
+            value?.[0]?.uldegdel ?? record?.khungulukhKhugatsaa ?? 0;
+
           return (
             <div className="flex h-[1.5rem] w-[4rem] items-center justify-center rounded-lg bg-green-400 px-2 py-1 font-[600] text-white">
-              {value ?? record?.khungulukhKhugatsaa ?? 0}
+              {uldegdel}
             </div>
           );
         },

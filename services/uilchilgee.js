@@ -4,15 +4,15 @@ import socketIOClient from "socket.io-client";
 import _ from "lodash";
 import { t } from "i18next";
 //production
-// export const url =
-//   process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api";
-// export const socket = () =>
-//   socketIOClient(
-//     process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
-//     {
-//       transports: ["websocket"],
-//     },
-// );
+export const url =
+  process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api";
+export const socket = () =>
+  socketIOClient(
+    process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
+    {
+      transports: ["websocket"],
+    },
+  );
 // // test rently
 // // export const url =
 // //   process.env.NEXT_PUBLIC_URL || "https://rently.zevtabs.mn/api";
@@ -24,11 +24,11 @@ import { t } from "i18next";
 // //     },
 // //   );
 // test
-export const url = "http://103.143.40.175:8081";
-export const socket = () =>
-  socketIOClient("http://103.143.40.175:8081", {
-    transports: ["websocket"],
-  });
+// export const url = "http://103.143.40.175:8081";
+// export const socket = () =>
+//   socketIOClient("http://103.143.40.175:8081", {
+//     transports: ["websocket"],
+//   });
 
 export const aldaaBarigch = (e) => {
   if (

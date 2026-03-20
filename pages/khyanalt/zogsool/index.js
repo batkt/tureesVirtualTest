@@ -722,22 +722,22 @@ function Zogsool({ token }) {
           ],
         });
       } else if (Number(tuluv) === 5) {
+        const startDate = moment(ognoo[0]).startOf("day").toDate();
+        const endDate = moment(ognoo[1]).endOf("day").toDate();
+
         baseQuery["niitDun"] = { $gt: 0 };
         baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
         baseQuery["$or"] = [
           {
             "tuukh.0.tuluv": -4,
-            "tuukh.0.tulbur.ognoo": {
-              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-            },
+            "tuukh.0.tulbur.ognoo": { $gte: startDate, $lte: endDate },
             "tuukh.0.uneguiGarsan": { $exists: false },
           },
           {
             "tuukh.0.tuluv": 0,
             "tuukh.0.tsagiinTuukh.0.garsanTsag": {
-              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+              $gte: startDate,
+              $lte: endDate,
             },
             "tuukh.0.uneguiGarsan": { $exists: false },
           },
