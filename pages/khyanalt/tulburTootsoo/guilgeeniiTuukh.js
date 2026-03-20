@@ -284,7 +284,7 @@ function TableGuilgee({
   }
   return (
     <Table
-      scroll={{ y: "calc(100vh - 32rem)" }}
+      scroll={{ x: "max-content", y: "calc(100vh - 32rem)" }}
       size="small"
       bordered
       columns={columns}
@@ -703,37 +703,42 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
         key: "index",
         width: "2.5rem",
         align: "center",
+        fixed: "left",
         render: (text, record, index) => index + 1,
       },
       {
         width: "7rem",
         align: "center",
+        fixed: "left",
         title: t("Регистр"),
         dataIndex: "register",
-      },
-      {
-        width: "7rem",
-        align: "center",
-        title: t("Бүртгэлийн дугаар"),
-        dataIndex: "customerTin",
       },
       {
         title: t("Талбай"),
         dataIndex: "talbainDugaar",
         ellipsis: true,
         align: "center",
-        width: "5rem",
+        fixed: "left",
+        width: "6rem",
         showSorterTooltip: false,
         sorter: () => 0,
+      },
+      {
+        width: "8rem",
+        align: "center",
+        fixed: "left",
+        title: t("Нэр"),
+        dataIndex: "ner",
       },
       {
         title: t("Утас"),
         dataIndex: "utas",
         ellipsis: true,
         align: "center",
+        fixed: "left",
         width: "7rem",
         render(data) {
-          if (data.length > 1) {
+          if (data && data.length > 1) {
             return (
               <Tooltip
                 placement="top"
@@ -772,12 +777,12 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
             );
         },
       },
-
       {
         title: t("Үлдэгдэл"),
-        width: "calc(18rem - 10rem)",
+        width: "8rem",
         dataIndex: "uldegdel",
         align: "center",
+        fixed: "left",
         summary: true,
         render(text, record, index) {
           return (
@@ -800,12 +805,21 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
         },
         showSorterTooltip: false,
         sorter: (a, b) => {
-          const effA =
-             Number(a?.uldegdel ?? (a?.tuluv == -1 ? a?.tsutsalsanUldegdel : 0));
-          const effB =
-             Number(b?.uldegdel ?? (b?.tuluv == -1 ? b?.tsutsalsanUldegdel : 0));
+          const effA = Number(
+            a?.uldegdel ?? (a?.tuluv == -1 ? a?.tsutsalsanUldegdel : 0)
+          );
+          const effB = Number(
+            b?.uldegdel ?? (b?.tuluv == -1 ? b?.tsutsalsanUldegdel : 0)
+          );
           return effA - effB;
         },
+      },
+      {
+        title: t("Бүртгэлийн дугаар"),
+        dataIndex: "customerTin",
+        width: "8rem",
+        align: "center",
+        ellipsis: true,
       },
       {
         width: "9rem",
@@ -904,10 +918,10 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
       ...turulColumns,
       {
         title: t("Үйлдэл"),
-        width: "10rem",
+        width: "15rem",
         align: "center",
+        fixed: "right",
         dataIndex: "baritsaaniiUldegdel",
-        ellipsis: true,
         render: (text, row) => {
           const khuvi =
             row.baritsaaAvakhDun > 0
