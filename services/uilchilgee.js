@@ -12,14 +12,14 @@ import { t } from "i18next";
 //     {
 //       transports: ["websocket"],
 //     },
-//   );
-
-// test rently
+  // );
+// test
 export const url = "http://103.143.40.175:8081";
 export const socket = () =>
   socketIOClient("http://103.143.40.175:8081", {
     transports: ["websocket"],
   });
+
 export const aldaaBarigch = (e) => {
   if (
     e?.response?.data?.offline ||
