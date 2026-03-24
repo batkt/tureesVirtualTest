@@ -1,7 +1,7 @@
 import Admin from "components/Admin";
 import GuidedTour from "components/GuidedTour";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import fsmApi from "services/fsmApi";
+import fsmApi, { FSM_BASE_URL_ZEV as FSM_BASE_URL } from "services/fsmApi";
 import { useAuth } from "services/auth";
 import { message, Form, Input, Spin } from "antd";
 import { useTranslation } from "react-i18next";
@@ -65,7 +65,7 @@ function Uilchluulegch() {
   
   const { token, barilgiinId, ajiltan } = useAuth();
   const baiguullagiinId = ajiltan?.baiguullagiinId;
-  const api = useMemo(() => fsmApi.withAuth(token), [token]);
+  const api = useMemo(() => fsmApi.withAuth(token, FSM_BASE_URL), [token, FSM_BASE_URL]);
 
   const fetchUsers = useCallback(async () => {
     if (!barilgiinId) return;
@@ -208,7 +208,7 @@ function Uilchluulegch() {
     fetchUserHistoryData(user._id);
   };
 
-  const { on, off, emit } = useFsmSocket();
+  const { on, off, emit } = useFsmSocket(null, null, null, FSM_BASE_URL);
 
   useEffect(() => {
     if (barilgiinId && emit) {

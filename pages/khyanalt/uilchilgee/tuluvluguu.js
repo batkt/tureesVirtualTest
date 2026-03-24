@@ -63,7 +63,7 @@ dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(isoWeek);
 import _ from "lodash";
-import fsmApi, { FSM_BASE_URL } from "services/fsmApi";
+import fsmApi, { FSM_BASE_URL_ZEV as FSM_BASE_URL } from "services/fsmApi";
 import { useAuth } from "services/auth";
 import useJagsaalt from "hooks/useJagsaalt";
 
@@ -77,7 +77,7 @@ function Tuluvluguu() {
   const { t } = useTranslation();
   const { token, barilgiinId, ajiltan } = useAuth();
   const baiguullagiinId = ajiltan?.baiguullagiinId;
-  const api = useMemo(() => fsmApi.withAuth(token), [token]);
+  const api = useMemo(() => fsmApi.withAuth(token, FSM_BASE_URL), [token, FSM_BASE_URL]);
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [view, setView] = useState("Month"); // Month, Week, Day, Agenda
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
@@ -330,7 +330,9 @@ function Tuluvluguu() {
 
   const { isConnected, socket: fsmSocket, onlineUsers: onlineUsersFromHook } = useFsmSocket(
     selectedTask ? (selectedTask.projectId || selectedTask.project) : null,
-    selectedTask ? (selectedTask.id || selectedTask._id) : null
+    selectedTask ? (selectedTask.id || selectedTask._id) : null,
+    null,
+    FSM_BASE_URL
   );
 
   useEffect(() => {

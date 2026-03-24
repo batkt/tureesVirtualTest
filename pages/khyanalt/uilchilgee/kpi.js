@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useFsmSocket } from "hooks/useFsmSocket";
 import { useAuth } from "services/auth";
-import fsmApi from "services/fsmApi";
+import fsmApi, { FSM_BASE_URL_ZEV as FSM_BASE_URL } from "services/fsmApi";
 import useJagsaalt from "hooks/useJagsaalt";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -77,8 +77,8 @@ function KPI() {
   const { token, barilgiinId, ajiltan } = useAuth();
   const baiguullagiinId = ajiltan?.baiguullagiinId;
   
-  const { isConnected, socket: fsmSocket } = useFsmSocket();
-  const api = useMemo(() => fsmApi.withAuth(token), [token]);
+  const { isConnected, socket: fsmSocket } = useFsmSocket(null, null, null, FSM_BASE_URL);
+  const api = useMemo(() => fsmApi.withAuth(token, FSM_BASE_URL), [token, FSM_BASE_URL]);
 
   const ajiltanJagsaalt = useJagsaalt("/ajiltan");
   const { jagsaalt: usersList, isValidating: loading, mutate: ajiltniiJagsaaltMutate } = ajiltanJagsaalt;

@@ -3,7 +3,7 @@ import { fsmSocket } from 'services/fsmApi';
 import { useAuth } from 'services/auth';
 import { toast } from 'sonner';
 
-export const useFsmSocket = (projectId = null, taskId = null, barilgiinId = null) => {
+export const useFsmSocket = (projectId = null, taskId = null, barilgiinId = null, baseURL = null) => {
   const { ajiltan } = useAuth();
   const socketRef = useRef(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -12,7 +12,7 @@ export const useFsmSocket = (projectId = null, taskId = null, barilgiinId = null
   useEffect(() => {
     if (!ajiltan?._id) return;
 
-    const socket = fsmSocket();
+    const socket = fsmSocket(baseURL || undefined);
     socketRef.current = socket;
 
     socket.on('connect', () => {

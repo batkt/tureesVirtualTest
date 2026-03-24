@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import dayjs from "dayjs";
 import "dayjs/locale/mn";
 dayjs.locale("mn");
-import fsmApi, { FSM_BASE_URL } from "services/fsmApi";
+import fsmApi, { FSM_BASE_URL_ZEV as FSM_BASE_URL } from "services/fsmApi";
 import { useAuth } from "services/auth";
 import { message, Form, Input, InputNumber, Modal, DatePicker, Tooltip, Popconfirm, Spin, AutoComplete, Table, Card, Tag } from "antd";
 import { useTranslation } from "react-i18next";
@@ -113,7 +113,7 @@ function BaraaMaterial() {
   const [projectForm] = Form.useForm();
   const [loadingHistory, setLoadingHistory] = useState(false);
   const baiguullagiinId = ajiltan?.baiguullagiinId;
-  const api = useMemo(() => fsmApi.withAuth(token), [token]);
+  const api = useMemo(() => fsmApi.withAuth(token, FSM_BASE_URL), [token, FSM_BASE_URL]);
   const ajiltanJagsaalt = useJagsaalt("/ajiltan");
   const [history, setHistory] = useState([]);
   const [usageStats, setUsageStats] = useState([]);
@@ -391,8 +391,11 @@ function BaraaMaterial() {
     }
   }, [api, baiguullagiinId, barilgiinId]);
 
-  const { isConnected, socket: fsmSocket } = useFsmSocket(
-    selectedProjectForChat ? (selectedProjectForChat.id || selectedProjectForChat._id) : null
+  const { isConnected: isChatConnected, socket: fsmSocket } = useFsmSocket(
+    selectedProjectForChat ? (selectedProjectForChat.id || selectedProjectForChat._id) : null,
+    null,
+    null,
+    FSM_BASE_URL
   );
 
   useEffect(() => {
@@ -516,7 +519,7 @@ function BaraaMaterial() {
     setTimeout(() => { options.onSuccess('ok'); }, 100);
   };
 
-  const { socket } = useFsmSocket();
+  const { isConnected, socket } = useFsmSocket(null, null, null, FSM_BASE_URL);
 
   const usageMap = useMemo(() => {
     const map = {};

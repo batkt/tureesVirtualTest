@@ -2,7 +2,7 @@ import Admin from "components/Admin";
 import GuidedTour from "components/GuidedTour";
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { createPortal } from 'react-dom';
-import fsmApi, { FSM_BASE_URL } from "services/fsmApi";
+import fsmApi, { FSM_BASE_URL_ZEV as FSM_BASE_URL } from "services/fsmApi";
 import { useAuth } from "services/auth";
 import { useTranslation } from "react-i18next";
 import useJagsaalt from "hooks/useJagsaalt";
@@ -161,7 +161,7 @@ function Khynalt() {
   
   const { token, barilgiinId, ajiltan } = useAuth();
   const baiguullagiinId = ajiltan?.baiguullagiinId;
-  const api = useMemo(() => fsmApi.withAuth(token), [token]);
+  const api = useMemo(() => fsmApi.withAuth(token, FSM_BASE_URL), [token, FSM_BASE_URL]);
 
   const fetchData = useCallback(async () => {
     if (!barilgiinId) return;
@@ -213,7 +213,8 @@ function Khynalt() {
   const { isConnected, socket: fsmSocket } = useFsmSocket(
     selectedProjectForChat ? (selectedProjectForChat.id || selectedProjectForChat._id) : null,
     null,
-    barilgiinId
+    barilgiinId,
+    FSM_BASE_URL
   );
 
   const fetchProjectChatHistory = useCallback(async (projectId) => {

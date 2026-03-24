@@ -3937,6 +3937,26 @@ function camera({ token }) {
                       PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
                     />
                   )
+                ) : baiguullaga?._id === "6715ef2ca5cefb3e54505428" &&  //gegeenten
+                  barilgiinId === "69bbd7ccacd5dafa46593dc6" ? (
+                  camerVal[0] === "192.168.2.155" ||
+                  camerVal[0] === "192.168.2.156" ? (
+                    <R2WPlayerComponent
+                      USER={"admin"}
+                      ROOT={"live"}
+                      PASSWD={"admin123"}
+                      Camer={camerVal[0]}
+                      PORT={554}
+                    />
+                  ) : (
+                    <R2WPlayerComponent
+                      USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                      Camer={camerVal[0]}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                    />
+                  )
                 ) : baiguullaga?._id === "671f0d5d53b82cbedf0f81a3" &&
                   barilgiinId === "671f0d5d53b82cbedf0f81a4" ? (
                   camerVal[0] === "192.168.1.155" ||
@@ -4161,6 +4181,17 @@ function camera({ token }) {
                     USER={"admin"}
                     ROOT={"live"}
                     PASSWD={"Admin123"}
+                    Camer={camerVal[1]}
+                    PORT={554}
+                  />
+                ) : baiguullaga?._id === "6715ef2ca5cefb3e54505428" &&
+                  barilgiinId === "69bbd7ccacd5dafa46593dc6" &&
+                  (camerVal[1] === "192.168.2.155" ||
+                    camerVal[1] === "192.168.2.156") ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    ROOT={"live"}
+                    PASSWD={"admin123"}
                     Camer={camerVal[1]}
                     PORT={554}
                   />
