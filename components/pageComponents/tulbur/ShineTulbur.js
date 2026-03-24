@@ -44,7 +44,7 @@ function ShineTulbur(
     updateOfflineItem,
     isActuallyOffline: isActuallyOfflineProp,
   },
-  ref
+  ref,
 ) {
   const isNavigatorOffline =
     typeof navigator !== "undefined" ? !navigator.onLine : false;
@@ -55,7 +55,7 @@ function ShineTulbur(
 
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
-    !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
+    !!data?.tuluv && data?.tuluv === 1 ? 2 : 1,
   );
   const [isProcessing, setIsProcessing] = useState(false);
   const [khaanbank, setTerminal] = React.useState(false);
@@ -85,8 +85,8 @@ function ShineTulbur(
     Math.max(
       0,
       (niitDun || 0) -
-        (data?.tulbur?.reduce((a, b) => a + (Number(b?.dun) || 0), 0) || 0)
-    )
+        (data?.tulbur?.reduce((a, b) => a + (Number(b?.dun) || 0), 0) || 0),
+    ),
   );
 
   const khungulultAnkhOrjIrsen = useMemo(() => {
@@ -132,7 +132,7 @@ function ShineTulbur(
     () => ({
       khaaya,
     }),
-    [khaaya]
+    [khaaya],
   );
 
   const value = React.useMemo(() => {
@@ -181,7 +181,7 @@ function ShineTulbur(
 
       const currentTotal = tulbur.reduce(
         (a, b) => a + (Number(b?.dun) || 0),
-        0
+        0,
       );
       const targetAmount = niitDun || data?.tulukhDun || 0;
 
@@ -344,7 +344,7 @@ function ShineTulbur(
     });
     const tulukhGejBuiNiitDun = tulbur.reduce(
       (a, b) => a + (Number(b?.dun) || 0),
-      0
+      0,
     );
     const khungulultDun = tulbur
       .filter(
@@ -353,7 +353,7 @@ function ShineTulbur(
           Number(a.dun) > 0 &&
           (a.turul == "khungulult" ||
             (typeof a.turul === "string" &&
-              a.turul.toLowerCase().startsWith("ugaalga")))
+              a.turul.toLowerCase().startsWith("ugaalga"))),
       )
       .reduce((a, b) => a + (Number(b?.dun) || 0), 0);
 
@@ -366,7 +366,7 @@ function ShineTulbur(
           !(
             typeof a.turul === "string" &&
             a.turul.toLowerCase().startsWith("ugaalga")
-          )
+          ),
       )
       .reduce((a, b) => a + (Number(b?.dun) || 0), 0);
 
@@ -391,7 +391,7 @@ function ShineTulbur(
       };
       try {
         const stored = JSON.parse(
-          localStorage.getItem("cameraPendingUpdates") || "[]"
+          localStorage.getItem("cameraPendingUpdates") || "[]",
         );
         stored.push(pendingPayment);
         localStorage.setItem("cameraPendingUpdates", JSON.stringify(stored));
@@ -401,13 +401,13 @@ function ShineTulbur(
         updateOfflineItem(uilchluugchiinId, (item) => ({
           ...item,
           tuukh: item.tuukh?.map((t, idx) =>
-            idx === 0 ? { ...t, tuluv: 1, tulbur: yavuulakhTulbur } : t
+            idx === 0 ? { ...t, tuluv: 1, tulbur: yavuulakhTulbur } : t,
           ),
         }));
       }
 
       toast.success(
-        t("Оффлайнд хадгаллаа. Сүлжээнд холбогдох үед синк хийгдэнэ.")
+        t("Оффлайнд хадгаллаа. Сүлжээнд холбогдох үед синк хийгдэнэ."),
       );
       ebarimtguiTulburDuusgakh();
       setLoading(false);
@@ -496,7 +496,7 @@ function ShineTulbur(
   async function batalgaajuulaltKhiiya(
     qpayTulugdsun,
     garaasSongosonTurul,
-    ebarimtShuud = false
+    ebarimtShuud = false,
   ) {
     if (loading) return;
 
@@ -522,7 +522,7 @@ function ShineTulbur(
               vatps_bill_type: "1",
             },
           },
-          { timeout: 4000000 }
+          { timeout: 4000000 },
         )
         .then(({ data }) => {
           if (data.status === true && data?.response?.response_code === "000") {
@@ -593,9 +593,9 @@ function ShineTulbur(
       setTurulruuKhiikhDun(Math.max(0, Number(newUneValue) || 0).toString());
       setRefreshdekhEsekh(false);
     } else {
-      setTurulruuKhiikhDun(
-        Math.max(0, Number(turulruuKhiikhDun) + Number(newUneValue))
-      );
+      const current =
+        turulruuKhiikhDun === "0" ? "" : turulruuKhiikhDun.toString();
+      setTurulruuKhiikhDun(current + newUneValue.toString());
     }
   };
 
@@ -605,7 +605,7 @@ function ShineTulbur(
       setRefreshdekhEsekh(false);
     } else {
       setTurulruuKhiikhDun(
-        Math.max(0, parseInt(turulruuKhiikhDun) + parseInt(newUneValue))
+        Math.max(0, parseInt(turulruuKhiikhDun) + parseInt(newUneValue)),
       );
     }
   };
@@ -635,7 +635,7 @@ function ShineTulbur(
           setSongogdsonBank(null);
         }
         setTurulruuKhiikhDun((e) =>
-          Math.max(0, parseInt(e) + (Number(tukhainTulbur?.dun) || 0))
+          Math.max(0, parseInt(e) + (Number(tukhainTulbur?.dun) || 0)),
         );
         tulbur.splice(index, 1);
       } else {
@@ -675,7 +675,7 @@ function ShineTulbur(
           setTurulruuKhiikhDun(key.toString());
         } else {
           setTurulruuKhiikhDun(
-            (turulruuKhiikhDun?.toString() || "") + key.toString()
+            (turulruuKhiikhDun?.toString() || "") + key.toString(),
           );
         }
       }
@@ -779,7 +779,7 @@ function ShineTulbur(
                       eBarimt.status == "SUCCESS"
                         ? eBarimt?.totalAmount - eBarimt?.totalVAT
                         : eBarimt?.amount - eBarimt?.vat,
-                      2
+                      2,
                     )}
                     ₮
                   </p>
@@ -791,7 +791,7 @@ function ShineTulbur(
                       eBarimt.status == "SUCCESS"
                         ? eBarimt?.totalVAT
                         : eBarimt?.vat,
-                      2
+                      2,
                     )}
                     ₮
                   </p>
@@ -802,7 +802,7 @@ function ShineTulbur(
                     {formatNumber(
                       eBarimt.status == "SUCCESS"
                         ? eBarimt?.totalAmount
-                        : eBarimt?.amount
+                        : eBarimt?.amount,
                     )}
                     ₮
                   </p>
@@ -850,7 +850,7 @@ function ShineTulbur(
                 <p className="text-right">
                   {data?.tsagiinTuukh?.[0]?.orsonTsag &&
                     moment(data?.tsagiinTuukh[0]?.orsonTsag).format(
-                      "YYYY-MM-DD HH:mm"
+                      "YYYY-MM-DD HH:mm",
                     )}
                 </p>
               </div>
@@ -859,7 +859,7 @@ function ShineTulbur(
                 <p className="text-right">
                   {data?.tsagiinTuukh?.[0]?.garsanTsag &&
                     moment(data?.tsagiinTuukh[0]?.garsanTsag).format(
-                      "YYYY-MM-DD HH:mm"
+                      "YYYY-MM-DD HH:mm",
                     )}
                 </p>
               </div>
@@ -1126,9 +1126,9 @@ function ShineTulbur(
                       (niitDun || 0) -
                         (tulbur?.reduce(
                           (a, b) => a + (Number(b?.dun) || 0),
-                          0
-                        ) || 0)
-                    )
+                          0,
+                        ) || 0),
+                    ),
                   )
                 }
                 className="flex h-[53px] w-[256px] cursor-pointer items-center justify-center rounded-full  border-[1px] border-green-600"
@@ -1219,7 +1219,7 @@ function ShineTulbur(
                 <div
                   onClick={() =>
                     setTurulruuKhiikhDun(
-                      turulruuKhiikhDun.toString().slice(0, -1)
+                      turulruuKhiikhDun.toString().slice(0, -1),
                     )
                   }
                   style={{ backgroundColor: "rgba(255, 70, 70, 0.1)" }}
@@ -1259,10 +1259,10 @@ function ShineTulbur(
                                     (typeof a.turul === "string" &&
                                       a.turul
                                         .toLowerCase()
-                                        .startsWith("ugaalga")))
+                                        .startsWith("ugaalga"))),
                               )
-                              .reduce((a, b) => a + (Number(b?.dun) || 0), 0)
-                        )
+                              .reduce((a, b) => a + (Number(b?.dun) || 0), 0),
+                        ),
                       )}
                       ₮
                     </div>
@@ -1290,9 +1290,9 @@ function ShineTulbur(
                           ((niitDun || 0) -
                             (tulbur.reduce(
                               (a, b) => a + (Number(b?.dun) || 0),
-                              0
-                            ) || 0))
-                      )
+                              0,
+                            ) || 0)),
+                      ),
                     )}
                     ₮
                   </div>
