@@ -386,7 +386,7 @@ function TulburiinDelgerenguiTailan(
           case "qpay":
             item = {
               ner: "QPay",
-              icon: "/qpay.png",
+              icon: "/Rectangle56.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
