@@ -707,10 +707,10 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
         render: (text, record, index) => index + 1,
       },
       {
-        width: "7rem",
+        width: 100,
         align: "center",
         fixed: "left",
-        title: t("Регистр"),
+        title: "РД",
         dataIndex: "register",
       },
       {
@@ -719,12 +719,22 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
         ellipsis: true,
         align: "center",
         fixed: "left",
-        width: "6rem",
+        width: 96,
         showSorterTooltip: false,
         sorter: () => 0,
+        render: (data) => {
+          const list = Array.isArray(data) ? data : data != null ? [data] : [];
+          if (list.length === 0) return null;
+          const label = list.join(", ");
+          return (
+            <Tooltip placement="top" title={<div style={{ maxWidth: 300 }}>{label}</div>}>
+              <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 80, margin: "0 auto" }}>{label}</div>
+            </Tooltip>
+          );
+        },
       },
       {
-        width: "8rem",
+        width: 130,
         align: "center",
         fixed: "left",
         title: t("Нэр"),
@@ -736,7 +746,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
         ellipsis: true,
         align: "center",
         fixed: "left",
-        width: "7rem",
+        width: 100,
         render(data) {
           if (data && data.length > 1) {
             return (
@@ -779,7 +789,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
       },
       {
         title: t("Үлдэгдэл"),
-        width: "8rem",
+        width: 150,
         dataIndex: "uldegdel",
         align: "center",
         fixed: "left",
@@ -1200,7 +1210,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
     modal({
       title: t("Гүйлгээ хийх"),
       icon: <FileExcelOutlined />,
-      width: "650px",
+      width: "700px",
       content: (
         <GuilgeeKhiikh
           khadgalyaButtonId={khadgalyaButtonId}

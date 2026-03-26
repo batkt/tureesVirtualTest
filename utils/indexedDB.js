@@ -103,24 +103,53 @@ export async function deleteOfflinePayment(id) {
   }
 }
 
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
 // Generic cache helpers for list/data caching
+// setCache is intentionally disabled — no new data is written to the cache store
 export async function setCache(key, value) {
-  try {
-    const db = await openDB();
-    const wrapped = { value, savedAt: new Date().toISOString() };
-    await db.put(STORES.CACHE, wrapped, key);
-  } catch (error) {
-    throw error;
-  }
+  // No-op: caching disabled
 }
 
 export async function getCache(key) {
   try {
     const db = await openDB();
     const wrapped = await db.get(STORES.CACHE, key);
-    return wrapped ? wrapped.value : null;
+    if (!wrapped) return null;
+
+    // Expire entries older than 24 hours
+    if (wrapped.savedAt) {
+      const age = Date.now() - new Date(wrapped.savedAt).getTime();
+      if (age > CACHE_TTL_MS) {
+        // Delete the stale entry and return null so fresh data is fetched
+        await db.delete(STORES.CACHE, key);
+        return null;
+      }
+    }
+
+    return wrapped.value;
   } catch (error) {
     return null;
+  }
+}
+
+/** Removes all cache entries that are older than 24 hours. */
+export async function clearExpiredCache() {
+  try {
+    const db = await openDB();
+    const allKeys = await db.getAllKeys(STORES.CACHE);
+    const now = Date.now();
+    for (const key of allKeys) {
+      const wrapped = await db.get(STORES.CACHE, key);
+      if (wrapped?.savedAt) {
+        const age = now - new Date(wrapped.savedAt).getTime();
+        if (age > CACHE_TTL_MS) {
+          await db.delete(STORES.CACHE, key);
+        }
+      }
+    }
+  } catch (error) {
+    console.error("[clearExpiredCache] Error:", error);
   }
 }
 
@@ -146,7 +175,9 @@ export async function searchCacheByPrefix(prefix) {
 
     if (matchingKeys.length === 0) return null;
 
-    // Find the most recent cache entry
+    const now = Date.now();
+
+    // Find the most recent cache entry that is still within 24h TTL
     let bestValue = null;
     let bestDate = null;
 
@@ -154,6 +185,8 @@ export async function searchCacheByPrefix(prefix) {
       const wrapped = await db.get(STORES.CACHE, key);
       if (wrapped?.value) {
         const savedAt = wrapped.savedAt ? new Date(wrapped.savedAt) : null;
+        // Skip expired entries
+        if (savedAt && now - savedAt.getTime() > CACHE_TTL_MS) continue;
         if (!bestDate || (savedAt && savedAt > bestDate)) {
           bestDate = savedAt;
           bestValue = wrapped.value;
@@ -168,4 +201,4 @@ export async function searchCacheByPrefix(prefix) {
   }
 }
 
-export { STORES };
+export { STORES, CACHE_TTL_MS };

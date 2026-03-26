@@ -65,6 +65,8 @@ function GuilgeeKhiikh(
   const [ashiglaltiinId, setAshiglaltiinId] = React.useState(undefined);
   const [ashiglaltiinNer, setAshiglaltiinNer] = React.useState(undefined);
   const [loading, setLoading] = useState(false);
+  const [teglekhLoading, setTeglekhLoading] = useState(false);
+  const [teglekhDone, setTeglekhDone] = useState(false);
 
   const [busadTurul, setBusadTurul] = useState();
   const [zardliinTurul, setZardliinTurul] = useState();
@@ -374,6 +376,9 @@ function GuilgeeKhiikh(
           default:
             break;
         }
+       
+        if (turul === "teglekh") return;
+
         const saveButton = document.getElementById(khadgalyaButtonId);
         saveButton?.setAttribute("disabled", true);
         if (loading) return; 
@@ -524,6 +529,7 @@ function GuilgeeKhiikh(
     const ankhanOgnoo = ognoo;
     setTurul(e.target.value);
     setTureesEkhniiUldegdelEsekh(false);
+    setTeglekhDone(false);
 
     if (e.target.value === "ashiglalt" || e.target.value === "torguuli") {
       setOgnoo(moment());
@@ -551,12 +557,13 @@ function GuilgeeKhiikh(
             setTailbar("");
           }}
           value={turul}
-          className="flex w-full flex-wrap items-center gap-4"
+          className="flex w-full flex-wrap items-center gap-2 text-sm"
         >
           <Radio value={"voucher"}>{t("Ваучераар")}</Radio>
           <Radio value={"avlaga"}>{t("Авлага")}</Radio>
           <Radio value={"torguuli"}>{t("Торгууль")}</Radio>
           <Radio value={"ashiglalt"}>{t("Ашиглалт")}</Radio>
+          <Radio value={"teglekh"}>{t("Заалт тэглэх")}</Radio>
           <Radio value={"busad"}>{t("Бусад")} </Radio>
         </Radio.Group>
       </div>
@@ -712,6 +719,98 @@ function GuilgeeKhiikh(
           </div>
         </div>
       )}
+      {turul === "teglekh" && (() => {
+        // Find the latest Цахилгаан guilgee that has a suuliinZaalt
+        const tsakhilgaanGuilgeenuud = Array.isArray(guilgeeniiTuukh)
+          ? guilgeeniiTuukh.filter(
+              (x) =>
+                x?.tailbar?.includes("Цахилгаан") &&
+                x?.suuliinZaalt != null
+            )
+          : [];
+        const suuliinGuilgee =
+          tsakhilgaanGuilgeenuud.length > 0
+            ? tsakhilgaanGuilgeenuud[tsakhilgaanGuilgeenuud.length - 1]
+            : null;
+
+        async function doTeglekh() {
+          if (!suuliinGuilgee?._id || teglekhLoading) return;
+          setTeglekhLoading(true);
+          try {
+            await uilchilgee(token).post("/zaaltTeglekh", {
+              guilgeeniiId: suuliinGuilgee._id,
+              gereeniiId: data?._id,
+            });
+            notification.success({ message: t("Заалт амжилттай тэглэгдлээ") });
+            guilgeeniiTuukhMutate();
+            setTeglekhDone(true);
+            _.isFunction(data.mutate) && data.mutate();
+          } catch (err) {
+            aldaaBarigch(err);
+          } finally {
+            setTeglekhLoading(false);
+          }
+        }
+
+        return (
+          <div className="flex flex-col gap-3">
+            {suuliinGuilgee ? (
+              <>
+                <div className="rounded-lg border border-dashed border-amber-400 bg-amber-50 dark:bg-amber-900/20 p-4 flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">{t("Сүүлийн гүйлгээ")}</span>
+                    <span className="text-xs text-gray-400">
+                      {suuliinGuilgee.ognoo
+                        ? moment(suuliinGuilgee.ognoo).format("YYYY-MM-DD")
+                        : ""}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium dark:text-gray-200">{t("Тайлбар")}:</span>
+                    <span className="text-sm dark:text-gray-200">{suuliinGuilgee.tailbar}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium dark:text-gray-200">{t("Өмнөх заалт")}:</span>
+                    <span className="text-sm dark:text-gray-200">
+                      {teglekhDone ? (
+                        <span className="text-red-500 font-bold">0</span>
+                      ) : (
+                        formatNumber(suuliinGuilgee.umnukhZaalt ?? 0)
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium dark:text-gray-200">{t("Сүүлийн заалт")}:</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">
+                      {formatNumber(suuliinGuilgee.suuliinZaalt ?? 0)}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  disabled={teglekhDone || teglekhLoading}
+                  onClick={doTeglekh}
+                  className={`w-full rounded-lg py-2 px-4 font-medium transition-all ${
+                    teglekhDone
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-red-500 hover:bg-red-600 text-white"
+                  }`}
+                >
+                  {teglekhLoading
+                    ? t("Түр хүлээнэ үү...")
+                    : teglekhDone
+                    ? t("Тэглэгдсэн")
+                    : t("Тэглэх")}
+                </button>
+              </>
+            ) : (
+              <div className="text-center text-gray-400 py-6">
+                {t("Цахилгааны заалттай гүйлгээ олдсонгүй")}
+              </div>
+            )}
+          </div>
+        );
+      })()}
       {turul === "busad" && (
         <Select
           id="select"

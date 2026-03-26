@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { AuthProvider } from "../services/auth";
 import { ThemeProvider } from "next-themes";
+import { clearExpiredCache } from "../utils/indexedDB";
 import { ConfigProvider } from "antd";
 import mnMN from "antd/lib/locale/mn_MN";
 import moment from "moment";
@@ -57,6 +58,8 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     // Load AOS on client side only
     loadAOS();
+    // Purge IndexedDB cache entries older than 24 hours on every app init
+    clearExpiredCache().catch(() => {});
   }, []);
 
   return (

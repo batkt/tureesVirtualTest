@@ -332,23 +332,9 @@ self.addEventListener("fetch", (event) => {
           );
         }
       } else {
+        // Cache saving disabled — always use network, no cache fallback for GETs
         return networkWithTimeout(event.request)
-          .then((response) => {
-            if (response.ok) {
-              const clone = response.clone();
-              caches
-                .open(API_CACHE_NAME)
-                .then((cache) => cache.put(event.request, clone));
-            }
-            return response;
-          })
-          .catch(async () => {
-            const cachedResponse = await caches.match(event.request);
-            if (cachedResponse) {
-              return cachedResponse;
-            }
-            return new Response("Интернет салсан байна", { status: 503 });
-          });
+          .catch(() => new Response("Интернет салсан байна", { status: 503 }));
       }
     })()
   );
