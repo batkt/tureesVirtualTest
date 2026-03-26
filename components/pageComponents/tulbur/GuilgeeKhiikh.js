@@ -67,6 +67,7 @@ function GuilgeeKhiikh(
   const [loading, setLoading] = useState(false);
   const [teglekhLoading, setTeglekhLoading] = useState(false);
   const [teglekhDone, setTeglekhDone] = useState(false);
+  const [teglekhOriginalZaalt, setTeglekhOriginalZaalt] = useState(null);
 
   const [busadTurul, setBusadTurul] = useState();
   const [zardliinTurul, setZardliinTurul] = useState();
@@ -720,7 +721,7 @@ function GuilgeeKhiikh(
         </div>
       )}
       {turul === "teglekh" && (() => {
-        // Find the latest Цахилгаан guilgee that has a suuliinZaalt
+      
         const tsakhilgaanGuilgeenuud = Array.isArray(guilgeeniiTuukh)
           ? guilgeeniiTuukh.filter(
               (x) =>
@@ -735,6 +736,8 @@ function GuilgeeKhiikh(
 
         async function doTeglekh() {
           if (!suuliinGuilgee?._id || teglekhLoading) return;
+        
+          const originalZaalt = suuliinGuilgee.suuliinZaalt ?? 0;
           setTeglekhLoading(true);
           try {
             await uilchilgee(token).post("/zaaltTeglekh", {
@@ -742,6 +745,7 @@ function GuilgeeKhiikh(
               gereeniiId: data?._id,
             });
             notification.success({ message: t("Заалт амжилттай тэглэгдлээ") });
+            setTeglekhOriginalZaalt(originalZaalt);
             guilgeeniiTuukhMutate();
             setTeglekhDone(true);
             _.isFunction(data.mutate) && data.mutate();
@@ -756,7 +760,7 @@ function GuilgeeKhiikh(
           <div className="flex flex-col gap-3">
             {suuliinGuilgee ? (
               <>
-                <div className="rounded-lg border border-dashed border-amber-400 bg-amber-50 dark:bg-amber-900/20 p-4 flex flex-col gap-2">
+                <div className="rounded-lg border border-dashed border-gray-400 bg-gray-50 dark:bg-gray-900/20 p-4 flex flex-col gap-2">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500 dark:text-gray-400">{t("Сүүлийн гүйлгээ")}</span>
                     <span className="text-xs text-gray-400">
@@ -772,17 +776,19 @@ function GuilgeeKhiikh(
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium dark:text-gray-200">{t("Өмнөх заалт")}:</span>
                     <span className="text-sm dark:text-gray-200">
-                      {teglekhDone ? (
-                        <span className="text-red-500 font-bold">0</span>
-                      ) : (
-                        formatNumber(suuliinGuilgee.umnukhZaalt ?? 0)
-                      )}
+                      {teglekhDone
+                        ? <span className="font-semibold">{formatNumber(teglekhOriginalZaalt ?? 0)}</span>
+                        : formatNumber(suuliinGuilgee.umnukhZaalt ?? 0)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium dark:text-gray-200">{t("Сүүлийн заалт")}:</span>
                     <span className="font-bold text-blue-600 dark:text-blue-400">
-                      {formatNumber(suuliinGuilgee.suuliinZaalt ?? 0)}
+                      {teglekhDone ? (
+                        <span className="text-red-500 font-bold">0</span>
+                      ) : (
+                        formatNumber(suuliinGuilgee.suuliinZaalt ?? 0)
+                      )}
                     </span>
                   </div>
                 </div>
@@ -792,15 +798,15 @@ function GuilgeeKhiikh(
                   onClick={doTeglekh}
                   className={`w-full rounded-lg py-2 px-4 font-medium transition-all ${
                     teglekhDone
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      ? "bg-red-100 text-gray-800 cursor-not-allowed"
                       : "bg-red-500 hover:bg-red-600 text-white"
                   }`}
                 >
                   {teglekhLoading
                     ? t("Түр хүлээнэ үү...")
                     : teglekhDone
-                    ? t("Тэглэгдсэн")
-                    : t("Тэглэх")}
+                    ? t("Заалт тэглэгдсэн")
+                    : t("Заалт тэглэх")}
                 </button>
               </>
             ) : (
@@ -1001,7 +1007,7 @@ function GuilgeeKhiikh(
             />
           </div>
         </div>
-      ) : (
+      ) : turul === "teglekh" ? null : (
         <InputNumber
           onKeyDown={focuser}
           id="guilgeeDunInputNumber"
