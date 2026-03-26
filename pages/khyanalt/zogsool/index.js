@@ -1715,13 +1715,28 @@ function Zogsool({ token }) {
         title: t("И-Баримт"),
         align: "right",
         width: "9rem",
-        dataIndex: "ebarimtAvsanDun",
+        dataIndex: "ebarimtAvakhDun",
         showSorterTooltip: false,
         sorter: () => 0,
-        render(v, parents) {
-          return v && formatNumber(v, 0);
+        render(v, record) {
+          const avakh = v;
+          const avsan = record?.ebarimtAvsanDun;
+
+          if (!avakh && !avsan) return null;
+
+          return (
+            <div className="flex flex-col items-end">
+              {avakh && <span>{formatNumber(avakh, 0)}</span>}
+              {avsan && (
+                <span className="text-xs text-gray-400">
+                  {formatNumber(avsan, 0)}
+                </span>
+              )}
+            </div>
+          );
         },
       },
+
       {
         title: (
           <Popover
