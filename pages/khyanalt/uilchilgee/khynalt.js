@@ -513,11 +513,11 @@ function Khynalt() {
     }).length;
     
     return [
-      { title: "Өнөөдрийн ажил", value: tasksToday.length.toString() },
-      { title: "Дууссан (Өнөөдөр)", value: doneToday.toString() },
-      { title: "Бараа материал", value: baraas.length.toString() },
-      { title: "Яаралтай", value: tasksToday.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
       { title: "Нийт ажил", value: tasks.length.toString() },
+      { title: "Өнөөдрийн ажил", value: tasksToday.length.toString() },
+      { title: "Яаралтай ажил", value: tasksToday.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
+      { title: "Дууссан", value: doneToday.toString() },
+      { title: "Бараа материал", value: baraas.length.toString() },
     ];
   }, [tasks, baraas, isTaskOnDay]);
 

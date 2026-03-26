@@ -14,6 +14,7 @@ import {
   DownOutlined,
   QuestionCircleOutlined,
   CheckOutlined,
+  TeamOutlined,
   ClockCircleOutlined,
   CheckCircleFilled,
   CloseOutlined,
@@ -123,6 +124,7 @@ function Tuluvluguu() {
   const socketRef = useRef(null);
   const messagesEndRef = useRef(null);
   const projectChatEndRef = useRef(null);
+  const urlProcessedTaskRef = useRef(null);
   const [taskImages, setTaskImages] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
@@ -210,6 +212,18 @@ function Tuluvluguu() {
   const getTaskPosition = (task, viewDay, colIndex = 0, totalCols = 1) => {
     let start = dayjs(task.ekhlekhTsag || task.duusakhTsag);
     let end = dayjs(task.duusakhTsag || task.ekhlekhTsag);
+    
+    // For looping tasks, we format their start/end specifically to viewDay
+    if (task.isLoop === true || task.isLoop === 'true') {
+        const startH = start.isValid() ? start.hour()   : 9;
+        const startM = start.isValid() ? start.minute() : 0;
+        const endH   = end.isValid()   ? end.hour()     : 18;
+        const endM   = end.isValid()   ? end.minute()   : 0;
+        
+        start = dayjs(viewDay).startOf('day').hour(startH).minute(startM);
+        end   = dayjs(viewDay).startOf('day').hour(endH).minute(endM);
+        if (end.isBefore(start)) end = end.add(1, 'day');
+    }
     if (!start.isValid() || !end.isValid()) return {};
     const dayStart = dayjs(viewDay).startOf('day');
     const dayEnd = dayjs(viewDay).endOf('day');
@@ -345,20 +359,47 @@ function Tuluvluguu() {
 
   const teamMembers = useMemo(() => {
     return allEmployees.map(a => {
-      const kpiInfo = companyKpis.find(k => k._id === a._id || k.ajiltniiId === a._id);
+      const aId = a._id || a.id;
+      const kpiInfo = companyKpis.find(k => k._id === aId || k.ajiltniiId === aId);
+      
+      const memberTasks = tasks.filter(t =>
+        t.hariutsagchId === aId || 
+        (Array.isArray(t.ajiltnuud) && t.ajiltnuud.some(uid => uid === aId)) ||
+        t.user?._id === aId
+      );
+      
+      const doneCount = memberTasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'shalga').length;
+      const activeCount = memberTasks.filter(t => t.tuluv === 'khiigdej bui').length;
+      const overdueCount = memberTasks.filter(t => 
+        t.tuluv !== 'duussan' && 
+        t.tuluv !== 'shalga' &&
+        (t.khugatsaaDuusakhOgnoo || t.duusakhTsag) && 
+        dayjs(t.khugatsaaDuusakhOgnoo || t.duusakhTsag).isBefore(dayjs(), 'day')
+      ).length;
+      const remainingCount = Math.max(memberTasks.length - doneCount - activeCount - overdueCount, 0);
+      
+      const scoredTasks = memberTasks.filter(t => t.onooson != null);
+      const dynamicAvg = scoredTasks.length > 0 
+        ? (scoredTasks.reduce((acc, t) => acc + t.onooson, 0) / scoredTasks.length).toFixed(1)
+        : (kpiInfo?.kpiDundaj || 0);
+
       return {
-        id: a._id,
-        name: a.ner || a.nevtrekhNer,
+        id: aId,
+        name: a.ner || a.nevtrekhNer || "Ажилтан",
         role: a.albanTushaal || a.erkh || "Ажилтан",
-        online: onlineUsers[a._id] === 'online',
         kpi: kpiInfo?.kpiHuvv || 0,
         kpiOnoo: kpiInfo?.kpiOnoo || 0,
-        kpiDaalgavarToo: kpiInfo?.kpiDaalgavarToo || 0,
-        kpiDundaj: kpiInfo?.kpiDundaj || 0,
-        lastShineelsn: kpiInfo?.kpiShineelsenOgnoo
+        kpiDaalgavarToo: doneCount,
+        kpiDundaj: dynamicAvg,
+        lastShineelsn: kpiInfo?.kpiShineelsenOgnoo,
+        doneCount,
+        activeCount,
+        overdueCount,
+        remainingCount,
+        totalTasks: memberTasks.length
       };
-    });
-  }, [allEmployees, onlineUsers, companyKpis]);
+    }) || [];
+  }, [allEmployees, tasks, companyKpis]);
 
 
   const fetchProjects = useCallback(async () => {
@@ -895,7 +936,7 @@ function Tuluvluguu() {
       { title: t("Сонгосон ажил"), value: filteredTasks.length.toString() },
       { title: t("Дууссан"), value: filteredTasks.filter(t => t.tuluv === "duussan" || t.tuluv === "shalga").length.toString() },
       { title: t("Хэтэрсэн"), value: overdueCount.toString() },
-      { title: t("Яаралтай"), value: filteredTasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
+      // { title: t("Яаралтай"), value: filteredTasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
       { 
         title: t("Гүйцэтгэл"), 
         value: companyKpis.length > 0 
@@ -919,6 +960,7 @@ useEffect(() => {
           if (pId && !selectedProjectIds.includes(pId)) {
             setSelectedProjectIds(prev => [...prev, pId]);
           }
+          urlProcessedTaskRef.current = taskId;
         }
       } else if (projectId) {
         if (!selectedProjectIds.includes(projectId)) {
@@ -1574,7 +1616,7 @@ useEffect(() => {
       <div className="col-span-12 flex flex-col xl:flex-row h-auto xl:h-H8HalfRem w-full -mx-0 xl:-mx-1 -mt-2 text-black lg:rounded-2xl shadow-2xl relative animate-entrance">
         <div className="flex-1 flex flex-col p-4 overflow-hidden relative min-w-0">
         
-        <div id="cal-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-6 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
+        <div id="cal-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
           {statCards.map((card, index) => (
             <div
               key={index}
@@ -1762,6 +1804,7 @@ useEffect(() => {
                                   <CheckCircleFilled style={{ color: task.projectColor || "#14b8a6", fontSize: 10 }} /> : 
                                   <div className="flex items-center gap-1">
                                     <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: task.projectColor || "#14b8a6" }}></div>
+                                    <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${task.zereglel === "nen yaraltai" ? "bg-red-500" : task.zereglel === "yaraltai" ? "bg-amber-500" : task.zereglel === "engiin" ? "bg-yellow-400" : "bg-transparent"}`} />
                                     {task.isLoop && <RollbackOutlined style={{ fontSize: '10px', color: '#8B5CF6' }} />}
                                   </div>
                                 }
@@ -2154,31 +2197,69 @@ useEffect(() => {
 
               {/* 2. Team Section */}
               <div className="flex flex-col p-4 shrink-0">
-                <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center  uppercase opacity-70">
-                  <span>Ажилтан</span>
+                <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center uppercase opacity-70">
+                  <span>Ажилтны гүйцэтгэл</span>
                 </div>
-                <div className="max-h-[300px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
-                  {teamMembers.map((member, i) => (
-                    <div key={i} 
-                      onClick={() => handleMemberClick(member)}
-                      className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md"
-                    >
-                      <div className="flex items-center space-x-4 w-full">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
-                          <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
-                        </Avatar>
-                        <div className="flex flex-col min-w-0 flex-1 justify-center">
-                          <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
-                          <div className="text-[12px] text-gray-400 dark:text-gray-600 font-medium leading-tight mt-1 items-center flex justify-between">
-                            <span>{member.role}</span>
-                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-                              {member.kpi}%
-                            </span>
+                <div className="max-h-[350px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                  {teamMembers.map((member, i) => {
+                    const total     = member.totalTasks;
+                    const done      = member.doneCount;
+                    const active    = member.activeCount;
+                    const overdue   = member.overdueCount;
+                    const remaining = member.remainingCount;
+                    const pct       = total > 0 ? Math.round((done / total) * 100) : 0;
+                    
+                    const avatarColors = ['#0096FF','#0096FF','#0096FF','#0096FF','#0096FF'];
+                    const ac = avatarColors[i % avatarColors.length];
+
+                    return (
+                      <div key={member.id}
+                        className="group flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 hover:shadow-sm border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 cursor-pointer transition-all"
+                      >
+                        <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-[12px] font-bold"
+                          style={{ background: `${ac}22`, border: `1.5px solid ${ac}50`, color: ac }}>
+                          {member.name?.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="flex flex-col flex-1 min-w-0 gap-1.5">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200 truncate leading-none">{member.name}</span>
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              {overdue > 0 && (
+                                <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full"
+                                  style={{ background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' }}>
+                                  {overdue} Хэтэрсэн
+                                </span>
+                              )}
+                              <span className="text-[12px] font-bold tabular-nums" style={{ color: ac }}>{pct}%</span>
+                            </div>
+                          </div>
+                          <div className="h-[5px] w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden flex">
+                            {total > 0 ? (
+                              <>
+                                <div style={{ width: `${(done / total) * 100}%`, background: '#22c55e', transition: 'width 0.6s ease' }} className="h-full" />
+                                <div style={{ width: `${(active / total) * 100}%`, background: '#0096FF', transition: 'width 0.6s ease 0.1s' }} className="h-full" />
+                                <div style={{ width: `${(overdue / total) * 100}%`, background: '#ef4444', transition: 'width 0.6s ease 0.2s' }} className="h-full" />
+                              </>
+                            ) : (
+                              <div className="h-full w-full bg-gray-200 dark:bg-gray-700 rounded-full" />
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-[8px] font-bold" style={{ color: '#22c55e' }}>{done} Дууссан</span>
+                            {active > 0 && <span className="text-[8px] font-bold" style={{ color: '#0096FF' }}>{active} Идэвхтэй</span>}
+                            {overdue > 0 && <span className="text-[8px] font-bold" style={{ color: '#ef4444' }}>{overdue} Хэтэрсэн</span>}
+                            {remaining > 0 && <span className="text-[8px] font-bold text-gray-400">{remaining} Хүлээгдэж буй</span>}
                           </div>
                         </div>
                       </div>
+                    );
+                  })}
+                  {teamMembers.length === 0 && (
+                    <div className="flex flex-col items-center justify-center py-6 text-gray-400 gap-1 text-[12px] font-bold uppercase ">
+                      <TeamOutlined className="text-2xl opacity-20" />
+                      Ажилтан байхгүй
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
 

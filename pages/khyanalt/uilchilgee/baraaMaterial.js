@@ -658,9 +658,18 @@ function BaraaMaterial() {
 
   const teamMembers = useMemo(() => {
     return ajiltanJagsaalt?.jagsaalt?.map(a => ({
-      id: a._id,
-      name: a.ner || a.nevtrekhNer,
-      role: a.albanTushaal || a.erkh || "Ажилтан"
+      id: a._id || a.id,
+      name: a.ner || a.nevtrekhNer || "Ажилтан",
+      role: a.albanTushaal || a.erkh || "Ажилтан",
+      kpi: 0,
+      kpiOnoo: 0,
+      kpiDaalgavarToo: 0,
+      kpiDundaj: 0,
+      doneCount: 0,
+      activeCount: 0,
+      overdueCount: 0,
+      remainingCount: 0,
+      totalTasks: 0
     })) || [];
   }, [ajiltanJagsaalt?.jagsaalt]);
 
@@ -946,23 +955,69 @@ function BaraaMaterial() {
 
               {/* 2. Team Section */}
               <div id="mat-team" className="flex flex-col p-4 shrink-0">
-                <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center  uppercase opacity-70">
-                  <span>Ажилтан</span>
+                <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center uppercase opacity-70">
+                  <span>Ажилтны гүйцэтгэл</span>
                 </div>
-                <div className="max-h-[300px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
-                  {teamMembers.map((member, i) => (
-                    <div key={i} className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md">
-                      <div className="flex items-center space-x-4 w-full">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
-                          <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
-                        </Avatar>
-                        <div className="flex flex-col min-w-0 flex-1 justify-center">
-                          <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
-                          <div className="text-[12px] text-gray-400 dark:text-gray-600 font-medium leading-tight mt-1">{member.role}</div>
+                <div className="max-h-[350px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                  {teamMembers.map((member, i) => {
+                    const total     = member.totalTasks;
+                    const done      = member.doneCount;
+                    const active    = member.activeCount;
+                    const overdue   = member.overdueCount;
+                    const remaining = member.remainingCount;
+                    const pct       = total > 0 ? Math.round((done / total) * 100) : 0;
+                    
+                    const avatarColors = ['#0096FF','#0096FF','#0096FF','#0096FF','#0096FF'];
+                    const ac = avatarColors[i % avatarColors.length];
+
+                    return (
+                      <div key={member.id}
+                        className="group flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 hover:shadow-sm border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 cursor-pointer transition-all"
+                      >
+                        <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-[12px] font-bold"
+                          style={{ background: `${ac}22`, border: `1.5px solid ${ac}50`, color: ac }}>
+                          {member.name?.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="flex flex-col flex-1 min-w-0 gap-1.5">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200 truncate leading-none">{member.name}</span>
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              {overdue > 0 && (
+                                <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full"
+                                  style={{ background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' }}>
+                                  {overdue} Хэтэрсэн
+                                </span>
+                              )}
+                              <span className="text-[12px] font-bold tabular-nums" style={{ color: ac }}>{pct}%</span>
+                            </div>
+                          </div>
+                          <div className="h-[5px] w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden flex">
+                            {total > 0 ? (
+                              <>
+                                <div style={{ width: `${(done / total) * 100}%`, background: '#22c55e', transition: 'width 0.6s ease' }} className="h-full" />
+                                <div style={{ width: `${(active / total) * 100}%`, background: '#0096FF', transition: 'width 0.6s ease 0.1s' }} className="h-full" />
+                                <div style={{ width: `${(overdue / total) * 100}%`, background: '#ef4444', transition: 'width 0.6s ease 0.2s' }} className="h-full" />
+                              </>
+                            ) : (
+                              <div className="h-full w-full bg-gray-200 dark:bg-gray-700 rounded-full" />
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-[8px] font-bold" style={{ color: '#22c55e' }}>{done} Дууссан</span>
+                            {active > 0 && <span className="text-[8px] font-bold" style={{ color: '#0096FF' }}>{active} Идэвхтэй</span>}
+                            {overdue > 0 && <span className="text-[8px] font-bold" style={{ color: '#ef4444' }}>{overdue} Хэтэрсэн</span>}
+                            {remaining > 0 && <span className="text-[8px] font-bold text-gray-400">{remaining} Хүлээгдэж буй</span>}
+                          </div>
                         </div>
                       </div>
+                    );
+                  })}
+                  {teamMembers.length === 0 && (
+                    <div className="flex flex-col items-center justify-center py-6 text-gray-400 gap-1 text-[12px] font-bold uppercase ">
+                      <TeamOutlined className="text-2xl opacity-20" />
+                      Ажилтан байхгүй
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
 
