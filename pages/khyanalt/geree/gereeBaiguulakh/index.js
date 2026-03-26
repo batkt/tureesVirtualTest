@@ -282,10 +282,10 @@ function GereeBaiguulakh({ token }) {
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
     if (!gereeniiZagvar || typeof gereeniiZagvar !== "object") return;
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
-    if (butsaakhUtga?.dedKhesguud)
-      butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud?.filter(
-        (a) => a.khamaarakhKheseg === steps[current].title,
-      );
+    // if (butsaakhUtga?.dedKhesguud)
+    //   butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud?.filter(
+    //     (a) => a.khamaarakhKheseg === steps[current].title,
+    //   );
     khadgalakhGeree.sariinNiilberDun = tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
@@ -403,10 +403,10 @@ function GereeBaiguulakh({ token }) {
   const alkhamiinAktiinZagvar = React.useMemo(() => {
     if (!aktiinZagvar || typeof aktiinZagvar !== "object") return;
     let butsaakhUtga = _.cloneDeep(aktiinZagvar);
-    if (butsaakhUtga?.dedKhesguud)
-      butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
-        (a) => a.khamaarakhKheseg === steps[current].title,
-      );
+    // if (butsaakhUtga?.dedKhesguud)
+    //   butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
+    //     (a) => a.khamaarakhKheseg === steps[current].title,
+    //   );
     khadgalakhGeree.sariinNiilberDun = tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
