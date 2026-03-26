@@ -541,8 +541,28 @@ function Tuluvluguu() {
       });
     };
 
+    const handleSocketTaskDelete = ({ taskId }) => {
+      if (!taskId) return;
+      setTasks(prev => prev.filter(t => (t._id || t.id) !== taskId));
+      setDayTasksModal(prev => ({
+        ...prev,
+        tasks: prev.tasks.filter(t => (t._id || t.id) !== taskId)
+      }));
+      setSelectedTask(prev => {
+        if (prev && (prev._id === taskId || prev.id === taskId)) {
+          setIsTaskDetailVisible(false);
+          return null;
+        }
+        return prev;
+      });
+    };
+
     fsmSocket.on("task_updated", handleSocketTaskUpdate);
-    return () => fsmSocket.off("task_updated", handleSocketTaskUpdate);
+    fsmSocket.on("task_deleted", handleSocketTaskDelete);
+    return () => {
+      fsmSocket.off("task_updated", handleSocketTaskUpdate);
+      fsmSocket.off("task_deleted", handleSocketTaskDelete);
+    };
   }, [fsmSocket]);
 
   const monthData = useMemo(() => {
@@ -1090,11 +1110,19 @@ useEffect(() => {
   const handleDeleteTask = async (taskId) => {
     try {
       const res = await api.delete(`/tasks/${taskId}`);
-      if (res.data?.success || res.status === 200) {
-        setAllTasks((prev) => prev.filter((t) => (t.id || t._id) !== taskId));
+      if (res.data?.success || res.status === 200 || res.status === 204) {
+        setTasks((prev) => prev.filter((t) => (t.id || t._id) !== taskId));
+        setDayTasksModal(prev => ({
+          ...prev,
+          tasks: prev.tasks.filter(t => (t._id || t.id) !== taskId)
+        }));
+        if (fsmSocket) {
+          fsmSocket.emit("task_deleted", { taskId });
+        }
         toast.success("Ажил амжилттай устгагдлаа");
-        if (selectedTask && (selectedTask.id || selectedTask._id) === taskId) {
+        if (selectedTask && (selectedTask.id || selectedTask._id || selectedTask) === taskId) {
           setIsTaskDetailVisible(false);
+          setSelectedTask(null);
         }
       }
     } catch (err) {
@@ -1829,17 +1857,18 @@ useEffect(() => {
                                   ) : task.status === 'Progress' ? (
                                     <LoadingOutlined className="text-amber-500 scale-90" />
                                   ) : null}
-                                  <Popconfirm
-                                    title="Та энэ ажлыг устгахдаа итгэлтэй байна уу?"
-                                    onConfirm={() => handleDeleteTask(task.id || task._id)}
-                                    okText="Тийм"
-                                    cancelText="Үгүй"
-                                  >
-                                  <DeleteOutlined 
-                                      className="text-red-500 hover:text-red-600 ml-1 p-0.5 opacity-100 transition-opacity" 
-                                      onClick={(e) => e.stopPropagation()}
-                                    />
-                                  </Popconfirm>
+                                  <div onClick={(e) => e.stopPropagation()}>
+                                    <Popconfirm
+                                      title="Та энэ ажлыг устгахдаа итгэлтэй байна уу?"
+                                      onConfirm={() => handleDeleteTask(task.id || task._id)}
+                                      okText="Тийм"
+                                      cancelText="Үгүй"
+                                    >
+                                      <DeleteOutlined 
+                                        className="text-red-500 hover:text-red-600 ml-1 p-0.5 opacity-100 transition-opacity" 
+                                      />
+                                    </Popconfirm>
+                                  </div>
                                 </div>
                               </div>
                               <div className="truncate text-[12px] leading-tight group-hover/task:whitespace-normal group-hover/task:overflow-visible transition-all">{task.title}</div>
@@ -1910,25 +1939,22 @@ useEffect(() => {
                                ) : (
                                  <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: task.projectColor || "#94a3b8" }} />
                                )}
-                               <Popconfirm
-                                  title="Та энэ ажлыг устгахдаа итгэлтэй байна уу?"
-                                  onConfirm={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteTask(task.id || task._id);
-                                  }}
-                                  onCancel={(e) => e.stopPropagation()}
-                                  okText="Тийм"
-                                  cancelText="Үгүй"
-                                >
-                                  <Button 
-                                    type="text" 
-                                    size="small" 
-                                    danger
-                                    icon={<DeleteOutlined className="text-[16px]" />} 
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="opacity-0 group-hover/task:opacity-100 transition-opacity bg-red-500/10 hover:bg-red-500/20 rounded-full w-8 h-8 flex items-center justify-center p-0"
-                                  />
-                                </Popconfirm>
+                                <div onClick={(e) => e.stopPropagation()}>
+                                  <Popconfirm
+                                     title="Та энэ ажлыг устгахдаа итгэлтэй байна уу?"
+                                     onConfirm={() => handleDeleteTask(task.id || task._id)}
+                                     okText="Тийм"
+                                     cancelText="Үгүй"
+                                   >
+                                     <Button 
+                                       type="text" 
+                                       size="small" 
+                                       danger
+                                       icon={<DeleteOutlined className="text-[16px]" />} 
+                                       className="opacity-0 group-hover/task:opacity-100 transition-opacity bg-red-500/10 hover:bg-red-500/20 rounded-full w-8 h-8 flex items-center justify-center p-0"
+                                     />
+                                   </Popconfirm>
+                                </div>
                              </div>
                           </div>
                           <div className="text-[14px] leading-tight font-extrabold drop-shadow-sm mb-1">{task.title}</div>
@@ -2017,23 +2043,20 @@ useEffect(() => {
                             </span>
                           </div>
                           <div className="col-span-1 flex justify-end">
-                            <Popconfirm
-                              title="Устгах уу?"
-                              onConfirm={(e) => {
-                                e.stopPropagation();
-                                handleDeleteTask(task.id || task._id);
-                              }}
-                              onCancel={(e) => e.stopPropagation()}
-                              okText="Тийм"
-                              cancelText="Үгүй"
-                            >
-                              <Button 
-                                type="text" 
-                                size="small" 
-                                icon={<DeleteOutlined className="text-gray-400 hover:text-red-500" />} 
-                                onClick={(e) => e.stopPropagation()}
-                              />
-                            </Popconfirm>
+                            <div onClick={(e) => e.stopPropagation()}>
+                              <Popconfirm
+                                title="Устгах уу?"
+                                onConfirm={() => handleDeleteTask(task.id || task._id)}
+                                okText="Тийм"
+                                cancelText="Үгүй"
+                              >
+                                <Button 
+                                  type="text" 
+                                  size="small" 
+                                  icon={<DeleteOutlined className="text-gray-400 hover:text-red-500" />} 
+                                />
+                              </Popconfirm>
+                            </div>
                           </div>
                         </div>
                       );
@@ -3454,19 +3477,20 @@ useEffect(() => {
                 <span className="text-[12px] text-gray-400 mt-0.5">{task.gereeNomer}</span>
                 <span className="text-[12px] text-gray-400 mt-0.5">{task.taskId}</span>
               </div>
-              <Popconfirm
-                title="Та энэ ажлыг устгахдаа итгэлтэй байна уу?"
-                onConfirm={() => handleDeleteTask(task.id || task._id)}
-                okText="Тийм"
-                cancelText="Үгүй"
-              >
-                <Button 
-                  type="text" 
-                  size="small" 
-                  icon={<DeleteOutlined className="text-gray-400 hover:text-red-500" />} 
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </Popconfirm>
+              <div onClick={(e) => e.stopPropagation()}>
+                <Popconfirm
+                  title="Та энэ ажлыг устгахдаа итгэлтэй байна уу?"
+                  onConfirm={() => handleDeleteTask(task.id || task._id)}
+                  okText="Тийм"
+                  cancelText="Үгүй"
+                >
+                  <Button 
+                    type="text" 
+                    size="small" 
+                    icon={<DeleteOutlined className="text-gray-400 hover:text-red-500" />} 
+                  />
+                </Popconfirm>
+              </div>
             </div>
           )}
         />
