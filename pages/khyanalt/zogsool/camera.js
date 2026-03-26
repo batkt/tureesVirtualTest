@@ -2804,7 +2804,7 @@ function camera({ token }) {
       zogsoolUilchilgee()
         .get(`/neeye/${ip}`)
         .then((response) => {
-          console.log("neeye: --->" + response.data);
+          console.log("neeye: --->" + response?.data);
         })
         .catch((error) => {
           console.error("API error:", error);
