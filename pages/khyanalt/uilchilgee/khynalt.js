@@ -103,25 +103,28 @@ function Khynalt() {
     if (!task || !day) return false;
     const targetDay = moment(day).startOf('day');
     
-    // Check if it's a looping task (Daily)
     const isLoop = task.isLoop === true || task.isLoop === 'true';
+    const isDay = task.isDay === true || task.isDay === 'true';
     const startOgnoo = task.ekhlekhOgnoo || task.ekhlekhTsag;
-    const endOgnoo   = task.duusakhOgnoo || task.duusakhTsag;
+    const endOgnoo = task.duusakhOgnoo || task.duusakhTsag;
     
-    if (isLoop && startOgnoo && endOgnoo) {
+    // Logic aligned with CleaningTask.isOnDay in Flutter:
+    
+    // 1. If it's a loop or full-day task, check the range properly
+    if (isLoop || isDay) {
+      if (!startOgnoo) return false;
       const start = moment(startOgnoo).startOf('day');
-      const end   = moment(endOgnoo).startOf('day');
-      return targetDay.isSameOrAfter(start) && targetDay.isSameOrBefore(end);
+      
+      if (endOgnoo) {
+        const end = moment(endOgnoo).startOf('day');
+        return targetDay.isSameOrAfter(start) && targetDay.isSameOrBefore(end);
+      }
+      
+      // No end date means it's ongoing from start
+      return targetDay.isSameOrAfter(start);
     }
     
-    // Check if it's a multi-day task
-    if (startOgnoo && endOgnoo) {
-      const start = moment(startOgnoo).startOf('day');
-      const end   = moment(endOgnoo).startOf('day');
-      return targetDay.isSameOrAfter(start) && targetDay.isSameOrBefore(end);
-    }
-    
-    // Fallback to single date
+    // 2. Fallback to single date check
     const taskDate = task.ekhlekhTsag || task.ekhlekhOgnoo || task.createdAt;
     return moment(taskDate).isSame(targetDay, 'day');
   }, []);
@@ -455,10 +458,13 @@ function Khynalt() {
 
   const teamMembers = useMemo(() => {
     return ajiltanJagsaalt?.jagsaalt?.map(a => {
-      const kpiInfo = companyKpis.find(k => k._id === a._id || k.ajiltniiId === a._id);
+      const aId = a._id || a.id;
+      const kpiInfo = companyKpis.find(k => k._id === aId || k.ajiltniiId === aId);
       
       const memberTasks = tasks.filter(t =>
-        t.hariutsagchId === a._id || (Array.isArray(t.ajiltnuud) && t.ajiltnuud.includes(a._id))
+        t.hariutsagchId === aId || 
+        (Array.isArray(t.ajiltnuud) && t.ajiltnuud.some(uid => uid === aId)) ||
+        t.user?._id === aId
       );
       
       const doneCount = memberTasks.filter(t => t.tuluv === 'duussan' || t.tuluv === 'shalga').length;
@@ -466,20 +472,19 @@ function Khynalt() {
       const overdueCount = memberTasks.filter(t => 
         t.tuluv !== 'duussan' && 
         t.tuluv !== 'shalga' &&
-        t.duusakhTsag && 
-        moment(t.duusakhTsag).isBefore(moment(), 'day')
+        (t.khugatsaaDuusakhOgnoo || t.duusakhTsag) && 
+        moment(t.khugatsaaDuusakhOgnoo || t.duusakhTsag).isBefore(moment(), 'day')
       ).length;
       const remainingCount = Math.max(memberTasks.length - doneCount - activeCount - overdueCount, 0);
       
-      // Calculate average score if scores are available in task history
       const scoredTasks = memberTasks.filter(t => t.onooson != null);
       const dynamicAvg = scoredTasks.length > 0 
-        ? (scoredTasks.reduce((acc, t) => acc + t.onooson, 0) / scoredTasks.length).toFixed(2)
+        ? (scoredTasks.reduce((acc, t) => acc + t.onooson, 0) / scoredTasks.length).toFixed(1)
         : (kpiInfo?.kpiDundaj || 0);
 
       return {
-        id: a._id,
-        name: a.ner || a.nevtrekhNer,
+        id: aId,
+        name: a.ner || a.nevtrekhNer || 'Ажилтан',
         role: a.albanTushaal || a.erkh || "Ажилтан",
         kpi: kpiInfo?.kpiHuvv || 0,
         kpiOnoo: kpiInfo?.kpiOnoo || 0,
@@ -496,13 +501,20 @@ function Khynalt() {
   }, [ajiltanJagsaalt?.jagsaalt, companyKpis, tasks]);
 
   const statCards = useMemo(() => {
-    const today = moment();
+    const today = moment().startOf('day');
     const tasksToday = tasks.filter(t => isTaskOnDay(t, today));
-    const doneToday = tasksToday.filter(t => t.tuluv === "duussan" || t.tuluv === "shalga").length;
+    
+    // Unify logic: Done count should reflect tasks actually finished today
+    // to match chart and avoid "5 in chart but 3 in card" discrepancy
+    const doneToday = tasks.filter(t => {
+      if (t.tuluv !== 'duussan' && t.tuluv !== 'shalga') return false;
+      const completeDate = t.duussanOgnoo || t.updatedAt;
+      return moment(completeDate).isSame(today, 'day');
+    }).length;
     
     return [
       { title: "Өнөөдрийн ажил", value: tasksToday.length.toString() },
-      { title: "Дууссан ажил", value: doneToday.toString() },
+      { title: "Дууссан (Өнөөдөр)", value: doneToday.toString() },
       { title: "Бараа материал", value: baraas.length.toString() },
       { title: "Яаралтай", value: tasksToday.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
       { title: "Нийт ажил", value: tasks.length.toString() },
@@ -669,7 +681,11 @@ function Khynalt() {
                     const today = moment();
                     const tasksForToday = tasks.filter(t => isTaskOnDay(t, today));
                     
-                    const doneTotal   = tasksForToday.filter(t => t.tuluv === 'duussan' || t.tuluv === 'shalga').length;
+                    const doneTotal   = tasks.filter(t => {
+                        if (t.tuluv !== 'duussan' && t.tuluv !== 'shalga') return false;
+                        const completeDate = t.duussanOgnoo || t.updatedAt;
+                        return moment(completeDate).isSame(today, 'day');
+                    }).length;
                     const activeTotal  = tasksForToday.filter(t => t.tuluv === 'khiigdej bui').length;
                     const waitingTotal = tasksForToday.filter(t => t.tuluv === 'khuleegdej bui' || t.tuluv === 'shine' || t.tuluv === 'khugatsaa khetersen').length;
                     
@@ -1125,20 +1141,42 @@ function Khynalt() {
                 <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center  uppercase opacity-70">
                   <span>Ажилтан</span>
                 </div>
-                <div className="max-h-[300px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
-                  {teamMembers.map((member, i) => (
-                    <div key={i} className="flex items-center group cursor-pointer transition-all px-3 py-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md">
-                      <div className="flex items-center space-x-4 w-full">
-                        <Avatar size="medium" className="bg-gradient-to-tr from-green-300 to-gray-500 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
-                          <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
-                        </Avatar>
-                        <div className="flex flex-col min-w-0 flex-1 justify-center">
-                          <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
-                          <div className="text-[10px] text-gray-400 dark:text-gray-600 font-medium leading-tight mt-1 ">{member.role}</div>
+                <div className="max-h-[500px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                  {teamMembers.map((member, i) => {
+                    const avatarColors = ['#0096FF','#34D399','#F59E0B','#EF4444','#8B5CF6'];
+                    const ac = avatarColors[i % avatarColors.length];
+                    const pct = member.totalTasks > 0 ? Math.round((member.doneCount / member.totalTasks) * 100) : 0;
+
+                    return (
+                      <div key={i} 
+                        onClick={() => handleMemberClick(member)}
+                        className="flex flex-col group cursor-pointer transition-all px-3 py-3 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-500/5 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/10 shadow-sm hover:shadow-md"
+                      >
+                        <div className="flex items-center space-x-3 w-full mb-2">
+                          <div className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-[12px] font-bold border-2 border-white dark:border-gray-800 shadow-lg"
+                            style={{ background: `${ac}22`, color: ac, borderColor: `${ac}40` }}>
+                            {member.name?.charAt(0).toUpperCase()}
+                          </div>
+                          <div className="flex flex-col min-w-0 flex-1 justify-center">
+                            <div className="flex items-center justify-between">
+                              <div className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate leading-tight transition-colors">{member.name}</div>
+                              <span className="text-[11px] font-bold text-emerald-500">{member.kpi}%</span>
+                            </div>
+                            <div className="text-[10px] text-gray-400 dark:text-gray-600 font-medium leading-tight mt-0.5">{member.role}</div>
+                          </div>
+                        </div>
+                        <div className="w-full space-y-1.5">
+                          <div className="flex justify-between items-center px-0.5">
+                            <span className="text-[9px] font-bold text-gray-400 uppercase">Гүйцэтгэл</span>
+                            <span className="text-[10px] font-bold text-gray-500">{pct}%</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden flex">
+                             <div style={{ width: `${pct}%`, background: '#22c55e' }} className="h-full rounded-full" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 

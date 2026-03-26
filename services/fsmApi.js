@@ -2,7 +2,7 @@ import axios from "axios";
 import { io } from "socket.io-client";
 
 export const FSM_BASE_URL = "http://103.143.40.175:8000";
-export const FSM_BASE_URL_ZEV = "https://fsm.zevtabs.mn";
+export const FSM_BASE_URL_ZEV = "http://103.143.40.175:8000";
 
 /** Base axios instance (no auth) */
 const fsmApi = axios.create({

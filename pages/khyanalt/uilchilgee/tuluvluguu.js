@@ -15,6 +15,7 @@ import {
   QuestionCircleOutlined,
   CheckOutlined,
   ClockCircleOutlined,
+  CheckCircleFilled,
   CloseOutlined,
   LoadingOutlined,
   EditOutlined,
@@ -24,6 +25,7 @@ import {
   MessageOutlined,
   PaperClipOutlined,
   FileOutlined,
+  CheckCircleOutlined,
   RollbackOutlined,
   StarOutlined,
   TrophyOutlined
@@ -225,9 +227,11 @@ function Tuluvluguu() {
       position: 'absolute',
       top: (startMinutes / 60) * rowHeight,
       height: (durationMinutes / 60) * rowHeight,
-      width: `calc(${colWidth}% - ${margin * 2}px)`,
-      left: `calc(${colIndex * colWidth}% + ${margin}px)`,
-      zIndex: 20 + colIndex
+      width: `calc(${Math.max(colWidth, 100/Math.max(totalCols, 4))}% - ${margin * 2}px)`,
+      minWidth: totalCols === 1 ? 'auto' : '50px',
+      left: `calc(${(colIndex * colWidth)}% + ${margin}px)`,
+      zIndex: 20 + colIndex,
+      boxShadow: totalCols > 1 ? '4px 0 10px rgba(0,0,0,0.1)' : 'none'
     };
   };
 
@@ -665,8 +669,8 @@ function Tuluvluguu() {
         khugatsaaDuusakhOgnoo: duusakhTsag,
         barilgiinId,
         baiguullagiinId,
-        ekhlekhOgnoo: values.dateRange?.[0] ? values.dateRange[0].toISOString() : ekhlekhTsag,
-        duusakhOgnoo: values.dateRange?.[1] ? values.dateRange[1].toISOString() : duusakhTsag,
+        ekhlekhOgnoo: getISOValue(values.dateRange?.[0], isDay ? null : values.startTime, false),
+        duusakhOgnoo: getISOValue(values.dateRange?.[1], isDay ? null : values.endTime,   true),
         isDay: values.isDay || false,
         isLoop: values.isLoop || false,
         zurag: uploadedImages, 
@@ -713,6 +717,7 @@ function Tuluvluguu() {
       if (res.data?.success || res.status === 200) {
         toast.success(editingTask ? "Ажил амжилттай шинэчлэгдлээ" : "Ажил амжилттай нэмэгдлээ");
         await fetchTasks();
+        await fetchBaraas(); // Refresh product stock after task creation/edit
         setIsTaskModalVisible(false);
         setEditingTask(null);
         taskForm.resetFields();
@@ -1082,6 +1087,21 @@ useEffect(() => {
       setEditingMsg(null);
     }
   }, [isTaskDetailVisible, fetchSubtasks, fetchTaskDetail, fetchTaskScore]); 
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const res = await api.delete(`/tasks/${taskId}`);
+      if (res.data?.success || res.status === 200) {
+        setAllTasks((prev) => prev.filter((t) => (t.id || t._id) !== taskId));
+        toast.success("Ажил амжилттай устгагдлаа");
+        if (selectedTask && (selectedTask.id || selectedTask._id) === taskId) {
+          setIsTaskDetailVisible(false);
+        }
+      }
+    } catch (err) {
+      toast.error("Ажил устгахад алдаа гарлаа");
+    }
+  };
+
   const handleCreateSubtask = async () => {
     if (!newSubtaskTitle.trim() || !selectedTask) return;
     try {
@@ -1704,20 +1724,20 @@ useEffect(() => {
                             <Tooltip key={task.id} title={`${task.projectName}: ${task.title}`}>
                               <div 
                                 onClick={(e) => handleTaskClick(task, e)}
-                                className="flex items-center space-x-1.5 px-1.5 py-1 rounded-md text-[12px] font-bold border-l-2 hover:opacity-80 transition-opacity cursor-pointer text-gray-800 dark:text-gray-200 tracking-tight shrink-0"
+                                className="group/entry flex items-center space-x-1.5 px-1.5 py-1 rounded-md text-[12px] font-bold border-l-2 hover:opacity-80 transition-opacity cursor-pointer text-gray-800 dark:text-gray-200 tracking-tight shrink-0 relative"
                                 style={{ 
                                   borderLeftColor: task.projectColor || "#14b8a6",
                                   backgroundColor: (task.projectColor || "#14b8a6") + "20"
                                 }}
                               >
                                 {task.completed ? 
-                                  <CheckOutlined style={{ color: task.projectColor || "#14b8a6", fontSize: 8 }} /> : 
+                                  <CheckCircleFilled style={{ color: task.projectColor || "#14b8a6", fontSize: 10 }} /> : 
                                   <div className="flex items-center gap-1">
                                     <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: task.projectColor || "#14b8a6" }}></div>
                                     {task.isLoop && <RollbackOutlined style={{ fontSize: '10px', color: '#8B5CF6' }} />}
                                   </div>
                                 }
-                                <span className="truncate flex-1">{task.title}</span>
+                                 <span className="truncate flex-1">{task.title}</span>
                               </div>
                             </Tooltip>
                           ))}
@@ -1751,7 +1771,8 @@ useEffect(() => {
             )}
 
             {view === "Week" && (
-              <div className="flex flex-col h-[calc(100vh-320px)] min-h-[500px] bg-white dark:bg-gray-800  overflow-hidden shadow-inner">
+              <div className="flex flex-col h-[calc(100vh-320px)] min-h-[500px] bg-white dark:bg-gray-800 overflow-x-auto shadow-inner custom-scrollbar">
+                <div className="min-w-[1200px] flex flex-col h-full">
                 <div className="grid grid-cols-8 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111827] sticky top-0 z-10 shadow-sm shrink-0">
                   <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">ЦАГ</div>
                   {weekData.map(date => (
@@ -1774,22 +1795,54 @@ useEffect(() => {
                     return (
                       <div key={date.toString()} className={`border-r border-gray-100 dark:border-gray-900 relative ${isPast ? "bg-gray-100/30 dark:bg-gray-900/20 cursor-not-allowed" : ""}`}>
                         {Array.from({length: 24}).map((_, i) => (
-                          <div key={i} className="h-12 border-b border-gray-50 dark:border-gray-900/20 group cursor-crosshair hover:bg-teal-500/5 transition-colors">
+                          <div key={i} className={`h-12 border-b group cursor-crosshair transition-colors ${i >= 8 && i <= 18 ? "bg-white/50 dark:bg-white/5 border-gray-100 dark:border-gray-800/60" : "bg-gray-50/50 dark:bg-black/20 border-gray-50 dark:border-gray-900/40"} hover:bg-teal-500/5`}>
                           </div>
                         ))}
+                        {date.isSame(dayjs(), 'day') && (
+                          <div 
+                            className="absolute left-0 right-0 border-t-2 border-red-500 z-20 pointer-events-none before:content-[''] before:absolute before:-left-1 before:-top-1 before:w-2 before:h-2 before:bg-red-500 before:rounded-full shadow-[0_0_8px_rgba(239,68,68,0.5)]"
+                            style={{ top: `${(dayjs().hour() * 60 + dayjs().minute()) / 1440 * 100}%` }}
+                          >
+                             <div className="absolute -left-10 -top-2.5 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded font-bold shadow-sm">
+                               {dayjs().format("HH:mm")}
+                             </div>
+                          </div>
+                        )}
                         <div className="absolute top-0 left-0 w-full h-full">
                           {getTasksWithOverlap(filteredTasks.filter(t => isTaskOnDay(t, date))).map(task => (
                             <div 
                               key={task.id || task._id} 
                               onClick={(e) => handleTaskClick(task, e)}
-                              className="border-l-[3px] rounded-lg p-1 text-[12px] font-bold text-gray-800 dark:text-gray-100 shadow-xl border border-gray-100 dark:border-gray-700/50 tracking-tighter cursor-pointer hover:scale-[1.02] transition-transform overflow-hidden"
+                              className="group/task rounded-xl p-1.5 text-[11px] font-bold text-gray-800 dark:text-gray-100 shadow-lg border border-white/20 dark:border-white/5 tracking-tighter cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all overflow-hidden flex flex-col justify-between backdrop-blur-sm relative"
                               style={{ 
-                                borderLeftColor: task.projectColor || "#14b8a6",
-                                backgroundColor: (task.projectColor || "#14b8a6") + "15",
+                                borderLeft: `4px solid ${task.projectColor || "#14b8a6"}`,
+                                background: `linear-gradient(135deg, ${(task.projectColor || "#14b8a6")}25 0%, ${(task.projectColor || "#14b8a6")}10 100%)`,
+                                boxShadow: `0 4px 15px -3px ${(task.projectColor || "#14b8a6")}30`,
                                 ...getTaskPosition(task, date, task.colIndex, task.totalCols)
                               }}
                             >
-                              <div className="truncate">{task.title}</div>
+                              <div className="flex items-center justify-between gap-1 mb-0.5">
+                                <span className="truncate opacity-80 uppercase text-[9px]" style={{ color: task.projectColor || "#94a3b8" }}>{task.projectName}</span>
+                                <div className="flex items-center gap-1 opacity-0 group-hover/task:opacity-100 transition-opacity">
+                                  {task.completed ? (
+                                    <CheckCircleOutlined className="text-teal-500 scale-90" />
+                                  ) : task.status === 'Progress' ? (
+                                    <LoadingOutlined className="text-amber-500 scale-90" />
+                                  ) : null}
+                                  <Popconfirm
+                                    title="Та энэ ажлыг устгахдаа итгэлтэй байна уу?"
+                                    onConfirm={() => handleDeleteTask(task.id || task._id)}
+                                    okText="Тийм"
+                                    cancelText="Үгүй"
+                                  >
+                                  <DeleteOutlined 
+                                      className="text-red-500 hover:text-red-600 ml-1 p-0.5 opacity-100 transition-opacity" 
+                                      onClick={(e) => e.stopPropagation()}
+                                    />
+                                  </Popconfirm>
+                                </div>
+                              </div>
+                              <div className="truncate text-[12px] leading-tight group-hover/task:whitespace-normal group-hover/task:overflow-visible transition-all">{task.title}</div>
                             </div>
                           ))}
                         </div>
@@ -1798,10 +1851,12 @@ useEffect(() => {
                   })}
                 </div>
               </div>
-            )}
+            </div>
+          )}
             
             {view === "Day" && (
-              <div className="flex flex-col h-[calc(100vh-320px)] min-h-[500px] bg-white dark:bg-gray-800 overflow-hidden shadow-inner">
+              <div className="flex flex-col h-[calc(100vh-320px)] min-h-[500px] bg-white dark:bg-gray-800 overflow-x-auto shadow-inner custom-scrollbar">
+                <div className="min-w-[800px] flex flex-col h-full">
                 <div className="grid grid-cols-8 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111827] sticky top-0 z-10 shadow-sm shrink-0">
                   <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">ЦАГ</div>
                   <div className="col-span-7 p-3 text-center">
@@ -1819,33 +1874,76 @@ useEffect(() => {
                   </div>
                   <div className={`col-span-7 relative ${currentDate.startOf('day').isBefore(dayjs().startOf('day')) ? "bg-gray-100/30 dark:bg-gray-900/40 cursor-not-allowed" : "bg-white dark:bg-[#111827]/30"}`}>
                     {Array.from({length: 24}).map((_, i) => (
-                      <div key={i} className="h-12 border-b border-gray-50 dark:border-gray-900/20 group cursor-crosshair hover:bg-teal-500/5 transition-colors">
+                      <div key={i} className={`h-12 border-b group cursor-crosshair transition-colors ${i >= 8 && i <= 18 ? "bg-white/50 dark:bg-white/5 border-gray-100 dark:border-gray-800/60" : "bg-gray-50/50 dark:bg-black/20 border-gray-50 dark:border-gray-900/40"} hover:bg-teal-500/5`}>
                       </div>
                     ))}
+                    {currentDate.isSame(dayjs(), 'day') && (
+                      <div 
+                        className="absolute left-0 right-0 border-t-2 border-red-500 z-20 pointer-events-none before:content-[''] before:absolute before:-left-1.5 before:-top-1.5 before:w-3 before:h-3 before:bg-red-500 before:rounded-full shadow-[0_0_12px_rgba(239,68,68,0.6)]"
+                        style={{ top: `${(dayjs().hour() * 60 + dayjs().minute()) / 1440 * 100}%` }}
+                      >
+                         <div className="absolute -left-12 -top-3 bg-red-500 text-white text-[11px] px-2 py-0.5 rounded-full font-bold shadow-lg">
+                           {dayjs().format("HH:mm")}
+                         </div>
+                      </div>
+                    )}
                     <div className="absolute top-0 left-0 w-full h-full">
                       {getTasksWithOverlap(filteredTasks.filter(t => isTaskOnDay(t, currentDate))).map(task => (
                         <div 
                           key={task.id || task._id} 
                           onClick={(e) => handleTaskClick(task, e)}
-                          className="border-l-[3px] rounded-lg p-1.5 text-[12px] font-bold text-gray-800 dark:text-gray-100 shadow-2xl border border-gray-100 dark:border-gray-700/50 tracking-tighter cursor-pointer hover:scale-[1.01] transition-transform overflow-hidden"
+                          className="group/task rounded-2xl p-3 text-[13px] font-bold text-gray-800 dark:text-gray-100 shadow-2xl border border-white/20 dark:border-white/10 tracking-tight cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all overflow-hidden backdrop-blur-md flex flex-col justify-between relative"
                           style={{ 
-                            borderLeftColor: task.projectColor || "#14b8a6",
-                            backgroundColor: (task.projectColor || "#14b8a6") + "15",
+                            borderLeft: `6px solid ${task.projectColor || "#14b8a6"}`,
+                            background: `linear-gradient(145deg, ${(task.projectColor || "#14b8a6")}30 0%, ${(task.projectColor || "#14b8a6")}15 100%)`,
+                            boxShadow: `0 10px 25px -5px ${(task.projectColor || "#14b8a6")}40`,
                             ...getTaskPosition(task, currentDate, task.colIndex, task.totalCols)
                           }}
                         >
-                          <div className="flex items-center justify-between mb-1">
-                             <span className="text-[12px] font-bold" style={{ color: task.projectColor || "#94a3b8" }}>{task.projectName}</span>
-                             {task.completed && <CheckOutlined style={{ color: task.projectColor || "#14b8a6" }} className="scale-75" />}
+                          <div className="flex items-center justify-between mb-2">
+                             <span className="text-[10px] font-black uppercase tracking-widest opacity-70" style={{ color: task.projectColor || "#94a3b8" }}>{task.projectName}</span>
+                             <div className="flex items-center gap-2">
+                               {task.completed ? (
+                                 <CheckCircleFilled className="text-teal-500 text-[14px]" />
+                               ) : task.status === 'Progress' ? (
+                                 <LoadingOutlined className="text-amber-500 text-[14px]" />
+                               ) : (
+                                 <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: task.projectColor || "#94a3b8" }} />
+                               )}
+                               <Popconfirm
+                                  title="Та энэ ажлыг устгахдаа итгэлтэй байна уу?"
+                                  onConfirm={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteTask(task.id || task._id);
+                                  }}
+                                  onCancel={(e) => e.stopPropagation()}
+                                  okText="Тийм"
+                                  cancelText="Үгүй"
+                                >
+                                  <Button 
+                                    type="text" 
+                                    size="small" 
+                                    danger
+                                    icon={<DeleteOutlined className="text-[16px]" />} 
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="opacity-0 group-hover/task:opacity-100 transition-opacity bg-red-500/10 hover:bg-red-500/20 rounded-full w-8 h-8 flex items-center justify-center p-0"
+                                  />
+                                </Popconfirm>
+                             </div>
                           </div>
-                          <div className="truncate">{task.title}</div>
+                          <div className="text-[14px] leading-tight font-extrabold drop-shadow-sm mb-1">{task.title}</div>
+                          <div className="mt-auto flex items-center gap-2 opacity-60 text-[10px]">
+                            <ClockCircleOutlined />
+                            <span>{dayjs(task.ekhlekhTsag).format("HH:mm")} - {dayjs(task.duusakhTsag).format("HH:mm")}</span>
+                          </div>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
             {view === "Agenda" && (() => {
               const today = currentDate.format("YYYY-MM-DD");
@@ -1884,23 +1982,23 @@ useEffect(() => {
                     </div>
                     
                     <div className="grid grid-cols-12 px-5 py-2 border-b  border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800">
-                      <div className="col-span-5 text-[12px]  font-bold text-gray-400 dark:text-gray-600 uppercase ">Ажил</div>
+                      <div className="col-span-4 text-[12px]  font-bold text-gray-400 dark:text-gray-600 uppercase ">Ажил</div>
                       <div className="col-span-2 text-[12px]  font-bold text-gray-400 dark:text-gray-600 uppercase ">Төлөв</div>
                       <div className="col-span-3 text-[12px] font-bold text-gray-400 dark:text-gray-600 uppercase ">Төсөл</div>
                       <div className="col-span-2 text-[12px] font-bold text-gray-400 dark:text-gray-600 uppercase ">Огноо</div>
+                      <div className="col-span-1 text-[12px] font-bold text-gray-400 dark:text-gray-600 uppercase "></div>
                     </div>
                                         {groupTasks.map(task => {
                       const proj = projects.find(p => p.id === task.projectId || p.id === task.project || p._id === task.projectId);
                       return (
                         <div
-                          key={task.id}
-                          onClick={(e) => handleTaskClick(task, e)}
-                          className="grid grid-cols-12 items-center px-5 py-3.5 border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/20 cursor-pointer transition-colors"
+                          key={task.id || task._id}
+                          className="group/item grid grid-cols-12 gap-4 px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/10 cursor-pointer transition-all border-b border-gray-100 dark:border-gray-800 items-center"
+                          onClick={() => handleTaskClick(task)}
                         >
-                          <div className="col-span-5 flex items-center gap-2.5 min-w-0">
-                            {/* <Checkbox checked={task.completed} onClick={e => e.stopPropagation()} className="shrink-0" /> */}
+                          <div className="col-span-4 flex items-center gap-2.5 min-w-0 pr-2">
                             <div className={`w-2 h-2 rounded-full shrink-0 ${priorityDot(task.zereglel)}`} />
-                            <span className={`text-[13px] font-semibold truncate ${task.completed ? "line-through text-gray-400" : "text-gray-800 dark:text-gray-200"}`}>
+                            <span className={`text-[13px] font-bold text-gray-700 dark:text-gray-200 truncate group-hover/item:text-teal-600 transition-colors ${task.completed ? "line-through text-gray-400" : ""}`}>
                               {task.title}
                             </span>
                           </div>
@@ -1917,6 +2015,25 @@ useEffect(() => {
                             <span className={`text-[12px] font-bold ${task.date < today && !task.completed ? "text-red-500" : "text-gray-500 dark:text-gray-400"}`}>
                               {task.date ? dayjs(task.date).format("YYYY-MM-DD") : "—"}
                             </span>
+                          </div>
+                          <div className="col-span-1 flex justify-end">
+                            <Popconfirm
+                              title="Устгах уу?"
+                              onConfirm={(e) => {
+                                e.stopPropagation();
+                                handleDeleteTask(task.id || task._id);
+                              }}
+                              onCancel={(e) => e.stopPropagation()}
+                              okText="Тийм"
+                              cancelText="Үгүй"
+                            >
+                              <Button 
+                                type="text" 
+                                size="small" 
+                                icon={<DeleteOutlined className="text-gray-400 hover:text-red-500" />} 
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            </Popconfirm>
                           </div>
                         </div>
                       );
@@ -2333,9 +2450,12 @@ useEffect(() => {
                                            i.negj === 'gr' ? "гр" :
                                            i.negj === 'm' ? "м" :
                                            i.negj || '';
+                              // Disable products already selected in other rows
+                              const currentBaraaList = taskForm.getFieldValue('baraa') || [];
+                              const alreadySelected = currentBaraaList.some((b, idx) => b?.baraaId === i._id && idx !== name);
                               return (
-                                <Select.Option key={i._id} value={i._id}>
-                                  {i.ner} ({i.uldegdel || 0} {negj})
+                                <Select.Option key={i._id} value={i._id} disabled={alreadySelected}>
+                                  {i.ner} ({i.uldegdel || 0} {negj}) {alreadySelected ? '(сонгогдсон)' : ''}
                                 </Select.Option>
                               );
                             })}
@@ -2510,15 +2630,29 @@ useEffect(() => {
                         ID: {selectedTask.taskId}
                       </span>
                     )}
-                    <div className="flex items-center gap-3">
-                      <h1 className="text-2xl font-bold m-0 dark:text-white leading-tight truncate">{selectedTask?.title}</h1>
-                      <Button 
-                        type="text" 
-                        size="small" 
-                        icon={<EditOutlined className="text-gray-400 hover:text-blue-500 text-[16px]" />} 
-                        onClick={() => handleEditTask(selectedTask)}
-                      />
-                    </div>
+                      <div className="flex items-center gap-2">
+                        <h1 className="text-2xl font-bold m-0 dark:text-white leading-tight truncate">{selectedTask?.title}</h1>
+                        <div className="flex items-center gap-1">
+                          <Button 
+                            type="text" 
+                            size="small" 
+                            icon={<EditOutlined className="text-gray-400 hover:text-blue-500 text-[16px]" />} 
+                            onClick={() => handleEditTask(selectedTask)}
+                          />
+                          <Popconfirm
+                            title="Энэ ажлыг устгах уу?"
+                            onConfirm={() => handleDeleteTask(selectedTask.id || selectedTask._id)}
+                            okText="Тийм"
+                            cancelText="Үгүй"
+                          >
+                            <Button 
+                              type="text" 
+                              size="small" 
+                              icon={<DeleteOutlined className="text-gray-400 hover:text-red-500 text-[16px]" />} 
+                            />
+                          </Popconfirm>
+                        </div>
+                      </div>
                   </div>
                </div>
 
@@ -3320,6 +3454,19 @@ useEffect(() => {
                 <span className="text-[12px] text-gray-400 mt-0.5">{task.gereeNomer}</span>
                 <span className="text-[12px] text-gray-400 mt-0.5">{task.taskId}</span>
               </div>
+              <Popconfirm
+                title="Та энэ ажлыг устгахдаа итгэлтэй байна уу?"
+                onConfirm={() => handleDeleteTask(task.id || task._id)}
+                okText="Тийм"
+                cancelText="Үгүй"
+              >
+                <Button 
+                  type="text" 
+                  size="small" 
+                  icon={<DeleteOutlined className="text-gray-400 hover:text-red-500" />} 
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </Popconfirm>
             </div>
           )}
         />
