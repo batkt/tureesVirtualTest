@@ -2802,9 +2802,13 @@ function camera({ token }) {
       //     });
       // } else
       zogsoolUilchilgee()
-        .get("/neeye/" + ip + "")
-        .then(function (response) {})
-        .catch(function (error) {});
+        .get(`/neeye/${ip}`)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("API error:", error);
+        });
     }
   };
 
@@ -3937,7 +3941,7 @@ function camera({ token }) {
                       PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
                     />
                   )
-                ) : baiguullaga?._id === "6715ef2ca5cefb3e54505428" &&  //gegeenten
+                ) : baiguullaga?._id === "6715ef2ca5cefb3e54505428" && //gegeenten
                   barilgiinId === "69bbd7ccacd5dafa46593dc6" ? (
                   camerVal[0] === "192.168.2.155" ||
                   camerVal[0] === "192.168.2.156" ? (
