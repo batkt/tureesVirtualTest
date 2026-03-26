@@ -179,11 +179,11 @@ function GuilgeeKhiikh(
           });
           return;
         }
-        if (!dun && !suuriKhuraamj) {
+        if (turul !== "teglekh" && !dun && !suuriKhuraamj) {
           notification.warning({ message: t("Та дүн оруулна уу") });
           return;
         }
-        if (!ognoo) {
+        if (turul !== "teglekh" && !ognoo) {
           notification.warning({ message: t("Огноо сонгоно уу") });
           return;
         }
@@ -378,7 +378,10 @@ function GuilgeeKhiikh(
             break;
         }
        
-        if (turul === "teglekh") return;
+        if (turul === "teglekh") {
+          onClose();
+          return;
+        }
 
         const saveButton = document.getElementById(khadgalyaButtonId);
         saveButton?.setAttribute("disabled", true);
@@ -564,8 +567,9 @@ function GuilgeeKhiikh(
           <Radio value={"avlaga"}>{t("Авлага")}</Radio>
           <Radio value={"torguuli"}>{t("Торгууль")}</Radio>
           <Radio value={"ashiglalt"}>{t("Ашиглалт")}</Radio>
-          <Radio value={"teglekh"}>{t("Заалт тэглэх")}</Radio>
+          
           <Radio value={"busad"}>{t("Бусад")} </Radio>
+          <Radio value={"teglekh"}>{t("Заалт тэглэх")}</Radio>
         </Radio.Group>
       </div>
       <Divider />
