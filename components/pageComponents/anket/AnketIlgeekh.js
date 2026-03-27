@@ -66,13 +66,26 @@ const AnketIlgeekh = (
               ],
             })
             .then(({ data }) => {
-              if (data === "Amjilttai") {
-                notification.success({
-                  message: t("И-мэйл Амжилттай илгээлээ"),
-                });
+              if (data === "Amjilttai" || data?.result === "Amjilttai") {
+                if (data?.failedMails && data.failedMails.length > 0) {
+                  notification.error({
+                    message: t("И-мэйл илгээхэд алдаа гарлаа"),
+                    description: data.failedMails
+                      .map((a) => `${a.mail}: ${a.aldaa}`)
+                      .join(", "),
+                  });
+                } else {
+                  notification.success({
+                    message: t("И-мэйл Амжилттай илгээлээ"),
+                  });
+                }
                 setEmail("");
                 setUtasniiDugaar("");
                 destroy();
+              } else {
+                notification.error({
+                  message: t("И-мэйл илгээхэд алдаа гарлаа"),
+                });
               }
             })
             .catch((e) => {

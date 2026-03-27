@@ -325,6 +325,7 @@ function tulburTootsoo({ token }) {
       dataIndex: "gereeniiDugaar",
       ellipsis: true,
       align: "center",
+      className: "overflow-x-auto",
     },
     {
       title: t("Хариу"),
@@ -3723,7 +3724,16 @@ function tulburTootsoo({ token }) {
             okText: t("Хаах"),
             style: { minWidth: "50vw" },
           });
-          notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
+
+          const hasFailure = Array.isArray(data)
+            ? data.some((item) => item.success === false)
+            : data?.success === false;
+
+          if (hasFailure) {
+            notification.error({ message: t("И-мэйл илгээхэд алдаа гарлаа") });
+          } else {
+            notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
+          }
           setLoading(false);
         })
         .catch((e) => {

@@ -223,18 +223,22 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 <td colspan="4" style="border: 1px solid #000; text-align: left;">${
                   mur.tailbar
                 }</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.negj&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.tariff&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.khungulult&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.tulukhDun&gt;</td>
+                <td style="border: 1px solid #000; text-align: center;">${formatNumber(
+                  mur.negj || medeelel?.talbainKhemjee,
+                  2,
+                )}</td>
+                <td style="border: 1px solid #000; text-align: right;">${formatNumber(
+                  mur.tariff,
+                  2,
+                )}</td>
+                <td style="border: 1px solid #000; text-align: right;">${formatNumber(
+                  mur.khungulult,
+                  2,
+                )}</td>
+                <td style="border: 1px solid #000; text-align: right;">${formatNumber(
+                  mur.tulukhDun,
+                  2,
+                )}</td>
               </tr>
             `,
                 )
@@ -294,18 +298,23 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 <td colspan="4" style="border: 1px solid #000; text-align: left;">${
                   mur.tailbar
                 }</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.negj&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.tariff&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.khungulult&gt;</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${
-                  mur.tailbar
-                }.tulukhDun&gt;</td>
+                <td style="border: 1px solid #000; text-align: center;">${formatNumber(
+                  mur.negj || medeelel?.talbainKhemjee,
+                  2,
+                )}</td>
+                <td style="border: 1px solid #000; text-align: right;">${formatNumber(
+                  mur.tariff ||
+                    mur.tulukhDun / (mur.negj || medeelel?.talbainKhemjee || 1),
+                  2,
+                )}</td>
+                <td style="border: 1px solid #000; text-align: right;">${formatNumber(
+                  mur.khungulult,
+                  2,
+                )}</td>
+                <td style="border: 1px solid #000; text-align: right;">${formatNumber(
+                  mur.tulukhDun,
+                  2,
+                )}</td>
               </tr>
             `,
               )

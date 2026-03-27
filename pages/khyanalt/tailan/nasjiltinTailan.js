@@ -1003,8 +1003,7 @@ function nasjiltinTailan({ token }) {
           format="YYYY-MM"
         />
         <Select
-          bordered={false}
-          className="overflow-y-scroll rounded-md  border-gray-400  md:w-1/4"
+          className="overflow-y-scroll rounded-md  border-gray-400  md:w-[200px]"
           style={{ textOverflow: "ellipsis" }}
           showSearch
           mode="multiple"

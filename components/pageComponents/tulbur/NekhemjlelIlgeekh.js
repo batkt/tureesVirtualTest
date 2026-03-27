@@ -724,10 +724,22 @@ function GuilgeeKhiikh(
         gereenuud: tempGereenuud,
       })
       .then(({ data }) => {
-        if (data === "Amjilttai") {
+        const hasFailure = Array.isArray(data)
+          ? data.some((item) => item.success === false)
+          : data?.success === false;
+
+        if (data === "Amjilttai" || (data && !hasFailure)) {
           notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
           setLoading(false);
           destroy();
+        } else {
+          notification.error({
+            message: t("И-мэйл илгээхэд алдаа гарлаа"),
+            description: Array.isArray(data)
+              ? data.find((a) => a.success === false)?.message
+              : data?.message,
+          });
+          setLoading(false);
         }
       })
       .catch((e) => {

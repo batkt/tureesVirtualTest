@@ -418,9 +418,8 @@ function negtgelTailan({ token }) {
           onChange={setOgnoo}
         />
         <Select
-          bordered={false}
-          className="overflow-y-scroll bg-white rounded-md md:w-1/4"
-          style={{ textOverflow: "ellipsis" }}
+          className="overflow-y-scroll rounded-md  !border-gray-800  md:w-[200px]"
+          // style={{ textOverflow: "ellipsis" }}
           showSearch
           mode="multiple"
           filterOption={(o) => o}
