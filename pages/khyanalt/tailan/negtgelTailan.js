@@ -35,7 +35,29 @@ function negtgelTailan({ token }) {
   const [shineBagana, setShineBagana] = useState([]);
   const { t } = useTranslation();
 
-  const searchKeys = ["ner", "register", "customerTin", "gereeniiDugaar"];
+  const searchKeys = [
+    "ner",
+    "register",
+    "customerTin",
+    "gereeniiDugaar",
+    "talbainDugaar",
+  ];
+
+  const reportSearchKeys = [
+    "ner",
+    "register",
+    "customerTin",
+    "gereeniiDugaar",
+    "talbainDugaar",
+  ];
+
+  const customerSelect = {
+    ner: 1,
+    register: 1,
+    customerTin: 1,
+    gereeniiDugaar: 1,
+    talbainDugaar: 1,
+  };
   const kharitsagchQuery = useMemo(() => {
     return {
       barilgiinId: barilgiinId,
@@ -43,10 +65,10 @@ function negtgelTailan({ token }) {
     };
   }, [baiguullaga, barilgiinId]);
   const khariltsagchiinGaralt = useJagsaalt(
-    "/khariltsagch",
+    "/geree",
     kharitsagchQuery,
     undefined,
-    undefined,
+    customerSelect,
     searchKeys
   );
   const [songogdsonIds, setSongogdsonIds] = useState([]);
@@ -72,7 +94,7 @@ function negtgelTailan({ token }) {
   const { tailanGaralt, unshijBaina, setTailanKhuudaslalt } = useNegtgelTailan(
     token,
     query,
-    searchKeys,
+    reportSearchKeys,
     500
   );
 
@@ -434,10 +456,15 @@ function negtgelTailan({ token }) {
         >
           {khariltsagchiinGaralt?.jagsaalt?.map((data) => (
             <Select.Option
-              key={!!data?.register ? data?.register : data?.customerTin}
+              key={data?.register || data?.customerTin}
               className="dark:text-gray-300"
             >
-              {data?.ner}{" "}
+              <div className="flex flex-col">
+                <div className="flex justify-between font-semibold">
+                  <span>{data?.ner}</span>
+                  
+                </div>
+              </div>
             </Select.Option>
           ))}
         </Select>
