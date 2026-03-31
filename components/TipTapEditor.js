@@ -88,17 +88,15 @@ const TipTapEditor = forwardRef(
           },
           paragraph: false,
         }),
-        // Custom Paragraph extension that preserves whitespace
+        // Custom Paragraph extension that preserves whitespace and handles alignment
         Paragraph.extend({
-          parseHTML() {
-            return [{ tag: "p" }];
-          },
           renderHTML({ HTMLAttributes }) {
+            const { style, ...rest } = HTMLAttributes;
             return [
               "p",
               {
-                ...HTMLAttributes,
-                style: "white-space: pre-wrap; word-wrap: break-word;",
+                ...rest,
+                style: `white-space: pre-wrap; word-wrap: break-word;${style ? ` ${style}` : ""}`,
               },
               0,
             ];
@@ -107,7 +105,8 @@ const TipTapEditor = forwardRef(
         TextStyle,
         Color,
         TextAlign.configure({
-          types: ["heading", "paragraph"],
+          types: ["heading", "paragraph", "tableCell", "tableHeader"],
+          alignments: ["left", "center", "right", "justify"],
         }),
         Underline,
         Link.configure({
@@ -291,6 +290,16 @@ const TipTapEditor = forwardRef(
             title="Баруун талруу шахах"
           >
             <AlignRightOutlined />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+            className={
+              editor.isActive({ textAlign: "justify" }) ? "is-active" : ""
+            }
+            title="Талуудад шахах"
+          >
+            <span style={{ fontSize: "16px", fontWeight: "bold" }}>≡</span>
           </button>
           <div className="toolbar-separator" />
 

@@ -372,6 +372,34 @@ function GereeBaiguulakh({ token }) {
           new RegExp(`&lt;${key}&gt;`, "g"),
           value,
         );
+      } else if (key === "segmentuud") {
+        value.map((mur) => {
+          butsaakhUtga?.dedKhesguud
+            ?.filter(
+              (a) => !!a.zaalt && a.zaalt?.indexOf(`&lt;${mur.ner}&gt;`) !== -1,
+            )
+            .map((b) => {
+              const formattedUtga = !isNaN(parseFloat(mur.utga))
+                ? formatNumber(mur.utga)
+                : mur.utga;
+              b.zaalt = b.zaalt.replace(
+                new RegExp(`&lt;${mur.ner}&gt;`, "g"),
+                formattedUtga,
+              );
+            });
+          butsaakhUtga.zuunKhul = butsaakhUtga.zuunKhul?.replace(
+            new RegExp(`&lt;${mur.ner}&gt;`, "g"),
+            !isNaN(parseFloat(mur.utga)) ? formatNumber(mur.utga) : mur.utga,
+          );
+          butsaakhUtga.baruunKhul = butsaakhUtga.baruunKhul?.replace(
+            new RegExp(`&lt;${mur.ner}&gt;`, "g"),
+            !isNaN(parseFloat(mur.utga)) ? formatNumber(mur.utga) : mur.utga,
+          );
+          butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
+            new RegExp(`&lt;${mur.ner}&gt;`, "g"),
+            !isNaN(parseFloat(mur.utga)) ? formatNumber(mur.utga) : mur.utga,
+          );
+        });
       } else {
         butsaakhUtga?.dedKhesguud
           ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)

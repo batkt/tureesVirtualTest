@@ -788,7 +788,7 @@ function nasjiltinTailan({ token }) {
         fixed: "left",
         onHeaderCell: () => ({ style: { textAlign: "center" } }),
         render: (text) => {
-          return <div className="flex justify-start">{text}</div>;
+          return <div className="flex justify-center">{text}</div>;
         },
       },
       {
@@ -820,7 +820,7 @@ function nasjiltinTailan({ token }) {
           style: { textAlign: "center" },
         }),
         render: (text) => {
-          return <div className="flex justify-start">{text}</div>;
+          return <div className="flex justify-center">{text}</div>;
         },
       },
       {

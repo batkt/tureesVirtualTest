@@ -408,6 +408,9 @@ function BarilgaBurtgel({ token }) {
         boxWidth: 10,
         boxHeight: 10,
       },
+      datalabels: {
+        display: false,
+      },
     },
   };
 

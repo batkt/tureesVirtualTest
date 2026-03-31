@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
 import KhariltsagchiinLavlakh from "./KhariltsagchiinLavlakh";
+import formatNumber from "tools/function/formatNumber";
 
 var timeout = null;
 

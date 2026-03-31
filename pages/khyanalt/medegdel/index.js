@@ -172,7 +172,18 @@ function Khyanalt({ token }) {
 
   const query = useMemo(() => {
     return {
-      turul: { $in: ["medegdel", "Mail", "SMS", "App"] },
+      turul: {
+        $in: [
+          "medegdel",
+          "Mail",
+          "SMS",
+          "App",
+          "sanal",
+          "gomdol",
+          "duudlaga",
+          "shaardlaga",
+        ],
+      },
       khuleenAvagchiinId: khariltsagch?._id,
     };
   }, [khariltsagch]);
@@ -1252,12 +1263,13 @@ function Khyanalt({ token }) {
                 {medegdelAvya?.jagsaalt.map((a) => {
                   return (
                     <div
-                      key={a._id || Math.random()} // key нэмэх
+                      key={a._id || Math.random()}
                       className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 p-3 ${
                         a.turul === "medegdel" ||
                         a.turul === "Mail" ||
                         a.turul === "SMS" ||
-                        a.turul === "App"
+                        a.turul === "App" ||
+                        a.turul === "shaardlaga"
                           ? "ml-auto rounded-br-none bg-green-500"
                           : "rounded-bl-none bg-blue-500"
                       }`}
@@ -1286,7 +1298,17 @@ function Khyanalt({ token }) {
                       </span>
 
                       <span className="absolute -bottom-5 right-0 text-xs text-gray-500">
-                        {a.turul === "medegdel" ? t("Мэдэгдэл") : a.turul}
+                        {a.turul === "medegdel"
+                          ? t("Мэдэгдэл")
+                          : a.turul === "sanal"
+                          ? t("Санал")
+                          : a.turul === "gomdol"
+                          ? t("Гомдол")
+                          : a.turul === "duudlaga"
+                          ? t("Дуудлага")
+                          : a.turul === "shaardlaga"
+                          ? t("Шаардлага")
+                          : a.turul}
                       </span>
                     </div>
                   );
