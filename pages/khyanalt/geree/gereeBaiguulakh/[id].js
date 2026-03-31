@@ -379,10 +379,10 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
     if (!gereeniiZagvar || typeof gereeniiZagvar !== "object") return;
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
-    if (butsaakhUtga?.dedKhesguud)
-      butsaakhUtga.dedKhesguud = butsaakhUtga?.dedKhesguud?.filter(
-        (a) => a.khamaarakhKheseg === steps[current].title,
-      );
+    // if (butsaakhUtga?.dedKhesguud)
+    //   butsaakhUtga.dedKhesguud = butsaakhUtga?.dedKhesguud?.filter(
+    //     (a) => a.khamaarakhKheseg === steps[current].title,
+    //   );
     khadgalakhGeree.sariinNiilberDun = tootsohSariinNiilberDun(khadgalakhGeree);
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
@@ -399,7 +399,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
         //   khadgalakhGeree.khugatsaa,
         //   "months"
         // )
-        let duusakhOgnoo = moment(khadgalakhGeree.duusakhOgnoo);
+        let duusakhOgnoo = moment(khadgalakhGeree.duusakhOgnoo || khadgalakhGeree.gereeniiOgnoo);
 
         khadgalakhGeree.duusakhOn = duusakhOgnoo.format("YYYY");
         khadgalakhGeree.duusakhSar = duusakhOgnoo.format("MM");
@@ -417,14 +417,20 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
       if (key === "zardluud") {
         value.map((mur) => {
-          butsaakhUtga?.dedKhesguud
+          butsaakhUtga.dedKhesguud
             ?.filter(
               (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1,
             )
             .map((b) => {
               b.zaalt = b.zaalt.replace(
                 new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"),
-                formatNumber(mur.tariff),
+                key === "utas"
+                  ? mur.tariff || mur.dun
+                  : parseFloat(mur.tariff || mur.dun) != NaN
+                  ? key != "register"
+                    ? formatNumber(mur.tariff || mur.dun)
+                    : mur.tariff || mur.dun
+                  : formatNumber(mur.tariff || mur.dun),
               );
             });
         });
@@ -454,27 +460,41 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
               );
             });
         });
+      } else if (key === "segmentuud") {
+        value?.map((mur) => {
+          butsaakhUtga?.dedKhesguud
+            ?.filter(
+              (a) => !!a.zaalt && a.zaalt?.indexOf(`&lt;${mur.ner}&gt;`) !== -1,
+            )
+            .map((b) => {
+              const formattedUtga = !isNaN(parseFloat(mur.utga))
+                ? formatNumber(mur.utga)
+                : mur.utga;
+              b.zaalt = b.zaalt.replace(
+                new RegExp(`&lt;${mur.ner}&gt;`, "g"),
+                formattedUtga,
+              );
+            });
+        });
       } else {
         butsaakhUtga?.dedKhesguud
           ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
           ?.map((b) => {
+            const orluulakhUtga =
+              key === "sariinNiilberDun" ? formatNumber(value) : value;
             b.zaalt = b.zaalt.replace(
               new RegExp(`&lt;${key}&gt;`, "g"),
-              key === "utas"
-                ? value[0]
-                : key === "talbainNegjUne" ||
-                  key === "talbainNiitUne" ||
-                  key === "baritsaaAvakhDun" ||
-                  key === "sariinNiilberDun"
-                ? formatNumber(value)
-                : value,
-              // : parseFloat(value) != NaN
-              // ? key != "register"
-              //   ? value
-              //   : formatNumber(value)
-              // : value
+              orluulakhUtga,
             );
           });
+        butsaakhUtga.zuunKhul = butsaakhUtga.zuunKhul?.replace(
+          new RegExp(`&lt;${key}&gt;`, "g"),
+          key === "sariinNiilberDun" ? formatNumber(value) : value,
+        );
+        butsaakhUtga.baruunKhul = butsaakhUtga.baruunKhul?.replace(
+          new RegExp(`&lt;${key}&gt;`, "g"),
+          key === "sariinNiilberDun" ? formatNumber(value) : value,
+        );
       }
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
@@ -642,17 +662,17 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
             )}
             <div className="flex w-full flex-col items-center justify-center gap-10 dark:bg-white">
               <div>
-                {current === 0 && gereeniiZagvar?.ner && (
+                {!!alkhamiinGereeniiZagvar?.ner && (
                   <>
                     <div className="grid grid-cols-2 gap-4 ">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: gereeniiZagvar?.zuunTolgoi,
+                          __html: alkhamiinGereeniiZagvar?.zuunTolgoi,
                         }}
                       />
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: gereeniiZagvar?.baruunTolgoi,
+                          __html: alkhamiinGereeniiZagvar?.baruunTolgoi,
                         }}
                       />
                     </div>
@@ -675,26 +695,26 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
                           : ""
                       }
                       key={`alkhamiinGereeniiZagvar${index}`}
-                      className="group relative flex w-full flex-row rounded-md p-1 "
+                      className="group relative flex w-full flex-row rounded-md p-1"
                     >
                       <div
-                        className="sun-editor-editable w-full text-center text-black"
+                        className="sun-editor-editable w-full text-center text-black [&_*]:!text-gray-700 dark:[&_*]:!text-gray-200"
                         dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                       />
                     </div>
                   );
                 })}
-                {current === 0 && gereeniiZagvar?.ner && (
+                {!!alkhamiinGereeniiZagvar?.ner && (
                   <>
                     <div className="grid grid-cols-2 gap-4 ">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: gereeniiZagvar?.zuuKhul,
+                          __html: alkhamiinGereeniiZagvar?.zuuKhul,
                         }}
                       />
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: gereeniiZagvar?.baruunKhul,
+                          __html: alkhamiinGereeniiZagvar?.baruunKhul,
                         }}
                       />
                     </div>

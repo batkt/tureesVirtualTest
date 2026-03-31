@@ -63,6 +63,27 @@
   }
 }
 
+/* Fix for SunEditor table borders in preview */
+.sun-editor-editable table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  border: 1px solid #e5e7eb !important;
+  margin-bottom: 1rem;
+}
+
+.sun-editor-editable table td,
+.sun-editor-editable table th {
+  border: 1px solid #e5e7eb !important;
+  padding: 8px !important;
+}
+
+/* Dark mode fix for table borders */
+.dark .sun-editor-editable table,
+.dark .sun-editor-editable table td,
+.dark .sun-editor-editable table th {
+  border-color: #374151 !important;
+}
+
 @keyframes swipeAnimation {
   from {
     transform: translateX(100%);

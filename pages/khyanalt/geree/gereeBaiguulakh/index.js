@@ -298,11 +298,7 @@ function GereeBaiguulakh({ token }) {
         khadgalakhGeree.gereeniiOgnoo,
       ).format("DD");
       if (khadgalakhGeree.khugatsaa > 0) {
-        // let duusakhOgnoo = moment(khadgalakhGeree.gereeniiOgnoo).add(
-        //   khadgalakhGeree.khugatsaa,
-        //   "months"
-        // )
-        let duusakhOgnoo = moment(khadgalakhGeree.duusakhOgnoo);
+        let duusakhOgnoo = moment(khadgalakhGeree.duusakhOgnoo || khadgalakhGeree.gereeniiOgnoo);
 
         khadgalakhGeree.duusakhOn = duusakhOgnoo.format("YYYY");
         khadgalakhGeree.duusakhSar = duusakhOgnoo.format("MM");
@@ -814,7 +810,7 @@ function GereeBaiguulakh({ token }) {
                         className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
                       >
                         <div
-                          className="w-full [&_*]:text-gray-700 dark:[&_*]:text-gray-200"
+                          className="sun-editor-editable w-full text-center dark:bg-gray-900 [&_*]:text-gray-700 dark:[&_*]:text-gray-200"
                           dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                         />
                       </div>
