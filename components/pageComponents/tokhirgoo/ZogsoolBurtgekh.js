@@ -477,6 +477,21 @@ function ZogsoolBurtgekh(
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
+                {t("Бүртгэлгүй машин нээх эсэх")}
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item className="m-0" name="burtgelguiMashinNeekhEsekh">
+                <Switch
+                  className="bg-gray-400"
+                  defaultChecked={data?.burtgelguiMashinNeekhEsekh}
+                  checkedChildren="Тийм"
+                  unCheckedChildren="Үгүй"
+                />
+              </Form.Item>
+            </div>
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
                 {t("Дурын төрөлтэй машинд тогтмол төлбөр бодогдох эсэх")}
               </div>
             </div>
@@ -505,10 +520,11 @@ function ZogsoolBurtgekh(
               >
                 {({ getFieldValue }) => (
                   <div
-                    className={`flex flex-row justify-between overflow-hidden transition-all duration-300 ease-in-out ${getFieldValue("togtmolTulburEsekh")
-                      ? "max-h-20 translate-y-0 transform opacity-100"
-                      : "max-h-0 -translate-y-2 transform opacity-0"
-                      }`}
+                    className={`flex flex-row justify-between overflow-hidden transition-all duration-300 ease-in-out ${
+                      getFieldValue("togtmolTulburEsekh")
+                        ? "max-h-20 translate-y-0 transform opacity-100"
+                        : "max-h-0 -translate-y-2 transform opacity-0"
+                    }`}
                   >
                     <div className="col-span-2 border-l-2 border-green-500 pl-4">
                       <div className="font-medium dark:text-white">
