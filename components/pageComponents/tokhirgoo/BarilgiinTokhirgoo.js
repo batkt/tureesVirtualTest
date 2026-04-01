@@ -266,31 +266,6 @@ function BarilgiinTokhirgoo({
                   <div className="ml-auto">
                     <DatePicker
                       placeholder="Огноо сонгоно уу"
-                      value={barilgaTokhirgoo?.aldangiBodojEkhlekhOgnoo}
-                      onChange={(v) =>
-                        setBarilgaTokhirgoo((a) => ({
-                          ...(a || {}),
-                          aldangiBodojEkhlekhOgnoo: v,
-                        }))
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="box">
-                <div className="flex items-center p-5">
-                  <div className="border-l-2 border-green-500 pl-4">
-                    <div className="font-medium">
-                      {t("Алданги бодож эхлэх огноо шинэ")}
-                    </div>
-                    <div className="text-gray-600">
-                      {t("Хугацаа хэтэрсэн огноо бодож эхлэх огноо")}
-                    </div>
-                  </div>
-
-                  <div className="ml-auto">
-                    <DatePicker
-                      placeholder="Огноо сонгоно уу"
                       value={barilgaTokhirgoo?.aldangiOgnoo}
                       onChange={(v) =>
                         setBarilgaTokhirgoo((a) => ({
