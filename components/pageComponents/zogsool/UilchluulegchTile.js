@@ -38,8 +38,8 @@ function UilchluulegchTile({
             minToHour(
               props?.tuukh?.reduce(
                 (a, b) => a + (b?.niitKhugatsaa || 0),
-                0 || 0
-              )
+                0 || 0,
+              ),
             )
           ) : (
             <TsagToololt

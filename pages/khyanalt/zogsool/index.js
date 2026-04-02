@@ -10,39 +10,27 @@ import {
   Card,
   DatePicker,
   Input,
-  message,
-  Modal,
   notification,
-  Popconfirm,
   Popover,
-  Radio,
   Select,
   Table,
   Tabs,
   Tooltip,
   Table as AntdTable,
 } from "antd";
-import CardList from "components/cardList";
-import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useRef, useEffect } from "react";
 import useOrder from "tools/function/useOrder";
-
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
-import { useUilchluulegchdiinDunAvay } from "hooks/useUilchluulegch";
-
 import useUilchluulegchZogsool from "hooks/useUilchluulegchZogsool";
-
 import { useUilchluulegchToololt } from "hooks/useUilchluulegch";
-
 import useJagsaalt from "hooks/useJagsaalt";
 import {
-  CloseSquareFilled,
   DownloadOutlined,
   CloseCircleOutlined,
   DownOutlined,
@@ -55,7 +43,6 @@ import {
 } from "@ant-design/icons";
 import { Excel } from "antd-table-saveas-excel";
 import confirm from "antd/lib/modal/confirm";
-import { TbRuler2Off } from "react-icons/tb";
 
 export function excelTatajAvya(
   token,
