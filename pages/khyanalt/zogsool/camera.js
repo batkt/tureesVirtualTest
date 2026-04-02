@@ -1705,7 +1705,10 @@ function camera({ token }) {
         dataIndex: "mashin",
         showSorterTooltip: false,
         render: (a, record) => {
-          if (a?.khungulultTurul === "togtmolTsag") {
+          if (
+            a?.khungulultTurul === "togtmolTsag" ||
+            a?.khungulultTurul === "Сараар"
+          ) {
             return (
               <div className="flex items-center justify-center">
                 {a && (
