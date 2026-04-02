@@ -53,7 +53,7 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
         destroy();
       },
     }),
-    [tailbar]
+    [tailbar],
   );
   return (
     <div>
@@ -153,7 +153,7 @@ function tulburTootsoo() {
       undefined,
       1000,
       undefined,
-      select
+      select,
     );
   const {
     khungulultTuukh,
@@ -163,7 +163,7 @@ function tulburTootsoo() {
   } = useKhungulultTuukh(
     songogdsonNuur === "2" && token,
     baiguullaga?._id,
-    query
+    query,
   );
 
   const [tootsoolol, setTootsoolol] = useState({
@@ -188,7 +188,7 @@ function tulburTootsoo() {
     () => ({
       barilgiinId,
     }),
-    [barilgiinId]
+    [barilgiinId],
   );
 
   const zardal = useJagsaalt(
@@ -197,7 +197,7 @@ function tulburTootsoo() {
     undefined,
     undefined,
     undefined,
-    token
+    token,
   );
 
   const isSelectedUtilityExpense = useMemo(() => {
@@ -267,7 +267,7 @@ function tulburTootsoo() {
     if (form.getFieldValue("turul") === "Бүгд") {
       onSelectChange(
         filteredGereeniiJagsaalt.map((r) => r._id),
-        filteredGereeniiJagsaalt
+        filteredGereeniiJagsaalt,
       );
     }
   }, [shuult, form, filteredGereeniiJagsaalt]);
@@ -279,7 +279,7 @@ function tulburTootsoo() {
   function disabledDate(current) {
     return ajiltan?.erkh == "Admin" ||
       _.get(ajiltan, `tokhirgoo.umkhunSaraarKhungulultEsekh`)?.find(
-        (a) => a === barilgiinId
+        (a) => a === barilgiinId,
       )
       ? false
       : current && current < moment().startOf("day");
@@ -326,7 +326,7 @@ function tulburTootsoo() {
     if (
       ajiltan?.erkh !== "Admin" &&
       !_.get(ajiltan, `tokhirgoo.khungulultUzuulekhEsekh`)?.find(
-        (a) => a === barilgiinId
+        (a) => a === barilgiinId,
       )
     ) {
       setWaiting(false);
@@ -352,7 +352,7 @@ function tulburTootsoo() {
       ugugdul.khungulultiinDun = tootsoolol.khunglugdsunDun;
       ugugdul.khamaataiGereenuud = songogdsonGereenuud.map((x) => {
         var zardliinData = x?.zardluud?.find(
-          (e) => e?._id === form.getFieldValue("zardliinId")
+          (e) => e?._id === form.getFieldValue("zardliinId"),
         );
 
         if (turul === "zardal") {
@@ -375,7 +375,7 @@ function tulburTootsoo() {
                 (guilgee) =>
                   guilgee.tailbar ===
                     (zardliinData?.ner || songogdsonZardal?.ner) &&
-                  (guilgee.tulukhDun || 0) !== 0
+                  (guilgee.tulukhDun || 0) !== 0,
               );
               khymdraaguiDun = avlagaData?.tulukhDun || 0;
             }
@@ -641,7 +641,7 @@ function tulburTootsoo() {
     ) {
       column.push({
         title: zardal?.jagsaalt?.find(
-          (e) => e?._id === form.getFieldValue("zardliinId")
+          (e) => e?._id === form.getFieldValue("zardliinId"),
         )?.ner,
         dataIndex: "data",
         className: "data",
@@ -649,11 +649,11 @@ function tulburTootsoo() {
         align: "center",
         render: (e, data) => {
           var zardliinData = data?.zardluud?.find(
-            (e) => e?._id === form.getFieldValue("zardliinId")
+            (e) => e?._id === form.getFieldValue("zardliinId"),
           );
 
           const selectedZardal = zardal?.jagsaalt?.find(
-            (e) => e?._id === form.getFieldValue("zardliinId")
+            (e) => e?._id === form.getFieldValue("zardliinId"),
           );
 
           const isUtilityExpense =
@@ -669,7 +669,7 @@ function tulburTootsoo() {
             const avlagaData = data?.avlaga?.guilgeenuud?.find(
               (guilgee) =>
                 guilgee.tailbar === selectedZardal?.ner &&
-                (guilgee.tulukhDun || 0) !== 0
+                (guilgee.tulukhDun || 0) !== 0,
             );
 
             if (avlagaData) {
@@ -687,7 +687,7 @@ function tulburTootsoo() {
 
             var kharuulakhData = formatNumber(
               zardliinData?.tariff * urjuulekhData,
-              2
+              2,
             );
 
             return zardliinData?.turul === "Дурын"
@@ -724,7 +724,7 @@ function tulburTootsoo() {
                 if (data !== undefined) {
                   khungulultTuukhMutate(
                     (s) => ({ ...s, jagsaalt: s.jagsaalt }),
-                    true
+                    true,
                   );
                   toast.success(t("Устгагдлаа"));
                 }
@@ -984,16 +984,18 @@ function tulburTootsoo() {
   }
 
   function khungulukhDunTootsoolyo() {
-    let dun = Number(form?.getFieldValue("khungulukhKhuvi"));
+    const rawDiscount = form?.getFieldValue("khungulukhKhuvi");
+    let dun = Number(rawDiscount);
+    if (isNaN(dun) || dun < 0) dun = 0;
     let niitSariinTurees = 0;
     let niitTalbai = songogdsonGereenuud?.length || 0;
     const fVal = form.getFieldValue("zardliinId");
-    const khungulukhTurul = form.getFieldValue("khungulukhTurul");
+    const khungulukhTurul = form.getFieldValue("khungulukhTurul") || "turees";
 
     if (khungulukhTurul === "turees") {
       niitSariinTurees = songogdsonGereenuud?.reduce(
         (a, b) => a + Number(b?.sariinTurees || 0),
-        0
+        0,
       );
     } else {
       const selectedZardalMaster = zardal.jagsaalt?.find((z) => z._id === fVal);
@@ -1018,7 +1020,7 @@ function tulburTootsoo() {
             const avlagaData = e?.avlaga?.guilgeenuud?.find(
               (guilgee) =>
                 guilgee.tailbar === selectedZardal?.ner &&
-                (guilgee.tulukhDun || 0) !== 0
+                (guilgee.tulukhDun || 0) !== 0,
             );
             if (avlagaData) {
               niitSariinTurees += Number(avlagaData.tulukhDun || 0);
@@ -1074,7 +1076,7 @@ function tulburTootsoo() {
               const avlagaData = geree?.avlaga?.guilgeenuud?.find(
                 (guilgee) =>
                   guilgee.tailbar === selectedZardal?.ner &&
-                  (guilgee.tulukhDun || 0) !== 0
+                  (guilgee.tulukhDun || 0) !== 0,
               );
               khymdraaguiDun = avlagaData?.tulukhDun || 0;
             }
@@ -1083,8 +1085,7 @@ function tulburTootsoo() {
               khymdraaguiDun = geree.talbainKhemjee * (gereeZardal.tariff || 0);
             else if (gereeZardal.turul === "1м3/талбай")
               khymdraaguiDun =
-                (geree.talbainKhemjeeMetrKube || 0) *
-                (gereeZardal.tariff || 0);
+                (geree.talbainKhemjeeMetrKube || 0) * (gereeZardal.tariff || 0);
             else if (gereeZardal.turul === "Дурын")
               khymdraaguiDun = Number(gereeZardal.dun || 0);
             else khymdraaguiDun = Number(gereeZardal.tariff || 0);
@@ -1094,7 +1095,9 @@ function tulburTootsoo() {
         const ehlel = ognoonuud?.[0];
         const duusah = ognoonuud?.[1];
 
-        if (!geree.guchKhonogOruulakhEsekh && khungulultKhuvi && khungulultKhuvi > 0) {
+        const hasDailyDiscount = khungulultKhuvi && khungulultKhuvi > 0;
+
+        if (!geree.guchKhonogOruulakhEsekh && hasDailyDiscount) {
           if (ehlel && duusah) {
             const ehlelMonth = moment(ehlel).format("YYYY-MM");
             const duusahMonth = moment(duusah).format("YYYY-MM");
@@ -1126,7 +1129,8 @@ function tulburTootsoo() {
               const secondMonthDays =
                 moment(duusah).diff(duusahMonthStart, "days") + 1;
               const secondMonthTotalDays = moment(duusah).daysInMonth();
-              const secondMonthDailyRate = khymdraaguiDun / secondMonthTotalDays;
+              const secondMonthDailyRate =
+                khymdraaguiDun / secondMonthTotalDays;
               const secondMonthDiscount =
                 khungulukh === "khuvi"
                   ? (secondMonthDailyRate * khungulultKhuvi) / 100
@@ -1141,7 +1145,7 @@ function tulburTootsoo() {
                 ? (Number(khymdraaguiDun) * dun) / 100
                 : dun;
           }
-        } else if (khungulultKhuvi && khungulultKhuvi > 0) {
+        } else if (hasDailyDiscount) {
           const negOdriinTolokh = khymdraaguiDun / 30;
           const dailyDiscount =
             khungulukh === "khuvi"
@@ -1150,11 +1154,7 @@ function tulburTootsoo() {
           gereeKhunglugdsunDun =
             dailyDiscount * (form.getFieldValue("khungulultKhonog") || 0);
         } else {
-          gereeKhunglugdsunDun =
-            ((form.getFieldValue("khungulultKhonog") || 0) * khymdraaguiDun) /
-            (parseFloat(
-              moment(ognoonuud ? ognoonuud[0] : moment()).endOf("month").format("DD")
-            ) || 1);
+          gereeKhunglugdsunDun = 0;
         }
 
         totalKhunglugdsunDun += gereeKhunglugdsunDun;
@@ -1183,7 +1183,7 @@ function tulburTootsoo() {
               const avlagaData = geree?.avlaga?.guilgeenuud?.find(
                 (guilgee) =>
                   guilgee.tailbar === selectedZardal?.ner &&
-                  (guilgee.tulukhDun || 0) !== 0
+                  (guilgee.tulukhDun || 0) !== 0,
               );
               khymdraaguiDun = avlagaData?.tulukhDun || 0;
             }
@@ -1192,8 +1192,7 @@ function tulburTootsoo() {
               khymdraaguiDun = geree.talbainKhemjee * (gereeZardal.tariff || 0);
             else if (gereeZardal.turul === "1м3/талбай")
               khymdraaguiDun =
-                (geree.talbainKhemjeeMetrKube || 0) *
-                (gereeZardal.tariff || 0);
+                (geree.talbainKhemjeeMetrKube || 0) * (gereeZardal.tariff || 0);
             else if (gereeZardal.turul === "Дурын")
               khymdraaguiDun = Number(gereeZardal.dun || 0);
             else khymdraaguiDun = Number(gereeZardal.tariff || 0);
@@ -1221,7 +1220,11 @@ function tulburTootsoo() {
       khuudasniiNer="khungulult"
       className="p-0 px-3 pb-12 md:p-4 md:px-4 md:pb-0"
       onSearch={(searchValue) => {
-        setKhuudaslalt((a) => ({ ...a, search: searchValue, khuudasniiDugaar: 1 }));
+        setKhuudaslalt((a) => ({
+          ...a,
+          search: searchValue,
+          khuudasniiDugaar: 1,
+        }));
         setGereeniiKhuudaslalt((a) => ({
           ...a,
           search: searchValue,
@@ -1246,7 +1249,7 @@ function tulburTootsoo() {
                   autoComplete={"off"}
                   ref={formRef}
                   name="control-ref"
-                  initialValues={{ remember: true }}
+                  initialValues={{ remember: true, khungulukhTurul: "turees" }}
                   labelCol={{
                     span: 12,
                   }}
@@ -1372,11 +1375,40 @@ function tulburTootsoo() {
                         disabledDate={disabledDate}
                         placeholder={[t("Эхлэх өдөр"), t("Дуусах өдөр")]}
                         onChange={(v) => {
+                          if (v && v[0] && v[1]) {
+                            const monthDiff = moment(v[1]).diff(
+                              moment(v[0]),
+                              "months",
+                              true,
+                            );
+                            if (monthDiff > 1) {
+                              notification.warning({
+                                message: t(
+                                  "Зөвхөн 1 сарыг хамарсан хөнгөлөлт сонгож болно",
+                                ),
+                              });
+                              setOgnoonuud([]);
+                              form.setFieldsValue({
+                                ognoonuud: [],
+                                khungulultKhonog: undefined,
+                              });
+                              setTootsoolol((prev) => ({
+                                ...prev,
+                                khunglugdsunDun: 0,
+                              }));
+                              return;
+                            }
+                          }
+
                           setOgnoonuud(v);
-                          form.setFieldValue(
-                            "khungulultKhonog",
-                            moment(v[1]).diff(v[0], "d") + 1
-                          );
+                          if (v && v[0] && v[1]) {
+                            form.setFieldValue(
+                              "khungulultKhonog",
+                              moment(v[1]).diff(v[0], "d") + 1,
+                            );
+                          } else {
+                            form.setFieldValue("khungulultKhonog", undefined);
+                          }
                           khungulukhDunTootsoolyo();
                         }}
                       />
@@ -1437,21 +1469,21 @@ function tulburTootsoo() {
                               value === ""
                             ) {
                               return Promise.reject(
-                                new Error(t("Хөнгөлөх хувь оруулна уу!"))
+                                new Error(t("Хөнгөлөх хувь оруулна уу!")),
                               );
                             }
                             if (Number(value) <= 0) {
                               return Promise.reject(
                                 new Error(
-                                  t("Хөнгөлөх хувь 0-ээс их байх ёстой!")
-                                )
+                                  t("Хөнгөлөх хувь 0-ээс их байх ёстой!"),
+                                ),
                               );
                             }
                             if (Number(value) > 100) {
                               return Promise.reject(
                                 new Error(
-                                  t("Хөнгөлөх хувь 100-аас бага байх ёстой!")
-                                )
+                                  t("Хөнгөлөх хувь 100-аас бага байх ёстой!"),
+                                ),
                               );
                             }
                             return Promise.resolve();
@@ -1669,8 +1701,8 @@ function tulburTootsoo() {
                                 ? formatNumber(
                                     khungulultTuukh?.jagsaalt?.reduce(
                                       (a, b) => a + (b[mur.dataIndex] || 0),
-                                      0
-                                    )
+                                      0,
+                                    ),
                                   )
                                 : ""}
                               {mur.summary && "₮"}
