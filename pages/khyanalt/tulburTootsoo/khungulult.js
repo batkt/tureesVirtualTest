@@ -266,13 +266,9 @@ function tulburTootsoo() {
     zardal?.jagsaalt,
   ]);
 
+  // Removed auto-selection to prevent non-zero row counts when no manual check has been made.
   useEffect(() => {
-    if (form.getFieldValue("turul") === "Бүгд") {
-      onSelectChange(
-        filteredGereeniiJagsaalt.map((r) => r._id),
-        filteredGereeniiJagsaalt
-      );
-    }
+    // Selection stays 0 until user manually checks a row.
   }, [shuult, form, filteredGereeniiJagsaalt]);
 
   useEffect(() => {
@@ -1149,13 +1145,25 @@ function tulburTootsoo() {
         });
       }
 
-      setTootsoolol({
-        niitTalbai,
-        niitSariinTurees: baseTotalForSearch,
-        khunglugdsunDun: 0,
-        niitTulukhDun: baseTotalForSearch,
-        khungulukhKhuvi: 0,
-      });
+      // For "zardal" type: show nothing until user provides khuvi or mungundun.
+      // For "turees" type: show the base total so user knows what they're discounting.
+      if (khungulukhTurul === "zardal") {
+        setTootsoolol({
+          niitTalbai: rowsToUse.length,
+          niitSariinTurees: 0,
+          khunglugdsunDun: 0,
+          niitTulukhDun: 0,
+          khungulukhKhuvi: 0,
+        });
+      } else {
+        setTootsoolol({
+          niitTalbai,
+          niitSariinTurees: baseTotalForSearch,
+          khunglugdsunDun: 0,
+          niitTulukhDun: baseTotalForSearch,
+          khungulukhKhuvi: 0,
+        });
+      }
       return;
     }
 
@@ -1605,11 +1613,26 @@ function tulburTootsoo() {
                         disabledDate={disabledDate}
                         placeholder={[t("Эхлэх өдөр"), t("Дуусах өдөр")]}
                         onChange={(v) => {
-                          setOgnoonuud(v);
-                          form.setFieldValue(
-                            "khungulultKhonog",
-                            moment(v[1]).diff(v[0], "d") + 1
-                          );
+                          let finalVal = v;
+                          if (v && v[0] && v[1] && turul === "zardal") {
+                            const startMonth = moment(v[0]).format("YYYY-MM");
+                            const endMonth = moment(v[1]).format("YYYY-MM");
+                            if (startMonth !== endMonth) {
+                              notification.warning({
+                                message: t("Зардлын хөнгөлөлт нэг сар дотор байх ёстой."),
+                              });
+                              const correctedEnd = moment(v[0]).endOf("month");
+                              finalVal = [v[0], correctedEnd];
+                              form.setFieldsValue({ ognoonuud: finalVal });
+                            }
+                          }
+                          setOgnoonuud(finalVal);
+                          if (finalVal && finalVal[0] && finalVal[1]) {
+                            form.setFieldValue(
+                              "khungulultKhonog",
+                              moment(finalVal[1]).diff(finalVal[0], "d") + 1
+                            );
+                          }
                         }}
                       />
                     </Form.Item>
