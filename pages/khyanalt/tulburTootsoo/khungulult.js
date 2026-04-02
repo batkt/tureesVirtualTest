@@ -1063,7 +1063,20 @@ function tulburTootsoo() {
     setSongogdsonGereenuud(selectedRows);
   }
 
-  function khungulultDunTootsoolyo() {
+  function khungulultDunTootsoolyo(manualRows) {
+    const rowsToUse = manualRows !== undefined ? manualRows : songogdsonGereenuud;
+
+    if (!rowsToUse || rowsToUse.length === 0) {
+      setTootsoolol({
+        niitTalbai: 0,
+        niitSariinTurees: 0,
+        khunglugdsunDun: 0,
+        niitTulukhDun: 0,
+        khungulukhKhuvi: 0,
+      });
+      return;
+    }
+
     let dun =
       Number(form?.getFieldValue("khungulukhKhuvi")) ||
       Number(form?.getFieldValue("khungulultKhuvi")) ||
@@ -1467,7 +1480,18 @@ function tulburTootsoo() {
                     khungulukhTurul: "turees",
                     khonogTootsokhEsekh: false,
                   }}
-                  onValuesChange={() => khungulultDunTootsoolyo()}
+                  onValuesChange={(changedValues) => {
+                    if (
+                      changedValues.khungulukhTurul ||
+                      changedValues.zardliinId
+                    ) {
+                      setRowKeys([]);
+                      setSongogdsonGereenuud([]);
+                      khungulultDunTootsoolyo([]);
+                    } else {
+                      khungulultDunTootsoolyo();
+                    }
+                  }}
                   labelCol={{
                     span: 12,
                   }}
@@ -1497,14 +1521,6 @@ function tulburTootsoo() {
                           });
                           form.setFieldsValue({ zardliinId: undefined });
                         }
-                        setRowKeys([]);
-                        setSongogdsonGereenuud([]);
-                        setTootsoolol({
-                          niitTalbai: 0,
-                          niitSariinTurees: 0,
-                          khunglugdsunDun: 0,
-                          niitTulukhDun: 0,
-                        });
                       }}
                     >
                       <Select.Option value={"turees"}>Түрээс</Select.Option>
@@ -1540,12 +1556,6 @@ function tulburTootsoo() {
                                     "zardluud._id": e,
                                   },
                             });
-                            setRowKeys([]);
-                            setSongogdsonGereenuud([]);
-                            // Trigger calculation when zardal changes
-                            setTimeout(() => {
-                              khungulultDunTootsoolyo();
-                            }, 100);
                           }}
                         >
                           {zardal?.jagsaalt?.map((z) => (
@@ -1572,7 +1582,6 @@ function tulburTootsoo() {
                             form.setFieldValue("khungulultKhonog", 0);
                           }
                           setKhonogTootsokhEsekh(v);
-                          khungulultDunTootsoolyo();
                         }}
                       />
                     </Form.Item>
@@ -1601,7 +1610,6 @@ function tulburTootsoo() {
                             "khungulultKhonog",
                             moment(v[1]).diff(v[0], "d") + 1
                           );
-                          khungulultDunTootsoolyo();
                         }}
                       />
                     </Form.Item>
