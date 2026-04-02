@@ -273,8 +273,15 @@ function tulburTootsoo() {
   }, [shuult, form, filteredGereeniiJagsaalt]);
 
   useEffect(() => {
-    khungulukhDunTootsoolyo();
-  }, [songogdsonGereenuud, zardal?.jagsaalt]);
+    khungulultDunTootsoolyo();
+  }, [
+    songogdsonGereenuud,
+    zardal?.jagsaalt,
+    turul,
+    khonogTootsokhEsekh,
+    khungulukh,
+    ognoonuud,
+  ]);
 
   function disabledDate(current) {
     return ajiltan?.erkh == "Admin" ||
@@ -983,8 +990,11 @@ function tulburTootsoo() {
     setSongogdsonGereenuud(selectedRows);
   }
 
-  function khungulukhDunTootsoolyo() {
-    let dun = Number(form?.getFieldValue("khungulukhKhuvi"));
+  function khungulultDunTootsoolyo() {
+    let dun =
+      Number(form?.getFieldValue("khungulukhKhuvi")) ||
+      Number(form?.getFieldValue("khungulultKhuvi")) ||
+      0;
     let niitSariinTurees = 0;
     let niitTalbai = songogdsonGereenuud?.length || 0;
     const fVal = form.getFieldValue("zardliinId");
@@ -1246,7 +1256,12 @@ function tulburTootsoo() {
                   autoComplete={"off"}
                   ref={formRef}
                   name="control-ref"
-                  initialValues={{ remember: true }}
+                  initialValues={{
+                    remember: true,
+                    khungulukhTurul: "turees",
+                    khonogTootsokhEsekh: false,
+                  }}
+                  onValuesChange={() => khungulultDunTootsoolyo()}
                   labelCol={{
                     span: 12,
                   }}
@@ -1320,7 +1335,7 @@ function tulburTootsoo() {
                             });
                             // Trigger calculation when zardal changes
                             setTimeout(() => {
-                              khungulukhDunTootsoolyo();
+                              khungulultDunTootsoolyo();
                             }, 100);
                           }}
                         >
@@ -1348,7 +1363,7 @@ function tulburTootsoo() {
                             form.setFieldValue("khungulultKhonog", 0);
                           }
                           setKhonogTootsokhEsekh(v);
-                          khungulukhDunTootsoolyo();
+                          khungulultDunTootsoolyo();
                         }}
                       />
                     </Form.Item>
@@ -1377,7 +1392,7 @@ function tulburTootsoo() {
                             "khungulultKhonog",
                             moment(v[1]).diff(v[0], "d") + 1
                           );
-                          khungulukhDunTootsoolyo();
+                          khungulultDunTootsoolyo();
                         }}
                       />
                     </Form.Item>
@@ -1464,7 +1479,7 @@ function tulburTootsoo() {
                         min={1}
                         max={100}
                         placeholder="Хөнгөлөх хувь"
-                        onChange={khungulukhDunTootsoolyo}
+                        onChange={khungulultDunTootsoolyo}
                       />
                     </Form.Item>
                   ) : (
@@ -1548,7 +1563,7 @@ function tulburTootsoo() {
                             ? "Хөнгөлөх хувь"
                             : "Хөнгөлөх дүн"
                         }
-                        onChange={khungulukhDunTootsoolyo}
+                        onChange={khungulultDunTootsoolyo}
                       />
                     </Form.Item>
                   ) : (
