@@ -27,6 +27,8 @@ import {
   PlusOutlined,
   SettingOutlined,
   UploadOutlined,
+  PrinterOutlined,
+  CloseCircleOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
@@ -48,6 +50,7 @@ import uilchilgee from "services/uilchilgee";
 import { useRouter } from "next/router";
 import Tseneglekh from "components/pageComponents/zogsool/Tseneglekh";
 import { toast } from "sonner";
+import DugaarKharya from "components/pageComponents/zogsool/DugaarKharya";
 function mashinBurtgel({ token }) {
   const { t } = useTranslation();
   const router = useRouter();
@@ -61,6 +64,11 @@ function mashinBurtgel({ token }) {
   const [songogdsonMashin, setSongogdsonMashin] = useState([]);
   const [songogdsonBlockMashin, setSongogdsonBlockMashin] = useState([]);
   const [activeTab, setActiveTab] = useState("1");
+  const ref = React.useRef(null);
+  const [ognoo, setOgnoo] = React.useState([
+    moment(moment().startOf("month").format("YYYY-MM-DD 00:00:00")),
+    moment(moment().endOf("month").format("YYYY-MM-DD 23:59:59")),
+  ]);
 
   const query = useMemo(() => {
     var query = {};
@@ -414,39 +422,39 @@ function mashinBurtgel({ token }) {
         render: (value, record) => {
           if (record?.turul === "Байгууллага") {
             return (
-              <Popover
-                content={
-                  <div style={{ minWidth: "200px", width: "100%" }}>
-                    {record.mashinuud && record.mashinuud.length > 0 ? (
-                      record.mashinuud.map((mashiin, index) => (
-                        <div
-                          className="px-2 py-1 text-black dark:text-gray-200"
-                          key={index}
-                          style={{
-                            width: "100%",
-                            backgroundColor:
-                              index % 2 === 1
-                                ? "rgba(128, 128, 128, 0.3)"
-                                : "transparent",
-                          }}
-                        >
-                          {mashiin}
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-black dark:text-gray-200">
-                        Бүртгэлтэй машин алга
-                      </div>
-                    )}
-                  </div>
-                }
-                title="Машин дугаарууд"
-                trigger="hover"
-              >
-                <span className="cursor-pointer ">
-                  <EyeOutlined className="mr-1 h-5 text-black dark:text-gray-200" />
-                </span>
-              </Popover>
+              <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
+                <a
+                  onClick={() => dugaarKharya(record)}
+                  className="fill-current text-green-500 hover:scale-110"
+                >
+                  <Tooltip
+                    title={t("Дугаар харах")}
+                    className="flex w-full items-center  justify-center px-[6px] "
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                      <rect
+                        x="8"
+                        y="2"
+                        width="8"
+                        height="4"
+                        rx="1"
+                        ry="1"
+                      ></rect>
+                    </svg>
+                  </Tooltip>
+                </a>
+              </div>
             );
           } else {
             return record.dugaar || "-";
@@ -462,18 +470,29 @@ function mashinBurtgel({ token }) {
         sorter: () => 0,
       },
       {
+        title: t("Хөнгөлөх хугацаа"),
+        align: "center",
+        width: "6rem",
+        dataIndex: "khungulukhKhugatsaa",
+        showSorterTooltip: false,
+        render: (value, record) => {
+          return (
+            <div className="flex h-[1.5rem] w-[4rem] items-center justify-center rounded-lg bg-green-400 px-2 py-1 font-[600] text-white">
+              {value ? value : 0}
+            </div>
+          );
+        },
+      },
+      {
         title: t("Үлдэгдэл хугацаа"),
         align: "center",
         width: "6rem",
-        dataIndex: "tsenegleltTuukh",
+        dataIndex: "uldegdelKhungulukhKhugatsaa",
         showSorterTooltip: false,
         render: (value, record) => {
-          const uldegdel =
-            value?.[0]?.uldegdel ?? record?.khungulukhKhugatsaa ?? 0;
-
           return (
             <div className="flex h-[1.5rem] w-[4rem] items-center justify-center rounded-lg bg-green-400 px-2 py-1 font-[600] text-white">
-              {uldegdel}
+              {value ? value : 0}
             </div>
           );
         },
@@ -999,6 +1018,62 @@ function mashinBurtgel({ token }) {
   });
   function medegdelKhuudasruuOchiy() {
     router.push("/khyanalt/zogsool/zogsoolMedegdel");
+  }
+
+  function refreshData() {
+    mashinMutate();
+    mashinToololtMutate();
+  }
+
+  function dugaarKharya(data) {
+    const footer = [
+      <Button
+        type="primary"
+        onClick={() => ref.current.excelTatakh()}
+        icon={<FileExcelOutlined />}
+      >
+        {t("Татах")}
+      </Button>,
+      <Button
+        type="primary"
+        onClick={() => ref.current.khevlekh()}
+        icon={<PrinterOutlined />}
+      >
+        {t("Хэвлэх")}
+      </Button>,
+      <Button
+        onClick={() => ref.current.khaaya()}
+        icon={<CloseCircleOutlined />}
+      >
+        {t("Хаах")}
+      </Button>,
+    ];
+    modal({
+      title: (
+        <div className="relative flex w-full justify-between">
+          {t("Дугаар")}
+        </div>
+      ),
+      icon: <FileExcelOutlined />,
+      width: "50vw",
+      bodyStyle: {
+        height: "90vh",
+      },
+      style: { top: 20 },
+      content: (
+        <DugaarKharya
+          data={data}
+          ajiltan={ajiltan}
+          barilgiinId={barilgiinId}
+          ref={ref}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+          ognoo={ognoo}
+          onFinish={refreshData}
+        />
+      ),
+      footer,
+    });
   }
 
   return (
