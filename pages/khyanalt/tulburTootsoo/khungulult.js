@@ -53,7 +53,7 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
         destroy();
       },
     }),
-    [tailbar]
+    [tailbar],
   );
   return (
     <div>
@@ -153,7 +153,7 @@ function tulburTootsoo() {
       undefined,
       1000,
       undefined,
-      select
+      select,
     );
   const {
     khungulultTuukh,
@@ -163,7 +163,7 @@ function tulburTootsoo() {
   } = useKhungulultTuukh(
     songogdsonNuur === "2" && token,
     baiguullaga?._id,
-    query
+    query,
   );
 
   const [tootsoolol, setTootsoolol] = useState({
@@ -188,7 +188,7 @@ function tulburTootsoo() {
     () => ({
       barilgiinId,
     }),
-    [barilgiinId]
+    [barilgiinId],
   );
 
   const zardal = useJagsaalt(
@@ -197,7 +197,7 @@ function tulburTootsoo() {
     undefined,
     undefined,
     undefined,
-    token
+    token,
   );
 
   const isSelectedUtilityExpense = useMemo(() => {
@@ -210,10 +210,9 @@ function tulburTootsoo() {
 
     const selectedZardal = zardal?.jagsaalt?.find((z) => z._id === zardliinId);
     return (
-      selectedZardal?.ner?.trim() === "Халуун ус" ||
-      selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
-      selectedZardal?.ner?.trim() === "Цахилгаан" ||
-      selectedZardal?.ner?.trim() === "Цахилгаан2"
+      selectedZardal?.ner === "Халуун ус" ||
+      selectedZardal?.ner === "Хүйтэн ус" ||
+      selectedZardal?.ner === "Цахилгаан"
     );
   }, [
     form.getFieldValue("zardliinId"),
@@ -234,15 +233,12 @@ function tulburTootsoo() {
     const selectedZardal = zardal?.jagsaalt?.find((z) => z._id === zardliinId);
 
     const isUtilityExpense =
-      selectedZardal?.ner?.trim() === "Халуун ус" ||
-      selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
-      selectedZardal?.ner?.trim() === "Цахилгаан" ||
-      selectedZardal?.ner?.trim() === "Цахилгаан2";
+      selectedZardal?.ner === "Халуун ус" ||
+      selectedZardal?.ner === "Хүйтэн ус" ||
+      selectedZardal?.ner === "Цахилгаан";
 
     if (!isUtilityExpense) {
-      return gereeniiMedeelel.jagsaalt.filter((geree) => {
-        return geree?.zardluud?.some((z) => z._id === zardliinId);
-      });
+      return gereeniiMedeelel.jagsaalt;
     }
 
     return gereeniiMedeelel.jagsaalt.filter((geree) => {
@@ -251,41 +247,40 @@ function tulburTootsoo() {
         return true;
       }
 
-      const rangeGuilgeenuud = geree?.avlaga?.guilgeenuud?.some((guilgee) => {
+      const hasAvlagaData = geree?.avlaga?.guilgeenuud?.some((guilgee) => {
         return (
-          guilgee.tailbar?.trim() === selectedZardal?.ner?.trim() &&
+          guilgee.tailbar === selectedZardal?.ner &&
           (guilgee.tulukhDun || 0) !== 0
         );
       });
-      return rangeGuilgeenuud;
+
+      return hasAvlagaData;
     });
   }, [
+    gereeniiMedeelel?.jagsaalt,
     form.getFieldValue("zardliinId"),
     form.getFieldValue("khungulukhTurul"),
-    gereeniiMedeelel?.jagsaalt,
     zardal?.jagsaalt,
   ]);
 
-  // Removed auto-selection to prevent non-zero row counts when no manual check has been made.
   useEffect(() => {
-    // Selection stays 0 until user manually checks a row.
+    if (form.getFieldValue("turul") === "Бүгд") {
+      onSelectChange(
+        filteredGereeniiJagsaalt.map((r) => r._id),
+        filteredGereeniiJagsaalt,
+      );
+    }
   }, [shuult, form, filteredGereeniiJagsaalt]);
 
   useEffect(() => {
-    khungulultDunTootsoolyo();
-  }, [
-    songogdsonGereenuud,
-    zardal?.jagsaalt,
-    turul,
-    khonogTootsokhEsekh,
-    khungulukh,
-    ognoonuud,
-  ]);
+    khungulukhDunTootsoolyo();
+  }, [songogdsonGereenuud, zardal?.jagsaalt, form?.getFieldValue("khungulukhTurul"),
+    ]);
 
   function disabledDate(current) {
     return ajiltan?.erkh == "Admin" ||
       _.get(ajiltan, `tokhirgoo.umkhunSaraarKhungulultEsekh`)?.find(
-        (a) => a === barilgiinId
+        (a) => a === barilgiinId,
       )
       ? false
       : current && current < moment().startOf("day");
@@ -332,7 +327,7 @@ function tulburTootsoo() {
     if (
       ajiltan?.erkh !== "Admin" &&
       !_.get(ajiltan, `tokhirgoo.khungulultUzuulekhEsekh`)?.find(
-        (a) => a === barilgiinId
+        (a) => a === barilgiinId,
       )
     ) {
       setWaiting(false);
@@ -355,23 +350,10 @@ function tulburTootsoo() {
       ugugdul.barilgiinId = barilgiinId;
       ugugdul.tulukhDun = tootsoolol.niitSariinTurees;
       ugugdul.khungulsunDun = tootsoolol.niitTulukhDun;
-      const ehlelRange = ognoonuud?.[0]
-        ? moment(ognoonuud[0]).startOf("month")
-        : null;
-      const duusahRange = ognoonuud?.[1]
-        ? moment(ognoonuud[1]).startOf("month")
-        : null;
-      const monthsCount =
-        ehlelRange && duusahRange
-          ? duusahRange.diff(ehlelRange, "months") + 1
-          : 1;
-
-      ugugdul.khungulultiinDun =
-        tootsoolol.khunglugdsunDun /
-        (ugugdul.khonogTootsokhEsekh ? 1 : monthsCount);
+      ugugdul.khungulultiinDun = tootsoolol.khunglugdsunDun;
       ugugdul.khamaataiGereenuud = songogdsonGereenuud.map((x) => {
         var zardliinData = x?.zardluud?.find(
-          (e) => e?._id === form.getFieldValue("zardliinId")
+          (e) => e?._id === form.getFieldValue("zardliinId"),
         );
 
         if (turul === "zardal") {
@@ -379,14 +361,12 @@ function tulburTootsoo() {
 
           var khymdraaguiDun;
           const isUtilityExpense =
-            zardliinData?.ner?.trim() === "Халуун ус" ||
-            zardliinData?.ner?.trim() === "Хүйтэн ус" ||
-            zardliinData?.ner?.trim() === "Цахилгаан" ||
-            zardliinData?.ner?.trim() === "Цахилгаан2" ||
-            songogdsonZardal?.ner?.trim() === "Халуун ус" ||
-            songogdsonZardal?.ner?.trim() === "Хүйтэн ус" ||
-            songogdsonZardal?.ner?.trim() === "Цахилгаан" ||
-            songogdsonZardal?.ner?.trim() === "Цахилгаан2";
+            zardliinData?.ner === "Халуун ус" ||
+            zardliinData?.ner === "Хүйтэн ус" ||
+            zardliinData?.ner === "Цахилгаан" ||
+            songogdsonZardal?.ner === "Халуун ус" ||
+            songogdsonZardal?.ner === "Хүйтэн ус" ||
+            songogdsonZardal?.ner === "Цахилгаан";
 
           if (isUtilityExpense) {
             if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
@@ -394,24 +374,25 @@ function tulburTootsoo() {
             } else {
               const avlagaData = x?.avlaga?.guilgeenuud?.find(
                 (guilgee) =>
-                  guilgee.tailbar?.trim() ===
-                    (zardliinData?.ner || songogdsonZardal?.ner)?.trim() &&
-                  (guilgee.tulukhDun || 0) !== 0
+                  guilgee.tailbar ===
+                    (zardliinData?.ner || songogdsonZardal?.ner) &&
+                  (guilgee.tulukhDun || 0) !== 0,
               );
               khymdraaguiDun = avlagaData?.tulukhDun || 0;
             }
-          } else if (zardliinData) {
+          } else if (zardliinData || songogdsonZardal) {
+            const actingZardal = zardliinData || songogdsonZardal;
             var urjuulekhData =
-              zardliinData?.turul === "1м3/талбай"
+              actingZardal?.turul === "1м3/талбай"
                 ? x.talbainKhemjeeMetrKube || 1
-                : zardliinData?.turul === "1м2"
+                : actingZardal?.turul === "1м2"
                 ? x?.talbainKhemjee
-                : zardliinData?.turul === "Тогтмол" && 1;
+                : actingZardal?.turul === "Тогтмол" && 1;
 
             khymdraaguiDun =
-              zardliinData?.turul === "Дурын"
-                ? zardliinData.dun
-                : zardliinData?.tariff * urjuulekhData;
+              actingZardal?.turul === "Дурын"
+                ? actingZardal.dun
+                : (actingZardal?.tariff || 0) * (urjuulekhData || 1);
           } else {
             khymdraaguiDun = 0;
           }
@@ -550,17 +531,11 @@ function tulburTootsoo() {
           }
         }
 
-        const monthsCount =
-          ehlelRange && duusahRange
-            ? duusahRange.diff(ehlelRange, "months") + 1
-            : 1;
-
         return {
           gereeniiId: x._id,
           gereeniiDugaar: x.gereeniiDugaar,
           ner: x.ner,
-          khymdarsanDun:
-            khymdarsanDun / (ugugdul.khonogTootsokhEsekh ? 1 : monthsCount),
+          khymdarsanDun,
         };
       });
 
@@ -596,6 +571,13 @@ function tulburTootsoo() {
   }
 
   const gereeniiColumn = useMemo(() => {
+    let durationMultiplier = 1;
+    const currentOgnoonuud = ognoonuud && ognoonuud.length > 0 ? ognoonuud : form?.getFieldValue("ognoonuud");
+    if (currentOgnoonuud && currentOgnoonuud[0] && currentOgnoonuud[1]) {
+      const mDiff = moment(currentOgnoonuud[1]).startOf("month").diff(moment(currentOgnoonuud[0]).startOf("month"), "months");
+      durationMultiplier = mDiff >= 0 ? mDiff + 1 : 1;
+    }
+
     let column = [
       {
         title: t("Түрээслэгч"),
@@ -654,24 +636,11 @@ function tulburTootsoo() {
         width: "7rem",
         align: "center",
         render: (sariinTurees) => {
-          const ognoonuudVal = form.getFieldValue("ognoonuud");
-          const ehlelVal = ognoonuudVal?.[0]
-            ? moment(ognoonuudVal[0]).startOf("month")
-            : null;
-          const duusahVal = ognoonuudVal?.[1]
-            ? moment(ognoonuudVal[1]).startOf("month")
-            : null;
-          const monthsCount =
-            ehlelVal && duusahVal ? duusahVal.diff(ehlelVal, "months") + 1 : 1;
-
-          return formatNumber(
-            (sariinTurees || 0) *
-              (form.getFieldValue("khonogTootsokhEsekh") ? 1 : monthsCount)
-          );
+          return formatNumber((sariinTurees || 0) * durationMultiplier);
         },
         showSorterTooltip: false,
         sorter: (a, b) =>
-          Number(a.sariinTurees || 0) - Number(b.sariinTurees || 0),
+          Number((a.sariinTurees || 0) * durationMultiplier) - Number((b.sariinTurees || 0) * durationMultiplier),
       },
     ];
 
@@ -681,7 +650,7 @@ function tulburTootsoo() {
     ) {
       column.push({
         title: zardal?.jagsaalt?.find(
-          (e) => e?._id === form.getFieldValue("zardliinId")
+          (e) => e?._id === form.getFieldValue("zardliinId"),
         )?.ner,
         dataIndex: "data",
         className: "data",
@@ -689,11 +658,11 @@ function tulburTootsoo() {
         align: "center",
         render: (e, data) => {
           var zardliinData = data?.zardluud?.find(
-            (e) => e?._id === form.getFieldValue("zardliinId")
+            (e) => e?._id === form.getFieldValue("zardliinId"),
           );
 
           const selectedZardal = zardal?.jagsaalt?.find(
-            (e) => e?._id === form.getFieldValue("zardliinId")
+            (e) => e?._id === form.getFieldValue("zardliinId"),
           );
 
           const isUtilityExpense =
@@ -703,79 +672,42 @@ function tulburTootsoo() {
             selectedZardal?.ner?.trim() === "Цахилгаан2";
 
           if (isUtilityExpense) {
-            const ehlelVal = form.getFieldValue("ognoonuud")?.[0]
-              ? moment(form.getFieldValue("ognoonuud")[0]).startOf("month")
-              : null;
-            const duusahVal = form.getFieldValue("ognoonuud")?.[1]
-              ? moment(form.getFieldValue("ognoonuud")[1]).startOf("month")
-              : null;
+            if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
+              return formatNumber((zardliinData?.tulukhDun || 0) * durationMultiplier, 2);
+            }
 
-            const rangeGuilgeenuud = data?.avlaga?.guilgeenuud?.filter(
-              (guilgee) => {
-                const guilgeeOgnoo = moment(guilgee.ognoo).startOf("month");
-                return (
-                  guilgee.tailbar?.trim() === selectedZardal?.ner?.trim() &&
-                  (ehlelVal && duusahVal
-                    ? guilgeeOgnoo.isSameOrAfter(ehlelVal) &&
-                      guilgeeOgnoo.isSameOrBefore(duusahVal)
-                    : true) &&
-                  (guilgee.tulukhDun || 0) !== 0
-                );
-              }
+            const avlagaData = data?.avlaga?.guilgeenuud?.find(
+              (guilgee) =>
+                guilgee.tailbar === selectedZardal?.ner &&
+                (guilgee.tulukhDun || 0) !== 0,
             );
 
-            const sumRange =
-              rangeGuilgeenuud?.reduce(
-                (a, b) => a + Number(b.tulukhDun || 0),
-                0
-              ) || 0;
-
-            if (sumRange !== 0) {
-              return formatNumber(sumRange, 2);
-            } else if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
-              return formatNumber(zardliinData?.tulukhDun || 0, 2);
+            if (avlagaData) {
+              return formatNumber((avlagaData.tulukhDun || 0) * durationMultiplier, 2);
             }
           }
 
-          if (zardliinData) {
-            const ehlelVal = form.getFieldValue("ognoonuud")?.[0]
-              ? moment(form.getFieldValue("ognoonuud")[0]).startOf("month")
-              : null;
-            const duusahVal = form.getFieldValue("ognoonuud")?.[1]
-              ? moment(form.getFieldValue("ognoonuud")[1]).startOf("month")
-              : null;
-            const monthsCount =
-              ehlelVal && duusahVal
-                ? duusahVal.diff(ehlelVal, "months") + 1
-                : 1;
-
+          if (zardliinData || selectedZardal) {
+            const actingZardal = zardliinData || selectedZardal;
             var urjuulekhData =
-              zardliinData?.turul === "1м3/талбай"
+              actingZardal?.turul === "1м3/талбай"
                 ? data.talbainKhemjeeMetrKube || 1
-                : zardliinData?.turul === "1м2"
+                : actingZardal?.turul === "1м2"
                 ? data?.talbainKhemjee
-                : zardliinData?.turul === "Тогтмол" && 1;
+                : actingZardal?.turul === "Тогтмол" && 1;
 
-            var kharuulakhData = formatNumber(
-              zardliinData?.tariff * urjuulekhData * monthsCount,
-              2
-            );
+            var rawAmount = actingZardal?.turul === "Дурын"
+              ? actingZardal?.dun || 0
+              : actingZardal?.tariff * urjuulekhData;
 
-            return zardliinData?.turul === "Дурын"
-              ? (zardliinData?.dun || 0) * monthsCount
-              : kharuulakhData || 0;
+            return formatNumber(rawAmount * durationMultiplier, 2);
           } else return 0;
         },
       });
     }
 
     return column;
-  }, [
-    form.getFieldValue("zardliinId"),
-    zardal?.jagsaalt,
-    ognoonuud,
-    khonogTootsokhEsekh,
-  ]);
+  }, [form.getFieldValue("zardliinId"), zardal?.jagsaalt, ognoonuud, form.getFieldValue("khungulukhTurul")]);
 
   function ustgaya(mur) {
     const footer = [
@@ -800,7 +732,7 @@ function tulburTootsoo() {
                 if (data !== undefined) {
                   khungulultTuukhMutate(
                     (s) => ({ ...s, jagsaalt: s.jagsaalt }),
-                    true
+                    true,
                   );
                   toast.success(t("Устгагдлаа"));
                 }
@@ -1059,131 +991,37 @@ function tulburTootsoo() {
     setSongogdsonGereenuud(selectedRows);
   }
 
-  function khungulultDunTootsoolyo(manualRows) {
-    const rowsToUse = manualRows !== undefined ? manualRows : songogdsonGereenuud;
+  function khungulukhDunTootsoolyo() {
+    const rawDiscount = form?.getFieldValue("khungulukhKhuvi");
+    let dun = Number(rawDiscount);
+    if (isNaN(dun) || dun < 0) dun = 0;
 
-    if (!rowsToUse || rowsToUse.length === 0) {
-      setTootsoolol({
-        niitTalbai: 0,
-        niitSariinTurees: 0,
-        khunglugdsunDun: 0,
-        niitTulukhDun: 0,
-        khungulukhKhuvi: 0,
-      });
-      return;
+    let durationMultiplier = 1;
+    const currentOgnoonuud = ognoonuud && ognoonuud.length > 0 ? ognoonuud : form?.getFieldValue("ognoonuud");
+    if (currentOgnoonuud && currentOgnoonuud[0] && currentOgnoonuud[1]) {
+      const mDiff = moment(currentOgnoonuud[1]).startOf("month").diff(moment(currentOgnoonuud[0]).startOf("month"), "months");
+      durationMultiplier = mDiff >= 0 ? mDiff + 1 : 1;
     }
 
-    let dun =
-      Number(form?.getFieldValue("khungulukhKhuvi")) ||
-      Number(form?.getFieldValue("khungulultKhuvi")) ||
-      0;
     let niitSariinTurees = 0;
     let niitTalbai = songogdsonGereenuud?.length || 0;
     const fVal = form.getFieldValue("zardliinId");
-    const khungulukhTurul = turul;
+    const khungulukhTurul = form.getFieldValue("khungulukhTurul") || "turees";
 
-    const ehlelRange = ognoonuud?.[0] ? moment(ognoonuud[0]).startOf("month") : null;
-    const duusahRange = ognoonuud?.[1] ? moment(ognoonuud[1]).startOf("month") : null;
-    const monthsCount =
-      ehlelRange && duusahRange ? duusahRange.diff(ehlelRange, "months") + 1 : 1;
-
-    if (dun === 0) {
-      let baseTotalForSearch = 0;
-      if (khungulukhTurul === "turees") {
-        baseTotalForSearch = songogdsonGereenuud?.reduce(
-          (a, b) =>
-            a +
-            Number(b?.sariinTurees || 0) * (khonogTootsokhEsekh ? 1 : monthsCount),
-          0
-        );
-      } else {
-        const selectedZardalMaster = zardal.jagsaalt?.find((z) => z._id === fVal);
-        songogdsonGereenuud?.forEach((e) => {
-          const gereeZardal = e?.zardluud.find((a) => a._id === fVal);
-          const selectedZardal = gereeZardal || selectedZardalMaster;
-          if (!selectedZardal) return;
-
-          const isUtilityExpense =
-            selectedZardal?.ner?.trim() === "Халуун ус" ||
-            selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
-            selectedZardal?.ner?.trim() === "Цахилгаан" ||
-            selectedZardal?.ner?.trim() === "Цахилгаан2";
-
-          if (isUtilityExpense) {
-            const rangeGuilgeenuud = e?.avlaga?.guilgeenuud?.filter((guilgee) => {
-              const guilgeeOgnoo = moment(guilgee.ognoo).startOf("month");
-              return (
-                guilgee.tailbar?.trim() === selectedZardal?.ner?.trim() &&
-                (ehlelRange && duusahRange
-                  ? guilgeeOgnoo.isSameOrAfter(ehlelRange) &&
-                    guilgeeOgnoo.isSameOrBefore(duusahRange)
-                  : true) &&
-                (guilgee.tulukhDun || 0) !== 0
-              );
-            });
-            if (rangeGuilgeenuud && rangeGuilgeenuud.length > 0) {
-              baseTotalForSearch += rangeGuilgeenuud.reduce(
-                (a, b) => a + Number(b.tulukhDun || 0),
-                0
-              );
-            } else if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
-              baseTotalForSearch += Number(gereeZardal.tulukhDun || 0);
-            }
-          } else {
-            let monthlyAmount = 0;
-            if (selectedZardal.turul === "1м2")
-              monthlyAmount = e.talbainKhemjee * (selectedZardal.tariff || 0);
-            else if (selectedZardal.turul === "1м3/талбай")
-              monthlyAmount =
-                (e.talbainKhemjeeMetrKube || 0) * (selectedZardal.tariff || 0);
-            else if (selectedZardal.turul === "Дурын")
-              monthlyAmount = Number(selectedZardal.dun || 0);
-            else monthlyAmount = Number(selectedZardal.tariff || 0);
-            baseTotalForSearch +=
-              monthlyAmount * (khonogTootsokhEsekh ? 1 : monthsCount);
-          }
-        });
-      }
-
-      // For "zardal" type: show nothing until user provides khuvi or mungundun.
-      // For "turees" type: show the base total so user knows what they're discounting.
-      if (khungulukhTurul === "zardal") {
-        setTootsoolol({
-          niitTalbai: rowsToUse.length,
-          niitSariinTurees: 0,
-          khunglugdsunDun: 0,
-          niitTulukhDun: 0,
-          khungulukhKhuvi: 0,
-        });
-      } else {
-        setTootsoolol({
-          niitTalbai,
-          niitSariinTurees: baseTotalForSearch,
-          khunglugdsunDun: 0,
-          niitTulukhDun: baseTotalForSearch,
-          khungulukhKhuvi: 0,
-        });
-      }
-      return;
-    }
-
-    // 1. Calculate Base Total Amount (niitSariinTurees)
     if (khungulukhTurul === "turees") {
       niitSariinTurees = songogdsonGereenuud?.reduce(
-        (a, b) => a + Number(b?.sariinTurees || 0) * (khonogTootsokhEsekh ? 1 : monthsCount),
-        0
+        (a, b) => a + Number(b?.sariinTurees || 0),
+        0,
       );
     } else {
-      const selectedZardalMaster = zardal.jagsaalt?.find((z) => z._id === fVal);
+      const selectedZardalMaster = zardal?.jagsaalt?.find((z) => z._id === fVal);
       if (selectedZardalMaster) {
         setSongogdsonZardal(selectedZardalMaster);
       }
 
       songogdsonGereenuud?.forEach((e) => {
-        const gereeZardal = e?.zardluud.find((a) => a._id === fVal);
+        const gereeZardal = e?.zardluud?.find((a) => a._id === fVal);
         const selectedZardal = gereeZardal || selectedZardalMaster;
-
-        if (!selectedZardal) return;
 
         const isUtilityExpense =
           selectedZardal?.ner?.trim() === "Халуун ус" ||
@@ -1192,48 +1030,39 @@ function tulburTootsoo() {
           selectedZardal?.ner?.trim() === "Цахилгаан2";
 
         if (isUtilityExpense) {
-          const rangeGuilgeenuud = e?.avlaga?.guilgeenuud?.filter((guilgee) => {
-            const guilgeeOgnoo = moment(guilgee.ognoo).startOf("month");
-            return (
-              guilgee.tailbar?.trim() === selectedZardal?.ner?.trim() &&
-              (ehlelRange && duusahRange
-                ? guilgeeOgnoo.isSameOrAfter(ehlelRange) &&
-                  guilgeeOgnoo.isSameOrBefore(duusahRange)
-                : true) &&
-              (guilgee.tulukhDun || 0) !== 0
-            );
-          });
-
-          if (rangeGuilgeenuud && rangeGuilgeenuud.length > 0) {
-            niitSariinTurees += rangeGuilgeenuud.reduce(
-              (a, b) => a + Number(b.tulukhDun || 0),
-              0
-            );
-          } else if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
+          if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
             niitSariinTurees += Number(gereeZardal.tulukhDun || 0);
+          } else {
+            const avlagaData = e?.avlaga?.guilgeenuud?.find(
+              (guilgee) =>
+                guilgee.tailbar === selectedZardal?.ner &&
+                (guilgee.tulukhDun || 0) !== 0,
+            );
+            if (avlagaData) {
+              niitSariinTurees += Number(avlagaData.tulukhDun || 0);
+            }
           }
-        } else {
-          let monthlyAmount = 0;
+        } else if (selectedZardal) {
+          let sDun = 0;
           if (selectedZardal.turul === "1м2")
-            monthlyAmount = e.talbainKhemjee * (selectedZardal.tariff || 0);
+            sDun = (e.talbainKhemjee || 0) * (selectedZardal.tariff || 0);
           else if (selectedZardal.turul === "1м3/талбай")
-            monthlyAmount =
-              (e.talbainKhemjeeMetrKube || 0) * (selectedZardal.tariff || 0);
+            sDun = (e.talbainKhemjeeMetrKube || 1) * (selectedZardal.tariff || 0);
           else if (selectedZardal.turul === "Дурын")
-            monthlyAmount = Number(selectedZardal.dun || 0);
-          else monthlyAmount = Number(selectedZardal.tariff || 0);
-
-          niitSariinTurees += monthlyAmount * (khonogTootsokhEsekh ? 1 : monthsCount);
+            sDun = Number(selectedZardal.dun || 0);
+          else sDun = Number(selectedZardal.tariff || 0);
+          niitSariinTurees += sDun;
         }
       });
     }
+
+    niitSariinTurees = niitSariinTurees * durationMultiplier;
 
     if (khungulukh === "khuvi" && dun > 100) {
       form.setFieldsValue({ khungulukhKhuvi: 100 });
       dun = 100;
     }
 
-    // 2. Calculate Discount Total Amount
     let totalKhunglugdsunDun = 0;
 
     if (
@@ -1251,9 +1080,7 @@ function tulburTootsoo() {
         } else {
           const gereeZardal = geree?.zardluud?.find((a) => a._id === fVal);
           const selectedZardal =
-            gereeZardal || zardal.jagsaalt?.find((z) => z._id === fVal);
-
-          if (!selectedZardal) return;
+            gereeZardal || zardal?.jagsaalt?.find((z) => z._id === fVal);
 
           const isUtilityExpense =
             selectedZardal?.ner?.trim() === "Халуун ус" ||
@@ -1262,49 +1089,34 @@ function tulburTootsoo() {
             selectedZardal?.ner?.trim() === "Цахилгаан2";
 
           if (isUtilityExpense) {
-            const rangeGuilgeenuud = geree?.avlaga?.guilgeenuud?.filter(
-              (guilgee) => {
-                const guilgeeOgnoo = moment(guilgee.ognoo).startOf("month");
-                return (
-                  guilgee.tailbar?.trim() === selectedZardal?.ner?.trim() &&
-                  (ehlelRange && duusahRange
-                    ? guilgeeOgnoo.isSameOrAfter(ehlelRange) &&
-                      guilgeeOgnoo.isSameOrBefore(duusahRange)
-                    : true) &&
-                  (guilgee.tulukhDun || 0) !== 0
-                );
-              }
-            );
-
-            if (rangeGuilgeenuud && rangeGuilgeenuud.length > 0) {
-              khymdraaguiDun =
-                rangeGuilgeenuud.reduce((a, b) => a + Number(b.tulukhDun || 0), 0) /
-                monthsCount; // Monthly average for daily calculation
+            if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
+              khymdraaguiDun = gereeZardal.tulukhDun || 0;
             } else {
-              khymdraaguiDun = (gereeZardal?.tulukhDun || 0);
+              const avlagaData = geree?.avlaga?.guilgeenuud?.find(
+                (guilgee) =>
+                  guilgee.tailbar === selectedZardal?.ner &&
+                  (guilgee.tulukhDun || 0) !== 0,
+              );
+              khymdraaguiDun = avlagaData?.tulukhDun || 0;
             }
-          } else {
+          } else if (selectedZardal) {
             if (selectedZardal.turul === "1м2")
-              khymdraaguiDun =
-                geree.talbainKhemjee * (selectedZardal.tariff || 0);
+              khymdraaguiDun = (geree.talbainKhemjee || 0) * (selectedZardal.tariff || 0);
             else if (selectedZardal.turul === "1м3/талбай")
               khymdraaguiDun =
-                (geree.talbainKhemjeeMetrKube || 0) *
-                (selectedZardal.tariff || 0);
+                (geree.talbainKhemjeeMetrKube || 1) * (selectedZardal.tariff || 0);
             else if (selectedZardal.turul === "Дурын")
               khymdraaguiDun = Number(selectedZardal.dun || 0);
             else khymdraaguiDun = Number(selectedZardal.tariff || 0);
           }
         }
 
-        const ehlel = ognoonuud?.[0];
-        const duusah = ognoonuud?.[1];
+        const ehlel = currentOgnoonuud?.[0];
+        const duusah = currentOgnoonuud?.[1];
 
-        if (
-          !geree.guchKhonogOruulakhEsekh &&
-          khungulultKhuvi &&
-          khungulultKhuvi > 0
-        ) {
+        const hasDailyDiscount = khungulultKhuvi && khungulultKhuvi > 0;
+
+        if (!geree.guchKhonogOruulakhEsekh && hasDailyDiscount) {
           if (ehlel && duusah) {
             const ehlelMonth = moment(ehlel).format("YYYY-MM");
             const duusahMonth = moment(duusah).format("YYYY-MM");
@@ -1352,7 +1164,7 @@ function tulburTootsoo() {
                 ? (Number(khymdraaguiDun) * dun) / 100
                 : dun;
           }
-        } else if (khungulultKhuvi && khungulultKhuvi > 0) {
+        } else if (hasDailyDiscount) {
           const negOdriinTolokh = khymdraaguiDun / 30;
           const dailyDiscount =
             khungulukh === "khuvi"
@@ -1361,13 +1173,7 @@ function tulburTootsoo() {
           gereeKhunglugdsunDun =
             dailyDiscount * (form.getFieldValue("khungulultKhonog") || 0);
         } else {
-          gereeKhunglugdsunDun =
-            ((form.getFieldValue("khungulultKhonog") || 0) * khymdraaguiDun) /
-            (parseFloat(
-              moment(ognoonuud ? ognoonuud[0] : moment())
-                .endOf("month")
-                .format("DD")
-            ) || 1);
+          gereeKhunglugdsunDun = 0;
         }
 
         totalKhunglugdsunDun += gereeKhunglugdsunDun;
@@ -1377,13 +1183,11 @@ function tulburTootsoo() {
         let khymdraaguiDun = 0;
 
         if (khungulukhTurul === "turees") {
-          khymdraaguiDun = (geree.sariinTurees || 0) * monthsCount;
+          khymdraaguiDun = geree.sariinTurees;
         } else {
           const gereeZardal = geree?.zardluud?.find((a) => a._id === fVal);
           const selectedZardal =
-            gereeZardal || zardal.jagsaalt?.find((z) => z._id === fVal);
-
-          if (!selectedZardal) return;
+            gereeZardal || zardal?.jagsaalt?.find((z) => z._id === fVal);
 
           const isUtilityExpense =
             selectedZardal?.ner?.trim() === "Халуун ус" ||
@@ -1392,49 +1196,31 @@ function tulburTootsoo() {
             selectedZardal?.ner?.trim() === "Цахилгаан2";
 
           if (isUtilityExpense) {
-            const rangeGuilgeenuud = geree?.avlaga?.guilgeenuud?.filter(
-              (guilgee) => {
-                const guilgeeOgnoo = moment(guilgee.ognoo).startOf("month");
-                return (
-                  guilgee.tailbar?.trim() === selectedZardal?.ner?.trim() &&
-                  (ehlelRange && duusahRange
-                    ? guilgeeOgnoo.isSameOrAfter(ehlelRange) &&
-                      guilgeeOgnoo.isSameOrBefore(duusahRange)
-                    : true) &&
-                  (guilgee.tulukhDun || 0) !== 0
-                );
-              }
-            );
-
-            if (rangeGuilgeenuud && rangeGuilgeenuud.length > 0) {
-              khymdraaguiDun = rangeGuilgeenuud.reduce(
-                (a, b) => a + Number(b.tulukhDun || 0),
-                0
-              );
-            } else if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
+            if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
               khymdraaguiDun = gereeZardal.tulukhDun || 0;
+            } else {
+              const avlagaData = geree?.avlaga?.guilgeenuud?.find(
+                (guilgee) =>
+                  guilgee.tailbar === selectedZardal?.ner &&
+                  (guilgee.tulukhDun || 0) !== 0,
+              );
+              khymdraaguiDun = avlagaData?.tulukhDun || 0;
             }
-          } else {
-            let monthlyAmount = 0;
+          } else if (selectedZardal) {
             if (selectedZardal.turul === "1м2")
-              monthlyAmount =
-                geree.talbainKhemjee * (selectedZardal.tariff || 0);
+              khymdraaguiDun = (geree.talbainKhemjee || 0) * (selectedZardal.tariff || 0);
             else if (selectedZardal.turul === "1м3/талбай")
-              monthlyAmount =
-                (geree.talbainKhemjeeMetrKube || 0) *
-                (selectedZardal.tariff || 0);
+              khymdraaguiDun =
+                (geree.talbainKhemjeeMetrKube || 1) * (selectedZardal.tariff || 0);
             else if (selectedZardal.turul === "Дурын")
-              monthlyAmount = Number(selectedZardal.dun || 0);
-            else monthlyAmount = Number(selectedZardal.tariff || 0);
-
-            khymdraaguiDun = monthlyAmount * monthsCount;
+              khymdraaguiDun = Number(selectedZardal.dun || 0);
+            else khymdraaguiDun = Number(selectedZardal.tariff || 0);
           }
         }
 
-        const gereeKhunglugdsunDun =
-          khungulukh === "khuvi"
-            ? (Number(khymdraaguiDun) * dun) / 100
-            : dun * monthsCount;
+        let gereeKhunglugdsunDun =
+          khungulukh === "khuvi" ? (Number(khymdraaguiDun) * dun) / 100 : dun;
+        gereeKhunglugdsunDun = gereeKhunglugdsunDun * durationMultiplier;
         totalKhunglugdsunDun += gereeKhunglugdsunDun;
       });
     }
@@ -1483,23 +1269,7 @@ function tulburTootsoo() {
                   autoComplete={"off"}
                   ref={formRef}
                   name="control-ref"
-                  initialValues={{
-                    remember: true,
-                    khungulukhTurul: "turees",
-                    khonogTootsokhEsekh: false,
-                  }}
-                  onValuesChange={(changedValues) => {
-                    if (
-                      changedValues.khungulukhTurul ||
-                      changedValues.zardliinId
-                    ) {
-                      setRowKeys([]);
-                      setSongogdsonGereenuud([]);
-                      khungulultDunTootsoolyo([]);
-                    } else {
-                      khungulultDunTootsoolyo();
-                    }
-                  }}
+                  initialValues={{ remember: true, khungulukhTurul: "turees" }}
                   labelCol={{
                     span: 12,
                   }}
@@ -1518,6 +1288,8 @@ function tulburTootsoo() {
                       defaultValue="turees"
                       onChange={(e) => {
                         setTurul(e);
+                        form.setFieldsValue({ ognoonuud: undefined, zardliinId: undefined, khungulultKhonog: undefined });
+                        setOgnoonuud([]);
                         if (e === "turees") {
                           setShuult({
                             query: !!shuult?.query?.davkhar
@@ -1527,8 +1299,10 @@ function tulburTootsoo() {
                                 }
                               : { tuluv: shuult.query.tuluv },
                           });
-                          form.setFieldsValue({ zardliinId: undefined });
                         }
+                        setTimeout(() => {
+                          khungulukhDunTootsoolyo();
+                        }, 100);
                       }}
                     >
                       <Select.Option value={"turees"}>Түрээс</Select.Option>
@@ -1564,6 +1338,10 @@ function tulburTootsoo() {
                                     "zardluud._id": e,
                                   },
                             });
+                             
+                            setTimeout(() => {
+                              khungulukhDunTootsoolyo();
+                            }, 100);
                           }}
                         >
                           {zardal?.jagsaalt?.map((z) => (
@@ -1590,13 +1368,14 @@ function tulburTootsoo() {
                             form.setFieldValue("khungulultKhonog", 0);
                           }
                           setKhonogTootsokhEsekh(v);
+                          khungulukhDunTootsoolyo();
                         }}
                       />
                     </Form.Item>
                   ) : (
                     ""
                   )}
-                  {khonogTootsokhEsekh ? (
+                  {!isSelectedUtilityExpense && khonogTootsokhEsekh ? (
                     <Form.Item
                       labelAlign="left"
                       name="ognoonuud"
@@ -1613,30 +1392,45 @@ function tulburTootsoo() {
                         disabledDate={disabledDate}
                         placeholder={[t("Эхлэх өдөр"), t("Дуусах өдөр")]}
                         onChange={(v) => {
-                          let finalVal = v;
-                          if (v && v[0] && v[1] && turul === "zardal") {
-                            const startMonth = moment(v[0]).format("YYYY-MM");
-                            const endMonth = moment(v[1]).format("YYYY-MM");
-                            if (startMonth !== endMonth) {
+                          if (v && v[0] && v[1]) {
+                            const monthDiff = moment(v[1]).diff(
+                              moment(v[0]),
+                              "months",
+                              true,
+                            );
+                            if (monthDiff > 1) {
                               notification.warning({
-                                message: t("Зардлын хөнгөлөлт нэг сар дотор байх ёстой."),
+                                message: t(
+                                  "Зөвхөн 1 сарыг хамарсан хөнгөлөлт сонгож болно",
+                                ),
                               });
-                              const correctedEnd = moment(v[0]).endOf("month");
-                              finalVal = [v[0], correctedEnd];
-                              form.setFieldsValue({ ognoonuud: finalVal });
+                              setOgnoonuud([]);
+                              form.setFieldsValue({
+                                ognoonuud: [],
+                                khungulultKhonog: undefined,
+                              });
+                              setTootsoolol((prev) => ({
+                                ...prev,
+                                khunglugdsunDun: 0,
+                              }));
+                              return;
                             }
                           }
-                          setOgnoonuud(finalVal);
-                          if (finalVal && finalVal[0] && finalVal[1]) {
+
+                          setOgnoonuud(v);
+                          if (v && v[0] && v[1]) {
                             form.setFieldValue(
                               "khungulultKhonog",
-                              moment(finalVal[1]).diff(finalVal[0], "d") + 1
+                              moment(v[1]).diff(v[0], "d") + 1,
                             );
+                          } else {
+                            form.setFieldValue("khungulultKhonog", undefined);
                           }
+                          khungulukhDunTootsoolyo();
                         }}
                       />
                     </Form.Item>
-                  ) : (
+                  ) : !isSelectedUtilityExpense ? (
                     <Form.Item
                       labelAlign="left"
                       name="ognoonuud"
@@ -1659,7 +1453,7 @@ function tulburTootsoo() {
                         }}
                       />
                     </Form.Item>
-                  )}
+                  ) : null}
                   {khonogTootsokhEsekh ? (
                     <Form.Item
                       label={t("Хөнгөлөх хоног")}
@@ -1692,21 +1486,21 @@ function tulburTootsoo() {
                               value === ""
                             ) {
                               return Promise.reject(
-                                new Error(t("Хөнгөлөх хувь оруулна уу!"))
+                                new Error(t("Хөнгөлөх хувь оруулна уу!")),
                               );
                             }
                             if (Number(value) <= 0) {
                               return Promise.reject(
                                 new Error(
-                                  t("Хөнгөлөх хувь 0-ээс их байх ёстой!")
-                                )
+                                  t("Хөнгөлөх хувь 0-ээс их байх ёстой!"),
+                                ),
                               );
                             }
                             if (Number(value) > 100) {
                               return Promise.reject(
                                 new Error(
-                                  t("Хөнгөлөх хувь 100-аас бага байх ёстой!")
-                                )
+                                  t("Хөнгөлөх хувь 100-аас бага байх ёстой!"),
+                                ),
                               );
                             }
                             return Promise.resolve();
@@ -1719,7 +1513,7 @@ function tulburTootsoo() {
                         min={1}
                         max={100}
                         placeholder="Хөнгөлөх хувь"
-                        onChange={khungulultDunTootsoolyo}
+                        onChange={khungulukhDunTootsoolyo}
                       />
                     </Form.Item>
                   ) : (
@@ -1803,7 +1597,7 @@ function tulburTootsoo() {
                             ? "Хөнгөлөх хувь"
                             : "Хөнгөлөх дүн"
                         }
-                        onChange={khungulultDunTootsoolyo}
+                        onChange={khungulukhDunTootsoolyo}
                       />
                     </Form.Item>
                   ) : (
@@ -1924,8 +1718,8 @@ function tulburTootsoo() {
                                 ? formatNumber(
                                     khungulultTuukh?.jagsaalt?.reduce(
                                       (a, b) => a + (b[mur.dataIndex] || 0),
-                                      0
-                                    )
+                                      0,
+                                    ),
                                   )
                                 : ""}
                               {mur.summary && "₮"}

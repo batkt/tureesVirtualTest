@@ -49,27 +49,11 @@ function BarilgiinTokhirgoo({
         aldangiOgnoo: barilga?.tokhirgoo?.aldangiOgnoo
           ? moment(barilga?.tokhirgoo?.aldangiOgnoo)
           : undefined,
-        eBarimtAshiglakhEsekh: barilga?.tokhirgoo?.eBarimtAshiglakhEsekh
-          ? barilga?.tokhirgoo?.eBarimtAshiglakhEsekh
-          : undefined,
-        eBarimtShine: barilga?.tokhirgoo?.eBarimtShine
-          ? barilga?.tokhirgoo?.eBarimtShine
-          : undefined,
-        merchantTin: barilga?.tokhirgoo?.merchantTin
-          ? barilga?.tokhirgoo?.merchantTin
-          : undefined,
-        districtCode: barilga?.tokhirgoo?.districtCode
-          ? barilga?.tokhirgoo?.districtCode
-          : undefined,
-        eBarimtAutomataarIlgeekh: barilga?.tokhirgoo?.eBarimtAutomataarIlgeekh
-          ? barilga?.tokhirgoo?.eBarimtAutomataarIlgeekh
-          : undefined,
-        nuatTulukhEsekh: barilga?.tokhirgoo?.nuatTulukhEsekh
-          ? barilga?.tokhirgoo?.nuatTulukhEsekh
-          : undefined,
-        eBarimtBugdShivikh: barilga?.tokhirgoo?.eBarimtBugdShivikh
-          ? barilga?.tokhirgoo?.eBarimtBugdShivikh
-          : undefined,
+        eBarimtAshiglakhEsekh: barilga?.tokhirgoo?.eBarimtAshiglakhEsekh ?? false,
+        eBarimtShine: barilga?.tokhirgoo?.eBarimtShine ?? false,
+        eBarimtAutomataarIlgeekh: barilga?.tokhirgoo?.eBarimtAutomataarIlgeekh ?? false,
+        nuatTulukhEsekh: barilga?.tokhirgoo?.nuatTulukhEsekh ?? false,
+        eBarimtBugdShivikh: barilga?.tokhirgoo?.eBarimtBugdShivikh ?? false,
       });
       setSongogdsonDuuregKod(barilga?.tokhirgoo?.districtCode?.substring(0, 2));
 

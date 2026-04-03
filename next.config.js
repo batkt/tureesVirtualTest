@@ -18,9 +18,9 @@ const nextConfig = {
   },
 
   // Experimental optimizations
-  // experimental: {
-  //   optimizeCss: process.env.NODE_ENV === "production",
-  // },
+  experimental: {
+    optimizeCss: process.env.NODE_ENV === "production",
+  },
 
   env: {
     NEXT_PUBLIC_URL:
