@@ -1707,7 +1707,8 @@ function camera({ token }) {
         render: (a, record) => {
           if (
             a?.khungulultTurul === "togtmolTsag" ||
-            a?.khungulultTurul === "Сараар"
+            a?.khungulultTurul === "Сараар" ||
+            a?.khungulultTurul === "saraar"
           ) {
             return (
               <div className="flex items-center justify-center">

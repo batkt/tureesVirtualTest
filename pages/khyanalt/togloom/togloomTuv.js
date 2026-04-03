@@ -81,7 +81,7 @@ const QrCodeAvakh = React.forwardRef(
           destroy();
         },
       }),
-      [duusakhTsag]
+      [duusakhTsag],
     );
 
     return (
@@ -126,7 +126,7 @@ const QrCodeAvakh = React.forwardRef(
         </div>
       </div>
     );
-  }
+  },
 );
 
 const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
@@ -142,7 +142,7 @@ const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
         destroy();
       },
     }),
-    [shaltgaan]
+    [shaltgaan],
   );
   useEffect(() => {
     function keyUp(e) {
@@ -188,7 +188,7 @@ const TsagSungakh = React.forwardRef(
           destroy();
         },
       }),
-      [niitDun, khugatsaa, ekhlekhTsag, duusakhTsag, data]
+      [niitDun, khugatsaa, ekhlekhTsag, duusakhTsag, data],
     );
     function onChangeKhugatsaa(v) {
       setDuusakhTsag(moment(ekhlekhTsag).add("minutes", v));
@@ -293,7 +293,7 @@ const TsagSungakh = React.forwardRef(
         </div>
       </div>
     );
-  }
+  },
 );
 
 function DuusakhTsagAvii({ v, data, onRefresh }) {
@@ -438,7 +438,7 @@ function togloom1() {
   const { toololt, toololtMutate } = useToololt(
     "/togloomiinToololtAvya",
     token,
-    ognoo
+    ognoo,
   );
 
   useEffect(() => {
@@ -573,7 +573,7 @@ function togloom1() {
     query,
     order,
     undefined,
-    searchKeys
+    searchKeys,
   );
   const tailbarRef = React.useRef(null);
   const sungakhRef = React.useRef(null);
@@ -671,7 +671,7 @@ function togloom1() {
         shuult: { khungulsunEsekh: true },
       },
     ],
-    [toololt]
+    [toololt],
   );
 
   function onRefresh() {
@@ -925,7 +925,7 @@ function togloom1() {
         showSorterTooltip: false,
         render: (v, data) => {
           const khungulult = data?.tulbur?.find(
-            (a) => a.turul === "khungulult"
+            (a) => a.turul === "khungulult",
           );
           return (
             <div className="flex w-full items-center">
@@ -1008,7 +1008,7 @@ function togloom1() {
                       {t("Төлбөр")}
                     </div>
                     {togloominTuviinGaralt?.jagsaalt?.find(
-                      (a) => a?.tulburTulsunEsekh !== true
+                      (a) => a?.tulburTulsunEsekh !== true,
                     )?._id === data?._id && "[ F2 ]"}
                   </div>
                 ) : (
@@ -1127,7 +1127,7 @@ function togloom1() {
                         <Popconfirm
                           disabled={data?.tuluv === 3}
                           title={t(
-                            `Та үйлчлүүлэгчийг гаргахдаа итгэлтэй байна уу?`
+                            `Та үйлчлүүлэгчийг гаргахдаа итгэлтэй байна уу?`,
                           )}
                           okText={t("Тийм")}
                           cancelText={t("Үгүй")}
@@ -1137,7 +1137,7 @@ function togloom1() {
                               .then(({ data }) => {
                                 if (data === "Amjilttai") {
                                   toast.success(
-                                    `${ovog && ovog.charAt(0)}.${ner} гарлаа`
+                                    `${ovog && ovog.charAt(0)}.${ner} гарлаа`,
                                   );
                                 }
                               })
@@ -1245,11 +1245,11 @@ function togloom1() {
 
   useKeyboardTovchlol(
     "+",
-    () => mashinref?.current === null && khuukhedBurtgekh()
+    () => mashinref?.current === null && khuukhedBurtgekh(),
   );
   useKeyboardTovchlol("F2", () => {
     var data = togloominTuviinGaralt?.jagsaalt?.find(
-      (a) => a?.tulburTulsunEsekh !== true
+      (a) => a?.tulburTulsunEsekh !== true,
     );
     tulburRef.current === null &&
       (!!data
@@ -1262,7 +1262,7 @@ function togloom1() {
       title="Тоглоомын төв"
       khuudasniiNer="togloomTuv"
       onSearch={(value) =>
-        setKhuudaslalt((a) => ({
+        togloominTuviinGaralt.setKhuudaslalt((a) => ({
           ...a,
           search: value,
           khuudasniiDugaar: 1,
@@ -1329,7 +1329,10 @@ function togloom1() {
                 {t("Нийт орлого")} :{" "}
                 {!!togloomiinDun?.toololt
                   ? formatNumber(
-                      togloomiinDun?.toololt?.reduce((a, b) => a + b.niitDun, 0)
+                      togloomiinDun?.toololt?.reduce(
+                        (a, b) => a + b.niitDun,
+                        0,
+                      ),
                     )
                   : 0}
                 ₮
@@ -1408,7 +1411,7 @@ function togloom1() {
                       const jagsaalt =
                         data?.niitTulbur?.length > 0
                           ? data?.niitTulbur.filter(
-                              (a) => a.turul !== "khunglukh"
+                              (a) => a.turul !== "khunglukh",
                             )
                           : data?.tulbur.filter((a) => a.turul !== "khunglukh");
                       var utga = [];
@@ -1650,7 +1653,7 @@ function togloom1() {
                                     ?.filter((e) => e.turul === "belen")
                                     .reduce(
                                       (a, b) => a + Number(b.dun || 0),
-                                      0
+                                      0,
                                     ) || 0
                                 );
                               },
@@ -1666,7 +1669,7 @@ function togloom1() {
                                     ?.filter((e) => e.turul === "khariltsakh")
                                     .reduce(
                                       (a, b) => a + Number(b.dun || 0),
-                                      0
+                                      0,
                                     ) || 0
                                 );
                               },
@@ -1686,11 +1689,11 @@ function togloom1() {
                                         e.turul === "khas" ||
                                         e.turul === "golomt" ||
                                         e.turul === "kapitron" ||
-                                        e.turul === "tur"
+                                        e.turul === "tur",
                                     )
                                     .reduce(
                                       (a, b) => a + Number(b.dun || 0),
-                                      0
+                                      0,
                                     ) || 0
                                 );
                               },
@@ -1706,7 +1709,7 @@ function togloom1() {
                                     ?.filter((e) => e.turul === "qpay")
                                     .reduce(
                                       (a, b) => a + Number(b.dun || 0),
-                                      0
+                                      0,
                                     ) || 0
                                 );
                               },
@@ -1722,7 +1725,7 @@ function togloom1() {
                                     ?.filter((e) => e.turul === "ticket")
                                     .reduce(
                                       (a, b) => a + Number(b.dun || 0),
-                                      0
+                                      0,
                                     ) || 0
                                 );
                               },
@@ -1738,7 +1741,7 @@ function togloom1() {
                                     ?.filter((e) => e.turul === "erkhiinBichig")
                                     .reduce(
                                       (a, b) => a + Number(b.dun || 0),
-                                      0
+                                      0,
                                     ) || 0
                                 );
                               },
@@ -1754,7 +1757,7 @@ function togloom1() {
                           ],
                           query,
                           order,
-                          "Тоглоомын төв"
+                          "Тоглоомын төв",
                         );
                       }}
                     >
@@ -1808,19 +1811,19 @@ function togloom1() {
               }}
               summary={() => {
                 const totalEbarimt = Array.isArray(
-                  togloominTuviinGaralt?.jagsaalt
+                  togloominTuviinGaralt?.jagsaalt,
                 )
                   ? togloominTuviinGaralt.jagsaalt.reduce(
                       (sum, row) => sum + (Number(row?.ebarimtAvsanDun) || 0),
-                      0
+                      0,
                     )
                   : 0;
                 const niitKhungulsunDun = Array.isArray(
-                  togloominTuviinGaralt?.jagsaalt
+                  togloominTuviinGaralt?.jagsaalt,
                 )
                   ? togloominTuviinGaralt.jagsaalt.reduce(
                       (sum, row) => sum + (Number(row?.khungulsunDun) || 0),
-                      0
+                      0,
                     )
                   : 0;
 
