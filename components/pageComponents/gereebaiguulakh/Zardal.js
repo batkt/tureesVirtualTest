@@ -324,6 +324,8 @@ const Zardal = ({
         var urjuulekhData =
           el?.turul === "1м2"
             ? value.talbainKhemjee
+            : el?.turul === "1м3/талбай"
+            ? value.talbainKhemjeeMetrKube
             : el?.turul === "Тогтмол" && 1;
         el.tulukhDun = el.tariff * urjuulekhData;
       });

@@ -72,6 +72,8 @@ const Tulbur = ({
       );
     });
 
+    const metrKubeToUse = value.talbainKhemjeeMetrKube || (value.talbainuud || []).reduce((a, b) => a + Number(b.talbainKhemjeeMetrKube || 0), 0);
+
     uilchilgee(token)
       .post(`/khuvaariUusgey`, {
         dun: value.sariinTurees,
@@ -85,8 +87,8 @@ const Tulbur = ({
         duusakhOgnoo: moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00"),
         zardluud: zardluud,
         khungulultuud: updatedKhungulult,
-        mk: value.talbainKhemjee,
-        metrKube: value.talbainKhemjeeMetrKube,
+        mk: value.talbainKhemjee || (value.talbainuud || []).reduce((a, b) => a + Number(b.talbainKhemjee || 0), 0),
+        metrKube: metrKubeToUse,
         turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
         shineGereeEsekh: !value._id,
         guchKhonogOruulakhEsekh: value.guchKhonogOruulakhEsekh,

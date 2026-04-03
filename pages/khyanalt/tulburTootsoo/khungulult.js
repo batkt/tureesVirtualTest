@@ -1375,7 +1375,7 @@ function tulburTootsoo() {
                   ) : (
                     ""
                   )}
-                  {!isSelectedUtilityExpense && khonogTootsokhEsekh ? (
+                  {khonogTootsokhEsekh ? (
                     <Form.Item
                       labelAlign="left"
                       name="ognoonuud"
@@ -1430,44 +1430,82 @@ function tulburTootsoo() {
                         }}
                       />
                     </Form.Item>
-                  ) : !isSelectedUtilityExpense ? (
-                    <Form.Item
-                      labelAlign="left"
-                      name="ognoonuud"
-                      label={t("Хөнгөлөх сар")}
-                      rules={[
-                        {
-                          required: true,
-                          message: t("Хөнгөлөх сар бүртгэнэ үү!"),
-                        },
-                      ]}
-                    >
-                      <DatePicker.RangePicker
-                        allowClear={false}
-                        style={{ width: "100%" }}
-                        disabledDate={disabledDate}
-                        picker="month"
-                        placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
-                        onChange={(v) => {
-                          setOgnoonuud(v);
-                        }}
-                      />
-                    </Form.Item>
-                  ) : null}
-                  {khonogTootsokhEsekh ? (
-                    <Form.Item
-                      label={t("Хөнгөлөх хоног")}
-                      name="khungulultKhonog"
-                      labelAlign="left"
-                    >
-                      <Input
-                        type={"number"}
-                        placeholder={t("Хөнгөлөх хоног")}
-                      />
-                    </Form.Item>
-                  ) : (
-                    ""
-                  )}
+                
+  ) : !isSelectedUtilityExpense ? (
+    <Form.Item
+      labelAlign="left"
+      name="ognoonuud"
+      label={t("Хөнгөлөх сар")}
+      rules={[
+        {
+          required: true,
+          message: t("Хөнгөлөх сар бүртгэнэ үү!"),
+        },
+      ]}
+    >
+      <DatePicker.RangePicker
+        allowClear={false}
+        style={{ width: "100%" }}
+        disabledDate={disabledDate}
+        picker="month"
+        placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
+        onChange={(v) => {
+          setOgnoonuud(v);
+        }}
+      />
+    </Form.Item>
+  ) : (
+   
+    <Form.Item
+      labelAlign="left"
+      name="ognoonuud"
+      label={t("Хөнгөлөх өдөр")}
+      rules={[
+        {
+          required: true,
+          message: t("Хөнгөлөх өдөр бүртгэнэ үү!"),
+        },
+      ]}
+    >
+      <DatePicker.RangePicker
+        allowClear={false}
+        style={{ width: "100%" }}
+        disabledDate={disabledDate}
+        placeholder={[t("Эхлэх өдөр"), t("Дуусах өдөр")]}
+        onChange={(v) => {
+          setOgnoonuud(v);
+          khungulukhDunTootsoolyo();
+        }}
+      />
+    </Form.Item>
+  )}
+           
+  {khonogTootsokhEsekh ? (
+    <Form.Item
+      label={t("Хөнгөлөх хоног")}
+      name="khungulultKhonog"
+      labelAlign="left"
+    >
+      <Input
+        type={"number"}
+        placeholder={t("Хөнгөлөх хоног")}
+        readOnly={!!(ognoonuud && ognoonuud[0] && ognoonuud[1])}
+        style={{
+          backgroundColor:
+            ognoonuud && ognoonuud[0] && ognoonuud[1]
+              ? "#f5f5f5"
+              : undefined,
+          cursor:
+            ognoonuud && ognoonuud[0] && ognoonuud[1]
+              ? "not-allowed"
+              : undefined,
+        }}
+        onChange={khungulukhDunTootsoolyo}
+      />
+    </Form.Item>
+  ) : (
+    ""
+  )}
                   {khonogTootsokhEsekh ? (
                     <Form.Item
                       label={"Хөнгөлөх хувь"}
