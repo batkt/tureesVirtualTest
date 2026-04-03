@@ -143,7 +143,7 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
   );
 }
 
-const YurunkhiiMedeele = ({
+const KhurungiinBurtgel = ({
   token,
   next,
   prev,
@@ -778,4 +778,4 @@ const YurunkhiiMedeele = ({
   );
 };
 
-export default YurunkhiiMedeele;
+export default KhurungiinBurtgel;

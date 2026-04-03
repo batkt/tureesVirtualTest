@@ -210,9 +210,12 @@ function tulburTootsoo() {
 
     const selectedZardal = zardal?.jagsaalt?.find((z) => z._id === zardliinId);
     return (
-      selectedZardal?.ner === "Халуун ус" ||
-      selectedZardal?.ner === "Хүйтэн ус" ||
-      selectedZardal?.ner === "Цахилгаан"
+      selectedZardal?.ner?.trim() === "Халаалт" ||
+      selectedZardal?.ner?.trim() === "Дулаан" ||
+      selectedZardal?.ner?.trim() === "Халуун ус" ||
+      selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
+      selectedZardal?.ner?.trim() === "Цахилгаан" ||
+      selectedZardal?.ner?.trim() === "Цахилгаан2"
     );
   }, [
     form.getFieldValue("zardliinId"),
@@ -233,9 +236,12 @@ function tulburTootsoo() {
     const selectedZardal = zardal?.jagsaalt?.find((z) => z._id === zardliinId);
 
     const isUtilityExpense =
-      selectedZardal?.ner === "Халуун ус" ||
-      selectedZardal?.ner === "Хүйтэн ус" ||
-      selectedZardal?.ner === "Цахилгаан";
+      selectedZardal?.ner?.trim() === "Халаалт" ||
+      selectedZardal?.ner?.trim() === "Дулаан" ||
+      selectedZardal?.ner?.trim() === "Халуун ус" ||
+      selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
+      selectedZardal?.ner?.trim() === "Цахилгаан" ||
+      selectedZardal?.ner?.trim() === "Цахилгаан2";
 
     if (!isUtilityExpense) {
       return gereeniiMedeelel.jagsaalt;
@@ -243,7 +249,7 @@ function tulburTootsoo() {
 
     return gereeniiMedeelel.jagsaalt.filter((geree) => {
       const zardliinData = geree?.zardluud?.find((z) => z._id === zardliinId);
-      if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
+      if (zardliinData) {
         return true;
       }
 
@@ -385,9 +391,10 @@ function tulburTootsoo() {
             var urjuulekhData =
               actingZardal?.turul === "1м3/талбай"
                 ? x.talbainKhemjeeMetrKube || 1
-                : actingZardal?.turul === "1м2"
+                : actingZardal?.turul === "1м2" ||
+                  actingZardal?.ner?.trim() === "Дулаан"
                 ? x?.talbainKhemjee
-                : actingZardal?.turul === "Тогтмол" && 1;
+                : 1;
 
             khymdraaguiDun =
               actingZardal?.turul === "Дурын"
@@ -666,6 +673,8 @@ function tulburTootsoo() {
           );
 
           const isUtilityExpense =
+            selectedZardal?.ner?.trim() === "Халаалт" ||
+            selectedZardal?.ner?.trim() === "Дулаан" ||
             selectedZardal?.ner?.trim() === "Халуун ус" ||
             selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
             selectedZardal?.ner?.trim() === "Цахилгаан" ||
@@ -692,13 +701,15 @@ function tulburTootsoo() {
             var urjuulekhData =
               actingZardal?.turul === "1м3/талбай"
                 ? data.talbainKhemjeeMetrKube || 1
-                : actingZardal?.turul === "1м2"
+                : actingZardal?.turul === "1м2" ||
+                  actingZardal?.ner?.trim() === "Дулаан"
                 ? data?.talbainKhemjee
-                : actingZardal?.turul === "Тогтмол" && 1;
+                : 1;
 
-            var rawAmount = actingZardal?.turul === "Дурын"
-              ? actingZardal?.dun || 0
-              : actingZardal?.tariff * urjuulekhData;
+            var rawAmount =
+              actingZardal?.turul === "Дурын"
+                ? actingZardal?.dun || 0
+                : (actingZardal?.tariff || 0) * (urjuulekhData || 1);
 
             return formatNumber(rawAmount * durationMultiplier, 2);
           } else return 0;
@@ -1044,7 +1055,10 @@ function tulburTootsoo() {
           }
         } else if (selectedZardal) {
           let sDun = 0;
-          if (selectedZardal.turul === "1м2")
+          if (
+            selectedZardal.turul === "1м2" ||
+            selectedZardal.ner?.trim() === "Дулаан"
+          )
             sDun = (e.talbainKhemjee || 0) * (selectedZardal.tariff || 0);
           else if (selectedZardal.turul === "1м3/талбай")
             sDun = (e.talbainKhemjeeMetrKube || 1) * (selectedZardal.tariff || 0);
@@ -1083,6 +1097,8 @@ function tulburTootsoo() {
             gereeZardal || zardal?.jagsaalt?.find((z) => z._id === fVal);
 
           const isUtilityExpense =
+            selectedZardal?.ner?.trim() === "Халаалт" ||
+            selectedZardal?.ner?.trim() === "Дулаан" ||
             selectedZardal?.ner?.trim() === "Халуун ус" ||
             selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
             selectedZardal?.ner?.trim() === "Цахилгаан" ||
@@ -1100,11 +1116,16 @@ function tulburTootsoo() {
               khymdraaguiDun = avlagaData?.tulukhDun || 0;
             }
           } else if (selectedZardal) {
-            if (selectedZardal.turul === "1м2")
-              khymdraaguiDun = (geree.talbainKhemjee || 0) * (selectedZardal.tariff || 0);
+            if (
+              selectedZardal.turul === "1м2" ||
+              selectedZardal.ner?.trim() === "Дулаан"
+            )
+              khymdraaguiDun =
+                (geree.talbainKhemjee || 0) * (selectedZardal.tariff || 0);
             else if (selectedZardal.turul === "1м3/талбай")
               khymdraaguiDun =
-                (geree.talbainKhemjeeMetrKube || 1) * (selectedZardal.tariff || 0);
+                (geree.talbainKhemjeeMetrKube || 1) *
+                (selectedZardal.tariff || 0);
             else if (selectedZardal.turul === "Дурын")
               khymdraaguiDun = Number(selectedZardal.dun || 0);
             else khymdraaguiDun = Number(selectedZardal.tariff || 0);
@@ -1207,11 +1228,16 @@ function tulburTootsoo() {
               khymdraaguiDun = avlagaData?.tulukhDun || 0;
             }
           } else if (selectedZardal) {
-            if (selectedZardal.turul === "1м2")
-              khymdraaguiDun = (geree.talbainKhemjee || 0) * (selectedZardal.tariff || 0);
+            if (
+              selectedZardal.turul === "1м2" ||
+              selectedZardal.ner?.trim() === "Дулаан"
+            )
+              khymdraaguiDun =
+                (geree.talbainKhemjee || 0) * (selectedZardal.tariff || 0);
             else if (selectedZardal.turul === "1м3/талбай")
               khymdraaguiDun =
-                (geree.talbainKhemjeeMetrKube || 1) * (selectedZardal.tariff || 0);
+                (geree.talbainKhemjeeMetrKube || 1) *
+                (selectedZardal.tariff || 0);
             else if (selectedZardal.turul === "Дурын")
               khymdraaguiDun = Number(selectedZardal.dun || 0);
             else khymdraaguiDun = Number(selectedZardal.tariff || 0);
@@ -1288,8 +1314,22 @@ function tulburTootsoo() {
                       defaultValue="turees"
                       onChange={(e) => {
                         setTurul(e);
-                        form.setFieldsValue({ ognoonuud: undefined, zardliinId: undefined, khungulultKhonog: undefined });
+                        form.setFieldsValue({
+                          ognoonuud: undefined,
+                          zardliinId: undefined,
+                          khungulultKhonog: undefined,
+                          khungulultKhuvi: undefined,
+                        });
                         setOgnoonuud([]);
+                        setRowKeys([]);
+                        setSongogdsonGereenuud([]);
+                        setTootsoolol({
+                          niitTalbai: 0,
+                          niitSariinTurees: 0,
+                          khunglugdsunDun: 0,
+                          niitTulukhDun: 0,
+                          khungulukhKhuvi: 0,
+                        });
                         if (e === "turees") {
                           setShuult({
                             query: !!shuult?.query?.davkhar
@@ -1338,7 +1378,20 @@ function tulburTootsoo() {
                                     "zardluud._id": e,
                                   },
                             });
-                             
+                            form.setFieldsValue({
+                              ognoonuud: undefined,
+                              khungulultKhonog: undefined,
+                            });
+                            setOgnoonuud([]);
+                            setRowKeys([]);
+                            setSongogdsonGereenuud([]);
+                            setTootsoolol({
+                              niitTalbai: 0,
+                              niitSariinTurees: 0,
+                              khunglugdsunDun: 0,
+                              niitTulukhDun: 0,
+                              khungulukhKhuvi: 0,
+                            });
                             setTimeout(() => {
                               khungulukhDunTootsoolyo();
                             }, 100);
@@ -1367,6 +1420,17 @@ function tulburTootsoo() {
                             form.setFieldValue("khungulultKhuvi", 0);
                             form.setFieldValue("khungulultKhonog", 0);
                           }
+                          form.setFieldValue("ognoonuud", undefined);
+                          setOgnoonuud([]);
+                          setRowKeys([]);
+                          setSongogdsonGereenuud([]);
+                          setTootsoolol({
+                            niitTalbai: 0,
+                            niitSariinTurees: 0,
+                            khunglugdsunDun: 0,
+                            niitTulukhDun: 0,
+                            khungulukhKhuvi: 0,
+                          });
                           setKhonogTootsokhEsekh(v);
                           khungulukhDunTootsoolyo();
                         }}
@@ -1472,10 +1536,16 @@ function tulburTootsoo() {
         style={{ width: "100%" }}
         disabledDate={disabledDate}
         placeholder={[t("Эхлэх өдөр"), t("Дуусах өдөр")]}
-        onChange={(v) => {
-          setOgnoonuud(v);
-          khungulukhDunTootsoolyo();
-        }}
+          onChange={(v) => {
+            setOgnoonuud(v);
+            if (v && v[0] && v[1] && khonogTootsokhEsekh) {
+              form.setFieldValue(
+                "khungulultKhonog",
+                moment(v[1]).diff(v[0], "d") + 1,
+              );
+            }
+            khungulukhDunTootsoolyo();
+          }}
       />
     </Form.Item>
   )}
