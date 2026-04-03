@@ -14,7 +14,6 @@ import {
   Modal,
   TreeSelect,
   Form,
-  message,
   Tooltip,
   Drawer,
   Select,
@@ -31,7 +30,6 @@ import {
   DollarCircleOutlined,
   DownloadOutlined,
   FileExcelOutlined,
-  DownOutlined,
   CloseOutlined,
   FilterOutlined,
   ShareAltOutlined,
@@ -40,12 +38,9 @@ import {
   ArrowRightOutlined,
   VideoCameraAddOutlined,
   VideoCameraOutlined,
-  LoadingOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
-import CardList from "components/cardList";
 import BaganiinSongolt from "components/table/BaganiinSongolt";
-import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useRef, useEffect } from "react";
@@ -68,7 +63,7 @@ import { registerServiceWorker, unregisterServiceWorker } from "utils/swHelper";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
-import Stream1, { SocketStream, Stream2 } from "./stream";
+import { SocketStream } from "./stream";
 import StackStream from "./stackStream";
 import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
 import AjiltniiDelgerenguiTailan from "components/pageComponents/zogsool/AjiltniiDelgerenguiTailan";
@@ -81,29 +76,27 @@ import { CiDiscount1 } from "react-icons/ci";
 import throttle from "lodash/throttle";
 
 export function TsagToololt({ ekhlekhTsag }) {
-  const [timeUp, setTimeUp] = useState("Тооцоолж байна");
-
-  const tsagTootsoolur = () => {
-    var zoruu = moment.duration(moment(new Date()).diff(ekhlekhTsag));
-    var tsag = Math.floor(zoruu.asHours());
-    var minut = Math.floor(zoruu.minutes());
-    var second = Math.floor(zoruu.seconds());
-    return (
-      <div>
-        {tsag < 10 && "0"}
-        {tsag > 0 ? tsag : "0"} : {minut < 10 && "0"}
-        {minut > 0 ? minut : "0"} : {second < 10 && "0"}
-        {second > 0 ? second : "0"}
-      </div>
-    );
-  };
+  const ref = useRef(null);
 
   useEffect(() => {
-    setTimeout(() => {
-      setTimeUp(tsagTootsoolur());
-    }, 1000);
-  }, [ekhlekhTsag, timeUp]);
-  return <div>{timeUp}</div>;
+    if (!ekhlekhTsag) return;
+
+    const tick = () => {
+      if (!ref.current) return;
+      const zoruu = moment.duration(moment().diff(ekhlekhTsag));
+      const tsag = Math.floor(zoruu.asHours());
+      const minut = zoruu.minutes();
+      const second = zoruu.seconds();
+      const pad = (n) => (n < 10 ? "0" + n : n);
+      ref.current.textContent = `${pad(tsag)} : ${pad(minut)} : ${pad(second)}`;
+    };
+
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id); // Cleanup
+  }, [ekhlekhTsag]);
+
+  return <span ref={ref}>--:--:--</span>;
 }
 
 const usguud = [
@@ -1299,7 +1292,7 @@ function camera({ token }) {
         turul: { $ne: "VIP" },
       }),
     };
-  }, [uilchluulegchGaralt, songogdzonZogsool]);
+  }, [songogdzonZogsool?.vipMashinToolokhEsekh]);
 
   const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } =
     useUilchluulegchZogsoolToo(token, tooQue);
@@ -1582,9 +1575,6 @@ function camera({ token }) {
         width: "10rem",
         dataIndex: "tuukh.0.niitKhugatsaa",
         render(v, parents) {
-          const d2 = tsagTootsoolur(
-            parents?.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag,
-          );
           if (parents?.zurchil === "Гарсан цаг тодорхойгүй!") {
             return (
               <div className="rounded bg-red-200 px-3 py-1 text-slate-700">
@@ -2437,7 +2427,6 @@ function camera({ token }) {
     khelber,
     dun,
     shineBagana,
-    uilchluulegchGaralt,
     tuluvFilter,
   ]);
 
@@ -3370,24 +3359,6 @@ function camera({ token }) {
     });
   };
 
-  const tsagTootsoolur = (v) => {
-    const odooginTsag =
-      Number(moment(new Date()).format("HH")) * 60 * 60 +
-      Number(moment(new Date()).format("mm")) * 60 +
-      Number(moment(new Date()).format("ss"));
-    const ekhlesenTsag =
-      Number(moment(v).format("HH")) * 60 * 60 +
-      Number(moment(v).format("mm")) * 60 +
-      Number(moment(v).format("ss"));
-    const difference = odooginTsag - ekhlesenTsag;
-    const tsag = Math.floor(difference / 60 / 60);
-    const minut = Math.floor((difference - tsag * 60 * 60) / 60);
-    // const second = Math.floor(difference - tsag * 60 * 60 - minut * 60);
-    return {
-      hours: tsag.toString(),
-      minutes: minut.toString(),
-    };
-  };
   const orlogoGaraasOruulya = () => {
     const body = form.getFieldsValue();
     let yavuulakhData = {};
