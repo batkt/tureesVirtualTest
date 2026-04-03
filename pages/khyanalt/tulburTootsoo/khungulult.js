@@ -367,9 +367,13 @@ function tulburTootsoo() {
 
           var khymdraaguiDun;
           const isUtilityExpense =
+            zardliinData?.ner === "Халаалт" ||
+            zardliinData?.ner === "Дулаан" ||
             zardliinData?.ner === "Халуун ус" ||
             zardliinData?.ner === "Хүйтэн ус" ||
             zardliinData?.ner === "Цахилгаан" ||
+            songogdsonZardal?.ner === "Халаалт" ||
+            songogdsonZardal?.ner === "Дулаан" ||
             songogdsonZardal?.ner === "Халуун ус" ||
             songogdsonZardal?.ner === "Хүйтэн ус" ||
             songogdsonZardal?.ner === "Цахилгаан";
@@ -1035,6 +1039,8 @@ function tulburTootsoo() {
         const selectedZardal = gereeZardal || selectedZardalMaster;
 
         const isUtilityExpense =
+          selectedZardal?.ner?.trim() === "Халаалт" ||
+          selectedZardal?.ner?.trim() === "Дулаан" ||
           selectedZardal?.ner?.trim() === "Халуун ус" ||
           selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
           selectedZardal?.ner?.trim() === "Цахилгаан" ||
@@ -1211,6 +1217,8 @@ function tulburTootsoo() {
             gereeZardal || zardal?.jagsaalt?.find((z) => z._id === fVal);
 
           const isUtilityExpense =
+            selectedZardal?.ner?.trim() === "Халаалт" ||
+            selectedZardal?.ner?.trim() === "Дулаан" ||
             selectedZardal?.ner?.trim() === "Халуун ус" ||
             selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
             selectedZardal?.ner?.trim() === "Цахилгаан" ||

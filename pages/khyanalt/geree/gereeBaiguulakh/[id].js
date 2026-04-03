@@ -24,6 +24,7 @@ import formatNumber from "tools/function/formatNumber";
 import tootsohSariinNiilberDun from "tools/function/tootsohSariinNiilberDun";
 import createMethod from "tools/function/crud/createMethod";
 import { toWords } from "mon_num";
+import getListMethod from "tools/function/crud/getListMethod";
 
 const Konva = dynamic(() => import("components/konva"), { ssr: false });
 
@@ -115,20 +116,67 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
         .then(({ data }) => setAktiinZagvar(data));
     }
   }, [data]);
+
+  // Auto-fetch talbainuud on edit page load if talbainKhemjeeMetrKube is null.
+  // This lets the user skip directly to step 4 (Зардал) without going through step 3 (Талбай).
+  useEffect(() => {
+    if (
+      khadgalakhGeree?.talbainIdnuud?.length > 0 &&
+      !khadgalakhGeree?.talbainuud &&
+      (khadgalakhGeree?.talbainKhemjeeMetrKube == null ||
+        khadgalakhGeree?.talbainKhemjeeMetrKube === 0)
+    ) {
+      getListMethod("talbai", token, {
+        khuudasniiDugaar: 1,
+        khuudasniiKhemjee: 1000,
+        query: { _id: { $in: khadgalakhGeree.talbainIdnuud } },
+      }).then(({ data: talbaiData }) => {
+        const talbainuud = talbaiData?.jagsaalt || [];
+        if (talbainuud.length === 0) return;
+        const talbainKhemjeeMetrKube = talbainuud.reduce(
+          (a, b) => a + Number(b.talbainKhemjeeMetrKube || 0),
+          0
+        );
+        const talbainKhemjee = talbainuud.reduce(
+          (a, b) => a + Number(b.talbainKhemjee || 0),
+          0
+        );
+        setKhagalakhGeree((prev) => ({
+          ...prev,
+          talbainuud,
+          talbainKhemjeeMetrKube,
+          talbainKhemjee: prev.talbainKhemjee || talbainKhemjee,
+        }));
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     const shineHayag = songosonBarilgiinHayag || "";
     setKhagalakhGeree((prev) => {
       const old = prev || {};
       const aliUdaanHayag = old?.barilgiinKhayag ?? "";
-      if (aliUdaanHayag === shineHayag && old?.barilgiinId === barilgiinId)
+      
+      // Also calculate totals if talbainuud is present
+      let updatedFields = {};
+      if (old.talbainuud?.length > 0) {
+        updatedFields.talbainKhemjee = old.talbainuud.reduce((a, b) => a + (b.talbainKhemjee || 0), 0);
+        updatedFields.talbainKhemjeeMetrKube = old.talbainuud.reduce((a, b) => a + Number(b.talbainKhemjeeMetrKube || 0), 0);
+        updatedFields.talbainNiitUne = old.talbainuud.reduce((a, b) => a + Number(b.talbainNiitUne || 0), 0);
+        updatedFields.sariinTurees = updatedFields.talbainNiitUne;
+      }
+
+      if (aliUdaanHayag === shineHayag && old?.barilgiinId === barilgiinId && !Object.keys(updatedFields).some(k => old[k] !== updatedFields[k]))
         return prev;
+        
       return {
         ...old,
+        ...updatedFields,
         barilgiinId,
         barilgiinKhayag: shineHayag,
       };
     });
-  }, [barilgiinId, songosonBarilgiinHayag]);
+  }, [barilgiinId, songosonBarilgiinHayag, khadgalakhGeree.talbainuud]);
   useEffect(() => {
     if (current === 0) {
       var elem = document.getElementById("erunkhiiMedeelel");

@@ -194,6 +194,7 @@ const KhurungiinBurtgel = ({
         query: { _id: { $in: value.talbainIdnuud } },
       }).then(({ data }) => {
         value.talbainuud = data.jagsaalt;
+        talbainBurtgelBugulyu(data.jagsaalt);
         onChange({ ...value });
       });
     }
@@ -220,8 +221,8 @@ const KhurungiinBurtgel = ({
             "YYYY-MM-DD 00:00:00"
           ),
           zardluud: value.zardluud,
-          mk: value.talbainKhemjee,
-          metrKube: value.talbainKhemjeeMetrKube,
+          mk: value.talbainKhemjee || (value.talbainuud || []).reduce((a, b) => a + Number(b.talbainKhemjee || 0), 0),
+          metrKube: value.talbainKhemjeeMetrKube || (value.talbainuud || []).reduce((a, b) => a + Number(b.talbainKhemjeeMetrKube || 0), 0),
           turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
           shineGereeEsekh: !value._id,
           guchKhonogOruulakhEsekh: value.guchKhonogOruulakhEsekh,
@@ -236,7 +237,12 @@ const KhurungiinBurtgel = ({
         .catch((e) => {
           aldaaBarigch(e);
         });
-  }, [value.talbainIdnuud]);
+  }, [
+    value.talbainIdnuud,
+    value.talbainKhemjeeMetrKube,
+    value.sariinTurees,
+    value.zardluud,
+  ]);
 
   const sulEsekh = (talbainDugaar, callback) => {
     uilchilgee(token)
@@ -445,6 +451,15 @@ const KhurungiinBurtgel = ({
     }, 500),
     [value, gereeniiZagvar]
   );
+  const onChangeM3 = useCallback(
+    _.debounce((i, v) => {
+      _.set(value.talbainuud, `${i}.talbainKhemjeeMetrKube`, v || 0);
+
+      talbainBurtgelBugulyu(value.talbainuud);
+      onChange({ ...value });
+    }, 500),
+    [value]
+  );
 
   const baritsaaChange = (e) => {
     if (e === true) {
@@ -541,12 +556,10 @@ const KhurungiinBurtgel = ({
                     {t("м")}
                     <sup>2</sup>
                   </div>
-                  {talbai.talbainKhemjeeMetrKube > 0 && (
-                    <div className="flex items-center justify-center text-center">
-                      {t("м")}
-                      <sup>3</sup>
-                    </div>
-                  )}
+                  <div className="flex items-center justify-center text-center">
+                    {t("м")}
+                    <sup>3</sup>
+                  </div>
                   <div className="flex items-center justify-center text-center">
                     {t("Түрээсийн төлбөр")}
                   </div>
@@ -582,11 +595,14 @@ const KhurungiinBurtgel = ({
                       />
                     </div>
                   )}
-                  {talbai.talbainKhemjeeMetrKube > 0 && (
-                    <div className="text-center">
-                      {talbai?.talbainKhemjeeMetrKube.toFixed(2)}
-                    </div>
-                  )}
+                  <div className="flex items-center justify-center text-center">
+                    <InputNumber
+                      size="small"
+                      placeholder="м3"
+                      value={talbai?.talbainKhemjeeMetrKube || 0}
+                      onChange={(v) => onChangeM3(index, v)}
+                    />
+                  </div>
                   <div className="pr-2 text-right">
                     {gereeniiZagvar.turGereeEsekh ? (
                       <InputNumber

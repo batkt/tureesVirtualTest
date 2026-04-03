@@ -500,17 +500,29 @@ function GereeBaiguulakh({ token }) {
   useEffect(() => {
     const nextHayag = songosonBarilgiinHayag || "";
     setKhagalakhGeree((prev) => {
-      const currentHayag = prev?.barilgiinKhayag ?? "";
-      if (prev?.barilgiinId === barilgiinId && currentHayag === nextHayag) {
+      const old = prev || {};
+      const currentHayag = old?.barilgiinKhayag ?? "";
+
+      // Calculate totals if talbainuud is present
+      let updatedFields = {};
+      if (old.talbainuud?.length > 0) {
+        updatedFields.talbainKhemjee = old.talbainuud.reduce((a, b) => a + (b.talbainKhemjee || 0), 0);
+        updatedFields.talbainKhemjeeMetrKube = old.talbainuud.reduce((a, b) => a + Number(b.talbainKhemjeeMetrKube || 0), 0);
+        updatedFields.talbainNiitUne = old.talbainuud.reduce((a, b) => a + Number(b.talbainNiitUne || 0), 0);
+        updatedFields.sariinTurees = updatedFields.talbainNiitUne;
+      }
+
+      if (old?.barilgiinId === barilgiinId && currentHayag === nextHayag && !Object.keys(updatedFields).some(k => old[k] !== updatedFields[k])) {
         return prev;
       }
       return {
-        ...prev,
+        ...old,
+        ...updatedFields,
         barilgiinId,
         barilgiinKhayag: nextHayag,
       };
     });
-  }, [barilgiinId, songosonBarilgiinHayag]);
+  }, [barilgiinId, songosonBarilgiinHayag, khadgalakhGeree.talbainuud]);
 
   const prev = () => {
     if (current > 0) setCurrent(current - 1);

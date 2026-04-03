@@ -12,6 +12,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import numberToWords from "tools/function/numberToWords";
+import _ from "lodash";
 const formItemLayout = {
   labelCol: {
     span: 10,
@@ -253,8 +254,8 @@ const Zardal = ({
             "YYYY-MM-DD 00:00:00"
           ),
           zardluud: value.zardluud,
-          mk: value.talbainKhemjee,
-          metrKube: value.talbainKhemjeeMetrKube,
+          mk: value.talbainKhemjee || (value.talbainuud || []).reduce((a, b) => a + Number(b.talbainKhemjee || 0), 0),
+          metrKube: value.talbainKhemjeeMetrKube || (value.talbainuud || []).reduce((a, b) => a + Number(b.talbainKhemjeeMetrKube || 0), 0),
           turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
           shineGereeEsekh: !value._id,
           guchKhonogOruulakhEsekh: value.guchKhonogOruulakhEsekh,
@@ -269,7 +270,13 @@ const Zardal = ({
         .catch((e) => {
           aldaaBarigch(e);
         });
-  }, [form.getFieldValue("zardluud")]);
+  }, [
+    value.zardluud,
+    value.talbainKhemjeeMetrKube,
+    value.talbainNiitUne,
+    value.khugatsaa,
+    value.duusakhOgnoo,
+  ]);
 
   const ashiglaltiinZardal = useJagsaalt(
     "/ashiglaltiinZardluud",
@@ -321,13 +328,20 @@ const Zardal = ({
         if (el.turul === "Дурын") {
           el.dun = el.dun ? el.dun : "";
         }
+        
+        // Sum up tariff components for water expenses if tariff is missing
+        if (!el.tariff && (el.ner?.includes("Халуун ус") || el.ner?.includes("Хүйтэн ус"))) {
+          el.tariff = (el.tseverUsDun || 0) + (el.bokhirUsDun || 0) + (el.usKhalaasniiDun || 0);
+        }
+
         var urjuulekhData =
           el?.turul === "1м2"
             ? value.talbainKhemjee
-            : el?.turul === "1м3/талбай"
+            : (el?.turul === "1м3/талбай" || el?.turul === "1м3")
             ? value.talbainKhemjeeMetrKube
-            : el?.turul === "Тогтмол" && 1;
-        el.tulukhDun = el.tariff * urjuulekhData;
+            : el?.turul === "Тогтмол" ? 1 : 0;
+            
+        el.tulukhDun = (el.tariff || el.dun || 0) * urjuulekhData;
       });
       form.setFieldsValue({ ...value });
       onChange({ ...value });
@@ -355,6 +369,13 @@ const Zardal = ({
     form.setFieldsValue({ ...value });
     onChange({ ...value });
   }
+  // Sync form whenever zardluud changes (important when skipping directly to this step in edit mode)
+  useEffect(() => {
+    if (value?.zardluud) {
+      form.setFieldsValue({ zardluud: value.zardluud });
+    }
+  }, [value?.zardluud]);
+
   useEffect(() => {
     document.getElementById("songokhKheseg").focus();
   }, []);

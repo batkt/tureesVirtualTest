@@ -88,8 +88,8 @@ const YurunkhiiMedeele = ({
             "YYYY-MM-DD 00:00:00"
           ),
           zardluud: value.zardluud,
-          mk: value.talbainKhemjee,
-          metrKube: value.talbainKhemjeeMetrKube,
+          mk: value.talbainKhemjee || (value.talbainuud || []).reduce((a, b) => a + Number(b.talbainKhemjee || 0), 0),
+          metrKube: value.talbainKhemjeeMetrKube || (value.talbainuud || []).reduce((a, b) => a + Number(b.talbainKhemjeeMetrKube || 0), 0),
           turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
           shineGereeEsekh: !value._id,
           guchKhonogOruulakhEsekh: value.guchKhonogOruulakhEsekh,
@@ -106,12 +106,14 @@ const YurunkhiiMedeele = ({
           aldaaBarigch(e);
         });
   }, [
-    form.getFieldValue("khugatsaa"),
-    form.getFieldValue("tulukhUdur"),
-    form.getFieldValue("duusakhOgnoo"),
-    form.getFieldValue("guchKhonogOruulakhEsekh"),
-    form.getFieldValue("garaasKhonogOruulakhEsekh"),
-    form.getFieldValue("ekhniiSariinKhonog"),
+    value.khugatsaa,
+    value.tulukhUdur,
+    value.duusakhOgnoo,
+    value.guchKhonogOruulakhEsekh,
+    value.garaasKhonogOruulakhEsekh,
+    value.ekhniiSariinKhonog,
+    value.talbainKhemjeeMetrKube,
+    value.talbainKhemjee,
   ]);
 
   const onValuesChange = (values, v) => {
