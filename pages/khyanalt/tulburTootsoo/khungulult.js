@@ -274,7 +274,8 @@ function tulburTootsoo() {
 
   useEffect(() => {
     khungulukhDunTootsoolyo();
-  }, [songogdsonGereenuud, zardal?.jagsaalt]);
+  }, [songogdsonGereenuud, zardal?.jagsaalt, form?.getFieldValue("khungulukhTurul"),
+    ]);
 
   function disabledDate(current) {
     return ajiltan?.erkh == "Admin" ||
@@ -379,18 +380,19 @@ function tulburTootsoo() {
               );
               khymdraaguiDun = avlagaData?.tulukhDun || 0;
             }
-          } else if (zardliinData) {
+          } else if (zardliinData || songogdsonZardal) {
+            const actingZardal = zardliinData || songogdsonZardal;
             var urjuulekhData =
-              zardliinData?.turul === "1м3/талбай"
+              actingZardal?.turul === "1м3/талбай"
                 ? x.talbainKhemjeeMetrKube || 1
-                : zardliinData?.turul === "1м2"
+                : actingZardal?.turul === "1м2"
                 ? x?.talbainKhemjee
-                : zardliinData?.turul === "Тогтмол" && 1;
+                : actingZardal?.turul === "Тогтмол" && 1;
 
             khymdraaguiDun =
-              zardliinData?.turul === "Дурын"
-                ? zardliinData.dun
-                : zardliinData?.tariff * urjuulekhData;
+              actingZardal?.turul === "Дурын"
+                ? actingZardal.dun
+                : (actingZardal?.tariff || 0) * (urjuulekhData || 1);
           } else {
             khymdraaguiDun = 0;
           }
@@ -569,6 +571,13 @@ function tulburTootsoo() {
   }
 
   const gereeniiColumn = useMemo(() => {
+    let durationMultiplier = 1;
+    const currentOgnoonuud = ognoonuud && ognoonuud.length > 0 ? ognoonuud : form?.getFieldValue("ognoonuud");
+    if (currentOgnoonuud && currentOgnoonuud[0] && currentOgnoonuud[1]) {
+      const mDiff = moment(currentOgnoonuud[1]).startOf("month").diff(moment(currentOgnoonuud[0]).startOf("month"), "months");
+      durationMultiplier = mDiff >= 0 ? mDiff + 1 : 1;
+    }
+
     let column = [
       {
         title: t("Түрээслэгч"),
@@ -627,11 +636,11 @@ function tulburTootsoo() {
         width: "7rem",
         align: "center",
         render: (sariinTurees) => {
-          return formatNumber(sariinTurees || 0);
+          return formatNumber((sariinTurees || 0) * durationMultiplier);
         },
         showSorterTooltip: false,
         sorter: (a, b) =>
-          Number(a.sariinTurees || 0) - Number(b.sariinTurees || 0),
+          Number((a.sariinTurees || 0) * durationMultiplier) - Number((b.sariinTurees || 0) * durationMultiplier),
       },
     ];
 
@@ -657,13 +666,14 @@ function tulburTootsoo() {
           );
 
           const isUtilityExpense =
-            selectedZardal?.ner === "Халуун ус" ||
-            selectedZardal?.ner === "Хүйтэн ус" ||
-            selectedZardal?.ner === "Цахилгаан";
+            selectedZardal?.ner?.trim() === "Халуун ус" ||
+            selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
+            selectedZardal?.ner?.trim() === "Цахилгаан" ||
+            selectedZardal?.ner?.trim() === "Цахилгаан2";
 
           if (isUtilityExpense) {
             if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
-              return formatNumber(zardliinData?.tulukhDun || 0, 2);
+              return formatNumber((zardliinData?.tulukhDun || 0) * durationMultiplier, 2);
             }
 
             const avlagaData = data?.avlaga?.guilgeenuud?.find(
@@ -673,33 +683,31 @@ function tulburTootsoo() {
             );
 
             if (avlagaData) {
-              return formatNumber(avlagaData.tulukhDun || 0, 2);
+              return formatNumber((avlagaData.tulukhDun || 0) * durationMultiplier, 2);
             }
           }
 
-          if (zardliinData) {
+          if (zardliinData || selectedZardal) {
+            const actingZardal = zardliinData || selectedZardal;
             var urjuulekhData =
-              zardliinData?.turul === "1м3/талбай"
+              actingZardal?.turul === "1м3/талбай"
                 ? data.talbainKhemjeeMetrKube || 1
-                : zardliinData?.turul === "1м2"
+                : actingZardal?.turul === "1м2"
                 ? data?.talbainKhemjee
-                : zardliinData?.turul === "Тогтмол" && 1;
+                : actingZardal?.turul === "Тогтмол" && 1;
 
-            var kharuulakhData = formatNumber(
-              zardliinData?.tariff * urjuulekhData,
-              2,
-            );
+            var rawAmount = actingZardal?.turul === "Дурын"
+              ? actingZardal?.dun || 0
+              : actingZardal?.tariff * urjuulekhData;
 
-            return zardliinData?.turul === "Дурын"
-              ? zardliinData?.dun || 0
-              : kharuulakhData || 0;
+            return formatNumber(rawAmount * durationMultiplier, 2);
           } else return 0;
         },
       });
     }
 
     return column;
-  }, [form.getFieldValue("zardliinId"), zardal?.jagsaalt]);
+  }, [form.getFieldValue("zardliinId"), zardal?.jagsaalt, ognoonuud, form.getFieldValue("khungulukhTurul")]);
 
   function ustgaya(mur) {
     const footer = [
@@ -987,6 +995,14 @@ function tulburTootsoo() {
     const rawDiscount = form?.getFieldValue("khungulukhKhuvi");
     let dun = Number(rawDiscount);
     if (isNaN(dun) || dun < 0) dun = 0;
+
+    let durationMultiplier = 1;
+    const currentOgnoonuud = ognoonuud && ognoonuud.length > 0 ? ognoonuud : form?.getFieldValue("ognoonuud");
+    if (currentOgnoonuud && currentOgnoonuud[0] && currentOgnoonuud[1]) {
+      const mDiff = moment(currentOgnoonuud[1]).startOf("month").diff(moment(currentOgnoonuud[0]).startOf("month"), "months");
+      durationMultiplier = mDiff >= 0 ? mDiff + 1 : 1;
+    }
+
     let niitSariinTurees = 0;
     let niitTalbai = songogdsonGereenuud?.length || 0;
     const fVal = form.getFieldValue("zardliinId");
@@ -998,13 +1014,13 @@ function tulburTootsoo() {
         0,
       );
     } else {
-      const selectedZardalMaster = zardal.jagsaalt?.find((z) => z._id === fVal);
+      const selectedZardalMaster = zardal?.jagsaalt?.find((z) => z._id === fVal);
       if (selectedZardalMaster) {
         setSongogdsonZardal(selectedZardalMaster);
       }
 
       songogdsonGereenuud?.forEach((e) => {
-        const gereeZardal = e?.zardluud.find((a) => a._id === fVal);
+        const gereeZardal = e?.zardluud?.find((a) => a._id === fVal);
         const selectedZardal = gereeZardal || selectedZardalMaster;
 
         const isUtilityExpense =
@@ -1026,18 +1042,21 @@ function tulburTootsoo() {
               niitSariinTurees += Number(avlagaData.tulukhDun || 0);
             }
           }
-        } else if (!!gereeZardal) {
-          if (gereeZardal.turul === "1м2")
-            niitSariinTurees += e.talbainKhemjee * (gereeZardal.tariff || 0);
-          else if (gereeZardal.turul === "1м3/талбай")
-            niitSariinTurees +=
-              (e.talbainKhemjeeMetrKube || 0) * (gereeZardal.tariff || 0);
-          else if (gereeZardal.turul === "Дурын")
-            niitSariinTurees += Number(gereeZardal.dun || 0);
-          else niitSariinTurees += Number(gereeZardal.tariff || 0);
+        } else if (selectedZardal) {
+          let sDun = 0;
+          if (selectedZardal.turul === "1м2")
+            sDun = (e.talbainKhemjee || 0) * (selectedZardal.tariff || 0);
+          else if (selectedZardal.turul === "1м3/талбай")
+            sDun = (e.talbainKhemjeeMetrKube || 1) * (selectedZardal.tariff || 0);
+          else if (selectedZardal.turul === "Дурын")
+            sDun = Number(selectedZardal.dun || 0);
+          else sDun = Number(selectedZardal.tariff || 0);
+          niitSariinTurees += sDun;
         }
       });
     }
+
+    niitSariinTurees = niitSariinTurees * durationMultiplier;
 
     if (khungulukh === "khuvi" && dun > 100) {
       form.setFieldsValue({ khungulukhKhuvi: 100 });
@@ -1061,7 +1080,7 @@ function tulburTootsoo() {
         } else {
           const gereeZardal = geree?.zardluud?.find((a) => a._id === fVal);
           const selectedZardal =
-            gereeZardal || zardal.jagsaalt?.find((z) => z._id === fVal);
+            gereeZardal || zardal?.jagsaalt?.find((z) => z._id === fVal);
 
           const isUtilityExpense =
             selectedZardal?.ner?.trim() === "Халуун ус" ||
@@ -1080,20 +1099,20 @@ function tulburTootsoo() {
               );
               khymdraaguiDun = avlagaData?.tulukhDun || 0;
             }
-          } else if (gereeZardal) {
-            if (gereeZardal.turul === "1м2")
-              khymdraaguiDun = geree.talbainKhemjee * (gereeZardal.tariff || 0);
-            else if (gereeZardal.turul === "1м3/талбай")
+          } else if (selectedZardal) {
+            if (selectedZardal.turul === "1м2")
+              khymdraaguiDun = (geree.talbainKhemjee || 0) * (selectedZardal.tariff || 0);
+            else if (selectedZardal.turul === "1м3/талбай")
               khymdraaguiDun =
-                (geree.talbainKhemjeeMetrKube || 0) * (gereeZardal.tariff || 0);
-            else if (gereeZardal.turul === "Дурын")
-              khymdraaguiDun = Number(gereeZardal.dun || 0);
-            else khymdraaguiDun = Number(gereeZardal.tariff || 0);
+                (geree.talbainKhemjeeMetrKube || 1) * (selectedZardal.tariff || 0);
+            else if (selectedZardal.turul === "Дурын")
+              khymdraaguiDun = Number(selectedZardal.dun || 0);
+            else khymdraaguiDun = Number(selectedZardal.tariff || 0);
           }
         }
 
-        const ehlel = ognoonuud?.[0];
-        const duusah = ognoonuud?.[1];
+        const ehlel = currentOgnoonuud?.[0];
+        const duusah = currentOgnoonuud?.[1];
 
         const hasDailyDiscount = khungulultKhuvi && khungulultKhuvi > 0;
 
@@ -1168,7 +1187,7 @@ function tulburTootsoo() {
         } else {
           const gereeZardal = geree?.zardluud?.find((a) => a._id === fVal);
           const selectedZardal =
-            gereeZardal || zardal.jagsaalt?.find((z) => z._id === fVal);
+            gereeZardal || zardal?.jagsaalt?.find((z) => z._id === fVal);
 
           const isUtilityExpense =
             selectedZardal?.ner?.trim() === "Халуун ус" ||
@@ -1187,20 +1206,21 @@ function tulburTootsoo() {
               );
               khymdraaguiDun = avlagaData?.tulukhDun || 0;
             }
-          } else if (gereeZardal) {
-            if (gereeZardal.turul === "1м2")
-              khymdraaguiDun = geree.talbainKhemjee * (gereeZardal.tariff || 0);
-            else if (gereeZardal.turul === "1м3/талбай")
+          } else if (selectedZardal) {
+            if (selectedZardal.turul === "1м2")
+              khymdraaguiDun = (geree.talbainKhemjee || 0) * (selectedZardal.tariff || 0);
+            else if (selectedZardal.turul === "1м3/талбай")
               khymdraaguiDun =
-                (geree.talbainKhemjeeMetrKube || 0) * (gereeZardal.tariff || 0);
-            else if (gereeZardal.turul === "Дурын")
-              khymdraaguiDun = Number(gereeZardal.dun || 0);
-            else khymdraaguiDun = Number(gereeZardal.tariff || 0);
+                (geree.talbainKhemjeeMetrKube || 1) * (selectedZardal.tariff || 0);
+            else if (selectedZardal.turul === "Дурын")
+              khymdraaguiDun = Number(selectedZardal.dun || 0);
+            else khymdraaguiDun = Number(selectedZardal.tariff || 0);
           }
         }
 
-        const gereeKhunglugdsunDun =
+        let gereeKhunglugdsunDun =
           khungulukh === "khuvi" ? (Number(khymdraaguiDun) * dun) / 100 : dun;
+        gereeKhunglugdsunDun = gereeKhunglugdsunDun * durationMultiplier;
         totalKhunglugdsunDun += gereeKhunglugdsunDun;
       });
     }
@@ -1268,6 +1288,8 @@ function tulburTootsoo() {
                       defaultValue="turees"
                       onChange={(e) => {
                         setTurul(e);
+                        form.setFieldsValue({ ognoonuud: undefined, zardliinId: undefined, khungulultKhonog: undefined });
+                        setOgnoonuud([]);
                         if (e === "turees") {
                           setShuult({
                             query: !!shuult?.query?.davkhar
@@ -1277,15 +1299,10 @@ function tulburTootsoo() {
                                 }
                               : { tuluv: shuult.query.tuluv },
                           });
-                          form.setFieldsValue({ zardliinId: undefined });
                         }
-                        setRowKeys([]);
-                        setTootsoolol({
-                          niitTalbai: 0,
-                          niitSariinTurees: 0,
-                          khunglugdsunDun: 0,
-                          niitTulukhDun: 0,
-                        });
+                        setTimeout(() => {
+                          khungulukhDunTootsoolyo();
+                        }, 100);
                       }}
                     >
                       <Select.Option value={"turees"}>Түрээс</Select.Option>
@@ -1321,7 +1338,7 @@ function tulburTootsoo() {
                                     "zardluud._id": e,
                                   },
                             });
-                            // Trigger calculation when zardal changes
+                             
                             setTimeout(() => {
                               khungulukhDunTootsoolyo();
                             }, 100);
