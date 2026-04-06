@@ -369,7 +369,7 @@ function GereeBaiguulakh({ token }) {
           value,
         );
       } else if (key === "segmentuud") {
-        value.map((mur) => {
+        (value ?? []).map((mur) => {
           butsaakhUtga?.dedKhesguud
             ?.filter(
               (a) => !!a.zaalt && a.zaalt?.indexOf(`&lt;${mur.ner}&gt;`) !== -1,
