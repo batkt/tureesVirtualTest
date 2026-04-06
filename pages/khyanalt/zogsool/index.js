@@ -1055,6 +1055,11 @@ function Zogsool({ token }) {
   const toololt = useMemo(
     () => [
       {
+        name: "Нийт",
+        too: formatNumber(uilchluulegchGaralt?.niitMur, 0),
+        query: {},
+      },
+      {
         name: "Үйлчлүүлэгч",
         too: formatNumber(
           !!uilchiluulegchToololt &&
