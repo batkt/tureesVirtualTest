@@ -77,139 +77,132 @@ const khatuuZagvarVirtus = (medeelel, ajiltan, baiguullaga) => {
 </div>
 
 <!-- Main Table -->
-<!-- Main Table -->
 <table class="vt" style="margin-top:16px;">
+  ${(() => {
+    const hasMeters = medeelel.zardluud.some(z => z.tailbar?.toLowerCase().includes("цахилгаан") || z.tailbar?.toLowerCase().includes("цэвэр ус") || z.tailbar?.toLowerCase().includes("бохир ус") || z.tailbar?.toLowerCase().includes("халуун ус") || z.tailbar?.toLowerCase().includes("хүйтэн ус"));
+    return `<thead>
+      <tr class="hdr">
+        <td style="width:40px;background-color:#a5bfdb;text-align:center;">Д/д</td>
+        <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
+        <td style="width:170px;background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
+        ${hasMeters ? 
+          `<td style="width:80px;background-color:#a5bfdb;text-align:center;">Тоолуурын заалт өмнө</td>
+           <td style="width:80px;background-color:#a5bfdb;text-align:center;">Тоолуурын заалт одоо</td>` 
+          : 
+          `<td style="width:80px;background-color:#a5bfdb;text-align:center;">Талбай м2</td>
+           <td style="width:80px;background-color:#a5bfdb;text-align:center;">Үнэ ₮</td>`
+        }
+        <td style="width:110px;background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
+      </tr>
+    </thead>`;
+  })()}
   <tbody>
     ${(() => {
       let html = "";
       let n = 1;
 
-      // 0. Base Rent (Түрээсийн төлбөр)
-      if (medeelel?.tukhainSariinTureesiinTulukhDun > 0) {
-        html += `<tr class="cat">
-          <td style="width:40px;background-color:#a5bfdb;text-align:center;">Д/д</td>
-          <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
-          <td style="width:170px;background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
-          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Талбай м2</td>
-          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Үнэ ₮</td>
-          <td style="width:110px;background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
-        </tr>`;
-        html += `<tr>
-          <td style="text-align:center;">${n++}</td>
-          <td></td>
-          <td style="text-align:center;">${getCoverage(medeelel?.ognoo)}</td>
-          <td></td><td></td>
-          <td style="text-align:right;">${formatNumber(medeelel?.tukhainSariinTureesiinTulukhDun || 0)}</td>
-        </tr>`;
+      // --- SECTION 1: MANAGEMENT & RENT ---
 
-      }
+      const baseArea = parseFloat(medeelel?.talbainKhemjee || "0");
+      const baseTotal = parseFloat(medeelel?.talbainNiitUne || "0");
+      const baseNegjUne = baseArea > 0 ? baseTotal / baseArea : (medeelel?.talbainNegjUne || 0);
 
-      // 1. Electricity & Water
-      const utilities = medeelel.zardluud.filter(z =>
-        z.tailbar?.toLowerCase().includes("цахилгаан") || 
-        z.tailbar?.toLowerCase().includes("ус")
-      );
-      if (utilities.length > 0) {
-        html += `<tr class="cat">
-          <td style="width:40px;background-color:#a5bfdb;text-align:center;">Д/д</td>
-          <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
-          <td style="width:170px;background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
-          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Тоолуурын заалт өмнө</td>
-          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Тоолуурын заалт одоо</td>
-          <td style="width:110px;background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
-        </tr>`;
-        const rn = n++;
-        utilities.forEach((z, i) => {
-          html += `<tr>
-            ${i === 0 ? `<td rowspan="${utilities.length}" style="text-align:center;">${rn}</td>` : ""}
-            <td>${z.tailbar} ${z.talbainDugaar ? "№" + z.talbainDugaar : ""}</td>
-            ${i === 0 ? `<td rowspan="${utilities.length}" style="text-align:center;">${getCoverage(utilities[0]?.ognoo)}</td>` : ""}
-            <td style="text-align:center;">${z.umnukhZaalt !== null && z.umnukhZaalt !== undefined ? z.umnukhZaalt : ""}</td>
-            <td style="text-align:center;">${z.suuliinZaalt !== null && z.suuliinZaalt !== undefined ? z.suuliinZaalt : ""}</td>
-            <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : ""}</td>
-          </tr>`;
-        });
-      }
+      html += `<tr>
+        <td style="text-align:center;">${n++}</td>
+        <td>Менежмент</td>
+        <td style="text-align:center;">${getCoverage(medeelel?.ognoo)}</td>
+        <td style="text-align:right;">${formatNumber(baseArea)}</td>
+        <td style="text-align:right;">${formatNumber(baseNegjUne)}</td>
+        <td style="text-align:right;">&lt;khungulsunTalbainNiitUne&gt;</td>
+      </tr>`;
 
-      // 3. Management
-      const mgmt = medeelel.zardluud.filter(z => z.tailbar?.toLowerCase().includes("менежмент"));
-      if (mgmt.length > 0) {
-        html += `<tr class="cat">
-          <td style="width:40px;background-color:#a5bfdb;text-align:center;">Д/д</td>
-          <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
-          <td style="width:170px;background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
-          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Талбай м2</td>
-          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Үнэ ₮</td>
-          <td style="width:110px;background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
-        </tr>`;
-        const rn = n++;
+      // 1.2 Management dynamic
+      const mgmtItems = (medeelel.zardluud || []).filter(z => z.tailbar?.toLowerCase().includes("менежмент"));
+      if (mgmtItems.length > 0) {
         const area = parseFloat(medeelel.talbainKhemjee || "0");
-        mgmt.forEach((z, i) => {
+        mgmtItems.forEach((z) => {
           let tariffVal = "";
           if (z.tariff) tariffVal = formatNumber(z.tariff);
           else if (z.negjUne) tariffVal = formatNumber(z.negjUne);
           else if (area > 0) tariffVal = formatNumber(z.tulukhDun / area);
-          else tariffVal = "";
 
-          html += `<tr>
-            ${i === 0 ? `<td rowspan="${mgmt.length}" style="text-align:center;">${rn}</td>` : ""}
-            <td>${z.tailbar} ${z.talbainDugaar ? "№" + z.talbainDugaar : ""}</td>
-            ${i === 0 ? `<td rowspan="${mgmt.length}" style="text-align:center;">${getCoverage(mgmt[0]?.ognoo)}</td>` : ""}
-            <td style="text-align:right;">${area}</td>
-            <td style="text-align:right;">${tariffVal}</td>
-            <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : ""}</td>
-          </tr>`;
-        });
-      }
-
-      // 4. Heating
-      const heat = medeelel.zardluud.filter(z => z.tailbar?.toLowerCase().includes("дулаан"));
-      if (heat.length > 0) {
-        html += `<tr class="cat">
-          <td style="width:40px;background-color:#a5bfdb;text-align:center;">Д/д</td>
-          <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
-          <td style="width:170px;background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
-          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Талбай м3</td>
-          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Үнэ ₮</td>
-          <td style="width:110px;background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
-        </tr>`;
-        const rn = n++;
-        const areaH = parseFloat(medeelel.talbainKhemjeeMetrKube || medeelel.talbainKhemjee || "0");
-        heat.forEach((z, i) => {
-          let tariffVal = "";
-          if (z.tariff) tariffVal = formatNumber(z.tariff);
-          else if (z.negjUne) tariffVal = formatNumber(z.negjUne);
-          else if (areaH > 0) tariffVal = formatNumber(z.tulukhDun / areaH);
-          else tariffVal = "";
-
-          html += `<tr>
-            ${i === 0 ? `<td rowspan="${heat.length}" style="text-align:center;">${rn}</td>` : ""}
-            <td>${z.tailbar}</td>
-            ${i === 0 ? `<td rowspan="${heat.length}" style="text-align:center;">${getCoverage(heat[0]?.ognoo)}</td>` : ""}
-            <td style="text-align:right;">${areaH}</td>
-            <td style="text-align:right;">${tariffVal}</td>
-            <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : ""}</td>
-          </tr>`;
-        });
-      }
-
-      // 5. Other (Parking etc. including arrears)
-      const other = medeelel.zardluud.filter(z => {
-        const tb = z.tailbar ? z.tailbar.toLowerCase() : "";
-        return !tb.includes("цахилгаан") &&
-               !tb.includes("ус") &&
-               !tb.includes("менежмент") &&
-               !tb.includes("дулаан");
-      });
-      if (other.length > 0) {
-        other.forEach((z) => {
-          const title = z.turul === 'khuvaari' ? "" : (z.tailbar || "");
           html += `<tr>
             <td style="text-align:center;">${n++}</td>
-            <td>${title}</td>
+            <td>${z.tailbar} ${z.talbainDugaar ? "№" + z.tailbar : ""}</td>
             <td style="text-align:center;">${getCoverage(z.ognoo)}</td>
-            <td></td><td></td>
-            <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : ""}</td>
+            <td style="text-align:right;">&lt;talbainKhemjee&gt;</td>
+            <td style="text-align:right;">${tariffVal}</td>
+            <td style="text-align:right;">&lt;${z.tailbar}.tulukhDun&gt;</td>
+          </tr>`;
+        });
+      }
+
+      // --- SECTION 2: UTILITIES (Electricity & Water) ---
+      const utils = (medeelel.zardluud || []).filter(z => {
+        const tb = (z.tailbar || "").toLowerCase();
+        return tb.includes("цахилгаан") || tb.includes("ус");
+      });
+
+      if (utils.length > 0) {
+        html += `<tr class="cat">
+          <td style="background-color:#a5bfdb;text-align:center;">Д/д</td>
+          <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
+          <td style="background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
+          <td style="background-color:#a5bfdb;text-align:center;">Тоолуурын заалт өмнө</td>
+          <td style="background-color:#a5bfdb;text-align:center;">Тоолуурын заалт одоо</td>
+          <td style="background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
+        </tr>`;
+
+        utils.forEach((z) => {
+          html += `<tr>
+            <td style="text-align:center;">${n++}</td>
+            <td>${z.tailbar} ${z.talbainDugaar ? "№" + z.talbainDugaar : ""}</td>
+            <td style="text-align:center;">${getCoverage(z.ognoo)}</td>
+            <td style="text-align:center;">${z.umnukhZaalt !== null && z.umnukhZaalt !== undefined ? z.umnukhZaalt : ""}</td>
+            <td style="text-align:center;">${z.suuliinZaalt !== null && z.suuliinZaalt !== undefined ? z.suuliinZaalt : ""}</td>
+            <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : `&lt;${z.tailbar}.tulukhDun&gt;`}</td>
+          </tr>`;
+        });
+      }
+
+      // --- SECTION 3: HEATING & OTHERS ---
+      const otherItems = (medeelel.zardluud || []).filter(z => {
+        const tb = (z.tailbar || "").toLowerCase();
+        return !tb.includes("цахилгаан") && !tb.includes("ус") && !tb.includes("менежмент");
+      });
+
+      if (otherItems.length > 0) {
+        html += `<tr class="cat">
+          <td style="background-color:#a5bfdb;text-align:center;">Д/д</td>
+          <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
+          <td style="background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
+          <td style="background-color:#a5bfdb;text-align:center;">Талбай м3 / Тоо</td>
+          <td style="background-color:#a5bfdb;text-align:center;">Үнэ ₮</td>
+          <td style="background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
+        </tr>`;
+
+        const areaH = parseFloat(medeelel.talbainKhemjeeMetrKube || medeelel.talbainKhemjee || "0");
+        otherItems.forEach((z) => {
+          let tariffVal = "";
+          let volVal = "";
+          if (z.tailbar?.toLowerCase().includes("дулаан")) {
+              if (z.tariff) tariffVal = formatNumber(z.tariff);
+              else if (z.negjUne) tariffVal = formatNumber(z.negjUne);
+              else if (areaH > 0) tariffVal = formatNumber(z.tulukhDun / areaH);
+              volVal = "&lt;talbainKhemjeeMetrKube&gt;";
+          } else {
+              volVal = z.tooKhemjee || "";
+              if (z.tariff) tariffVal = formatNumber(z.tariff);
+              else if (z.negjUne) tariffVal = formatNumber(z.negjUne);
+          }
+
+          html += `<tr>
+            <td style="text-align:center;">${n++}</td>
+            <td>${z.tailbar || ""}</td>
+            <td style="text-align:center;">${getCoverage(z.ognoo)}</td>
+            <td style="text-align:right;">${volVal}</td>
+            <td style="text-align:right;">${tariffVal}</td>
+            <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : `&lt;${z.tailbar}.tulukhDun&gt;`}</td>
           </tr>`;
         });
       }
@@ -217,18 +210,11 @@ const khatuuZagvarVirtus = (medeelel, ajiltan, baiguullaga) => {
       return html;
     })()}
 
-
-    <tr class="tot">
-      <td colspan="4" style="border:none;"></td>
-      <td style="text-align:left;font-size:16px;color:#000;font-weight:normal;white-space:nowrap;"></td>
-      <td style="text-align:right;font-size:16px;color:#000;font-weight:normal;">${formatNumber(medeelel?.tukhainSariinTureesiinTulukhDun || 0)}</td>
-    </tr>
     <tr class="tot">
       <td colspan="4" style="border:none;"></td>
       <td style="text-align:left;background:#a5bfdb;font-size:16px;color:#000;font-weight:normal;white-space:nowrap;">Нийт төлөх дүн</td>
-      <td style="text-align:right;background:#a5bfdb;font-size:16px;color:#000;font-weight:bold;">${formatNumber(medeelel?.eneSardTulukhDun || 0)}</td>
+      <td style="text-align:right;background:#a5bfdb;font-size:16px;color:#000;font-weight:bold;">&lt;garaasBodsonNiitDun&gt;</td>
     </tr>
-
   </tbody>
 </table>
 
