@@ -542,11 +542,19 @@ function tulburTootsoo() {
           }
         }
 
+        var durationMultiplier = 1;
+        if (ognoonuud?.[0] && ognoonuud?.[1] && !khonogTootsokhEsekh) {
+          const mDiff = moment(ognoonuud[1])
+            .startOf("month")
+            .diff(moment(ognoonuud[0]).startOf("month"), "months");
+          durationMultiplier = mDiff >= 0 ? mDiff + 1 : 1;
+        }
+
         return {
           gereeniiId: x._id,
           gereeniiDugaar: x.gereeniiDugaar,
           ner: x.ner,
-          khymdarsanDun,
+          khymdarsanDun: (khungulukh === "khuvi" ? khymdarsanDun : parseFloat(form.getFieldValue("khungulukhKhuvi") || 0)) * durationMultiplier,
         };
       });
 
@@ -907,7 +915,7 @@ function tulburTootsoo() {
         dataIndex: "tulukhDun",
         align: "right",
         render: (data) => {
-          return formatNumber(data) + "₮";
+          return formatNumber(data);
         },
       },
       {
@@ -917,7 +925,7 @@ function tulburTootsoo() {
         dataIndex: "khungulultiinDun",
         align: "right",
         render: (data) => {
-          return formatNumber(data) + "₮";
+          return formatNumber(data);
         },
       },
       {
@@ -927,7 +935,7 @@ function tulburTootsoo() {
         dataIndex: "khungulsunDun",
         align: "right",
         render: (data) => {
-          return formatNumber(data) + "₮";
+          return formatNumber(data);
         },
       },
       {
@@ -1811,7 +1819,6 @@ function tulburTootsoo() {
 
                 <Table
                   bordered
-                  tableLayout={"fixed"}
                   size="small"
                   rowClassName="hover:bg-blue-100"
                   dataSource={khungulultTuukh?.jagsaalt}
@@ -1822,23 +1829,29 @@ function tulburTootsoo() {
                         <Table.Summary.Row>
                           {columns?.map((mur, index) => (
                             <Table.Summary.Cell
-                              className={`${
-                                mur.summary !== true
-                                  ? "border-none"
-                                  : "font-bold"
-                              }`}
+                              key={index}
                               index={index}
-                              align="right"
+                              align={mur.align || "center"}
+                              className={`${
+                                mur.summary === true
+                                  ? "font-bold text-black dark:text-white text-xs whitespace-nowrap"
+                                  : "border-none"
+                              }`}
                             >
-                              {mur.summary
-                                ? formatNumber(
-                                    khungulultTuukh?.jagsaalt?.reduce(
-                                      (a, b) => a + (b[mur.dataIndex] || 0),
-                                      0,
-                                    ),
-                                  )
-                                : ""}
-                              {mur.summary && "₮"}
+                              {mur.summary === true ? (
+                                <span className="flex flex-col">
+                                  <span>
+                                    {formatNumber(
+                                      khungulultTuukh?.jagsaalt?.reduce(
+                                        (a, b) => a + (b[mur.dataIndex] || 0),
+                                        0,
+                                      ),
+                                    )}
+                                  </span>
+                                </span>
+                              ) : (
+                                ""
+                              )}
                             </Table.Summary.Cell>
                           ))}
                         </Table.Summary.Row>
@@ -1857,7 +1870,7 @@ function tulburTootsoo() {
                         khuudasniiKhemjee,
                       })),
                   }}
-                  scroll={{ y: "calc(100vh - 26rem)" }}
+                  scroll={{ x: "max-content", y: "calc(100vh - 26rem)" }}
                   rowKey={(row) => row._id}
                   className="t-head"
                   columns={columns}
