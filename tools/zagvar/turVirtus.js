@@ -77,70 +77,53 @@ const khatuuZagvarVirtus = (medeelel, ajiltan, baiguullaga) => {
 </div>
 
 <!-- Main Table -->
+<!-- Main Table -->
 <table class="vt" style="margin-top:16px;">
-  ${(() => {
-    const hasMeters = medeelel.zardluud.some(z => z.tailbar?.toLowerCase().includes("цахилгаан") || z.tailbar?.toLowerCase().includes("цэвэр ус") || z.tailbar?.toLowerCase().includes("бохир ус") || z.tailbar?.toLowerCase().includes("халуун ус") || z.tailbar?.toLowerCase().includes("хүйтэн ус"));
-    return `<thead>
-      <tr class="hdr">
-        <td style="width:40px;background-color:#a5bfdb;text-align:center;">Д/д</td>
-        <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
-        <td style="width:170px;background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
-        ${hasMeters ? 
-          `<td style="width:80px;background-color:#a5bfdb;text-align:center;">Тоолуурын заалт өмнө</td>
-           <td style="width:80px;background-color:#a5bfdb;text-align:center;">Тоолуурын заалт одоо</td>` 
-          : 
-          `<td style="width:80px;background-color:#a5bfdb;text-align:center;">Талбай м2</td>
-           <td style="width:80px;background-color:#a5bfdb;text-align:center;">Үнэ ₮</td>`
-        }
-        <td style="width:110px;background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
-      </tr>
-    </thead>`;
-  })()}
   <tbody>
     ${(() => {
       let html = "";
       let n = 1;
 
       // 0. Base Rent (Түрээсийн төлбөр)
-      html += `<tr>
-        <td style="text-align:center;">${n++}</td>
-        <td>Түрээсийн төлбөр</td>
-        <td style="text-align:center;">${getCoverage(medeelel?.ognoo)}</td>
-        <td style="text-align:right;">&lt;talbainKhemjee&gt;</td>
-        <td></td>
-        <td style="text-align:right;">&lt;khungulsunTalbainNiitUne&gt;</td>
-      </tr>`;
+      if (medeelel?.tukhainSariinTureesiinTulukhDun > 0) {
+        html += `<tr class="cat">
+          <td style="width:40px;background-color:#a5bfdb;text-align:center;">Д/д</td>
+          <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
+          <td style="width:170px;background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
+          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Талбай м2</td>
+          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Үнэ ₮</td>
+          <td style="width:110px;background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
+        </tr>`;
+        html += `<tr>
+          <td style="text-align:center;">${n++}</td>
+          <td></td>
+          <td style="text-align:center;">${getCoverage(medeelel?.ognoo)}</td>
+          <td></td><td></td>
+          <td style="text-align:right;">${formatNumber(medeelel?.tukhainSariinTureesiinTulukhDun || 0)}</td>
+        </tr>`;
 
-      // 1. Electricity
-      const elec = medeelel.zardluud.filter(z =>
-        z.tailbar?.includes("Цахилгаан") || z.tailbar?.includes("цахилгаан")
-      );
-      if (elec.length > 0) {
-        const rn = n++;
-        elec.forEach((z, i) => {
-          html += `<tr>
-            ${i === 0 ? `<td rowspan="${elec.length}" style="text-align:center;">${rn}</td>` : ""}
-            <td>${z.tailbar} ${z.talbainDugaar ? "№" + z.talbainDugaar : ""}</td>
-            ${i === 0 ? `<td rowspan="${elec.length}" style="text-align:center;">${getCoverage(elec[0]?.ognoo)}</td>` : ""}
-            <td style="text-align:center;">${z.umnukhZaalt !== null && z.umnukhZaalt !== undefined ? z.umnukhZaalt : ""}</td>
-            <td style="text-align:center;">${z.suuliinZaalt !== null && z.suuliinZaalt !== undefined ? z.suuliinZaalt : ""}</td>
-            <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : ""}</td>
-          </tr>`;
-        });
       }
 
-      // 2. Water
-      const water = medeelel.zardluud.filter(z =>
-        z.tailbar?.includes("Цэвэр ус") || z.tailbar?.includes("Бохир ус") ||
-        z.tailbar?.includes("Халуун ус") || z.tailbar?.includes("Хүйтэн ус")
+      // 1. Electricity & Water
+      const utilities = medeelel.zardluud.filter(z =>
+        z.tailbar?.toLowerCase().includes("цахилгаан") || 
+        z.tailbar?.toLowerCase().includes("ус")
       );
-      if (water.length > 0) {
+      if (utilities.length > 0) {
+        html += `<tr class="cat">
+          <td style="width:40px;background-color:#a5bfdb;text-align:center;">Д/д</td>
+          <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
+          <td style="width:170px;background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
+          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Тоолуурын заалт өмнө</td>
+          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Тоолуурын заалт одоо</td>
+          <td style="width:110px;background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
+        </tr>`;
         const rn = n++;
-        water.forEach((z, i) => {
+        utilities.forEach((z, i) => {
           html += `<tr>
-            ${i === 0 ? `<td rowspan="${water.length}" style="text-align:center;">${rn}</td>` : ""}
+            ${i === 0 ? `<td rowspan="${utilities.length}" style="text-align:center;">${rn}</td>` : ""}
             <td>${z.tailbar} ${z.talbainDugaar ? "№" + z.talbainDugaar : ""}</td>
-            ${i === 0 ? `<td rowspan="${water.length}" style="text-align:center;">${getCoverage(water[0]?.ognoo)}</td>` : ""}
+            ${i === 0 ? `<td rowspan="${utilities.length}" style="text-align:center;">${getCoverage(utilities[0]?.ognoo)}</td>` : ""}
             <td style="text-align:center;">${z.umnukhZaalt !== null && z.umnukhZaalt !== undefined ? z.umnukhZaalt : ""}</td>
             <td style="text-align:center;">${z.suuliinZaalt !== null && z.suuliinZaalt !== undefined ? z.suuliinZaalt : ""}</td>
             <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : ""}</td>
@@ -152,8 +135,12 @@ const khatuuZagvarVirtus = (medeelel, ajiltan, baiguullaga) => {
       const mgmt = medeelel.zardluud.filter(z => z.tailbar?.toLowerCase().includes("менежмент"));
       if (mgmt.length > 0) {
         html += `<tr class="cat">
-          <td style="background-color:#a5bfdb;text-align:center;">Д/д</td><td style="background-color:#a5bfdb;text-align:center;">Нэхэмжлэлийн утга</td><td style="background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
-          <td style="background-color:#a5bfdb;text-align:center;">Талбай м2</td><td style="background-color:#a5bfdb;text-align:center;">Үнэ ₮</td><td style="background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
+          <td style="width:40px;background-color:#a5bfdb;text-align:center;">Д/д</td>
+          <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
+          <td style="width:170px;background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
+          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Талбай м2</td>
+          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Үнэ ₮</td>
+          <td style="width:110px;background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
         </tr>`;
         const rn = n++;
         const area = parseFloat(medeelel.talbainKhemjee || "0");
@@ -168,9 +155,9 @@ const khatuuZagvarVirtus = (medeelel, ajiltan, baiguullaga) => {
             ${i === 0 ? `<td rowspan="${mgmt.length}" style="text-align:center;">${rn}</td>` : ""}
             <td>${z.tailbar} ${z.talbainDugaar ? "№" + z.talbainDugaar : ""}</td>
             ${i === 0 ? `<td rowspan="${mgmt.length}" style="text-align:center;">${getCoverage(mgmt[0]?.ognoo)}</td>` : ""}
-            <td style="text-align:right;">&lt;talbainKhemjee&gt;</td>
+            <td style="text-align:right;">${area}</td>
             <td style="text-align:right;">${tariffVal}</td>
-            <td style="text-align:right;">&lt;${z.tailbar}.tulukhDun&gt;</td>
+            <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : ""}</td>
           </tr>`;
         });
       }
@@ -179,8 +166,12 @@ const khatuuZagvarVirtus = (medeelel, ajiltan, baiguullaga) => {
       const heat = medeelel.zardluud.filter(z => z.tailbar?.toLowerCase().includes("дулаан"));
       if (heat.length > 0) {
         html += `<tr class="cat">
-          <td style="background-color:#a5bfdb;text-align:center;">Д/д</td><td style="background-color:#a5bfdb;text-align:center;">Нэхэмжлэлийн утга</td><td style="background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
-          <td style="background-color:#a5bfdb;text-align:center;">Талбай м3</td><td style="background-color:#a5bfdb;text-align:center;">Үнэ ₮</td><td style="background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
+          <td style="width:40px;background-color:#a5bfdb;text-align:center;">Д/д</td>
+          <td style="background-color:#a5bfdb;">Нэхэмжлэлийн утга</td>
+          <td style="width:170px;background-color:#a5bfdb;text-align:center;">Хамрах хугацаа</td>
+          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Талбай м3</td>
+          <td style="width:80px;background-color:#a5bfdb;text-align:center;">Үнэ ₮</td>
+          <td style="width:110px;background-color:#a5bfdb;text-align:center;">Нийт үнэ ₮</td>
         </tr>`;
         const rn = n++;
         const areaH = parseFloat(medeelel.talbainKhemjeeMetrKube || medeelel.talbainKhemjee || "0");
@@ -195,43 +186,49 @@ const khatuuZagvarVirtus = (medeelel, ajiltan, baiguullaga) => {
             ${i === 0 ? `<td rowspan="${heat.length}" style="text-align:center;">${rn}</td>` : ""}
             <td>${z.tailbar}</td>
             ${i === 0 ? `<td rowspan="${heat.length}" style="text-align:center;">${getCoverage(heat[0]?.ognoo)}</td>` : ""}
-            <td style="text-align:right;">&lt;talbainKhemjeeMetrKube&gt;</td>
+            <td style="text-align:right;">${areaH}</td>
             <td style="text-align:right;">${tariffVal}</td>
-            <td style="text-align:right;">&lt;${z.tailbar}.tulukhDun&gt;</td>
+            <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : ""}</td>
           </tr>`;
         });
       }
 
-      // 5. Other (Parking etc.)
+      // 5. Other (Parking etc. including arrears)
       const other = medeelel.zardluud.filter(z => {
         const tb = z.tailbar ? z.tailbar.toLowerCase() : "";
         return !tb.includes("цахилгаан") &&
-               !tb.includes("цэвэр ус") &&
-               !tb.includes("бохир ус") &&
-               !tb.includes("халуун ус") &&
-               !tb.includes("хүйтэн ус") &&
+               !tb.includes("ус") &&
                !tb.includes("менежмент") &&
                !tb.includes("дулаан");
       });
-      other.forEach((z) => {
-        const title = z.turul === 'khuvaari' ? "Түрээсийн төлбөр" : (z.tailbar || "");
-        html += `<tr>
-          <td style="text-align:center;">${n++}</td>
-          <td>${title}</td>
-          <td style="text-align:center;">${getCoverage(z.ognoo)}</td>
-          <td></td><td></td>
-          <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : `&lt;${z.tailbar || 'other'}.tulukhDun&gt;`}</td>
-        </tr>`;
-      });
+      if (other.length > 0) {
+        other.forEach((z) => {
+          const title = z.turul === 'khuvaari' ? "" : (z.tailbar || "");
+          html += `<tr>
+            <td style="text-align:center;">${n++}</td>
+            <td>${title}</td>
+            <td style="text-align:center;">${getCoverage(z.ognoo)}</td>
+            <td></td><td></td>
+            <td style="text-align:right;">${z.tulukhDun ? formatNumber(z.tulukhDun) : ""}</td>
+          </tr>`;
+        });
+      }
 
       return html;
     })()}
 
+
+    <tr class="tot">
+      <td colspan="4" style="border:none;"></td>
+      <td style="text-align:left;font-size:16px;color:#000;font-weight:normal;white-space:nowrap;"></td>
+      <td style="text-align:right;font-size:16px;color:#000;font-weight:normal;">${formatNumber(medeelel?.tukhainSariinTureesiinTulukhDun || 0)}</td>
+    </tr>
     <tr class="tot">
       <td colspan="4" style="border:none;"></td>
       <td style="text-align:left;background:#a5bfdb;font-size:16px;color:#000;font-weight:normal;white-space:nowrap;">Нийт төлөх дүн</td>
-      <td style="text-align:right;background:#a5bfdb;font-size:16px;color:#000;font-weight:bold;">&lt;garaasBodsonNiitDun&gt;</td>
+      <td style="text-align:right;background:#a5bfdb;font-size:16px;color:#000;font-weight:bold;">${formatNumber(medeelel?.eneSardTulukhDun || 0)}</td>
     </tr>
+
   </tbody>
 </table>
 
