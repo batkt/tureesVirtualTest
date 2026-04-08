@@ -17,12 +17,12 @@ import React, {
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { ebarimtKhelberuud } from "tools/logic/tulburiinKhelberuud";
 import moment, { utc } from "moment";
-import amjilttaiAnimation from "../../amjilttaiAnimation.json";
+import amjilttaiAnimation from "../../../kiosk/amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
 import DugaarKeyboardMobile from "components/pageComponents/kiosk/DugaarKeyboardMobile";
 import useQpayObject from "hooks/useQpayObject";
-import ZuvhunKhunglukhModalContent from "../../ZuvhunKhunglukhModalContent";
+import ZuvhunKhunglukhModalContent from "../../../kiosk/ZuvhunKhunglukhModalContent";
 import { MdOutlineDiscount } from "react-icons/md";
 import { modal } from "components/ant/Modal";
 import dynamic from "next/dynamic";
