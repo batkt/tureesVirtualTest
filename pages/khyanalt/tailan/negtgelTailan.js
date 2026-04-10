@@ -72,6 +72,7 @@ function negtgelTailan({ token }) {
     searchKeys
   );
   const [songogdsonIds, setSongogdsonIds] = useState([]);
+  const [songogdsonTurul, setSongogdsonTurul] = useState();
 
   const printRef = useRef(null);
   const [ognoo, setOgnoo] = useState([
@@ -89,8 +90,9 @@ function negtgelTailan({ token }) {
       ekhlekhOgnoo: ognoo && ognoo[0].format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: ognoo && ognoo[1].format("YYYY-MM-DD 23:59:59"),
       khariltsagchiinId: songogdsonIds.length > 0 ? songogdsonIds : undefined,
+      turul: songogdsonTurul,
     };
-  }, [ognoo, baiguullaga, barilgiinId, songogdsonIds]);
+  }, [ognoo, baiguullaga, barilgiinId, songogdsonIds, songogdsonTurul]);
   const { tailanGaralt, unshijBaina, setTailanKhuudaslalt } = useNegtgelTailan(
     token,
     query,
@@ -127,21 +129,21 @@ function negtgelTailan({ token }) {
     setExcelUnshijBaina(true);
     var excelCol = [
       {
-        title: "Регистер/ТИН",
+        title: t("Регистер/ТИН"),
         dataIndex: "_id",
         render: (id) => {
           return id?.register;
         },
       },
       {
-        title: "Харилцагч нэр",
+        title: t("Харилцагч нэр"),
         dataIndex: "_id",
         render: (id) => {
           return id?.ner;
         },
       },
       {
-        title: "Талбайн хэмжээ",
+        title: t("Талбайн хэмжээ"),
         dataIndex: ["_id", "talbainKhemjee"],
         __numFmt__: "#,##0.00",
         __cellType__: "TypeNumeric",
@@ -150,7 +152,7 @@ function negtgelTailan({ token }) {
         },
       },
       {
-        title: "Түрээс үнэ",
+        title: t("Түрээс үнэ"),
         dataIndex: ["_id", "talbainNegjUne"],
         __style__: { h: "right" },
         __numFmt__: "#,##0.00",
@@ -196,7 +198,7 @@ function negtgelTailan({ token }) {
       excelCol.push(col);
     });
     excelCol.push({
-      title: "Нийт",
+      title: t("Нийт"),
       dataIndex: "niitTulukhDun",
       __style__: { h: "right" },
       __numFmt__: "#,##0.00",
@@ -206,10 +208,10 @@ function negtgelTailan({ token }) {
       },
     });
     excel
-      .addSheet("Нэгтгэл тайлан")
+      .addSheet(t("Нэгтгэл тайлан"))
       .addColumns(excelCol)
       .addDataSource(tailanGaralt)
-      .saveAs("НэгтгэлТайлан.xlsx");
+      .saveAs(`${t("Нэгтгэл тайлан")}.xlsx`);
     setExcelUnshijBaina(false);
   }
 
@@ -227,7 +229,7 @@ function negtgelTailan({ token }) {
         },
       },
       {
-        title: "Регистер/ТИН",
+        title: t("Регистер/ТИН"),
         dataIndex: "_id",
         width: "12rem",
         className: "text-mashJijig",
@@ -419,7 +421,7 @@ function negtgelTailan({ token }) {
 
   return (
     <Admin
-      title="Нэгтгэл тайлан"
+      title={t("Нэгтгэл тайлан")}
       khuudasniiNer="negtgelTailan"
       className="p-0 md:p-4"
       onSearch={(search) =>
@@ -468,6 +470,17 @@ function negtgelTailan({ token }) {
             </Select.Option>
           ))}
         </Select>
+        <Select
+          className="rounded-md border-gray-400 md:w-[150px]"
+          allowClear={true}
+          value={songogdsonTurul}
+          onChange={setSongogdsonTurul}
+          placeholder={t("Төрөл сонгох")}
+        >
+          <Select.Option value="Түрээс">{t("Түрээс")}</Select.Option>
+          <Select.Option value="Үйлчилгээ">{t("Үйлчилгээ")}</Select.Option>
+          <Select.Option value="Зогсоол">{t("Зогсоол")}</Select.Option>
+        </Select>
         <div className="ml-auto flex gap-2">
           <div className="flex h-8">
             <button
@@ -493,7 +506,7 @@ function negtgelTailan({ token }) {
                 <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path>
                 <rect x="6" y="14" width="12" height="8"></rect>
               </svg>
-              Хэвлэх
+              {t("Хэвлэх")}
             </button>
             <div className="dropdown h-8 w-1/2 sm:w-auto">
               <Dropdown
@@ -503,7 +516,7 @@ function negtgelTailan({ token }) {
                       key="ExcelTatakh"
                       onClick={() => exceleerTatya()}
                     >
-                      Тайлан татах
+                      {t("Тайлан татах")}
                     </Menu.Item>
                   </Menu>
                 }
@@ -702,7 +715,7 @@ function negtgelTailan({ token }) {
               <div className="w-1/3 text-left text-sm">
                 {ognoo ? (
                   <div>
-                    Огноо: {moment(ognoo[0]).format("YYYY-MM-DD")}-{" "}
+                    {t("Огноо")}: {moment(ognoo[0]).format("YYYY-MM-DD")}-{" "}
                     {moment(ognoo[1]).format("YYYY-MM-DD")}
                   </div>
                 ) : (
@@ -710,7 +723,7 @@ function negtgelTailan({ token }) {
                 )}
               </div>
               <div className="w-1/3 text-center text-sm font-bold">
-                Нэгтгэл тайлан
+                {t("Нэгтгэл тайлан")}
               </div>
             </div>
             <table className="w-full border-2 border-gray-500">
@@ -726,25 +739,25 @@ function negtgelTailan({ token }) {
                     className="border border-gray-400 text-mashJijigiinJijig"
                     rowSpan={2}
                   >
-                    Харилцагчийн регистер/Бүртгэлийн дугаар
+                    {t("Харилцагчийн регистер/Бүртгэлийн дугаар")}
                   </th>
                   <th
                     className="border border-gray-400 text-mashJijigiinJijig"
                     rowSpan={2}
                   >
-                    Харилцагч нэр
+                    {t("Харилцагч нэр")}
                   </th>
                   <th
                     className="border border-gray-400 text-mashJijigiinJijig"
                     rowSpan={2}
                   >
-                    Талбайн хэмжээ
+                    {t("Талбайн хэмжээ")}
                   </th>
                   <th
                     className="border border-gray-400 text-mashJijigiinJijig"
                     rowSpan={2}
                   >
-                    Түрээс үнэ
+                    {t("Түрээс үнэ")}
                   </th>
                   {shineBagana?.map((murOgnoo, index) => {
                     return (

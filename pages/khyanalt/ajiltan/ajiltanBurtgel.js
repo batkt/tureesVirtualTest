@@ -277,6 +277,7 @@ function AjiltanBurtgel({ token }) {
                   id="input1"
                   onKeyUp={focuser}
                   autoFocus={true}
+                  style={{ borderRadius: '8px' }}
                   type="text"
                   allowClear
                   placeholder={t("Овог")}
@@ -306,6 +307,7 @@ function AjiltanBurtgel({ token }) {
                   onKeyUp={focuser}
                   type="text"
                   allowClear
+                  style={{ borderRadius: '8px' }}
                   placeholder={t("Нэр")}
                   value={ajiltanState.ner}
                   prefix={<UserOutlined style={iconColor} />}
@@ -333,6 +335,7 @@ function AjiltanBurtgel({ token }) {
                   autoComplete="off"
                   id="input3"
                   onKeyUp={focuser}
+                  style={{ borderRadius: '8px' }}
                   allowClear
                   maxLength={10}
                   placeholder={t("Регистр")}
@@ -364,6 +367,7 @@ function AjiltanBurtgel({ token }) {
                   id="input4"
                   onKeyUp={focuser}
                   allowClear
+                  style={{ borderRadius: '8px' }}
                   placeholder={t("Хаяг")}
                   value={ajiltanState.khayag}
                   onChange={(e) => onChange("khayag", e.target.value)}
@@ -390,6 +394,7 @@ function AjiltanBurtgel({ token }) {
                   autoComplete="off"
                   className="appearance-none"
                   type="number"
+                  style={{ borderRadius: '8px' }}
                   id="input5"
                   onKeyUp={focuser}
                   allowClear
@@ -446,6 +451,7 @@ function AjiltanBurtgel({ token }) {
                   id="input7"
                   onKeyDown={focuser}
                   allowClear
+                  style={{ borderRadius: '8px' }}
                   placeholder={t("Албан тушаал")}
                   value={ajiltanState.albanTushaal}
                   onChange={(e) => onChange("albanTushaal", e.target.value)}
@@ -469,6 +475,7 @@ function AjiltanBurtgel({ token }) {
               <Input
                 autoComplete="off"
                 onKeyDown={focuser}
+                style={{ borderRadius: '8px' }}
                 id="input8"
                 placeholder={t("Нэвтрэх нэр")}
                 value={ajiltanState.nevtrekhNer}
@@ -496,6 +503,7 @@ function AjiltanBurtgel({ token }) {
                 placeholder={t("Нууц үг")}
                 value={ajiltanState.nuutsUg}
                 onChange={(e) => onChange("nuutsUg", e.target.value)}
+                style={{ borderRadius: '8px' }}
                 prefix={<SecurityScanOutlined style={iconColor} />}
               />
             </Form.Item>

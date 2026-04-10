@@ -319,11 +319,9 @@ function Khynalt() {
         setTimeout(() => { projectChatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, 100);
       }
 
-      setProjectChatInput('');
-      setSelectedProjectChatFile(null);
       setReplyToProject(null);
     } catch (err) {
-      toast.error('Зурвас илгээхэд алдаа гарлаа');
+      toast.error(t('Зурвас илгээхэд алдаа гарлаа'));
     } finally {
       setUploadingProjectChatFile(false);
     }
@@ -338,7 +336,7 @@ function Khynalt() {
         setEditingProjectMsg(null);
       }
     } catch (err) {
-      toast.error('Засахад алдаа гарлаа');
+      toast.error(t('Засахад алдаа гарлаа'));
     }
   };
 
@@ -347,7 +345,7 @@ function Khynalt() {
       await api.delete(`/chats/${msgId}`);
       setProjectChatMessages(prev => prev.map(m => m._id === msgId ? { ...m, isDeleted: true } : m));
     } catch (err) {
-      toast.error('Устгахад алдаа гарлаа');
+      toast.error(t('Устгахад алдаа гарлаа'));
     }
   };
 
@@ -396,14 +394,14 @@ function Khynalt() {
       }
       
       if (res.data?.success) {
-        toast.success(`Төсөл амжилттай ${editingProject ? 'засагдлаа' : 'нэмэгдлээ'}`);
+        toast.success(`${t("Төсөл амжилттай")} ${editingProject ? t('засагдлаа') : t('нэмэгдлээ')}`);
         await fetchData();
         setIsProjectModalVisible(false);
         projectForm.resetFields();
         setEditingProject(null);
       }
     } catch (err) {
-      toast.error(err?.response?.data?.message || `Төсөл ${editingProject ? 'засахад' : 'нэмэхэд'} алдаа гарлаа`);
+      toast.error(err?.response?.data?.message || `${t("Төсөл")} ${editingProject ? t('засахад') : t('нэмэхэд')} ${t("алдаа гарлаа")}`);
     } finally {
       setSavingProject(false);
     }
@@ -425,12 +423,12 @@ function Khynalt() {
     try {
       const res = await api.delete(`/projects/${id}`);
       if (res.data?.success || res.status === 200 || res.status === 204) {
-        toast.success("Төсөл амжилттай устгагдлаа");
+        toast.success(t("Төсөл амжилттай устгагдлаа"));
         setSelectedProjectIds(prev => prev.filter(pId => pId !== id));
         await fetchData();
       }
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Төсөл устгахад алдаа гарлаа");
+      toast.error(err?.response?.data?.message || t("Төсөл устгахад алдаа гарлаа"));
     }
   };
 
@@ -484,8 +482,8 @@ function Khynalt() {
 
       return {
         id: aId,
-        name: a.ner || a.nevtrekhNer || 'Ажилтан',
-        role: a.albanTushaal || a.erkh || "Ажилтан",
+        name: a.ner || a.nevtrekhNer || t('Ажилтан'),
+        role: a.albanTushaal || a.erkh || t("Ажилтан"),
         kpi: kpiInfo?.kpiHuvv || 0,
         kpiOnoo: kpiInfo?.kpiOnoo || 0,
         kpiDaalgavarToo: doneCount,
@@ -513,11 +511,11 @@ function Khynalt() {
     }).length;
     
     return [
-      { title: "Нийт ажил", value: tasks.length.toString() },
-      { title: "Өнөөдрийн ажил", value: tasksToday.length.toString() },
-      { title: "Яаралтай ажил", value: tasksToday.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
-      { title: "Дууссан", value: doneToday.toString() },
-      { title: "Бараа материал", value: baraas.length.toString() },
+      { title: t("Нийт ажил"), value: tasks.length.toString() },
+      { title: t("Өнөөдрийн ажил"), value: tasksToday.length.toString() },
+      { title: t("Яаралтай ажил"), value: tasksToday.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
+      { title: t("Дууссан"), value: doneToday.toString() },
+      { title: t("Бараа материал"), value: baraas.length.toString() },
     ];
   }, [tasks, baraas, isTaskOnDay]);
 
@@ -531,10 +529,10 @@ function Khynalt() {
   }, [isTutorialOpen, currentTutorialStep]);
 
   const tutorialSteps = [
-    { targetId: "khyanalt-stats", title: "Статистик", description: "Дээд хэсэгт байрлах картууд нь таны бизнесийн гол үзүүлэлтүүдийг (нийт ажил, дууссан ажил, бараа материал) шууд харуулна." },
-    { targetId: "khyanalt-activity-chart", title: "Гүйцэтгэлийн график", description: "Сүүлийн 7 хоногийн ажлын гүйцэтгэлийг өдрөөр нь харьцуулан харах боломжтой." },
-    { targetId: "khyanalt-tasks", title: "Ажлын жагсаалт", description: "Хамгийн сүүлд нэмэгдсэн болон хийгдэж буй ажлуудыг эндээс хянах боломжтой." },
-    { targetId: "khyanalt-team", title: "Баг хамт олон", description: "Танай багийн гишүүдийн жагсаалт энд харагдах бөгөөд тэдний үүргийг хянах боломжтой." },
+    { targetId: "khyanalt-stats", title: t("Статистик"), description: t("Дээд хэсэгт байрлах картууд нь таны бизнесийн гол үзүүлэлтүүдийг (нийт ажил, дууссан ажил, бараа материал) шууд харуулна.") },
+    { targetId: "khyanalt-activity-chart", title: t("Гүйцэтгэлийн график"), description: t("Сүүлийн 7 хоногийн ажлын гүйцэтгэлийг өдрөөр нь харьцуулан харах боломжтой.") },
+    { targetId: "khyanalt-tasks", title: t("Ажлын жагсаалт"), description: t("Хамгийн сүүлд нэмэгдсэн болон хийгдэж буй ажлуудыг эндээс хянах боломжтой.") },
+    { targetId: "khyanalt-team", title: t("Баг хамт олон"), description: t("Танай багийн гишүүдийн жагсаалт энд харагдах бөгөөд тэдний үүргийг хянах боломжтой.") },
   ];
 
   const chartData = useMemo(() => {
@@ -625,7 +623,7 @@ function Khynalt() {
   ]);
 
   return (
-    <Admin title="Хяналтын самбар" khuudasniiNer="khynalt">
+    <Admin title={t("Хяналтын самбар")} khuudasniiNer="khynalt">
       <div className="col-span-12 flex flex-col xl:flex-row h-auto xl:h-H8HalfRem w-full -mx-0 xl:-mx-1 -mt-2 text-black lg:rounded-2xl shadow-2xl relative animate-entrance">
         <div className="flex-1 flex flex-col p-3 md:p-4 overflow-hidden relative min-w-0">
           <div className="flex justify-between items-center px-1">
@@ -660,7 +658,7 @@ function Khynalt() {
 
           <div className="flex-1 overflow-y-auto pr-2 pb-8 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-100 dark:[&::-webkit-scrollbar-thumb]:bg-slate-800">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-5">
-              <DashboardCard id="khyanalt-activity-chart" title={<div className="flex flex-col"><span className="leading-tight">Гүйцэтгэлийн хандлага</span><span className="text-[10px] text-gray-400 font-normal uppercase mt-0.5">Өнөөдрийн төлөв байдал</span></div>} icon={<AreaChartOutlined/>} headerClass="border-green-500" rightActions={
+              <DashboardCard id="khyanalt-activity-chart" title={<div className="flex flex-col"><span className="leading-tight">{t("Гүйцэтгэлийн хандлага")}</span><span className="text-[10px] text-gray-400 font-normal uppercase mt-0.5">{t("Өнөөдрийн төлөв байдал")}</span></div>} icon={<AreaChartOutlined/>} headerClass="border-green-500" rightActions={
                 <div className="flex gap-1.5 bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg border border-gray-200 dark:border-gray-700">
                   {[7, 14, 30].map(r => (
                     <button
@@ -729,9 +727,9 @@ function Khynalt() {
                     };
 
                     const series = [
-                      { key: 'waiting', color: '#f59e0b', gradId: 'gradAmber', glowId: 'glowAmber', label: "Хүлээгдэж буй", count: waitingTotal, isArea: true },
-                      { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: "Идэвхтэй", count: activeTotal, isArea: true  },
-                      { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: "Дууссан", count: doneTotal, isArea: true    },
+                      { key: 'waiting', color: '#f59e0b', gradId: 'gradAmber', glowId: 'glowAmber', label: t("Хүлээгдэж буй"), count: waitingTotal, isArea: true },
+                      { key: 'active',  color: '#3b82f6', gradId: 'gradBlue',  glowId: 'glowBlue',  label: t("Идэвхтэй"), count: activeTotal, isArea: true  },
+                      { key: 'done',    color: '#22c55e', gradId: 'gradGreen', glowId: 'glowGreen', label: t("Дууссан"), count: doneTotal, isArea: true    },
                     ];
 
                     return (

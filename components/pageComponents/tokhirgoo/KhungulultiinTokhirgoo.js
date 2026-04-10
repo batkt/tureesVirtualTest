@@ -428,8 +428,8 @@ function KhungulultiinTokhirgoo({
                     }
                     placeholder={
                       barilgaTokhirgoo?.khungulukhSarBuriinTurul === "khuvi"
-                        ? "Хөнгөлөх хувь"
-                        : "Хөнгөлөх дүн"
+                        ? t("Хөнгөлөх хувь")
+                        : t("Хөнгөлөх дүн")
                     }
                     value={barilgaTokhirgoo?.khungulukhSarBuriinUtga}
                     onChange={(v) =>

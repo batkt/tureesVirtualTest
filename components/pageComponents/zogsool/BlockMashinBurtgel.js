@@ -125,10 +125,10 @@ function BlockMashinBurtgel(
         label={t("Машины дугаар")}
         name="dugaar"
       >
-        <Input onKeyUp={focuser} placeholder={t("Машины дугаар")} />
+        <Input onKeyUp={focuser} placeholder={t("Машины дугаар")} style={{ borderRadius: '8px'}} />
       </Form.Item>
       <Form.Item label={t("Тайлбар")} name="tailbar">
-        <Input onKeyUp={focuser} placeholder={t("Тайлбар")} />
+        <Input onKeyUp={focuser} placeholder={t("Тайлбар")} style={{ borderRadius: '8px'}} />
       </Form.Item>
     </Form>
   );

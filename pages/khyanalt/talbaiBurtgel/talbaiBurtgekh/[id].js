@@ -703,7 +703,7 @@ function TalbaiBurtgekh({ token }) {
                   onKeyUp={focuser}
                   type="text"
                   allowClear
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", borderRadius: '8px' }}
                   placeholder={t("Дугаар")}
                   value={talbaiState.kod}
                   onChange={(e) => onChange("kod", e.target.value)}
@@ -727,7 +727,7 @@ function TalbaiBurtgekh({ token }) {
               >
                 <InputNumber
                   onKeyUp={focuser}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", borderRadius: '8px' }}
                   allowClear
                   placeholder={t("Талбайн хэмжээ/м2/")}
                   value={talbaiState.talbainKhemjee}
@@ -757,7 +757,7 @@ function TalbaiBurtgekh({ token }) {
               >
                 <InputNumber
                   onKeyUp={focuser}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", borderRadius: '8px' }}
                   allowClear
                   placeholder={t("Талбайн хэмжээ/м3/")}
                   value={talbaiState.talbainKhemjeeMetrKube}
@@ -791,7 +791,7 @@ function TalbaiBurtgekh({ token }) {
               >
                 <InputNumber
                   onKeyUp={focuser}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", borderRadius: '8px' }}
                   placeholder={t("Нэгж үнэ")}
                   value={talbaiState.talbainNegjUne}
                   formatter={(value) =>
@@ -819,7 +819,7 @@ function TalbaiBurtgekh({ token }) {
               >
                 <InputNumber
                   onKeyUp={focuser}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", borderRadius: '8px' }}
                   placeholder={t("Нийт үнэ")}
                   value={talbaiState.talbainNiitUne}
                   formatter={(value) =>
@@ -843,7 +843,7 @@ function TalbaiBurtgekh({ token }) {
               >
                 <Input
                   onKeyUp={focuser}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", borderRadius: '8px' }}
                   placeholder={t("Тоолуурын дугаар")}
                   value={talbaiState.tooluuriinDugaar}
                   onChange={(e) => onChange("tooluuriinDugaar", e.target.value)}
@@ -867,7 +867,7 @@ function TalbaiBurtgekh({ token }) {
                 ]}
               >
                 <Select
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", borderRadius: '8px' }}
                   placeholder={t("Давхар")}
                   value={talbaiState.davkhar}
                   onChange={(e) => {
@@ -933,7 +933,7 @@ function TalbaiBurtgekh({ token }) {
               <Form.Item name="tailbar" label={t("Тайлбар")}>
                 <TextArea
                   onKeyDown={focuser}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", borderRadius: '8px' }}
                   rows={4}
                   placeholder={t("Тайлбар")}
                   value={talbaiState.tailbar}

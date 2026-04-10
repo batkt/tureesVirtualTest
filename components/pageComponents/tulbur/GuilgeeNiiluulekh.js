@@ -132,10 +132,10 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         ((mur?.baritsaaAvakhDun || 0) -
           (mur?.baritsaaniiUldegdel || 0) +
           Number.EPSILON) *
-          10000
-      ) / 10000;
+          100
+      ) / 100;
     var aldangiinUldegdel =
-      Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
+      Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 100) / 100;
 
     if (mur.tureesiinTulbur > 0 || mur.baritsaaTulbur > 0) {
       if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
@@ -510,14 +510,14 @@ function GuilgeeNiiluulekh(
     if (talbar === "tureesiinTulbur") {
       const mur = gereenuud[index];
       const aldangiinUldegdel =
-        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
+        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 100) / 100;
       const baritsaaUldegdel =
         Math.round(
           ((mur?.baritsaaAvakhDun || 0) -
             (mur?.baritsaaniiUldegdel || 0) +
             Number.EPSILON) *
-            10000
-        ) / 10000;
+            100
+        ) / 100;
 
       if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
         notification.warning({
@@ -533,7 +533,7 @@ function GuilgeeNiiluulekh(
     if (talbar === "baritsaaTulbur") {
       const mur = gereenuud[index];
       const aldangiinUldegdel =
-        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
+        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 100) / 100;
 
       if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
         notification.warning({
@@ -549,7 +549,7 @@ function GuilgeeNiiluulekh(
     if (talbar === "baritsaaTulbur") {
       const mur = gereenuud[index];
       const aldangiinUldegdel =
-        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
+        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 100) / 100;
 
       if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
         notification.warning({
@@ -580,14 +580,14 @@ function GuilgeeNiiluulekh(
     if (talbar === "tureesiinTulbur") {
       const mur = gereenuud[index];
       const aldangiinUldegdel =
-        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
+        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 100) / 100;
       const baritsaaUldegdel =
         Math.round(
           ((mur?.baritsaaAvakhDun || 0) -
             (mur?.baritsaaniiUldegdel || 0) +
             Number.EPSILON) *
-            10000
-        ) / 10000;
+            100
+        ) / 100;
 
       if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
         notification.warning({
@@ -603,7 +603,7 @@ function GuilgeeNiiluulekh(
     if (talbar === "baritsaaTulbur") {
       const mur = gereenuud[index];
       const aldangiinUldegdel =
-        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 10000) / 10000;
+        Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 100) / 100;
 
       if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
         notification.warning({
@@ -809,8 +809,13 @@ function GuilgeeNiiluulekh(
                 </span>
               </Popconfirm>
             </div>
-            {(geree?.baritsaaAvakhDun || 0) -
-              (geree?.baritsaaniiUldegdel || 0) >
+            {Math.round(
+              ((geree?.baritsaaAvakhDun || 0) -
+                (geree?.baritsaaniiUldegdel || 0) +
+                Number.EPSILON) *
+                100
+            ) /
+              100 >
               0 && (
               <div className="box grid w-full grid-cols-3 rounded-md border bg-gray-100 p-1">
                 <div className="col-span-4">{t("Барьцааны үлдэгдэл")}</div>
@@ -837,7 +842,7 @@ function GuilgeeNiiluulekh(
                 </div>
               </div>
             )}
-            {(geree?.aldangiinUldegdel || 0) > 0 && (
+            {Math.round((geree?.aldangiinUldegdel || 0) * 100) / 100 > 0 && (
               <div className="w-full space-y-2">
                 <div className="box grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
                   <div className="col-span-4">{t("Алдангийн үлдэгдэл")}</div>

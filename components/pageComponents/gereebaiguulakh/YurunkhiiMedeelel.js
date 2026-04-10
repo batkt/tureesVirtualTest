@@ -356,6 +356,7 @@ const YurunkhiiMedeele = ({
         <Form.Item
           name="gereeniiDugaar"
           label={t("Гэрээний дугаар")}
+          
           required={false}
           rules={[
             {
@@ -368,6 +369,7 @@ const YurunkhiiMedeele = ({
             onKeyUp={focuser}
             allowClear
             placeholder={t("Гэрээний дугаар")}
+            style={{ borderRadius: '8px'}}
             prefix={<SolutionOutlined />}
           />
         </Form.Item>
@@ -454,6 +456,7 @@ const YurunkhiiMedeele = ({
           <Input
             onKeyUp={focuser}
             allowClear
+            style={{ borderRadius: '8px'}}
             placeholder={t("Бүртгэлийн дугаар")}
             prefix={<SolutionOutlined />}
           />
@@ -474,6 +477,7 @@ const YurunkhiiMedeele = ({
               onKeyUp={focuser}
               allowClear
               placeholder={t("Байгууллага нэр")}
+              style={{ borderRadius: '8px'}}
               prefix={<SolutionOutlined />}
             />
           </Form.Item>
@@ -489,6 +493,7 @@ const YurunkhiiMedeele = ({
           >
             <Input
               onKeyUp={focuser}
+              style={{ borderRadius: '8px'}}
               allowClear
               placeholder={t("Овог")}
               prefix={<SolutionOutlined />}
@@ -507,6 +512,7 @@ const YurunkhiiMedeele = ({
             <Input
               onKeyUp={focuser}
               allowClear
+              style={{ borderRadius: '8px'}}
               placeholder={t("Нэр")}
               prefix={<SolutionOutlined />}
             />
@@ -525,6 +531,7 @@ const YurunkhiiMedeele = ({
             <Input
               onKeyUp={focuser}
               allowClear
+              style={{ borderRadius: '8px'}}
               placeholder={t("Овог")}
               prefix={<SolutionOutlined />}
             />
@@ -542,6 +549,7 @@ const YurunkhiiMedeele = ({
           >
             <Input
               onKeyUp={focuser}
+              style={{ borderRadius: '8px'}}
               allowClear
               placeholder={t("Нэр")}
               prefix={<SolutionOutlined />}
@@ -554,6 +562,7 @@ const YurunkhiiMedeele = ({
           <Input
             onKeyUp={focuser}
             allowClear
+            style={{ borderRadius: '8px'}}
             placeholder={t("Албан тушаал")}
             prefix={<SolutionOutlined />}
           />
@@ -572,6 +581,7 @@ const YurunkhiiMedeele = ({
             <Input
               onKeyUp={focuser}
               allowClear
+              style={{ borderRadius: '8px'}}
               placeholder={t("Утас")}
               prefix={<SolutionOutlined />}
             />
@@ -590,6 +600,7 @@ const YurunkhiiMedeele = ({
             <Input
               onKeyUp={focuser}
               allowClear
+              style={{ borderRadius: '8px'}}
               placeholder={t("Утас")}
               prefix={<SolutionOutlined />}
             />
@@ -606,6 +617,7 @@ const YurunkhiiMedeele = ({
           >
             <Input
               onKeyUp={focuser}
+              style={{ borderRadius: '8px'}}
               type="email"
               placeholder={t("И-мэйл хаяг")}
               allowClear
@@ -639,6 +651,7 @@ const YurunkhiiMedeele = ({
               type="email"
               placeholder={t("И-мэйл хаяг")}
               allowClear
+              style={{ borderRadius: '8px'}}
               prefix={<MailOutlined />}
               normalize={(value) => value?.replace(/\s/g, "")}
             />
@@ -651,7 +664,7 @@ const YurunkhiiMedeele = ({
           name={"khariltsagchiinNershil"}
           rules={[{ required: true, message: t("Нэр оруулна уу !") }]}
         >
-          <Input placeholder={t("Дэлгүүр, брэнд нэр")} />
+          <Input placeholder={t("Дэлгүүр, брэнд нэр")}  style={{ borderRadius: '8px'}}/>
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-delay="900">

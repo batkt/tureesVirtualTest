@@ -31,8 +31,8 @@ function Table({ data, updateMyData }) {
           <div className="table-cell w-14">
             <InputNumber
               style={{ width: "100%" }}
-              placeholder="Хөнгөлөх хувь"
-              title="Хөнгөлөх хувь"
+              placeholder={t("Хөнгөлөх хувь")}
+              title={t("Хөнгөлөх хувь")}
               min={0}
               max={100}
               value={mur.khyamdraliinKhuvi}

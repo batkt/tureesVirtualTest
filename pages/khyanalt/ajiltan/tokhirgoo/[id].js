@@ -68,7 +68,7 @@ function index({ token, data }) {
 
   return (
     <Admin
-      title={"Ажилтны эрхийн тохиргоо"}
+      title={t("Ажилтны эрхийн тохиргоо")}
       dedKhuudas
       className="p-5 pb-10 lg:pb-0"
     >
@@ -321,7 +321,7 @@ function index({ token, data }) {
                             }}
                           />
                         )}
-                        <div>{mur.ner}</div>
+                        <div>{t(mur.ner)}</div>
                       </div>
                       <div className=" flex w-1/2 items-center justify-center border-l py-2 ">
                         {!mur?.sub && (
@@ -417,7 +417,7 @@ function index({ token, data }) {
                                     setTargetKeys([...targetKeys]);
                                   }}
                                 />
-                                <div>{a.ner}</div>
+                                <div>{t(a.ner)}</div>
                               </div>
                               <div className=" flex w-1/2 items-center justify-center border-x py-2 ">
                                 <div className="flex rounded-md border border-gray-700 px-6">

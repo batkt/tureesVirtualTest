@@ -343,7 +343,7 @@ function ZakhialgaNemekh({ token }) {
                 onClick={() => nemekh()}
               >
                 <FileAddOutlined />
-                Гэрээний заалт нэмэх
+                {t("Гэрээний заалт нэмэх")}
               </Button>
             </Form.Item>
           </Form>

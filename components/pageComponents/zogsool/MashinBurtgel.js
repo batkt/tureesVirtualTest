@@ -701,6 +701,7 @@ function MashinBurtgel(
           <Input
             maxLength={8}
             onKeyUp={focuser}
+            style= {{ borderRadius: '8px'}}
             placeholder={t("Утас")}
             onChange={gereeAvya}
           />
@@ -737,7 +738,7 @@ function MashinBurtgel(
           label={t("Машины дугаар")}
           name="dugaar"
         >
-          <Input onKeyUp={focuser} placeholder={t("Машины дугаар")} />
+          <Input onKeyUp={focuser} placeholder={t("Машины дугаар")}  style={{borderRadius: '8px'}}/>
         </Form.Item>
       )}
       <Form.Item
@@ -751,10 +752,10 @@ function MashinBurtgel(
         label={t("Нэр")}
         name="ezemshigchiinNer"
       >
-        <Input onKeyUp={focuser} placeholder={t("Нэр")} />
-      </Form.Item>
+        <Input onKeyUp={focuser} placeholder={t("Нэр")}  style={{borderRadius: '8px'}}/>
+        </Form.Item>
       <Form.Item label={t("Тайлбар")} name="temdeglel">
-        <Input onKeyUp={focuser} placeholder={t("Тайлбар")} />
+        <Input onKeyUp={focuser} placeholder={t("Тайлбар")}  style={{borderRadius: '8px'}}/>
       </Form.Item>
       {turulShalgah === "Гэрээт" && (
         <Form.Item

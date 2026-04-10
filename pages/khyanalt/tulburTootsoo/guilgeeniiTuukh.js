@@ -1745,7 +1745,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                 loading={aldangiBodokhLoading}
                 disabled={!baiguullaga?._id}
               >
-                Алданги бодох
+                {t("Алданги бодох")}
               </Button>
             )}
             {ajiltan?.nevtrekhNer === "CAdmin1" && (
@@ -1756,7 +1756,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                 loading={aldangiUstgahLoading}
                 disabled={!baiguullaga?._id || !barilgiinId}
               >
-                Алданги устгах
+                {t("Алданги устгах")}
               </Button>
             )}
 

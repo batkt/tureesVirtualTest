@@ -71,6 +71,7 @@ function nasjiltinTailan({ token }) {
     searchKeys
   );
   const [songogdsonIds, setSongogdsonIds] = useState([]);
+  const [songogdsonTurul, setSongogdsonTurul] = useState();
 
   const printRef = useRef(null);
   const [ognoo, setOgnoo] = useState(moment().endOf("month"));
@@ -91,8 +92,9 @@ function nasjiltinTailan({ token }) {
         ? moment(ognoo).format("YYYY-MM-DD 23:59:59")
         : undefined,
       khariltsagchiinId: songogdsonIds.length > 0 ? songogdsonIds : undefined,
+      turul: songogdsonTurul,
     };
-  }, [ognoo, baiguullaga, barilgiinId, songogdsonIds]);
+  }, [ognoo, baiguullaga, barilgiinId, songogdsonIds, songogdsonTurul]);
 
   const { nasjiltinTailan, unshijBaina, setTailanKhuudaslalt } =
     useNasjiltinTailan(token, query, reportSearchKeys, 500);
@@ -152,27 +154,27 @@ function nasjiltinTailan({ token }) {
 
     var excelCol = [
       {
-        title: "Гэрээний дугаар",
+        title: t("Гэрээний дугаар"),
         dataIndex: "gereeniiDugaar",
         __style__: { h: "center" },
       },
       {
-        title: "Харилцагч",
+        title: t("Харилцагч"),
         dataIndex: "ner",
         __style__: { h: "center" },
       },
       {
-        title: "Талбайн дугаар",
+        title: t("Талбайн дугаар"),
         dataIndex: "talbainDugaar",
         __style__: { h: "center" },
       },
       {
-        title: "Харилцагч РД",
+        title: t("Харилцагч РД"),
         dataIndex: "register",
         __style__: { h: "center" },
       },
       {
-        title: "Нийт дүн",
+        title: t("Нийт дүн"),
         dataIndex: "niitDun",
         __style__: { h: "right" },
         __numFmt__: "#,##0.00",
@@ -182,7 +184,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "Xөнгөлөлт",
+        title: t("Xөнгөлөлт"),
         dataIndex: "khungulult",
         __style__: { h: "right" },
         __numFmt__: "#,##0.00",
@@ -192,7 +194,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "Төлсөн дүн",
+        title: t("Төлсөн дүн"),
         dataIndex: "tulsunDun",
         __style__: { h: "right" },
         __numFmt__: "#,##0.00",
@@ -202,7 +204,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "Төлөх дүн",
+        title: t("Төлөх дүн"),
         dataIndex: "tulukhDun",
         __style__: { h: "right" },
         __numFmt__: "#,##0.00",
@@ -212,7 +214,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "0-30 хоног",
+        title: t("0-30 хоног"),
         dataIndex: "avalaga0",
         __style__: { h: "right" },
         __numFmt__: "#,##0.00",
@@ -222,7 +224,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "31-60 хоног",
+        title: t("31-60 хоног"),
         dataIndex: "avlaga31",
         __style__: { h: "right" },
         __numFmt__: "#,##0.00",
@@ -232,7 +234,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "61-90 хоног",
+        title: t("61-90 хоног"),
         dataIndex: "avlaga61",
         __style__: { h: "right" },
         __numFmt__: "#,##0.00",
@@ -242,7 +244,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "91-120 хоног",
+        title: t("91-120 хоног"),
         dataIndex: "avlaga91",
         __style__: { h: "right" },
         __numFmt__: "#,##0.00",
@@ -252,7 +254,7 @@ function nasjiltinTailan({ token }) {
         },
       },
       {
-        title: "+120 хоног",
+        title: t("+120 хоног"),
         dataIndex: "avlaga120",
         __style__: { h: "right" },
         __numFmt__: "#,##0.00",
@@ -265,10 +267,10 @@ function nasjiltinTailan({ token }) {
     ];
 
     excel
-      .addSheet("Насжилтын тайлан")
+      .addSheet(t("Насжилтын тайлан"))
       .addColumns(excelCol)
       .addDataSource(filteredDataSource)
-      .saveAs("НасжилтынТайлан.xlsx");
+      .saveAs(`${t("Насжилтын тайлан")}.xlsx`);
     setExcelUnshijBaina(false);
   }
 
@@ -869,7 +871,7 @@ function nasjiltinTailan({ token }) {
       },
 
       {
-        title: "Төлсөн дүн",
+        title: t("Төлсөн дүн"),
         dataIndex: "tulsunDun",
         key: "tulsunDun",
         align: "center",
@@ -885,7 +887,7 @@ function nasjiltinTailan({ token }) {
         ),
       },
       {
-        title: "Төлөх дүн",
+        title: t("Төлөх дүн"),
         dataIndex: "tulukhDun",
         key: "tulukhDun",
         align: "center",
@@ -901,32 +903,20 @@ function nasjiltinTailan({ token }) {
         ),
       },
       {
-        title: "0-30 хоног",
+        title: t("0-30 хоног"),
         dataIndex: "avalaga0",
         key: "avalaga0",
-        align: "center",
-        width: "8rem",
+        align: "right",
+        width: "12rem",
         className: "text-mashJijig",
-        ellipsis: true,
-        onHeaderCell: () => ({
-          style: { textAlign: "center" },
-        }),
-
-        render: (value) => (
-          <div className="flex justify-end">{formatNumber(value, 2)}</div>
-        ),
+        render: (text) => {
+          return formatNumber(text, 2);
+        },
       },
       {
-        title: "31-60 хоног",
+        title: t("31-60 хоног"),
         dataIndex: "avlaga31",
         key: "avlaga31",
-        align: "center",
-        width: "8rem",
-        className: "text-mashJijig",
-        ellipsis: true,
-        onHeaderCell: () => ({
-          style: { textAlign: "center" },
-        }),
 
         render: (value) => (
           <div className="flex justify-end">{formatNumber(value, 2)}</div>
@@ -1001,7 +991,7 @@ function nasjiltinTailan({ token }) {
 
   return (
     <Admin
-      title="Насжилтын тайлан"
+      title={t("Насжилтын тайлан")}
       khuudasniiNer="nasjiltinTailan"
       className="p-0 md:p-4"
       onSearch={(search) =>
@@ -1054,6 +1044,17 @@ function nasjiltinTailan({ token }) {
             </Select.Option>
           ))}
         </Select>
+        <Select
+          className="rounded-md border-gray-400 md:w-[150px]"
+          allowClear={true}
+          value={songogdsonTurul}
+          onChange={setSongogdsonTurul}
+          placeholder={t("Төрөл сонгох")}
+        >
+          <Select.Option value="Түрээс">{t("Түрээс")}</Select.Option>
+          <Select.Option value="Үйлчилгээ">{t("Үйлчилгээ")}</Select.Option>
+          <Select.Option value="Зогсоол">{t("Зогсоол")}</Select.Option>
+        </Select>
         <div className="ml-auto flex gap-2">
           <div className="flex h-8">
             <button
@@ -1079,7 +1080,7 @@ function nasjiltinTailan({ token }) {
                 <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path>
                 <rect x="6" y="14" width="12" height="8"></rect>
               </svg>
-              Хэвлэх
+              {t("Хэвлэх")}
             </button>
             <div className="dropdown h-8 w-1/2 sm:w-auto">
               <Dropdown
@@ -1089,14 +1090,14 @@ function nasjiltinTailan({ token }) {
                       key="ExcelTatakh"
                       onClick={() => exceleerTatya()}
                     >
-                      Тайлан татах
+                      {t("Тайлан татах")}
                     </Menu.Item>
                     {baiguullaga?._id === "612f457d185280db676d0b51" ? (
                       <Menu.Item
                         key="ExcelTatakhCopy"
                         onClick={() => tatakhMsgTuukh()}
                       >
-                        Авлага тайлан татах
+                        {t("Авлага тайлан татах")}
                       </Menu.Item>
                     ) : null}
                     {ajiltan?.khereglechiinNer === "CAdmin1" ? (

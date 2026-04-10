@@ -6,7 +6,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import router from "next/router";
 import CardList from "components/cardList";
-import UstsanTuukhTile from "components/pageComponents/ustsanTuukh/UstsanTuukhTile";
+import ZassanTuukhTile from "components/pageComponents/zassanTuukh/ZassanTuukhTile";
 import formatNumber from "tools/function/formatNumber";
 import { useAuth } from "services/auth";
 import { EyeOutlined, FileExcelOutlined } from "@ant-design/icons";
@@ -85,7 +85,7 @@ function ZassanTuukh() {
           ajiltan={ajiltan}
         />
       ),
-      width: "80vw",
+      width: typeof window !== "undefined" && window.innerWidth > 768 ? "80vw" : "95vw",
       footer,
     });
   }
@@ -97,7 +97,7 @@ function ZassanTuukh() {
         dataIndex: "classOgnoo",
         align: "center",
         ellipsis: true,
-        width: "3rem",
+        width: "6rem",
         showSorterTooltip: false,
         render: (a) => {
           return (
@@ -112,13 +112,13 @@ function ZassanTuukh() {
         dataIndex: "className",
         align: "left",
         ellipsis: true,
-        width: "3rem",
+        width: "8rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
       {
         title: t("Дугаар"),
-        width: "5rem",
+        width: "7rem",
         dataIndex: "classDugaar",
         align: "center",
         sorter: () => 0,
@@ -128,7 +128,7 @@ function ZassanTuukh() {
         dataIndex: "ajiltniiNer",
         align: "left",
         ellipsis: true,
-        width: "3rem",
+        width: "8rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -137,7 +137,7 @@ function ZassanTuukh() {
         dataIndex: "createdAt",
         align: "center",
         ellipsis: true,
-        width: "3rem",
+        width: "9rem",
         showSorterTooltip: false,
         sorter: () => 0,
         render: (data) => {
@@ -258,6 +258,25 @@ function ZassanTuukh() {
           rowKey={(row) => row._id}
           pagination={{
             current: Number(zassanBarimt?.data?.khuudasniiDugaar),
+            pageSize: zassanBarimt?.data?.khuudasniiKhemjee,
+            total: zassanBarimt?.data?.niitMur,
+            showSizeChanger: true,
+            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+              zassanBarimt.setKhuudaslalt((kh) => ({
+                ...kh,
+                khuudasniiDugaar,
+                khuudasniiKhemjee,
+              })),
+          }}
+        />
+        <CardList
+          keyValue="zassanBarimt"
+          className="block overflow-auto md:hidden"
+          jagsaalt={zassanBarimt?.jagsaalt}
+          Component={ZassanTuukhTile}
+          componentProps={{ onView: medeelelKharakh }}
+          pagination={{
+            current: zassanBarimt?.data?.khuudasniiDugaar,
             pageSize: zassanBarimt?.data?.khuudasniiKhemjee,
             total: zassanBarimt?.data?.niitMur,
             showSizeChanger: true,

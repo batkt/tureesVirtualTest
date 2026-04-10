@@ -502,7 +502,7 @@ function UstsanTuukh() {
       title: t("Дэлгэрэнгүй Мэдээлэл"),
       icon: <FileExcelOutlined />,
       content: <DelgerenguiKharakh ref={ref} data={mur} />,
-      width: "25vw",
+      width: typeof window !== "undefined" && window.innerWidth > 768 ? "25vw" : "95vw",
       footer,
       onCancel: () => {
         ref.current.khaaya();
@@ -517,7 +517,7 @@ function UstsanTuukh() {
         dataIndex: "createdAt",
         align: "center",
         ellipsis: true,
-        width: "4rem",
+        width: "9rem",
         showSorterTooltip: false,
         sorter: () => 0,
         render: (data) => {
@@ -530,7 +530,7 @@ function UstsanTuukh() {
         dataIndex: "class",
         align: "left",
         ellipsis: true,
-        width: "4rem",
+        width: "8rem",
         showSorterTooltip: false,
         render: (mur) => {
           var text;
@@ -594,7 +594,7 @@ function UstsanTuukh() {
             case "Mail":
               turulColumns.push({
                 title: "Нэр",
-                width: "3rem",
+                width: "8rem",
                 align: "left",
                 render: (medegdel) => {
                   return (
@@ -619,7 +619,7 @@ function UstsanTuukh() {
         title: t("Устгасан шалтгаан"),
         align: "left",
         ellipsis: true,
-        width: "5rem",
+        width: "12rem",
         showSorterTooltip: false,
         render: (tailbar) => {
           return (
@@ -634,7 +634,7 @@ function UstsanTuukh() {
         title: t("Хийсэн"),
         align: "left",
         ellipsis: true,
-        width: "3rem",
+        width: "8rem",
         showSorterTooltip: false,
         render: (tailbar) => {
           return (
@@ -651,7 +651,7 @@ function UstsanTuukh() {
         title: t("Огноо"),
         align: "center",
         ellipsis: true,
-        width: "3rem",
+        width: "7rem",
         showSorterTooltip: false,
         render: (tailbar) => {
           return (
@@ -672,13 +672,13 @@ function UstsanTuukh() {
         dataIndex: "ajiltniiNer",
         align: "left",
         ellipsis: true,
-        width: "3rem",
+        width: "8rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
       {
         title: t("Тайлбар"),
-        width: "2rem",
+        width: "5rem",
         dataIndex: "tuluv",
         align: "center",
         render(a, record, index) {
@@ -891,7 +891,7 @@ function UstsanTuukh() {
           className="block overflow-auto md:hidden"
           jagsaalt={combinedData}
           Component={UstsanTuukhTile}
-          componentProps={{ router }}
+          componentProps={{ router, onView: medeelelKharakh }}
           pagination={{
             current: ustsanBarimt?.data?.khuudasniiDugaar,
             pageSize: ustsanBarimt?.data?.khuudasniiKhemjee,

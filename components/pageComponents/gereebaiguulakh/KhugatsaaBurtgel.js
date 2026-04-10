@@ -240,9 +240,10 @@ const YurunkhiiMedeele = ({
           >
             <Input
               onKeyUp={focuser}
+              
               type="number"
               inputMode="decimal"
-              style={{ width: "100%" }}
+              style={{ width: "100%", borderRadius: '8px' }}
               max={0.5}
               min={0}
             />
@@ -275,7 +276,7 @@ const YurunkhiiMedeele = ({
           >
             <InputNumber
               onKeyUp={focuser}
-              style={{ width: "100%" }}
+              style={{ width: "100%", borderRadius: '8px' }}
               min={0}
               max={100}
             />
@@ -343,7 +344,7 @@ const YurunkhiiMedeele = ({
         >
           <InputNumber
             onKeyUp={focuser}
-            style={{ width: "100%" }}
+            style={{ width: "100%", borderRadius: '8px' }}
             formatter={(val) =>
               `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
@@ -373,7 +374,7 @@ const YurunkhiiMedeele = ({
         >
           {gereeniiZagvar?.turGereeEsekh === true ? (
             <Input
-              style={{ width: "100%" }}
+              style={{ width: "100%", borderRadius: '8px' }}
               allowClear
               placeholder={t("Авлага үүсэх огноо")}
               prefix={<SolutionOutlined />}

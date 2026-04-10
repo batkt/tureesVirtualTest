@@ -817,6 +817,7 @@ function AjiltanBurtgel({ token }) {
                     onKeyUp={focuser}
                     type="text"
                     allowClear
+                    style={{borderRadius: '8px'}}
                     placeholder={t("Овог")}
                     value={khariltsagchState.ovog}
                     prefix={<UserOutlined style={iconColor} />}
@@ -843,6 +844,7 @@ function AjiltanBurtgel({ token }) {
                   onKeyUp={focuser}
                   type="text"
                   allowClear
+                  style={{ borderRadius: '8px'}}
                   placeholder={t("Нэр")}
                   value={khariltsagchState.ner}
                   prefix={<UserOutlined style={iconColor} />}
@@ -858,6 +860,7 @@ function AjiltanBurtgel({ token }) {
               <Form.Item
                 name="register"
                 dependencies={["customerTin"]}
+                style={{ borderRadius: '8px'}}
                 rules={[
                   ({ getFieldValue }) => ({
                     validator(_, value) {
@@ -893,6 +896,7 @@ function AjiltanBurtgel({ token }) {
                   allowClear
                   maxLength={10}
                   placeholder={t("Регистр")}
+                  style={{ borderRadius: '8px'}}
                   value={khariltsagchState.register}
                   onChange={(e) => {
                     const value = e.target.value.toUpperCase();
@@ -933,6 +937,7 @@ function AjiltanBurtgel({ token }) {
                 <Input
                   onKeyUp={focuser}
                   allowClear
+                  style= {{borderRadius : '8px'}}
                   placeholder={t("Бүртгэлийн дугаар")}
                   value={khariltsagchState.customerTin}
                   onChange={(e) => {
@@ -944,22 +949,7 @@ function AjiltanBurtgel({ token }) {
                 ></Input>
               </Form.Item>
             </div>
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="600"
-            >
-              <Form.Item name="albanTushaal">
-                <Input
-                  onKeyUp={focuser}
-                  allowClear
-                  placeholder={t("Албан тушаал")}
-                  value={khariltsagchState.albanTushaal}
-                  onChange={(e) => onChange("albanTushaal", e.target.value)}
-                  prefix={<SolutionOutlined style={iconColor} />}
-                ></Input>
-              </Form.Item>
-            </div>
+            
             {khariltsagchState.turul === "ААН" && (
               <div
                 data-aos="fade-right"
@@ -979,6 +969,7 @@ function AjiltanBurtgel({ token }) {
                     onKeyUp={focuser}
                     type="text"
                     allowClear
+                    style={{borderRadius: '8px'}}
                     placeholder={t("Захирлын Овог")}
                     value={khariltsagchState.zakhirliinOvog}
                     prefix={<UserOutlined style={iconColor} />}
@@ -1006,12 +997,23 @@ function AjiltanBurtgel({ token }) {
                     onKeyUp={focuser}
                     type="text"
                     allowClear
+                    style={{borderRadius: '8px'}}
                     placeholder={t("Захирлын нэр")}
                     value={khariltsagchState.zakhirliinNer}
                     prefix={<UserOutlined style={iconColor} />}
                     onChange={(e) => onChange("zakhirliinNer", e.target.value)}
                   ></Input>
                 </Form.Item>
+                <Form.Item name="albanTushaal">
+                <Input
+                  onKeyUp={focuser}
+                  allowClear
+                  placeholder={t("Албан тушаал")}
+                  value={khariltsagchState.albanTushaal}
+                  onChange={(e) => onChange("albanTushaal", e.target.value)}
+                  prefix={<SolutionOutlined style={iconColor} />}
+                ></Input>
+              </Form.Item>
               </div>
             )}
             <div
@@ -1033,6 +1035,7 @@ function AjiltanBurtgel({ token }) {
                   allowClear
                   placeholder={t("Хаяг")}
                   value={khariltsagchState.khayag}
+                  style={{borderRadius: '8px'}}
                   onChange={(e) => onChange("khayag", e.target.value)}
                   prefix={<HomeOutlined style={iconColor} />}
                 ></Input>
@@ -1119,6 +1122,7 @@ function AjiltanBurtgel({ token }) {
                           <Input
                             maxLength={8}
                             type="text"
+                            style={{borderRadius: '8px'}}
                             className="appearance-none"
                             placeholder={
                               t("Утасны дугаар") + " " + (field.name + 1)
@@ -1181,6 +1185,7 @@ function AjiltanBurtgel({ token }) {
                   onKeyUp={focuser}
                   type="email"
                   placeholder={t("И-мэйл")}
+                  style={{borderRadius: '8px'}}
                   value={khariltsagchState.email}
                   onChange={(e) => onChange("mail", e.target.value)}
                   prefix={<MailOutlined style={iconColor} />}
@@ -1195,7 +1200,7 @@ function AjiltanBurtgel({ token }) {
               <Form.Item name="temdeglel">
                 <TextArea
                   onKeyDown={focuser}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%" , borderRadius: '8px'}}
                   rows={4}
                   placeholder={t("Тэмдэглэл")}
                   onChange={(e) => onChange("temdeglel", e.target.value)}

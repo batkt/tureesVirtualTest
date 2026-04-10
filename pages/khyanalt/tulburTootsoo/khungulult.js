@@ -1575,8 +1575,10 @@ function tulburTootsoo() {
       <Input
         type={"number"}
         placeholder={t("Хөнгөлөх хоног")}
+        
         readOnly={!!(ognoonuud && ognoonuud[0] && ognoonuud[1])}
         style={{
+          borderRadius: '8px',
           backgroundColor:
             ognoonuud && ognoonuud[0] && ognoonuud[1]
               ? "#f5f5f5"
@@ -1594,8 +1596,9 @@ function tulburTootsoo() {
   )}
                   {khonogTootsokhEsekh ? (
                     <Form.Item
-                      label={"Хөнгөлөх хувь"}
+                      label={t("Хөнгөлөх хувь")}
                       name="khungulultKhuvi"
+                      style={{borderRadius: '8px'}}
                       labelAlign="left"
                       rules={[
                         {
@@ -1636,7 +1639,9 @@ function tulburTootsoo() {
                         type="number"
                         min={1}
                         max={100}
+                        
                         placeholder="Хөнгөлөх хувь"
+                        style={{borderRadius: '8px'}}
                         onChange={khungulukhDunTootsoolyo}
                       />
                     </Form.Item>
@@ -1694,9 +1699,9 @@ function tulburTootsoo() {
                           }
                         }}
                       >
-                        <Select.Option key={"khuvi"}>Хувь</Select.Option>
+                        <Select.Option key={"khuvi"}>{t("Хувь")}</Select.Option>
                         <Select.Option key={"mungunDun"}>
-                          Мөнгөн дүн
+                         {t("Мөнгөн дүн")}
                         </Select.Option>
                       </Select>
                     </Form.Item>
@@ -1707,19 +1712,20 @@ function tulburTootsoo() {
                     <Form.Item
                       label={
                         khungulukh === "khuvi"
-                          ? "Хөнгөлөх хувь"
-                          : "Хөнгөлөх дүн"
+                          ? t("Хөнгөлөх хувь")
+                          : t("Хөнгөлөх дүн")
                       }
                       name="khungulukhKhuvi"
                       labelAlign="left"
                     >
                       <Input
                         onKeyDown={focuser}
+                        style={{borderRadius: '8px'}}
                         type={"number"}
                         placeholder={
                           khungulukh === "khuvi"
-                            ? "Хөнгөлөх хувь"
-                            : "Хөнгөлөх дүн"
+                            ? t("Хөнгөлөх хувь")
+                            : t("Хөнгөлөх дүн")
                         }
                         onChange={khungulukhDunTootsoolyo}
                       />
@@ -1731,10 +1737,12 @@ function tulburTootsoo() {
                     label={t("Шалтгаан")}
                     name="shaltgaan"
                     labelAlign="left"
+                    style={{borderRadius: '8px'}}
                   >
                     <Input.TextArea
                       onKeyDown={focuser}
                       placeholder={t("Шалтгаан")}
+                      style={{borderRadius: '8px'}}
                     />
                   </Form.Item>
                   <div className="flex-column mt-12 grid text-base dark:text-gray-50">

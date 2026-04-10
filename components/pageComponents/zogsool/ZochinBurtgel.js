@@ -462,6 +462,7 @@ function ZochinBurtgel(
           maxLength={8}
           onKeyUp={focuser}
           placeholder={t("Утас")}
+          style={{borderRadius: '8px'}}
           onChange={gereeAvya}
           disabled={isLoading}
           requiredMark={"required"}
@@ -494,9 +495,10 @@ function ZochinBurtgel(
       >
         <Input
           onKeyUp={focuser}
+          
           placeholder={t("Машины дугаар (сонголттой)")}
           disabled={isLoading}
-          style={{ marginBottom: 8 }}
+          style={{ marginBottom: 8, borderRadius: '8px' }}
         />
         {/* <Input
           onKeyUp={focuser}
@@ -509,6 +511,7 @@ function ZochinBurtgel(
         <Input
           onKeyUp={focuser}
           placeholder={t("Овог (сонголттой)")}
+          style={{borderRadius: '8px'}}Ө
           disabled={isLoading}
         />
       </Form.Item>
@@ -524,7 +527,7 @@ function ZochinBurtgel(
         label={t("Нэр")}
         name="ner"
       >
-        <Input onKeyUp={focuser} placeholder={t("Нэр")} disabled={isLoading} />
+        <Input onKeyUp={focuser} placeholder={t("Нэр")} disabled={isLoading}  style={{borderRadius: '8px'}}/>
       </Form.Item>
 
       <Form.Item
@@ -562,8 +565,9 @@ function ZochinBurtgel(
       >
         <InputNumber
           min={1}
-          style={{ width: "100%" }}
+          style={{ width: "100%", borderRadius: '8px' }}
           onKeyUp={focuser}
+          
           placeholder={t("Эрхийн тоо")}
           disabled={isLoading}
         />
@@ -582,7 +586,7 @@ function ZochinBurtgel(
       >
         <InputNumber
           min={0}
-          style={{ width: "100%" }}
+          style={{ width: "100%" , borderRadius: '8px'}}
           onKeyUp={focuser}
           placeholder={t("Үнэгүй минут")}
           disabled={isLoading}
@@ -602,7 +606,7 @@ function ZochinBurtgel(
       >
         <InputNumber
           min={0}
-          style={{ width: "100%" }}
+          style={{ width: "100%" , borderRadius: '8px'}}
           onKeyUp={focuser}
           placeholder={t("Тоот")}
           disabled={isLoading}
@@ -614,6 +618,7 @@ function ZochinBurtgel(
           rows={3}
           onKeyUp={focuser}
           placeholder={t("Тайлбар (сонголттой)")}
+          style={{borderRadius: '8px'}}
           disabled={isLoading}
         />
       </Form.Item>

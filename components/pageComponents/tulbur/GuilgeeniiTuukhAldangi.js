@@ -983,7 +983,7 @@ function GuilgeeniiTuukhAldangi(
                   {t("Алданги засах дүнг оруулна уу")}
                 </label>
                 <InputNumber
-                  placeholder="Дүнгээ оруулна уу..."
+                  placeholder={t("Дүнгээ оруулна уу...")}
                   formatter={(value) =>
                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   }

@@ -45,7 +45,7 @@ function ZardalMur({
             id="zardalMurInput"
             placeholder={t("Нэр")}
             value={zardal.ner}
-            style={{ width: "100%" }}
+            style={{ width: "100%", borderRadius: '8px' }}
             onChange={(e) => onChangeZardal(e, zam)}
           />
         </div>

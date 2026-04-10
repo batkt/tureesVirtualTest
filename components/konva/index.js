@@ -11,6 +11,7 @@ import {
   Group,
   Rect,
   Text,
+  Path,
 } from "react-konva";
 import uilchilgee, { url } from "services/uilchilgee";
 
@@ -88,6 +89,7 @@ function Drawer(props) {
     !!props.points || false
   );
   const [isFinished, setIsFinished] = useState(!!props.points || false);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const barilga = props.baiguullaga?.barilguud?.find(
@@ -171,23 +173,6 @@ function Drawer(props) {
       ?.planZurag;
   }, [props]);
 
-  if (!plan)
-    return (
-      <div className="space-y-6 ">
-        <div className="flex justify-center pt-10 text-4xl text-gray-400 dark:text-red-100">
-          {t("План зураг оруулаагүй байна")}
-        </div>
-        <div className="flex justify-center ">
-          <img
-            src="https://media.istockphoto.com/vectors/house-plan-on-paper-with-ruler-and-pencil-thin-line-icon-interior-vector-id1282413344?k=20&m=1282413344&s=612x612&w=0&h=C_0ZmwrBoUW-AJo6_JYctTcWBEi5zj4pizoij_4gbf0="
-            alt="no plan"
-            width={"30%"}
-            height={"30%"}
-          />
-        </div>
-      </div>
-    );
-
   return (
     <div className="flex flex-col">
       <div className="flex justify-end space-x-3 pb-3 print:hidden">
@@ -205,13 +190,47 @@ function Drawer(props) {
         height={!!props?.talbaiGereendKharakh ? 500 : undur}
         onMouseDown={handleClick}
         onMouseMove={handleMouseMove}
+        className="rounded-lg border border-gray-200 bg-gray-50/50 dark:border-gray-700 dark:bg-gray-900/50"
       >
         <Layer>
-          <URLImage
-            width={!!props?.talbaiGereendKharakh ? 650 : urgun}
-            height={!!props?.talbaiGereendKharakh ? 500 : undur}
-            src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${plan}`}
-          />
+          {(!plan || imageError) && (
+            <Group x={(!!props?.talbaiGereendKharakh ? 650 : urgun) / 2 - 100} y={(!!props?.talbaiGereendKharakh ? 500 : undur) / 2 - 100}>
+              <Rect
+                width={200}
+                height={200}
+                fill="white"
+                cornerRadius={20}
+                shadowBlur={10}
+                shadowOpacity={0.1}
+                opacity={0.5}
+              />
+              <Path
+                data="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                fill="#94a3b8"
+                scaleX={4}
+                scaleY={4}
+                x={50}
+                y={50}
+                opacity={0.2}
+              />
+              <Text
+                text={imageError ? t("Ачаалахад алдаа гарлаа") : t("План зураг оруулаагүй")}
+                width={200}
+                y={160}
+                align="center"
+                fontSize={14}
+                fill="#64748b"
+              />
+            </Group>
+          )}
+          {plan && !imageError && (
+            <URLImage
+              width={!!props?.talbaiGereendKharakh ? 650 : urgun}
+              height={!!props?.talbaiGereendKharakh ? 500 : undur}
+              src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${plan}`}
+              onError={() => setImageError(true)}
+            />
+          )}
           {talbainuud?.map((mur) => {
             const flattenedPoints = mur.bairshil.reduce(
               (a, b) => a.concat(b),

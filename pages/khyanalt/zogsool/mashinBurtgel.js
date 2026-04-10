@@ -956,7 +956,7 @@ function mashinBurtgel({ token }) {
       </Space>,
     ];
     modal({
-      title: "Машин бүртгэл",
+      title: t("Машин бүртгэл"),
       icon: <FileExcelOutlined />,
       content: (
         <MashinBurtgel
@@ -1078,7 +1078,7 @@ function mashinBurtgel({ token }) {
 
   return (
     <Admin
-      title="Машин бүртгэл"
+      title={t("Машин бүртгэл")}
       khuudasniiNer="mashinBurtgel"
       className="p-0 md:p-4"
       tsonkhniiId={"64546d9caf55fc853dd6812c"}

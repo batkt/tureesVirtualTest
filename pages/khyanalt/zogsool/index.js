@@ -3182,7 +3182,7 @@ function Zogsool({ token }) {
               },
               {
                 key: DAILY_CLOSING_TAB_KEY,
-                label: "Өдрийн хаалт",
+                label: t("Өдрийн хаалт"),
                 children: (
                   <div className="mt-8 overflow-x-auto">
                     <Table

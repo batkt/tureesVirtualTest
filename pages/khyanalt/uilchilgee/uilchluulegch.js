@@ -58,9 +58,9 @@ function Uilchluulegch() {
   
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const tutorialSteps = [
-    { targetId: "cust-search-filter", title: "Хайлт ба шүүлтүүр", description: t("Үйлчлүүлэгчдийг нэр, утсаар хайх болон төрөл болон төлөвөөр нь шүүх хэсэг.") },
-    { targetId: "cust-add-btn", title: "Шинэ харилцагч", description: t("Шинэ үйлчлүүлэгч системд бүртгэх товч.") },
-    { targetId: "cust-list", title: "Үйлчлүүлэгч", description: t("Бүх үйлчлүүлэгчдийн карт жагсаалт. Карт бүр дээрх 'Дэлгэрэнгүй харах' товчоор түүхийг нь харна уу.") },
+    { targetId: "cust-search-filter", title: t("Хайлт ба шүүлтүүр"), description: t("Үйлчлүүлэгчдийг нэр, утсаар хайх болон төрөл болон төлөвөөр нь шүүх хэсэг.") },
+    { targetId: "cust-add-btn", title: t("Шинэ харилцагч"), description: t("Шинэ үйлчлүүлэгч системд бүртгэх товч.") },
+    { targetId: "cust-list", title: t("Үйлчлүүлэгч"), description: t("Бүх үйлчлүүлэгчдийн карт жагсаалт. Карт бүр дээрх 'Дэлгэрэнгүй харах' товчоор түүхийг нь харна уу.") },
   ];
   
   const { token, barilgiinId, ajiltan } = useAuth();
@@ -87,7 +87,7 @@ function Uilchluulegch() {
   }, [fetchUsers]);
 
   const handleSaveUser = async (values) => {
-    if (!barilgiinId) { toast.warning("Барилгын мэдээлэл байхгүй байна"); return; }
+    if (!barilgiinId) { toast.warning(t("Барилгын мэдээлэл байхгүй байна")); return; }
     try {
       const payload = {
         ...values,
@@ -103,14 +103,14 @@ function Uilchluulegch() {
       }
 
       if (res.data?.success || res.status === 200) {
-        toast.success(`Үйлчлүүлэгч амжилттай ${editingUser ? 'шинэчлэгдлээ' : 'нэмэгдлээ'}`);
+        toast.success(`${t("Үйлчлүүлэгч амжилттай")} ${editingUser ? t('шинэчлэгдлээ') : t('нэмэгдлээ')}`);
         await fetchUsers();
         setIsAddModalOpen(false);
         setEditingUser(null);
         form.resetFields();
       }
     } catch (err) {
-      toast.error(err?.response?.data?.message || `Үйлчлүүлэгч ${editingUser ? 'шинэчлэхэд' : 'нэмэхэд'} алдаа гарлаа`);
+      toast.error(err?.response?.data?.message || `${t("Үйлчлүүлэгч")} ${editingUser ? t('шинэчлэхэд') : t('нэмэхэд')} ${t("алдаа гарлаа")}`);
     }
   };
 
@@ -118,11 +118,11 @@ function Uilchluulegch() {
     try {
       const res = await api.delete(`/uilchluulegch/${id}`);
       if (res.data?.success || res.status === 200) {
-        toast.success("Үйлчлүүлэгч амжилттай устгагдлаа");
+        toast.success(t("Үйлчлүүлэгч амжилттай устгагдлаа"));
         await fetchUsers();
       }
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Үйлчлүүлэгч устгахад алдаа гарлаа");
+      toast.error(err?.response?.data?.message || t("Үйлчлүүлэгч устгахад алдаа гарлаа"));
     }
   };
 
@@ -185,7 +185,7 @@ function Uilchluulegch() {
       };
       const res = await api.post(`/tasks/${taskId}/client-onoo`, payload);
       if (res.data?.success) {
-        toast.success("Үнэлгээ амжилттай хадгалагдлаа");
+        toast.success(t("Үнэлгээ амжилттай хадгалагдлаа"));
         const updatedTask = res.data.data;
         setClientTasks(prev => prev.map(t => t._id === taskId ? { ...t, ...updatedTask } : t));
         if (res.data.clientKpi) {
@@ -196,7 +196,7 @@ function Uilchluulegch() {
         setRatingTaskId(null);
       }
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Оноо хадгалахад алдаа гарлаа");
+      toast.error(err?.response?.data?.message || t("Оноо хадгалахад алдаа гарлаа"));
     } finally {
       setSavingClientScore(false);
     }
@@ -240,10 +240,10 @@ function Uilchluulegch() {
   }, [on, off]);
 
   const statCards = [
-    { title: "Нийт харилцагч", value: users.length.toString() },
-    { title: "Шинэ", value: users.filter(u => u.tuluv === 'shine').length.toString() },
-    { title: "Нийт даалгавар", value: users.reduce((acc, curr) => acc + (Number(curr.kpiDaalgavarToo) || 0), 0).toString() },
-    { title: "Дундаж KPI", value: (users.length > 0 ? (users.reduce((acc, curr) => acc + (Number(curr.kpiDundaj) || 0), 0) / users.length).toFixed(1) : "0") },
+    { title: t("Нийт харилцагч"), value: users.length.toString() },
+    { title: t("Шинэ"), value: users.filter(u => u.tuluv === 'shine').length.toString() },
+    { title: t("Нийт даалгавар"), value: users.reduce((acc, curr) => acc + (Number(curr.kpiDaalgavarToo) || 0), 0).toString() },
+    { title: t("Дундаж KPI"), value: (users.length > 0 ? (users.reduce((acc, curr) => acc + (Number(curr.kpiDundaj) || 0), 0) / users.length).toFixed(1) : "0") },
   ];
 
   const filteredUsers = useMemo(() => {
@@ -261,7 +261,7 @@ function Uilchluulegch() {
   }, [users, searchText, filterStatus]);
 
   return (
-    <Admin title="Үйлчлүүлэгч" khuudasniiNer="uilchluulegch">
+    <Admin title={t("Үйлчлүүлэгч")} khuudasniiNer="uilchluulegch">
       <div className="col-span-12 flex flex-col h-auto xl:h-H7HalfRem w-full text-black overflow-hidden lg:rounded-2xl shadow-2xl relative animate-entrance">
         <GuidedTour 
           steps={tutorialSteps} 
@@ -307,14 +307,14 @@ function Uilchluulegch() {
                  allowClear
                />
                <Select
-                 placeholder="Төлөв"
+                 placeholder={t("Төлөв")}
                  value={filterStatus}
                  onChange={(val) => setFilterStatus(val)}
                  className="h-[40px] w-32 [&>.ant-select-selector]:!h-[40px] [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!flex [&>.ant-select-selector]:!items-center"
                  options={[
-                   { label: "Бүгд", value: "all" },
-                   { label: "Идэвхтэй", value: "idevhtei" },
-                   { label: "Идэвхгүй", value: "idevhgui" },
+                   { label: t("Бүгд"), value: "all" },
+                   { label: t("Идэвхтэй"), value: "idevhtei" },
+                   { label: t("Идэвхгүй"), value: "idevhgui" },
                  ]}
                />
             </div>
@@ -325,7 +325,7 @@ function Uilchluulegch() {
                 onClick={() => setIsAddModalOpen(true)}
                 className="text-white bg-emerald-500 hover:!bg-emerald-400 border-none !rounded-xl text-[12px] font-bold shadow-lg shadow-emerald-500/20 h-[40px] px-6 w-full md:w-auto"
               >
-                Шинэ харилцагч
+                {t("Шинэ харилцагч")}
               </Button>
               <Button
                 shape="circle"
@@ -357,7 +357,7 @@ function Uilchluulegch() {
                     <div className="flex flex-col min-w-0">
                       <span className="text-black dark:text-gray-200 font-bold text-[13px]  truncate">{user.ner}</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-500 text-[12px] dark:text-gray-400 font-medium ">Гэрээний дугаар: {user.gereeNomer || "-"}</span>
+                        <span className="text-gray-500 text-[12px] dark:text-gray-400 font-medium ">{t("Гэрээний дугаар")}: {user.gereeNomer || "-"}</span>
                         {(() => {
                           const finalTuluv = (user.kpiDaalgavarToo > 0) ? user.tuluv : 'idevhgui';
                           return (
@@ -377,13 +377,13 @@ function Uilchluulegch() {
                   <Dropdown
                      menu={{
                        items: [
-                         { key: '1', label: 'Засах', icon: <EditOutlined className="text-blue-500" />, onClick: () => openEditModal(user) },
-                         { key: '2', label: 'Устгах', icon: <DeleteOutlined className="text-red-500" />, danger: true, onClick: () => {
+                         { key: '1', label: t('Засах'), icon: <EditOutlined className="text-blue-500" />, onClick: () => openEditModal(user) },
+                         { key: '2', label: t('Устгах'), icon: <DeleteOutlined className="text-red-500" />, danger: true, onClick: () => {
                            Modal.confirm({
-                             title: 'Үйлчлүүлэгч устгах',
-                             content: 'Та энэ үйлчлүүлэгчийг устгахдаа итгэлтэй байна уу?',
-                             okText: 'Устгах',
-                             cancelText: 'Цуцлах',
+                             title: t('Үйлчлүүлэгч устгах'),
+                             content: t('Та энэ үйлчлүүлэгчийг устгахдаа итгэлтэй байна уу?'),
+                             okText: t('Устгах'),
+                             cancelText: t('Цуцлах'),
                              okButtonProps: { danger: true },
                              onOk: () => handleDeleteUser(user._id)
                            });
@@ -399,26 +399,26 @@ function Uilchluulegch() {
                 <div className="grid grid-cols-2 gap-2.5 text-[12px] text-gray-600 dark:text-gray-400 font-medium  mt-1 ">
                   <div className="flex items-center gap-2">
                     <MailOutlined className="text-gray-400 shrink-0 text-sm" />
-                    <span className="truncate">{user.mail || "мэйл байхгүй"}</span>
+                    <span className="truncate">{user.mail || t("мэйл байхгүй")}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <PhoneOutlined className="text-gray-400 shrink-0 text-sm" />
-                    <span className="truncate">{Array.isArray(user.utas) ? user.utas[0] : (user.utas || "утас байхгүй")}</span>
+                    <span className="truncate">{Array.isArray(user.utas) ? user.utas[0] : (user.utas || t("утас байхгүй"))}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <EnvironmentOutlined className="text-gray-400 shrink-0 text-sm" />
-                    <span className="line-clamp-1 leading-tight">{user.khayag || "хаяг байхгүй"}</span>
+                    <span className="line-clamp-1 leading-tight">{user.khayag || t("хаяг байхгүй")}</span>
                   </div>
                 </div>
                 
                 <div className="flex justify-between items-center px-10 mt-2 border-b dark:border-gray-800 rounded-xl border-gray-300 shadow-md">
                   <div className="flex flex-col items-center">
                     <span className="text-black dark:text-white font-bold text-sm ">{user.kpiDaalgavarToo || "0"}</span>
-                    <span className="text-gray-500 dark:text-gray-400 text-[12px] font-semibold mt-1">Ажлууд</span>
+                    <span className="text-gray-500 dark:text-gray-400 text-[12px] font-semibold mt-1">{t("Ажлууд")}</span>
                   </div>
                   <div className="flex flex-col items-center">
                     <span className="text-emerald-400 font-bold text-sm ">{user.kpiDundaj || "-"}</span>
-                    <span className="text-gray-500 dark:text-gray-400 text-[12px] font-semibold mt-1">Үнэлгээ</span>
+                    <span className="text-gray-500 dark:text-gray-400 text-[12px] font-semibold mt-1">{t("Үнэлгээ")}</span>
                   </div>
                 </div>
 
@@ -427,7 +427,7 @@ function Uilchluulegch() {
                   className="w-full bg-emerald-500 hover:!bg-emerald-400 border-none !rounded-md font-bold  mt-2 shadow h-[34px] text-[12px]"
                   onClick={() => handleOpenModal(user)}
                 >
-                  Дэлгэрэнгүй харах
+                  {t("Дэлгэрэнгүй харах")}
                 </Button>
               </div>
             ))}
@@ -456,12 +456,12 @@ function Uilchluulegch() {
                               selTuluv === 'idevhgui' ? 'bg-red-500 text-white' : 
                               'bg-gray-500 text-white'
                             }`}>
-                             {selTuluv === 'shine' ? 'Шинэ' : selTuluv === 'idevhtei' ? 'Идэвхтэй' : selTuluv === 'idevhgui' ? 'Идэвхгүй' : selTuluv}
+                             {selTuluv === 'shine' ? t('Шинэ') : selTuluv === 'idevhtei' ? t('Идэвхтэй') : selTuluv === 'idevhgui' ? t('Идэвхгүй') : selTuluv}
                            </span>
                          );
                        })()}
-                       <span className="text-xs font-bold text-gray-500">Ажлууд: {selectedUser?.kpiDaalgavarToo || 0}</span>
-                       <span className="text-xs font-bold text-gray-500">Үнэлгээ: {selectedUser?.kpiDundaj || "-"}</span>
+                       <span className="text-xs font-bold text-gray-500">{t("Ажлууд")}: {selectedUser?.kpiDaalgavarToo || 0}</span>
+                       <span className="text-xs font-bold text-gray-500">{t("Үнэлгээ")}: {selectedUser?.kpiDundaj || "-"}</span>
                     </div>
                   </div>
                 </div>
@@ -488,9 +488,9 @@ function Uilchluulegch() {
                               proj.tuluv === 'khiigdej bui' ? 'text-amber-500' : 
                               proj.tuluv === 'shine' ? 'text-blue-500' : 'text-gray-500'
                             }`}>
-                              {proj.tuluv === 'duussan' ? 'Дууссан' : 
-                               proj.tuluv === 'khiigdej bui' ? 'Хийгдэж буй' : 
-                               proj.tuluv === 'shine' ? 'Шинэ' : proj.tuluv}
+                              {proj.tuluv === 'duussan' ? t('Дууссан') : 
+                               proj.tuluv === 'khiigdej bui' ? t('Хийгдэж буй') : 
+                               proj.tuluv === 'shine' ? t('Шинэ') : proj.tuluv}
                             </div>
                           </div>
                         ))}
@@ -522,7 +522,7 @@ function Uilchluulegch() {
                               <span>{dayjs(task.ekhlekhTsag).format("YYYY.MM.DD HH:mm:ss")} - {dayjs(task.duusakhTsag).format("HH:mm:ss")}</span>
                               {formatSpentTime(task) && (
                                 <span className="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded text-[12px] font-bold">
-                                  Зарцуулсан: {formatSpentTime(task)}
+                                  {t("Зарцуулсан")}: {formatSpentTime(task)}
                                 </span>
                               )}
                             </div>
@@ -532,12 +532,12 @@ function Uilchluulegch() {
                               <div className="mt-4 pt-4 border-t">
                                 {task.uilchluulegchOnooson != null ? (
                                   <div className="flex items-center gap-2 text-emerald-500 bg-emerald-50 dark:bg-emerald-950 p-2 rounded">
-                                     Үнэлгээ: {task.uilchluulegchOnooson}/10
+                                     {t("Үнэлгээ")}: {task.uilchluulegchOnooson}/10
                                   </div>
                                 ) : ratingTaskId === task._id ? (
                                   <div className="space-y-3 p-3 bg-blue-50 dark:bg-blue-950 rounded border border-blue-100">
                                     <div className="flex justify-between text-xs font-bold">
-                                      <span>Оноо: {clientScorePoints}</span>
+                                      <span>{t("Оноо")}: {clientScorePoints}</span>
                                       <StarOutlined className="text-amber-500" />
                                     </div>
                                     <input
@@ -547,15 +547,15 @@ function Uilchluulegch() {
                                       className="w-full"
                                     />
                                     <Input.TextArea
-                                      placeholder="Тайлбар..."
+                                      placeholder={t("Тайлбар...")}
                                       value={clientScoreNote}
                                       onChange={e => setClientScoreNote(e.target.value)}
                                       rows={2}
                                       size="small"
                                     />
                                     <div className="flex gap-2">
-                                      <Button size="small" onClick={() => setRatingTaskId(null)}>Цуцлах</Button>
-                                      <Button size="small" type="primary" loading={savingClientScore} onClick={() => handleSubmitClientScore(task._id)}>Хадгалах</Button>
+                                      <Button size="small" onClick={() => setRatingTaskId(null)}>{t("Цуцлах")}</Button>
+                                      <Button size="small" type="primary" loading={savingClientScore} onClick={() => handleSubmitClientScore(task._id)}>{t("Хадгалах")}</Button>
                                     </div>
                                   </div>
                                 ) : (
@@ -563,7 +563,7 @@ function Uilchluulegch() {
                                     block size="small" className="text-yellow-500" icon={<StarOutlined />}
                                     onClick={() => { setRatingTaskId(task._id); setClientScorePoints(8); setClientScoreNote(""); }}
                                   >
-                                    Үнэлгээ өгөх
+                                    {t("Үнэлгээ өгөх")}
                                   </Button>
                                 )}
                               </div>
@@ -577,13 +577,13 @@ function Uilchluulegch() {
               </div>
 
               <div className="flex justify-end gap-2 mt-4 pt-4 border-t">
-                <Button onClick={() => setIsDetailModalOpen(false)}>Хаах</Button>
+                <Button onClick={() => setIsDetailModalOpen(false)}>{t("Хаах")}</Button>
               </div>
             </div>
           </Modal>
 
           <Modal
-            title={editingUser ? "Үйлчлүүлэгч засах" : "Үйлчлүүлэгч нэмэх"}
+            title={editingUser ? t("Үйлчлүүлэгч засах") : t("Үйлчлүүлэгч нэмэх")}
             open={isAddModalOpen}
             onCancel={() => {
               setIsAddModalOpen(false);
@@ -596,22 +596,22 @@ function Uilchluulegch() {
             okButtonProps={{ className: "bg-emerald-500 hover:bg-emerald-400 border-none" }}
           >
             <Form form={form} layout="vertical" onFinish={handleSaveUser}>
-              <Form.Item name="ner" label="Нэр" rules={[{ required: true }]}>
-                 <Input placeholder="Үйлчлүүлэгчийн нэр" />
+              <Form.Item name="ner" label={t("Нэр")} rules={[{ required: true }]}>
+                 <Input placeholder={t("Үйлчлүүлэгчийн нэр")} />
               </Form.Item>
-              <Form.Item name="register" label="Регистр">
-                 <Input placeholder="Регистрийн дугаар" />
+              <Form.Item name="register" label={t("Регистр")}>
+                 <Input placeholder={t("Регистрийн дугаар")} />
               </Form.Item>
-              <Form.Item name="utas" label="Утас">
-                 <Input placeholder="Утасны дугаар" />
+              <Form.Item name="utas" label={t("Утас")}>
+                 <Input placeholder={t("Утасны дугаар")} />
               </Form.Item>
-              <Form.Item name="mail" label="И-мэйл">
-                 <Input placeholder="И-мэйл хаяг" />
+              <Form.Item name="mail" label={t("И-мэйл")}>
+                 <Input placeholder={t("И-мэйл хаяг")} />
               </Form.Item>
-              <Form.Item name="khayag" label="Хаяг">
-                 <Input.TextArea placeholder="Хаяг" rows={2} />
+              <Form.Item name="khayag" label={t("Хаяг")}>
+                 <Input.TextArea placeholder={t("Хаяг")} rows={2} />
               </Form.Item>
-              <Form.Item name="gereeNomer" label="Гэрээний дугаар">
+              <Form.Item name="gereeNomer" label={t("Гэрээний дугаар")}>
                  <Input placeholder="GR-..." />
               </Form.Item>
             </Form>

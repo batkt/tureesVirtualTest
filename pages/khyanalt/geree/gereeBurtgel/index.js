@@ -1800,7 +1800,7 @@ function ZakhialgiinKhyanalt() {
   return (
     <Admin
       khuudasniiNer="gereeBurtgel"
-      title="Гэрээний жагсаалт"
+      title={t("Гэрээний жагсаалт")}
       className="p-0 md:p-5  "
       setNeesenEsekh={setNeesenEsekh}
       tsonkhniiId="61c2c5dc1c2830c4e6f90c6d"

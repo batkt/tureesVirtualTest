@@ -306,6 +306,7 @@ const KhurungiinBurtgel = ({
       (a, b) => a + Number(b.talbainKhemjeeMetrKube || 0),
       0
     );
+    value.talbainuud = talbainuud;
     value.talbainNegjUneUsgeer = toWordsOrEmpty(value.talbainNegjUne);
     value.talbainNiitUneUsgeer = toWordsOrEmpty(value.talbainNiitUne);
     value.davkhar = [...new Set(talbainuud.map((a) => a.davkhar))].join(",");
@@ -536,10 +537,12 @@ const KhurungiinBurtgel = ({
                 <div
                   className={`grid ${
                     gereeniiZagvar?.turGereeEsekh &&
-                    talbai.talbainKhemjeeMetrKube
+                    (talbai.talbainKhemjeeMetrKube ||
+                      gereeniiZagvar?.turGereeEsekh)
                       ? "grid-cols-5"
                       : gereeniiZagvar?.turGereeEsekh ||
-                        talbai.talbainKhemjeeMetrKube
+                        (talbai.talbainKhemjeeMetrKube ||
+                          gereeniiZagvar?.turGereeEsekh)
                       ? "grid-cols-4"
                       : "grid-cols-3"
                   } divide-x-2 py-1`}
@@ -556,10 +559,13 @@ const KhurungiinBurtgel = ({
                     {t("м")}
                     <sup>2</sup>
                   </div>
-                  <div className="flex items-center justify-center text-center">
-                    {t("м")}
-                    <sup>3</sup>
-                  </div>
+                  {(talbai.talbainKhemjeeMetrKube ||
+                    gereeniiZagvar?.turGereeEsekh) && (
+                    <div className="flex items-center justify-center text-center">
+                      {t("м")}
+                      <sup>3</sup>
+                    </div>
+                  )}
                   <div className="flex items-center justify-center text-center">
                     {t("Түрээсийн төлбөр")}
                   </div>
@@ -567,10 +573,12 @@ const KhurungiinBurtgel = ({
                 <div
                   className={`grid ${
                     gereeniiZagvar?.turGereeEsekh &&
-                    talbai.talbainKhemjeeMetrKube
+                    (talbai.talbainKhemjeeMetrKube ||
+                      gereeniiZagvar?.turGereeEsekh)
                       ? "grid-cols-5"
                       : gereeniiZagvar?.turGereeEsekh ||
-                        talbai.talbainKhemjeeMetrKube
+                        (talbai.talbainKhemjeeMetrKube ||
+                          gereeniiZagvar?.turGereeEsekh)
                       ? "grid-cols-4"
                       : "grid-cols-3"
                   } divide-x-2 py-1`}
@@ -585,6 +593,7 @@ const KhurungiinBurtgel = ({
                     <div className="flex items-center justify-center text-center">
                       <InputNumber
                         size="small"
+                        disabled
                         formatter={(v) =>
                           `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
@@ -595,14 +604,22 @@ const KhurungiinBurtgel = ({
                       />
                     </div>
                   )}
-                  <div className="flex items-center justify-center text-center">
-                    <InputNumber
-                      size="small"
-                      placeholder="м3"
-                      value={talbai?.talbainKhemjeeMetrKube || 0}
-                      onChange={(v) => onChangeM3(index, v)}
-                    />
-                  </div>
+                  {(talbai.talbainKhemjeeMetrKube ||
+                    gereeniiZagvar?.turGereeEsekh) && (
+                    <div className="flex items-center justify-center text-center">
+                      {gereeniiZagvar.turGereeEsekh ? (
+                        <InputNumber
+                          size="small"
+                          placeholder="м3"
+                          disabled
+                          value={talbai?.talbainKhemjeeMetrKube || 0}
+                          onChange={(v) => onChangeM3(index, v)}
+                        />
+                      ) : (
+                        talbai?.talbainKhemjeeMetrKube || 0
+                      )}
+                    </div>
+                  )}
                   <div className="pr-2 text-right">
                     {gereeniiZagvar.turGereeEsekh ? (
                       <InputNumber
@@ -658,31 +675,70 @@ const KhurungiinBurtgel = ({
       >
         <div className="divide-y-2 border">
           <div className="grid grid-cols-12 divide-x-2">
-            <div className="col-span-4 text-center">{t("Давхар")}</div>
-            <div className="col-span-4 text-center">
+            <div
+              className={`${
+                value.talbainKhemjeeMetrKube ? "col-span-3" : "col-span-4"
+              } text-center`}
+            >
+              {t("Давхар")}
+            </div>
+            <div
+              className={`${
+                value.talbainKhemjeeMetrKube ? "col-span-3" : "col-span-4"
+              } text-center`}
+            >
               {t("м")}
               <sup>2</sup>
             </div>
-            <div className="col-span-4 text-center">{t("Нийт төлбөр")}</div>
+            {value.talbainKhemjeeMetrKube > 0 && (
+              <div className="col-span-3 text-center">
+                {t("м")}
+                <sup>3</sup>
+              </div>
+            )}
+            <div
+              className={`${
+                value.talbainKhemjeeMetrKube ? "col-span-3" : "col-span-4"
+              } text-center`}
+            >
+              {t("Нийт төлбөр")}
+            </div>
           </div>
           <div className="grid grid-cols-12 divide-x-2">
-            <div className="col-span-4 text-center text-base font-medium">
+            <div
+              className={`${
+                value.talbainKhemjeeMetrKube ? "col-span-3" : "col-span-4"
+              } text-center text-base font-medium`}
+            >
               {value.davkhar}
             </div>
-            <div className="col-span-4 text-center text-base font-medium">
+            <div
+              className={`${
+                value.talbainKhemjeeMetrKube ? "col-span-3" : "col-span-4"
+              } text-center text-base font-medium`}
+            >
               {parseFloat(value.talbainKhemjee || 0).toFixed(2)}
             </div>
-            <div className="col-span-4 pr-2 text-right text-base font-medium">
+            {value.talbainKhemjeeMetrKube > 0 && (
+              <div className="col-span-3 text-center text-base font-medium">
+                {parseFloat(value.talbainKhemjeeMetrKube || 0).toFixed(2)}
+              </div>
+            )}
+            <div
+              className={`${
+                value.talbainKhemjeeMetrKube ? "col-span-3" : "col-span-4"
+              } pr-2 text-right text-base font-medium`}
+            >
               {formatNumber(value.sariinTurees)}
             </div>
           </div>
         </div>
       </div>
       <Form.Item label={t("Зориулалт")} name={"zoriulalt"}>
-        <Input placeholder={t("Ашиглах зориулалт")} />
+        <Input placeholder={t("Ашиглах зориулалт")} style={{borderRadius: '8px'}} />
       </Form.Item>
       <Form.Item label={t("Тусгай зориулалт")} name={"tusgaiZoriulalt"}>
-        <Input placeholder={t("Ашиглах тусгай зориулалт")} />
+        <Input placeholder={t("Ашиглах тусгай зориулалт")} style={{borderRadius: '8px'}} />
       </Form.Item>
       <Form.Item
         label={t("Талбайн нэмэлт нөхцөл")}

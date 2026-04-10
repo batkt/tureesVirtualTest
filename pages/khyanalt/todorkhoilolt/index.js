@@ -357,7 +357,7 @@ function Todorkhoilolt() {
           ">
             <div style="margin-bottom: 20px; text-align: center;">
               <h2 style="margin: 0; font-size: 18px; font-weight: bold;">
-                ${title || "Тодорхойлолт"}
+                ${title || t("Тодорхойлолт")}
               </h2>
             </div>
 
@@ -507,7 +507,7 @@ function Todorkhoilolt() {
       </Button>,
     ];
     modal({
-      title: "Тодорхойлолт",
+      title: t("Тодорхойлолт"),
       icon: <FileExcelOutlined />,
       content: (
         <Burtgel
@@ -585,7 +585,7 @@ function Todorkhoilolt() {
             e.stopPropagation();
             setTurulZagvar(!turulZagvar);
           }}
-          className={`fixed z-50 rounded-full border bg-green-600 p-2 text-2xl text-white transition-all  duration-300 md:hidden ${
+          className={`fixed z-50 rounded-full border bg-green-600 p-2 text-2xl text-white transition-all  duration-300 xl:hidden ${
             turulZagvar === true
               ? "right-[2vw] top-[10vh]"
               : neesenEsekh
@@ -601,7 +601,7 @@ function Todorkhoilolt() {
         </div>
 
         <div
-          className={`fixed z-40 mt-5 h-full rounded-md border-2 border-green-500 bg-white shadow-md transition-all duration-300 md:static md:w-auto md:border-none md:bg-transparent md:shadow-none ${
+          className={`fixed z-40 mt-5 h-full rounded-md border-2 border-green-500 bg-white shadow-md transition-all duration-300 xl:static xl:w-auto xl:border-none xl:bg-transparent xl:shadow-none ${
             turulZagvar === true
               ? " right-[5vw] top-[10vh] w-[90vw] "
               : " -right-full top-[30vh] w-[90vw] "
@@ -622,7 +622,7 @@ function Todorkhoilolt() {
                 setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
               }
               onClear={() => setSongogdsonKhariltsagch(null)}
-              placeholder="Харилцагч сонгох"
+              placeholder={t("Харилцагч сонгох")}
             >
               {jagsaalt?.map((data) => (
                 <Select.Option
@@ -653,7 +653,7 @@ function Todorkhoilolt() {
           <div
             className={` h-full h-medegdelHariltsagchPhone overflow-hidden overflow-y-scroll xl:block`}
           >
-            <p>Загварууд</p>
+            <p>{t("Загварууд")}</p>
             {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
               <div>
                 {a.turul === turul ? (
@@ -939,8 +939,8 @@ function Todorkhoilolt() {
           </div>
         </div>
       )}
-      <div className="box jusity-between relative  col-span-3 flex h-full max-h-[100vh] min-h-[70vh] flex-col overflow-y-scroll p-2 lg:col-span-6 lg:mt-0 xl:col-span-3 xl:h-H7HalfRem">
-        <div className="font-18 mb-2">Тодорхойлолт авсан түүх</div>
+      <div className="box justify-between relative col-span-12 flex h-full max-h-[100vh] min-h-[70vh] flex-col overflow-y-scroll p-2 lg:col-span-6 lg:mt-0 xl:col-span-3 xl:h-H7HalfRem">
+        <div className="font-18 mb-2">{t("Тодорхойлолт авсан түүх")}</div>
 
         <div className="h-full">
           {[...mailtuukhmailtuukhJagsaalt]
@@ -956,9 +956,9 @@ function Todorkhoilolt() {
                 <div className="mx-1 mb-1 flex flex-row justify-between">
                   <span className="w-50% flex flex-row  justify-between">
                     <span className="flex flex-col">
-                      <span>Өдөр:</span>
-                      <span>Харилцагч:</span>
-                      <span>Төрөл:</span>
+                      <span>{t("Огноо")}:</span>
+                      <span>{t("Харилцагч")}:</span>
+                      <span>{t("Төрөл")}:</span>
                     </span>
                     <span className="ml-10 flex flex-col">
                       <span className="flex justify-between ">
@@ -974,15 +974,15 @@ function Todorkhoilolt() {
                       </p>
 
                       <p className="w-20 border border-solid border-blue-600  bg-blue-200  text-center  text-blue-600">
-                        {mur?.turul === "Хэвлэх" ? "Хэвлэсэн" : "Илгээсэн"}
+                        {mur?.turul === "Хэвлэх" ? t("Хэвлэсэн") : t("Илгээсэн")}
                       </p>
                     </span>
                   </span>
                   <span className="w-50% flex flex-row justify-between">
                     <span className="flex flex-col">
-                      <span>Цаг:</span>
-                      <span>Утас:</span>
-                      <span>Ажилтан:</span>
+                      <span>{t("Цаг")}:</span>
+                      <span>{t("Утас")}:</span>
+                      <span>{t("Ажилтан")}:</span>
                     </span>
                     <span className="ml-2 flex flex-col">
                       {new Date(mur?.createdAt).toLocaleTimeString("en-GB", {

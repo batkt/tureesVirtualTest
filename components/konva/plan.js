@@ -2,7 +2,7 @@ import useJagsaalt from "hooks/useJagsaalt";
 import { t } from "i18next";
 import _ from "lodash";
 import React, { Component, useMemo } from "react";
-import { Stage, Layer, Line, Image, Text, Group, Rect } from "react-konva";
+import { Stage, Layer, Line, Image, Text, Group, Rect, Path } from "react-konva";
 import { url } from "services/uilchilgee";
 import { undur, urgun } from ".";
 
@@ -186,6 +186,8 @@ class App extends Component {
   state = {
     isMouseOverStartPoint: !!this.props.points?.length || false,
     isFinished: !!this.props.points?.length || false,
+    imageError: false,
+    pointer: null,
   };
 
   escDarakh = (e) => {
@@ -206,13 +208,13 @@ class App extends Component {
   }
   render() {
     const {
-      state: { pointer },
+      state: { pointer, imageError },
       props,
     } = this;
     const talbainuud = props.talbainuud;
 
     return (
-      <div>
+      <div className="flex flex-col">
         <div className="flex space-x-3">
           <div className="flex h-8 w-full items-end justify-end space-x-10 pb-1 ">
             <div className="flex">
@@ -226,13 +228,44 @@ class App extends Component {
           </div>
         </div>
 
-        <Stage width={urgun} height={undur}>
+        <Stage width={urgun} height={undur} className="rounded-lg border border-gray-200 bg-gray-50/50 dark:border-gray-700 dark:bg-gray-900/50">
           <Layer>
-            {props.plan && (
+            {(!props.plan || imageError) && (
+              <Group x={urgun / 2 - 100} y={undur / 2 - 100}>
+                <Rect
+                  width={200}
+                  height={200}
+                  fill="white"
+                  cornerRadius={20}
+                  shadowBlur={10}
+                  shadowOpacity={0.1}
+                  opacity={0.5}
+                />
+                <Path
+                  data="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                  fill="#94a3b8"
+                  scaleX={4}
+                  scaleY={4}
+                  x={50}
+                  y={50}
+                  opacity={0.2}
+                />
+                <Text
+                  text={imageError ? t("Ачаалахад алдаа гарлаа") : t("План зураг оруулаагүй")}
+                  width={200}
+                  y={160}
+                  align="center"
+                  fontSize={14}
+                  fill="#64748b"
+                />
+              </Group>
+            )}
+            {props.plan && !imageError && (
               <URLImage
                 width={urgun}
                 height={undur}
                 src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${props.plan}`}
+                onError={() => this.setState({ imageError: true })}
               />
             )}
             {talbainuud?.map((mur) => {
