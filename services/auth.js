@@ -335,14 +335,14 @@ export const AuthProvider = ({ children }) => {
           }
           if (!solikhBarilgaOldsonEsekh) {
             toast.error("Лицензийн хугацаа дууссан байна", {
-              description: "Админтай холбогдоно уу",
+              description: "Админтай холбогдож төлбөрөө төлнө үү",
               duration: 5000,
             });
             return;
           }
         } else {
           toast.error("Лицензийн хугацаа дууссан байна", {
-            description: "Админтай холбогдоно уу",
+            description: "Админтай холбогдож төлбөрөө төлнө үү",
             duration: 5000,
           });
           return;
