@@ -2201,7 +2201,9 @@ function camera({ token }) {
                     {(ajiltan?.tokhirgoo?.zogsooliinKhungulultEsekh === true ||
                       ajiltan?.erkh === "Admin") && (
                       <div
-                        onClick={() => khungulyu(parent, parent?._id)}
+                        onClick={() =>
+                          khungulyu(parent, parent?._id, songogdzonZogsool)
+                        }
                         className="flex w-28 cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
                       >
                         <div className="flex items-center justify-center">
@@ -2432,6 +2434,7 @@ function camera({ token }) {
     dun,
     shineBagana,
     tuluvFilter,
+    songogdzonZogsool,
   ]);
 
   const baganuud = [
@@ -3329,7 +3332,7 @@ function camera({ token }) {
     }
   };
 
-  const khungulyu = (data, uilchluulegchiinId) => {
+  const khungulyu = (data, uilchluulegchiinId, songogdzonZogsool) => {
     const footer = [
       <div className="flex w-full items-center justify-between">
         <Button type="primary" onClick={() => khungulultRef?.current.khaaya()}>
