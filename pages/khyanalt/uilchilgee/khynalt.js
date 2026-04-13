@@ -861,7 +861,7 @@ function Khynalt() {
 
 
 
-                <DashboardCard id="khyanalt-tasks" title="Олгогдсон ажлууд" icon={<CheckSquareOutlined/>} headerClass="border-green-500" rightActions={<span className="text-emerald-500 text-[12px] font-bold cursor-pointer hover:underline" onClick={() => router.push('/khyanalt/uilchilgee/tuluvluguu')}>Бүгдийг харах <DownOutlined className="text-[8px]"/></span>}>
+                <DashboardCard id="khyanalt-tasks" title={t("Олгогдсон ажлууд")} icon={<CheckSquareOutlined/>} headerClass="border-green-500" rightActions={<span className="text-emerald-500 text-[12px] font-bold cursor-pointer hover:underline" onClick={() => router.push('/khyanalt/uilchilgee/tuluvluguu')}>{t("Бүгдийг харах")} <DownOutlined className="text-[8px]"/></span>}>
                   <div className="flex flex-col gap-2">
                     {(() => {
                       const today = moment();
@@ -901,9 +901,9 @@ function Khynalt() {
                                    task.zereglel === "engiin" ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400" :
                                    "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
                                 }`}>
-                                   {task.zereglel === "yaraltai" ? "Яаралтай" :
-                                    task.zereglel === "nen yaraltai" ? "Нэн яаралтай" :
-                                    task.zereglel === "engiin" ? "Энгийн" : "Бага"}
+                                   {task.zereglel === "yaraltai" ? t("Яаралтай") :
+                                    task.zereglel === "nen yaraltai" ? t("Нэн яаралтай") :
+                                    task.zereglel === "engiin" ? t("Энгийн") : t("Бага")}
                                 </span>
                                 <span className={`px-1.5 py-0.5 w-20 text-center rounded text-[12px]  font-bold ${
                                    task.tuluv === "duussan" || task.tuluv === "shalga" ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" :
@@ -911,10 +911,10 @@ function Khynalt() {
                                    task.tuluv === "khugatsaa khetersen" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
                                    "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
                                 }`}>
-                                   {task.tuluv === "duussan" || task.tuluv === "shalga" ? "Дууссан" :
-                                    task.tuluv === "khiigdej bui" ? "Идэвхтэй" :
-                                    task.tuluv === "khugatsaa khetersen" ? "Хэтэрсэн" :
-                                    "Хүлээгдэж буй"}
+                                   {task.tuluv === "duussan" || task.tuluv === "shalga" ? t("Дууссан") :
+                                    task.tuluv === "khiigdej bui" ? t("Идэвхтэй") :
+                                    task.tuluv === "khugatsaa khetersen" ? t("Хэтэрсэн") :
+                                    t("Хүлээгдэж буй")}
                                 </span>
                                 <span className="flex items-center gap-1 text-[12px] text-gray-400 font-bold w-16 justify-end">
                                    <CalendarOutlined className="text-[12px] opacity-50" />
@@ -944,7 +944,7 @@ function Khynalt() {
 
 
 
-                <DashboardCard title="Ажилтны гүйцэтгэл" icon={<TeamOutlined/>} headerClass="border-green-500">
+                <DashboardCard title={t("Ажилтны гүйцэтгэл")} icon={<TeamOutlined/>} headerClass="border-green-500">
                   <div className="flex flex-col gap-2">
                     {teamMembers.map((member, i) => {
                       const total     = member.totalTasks;
@@ -994,10 +994,10 @@ function Khynalt() {
                               )}
                             </div>
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-[8px] font-bold" style={{ color: '#22c55e' }}>{done} Дууссан</span>
-                              {active > 0 && <span className="text-[8px] font-bold" style={{ color: '#0096FF' }}>{active} Идэвхтэй</span>}
-                              {overdue > 0 && <span className="text-[8px] font-bold" style={{ color: '#ef4444' }}>{overdue} Хугацаа хэтэрсэн</span>}
-                              {remaining > 0 && <span className="text-[8px] font-bold text-gray-400">{remaining} Хүлээгдэж буй</span>}
+                              <span className="text-[8px] font-bold" style={{ color: '#22c55e' }}>{done} {t("Дууссан")}</span>
+                              {active > 0 && <span className="text-[8px] font-bold" style={{ color: '#0096FF' }}>{active} {t("Идэвхтэй")}</span>}
+                              {overdue > 0 && <span className="text-[8px] font-bold" style={{ color: '#ef4444' }}>{overdue} {t("Хугацаа хэтэрсэн")}</span>}
+                              {remaining > 0 && <span className="text-[8px] font-bold text-gray-400">{remaining} {t("Хүлээгдэж буй")}</span>}
                             </div>
                           </div>
                         </div>
@@ -1012,7 +1012,7 @@ function Khynalt() {
                   </div>
                 </DashboardCard>
 
-                 <DashboardCard title="Төслүүдийн гүйцэтгэл" icon={<SiMaterialdesign/>} headerClass="border-emerald-500">
+                 <DashboardCard title={t("Төслүүдийн гүйцэтгэл")} icon={<SiMaterialdesign/>} headerClass="border-emerald-500">
                   <div className="flex flex-col gap-4">
                     {projectStats.map(p => (
                       <div key={p.id} className="flex flex-col gap-1.5">
@@ -1039,7 +1039,7 @@ function Khynalt() {
                   </div>
                 </DashboardCard>
 
-                <DashboardCard title="Бараа материал" icon={<TbBoxSeam/>} headerClass="border-green-500">
+                <DashboardCard title={t("Бараа материал")} icon={<TbBoxSeam/>} headerClass="border-green-500">
                   <div className="flex flex-col gap-3">
                     {baraas.map(item => (
                       <div key={item._id} className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2 last:border-b-0">
@@ -1077,7 +1077,7 @@ function Khynalt() {
               <div className="flex flex-col p-4 space-y-3 shrink-0">
                 <div className="flex items-center justify-between px-1">
                                   <div className="text-[12px] font-bold text-gray-400 mb-2 flex items-center  uppercase opacity-70">
-                                    <span>Төсөл</span>
+                                    <span>{t("Төслүүд")}</span>
                                   </div>
                                   <Button
                                     type="text"
@@ -1137,7 +1137,7 @@ function Khynalt() {
               {/* 2. Team Section */}
               <div id="khyanalt-team" className="flex flex-col p-4 shrink-0">
                 <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center  uppercase opacity-70">
-                  <span>Ажилтан</span>
+                  <span>{t("Ажилтан")}</span>
                 </div>
                 <div className="max-h-[500px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                   {teamMembers.map((member, i) => {
@@ -1165,7 +1165,7 @@ function Khynalt() {
                         </div>
                         <div className="w-full space-y-1.5">
                           <div className="flex justify-between items-center px-0.5">
-                            <span className="text-[9px] font-bold text-gray-400 uppercase">Гүйцэтгэл</span>
+                            <span className="text-[9px] font-bold text-gray-400 uppercase">{t("Гүйцэтгэл")}</span>
                             <span className="text-[10px] font-bold text-gray-500">{pct}%</span>
                           </div>
                           <div className="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden flex">
@@ -1226,7 +1226,7 @@ function Khynalt() {
                   onClick={() => setIsTutorialOpen(true)}
                 >
                     <QuestionCircleOutlined className="text-gray-700 dark:text-gray-300 text-[14px] group-hover:text-white transition-colors" />
-                    <span className="text-gray-700 dark:text-gray-300 text-[12px] font-bold group-hover:text-white transition-colors">Тусламж</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-[12px] font-bold group-hover:text-white transition-colors">{t("Тусламж")}</span>
                 </div>
             </div>
           </div>
@@ -1258,16 +1258,16 @@ function Khynalt() {
         <Form form={projectForm} layout="vertical" onFinish={handleCreateProject} className="space-y-6">
           <Form.Item
             name="name"
-            label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">Төслийн нэр</span>}
+            label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">{t("Төслийн нэр")}</span>}
             required
-            rules={[{ required: true, message: 'Төслийн нэр оруулна уу' }]}
+            rules={[{ required: true, message: t("Төслийн нэр оруулна уу") }]}
           >
             <Input placeholder="Жишээ нь: Барилга А засвар" className="h-12 rounded-xl" />
           </Form.Item>
 
           <Form.Item
             name="tailbar"
-            label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">Тайлбар</span>}
+            label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">{t("Тайлбар")}</span>}
           >
             <Input.TextArea placeholder="Төслийн дэлгэрэнгүй тайлбар..." className="rounded-xl" rows={2} />
           </Form.Item>
@@ -1275,13 +1275,13 @@ function Khynalt() {
           <div className="grid grid-cols-2 gap-4">
             <Form.Item
               name="ekhlekhOgnoo"
-              label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">Эхлэх өдөр</span>}
+              label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">{t("Эхлэх өдөр")}</span>}
             >
               <DatePicker className="w-full h-12 rounded-xl" format="YYYY-MM-DD" />
             </Form.Item>
             <Form.Item
               name="duusakhOgnoo"
-              label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">Дуусах өдөр</span>}
+              label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">{t("Дуусах өдөр")}</span>}
             >
               <DatePicker className="w-full h-12 rounded-xl" format="YYYY-MM-DD" />
             </Form.Item>
@@ -1289,24 +1289,24 @@ function Khynalt() {
 
           <Form.Item
             name="color"
-            label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">Өнгө</span>}
+            label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">{t("Өнгө")}</span>}
             initialValue="#10B981"
           >
             <Select className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex [&_.ant-select-selection-item]:!flex [&_.ant-select-selection-item]:!items-center">
-              <Select.Option value="#10B981"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#10B981] shadow-sm"></div><span className="font-bold">Ногоон</span></div></Select.Option>
-              <Select.Option value="#3B82F6"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#3B82F6] shadow-sm"></div><span className="font-bold">Цэнхэр</span></div></Select.Option>
-              <Select.Option value="#8B5CF6"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#8B5CF6] shadow-sm"></div><span className="font-bold">Ягаан</span></div></Select.Option>
-              <Select.Option value="#EF4444"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#EF4444] shadow-sm"></div><span className="font-bold">Улаан</span></div></Select.Option>
-              <Select.Option value="#F59E0B"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#F59E0B] shadow-sm"></div><span className="font-bold">Шар</span></div></Select.Option>
+              <Select.Option value="#10B981"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#10B981] shadow-sm"></div><span className="font-bold">{t("Ногоон")}</span></div></Select.Option>
+              <Select.Option value="#3B82F6"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#3B82F6] shadow-sm"></div><span className="font-bold">{t("Цэнхэр")}</span></div></Select.Option>
+              <Select.Option value="#8B5CF6"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#8B5CF6] shadow-sm"></div><span className="font-bold">{t("Ягаан")}</span></div></Select.Option>
+              <Select.Option value="#EF4444"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#EF4444] shadow-sm"></div><span className="font-bold">{t("Улаан")}</span></div></Select.Option>
+              <Select.Option value="#F59E0B"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#F59E0B] shadow-sm"></div><span className="font-bold">{t("Шар")}</span></div></Select.Option>
             </Select>
           </Form.Item>
 
           <div className="flex justify-end space-x-4 pt-4">
             <Button onClick={() => { setIsProjectModalVisible(false); setEditingProject(null); projectForm.resetFields(); }}>
-              Болих
+              {t("Болих")}
             </Button>
             <Button type="primary" htmlType="submit" loading={savingProject}>
-              {editingProject ? "Хадгалах" : "Үүсгэх"}
+              {editingProject ? t("Хадгалах") : t("Үүсгэх")}
             </Button>
           </div>
         </Form>
@@ -1395,8 +1395,8 @@ function Khynalt() {
                            <div className="flex flex-col gap-2 w-full min-w-[200px]">
                              <Input.TextArea autoFocus value={editProjectMsgText} onChange={e => setEditProjectMsgText(e.target.value)} rows={2} className="rounded-xl text-xs bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-300" />
                              <div className="flex justify-end gap-2">
-                               <Button size="small" type="primary" onClick={() => handleEditProjectChatMsg(msg._id, editProjectMsgText)}>Засах</Button>
-                               <Button size="small" onClick={() => setEditingProjectMsg(null)}>Болих</Button>
+                               <Button size="small" type="primary" onClick={() => handleEditProjectChatMsg(msg._id, editProjectMsgText)}>{t("Засах")}</Button>
+                               <Button size="small" onClick={() => setEditingProjectMsg(null)}>(t{"Болих"})</Button>
                              </div>
                            </div>
                         ) : (

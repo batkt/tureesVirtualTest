@@ -90,10 +90,10 @@ function KPI() {
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const tutorialSteps = [
-    { targetId: "khyanalt-stats", title: t("Нийт статистик"), description: "Танай байгууллагын нийт ажилтнуудын хангасан онооны дундаж болон тэргүүлж буй ажилтныг энд харуулна." },
-    { targetId: "kpi-distribution", title: t("Хуваарилалт"), description: "Нийт ажилчдын KPI хэрхэн хуваарилагдаж байгааг эндээс харах боломжтой." },
-    { targetId: "kpi-top-users", title: t("Шилдэг гүйцэтгэл"), description: "Хамгийн өндөр KPI-тай шилдэг ажилчдын мэдээлэл." },
-    { targetId: "kpi-users-list", title: t("Ажилчдын жагсаалт"), description: "Танай багийн бүх гишүүд болон тэдний дэлгэрэнгүй KPI-г эндээс харна." }
+    { targetId: "khyanalt-stats", title: t("Нийт статистик"), description: t("Танай байгууллагын нийт ажилтнуудын хангасан онооны дундаж болон тэргүүлж буй ажилтныг энд харуулна.") },
+    { targetId: "kpi-distribution", title: t("Хуваарилалт"), description: t("Нийт ажилчдын KPI хэрхэн хуваарилагдаж байгааг эндээс харах боломжтой.") },
+    { targetId: "kpi-top-users", title: t("Шилдэг гүйцэтгэл"), description: t("Хамгийн өндөр KPI-тай шилдэг ажилчдын мэдээлэл.") },
+    { targetId: "kpi-users-list", title: t("Ажилчдын жагсаалт"), description: t("Танай багийн бүх гишүүд болон тэдний дэлгэрэнгүй KPI-г эндээс харна.") }
   ];
 
   const fetchInitialKpis = useCallback(async () => {
@@ -383,14 +383,14 @@ function KPI() {
   };
 
   const statCards = [
-    { title: "Нийт ажилтан", value: users.length, icon: <TeamOutlined /> },
-    { title: "Дундаж KPI", value: `${avgKpi}%`, icon: <RiseOutlined /> },
-    { title: "KPI > 80%", value: users.filter(u => (u.kpiHuvv ?? 0) >= 80).length, icon: <TrophyOutlined /> },
-    { title: "KPI < 40%", value: users.filter(u => (u.kpiHuvv ?? 0) < 40).length, icon: <FireOutlined /> },
+    { title: t("Нийт ажилтан"), value: users.length, icon: <TeamOutlined /> },
+    { title: t("Дундаж KPI"), value: `${avgKpi}%`, icon: <RiseOutlined /> },
+    { title: t("KPI > 80%"), value: users.filter(u => (u.kpiHuvv ?? 0) >= 80).length, icon: <TrophyOutlined /> },
+    { title: t("KPI < 40%"), value: users.filter(u => (u.kpiHuvv ?? 0) < 40).length, icon: <FireOutlined /> },
   ];
 
   return (
-    <Admin title="KPI гүйцэтгэл" khuudasniiNer="kpi">
+    <Admin title={t("KPI гүйцэтгэл")} khuudasniiNer="kpi">
       <div className="col-span-12 flex flex-col xl:flex-row h-auto xl:h-[calc(100vh-110px)] w-full -mx-0 xl:-mx-1 -mt-2 text-black overflow-hidden lg:rounded-2xl shadow-2xl relative animate-entrance">
         <GuidedTour 
           steps={tutorialSteps} 
@@ -454,7 +454,7 @@ function KPI() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               
               <div className="md:col-span-2 xl:col-span-1" id="kpi-distribution">
-                <DashboardCard title="KPI хуваарилалт" icon={<BarChartOutlined />} headerClass="border-green-500" noScroll={true}>
+                <DashboardCard title={t("KPI хуваарилалт")} icon={<BarChartOutlined />} headerClass="border-green-500" noScroll={true}>
                   <div className="h-full w-full">
                     <Bar key={`dist-${users.length}`} data={distributionData} options={chartOptions} />
                   </div>
@@ -462,13 +462,13 @@ function KPI() {
               </div>
 
               <div className="md:col-span-1 xl:col-span-1" id="kpi-top-users">
-                <DashboardCard title="Шилдэг гүйцэтгэл" icon={<PieChartOutlined />} headerClass="border-green-500" noScroll={true}>
+                <DashboardCard title={t("Шилдэг гүйцэтгэл")} icon={<PieChartOutlined />} headerClass="border-green-500" noScroll={true}>
                   <div className="h-full flex flex-col justify-center gap-4">
                     <div className="h-44 w-full relative">
                       <Doughnut key={`top5-${topUsers.length}`} data={doughnutData} options={{...chartOptions, cutout: '70%'}} />
                       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                         <span className="text-xl font-bold text-gray-800 dark:text-gray-100 lining-nums">{avgKpi}%</span>
-                        <span className="text-[12px] font-bold text-gray-400 uppercase">ДУНДАЖ</span>
+                        <span className="text-[12px] font-bold text-gray-400 uppercase">{t("Дундаж")}</span>
                       </div>
                     </div>
                     <div className="flex flex-col gap-1 px-2">
@@ -485,7 +485,7 @@ function KPI() {
 
               <div className="md:col-span-2 xl:col-span-1" id="kpi-users-list">
                 <DashboardCard 
-                  title="Ажилчдын үзүүлэлт" 
+                  title={t("Ажилчдын үзүүлэлт")} 
                   icon={<TeamOutlined/>}
                   headerClass="border-green-500"
                   
@@ -493,7 +493,7 @@ function KPI() {
                   {loading && users.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-24 gap-4">
                       <Spin size="large" />
-                      <span className="text-[12px] font-bold text-gray-40">Уншиж байна</span>
+                      <span className="text-[12px] font-bold text-gray-40">{t("Уншиж байна")}</span>
                     </div>
                   ) : (
                     <div className="flex flex-col gap-2">
@@ -536,9 +536,9 @@ function KPI() {
                               </div>
 
                               <div className="flex items-center gap-3 text-[12px] font-bold text-gray-400 uppercase tracking-tight">
-                                <span className="flex items-center gap-1"><CheckSquareOutlined /> {user.todayTaskCount || 0} өнөөдөр</span>
-                                <span className="flex items-center gap-1"><CheckCircleOutlined className="text-[10px]" /> {user.kpiDaalgavarToo || 0} нийт</span>
-                                <span className="flex items-center gap-1" style={{ color }}><TrophyOutlined /> {user.kpiOnoo || 0} оноо</span>
+                                <span className="flex items-center gap-1"><CheckSquareOutlined /> {user.todayTaskCount || 0} {t("Өнөөдөр")}</span>
+                                <span className="flex items-center gap-1"><CheckCircleOutlined className="text-[10px]" /> {user.kpiDaalgavarToo || 0} {t("Нийт")}</span>
+                                <span className="flex items-center gap-1" style={{ color }}><TrophyOutlined /> {user.kpiOnoo || 0} {t("Оноо")}</span>
                                 <span className="ml-auto opacity-60">{user.albanTushaal || user.erkh}</span>
                               </div>
                             </div>
@@ -610,7 +610,7 @@ function KPI() {
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
                     <CrownOutlined className="text-yellow-400 text-xl" />
-                    <span className="text-[12px] font-bold text-gray-400 uppercase ">Шилдэг гүйцэтгэгч</span>
+                    <span className="text-[12px] font-bold text-gray-400 uppercase ">{t("Шилдэг гүйцэтгэгч")}</span>
                   </div>
                   {topUsers[0] ? (
                     <div className="flex items-center gap-4">
@@ -619,10 +619,10 @@ function KPI() {
                                          </Avatar>
                       <div className="flex flex-col min-w-0">
                         <span className="text-lg font-bold dark:text-white truncate leading-tight">{topUsers[0].ner || topUsers[0].nevtrekhNer}</span>
-                        <span className="text-[12px] font-bold opacity-80 dark:text-gray-500">{topUsers[0].albanTushaal || "Ажилтан"}</span>
+                        <span className="text-[12px] font-bold opacity-80 dark:text-gray-500">{topUsers[0].albanTushaal || t("Ажилтан")}</span>
                       </div>
                     </div>
-                  ) : <span className="text-sm font-bold">Одоогоор байхгүй</span>}
+                  ) : <span className="text-sm font-bold">{t("Одоогоор байхгүй")}</span>}
                 </div>
                 <div className="relative z-10 mt-6 flex items-end justify-between ">
                   <div className="flex flex-col">
@@ -637,7 +637,7 @@ function KPI() {
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <CheckSquareOutlined className="text-emerald-500 text-xl" />
-                    <span className="text-[12px] font-bold text-gray-400 uppercase ">Ажлын мастер</span>
+                    <span className="text-[12px] font-bold text-gray-400 uppercase ">{t("Ажлын мастер")}</span>
                   </div>
                   {(() => {
                     const master = [...users].sort((a,b) => (b.kpiDaalgavarToo || 0) - (a.kpiDaalgavarToo || 0))[0];
@@ -673,7 +673,7 @@ function KPI() {
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <ThunderboltOutlined className="text-amber-500 text-xl" />
-                    <span className="text-[12px] font-bold text-gray-400 uppercase ">Онооны тэргүүлэгч</span>
+                    <span className="text-[12px] font-bold text-gray-400 uppercase ">{t("Онооны тэргүүлэгч")}</span>
                   </div>
                   {(() => {
                     const leader = [...users].sort((a,b) => (b.kpiOnoo || 0) - (a.kpiOnoo || 0))[0];
@@ -684,11 +684,11 @@ function KPI() {
                         </Avatar>
                         <div className="flex flex-col min-w-0">
                           <span className="text-lg font-bold dark:text-white truncate leading-tight">{leader.ner || leader.nevtrekhNer}</span>
-                          <span className="text-[12px] font-bold opacity-80 dark:text-gray-500">{leader.albanTushaal || "Ажилтан"}</span>
+                          <span className="text-[12px] font-bold opacity-80 dark:text-gray-500">{leader.albanTushaal || t("Ажилтан")}</span>
                         </div>
                       </div>
                     ) : (
-                      <span className="text-sm font-bold">Одоогоор байхгүй</span>
+                      <span className="text-sm font-bold">{t("Одоогоор байхгүй")}</span>
                     );
                   })()}
                 </div>
@@ -698,7 +698,7 @@ function KPI() {
                     return (
                       <>
                         <span className="text-2xl font-bold tabular-nums text-amber-500">{leader?.kpiOnoo || 0}</span>
-                        <span className="text-[12px] font-bold uppercase opacity-60 dark:text-gray-500 text-gray-600">Нийт оноо</span>
+                        <span className="text-[12px] font-bold uppercase opacity-60 dark:text-gray-500 text-gray-600">{t("Нийт оноо")}</span>
                       </>
                     );
                   })()}
@@ -710,7 +710,7 @@ function KPI() {
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <RiseOutlined className="text-blue-500 text-xl" />
-                    <span className="text-[12px] font-bold text-gray-400 uppercase ">Багийн Төлөв</span>
+                    <span className="text-[12px] font-bold text-gray-400 uppercase ">{t("Багийн Төлөв")}</span>
                   </div>
                   <div className="flex flex-col">
                     <div className="flex items-baseline gap-2">
@@ -724,12 +724,12 @@ function KPI() {
                         );
                       })()}
                     </div>
-                    <span className="text-[12px] font-bold text-gray-400 uppercase mt-1">Дундажаас дээш ажилтан</span>
+                    <span className="text-[12px] font-bold text-gray-400 uppercase mt-1">{t("Дундажаас дээш ажилтан")}</span>
                     </div>
                 </div>
                 <div className="mt-4 flex flex-col gap-1.5">
                    <div className="flex items-center justify-between text-[12px] font-bold">
-                     <span className="text-gray-400 uppercase">Тогтвортой байдал</span>
+                     <span className="text-gray-400 uppercase">{t("Тогтвортой байдал")}</span>
                      <span className="text-blue-500">
                       {avgKpi === 0 ? "Одоогоор үнэлгээгүй" : (avgKpi >= 80 ? "Маш сайн" : avgKpi >= 50 ? "Үр дүнтэй" : "Сайжруулах")}
                      </span>

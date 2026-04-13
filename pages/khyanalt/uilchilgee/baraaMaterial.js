@@ -212,14 +212,14 @@ function BaraaMaterial() {
       render: (text, record, index) => <span className="text-gray-400 font-bold">{index + 1}</span>
     },
     {
-      title: 'Барааны нэр',
+      title: t('Барааны нэр'),
       dataIndex: 'ner',
       key: 'ner',
       className: 'font-medium text-[12px]',
       render: (text) => <span className="text-gray-800 dark:text-gray-200">{text}</span>
     },
     {
-      title: 'Үлдэгдэл',
+      title: t('Үлдэгдэл'),
       dataIndex: 'uldegdel',
       key: 'uldegdel',
       align: 'center',
@@ -231,7 +231,7 @@ function BaraaMaterial() {
       )
     },
     {
-      title: 'Зарцуулалт',
+      title: t('Зарцуулалт'),
       key: 'usage',
       align: 'center',
       width: 100,
@@ -242,7 +242,7 @@ function BaraaMaterial() {
       )
     },
     {
-      title: 'Нэгж',
+      title: t('Нэгж'),
       key: 'negj',
       align: 'center',
       width: 80,
@@ -253,7 +253,7 @@ function BaraaMaterial() {
       )
     },
     {
-      title: 'Төрөл',
+      title: t('Төрөл'),
       dataIndex: 'turul',
       key: 'turul',
       align: 'center',
@@ -270,13 +270,13 @@ function BaraaMaterial() {
         <Dropdown
           menu={{
             items: [
-              { key: '1', label: 'Засах', icon: <EditOutlined className="text-blue-500"/>, onClick: () => openEditModal(row) },
-              { key: '2', label: 'Устгах', icon: <DeleteOutlined className="text-red-500"/>, danger: true, onClick: () => {
+              { key: '1', label: t('Засах'), icon: <EditOutlined className="text-blue-500"/>, onClick: () => openEditModal(row) },
+              { key: '2', label: t('Устгах'), icon: <DeleteOutlined className="text-red-500"/>, danger: true, onClick: () => {
                 Modal.confirm({
-                  title: "Устгах",
-                  content: "Та устгахдаа итгэлтэй байна уу?",
-                  okText: "Устгах",
-                  cancelText: "Цуцлах",
+                  title: t("Устгах"),
+                  content: t("Та устгахдаа итгэлтэй байна уу?"),
+                  okText: t("Устгах"),
+                  cancelText: t("Цуцлах"),
                   okButtonProps: { danger: true },
                   onOk: () => handleDeleteBaraa(row._id)
                 });
@@ -675,11 +675,11 @@ function BaraaMaterial() {
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const tutorialSteps = [
-    { targetId: "mat-usage-dashboard", title: "Нийт статистик", description: "Энд бараа материалын нийт төрөл, үлдэгдэл болон үнэ цэнийг нэгдсэн байдлаар харна." },
-    { targetId: "mat-actions", title: "Үйлдлүүд", description: "Шинээр бараа бүртгэх, барааны орлого авах болон Excel файл татаж авах үйлдлүүдийг эндээс хийнэ." },
-    { targetId: "mat-table", title: "Барааны жагсаалт", description: "Бүх бараа материалын дэлгэрэнгүй жагсаалт, үлдэгдэл, нэгж өртөг зэргийг эндээс хянах боломжтой." },
-    { targetId: "mat-sidebar", title: "Хайлт", description: "Бараа материалыг хурдан нэмэх хэсэг." },
-    { targetId: "mat-team", title: "Баг хамт олон", description: "Материал хариуцсан багийн гишүүдийг эндээс харна." },
+    { targetId: "mat-usage-dashboard", title: t("Нийт статистик"), description: t("Энд бараа материалын нийт төрөл, үлдэгдэл болон үнэ цэнийг нэгдсэн байдлаар харна.") },
+    { targetId: "mat-actions", title: t("Үйлдлүүд"), description: t("Шинээр бараа бүртгэх, барааны орлого авах болон Excel файл татаж авах үйлдлүүдийг эндээс хийнэ.") },
+    { targetId: "mat-table", title: t("Барааны жагсаалт"), description: t("Бүх бараа материалын дэлгэрэнгүй жагсаалт, үлдэгдэл, нэгж өртөг зэргийг эндээс хянах боломжтой.") },
+    { targetId: "mat-sidebar", title: t("Хайлт"), description: t("Бараа материалыг хурдан нэмэх хэсэг.") },
+    { targetId: "mat-team", title: t("Баг хамт олон"), description: t("Материал хариуцсан багийн гишүүдийг эндээс харна.") },
   ];
 
   useEffect(() => {
@@ -737,7 +737,7 @@ function BaraaMaterial() {
               onChange={setFilterType}
               className="w-full sm:w-48 [&>.ant-select-selector]:!bg-white dark:[&>.ant-select-selector]:!bg-[#222a38] dark:[&>.ant-select-selector]:!border-[#2d3748]/50 [&>.ant-select-selector]:!border-gray-200 dark:[&>.ant-select-selector]:!text-gray-300 [&>.ant-select-selector]:!rounded-lg [&>.ant-select-selector]:!h-[36px] [&>.ant-select-selector]:!flex [&>.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!text-xs"
             >
-                <Select.Option value="all">Бүх төрөл</Select.Option>
+                <Select.Option value="all">{t("Бүх төрөл")}</Select.Option>
                 {Object.entries(typeMap).map(([key, value]) => (
                   <Select.Option key={key} value={key}>{value}</Select.Option>
                 ))}
@@ -747,10 +747,10 @@ function BaraaMaterial() {
               <Button
                 type="primary"
                 icon={<PlusOutlined />}
-                className="bg-emerald-500 hover:bg-emerald-600 border-none !rounded-xl text-xs font-bold shadow-lg shadow-emerald-500/20 h-[40px] px-6 transition-all hover:scale-105 active:scale-95"
+                className="bg-emerald-500 hover:bg-emerald-600 border-none !rounded-xl text-xs font-bold shadow-lg shadow-emerald-500/20 h-[40px] px-6 transition-all  active:scale-95"
                 onClick={() => setIsAddModalOpen(true)}
               >
-                Бараа бүртгэх
+                {t("Бараа бүртгэх")}
               </Button>
               {/* <Button
                 type="default"
@@ -795,7 +795,7 @@ function BaraaMaterial() {
   <div className="flex items-center justify-between mb-6">
     <div>
       <h3 className="text-[14px] font-bold text-slate-800 dark:text-slate-100 uppercase flex items-center gap-2">
-        Өнөөдрийн зарцуулалт
+        {t("Өнөөдрийн зарцуулалт")}
       </h3>
     </div>
 
@@ -848,7 +848,7 @@ function BaraaMaterial() {
                  <div>
                     <h3 className="text-[14px] font-bold text-slate-800 dark:text-slate-100 uppercase flex items-center gap-2">
                        {/* <ThunderboltOutlined className="text-amber-500" /> */}
-                       Их ашиглалттай бараа материал
+                      {t("Их ашиглалттай бараа материал")}
                     </h3>
                     {/* <p className="text-[12px] text-slate-400 font-bold uppercase r mt-0.5">Top Consumers</p> */}
                  </div>
@@ -907,7 +907,7 @@ function BaraaMaterial() {
               <div id="mat-sidebar" className="flex flex-col p-4 space-y-3 shrink-0">
                 <div className="flex items-center justify-between px-1">
                   <div className="text-[12px] font-bold text-gray-400 mb-2 flex items-center  uppercase opacity-70">
-                    <span>Төслүүд</span>
+                    <span>{t("Төслүүд")}</span>
                   </div>
                   <Button
                     type="text"
@@ -916,7 +916,7 @@ function BaraaMaterial() {
                     icon={<PlusOutlined className="text-white text-[12px]" />}
                     className="!text-white text-[12px] bg-green-500 font-bold hover:!bg-emerald-500/10 rounded-lg"
                   >
-                    Нэмэх
+                    {t("Нэмэх")}
                   </Button>
                 </div>
                 
@@ -924,7 +924,7 @@ function BaraaMaterial() {
                   {loadingProjects ? (
                     <div className="flex justify-center py-4"><Spin size="small" /></div>
                   ) : projects.length === 0 ? (
-                    <div className="text-center text-gray-400 text-[12px] py-4 font-medium">Төсөл байхгүй байна</div>
+                    <div className="text-center text-gray-400 text-[12px] py-4 font-medium">{t("Төсөл байхгүй байна")}</div>
                   ) : (
                     projects.map(p => (
                       <div key={p.id} className="flex items-center space-x-3 cursor-pointer group hover:bg-emerald-50 dark:hover:bg-emerald-500/10 px-3 py-2.5 rounded-2xl transition-all duration-300 border border-transparent hover:border-emerald-200/50 dark:hover:border-emerald-500/20 shadow-sm hover:shadow-md">
@@ -935,13 +935,13 @@ function BaraaMaterial() {
                           <span className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate transition-colors">{p.name}</span>
                         </div>
                         <div className="opacity-0 group-hover:opacity-100 flex items-center space-x-1 shrink-0 transition-opacity">
-                          <Tooltip title="Чат">
+                          <Tooltip title={t("Чат")}>
                             <Button type="text" size="small" icon={<MessageOutlined className="text-gray-400 hover:text-emerald-500 text-[12px]" />} onClick={(e) => openProjectChat(p, e)} />
                           </Tooltip>
-                          <Tooltip title="Засах">
+                          <Tooltip title={t("Засах")}>
                             <Button type="text" size="small" icon={<EditOutlined className="text-gray-400 hover:text-blue-500 text-[12px]" />} onClick={(e) => { e.stopPropagation(); handleEditProject(p); }} />
                           </Tooltip>
-                          <Popconfirm title="Төслийг устгах уу?" onConfirm={(e) => { e.stopPropagation(); handleDeleteProject(p.id); }} onCancel={(e) => e.stopPropagation()}>
+                          <Popconfirm title={t("Төслийг устгах уу?")} onConfirm={(e) => { e.stopPropagation(); handleDeleteProject(p.id); }} onCancel={(e) => e.stopPropagation()}>
                             <Button type="text" size="small" icon={<DeleteOutlined className="text-gray-400 hover:text-red-500 text-[12px]" />} onClick={(e) => e.stopPropagation()} />
                           </Popconfirm>
                         </div>
@@ -956,7 +956,7 @@ function BaraaMaterial() {
               {/* 2. Team Section */}
               <div id="mat-team" className="flex flex-col p-4 shrink-0">
                 <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center uppercase opacity-70">
-                  <span>Ажилтны гүйцэтгэл</span>
+                  <span>{t("Ажилтны гүйцэтгэл")}</span>
                 </div>
                 <div className="max-h-[350px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                   {teamMembers.map((member, i) => {
@@ -985,7 +985,7 @@ function BaraaMaterial() {
                               {overdue > 0 && (
                                 <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full"
                                   style={{ background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' }}>
-                                  {overdue} Хэтэрсэн
+                                  {overdue} {t("Хэтэрсэн")}
                                 </span>
                               )}
                               <span className="text-[12px] font-bold tabular-nums" style={{ color: ac }}>{pct}%</span>
@@ -1003,10 +1003,10 @@ function BaraaMaterial() {
                             )}
                           </div>
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-[8px] font-bold" style={{ color: '#22c55e' }}>{done} Дууссан</span>
-                            {active > 0 && <span className="text-[8px] font-bold" style={{ color: '#0096FF' }}>{active} Идэвхтэй</span>}
-                            {overdue > 0 && <span className="text-[8px] font-bold" style={{ color: '#ef4444' }}>{overdue} Хэтэрсэн</span>}
-                            {remaining > 0 && <span className="text-[8px] font-bold text-gray-400">{remaining} Хүлээгдэж буй</span>}
+                            <span className="text-[8px] font-bold" style={{ color: '#22c55e' }}>{done} {t("Дууссан")}</span>
+                            {active > 0 && <span className="text-[8px] font-bold" style={{ color: '#0096FF' }}>{active} {t("Идэвхтэй")}</span>}
+                            {overdue > 0 && <span className="text-[8px] font-bold" style={{ color: '#ef4444' }}>{overdue} {t("Хэтэрсэн")}</span>}
+                            {remaining > 0 && <span className="text-[8px] font-bold text-gray-400">{remaining} {t("Хүлээгдэж буй")}</span>}
                           </div>
                         </div>
                       </div>
@@ -1015,7 +1015,7 @@ function BaraaMaterial() {
                   {teamMembers.length === 0 && (
                     <div className="flex flex-col items-center justify-center py-6 text-gray-400 gap-1 text-[12px] font-bold uppercase ">
                       <TeamOutlined className="text-2xl opacity-20" />
-                      Ажилтан байхгүй
+                      {t("Ажилтан байхгүй")}
                     </div>
                   )}
                 </div>
@@ -1027,14 +1027,14 @@ function BaraaMaterial() {
               <div className="flex flex-col p-4 shrink-0">
                 <div className="flex items-center justify-between mb-3 px-1">
                   <div className="text-[12px] font-bold text-gray-400 flex items-center  uppercase opacity-70">
-                    <span>Түүх</span>
+                    <span>{t("Түүх")}</span>
                   </div>
                 </div>
                 <div className="max-h-[300px] overflow-y-auto space-y-4 px-2 custom-scrollbar">
                   {loadingHistory ? (
                     <div className="flex justify-center py-4"><Spin size="small" /></div>
                   ) : history.length === 0 ? (
-                    <div className="text-center text-gray-400 text-[12px]">Түүх байхгүй байна</div>
+                    <div className="text-center text-gray-400 text-[12px]">{t("Түүх байхгүй байна")}</div>
                   ) : (
                     history.slice(0, 10).map((act) => (
                       <div key={act._id || act.id} className="hover:scale-105 relative pl-5 before:content-[''] before:absolute before:left-[5px] before:top-4 before:w-[1px] before:h-[130%] before:bg-slate-400/30 dark:before:bg-slate-600/30 last:before:hidden transition-all">
@@ -1043,13 +1043,13 @@ function BaraaMaterial() {
                           {act.ajiltniiNer && <span className="text-gray-500 dark:text-gray-400 font-bold">{act.ajiltniiNer} </span>}
                           <span className="text-gray-400 font-medium">
                             {act.uildelText || (
-                              act.uildel === "created task" || act.uildel === "created" ? "даалгавар үүсгэлээ" :
-                              act.uildel === "updated task" || act.uildel === "updated" ? "даалгавар шинэчиллээ" :
-                              act.uildel === "added member" || act.uildel === "added" ? "гишүүн нэмлээ" :
-                              act.uildel === "deleted task" || act.uildel === "deleted" ? "даалгавар устгалаа" :
-                              act.uildel === "completed task" || act.uildel === "completed" ? "даалгавар дуусгалаа" :
-                              act.uildel === "message sent" ? "зурвас илгээлээ" :
-                              (act.uildel || 'үйлдэл хийлээ')
+                              act.uildel === "created task" || act.uildel === "created" ? (t("даалгавар үүсгэлээ")) :
+                              act.uildel === "updated task" || act.uildel === "updated" ? (t("даалгавар шинэчиллээ")) :
+                              act.uildel === "added member" || act.uildel === "added" ? (t("гишүүн нэмлээ")) :
+                              act.uildel === "deleted task" || act.uildel === "deleted" ? (t("даалгавар устгалаа")) :
+                              act.uildel === "completed task" || act.uildel === "completed" ? (t("даалгавар дуусгалаа")) :
+                              act.uildel === "message sent" ? (t("зурвас илгээлээ")) :
+                              (act.uildel || t("үйлдэл хийлээ"))
                             )}
                           </span>
                           {act.taskNer && <span className="text-emerald-500 font-bold ml-1">{act.taskNer}</span>}
@@ -1069,7 +1069,7 @@ function BaraaMaterial() {
                   onClick={() => setIsTutorialOpen(true)}
                 >
                     <QuestionCircleOutlined className="text-gray-700 dark:text-gray-300 text-[14px] group-hover:text-white transition-colors" />
-                    <span className="text-gray-700 dark:text-gray-300 text-[12px] font-bold group-hover:text-white transition-colors">Тусламж</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-[12px] font-bold group-hover:text-white transition-colors">{t("Тусламж")}</span>
                 </div>
             </div>
           </div>
@@ -1090,7 +1090,7 @@ function BaraaMaterial() {
         )}
 
         <Modal
-            title={editingBaraa ? "Бараа засах" : "Бараа бүртгэх"}
+            title={editingBaraa ? t("Бараа засах") : t("Бараа бүртгэх")}
             open={isAddModalOpen}
             onCancel={() => {
               setIsAddModalOpen(false);
@@ -1098,8 +1098,8 @@ function BaraaMaterial() {
               form.resetFields();
             }}
             onOk={() => form.submit()}
-            okText="Хадгалах"
-            cancelText="Болих"
+            okText={t("Хадгалах")}
+            cancelText={t("Болих")}
             okButtonProps={{ className: "bg-emerald-500 hover:bg-emerald-400 border-none" }}
           >
             <Form 
@@ -1108,29 +1108,29 @@ function BaraaMaterial() {
               onFinish={handleSaveBaraa}
             >
               <div className="grid grid-cols-2 gap-4">
-              <Form.Item name="ner" label="Барааны нэр" rules={[{ required: true }]}>
-                <Input className="rounded-lg" placeholder="Нэр" autoComplete="off" />
+              <Form.Item name="ner" label={t("Барааны нэр")} rules={[{ required: true }]}>
+                <Input className="rounded-lg" placeholder={t("Нэр")} autoComplete="off" />
               </Form.Item>
               
-                <Form.Item name="turul" label="Төрөл">
+                <Form.Item name="turul" label={t("Төрөл")}>
                   <AutoComplete
                     options={[
-                      { value: "Цэвэрлэгээ" },
-                      { value: "Угаалгын" },
-                      { value: "Ариутгагч" },
-                      { value: "Багаж" },
-                      { value: "Бусад" }
+                      { value: t("Цэвэрлэгээ") },
+                      { value: t("Угаалгын") },
+                      { value: t("Ариутгагч") },
+                      { value: t("Багаж") },
+                      { value: t("Бусад") }
                     ]}
                     filterOption={(inputValue, option) =>
                       option.value.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                     }
                   >
-                    <Input className="rounded-lg" placeholder="Төрөл бичих..." />
+                    <Input className="rounded-lg" placeholder={t("Төрөл бичих...")} />
                   </AutoComplete>
                 </Form.Item>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <Form.Item name="negj" label="Нэгж" initialValue="shirheg">
+                <Form.Item name="negj" label={t("Нэгж")} initialValue="shirheg">
   <Select 
     placeholder="Сонгох"
     onChange={() => {
@@ -1142,12 +1142,12 @@ function BaraaMaterial() {
       }
     }}
   >
-    <Select.Option value="shirheg">Ширхэг</Select.Option>
-    <Select.Option value="litr">Литр</Select.Option>
-    <Select.Option value="kg">Кг</Select.Option>
-    <Select.Option value="haire">Хайрцаг</Select.Option>
-    <Select.Option value="bogts">Богц</Select.Option>
-    <Select.Option value="dana">Дан</Select.Option>
+    <Select.Option value="shirheg">{t("Ширхэг")}</Select.Option>
+    <Select.Option value="litr">{t("Литр")}</Select.Option>
+    <Select.Option value="kg">{t("Кг")}</Select.Option>
+    <Select.Option value="haire">{t("Хайрцаг")}</Select.Option>
+    <Select.Option value="bogts">{t("Богц")}</Select.Option>
+    <Select.Option value="dana">{t("Дан")}</Select.Option>
   </Select>
 </Form.Item>
 
@@ -1159,14 +1159,14 @@ function BaraaMaterial() {
     const negj = getFieldValue('negj');
     const isWhole = negj === 'shirheg' || negj === 'haire' || negj === 'bogts' || negj === 'dana';
     return (
-      <Form.Item name="uldegdel" label="Үлдэгдэл" initialValue={0}
+      <Form.Item name="uldegdel" label={t("Үлдэгдэл")} initialValue={0}
       rules={[
     { required: true, message: "Тоо оруулна уу" },
     { type: 'number', min: 1, message: "0-ээс их байх ёстой" }
   ]}>
         <InputNumber
           className="w-full rounded-md dark:border-gray-700"
-          placeholder="Үлдэгдэл"
+          placeholder={t("Үлдэгдэл")}
           precision={isWhole ? 0 : 2}
           step={isWhole ? 1 : 0.1}
           min={0}
@@ -1232,7 +1232,7 @@ function BaraaMaterial() {
     
               <Form.Item 
                 name="color" 
-                label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">Өнгө</span>}
+                label={<span className="text-gray-400 text-[12px] font-bold uppercase  pl-1">{t("Өнгө")}</span>}
                 initialValue="#10B981"
               >
                 <Select className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex [&_.ant-select-selection-item]:!flex [&_.ant-select-selection-item]:!items-center">
@@ -1344,8 +1344,8 @@ function BaraaMaterial() {
                            <div className="flex flex-col gap-2 w-full min-w-[200px]">
                              <Input.TextArea autoFocus value={editProjectMsgText} onChange={e => setEditProjectMsgText(e.target.value)} rows={2} className="rounded-xl text-xs bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-300" />
                              <div className="flex justify-end gap-2">
-                               <Button size="small" type="primary" onClick={() => handleEditProjectChatMsg(msg._id, editProjectMsgText)}>Засах</Button>
-                               <Button size="small" onClick={() => setEditingProjectMsg(null)}>Болих</Button>
+                               <Button size="small" type="primary" onClick={() => handleEditProjectChatMsg(msg._id, editProjectMsgText)}>{t("Засах")}</Button>
+                               <Button size="small" onClick={() => setEditingProjectMsg(null)}>{t("Болих")}</Button>
                              </div>
                            </div>
                         ) : (

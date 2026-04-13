@@ -2,8 +2,9 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Button } from 'antd';
 import { LeftOutlined, RightOutlined, CloseOutlined } from '@ant-design/icons';
-
+import { useTranslation } from 'react-i18next';
 const GuidedTour = ({ steps, isOpen, onClose, currentStep: externalStep, onStepChange }) => {
+  const { t } = useTranslation();
   const [internalStep, setInternalStep] = useState(0);
   const currentStep = externalStep !== undefined ? externalStep : internalStep;
   const setCurrentStep = (step) => {
@@ -170,17 +171,17 @@ const GuidedTour = ({ steps, isOpen, onClose, currentStep: externalStep, onStepC
           <div className="flex gap-2">
             {currentStep > 0 && (
               <Button size="small" onClick={() => setCurrentStep(prev => prev - 1)} className="rounded-lg font-bold border-none bg-slate-200/50 dark:bg-slate-800 dark:text-gray-400">
-                Буцах
+                {t("Буцах")}
               </Button>
             )}
             
             {currentStep < steps.length - 1 ? (
               <Button type="primary" size="small" onClick={() => setCurrentStep(prev => prev + 1)} className="bg-emerald-500 hover:bg-emerald-400 border-none rounded-lg font-bold shadow-lg shadow-emerald-500/20">
-                Дараах <RightOutlined className="text-[10px]" />
+                {t("Дараах")} <RightOutlined className="text-[10px]" />
               </Button>
             ) : (
               <Button type="primary" size="small" onClick={onClose} className="bg-emerald-600 hover:bg-emerald-500 border-none rounded-lg font-bold shadow-lg shadow-emerald-600/20">
-                Дуусгах
+                {t("Дуусгах")}
               </Button>
             )}
           </div>

@@ -70,14 +70,15 @@ import fsmApi, { FSM_BASE_URL_ZEV as FSM_BASE_URL } from "services/fsmApi";
 import { useAuth } from "services/auth";
 import useJagsaalt from "hooks/useJagsaalt";
 
-import "dayjs/locale/mn";
-dayjs.locale("mn");
-
 import { useRouter } from "next/router";
 
 function Tuluvluguu() {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    dayjs.locale(i18n.language === 'mn' ? 'mn' : 'en');
+  }, [i18n.language]);
   const { token, barilgiinId, ajiltan } = useAuth();
   const baiguullagiinId = ajiltan?.baiguullagiinId;
   const api = useMemo(() => fsmApi.withAuth(token, FSM_BASE_URL), [token, FSM_BASE_URL]);
@@ -817,14 +818,14 @@ function Tuluvluguu() {
       }
       
       if (res.data?.success) {
-        toast.success(`Төсөл амжилттай ${editingProject ? 'засагдлаа' : 'нэмэгдлээ'}`);
+        toast.success(editingProject ? t("Төсөл амжилттай засагдлаа") : t("Төсөл амжилттай нэмэгдлээ"));
         await fetchProjects();
         setIsProjectModalVisible(false);
         projectForm.resetFields();
         setEditingProject(null);
       }
     } catch (err) {
-      toast.error(err?.response?.data?.message || `Төсөл ${editingProject ? 'засахад' : 'нэмэхэд'} алдаа гарлаа`);
+      toast.error(err?.response?.data?.message || (editingProject ? t("Төсөл засахад алдаа гарлаа") : t("Төсөл нэмэхэд алдаа гарлаа")));
     } finally {
       setSavingProject(false);
     }
@@ -1657,7 +1658,7 @@ useEffect(() => {
                   }}
                   className="[&>.ant-checkbox-inner]:!w-4.5 [&>.ant-checkbox-inner]:!h-4.5 [&>.ant-checkbox-inner]:!rounded-md [&>.ant-checkbox-inner]:!border-gray-300 dark:[&>.ant-checkbox-inner]:!border-gray-600 dark:[&>.ant-checkbox-inner]:!bg-transparent" 
                 />
-                <span>Ерөнхий</span>
+                <span>{t("Ерөнхий")}</span>
                 <RightOutlined style={{ fontSize: '10px' }} className="rotate-90 text-gray-400" />
               </div>
               <Button
@@ -1710,11 +1711,20 @@ useEffect(() => {
                   <Button type="text" size="small" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white p-0 flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-lg" onClick={prev}>
                     <LeftOutlined style={{ fontSize: '10px' }} />
                   </Button>
-                  <span className="font-bold text-[12px] md:text-[12px] min-w-[100px] md:min-w-[150px] text-center text-gray-800 dark:text-gray-100 px-2 select-none uppercase tracking-tight">
-                    {view === "Month" ? currentDate.format("YYYY - MMMM") : 
-                     view === "Week" ? `${currentDate.startOf('isoWeek').format("MM/DD")} - ${currentDate.endOf('isoWeek').format("MM/DD")}` :
-                     currentDate.format("YYYY/MM/DD")}
-                   </span>
+                  <DatePicker
+                    picker={view === "Month" ? "month" : undefined}
+                    value={currentDate}
+                    onChange={(date) => date && setCurrentDate(date)}
+                    allowClear={false}
+                    suffixIcon={null}
+                    bordered={false}
+                    className="font-bold text-[12px] md:text-[12px] min-w-[100px] md:min-w-[150px] text-center text-gray-800 dark:text-gray-100 px-2 uppercase shadow-none cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg flex items-center justify-center h-full"
+                    format={(date) => {
+                      if (view === "Month") return date.format("YYYY - MMMM");
+                      if (view === "Week") return `${date.startOf('isoWeek').format("MM/DD")} - ${date.endOf('isoWeek').format("MM/DD")}`;
+                      return date.format("YYYY/MM/DD");
+                    }}
+                  />
                   <Button type="text" size="small" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white p-0 flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-lg" onClick={next}>
                     <RightOutlined style={{ fontSize: '10px' }} />
                   </Button>
@@ -1748,7 +1758,7 @@ useEffect(() => {
             {view === "Month" && (
               <div className="flex flex-col h-[calc(100vh-320px)] min-h-[500px] bg-white dark:bg-gray-800 overflow-hidden shadow-inner">
                 <div className="grid grid-cols-7 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 sticky top-0 z-10 shadow-sm shrink-0">
-                  {["ДАВАА", "МЯГМАР", "ЛХАГВА", "ПҮРЭВ", "БААСАН", "БЯМБА", "НЯМ"].map(day => (
+                  {[t("ДАВАА"), t("МЯГМАР"), t("ЛХАГВА"), t("ПҮРЭВ"), t("БААСАН"), t("БЯМБА"), t("НЯМ")].map(day => (
                     <div key={day} className="p-3 text-center text-[12px] font-bold text-gray-400 dark:text-gray-500  border-r border-gray-100 dark:border-gray-800 uppercase last:border-r-0">
                       {day}
                     </div>
@@ -1845,7 +1855,7 @@ useEffect(() => {
               <div className="flex flex-col h-[calc(100vh-320px)] min-h-[500px] bg-white dark:bg-gray-800 overflow-x-auto shadow-inner custom-scrollbar">
                 <div className="min-w-[1200px] flex flex-col h-full">
                 <div className="grid grid-cols-8 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111827] sticky top-0 z-10 shadow-sm shrink-0">
-                  <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">ЦАГ</div>
+                  <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">{t("ЦАГ")}</div>
                   {weekData.map(date => (
                     <div key={date.toString()} className="p-3 text-center border-r border-gray-100 dark:border-gray-900 last:border-r-0">
                       <div className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{date.format("ddd")}</div>
@@ -1902,10 +1912,10 @@ useEffect(() => {
                                   ) : null}
                                   <div onClick={(e) => e.stopPropagation()}>
                                     <Popconfirm
-                                      title="Та энэ ажлыг устгахдаа итгэлтэй байна уу?"
+                                      title={t("Та энэ ажлыг устгахдаа итгэлтэй байна уу?")}
                                       onConfirm={() => handleDeleteTask(task.id || task._id)}
-                                      okText="Тийм"
-                                      cancelText="Үгүй"
+                                      okText={t("Тийм")}
+                                      cancelText={t("Үгүй")}
                                     >
                                       <DeleteOutlined 
                                         className="text-red-500 hover:text-red-600 ml-1 p-0.5 opacity-100 transition-opacity" 
@@ -1930,10 +1940,10 @@ useEffect(() => {
               <div className="flex flex-col h-[calc(100vh-320px)] min-h-[500px] bg-white dark:bg-gray-800 overflow-x-auto shadow-inner custom-scrollbar">
                 <div className="min-w-[800px] flex flex-col h-full">
                 <div className="grid grid-cols-8 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111827] sticky top-0 z-10 shadow-sm shrink-0">
-                  <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">ЦАГ</div>
+                  <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">{t("ЦАГ")}</div>
                   <div className="col-span-7 p-3 text-center">
                     <div className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{currentDate.format("dddd")}</div>
-                    <div className="text-[12px] font-bold text-teal-500">{currentDate.format("YYYY оны MMMM DD")}</div>
+                    <div className="text-[12px] font-bold text-teal-500">{i18n.language === 'mn' ? currentDate.format("YYYY оны MMMM DD") : currentDate.format("MMMM DD, YYYY")}</div>
                   </div>
                 </div>
                 <div className="flex-1 grid grid-cols-8 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700">
@@ -2051,10 +2061,10 @@ useEffect(() => {
                     </div>
                     
                     <div className="grid grid-cols-12 px-5 py-2 border-b  border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800">
-                      <div className="col-span-4 text-[12px]  font-bold text-gray-400 dark:text-gray-600 uppercase ">Ажил</div>
-                      <div className="col-span-2 text-[12px]  font-bold text-gray-400 dark:text-gray-600 uppercase ">Төлөв</div>
-                      <div className="col-span-3 text-[12px] font-bold text-gray-400 dark:text-gray-600 uppercase ">Төсөл</div>
-                      <div className="col-span-2 text-[12px] font-bold text-gray-400 dark:text-gray-600 uppercase ">Огноо</div>
+                      <div className="col-span-4 text-[12px]  font-bold text-gray-400 dark:text-gray-600 uppercase ">{t("Ажил")}</div>
+                      <div className="col-span-2 text-[12px]  font-bold text-gray-400 dark:text-gray-600 uppercase ">{t("Төлөв")}</div>
+                      <div className="col-span-3 text-[12px] font-bold text-gray-400 dark:text-gray-600 uppercase ">{t("Төсөл")}</div>
+                      <div className="col-span-2 text-[12px] font-bold text-gray-400 dark:text-gray-600 uppercase ">{t("Огноо")}</div>
                       <div className="col-span-1 text-[12px] font-bold text-gray-400 dark:text-gray-600 uppercase "></div>
                     </div>
                                         {groupTasks.map(task => {
@@ -2110,7 +2120,7 @@ useEffect(() => {
                       className="flex items-center gap-3 px-5 py-3 text-gray-400 dark:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/10 cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-800"
                     >
                       <PlusOutlined className="text-[12px]" />
-                      <span className="text-[12px] font-semibold">Шинэ ажил эхлүүлэх</span>
+                      <span className="text-[12px] font-semibold">{t("Шинэ ажил эхлүүлэх")}</span>
                     </div>
                   </div>
                 );
@@ -2121,8 +2131,8 @@ useEffect(() => {
                   {filteredTasks.length === 0 ? (
                     <div className="flex-1 flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 py-20 space-y-3">
                       <CalendarOutlined style={{ fontSize: '40px' }} />
-                      <div className="text-[13px] font-bold">Ажил байхгүй байна</div>
-                      <div className="text-[12px]">Уг огноонд ажил байхгүй байна.</div>
+                      <div className="text-[13px] font-bold">{t("Ажил байхгүй байна")}</div>
+                      <div className="text-[12px]">{t("Уг огноонд ажил байхгүй байна.")}</div>
                     </div>
                   ) : (
                     <>
@@ -2149,7 +2159,7 @@ useEffect(() => {
               <div className="flex flex-col p-4 space-y-3 shrink-0">
                 <div className="flex items-center justify-between px-1">
                   <div className="text-[12px] font-bold text-gray-400 mb-2 flex items-center  uppercase opacity-70">
-                    <span>Төсөл</span>
+                    <span>{t("Төслүүд")}</span>
                   </div>
                   <Button
                     type="text"
@@ -2198,7 +2208,7 @@ useEffect(() => {
               {/* 2. Team Section */}
               <div className="flex flex-col p-4 shrink-0">
                 <div className="text-[12px] font-bold text-gray-400 mb-3 px-1 flex items-center uppercase opacity-70">
-                  <span>Ажилтны гүйцэтгэл</span>
+                  <span>{t("Ажилтны гүйцэтгэл")}</span>
                 </div>
                 <div className="max-h-[350px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                   {teamMembers.map((member, i) => {
@@ -2285,12 +2295,12 @@ useEffect(() => {
                           {act.ajiltniiNer && <span className="text-gray-500 dark:text-gray-400 font-bold">{act.ajiltniiNer} </span>}
                           <span className="text-gray-400 font-medium">
                             {act.uildelText || (
-                              act.uildel === "created task" || act.uildel === "created" ? "даалгавар үүсгэлээ" :
-                              act.uildel === "updated task" || act.uildel === "updated" ? "даалгавар шинэчиллээ" :
-                              act.uildel === "added member" || act.uildel === "added" ? "гишүүн нэмлээ" :
-                              act.uildel === "deleted task" || act.uildel === "deleted" ? "даалгавар устгалаа" :
-                              act.uildel === "completed task" || act.uildel === "completed" ? "даалгавар дуусгалаа" :
-                              act.uildel === "message sent" ? "зурвас илгээлээ" :
+                              act.uildel === "created task" || act.uildel === "created" ? t("даалгавар үүсгэлээ" ):
+                              act.uildel === "updated task" || act.uildel === "updated" ? t("даалгавар шинэчиллээ") :
+                              act.uildel === "added member" || act.uildel === "added" ? t("гишүүн нэмлээ") :
+                              act.uildel === "deleted task" || act.uildel === "deleted" ? t("даалгавар устгалаа") :
+                              act.uildel === "completed task" || act.uildel === "completed" ? t("даалгавар дуусгалаа") :
+                              act.uildel === "message sent" ? t("зурвас илгээлээ") :
                               (act.uildel || 'үйлдэл хийлээ')
                             )}
                           </span>
@@ -2311,7 +2321,7 @@ useEffect(() => {
                   onClick={() => setIsTutorialOpen(true)}
                 >
                     <QuestionCircleOutlined className="text-gray-700 dark:text-gray-300 text-[14px] group-hover:text-white transition-colors" />
-                    <span className="text-gray-700 dark:text-gray-300 text-[12px] font-bold group-hover:text-white transition-colors">Тусламж</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-[12px] font-bold group-hover:text-white transition-colors">{t("Тусламж")}</span>
                 </div>
             </div>
           </div>
@@ -2332,7 +2342,7 @@ useEffect(() => {
       </div>
 
       <Modal
-        title={editingTask ? "Ажил засах" : "Шинэ ажил эхлүүлэх"}
+        title={editingTask ? t("Ажил засах") : t("Шинэ ажил эхлүүлэх")}
         visible={isTaskModalVisible}
         onCancel={() => setIsTaskModalVisible(false)}
         footer={null}
@@ -2343,28 +2353,28 @@ useEffect(() => {
         <Form form={taskForm} layout="vertical" onFinish={handleCreateTask} className="space-y-4">
           <Form.Item 
             name="title" 
-            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Даалгаврын нэр</span>} 
+            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Даалгаврын нэр")}</span>} 
             required 
-            rules={[{ required: true, message: "Даалгаврын нэр оруулах" }]}
+            rules={[{ required: true, message: t("Даалгаврын нэр оруулах") }]}
             className="!mb-0"
           >
-            <Input placeholder="Даалгаврын нэр оруулах" className="h-12 rounded-xl" />
+            <Input placeholder={t("Даалгаврын нэр оруулах")} className="h-12 rounded-xl" />
           </Form.Item>
 
-          <Form.Item name="description" label={<span className="text-gray-400 text-[12px] font-bold block pl-1 dark:border-gray-700 border-gray-300">Тайлбар</span>} className="!mb-0">
+          <Form.Item name="description" label={<span className="text-gray-400 text-[12px] font-bold block pl-1 dark:border-gray-700 border-gray-300">{t("Тайлбар")}</span>} className="!mb-0">
             <Input.TextArea placeholder="Дэлгэрэнгүй тайлбар бичих..." className="dark:border-gray-700 border-gray-300 rounded-xl" rows={3} />
           </Form.Item>
 
           <div className="grid grid-cols-2 gap-6">
             <Form.Item 
               name="projectId" 
-              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Төсөл</span>}
-              rules={[{ required: true, message: "Төсөл сонгох" }]}
+              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Төсөл")}</span>}
+              rules={[{ required: true, message: t("Төсөл сонгох") }]}
               className="!mb-0"
             >
               <Select 
                 className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
-                placeholder="Төсөл сонгох"
+                placeholder={t("Төсөл сонгох")}
                 loading={loadingProjects}
               >
                 {projects.map(p => <Select.Option key={p.id} value={p.id}>{p.name}</Select.Option>)}
@@ -2373,32 +2383,32 @@ useEffect(() => {
 
             <Form.Item 
               name="zereglel" 
-              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Зэрэглэл</span>}
+              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Зэрэглэл")}</span>}
               initialValue="engiin"
               className="!mb-0"
             >
               <Select className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex">
-                <Select.Option value="nen yaraltai">🔴 Нэн яаралтай</Select.Option>
-                <Select.Option value="yaraltai">🟠 Яаралтай</Select.Option>
-                <Select.Option value="engiin">🟢 Дунд</Select.Option>
-                <Select.Option value="baga">🔵 Бага</Select.Option>
+                <Select.Option value="nen yaraltai">🔴 {t("Нэн яаралтай")}</Select.Option>
+                <Select.Option value="yaraltai">🟠 {t("Яаралтай")}</Select.Option>
+                <Select.Option value="engiin">🟢 {t("Дунд")}</Select.Option>
+                <Select.Option value="baga">🔵 {t("Бага")}</Select.Option>
               </Select>
             </Form.Item>
           </div>
 
           <div className="bg-gray-50 dark:bg-gray-800/40 p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-gray-400 text-[12px] font-bold uppercase pl-1">Хугацаа</span>
+              <span className="text-gray-400 text-[12px] font-bold uppercase pl-1">{t("Хугацаа")}</span>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-[12px] font-bold text-gray-500">Бүтэн өдөр</span>
+                  <span className="text-[12px] font-bold text-gray-500">{t("Бүтэн өдөр")}</span>
                   <Form.Item name="isDay" valuePropName="checked" className="!mb-0">
                     <Switch size="small" />
                   </Form.Item>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Tooltip title="Өдөр бүр давтагдах">
-                    <span className="text-[12px] font-bold text-gray-500">Өдөр бүр</span>
+                  <Tooltip title={t("Өдөр бүр давтагдах")}>
+                    <span className="text-[12px] font-bold text-gray-500">{t("Өдөр бүр")}</span>
                   </Tooltip>
                   <Form.Item name="isLoop" valuePropName="checked" className="!mb-0">
                     <Switch size="small" />
@@ -2409,7 +2419,7 @@ useEffect(() => {
 
             <Form.Item 
               name="dateRange" 
-              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Огноо сонгох</span>}
+              label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Огноо сонгох")}</span>}
               initialValue={[dayjs(selectedDay), dayjs(selectedDay)]}
               className="!mb-0"
             >
@@ -2419,7 +2429,7 @@ useEffect(() => {
             <div className="grid grid-cols-2 gap-6">
                 <Form.Item
                   name="startTime"
-                  label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Эхлэх цаг</span>}
+                  label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Эхлэх цаг")}</span>}
                   className="!mb-0"
                 >
                   <TimePicker
@@ -2432,7 +2442,7 @@ useEffect(() => {
                 </Form.Item>
                 <Form.Item
                   name="endTime"
-                  label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Дуусах цаг</span>}
+                  label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Дуусах цаг")}</span>}
                   className="!mb-0"
                   rules={[
                     {
@@ -2461,19 +2471,19 @@ useEffect(() => {
               </div>
           </div>
           <div className="grid grid-cols-2 gap-6">
-            <Form.Item name="bairshil" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Байршил</span>} className="!mb-0">
-              <Input placeholder="Байршил оруулах" className="h-12 rounded-xl" />
+            <Form.Item name="bairshil" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Байршил")}</span>} className="!mb-0">
+              <Input placeholder={t("Байршил оруулах")} className="h-12 rounded-xl" />
             </Form.Item>
-            <Form.Item name="davkhar" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Давхар</span>} className="!mb-0">
-              <Input placeholder="Давхар оруулах" className="h-12 rounded-xl" />
+            <Form.Item name="davkhar" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Давхар")}</span>} className="!mb-0">
+              <Input placeholder={t("Давхар оруулах")} className="h-12 rounded-xl" />
             </Form.Item>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-            <Form.Item name="ajiltnuud" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Хамтрах ажилтнууд</span>} className="!mb-0">
+            <Form.Item name="ajiltnuud" label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Хамтрах ажилтнууд")}</span>} className="!mb-0">
                <Select 
                  mode="multiple"
-                 placeholder="Ажилтан сонгох"
+                 placeholder={t("Ажилтан сонгох")}
                  className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
                  allowClear
                  showSearch
@@ -2485,7 +2495,7 @@ useEffect(() => {
                </Select>
             </Form.Item>
 
-            <Form.Item label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Зураг хавсаргах</span>} className="!mb-0">
+            <Form.Item label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Зураг хавсаргах")}</span>} className="!mb-0">
               <Upload
                 listType="picture-card"
                 fileList={taskImages}
@@ -2497,7 +2507,7 @@ useEffect(() => {
                 {taskImages.length < 8 && (
                   <div className="flex flex-col items-center justify-center text-gray-400 text-xs">
                     <PlusOutlined />
-                    <div className="mt-1">Зураг</div>
+                    <div className="mt-1">{t("Зураг")}</div>
                   </div>
                 )}
               </Upload>
@@ -2506,7 +2516,7 @@ useEffect(() => {
           
           
 
-          <Divider orientation="left" className="!mt-0 !mb-4"><span className="text-gray-400 text-[12px] font-bold uppercase">Бараа материал</span></Divider>
+          <Divider orientation="left" className="!mt-0 !mb-4"><span className="text-gray-400 text-[12px] font-bold uppercase">{t("Бараа материал")}</span></Divider>
           
           <Form.List name="baraa">
             {(fields, { add, remove }) => (
@@ -2524,11 +2534,11 @@ useEffect(() => {
                         <Form.Item
                           {...restField}
                           name={[name, 'baraaId']}
-                          rules={[{ required: true, message: "Бараа сонгох" }]}
+                          rules={[{ required: true, message: t("Бараа сонгох") }]}
                           className="!mb-0"
                         >
                           <Select
-                            placeholder="Бараа сонгох"
+                            placeholder={t("Бараа сонгох")}
                             showSearch
                             optionFilterProp="children"
                             className="w-full h-10 [&>.ant-select-selector]:!h-10 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
@@ -2586,7 +2596,7 @@ useEffect(() => {
           className="!mb-0"
         >
           <InputNumber
-            placeholder="Тоо"
+            placeholder={t("Тоо1")}
             className="w-full h-10 dark:border-gray-700 rounded-lg"
             precision={isWhole ? 0 : 2}
             step={isWhole ? 1 : 0.1}
@@ -2603,7 +2613,7 @@ useEffect(() => {
                           name={[name, 'tailbar']}
                           className="!mb-0"
                         >
-                          <Input placeholder="Тайлбар" className="h-10 rounded-xl" />
+                          <Input placeholder={t("Тайлбар")} className="h-10 rounded-xl" />
                         </Form.Item>
                       </div>
                     </div>
@@ -2616,7 +2626,7 @@ useEffect(() => {
                   icon={<PlusOutlined />}
                   className="rounded-xl dark:bg-green-600 dark:text-white dark:hover:!bg-green-500 dark:hover:!text-blue-500 h-12 border-2 border-dashed border-gray-200 dark:border-gray-700 hover:!border-teal-500 hover:!text-teal-500 text-gray-400 font-bold"
                 >
-                  Бараа нэмэх
+                  {t("Бараа нэмэх")}
                 </Button>
               </div>
             )}
@@ -2625,10 +2635,10 @@ useEffect(() => {
           <div className="flex items-end justify-end pt-6 border-t dark:border-slate-700/50 border-gray-300">
              <Space size="middle">
                <Button onClick={() => { setIsTaskModalVisible(false); setTaskImages([]); }} disabled={savingTask}>
-                 Цуцлах
+                 {t("Болих")}
                </Button>
                <Button type="primary" htmlType="submit" loading={savingTask}>
-                 Үүсгэх
+                 {editingTask ? t("Хадгалах") : t("Үүсгэх")}
                </Button>
              </Space>
           </div>
@@ -2636,7 +2646,7 @@ useEffect(() => {
         </div>
       </Modal>
       <Modal
-        title={editingProject ? "Төсөл засах" : "Төсөл үүсгэх"}
+        title={editingProject ? t("Төсөл засах") : t("Төсөл үүсгэх")}
         visible={isProjectModalVisible}
         onCancel={() => { setIsProjectModalVisible(false); setEditingProject(null); projectForm.resetFields(); }}
         footer={null}
@@ -2646,33 +2656,33 @@ useEffect(() => {
         <Form form={projectForm} layout="vertical" onFinish={handleCreateProject} className="space-y-6">
           <Form.Item 
             name="name" 
-            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Төслийн нэр</span>}
+            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Төслийн нэр")}</span>}
             required
-            rules={[{ required: true, message: "Төслийн нэр оруулах" }]}
+            rules={[{ required: true, message: t("Төслийн нэр оруулах") }]}
           >
-            <Input placeholder="Төслийн нэр" className="h-12 rounded-xl" />
+            <Input placeholder={t("Төслийн нэр")} className="h-12 rounded-xl" />
           </Form.Item>
 
           <Form.Item 
             name="tailbar" 
-            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Тайлбар</span>}
+            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Тайлбар")}</span>}
           >
-            <Input.TextArea placeholder="Тайлбар бичих" className="rounded-xl dark:border-gray-700 border-gray-200" rows={2} />
+            <Input.TextArea placeholder={t("Тайлбар бичих")} className="rounded-xl dark:border-gray-700 border-gray-200" rows={2} />
           </Form.Item>
           
           
 
           <Form.Item 
             name="color" 
-            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">Өнгө</span>}
+            label={<span className="text-gray-400 text-[12px] font-bold block pl-1">{t("Өнгө")}</span>}
             initialValue="#10B981"
           >
             <Select className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex [&_.ant-select-selection-item]:!flex [&_.ant-select-selection-item]:!items-center">
-              <Select.Option value="#10B981"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#10B981] shadow-sm"></div><span className="font-bold">Ногоон</span></div></Select.Option>
-              <Select.Option value="#3B82F6"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#3B82F6] shadow-sm"></div><span className="font-bold">Цэнхэр</span></div></Select.Option>
-              <Select.Option value="#8B5CF6"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#8B5CF6] shadow-sm"></div><span className="font-bold">Нил ягаан</span></div></Select.Option>
-              <Select.Option value="#EF4444"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#EF4444] shadow-sm"></div><span className="font-bold">Улаан</span></div></Select.Option>
-              <Select.Option value="#F59E0B"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#F59E0B] shadow-sm"></div><span className="font-bold">Шар</span></div></Select.Option>
+              <Select.Option value="#10B981"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#10B981] shadow-sm"></div><span className="font-bold">{t("Ногоон")}</span></div></Select.Option>
+              <Select.Option value="#3B82F6"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#3B82F6] shadow-sm"></div><span className="font-bold">{t("Цэнхэр")}</span></div></Select.Option>
+              <Select.Option value="#8B5CF6"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#8B5CF6] shadow-sm"></div><span className="font-bold">{t("Нил ягаан")}</span></div></Select.Option>
+              <Select.Option value="#EF4444"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#EF4444] shadow-sm"></div><span className="font-bold">{t("Улаан")}</span></div></Select.Option>
+              <Select.Option value="#F59E0B"><div className="flex items-center space-x-3"><div className="w-4 h-4 rounded-lg bg-[#F59E0B] shadow-sm"></div><span className="font-bold">{t("Шар")}</span></div></Select.Option>
             </Select>
           </Form.Item>
 
@@ -2766,7 +2776,7 @@ useEffect(() => {
                     selectedTask?.zereglel === 'yaraltai' ? 'bg-amber-500 text-white' :
                     selectedTask?.zereglel === 'engiin' ? 'bg-green-500 text-white' : 'bg-teal-500 text-white'
                   }`}>
-                    {selectedTask?.zereglel === "nen yaraltai" ? "🔴 Нэн Яаралтай" : selectedTask?.zereglel === "yaraltai" ? "🟠 Яаралтай" : selectedTask?.zereglel === "engiin" ? "🟢 Энгийн" : "🔵 Бага"}
+                    {selectedTask?.zereglel === "nen yaraltai" ? `🔴 ${t("Нэн Яаралтай")}` : selectedTask?.zereglel === "yaraltai" ? `🟠 ${t("Яаралтай")}` : selectedTask?.zereglel === "engiin" ? `🟢 ${t("Энгийн")}` : `🔵 ${t("Бага")}`}
                   </span>
                   <span className={`font-bold italic underline text-[12px] px-2 py-0.5 rounded-full border ${
                     selectedTask?.tuluv === 'duussan' ? 'text-green-500 border-green-500/20 bg-green-500/5' : 
@@ -2775,10 +2785,10 @@ useEffect(() => {
                     selectedTask?.tuluv === 'shalga' ? 'text-blue-500 border-blue-500/20 bg-blue-500/5' : 'text-teal-500 border-teal-500/20 bg-teal-500/5'
                   }`}>
                     {
-                      selectedTask?.tuluv === 'duussan' ? 'Дууссан' : 
-                      selectedTask?.tuluv === 'khiigdej bui' ? 'Хийгдэж буй' : 
-                      selectedTask?.tuluv === 'khugatsaa khetersen' ? 'Хугацаа хэтэрсэн' :
-                      selectedTask?.tuluv === 'shalga' ? 'Шалгах' : 'Шинэ'
+                      selectedTask?.tuluv === 'duussan' ? t("Дууссан") : 
+                      selectedTask?.tuluv === 'khiigdej bui' ? t("Хийгдэж буй") : 
+                      selectedTask?.tuluv === 'khugatsaa khetersen' ? t("Хугацаа хэтэрсэн") :
+                      selectedTask?.tuluv === 'shalga' ? t("Шалгах") : t("Шинэ")
                     }
                   </span>
                </div>
@@ -2796,7 +2806,7 @@ useEffect(() => {
                 <div className="flex gap-2 pb-2">
                   {selectedTask?.isDay && (
                     <Tag color="cyan" className="rounded-lg font-bold italic underline border-none px-3 py-1 flex items-center gap-2 m-0 shadow-sm">
-                      <ClockCircleOutlined /> Бүтэн өдөр
+                      <ClockCircleOutlined /> {t("Бүтэн өдөр")}
                     </Tag>
                   )}
                   {selectedTask?.isLoop && (
