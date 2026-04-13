@@ -104,7 +104,7 @@ function excelTatajAvya(
       const processedData = data?.jagsaalt?.map((item) => {
         const processedItem = { ...item };
 
-        if (shuultUtga === "Цуцласан") {
+        if (shuultUtga === "Цуцалсан") {
           const tsutslyo =
             item.gereeniiTuukhuud?.filter((a) => a.turul === "Tsutslakh") || [];
           if (tsutslyo.length > 0) {
@@ -717,16 +717,16 @@ function ZakhialgiinKhyanalt() {
         },
       },
       {
-        title: t(shuult.utga === "Цуцласан" ? "Цуцлагдсан" : "Дуусах"),
+        title: t(shuult?.utga === "Цуцалсан" ? "Цуцлагдсан" : "Дуусах"),
         dataIndex:
-          shuult.utga === "Цуцласан" ? "gereeniiTuukhuud" : "duusakhOgnoo",
+          shuult?.utga === "Цуцалсан" ? "gereeniiTuukhuud" : "duusakhOgnoo",
         className: "text-center",
         align: "center",
         ellipsis: true,
         showSorterTooltip: false,
         sortOrder: "descend",
       },
-      ...(shuult.utga === "Цуцласан"
+      ...(shuult?.utga === "Цуцалсан"
         ? [
             {
               title: "Цуцлах шалтгаан",
@@ -746,12 +746,12 @@ function ZakhialgiinKhyanalt() {
       },
       ...excelNemekhCol,
     ],
-    [shuult.utga, excelNemekhCol, t]
+    [shuult?.utga, excelNemekhCol, t]
   );
 
   useEffect(() => {
-    if (JSON.stringify(shuult.utga) !== JSON.stringify("Хэвийн")) {
-      setURLSearchParam("cardShuult", JSON.stringify(shuult.utga));
+    if (JSON.stringify(shuult?.utga) !== JSON.stringify("Хэвийн")) {
+      setURLSearchParam("cardShuult", JSON.stringify(shuult?.utga));
     }
     if (JSON.stringify(order) !== JSON.stringify({ createdAt: -1 })) {
       setURLSearchParam("orderID", JSON.stringify(order));
@@ -764,7 +764,10 @@ function ZakhialgiinKhyanalt() {
       if (!!url.get("orderID")) setOrder({ ...JSON.parse(url.get("orderID")) });
       if (!!url.get("cardShuult")) {
         const cardShuult = JSON.parse(url.get("cardShuult"));
-        setShuult(khyanaltiinDun.find((e) => e.utga === cardShuult));
+        const selectedShuult = khyanaltiinDun.find((e) => e.utga === cardShuult);
+        if (selectedShuult) {
+          setShuult(selectedShuult);
+        }
       }
     }
   }, [gereeOgnoo]);
@@ -903,7 +906,7 @@ function ZakhialgiinKhyanalt() {
           ? gereeToollolt?.reduce((a, b) => b.tsutsalsan, 0)
           : 0,
       icon: <FileExcelOutlined />,
-      utga: "Цуцласан",
+      utga: "Цуцалсан",
       color: "bg-gray-200 dark:bg-gray-900",
       selectedColor: "bg-gray-200 dark:bg-gray-900",
       border: "border-gray-800 dark:border-gray-300",
@@ -1031,15 +1034,15 @@ function ZakhialgiinKhyanalt() {
       },
 
       {
-        title: t(shuult.utga === "Цуцласан" ? "Цуцлагдсан" : "Дуусах"),
+        title: t(shuult?.utga === "Цуцалсан" ? "Цуцлагдсан" : "Дуусах"),
         dataIndex:
-          shuult.utga === "Цуцласан" ? "gereeniiTuukhuud" : "duusakhOgnoo",
+          shuult?.utga === "Цуцалсан" ? "gereeniiTuukhuud" : "duusakhOgnoo",
         align: "center",
         ellipsis: true,
         width: "7rem",
         render: (data) => {
           let ognoo;
-          if (shuult.utga === "Цуцласан") {
+          if (shuult?.utga === "Цуцалсан") {
             const tsutslyo = data?.filter((a) => a.turul === "Tsutslakh") || [];
             if (tsutslyo.length > 0) {
               const latest = tsutslyo.reduce((prev, current) => {
@@ -1057,7 +1060,7 @@ function ZakhialgiinKhyanalt() {
         },
         showSorterTooltip: false,
         sortOrder: sortOrderShalgakh(
-          shuult.utga === "Цуцласан"
+          shuult?.utga === "Цуцалсан"
             ? order.gereeniiTuukhuud
             : order.duusakhOgnoo
         ),
@@ -1142,7 +1145,7 @@ function ZakhialgiinKhyanalt() {
         sorter: () => 0,
       },
     ];
-    if (shuult.utga == "Цуцласан") {
+    if (shuult?.utga == "Цуцалсан") {
       jagsaalt.push(
         {
           title: "Цуцалсан шалтгаан",
@@ -1269,7 +1272,7 @@ function ZakhialgiinKhyanalt() {
                     <UploadOutlined style={{ fontSize: "18px" }} />{" "}
                     <label>{t("Зураг")}</label>
                   </a>
-                  {shuult.utga !== "Цуцласан" && (
+                  {shuult?.utga !== "Цуцалсан" && (
                     <a
                       className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                       onClick={() => {
@@ -1294,7 +1297,7 @@ function ZakhialgiinKhyanalt() {
                     </a>
                   )}
 
-                  {shuult.utga !== "Цуцласан" && (
+                  {shuult?.utga !== "Цуцалсан" && (
                     <a
                       className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
                       onClick={() => gereeSungaya(data)}
@@ -1304,7 +1307,7 @@ function ZakhialgiinKhyanalt() {
                     </a>
                   )}
 
-                  {shuult.utga !== "Цуцласан" && (
+                  {shuult?.utga !== "Цуцалсан" && (
                     <Popconfirm
                       title="Цуцлахдаа итгэлтэй байна уу?"
                       okText={t("Тийм")}
@@ -1318,7 +1321,7 @@ function ZakhialgiinKhyanalt() {
                       </a>
                     </Popconfirm>
                   )}
-                  {shuult.utga === "Цуцласан" && (
+                  {shuult?.utga === "Цуцалсан" && (
                     <>
                       <Popconfirm
                         title="Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?"

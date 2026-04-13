@@ -63,25 +63,44 @@
   }
 }
 
-/* Fix for SunEditor table borders in preview */
-.sun-editor-editable table {
+/* Fix for Editor table borders in preview */
+.sun-editor-editable table,
+.tiptap-content table,
+.ProseMirror table,
+.tiptap-table {
   border-collapse: collapse !important;
   width: 100% !important;
-  border: 1px solid #e5e7eb !important;
+  border: 1px solid #c0c2c5 !important;
   margin-bottom: 1rem;
+  table-layout: fixed;
 }
 
 .sun-editor-editable table td,
-.sun-editor-editable table th {
-  border: 1px solid #e5e7eb !important;
+.sun-editor-editable table th,
+.tiptap-content table td,
+.tiptap-content table th,
+.ProseMirror table td,
+.ProseMirror table th,
+.tiptap-table-cell {
+  border: 1px solid #c0c2c5 !important;
   padding: 8px !important;
+  min-width: 1rem;
+  word-break: break-word;
 }
 
 /* Dark mode fix for table borders */
 .dark .sun-editor-editable table,
 .dark .sun-editor-editable table td,
-.dark .sun-editor-editable table th {
-  border-color: #ffffff !important;
+.dark .sun-editor-editable table th,
+.dark .tiptap-content table,
+.dark .tiptap-content table td,
+.dark .tiptap-content table th,
+.dark .ProseMirror table,
+.dark .ProseMirror table td,
+.dark .ProseMirror table th,
+.dark .tiptap-table,
+.dark .tiptap-table-cell {
+  border-color: #4b5563 !important;
 }
 
 @keyframes swipeAnimation {

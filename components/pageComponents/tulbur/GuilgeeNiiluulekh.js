@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import {
+  Button,
   Divider,
   Dropdown,
   Input,
@@ -190,6 +191,7 @@ function GuilgeeNiiluulekh(
   const [khaagdsanGereeEsekh, setKhaagdsanGereeEsekh] = useState(false);
   const [guilgeeniiTailbar, setGuilgeeniiTailbar] = useState();
   const [magadlaltaiGereenuud, setMagadlaltaiGereenuud] = React.useState([]);
+  const [showMagadlalModal, setShowMagadlalModal] = useState(false);
   const [expandedAldangi, setExpandedAldangi] = React.useState({});
   const [expandedTurees, setExpandedTurees] = React.useState({});
   const inputRef = React.useRef();
@@ -616,31 +618,29 @@ function GuilgeeNiiluulekh(
         return;
       }
     }
-    let sum = zuruuZun(index, talbar);
+    const currentSumOfOthers = zuruuZun(index, talbar);
+    const remainingBankFunds = Math.round((guilgeeniiDun - currentSumOfOthers) * 100) / 100;
 
-    if (
-      "tulsunAldangi" === talbar &&
-      guilgeeniiDun - sum > gereenuud[index].aldangiinUldegdel
-    )
-      sum = guilgeeniiDun - gereenuud[index].aldangiinUldegdel;
+    if (remainingBankFunds <= 0) return;
 
-    if (
-      "baritsaaTulbur" === talbar &&
-      guilgeeniiDun - sum >
-        (gereenuud[index]?.baritsaaAvakhDun || 0) -
-          (gereenuud[index]?.baritsaaniiUldegdel || 0)
-    ) {
-      let baritsaadun =
-        (gereenuud[index]?.baritsaaAvakhDun || 0) -
-        (gereenuud[index]?.baritsaaniiUldegdel || 0);
-      sum += guilgeeniiDun - sum - baritsaadun;
+    let debtToPay = 0;
+    if (talbar === "tulsunAldangi") {
+      debtToPay = gereenuud[index].aldangiinUldegdel || 0;
+    } else if (talbar === "tureesiinTulbur") {
+      debtToPay = gereenuud[index].uldegdel || 0;
+    } else if (talbar === "baritsaaTulbur") {
+      debtToPay = (gereenuud[index]?.baritsaaAvakhDun || 0) - (gereenuud[index]?.baritsaaniiUldegdel || 0);
     }
 
-    if (sum < guilgeeniiDun) {
-      target.value = formatNumber(guilgeeniiDun - sum);
+    // Amount to allocate is the smaller of remaining bank funds or the actual debt
+    const amountToAllocate = Math.max(0, Math.round(Math.min(remainingBankFunds, debtToPay) * 100) / 100);
+
+    if (amountToAllocate > 0) {
+      target.value = formatter(amountToAllocate);
       setGereenuud((a) => {
-        _.set(a, `${index}.${talbar}`, _.toNumber(parser(target.value)));
-        return [...a];
+        const newData = [...a];
+        _.set(newData, `${index}.${talbar}`, amountToAllocate);
+        return newData;
       });
     }
   }
@@ -657,25 +657,63 @@ function GuilgeeNiiluulekh(
   return (
     <div className="flex w-full flex-col space-y-2 overflow-hidden" style={{ height: "calc(100vh - 250px)" }}>
       {magadlaltaiGereenuud?.length > 0 && (
-        <div>
-          <div className="py-2 text-lg font-medium">
-            {t("Магадлалтай гэрээ")}
-          </div>
-
-          <div className="max-h-[calc(5*2.5rem)] overflow-y-auto">
-            {magadlaltaiGereenuud?.map((mur, i) => (
-              <div
-                className="grid grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
-                key={`gereeniisongolt${i}`}
-              >
-                <div className="truncate px-2">{mur.talbainDugaar}</div>
-                <div className="px-2">{mur.register}</div>
-                <div className="px-2">{mur.ner}</div>
+        <div 
+          className="flex items-center justify-between gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-900/30 cursor-pointer hover:bg-blue-100 transition-all duration-200 group mt-2"
+          onClick={() => setShowMagadlalModal(true)}
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-white shadow-lg shadow-blue-200 dark:shadow-blue-900/50">
+              <span className="font-bold">{magadlaltaiGereenuud.length}</span>
+            </div>
+            <div>
+              <div className="text-sm font-bold text-blue-900 dark:text-blue-100 uppercase tracking-tight">
+                {t("Магадлалтай гэрээ")}
               </div>
-            ))}
+              <div className="text-xs text-blue-600 dark:text-blue-400">
+                {t("Энэ гүйлгээнд тохирох байж болзошгүй гэрээнүүд")}
+              </div>
+            </div>
           </div>
+          <Button type="primary" size="small" className="rounded-full px-4 font-medium transition-transform group-hover:scale-105">
+            {t("Харах")}
+          </Button>
         </div>
       )}
+
+      <Modal
+        title={t("Магадлалтай гэрээний жагсаалт")}
+        visible={showMagadlalModal}
+        onCancel={() => setShowMagadlalModal(false)}
+        footer={null}
+        width={700}
+        centered
+        className="rounded-3xl"
+      >
+        <div className="space-y-3 p-2">
+          {magadlaltaiGereenuud?.map((mur, i) => (
+            <div
+              className="grid grid-cols-3 gap-4 rounded-xl border border-gray-200 p-4 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors shadow-sm cursor-pointer"
+              key={`magadlalmodal${i}`}
+              onClick={() => {
+                setShowMagadlalModal(false);
+              }}
+            >
+              <div className="flex flex-col">
+                <span className="text-[10px] uppercase text-gray-400 font-bold mb-1">{t("Талбай")}</span>
+                <span className="font-bold text-gray-800 dark:text-white">{mur.talbainDugaar}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] uppercase text-gray-400 font-bold mb-1">{t("Регистр")}</span>
+                <span className="font-bold text-gray-800 dark:text-white">{mur.register}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] uppercase text-gray-400 font-bold mb-1">{t("Нэр")}</span>
+                <span className="font-bold text-gray-800 dark:text-white truncate">{mur.ner}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Modal>
       <div className="space-y-2 ">
         <div className="flex justify-between">
           <span className="text-sm font-medium dark:text-gray-100 lg:text-xl">

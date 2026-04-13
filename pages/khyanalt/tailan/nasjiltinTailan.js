@@ -83,8 +83,28 @@ function nasjiltinTailan({ token }) {
     pageStyle: "print",
   });
 
+  const segments = useJagsaalt("/segment");
+  const turulOptions = useMemo(() => {
+    const allOptions = segments?.jagsaalt?.reduce((acc, current) => {
+      if (current.utguud && Array.isArray(current.utguud)) {
+        return [...acc, ...current.utguud];
+      }
+      return acc;
+    }, []);
+    return [
+      ...new Set(allOptions?.filter((opt) => opt !== null && opt !== undefined)),
+    ];
+  }, [segments.jagsaalt]);
+
+  const songogdsonSegments = useMemo(() => {
+    return (
+      segments?.jagsaalt?.filter((s) => s.utguud?.includes(songogdsonTurul)) ||
+      []
+    );
+  }, [segments.jagsaalt, songogdsonTurul]);
+
   const query = useMemo(() => {
-    return {
+    const q = {
       baiguullagiinId: baiguullaga?._id,
       barilgiinId: barilgiinId,
       ekhlekhOgnoo: undefined,
@@ -93,11 +113,31 @@ function nasjiltinTailan({ token }) {
         : undefined,
       khariltsagchiinId: songogdsonIds.length > 0 ? songogdsonIds : undefined,
       turul: songogdsonTurul,
+      segment: songogdsonTurul,
+      yalgal: songogdsonTurul,
     };
-  }, [ognoo, baiguullaga, barilgiinId, songogdsonIds, songogdsonTurul]);
+    songogdsonSegments.forEach((s) => {
+      if (s.ner) {
+        q[s.ner] = songogdsonTurul;
+      }
+    });
+    // Fallback common key
+    if (songogdsonSegments.length > 0) {
+      q["ялгах утга"] = songogdsonTurul;
+    }
+    return q;
+  }, [
+    ognoo,
+    baiguullaga,
+    barilgiinId,
+    songogdsonIds,
+    songogdsonTurul,
+    songogdsonSegments,
+  ]);
 
   const { nasjiltinTailan, unshijBaina, setTailanKhuudaslalt } =
     useNasjiltinTailan(token, query, reportSearchKeys, 500);
+
 
   const dataSource = useMemo(() => {
     return (
@@ -1051,9 +1091,11 @@ function nasjiltinTailan({ token }) {
           onChange={setSongogdsonTurul}
           placeholder={t("Төрөл сонгох")}
         >
-          <Select.Option value="Түрээс">{t("Түрээс")}</Select.Option>
-          <Select.Option value="Үйлчилгээ">{t("Үйлчилгээ")}</Select.Option>
-          <Select.Option value="Зогсоол">{t("Зогсоол")}</Select.Option>
+          {turulOptions.map((opt) => (
+            <Select.Option key={opt} value={opt}>
+              {t(opt)}
+            </Select.Option>
+          ))}
         </Select>
         <div className="ml-auto flex gap-2">
           <div className="flex h-8">
@@ -1166,10 +1208,10 @@ function nasjiltinTailan({ token }) {
           </div>
         </div>
       </div>
-      <div className="text-mashJijig col-span-12 mt-12 flex items-center justify-center 2xl:mt-0">
+      <div className="text-mashJijig col-span-12 mt-4 w-full overflow-hidden rounded-lg border bg-white shadow-sm dark:bg-gray-800 2xl:mt-0">
         <Table
           sticky={{ offsetHeader: 0 }}
-          scroll={{ y: "calc(100vh - 19rem)", x: "calc(100vw - 25rem)" }}
+          scroll={{ y: "calc(100vh - 19rem)", x: 2200 }}
           tableLayout="fixed"
           bordered
           size="small"

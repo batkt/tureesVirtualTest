@@ -194,7 +194,7 @@ function ZakhialgaNemekh({ token }) {
     >
       <div className="col-span-12 flex justify-center p-4 lg:col-span-9 xl:col-span-10">
         <div
-          className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-gray-900 dark:bg-gray-700 dark:text-white"
+          className="flex w-full flex-col space-y-1 overflow-x-auto bg-white p-[15mm] pl-[24mm] pr-[14mm] text-gray-900 dark:bg-gray-700 dark:text-white"
           style={{ width: "300mm" }}
         >
           <div className="grid grid-cols-2 gap-4 pb-5">
@@ -240,7 +240,7 @@ function ZakhialgaNemekh({ token }) {
             {gereeniiZagvar?.dedKhesguud?.map((mur, index) => {
               return (
                 <div
-                  key={mur._id}
+                  key={mur._id || `clause-${index}`}
                   className="group relative flex w-full flex-row rounded-lg border border-dashed border-gray-600 p-1 text-gray-900 hover:bg-gray-100 dark:border-gray-300 dark:text-white dark:hover:bg-gray-700"
                 >
                   <div className="absolute -right-2 -top-2 z-10 flex flex-col space-y-1">
@@ -259,7 +259,7 @@ function ZakhialgaNemekh({ token }) {
                   </div>
 
                   <div
-                    className="sun-editor-editable w-full text-gray-900 dark:border-gray-300 dark:bg-gray-700 dark:text-white [&_*]:text-gray-900 dark:[&_*]:text-white"
+                    className="sun-editor-editable w-full overflow-x-auto text-gray-900 dark:border-gray-300 dark:bg-gray-700 dark:text-white [&_*]:text-gray-900 dark:[&_*]:text-white"
                     dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                   />
                 </div>

@@ -158,6 +158,7 @@
   "Одоогоор байхгүй":"Not available yet",
   "Ажилтан":"Employee",
   "Шилдэг гүйцэтгэгч":"Top performance",
+  "Үйлчилгээ сонордуулга":"Service notification",
   "Дараах":"Next",
   "Буцах":"Back",
   
@@ -307,7 +308,7 @@
   "Хэвийн": "Regular",
   "Үндсэн гэрээ": "Permanent contracts",
   "Түр гэрээ": "Temporary contract",
-  "Цуцласан": "Cancelled",
+  "Цуцалсан": "Cancelled",
   "Сунгах гэрээ": "Renewable",
   "Сунгах": "Renewal",
   "Хугацаа хэтэрсэн": "Expired",

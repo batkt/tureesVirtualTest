@@ -708,7 +708,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
                 })}
               </Select>
             )}
-            <div className="flex w-full flex-col items-center justify-center gap-10 dark:bg-white">
+            <div className="flex w-full flex-col items-center justify-center gap-10 dark:bg-gray-900">
               <div>
                 {!!alkhamiinGereeniiZagvar?.ner && (
                   <>
@@ -746,7 +746,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
                       className="group relative flex w-full flex-row rounded-md p-1"
                     >
                       <div
-                        className="sun-editor-editable w-full text-center text-black [&_*]:!text-gray-700 dark:[&_*]:!text-gray-200"
+                        className="sun-editor-editable w-full overflow-x-auto text-center text-black [&_*]:!text-gray-700 dark:[&_*]:!text-gray-200"
                         dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                       />
                     </div>
