@@ -464,7 +464,8 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
 
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
       if (key === "zardluud") {
-        value.map((mur) => {
+        value?.map((mur) => {
+          if (!mur) return;
           butsaakhUtga.dedKhesguud
             ?.filter(
               (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1,
@@ -482,7 +483,8 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
               );
             });
         });
-        value.map((mur) => {
+        value?.map((mur) => {
+          if (!mur) return;
           butsaakhUtga?.dedKhesguud
             ?.filter(
               (a) =>
@@ -495,7 +497,8 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
               );
             });
         });
-        value.map((mur) => {
+        value?.map((mur) => {
+          if (!mur) return;
           butsaakhUtga?.dedKhesguud
             ?.filter(
               (a) =>
@@ -510,6 +513,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
         });
       } else if (key === "segmentuud") {
         value?.map((mur) => {
+          if (!mur) return;
           butsaakhUtga?.dedKhesguud
             ?.filter(
               (a) => !!a.zaalt && a.zaalt?.indexOf(`&lt;${mur.ner}&gt;`) !== -1,

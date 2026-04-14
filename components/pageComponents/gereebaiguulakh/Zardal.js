@@ -70,20 +70,23 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
         backdropFilter: "blur(12px) saturate(180%)",
       }}
       dropdownClassName="ant-select-dropdown-opaque"
+      optionLabelProp="label"
     >
-      <div value={1} disabled className="flex w-full border-b">
-        <div className="flex">
-          <div className="w-1/2 border-r bg-green-400 bg-opacity-10 text-center font-medium text-gray-600 dark:text-gray-200">
-            {t("Зардлын нэршил")}
-          </div>
-          <div className="w-1/2 bg-blue-600 bg-opacity-5 text-center font-medium text-gray-600 dark:text-gray-200">
-            {t("Нэгж")}, {t("Үнэ")}
+      <Select.Option value="header" disabled label="" className="p-0">
+        <div className="flex w-full border-b">
+          <div className="flex w-full">
+            <div className="w-1/2 border-r bg-green-400 bg-opacity-10 text-center font-medium text-gray-600 dark:text-gray-200">
+              {t("Зардлын нэршил")}
+            </div>
+            <div className="w-1/2 bg-blue-600 bg-opacity-5 text-center font-medium text-gray-600 dark:text-gray-200">
+              {t("Нэгж")}, {t("Үнэ")}
+            </div>
           </div>
         </div>
-      </div>
+      </Select.Option>
       {ashiglaltiinZardal?.jagsaalt.map((a, i) => {
         return (
-          <Select.Option key={a._id} value={a._id}>
+          <Select.Option key={a._id} value={a._id} label={a.ner}>
             <div className="pointer-events-none flex w-full justify-between border-b">
               <p className="flex border-r bg-green-400 bg-opacity-10 pl-2 pr-2 text-left">
                 {a.ner}

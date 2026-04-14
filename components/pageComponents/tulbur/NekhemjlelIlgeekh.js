@@ -226,7 +226,7 @@ function GuilgeeKhiikh(
           khungulsunTalbainNiitUneNuatgui || 0
         );
         medeelel.khungulult = formatNumber(medeelel.khungulult);
-
+        medeelel.tulsunDun = formatNumber(medeelel.tulsunDun);
         medeelel.gariinUseg = renderToString(
           <span>
             <img

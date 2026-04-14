@@ -127,6 +127,7 @@ function GuilgeeExceleesOruulakhOlnoor(
 
       const response = await uilchilgee(token).post("/tooluurMedeelelTatya", {
         ognoo: moment(ognoo).format("YYYY-MM-DD HH:mm:ss"),
+        barilgiinId,
       });
 
       setData(response.data || []);

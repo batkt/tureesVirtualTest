@@ -147,7 +147,9 @@ const fetcherGuilgee = (url, token, gereeniiId, ognoo, shineOgnoo) => {
       res.data.forEach((x) => {
         uldegdel =
           uldegdel +
-          (x?.tulukhDun || 0 - (x?.tulsunDun || 0) - (x?.khyamdral || 0));
+          (x?.tulukhDun || 0) -
+          (x?.tulsunDun || 0) -
+          (x?.khyamdral || 0);
         if (x.turul === "khyamdral" && uldegdel < 0) x.uldegdel = 0;
         else x.uldegdel = uldegdel;
       });
