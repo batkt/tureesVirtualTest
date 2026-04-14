@@ -83,6 +83,13 @@ function Tuluvluguu() {
   const baiguullagiinId = ajiltan?.baiguullagiinId;
   const api = useMemo(() => fsmApi.withAuth(token, FSM_BASE_URL), [token, FSM_BASE_URL]);
   const [currentDate, setCurrentDate] = useState(dayjs());
+  const baraaTypeMap = {
+    tseverlegch: "Цэвэрлэгээ",
+    ugaalgiin: "Угаалгын",
+    ariutgagch: "Ариутгагч",
+    bagaj: "Багаж",
+    busad: "Бусад"
+  };
   const [view, setView] = useState("Month"); // Month, Week, Day, Agenda
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
   
@@ -2529,54 +2536,91 @@ useEffect(() => {
                       onClick={() => remove(name)}
                       className="absolute -top-2 -right-2 bg-white dark:bg-gray-800 shadow-md !rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-opacity"
                     />
-                    <div className="grid grid-cols-12 gap-4">
-                      <div className="col-span-12 md:col-span-6">
+                    <div className="grid grid-cols-12 gap-3">
+                      <div className="col-span-12 md:col-span-3">
                         <Form.Item
                           {...restField}
-                          name={[name, 'baraaId']}
-                          rules={[{ required: true, message: t("Бараа сонгох") }]}
+                          name={[name, 'type']}
                           className="!mb-0"
                         >
                           <Select
-                            placeholder={t("Бараа сонгох")}
-                            showSearch
-                            optionFilterProp="children"
+                            placeholder={t("Төрөл")}
+                            allowClear
                             className="w-full h-10 [&>.ant-select-selector]:!h-10 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
-                            onChange={(val) => {
-                              const item = baraas.find(i => i._id === val);
-                              if (item) {
-                                // Update price snapshot automatically
-                                const currentBaraa = taskForm.getFieldValue('baraa');
-                                currentBaraa[name] = { 
-                                  ...currentBaraa[name], 
-                                  une: item.zarakhUne,
-                                  ner: item.ner
-                                };
-                                taskForm.setFieldsValue({ baraa: currentBaraa });
-                              }
+                            onChange={() => {
+                              
+                              const currentBaraa = taskForm.getFieldValue('baraa');
+                              currentBaraa[name] = { ...currentBaraa[name], baraaId: undefined };
+                              taskForm.setFieldsValue({ baraa: currentBaraa });
                             }}
                           >
-                            {baraas.map(i => {
-                              const negj = i.negj === 'shirheg' ? "ш" :
-                                           i.negj === 'haire' || i.negj === 'hairtsag' ? "хайрцаг" :
-                                           i.negj === 'kg' ? "кг" :
-                                           i.negj === 'l' || i.negj === 'litr' ? "литр" :
-                                           i.negj === 'gr' ? "гр" :
-                                           i.negj === 'm' ? "м" :
-                                           i.negj || '';
-                              // Disable products already selected in other rows
-                              const currentBaraaList = taskForm.getFieldValue('baraa') || [];
-                              const alreadySelected = currentBaraaList.some((b, idx) => b?.baraaId === i._id && idx !== name);
-                              return (
-                                <Select.Option key={i._id} value={i._id} disabled={alreadySelected}>
-                                  {i.ner} ({i.uldegdel || 0} {negj}) {alreadySelected ? '(сонгогдсон)' : ''}
-                                </Select.Option>
-                              );
-                            })}
+                             {Object.entries(baraaTypeMap).map(([k, v]) => (
+                               <Select.Option key={k} value={k}>{v}</Select.Option>
+                             ))}
                           </Select>
                         </Form.Item>
                       </div>
-                      <div className="col-span-4 md:col-span-2">
+                      <div className="col-span-12 md:col-span-4">
+                        <Form.Item
+                          noStyle
+                          shouldUpdate={(prev, curr) => prev.baraa?.[name]?.type !== curr.baraa?.[name]?.type}
+                        >
+                          {({ getFieldValue }) => {
+                            const selectedType = getFieldValue(['baraa', name, 'type']);
+                            const filtered = baraas.filter(i => {
+                              if (!selectedType || selectedType === 'all') return true;
+                              if (selectedType === "tseverlegch") return ['tseverlegch', 'Цэвэрлэгч', 'Цэвэрлэгээ'].includes(i.turul);
+                              if (selectedType === "busad") {
+                                  const keys = ['tseverlegch', 'Цэвэрлэгч', 'Цэвэрлэгээ', 'ugaalgiin', 'Угаалгын', 'ariutgagch', 'Ариутгагч', 'bagaj', 'Багаж'];
+                                  return !keys.includes(i.turul);
+                              }
+                              return i.turul === selectedType || i.turul === baraaTypeMap[selectedType];
+                            });
+
+                            return (
+                              <Form.Item
+                                {...restField}
+                                name={[name, 'baraaId']}
+                                rules={[{ required: true, message: t("Бараа сонгох") }]}
+                                className="!mb-0"
+                              >
+                                <Select
+                                  placeholder={t("Бараа сонгох")}
+                                  showSearch
+                                  optionFilterProp="children"
+                                  className="w-full h-10 [&>.ant-select-selector]:!h-10 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
+                                  onChange={(val) => {
+                                    const item = baraas.find(i => i._id === val);
+                                    if (item) {
+                                      const currentBaraa = taskForm.getFieldValue('baraa');
+                                      currentBaraa[name] = { ...currentBaraa[name], une: item.zarakhUne, ner: item.ner };
+                                      taskForm.setFieldsValue({ baraa: currentBaraa });
+                                    }
+                                  }}
+                                >
+                                  {filtered.map(i => {
+                                    const negj = i.negj === 'shirheg' ? "ш" :
+                                                 i.negj === 'haire' || i.negj === 'hairtsag' ? "хайрцаг" :
+                                                 i.negj === 'kg' ? "кг" :
+                                                 i.negj === 'l' || i.negj === 'litr' ? "литр" :
+                                                 i.negj === 'gr' ? "гр" :
+                                                 i.negj === 'm' ? "м" :
+                                                 i.negj || '';
+                                    const currentBaraaList = taskForm.getFieldValue('baraa') || [];
+                                    const alreadySelected = currentBaraaList.some((b, idx) => b?.baraaId === i._id && idx !== name);
+                                    return (
+                                      <Select.Option key={i._id} value={i._id} disabled={alreadySelected}>
+                                        {i.ner} ({i.uldegdel || 0} {negj}) {alreadySelected ? '(сонгогдсон)' : ''}
+                                      </Select.Option>
+                                    );
+                                  })}
+                                </Select>
+                              </Form.Item>
+                            );
+                          }}
+                        </Form.Item>
+                      </div>
+                      <div className="col-span-6 md:col-span-2">
   <Form.Item
     noStyle
     shouldUpdate
@@ -2607,7 +2651,7 @@ useEffect(() => {
     }}
   </Form.Item>
 </div>
-                      <div className="col-span-8 md:col-span-4">
+                      <div className="col-span-6 md:col-span-3">
                         <Form.Item
                           {...restField}
                           name={[name, 'tailbar']}
@@ -2634,7 +2678,7 @@ useEffect(() => {
 
           <div className="flex items-end justify-end pt-6 border-t dark:border-slate-700/50 border-gray-300">
              <Space size="middle">
-               <Button onClick={() => { setIsTaskModalVisible(false); setTaskImages([]); }} disabled={savingTask}>
+                <Button onClick={() => { setIsTaskModalVisible(false); setTaskImages([]); }} disabled={savingTask}>
                  {t("Болих")}
                </Button>
                <Button type="primary" htmlType="submit" loading={savingTask}>
