@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import { useAuth } from "services/auth";
@@ -60,12 +60,15 @@ function useKhungulultTuukh(token, baiguullagiinId, query) {
     fetcher,
     { revalidateOnFocus: false }
   );
-  return {
-    setKhuudaslalt,
-    khungulultTuukh: data,
-    khungulultTuukhMutate: mutate,
-    isValidating2: isValidating,
-  };
+  return useMemo(
+    () => ({
+      setKhuudaslalt,
+      khungulultTuukh: data,
+      khungulultTuukhMutate: mutate,
+      isValidating2: isValidating,
+    }),
+    [data, mutate, isValidating],
+  );
 }
 
 export default useKhungulultTuukh;

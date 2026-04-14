@@ -632,8 +632,12 @@ function GuilgeeNiiluulekh(
       debtToPay = (gereenuud[index]?.baritsaaAvakhDun || 0) - (gereenuud[index]?.baritsaaniiUldegdel || 0);
     }
 
-    // Amount to allocate is the smaller of remaining bank funds or the actual debt
-    const amountToAllocate = Math.max(0, Math.round(Math.min(remainingBankFunds, debtToPay) * 100) / 100);
+  
+    const amountToAllocate =
+      Math.max(
+        0,
+        Math.min(remainingBankFunds, Math.abs(debtToPay || 0)),
+      );
 
     if (amountToAllocate > 0) {
       target.value = formatter(amountToAllocate);

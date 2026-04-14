@@ -68,7 +68,7 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
 function tulburTootsoo() {
   useEffect(() => {
     Aos.init({ once: true });
-  });
+  }, []);
   const { t, i18n } = useTranslation();
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
@@ -151,7 +151,7 @@ function tulburTootsoo() {
       undefined,
       shuult?.query,
       undefined,
-      1000,
+      100,
       undefined,
       select,
     );
@@ -229,11 +229,8 @@ function tulburTootsoo() {
 
     if (!gereeniiMedeelel?.jagsaalt) return [];
 
-    if (khungulukhTurul !== "zardal" || !zardliinId) {
-      return gereeniiMedeelel.jagsaalt;
-    }
-
-    const selectedZardal = zardal?.jagsaalt?.find((z) => z._id === zardliinId);
+    const zardluudMap = new Map(zardal?.jagsaalt?.map((z) => [z._id, z]));
+    const selectedZardal = zardluudMap.get(zardliinId);
 
     const isUtilityExpense =
       selectedZardal?.ner?.trim() === "Халаалт" ||
@@ -677,11 +674,11 @@ function tulburTootsoo() {
         align: "center",
         render: (e, data) => {
           var zardliinData = data?.zardluud?.find(
-            (e) => e?._id === form.getFieldValue("zardliinId"),
+            (e) => e?._id === zardliinId,
           );
 
           const selectedZardal = zardal?.jagsaalt?.find(
-            (e) => e?._id === form.getFieldValue("zardliinId"),
+            (e) => e?._id === zardliinId,
           );
 
           const isUtilityExpense =

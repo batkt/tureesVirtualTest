@@ -308,7 +308,8 @@ class App extends Component {
                       : "red"
                   }
                   opacity={0.3}
-                  strokeWidth={5}
+                  strokeWidth={2}
+                  hitStrokeWidth={20}
                   closed={true}
                 />
               );
@@ -324,16 +325,16 @@ class App extends Component {
                 }, 0) / mur.bairshil.length;
 
               return (
-                <Group key={mur._id + "text"}>
+                <Group key={mur._id + "text"} listening={false}>
                   <Text
-                    x={x - (mur.kod.length * 4) / 2}
-                    y={y - 15 / 2}
+                    x={x - (mur.kod.length * 3) / 2}
+                    y={y - 10 / 2}
                     fontStyle="bold"
                     text={mur.kod}
                     stroke="white"
-                    strokeWidth={0.3}
+                    strokeWidth={0.2}
                     fill={"black"}
-                    fontSize={13}
+                    fontSize={10}
                     align="center"
                   />
                 </Group>

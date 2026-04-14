@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import { useAuth } from "services/auth";
 import useSWR from "swr";
@@ -67,7 +67,7 @@ function useNekhemjlekh(
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setNekhemjlelKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 1000,
+    khuudasniiKhemjee: 100,
     search: "",
     jagsaalt: [],
   });
@@ -88,12 +88,15 @@ function useNekhemjlekh(
     fetcher,
     { revalidateOnFocus: false }
   );
-  return {
-    setNekhemjlelKhuudaslalt,
-    nekhemjlel: data,
-    nekhemjlelMutate: mutate,
-    isValidating,
-  };
+  return useMemo(
+    () => ({
+      setNekhemjlelKhuudaslalt,
+      nekhemjlel: data,
+      nekhemjlelMutate: mutate,
+      isValidating,
+    }),
+    [data, mutate, isValidating],
+  );
 }
 
 export default useNekhemjlekh;

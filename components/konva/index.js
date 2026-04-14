@@ -21,9 +21,10 @@ export const urgun = window.innerWidth - 75;
 export function bairshilKhurvuuljAvakh(points, gereeEsekh) {
   const data =
     points?.map((mur) => {
-      mur[0] = (mur[0] * (!!gereeEsekh ? 650 : urgun)) / 1000;
-      mur[1] = (mur[1] * (!!gereeEsekh ? 500 : undur)) / 1000;
-      return mur;
+      return [
+        (mur[0] * (!!gereeEsekh ? 650 : urgun)) / 1000,
+        (mur[1] * (!!gereeEsekh ? 500 : undur)) / 1000,
+      ];
     }) || [];
   return JSON.parse(JSON.stringify(data));
 }
@@ -31,9 +32,7 @@ export function bairshilKhurvuuljAvakh(points, gereeEsekh) {
 function khurvuuljYavuulakh(points) {
   return (
     points?.map((mur) => {
-      mur[0] = (mur[0] * 1000) / urgun;
-      mur[1] = (mur[1] * 1000) / undur;
-      return mur;
+      return [(mur[0] * 1000) / urgun, (mur[1] * 1000) / undur];
     }) || []
   );
 }
@@ -80,9 +79,12 @@ class URLImage extends React.Component {
 }
 
 function Drawer(props) {
-  const [points, setPoints] = useState(
-    bairshilKhurvuuljAvakh(props.points, props?.talbaiGereendKharakh) || []
-  );
+  const isMultiple = props.talbaiGereendKharakh && Array.isArray(props.points?.[0]);
+  const initialPoints = isMultiple
+    ? props.points.map((p) => bairshilKhurvuuljAvakh(p, true))
+    : bairshilKhurvuuljAvakh(props.points, props?.talbaiGereendKharakh) || [];
+
+  const [points, setPoints] = useState(initialPoints);
   const [curMousePos, setCurMousePos] = useState([0, 0]);
   const [talbainuud, setTalbainuud] = useState([]);
   const [isMouseOverStartPoint, setIsMouseOverStartPoint] = useState(
@@ -90,16 +92,18 @@ function Drawer(props) {
   );
   const [isFinished, setIsFinished] = useState(!!props.points || false);
   const [imageError, setImageError] = useState(false);
+  const [pointer, setPointer] = useState(null);
 
   useEffect(() => {
     const barilga = props.baiguullaga?.barilguud?.find(
       (a) => a._id === props.barilgiinId
     );
+    if (props?.talbaiGereendKharakh) return;
     uilchilgee(props.token)
       .get("/talbai", {
         params: {
           query: {
-            _id: { $nin: props._id },
+            _id: { $nin: Array.isArray(props._id) ? props._id : [props._id] },
             davkhar: props.davkhar,
             barilgiinId: barilga?._id,
             "bairshil.1": { $exists: true },
@@ -165,11 +169,43 @@ function Drawer(props) {
       .reduce((a, b) => a.concat(b), []);
   }, [isFinished, curMousePos, points]);
 
+  const zoomSettings = useMemo(() => {
+    const allPoints = isMultiple ? points.flat(1) : points;
+    if (!props?.talbaiGereendKharakh || !allPoints.length)
+      return { scale: 1, x: 0, y: 0 };
+
+    const xCoords = allPoints.map((p) => p[0]);
+    const yCoords = allPoints.map((p) => p[1]);
+    const minX = Math.min(...xCoords);
+    const maxX = Math.max(...xCoords);
+    const minY = Math.min(...yCoords);
+    const maxY = Math.max(...yCoords);
+
+    const areaWidth = Math.max(1, maxX - minX);
+    const areaHeight = Math.max(1, maxY - minY);
+
+    const targetW = 650;
+    const targetH = 500;
+
+    const scale = Math.min(
+      targetW / (areaWidth * 1.8),
+      targetH / (areaHeight * 1.8),
+    );
+
+    const finalScale = Math.min(50, Math.max(1, scale));
+
+    return {
+      scale: finalScale,
+      x: targetW / 2 - (minX + areaWidth / 2) * finalScale,
+      y: targetH / 2 - (minY + areaHeight / 2) * finalScale,
+    };
+  }, [points, props?.talbaiGereendKharakh, isMultiple]);
+
   const plan = useMemo(() => {
     const barilga = props.baiguullaga?.barilguud?.find(
       (a) => a._id === props.barilgiinId
     );
-    return barilga?.davkharuud?.find((a) => a.davkhar === props.davkhar)
+    return barilga?.davkharuud?.find((a) => String(a.davkhar) === String(props.davkhar))
       ?.planZurag;
   }, [props]);
 
@@ -188,6 +224,10 @@ function Drawer(props) {
       <Stage
         width={!!props?.talbaiGereendKharakh ? 650 : urgun}
         height={!!props?.talbaiGereendKharakh ? 500 : undur}
+        scaleX={zoomSettings.scale}
+        scaleY={zoomSettings.scale}
+        x={zoomSettings.x}
+        y={zoomSettings.y}
         onMouseDown={handleClick}
         onMouseMove={handleMouseMove}
         className="rounded-lg border border-gray-200 bg-gray-50/50 dark:border-gray-700 dark:bg-gray-900/50"
@@ -231,7 +271,7 @@ function Drawer(props) {
               onError={() => setImageError(true)}
             />
           )}
-          {talbainuud?.map((mur) => {
+          {!props.talbaiGereendKharakh && talbainuud?.map((mur) => {
             const flattenedPoints = mur.bairshil.reduce(
               (a, b) => a.concat(b),
               []
@@ -241,55 +281,124 @@ function Drawer(props) {
                 key={mur._id}
                 points={flattenedPoints}
                 stroke="black"
-                fill={mur.idevkhiteiEsekh ? "lightgreen" : "red"}
+                fill={
+                  pointer?._id === mur._id
+                    ? mur.idevkhiteiEsekh
+                      ? "#B7DC96"
+                      : "pink"
+                    : mur.idevkhiteiEsekh
+                    ? "green"
+                    : "red"
+                }
                 opacity={0.3}
-                strokeWidth={5}
+                strokeWidth={2}
+                hitStrokeWidth={20}
                 closed={true}
+                onMouseEnter={() => setPointer(mur)}
+                onMouseLeave={() => setPointer(null)}
               />
             );
           })}
-          {talbainuud?.map((mur) => {
-            const x =
-              mur.bairshil?.reduce((a, b) => {
-                return a + b[0];
-              }, 0) / mur.bairshil.length;
-            const y =
-              mur.bairshil?.reduce((a, b) => {
-                return a + b[1];
-              }, 0) / mur.bairshil.length;
-            return (
-              <Group>
-                <Rect
-                  x={x - (mur.kod.length / 2) * 15}
-                  y={y - 15}
-                  width={50}
-                  height={26}
-                  fill="white"
-                  stroke={1}
-                  opacity={0.9}
+            {!props.talbaiGereendKharakh && talbainuud?.map((mur) => {
+              const x =
+                mur.bairshil?.reduce((a, b) => {
+                  return a + b[0];
+                }, 0) / mur.bairshil.length;
+              const y =
+                mur.bairshil?.reduce((a, b) => {
+                  return a + b[1];
+                }, 0) / mur.bairshil.length;
+              return (
+                <Group key={mur._id + "text"} listening={false}>
+                  <Text
+                    x={x - (mur.kod.length * 4) / 2}
+                    y={y - 12 / 2}
+                    text={mur.kod}
+                    fill={"black"}
+                    fontSize={11}
+                    fontStyle="bold"
+                    stroke="white"
+                    strokeWidth={0.2}
+                    align="center"
+                    opacity={0.5}
+                  />
+                </Group>
+              );
+            })}
+          {isMultiple ? (
+            points.map((p, idx) => (
+              <React.Fragment key={idx}>
+                <Line
+                  points={p.flat()}
+                  stroke="black"
+                  fill={
+                    props.units?.[idx]?.idevkhiteiEsekh ? "lightgreen" : "red"
+                  }
+                  opacity={0.7}
+                  strokeWidth={5 / zoomSettings.scale}
+                  closed={true}
                 />
-                <Text
-                  key={mur._id + "text"}
-                  x={x - (mur.kod.length / 2) * 10}
-                  y={y - 15 / 2}
-                  text={mur.kod}
-                  fill={"black"}
-                  fontSize={15}
-                  align="center"
+                {/* Render label for the contract unit */}
+                {props.units?.[idx] && (
+                  <Group
+                    listening={false}
+                    x={
+                      p.reduce((sum, pt) => sum + pt[0], 0) / p.length -
+                      (props.units[idx].kod.length * 4) / 2 / zoomSettings.scale
+                    }
+                    y={p.reduce((sum, pt) => sum + pt[1], 0) / p.length - 12 / 2 / zoomSettings.scale}
+                  >
+                    <Text
+                      text={props.units[idx].kod}
+                      fill={"black"}
+                      fontSize={11 / zoomSettings.scale}
+                      fontStyle="bold"
+                      stroke="white"
+                      strokeWidth={0.2 / zoomSettings.scale}
+                      align="center"
+                    />
+                  </Group>
+                )}
+              </React.Fragment>
+            ))
+          ) : (
+            props.talbaiGereendKharakh &&
+            props.units?.[0] && (
+              <React.Fragment>
+                <Line
+                  points={points.flat()}
+                  stroke="black"
+                  fill={props.units[0].idevkhiteiEsekh ? "lightgreen" : "red"}
+                  opacity={0.7}
+                  strokeWidth={5 / zoomSettings.scale}
+                  closed={true}
                 />
-              </Group>
-            );
-          })}
-          <Line
-            points={flattenedPoints}
-            stroke="black"
-            fill="#00D2FF"
-            opacity={0.3}
-            strokeWidth={5}
-            closed={isFinished}
-          />
+                <Group
+                  listening={false}
+                  x={
+                    points.reduce((sum, pt) => sum + pt[0], 0) / points.length -
+                    (props.units[0].kod.length * 4) / 2 / zoomSettings.scale
+                  }
+                  y={
+                    points.reduce((sum, pt) => sum + pt[1], 0) / points.length -
+                    12 / 2 / zoomSettings.scale
+                  }
+                >
+                  <Text
+                    text={props.units[0].kod}
+                    fill={"black"}
+                    fontSize={11 / zoomSettings.scale}
+                    fontStyle="bold"
+                    stroke="white"
+                    strokeWidth={0.2 / zoomSettings.scale}
+                    align="center"
+                  />
+                </Group>
+              </React.Fragment>
+            )
+          )}
 
-          {points.map((point, index) => {
+          {!isMultiple && points.map((point, index) => {
             const width = 6;
             const x = point[0];
             const y = point[1];
@@ -299,11 +408,11 @@ function Drawer(props) {
                 key={`${index}circle`}
                 x={x}
                 y={y}
-                width={width}
-                height={width}
+                width={width / zoomSettings.scale}
+                height={width / zoomSettings.scale}
                 fill="white"
                 stroke="black"
-                strokeWidth={3}
+                strokeWidth={1 / zoomSettings.scale}
                 onDragStart={handleDragStartPoint}
                 onDragEnd={(e) => handleDragEndPoint(e, index)}
                 onDblClick={() => setIsFinished(true)}

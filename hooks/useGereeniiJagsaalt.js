@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
@@ -99,12 +99,15 @@ function useGereeniiJagsaalt(
       revalidateOnFocus: false,
     }
   );
-  return {
-    gereeniiMedeelel: data,
-    isValidating,
-    gereeniiMedeelelMutate: mutate,
-    setGereeniiKhuudaslalt,
-  };
+  return useMemo(
+    () => ({
+      gereeniiMedeelel: data,
+      isValidating,
+      gereeniiMedeelelMutate: mutate,
+      setGereeniiKhuudaslalt,
+    }),
+    [data, isValidating, mutate],
+  );
 }
 export function useGereeniiJagsaaltToollolt(token) {
   const { barilgiinId } = useAuth();

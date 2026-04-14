@@ -239,6 +239,27 @@ function tulburTootsoo({ token }) {
     setNekhemjleliinJagsaalt(list);
   }, [nekhemjlel, khariltsagchiinGaralt]);
 
+  const renderedInvoiceCache = useRef(new Map());
+  useEffect(() => {
+    renderedInvoiceCache.current.clear();
+  }, [barimt, ognoo, ashiglaltiinZardal, baiguullaga]);
+
+  const nekhemjleliinMap = useMemo(() => {
+    return new Map(nekhemjleliinJagsaalt.map((n) => [n._id, n]));
+  }, [nekhemjleliinJagsaalt]);
+
+  const barilguudMap = useMemo(() => {
+    return new Map(baiguullaga?.barilguud?.map((b) => [b._id, b]) || []);
+  }, [baiguullaga?.barilguud]);
+
+  const zagvarlarMap = useMemo(() => {
+    return new Map(nekhemjlekhiinZagvar?.jagsaalt?.map((z) => [z._id, z]) || []);
+  }, [nekhemjlekhiinZagvar?.jagsaalt]);
+
+  const zardluudMap = useMemo(() => {
+    return new Map(ashiglaltiinZardal?.jagsaalt?.map((z) => [z.ner, z]) || []);
+  }, [ashiglaltiinZardal?.jagsaalt]);
+
   useEffect(() => {
     setBarimt(undefined);
     setDans(undefined);
@@ -419,19 +440,33 @@ function tulburTootsoo({ token }) {
   }, [barilgiinId, token, barimt, songogdsonGereenuud, nekhemjleliinJagsaalt]);
 
   const nekhemjlekhuud = useMemo(() => {
-    if (barimt && songogdsonGereenuud && Array.isArray(songogdsonGereenuud))
-      return songogdsonGereenuud
-        ?.filter((a) => !!nekhemjleliinJagsaalt?.find((n) => n._id === a))
-        ?.map((a, i) => {
-          var zagvar = _.cloneDeep(
-            nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt),
-          );
-          const medeelel = _.cloneDeep(
-            nekhemjleliinJagsaalt.find((n) => n._id === a),
-          );
-          const barilga = baiguullaga?.barilguud?.find(
-            (a) => a._id === medeelel?.barilgiinId,
-          );
+    if (barimt && songogdsonGereenuud && Array.isArray(songogdsonGereenuud)) {
+      const selectedZagvar = zagvarlarMap.get(barimt);
+      if (!selectedZagvar) return [];
+
+      const assetCache = new Map();
+      return songogdsonGereenuud.map((id, i) => {
+        const item = nekhemjleliinMap.get(id);
+        if (!item) return null;
+
+        const cacheKey = `${id}-${barimt}-${dugaarlalt?.format || ""}-${
+          nekhemjlekhiinDugaarData.dugaarList?.[i] || ""
+        }`;
+        if (renderedInvoiceCache.current.has(cacheKey)) {
+          return renderedInvoiceCache.current.get(cacheKey);
+        }
+
+        const medeelel = { ...item };
+          var zagvar = { ...selectedZagvar };
+          const barilga = barilguudMap.get(medeelel?.barilgiinId);
+
+          const getAsset = (type, fn) => {
+            const key = `${medeelel?.barilgiinId}-${type}`;
+            if (assetCache.has(key)) return assetCache.get(key);
+            const val = fn();
+            assetCache.set(key, val);
+            return val;
+          };
 
           if (zagvar?.khatuuZagvarEsekh) {
             if (
@@ -1836,7 +1871,7 @@ function tulburTootsoo({ token }) {
               nemeltNekhemjlekh,
             );
           }
-          return {
+          const result = {
             zagvar: zagvar?.nekhemjlekh,
             medeelel: medeelel,
             mail: medeelel?.mail,
@@ -1845,16 +1880,22 @@ function tulburTootsoo({ token }) {
             khatuuZagvarEsekh: zagvar?.khatuuZagvarEsekh,
             zagvariinNer: zagvar?.ner,
           };
-        });
+          renderedInvoiceCache.current.set(cacheKey, result);
+          return result;
+        }).filter(Boolean);
+    }
     return [];
   }, [
     barimt,
     songogdsonGereenuud,
     ashiglaltiinZardal,
-    ashiglaltiinZardal,
     ognoo,
     token,
     nekhemjlekhiinDugaarData,
+    nekhemjleliinMap,
+    barilguudMap,
+    zardluudMap,
+    zagvarlarMap,
   ]);
 
   function send() {

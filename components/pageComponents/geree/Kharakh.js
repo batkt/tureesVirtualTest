@@ -3,8 +3,10 @@ import uilchilgee, { url } from "services/uilchilgee";
 import dynamic from "next/dynamic";
 import { t } from "i18next";
 import formatNumber from "tools/function/formatNumber";
+import _ from "lodash";
 import { EyeOutlined } from "@ant-design/icons";
 const Konva = dynamic(() => import("components/konva"), { ssr: false });
+
 
 function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
   const { geree, ...gereeniiZagvar } = data;
@@ -287,41 +289,57 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
             <div className="sticky left-0 top-0 text-2xl font-semibold opacity-30 print:hidden">
               Талбай
             </div>
-            {talbainuud?.map((a, i) => {
-              return (
-                <div
-                  key={i}
-                  className="flex w-full break-before-page flex-col justify-center space-y-1 bg-white pl-[24mm] pr-[14mm] text-black shadow-lg dark:bg-gray-800 dark:text-white print:shadow-none"
-                  style={{ width: "210mm", height: "200mm" }}
-                >
-                  <div className="font flex gap-3 text-lg">
-                    <div>{t("Код")}:</div>
-                    <div>{a?.kod}</div>
+            {Object.entries(_.groupBy(talbainuud, "davkhar")).map(
+              ([davkhar, units], i) => {
+                const aggregateKod = units.map((u) => u.kod).join(", ");
+                const totalSurface = units.reduce(
+                  (sum, u) => sum + (u.talbainKhemjee || 0),
+                  0,
+                );
+                const totalRent = units.reduce(
+                  (sum, u) => sum + (u.tureesiinTulbur || 0),
+                  0,
+                );
+
+                // GroupBy key is a string, ensure it matches the unit's original type if needed
+                const targetDavkhar = units[0]?.davkhar ?? davkhar;
+
+                return (
+                  <div
+                    key={i}
+                    className="flex w-full break-before-page flex-col justify-center space-y-1 bg-white pl-[24mm] pr-[14mm] text-black shadow-lg dark:bg-gray-800 dark:text-white print:shadow-none"
+                    style={{ width: "210mm", height: "200mm" }}
+                  >
+                    <div className="font flex gap-3 text-lg mt-4">
+                      <div className="font-bold">{t("Код")}:</div>
+                      <div>{aggregateKod}</div>
+                    </div>
+                    <Konva
+                      talbaiGereendKharakh={true}
+                      baiguullaga={baiguullaga}
+                      barilgiinId={barilgiinId}
+                      token={token}
+                      _id={units.map((u) => u._id)}
+                      points={units.map((u) => u.bairshil)}
+                      units={units}
+                      davkhar={targetDavkhar}
+                    />
+                    <div className="flex gap-3">
+                      <div className="font-semibold">{t("Хэмжээ")}:</div>
+                      <div>{totalSurface.toFixed(2)}m²</div>
+                    </div>
+                    <div className="flex gap-3">
+                      <div className="font-semibold">{t("Сарын түрээс")}:</div>
+                      <div>{formatNumber(totalRent)}₮</div>
+                    </div>
+                    <div className="flex gap-3">
+                      <div className="font-semibold">{t("Давхар")}:</div>
+                      <div>{davkhar}</div>
+                    </div>
                   </div>
-                  <Konva
-                    talbaiGereendKharakh={true}
-                    baiguullaga={baiguullaga}
-                    barilgiinId={barilgiinId}
-                    token={token}
-                    _id={a._id}
-                    points={a.bairshil}
-                    davkhar={a.davkhar}
-                  />
-                  <div className="flex gap-3">
-                    <div>{t("Хэмжээ")}:</div>
-                    <div>{a.talbainKhemjee || 0}m²</div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div>{t("Сарын түрээс")}:</div>
-                    <div>{formatNumber(a.tureesiinTulbur || 0)}₮</div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div>{t("Давхар")}:</div>
-                    <div>{a.davkhar}</div>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              },
+            )}
           </div>
         )}
 

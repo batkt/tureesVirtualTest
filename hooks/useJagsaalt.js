@@ -240,7 +240,7 @@ function useJagsaalt(
     url,
   ]);
 
-  function next() {
+  const next = useCallback(() => {
     if (!!data)
       if (khuudaslalt?.khuudasniiDugaar < data?.niitKhuudas) {
         setKhuudaslalt((a) => {
@@ -249,18 +249,18 @@ function useJagsaalt(
           return { ...a };
         });
       }
-  }
+  }, [data, khuudaslalt?.khuudasniiDugaar]);
 
-  function refresh() {
+  const refresh = useCallback(() => {
     setKhuudaslalt((a) => {
       a.jagsaalt = [];
       a.khuudasniiDugaar = 1;
       return { ...a };
     });
     mutate();
-  }
+  }, [mutate]);
 
-  function onSearch(search) {
+  const onSearch = useCallback((search) => {
     clearTimeout(timeout);
     timeout = setTimeout(function () {
       setKhuudaslalt((a) => {
@@ -272,7 +272,7 @@ function useJagsaalt(
         };
       });
     }, 300);
-  }
+  }, []);
 
   const jagsaalt = useMemo(() => {
     const serverList = data?.jagsaalt || [];
@@ -292,17 +292,30 @@ function useJagsaalt(
     return baseList;
   }, [khuudaslalt, data, offlineCache, shouldFetch]);
 
-  return {
-    data,
-    mutate,
-    jagsaalt,
-    next,
-    refresh,
-    onSearch,
-    isValidating,
-    setKhuudaslalt,
-    khuudaslalt,
-  };
+  return useMemo(
+    () => ({
+      data,
+      mutate,
+      jagsaalt,
+      next,
+      refresh,
+      onSearch,
+      isValidating,
+      setKhuudaslalt,
+      khuudaslalt,
+    }),
+    [
+      data,
+      mutate,
+      jagsaalt,
+      next,
+      refresh,
+      onSearch,
+      isValidating,
+      setKhuudaslalt,
+      khuudaslalt,
+    ],
+  );
 }
 
 export default useJagsaalt;
