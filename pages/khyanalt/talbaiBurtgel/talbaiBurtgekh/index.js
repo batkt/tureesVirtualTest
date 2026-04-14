@@ -24,6 +24,7 @@ import {
   Tag,
   Drawer,
   Grid,
+  Select,
 } from "antd";
 import { toast } from "sonner";
 import Admin from "components/Admin";
@@ -663,6 +664,30 @@ function talbaiBurtgekh({ token }) {
             data-aos-delay="200"
           >
             <div className="hidden md:flex">
+              <Select
+                allowClear
+                placeholder={t("Давхар")}
+                onChange={(v) => {
+                  setQuery((prev) => {
+                    const q = { ...prev };
+                    if (v) q.davkhar = v;
+                    else delete q.davkhar;
+                    return q;
+                  });
+                }}
+                className="w-32 mr-2"
+                value={query.davkhar}
+              >
+                {baiguullaga?.barilguud
+                  ?.find((a) => a._id === barilgiinId)
+                  ?.davkharuud?.slice()
+                  .sort((a, b) => Number(a.davkhar) - Number(b.davkhar))
+                  .map((d) => (
+                    <Select.Option key={d.davkhar} value={d.davkhar}>
+                      {d.davkhar}-р давхар
+                    </Select.Option>
+                  ))}
+              </Select>
               <BaganiinSongolt
                 shineBagana={shineBagana}
                 setShineBagana={setShineBagana}

@@ -98,7 +98,6 @@ function Drawer(props) {
     const barilga = props.baiguullaga?.barilguud?.find(
       (a) => a._id === props.barilgiinId
     );
-    if (props?.talbaiGereendKharakh) return;
     uilchilgee(props.token)
       .get("/talbai", {
         params: {
@@ -170,35 +169,7 @@ function Drawer(props) {
   }, [isFinished, curMousePos, points]);
 
   const zoomSettings = useMemo(() => {
-    const allPoints = isMultiple ? points.flat(1) : points;
-    if (!props?.talbaiGereendKharakh || !allPoints.length)
-      return { scale: 1, x: 0, y: 0 };
-
-    const xCoords = allPoints.map((p) => p[0]);
-    const yCoords = allPoints.map((p) => p[1]);
-    const minX = Math.min(...xCoords);
-    const maxX = Math.max(...xCoords);
-    const minY = Math.min(...yCoords);
-    const maxY = Math.max(...yCoords);
-
-    const areaWidth = Math.max(1, maxX - minX);
-    const areaHeight = Math.max(1, maxY - minY);
-
-    const targetW = 650;
-    const targetH = 500;
-
-    const scale = Math.min(
-      targetW / (areaWidth * 1.8),
-      targetH / (areaHeight * 1.8),
-    );
-
-    const finalScale = Math.min(50, Math.max(1, scale));
-
-    return {
-      scale: finalScale,
-      x: targetW / 2 - (minX + areaWidth / 2) * finalScale,
-      y: targetH / 2 - (minY + areaHeight / 2) * finalScale,
-    };
+    return { scale: 1, x: 0, y: 0 };
   }, [points, props?.talbaiGereendKharakh, isMultiple]);
 
   const plan = useMemo(() => {
@@ -271,7 +242,7 @@ function Drawer(props) {
               onError={() => setImageError(true)}
             />
           )}
-          {!props.talbaiGereendKharakh && talbainuud?.map((mur) => {
+          {talbainuud?.map((mur) => {
             const flattenedPoints = mur.bairshil.reduce(
               (a, b) => a.concat(b),
               []
@@ -299,7 +270,7 @@ function Drawer(props) {
               />
             );
           })}
-            {!props.talbaiGereendKharakh && talbainuud?.map((mur) => {
+            {talbainuud?.map((mur) => {
               const x =
                 mur.bairshil?.reduce((a, b) => {
                   return a + b[0];
@@ -330,12 +301,16 @@ function Drawer(props) {
               <React.Fragment key={idx}>
                 <Line
                   points={p.flat()}
-                  stroke="black"
+                  stroke="#10b981"
+                  lineJoin="round"
                   fill={
-                    props.units?.[idx]?.idevkhiteiEsekh ? "lightgreen" : "red"
+                    props.units?.[idx]?.idevkhiteiEsekh ? "#34d399" : "#ef4444"
                   }
-                  opacity={0.7}
-                  strokeWidth={5 / zoomSettings.scale}
+                  opacity={0.85}
+                  strokeWidth={3 / zoomSettings.scale}
+                  shadowColor="#10b981"
+                  shadowBlur={15}
+                  shadowOpacity={0.8}
                   closed={true}
                 />
                 {/* Render label for the contract unit */}
@@ -367,10 +342,14 @@ function Drawer(props) {
               <React.Fragment>
                 <Line
                   points={points.flat()}
-                  stroke="black"
-                  fill={props.units[0].idevkhiteiEsekh ? "lightgreen" : "red"}
-                  opacity={0.7}
-                  strokeWidth={5 / zoomSettings.scale}
+                  stroke="#10b981"
+                  lineJoin="round"
+                  fill={props.units[0].idevkhiteiEsekh ? "#34d399" : "#ef4444"}
+                  opacity={0.85}
+                  strokeWidth={3 / zoomSettings.scale}
+                  shadowColor="#10b981"
+                  shadowBlur={15}
+                  shadowOpacity={0.8}
                   closed={true}
                 />
                 <Group
@@ -396,6 +375,21 @@ function Drawer(props) {
                 </Group>
               </React.Fragment>
             )
+          )}
+
+          {!isMultiple && !props.talbaiGereendKharakh && points.length > 0 && (
+            <Line
+              points={flattenedPoints}
+              stroke="#737185ff"
+              lineJoin="round"
+              fill={isFinished ? "#a6d2f5ff" : "transparent"}
+              opacity={0.85}
+              strokeWidth={3 / zoomSettings.scale}
+              shadowColor="#6d6a7dff"
+              shadowBlur={15}
+              shadowOpacity={0.8}
+              closed={isFinished}
+            />
           )}
 
           {!isMultiple && points.map((point, index) => {

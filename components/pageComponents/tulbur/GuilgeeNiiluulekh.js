@@ -631,12 +631,13 @@ function GuilgeeNiiluulekh(
     } else if (talbar === "baritsaaTulbur") {
       debtToPay = (gereenuud[index]?.baritsaaAvakhDun || 0) - (gereenuud[index]?.baritsaaniiUldegdel || 0);
     }
-
-  
+    
+    const absDebtToPay = Math.round((Math.abs(debtToPay || 0) + Number.EPSILON) * 100) / 100;
+    
     const amountToAllocate =
       Math.max(
         0,
-        Math.min(remainingBankFunds, Math.abs(debtToPay || 0)),
+        Math.min(remainingBankFunds, absDebtToPay),
       );
 
     if (amountToAllocate > 0) {

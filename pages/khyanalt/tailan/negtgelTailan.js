@@ -511,17 +511,29 @@ function negtgelTailan({ token }) {
           ))}
         </Select>
         <Select
-          className="rounded-md border-gray-400 md:w-[150px]"
+          className="rounded-md border-gray-400 md:w-[200px]"
           allowClear={true}
+          showSearch
           value={songogdsonTurul}
           onChange={setSongogdsonTurul}
           placeholder={t("Төрөл сонгох")}
         >
-          {turulOptions.map((opt) => (
-            <Select.Option key={opt} value={opt}>
-              {t(opt)}
-            </Select.Option>
-          ))}
+          {segments?.jagsaalt
+            ?.filter((s) => s.ner && s.utguud?.some((u) => u))
+            ?.map((segment) => (
+              <Select.OptGroup
+                key={segment._id}
+                label={`${t(segment.ner)} (${t(segment.turul || "бусад")})`}
+              >
+                {segment.utguud
+                  ?.filter((o) => o)
+                  ?.map((opt, i) => (
+                    <Select.Option key={`${segment._id}-${opt}-${i}`} value={opt}>
+                      {t(opt)}
+                    </Select.Option>
+                  ))}
+              </Select.OptGroup>
+            ))}
         </Select>
         <div className="ml-auto flex gap-2">
           <div className="flex h-8">

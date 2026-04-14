@@ -301,7 +301,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                   0,
                 );
 
-                // GroupBy key is a string, ensure it matches the unit's original type if needed
+              
                 const targetDavkhar = units[0]?.davkhar ?? davkhar;
 
                 return (
