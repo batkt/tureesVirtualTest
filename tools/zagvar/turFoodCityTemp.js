@@ -429,19 +429,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               Нийт дүн
             </td>
             <td style="border: 1px solid #000; text-align: right; padding: 8px;">
-              ${formatNumber(
-                (parseFloat(
-                  String(
-                    medeelel?.ekhniiUldegdel ?? medeelel?.umnukhSariinUrTulbur ?? 0,
-                  ).replace(/,/g, ""),
-                ) || 0) +
-                  (parseFloat(
-                    String(medeelel?.niitDun || 0).replace(/,/g, ""),
-                  ) || 0) -
-                  (parseFloat(
-                    String(medeelel?.tulsunAldangi || 0).replace(/,/g, ""),
-                  ) || 0),
-              )}
+              &lt;niitDun&gt;
             </td>
           </tr>
           <tr style="font-weight: 600; background-color: #f9f9f9;">
