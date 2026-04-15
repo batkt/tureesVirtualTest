@@ -588,6 +588,7 @@ function tulburTootsoo() {
 
   const gereeniiColumn = useMemo(() => {
     let durationMultiplier = 1;
+    const zardliinId = form.getFieldValue("zardliinId");
     const currentOgnoonuud = ognoonuud && ognoonuud.length > 0 ? ognoonuud : form?.getFieldValue("ognoonuud");
     if (currentOgnoonuud && currentOgnoonuud[0] && currentOgnoonuud[1]) {
       const mDiff = moment(currentOgnoonuud[1]).startOf("month").diff(moment(currentOgnoonuud[0]).startOf("month"), "months");
@@ -666,7 +667,7 @@ function tulburTootsoo() {
     ) {
       column.push({
         title: zardal?.jagsaalt?.find(
-          (e) => e?._id === form.getFieldValue("zardliinId"),
+          (e) => e?._id === zardliinId,
         )?.ner,
         dataIndex: "data",
         className: "data",
@@ -674,11 +675,11 @@ function tulburTootsoo() {
         align: "center",
         render: (e, data) => {
           var zardliinData = data?.zardluud?.find(
-            (e) => e?._id === zardliinId,
+            (e) => e?._id === zardliinId
           );
 
           const selectedZardal = zardal?.jagsaalt?.find(
-            (e) => e?._id === zardliinId,
+            (e) => e?._id === zardliinId
           );
 
           const isUtilityExpense =

@@ -67,7 +67,7 @@ function BarilgaBurtgel({ token }) {
   const { theme } = useTheme();
   const { baiguullaga, barilgiinId } = useAuth();
   const [ognoo, setOgnoo] = useState(new Date());
-  const [nariivchlal, setNariivchlal] = useState("day");
+  const [nariivchlal, setNariivchlal] = useState("month");
   const [compareMode, setCompareMode] = useState(false);
   const [selectedSalbars, setSelectedSalbars] = useState([]);
   const [windowWidth, setWindowWidth] = useState(
@@ -620,7 +620,6 @@ function BarilgaBurtgel({ token }) {
                 style={{ borderRadius: "0.5rem" }}
               >
                 {[
-                  { val: "day", lab: "Өдөр" },
                   { val: "month", lab: "Сар" },
                   { val: "year", lab: "Жил" },
                 ].map((a) => (

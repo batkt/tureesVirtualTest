@@ -946,66 +946,53 @@ function nasjiltinTailan({ token }) {
         title: t("0-30 хоног"),
         dataIndex: "avalaga0",
         key: "avalaga0",
-        align: "right",
-        width: "12rem",
+        align: "center",
+        width: 120,
         className: "text-mashJijig",
         render: (text) => {
-          return formatNumber(text, 2);
+          return <div className="flex justify-end">{formatNumber(text, 2)}</div>;
         },
       },
       {
         title: t("31-60 хоног"),
         dataIndex: "avlaga31",
         key: "avlaga31",
-
+        align: "center",
+        width: 120,
+        className: "text-mashJijig",
         render: (value) => (
           <div className="flex justify-end">{formatNumber(value, 2)}</div>
         ),
       },
       {
-        title: "61-90 хоног",
+        title: t("61-90 хоног"),
         dataIndex: "avlaga61",
         key: "avlaga61",
         align: "center",
-        width: "8rem",
+        width: 120,
         className: "text-mashJijig",
-        ellipsis: true,
-        onHeaderCell: () => ({
-          style: { textAlign: "center" },
-        }),
-
         render: (value) => (
           <div className="flex justify-end">{formatNumber(value, 2)}</div>
         ),
       },
       {
-        title: "91-120 хоног",
+        title: t("91-120 хоног"),
         dataIndex: "avlaga91",
         key: "avlaga91",
         align: "center",
-        width: "8rem",
+        width: 120,
         className: "text-mashJijig",
-        ellipsis: true,
-        onHeaderCell: () => ({
-          style: { textAlign: "center" },
-        }),
-
         render: (value) => (
           <div className="flex justify-end">{formatNumber(value, 2)}</div>
         ),
       },
       {
-        title: "+120 хоног",
+        title: t("+120 хоног"),
         dataIndex: "avlaga120",
         key: "avlaga120",
         align: "center",
-        width: "8rem",
+        width: 120,
         className: "text-mashJijig",
-        ellipsis: true,
-        onHeaderCell: () => ({
-          style: { textAlign: "center" },
-        }),
-
         render: (value) => (
           <div className="flex justify-end">{formatNumber(value, 2)}</div>
         ),
@@ -1056,34 +1043,56 @@ function nasjiltinTailan({ token }) {
           format="YYYY-MM"
         />
         <Select
-          className="overflow-y-scroll rounded-md  border-gray-400  md:w-[200px]"
-          style={{ textOverflow: "ellipsis" }}
-          showSearch
-          mode="multiple"
-          filterOption={(o) => o}
-          allowClear={true}
-          onSearch={(search) =>
-            khariltsagchiinGaralt.setKhuudaslalt((a) => ({ ...a, search }))
-          }
-          onChange={(v) => {
-            setSongogdsonIds(v);
-          }}
-          placeholder={t("Харилцагч сонгох")}
-        >
-          {khariltsagchiinGaralt?.jagsaalt?.map((data) => (
-            <Select.Option
-              key={data?.register || data?.customerTin}
-              className="dark:text-gray-300"
-            >
-              <div className="flex flex-col">
-                <div className="flex justify-between font-semibold">
-                  <span>{data?.ner}</span>
-                  
-                </div>
-              </div>
-            </Select.Option>
-          ))}
-        </Select>
+  className="overflow-y-scroll rounded-md border-gray-400 md:w-[200px]"
+  style={{ textOverflow: "ellipsis" }}
+  showSearch
+  mode="multiple"
+  filterOption={(input, option) => {
+    const search = input.toLowerCase();
+    return (
+      option?.ner?.toLowerCase().includes(search) ||
+      option?.register?.toLowerCase().includes(search) ||
+      option?.gereeniiDugaar?.toLowerCase().includes(search) ||
+      option?.talbainDugaar?.toLowerCase().includes(search)
+    );
+  }}
+  allowClear={true}
+  onSearch={(search) =>
+    khariltsagchiinGaralt.setKhuudaslalt((a) => ({ ...a, search }))
+  }
+  onChange={(v) => {
+    setSongogdsonIds(v);
+  }}
+  placeholder={t("Харилцагч сонгох")}
+>
+  {[
+    ...new Map(
+      khariltsagchiinGaralt?.jagsaalt?.map((data) => [
+        data?.register || data?.customerTin,
+        data,
+      ])
+    ).values(),
+  ].map((data) => (
+    <Select.Option
+      key={data?.register || data?.customerTin}
+      value={data?.register || data?.customerTin}
+      label={data?.ner}
+      ner={data?.ner || ""}
+      register={data?.register || data?.customerTin || ""}
+      gereeniiDugaar={data?.gereeniiDugaar || ""}
+      talbainDugaar={data?.talbainDugaar || ""}
+    >
+      <div className="flex flex-col">
+        <span className="font-semibold">{data?.ner}</span>
+        <span className="text-xs text-gray-400">
+          {[data?.gereeniiDugaar, data?.talbainDugaar]
+            .filter(Boolean)
+            .join(" | ")}
+        </span>
+      </div>
+    </Select.Option>
+  ))}
+</Select>
         <Select
           className="rounded-md border-gray-400 md:w-[200px]"
           allowClear={true}

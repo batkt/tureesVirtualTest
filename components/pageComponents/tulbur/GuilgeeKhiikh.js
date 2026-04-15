@@ -850,7 +850,7 @@ function GuilgeeKhiikh(
       {busadTurul === "aldangi" && (
         <DatePicker
           locale={i18n.language === "mn" && locale}
-          value={shineOgnoo}
+          value={shineOgnoo}  
           onChange={(v) => setShineOgnoo(v ? v.startOf("day") : null)}
         />
       )}
@@ -1023,6 +1023,11 @@ function GuilgeeKhiikh(
           style={{ width: "100%", textAlign: "center" }}
           value={dun}
           onChange={(v) => setDun(v)}
+          onDoubleClick={() => {
+            if (busadTurul === "aldangi") {
+              setDun(formatNumber(data?.aldangiinUldegdel, 2));
+            }
+          }}
         />
       )}
       {turul === "ashiglalt" &&

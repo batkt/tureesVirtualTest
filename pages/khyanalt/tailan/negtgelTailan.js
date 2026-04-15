@@ -482,34 +482,56 @@ function negtgelTailan({ token }) {
           onChange={setOgnoo}
         />
         <Select
-          className="overflow-y-scroll rounded-md  !border-gray-800  md:w-[200px]"
-          // style={{ textOverflow: "ellipsis" }}
-          showSearch
-          mode="multiple"
-          filterOption={(o) => o}
-          allowClear={true}
-          onSearch={(search) =>
-            khariltsagchiinGaralt.setKhuudaslalt((a) => ({ ...a, search }))
-          }
-          onChange={(v) => {
-            setSongogdsonIds(v);
-          }}
-          placeholder={t("Харилцагч сонгох")}
-        >
-          {khariltsagchiinGaralt?.jagsaalt?.map((data) => (
-            <Select.Option
-              key={data?.register || data?.customerTin}
-              className="dark:text-gray-300"
-            >
-              <div className="flex flex-col">
-                <div className="flex justify-between font-semibold">
-                  <span>{data?.ner}</span>
-                  
-                </div>
-              </div>
-            </Select.Option>
-          ))}
-        </Select>
+  className="overflow-y-scroll rounded-md border-gray-400 md:w-[200px]"
+  style={{ textOverflow: "ellipsis" }}
+  showSearch
+  mode="multiple"
+  filterOption={(input, option) => {
+    const search = input.toLowerCase();
+    return (
+      option?.ner?.toLowerCase().includes(search) ||
+      option?.register?.toLowerCase().includes(search) ||
+      option?.gereeniiDugaar?.toLowerCase().includes(search) ||
+      option?.talbainDugaar?.toLowerCase().includes(search)
+    );
+  }}
+  allowClear={true}
+  onSearch={(search) =>
+    khariltsagchiinGaralt.setKhuudaslalt((a) => ({ ...a, search }))
+  }
+  onChange={(v) => {
+    setSongogdsonIds(v);
+  }}
+  placeholder={t("Харилцагч сонгох")}
+>
+  {[
+    ...new Map(
+      khariltsagchiinGaralt?.jagsaalt?.map((data) => [
+        data?.register || data?.customerTin,
+        data,
+      ])
+    ).values(),
+  ].map((data) => (
+    <Select.Option
+      key={data?.register || data?.customerTin}
+      value={data?.register || data?.customerTin}
+      label={data?.ner}
+      ner={data?.ner || ""}
+      register={data?.register || data?.customerTin || ""}
+      gereeniiDugaar={data?.gereeniiDugaar || ""}
+      talbainDugaar={data?.talbainDugaar || ""}
+    >
+      <div className="flex flex-col">
+        <span className="font-semibold">{data?.ner}</span>
+        <span className="text-xs text-gray-400">
+          {[data?.gereeniiDugaar, data?.talbainDugaar]
+            .filter(Boolean)
+            .join(" | ")}
+        </span>
+      </div>
+    </Select.Option>
+  ))}
+</Select>
         <Select
           className="rounded-md border-gray-400 md:w-[200px]"
           allowClear={true}
@@ -693,7 +715,7 @@ function negtgelTailan({ token }) {
           tableLayout="fixed"
           bordered
           size="small"
-          className="overflow-auto text-xs"
+          className="overflow-hidden text-xs"
           pagination={{
             current: tailanGaralt?.khuudasniiDugaar,
             total: tailanGaralt?.length,

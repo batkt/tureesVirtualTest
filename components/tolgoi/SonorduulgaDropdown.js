@@ -11,7 +11,8 @@ import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
-const formatMessage = (msg) => {
+
+const formatMessage = (msg, t) => {
   if (!msg) return "";
   let formatted = msg;
   // Translate priorities
@@ -67,43 +68,43 @@ const hrefAvya = (mur, ajiltan) => {
   return routes[mur.turul] || "";
 };
 
-const getTurulInfo = (turul) => {
+const getTurulInfo = (turul, t) => {
   const turulMap = {
     duudlaga: {
-      label: "Дуудлага",
+      label: t("Дуудлага"),
       color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
     },
     daalgavar: {
-      label: "Даалгавар",
+      label: t("Даалгавар"),
       color:
         "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
     },
     medegdel: {
-      label: "Мэдэгдэл",
+      label: t("Мэдэгдэл"),
       color:
         "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
     },
     gomdol: {
-      label: "Гомдол",
+      label: t("Гомдол"),
       color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
     },
     sanal: {
-      label: "Санал",
+      label: t("Санал"),
       color:
         "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
     },
     setgegdel: {
-      label: "Сэтгэгдэл",
+      label: t("Сэтгэгдэл"),
       color:
         "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200",
     },
     medegdelAdmin: {
-      label: "Админ мэдэгдэл",
+      label: t("Админ мэдэгдэл"),
       color:
         "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
     },
     medegdelAdminAppWeb: {
-      label: "Админ мэдэгдэл",
+      label: t("Админ мэдэгдэл"),
       color:
         "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
     },
@@ -337,7 +338,7 @@ const SonorduulgaDropdown = React.memo(
                 onClick={() => setActiveTab("system")}
                 className={`flex-1 py-2.5 text-xs font-bold transition-all ${activeTab === 'system' ? 'text-green-600 border-b-2 border-green-600 dark:text-green-400' : 'text-gray-400 hover:text-gray-600'}`}
               >
-                Систем
+                {t("Систем")}
               </button>
               <button 
                 onClick={() => setActiveTab("service")}
@@ -407,13 +408,13 @@ const SonorduulgaDropdown = React.memo(
                           <div className="mt-1 flex items-center space-x-2">
                             <span
                               className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                                getTurulInfo(mur.turul).color
+                                getTurulInfo(mur.turul, t).color
                               }`}
                             >
                               <span className="mr-1">
-                                {getTurulInfo(mur.turul).icon}
+                                {getTurulInfo(mur.turul, t).icon}
                               </span>
-                              {getTurulInfo(mur.turul).label}
+                              {getTurulInfo(mur.turul, t).label}
                             </span>
                           </div>
                         </div>
@@ -566,10 +567,10 @@ const SonorduulgaDropdown = React.memo(
                         </div>
                         <div className="min-w-0 flex-1">
                           <h3 className="text-xs font-bold text-gray-800 dark:text-gray-200">
-                            {formatMessage(notif.title)}
+                            {formatMessage(notif.title, t)}
                           </h3>
                           <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5 whitespace-pre-wrap line-clamp-3">
-                             {formatMessage(notif.message)}
+                             {formatMessage(notif.message, t)}
                           </p>
                         </div>
                       </div>

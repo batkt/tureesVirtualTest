@@ -82,6 +82,12 @@ const Sungakh = React.forwardRef(({ token, onClose, confirm, data }, ref) => {
               confirm(duusakhOgnoo);
               onClose();
             }
+          })
+          .catch((err) => {
+            toast.error(
+              t("Гэрээ сунгахад алдаа гарлаа: ") +
+                (err?.response?.data?.aldaa || err?.message)
+            );
           });
       },
       khaaya() {
