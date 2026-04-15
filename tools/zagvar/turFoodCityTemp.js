@@ -104,11 +104,9 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;"><b>Төлбөр хийх хугацаа:</b></p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            <b>&nbsp;${
-              !!medeelel?.nekhemjlekhTulukhUdur
-                ? "&lt;nekhemjlekhTulukhUdur&gt;"
-                : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
-            }</b>
+            <b>&nbsp;
+                &lt;nekhemjlekhTulukhUdur&gt;
+            </b>
           </p>
 
         </div>
@@ -437,6 +435,14 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
             </td>
             <td style="border: 1px solid #000; text-align: right; padding: 8px;">
               &lt;umnukhSariinTulsunDun&gt;
+            </td>
+          </tr>
+           <tr style="font-weight: 600; background-color: #f9f9f9;">
+            <td colspan="8" style="border: 1px solid #000; text-align: right; padding: 8px; white-space: nowrap;">
+              Төлсөн алданги
+            </td>
+            <td style="border: 1px solid #000; text-align: right; padding: 8px;">
+              &lt;niitTulsunAldangi&gt;
             </td>
           </tr>
           <tr style="font-weight: 600; background-color: #f9f9f9;">

@@ -480,6 +480,9 @@ function tulburTootsoo({ token }) {
                     : medeelel.tulsunDun || 0,
                 ) || 0;
               medeelel.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+              medeelel.niitTulsunAldangi = formatNumber(
+                medeelel?.niitTulsunAldangi || 0,
+              );
 
               if (medeelel.niitDun !== undefined && medeelel.niitDun !== null) {
                 if (medeelel.aldangiinUldegdel > 0)
@@ -1200,22 +1203,20 @@ function tulburTootsoo({ token }) {
             const nekhemjlekhTulukhUdur = Number(
               barilga?.tokhirgoo?.nekhemjlekhTulukhUdur,
             );
-            const dayOfMonth = medeelel.tulukhUdur?.[0]; // e.g. 25
-
-            if (dayOfMonth && nekhemjlekhTulukhUdur) {
-              const now = new Date();
-
-              let baseDate = new Date(
-                now.getFullYear(),
-                now.getMonth(),
-                dayOfMonth,
-              );
-
-              baseDate.setDate(baseDate.getDate() + nekhemjlekhTulukhUdur);
-
-              const month = String(baseDate.getMonth() + 1).padStart(2, "0");
-              const day = String(baseDate.getDate()).padStart(2, "0");
+            if (
+              Number.isFinite(nekhemjlekhTulukhUdur) &&
+              nekhemjlekhTulukhUdur > 0
+            ) {
+              const baseDate = new Date();
               const year = baseDate.getFullYear();
+              const monthIndex = baseDate.getMonth();
+              const maxDayInMonth = new Date(year, monthIndex + 1, 0).getDate();
+              const clampedDay = Math.min(
+                Math.floor(nekhemjlekhTulukhUdur),
+                maxDayInMonth,
+              );
+              const month = String(monthIndex + 1).padStart(2, "0");
+              const day = String(clampedDay).padStart(2, "0");
 
               medeelel.nekhemjlekhTulukhUdur = `${month}/${day}/${year}`;
             }
@@ -2005,6 +2006,9 @@ function tulburTootsoo({ token }) {
                     : nekhemjlekh.tulsunDun || 0,
                 ) || 0;
               nekhemjlekh.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+              nekhemjlekh.niitTulsunAldangi = formatNumber(
+                nekhemjlekh?.niitTulsunAldangi || 0,
+              );
 
               if (
                 nekhemjlekh.niitDun !== undefined &&
@@ -2502,6 +2506,9 @@ function tulburTootsoo({ token }) {
                       : nekhemjlekh.tulsunDun || 0,
                   ) || 0;
                 nekhemjlekh.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+                nekhemjlekh.niitTulsunAldangi = formatNumber(
+                  nekhemjlekh?.niitTulsunAldangi || 0,
+                );
 
                 if (
                   nekhemjlekh.niitDun !== undefined &&
@@ -3056,22 +3063,20 @@ function tulburTootsoo({ token }) {
         const nekhemjlekhTulukhUdur = Number(
           barilga?.tokhirgoo?.nekhemjlekhTulukhUdur,
         );
-        const dayOfMonth = nekhemjlekh.tulukhUdur?.[0];
-
-        if (dayOfMonth && nekhemjlekhTulukhUdur) {
-          const now = new Date();
-
-          let baseDate = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            dayOfMonth,
-          );
-
-          baseDate.setDate(baseDate.getDate() + nekhemjlekhTulukhUdur);
-
-          const month = String(baseDate.getMonth() + 1).padStart(2, "0");
-          const day = String(baseDate.getDate()).padStart(2, "0");
+        if (
+          Number.isFinite(nekhemjlekhTulukhUdur) &&
+          nekhemjlekhTulukhUdur > 0
+        ) {
+          const baseDate = new Date();
           const year = baseDate.getFullYear();
+          const monthIndex = baseDate.getMonth();
+          const maxDayInMonth = new Date(year, monthIndex + 1, 0).getDate();
+          const clampedDay = Math.min(
+            Math.floor(nekhemjlekhTulukhUdur),
+            maxDayInMonth,
+          );
+          const month = String(monthIndex + 1).padStart(2, "0");
+          const day = String(clampedDay).padStart(2, "0");
 
           nekhemjlekh.nekhemjlekhTulukhUdur = `${month}/${day}/${year}`;
         }
