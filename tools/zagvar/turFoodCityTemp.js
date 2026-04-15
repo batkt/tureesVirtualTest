@@ -184,6 +184,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   a.tailbar === "Дулаан нэмэлт" ||
                   a.tailbar === "Ус-2" ||
                   a.tailbar === "Ус" ||
+                  a.tailbar?.includes("Ус") ||
                   a.tailbar?.includes("Засвар үйлчилгээний зардал") ||
                   a.tailbar?.includes("Торгууль"),
               );
@@ -221,10 +222,11 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 <td colspan="4" style="border: 1px solid #000; text-align: left;">${
                   mur.tailbar
                 }</td>
-                <td style="border: 1px solid #000; text-align: center;">${formatNumber(
-                  mur.negj || medeelel?.talbainKhemjee,
-                  2,
-                )}</td>
+                <td style="border: 1px solid #000; text-align: center;">${
+                  mur.tailbar?.includes("Ус")
+                    ? ""
+                    : formatNumber(mur.negj || medeelel?.talbainKhemjee, 2)
+                }</td>
                 <td style="border: 1px solid #000; text-align: right;">${formatNumber(
                   mur.tariff,
                   2,
@@ -296,10 +298,11 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 <td colspan="4" style="border: 1px solid #000; text-align: left;">${
                   mur.tailbar
                 }</td>
-                <td style="border: 1px solid #000; text-align: center;">${formatNumber(
-                  mur.negj || medeelel?.talbainKhemjee,
-                  2,
-                )}</td>
+                <td style="border: 1px solid #000; text-align: center;">${
+                  mur.tailbar?.includes("Ус")
+                    ? ""
+                    : formatNumber(mur.negj || medeelel?.talbainKhemjee, 2)
+                }</td>
                 <td style="border: 1px solid #000; text-align: right;">${formatNumber(
                   mur.tariff ||
                     mur.tulukhDun / (mur.negj || medeelel?.talbainKhemjee || 1),
@@ -426,7 +429,19 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               Нийт дүн
             </td>
             <td style="border: 1px solid #000; text-align: right; padding: 8px;">
-              &lt;niitDun&gt;
+              ${formatNumber(
+                (parseFloat(
+                  String(
+                    medeelel?.ekhniiUldegdel ?? medeelel?.umnukhSariinUrTulbur ?? 0,
+                  ).replace(/,/g, ""),
+                ) || 0) +
+                  (parseFloat(
+                    String(medeelel?.niitDun || 0).replace(/,/g, ""),
+                  ) || 0) -
+                  (parseFloat(
+                    String(medeelel?.tulsunAldangi || 0).replace(/,/g, ""),
+                  ) || 0),
+              )}
             </td>
           </tr>
           <tr style="font-weight: 600; background-color: #f9f9f9;">
@@ -442,7 +457,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               Төлсөн алданги
             </td>
             <td style="border: 1px solid #000; text-align: right; padding: 8px;">
-              &lt;niitTulsunAldangi&gt;
+              &lt;tulsunAldangi&gt;
             </td>
           </tr>
           <tr style="font-weight: 600; background-color: #f9f9f9;">
@@ -450,7 +465,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
               Нийт үлдэгдэл
             </td>
             <td style="border: 1px solid #000; text-align: right; padding: 8px;">
-              &lt;garaasBodsonNiitDun&gt;
+              &lt;niitUldegdel&gt;
             </td>
           </tr>
         </tfoot>

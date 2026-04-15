@@ -480,6 +480,9 @@ function tulburTootsoo({ token }) {
                     : medeelel.tulsunDun || 0,
                 ) || 0;
               medeelel.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+              medeelel.tulsunAldangi = formatNumber(
+                medeelel?.tulsunAldangi || 0,
+              );
               medeelel.niitTulsunAldangi = formatNumber(
                 medeelel?.niitTulsunAldangi || 0,
               );
@@ -2006,6 +2009,9 @@ function tulburTootsoo({ token }) {
                     : nekhemjlekh.tulsunDun || 0,
                 ) || 0;
               nekhemjlekh.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+              nekhemjlekh.tulsunAldangi = formatNumber(
+                nekhemjlekh?.tulsunAldangi || 0,
+              );
               nekhemjlekh.niitTulsunAldangi = formatNumber(
                 nekhemjlekh?.niitTulsunAldangi || 0,
               );
@@ -2506,6 +2512,9 @@ function tulburTootsoo({ token }) {
                       : nekhemjlekh.tulsunDun || 0,
                   ) || 0;
                 nekhemjlekh.umnukhSariinTulsunDun = formatNumber(tulsunDun);
+                nekhemjlekh.tulsunAldangi = formatNumber(
+                  nekhemjlekh?.tulsunAldangi || 0,
+                );
                 nekhemjlekh.niitTulsunAldangi = formatNumber(
                   nekhemjlekh?.niitTulsunAldangi || 0,
                 );
