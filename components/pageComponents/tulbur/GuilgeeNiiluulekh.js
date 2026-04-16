@@ -618,7 +618,8 @@ function GuilgeeNiiluulekh(
       }
     }
     const currentSumOfOthers = zuruuZun(index, talbar);
-    const remainingBankFunds = Math.round((guilgeeniiDun - currentSumOfOthers) * 100) / 100;
+    const remainingBankFunds =
+      Math.round((guilgeeniiDun - currentSumOfOthers) * 100) / 100;
 
     if (remainingBankFunds <= 0) return;
 
@@ -628,15 +629,40 @@ function GuilgeeNiiluulekh(
     } else if (talbar === "tureesiinTulbur") {
       debtToPay = gereenuud[index].uldegdel || 0;
     } else if (talbar === "baritsaaTulbur") {
-      debtToPay = (gereenuud[index]?.baritsaaAvakhDun || 0) - (gereenuud[index]?.baritsaaniiUldegdel || 0);
+      debtToPay =
+        (gereenuud[index]?.baritsaaAvakhDun || 0) -
+        (gereenuud[index]?.baritsaaniiUldegdel || 0);
     }
 
-    const absDebtToPay = Math.round((Math.abs(debtToPay || 0) + Number.EPSILON) * 100) / 100;
+    const absDebtToPay =
+      Math.round((Math.abs(debtToPay || 0) + Number.EPSILON) * 100) / 100;
 
-    const amountToAllocate =
-      Math.abs(remainingBankFunds - absDebtToPay) <= 0.015
-        ? remainingBankFunds
-        : Math.max(0, Math.min(remainingBankFunds, absDebtToPay));
+    const aldangiBalance =
+      Math.round((gereenuud[index]?.aldangiinUldegdel || 0) * 100) / 100;
+    const baritsaaBalance =
+      Math.round(
+        ((gereenuud[index]?.baritsaaAvakhDun || 0) -
+          (gereenuud[index]?.baritsaaniiUldegdel || 0) +
+          Number.EPSILON) *
+        100
+      ) / 100;
+
+    let amountToAllocate = 0;
+
+    if (
+      talbar === "tureesiinTulbur" &&
+      aldangiBalance <= 0 &&
+      baritsaaBalance <= 0 &&
+      absDebtToPay > 0
+    ) {
+      // Special case: Only rent debt exists, fill full remaining amount
+      amountToAllocate = remainingBankFunds;
+    } else {
+      amountToAllocate =
+        Math.abs(remainingBankFunds - absDebtToPay) <= 0.015
+          ? remainingBankFunds
+          : Math.max(0, Math.min(remainingBankFunds, absDebtToPay));
+    }
 
     if (amountToAllocate > 0) {
       target.value = formatter(amountToAllocate);
