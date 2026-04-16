@@ -170,7 +170,7 @@ function ProfileTovch({
       // Search in title, message, and notification type
       return (
         displayTitle.includes(searchTerm) ||
-        displaytoastincludes(searchTerm) ||
+        displayMessage.includes(searchTerm) ||
         (turul && turul.toLowerCase().includes(searchTerm))
       );
     });

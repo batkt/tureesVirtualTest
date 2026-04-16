@@ -299,7 +299,7 @@ const KhurungiinBurtgel = ({
         (a, b) => a + Number(b.talbainNiitUne || 0),
         0
       );
-      value.talbainKhemjee = talbainuud.reduce((a, b) => b.talbainKhemjee, 0);
+      value.talbainKhemjee = talbainuud.reduce((a, b) => a + (b.talbainKhemjee || 0), 0);
     }
 
     value.talbainKhemjeeMetrKube = (talbainuud || []).reduce(
@@ -351,8 +351,8 @@ const KhurungiinBurtgel = ({
       v.tooluuriinDugaar = v.tooluuriinDugaar || "";
 
       if (gereeniiZagvar?.turGereeEsekh === true) {
-        v.talbainKhemjee = 0;
-        v.talbainNiitUne = 0;
+        // v.talbainKhemjee = 0;
+        // v.talbainNiitUne = 0;
       }
       value.talbainuud.push(v);
       talbainBurtgelBugulyu(value.talbainuud);
@@ -442,10 +442,6 @@ const KhurungiinBurtgel = ({
     _.debounce((i, v) => {
       _.set(value.talbainuud, `${i}.talbainNiitUne`, v || 0);
 
-      if (gereeniiZagvar?.turGereeEsekh === true) {
-        value.talbainNiitUne = v || 0;
-        value.sariinTurees = v || 0;
-      }
 
       talbainBurtgelBugulyu(value.talbainuud);
       onChange({ ...value });
@@ -593,13 +589,13 @@ const KhurungiinBurtgel = ({
                     <div className="flex items-center justify-center text-center">
                       <InputNumber
                         size="small"
-                        disabled
                         formatter={(v) =>
                           `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
                         max={value?._id ? undefined : talbai?.sulKhemjee}
                         parser={(v) => v.replace(/\$\s?|(,*)/g, "")}
-                        value={value?.talbainKhemjee || 0}
+                        value={talbai?.talbainKhemjee || 0}
+                        disabled
                         onChange={(v) => onChangeM2(index, v)}
                       />
                     </div>
@@ -611,7 +607,6 @@ const KhurungiinBurtgel = ({
                         <InputNumber
                           size="small"
                           placeholder="м3"
-                          disabled
                           value={talbai?.talbainKhemjeeMetrKube || 0}
                           onChange={(v) => onChangeM3(index, v)}
                         />

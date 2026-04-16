@@ -247,88 +247,94 @@ const Tulbur = ({
       onValuesChange={(values) => onChange({ ...value, ...values })}
       onFinish={onFinish}
     >
-      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <div
-          data-aos="fade-right"
-          data-aos-duration="1000"
-          data-aos-delay="400"
-          className="w-full md:w-auto"
-        >
-          <Form.Item
-            labelAlign="left"
-            name="ognoonuud"
-            label={t("Хөнгөлөх сар")}
-            className="w-full"
+      {gereeniiZagvar?.turGereeEsekh !== true && (
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="400"
+            className="w-full md:w-auto"
           >
-            <DatePicker.RangePicker
-              className="w-full rounded-md md:w-auto"
-              allowClear={false}
-              picker="month"
-              placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
-              onChange={(v) => {
-                setOgnoonuud(v);
-              }}
-            />
-          </Form.Item>
-        </div>
-
-        <div
-          data-aos="fade-right"
-          data-aos-duration="1000"
-          data-aos-delay="400"
-          className="w-full md:w-auto"
-        >
-          <Form.Item
-            name="khungulukhKhuvi"
-            labelAlign="left"
-            className="w-full"
-          >
-            <Input
-              className="w-full rounded-md md:w-auto"
-              onKeyDown={focuser}
-              type="number"
-              placeholder={t("Хөнгөлөх хувь")}
-            />
-          </Form.Item>
-        </div>
-
-        <div
-          data-aos="fade-right"
-          data-aos-duration="1000"
-          data-aos-delay="400"
-          className="flex w-full md:block md:w-auto"
-        >
-          <Form.Item>
-            <Button
-              className="w-full md:w-auto"
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => khungulultOruulakh()}
-            ></Button>
-          </Form.Item>
-        </div>
-      </div>
-      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
-        <Form.Item noStyle>
-          <KhungulultiinKhuvaariUusgekh
-            t={t}
-            ugugdul={khungulultKhuvaari}
-            hungulultUstgakh={hungulultUstgakh}
-          />
-        </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-duration="1000">
-        <Form.Item label={t("Нийт хөнгөлөлт")}>
-          <div className="text-right text-lg font-medium dark:text-gray-100">
-            {formatNumber(
-              value.khungulultuud?.reduce(
-                (a, b) => a + b.khungulultiinDun || 0,
-                0
-              )
-            )}
+            <Form.Item
+              labelAlign="left"
+              name="ognoonuud"
+              label={t("Хөнгөлөх сар")}
+              className="w-full"
+            >
+              <DatePicker.RangePicker
+                className="w-full rounded-md md:w-auto"
+                allowClear={false}
+                picker="month"
+                placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
+                onChange={(v) => {
+                  setOgnoonuud(v);
+                }}
+              />
+            </Form.Item>
           </div>
-        </Form.Item>
-      </div>
+
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="400"
+            className="w-full md:w-auto"
+          >
+            <Form.Item
+              name="khungulukhKhuvi"
+              labelAlign="left"
+              className="w-full"
+            >
+              <Input
+                className="w-full rounded-md md:w-auto"
+                onKeyDown={focuser}
+                type="number"
+                placeholder={t("Хөнгөлөх хувь")}
+              />
+            </Form.Item>
+          </div>
+
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="400"
+            className="flex w-full md:block md:w-auto"
+          >
+            <Form.Item>
+              <Button
+                className="w-full md:w-auto"
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={() => khungulultOruulakh()}
+              ></Button>
+            </Form.Item>
+          </div>
+        </div>
+      )}
+      {gereeniiZagvar?.turGereeEsekh !== true && (
+        <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
+          <Form.Item noStyle>
+            <KhungulultiinKhuvaariUusgekh
+              t={t}
+              ugugdul={khungulultKhuvaari}
+              hungulultUstgakh={hungulultUstgakh}
+            />
+          </Form.Item>
+        </div>
+      )}
+      {gereeniiZagvar?.turGereeEsekh !== true && (
+        <div data-aos="fade-right" data-aos-duration="1000">
+          <Form.Item label={t("Нийт хөнгөлөлт")}>
+            <div className="text-right text-lg font-medium dark:text-gray-100">
+              {formatNumber(
+                value.khungulultuud?.reduce(
+                  (a, b) => a + b.khungulultiinDun || 0,
+                  0
+                )
+              )}
+            </div>
+          </Form.Item>
+        </div>
+      )}
       <div>
         <Form.Item label={t("Түрээсийн төлбөр")}>
           <div className="text-right text-lg font-medium dark:text-gray-100">
