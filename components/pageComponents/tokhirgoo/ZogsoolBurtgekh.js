@@ -561,21 +561,7 @@ function ZogsoolBurtgekh(
               <div className="font-medium dark:text-white"></div>
               <div className="text-xs text-gray-400"></div>
             </div>
-            <div className="text-xs text-gray-400"> </div>
-            <div className="col-span-2 border-l-2 border-green-500 pl-4">
-              <div className="font-medium dark:text-white">
-                Баазаас машины түүхийн мэдээлэл цэвэрлэгдэх өдөр сонгох
-              </div>
-            </div>
 
-            <div className="col-span-2">
-              <Form.Item className="m-0" name="mashinUstgakhKhugatsaa">
-                <InputNumber
-                  style={{ width: "100%" }}
-                  placeholder="Хугацаа/Хоног"
-                />
-              </Form.Item>
-            </div>
             <div className="text-xs text-gray-400"> </div>
           </div>
         </div>
