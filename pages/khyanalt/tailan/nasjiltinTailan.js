@@ -1032,78 +1032,79 @@ function nasjiltinTailan({ token }) {
       tsonkhniiId={"683e6d781d7368c43b18eb31"}
     >
       <div className="col-span-12 flex flex-col gap-4 px-5 md:px-0 lg:flex-row lg:items-center">
-        <div className="w-full lg:w-auto">
+        <div className="w-full lg:w-40">
           <DatePicker
             className="w-full"
-            style={{ width: "100%" }}
             locale={local}
             value={ognoo}
             picker="month"
             onChange={handleDateChange}
-            placeholder={"Дуусах огноо"}
+            placeholder={"Огноо"}
             format="YYYY-MM"
           />
         </div>
-        <Select
-          className="w-full rounded-md border-gray-400 lg:w-[250px]"
-          style={{ width: "100%", textOverflow: "ellipsis" }}
-          showSearch
-          mode="multiple"
-          filterOption={(input, option) => {
-            const search = input.toLowerCase();
-            return (
-              option?.ner?.toLowerCase().includes(search) ||
-              option?.register?.toLowerCase().includes(search) ||
-              option?.gereeniiDugaar?.toLowerCase().includes(search) ||
-              option?.talbainDugaar?.toLowerCase().includes(search)
-            );
-          }}
-          allowClear={true}
-          onSearch={(search) =>
-            khariltsagchiinGaralt.setKhuudaslalt((a) => ({ ...a, search }))
-          }
-          onChange={(v) => {
-            setSongogdsonIds(v);
-          }}
-          placeholder={t("Харилцагч сонгох")}
-        >
-          {[
-            ...new Map(
-              khariltsagchiinGaralt?.jagsaalt?.map((data) => [
-                data?.register || data?.customerTin,
-                data,
-              ])
-            ).values(),
-          ].map((data) => (
-            <Select.Option
-              key={data?.register || data?.customerTin}
-              value={data?.register || data?.customerTin}
-              label={data?.ner}
-              ner={data?.ner || ""}
-              register={data?.register || data?.customerTin || ""}
-              gereeniiDugaar={data?.gereeniiDugaar || ""}
-              talbainDugaar={data?.talbainDugaar || ""}
-            >
-              <div className="flex flex-col">
-                <span className="font-semibold">{data?.ner}</span>
-                <span className="text-xs text-gray-400">
-                  {[data?.gereeniiDugaar, data?.talbainDugaar]
-                    .filter(Boolean)
-                    .join(" | ")}
-                </span>
-              </div>
-            </Select.Option>
-          ))}
-        </Select>
-        <Select
-          className="w-full rounded-md border-gray-400 lg:w-[200px]"
-          style={{ width: "100%" }}
-          allowClear={true}
-          showSearch
-          value={songogdsonTurul}
-          onChange={setSongogdsonTurul}
-          placeholder={t("Төрөл сонгох")}
-        >
+        <div className="w-full lg:w-72">
+          <Select
+            className="w-full rounded-md border-gray-400"
+            style={{ textOverflow: "ellipsis" }}
+            showSearch
+            mode="multiple"
+            filterOption={(input, option) => {
+              const search = input.toLowerCase();
+              return (
+                option?.ner?.toLowerCase().includes(search) ||
+                option?.register?.toLowerCase().includes(search) ||
+                option?.gereeniiDugaar?.toLowerCase().includes(search) ||
+                option?.talbainDugaar?.toLowerCase().includes(search)
+              );
+            }}
+            allowClear={true}
+            onSearch={(search) =>
+              khariltsagchiinGaralt.setKhuudaslalt((a) => ({ ...a, search }))
+            }
+            onChange={(v) => {
+              setSongogdsonIds(v);
+            }}
+            placeholder={t("Харилцагч сонгох")}
+          >
+            {[
+              ...new Map(
+                khariltsagchiinGaralt?.jagsaalt?.map((data) => [
+                  data?.register || data?.customerTin,
+                  data,
+                ])
+              ).values(),
+            ].map((data) => (
+              <Select.Option
+                key={data?.register || data?.customerTin}
+                value={data?.register || data?.customerTin}
+                label={data?.ner}
+                ner={data?.ner || ""}
+                register={data?.register || data?.customerTin || ""}
+                gereeniiDugaar={data?.gereeniiDugaar || ""}
+                talbainDugaar={data?.talbainDugaar || ""}
+              >
+                <div className="flex flex-col">
+                  <span className="font-semibold">{data?.ner}</span>
+                  <span className="text-xs text-gray-400">
+                    {[data?.gereeniiDugaar, data?.talbainDugaar]
+                      .filter(Boolean)
+                      .join(" | ")}
+                  </span>
+                </div>
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
+        <div className="w-full lg:w-56">
+          <Select
+            className="w-full rounded-md border-gray-400"
+            allowClear={true}
+            showSearch
+            value={songogdsonTurul}
+            onChange={setSongogdsonTurul}
+            placeholder={t("Төрөл сонгох")}
+          >
           {segments?.jagsaalt
             ?.filter((s) => s.ner && s.utguud?.some((u) => u))
             ?.map((segment) => (
@@ -1124,6 +1125,7 @@ function nasjiltinTailan({ token }) {
               </Select.OptGroup>
             ))}
         </Select>
+        </div>
         <div className="ml-auto flex gap-2">
           <div className="flex h-8">
             <button
