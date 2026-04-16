@@ -655,7 +655,7 @@ function GuilgeeNiiluulekh(
       baritsaaBalance <= 0 &&
       absDebtToPay > 0
     ) {
-      // Special case: Only rent debt exists, fill full remaining amount
+     
       amountToAllocate = remainingBankFunds;
     } else {
       amountToAllocate =
