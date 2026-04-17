@@ -5256,6 +5256,9 @@ function camera({ token }) {
                             className="w-full"
                             format="YYYY-MM-DD"
                             placeholder={t("Огноо сонгоно уу")}
+                            disabledDate={(current) =>
+                              current && current.isAfter(moment(), "day")
+                            }
                           />
                         </Form.Item>
                         <Form.Item
@@ -5263,7 +5266,26 @@ function camera({ token }) {
                           name="burtgelTsag"
                           className="w-full md:w-1/2"
                         >
-                          <Input type="time" step={300} className="w-full" />
+                          <Input
+                            type="time"
+                            step={300}
+                            className="w-full"
+                            onChange={(e) => {
+                              const date = form.getFieldValue("burtgelOgnoo");
+                              const now = moment();
+                              const isToday =
+                                !date || moment(date).isSame(now, "day");
+                              if (
+                                isToday &&
+                                e.target.value > now.format("HH:mm")
+                              ) {
+                                form.setFieldValue(
+                                  "burtgelTsag",
+                                  now.format("HH:mm"),
+                                );
+                              }
+                            }}
+                          />
                         </Form.Item>
                       </div>
                     )}
