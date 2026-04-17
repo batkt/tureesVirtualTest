@@ -46,7 +46,7 @@ export function useTalbai(token, baiguullagiinId, query, order) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setTalbaiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 100,
+    khuudasniiKhemjee: query?.khuudasniiKhemjee || 100,
     search: "",
     jagsaalt: [],
   });

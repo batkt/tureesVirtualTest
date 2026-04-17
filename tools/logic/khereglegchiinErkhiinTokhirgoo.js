@@ -251,6 +251,12 @@ export const tsonknuud = [
     tokhirgoo: [],
   },
   {
+    key: "/khyanalt/tailan/dashboard",
+    ner: "Хяналтын самбар",
+    tailbar: "Барилгын үйл ажиллагааны нэгдсэн хяналтын самбар.",
+    tokhirgoo: [],
+  },
+  {
     key: "/khyanalt/uilchilgee/baraaMaterial",
     ner: "Бараа материал",
     tokhirgoo: [],
@@ -983,6 +989,12 @@ export const khuudasnuud = [
       </svg>
     ),
     sub: [
+      {
+        ner: "Хяналтын самбар",
+        khuudasniiNer: "dashboard",
+        href: "/khyanalt/tailan/dashboard",
+        icon: <TbChartBar style={{ width: "24", height: "24" }} />,
+      },
       {
         ner: "График",
         khuudasniiNer: "tailan",
