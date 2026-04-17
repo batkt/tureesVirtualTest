@@ -49,6 +49,7 @@ import useKhariltsagch from "hooks/useKhariltsagch";
 import { useTranslation } from "react-i18next";
 import khatuuZagvar from "tools/zagvar/tur";
 import khatuuZagvarKaidu from "tools/zagvar/turKaidu";
+import khatuuZagvarLans from "tools/zagvar/turUguumursLans";
 import khatuuZagvarUranGan from "tools/zagvar/turUranGan";
 import khatuuZagvarFoodCity from "tools/zagvar/turFoodCityTemp";
 import khatuuZagvarGotoMPM from "tools/zagvar/turGotoMPM";
@@ -598,6 +599,55 @@ function tulburTootsoo({ token }) {
               }
 
               zagvar.nekhemjlekh = khatuuZagvarVirtus(
+                medeelel,
+                ajiltan,
+                baiguullaga,
+              );
+            } else if (ajiltan?.baiguullagiinId === "679aea9032299b7ba8462a77");
+              //lans
+              else if (
+              ajiltan?.baiguullagiinId === "631595e9957b7d5ec013c076" &&
+              barilgiinId === "631725de1cece418c5471864"
+            ) {
+              const barilga = baiguullaga?.barilguud?.find(
+                (a) => a._id === barilgiinId,
+              );
+              if (barilga?.tamga) {
+                medeelel.tamga = renderToString(
+                  <span>
+                    <img
+                      src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
+                      style={{
+                        width: 130,
+                        height: 120,
+                        transform: "translate(-20%, 0%)",
+                        opacity: 0.85,
+                      }}
+                    />
+                  </span>,
+                );
+              } else {
+                medeelel.tamga = "";
+              }
+
+              if (barilga?.gariinUseg) {
+                medeelel.gariinUseg = renderToString(
+                  <span style={{ position: "relative", zIndex: 9999 }}>
+                    <img
+                      src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
+                      style={{
+                        width: 100,
+                        height: 50,
+                        transform: "translate(10%, -40%)",
+                      }}
+                    />
+                  </span>,
+                );
+              } else {
+                medeelel.gariinUseg = "";
+              }
+
+              zagvar.nekhemjlekh = khatuuZagvarLans(
                 medeelel,
                 ajiltan,
                 baiguullaga,
@@ -2620,6 +2670,49 @@ function tulburTootsoo({ token }) {
                 }
 
                 return khatuuZagvarVirtus(nekhemjlekh, ajiltan, baiguullaga);
+              })()
+            : ajiltan?.baiguullagiinId === "631595e9957b7d5ec013c076" &&
+              barilgiinId === "631725de1cece418c5471864"
+            ? (() => {
+                const barilga = baiguullaga?.barilguud?.find(
+                  (a) => a._id === barilgiinId,
+                );
+                if (barilga?.tamga) {
+                  nekhemjlekh.tamga = renderToString(
+                    <span>
+                      <img
+                        src={`${url}/zuragAvya/tamga/${baiguullaga?._id}/${barilga.tamga}`}
+                        style={{
+                          width: 130,
+                          height: 120,
+                          transform: "translate(-20%, 0%)",
+                          opacity: 0.85,
+                        }}
+                      />
+                    </span>,
+                  );
+                } else {
+                  nekhemjlekh.tamga = "";
+                }
+
+                if (barilga?.gariinUseg) {
+                  nekhemjlekh.gariinUseg = renderToString(
+                    <span style={{ position: "relative", zIndex: 9999 }}>
+                      <img
+                        src={`${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${barilga.gariinUseg}`}
+                        style={{
+                          width: 100,
+                          height: 50,
+                          transform: "translate(10%, -40%)",
+                        }}
+                      />
+                    </span>,
+                  );
+                } else {
+                  nekhemjlekh.gariinUseg = "";
+                }
+
+                return khatuuZagvarLans(nekhemjlekh, ajiltan, baiguullaga);
               })()
             : ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0" ||
               barilgiinId === "6544bf602143a024b43f16ab"
