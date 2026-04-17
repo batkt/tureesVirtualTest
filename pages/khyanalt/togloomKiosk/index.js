@@ -51,6 +51,7 @@ const TogloomKiosk = () => {
   const [baiguullagaNer, setBaiguullagaNer] = useState();
   const [register, setRegister] = useState("");
   const [barCodes, setBarCodes] = useState([]);
+  const socketRef = React.useRef(null);
 
   const eBarimtRef = React.useRef(null);
 
@@ -179,7 +180,7 @@ const TogloomKiosk = () => {
               vatps_bill_type: "1",
             },
           },
-          { timeout: 4000000 }
+          { timeout: 4000000 },
         )
         .then(({ data }) => {
           if (data.status === true && data?.response?.response_code === "000") {
@@ -220,6 +221,37 @@ const TogloomKiosk = () => {
       socket().off(`qpay${khuleegdejBuiQpay}`);
     };
   }
+
+  useEffect(() => {
+    if (!socketRef.current) {
+      socketRef.current = socket();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!baiguullaga?._id || !socketRef.current) return;
+    const s = socketRef.current;
+    const cleanup = [];
+    const handleKiosk = (data) => {
+      if (
+        !data ||
+        !data?.barCodes ||
+        !data?.baiguullagiinId ||
+        data?.baiguullagiinId !== baiguullaga?._id
+      )
+        return;
+      console.log(
+        "Received bar codes from kiosk:",
+        JSON.stringify(data.barCodes),
+      );
+      khaalgaNeey(data.barCodes);
+    };
+    const eventName = "tsonjinBarCodeIlgeekh";
+    s.on(eventName, handleKiosk);
+
+    cleanup.push(() => s.off(eventName, handleKiosk));
+    return () => cleanup.forEach((fn) => fn());
+  }, [baiguullaga?._id]);
 
   useEffect(() => {
     if (khuleegdejBuiQpay) {
@@ -487,7 +519,7 @@ const TogloomKiosk = () => {
       <div className="flex h-1/2 w-full items-stretch justify-items-stretch">
         <div className="self-end justify-self-center pl-32 pr-32 text-center text-7xl text-[#FFFFFF]">
           {t(
-            "Цонжин цогцолбороор зочилж Монгол орны түүх, уламжлалтай танилцаарай."
+            "Цонжин цогцолбороор зочилж Монгол орны түүх, уламжлалтай танилцаарай.",
           )}
         </div>
       </div>
@@ -951,7 +983,7 @@ const TogloomKiosk = () => {
                     tasalbariinGuilgeeId,
                     register,
                     false,
-                    tasalbarDun
+                    tasalbarDun,
                   );
                 }}
               >
