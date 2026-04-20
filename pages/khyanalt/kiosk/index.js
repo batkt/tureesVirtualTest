@@ -73,7 +73,7 @@ const Kiosk = () => {
 
   const { jagsaalt: parkingJagsaalt, mutate: parkingMutate } = useJagsaalt(
     "/parking",
-    streamQuery
+    streamQuery,
   );
 
   const query = useMemo(() => {
@@ -157,7 +157,7 @@ const Kiosk = () => {
           songogdsonData?.plate_number,
           barilgiinId,
           ajiltan?.ner,
-          ajiltan?._id
+          ajiltan?._id,
         );
       });
     }
@@ -176,7 +176,7 @@ const Kiosk = () => {
           songogdsonData?.plate_number,
           barilgiinId,
           ajiltan?.ner,
-          ajiltan?._id
+          ajiltan?._id,
         );
       });
     }
@@ -243,7 +243,7 @@ const Kiosk = () => {
 
       const hoyrTsagiinDaraa = moment(songogdsonData.enter_date).add(
         2,
-        "hours"
+        "hours",
       );
       const hoyrTsagiinDataaGarsanEsekh = odooTsag.isAfter(hoyrTsagiinDaraa);
       if (hoyrTsagiinDataaGarsanEsekh) {
@@ -268,7 +268,7 @@ const Kiosk = () => {
 
       const hoyrTsagiinDaraa = moment(songogdsonData.enter_date).add(
         24,
-        "hours"
+        "hours",
       );
       const hoyrTsagiinDataaGarsanEsekh = odooTsag.isAfter(hoyrTsagiinDaraa);
       if (hoyrTsagiinDataaGarsanEsekh) {
@@ -293,7 +293,7 @@ const Kiosk = () => {
           getTsagiinTariff(
             parkingJagsaalt?.[0]?.tulburuud,
             servereesAvsonOdooTsag,
-            60
+            60,
           ) ||
           parkingJagsaalt?.[0]?.undsenUne ||
           2000;
@@ -315,7 +315,7 @@ const Kiosk = () => {
           getTsagiinTariff(
             parkingJagsaalt?.[0]?.tulburuud,
             servereesAvsonOdooTsag,
-            60
+            60,
           ) ||
           parkingJagsaalt?.[0]?.undsenUne ||
           2000;
@@ -451,7 +451,7 @@ const Kiosk = () => {
             <WarningOutlined style={{ fontSize: "36px" }} size={100} />
           </div>
           <div className="text-4xl">Таны машин бүртгэгдээгүй байна.</div>
-        </div>
+        </div>,
       );
       setDrawerOngoikh(false);
       setSongogdsonData(null);
@@ -506,7 +506,7 @@ const Kiosk = () => {
               baiguullagiinId: baiguullaga?._id,
               barilgiinId: barilgiinId,
             },
-          }
+          },
         );
         if (response.data.success == true) {
           if (response.data?.data?.pay_amount > 0) {
@@ -525,7 +525,7 @@ const Kiosk = () => {
                 <div className="text-4xl">
                   Тухайн машинд төлбөр бодогдоогүй байна.
                 </div>
-              </div>
+              </div>,
             );
             setUnshijBaina(false);
             setDrawerOngoikh(false);
@@ -566,7 +566,7 @@ const Kiosk = () => {
               vatps_bill_type: "1",
             },
           },
-          { timeout: 4000000 }
+          { timeout: 4000000 },
         )
         .then(({ data }) => {
           if (data.status === true && data?.response?.response_code === "000") {
@@ -577,7 +577,7 @@ const Kiosk = () => {
               songogdsonData?.plate_number,
               barilgiinId,
               ajiltan?.ner,
-              ajiltan?._id
+              ajiltan?._id,
             );
             setTerminal("success");
             setTimeout(() => {
@@ -595,7 +595,7 @@ const Kiosk = () => {
                 <div className="text-4xl">
                   Нэг удаагийн гүйлгээний дүн хүрэхгүй.
                 </div>
-              </div>
+              </div>,
             );
             setTerminal();
           } else if (
@@ -617,7 +617,7 @@ const Kiosk = () => {
               <div className="text-4xl">
                 Пос алдаа гарлаа. Та дахин оролдоно уу.
               </div>
-            </div>
+            </div>,
           );
           setTerminal();
         });
@@ -627,7 +627,7 @@ const Kiosk = () => {
       qpayAvakh(
         songogdsonData?.session_id,
         barilgiinId,
-        songogdsonData?.pay_amount
+        songogdsonData?.pay_amount,
       );
     }
     if (data === "pass") {
@@ -635,7 +635,7 @@ const Kiosk = () => {
       passAvakh(
         songogdsonData?.session_id,
         barilgiinId,
-        songogdsonData?.pay_amount
+        songogdsonData?.pay_amount,
       );
     }
   };
@@ -647,7 +647,7 @@ const Kiosk = () => {
     plate_number,
     barilgiinId,
     ajiltniiNer,
-    ajiltniiId
+    ajiltniiId,
   ) => {
     const isUgaalga =
       ajiltniiId === "694e6d2d5b0e44bb0cca2945" ||
@@ -685,7 +685,7 @@ const Kiosk = () => {
     customer_no,
     individual,
     paid_amount,
-    customerTin
+    customerTin,
   ) => {
     uilchilgee(token)
       .post("/v1/kioskEbarimtAvya", {
@@ -741,7 +741,7 @@ const Kiosk = () => {
           register,
           register !== "" ? false : true,
           songogdsonData?.pay_amount,
-          customerTin
+          customerTin,
         );
       }
     } else {
@@ -750,13 +750,13 @@ const Kiosk = () => {
         register,
         register !== "" ? false : true,
         songogdsonData?.pay_amount,
-        null
+        null,
       );
     }
   };
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden">
+    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black">
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] px-[100px] text-center text-2xl text-[#00D987]">
         Төлбөр төлснөөс хойш{" "}
         {parkingJagsaalt?.find((e) => e?.garakhTsag)?.garakhTsag || 30} минут
@@ -912,7 +912,7 @@ const Kiosk = () => {
                     <div>Орсон </div>
                     <div>
                       {moment(songogdsonData.enter_date).format(
-                        "DD/MM/YYYY HH:mm"
+                        "DD/MM/YYYY HH:mm",
                       )}
                     </div>
                   </div>
@@ -926,7 +926,7 @@ const Kiosk = () => {
                     <div>Зогссон хугацаа </div>
                     <div>
                       {utc(
-                        utc().diff(moment(songogdsonData?.enter_date))
+                        utc().diff(moment(songogdsonData?.enter_date)),
                       ).format("HH:mm")}
                     </div>
                   </div>
@@ -937,7 +937,7 @@ const Kiosk = () => {
                       {formatNumber(
                         songogdsonData?.anhniiPayAmount ??
                           songogdsonData?.pay_amount,
-                        0
+                        0,
                       )}
                       ₮
                     </div>
@@ -1080,7 +1080,7 @@ const Kiosk = () => {
                         {formatNumber(
                           songogdsonData?.anhniiPayAmount ??
                             songogdsonData?.pay_amount,
-                          0
+                          0,
                         )}
                         ₮
                       </div>
@@ -1198,9 +1198,11 @@ const Kiosk = () => {
                   <div>
                     {formatNumber(
                       Number(
-                        eBarimt?.amount ? eBarimt?.amount : eBarimt?.totalAmount
+                        eBarimt?.amount
+                          ? eBarimt?.amount
+                          : eBarimt?.totalAmount,
                       ),
-                      0
+                      0,
                     )}
                     ₮
                   </div>
@@ -1224,9 +1226,11 @@ const Kiosk = () => {
                   <div>
                     {formatNumber(
                       Number(
-                        eBarimt?.amount ? eBarimt?.amount : eBarimt?.totalAmount
+                        eBarimt?.amount
+                          ? eBarimt?.amount
+                          : eBarimt?.totalAmount,
                       ),
-                      0
+                      0,
                     )}
                     ₮
                   </div>
@@ -1249,7 +1253,7 @@ const Kiosk = () => {
             alt=""
           />
         </div>
-        <div className="px-12 text-center text-5xl text-[22px] font-bold text-[#1E1E1E] dark:text-white">
+        <div className="px-12 text-center text-5xl text-[22px] font-bold text-white">
           Зогсоолын төлбөрөө энд төлөн хугацаагаа хэмнээрэй
         </div>
       </div>

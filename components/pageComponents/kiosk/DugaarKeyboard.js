@@ -21,7 +21,7 @@ const DugaarKeyboard = ({
         inputRefs?.current[khoosonIndex]?.focus();
       },
     }),
-    [dugaar]
+    [dugaar],
   );
 
   const handleChange = (e, index) => {
@@ -82,7 +82,7 @@ const DugaarKeyboard = ({
   return (
     <div className="flex flex-col items-center justify-between gap-12">
       {!shineTurul ? (
-        <div className="text-5xl mt-4 font-bold md:text-[20px] text-black dark:text-white">
+        <div className="mt-4 text-5xl font-bold text-white dark:text-white md:text-[20px]">
           Улсын дугаар оруулна уу
         </div>
       ) : (
