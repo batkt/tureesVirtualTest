@@ -46,44 +46,47 @@ import { BiMoney, BiMoneyWithdraw } from "react-icons/bi";
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend, Filler);
 
 const GlassCard = ({ children, className = "", title, icon }) => (
-  <div className={`relative overflow-hidden rounded-[1.5rem] bg-white/70 dark:bg-slate-900/30 backdrop-blur-2xl border border-white/40 dark:border-slate-800/50 shadow-2xl transition-all duration-500 hover:shadow-emerald-500/5 ${className}`}>
+  <div className={`group relative overflow-hidden rounded-[1.5rem] bg-white/90 dark:bg-slate-900/60 border border-slate-200/50 dark:border-slate-800/50 shadow-sm transition-all duration-300 hover:shadow-md ${className}`}>
     {title && (
-      <div className="px-3 py-3 md:px-5 md:py-4 flex items-center justify-between border-b border-gray-100/50 dark:border-slate-800/50">
-        <div className="flex items-center gap-2 md:gap-3">
-          {icon && <div className="p-1.5 md:p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 text-sm md:text-base">{icon}</div>}
-          <span className="text-[11px] md:text-sm font-black tracking-tight text-slate-800 dark:text-slate-100">{title}</span>
+      <div className="px-4 py-3 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/50">
+        <div className="flex items-center gap-2">
+          {icon && (
+            <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-base">
+              {icon}
+            </div>
+          )}
+          <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase">{title}</span>
         </div>
       </div>
     )}
-    <div className="p-2 md:p-4">{children}</div>
+    <div className="p-3 md:p-4">{children}</div>
   </div>
 );
 
-const SummaryCard = ({ title, value, mk, suffix = "", fixed = 2, icon, index = 0 }) => {
+const SummaryCard = ({ title, value, icon, prefix = "₮", suffix = "₮", fixed = 2 }) => {
   const { t } = useTranslation();
   return (
     <div
-      data-aos="fade-left"
+      data-aos="fade-up"
       data-aos-duration="1000"
-      data-aos-delay={1 + index + "00"}
-      className="group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40 transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 dark:hover:shadow-gray-800"
+      className="group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40 transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105"
     >
-      <div className="absolute inset-0 bg-green-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
-
-      <div className="relative min-h-[100px] h-auto rounded-2xl p-3 sm:p-5">
-        <div className="flex h-full flex-col justify-between">
-          <div className="mb-2 flex items-start justify-between">
-            <div className="space-y-1">
-              <div className="bg-gradient-to-r from-green-900 to-green-700 bg-clip-text text-3xl font-bold text-transparent dark:from-green-100 dark:to-green-300">
-                {fixed === 0 ? value : formatNumber(value, fixed)} {suffix}
-              </div>
-              <div className="text-sm font-medium text-green-600 transition-colors duration-300 dark:text-green-400">
-                {title}
-              </div>
-            </div>
+      <div className="flex items-center gap-6 p-8">
+        <div className="flex-shrink-0">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-green-500 text-white shadow-lg transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
+            {React.cloneElement(icon, { size: 32, className: "text-2xl" })}
           </div>
-
-          <div className="h-0.5 w-0 rounded-full bg-green-500 transition-all duration-500 group-hover:w-full mt-4" />
+        </div>
+        <div className="flex flex-col">
+          <span className="text-sm font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            {title}
+          </span>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-black text-gray-900 dark:text-white">
+              {fixed === 0 ? value : formatNumber(value, fixed)}
+            </span>
+            <span className="text-lg font-bold text-green-600">{suffix}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -119,9 +122,9 @@ const BuildingStatsSummary = ({ baiguullaga, building, token, t }) => {
   const contractGrowth = prevContractCount > 0 ? (((contractCount - prevContractCount) / prevContractCount) * 100).toFixed(1) : null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <SummaryCard title={t("Орлого1")} value={currentActual} mk={building.niitTalbai} icon={<BiMoneyWithdraw />} index={0} />
-      <SummaryCard title={t("Гэрээ1")} value={contractCount} mk={building.niitTalbai} prefix="" fixed={0} icon={<FileTextOutlined />} index={1} />
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
+      <SummaryCard title={t("Орлого1")} value={currentActual} suffix="₮" icon={<BiMoneyWithdraw />} index={0} />
+      <SummaryCard title={t("Гэрээ1")} value={contractCount} fixed={0} icon={<FileTextOutlined />} index={1} />
     </div>
   );
 };
@@ -140,22 +143,43 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
   const chartData = {
     labels: tailanGaralt?.labels || [],
     datasets: [
-      { type: 'bar', label: t('Төлөвлөгөө'), data: tailanGaralt?.datasets?.find(d => d.label === "Төлөвлөгөө")?.data || [], backgroundColor: '#3b82f6', borderRadius: 4, barThickness: 12 },
-      { type: 'line', label: t('Гүйцэтгэл'), data: tailanGaralt?.datasets?.find(d => d.label === "Гүйцэтгэл")?.data || [], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 2 }
+      { 
+        type: 'bar', 
+        label: t('Төлөвлөгөө'), 
+        data: tailanGaralt?.datasets?.find(d => d.label === "Төлөвлөгөө")?.data || [], 
+        backgroundColor: isDark ? 'rgba(59, 130, 246, 0.5)' : 'rgba(59, 130, 246, 0.2)', 
+        borderRadius: 4, 
+        barThickness: 12 
+      },
+      { 
+        type: 'line', 
+        label: t('Гүйцэтгэл'), 
+        data: tailanGaralt?.datasets?.find(d => d.label === "Гүйцэтгэл")?.data || [], 
+        borderColor: '#10b981', 
+        backgroundColor: 'transparent', 
+        fill: false, 
+        tension: 0.4, 
+        borderWidth: 2, 
+        pointRadius: 3,
+        pointBackgroundColor: '#10b981',
+      }
     ]
   };
 
   return (
     <GlassCard title={t("Санхүүгийн гүйцэтгэл")} icon={<RiseOutlined />} className="h-[350px]">
-      <div className="h-[250px]">
+      <div className="h-[270px]">
         <Bar data={chartData} options={{ 
           responsive: true, maintainAspectRatio: false, 
           interaction: { mode: 'index', intersect: false },
           plugins: { 
-            legend: { display: false }, 
-            tooltip: { cornerRadius: 10, padding: 12, backgroundColor: isDark ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.9)', titleColor: isDark ? '#fff' : '#000', bodyColor: isDark ? '#fff' : '#000' } 
+            legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 6, usePointStyle: true, font: { size: 10 } } },
+            tooltip: { cornerRadius: 8, padding: 8, mode: 'index', intersect: false } 
           },
-          scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { borderDash: [5, 5], color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' } } }
+          scales: { 
+            x: { grid: { display: false }, ticks: { font: { size: 10 } } }, 
+            y: { beginAtZero: true, grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 } } } 
+          }
         }} />
       </div>
     </GlassCard>
@@ -163,8 +187,6 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
 };
 
 const BuildingOccupancyDoughnut = ({ building, token, t }) => {
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
   const { talbainToololt } = useTalbainToololt(token, building._id);
 
   const stats = useMemo(() => {
@@ -178,29 +200,66 @@ const BuildingOccupancyDoughnut = ({ building, token, t }) => {
 
   return (
     <GlassCard title={t("Талбайн ашиглалт")} icon={<HomeOutlined />} className="h-[350px]">
-      <div className="flex flex-col items-center justify-center h-full pb-4">
-         <div className="relative h-40 w-40 mb-4">
+      <div className="flex flex-col md:flex-row items-center justify-around h-full gap-4 px-2">
+         <div className="relative h-44 w-44 flex-shrink-0">
             <Doughnut data={{
               labels: [t("Идэвхтэй1"), t(" Идэвхгүй1")],
               datasets: [{
                 data: [stats.occupied, stats.vacant],
                 backgroundColor: ['#10b981', '#6366f1'],
-                borderWidth: 0, cutout: '80%', borderRadius: 8, spacing: 3
+                hoverBackgroundColor: ['#059669', '#4f46e5'],
+                borderWidth: 0, cutout: '75%', borderRadius: 4, spacing: 2, 
+                hoverOffset: 8
               }]
-            }} options={{ maintainAspectRatio: false, plugins: { legend: { display: false } } }} />
+            }} options={{ 
+              maintainAspectRatio: false, 
+              interaction: { mode: 'index', intersect: false },
+              plugins: { 
+                legend: { display: false }, 
+                tooltip: { 
+                  enabled: true, 
+                  mode: 'index', 
+                  intersect: false,
+                  cornerRadius: 8,
+                  padding: 8
+                } 
+              } 
+            }} />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-black text-slate-800 dark:text-white">{occupancyRate}%</span>
-              <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest">{t("Орсон")}</span>
+              <span className="text-3xl text-slate-800 dark:text-white leading-none tracking-tighter">{occupancyRate}%</span>
+              <span className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest">{t("Дүүргэлт")}</span>
             </div>
          </div>
-         <div className="grid grid-cols-2 gap-3 w-full">
-            <div className="p-2 rounded-xl bg-emerald-500/5 border border-emerald-500/10 text-center">
-               <p className="text-[9px] font-bold text-slate-400 mb-0 uppercase">{t("Идэвхтэй1")}</p>
-               <p className="text-base font-black text-emerald-600 mb-0">{stats.occupied}</p>
+
+         <div className="flex-1 w-full max-w-[200px] space-y-4">
+            <div className="space-y-1">
+               <div className="flex justify-between items-end">
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">{t("Нийт талбай")}</span>
+                  <span className="text-lg text-slate-700 dark:text-white leading-none">{stats.total}</span>
+               </div>
+               <div className="h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-slate-400" style={{ width: '100%' }} />
+               </div>
             </div>
-            <div className="p-2 rounded-xl bg-indigo-500/5 border border-indigo-500/10 text-center">
-               <p className="text-[9px] font-bold text-slate-400 mb-0 uppercase">{t("Идэвхгүй1")}</p>
-               <p className="text-base font-black text-indigo-600 mb-0">{stats.vacant}</p>
+
+            <div className="space-y-1">
+               <div className="flex justify-between items-end">
+                  <span className="text-[10px] text-emerald-500 uppercase tracking-wider">{t("Идэвхтэй1")}</span>
+                  <span className="text-lg text-emerald-600 leading-none">{stats.occupied}</span>
+               </div>
+               <div className="h-1 bg-emerald-50 dark:bg-emerald-950/30 rounded-full overflow-hidden">
+                  <div className="h-full bg-emerald-500" style={{ width: `${(stats.occupied / stats.total) * 100}%` }} />
+               </div>
+            </div>
+
+            <div className="space-y-1">
+               <div className="flex justify-between items-end">
+                  <span className="text-[10px] text-indigo-500 uppercase tracking-wider">{t("Идэвхгүй1")}</span>
+                  <span className="text-lg text-indigo-600 leading-none">{stats.vacant}</span>
+               </div>
+               <div className="h-1 bg-indigo-50 dark:bg-indigo-950/30 rounded-full overflow-hidden">
+                  <div className="h-full bg-indigo-500" style={{ width: `${(stats.vacant / stats.total) * 100}%` }} />
+               </div>
             </div>
          </div>
       </div>
@@ -227,22 +286,20 @@ const BuildingRevenueTable = ({ building, token, t }) => {
   }, [tailanGaralt]);
 
   return (
-    <GlassCard title={t("Төлбөрийн түүх")} icon={<BiMoneyWithdraw />} className="h-[400px] overflow-hidden">
-      <div className="pt-1 md:pt-2">
-        <Table 
-          dataSource={incomeData} loading={loading} size="small" scroll={{ y: 220 }} pagination={false}
+    <GlassCard title={t("Төлбөрийн түүх")} icon={<BiMoneyWithdraw />} className="h-[380px]">
+      <Table 
+        dataSource={incomeData} loading={loading} size="small" scroll={{ x: 'max-content', y: 260 }} pagination={false}
         className="premium-table"
         columns={[
-          { title: t('Сар'), dataIndex: 'month', key: 'month', width: 60, render: (v) => <span className="font-bold text-slate-600 dark:text-slate-300 text-[9px] md:text-[10px]">{v}</span> },
+          { title: t('Сар'), dataIndex: 'month', key: 'month', width: 80, align: 'center', render: (v) => <span className="text-slate-700 dark:text-slate-200 text-xs">{v}</span> },
           { 
             title: <div className="text-center w-full">{t('Орлого')}</div>, 
-            dataIndex: 'actual', key: 'actual', align: 'right', 
-            render: (v) => <span className="font-black text-emerald-600 text-[9px] md:text-[10px]">{formatNumber(v)}</span> 
+            dataIndex: 'actual', key: 'actual', align: 'right', width: 120,
+            render: (v) => <span className="text-emerald-600 text-[13px]">{formatNumber(v)}</span> 
           },
-          { title: '%', dataIndex: 'percent', key: 'percent', align: 'center', width: 40, render: (v) => <Tag color={v >= 100 ? "green" : "orange"} borderless className="rounded-lg px-1 py-0 font-bold text-[8px] md:text-[9px] m-0">{v}%</Tag> },
+          { title: '%', dataIndex: 'percent', key: 'percent', align: 'center', width: 60, render: (v) => <Tag color={v >= 100 ? "green" : "orange"} className="rounded-md font-medium text-[11px] m-0 border-none">{v}%</Tag> },
         ]}
       />
-      </div>
     </GlassCard>
   );
 };
@@ -259,23 +316,26 @@ const VacancyFloorTable = ({ building, baiguullaga, token, t }) => {
     const floorGroups = _.groupBy(vacantSpaces, 'davkhar');
     const floors = _.uniq(spaces.map(s => s.davkhar)).filter(f => f != null).sort((a,b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
     return floors.map(floor => ({
-      key: floor, location: `${floor}-р давхар`, count: floorGroups[floor]?.length || 0, potential: (floorGroups[floor] || []).reduce((sum, s) => sum + (Number(s.sariinTurees) || 0), 0)
+      key: floor, location: `${floor}-р давхар`, count: floorGroups[floor]?.length || 0, potential: (floorGroups[floor] || []).reduce((sum, s) => sum + (Number(s.talbainNiitUne) || Number(s.sariinTurees) || 0), 0)
     }));
   }, [allSpaces]);
 
   return (
-    <GlassCard title={t("Идэвхгүй талбайн мэдээлэл")} icon={<HomeOutlined />} className="h-[400px] overflow-hidden">
-      <div className="pt-1 md:pt-2">
-        <Table 
-          dataSource={tableData} loading={loadingSpaces} size="small" scroll={{ y: 220 }} pagination={false}
+    <GlassCard title={t("Идэвхгүй талбайн мэдээлэл")} icon={<HomeOutlined />} className="h-[380px]">
+      <Table 
+        dataSource={tableData} loading={loadingSpaces} size="small" scroll={{ x: 'max-content', y: 260 }} pagination={false}
         className="premium-table"
         columns={[
-          { title: t('Давхар'), dataIndex: 'location', key: 'location', render: (v) => <span className="font-medium text-[9px] md:text-[11px]">{v}</span> },
-          { title: t('Тоо2'), dataIndex: 'count', key: 'count', align: 'center', render: (v) => <Badge count={v} showZero color={v > 0 ? '#6366f1' : '#cbd5e1'} style={{ fontSize: '8px' }} /> },
-          { title: t('Боломжит түрээс'), dataIndex: 'potential', key: 'potential', align: 'right', render: (v) => <span className="font-bold text-slate-800 dark:text-white text-[9px] md:text-[11px]">{formatNumber(v)}</span> },
+          { title: t('Давхар'), dataIndex: 'location', align: 'center', key: 'location', width: 100, 
+            render: (v) => <span className="text-slate-700 dark:text-slate-200 text-xs">{v}</span> },
+          { title: t('Тоо2'), dataIndex: 'count', key: 'count', align: 'center', width: 60, render: (v) => <Badge count={v} showZero color={v > 0 ? '#6366f1' : '#cbd5e1'} style={{ fontSize: '11px' }} /> },
+          { 
+            title: <div className="text-center w-full">{t('Боломжит түрээс')}</div>, 
+            dataIndex: 'potential', key: 'potential', align: 'right', width: 120,
+            render: (v) => <span className="text-slate-800 dark:text-white text-[13px]">{formatNumber(v)}</span> 
+          },
         ]}
       />
-      </div>
     </GlassCard>
   );
 };
@@ -283,32 +343,24 @@ const VacancyFloorTable = ({ building, baiguullaga, token, t }) => {
 const BuildingSpaceTable = ({ building, baiguullaga, token, t }) => {
   const { talbainiiGaralt, isValidating } = useTalbai(token, baiguullaga?._id, { barilgiinId: building._id, idevkhiteiEsekh: { $in: [true, false] }, khuudasniiKhemjee: 1000 });
   return (
-    <GlassCard title={t("Талбайн бүртгэл")} icon={<HomeOutlined />} className="h-[400px] overflow-hidden">
-      <div className="pt-2">
-        <Table 
-          size="small" dataSource={talbainiiGaralt?.jagsaalt} loading={isValidating} 
-          pagination={{ pageSize: 20, showSizeChanger: false }} scroll={{ x: 'max-content', y: 200 }}
+    <GlassCard title={t("Талбайн бүртгэл")} icon={<HomeOutlined />} className="h-[380px]">
+      <Table 
+        size="small" dataSource={talbainiiGaralt?.jagsaalt} loading={isValidating} 
+        pagination={{ pageSize: 15, showSizeChanger: false, size: 'small' }} scroll={{ x: 'max-content', y: 220 }}
+        className="premium-table"
         columns={[
-          { title: <div className="text-center w-full text-[9px] md:text-[11px]">{t('Дугаар')}</div>, dataIndex: 'kod',  align:'left', key: 'kod', width: 90, render: (v) => <Tag className="rounded-lg font-black text-blue-600 bg-blue-50 border-blue-100 text-[9px] md:text-[10px] px-1 md:px-1.5">{v}</Tag> },
-          { title: <div className="text-center w-full text-[9px] md:text-[11px]">{t('Давхар')}</div>, dataIndex: 'davkhar', key: 'davkhar', width: 60, align: 'center', render: (v) => <span className="text-[9px] md:text-[11px]">{v}</span> },
-          { title: <div className="text-center w-full text-[9px] md:text-[11px]">{t('м2')}</div>, dataIndex: 'talbainKhemjee', align:'center', key: 'talbainKhemjee', width: 60, render: (v) => <span className="font-bold text-[9px] md:text-[11px]">{formatNumber(v)}</span> },
+          { title: 'm2', dataIndex: 'talbainKhemjee', align:'center', key: 'talbainKhemjee', width: 60, render: (v) => <span className="font-medium text-xs">{formatNumber(v)}</span> },
           { 
-            title: <div className="text-center w-full text-[9px] md:text-[11px]">{t('Үнэ')}</div>, 
+            title: <div className="text-center w-full">{t('Үнэ')}</div>, 
             dataIndex: 'talbainNiitUne', key: 'talbainNiitUne', align: 'right', width: 100,
-            render: (v) => <span className="font-black text-slate-800 dark:text-white text-[9px] md:text-[11px]">₮{formatNumber(v)}</span> 
+            render: (v) => <span className="text-slate-800 dark:text-white text-[13px]">{formatNumber(v)}</span> 
           },
           { 
-            title: <span className="text-[9px] md:text-[11px]">{t('Төлөв')}</span>, dataIndex: 'idevkhiteiEsekh', align:'center', key: 'idevkhiteiEsekh', width: 80,
-            render: (v) => (
-              <Badge 
-                status={v ? "success" : "default"} 
-                text={<span className="text-[9px] md:text-[10px] text-slate-600 dark:text-slate-400">{v ? t("Идэвхтэй") : t("Идэвхгүй")}</span>} 
-              />
-            ) 
+            title: t('Төлөв'), dataIndex: 'idevkhiteiEsekh', align:'center', key: 'idevkhiteiEsekh', width: 80,
+            render: (v) => <Badge status={v ? "success" : "default"} text={<span className="text-[12px] dark:text-white">{v ? t("Идэвхтэй") : t("Идэвхгүй")}</span>} />
           }
         ]}
       />
-      </div>
     </GlassCard>
   );
 };
@@ -330,16 +382,16 @@ export default function BuildingDashboard() {
 
   return (
     <Admin khuudasniiNer="dashboard" title={t("Хяналтын самбар")}>
-      <div className="col-span-12 flex flex-col h-[calc(100vh-70px)] w-full -mx-0 xl:-mx-1 -mt-2 text-black lg:rounded-2xl shadow-2xl relative animate-entrance overflow-y-auto backdrop-blur-md custom-scrollbar p-4 lg:p-6 space-y-8 pb-20">
+      <div className="col-span-12 flex flex-col h-[calc(100vh-80px)] w-full -mx-0 xl:-mx-1 text-black animate-entrance overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-6 pb-20">
         
         <BuildingStatsSummary baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
            <BuildingIncomeChart baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
            <BuildingOccupancyDoughnut building={selectedBuilding} token={token} t={t} />
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
            <BuildingRevenueTable building={selectedBuilding} token={token} t={t} />
            <VacancyFloorTable building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} />
            <BuildingSpaceTable building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} />

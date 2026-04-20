@@ -306,7 +306,8 @@
   "Та хадгалахгүй гарахдаа итгэлтэй байна уу?": "Are you sure you want to exit without saving?",
   "дутуу холбогдсон байна": "Insufficiently connected",
   "Энэ сарын": "Month",
-
+  "Дүүргэлт": "Occupancy",  
+  "Нийт талбай":"Total area",
   "Хэвийн": "Regular",
   "Үндсэн гэрээ": "Permanent contracts",
   "Түр гэрээ": "Temporary contract",

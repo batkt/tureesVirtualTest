@@ -1980,3 +1980,93 @@ input[type="number"] {
 .dark .bg-gray-800 [class*="[&_*]:!text-white"] * {
   color: white !important;
 }
+
+/* Premium Table Enhancements */
+.premium-table.ant-table-wrapper .ant-table {
+  background: transparent !important;
+}
+
+.premium-table .ant-table-thead > tr > th {
+  background: rgba(248, 250, 252, 0.5) !important;
+  color: #64748b !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-size: 11px !important;
+  letter-spacing: 0.1em !important;
+  border-bottom: 2px solid #f1f5f9 !important;
+}
+
+.dark .premium-table .ant-table-thead > tr > th {
+  background: rgba(15, 23, 42, 0.3) !important;
+  color: #94a3b8 !important;
+  border-bottom: 2px solid #1e293b !important;
+}
+
+.premium-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #f8fafc !important;
+  padding: 8px 12px;
+  transition: all 0.3s ease !important;
+}
+
+.dark .premium-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #1e293b !important;
+  background: transparent !important;
+}
+
+.premium-table .ant-table-row:hover > td {
+  background: rgba(16, 185, 129, 0.04) !important;
+}
+
+.dark .premium-table .ant-table-row:hover > td {
+  background: rgba(16, 185, 129, 0.08) !important;
+}
+
+.custom-table .ant-table-container {
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+}
+
+.premium-table .ant-table-thead {
+  border-radius: 0 !important;
+}
+
+.premium-table .ant-table {
+  border-spacing: 0 !important;
+}
+
+.premium-table .ant-table-header {
+  margin-bottom: 0 !important;
+}
+
+.premium-table .ant-table-body {
+  margin-top: 0 !important;
+}
+
+.premium-table .ant-table-content {
+  padding: 0 !important;
+}
+
+.premium-table .ant-table-header table,
+.premium-table .ant-table-body table {
+  border-spacing: 0 !important;
+  margin: 0 !important;
+}
+
+/* Custom Scrollbar for tables */
+.premium-table .ant-table-body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.premium-table .ant-table-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.premium-table .ant-table-body::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.dark .premium-table .ant-table-body::-webkit-scrollbar-thumb {
+  background: #334155;
+}
