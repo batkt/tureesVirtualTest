@@ -647,15 +647,21 @@ function GuilgeeNiiluulekh(
         100
       ) / 100;
 
+    const currentTulsunAldangi = gereenuud[index]?.tulsunAldangi || 0;
+    const currentTulsunBaritsaa = gereenuud[index]?.baritsaaTulbur || 0;
+
+    const isAldangiAddressed =
+      aldangiBalance <= 0 || currentTulsunAldangi >= aldangiBalance - 0.01;
+    const isBaritsaaAddressed =
+      baritsaaBalance <= 0 || currentTulsunBaritsaa >= baritsaaBalance - 0.01;
+
     let amountToAllocate = 0;
 
     if (
       talbar === "tureesiinTulbur" &&
-      aldangiBalance <= 0 &&
-      baritsaaBalance <= 0 &&
-      absDebtToPay > 0
+      isAldangiAddressed &&
+      isBaritsaaAddressed
     ) {
-     
       amountToAllocate = remainingBankFunds;
     } else {
       amountToAllocate =
