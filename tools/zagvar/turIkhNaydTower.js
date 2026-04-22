@@ -189,9 +189,11 @@ const khatuuZagvarIkhNayd = (
               ? "Цэцэг төв"
               : medeelel?.barilgiinId === "657955ac70280a9ebe8f11ef"
               ? "Шинэст"
-              : "Их наяд Плаза ХХК"
-              ? "Их наяд Tower"
+              : medeelel?.barilgiinId === "619e267fdd4835aa2c168b28"
+              ? "Их наяд Плаза ХХК"
               : medeelel?.barilgiinId === "622ec99a8e64e5b4f0c3acb6"
+              ? "Их наяд Tower"
+              : ""
           }
           </span> 
         </div>
