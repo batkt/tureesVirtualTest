@@ -493,7 +493,7 @@ function GuilgeeNiiluulekh(
       }
       return _.toNumber(a + value);
     }, 0);
-    return sum + (data.kholbosonDun || 0);
+    return Math.round((sum + (data.kholbosonDun || 0)) * 100) / 100;
   }
 
   function onChange({ target }) {
@@ -665,7 +665,7 @@ function GuilgeeNiiluulekh(
       amountToAllocate = remainingBankFunds;
     } else {
       amountToAllocate =
-        Math.abs(remainingBankFunds - absDebtToPay) <= 0.015
+        Math.abs(remainingBankFunds - absDebtToPay) <= 1
           ? remainingBankFunds
           : Math.max(0, Math.min(remainingBankFunds, absDebtToPay));
     }
@@ -680,9 +680,46 @@ function GuilgeeNiiluulekh(
     }
   }
 
+  function autoAllocate() {
+    let remaining = Math.round((guilgeeniiDun - (data.kholbosonDun || 0)) * 100) / 100;
+    if (remaining <= 0) {
+      notification.warning({ message: t("Хуваарилах дүн хүрэлцэхгүй байна") });
+      return;
+    }
+
+    setGereenuud((prevGereenuud) => {
+      const newGereenuud = prevGereenuud.map((g) => ({ ...g, tulsunAldangi: 0, tureesiinTulbur: 0, baritsaaTulbur: 0 }));
+
+      newGereenuud.forEach((mur) => {
+        if (remaining <= 0) return;
+
+        const aldangiBalance = Math.round((mur.aldangiinUldegdel || 0) * 100) / 100;
+        if (aldangiBalance > 0 && remaining > 0) {
+          const pay = Math.min(remaining, aldangiBalance);
+          mur.tulsunAldangi = pay;
+          remaining = Math.round((remaining - pay) * 100) / 100;
+        }
+
+        const tureesBalance = Math.round((mur.uldegdel || 0) * 100) / 100;
+        if (tureesBalance > 0 && remaining > 0) {
+          const pay = Math.min(remaining, tureesBalance);
+          mur.tureesiinTulbur = pay;
+          remaining = Math.round((remaining - pay) * 100) / 100;
+        }
+      });
+
+      if (remaining > 0 && newGereenuud.length > 0) {
+        newGereenuud[0].tureesiinTulbur = Math.round(((newGereenuud[0].tureesiinTulbur || 0) + remaining) * 100) / 100;
+      }
+
+      return newGereenuud;
+    });
+  }
+
   const zuruuDun = useMemo(() => {
     let sum = zuruuZun();
-    return guilgeeniiDun - sum;
+    const result = Math.round((guilgeeniiDun - sum) * 100) / 100;
+    return Math.abs(result) < 1 ? 0 : result;
   }, [gereenuud]);
 
   function inputChange(e) {
@@ -750,13 +787,20 @@ function GuilgeeNiiluulekh(
         </div>
       </Modal>
       <div className="space-y-2 ">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <span className="text-sm font-medium dark:text-gray-100 lg:text-xl">
             {t("Гүйлгээний мэдээлэл")}
           </span>
-          <span className="dark:text-gray-200">
-            {moment().format("YYYY-MM-DD")}
-          </span>
+          <div className="flex gap-3 items-center">
+            {gereenuud.length > 1 && (
+              <Button size="small" type="primary" onClick={autoAllocate}>
+                {t("Автомат хуваарилалт")}
+              </Button>
+            )}
+            <span className="dark:text-gray-200">
+              {moment().format("YYYY-MM-DD")}
+            </span>
+          </div>
         </div>
         <div className="box grid w-full grid-cols-4 rounded-md border border-gray-400 bg-gray-100 p-2 ">
           <div className="col-span-4 lg:col-span-1">

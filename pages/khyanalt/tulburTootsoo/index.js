@@ -56,12 +56,16 @@ function iconAvya(a, bank) {
 
   const kholbogdsonDun = a?.kholbosonDun || 0;
 
-  if (kholbogdsonDun > 0 && kholbogdsonDun < shiljuulegDun) {
+  if (kholbogdsonDun > 0 && kholbogdsonDun < shiljuulegDun && Math.abs(shiljuulegDun - kholbogdsonDun) >= 1) {
     Icon = TbEqualNot;
     color = "yellow";
     tailbar = `${formatNumber(shiljuulegDun - kholbogdsonDun, 0)} ₮ ${t(
       "дутуу холбогдсон байна"
     )}`;
+  } else if (kholbogdsonDun > 0 && Math.abs(shiljuulegDun - kholbogdsonDun) < 1) {
+    Icon = CheckOutlined;
+    color = "green";
+    tailbar = t("Гүйлгээ холбогдсон байна");
   } else if (
     a?.magadlaltaiGereenuud?.length > 0 &&
     !(a?.kholbosonGereeniiId?.length > 0)
@@ -1195,16 +1199,13 @@ function tulburTootsoo({ token }) {
               <div
                 key={`${index}toololt`}
                 className={`group relative w-[65vw] cursor-pointer overflow-hidden rounded-2xl 
-                  transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-2xl 
+                  transition-all duration-300 ease-out hover:shadow-2xl 
                   hover:shadow-gray-300 dark:hover:shadow-gray-800 md:col-span-6 md:w-auto lg:col-span-3 ${
                     mur.utga === songogdsonTurul
                       ? "border-2 border-green-500 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
                       : "border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
                   }`}
                 onClick={() => turulSongyo(mur.utga)}
-                data-aos="zoom-out-up"
-                data-aos-duration="1000"
-                data-aos-delay={1 + index + "00"}
               >
                 <div className="relative h-full w-[65vw] overflow-hidden rounded-2xl sm:w-auto">
                   <div className="absolute inset-0 bg-green-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10"></div>
@@ -1233,9 +1234,6 @@ function tulburTootsoo({ token }) {
         </div>
         <div
           className="mt-5 flex w-full flex-col md:flex-row"
-          data-aos="zoom-out-up"
-          data-aos-duration="1000"
-          data-aos-delay="200"
         >
           <div className="md:flex">
             <RangePicker
@@ -1674,12 +1672,7 @@ function tulburTootsoo({ token }) {
             </div>
           </div>
         </div>
-        <div
-          className="mt-5 overflow-auto "
-          data-aos="fade-left"
-          data-aos-duration="1000"
-          data-aos-delay="500"
-        >
+        <div className="mt-5 overflow-auto">
           <Table
             bordered
             size="small"
