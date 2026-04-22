@@ -3996,7 +3996,7 @@ function camera({ token }) {
                   <R2WPlayerComponent
                     USER={"admin"}
                     ROOT={"cam/realmonitor?channel=1%26subtype=1"}
-                    PASSWD={"admin123"}
+                    PASSWD={"Admin123"}
                     Camer={camerVal[0]}
                     PORT={554}
                   />
@@ -4200,7 +4200,7 @@ function camera({ token }) {
                   <R2WPlayerComponent
                     USER={"admin"}
                     ROOT={"cam/realmonitor?channel=1%26subtype=1"}
-                    PASSWD={"admin123"}
+                    PASSWD={"Admin123"}
                     Camer={camerVal[1]}
                     PORT={554}
                   />
