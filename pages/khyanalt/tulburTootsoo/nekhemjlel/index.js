@@ -254,7 +254,9 @@ function tulburTootsoo({ token }) {
   }, [baiguullaga?.barilguud]);
 
   const zagvarlarMap = useMemo(() => {
-    return new Map(nekhemjlekhiinZagvar?.jagsaalt?.map((z) => [z._id, z]) || []);
+    return new Map(
+      nekhemjlekhiinZagvar?.jagsaalt?.map((z) => [z._id, z]) || [],
+    );
   }, [nekhemjlekhiinZagvar?.jagsaalt]);
 
   const zardluudMap = useMemo(() => {
@@ -446,18 +448,19 @@ function tulburTootsoo({ token }) {
       if (!selectedZagvar) return [];
 
       const assetCache = new Map();
-      return songogdsonGereenuud.map((id, i) => {
-        const item = nekhemjleliinMap.get(id);
-        if (!item) return null;
+      return songogdsonGereenuud
+        .map((id, i) => {
+          const item = nekhemjleliinMap.get(id);
+          if (!item) return null;
 
-        const cacheKey = `${id}-${barimt}-${dugaarlalt?.format || ""}-${
-          nekhemjlekhiinDugaarData.dugaarList?.[i] || ""
-        }`;
-        if (renderedInvoiceCache.current.has(cacheKey)) {
-          return renderedInvoiceCache.current.get(cacheKey);
-        }
+          const cacheKey = `${id}-${barimt}-${dugaarlalt?.format || ""}-${
+            nekhemjlekhiinDugaarData.dugaarList?.[i] || ""
+          }`;
+          if (renderedInvoiceCache.current.has(cacheKey)) {
+            return renderedInvoiceCache.current.get(cacheKey);
+          }
 
-        const medeelel = { ...item };
+          const medeelel = { ...item };
           var zagvar = { ...selectedZagvar };
           const barilga = barilguudMap.get(medeelel?.barilgiinId);
 
@@ -555,7 +558,7 @@ function tulburTootsoo({ token }) {
                 baiguullaga,
                 barilgiinId,
               );
-              //vpm
+            //vpm
             else if (
               ajiltan?.baiguullagiinId === "697c6dd904f0f327ec2a9c15" &&
               barilgiinId === "697c6dd904f0f327ec2a9c16"
@@ -604,11 +607,11 @@ function tulburTootsoo({ token }) {
                 baiguullaga,
               );
             } else if (ajiltan?.baiguullagiinId === "679aea9032299b7ba8462a77");
-              //lans
-              else if (
+            else if (
               ajiltan?.baiguullagiinId === "631595e9957b7d5ec013c076" &&
               barilgiinId === "631725de1cece418c5471864"
             ) {
+              //lans
               const barilga = baiguullaga?.barilguud?.find(
                 (a) => a._id === barilgiinId,
               );
@@ -665,7 +668,6 @@ function tulburTootsoo({ token }) {
               ajiltan?.barilgiinId === "6544bf602143a024b43f16ab" ||
               ajiltan?.baiguullagiinId === "64e855ce37fdc9b105f936e0"
             )
-            
               // kaidu
               zagvar.nekhemjlekh = khatuuZagvarKaidu(
                 medeelel,
@@ -1936,7 +1938,8 @@ function tulburTootsoo({ token }) {
           };
           renderedInvoiceCache.current.set(cacheKey, result);
           return result;
-        }).filter(Boolean);
+        })
+        .filter(Boolean);
     }
     return [];
   }, [
