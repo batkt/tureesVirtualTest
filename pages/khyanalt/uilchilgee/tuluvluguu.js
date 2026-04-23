@@ -2400,7 +2400,7 @@ useEffect(() => {
                 <Select.Option value="nen yaraltai">🔴 {t("Нэн яаралтай")}</Select.Option>
                 <Select.Option value="yaraltai">🟠 {t("Яаралтай")}</Select.Option>
                 <Select.Option value="engiin">🟢 {t("Дунд")}</Select.Option>
-                <Select.Option value="baga">🔵 {t("Бага")}</Select.Option>
+               
               </Select>
             </Form.Item>
           </div>
