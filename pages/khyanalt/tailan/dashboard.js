@@ -3,7 +3,7 @@ import { useMemo, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import uilchilgee from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import { Badge, Table, Row, Col, Select, Tag, Popover, Button } from "antd";
+import { Badge, Table, Row, Col, Select, Tag, Popover, Button, DatePicker } from "antd";
 import {
   RiseOutlined,
   ReloadOutlined,
@@ -45,7 +45,7 @@ import { BiMoney, BiMoneyWithdraw } from "react-icons/bi";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend, Filler);
 
-const GlassCard = ({ children, className = "", title, icon }) => (
+const GlassCard = ({ children, className = "", title, icon, extra }) => (
   <div className={`group relative overflow-hidden rounded-[1.5rem] bg-white/90 dark:bg-slate-900/60 border border-slate-200/50 dark:border-slate-800/50 shadow-sm transition-all duration-300 hover:shadow-md ${className}`}>
     {title && (
       <div className="px-4 py-3 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/50">
@@ -57,6 +57,7 @@ const GlassCard = ({ children, className = "", title, icon }) => (
           )}
           <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase">{title}</span>
         </div>
+        {extra && <div className="flex items-center">{extra}</div>}
       </div>
     )}
     <div className="p-3 md:p-4">{children}</div>
@@ -124,7 +125,7 @@ const BuildingStatsSummary = ({ baiguullaga, building, token, t }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
       <SummaryCard title={t("Орлого1")} value={currentActual} suffix="₮" icon={<BiMoneyWithdraw />} index={0} />
-      <SummaryCard title={t("Гэрээ1")} value={contractCount} fixed={0} icon={<FileTextOutlined />} index={1} />
+      <SummaryCard title={t("Гэрээ1")} value={contractCount} suffix="" fixed={0} icon={<FileTextOutlined />} index={1} />
     </div>
   );
 };
@@ -174,11 +175,34 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
           interaction: { mode: 'index', intersect: false },
           plugins: { 
             legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 6, usePointStyle: true, font: { size: 10 } } },
-            tooltip: { cornerRadius: 8, padding: 8, mode: 'index', intersect: false } 
+            tooltip: { 
+              cornerRadius: 8, padding: 8, mode: 'index', intersect: false,
+              callbacks: {
+                label: function(context) {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += formatNumber(context.parsed.y);
+                  }
+                  return label;
+                }
+              }
+            } 
           },
           scales: { 
             x: { grid: { display: false }, ticks: { font: { size: 10 } } }, 
-            y: { beginAtZero: true, grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 } } } 
+            y: { 
+              beginAtZero: true, 
+              grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }, 
+              ticks: { 
+                font: { size: 10 },
+                callback: function(value) {
+                  return formatNumber(value, 0);
+                }
+              } 
+            } 
           }
         }} />
       </div>
@@ -268,10 +292,12 @@ const BuildingOccupancyDoughnut = ({ building, token, t }) => {
 };
 
 const BuildingRevenueTable = ({ building, token, t }) => {
+  const [dateRange, setDateRange] = useState([moment().subtract(5, 'months').startOf('month'), moment().endOf('month')]);
+
   const { tailanGaralt, loading } = useTailan("borluulaltiinTailanAvya", token, {
     baiguullagiinId: building.baiguullagiinId, barilgiinId: building._id,
-    ekhlekhOgnoo: moment().subtract(5, 'months').startOf('month').format('YYYY-MM-DD 00:00:00'),
-    duusakhOgnoo: moment().endOf('month').format('YYYY-MM-DD 23:59:59'), nariivchlal: 'month'
+    ekhlekhOgnoo: dateRange[0].format('YYYY-MM-DD 00:00:00'),
+    duusakhOgnoo: dateRange[1].format('YYYY-MM-DD 23:59:59'), nariivchlal: 'month'
   });
 
   const incomeData = useMemo(() => {
@@ -286,7 +312,20 @@ const BuildingRevenueTable = ({ building, token, t }) => {
   }, [tailanGaralt]);
 
   return (
-    <GlassCard title={t("Төлбөрийн түүх")} icon={<BiMoneyWithdraw />} className="h-[380px]">
+    <GlassCard 
+      title={t("Төлбөрийн түүх")} 
+      icon={<BiMoneyWithdraw />} 
+      className="h-[380px]"
+      extra={
+        <DatePicker.RangePicker 
+          size="small"
+          value={dateRange}
+          onChange={(dates) => dates && setDateRange(dates)}
+          className="w-48 text-[11px]"
+          allowClear={false}
+        />
+      }
+    >
       <Table 
         dataSource={incomeData} loading={loading} size="small" scroll={{ x: 'max-content', y: 260 }} pagination={false}
         className="premium-table"
@@ -340,23 +379,91 @@ const VacancyFloorTable = ({ building, baiguullaga, token, t }) => {
   );
 };
 
-const BuildingSpaceTable = ({ building, baiguullaga, token, t }) => {
-  const { talbainiiGaralt, isValidating } = useTalbai(token, baiguullaga?._id, { barilgiinId: building._id, idevkhiteiEsekh: { $in: [true, false] }, khuudasniiKhemjee: 1000 });
+const BuildingSegmentsTables = ({ building, baiguullaga, token, t }) => {
+  const [selectedSegment, setSelectedSegment] = useState('all');
+  const [dateRange, setDateRange] = useState(null);
+
+  const query = { barilgiinId: building._id, idevkhiteiEsekh: { $in: [true, false] }, khuudasniiKhemjee: 5000 };
+  if (dateRange && dateRange[0] && dateRange[1]) {
+    query.createdAt = { 
+      $gte: dateRange[0].startOf('day').toISOString(),
+      $lte: dateRange[1].endOf('day').toISOString()
+    };
+  }
+
+  const { talbainiiGaralt, isValidating } = useTalbai(token, baiguullaga?._id, query);
+  
+  const groupedBySegment = useMemo(() => {
+    const spaces = talbainiiGaralt?.jagsaalt || [];
+    const groups = {};
+    spaces.forEach(space => {
+       if (space.segmentuud && space.segmentuud.length > 0) {
+         space.segmentuud.forEach(seg => {
+           const segmentName = seg.ner || t('Бусад');
+           if (!groups[segmentName]) groups[segmentName] = [];
+           groups[segmentName].push(space);
+         });
+       } else {
+         const segmentName = t('Бусад');
+         if (!groups[segmentName]) groups[segmentName] = [];
+         groups[segmentName].push(space);
+       }
+    });
+    return groups;
+  }, [talbainiiGaralt, t]);
+
+  const segmentOptions = useMemo(() => {
+    return [
+      { label: t('Бүгд'), value: 'all' },
+      ...Object.keys(groupedBySegment).map(k => ({ label: k, value: k }))
+    ];
+  }, [groupedBySegment, t]);
+
+  const dataSource = useMemo(() => {
+    if (selectedSegment === 'all') {
+      const allSpaces = [];
+      Object.values(groupedBySegment).forEach(arr => allSpaces.push(...arr));
+      return _.uniqBy(allSpaces, '_id');
+    }
+    return groupedBySegment[selectedSegment] || [];
+  }, [selectedSegment, groupedBySegment]);
+
   return (
-    <GlassCard title={t("Талбайн бүртгэл")} icon={<HomeOutlined />} className="h-[380px]">
+    <GlassCard 
+      title={t("Талбайн бүртгэл")} 
+      icon={<HomeOutlined />} 
+      className="h-[380px]"
+      extra={
+        <div className="flex items-center gap-2">
+          <DatePicker.RangePicker 
+            size="small"
+            className="w-48 text-[11px]"
+            onChange={(dates) => setDateRange(dates)}
+          />
+          <Select
+            size="small"
+            value={selectedSegment}
+            onChange={setSelectedSegment}
+            options={segmentOptions}
+            className="w-32 text-[11px]"
+          />
+        </div>
+      }
+    >
       <Table 
-        size="small" dataSource={talbainiiGaralt?.jagsaalt} loading={isValidating} 
+        size="small" dataSource={dataSource} loading={isValidating} 
         pagination={{ pageSize: 15, showSizeChanger: false, size: 'small' }} scroll={{ x: 'max-content', y: 220 }}
         className="premium-table"
         columns={[
-          { title: 'm2', dataIndex: 'talbainKhemjee', align:'center', key: 'talbainKhemjee', width: 60, render: (v) => <span className="font-medium text-xs">{formatNumber(v)}</span> },
+          { title: t('Код'), dataIndex: 'kod', key: 'kod', width: 70, render: (v) => <span className="font-bold text-xs">{v}</span> },
+          { title: 'm2', dataIndex: 'talbainKhemjee', align:'center', key: 'talbainKhemjee', width: 50, render: (v) => <span className="font-medium text-xs">{formatNumber(v)}</span> },
           { 
             title: <div className="text-center w-full">{t('Үнэ')}</div>, 
-            dataIndex: 'talbainNiitUne', key: 'talbainNiitUne', align: 'right', width: 100,
+            dataIndex: 'talbainNiitUne', key: 'talbainNiitUne', align: 'right', width: 90,
             render: (v) => <span className="text-slate-800 dark:text-white text-[13px]">{formatNumber(v)}</span> 
           },
           { 
-            title: t('Төлөв'), dataIndex: 'idevkhiteiEsekh', align:'center', key: 'idevkhiteiEsekh', width: 80,
+            title: t('Төлөв'), dataIndex: 'idevkhiteiEsekh', align:'center', key: 'idevkhiteiEsekh', width: 70,
             render: (v) => <Badge status={v ? "success" : "default"} text={<span className="text-[12px] dark:text-white">{v ? t("Идэвхтэй") : t("Идэвхгүй")}</span>} />
           }
         ]}
@@ -394,7 +501,7 @@ export default function BuildingDashboard() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
            <BuildingRevenueTable building={selectedBuilding} token={token} t={t} />
            <VacancyFloorTable building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} />
-           <BuildingSpaceTable building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} />
+           <BuildingSegmentsTables building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} />
         </div>
       </div>
     </Admin>

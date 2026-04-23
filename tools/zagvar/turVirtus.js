@@ -109,7 +109,7 @@ const khatuuZagvarVirtus = (medeelel, ajiltan, baiguullaga) => {
 
       html += `<tr>
         <td style="text-align:center;">${n++}</td>
-        <td>Менежмент</td>
+        <td>Менежмент төлбөр</td>
         <td style="text-align:center;">${getCoverage(medeelel?.ognoo)}</td>
         <td style="text-align:right;">${formatNumber(baseArea)}</td>
         <td style="text-align:right;">${formatNumber(baseNegjUne)}</td>

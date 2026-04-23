@@ -83,7 +83,7 @@ function negtgelTailan({ token }) {
     contentRef: printRef,
     pageStyle: "print",
   });
-  const segments = useJagsaalt("/segment");
+  const segments = useJagsaalt("/segment", undefined, undefined, undefined, undefined, undefined, 1000);
   const turulOptions = useMemo(() => {
     const allOptions = segments?.jagsaalt?.reduce((acc, current) => {
       if (current.utguud && Array.isArray(current.utguud)) {
@@ -104,26 +104,14 @@ function negtgelTailan({ token }) {
   }, [segments.jagsaalt, songogdsonTurul]);
 
   const query = useMemo(() => {
-    const q = {
+    return {
       baiguullagiinId: baiguullaga?._id,
       barilgiinId: barilgiinId,
       ekhlekhOgnoo: ognoo && ognoo[0].format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: ognoo && ognoo[1].format("YYYY-MM-DD 23:59:59"),
       khariltsagchiinId: songogdsonIds.length > 0 ? songogdsonIds : undefined,
-      turul: songogdsonTurul,
-      segment: songogdsonTurul,
-      yalgal: songogdsonTurul,
+      songogdsonTurul: songogdsonTurul,
     };
-    songogdsonSegments.forEach((s) => {
-      if (s.ner) {
-        q[s.ner] = songogdsonTurul;
-      }
-    });
-    // Fallback common key
-    if (songogdsonSegments.length > 0) {
-      q["ялгах утга"] = songogdsonTurul;
-    }
-    return q;
   }, [
     ognoo,
     baiguullaga,
@@ -546,24 +534,34 @@ function negtgelTailan({ token }) {
             placeholder={t("Төрөл сонгох")}
           >
           {segments?.jagsaalt
-            ?.filter((s) => s.ner && s.utguud?.some((u) => u))
-            ?.map((segment) => (
-              <Select.OptGroup
-                key={segment._id}
-                label={`${t(segment.ner)} (${t(segment.turul || "бусад")})`}
-              >
-                {segment.utguud
-                  ?.filter((o) => o)
-                  ?.map((opt, i) => (
-                    <Select.Option
-                      key={`${segment._id}-${opt}-${i}`}
-                      value={opt}
-                    >
-                      {t(opt)}
-                    </Select.Option>
-                  ))}
-              </Select.OptGroup>
-            ))}
+            ?.filter((s) => s.ner)
+            ?.map((segment) => {
+              const hasUtguud = segment.utguud?.some((u) => u);
+              if (hasUtguud) {
+                return (
+                  <Select.OptGroup
+                    key={segment._id}
+                    label={`${t(segment.ner)} (${t(segment.turul || "бусад")})`}
+                  >
+                    {segment.utguud
+                      ?.filter((o) => o)
+                      ?.map((opt, i) => (
+                        <Select.Option
+                          key={`${segment._id}-${opt}-${i}`}
+                          value={opt}
+                        >
+                          {t(opt)}
+                        </Select.Option>
+                      ))}
+                  </Select.OptGroup>
+                );
+              }
+              return (
+                <Select.Option key={segment._id} value={segment.ner}>
+                  {t(segment.ner)}
+                </Select.Option>
+              );
+            })}
         </Select>
         </div>
         <div className="ml-auto flex gap-2">

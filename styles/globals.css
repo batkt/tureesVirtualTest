@@ -339,7 +339,9 @@
   background-color: #4b5563 !important;
   color: #ffffff !important;
 }
-
+.ant-pagination-item-ellipsis {
+  color: #e5e7eb !important;
+}
 .dark .se-toolbar button.active,
 .dark .se-btn.active {
   background-color: #3b82f6 !important;

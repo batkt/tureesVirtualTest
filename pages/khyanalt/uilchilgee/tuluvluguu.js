@@ -759,6 +759,7 @@ function Tuluvluguu() {
             une: une,
             niitUne: too * une,
             tailbar: b.tailbar || "",
+            type: b.type || "",
             ognoo: new Date().toISOString()
           };
         })
@@ -874,7 +875,8 @@ function Tuluvluguu() {
         baraaId: b.baraaId,
         too: b.too,
         une: b.une,
-        tailbar: b.tailbar || ""
+        tailbar: b.tailbar || "",
+        type: b.type || ""
       }))
     });
     setIsTaskModalVisible(true);
@@ -2546,7 +2548,8 @@ useEffect(() => {
                           <Select
                             placeholder={t("Төрөл")}
                             allowClear
-                            className="w-full h-10 [&>.ant-select-selector]:!h-10 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
+                            popupClassName="[&_.ant-select-item-option-active]:!bg-transparent [&_.ant-select-item-option-active]:!text-blue-500"
+                            className="w-full h-10 [&>.ant-select-selector]:!h-10 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex [&:hover_.ant-select-selector]:!bg-transparent"
                             onChange={() => {
                               
                               const currentBaraa = taskForm.getFieldValue('baraa');
@@ -2581,7 +2584,6 @@ useEffect(() => {
                               <Form.Item
                                 {...restField}
                                 name={[name, 'baraaId']}
-                                rules={[{ required: true, message: t("Бараа сонгох") }]}
                                 className="!mb-0"
                               >
                                 <Select
@@ -2634,9 +2636,8 @@ useEffect(() => {
           {...restField}
           name={[name, 'too']}
           rules={[
-    { required: true, message: "Тоо оруулна уу" },
-    { type: 'number', min: 1, message: "0-ээс их байх ёстой" }
-  ]}
+            { type: 'number', min: 0, message: "0-ээс их байх ёстой" }
+          ]}
           className="!mb-0"
         >
           <InputNumber
