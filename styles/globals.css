@@ -878,12 +878,12 @@ html.dark .ant-select-item-option:hover:not(.ant-select-item-option-disabled),
 html.dark .ant-dropdown-menu-item:hover,
 html.dark .ant-dropdown-menu-item-active,
 html.dark .ant-dropdown-menu-item.ant-dropdown-menu-item-active {
-  background-color: #ffffff !important;
-  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #3b82f6 !important;
 }
 
 html.dark .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-  background-color: #ffffff !important;
+  background-color: rgba(16, 185, 129, 0.15) !important;
   color: #10b981 !important;
 }
 

@@ -2590,6 +2590,8 @@ useEffect(() => {
                                   placeholder={t("Бараа сонгох")}
                                   showSearch
                                   optionFilterProp="children"
+                                  optionLabelProp="label"
+                                  popupClassName="[&_.ant-select-item-option-active]:!bg-transparent [&_.ant-select-item-option-active]:!text-blue-500"
                                   className="w-full h-10 [&>.ant-select-selector]:!h-10 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
                                   onChange={(val) => {
                                     const item = baraas.find(i => i._id === val);
@@ -2610,9 +2612,15 @@ useEffect(() => {
                                                  i.negj || '';
                                     const currentBaraaList = taskForm.getFieldValue('baraa') || [];
                                     const alreadySelected = currentBaraaList.some((b, idx) => b?.baraaId === i._id && idx !== name);
+                                    const isNegative = (i.uldegdel || 0) < 0;
                                     return (
-                                      <Select.Option key={i._id} value={i._id} disabled={alreadySelected}>
-                                        {i.ner} ({i.uldegdel || 0} {negj}) {alreadySelected ? '(сонгогдсон)' : ''}
+                                      <Select.Option key={i._id} value={i._id} label={i.ner} disabled={alreadySelected}>
+                                        <div className="flex justify-between items-center w-full">
+                                          <span>{i.ner}</span>
+                                          <span className={`font-bold ${isNegative ? 'text-red-500' : 'text-gray-400'}`}>
+                                            ({i.uldegdel || 0} {negj}) {alreadySelected ? '(сонгогдсон)' : ''}
+                                          </span>
+                                        </div>
                                       </Select.Option>
                                     );
                                   })}
