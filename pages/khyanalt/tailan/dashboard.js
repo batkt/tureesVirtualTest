@@ -214,46 +214,184 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
   );
 };
 
-const BuildingOccupancyDoughnut = ({ building, token, t }) => {
+const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all', dateRange, baiguullaga }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   const { talbainToololt } = useTalbainToololt(token, building._id);
 
+  const query = { barilgiinId: building._id, idevkhiteiEsekh: { $in: [true, false] }, khuudasniiKhemjee: 5000 };
+  if (dateRange && dateRange[0] && dateRange[1]) {
+    query.createdAt = { 
+      $gte: dateRange[0].startOf('day').toISOString(),
+      $lte: dateRange[1].endOf('day').toISOString()
+    };
+  }
+
+  const { talbainiiGaralt } = useTalbai(token, baiguullaga?._id, query);
+
   const stats = useMemo(() => {
-    if (!talbainToololt || !Array.isArray(talbainToololt)) return { occupied: 0, vacant: 0, total: 1 };
-    const occupied = talbainToololt.find(a => a._id === true)?.too || 0;
-    const vacant = talbainToololt.find(a => a._id === false)?.too || 0;
-    return { occupied, vacant, total: occupied + vacant || 1 };
-  }, [talbainToololt]);
+    let spaces = talbainiiGaralt?.jagsaalt;
+    
+    if (!spaces) {
+      if (!talbainToololt || !Array.isArray(talbainToololt)) return { occupied: 0, vacant: 0, total: 1, actualTotal: 0 };
+      const occupied = talbainToololt.find(a => a._id === true)?.too || 0;
+      const vacant = talbainToololt.find(a => a._id === false)?.too || 0;
+      const tTotal = occupied + vacant;
+      return { occupied, vacant, total: tTotal || 1, actualTotal: tTotal };
+    }
+
+    if (selectedSegment !== 'all') {
+      spaces = spaces.filter(space => {
+        if (!space.segmentuud || space.segmentuud.length === 0) {
+          return selectedSegment === t('Бусад');
+        }
+        return space.segmentuud.some(seg => (seg?.ner || t('Бусад')) === selectedSegment);
+      });
+    }
+
+    const occupied = spaces.filter(s => s.idevkhiteiEsekh === true).length;
+    const vacant = spaces.filter(s => s.idevkhiteiEsekh === false).length;
+    const actualTotal = occupied + vacant;
+    return { occupied, vacant, total: actualTotal || 1, actualTotal };
+  }, [talbainiiGaralt, selectedSegment, t, talbainToololt]);
 
   const occupancyRate = ((stats.occupied / stats.total) * 100).toFixed(0);
+
+  const groupedBySegment = useMemo(() => {
+    const spaces = talbainiiGaralt?.jagsaalt || [];
+    const groups = {};
+    spaces.forEach(space => {
+       if (space.segmentuud && space.segmentuud.length > 0) {
+         space.segmentuud.forEach(seg => {
+           if (!seg) return;
+           const segmentName = seg.ner || t('Бусад');
+           if (!groups[segmentName]) groups[segmentName] = [];
+           groups[segmentName].push(space);
+         });
+       } else {
+         const segmentName = t('Бусад');
+         if (!groups[segmentName]) groups[segmentName] = [];
+         groups[segmentName].push(space);
+       }
+    });
+    return groups;
+  }, [talbainiiGaralt, t]);
+
+  const chartData = useMemo(() => {
+    if (selectedSegment === 'all') {
+      const labels = [];
+      const data = [];
+      const bgColors = [];
+      const customData = [];
+      
+      const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'];
+      
+      Object.keys(groupedBySegment).forEach((segName, segIndex) => {
+         const segColor = colors[segIndex % colors.length];
+         const totalArea = groupedBySegment[segName].reduce((sum, s) => sum + (s.talbainKhemjee || 0), 0);
+         
+         labels.push(segName);
+         data.push(totalArea);
+         bgColors.push(segColor);
+         customData.push({
+           segmentName: segName,
+           totalArea: totalArea
+         });
+      });
+      
+      return {
+        labels,
+        datasets: [{
+          data,
+          backgroundColor: bgColors,
+          borderWidth: 1,
+          borderColor: isDark ? '#1e293b' : '#ffffff',
+          hoverOffset: 8,
+          cutout: '75%',
+          customData
+        }]
+      };
+    } else {
+      const spaces = groupedBySegment[selectedSegment] || [];
+      const totalArea = spaces.reduce((sum, s) => sum + (s.talbainKhemjee || 0), 0);
+      
+      const allSegments = Object.keys(groupedBySegment);
+      const segIndex = allSegments.indexOf(selectedSegment);
+      const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'];
+      const segColor = colors[Math.max(0, segIndex) % colors.length];
+
+      return {
+        labels: [selectedSegment],
+        datasets: [{
+          data: [totalArea],
+          backgroundColor: [segColor],
+          borderWidth: 1,
+          borderColor: isDark ? '#1e293b' : '#ffffff',
+          hoverOffset: 8,
+          cutout: '75%',
+          customData: [{
+            segmentName: selectedSegment,
+            totalArea: totalArea
+          }]
+        }]
+      };
+    }
+  }, [selectedSegment, groupedBySegment, isDark]);
+
+  const chartOptions = {
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: { display: false },
+      tooltip: {
+        enabled: true,
+        cornerRadius: 8,
+        padding: 8,
+        callbacks: {
+          label: function(context) {
+            const customData = chartData.datasets[context.datasetIndex]?.customData;
+            if (customData && customData[context.dataIndex]) {
+               const dataItem = customData[context.dataIndex];
+               const value = context.raw || 0;
+               return ` Сегмент: ${dataItem.segmentName} - ${formatNumber(value)} m2`;
+            }
+            return ` ${context.label || ''}: ${context.raw || 0}`;
+          }
+        }
+      }
+    }
+  };
 
   return (
     <GlassCard title={t("Талбайн ашиглалт")} icon={<HomeOutlined />} className="h-[350px]">
       <div className="flex flex-col md:flex-row items-center justify-around h-full gap-4 px-2">
          <div className="relative h-44 w-44 flex-shrink-0">
-            <Doughnut data={{
-              labels: [t("Идэвхтэй1"), t(" Идэвхгүй1")],
-              datasets: [{
-                data: [stats.occupied, stats.vacant],
-                backgroundColor: ['#10b981', '#6366f1'],
-                hoverBackgroundColor: ['#059669', '#4f46e5'],
-                borderWidth: 0, cutout: '75%', borderRadius: 4, spacing: 2, 
-                hoverOffset: 8
-              }]
-            }} options={{ 
-              maintainAspectRatio: false, 
-              interaction: { mode: 'index', intersect: false },
-              plugins: { 
-                legend: { display: false }, 
-                datalabels: { display: false },
-                tooltip: { 
-                  enabled: true, 
-                  mode: 'index', 
-                  intersect: false,
-                  cornerRadius: 8,
-                  padding: 8
-                } 
-              } 
-            }} />
+            {chartData.datasets[0]?.data?.length > 0 ? (
+               <Doughnut data={chartData} options={chartOptions} />
+            ) : (
+               <Doughnut data={{
+                 labels: [t("Идэвхтэй1"), t(" Идэвхгүй1")],
+                 datasets: [{
+                   data: [stats.occupied, stats.vacant],
+                   backgroundColor: ['#10b981', '#6366f1'],
+                   hoverBackgroundColor: ['#059669', '#4f46e5'],
+                   borderWidth: 0, cutout: '75%', borderRadius: 4, spacing: 2, 
+                   hoverOffset: 8
+                 }]
+               }} options={{ 
+                 maintainAspectRatio: false, 
+                 plugins: { 
+                   legend: { display: false }, 
+                   datalabels: { display: false },
+                   tooltip: { 
+                     enabled: true, 
+                     cornerRadius: 8,
+                     padding: 8
+                   } 
+                 } 
+               }} />
+            )}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-3xl text-slate-800 dark:text-white leading-none tracking-tighter">{occupancyRate}%</span>
               <span className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest">{t("Дүүргэлт")}</span>
@@ -264,7 +402,7 @@ const BuildingOccupancyDoughnut = ({ building, token, t }) => {
             <div className="space-y-1">
                <div className="flex justify-between items-end">
                   <span className="text-[10px] text-slate-400 uppercase tracking-wider">{t("Нийт талбай")}</span>
-                  <span className="text-lg text-slate-700 dark:text-white leading-none">{stats.total}</span>
+                  <span className="text-lg text-slate-700 dark:text-white leading-none">{stats.actualTotal}</span>
                </div>
                <div className="h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                   <div className="h-full bg-slate-400" style={{ width: '100%' }} />
@@ -384,9 +522,7 @@ const VacancyFloorTable = ({ building, baiguullaga, token, t }) => {
   );
 };
 
-const BuildingSegmentsTables = ({ building, baiguullaga, token, t }) => {
-  const [selectedSegment, setSelectedSegment] = useState('all');
-  const [dateRange, setDateRange] = useState(null);
+const BuildingSegmentsTables = ({ building, baiguullaga, token, t, selectedSegment, setSelectedSegment, dateRange, setDateRange }) => {
 
   const query = { barilgiinId: building._id, idevkhiteiEsekh: { $in: [true, false] }, khuudasniiKhemjee: 5000 };
   if (dateRange && dateRange[0] && dateRange[1]) {
@@ -482,6 +618,8 @@ export default function BuildingDashboard() {
   const { token, baiguullaga, ajiltan, barilgiinId } = useAuth();
   const { t } = useTranslation();
   const router = useRouter();
+  const [selectedSegment, setSelectedSegment] = useState('all');
+  const [dateRange, setDateRange] = useState(null);
 
   useEffect(() => { Aos.init({ duration: 1000 }); }, []);
 
@@ -501,13 +639,13 @@ export default function BuildingDashboard() {
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
            <BuildingIncomeChart baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
-           <BuildingOccupancyDoughnut building={selectedBuilding} token={token} t={t} />
+           <BuildingOccupancyDoughnut building={selectedBuilding} token={token} t={t} selectedSegment={selectedSegment} dateRange={dateRange} baiguullaga={baiguullaga} />
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
            <BuildingRevenueTable building={selectedBuilding} token={token} t={t} />
            <VacancyFloorTable building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} />
-           <BuildingSegmentsTables building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} />
+           <BuildingSegmentsTables building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} selectedSegment={selectedSegment} setSelectedSegment={setSelectedSegment} dateRange={dateRange} setDateRange={setDateRange} />
         </div>
       </div>
     </Admin>
