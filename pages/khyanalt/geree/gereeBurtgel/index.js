@@ -683,6 +683,20 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
       },
       {
+        title: t("И-мэйл"),
+        dataIndex: "mail",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: t("Утас"),
+        dataIndex: "utas",
+        className: "text-center",
+        align: "center",
+        ellipsis: true,
+      },
+      {
         title: t("Талбай"),
         dataIndex: "talbainDugaar",
         className: "text-center",

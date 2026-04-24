@@ -1112,6 +1112,12 @@ function AjiltanBurtgel({ token }) {
                             },
                             {
                               validator: async (_, value) => {
+                                if (value && (value.startsWith(" ") || value.endsWith(" "))) {
+                                  notification.warning({
+                                    message: t("Анхааруулга"),
+                                    description: t("Утасны дугаарт зай орсон байна, шалгана уу"),
+                                  });
+                                }
                                 if (value && value.length === 8) {
                                   return utasShalgakh(value, field);
                                 }
@@ -1178,6 +1184,16 @@ function AjiltanBurtgel({ token }) {
                   {
                     required: true,
                     message: t("И-мейл хаяг бүртгэнэ үү!"),
+                  },
+                  {
+                    validator: async (_, value) => {
+                      if (value && (value.startsWith(" ") || value.endsWith(" "))) {
+                        notification.warning({
+                          message: t("Анхааруулга"),
+                          description: t("И-мэйл хаягт зай орсон байна, шалгана уу"),
+                        });
+                      }
+                    },
                   },
                 ]}
               >
