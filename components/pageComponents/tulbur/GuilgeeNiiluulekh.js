@@ -34,15 +34,15 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
   let undsenGuilgee = [];
   let aldaa = [];
   gereenuud.forEach((mur) => {
-    if (mur.tureesiinTulbur > 0 || mur.tulsunAldangi > 0) {
+    if ((parseFloat(mur.tureesiinTulbur) || 0) > 0 || (parseFloat(mur.tulsunAldangi) || 0) > 0) {
       let guilgeeniiMur = {
         turul: "bank",
-        tulsunDun: mur.tureesiinTulbur || 0,
+        tulsunDun: parseFloat(mur.tureesiinTulbur) || 0,
         guilgeeniiId: guilgee._id,
         gereeniiId: mur._id,
         dansniiDugaar: guilgee.dansniiDugaar,
         tulukhAldangi: mur.aldangiinUldegdel,
-        tulsunAldangi: mur.tulsunAldangi,
+        tulsunAldangi: parseFloat(mur.tulsunAldangi) || 0,
         avlaguud:
           mur.avlaguud ||
           (() => {
@@ -97,11 +97,11 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
       }
       undsenGuilgee.push(guilgeeniiMur);
     }
-    if (mur.baritsaaTulbur > 0) {
+    if ((parseFloat(mur.baritsaaTulbur) || 0) > 0) {
       let baritsaaniiMur = {
         gereeniiId: mur._id,
         guilgeeniiId: guilgee._id,
-        orlogo: mur.baritsaaTulbur,
+        orlogo: parseFloat(mur.baritsaaTulbur) || 0,
         zarlaga: 0,
       };
       switch (dans.bank) {
@@ -484,12 +484,12 @@ function GuilgeeNiiluulekh(
         ["baritsaaTulbur", "tureesiinTulbur", "tulsunAldangi"]
           .filter((a) => a !== talbar)
           .forEach((mur) => {
-            value += b[mur] || 0;
+            value += parseFloat(b[mur]) || 0;
           });
       } else {
-        value += b.baritsaaTulbur || 0;
-        value += b.tureesiinTulbur || 0;
-        value += b.tulsunAldangi || 0;
+        value += parseFloat(b.baritsaaTulbur) || 0;
+        value += parseFloat(b.tureesiinTulbur) || 0;
+        value += parseFloat(b.tulsunAldangi) || 0;
       }
       return _.toNumber(a + value);
     }, 0);
@@ -564,7 +564,9 @@ function GuilgeeNiiluulekh(
       }
     }
     let sum = zuruuZun(index, talbar);
-    if (sum + _.toNumber(parser(target.value)) > guilgeeniiDun) {
+    const parsedStr = parser(target.value);
+    const numVal = _.toNumber(parsedStr);
+    if (sum + numVal > guilgeeniiDun) {
       target.value = formatter(guilgeeniiDun - sum);
       notification.warning({
         message: t("Анхаар"),
@@ -572,7 +574,9 @@ function GuilgeeNiiluulekh(
       });
     }
     setGereenuud((a) => {
-      _.set(a, `${index}.${talbar}`, _.toNumber(parser(target.value)));
+      // Preserve raw string if user is mid-decimal (e.g. "700000." or "700000.1")
+      const hasDecimal = parsedStr.includes(".");
+      _.set(a, `${index}.${talbar}`, hasDecimal ? parsedStr : numVal);
       return [...a];
     });
   }
@@ -657,11 +661,7 @@ function GuilgeeNiiluulekh(
 
     let amountToAllocate = 0;
 
-    if (
-      talbar === "tureesiinTulbur" &&
-      isAldangiAddressed &&
-      isBaritsaaAddressed
-    ) {
+    if (talbar === "tureesiinTulbur") {
       amountToAllocate = remainingBankFunds;
     } else {
       amountToAllocate =
@@ -1030,7 +1030,7 @@ function GuilgeeNiiluulekh(
                     {t("Төлбөр хуваарилалт")}
                   </div>
                   {(() => {
-                    let remainingPayment = geree.tureesiinTulbur || 0;
+                    let remainingPayment = parseFloat(geree.tureesiinTulbur) || 0;
                     const currentAllocations = [];
                     const rows = geree.sarUldegdel.map((monthDebt, mi) => {
                       let allocate = Math.min(remainingPayment, monthDebt.debt);
