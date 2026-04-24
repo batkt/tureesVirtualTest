@@ -567,7 +567,7 @@ function GuilgeeNiiluulekh(
     const parsedStr = parser(target.value);
     const numVal = _.toNumber(parsedStr);
     if (sum + numVal > guilgeeniiDun) {
-      target.value = formatter(guilgeeniiDun - sum);
+      target.value = formatNumber(guilgeeniiDun - sum, 2);
       notification.warning({
         message: t("Анхаар"),
         description: t("Гүйлгээний дүнгээс холбох дүн илүү гарсан байна"),
@@ -671,7 +671,7 @@ function GuilgeeNiiluulekh(
     }
 
     if (amountToAllocate > 0) {
-      target.value = formatter(amountToAllocate);
+      target.value = formatNumber(amountToAllocate, 2);
       setGereenuud((a) => {
         const newData = [...a];
         _.set(newData, `${index}.${talbar}`, amountToAllocate);
@@ -905,7 +905,7 @@ function GuilgeeNiiluulekh(
                       <input
                         className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700"
                         placeholder={t("Барьцаа дүн")}
-                        value={formatter(geree.baritsaaTulbur)}
+                        value={formatNumber(geree.baritsaaTulbur, 2)}
                         onDoubleClick={({ target }) =>
                           onDoubleClickKholbokhDun(target, index, "baritsaaTulbur")
                         }
@@ -926,7 +926,7 @@ function GuilgeeNiiluulekh(
                       <input
                         className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700"
                         placeholder="Барьцаа дүн"
-                        value={formatter(geree.tulsunAldangi)}
+                        value={formatNumber(geree.tulsunAldangi, 2)}
                         onDoubleClick={({ target }) =>
                           onDoubleClickKholbokhDun(target, index, "tulsunAldangi")
                         }
@@ -980,7 +980,7 @@ function GuilgeeNiiluulekh(
                       <input
                         className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700 "
                         placeholder={t("Төлөх дүн")}
-                        value={formatter(geree.tureesiinTulbur)}
+                        value={formatNumber(geree.tureesiinTulbur, 2)}
                         onDoubleClick={({ target }) =>
                           onDoubleClickKholbokhDun(
                             target,
