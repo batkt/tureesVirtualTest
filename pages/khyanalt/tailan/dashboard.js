@@ -244,6 +244,7 @@ const BuildingOccupancyDoughnut = ({ building, token, t }) => {
               interaction: { mode: 'index', intersect: false },
               plugins: { 
                 legend: { display: false }, 
+                datalabels: { display: false },
                 tooltip: { 
                   enabled: true, 
                   mode: 'index', 
