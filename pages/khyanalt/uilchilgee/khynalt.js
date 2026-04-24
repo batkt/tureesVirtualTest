@@ -87,7 +87,7 @@ function DashboardCard({ id, title, icon, rightActions, children, headerClass="b
         <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-bold text-[12.5px] ">
           <span className="text-gray-400 dark:text-gray-300">{icon}</span> {title}
         </div>
-        
+        {rightActions && <div className="flex items-center">{rightActions}</div>}
       </div>
       <div className="p-4 dark:bg-gray-900/40 flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
         {children}

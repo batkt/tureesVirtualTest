@@ -807,11 +807,21 @@ function AjiltanBurtgel({ token }) {
                 <Form.Item
                   name="ovog"
                   rules={[
-                    {
-                      required: true,
-                      message: t("Овог бүртгэнэ үү!"),
+                  {
+                    required: true,
+                    message: t("Овог бүртгэнэ үү!"),
+                  },
+                  {
+                    validator: async (_, value) => {
+                      if (value && value.trim() !== value) {
+                        notification.warning({
+                          message: t("Анхааруулга"),
+                          description: t("Овогт зай орсон байна, нэрийг шалгана уу"),
+                        });
+                      }
                     },
-                  ]}
+                  },
+                ]}
                 >
                   <Input
                     onKeyUp={focuser}
@@ -837,6 +847,16 @@ function AjiltanBurtgel({ token }) {
                   {
                     required: true,
                     message: t("Нэр заавал оруулна уу!"),
+                  },
+                  {
+                    validator: async (_, value) => {
+                      if (value && value.trim() !== value) {
+                        notification.warning({
+                          message: t("Анхааруулга"),
+                          description: t("Нэрэнд зай орсон байна, нэрийг шалгана уу"),
+                        });
+                      }
+                    },
                   },
                 ]}
               >
@@ -1112,7 +1132,7 @@ function AjiltanBurtgel({ token }) {
                             },
                             {
                               validator: async (_, value) => {
-                                if (value && (value.startsWith(" ") || value.endsWith(" "))) {
+                                if (value && value.trim() !== value) {
                                   notification.warning({
                                     message: t("Анхааруулга"),
                                     description: t("Утасны дугаарт зай орсон байна, шалгана уу"),
@@ -1187,11 +1207,21 @@ function AjiltanBurtgel({ token }) {
                   },
                   {
                     validator: async (_, value) => {
-                      if (value && (value.startsWith(" ") || value.endsWith(" "))) {
-                        notification.warning({
-                          message: t("Анхааруулга"),
-                          description: t("И-мэйл хаягт зай орсон байна, шалгана уу"),
-                        });
+                      if (value) {
+                        const trimmedValue = value.trim();
+                        if (value !== trimmedValue) {
+                          notification.warning({
+                            message: t("Анхааруулга"),
+                            description: t("И-мэйл хаягт зай орсон байна, шалгана уу"),
+                          });
+                        }
+                        if (!/\.(com|mn)$/i.test(trimmedValue)) {
+                          return Promise.reject(
+                            new Error(
+                              t("И-мейл хаяг .com эсвэл .mn-ээр төгсөх ёстой!")
+                            )
+                          );
+                        }
                       }
                     },
                   },
