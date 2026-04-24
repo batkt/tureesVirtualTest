@@ -175,6 +175,7 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
           interaction: { mode: 'index', intersect: false },
           plugins: { 
             legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 6, usePointStyle: true, font: { size: 10 } } },
+            datalabels: { display: false },
             tooltip: { 
               cornerRadius: 8, padding: 8, mode: 'index', intersect: false,
               callbacks: {
@@ -199,7 +200,10 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
               ticks: { 
                 font: { size: 10 },
                 callback: function(value) {
-                  return formatNumber(value, 0);
+                  if (value >= 1000000000) return (value / 1000000000).toFixed(1) + 'B';
+                  if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
+                  if (value >= 1000) return (value / 1000).toFixed(1) + 'K';
+                  return value;
                 }
               } 
             } 
@@ -399,6 +403,7 @@ const BuildingSegmentsTables = ({ building, baiguullaga, token, t }) => {
     spaces.forEach(space => {
        if (space.segmentuud && space.segmentuud.length > 0) {
          space.segmentuud.forEach(seg => {
+           if (!seg) return;
            const segmentName = seg.ner || t('Бусад');
            if (!groups[segmentName]) groups[segmentName] = [];
            groups[segmentName].push(space);

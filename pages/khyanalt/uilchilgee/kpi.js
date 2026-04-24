@@ -31,7 +31,8 @@ import {
   CrownOutlined,
   FireOutlined,
   InfoCircleOutlined,
-  QuestionCircleOutlined
+  QuestionCircleOutlined,
+  FileExcelOutlined
 } from "@ant-design/icons";
 import { Bar, Doughnut } from "react-chartjs-2";
 import {
@@ -60,7 +61,7 @@ function DashboardCard({ id, title, icon, rightActions, children, headerClass="b
   return (
     <div id={id} className={`bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm border-t-[3px] ${headerClass} hover:shadow-emerald-500 dark:hover:shadow-emerald-500/10 flex flex-col relative min-h-[260px] h-[400px]`}>
       <div className="flex justify-between items-center px-4 py-3 bg-blue-900/10 dark:bg-gray-900 border-b border-gray-100 dark:border-[#2d3748]/50 shrink-0">
-        <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-bold text-[12.5px]  uppercase">
+        <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-bold text-[12.5px]">
           <span className="text-gray-400 dark:text-gray-300">{icon}</span> {title}
         </div>
         {rightActions && <div className="flex items-center">{rightActions}</div>}
@@ -399,25 +400,7 @@ function KPI() {
         />
         <div className="flex-1 flex flex-col p-3 md:p-4 overflow-x-hidden relative min-w-0">
           
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-[14px] font-bold text-gray-800 dark:text-gray-200 uppercase tracking-tight"></h2>
-            <div className="flex items-center gap-2">
-              <Button
-                  icon={<DownloadOutlined />}
-                  onClick={handleExportExcel}
-                  className="text-[12px] font-bold uppercase tracking-wider bg-emerald-500 text-white hover:bg-emerald-600 border-none rounded-lg h-8 flex items-center shadow-lg shadow-emerald-500/20"
-                >
-                  Excel
-              </Button>
-              <Button
-                  shape="circle"
-                  icon={<QuestionCircleOutlined />}
-                  onClick={() => setIsTutorialOpen(true)}
-                  className="text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border-none shadow-sm flex items-center justify-center shrink-0 transition-colors"
-                  title={t("Тусламж")}
-                />
-            </div>
-          </div>
+          
 
           <div id="khyanalt-stats" className="hideScroll grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 shrink-0 pt-1">
             {statCards.map((card, index) => (
@@ -434,7 +417,7 @@ function KPI() {
                         <div className="mb-0.5 bg-gradient-to-r from-emerald-900 to-emerald-700 bg-clip-text text-3xl font-bold text-transparent dark:from-emerald-100 dark:to-emerald-300 lining-nums">
                           {card.value}
                         </div>
-                        <div className="text-[12px] font-bold text-emerald-600 transition-colors duration-300 dark:text-emerald-400 uppercase tracking-tighter">
+                        <div className="text-[12px] font-bold text-emerald-600 transition-colors duration-300 dark:text-emerald-400 tracking-tighter">
                           {card.title}
                         </div>
                       </div>
@@ -447,6 +430,25 @@ function KPI() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-[14px] font-bold text-gray-800 dark:text-gray-200 tracking-tight"></h2>
+            <div className="flex items-center gap-2">
+              <Button
+                  icon={<FileExcelOutlined />}
+                  onClick={handleExportExcel}
+                  className="text-[12px] font-bold tracking-wider bg-emerald-500 text-white hover:bg-emerald-600 border-none rounded-lg h-8 flex items-center shadow-lg shadow-emerald-500/20"
+                >
+                  Excel
+              </Button>
+              <Button
+                  shape="circle"
+                  icon={<QuestionCircleOutlined />}
+                  onClick={() => setIsTutorialOpen(true)}
+                  className="text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border-none shadow-sm flex items-center justify-center shrink-0 transition-colors"
+                  title={t("Тусламж")}
+                />
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-100 dark:[&::-webkit-scrollbar-thumb]:bg-slate-800">
@@ -468,7 +470,7 @@ function KPI() {
                       <Doughnut key={`top5-${topUsers.length}`} data={doughnutData} options={{...chartOptions, cutout: '70%'}} />
                       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                         <span className="text-xl font-bold text-gray-800 dark:text-gray-100 lining-nums">{avgKpi}%</span>
-                        <span className="text-[12px] font-bold text-gray-400 uppercase">{t("Дундаж")}</span>
+                        <span className="text-[12px] font-bold text-gray-400 ">{t("Дундаж")}</span>
                       </div>
                     </div>
                     <div className="flex flex-col gap-1 px-2">
@@ -535,7 +537,7 @@ function KPI() {
                                 />
                               </div>
 
-                              <div className="flex items-center gap-3 text-[12px] font-bold text-gray-400 uppercase tracking-tight">
+                              <div className="flex items-center gap-3 text-[12px] font-bold text-gray-400 tracking-tight">
                                 <span className="flex items-center gap-1"><CheckSquareOutlined /> {user.todayTaskCount || 0} {t("Өнөөдөр")}</span>
                                 <span className="flex items-center gap-1"><CheckCircleOutlined className="text-[10px]" /> {user.kpiDaalgavarToo || 0} {t("Нийт")}</span>
                                 <span className="flex items-center gap-1" style={{ color }}><TrophyOutlined /> {user.kpiOnoo || 0} {t("Оноо")}</span>
@@ -610,7 +612,7 @@ function KPI() {
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
                     <CrownOutlined className="text-yellow-400 text-xl" />
-                    <span className="text-[12px] font-bold text-gray-400 uppercase ">{t("Шилдэг гүйцэтгэгч")}</span>
+                    <span className="text-[12px] font-bold text-gray-400 ">{t("Шилдэг гүйцэтгэгч")}</span>
                   </div>
                   {topUsers[0] ? (
                     <div className="flex items-center gap-4">
@@ -627,7 +629,7 @@ function KPI() {
                 <div className="relative z-10 mt-6 flex items-end justify-between ">
                   <div className="flex flex-col">
                     <span className="text-2xl font-bold tabular-nums dark:text-green-500 text-green-600">{topUsers[0]?.kpiHuvv || 0}%</span>
-                    <span className="text-[12px] font-bold uppercase opacity-60 dark:text-gray-500 text-gray-600">KPI {t("Гүйцэтгэл")}</span>
+                    <span className="text-[12px] font-bold opacity-60 dark:text-gray-500 text-gray-600">KPI {t("Гүйцэтгэл")}</span>
                   </div>
                   {/* <Button size="small" ghost className="border-white/40 hover:bg-white/10 text-[12px] font-bold uppercase  h-7 rounded-lg">Профайл</Button> */}
                 </div>
@@ -637,7 +639,7 @@ function KPI() {
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <CheckSquareOutlined className="text-emerald-500 text-xl" />
-                    <span className="text-[12px] font-bold text-gray-400 uppercase ">{t("Ажлын мастер")}</span>
+                    <span className="text-[12px] font-bold text-gray-400 ">{t("Ажлын мастер")}</span>
                   </div>
                   {(() => {
                     const master = [...users].sort((a,b) => (b.kpiDaalgavarToo || 0) - (a.kpiDaalgavarToo || 0))[0];
@@ -662,7 +664,7 @@ function KPI() {
                     return (
                       <>
                         <span className="text-2xl font-bold tabular-nums text-emerald-500">{master?.kpiDaalgavarToo || 0}</span>
-                        <span className="text-[12px] font-bold uppercase opacity-60 dark:text-gray-500 text-gray-600">Нийт дууссан ажил</span>
+                        <span className="text-[12px] font-bold  opacity-60 dark:text-gray-500 text-gray-600">Нийт дууссан ажил</span>
                       </>
                     );
                   })()}
@@ -673,7 +675,7 @@ function KPI() {
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <ThunderboltOutlined className="text-amber-500 text-xl" />
-                    <span className="text-[12px] font-bold text-gray-400 uppercase ">{t("Онооны тэргүүлэгч")}</span>
+                    <span className="text-[12px] font-bold text-gray-400  ">{t("Онооны тэргүүлэгч")}</span>
                   </div>
                   {(() => {
                     const leader = [...users].sort((a,b) => (b.kpiOnoo || 0) - (a.kpiOnoo || 0))[0];
@@ -698,7 +700,7 @@ function KPI() {
                     return (
                       <>
                         <span className="text-2xl font-bold tabular-nums text-amber-500">{leader?.kpiOnoo || 0}</span>
-                        <span className="text-[12px] font-bold uppercase opacity-60 dark:text-gray-500 text-gray-600">{t("Нийт оноо")}</span>
+                        <span className="text-[12px] font-bold opacity-60 dark:text-gray-500 text-gray-600">{t("Нийт оноо")}</span>
                       </>
                     );
                   })()}
@@ -710,7 +712,7 @@ function KPI() {
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <RiseOutlined className="text-blue-500 text-xl" />
-                    <span className="text-[12px] font-bold text-gray-400 uppercase ">{t("Багийн Төлөв")}</span>
+                    <span className="text-[12px] font-bold text-gray-400  ">{t("Багийн Төлөв")}</span>
                   </div>
                   <div className="flex flex-col">
                     <div className="flex items-baseline gap-2">
@@ -724,12 +726,12 @@ function KPI() {
                         );
                       })()}
                     </div>
-                    <span className="text-[12px] font-bold text-gray-400 uppercase mt-1">{t("Дундажаас дээш ажилтан")}</span>
+                    <span className="text-[12px] font-bold text-gray-400  mt-1">{t("Дундажаас дээш ажилтан")}</span>
                     </div>
                 </div>
                 <div className="mt-4 flex flex-col gap-1.5">
                    <div className="flex items-center justify-between text-[12px] font-bold">
-                     <span className="text-gray-400 uppercase">{t("Тогтвортой байдал")}</span>
+                     <span className="text-gray-400 ">{t("Тогтвортой байдал")}</span>
                      <span className="text-blue-500">
                       {avgKpi === 0 ? "Одоогоор үнэлгээгүй" : (avgKpi >= 80 ? "Маш сайн" : avgKpi >= 50 ? "Үр дүнтэй" : "Сайжруулах")}
                      </span>
