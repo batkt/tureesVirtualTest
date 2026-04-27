@@ -706,7 +706,7 @@ function Khynalt() {
                       
                       return {
                         x: PAD_L + i * step,
-                        y: BASE - (val / seriesMax) * (BASE - 10),
+                        y: BASE - (val / seriesMax) * (BASE - 25),
                         v: d[key],
                         tasks: d[`${key}Tasks`] || []
                       };

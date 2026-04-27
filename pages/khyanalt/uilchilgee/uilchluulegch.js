@@ -34,6 +34,7 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 import { useFsmSocket } from "hooks/useFsmSocket";
+import DraggableModal from "components/DraggableModal";
 
 function Uilchluulegch() {
   const { t } = useTranslation();
@@ -241,7 +242,6 @@ function Uilchluulegch() {
 
   const statCards = [
     { title: t("Нийт харилцагч"), value: users.length.toString() },
-    { title: t("Шинэ"), value: users.filter(u => u.tuluv === 'shine').length.toString() },
     { title: t("Нийт даалгавар"), value: users.reduce((acc, curr) => acc + (Number(curr.kpiDaalgavarToo) || 0), 0).toString() },
     { title: t("Дундаж KPI"), value: (users.length > 0 ? (users.reduce((acc, curr) => acc + (Number(curr.kpiDundaj) || 0), 0) / users.length).toFixed(1) : "0") },
   ];
@@ -299,7 +299,7 @@ function Uilchluulegch() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 shrink-0 px-1">
             <div id="cust-search-filter" className="flex flex-1 items-center gap-4 w-full md:w-auto">
                <Input 
-                 placeholder={t("Нэр, утас, э-мэйлээр хайх...")} 
+                 placeholder={t("Нэр, утас, имэйлээр хайх...")} 
                  prefix={<SearchOutlined className="text-gray-400" />}
                  value={searchText}
                  onChange={(e) => setSearchText(e.target.value)}
@@ -433,12 +433,13 @@ function Uilchluulegch() {
             ))}
           </div>
 
-          <Modal
+          <DraggableModal
             open={isDetailModalOpen}
             onCancel={() => setIsDetailModalOpen(false)}
             footer={null}
             width={900}
             centered
+            title={t("Үйлчлүүлэгчийн түүх")}
           >
             <div className="p-4 flex flex-col h-[75vh]">
               <div className="flex justify-between items-start mb-6">
@@ -580,9 +581,9 @@ function Uilchluulegch() {
                 <Button onClick={() => setIsDetailModalOpen(false)}>{t("Хаах")}</Button>
               </div>
             </div>
-          </Modal>
+          </DraggableModal>
 
-          <Modal
+          <DraggableModal
             title={editingUser ? t("Үйлчлүүлэгч засах") : t("Үйлчлүүлэгч нэмэх")}
             open={isAddModalOpen}
             onCancel={() => {
@@ -615,7 +616,7 @@ function Uilchluulegch() {
                  <Input placeholder="GR-..." />
               </Form.Item>
             </Form>
-          </Modal>
+          </DraggableModal>
 
         </div>
       </div>

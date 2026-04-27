@@ -48,6 +48,7 @@ import {
   Avatar,
   Image
 } from "antd";
+import DraggableModal from "components/DraggableModal";
 import { useFsmSocket } from "hooks/useFsmSocket";
 import { Bar, Doughnut } from "react-chartjs-2";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -87,13 +88,6 @@ function BaraaMaterial() {
     dana: "дан"
   };
 
-  const typeMap = {
-    tseverlegch: "Цэвэрлэгээ",
-    ugaalgiin: "Угаалгын",
-    ariutgagch: "Ариутгагч",
-    bagaj: "Багаж",
-    busad: "Бусад"
-  };
   const [isRightPanelExpanded, setIsRightPanelExpanded] = useState(typeof window !== 'undefined' ? window.innerWidth >= 1280 : true);
   const [baraas, setBaraas] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -119,6 +113,39 @@ function BaraaMaterial() {
   const [usageStats, setUsageStats] = useState([]);
   const [todayUsageStats, setTodayUsageStats] = useState([]);
   const [loadingStats, setLoadingStats] = useState(false);
+  const { baiguullaga } = useAuth();
+  
+  const [typeMap, setTypeMap] = useState({
+    "Цэвэрлэгээ": "Цэвэрлэгээ",
+    "Угаалгын": "Угаалгын",
+    "Ариутгагч": "Ариутгагч",
+    "Багаж": "Багаж",
+    "Бусад": "Бусад"
+  });
+
+  const fetchFsmTuruls = useCallback(async () => {
+    if (!barilgiinId || !baiguullaga?._id) return;
+    try {
+      const res = await api.get("/fsm-turuls", {
+        params: { baiguullagiinId: baiguullaga._id, barilgiinId }
+      });
+      const turuls = res.data?.data || [];
+      if (turuls.length > 0) {
+        const newMap = turuls.reduce((acc, curr) => {
+          acc[curr.ner] = curr.ner;
+          return acc;
+        }, {});
+        setTypeMap(newMap);
+      }
+    } catch (err) {
+      console.error("Failed to load turuls", err);
+    }
+  }, [api, barilgiinId, baiguullaga]);
+
+  useEffect(() => {
+    fetchFsmTuruls();
+  }, [fetchFsmTuruls]);
+
   const [isProjectChatVisible, setIsProjectChatVisible] = useState(false);
   const [selectedProjectForChat, setSelectedProjectForChat] = useState(null);
   const [projectChatMessages, setProjectChatMessages] = useState([]);
@@ -130,6 +157,9 @@ function BaraaMaterial() {
   const [replyToProject, setReplyToProject] = useState(null);
   const [editingProjectMsg, setEditingProjectMsg] = useState(null);
   const [editProjectMsgText, setEditProjectMsgText] = useState("");
+  
+  const [tablePagination, setTablePagination] = useState({ current: 1, pageSize: 10 });
+  const [searchText, setSearchText] = useState("");
 
   const fetchBaraas = useCallback(async () => {
     if (!barilgiinId) return;
@@ -209,7 +239,10 @@ function BaraaMaterial() {
       key: 'index',
       width: 50,
       align: 'center',
-      render: (text, record, index) => <span className="text-gray-400 font-bold">{index + 1}</span>
+      render: (text, record, index) => {
+        const absoluteIndex = (tablePagination.current - 1) * tablePagination.pageSize + index + 1;
+        return <span className="text-gray-400 font-bold">{absoluteIndex}</span>;
+      }
     },
     {
       title: t('Барааны нэр'),
@@ -570,20 +603,29 @@ function BaraaMaterial() {
   }, [isConnected, socket, fetchUsageStats, fetchHistory, fetchBaraas]);
     
   const filteredBaraas = useMemo(() => {
-    if (filterType === "all") return baraas;
+    let list = baraas;
     
-    return baraas.filter(b => {
-      if (filterType === "tseverlegch") {
-        return ['tseverlegch', 'Цэвэрлэгч', 'Цэвэрлэгээ'].includes(b.turul);
-      }
-      if (filterType === "busad") {
-        const cleaningKeys = ['tseverlegch', 'Цэвэрлэгч', 'Цэвэрлэгээ', 'ugaalgiin', 'Угаалгын', 'ariutgagch', 'Ариутгагч', 'bagaj', 'Багаж'];
-        return !cleaningKeys.includes(b.turul);
-      }
-      const label = typeMap[filterType];
-      return b.turul === filterType || b.turul === label;
-    });
-  }, [baraas, filterType]);
+    if (filterType !== "all") {
+      list = list.filter(b => {
+        const label = typeMap[filterType] || filterType;
+        if (filterType === "Цэвэрлэгээ" && ['tseverlegch', 'Цэвэрлэгч'].includes(b.turul)) return true;
+        if (filterType === "Угаалгын" && b.turul === 'ugaalgiin') return true;
+        if (filterType === "Ариутгагч" && b.turul === 'ariutgagch') return true;
+        if (filterType === "Багаж" && b.turul === 'bagaj') return true;
+        return b.turul === filterType || b.turul === label;
+      });
+    }
+
+    if (searchText) {
+      const lowerSearch = searchText.toLowerCase();
+      list = list.filter(b => 
+        b.ner?.toLowerCase().includes(lowerSearch) || 
+        b.turul?.toLowerCase().includes(lowerSearch)
+      );
+    }
+    
+    return list;
+  }, [baraas, filterType, typeMap, searchText]);
 
   const handleSaveBaraa = async (values) => {
     if (!barilgiinId) { toast.warning("Барилгын мэдээлэл байхгүй байна"); return; }
@@ -593,6 +635,7 @@ function BaraaMaterial() {
         turul: values.turul || "Бусад",
         negj: values.negj || "shirheg",
         uldegdel: Number(values.uldegdel) || 0,
+        shirhegiinToo: values.negj === 'haire' ? (Number(values.shirhegiinToo) || 1) : 1,
         baiguullagiinId,
         barilgiinId
       };
@@ -636,7 +679,6 @@ function BaraaMaterial() {
     form.setFieldsValue({
       ...item,
       turul: typeMap[item.turul] || item.turul || "Бусад",
-      // map API field names → form field names
       negjUrtug: item.negjUne ?? 0,
       niitUne:   item.niitUrtug ?? 0,
       idevhtei: item.idevhtei !== undefined ? item.idevhtei : true
@@ -732,16 +774,26 @@ function BaraaMaterial() {
           </div> */}
 
           <div id="mat-actions" className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-4 shrink-0 animate-entrance-stagger-6">
-            <Select
-              value={filterType}
-              onChange={setFilterType}
-              className="w-full sm:w-48 [&>.ant-select-selector]:!bg-white dark:[&>.ant-select-selector]:!bg-[#222a38] dark:[&>.ant-select-selector]:!border-[#2d3748]/50 [&>.ant-select-selector]:!border-gray-200 dark:[&>.ant-select-selector]:!text-gray-300 [&>.ant-select-selector]:!rounded-lg [&>.ant-select-selector]:!h-[36px] [&>.ant-select-selector]:!flex [&>.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!text-xs"
-            >
-                <Select.Option value="all">{t("Бүх төрөл")}</Select.Option>
-                {Object.entries(typeMap).map(([key, value]) => (
-                  <Select.Option key={key} value={key}>{value}</Select.Option>
-                ))}
-             </Select>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Select
+                value={filterType}
+                onChange={setFilterType}
+                className="w-full sm:w-48 [&>.ant-select-selector]:!bg-white dark:[&>.ant-select-selector]:!bg-[#222a38] dark:[&>.ant-select-selector]:!border-[#2d3748]/50 [&>.ant-select-selector]:!border-gray-200 dark:[&>.ant-select-selector]:!text-gray-300 [&>.ant-select-selector]:!rounded-lg [&>.ant-select-selector]:!h-[36px] [&>.ant-select-selector]:!flex [&>.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!text-xs"
+              >
+                  <Select.Option value="all">🟢 {t("Бүх төрөл")}</Select.Option>
+                  {Object.entries(typeMap).map(([key, value]) => (
+                    <Select.Option key={key} value={key}>{value}</Select.Option>
+                  ))}
+               </Select>
+               <Input 
+                 placeholder={t("Барааны нэрээр хайх...")} 
+                 prefix={<SearchOutlined className="text-gray-400" />}
+                 value={searchText}
+                 onChange={(e) => setSearchText(e.target.value)}
+                 className="h-[36px] rounded-lg w-full sm:w-64 shadow-sm border-gray-200 dark:border-gray-700"
+                 allowClear
+               />
+            </div>
 
             <Space className="w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0" wrap={false}>
               <Button
@@ -786,6 +838,11 @@ function BaraaMaterial() {
                 loading={loading}
                 className="ant-table-custom"
                 rowClassName="hover:bg-slate-50 dark:hover:bg-slate-700/40"
+                pagination={{
+                  ...tablePagination,
+                  showSizeChanger: true
+                }}
+                onChange={(pagination) => setTablePagination(pagination)}
               />
             </div>
           </Card>
@@ -1089,7 +1146,7 @@ function BaraaMaterial() {
           document.body
         )}
 
-        <Modal
+        <DraggableModal
             title={editingBaraa ? t("Бараа засах") : t("Бараа бүртгэх")}
             open={isAddModalOpen}
             onCancel={() => {
@@ -1114,13 +1171,7 @@ function BaraaMaterial() {
               
                 <Form.Item name="turul" label={t("Төрөл")}>
                   <AutoComplete
-                    options={[
-                      { value: t("Цэвэрлэгээ") },
-                      { value: t("Угаалгын") },
-                      { value: t("Ариутгагч") },
-                      { value: t("Багаж") },
-                      { value: t("Бусад") }
-                    ]}
+                    options={Object.keys(typeMap).map(k => ({ value: typeMap[k] }))}
                     filterOption={(inputValue, option) =>
                       option.value.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                     }
@@ -1146,8 +1197,6 @@ function BaraaMaterial() {
     <Select.Option value="litr">{t("Литр")}</Select.Option>
     <Select.Option value="kg">{t("Кг")}</Select.Option>
     <Select.Option value="haire">{t("Хайрцаг")}</Select.Option>
-    <Select.Option value="bogts">{t("Богц")}</Select.Option>
-    <Select.Option value="dana">{t("Дан")}</Select.Option>
   </Select>
 </Form.Item>
 
@@ -1157,7 +1206,24 @@ function BaraaMaterial() {
 >
   {({ getFieldValue }) => {
     const negj = getFieldValue('negj');
-    const isWhole = negj === 'shirheg' || negj === 'haire' || negj === 'bogts' || negj === 'dana';
+    if (negj === 'haire') {
+      return (
+        <Form.Item name="shirhegiinToo" label={t("Хайрцаг дахь ширхэг")} initialValue={1} rules={[{ required: true, message: "Оруулна уу" }]}>
+          <InputNumber className="w-full rounded-md" min={1} />
+        </Form.Item>
+      );
+    }
+    return null;
+  }}
+</Form.Item>
+
+<Form.Item
+  noStyle
+  shouldUpdate={(prev, curr) => prev.negj !== curr.negj}
+>
+  {({ getFieldValue }) => {
+    const negj = getFieldValue('negj');
+    const isWhole = negj === 'shirheg' || negj === 'haire';
     return (
       <Form.Item name="uldegdel" label={t("Үлдэгдэл")} initialValue={0}
       rules={[
@@ -1186,11 +1252,11 @@ function BaraaMaterial() {
                
                
             </Form>
-          </Modal>
+          </DraggableModal>
 
           
 
-          <Modal
+          <DraggableModal
             title={editingProject ? t("Төсөл засах") : t("Шинэ төсөл эхлүүлэх")}
             open={isProjectModalVisible}
             onCancel={() => { setIsProjectModalVisible(false); setEditingProject(null); projectForm.resetFields(); }}
@@ -1253,7 +1319,7 @@ function BaraaMaterial() {
                 </Button>
               </div>
             </Form>
-          </Modal>
+          </DraggableModal>
       </div>
       <GuidedTour 
         steps={tutorialSteps} 

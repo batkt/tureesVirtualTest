@@ -4,6 +4,9 @@ import { url } from "services/uilchilgee";
 import updateMethod from "tools/function/crud/updateMethod";
 import getBase64 from "tools/function/getBase64";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
+import uilchilgee from "services/uilchilgee";
+import { Select } from "antd";
 
 const { TextArea } = Input;
 
@@ -11,11 +14,14 @@ function KhuviinMedeelel({
   ajiltan,
   token,
   ajiltanMutate,
+  baiguullaga,
+  baiguullagaMutate,
   khadgalsniiDaraa,
   setSongogdsonTsonkhniiIndex,
 }) {
   const { t } = useTranslation();
   const [state, setstate] = useState(ajiltan);
+  const [fsmTurul, setFsmTurul] = useState(baiguullaga?.fsmTuruljuulekh || ["Цэвэрлэгээ", "Угаалгын", "Ариутгагч", "Багаж", "Бусад"]);
   const zuragRef = useRef(null);
 
   function onChange({ target }, key) {
@@ -31,9 +37,19 @@ function KhuviinMedeelel({
       if (status === 200 && "Amjilttai" === data) {
         toast.success(t("Амжилттай засагдлаа"));
         ajiltanMutate({ ...ajiltanObject });
-        setSongogdsonTsonkhniiIndex(1);
       }
     });
+
+    if (baiguullaga) {
+      const yavuulakhData = { ...baiguullaga, fsmTuruljuulekh: fsmTurul };
+      uilchilgee(token)
+        .put(`/baiguullaga/${baiguullaga._id}`, yavuulakhData)
+        .then(({ data }) => {
+          if (data === "Amjilttai") {
+            baiguullagaMutate();
+          }
+        });
+    }
   }
 
   function zuragSolikh({ target }) {
@@ -123,6 +139,7 @@ function KhuviinMedeelel({
                       onChange={(e) => onChange(e, "shineNuutsUgDavtan")}
                     />
                   </div>
+                 
                 </div>
               </div>
               <div className="mt-3 flex w-full justify-end">

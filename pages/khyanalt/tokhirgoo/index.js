@@ -16,6 +16,7 @@ import Email from "components/pageComponents/tokhirgoo/EmailTokhirgoo";
 import Zogsool from "components/pageComponents/tokhirgoo/Zogsool";
 import AppTokhirgoo from "components/pageComponents/tokhirgoo/AppTokhirgoo";
 import SegmentTokhirgo from "components/pageComponents/tokhirgoo/SegmentTokhirgo";
+import FsmTuruljuulekh from "components/pageComponents/tokhirgoo/FsmTuruljuulekh";
 
 import { useMemo, useState } from "react";
 
@@ -24,6 +25,7 @@ import {
   BuildFilled,
   DatabaseOutlined,
   HistoryOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import NevtreltiinTuukh from "components/pageComponents/tokhirgoo/NevtreltiinTuukh";
 import { useTranslation } from "react-i18next";
@@ -292,6 +294,15 @@ function AjiltanBurtgel({ token }) {
           ),
           text: "Нэвтрэлтийн түүх",
           tsonkh: NevtreltiinTuukh,
+        },
+        {
+          icon: (
+            <div className="mr-2 flex items-center justify-center text-base">
+              <SettingOutlined />
+            </div>
+          ),
+          text: "FSM Төрөлжүүлэх",
+          tsonkh: FsmTuruljuulekh,
         },
         {
           icon: (

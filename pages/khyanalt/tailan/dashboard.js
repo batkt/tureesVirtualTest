@@ -14,6 +14,8 @@ import {
   HomeOutlined,
   TeamOutlined,
   FileTextOutlined,
+  DownloadOutlined,
+  PrinterOutlined,
 } from "@ant-design/icons";
 import _ from "lodash";
 import useSWR from "swr";
@@ -217,6 +219,7 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
 const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all', dateRange, baiguullaga }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const chartRef = React.useRef(null);
 
   const { talbainToololt } = useTalbainToololt(token, building._id);
 
@@ -339,6 +342,7 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
     }
   }, [selectedSegment, groupedBySegment, isDark]);
 
+
   const chartOptions = {
     maintainAspectRatio: false,
     plugins: {
@@ -354,7 +358,7 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
             if (customData && customData[context.dataIndex]) {
                const dataItem = customData[context.dataIndex];
                const value = context.raw || 0;
-               return ` Сегмент: ${dataItem.segmentName} - ${formatNumber(value)} m2`;
+               return `${formatNumber(value)} m2`;
             }
             return ` ${context.label || ''}: ${context.raw || 0}`;
           }
@@ -363,14 +367,16 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
     }
   };
 
+  const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'];
+
   return (
     <GlassCard title={t("Талбайн ашиглалт")} icon={<HomeOutlined />} className="h-[350px]">
       <div className="flex flex-col md:flex-row items-center justify-around h-full gap-4 px-2">
          <div className="relative h-44 w-44 flex-shrink-0">
             {chartData.datasets[0]?.data?.length > 0 ? (
-               <Doughnut data={chartData} options={chartOptions} />
+               <Doughnut ref={chartRef} data={chartData} options={chartOptions} />
             ) : (
-               <Doughnut data={{
+               <Doughnut ref={chartRef} data={{
                  labels: [t("Идэвхтэй1"), t(" Идэвхгүй1")],
                  datasets: [{
                    data: [stats.occupied, stats.vacant],
@@ -392,7 +398,7 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
                  } 
                }} />
             )}
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
               <span className="text-3xl text-slate-800 dark:text-white leading-none tracking-tighter">{occupancyRate}%</span>
               <span className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest">{t("Дүүргэлт")}</span>
             </div>
@@ -525,17 +531,23 @@ const VacancyFloorTable = ({ building, baiguullaga, token, t }) => {
 const BuildingSegmentsTables = ({ building, baiguullaga, token, t, selectedSegment, setSelectedSegment, dateRange, setDateRange }) => {
 
   const query = { barilgiinId: building._id, idevkhiteiEsekh: { $in: [true, false] }, khuudasniiKhemjee: 5000 };
-  if (dateRange && dateRange[0] && dateRange[1]) {
-    query.createdAt = { 
-      $gte: dateRange[0].startOf('day').toISOString(),
-      $lte: dateRange[1].endOf('day').toISOString()
-    };
-  }
-
+  
   const { talbainiiGaralt, isValidating } = useTalbai(token, baiguullaga?._id, query);
   
   const groupedBySegment = useMemo(() => {
-    const spaces = talbainiiGaralt?.jagsaalt || [];
+    let spaces = talbainiiGaralt?.jagsaalt || [];
+    
+    // Filter by date range on the frontend
+    if (dateRange && dateRange[0] && dateRange[1]) {
+      const start = moment(dateRange[0]).startOf('day');
+      const end = moment(dateRange[1]).endOf('day');
+      spaces = spaces.filter(space => {
+        if (!space.createdAt) return true;
+        const created = moment(space.createdAt);
+        return created >= start && created <= end;
+      });
+    }
+
     const groups = {};
     spaces.forEach(space => {
        if (space.segmentuud && space.segmentuud.length > 0) {
@@ -552,7 +564,7 @@ const BuildingSegmentsTables = ({ building, baiguullaga, token, t, selectedSegme
        }
     });
     return groups;
-  }, [talbainiiGaralt, t]);
+  }, [talbainiiGaralt, t, dateRange]);
 
   const segmentOptions = useMemo(() => {
     return [
@@ -580,7 +592,9 @@ const BuildingSegmentsTables = ({ building, baiguullaga, token, t, selectedSegme
           <DatePicker.RangePicker 
             size="small"
             className="w-48 text-[11px]"
+            value={dateRange}
             onChange={(dates) => setDateRange(dates)}
+            allowClear={false}
           />
           <Select
             size="small"
@@ -619,7 +633,8 @@ export default function BuildingDashboard() {
   const { t } = useTranslation();
   const router = useRouter();
   const [selectedSegment, setSelectedSegment] = useState('all');
-  const [dateRange, setDateRange] = useState(null);
+  const [dateRange, setDateRange] = useState([moment().subtract(6, 'months').startOf('month'), moment().endOf('month')]);
+  const dashboardRef = React.useRef(null);
 
   useEffect(() => { Aos.init({ duration: 1000 }); }, []);
 
@@ -629,13 +644,77 @@ export default function BuildingDashboard() {
     return list.find(b => b._id === bId) || list[0];
   }, [baiguullaga, ajiltan, barilgiinId, router.query]);
 
+  const handlePrintPage = () => {
+    window.print();
+  };
+
+  const handleExportAllExcel = () => {
+    // Gather all visible table data from the page
+    const tables = dashboardRef.current?.querySelectorAll('table') || [];
+    let csv = '';
+    
+    tables.forEach((table, tableIdx) => {
+      // Get table section title from closest GlassCard
+      const card = table.closest('.group');
+      const titleEl = card?.querySelector('span.text-\\[11px\\]');
+      const sectionTitle = titleEl?.textContent || `Хүснэгт ${tableIdx + 1}`;
+      csv += `\n${sectionTitle}\n`;
+
+      const rows = table.querySelectorAll('tr');
+      rows.forEach((row) => {
+        const cells = row.querySelectorAll('th, td');
+        const rowData = [];
+        cells.forEach((cell) => {
+          let text = cell.textContent?.trim() || '';
+          // Escape commas and quotes for CSV
+          if (text.includes(',') || text.includes('"')) {
+            text = `"${text.replace(/"/g, '""')}"`;
+          }
+          rowData.push(text);
+        });
+        csv += rowData.join(',') + '\n';
+      });
+      csv += '\n';
+    });
+
+    if (!csv.trim()) {
+      csv = 'Мэдээлэл байхгүй байна';
+    }
+
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dashboard_${selectedBuilding?.ner || 'report'}_${moment().format('YYYY-MM-DD')}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (!selectedBuilding) return null;
 
   return (
     <Admin khuudasniiNer="dashboard" title={t("Хяналтын самбар")}>
-      <div className="col-span-12 flex flex-col h-[calc(100vh-80px)] w-full -mx-0 xl:-mx-1 text-black animate-entrance overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-6 pb-20">
+      <div ref={dashboardRef} className="col-span-12 flex flex-col h-[calc(100vh-80px)] w-full -mx-0 xl:-mx-1 text-black animate-entrance overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-6 pb-20">
         
-        <BuildingStatsSummary baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
+        <div className="flex items-center justify-between">
+          <BuildingStatsSummary baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
+          <div className="flex items-center gap-2 ml-4 shrink-0">
+            <Button 
+              icon={<PrinterOutlined />} 
+              onClick={handlePrintPage}
+              className="flex items-center gap-1.5 rounded-xl border-slate-200 dark:border-slate-700 text-slate-500 hover:!text-emerald-600 hover:!border-emerald-400"
+            >
+              <span className="hidden sm:inline text-xs">{t("Хэвлэх")}</span>
+            </Button>
+            <Button 
+              icon={<DownloadOutlined />} 
+              onClick={handleExportAllExcel}
+              className="flex items-center gap-1.5 rounded-xl border-slate-200 dark:border-slate-700 text-slate-500 hover:!text-emerald-600 hover:!border-emerald-400"
+            >
+              <span className="hidden sm:inline text-xs">Excel</span>
+            </Button>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
            <BuildingIncomeChart baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />

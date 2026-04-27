@@ -2399,7 +2399,7 @@ useEffect(() => {
               <Select className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex">
                 <Select.Option value="nen yaraltai">🔴 {t("Нэн яаралтай")}</Select.Option>
                 <Select.Option value="yaraltai">🟠 {t("Яаралтай")}</Select.Option>
-                <Select.Option value="engiin">🟢 {t("Дунд")}</Select.Option>
+                <Select.Option value="engiin">🟢 {t("Энгийн")}</Select.Option>
                
               </Select>
             </Form.Item>
