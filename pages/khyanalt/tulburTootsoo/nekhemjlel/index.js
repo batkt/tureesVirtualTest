@@ -68,6 +68,16 @@ function chargeTagRe(name, field) {
   return new RegExp(`&lt;${n}(\\\\\\.|\\\\.)${field}&gt;`, "g");
 }
 
+const chargeTagReSoyolj = (name, field) => {
+  const n = String(name || "")
+    .trim()
+    .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(
+    `(?:&lt;|<)\\s*${n}\\s*(?:\\\\\\.|\\\\\\.\\.\\.|\\.|\\.\\.\\.)\\s*${field}\\s*(?:&gt;|>)`,
+    "gi",
+  );
+};
+
 function parseNum(v) {
   if (v == null || v === "") return 0;
   return parseFloat(String(v).replace(/,/g, "")) || 0;
@@ -843,7 +853,11 @@ function tulburTootsoo({ token }) {
           var zardluud = medeelel.zardluud.filter(
             (a) => a.tailbar === "Менежмент төлбөр хуучин",
           );
-          if (!zardluud || zardluud.length === 0) {
+          if (
+            !zardluud ||
+            zardluud.length === 0 ||
+            barilgiinId === "6731b43bc23730ac1908da2e"
+          ) {
             kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
               ? khungulsunTalbainNiitUne
               : 0;
@@ -1621,6 +1635,58 @@ function tulburTootsoo({ token }) {
                 menejmentCount++;
                 niilberNekhemjlelDunGoto += khungulultKhassanTulukhDun;
               }
+
+              if (barilgiinId === "6731b43bc23730ac1908da2e") {
+                // Soyolj Mall specific fixes: Gas consumption and flexible tag matching
+                if (a.tailbar?.includes("Газ")) {
+                  a.zuruuZaalt = (a.suuliinZaalt || 0) - (a.umnukhZaalt || 0);
+                  zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                    chargeTagReSoyolj(a.tailbar, "zuruuZaalt"),
+                    formatNumber(a.zuruuZaalt || 0) || "",
+                  );
+                }
+
+                // Apply flexible matching for all common tags for Soyolj
+                [
+                  "khemjikhNegj",
+                  "tulukhDun",
+                  "tulukhDunNuat",
+                  "tulukhDunNuattai",
+                  "tulukhDunNuatgui",
+                  "khungulultKhassanTulukhDun",
+                  "khungulultKhassanTulukhDunNuat",
+                  "khungulultKhassanTulukhDunNuatgui",
+                  "tariff",
+                  "negj",
+                  "suuliinZaalt",
+                  "umnukhZaalt",
+                  "khungulult",
+                  "zuruuZaalt",
+                  "tsakhilgaanUrjver",
+                  "tsekhDun",
+                  "chadalDun",
+                  "sekhDemjikhTulburDun",
+                  "tseverusTariff",
+                  "boxirusTariff",
+                  "usxalaasniitulburTariff",
+                ].forEach((field) => {
+                  let val = a[field];
+                  if (
+                    field === "tariff" ||
+                    field === "negj" ||
+                    field.includes("Dun") ||
+                    field.includes("Zaalt") ||
+                    field === "khungulult" ||
+                    field.includes("Tariff")
+                  ) {
+                    val = formatNumber(val || 0);
+                  }
+                  zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                    chargeTagReSoyolj(a.tailbar, field),
+                    val || "",
+                  );
+                });
+              }
             });
             medeelel.zuruuDun = zuruuDun;
             medeelel.tseverusDun = tseverusDun;
@@ -1870,6 +1936,9 @@ function tulburTootsoo({ token }) {
             //   );
             // }
             let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
+            if (barilgiinId === "6731b43bc23730ac1908da2e") {
+              garaasBodsonNiitDun = parseNum(medeelel.niitUldegdel);
+            }
             let garaasBodsonNiitDunNuatgui = garaasBodsonNiitDun / 1.1;
             let garaasBodsonNiitDunNuat = garaasBodsonNiitDunNuatgui * 0.1;
             // let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
