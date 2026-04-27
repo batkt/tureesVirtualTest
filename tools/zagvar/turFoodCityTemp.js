@@ -236,7 +236,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   2,
                 )}</td>
                 <td style="border: 1px solid #000; text-align: right;">${formatNumber(
-                  mur.tulukhDun,
+                  mur.tulukhDun - mur.khungulult || 0,
                   2,
                 )}</td>
               </tr>
@@ -282,7 +282,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                     mur.khungulult || 0
                   }</td>
                   <td style="border: 1px solid #000; text-align: right;">${
-                    formatNumber(mur.tulukhDun, 2) || 0
+                    formatNumber(mur.tulukhDun - mur.khungulult || 0, 2) || 0
                   }</td>
                 </tr>
               `,
@@ -313,7 +313,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   2,
                 )}</td>
                 <td style="border: 1px solid #000; text-align: right;">${formatNumber(
-                  mur.tulukhDun,
+                  mur.tulukhDun - mur.khungulult || 0,
                   2,
                 )}</td>
               </tr>
@@ -340,7 +340,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.suuliinZaalt&gt;</td>
                 <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.zuruuZaalt&gt;</td>
                 <td style="border: 1px solid #000; text-align: right;">${mur.tariff}/1.02</td>
-                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tulukhDun&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDun&gt;</td>
               </tr>
             `;
               })
@@ -385,7 +385,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tseverusTariff&gt;</td>
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.boxirusTariff&gt;</td>
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.usxalaasniitulburTariff&gt;</td>
-                  <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tulukhDun&gt;</td>
+                  <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDun&gt;</td>
                 </tr>
               `,
               )
@@ -413,7 +413,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tseverusTariff&gt;</td>
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.boxirusTariff&gt;</td>
                   <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.usxalaasniitulburTariff&gt;</td>
-                  <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.tulukhDun&gt;</td>
+                  <td style="border: 1px solid #000; text-align: right;">&lt;${mur.tailbar}.khungulultKhassanTulukhDun&gt;</td>
                 </tr>
               `,
               )
