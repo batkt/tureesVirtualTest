@@ -275,12 +275,14 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   <td style="border: 1px solid #000; text-align: center;">${incrementRow()}</td>
                   <td colspan="4" style="border: 1px solid #000; text-align: left;">Менежментийн төлбөр</td>
                   <td style="border: 1px solid #000; text-align: center;">&lt;talbainKhemjee&gt;</td>
-                  <td style="border: 1px solid #000; text-align: right;">${
-                    mur.tariff || 111
-                  }</td>
-                  <td style="border: 1px solid #000; text-align: right;">${
-                    mur.khungulult || 0
-                  }</td>
+                  <td style="border: 1px solid #000; text-align: right;">${formatNumber(
+                    mur.tariff || 0,
+                    2,
+                  )}</td>
+                  <td style="border: 1px solid #000; text-align: right;">${formatNumber(
+                    mur.khungulult || 0,
+                    2,
+                  )}</td>
                   <td style="border: 1px solid #000; text-align: right;">${
                     formatNumber(mur.tulukhDun - mur.khungulult || 0, 2) || 0
                   }</td>
