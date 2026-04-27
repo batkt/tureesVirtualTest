@@ -292,14 +292,19 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
       
       Object.keys(groupedBySegment).forEach((segName, segIndex) => {
          const segColor = colors[segIndex % colors.length];
-         const totalArea = groupedBySegment[segName].reduce((sum, s) => sum + (s.talbainKhemjee || 0), 0);
+         const segSpaces = groupedBySegment[segName];
+         const occupied = segSpaces.filter(s => s.idevkhiteiEsekh === true).length;
+         const vacant = segSpaces.filter(s => s.idevkhiteiEsekh === false).length;
+         const count = segSpaces.length;
          
          labels.push(segName);
-         data.push(totalArea);
+         data.push(count);
          bgColors.push(segColor);
          customData.push({
            segmentName: segName,
-           totalArea: totalArea
+           occupied,
+           vacant,
+           count
          });
       });
       
@@ -317,7 +322,8 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
       };
     } else {
       const spaces = groupedBySegment[selectedSegment] || [];
-      const totalArea = spaces.reduce((sum, s) => sum + (s.talbainKhemjee || 0), 0);
+      const occupied = spaces.filter(s => s.idevkhiteiEsekh === true).length;
+      const vacant = spaces.filter(s => s.idevkhiteiEsekh === false).length;
       
       const allSegments = Object.keys(groupedBySegment);
       const segIndex = allSegments.indexOf(selectedSegment);
@@ -325,22 +331,22 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
       const segColor = colors[Math.max(0, segIndex) % colors.length];
 
       return {
-        labels: [selectedSegment],
+        labels: [t("Идэвхтэй"), t("Идэвхгүй")],
         datasets: [{
-          data: [totalArea],
-          backgroundColor: [segColor],
+          data: [occupied, vacant],
+          backgroundColor: ['#10b981', '#6366f1'],
           borderWidth: 1,
           borderColor: isDark ? '#1e293b' : '#ffffff',
           hoverOffset: 8,
           cutout: '75%',
-          customData: [{
-            segmentName: selectedSegment,
-            totalArea: totalArea
-          }]
+          customData: [
+            { segmentName: t("Идэвхтэй"), count: occupied },
+            { segmentName: t("Идэвхгүй"), count: vacant }
+          ]
         }]
       };
     }
-  }, [selectedSegment, groupedBySegment, isDark]);
+  }, [selectedSegment, groupedBySegment, isDark, t]);
 
 
   const chartOptions = {
@@ -351,16 +357,26 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
       tooltip: {
         enabled: true,
         cornerRadius: 8,
-        padding: 8,
+        padding: 12,
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        titleFont: { size: 13, weight: 'bold' },
+        bodyFont: { size: 12 },
         callbacks: {
           label: function(context) {
-            const customData = chartData.datasets[context.datasetIndex]?.customData;
-            if (customData && customData[context.dataIndex]) {
-               const dataItem = customData[context.dataIndex];
-               const value = context.raw || 0;
-               return `${formatNumber(value)} m2`;
+            const dataset = chartData.datasets[context.datasetIndex];
+            const customData = dataset?.customData;
+            if (selectedSegment === 'all') {
+              if (customData && customData[context.dataIndex]) {
+                 const dataItem = customData[context.dataIndex];
+                 return [
+                   `${t("Идэвхтэй")}: ${dataItem.occupied}`,
+                   `${t("Идэвхгүй")}: ${dataItem.vacant}`
+                 ];
+              }
+            } else {
+              return ` ${context.raw}`;
             }
-            return ` ${context.label || ''}: ${context.raw || 0}`;
+            return ` ${context.raw || 0}`;
           }
         }
       }
@@ -374,10 +390,10 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
       <div className="flex flex-col md:flex-row items-center justify-around h-full gap-4 px-2">
          <div className="relative h-44 w-44 flex-shrink-0">
             {chartData.datasets[0]?.data?.length > 0 ? (
-               <Doughnut ref={chartRef} data={chartData} options={chartOptions} />
+               <Doughnut ref={chartRef} data={chartData} options={chartOptions} className="relative z-10" />
             ) : (
                <Doughnut ref={chartRef} data={{
-                 labels: [t("Идэвхтэй1"), t(" Идэвхгүй1")],
+                 labels: [t("Идэвхтэй"), t("Идэвхгүй")],
                  datasets: [{
                    data: [stats.occupied, stats.vacant],
                    backgroundColor: ['#10b981', '#6366f1'],
@@ -393,14 +409,17 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
                    tooltip: { 
                      enabled: true, 
                      cornerRadius: 8,
-                     padding: 8
+                     padding: 10,
+                     backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                     titleFont: { size: 13, weight: 'bold' },
+                     bodyFont: { size: 12 },
                    } 
                  } 
-               }} />
+               }} className="relative z-10" />
             )}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-3xl text-slate-800 dark:text-white leading-none tracking-tighter">{occupancyRate}%</span>
-              <span className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest">{t("Дүүргэлт")}</span>
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0">
+               <span className="text-3xl text-slate-800 dark:text-white leading-none tracking-tighter">{occupancyRate}%</span>
+               <span className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest">{t("Дүүргэлт")}</span>
             </div>
          </div>
 
@@ -696,9 +715,9 @@ export default function BuildingDashboard() {
     <Admin khuudasniiNer="dashboard" title={t("Хяналтын самбар")}>
       <div ref={dashboardRef} className="col-span-12 flex flex-col h-[calc(100vh-80px)] w-full -mx-0 xl:-mx-1 text-black animate-entrance overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-6 pb-20">
         
-        <div className="flex items-center justify-between">
+        
           <BuildingStatsSummary baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
-          <div className="flex items-center gap-2 ml-4 shrink-0">
+          {/* <div className="flex items-center gap-2 ml-4 shrink-0">
             <Button 
               icon={<PrinterOutlined />} 
               onClick={handlePrintPage}
@@ -713,8 +732,8 @@ export default function BuildingDashboard() {
             >
               <span className="hidden sm:inline text-xs">Excel</span>
             </Button>
-          </div>
-        </div>
+          </div> */}
+      
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
            <BuildingIncomeChart baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
