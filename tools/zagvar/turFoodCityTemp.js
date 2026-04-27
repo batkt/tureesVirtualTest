@@ -236,7 +236,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   2,
                 )}</td>
                 <td style="border: 1px solid #000; text-align: right;">${formatNumber(
-                  mur.tulukhDun - mur.khungulult || 0,
+                  (mur.tulukhDun || 0) - (mur.khungulult || 0),
                   2,
                 )}</td>
               </tr>
@@ -284,7 +284,10 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                     2,
                   )}</td>
                   <td style="border: 1px solid #000; text-align: right;">${
-                    formatNumber(mur.tulukhDun - mur.khungulult || 0, 2) || 0
+                    formatNumber(
+                      (mur.tulukhDun || 0) - (mur.khungulult || 0),
+                      2,
+                    ) || 0
                   }</td>
                 </tr>
               `,
@@ -315,7 +318,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   2,
                 )}</td>
                 <td style="border: 1px solid #000; text-align: right;">${formatNumber(
-                  mur.tulukhDun - mur.khungulult || 0,
+                  (mur.tulukhDun || 0) - (mur.khungulult || 0),
                   2,
                 )}</td>
               </tr>
