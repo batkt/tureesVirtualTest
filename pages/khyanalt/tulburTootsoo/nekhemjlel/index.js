@@ -483,10 +483,7 @@ function tulburTootsoo({ token }) {
           };
 
           if (zagvar?.khatuuZagvarEsekh) {
-            if (
-              ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" &&
-              barilgiinId === "6659717af6cab41f3ec723b5"
-            ) {
+            if (ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d") {
               const tulsunDun =
                 parseFloat(
                   typeof medeelel.tulsunDun === "string"
@@ -2121,8 +2118,7 @@ function tulburTootsoo({ token }) {
       );
 
       var text = songosonZagvar?.khatuuZagvarEsekh
-        ? ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" &&
-          barilgiinId === "6659717af6cab41f3ec723b5"
+        ? ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d"
           ? (() => {
               const tulsunDun =
                 parseFloat(
@@ -2624,8 +2620,7 @@ function tulburTootsoo({ token }) {
         );
 
         var text = songosonZagvar?.khatuuZagvarEsekh
-          ? ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" &&
-            barilgiinId === "6659717af6cab41f3ec723b5"
+          ? ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d"
             ? (() => {
                 const tulsunDun =
                   parseFloat(
