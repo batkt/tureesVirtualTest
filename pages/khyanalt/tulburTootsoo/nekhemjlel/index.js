@@ -83,6 +83,42 @@ function parseNum(v) {
   return parseFloat(String(v).replace(/,/g, "")) || 0;
 }
 
+const ResultModalContent = ({ aggregatedData, emptyOrInvalidList, columns }) => {
+  const [filter, setFilter] = useState('all');
+
+  const successes = aggregatedData.filter(item => item.success !== false).length;
+  const failures = aggregatedData.filter(item => item.success === false).length;
+  const emptyCount = emptyOrInvalidList.length;
+  const total = successes + failures + emptyCount;
+
+  const getFilteredData = () => {
+     const allData = [...aggregatedData, ...emptyOrInvalidList];
+     if (filter === 'success') return allData.filter(d => d.success !== false && !d.isEmpty);
+     if (filter === 'failure') return allData.filter(d => d.success === false && !d.isEmpty);
+     if (filter === 'empty') return allData.filter(d => d.isEmpty);
+     return allData;
+  }
+
+  return (
+    <div className="box p-5">
+      <div className="mb-4 text-gray-700 dark:text-gray-200">
+         <div className={`cursor-pointer p-1 rounded ${filter === 'all' ? 'bg-gray-200 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`} onClick={() => setFilter('all')}>Нийт: <span className="font-bold">{total}</span></div>
+         <div className={`cursor-pointer text-green-600 p-1 rounded ${filter === 'success' ? 'bg-green-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`} onClick={() => setFilter('success')}>Амжилттай: <span className="font-bold">{successes}</span></div>
+         <div className={`cursor-pointer text-red-500 p-1 rounded ${filter === 'failure' ? 'bg-red-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`} onClick={() => setFilter('failure')}>Алдаатай: <span className="font-bold">{failures}</span></div>
+         <div className={`cursor-pointer text-yellow-600 p-1 rounded ${filter === 'empty' ? 'bg-yellow-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`} onClick={() => setFilter('empty')}>Хоосон эсвэл буруу мэйл хаягтай гэрээ: <span className="font-bold">{emptyCount}</span></div>
+      </div>
+      <Table
+        bordered
+        size="small"
+        dataSource={getFilteredData()}
+        scroll={{ y: "calc( 100vh - 21rem )" }}
+        columns={columns}
+        rowKey={(record, i) => i}
+      />
+    </div>
+  );
+};
+
 function tulburTootsoo({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
@@ -2616,6 +2652,8 @@ function tulburTootsoo({ token }) {
     if (!excelZagvarSongogdson) {
       const mailuud = [];
       let successCount = 0;
+      let emptyOrInvalidEmails = 0;
+      const emptyOrInvalidList = [];
       setLoading(true);
       songogdsonGereenuud.map((mur, index) => {
         var nekhemjlekh = _.cloneDeep(
@@ -3978,13 +4016,22 @@ function tulburTootsoo({ token }) {
             text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), "");
           }
         }
-        if (!!nekhemjlekh.mail) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (nekhemjlekh.mail && emailRegex.test(nekhemjlekh.mail.trim())) {
           mailuud.push({
             gereeniiDugaar: nekhemjlekh.gereeniiDugaar,
             barilgiinId: nekhemjlekh?.barilgiinId,
             baiguullagiinId: ajiltan?.baiguullagiinId,
             mail: nekhemjlekh.mail,
             content: text,
+          });
+        } else {
+          emptyOrInvalidEmails++;
+          emptyOrInvalidList.push({
+             mailKhayag: nekhemjlekh.mail || "(Хоосон)",
+             success: false,
+             message: "Хоосон эсвэл буруу мэйл хаягтай",
+             isEmpty: true
           });
         }
       });
@@ -4027,65 +4074,127 @@ function tulburTootsoo({ token }) {
         gereenuud.push(tempData);
       });
       setLoading(true);
-      uilchilgee(token)
-        .post(`/mailOlnoorIlgeeye`, {
-          mailuud,
-          subject: "Түрээсийн төлбөр",
-          gereenuud: gereenuud,
-          ognoo: ognoo,
-        })
-        .then(({ data }) => {
+      const BATCH_SIZE = 10;
+      const processBatches = async () => {
+        let aggregatedData = [];
+        const msgKey = 'mail_send_progress';
+        try {
+          message.loading({ content: `Илгээж эхэлж байна... 0/${gereenuud.length}`, key: msgKey, duration: 0 });
+          for (let i = 0; i < gereenuud.length; i += BATCH_SIZE) {
+            const gereeBatch = gereenuud.slice(i, i + BATCH_SIZE);
+            const mailBatch = mailuud.filter((m) =>
+              gereeBatch.some((g) => g.gereeniiDugaar === m.gereeniiDugaar && g.mail === m.mail)
+            );
+
+            if (gereeBatch.length > 0) {
+              const { data } = await uilchilgee(token).post(`/mailOlnoorIlgeeye`, {
+                mailuud: mailBatch,
+                subject: "Түрээсийн төлбөр",
+                gereenuud: gereeBatch,
+                ognoo: ognoo,
+              });
+
+              if (Array.isArray(data)) {
+                aggregatedData = aggregatedData.concat(data);
+              } else if (data === "Amjilttai") {
+                aggregatedData = aggregatedData.concat(mailBatch.map(m => ({ success: true, mailKhayag: m.mail })));
+              } else if (data && Array.isArray(data.message)) {
+                aggregatedData = aggregatedData.concat(data.message);
+              }
+            }
+            message.loading({ content: `Илгээж байна... ${Math.min(i + BATCH_SIZE, gereenuud.length)}/${gereenuud.length}`, key: msgKey, duration: 0 });
+          }
+          message.success({ content: `Илгээж дууслаа`, key: msgKey, duration: 2 });
+
           Modal.info({
             className: "p-0",
             title: "Мэйл илгээсэн хариу",
-            content: (
-              <div className="box p-5">
-                <Table
-                  bordered
-                  size="small"
-                  dataSource={data}
-                  scroll={{ y: "calc( 100vh - 21rem )" }}
-                  columns={columns}
-                />
-              </div>
-            ),
+            content: <ResultModalContent aggregatedData={aggregatedData} emptyOrInvalidList={emptyOrInvalidList} columns={columns} />,
             okText: t("Хаах"),
             style: { minWidth: "50vw" },
           });
 
-          const hasFailure = Array.isArray(data)
-            ? data.some((item) => item.success === false)
-            : data?.success === false;
+          const hasFailure = aggregatedData.some((item) => item.success === false);
 
           if (hasFailure) {
             notification.error({ message: t("И-мэйл илгээхэд алдаа гарлаа") });
           } else {
             notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
           }
-          setLoading(false);
-        })
-        .catch((e) => {
-          setLoading(false);
+        } catch (e) {
+          message.destroy(msgKey);
           aldaaBarigch(e);
-        });
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+      processBatches();
     } else {
       const mailuud = [];
+      let emptyOrInvalidEmails = 0;
+      const emptyOrInvalidList = [];
       nekhemjlekhuud.map((mur, index) => {
-        mailuud.push({ mail: mur.mail, content: tatsanExcelZagvar[index] });
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (mur.mail && emailRegex.test(mur.mail.trim())) {
+          mailuud.push({ mail: mur.mail, content: tatsanExcelZagvar[index] });
+        } else {
+          emptyOrInvalidEmails++;
+          emptyOrInvalidList.push({
+             mailKhayag: mur.mail || "(Хоосон)",
+             success: false,
+             message: "Хоосон эсвэл буруу мэйл хаягтай",
+             isEmpty: true
+          });
+        }
       });
       setLoading(true);
-      uilchilgee(token)
-        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
-        .then(({ data }) => {
-          if (data === "Amjilttai") {
-            notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
-            setLoading(false);
+      const BATCH_SIZE = 10;
+      const processBatches = async () => {
+        let aggregatedData = [];
+        const msgKey = 'mail_send_progress';
+        try {
+          message.loading({ content: `Илгээж эхэлж байна... 0/${mailuud.length}`, key: msgKey, duration: 0 });
+          for (let i = 0; i < mailuud.length; i += BATCH_SIZE) {
+            const mailBatch = mailuud.slice(i, i + BATCH_SIZE);
+            if (mailBatch.length > 0) {
+              const { data } = await uilchilgee(token).post(`/mailOlnoorIlgeeye`, { mailuud: mailBatch, subject: "Түрээсийн төлбөр" });
+              if (Array.isArray(data)) {
+                aggregatedData = aggregatedData.concat(data);
+              } else if (data === "Amjilttai") {
+                aggregatedData = aggregatedData.concat(mailBatch.map(m => ({ success: true, mailKhayag: m.mail })));
+              } else if (data && Array.isArray(data.message)) {
+                aggregatedData = aggregatedData.concat(data.message);
+              }
+            }
+            message.loading({ content: `Илгээж байна... ${Math.min(i + BATCH_SIZE, mailuud.length)}/${mailuud.length}`, key: msgKey, duration: 0 });
           }
-        })
-        .catch((e) => {
-          setLoading(false);
+          message.success({ content: `Илгээж дууслаа`, key: msgKey, duration: 2 });
+
+          Modal.info({
+            className: "p-0",
+            title: "Мэйл илгээсэн хариу",
+            content: <ResultModalContent aggregatedData={aggregatedData} emptyOrInvalidList={emptyOrInvalidList} columns={columns} />,
+            okText: t("Хаах"),
+            style: { minWidth: "50vw" },
+          });
+
+          const hasFailure = aggregatedData.some((item) => item.success === false);
+
+          if (hasFailure) {
+            notification.error({ message: t("И-мэйл илгээхэд алдаа гарлаа") });
+          } else {
+            notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
+          }
+        } catch (e) {
+          message.destroy(msgKey);
           aldaaBarigch(e);
-        });
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+      processBatches();
     }
   }
   async function appIlgeeye() {

@@ -702,6 +702,11 @@ function GuilgeeKhiikh(
       toast.warning(t("И-мэйл илгээгдсэн байна"));
       return;
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!nekhemjlekh.mail || !emailRegex.test(nekhemjlekh.mail.trim())) {
+      toast.warning(t("И-мэйл хаяг буруу эсвэл хоосон байна."));
+      return;
+    }
     var mailuud = [];
     mailuud.push({
       mail: nekhemjlekh.mail,

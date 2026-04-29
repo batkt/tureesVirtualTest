@@ -158,9 +158,7 @@ function FsmTuruljuulekh({ baiguullaga, baiguullagaMutate }) {
                     <div className="font-bold text-gray-800 dark:text-gray-100 text-sm">
                       {cat.ner}
                     </div>
-                    <div className="text-xs text-gray-400 mt-0.5">
-                      {cat.projectCount} {t("төсөл")}
-                    </div>
+                    
                   </div>
                 </div>
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
