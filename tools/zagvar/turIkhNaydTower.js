@@ -251,8 +251,13 @@ const khatuuZagvarIkhNayd = (
           <span style="">${
             !!medeelel?.nekhemjlekhTulukhUdur
               ? "&lt;nekhemjlekhTulukhUdur&gt;"
-              : "&lt;duusakhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
+              : "&lt;ekhelkhSar&gt;/&lt;duusakhUdur&gt;/&lt;duusakhOn&gt;"
           }</span>
+        </div>
+        <div style="display: flex; font-size:12px; justify-content: space-between;">
+         <span style= "font-size:12px">
+          ${medeelel.sariiinToo ? `${medeelel.sariiinToo} сарын нэхэмжлэх` : ``}
+          </span>
         </div>
         <div style="display: flex; font-size:12px; justify-content: space-between;">
           <span>&nbsp;&nbsp;&nbsp;</span>
@@ -269,9 +274,6 @@ const khatuuZagvarIkhNayd = (
       <thead>
       <tr>
           <th style="border: none; " colspan="2">
-          <span style= "font-size:12px">
-          Хамрах хугацаа: &lt;ekhlekhOn&gt; оны &lt;ekhelkhSar&gt;-р сар
-          </span>
           </th>
           <th style="border: none;"></th>
           <th style="border: 1px solid #000; font-size:12px;" colspan="2">

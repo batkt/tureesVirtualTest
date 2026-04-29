@@ -465,7 +465,7 @@ function tulburTootsoo({ token }) {
 
           const cacheKey = `${id}-${barimt}-${dugaarlalt?.format || ""}-${
             nekhemjlekhiinDugaarData.dugaarList?.[i] || ""
-          }`;
+          }-${olnoorSaraarEsekh ? moment().format("YYYY-MM") : ""}`;
           if (renderedInvoiceCache.current.has(cacheKey)) {
             return renderedInvoiceCache.current.get(cacheKey);
           }
@@ -698,6 +698,12 @@ function tulburTootsoo({ token }) {
               ) {
                 medeelel.nekhemjlekhiinDugaar =
                   nekhemjlekhiinDugaarData.dugaarList[i];
+              }
+              if (olnoorSaraarEsekh && ognoo) {
+                medeelel.sariiinToo = Math.max(
+                  1,
+                  moment().diff(moment(ognoo), "months") + 1,
+                );
               }
               zagvar.nekhemjlekh = khatuuZagvarIkhNaydTower(
                 medeelel,
@@ -1289,7 +1295,12 @@ function tulburTootsoo({ token }) {
 
             medeelel.sar = moment().format("MM");
             medeelel.ekhlekhOn = moment(ognoo).format("YYYY");
-            medeelel.ekhelkhSar = moment(ognoo).format("MM");
+            if (olnoorSaraarEsekh && ognoo) {
+              medeelel.ekhelkhSar = moment().format("MM");
+            } else {
+              medeelel.ekhelkhSar = moment(ognoo).format("MM");
+            }
+
             medeelel.ekhlekhUdur = moment(ognoo).format("DD");
             medeelel.duusakhOn = moment(ognoo).format("YYYY");
             medeelel.duusakhSar = moment(ognoo).format("MM");
@@ -2019,6 +2030,7 @@ function tulburTootsoo({ token }) {
     barilguudMap,
     zardluudMap,
     zagvarlarMap,
+    olnoorSaraarEsekh,
   ]);
 
   function send() {
@@ -2359,7 +2371,11 @@ function tulburTootsoo({ token }) {
 
       nekhemjlekh.sar = moment().format("MM");
       nekhemjlekh.ekhlekhOn = moment().format("YYYY");
-      nekhemjlekh.ekhelkhSar = moment().format("MM");
+      if (olnoorSaraarEsekh && ognoo) {
+        nekhemjlekh.ekhelkhSar = moment().format("MM");
+      } else {
+        nekhemjlekh.ekhelkhSar = moment(ognoo).format("MM");
+      }
       nekhemjlekh.ekhlekhUdur = moment().format("DD");
       nekhemjlekh.duusakhOn = moment().format("YYYY");
       nekhemjlekh.duusakhSar = moment().format("MM");
@@ -3347,7 +3363,11 @@ function tulburTootsoo({ token }) {
 
         nekhemjlekh.sar = moment(ognoo).format("MM");
         nekhemjlekh.ekhlekhOn = moment(ognoo).format("YYYY");
-        nekhemjlekh.ekhelkhSar = moment(ognoo).format("MM");
+        if (olnoorSaraarEsekh && ognoo) {
+          nekhemjlekh.ekhelkhSar = moment().format("MM");
+        } else {
+          nekhemjlekh.ekhelkhSar = moment(ognoo).format("MM");
+        }
         nekhemjlekh.ekhlekhUdur = moment(ognoo).format("DD");
         nekhemjlekh.duusakhOn = moment(ognoo).format("YYYY");
         nekhemjlekh.duusakhSar = moment(ognoo).format("MM");
