@@ -83,29 +83,76 @@ function parseNum(v) {
   return parseFloat(String(v).replace(/,/g, "")) || 0;
 }
 
-const ResultModalContent = ({ aggregatedData, emptyOrInvalidList, columns }) => {
-  const [filter, setFilter] = useState('all');
+const ResultModalContent = ({
+  aggregatedData,
+  emptyOrInvalidList,
+  columns,
+}) => {
+  const [filter, setFilter] = useState("all");
 
-  const successes = aggregatedData.filter(item => item.success !== false).length;
-  const failures = aggregatedData.filter(item => item.success === false).length;
+  const successes = aggregatedData.filter(
+    (item) => item.success !== false,
+  ).length;
+  const failures = aggregatedData.filter(
+    (item) => item.success === false,
+  ).length;
   const emptyCount = emptyOrInvalidList.length;
   const total = successes + failures + emptyCount;
 
   const getFilteredData = () => {
-     const allData = [...aggregatedData, ...emptyOrInvalidList];
-     if (filter === 'success') return allData.filter(d => d.success !== false && !d.isEmpty);
-     if (filter === 'failure') return allData.filter(d => d.success === false && !d.isEmpty);
-     if (filter === 'empty') return allData.filter(d => d.isEmpty);
-     return allData;
-  }
+    const allData = [...aggregatedData, ...emptyOrInvalidList];
+    if (filter === "success")
+      return allData.filter((d) => d.success !== false && !d.isEmpty);
+    if (filter === "failure")
+      return allData.filter((d) => d.success === false && !d.isEmpty);
+    if (filter === "empty") return allData.filter((d) => d.isEmpty);
+    return allData;
+  };
 
   return (
     <div className="box p-5">
       <div className="mb-4 text-gray-700 dark:text-gray-200">
-         <div className={`cursor-pointer p-1 rounded ${filter === 'all' ? 'bg-gray-200 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`} onClick={() => setFilter('all')}>Нийт: <span className="font-bold">{total}</span></div>
-         <div className={`cursor-pointer text-green-600 p-1 rounded ${filter === 'success' ? 'bg-green-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`} onClick={() => setFilter('success')}>Амжилттай: <span className="font-bold">{successes}</span></div>
-         <div className={`cursor-pointer text-red-500 p-1 rounded ${filter === 'failure' ? 'bg-red-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`} onClick={() => setFilter('failure')}>Алдаатай: <span className="font-bold">{failures}</span></div>
-         <div className={`cursor-pointer text-yellow-600 p-1 rounded ${filter === 'empty' ? 'bg-yellow-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`} onClick={() => setFilter('empty')}>Хоосон эсвэл буруу мэйл хаягтай гэрээ: <span className="font-bold">{emptyCount}</span></div>
+        <div
+          className={`cursor-pointer rounded p-1 ${
+            filter === "all"
+              ? "bg-gray-200 dark:bg-gray-700"
+              : "hover:bg-gray-100 dark:hover:bg-gray-800"
+          }`}
+          onClick={() => setFilter("all")}
+        >
+          Нийт: <span className="font-bold">{total}</span>
+        </div>
+        <div
+          className={`cursor-pointer rounded p-1 text-green-600 ${
+            filter === "success"
+              ? "bg-green-100 dark:bg-gray-700"
+              : "hover:bg-gray-100 dark:hover:bg-gray-800"
+          }`}
+          onClick={() => setFilter("success")}
+        >
+          Амжилттай: <span className="font-bold">{successes}</span>
+        </div>
+        <div
+          className={`cursor-pointer rounded p-1 text-red-500 ${
+            filter === "failure"
+              ? "bg-red-100 dark:bg-gray-700"
+              : "hover:bg-gray-100 dark:hover:bg-gray-800"
+          }`}
+          onClick={() => setFilter("failure")}
+        >
+          Алдаатай: <span className="font-bold">{failures}</span>
+        </div>
+        <div
+          className={`cursor-pointer rounded p-1 text-yellow-600 ${
+            filter === "empty"
+              ? "bg-yellow-100 dark:bg-gray-700"
+              : "hover:bg-gray-100 dark:hover:bg-gray-800"
+          }`}
+          onClick={() => setFilter("empty")}
+        >
+          Хоосон эсвэл буруу мэйл хаягтай гэрээ:{" "}
+          <span className="font-bold">{emptyCount}</span>
+        </div>
       </div>
       <Table
         bordered
@@ -1333,11 +1380,11 @@ function tulburTootsoo({ token }) {
             medeelel.ekhlekhOn = moment(ognoo).format("YYYY");
             if (olnoorSaraarEsekh && ognoo) {
               medeelel.ekhelkhSar = moment().format("MM");
+              medeelel.ekhlekhUdur = moment().format("DD");
             } else {
               medeelel.ekhelkhSar = moment(ognoo).format("MM");
+              medeelel.ekhlekhUdur = moment(ognoo).format("DD");
             }
-
-            medeelel.ekhlekhUdur = moment(ognoo).format("DD");
             medeelel.duusakhOn = moment(ognoo).format("YYYY");
             medeelel.duusakhSar = moment(ognoo).format("MM");
             medeelel.duusakhUdur = moment(ognoo)
@@ -2409,10 +2456,11 @@ function tulburTootsoo({ token }) {
       nekhemjlekh.ekhlekhOn = moment().format("YYYY");
       if (olnoorSaraarEsekh && ognoo) {
         nekhemjlekh.ekhelkhSar = moment().format("MM");
+        nekhemjlekh.ekhlekhUdur = moment().format("DD");
       } else {
         nekhemjlekh.ekhelkhSar = moment(ognoo).format("MM");
+        nekhemjlekh.ekhlekhUdur = moment(ognoo).format("DD");
       }
-      nekhemjlekh.ekhlekhUdur = moment().format("DD");
       nekhemjlekh.duusakhOn = moment().format("YYYY");
       nekhemjlekh.duusakhSar = moment().format("MM");
       nekhemjlekh.duusakhUdur = moment().format("DD");
@@ -3403,10 +3451,11 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.ekhlekhOn = moment(ognoo).format("YYYY");
         if (olnoorSaraarEsekh && ognoo) {
           nekhemjlekh.ekhelkhSar = moment().format("MM");
+          nekhemjlekh.ekhlekhUdur = moment().format("DD");
         } else {
           nekhemjlekh.ekhelkhSar = moment(ognoo).format("MM");
+          nekhemjlekh.ekhlekhUdur = moment(ognoo).format("DD");
         }
-        nekhemjlekh.ekhlekhUdur = moment(ognoo).format("DD");
         nekhemjlekh.duusakhOn = moment(ognoo).format("YYYY");
         nekhemjlekh.duusakhSar = moment(ognoo).format("MM");
         nekhemjlekh.duusakhUdur = moment(ognoo)
@@ -4028,10 +4077,10 @@ function tulburTootsoo({ token }) {
         } else {
           emptyOrInvalidEmails++;
           emptyOrInvalidList.push({
-             mailKhayag: nekhemjlekh.mail || "(Хоосон)",
-             success: false,
-             message: "Хоосон эсвэл буруу мэйл хаягтай",
-             isEmpty: true
+            mailKhayag: nekhemjlekh.mail || "(Хоосон)",
+            success: false,
+            message: "Хоосон эсвэл буруу мэйл хаягтай",
+            isEmpty: true,
           });
         }
       });
@@ -4077,44 +4126,75 @@ function tulburTootsoo({ token }) {
       const BATCH_SIZE = 10;
       const processBatches = async () => {
         let aggregatedData = [];
-        const msgKey = 'mail_send_progress';
+        const msgKey = "mail_send_progress";
         try {
-          message.loading({ content: `Илгээж эхэлж байна... 0/${gereenuud.length}`, key: msgKey, duration: 0 });
+          message.loading({
+            content: `Илгээж эхэлж байна... 0/${gereenuud.length}`,
+            key: msgKey,
+            duration: 0,
+          });
           for (let i = 0; i < gereenuud.length; i += BATCH_SIZE) {
             const gereeBatch = gereenuud.slice(i, i + BATCH_SIZE);
             const mailBatch = mailuud.filter((m) =>
-              gereeBatch.some((g) => g.gereeniiDugaar === m.gereeniiDugaar && g.mail === m.mail)
+              gereeBatch.some(
+                (g) =>
+                  g.gereeniiDugaar === m.gereeniiDugaar && g.mail === m.mail,
+              ),
             );
 
             if (gereeBatch.length > 0) {
-              const { data } = await uilchilgee(token).post(`/mailOlnoorIlgeeye`, {
-                mailuud: mailBatch,
-                subject: "Түрээсийн төлбөр",
-                gereenuud: gereeBatch,
-                ognoo: ognoo,
-              });
+              const { data } = await uilchilgee(token).post(
+                `/mailOlnoorIlgeeye`,
+                {
+                  mailuud: mailBatch,
+                  subject: "Түрээсийн төлбөр",
+                  gereenuud: gereeBatch,
+                  ognoo: ognoo,
+                },
+              );
 
               if (Array.isArray(data)) {
                 aggregatedData = aggregatedData.concat(data);
               } else if (data === "Amjilttai") {
-                aggregatedData = aggregatedData.concat(mailBatch.map(m => ({ success: true, mailKhayag: m.mail })));
+                aggregatedData = aggregatedData.concat(
+                  mailBatch.map((m) => ({ success: true, mailKhayag: m.mail })),
+                );
               } else if (data && Array.isArray(data.message)) {
                 aggregatedData = aggregatedData.concat(data.message);
               }
             }
-            message.loading({ content: `Илгээж байна... ${Math.min(i + BATCH_SIZE, gereenuud.length)}/${gereenuud.length}`, key: msgKey, duration: 0 });
+            message.loading({
+              content: `Илгээж байна... ${Math.min(
+                i + BATCH_SIZE,
+                gereenuud.length,
+              )}/${gereenuud.length}`,
+              key: msgKey,
+              duration: 0,
+            });
           }
-          message.success({ content: `Илгээж дууслаа`, key: msgKey, duration: 2 });
+          message.success({
+            content: `Илгээж дууслаа`,
+            key: msgKey,
+            duration: 2,
+          });
 
           Modal.info({
             className: "p-0",
             title: "Мэйл илгээсэн хариу",
-            content: <ResultModalContent aggregatedData={aggregatedData} emptyOrInvalidList={emptyOrInvalidList} columns={columns} />,
+            content: (
+              <ResultModalContent
+                aggregatedData={aggregatedData}
+                emptyOrInvalidList={emptyOrInvalidList}
+                columns={columns}
+              />
+            ),
             okText: t("Хаах"),
             style: { minWidth: "50vw" },
           });
 
-          const hasFailure = aggregatedData.some((item) => item.success === false);
+          const hasFailure = aggregatedData.some(
+            (item) => item.success === false,
+          );
 
           if (hasFailure) {
             notification.error({ message: t("И-мэйл илгээхэд алдаа гарлаа") });
@@ -4128,7 +4208,7 @@ function tulburTootsoo({ token }) {
           setLoading(false);
         }
       };
-      
+
       processBatches();
     } else {
       const mailuud = [];
@@ -4141,10 +4221,10 @@ function tulburTootsoo({ token }) {
         } else {
           emptyOrInvalidEmails++;
           emptyOrInvalidList.push({
-             mailKhayag: mur.mail || "(Хоосон)",
-             success: false,
-             message: "Хоосон эсвэл буруу мэйл хаягтай",
-             isEmpty: true
+            mailKhayag: mur.mail || "(Хоосон)",
+            success: false,
+            message: "Хоосон эсвэл буруу мэйл хаягтай",
+            isEmpty: true,
           });
         }
       });
@@ -4152,34 +4232,62 @@ function tulburTootsoo({ token }) {
       const BATCH_SIZE = 10;
       const processBatches = async () => {
         let aggregatedData = [];
-        const msgKey = 'mail_send_progress';
+        const msgKey = "mail_send_progress";
         try {
-          message.loading({ content: `Илгээж эхэлж байна... 0/${mailuud.length}`, key: msgKey, duration: 0 });
+          message.loading({
+            content: `Илгээж эхэлж байна... 0/${mailuud.length}`,
+            key: msgKey,
+            duration: 0,
+          });
           for (let i = 0; i < mailuud.length; i += BATCH_SIZE) {
             const mailBatch = mailuud.slice(i, i + BATCH_SIZE);
             if (mailBatch.length > 0) {
-              const { data } = await uilchilgee(token).post(`/mailOlnoorIlgeeye`, { mailuud: mailBatch, subject: "Түрээсийн төлбөр" });
+              const { data } = await uilchilgee(token).post(
+                `/mailOlnoorIlgeeye`,
+                { mailuud: mailBatch, subject: "Түрээсийн төлбөр" },
+              );
               if (Array.isArray(data)) {
                 aggregatedData = aggregatedData.concat(data);
               } else if (data === "Amjilttai") {
-                aggregatedData = aggregatedData.concat(mailBatch.map(m => ({ success: true, mailKhayag: m.mail })));
+                aggregatedData = aggregatedData.concat(
+                  mailBatch.map((m) => ({ success: true, mailKhayag: m.mail })),
+                );
               } else if (data && Array.isArray(data.message)) {
                 aggregatedData = aggregatedData.concat(data.message);
               }
             }
-            message.loading({ content: `Илгээж байна... ${Math.min(i + BATCH_SIZE, mailuud.length)}/${mailuud.length}`, key: msgKey, duration: 0 });
+            message.loading({
+              content: `Илгээж байна... ${Math.min(
+                i + BATCH_SIZE,
+                mailuud.length,
+              )}/${mailuud.length}`,
+              key: msgKey,
+              duration: 0,
+            });
           }
-          message.success({ content: `Илгээж дууслаа`, key: msgKey, duration: 2 });
+          message.success({
+            content: `Илгээж дууслаа`,
+            key: msgKey,
+            duration: 2,
+          });
 
           Modal.info({
             className: "p-0",
             title: "Мэйл илгээсэн хариу",
-            content: <ResultModalContent aggregatedData={aggregatedData} emptyOrInvalidList={emptyOrInvalidList} columns={columns} />,
+            content: (
+              <ResultModalContent
+                aggregatedData={aggregatedData}
+                emptyOrInvalidList={emptyOrInvalidList}
+                columns={columns}
+              />
+            ),
             okText: t("Хаах"),
             style: { minWidth: "50vw" },
           });
 
-          const hasFailure = aggregatedData.some((item) => item.success === false);
+          const hasFailure = aggregatedData.some(
+            (item) => item.success === false,
+          );
 
           if (hasFailure) {
             notification.error({ message: t("И-мэйл илгээхэд алдаа гарлаа") });
@@ -4193,7 +4301,7 @@ function tulburTootsoo({ token }) {
           setLoading(false);
         }
       };
-      
+
       processBatches();
     }
   }
