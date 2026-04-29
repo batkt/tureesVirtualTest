@@ -354,7 +354,6 @@ function camera({ token }) {
     !!camerVal[1] && songogdsonCameraIP === camerVal[1];
   const searchUtga = useRef(null);
   const socketRef = useRef(null);
-  const refreshRef = useRef();
 
   useEffect(() => {
     setShineBagana([]);
@@ -986,12 +985,6 @@ function camera({ token }) {
   }, [tuluvFilter]);
 
   useEffect(() => {
-    refreshRef.current = throttle(() => {
-      onRefresh();
-    }, 1500);
-  }, []);
-
-  useEffect(() => {
     if (!socketRef.current) {
       socketRef.current = socket();
     }
@@ -1012,7 +1005,7 @@ function camera({ token }) {
 
       if (!data?.oruulakhguiEsekh) {
         khaalgaNeey(data.cameraIP, data.turul);
-        refreshRef.current?.();
+        onRefresh();
       }
 
       const dugaar = data.mashiniiDugaar?.replace("???", "");
@@ -1061,9 +1054,10 @@ function camera({ token }) {
         url = `/sambarOgnootoi/${garsanKhaalga}/${dugaar}/${niit}/${start}/${end}`;
       }
       if (u?.turul === "Үнэгүй" || niit === 0) {
-        if (u?.tuukh?.[0]?.garsanKhaalga) {
+        console.log("cameraIP for free exit:", u?.cameraIP);
+        if (u?.cameraIP) {
           if (songogdzonZogsool?.garakhKhaalgaGarTokhirgoo !== true) {
-            khaalgaNeey(u.tuukh[0].garsanKhaalga);
+            khaalgaNeey(u.cameraIP);
           }
         }
       }
@@ -1072,7 +1066,7 @@ function camera({ token }) {
           .get(url)
           .catch(() => {});
       }
-      refreshRef.current?.();
+      onRefresh();
     };
     const handleGarahTulsun = (data) => {
       if (
@@ -1094,17 +1088,32 @@ function camera({ token }) {
       }
 
       khaalgaNeey(data.cameraIP);
-      refreshRef.current?.();
+      onRefresh();
+    };
+    const handleRefresh = (data) => {
+      if (
+        !data ||
+        !data?.mashiniiDugaar ||
+        !data?.baiguullagiinId ||
+        data?.baiguullagiinId !== baiguullaga?._id
+      )
+        return;
+      let dugaar = data?.mashiniiDugaar?.replace("???", "");
+      console.log("Received refresh event for:", dugaar);
+      onRefresh();
     };
     const eventName = "zogsoolOroh";
     const e1 = "zogsoolGarah";
     const e2 = "zogsoolGarahTulsun";
+    const refresh = "zogsoolRefresh";
     s.on(eventName, handleOroh);
     s.on(e1, handleGarah);
     s.on(e2, handleGarahTulsun);
+    s.on(refresh, handleRefresh);
     cleanup.push(() => s.off(eventName, handleOroh));
     cleanup.push(() => s.off(e1, handleGarah));
     cleanup.push(() => s.off(e2, handleGarahTulsun));
+    cleanup.push(() => s.off(refresh, handleRefresh));
     return () => cleanup.forEach((fn) => fn());
   }, [baiguullaga?._id]);
 
@@ -4186,7 +4195,7 @@ function camera({ token }) {
                     Camer={camerVal[1]}
                     PORT={554}
                   />
-                )  : parkingJagsaalt?.[0]?.tokhirgoo ? (
+                ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
                     <SocketStream
                       ip={camerVal[1]}
