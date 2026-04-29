@@ -1,7 +1,8 @@
-import axios, { aldaaBarigch } from "services/uilchilgee";
+import axios, { aldaaBarigch, socket } from "services/uilchilgee";
 import useSWR from "swr";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useAuth } from "services/auth";
+import { notification } from "antd";
 
 const filterDismissedNotifications = (notifications, keepDismissed = false) => {
   if (keepDismissed) {
@@ -11,6 +12,8 @@ const filterDismissedNotifications = (notifications, keepDismissed = false) => {
     (notification) => !notification.dakhijKharikhEsekh
   );
 };
+
+const globalSeenIds = new Set();
 
 const fetcher = (
   url,
@@ -36,7 +39,7 @@ const fetcher = (
                 },
                 {
                   turul: {
-                    $in: ["daalgavar", "setgegdel"],
+                    $in: ["daalgavar", "setgegdel", "sanal", "gomdol", "shaardlaga", "sanalKhuselt"],
                   },
                 },
               ],
@@ -230,26 +233,45 @@ function useSonorduulga(token) {
     }
   }, [token, baiguullaga?._id, fetchNotifications]);
 
-  // useEffect(() => {
-  //   if (ajiltan?._id) {
-  //     socket().on(`ajiltan${ajiltan?._id}`, (res) => {
-  //       if (res.type === "logout" && res?.ip) {
-  //         toast.warning(
-  //           "" +
-  //             res.ip +
-  //             " IP-тай төхөөрөмжөөс давхар нэвтэрсэн тул таны холболт саллаа.",
-  //           5
-  //         );
-  //         setTimeout(() => {
-  //           window.location.href = "/";
-  //         }, 4000);
-  //       }
-  //     });
-  //   }
-  //   return () => {
-  //     socket().off(`ajiltan${ajiltan?._id}`);
-  //   };
-  // }, [ajiltan]);
+
+  useEffect(() => {
+    if (ajiltan?._id && baiguullaga?._id) {
+      const eventName = `khariltsagch${ajiltan._id}`;
+      const appWebEventName = `appWebDuudlaga${baiguullaga._id}`;
+      const socketInstance = socket();
+
+      const handleNotification = (notif) => {
+        if (notif && notif._id) {
+          if (globalSeenIds.has(notif._id)) return;
+          globalSeenIds.add(notif._id);
+          // Keep the set size manageable
+          if (globalSeenIds.size > 50) {
+            const firstEntry = globalSeenIds.values().next().value;
+            globalSeenIds.delete(firstEntry);
+          }
+
+          notification.success({
+            message: "Шинэ дуудлага",
+            description: "Шинэ дуудлага ирлээ",
+            duration: 5,
+          });
+
+    
+          mutate();
+          too.mutate();
+          fetchNotifications(1, false);
+        }
+      };
+
+      socketInstance.on(eventName, handleNotification);
+      socketInstance.on(appWebEventName, handleNotification);
+
+      return () => {
+        socketInstance.off(eventName, handleNotification);
+        socketInstance.off(appWebEventName, handleNotification);
+      };
+    }
+  }, [ajiltan?._id, baiguullaga?._id, mutate, too, fetchNotifications]);
 
   return {
     setKhuudaslalt,
