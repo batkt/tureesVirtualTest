@@ -54,6 +54,8 @@ import khatuuZagvarUranGan from "tools/zagvar/turUranGan";
 import khatuuZagvarFoodCity from "tools/zagvar/turFoodCityTemp";
 import khatuuZagvarGotoMPM from "tools/zagvar/turGotoMPM";
 import khatuuZagvarGotoMT from "tools/zagvar/turGotoMT";
+import khatuuZagvarGotoMPM15 from "tools/zagvar/turGotoMPM15";
+import khatuuZagvarGotoMT15 from "tools/zagvar/turGotoMT15";
 import khatuuZagvarVirtus from "tools/zagvar/turVirtus";
 import khatuuZagvarSoyoljMall from "tools/zagvar/turSoyoljMall";
 import khatuuZagvarIkhNaydTower from "tools/zagvar/turIkhNaydTower";
@@ -624,15 +626,25 @@ function tulburTootsoo({ token }) {
             } else if (
               ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "67512183c60497546f59513a"
-            )
-              // goto MPM
-              zagvar.nekhemjlekh = khatuuZagvarGotoMPM(
-                medeelel,
-                ajiltan,
-                baiguullaga,
-                barilgiinId,
-              );
-            else if (
+            ) {
+              if (zagvar.ner?.includes("20ны өдөр")) {
+                // goto MPM
+                zagvar.nekhemjlekh = khatuuZagvarGotoMPM(
+                  medeelel,
+                  ajiltan,
+                  baiguullaga,
+                  barilgiinId,
+                );
+              } else {
+                // goto MPM
+                zagvar.nekhemjlekh = khatuuZagvarGotoMPM15(
+                  medeelel,
+                  ajiltan,
+                  baiguullaga,
+                  barilgiinId,
+                );
+              }
+            } else if (
               ajiltan?.baiguullagiinId === "6731b43bc23730ac1908da2d" &&
               barilgiinId === "6731b43bc23730ac1908da2e"
             )
@@ -647,14 +659,25 @@ function tulburTootsoo({ token }) {
             else if (
               ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "6735c77a7fc60cd66deb290a"
-            )
-              // goto MT
-              zagvar.nekhemjlekh = khatuuZagvarGotoMT(
-                medeelel,
-                ajiltan,
-                baiguullaga,
-                barilgiinId,
-              );
+            ) {
+              if (zagvar.ner?.includes("20ны өдөр")) {
+                // goto MT
+                zagvar.nekhemjlekh = khatuuZagvarGotoMT(
+                  medeelel,
+                  ajiltan,
+                  baiguullaga,
+                  barilgiinId,
+                );
+              } else {
+                // goto MT
+                zagvar.nekhemjlekh = khatuuZagvarGotoMT15(
+                  medeelel,
+                  ajiltan,
+                  baiguullaga,
+                  barilgiinId,
+                );
+              }
+            }
             //vpm
             else if (
               ajiltan?.baiguullagiinId === "697c6dd904f0f327ec2a9c15" &&
@@ -2777,7 +2800,8 @@ function tulburTootsoo({ token }) {
                 return khatuuZagvarFoodCity(nekhemjlekh, ajiltan, baiguullaga);
               })()
             : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
-              barilgiinId === "67512183c60497546f59513a"
+              barilgiinId === "67512183c60497546f59513a" &&
+              zagvar.ner?.includes("20ны өдөр")
             ? khatuuZagvarGotoMPM(
                 nekhemjlekh,
                 ajiltan,
@@ -2785,8 +2809,27 @@ function tulburTootsoo({ token }) {
                 barilgiinId,
               )
             : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
-              barilgiinId === "6735c77a7fc60cd66deb290a"
+              barilgiinId === "67512183c60497546f59513a" &&
+              zagvar.ner?.includes("15ны өдөр")
+            ? khatuuZagvarGotoMPM15(
+                nekhemjlekh,
+                ajiltan,
+                baiguullaga,
+                barilgiinId,
+              )
+            : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
+              barilgiinId === "6735c77a7fc60cd66deb290a" &&
+              zagvar.ner?.includes("20ны өдөр")
             ? khatuuZagvarGotoMT(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
+            : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
+              barilgiinId === "6735c77a7fc60cd66deb290a" &&
+              zagvar.ner?.includes("15ны өдөр")
+            ? khatuuZagvarGotoMT15(
+                nekhemjlekh,
+                ajiltan,
+                baiguullaga,
+                barilgiinId,
+              )
             : ajiltan?.baiguullagiinId === "679aea9032299b7ba8462a77"
             ? khatuuZagvarUranGan(
                 nekhemjlekh,
