@@ -6,13 +6,18 @@ import { t } from "i18next";
 //production
 export const url =
   process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api";
-export const socket = () =>
-  socketIOClient(
-    process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
-    {
-      transports: ["websocket"],
-    },
-  );
+let socketInstance = null;
+export const socket = () => {
+  if (!socketInstance) {
+    socketInstance = socketIOClient(
+      process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
+      {
+        transports: ["websocket"],
+      }
+    );
+  }
+  return socketInstance;
+};
 // test rently
 // export const url =
 //   process.env.NEXT_PUBLIC_URL || "https://rently.zevtabs.mn/api";
