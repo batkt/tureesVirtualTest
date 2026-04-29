@@ -2801,7 +2801,7 @@ function tulburTootsoo({ token }) {
               })()
             : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "67512183c60497546f59513a" &&
-              zagvar.ner?.includes("20ны өдөр")
+              songosonZagvar.ner?.includes("20ны өдөр")
             ? khatuuZagvarGotoMPM(
                 nekhemjlekh,
                 ajiltan,
@@ -2810,7 +2810,7 @@ function tulburTootsoo({ token }) {
               )
             : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "67512183c60497546f59513a" &&
-              zagvar.ner?.includes("15ны өдөр")
+              songosonZagvar.ner?.includes("15ны өдөр")
             ? khatuuZagvarGotoMPM15(
                 nekhemjlekh,
                 ajiltan,
@@ -2819,11 +2819,11 @@ function tulburTootsoo({ token }) {
               )
             : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "6735c77a7fc60cd66deb290a" &&
-              zagvar.ner?.includes("20ны өдөр")
+              songosonZagvar.ner?.includes("20ны өдөр")
             ? khatuuZagvarGotoMT(nekhemjlekh, ajiltan, baiguullaga, barilgiinId)
             : ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "6735c77a7fc60cd66deb290a" &&
-              zagvar.ner?.includes("15ны өдөр")
+              songosonZagvar.ner?.includes("15ны өдөр")
             ? khatuuZagvarGotoMT15(
                 nekhemjlekh,
                 ajiltan,
