@@ -702,9 +702,9 @@ function GuilgeeKhiikh(
       toast.warning(t("И-мэйл илгээгдсэн байна"));
       return;
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.(com|mn)$/i;
     if (!nekhemjlekh.mail || !emailRegex.test(nekhemjlekh.mail.trim())) {
-      toast.warning(t("И-мэйл хаяг буруу эсвэл хоосон байна."));
+      toast.warning(t("И-мэйл хаяг буруу эсвэл хоосон байна (.com, .mn зөвшөөрөгдөнө)."));
       return;
     }
     var mailuud = [];

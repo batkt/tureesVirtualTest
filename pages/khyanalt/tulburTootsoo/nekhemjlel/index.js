@@ -101,12 +101,19 @@ const ResultModalContent = ({
 
   const getFilteredData = () => {
     const allData = [...aggregatedData, ...emptyOrInvalidList];
+    let filtered = allData;
     if (filter === "success")
-      return allData.filter((d) => d.success !== false && !d.isEmpty);
-    if (filter === "failure")
-      return allData.filter((d) => d.success === false && !d.isEmpty);
-    if (filter === "empty") return allData.filter((d) => d.isEmpty);
-    return allData;
+      filtered = allData.filter((d) => d.success !== false && !d.isEmpty);
+    else if (filter === "failure")
+      filtered = allData.filter((d) => d.success === false && !d.isEmpty);
+    else if (filter === "empty") filtered = allData.filter((d) => d.isEmpty);
+
+    // Sort: errors (success === false) or empty (isEmpty === true) first
+    return filtered.sort((a, b) => {
+      const priorityA = a.success === false || a.isEmpty ? 0 : 1;
+      const priorityB = b.success === false || b.isEmpty ? 0 : 1;
+      return priorityA - priorityB;
+    });
   };
 
   return (
@@ -158,7 +165,7 @@ const ResultModalContent = ({
         bordered
         size="small"
         dataSource={getFilteredData()}
-        scroll={{ y: "calc( 100vh - 21rem )" }}
+        scroll={{ x: "max-content", y: "calc( 100vh - 21rem )" }}
         columns={columns}
         rowKey={(record, i) => i}
       />
@@ -4065,7 +4072,7 @@ function tulburTootsoo({ token }) {
             text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), "");
           }
         }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.(com|mn)$/i;
         if (nekhemjlekh.mail && emailRegex.test(nekhemjlekh.mail.trim())) {
           mailuud.push({
             gereeniiDugaar: nekhemjlekh.gereeniiDugaar,
@@ -4189,7 +4196,8 @@ function tulburTootsoo({ token }) {
               />
             ),
             okText: t("Хаах"),
-            style: { minWidth: "50vw" },
+            width: "95%",
+            style: { top: 20, maxWidth: 1000 },
           });
 
           const hasFailure = aggregatedData.some(
@@ -4215,7 +4223,7 @@ function tulburTootsoo({ token }) {
       let emptyOrInvalidEmails = 0;
       const emptyOrInvalidList = [];
       nekhemjlekhuud.map((mur, index) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.(com|mn)$/i;
         if (mur.mail && emailRegex.test(mur.mail.trim())) {
           mailuud.push({ mail: mur.mail, content: tatsanExcelZagvar[index] });
         } else {
@@ -4282,7 +4290,8 @@ function tulburTootsoo({ token }) {
               />
             ),
             okText: t("Хаах"),
-            style: { minWidth: "50vw" },
+            width: "95%",
+            style: { top: 20, maxWidth: 1000 },
           });
 
           const hasFailure = aggregatedData.some(
