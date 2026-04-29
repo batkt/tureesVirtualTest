@@ -25,6 +25,9 @@ function BarilgiinTokhirgoo({
     barilgiinId || null,
   );
   const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState();
+  const [zogsoolNer, setZogsoolNer] = useState(
+    baiguullaga?.tokhirgoo?.zogsoolNer,
+  );
 
   const [songogdsonDuureg, setSongogdsonDuureg] = useState();
   const [songogdsonDuuregKod, setSongogdsonDuuregKod] = useState();
@@ -49,9 +52,11 @@ function BarilgiinTokhirgoo({
         aldangiOgnoo: barilga?.tokhirgoo?.aldangiOgnoo
           ? moment(barilga?.tokhirgoo?.aldangiOgnoo)
           : undefined,
-        eBarimtAshiglakhEsekh: barilga?.tokhirgoo?.eBarimtAshiglakhEsekh ?? false,
+        eBarimtAshiglakhEsekh:
+          barilga?.tokhirgoo?.eBarimtAshiglakhEsekh ?? false,
         eBarimtShine: barilga?.tokhirgoo?.eBarimtShine ?? false,
-        eBarimtAutomataarIlgeekh: barilga?.tokhirgoo?.eBarimtAutomataarIlgeekh ?? false,
+        eBarimtAutomataarIlgeekh:
+          barilga?.tokhirgoo?.eBarimtAutomataarIlgeekh ?? false,
         nuatTulukhEsekh: barilga?.tokhirgoo?.nuatTulukhEsekh ?? false,
         eBarimtBugdShivikh: barilga?.tokhirgoo?.eBarimtBugdShivikh ?? false,
       });
@@ -81,6 +86,7 @@ function BarilgiinTokhirgoo({
       };
       barilguudCopy[tukhainBarilgiinIndex] = updatedBarilga;
       yavuulakhData.barilguud = barilguudCopy;
+      yavuulakhData.tokhirgoo.zogsoolNer = zogsoolNer;
       if (!!barilgaTokhirgoo?.eBarimtShine) {
         if (
           !!barilgaTokhirgoo?.districtCode &&
@@ -317,6 +323,24 @@ function BarilgiinTokhirgoo({
                         merchantTin: target.value,
                       }))
                     }
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+          {barilgaTokhirgoo?.eBarimtShine && (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">
+                    {t("И-Баримт үүсгэгчийн нэр")}
+                  </div>
+                  <div className="text-gray-600"></div>
+                </div>
+                <div className="ml-auto">
+                  <Input
+                    value={zogsoolNer}
+                    onChange={({ target }) => setZogsoolNer(target.value)}
                   />
                 </div>
               </div>
