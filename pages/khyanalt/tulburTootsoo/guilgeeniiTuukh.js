@@ -1715,6 +1715,12 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
               onChange={(v) => {
                 setOgnoo(v);
                 setLoadingIndex(0);
+                setEneSardTuluuguiGereenuud((kh) => ({
+                  ...kh,
+                  khuudasniiDugaar: 1,
+                  jagsaalt: [],
+                }));
+                setKhuudaslalt((kh) => ({ ...kh, khuudasniiDugaar: 1 }));
               }}
               clearIcon={false}
               className="w-full sm:w-auto !h-8"
