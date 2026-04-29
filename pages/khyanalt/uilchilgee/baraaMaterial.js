@@ -720,8 +720,7 @@ function BaraaMaterial() {
     { targetId: "mat-usage-dashboard", title: t("Нийт статистик"), description: t("Энд бараа материалын нийт төрөл, үлдэгдэл болон үнэ цэнийг нэгдсэн байдлаар харна.") },
     { targetId: "mat-actions", title: t("Үйлдлүүд"), description: t("Шинээр бараа бүртгэх, барааны орлого авах болон Excel файл татаж авах үйлдлүүдийг эндээс хийнэ.") },
     { targetId: "mat-table", title: t("Барааны жагсаалт"), description: t("Бүх бараа материалын дэлгэрэнгүй жагсаалт, үлдэгдэл, нэгж өртөг зэргийг эндээс хянах боломжтой.") },
-    { targetId: "mat-sidebar", title: t("Хайлт"), description: t("Бараа материалыг хурдан нэмэх хэсэг.") },
-    { targetId: "mat-team", title: t("Баг хамт олон"), description: t("Материал хариуцсан багийн гишүүдийг эндээс харна.") },
+
   ];
 
   useEffect(() => {
@@ -780,7 +779,7 @@ function BaraaMaterial() {
                 onChange={setFilterType}
                 className="w-full sm:w-48 [&>.ant-select-selector]:!bg-white dark:[&>.ant-select-selector]:!bg-[#222a38] dark:[&>.ant-select-selector]:!border-[#2d3748]/50 [&>.ant-select-selector]:!border-gray-200 dark:[&>.ant-select-selector]:!text-gray-300 [&>.ant-select-selector]:!rounded-lg [&>.ant-select-selector]:!h-[36px] [&>.ant-select-selector]:!flex [&>.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!text-xs"
               >
-                  <Select.Option value="all">🟢 {t("Бүх төрөл")}</Select.Option>
+                  <Select.Option value="all">{t("Бүх төрөл")}</Select.Option>
                   {Object.entries(typeMap).map(([key, value]) => (
                     <Select.Option key={key} value={key}>{value}</Select.Option>
                   ))}
@@ -1233,8 +1232,8 @@ function BaraaMaterial() {
         <InputNumber
           className="w-full rounded-md dark:border-gray-700"
           placeholder={t("Үлдэгдэл")}
-          precision={isWhole ? 0 : 2}
-          step={isWhole ? 1 : 0.1}
+          precision={isWhole ? 0 : 3}
+          step={isWhole ? 1 : 0.001}
           min={0}
         />
       </Form.Item>

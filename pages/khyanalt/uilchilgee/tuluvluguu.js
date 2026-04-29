@@ -79,17 +79,26 @@ function Tuluvluguu() {
   useEffect(() => {
     dayjs.locale(i18n.language === 'mn' ? 'mn' : 'en');
   }, [i18n.language]);
-  const { token, barilgiinId, ajiltan } = useAuth();
-  const baiguullagiinId = ajiltan?.baiguullagiinId;
+  const { token, barilgiinId, ajiltan, baiguullaga } = useAuth();
+  const baiguullagiinId = baiguullaga?._id || ajiltan?.baiguullagiinId;
   const api = useMemo(() => fsmApi.withAuth(token, FSM_BASE_URL), [token, FSM_BASE_URL]);
   const [currentDate, setCurrentDate] = useState(dayjs());
-  const baraaTypeMap = {
-    tseverlegch: "Цэвэрлэгээ",
-    ugaalgiin: "Угаалгын",
-    ariutgagch: "Ариутгагч",
-    bagaj: "Багаж",
-    busad: "Бусад"
-  };
+  const [fsmTuruls, setFsmTuruls] = useState([]);
+  const baraaTypeMap = useMemo(() => {
+    const map = {};
+    fsmTuruls.forEach(t => { map[t.ner] = t.ner; });
+    // Fallback if empty to previous defaults, or maybe just let it be fully dynamic
+    if (fsmTuruls.length === 0) {
+      return {
+        tseverlegch: "Цэвэрлэгээ",
+        ugaalgiin: "Угаалгын",
+        ariutgagch: "Ариутгагч",
+        bagaj: "Багаж",
+        busad: "Бусад"
+      };
+    }
+    return map;
+  }, [fsmTuruls]);
   const [view, setView] = useState("Month"); // Month, Week, Day, Agenda
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
   
@@ -517,6 +526,14 @@ function Tuluvluguu() {
     }
   }, [barilgiinId, baiguullagiinId, api]);
 
+  const fetchFsmTuruls = useCallback(async () => {
+    if (!barilgiinId) return;
+    try {
+      const res = await api.get("/fsm-turuls", { params: { barilgiinId, baiguullagiinId } });
+      setFsmTuruls(res.data?.data || res.data || []);
+    } catch (err) {}
+  }, [barilgiinId, baiguullagiinId, api]);
+
   const handleMemberClick = (member) => {
     setSelectedMemberForKpi(member);
     setIsKpiModalVisible(true);
@@ -528,7 +545,8 @@ function Tuluvluguu() {
     fetchHistory();
     fetchUilchluulegchid();
     fetchBaraas();
-  }, [fetchProjects, fetchTasks, fetchHistory, fetchUilchluulegchid, fetchBaraas]);
+    fetchFsmTuruls();
+  }, [fetchProjects, fetchTasks, fetchHistory, fetchUilchluulegchid, fetchBaraas, fetchFsmTuruls]);
 
   useEffect(() => {
     if (!fsmSocket) return;
@@ -728,7 +746,7 @@ function Tuluvluguu() {
         ner: values.title,
         tailbar: values.description || '',
         zereglel: values.zereglel || 'engiin',
-        tuluv: 'shine',
+        tuluv: editingTask ? editingTask.tuluv : 'shine',
         hariutsagchId: values.hariutsagchId || null,
         ajiltnuud: values.ajiltnuud || [],
         ekhlekhTsag,
@@ -807,7 +825,7 @@ function Tuluvluguu() {
       const payload = {
         ner: values.name,
         tailbar: values.tailbar || "",
-        tuluv: "shine",
+        tuluv: editingProject ? editingProject.tuluv : "shine",
         ekhlekhOgnoo: values.ekhlekhOgnoo ? dayjs(values.ekhlekhOgnoo).format("YYYY-MM-DD") : dayjs().format("YYYY-MM-DD"),
         duusakhOgnoo: values.duusakhOgnoo ? dayjs(values.duusakhOgnoo).format("YYYY-MM-DD") : dayjs().add(30, "day").format("YYYY-MM-DD"),
         udirdagchId: ajiltan?._id,
@@ -2034,12 +2052,13 @@ useEffect(() => {
           )}
 
             {view === "Agenda" && (() => {
-              const today = currentDate.format("YYYY-MM-DD");
-              const overdue = filteredTasks.filter(t => t.date < today && !t.completed);
+              const realToday = dayjs().format("YYYY-MM-DD");
+              const selectedDay = currentDate.format("YYYY-MM-DD");
+              const overdue = filteredTasks.filter(t => t.date < realToday && !t.completed);
               const dueToday = filteredTasks.filter(t => 
-                (t.date === today || (t.startDate <= today && t.date >= today)) && !overdue.includes(t)
+                (t.date === selectedDay || (t.startDate <= selectedDay && t.date >= selectedDay)) && !overdue.includes(t)
               );
-              const upcoming = filteredTasks.filter(t => t.startDate > today && !overdue.includes(t) && !dueToday.includes(t));
+              const upcoming = filteredTasks.filter(t => t.startDate > selectedDay && !overdue.includes(t) && !dueToday.includes(t));
 
               const statusColor = (tuluv) => tuluv === "duussan"
                 ? "text-green-600 dark:text-green-400 bg-green-500/10"
@@ -2100,7 +2119,7 @@ useEffect(() => {
                             <span className="text-[12px] font-semibold text-gray-500 dark:text-gray-400 truncate">{proj?.name || "—"}</span>
                           </div>
                           <div className="col-span-2">
-                            <span className={`text-[12px] font-bold ${task.date < today && !task.completed ? "text-red-500" : "text-gray-500 dark:text-gray-400"}`}>
+                            <span className={`text-[12px] font-bold ${task.date < dayjs().format("YYYY-MM-DD") && !task.completed ? "text-red-500" : "text-gray-500 dark:text-gray-400"}`}>
                               {task.date ? dayjs(task.date).format("YYYY-MM-DD") : "—"}
                             </span>
                           </div>
@@ -2651,8 +2670,8 @@ useEffect(() => {
           <InputNumber
             placeholder={t("Тоо1")}
             className="w-full h-10 dark:border-gray-700 rounded-lg"
-            precision={isWhole ? 0 : 2}
-            step={isWhole ? 1 : 0.1}
+            precision={isWhole ? 0 : 3}
+            step={isWhole ? 1 : 0.001}
             min={0}
           />
         </Form.Item>
@@ -2750,7 +2769,7 @@ useEffect(() => {
               loading={loadingUilchluulegchid}
               // className="w-full h-12 [&>.ant-select-selector]:!h-12 [&>.ant-select-selector]:!rounded-xl [&>.ant-select-selector]:!items-center [&>.ant-select-selector]:!flex"
               allowClear
-              disabled={!!editingProject}
+              disabled={!!editingProject?.uilchluulegchId}
             >
               {uilchluulegchid.map(u => (
                 <Select.Option key={u._id} value={u._id}>

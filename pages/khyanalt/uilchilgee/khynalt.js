@@ -144,7 +144,7 @@ function Khynalt() {
   const [isKpiModalVisible, setIsKpiModalVisible] = useState(false);
   const [selectedMemberForKpi, setSelectedMemberForKpi] = useState(null);
   const [editingProject, setEditingProject] = useState(null);
-  const [chartRange, setChartRange] = useState(7); // 7, 14, 30 days
+  const [chartDateRange, setChartDateRange] = useState([moment().subtract(6, 'days'), moment()]); // Custom date range
   const [selectedProjectIds, setSelectedProjectIds] = useState([]);
   const ajiltanJagsaalt = useJagsaalt("/ajiltan");
   const [form] = Form.useForm();
@@ -475,16 +475,29 @@ function Khynalt() {
       ).length;
       const remainingCount = Math.max(memberTasks.length - doneCount - activeCount - overdueCount, 0);
       
-      const scoredTasks = memberTasks.filter(t => t.onooson != null);
+      const scoredTasks = memberTasks.filter(t => t.niitOnooson != null);
       const dynamicAvg = scoredTasks.length > 0 
-        ? (scoredTasks.reduce((acc, t) => acc + t.onooson, 0) / scoredTasks.length).toFixed(1)
+        ? (scoredTasks.reduce((acc, t) => acc + t.niitOnooson, 0) / scoredTasks.length).toFixed(1)
         : (kpiInfo?.kpiDundaj || 0);
+
+      let dynamicKpiHuvv = kpiInfo?.kpiHuvv || 0;
+      if (doneCount > 0) {
+        const qualityScore = (Number(dynamicAvg) / 10) * 100;
+        const onTimeCount = memberTasks.filter(t => {
+          if (t.tuluv !== 'duussan') return false;
+          const deadline = t.khugatsaaDuusakhOgnoo || t.duusakhTsag;
+          if (!deadline) return true;
+          return moment(t.duussanOgnoo || t.updatedAt).isSameOrBefore(moment(deadline));
+        }).length;
+        const timelinessScore = (onTimeCount / doneCount) * 100;
+        dynamicKpiHuvv = Math.round((qualityScore * 0.70) + (timelinessScore * 0.30));
+      }
 
       return {
         id: aId,
         name: a.ner || a.nevtrekhNer || t('Ажилтан'),
         role: a.albanTushaal || a.erkh || t("Ажилтан"),
-        kpi: kpiInfo?.kpiHuvv || 0,
+        kpi: dynamicKpiHuvv,
         kpiOnoo: kpiInfo?.kpiOnoo || 0,
         kpiDaalgavarToo: doneCount,
         kpiDundaj: dynamicAvg,
@@ -547,9 +560,14 @@ function Khynalt() {
   }, [tasks]);
   const multiChartData = useMemo(() => {
     const days = [];
-    // From (chartRange-1) days ago to today
-    for (let i = chartRange - 1; i >= 0; i--) {
-      days.push(moment().subtract(i, 'days').format('YYYY-MM-DD'));
+    if (chartDateRange && chartDateRange[0] && chartDateRange[1]) {
+      const start = chartDateRange[0].clone().startOf('day');
+      const end = chartDateRange[1].clone().startOf('day');
+      let curr = start.clone();
+      while(curr.isSameOrBefore(end)) {
+        days.push(curr.format('YYYY-MM-DD'));
+        curr.add(1, 'days');
+      }
     }
     return days.map(day => {
       const dayMoment = moment(day);
@@ -582,7 +600,7 @@ function Khynalt() {
         waitingTasks: waitingTasks.map(t => t.ner || t.title)
       };
     });
-  }, [tasks, chartRange, isTaskOnDay]);
+  }, [tasks, chartDateRange, isTaskOnDay]);
 
   const projectStats = useMemo(() => {
     return projects.map(p => {
@@ -658,17 +676,19 @@ function Khynalt() {
 
           <div className="flex-1 overflow-y-auto pr-2 pb-8 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-100 dark:[&::-webkit-scrollbar-thumb]:bg-slate-800">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-5">
-              <DashboardCard id="khyanalt-activity-chart" title={<div className="flex flex-col"><span className="leading-tight">{t("Гүйцэтгэлийн хандлага")}</span><span className="text-[10px] text-gray-400 font-normal uppercase mt-0.5">{t("Өнөөдрийн төлөв байдал")}</span></div>} icon={<AreaChartOutlined/>} headerClass="border-green-500" rightActions={
-                <div className="flex gap-1.5 bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg border border-gray-200 dark:border-gray-700">
-                  {[7, 14, 30].map(r => (
-                    <button
-                      key={r}
-                      onClick={() => setChartRange(r)}
-                      className={`text-[12px] font-bold uppercase px-2 py-0.5 rounded-md transition-all ${chartRange === r ? 'bg-sky-500 text-white shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'}`}
-                    >
-                      {r}д
-                    </button>
-                  ))}
+              <DashboardCard id="khyanalt-activity-chart" title={<div className="flex flex-col"><span className="leading-tight">{t("Гүйцэтгэлийн хандлага")}</span><span className="text-[10px] text-gray-400 font-normal uppercase mt-0.5">{t("Сонгосон хугацаанд")}</span></div>} icon={<AreaChartOutlined/>} headerClass="border-green-500" rightActions={
+                <div className="flex gap-1.5 p-0.5 rounded-lg">
+                  <DatePicker.RangePicker
+                    value={chartDateRange}
+                    onChange={(dates) => {
+                      if (dates && dates.length === 2) {
+                        setChartDateRange(dates);
+                      }
+                    }}
+                    format="YYYY-MM-DD"
+                    className="h-8 text-[12px] rounded-md"
+                    allowClear={false}
+                  />
                 </div>
               }>
                   {(() => {
@@ -821,14 +841,18 @@ function Khynalt() {
                               );
                             })}
                             {multiChartData.filter((_, idx) => {
-                              if (chartRange <= 7) return true;
-                              if (chartRange <= 14) return idx % 2 === 0;
-                              return idx % 5 === 0;
+                              const diff = multiChartData.length;
+                              if (diff <= 7) return true;
+                              if (diff <= 14) return idx % 2 === 0;
+                              if (diff <= 31) return idx % 5 === 0;
+                              return idx % Math.floor(diff / 6) === 0;
                             }).map((d, i) => {
                               const pt = mkPts('done').filter((_, idx) => {
-                                if (chartRange <= 7) return true;
-                                if (chartRange <= 14) return idx % 2 === 0;
-                                return idx % 5 === 0;
+                                const diff = multiChartData.length;
+                                if (diff <= 7) return true;
+                                if (diff <= 14) return idx % 2 === 0;
+                                if (diff <= 31) return idx % 5 === 0;
+                                return idx % Math.floor(diff / 6) === 0;
                               })[i];
 
                               return (
