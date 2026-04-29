@@ -20,7 +20,7 @@ import {
 import _ from "lodash";
 import useSWR from "swr";
 import createMethod from "tools/function/crud/createMethod";
-import moment from "moment";
+import moment from "moment"; 
 import React from "react";
 import { Pie, Doughnut, Line, Bar } from "react-chartjs-2";
 import useTailan from "hooks/tailan/useTailan";
@@ -48,7 +48,7 @@ import { BiMoney, BiMoneyWithdraw } from "react-icons/bi";
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend, Filler);
 
 const GlassCard = ({ children, className = "", title, icon, extra }) => (
-  <div className={`group relative overflow-hidden rounded-[1.5rem] bg-white/90 dark:bg-slate-900/60 border border-slate-200/50 dark:border-slate-800/50 shadow-sm transition-all duration-300 hover:shadow-md ${className}`}>
+  <div className={`glass-card group relative overflow-hidden rounded-[1.5rem] bg-white/90 dark:bg-slate-900/60 border border-slate-200/50 dark:border-slate-800/50 shadow-sm transition-all duration-300 hover:shadow-md ${className}`}>
     {title && (
       <div className="px-4 py-3 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/50">
         <div className="flex items-center gap-2">
@@ -59,7 +59,7 @@ const GlassCard = ({ children, className = "", title, icon, extra }) => (
           )}
           <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase">{title}</span>
         </div>
-        {extra && <div className="flex items-center">{extra}</div>}
+        {extra && <div className="hide-on-print flex items-center">{extra}</div>}
       </div>
     )}
     <div className="p-3 md:p-4">{children}</div>
@@ -547,7 +547,7 @@ const VacancyFloorTable = ({ building, baiguullaga, token, t }) => {
   );
 };
 
-const BuildingSegmentsTables = ({ building, baiguullaga, token, t, selectedSegment, setSelectedSegment, dateRange, setDateRange }) => {
+const BuildingSegmentsTables = ({ building, baiguullaga, token, t, selectedSegment, setSelectedSegment, dateRange, setDateRange, isPrinting }) => {
 
   const query = { barilgiinId: building._id, idevkhiteiEsekh: { $in: [true, false] }, khuudasniiKhemjee: 5000 };
   
@@ -627,7 +627,7 @@ const BuildingSegmentsTables = ({ building, baiguullaga, token, t, selectedSegme
     >
       <Table 
         size="small" dataSource={dataSource} loading={isValidating} 
-        pagination={{ pageSize: 15, showSizeChanger: false, size: 'small' }} scroll={{ x: 'max-content', y: 220 }}
+        pagination={isPrinting ? false : { pageSize: 15, showSizeChanger: false, size: 'small' }} scroll={{ x: 'max-content', y: isPrinting ? undefined : 220 }}
         className="premium-table"
         columns={[
           { title: t('Код'), dataIndex: 'kod', key: 'kod', width: 70, render: (v) => <span className="font-bold text-xs">{v}</span> },
@@ -653,6 +653,7 @@ export default function BuildingDashboard() {
   const router = useRouter();
   const [selectedSegment, setSelectedSegment] = useState('all');
   const [dateRange, setDateRange] = useState([moment().subtract(6, 'months').startOf('month'), moment().endOf('month')]);
+  const [isPrinting, setIsPrinting] = useState(false);
   const dashboardRef = React.useRef(null);
 
   useEffect(() => { Aos.init({ duration: 1000 }); }, []);
@@ -664,7 +665,12 @@ export default function BuildingDashboard() {
   }, [baiguullaga, ajiltan, barilgiinId, router.query]);
 
   const handlePrintPage = () => {
-    window.print();
+    setIsPrinting(true);
+    // Wait for state to update and re-render
+    setTimeout(() => {
+      window.print();
+      setIsPrinting(false);
+    }, 500);
   };
 
   const handleExportAllExcel = () => {
@@ -713,11 +719,104 @@ export default function BuildingDashboard() {
 
   return (
     <Admin khuudasniiNer="dashboard" title={t("Хяналтын самбар")}>
-      <div ref={dashboardRef} className="col-span-12 flex flex-col h-[calc(100vh-80px)] w-full -mx-0 xl:-mx-1 text-black animate-entrance overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-6 pb-20">
+      <style jsx global>{`
+        @media print {
+          /* Hide non-print elements */
+          nav, aside, header, footer, 
+          .ant-layout-sider, .ant-layout-header, 
+          .hide-on-print, .no-print, .ant-btn, .ant-select, .ant-picker,
+          .fixed, .absolute, .ant-table-pagination, .ant-switch,
+          #garchig, .ant-drawer, .ant-notification, .ant-modal-root {
+            display: none !important;
+          }
+
+          /* Reset Admin wrapper */
+          div.bg-green-600 {
+            background: white !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            display: block !important;
+            min-height: auto !important;
+          }
+
+          /* Hide Admin top header and sidebars specifically */
+          .main > div:first-child, 
+          .main + *,
+          div[class*="ProfileTovch"] {
+            display: none !important;
+          }
+
+          /* Reset layout for print */
+          body, html {
+            background: white !important;
+            height: auto !important;
+            overflow: visible !important;
+            color: black !important;
+          }
+
+          .main {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: white !important;
+            min-height: auto !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+          }
+
+          .print-container {
+            height: auto !important;
+            overflow: visible !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            transform: scale(0.85);
+            transform-origin: top center;
+          }
+
+          .glass-card {
+            break-inside: avoid;
+            box-shadow: none !important;
+            border: 1px solid #ddd !important;
+            background: white !important;
+            border-radius: 1rem !important;
+          }
+
+          .glass-card * {
+            color: black !important;
+          }
+
+          .premium-table .ant-table-body {
+            max-height: none !important;
+            overflow: visible !important;
+          }
+
+          .premium-table .ant-table-content {
+             overflow: visible !important;
+          }
+
+          .grid {
+            display: grid !important;
+            gap: 12px !important;
+          }
+
+          /* Force light mode colors for charts/icons */
+          .dark .glass-card, .dark .main {
+            background: white !important;
+            border-color: #ddd !important;
+            color: black !important;
+          }
+
+          @page {
+            size: A4 landscape;
+            margin: 5mm;
+          }
+        }
+      `}</style>
+      <div ref={dashboardRef} className="print-container col-span-12 flex flex-col h-[calc(100vh-80px)] w-full -mx-0 xl:-mx-1 text-black animate-entrance overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-6 pb-20">
         
-        
-          <BuildingStatsSummary baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
-          {/* <div className="flex items-center gap-2 ml-4 shrink-0">
+        <div className="flex justify-end items-center hide-on-print -mb-4">
+          <div className="flex items-center gap-2">
             <Button 
               icon={<PrinterOutlined />} 
               onClick={handlePrintPage}
@@ -725,15 +824,11 @@ export default function BuildingDashboard() {
             >
               <span className="hidden sm:inline text-xs">{t("Хэвлэх")}</span>
             </Button>
-            <Button 
-              icon={<DownloadOutlined />} 
-              onClick={handleExportAllExcel}
-              className="flex items-center gap-1.5 rounded-xl border-slate-200 dark:border-slate-700 text-slate-500 hover:!text-emerald-600 hover:!border-emerald-400"
-            >
-              <span className="hidden sm:inline text-xs">Excel</span>
-            </Button>
-          </div> */}
-      
+            
+          </div>
+        </div>
+
+        <BuildingStatsSummary baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
            <BuildingIncomeChart baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
@@ -743,7 +838,17 @@ export default function BuildingDashboard() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
            <BuildingRevenueTable building={selectedBuilding} token={token} t={t} />
            <VacancyFloorTable building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} />
-           <BuildingSegmentsTables building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} selectedSegment={selectedSegment} setSelectedSegment={setSelectedSegment} dateRange={dateRange} setDateRange={setDateRange} />
+           <BuildingSegmentsTables 
+             building={selectedBuilding} 
+             baiguullaga={baiguullaga} 
+             token={token} 
+             t={t} 
+             selectedSegment={selectedSegment} 
+             setSelectedSegment={setSelectedSegment} 
+             dateRange={dateRange} 
+             setDateRange={setDateRange} 
+             isPrinting={isPrinting}
+           />
         </div>
       </div>
     </Admin>
