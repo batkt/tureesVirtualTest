@@ -250,11 +250,34 @@ function useSonorduulga(token) {
             globalSeenIds.delete(firstEntry);
           }
 
-          notification.success({
-            message: "Шинэ дуудлага",
-            description: "Шинэ дуудлага ирлээ",
-            duration: 5,
-          });
+          const isDuudlaga = notif.turul === "duudlaga";
+          if (isDuudlaga) {
+            let msg = "Шинэ дуудлага";
+            let desc = "Шинэ дуудлага ирлээ";
+
+            if (notif.duudlagiinTurul === "sanal") {
+              msg = "Шинэ санал хүсэлт";
+              desc = "Шинэ санал хүсэлт ирлээ";
+            } else if (notif.duudlagiinTurul === "gomdol") {
+              msg = "Шинэ гомдол";
+              desc = "Шинэ гомдол ирлээ";
+            } else if (notif.duudlagiinTurul === "shaardlaga") {
+              msg = "Шинэ шаардлага";
+              desc = "Шинэ шаардлага ирлээ";
+            }
+
+            notification.success({
+              message: msg,
+              description: desc,
+              duration: 10,
+            });
+          } else {
+            notification.success({
+              message: notif.title || "Шинэ мэдэгдэл",
+              description: notif.message || "Шинэ мэдэгдэл ирлээ",
+              duration: 7,
+            });
+          }
 
     
           mutate();

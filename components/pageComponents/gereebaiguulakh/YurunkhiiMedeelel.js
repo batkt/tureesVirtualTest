@@ -574,13 +574,15 @@ const YurunkhiiMedeele = ({
             name="utas"
             rules={[
               { required: true, message: t("Утасны дугаар оруулна уу !") },
+              { pattern: /^[0-9]{8}$/, message: t("Утасны дугаар 8 оронтой тоо байх ёстой!") }
             ]}
             label={t("Утас")}
-            normalize={(value) => value?.replace(/\s/g, "")}
+            normalize={(value) => value?.replace(/\D/g, "").slice(0, 8)}
           >
             <Input
               onKeyUp={focuser}
               allowClear
+              maxLength={8}
               style={{ borderRadius: '8px'}}
               placeholder={t("Утас")}
               prefix={<SolutionOutlined />}
@@ -594,12 +596,15 @@ const YurunkhiiMedeele = ({
             name="utas"
             rules={[
               { required: true, message: t("Утасны дугаар оруулна уу !") },
+              { pattern: /^[0-9]{8}$/, message: t("Утасны дугаар 8 оронтой тоо байх ёстой!") }
             ]}
             label={t("Утас")}
+            normalize={(value) => value?.replace(/\D/g, "").slice(0, 8)}
           >
             <Input
               onKeyUp={focuser}
               allowClear
+              maxLength={8}
               style={{ borderRadius: '8px'}}
               placeholder={t("Утас")}
               prefix={<SolutionOutlined />}
@@ -611,7 +616,11 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item
             name="mail"
-            rules={[{ required: true, message: t("И-мэйл хаяг оруулна уу !") }]}
+            rules={[
+              { required: true, message: t("И-мэйл хаяг оруулна уу !") },
+              { type: 'email', message: t("И-мэйл хаяг буруу байна!") },
+              { pattern: /^[^\s@]+@[^\s@]+\.(com|mn)$/i, message: t("И-мэйл хаяг .com эсвэл .mn-ээр төгссөн байх ёстой!") }
+            ]}
             label={t("И-мэйл хаяг")}
             normalize={(value) => value?.replace(/\s/g, "")}
           >
@@ -642,7 +651,11 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item
             name="mail"
-            rules={[{ required: true, message: t("И-мэйл хаяг оруулна уу !") }]}
+            rules={[
+              { required: true, message: t("И-мэйл хаяг оруулна уу !") },
+              { type: 'email', message: t("И-мэйл хаяг буруу байна!") },
+              { pattern: /^[^\s@]+@[^\s@]+\.(com|mn)$/i, message: t("И-мэйл хаяг .com эсвэл .mn-ээр төгссөн байх ёстой!") }
+            ]}
             label={t("И-мэйл хаяг")}
             normalize={(value) => value?.replace(/\s/g, "")}
           >

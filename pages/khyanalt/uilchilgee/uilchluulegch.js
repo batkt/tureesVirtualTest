@@ -248,10 +248,11 @@ function Uilchluulegch() {
 
   const filteredUsers = useMemo(() => {
     return users.filter(user => {
+      const searchLower = searchText.toLowerCase();
       const matchSearch = !searchText || 
-        user.ner?.toLowerCase().includes(searchText.toLowerCase()) || 
-        user.utas?.some(u => u.includes(searchText)) ||
-        user.mail?.toLowerCase().includes(searchText.toLowerCase());
+        user.ner?.toLowerCase().includes(searchLower) || 
+        (Array.isArray(user.utas) ? user.utas.some(u => u.toString().includes(searchText)) : user.utas?.toString().includes(searchText)) ||
+        user.mail?.toLowerCase().includes(searchLower);
         
       const finalTuluv = (user.kpiDaalgavarToo > 0) ? user.tuluv : 'idevhgui';
       const matchStatus = filterStatus === "all" || finalTuluv === filterStatus;
@@ -298,13 +299,14 @@ function Uilchluulegch() {
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 shrink-0 px-1">
             <div id="cust-search-filter" className="flex flex-1 items-center gap-4 w-full md:w-auto">
-               <Input 
+               <Input.Search 
                  placeholder={t("Нэр, утас, имэйлээр хайх...")} 
-                 prefix={<SearchOutlined className="text-gray-400" />}
                  value={searchText}
                  onChange={(e) => setSearchText(e.target.value)}
-                 className="h-[40px] rounded-xl max-w-md shadow-sm border-gray-200 dark:border-gray-700"
+                 onSearch={(val) => setSearchText(val)}
+                 className="h-[40px] max-w-md shadow-sm [&_.ant-input-search-button]:!bg-emerald-500 [&_.ant-input-search-button]:!border-none [&_.ant-input]:!rounded-l-xl [&_.ant-input-group-addon_button]:!rounded-r-xl"
                  allowClear
+                 enterButton
                />
                <Select
                  placeholder={t("Төлөв")}
@@ -335,19 +337,26 @@ function Uilchluulegch() {
                 title={t("Тусламж")}
               />
             </div>
-            
-            
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 mt-2 relative">
-            {filteredUsers.length === 0 && (
+            {loading ? (
               <div className="col-span-full py-20 text-center">
-                <div className="text-gray-400 font-medium ">
-                  {t("Өгөгдөл олдсонгүй")}
-                </div>
+                <Spin size="large" />
               </div>
-            )}
-            {filteredUsers.map((user, idx) => (
+            ) : filteredUsers.length === 0 ? (
+              <div className="col-span-full py-20 text-center flex flex-col items-center justify-center">
+                <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-full mb-4">
+                  <SearchOutlined className="text-5xl text-gray-300 dark:text-gray-600" />
+                </div>
+                <div className="text-gray-500 dark:text-gray-400 font-bold text-lg">
+                  {t("Мэдээлэл олдсонгүй")}
+                </div>
+                <p className="text-gray-400 dark:text-gray-500 mt-2 max-w-xs mx-auto">
+                  {t("Таны хайсан нөхцөлд тохирох үйлчлүүлэгч олдсонгүй. Хайх утгаа шалгаад дахин оролдоно уу.")}
+                </p>
+              </div>
+            ) : filteredUsers.map((user, idx) => (
               <div key={user._id} id={idx === 0 ? "cust-list" : undefined} className="bg-white border border-gray-200 dark:bg-gray-900 dark:border-[#2d3748]/50 rounded-[18px] p-5 shadow-md hover:shadow-lg transition-transform hover:-translate-y-1 flex flex-col gap-4">
                 <div className="flex items-center justify-between gap-3 rounded-lg">
                   <div className="flex items-center gap-3 min-w-0 flex-1">

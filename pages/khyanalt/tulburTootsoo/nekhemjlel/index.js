@@ -450,9 +450,8 @@ function tulburTootsoo({ token }) {
     {
       title: t("Гэрээний дугаар"),
       dataIndex: "gereeniiDugaar",
-      ellipsis: true,
+      width: 150,
       align: "center",
-      className: "overflow-x-auto",
     },
     {
       title: t("Хариу"),

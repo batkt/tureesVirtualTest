@@ -720,79 +720,51 @@ export default function BuildingDashboard() {
   return (
     <Admin khuudasniiNer="dashboard" title={t("Хяналтын самбар")}>
       <style jsx global>{`
+        @page {
+          size: A4 landscape;
+          margin: 0;
+        }
+
         @media print {
-          /* Hide non-print elements */
-          nav, aside, header, footer, 
-          .ant-layout-sider, .ant-layout-header, 
-          .hide-on-print, .no-print, .ant-btn, .ant-select, .ant-picker,
-          .fixed, .absolute, .ant-table-pagination, .ant-switch,
-          #garchig, .ant-drawer, .ant-notification, .ant-modal-root {
-            display: none !important;
-          }
-
-          /* Reset Admin wrapper */
-          div.bg-green-600 {
+          /* Hide EVERYTHING in the body except the dashboard */
+          body {
+            visibility: hidden;
             background: white !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            display: block !important;
-            min-height: auto !important;
           }
-
-          /* Hide Admin top header and sidebars specifically */
-          .main > div:first-child, 
-          .main + *,
-          div[class*="ProfileTovch"] {
-            display: none !important;
-          }
-
-          /* Reset layout for print */
-          body, html {
-            background: white !important;
-            height: auto !important;
-            overflow: visible !important;
-            color: black !important;
-          }
-
-          .main {
-            width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            background: white !important;
-            min-height: auto !important;
-            border-radius: 0 !important;
-            box-shadow: none !important;
+          
+          .print-container, .print-container * {
+            visibility: visible;
           }
 
           .print-container {
-            height: auto !important;
-            overflow: visible !important;
-            padding: 0 !important;
-            margin: 0 !important;
+            position: absolute;
+            left: 0;
+            top: 0;
             width: 100% !important;
-            transform: scale(0.85);
-            transform-origin: top center;
+            height: auto !important;
+            padding: 5mm !important;
+            margin: 0 !important;
+            zoom: 0.8; 
+            background: white !important;
+          }
+
+          /* Explicitly hide Admin UI elements that might still be taking up space */
+          nav, aside, header, footer, 
+          .ant-layout-sider, .ant-layout-header,
+          #garchig, .ant-btn, .ant-select, .ant-picker, .hide-on-print {
+            display: none !important;
           }
 
           .glass-card {
             break-inside: avoid;
             box-shadow: none !important;
-            border: 1px solid #ddd !important;
+            border: 1px solid #eee !important;
+            margin-bottom: 0 !important;
             background: white !important;
-            border-radius: 1rem !important;
           }
 
           .glass-card * {
             color: black !important;
-          }
-
-          .premium-table .ant-table-body {
-            max-height: none !important;
-            overflow: visible !important;
-          }
-
-          .premium-table .ant-table-content {
-             overflow: visible !important;
           }
 
           .grid {
@@ -800,16 +772,35 @@ export default function BuildingDashboard() {
             gap: 12px !important;
           }
 
-          /* Force light mode colors for charts/icons */
-          .dark .glass-card, .dark .main {
+          .grid.grid-cols-1.md\:grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+
+          .grid.grid-cols-1.xl\:grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+
+          .grid.grid-cols-1.xl\:grid-cols-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          }
+
+          /* Tables should not scroll */
+          .premium-table .ant-table-body, 
+          .premium-table .ant-table-content {
+            max-height: none !important;
+            overflow: visible !important;
+          }
+
+          /* Force light mode */
+          .dark .glass-card, .dark .print-container {
             background: white !important;
-            border-color: #ddd !important;
+            border-color: #eee !important;
             color: black !important;
           }
 
-          @page {
-            size: A4 landscape;
-            margin: 5mm;
+          canvas {
+            max-width: 100% !important;
+            height: auto !important;
           }
         }
       `}</style>
