@@ -30,9 +30,9 @@ import { Pie, Doughnut, Line, Bar } from "react-chartjs-2";
 import useAvlagiinChartSalbaraar from "hooks/tailan/useAvlagiinChartSalbaraar";
 import useOrlogiinChartSalbaraarAvya from "hooks/tailan/useOrlogiinChartSalbaraarAvya";
 import useLineChart from "hooks/tailan/useLineChart";
-import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
-import local from "antd/lib/date-picker/locale/mn_MN";
+import mnMN from "antd/lib/date-picker/locale/mn_MN";
+import enUS from "antd/lib/date-picker/locale/en_US";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
 import {
@@ -606,14 +606,14 @@ function BarilgaBurtgel({ token }) {
           {/* Controls Section */}
           <div className="flex flex-shrink-0 flex-wrap items-center justify-between gap-4 rounded-xl border border-gray-200/50 bg-gradient-to-r from-gray-50 to-white p-4 shadow-sm backdrop-blur-sm dark:border-gray-700/50 dark:from-gray-800/95 dark:to-gray-900/95 dark:shadow-xl">
             <div className="flex flex-wrap items-center gap-3">
-              <DatePicker.RangePicker
-                locale={local}
+               <DatePicker.RangePicker
+                locale={i18n.language === "mn" ? mnMN : enUS}
                 value={lineOgnoo}
                 onChange={setLineOgnoo}
                 className="rounded-lg dark:border-gray-600"
               />
               <Select
-                placeholder="График төрөл сонгох"
+                placeholder={t("График төрөл сонгох")}
                 value={nariivchlal}
                 onChange={setNariivchlal}
                 className="w-full lg:w-[200px]"

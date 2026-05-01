@@ -384,7 +384,7 @@ const Tailbar = React.forwardRef(
           <div className="flex w-full flex-row justify-between">
             <div className="text-right">
               {t(
-                service === "/gereeSergeeye" ? "Сэргээх огноо" : "Эхлэх огноо"
+                service === "/gereeSergeeye" ? t("Сэргээх огноо") : t("Эхлэх огноо")
               )}
               :
             </div>
@@ -448,7 +448,7 @@ const Tailbar = React.forwardRef(
                 <div className="text-right"> Ашиглах огноо </div>
                 <DatePicker.RangePicker
                   className="font-medium"
-                  placeholder={["Эхлэх огноо", "Дуусах огноо"]}
+                  placeholder={[t("Эхлэх огноо"), t("Дуусах огноо") ]}
                   disabledDate={disabledDate}
                   value={tsutslakhOgnoo}
                   onChange={(e) => changeOgnoo(e)}

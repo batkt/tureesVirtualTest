@@ -4178,7 +4178,7 @@ function tulburTootsoo({ token }) {
         const msgKey = "mail_send_progress";
         try {
           message.loading({
-            content: `Илгээж эхэлж байна... 0/${gereenuud.length}`,
+            content: `Илгээж байна... 0/${gereenuud.length}`,
             key: msgKey,
             duration: 0,
           });
@@ -4285,7 +4285,7 @@ function tulburTootsoo({ token }) {
         const msgKey = "mail_send_progress";
         try {
           message.loading({
-            content: `Илгээж эхэлж байна... 0/${mailuud.length}`,
+            content: `Илгээж байна... 0/${mailuud.length}`,
             key: msgKey,
             duration: 0,
           });

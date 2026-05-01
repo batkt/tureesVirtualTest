@@ -446,7 +446,7 @@ function tulburTootsoo({ token }) {
         wrapClassName: "guilgee-modal",
         title: (
           <div className="flex items-center justify-between">
-            <span className="text-black dark:text-white">Гүйлгээ холбох</span>
+            <span className="text-black dark:text-white">{t("Гүйлгээ холбох")}</span>
           </div>
         ),
         width: "95%",
@@ -715,7 +715,7 @@ function tulburTootsoo({ token }) {
                   },
                 },
                 {
-                  title: "НӨАТУС",
+                  title: t("НӨАТУС"),
                   width: "4.5rem",
                   align: "center",
                   render(a) {
@@ -916,7 +916,7 @@ function tulburTootsoo({ token }) {
                   },
                 },
                 {
-                  title: "НӨАТУС",
+                  title: t("НӨАТУС"),
                   width: "4.5rem",
                   align: "center",
                   render(a) {
@@ -1099,7 +1099,7 @@ function tulburTootsoo({ token }) {
                   },
                 },
                 {
-                  title: "НӨАТУС",
+                  title: t("НӨАТУС"),
                   width: "5rem",
                   align: "center",
                   render(a) {

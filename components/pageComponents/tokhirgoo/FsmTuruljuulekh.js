@@ -155,7 +155,7 @@ function FsmTuruljuulekh({ baiguullaga, baiguullagaMutate }) {
               >
                 <div className="flex items-center gap-3">
                   <div>
-                    <div className="font-bold text-gray-800 dark:text-gray-100 text-sm">
+                    <div className="font-medium text-gray-800 dark:text-gray-100 text-sm">
                       {cat.ner}
                     </div>
                     
@@ -189,9 +189,17 @@ function FsmTuruljuulekh({ baiguullaga, baiguullagaMutate }) {
 
       <DraggableModal
         title={
-          editingItem
-            ? t("Төрөл засах")
-            : t("Шинэ төрөл нэмэх")
+          <div className="flex items-center gap-3 py-1">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 shadow-sm">
+              <SettingOutlined className="text-lg" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[15px] font-bold text-gray-800 dark:text-gray-100 leading-tight">
+                {editingItem ? t("Төрөл засах") : t("Шинэ төрөл нэмэх")}
+              </span>
+              
+            </div>
+          </div>
         }
         open={modalVisible}
         onCancel={() => {
@@ -201,33 +209,48 @@ function FsmTuruljuulekh({ baiguullaga, baiguullagaMutate }) {
         }}
         footer={null}
         centered
-        width={420}
+        width={440}
+        className="premium-modal"
       >
         <Form
           form={form}
           layout="vertical"
           onFinish={handleSave}
-          className="mt-4"
         >
-          <Form.Item
-            name="ner"
-            label={
-              <span className="text-gray-500 text-xs font-bold uppercase">
-                {t("Төрлийн нэр")}
+          <div className="rounded-2xl bg-gray-50/50  border-gray-100 dark:bg-gray-900/40 dark:border-gray-800">
+            <Form.Item
+              name="ner"
+              label={
+                <div className="flex items-center justify-between w-full mb-1">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                    {t("Төрлийн нэр")}
+                  </span>
+                  <span className="text-[10px] text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full font-bold">
+                    {t("Заавал")}
+                  </span>
+                </div>
+              }
+              rules={[
+                { required: true, message: t("Төрлийн нэрийг оруулна уу") },
+              ]}
+              className="!mb-0"
+            >
+              <Input
+                placeholder={t("Жишээ нь: Цэвэрлэгээ, Засвар")}
+                className="h-12 rounded-xl border-gray-200 bg-white shadow-sm transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+              />
+            </Form.Item>
+            <div className="mt-3 flex items-center gap-2 pl-1">
+              <div className="h-1 w-1 rounded-full bg-emerald-500"></div>
+              <span className="text-[10px] font-medium text-gray-400 italic">
+                {t("* Даалгавруудыг ангилахад ашиглагдана")}
               </span>
-            }
-            rules={[
-              { required: true, message: t("Төрлийн нэрийг оруулна уу") },
-            ]}
-          >
-            <Input
-              placeholder={t("Жишээ нь: Цэвэрлэгээ, Засвар")}
-              className="h-10 rounded-lg"
-            />
-          </Form.Item>
+            </div>
+          </div>
 
-          <div className="flex justify-end gap-3 pt-2">
+          <div className="mt-8 flex items-center justify-end gap-3 px-1">
             <Button
+              className="h-11 rounded-xl border-gray-100 px-8 font-bold text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:hover:bg-gray-800"
               onClick={() => {
                 setModalVisible(false);
                 setEditingItem(null);
@@ -236,8 +259,16 @@ function FsmTuruljuulekh({ baiguullaga, baiguullagaMutate }) {
             >
               {t("Болих")}
             </Button>
-            <Button type="primary" htmlType="submit" loading={saving}>
-              {editingItem ? t("Хадгалах") : t("Нэмэх")}
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={saving}
+              className="group h-11 rounded-xl bg-emerald-500 px-10 font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <div className="flex items-center gap-2">
+                <span>{editingItem ? t("Хадгалах") : t("Нэмэх")}</span>
+                
+              </div>
             </Button>
           </div>
         </Form>

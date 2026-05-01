@@ -471,7 +471,7 @@ function tulburTootsoo() {
             var khymdarsanDun = parseFloat(x.khunglugdsunDun);
           }
         } else {
-          ugugdul.tailbar = "Хөнгөлөлт";
+          ugugdul.tailbar = t("Хөнгөлөлт");
           var khymdraaguiDun = x.sariinTurees;
           var guchHonogOruulahEseh = x.guchKhonogOruulakhEsekh;
 
@@ -561,7 +561,7 @@ function tulburTootsoo() {
       ) {
         setWaiting(false);
         notification.warning({
-          message: "Тохируулсан хөнгөлөх хувиас хэтэрсэн байна!",
+          message: t("Тохируулсан хөнгөлөх хувиас хэтэрсэн байна!"),
         });
         return;
       }
@@ -570,7 +570,7 @@ function tulburTootsoo() {
         .then(({ data }) => {
           if (data === "Amjilttai") {
             setWaiting(false);
-            toast.success("Хөнгөлөлт амжилттай хийгдлээ");
+            toast.success(t("Хөнгөлөлт амжилттай хийгдлээ"));
             formRef.current.resetFields();
             setTootsoolol({});
             setOgnoonuud([]);
@@ -582,7 +582,7 @@ function tulburTootsoo() {
         });
     } else {
       setWaiting(false);
-      toast.warning("Хөнгөлөх талбай сонгоно уу");
+      toast.warning(t("Хөнгөлөх талбай сонгоно уу"));
     }
   }
 
@@ -639,7 +639,7 @@ function tulburTootsoo() {
         width: "7rem",
         className: "text-center",
         render: (talbainKhemjee) => {
-          return `${talbainKhemjee} м2`;
+          return `${talbainKhemjee} ${t("м2")}`;
         },
         showSorterTooltip: false,
 
@@ -738,7 +738,7 @@ function tulburTootsoo() {
       </Button>,
     ];
     modal({
-      title: "Хөнгөлөлт устгах шалтгаан",
+      title: t("Хөнгөлөлт устгах шалтгаан"),
       icon: <DeleteOutlined />,
       content: (
         <Tailbar
@@ -892,13 +892,13 @@ function tulburTootsoo() {
             case "turees":
               return (
                 <div className="flex items-center justify-center rounded-lg bg-green-400 px-2 py-1 dark:bg-green-700 dark:text-gray-200 ">
-                  Түрээс
+                  {t("Түрээс")}
                 </div>
               );
             case "zardal":
               return (
                 <div className="flex items-center justify-center rounded-lg bg-yellow-400 px-2 py-1 dark:bg-yellow-700 dark:text-gray-200 ">
-                  Зардал
+                  {t("Зардал")}
                 </div>
               );
             default:
@@ -1276,7 +1276,7 @@ function tulburTootsoo() {
 
   return (
     <Admin
-      title="Хөнгөлөлт"
+      title={t("Хөнгөлөлт")}
       khuudasniiNer="khungulult"
       className="p-0 px-3 pb-12 md:p-4 md:px-4 md:pb-0"
       onSearch={(searchValue) => {
@@ -1359,8 +1359,8 @@ function tulburTootsoo() {
                         }, 100);
                       }}
                     >
-                      <Select.Option value={"turees"}>Түрээс</Select.Option>
-                      <Select.Option value={"zardal"}>Зардал</Select.Option>
+                      <Select.Option value={"turees"}>{t("Түрээс")}</Select.Option>
+                      <Select.Option value={"zardal"}>{t("Зардал")}</Select.Option>
                     </Select>
                   </Form.Item>
                   {turul === "zardal" &&
@@ -1638,7 +1638,7 @@ function tulburTootsoo() {
                         min={1}
                         max={100}
                         
-                        placeholder="Хөнгөлөх хувь"
+                        placeholder={t("Хөнгөлөх хувь")}
                         style={{borderRadius: '8px'}}
                         onChange={khungulukhDunTootsoolyo}
                       />
@@ -1683,7 +1683,7 @@ function tulburTootsoo() {
                   {!khonogTootsokhEsekh ? (
                     <Form.Item label={t("Хөнгөлөх төрөл")} labelAlign="left">
                       <Select
-                        placeholder="Хөнгөлөх төрөл"
+                        placeholder={t("Хөнгөлөх төрөл")}
                         className="w-32"
                         value={khungulukh}
                         onChange={(v) => {

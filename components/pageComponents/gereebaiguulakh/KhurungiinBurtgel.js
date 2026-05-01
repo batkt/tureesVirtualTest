@@ -21,6 +21,7 @@ import _ from "lodash";
 import Aos from "aos";
 import useTalbai from "hooks/useTalbai";
 import { useAuth } from "services/auth";
+import {useTranslation} from "react-i18next";
 import formatNumber from "tools/function/formatNumber";
 import getListMethod from "tools/function/crud/getListMethod";
 import moment from "moment";
@@ -40,6 +41,7 @@ const toWordsOrEmpty = (value) => {
   if (!Number.isFinite(numericValue) || numericValue === 0) return "";
   return toWords(numericValue);
 };
+
 
 function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
   const { token, baiguullaga } = useAuth();
@@ -88,11 +90,11 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
       return typeof value === "string" ? value : value?._id;
     }
   }, [value, mode]);
-
+const {t} = useTranslation();
   return (
     <Select
       id={id}
-      placeholder="Талбай"
+      placeholder={t("Талбай")}
       filterOption={false}
       value={selectValue}
       mode={mode}

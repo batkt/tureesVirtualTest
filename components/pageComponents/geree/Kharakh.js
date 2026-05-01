@@ -168,7 +168,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
           }`}
         >
           <EyeOutlined />
-          Гэрээ
+          {t("Гэрээ")}
         </div>
         {gereeMedeelel?.talbainIdnuud?.length > 0 && (
           <div
@@ -184,7 +184,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
             }`}
           >
             <EyeOutlined />
-            Талбай
+            {t("Талбай")}
           </div>
         )}
         {gereeMedeelel?.aktiinZagvariinId && (
@@ -230,7 +230,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
         {KharakhKhesguud.find((a) => a === 1) && (
           <div>
             <div className="sticky top-0 text-2xl font-semibold opacity-30 print:hidden">
-              Гэрээ
+              {t("Гэрээ")}
             </div>
             <div
               className=" flex w-full flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg dark:bg-gray-800  dark:text-white print:min-h-0 print:shadow-none"
@@ -287,7 +287,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
         {KharakhKhesguud.find((a) => a === 2) && talbainuud?.length > 0 && (
           <div>
             <div className="sticky left-0 top-0 text-2xl font-semibold opacity-30 print:hidden">
-              Талбай
+              {t("Талбай")}
             </div>
             {Object.entries(_.groupBy(talbainuud, "davkhar")).map(
               ([davkhar, units], i) => {

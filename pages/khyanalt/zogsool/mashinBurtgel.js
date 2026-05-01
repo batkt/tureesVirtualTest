@@ -477,7 +477,7 @@ function mashinBurtgel({ token }) {
         showSorterTooltip: false,
         render: (value, record) => {
           return (
-            <div className="flex h-[1.5rem] w-[4rem] items-center justify-center rounded-lg bg-green-400 px-2 py-1 font-[600] text-white">
+            <div className="flex h-[1.5rem] w-[4rem] items-center justify-end rounded-lg bg-green-400 px-2 font-[600] text-white">
               {value ? value : 0}
             </div>
           );
@@ -491,7 +491,7 @@ function mashinBurtgel({ token }) {
         showSorterTooltip: false,
         render: (value, record) => {
           return (
-            <div className="flex h-[1.5rem] w-[4rem] items-center justify-center rounded-lg bg-green-400 px-2 py-1 font-[600] text-white">
+            <div className="flex h-[1.5rem] w-[4rem] items-center justify-end rounded-lg bg-green-400 px-2 font-[600] text-white">
               {value ? value : 0}
             </div>
           );

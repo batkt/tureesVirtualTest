@@ -59,6 +59,7 @@ import {
 } from "antd";
 import { useFsmSocket } from "hooks/useFsmSocket";
 import dayjs from "dayjs";
+import "dayjs/locale/mn";
 import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
 import isoWeek from "dayjs/plugin/isoWeek";
@@ -1765,7 +1766,7 @@ useEffect(() => {
                 { label: t("Сар"), value: "Month" },
                 { label: t("Долоо хоног"), value: "Week" },
                 { label: t("Өдөр"), value: "Day" },
-                { label: t("Агенда"), value: "Agenda" },
+                { label: t("uilchilgee.agenda"), value: "Agenda" },
               ].map(({ label, value }) => (
                 <button
                   key={value}
@@ -1885,7 +1886,7 @@ useEffect(() => {
                   <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">{t("ЦАГ")}</div>
                   {weekData.map(date => (
                     <div key={date.toString()} className="p-3 text-center border-r border-gray-100 dark:border-gray-900 last:border-r-0">
-                      <div className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{date.format("ddd")}</div>
+                      <div className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{t(date.format("ddd"))}</div>
                       <div className={`text-[12px] font-bold ${date.isSame(dayjs(), 'day') ? "text-teal-500" : "text-gray-700 dark:text-gray-300"}`}>{date.format("DD")}</div>
                     </div>
                   ))}
@@ -1969,8 +1970,8 @@ useEffect(() => {
                 <div className="grid grid-cols-8 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111827] sticky top-0 z-10 shadow-sm shrink-0">
                   <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">{t("ЦАГ")}</div>
                   <div className="col-span-7 p-3 text-center">
-                    <div className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{currentDate.format("dddd")}</div>
-                    <div className="text-[12px] font-bold text-teal-500">{i18n.language === 'mn' ? currentDate.format("YYYY оны MMMM DD") : currentDate.format("MMMM DD, YYYY")}</div>
+                    <div className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{t(currentDate.format("dddd"))}</div>
+                    <div className="text-[12px] font-bold text-teal-500">{i18n.language === 'mn' ? currentDate.format(`YYYY ${t("оны")} MMMM DD`) : currentDate.format("MMMM DD, YYYY")}</div>
                   </div>
                 </div>
                 <div className="flex-1 grid grid-cols-8 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700">
@@ -2204,7 +2205,7 @@ useEffect(() => {
                   {loadingProjects ? (
                     <div className="flex justify-center py-4"><Spin size="small" /></div>
                   ) : projects.length === 0 ? (
-                    <div className="text-center text-gray-400 text-[12px] py-4 font-medium">Мэдээлэл байхгүй</div>
+                    <div className="text-center text-gray-400 text-[12px] py-4 font-medium">{t("Мэдээлэл байхгүй")}</div>
                   ) : (
                     projects.map(p => (
                       <div key={p.id} className="flex items-center space-x-3 cursor-pointer group hover:bg-emerald-50 dark:hover:bg-emerald-500/10 px-3 py-2.5 rounded-2xl transition-all duration-300 border border-transparent hover:border-emerald-200/50 dark:hover:border-emerald-500/20 shadow-sm hover:shadow-md">
@@ -3907,7 +3908,7 @@ useEffect(() => {
               <span className="text-[10px] font-bold text-gray-400 uppercase block mb-3">Хамгийн сүүлд шинэчлэгдсэн</span>
               <div className="inline-flex items-center px-4 py-2 bg-emerald-50 dark:bg-emerald-900/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-xs font-bold border border-emerald-100 dark:border-emerald-800">
                 <ClockCircleOutlined className="mr-2" />
-                {selectedMemberForKpi?.lastShineelsn ? dayjs(selectedMemberForKpi.lastShineelsn).format("YYYY-MM-DD HH:mm") : "Мэдээлэл байхгүй"}
+                {selectedMemberForKpi?.lastShineelsn ? dayjs(selectedMemberForKpi.lastShineelsn).format("YYYY-MM-DD HH:mm") : t("Мэдээлэл байхгүй")}
               </div>
            </div>
         </div>

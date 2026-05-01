@@ -709,7 +709,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
         width: 100,
         align: "center",
         fixed: "left",
-        title: "РД",
+        title: t("РД"),
         dataIndex: "register",
       },
       {

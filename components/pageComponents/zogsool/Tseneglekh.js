@@ -64,9 +64,9 @@ function Tseneglekh({ data, destroy, token, barilgiinId, mutate }, ref) {
   function turulUurchilyu(turul) {
     switch (turul) {
       case "orlogo":
-        return "Орлого";
+        return t("Орлого");
       case "zarlaga":
-        return "Зарлага";
+        return t("Зарлага");
       default:
         return turul;
     }
@@ -87,7 +87,7 @@ function Tseneglekh({ data, destroy, token, barilgiinId, mutate }, ref) {
   const khuudsuud = [
     {
       key: 1,
-      label: "Цэнэглэх",
+      label:t("Цэнэглэх"),
       children: (
         <Form
           form={form}
@@ -106,7 +106,7 @@ function Tseneglekh({ data, destroy, token, barilgiinId, mutate }, ref) {
               },
             ]}
             name={"dun"}
-            label={"Цэнэглэх дүн:"}
+            label={t("Цэнэглэх дүн:")}
           >
             <InputNumber
               style={{ width: "100%" }}
@@ -123,7 +123,7 @@ function Tseneglekh({ data, destroy, token, barilgiinId, mutate }, ref) {
     },
     {
       key: 2,
-      label: "Түүх",
+      label: t("Түүх"),
       children: (
         <Table
           tableLayout="fixed"

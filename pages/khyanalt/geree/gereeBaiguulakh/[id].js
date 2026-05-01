@@ -703,7 +703,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
               <Select
                 showSearch
                 id={gereeniiZagvariinId}
-                placeholder="Гэрээний загвар сонгох"
+                placeholder={t("Гэрээний загвар сонгох")}
                 className="hidden w-full md:block"
                 size="large"
                 value={null}

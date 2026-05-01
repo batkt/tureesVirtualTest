@@ -128,11 +128,9 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
               router.push(`/khyanalt/geree/zagvar/${zagvaraaBichijUgnu}/new`)
             }
           >
-            {t(
-              zagvaraaBichijUgnu === "geree"
-                ? "Шинэ гэрээний загвар үүсгэх"
-                : "Актын загвар үүсгэх"
-            )}
+            {zagvaraaBichijUgnu === "geree"
+              ? t("Шинэ гэрээний загвар үүсгэх")
+              : t("Актын загвар үүсгэх")}
           </Button>
           {/* <Dropdown
             overlay={

@@ -147,7 +147,7 @@ function ZassanMedegdelKharakh(
             <thead className="bg-gray-100 dark:bg-gray-800">
               <tr>
                 <th className="border p-2 text-left w-1/4">{t("Талбарын нэр")}</th>
-                <th className="border p-2 text-right w-3/8 text-red-500">{t("Өмнох утга")}</th>
+                <th className="border p-2 text-right w-3/8 text-red-500">{t("Өмнөх утга")}</th>
                 <th className="border p-2 text-right w-3/8 text-green-600">{t("Шинэ утга")}</th>
               </tr>
             </thead>

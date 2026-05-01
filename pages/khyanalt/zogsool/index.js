@@ -1576,7 +1576,7 @@ function Zogsool({ token }) {
                     tulbur === "khungulult" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
-                  Хөнгөлөлт
+                  {t("Хөнгөлөлт")}
                 </div>
                 {baiguullaga?._id === "6115f350b35689cdbf1b9da3" && (
                   <>
@@ -1694,13 +1694,13 @@ function Zogsool({ token }) {
       },
       {
         title: t("Хөнгөлөлт"),
-        align: "right",
+        align: "center",
         width: "9rem",
         dataIndex: "tuukh",
         render(v) {
           const { discount } = splitTulbur(v?.[0]?.tulbur);
           if (!discount) return null;
-          return formatNumber(discount, 0);
+          return <div className="w-full text-right">{formatNumber(discount, 0)}</div>;
         },
       },
       {
