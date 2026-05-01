@@ -881,7 +881,7 @@ function BarilgaBurtgel({ token }) {
             <Calendar
               fullscreen={false}
               mode="month"
-              locale={i18n.language === "mn" && locale}
+              locale={i18n.language === "mn" ? mnMN : enUS}
               onChange={setOgnoo}
               className="rounded-xl"
             />

@@ -18,7 +18,7 @@ import uilchilgee from "services/uilchilgee";
 function FsmTuruljuulekh({ baiguullaga, baiguullagaMutate }) {
   const { t } = useTranslation();
   const { token, barilgiinId, ajiltan } = useAuth();
-  const baiguullagiinId = ajiltan?.baiguullagiinId;
+  const baiguullagiinId = baiguullaga?._id || ajiltan?.baiguullagiinId;
   const api = useMemo(() => fsmApi.withAuth(token, FSM_BASE_URL), [token]);
 
   const [categories, setCategories] = useState([]);
@@ -68,7 +68,11 @@ function FsmTuruljuulekh({ baiguullaga, baiguullagaMutate }) {
         });
         notification.success({ message: t("Амжилттай засагдлаа") });
       } else {
-        await api.post("/fsm-turuls", { ner: values.ner, baiguullagiinId, barilgiinId });
+        await api.post("/fsm-turuls", { 
+          ner: values.ner, 
+          baiguullagiinId, 
+          barilgiinId 
+        });
         notification.success({ message: t("Төрөл амжилттай нэмэгдлээ") });
       }
 
