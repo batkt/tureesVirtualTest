@@ -1,12 +1,4 @@
-import {
-  Steps,
-  Button,
-  Spin,
-  Switch,
-  Form,
-  Modal,
-  notification,
-} from "antd";
+import { Steps, Button, Spin, Switch, Form, Modal, notification } from "antd";
 import { toast } from "sonner";
 import React from "react";
 import formatNumber from "tools/function/formatNumber";
@@ -41,15 +33,15 @@ function Tulbur(
     niitDun,
     suuliikhEsekh,
   },
-  ref
+  ref,
 ) {
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
-    !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
+    !!data?.tuluv && data?.tuluv === 1 ? 2 : 1,
   );
   const [khaanbank, setTerminal] = React.useState(false);
   const [tulbur, setTulbur] = React.useState(
-    (niitDun ? [] : data?.tulbur) || []
+    (niitDun ? [] : data?.tulbur) || [],
   );
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
@@ -86,7 +78,7 @@ function Tulbur(
         destroy();
       },
     }),
-    [tulbur]
+    [tulbur],
   );
 
   function ebarimtAvya(id) {
@@ -215,11 +207,6 @@ function Tulbur(
         if (data === "Amjilttai") {
           setAlkham(2);
           onRefresh();
-          suuliikhEsekh === true &&
-            zogsoolUilchilgee()
-              .get("/neeye/" + camerVal + "")
-              .then(function (response) {})
-              .catch(function (error) {});
           setLoading(false);
         } else {
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
@@ -292,7 +279,7 @@ function Tulbur(
               vatps_bill_type: "1",
             },
           },
-          { timeout: 4000000 }
+          { timeout: 4000000 },
         )
         .then(({ data }) => {
           if (data.status === true && data?.response?.response_code === "000") {
@@ -419,7 +406,7 @@ function Tulbur(
                     eBarimt.status == "SUCCESS"
                       ? eBarimt?.totalVAT
                       : eBarimt?.vat,
-                    2
+                    2,
                   )}
                   ₮
                 </p>
@@ -431,7 +418,7 @@ function Tulbur(
                     eBarimt.status == "SUCCESS"
                       ? eBarimt?.totalVAT
                       : eBarimt?.vat,
-                    2
+                    2,
                   )}
                   ₮
                 </p>
@@ -479,7 +466,7 @@ function Tulbur(
               <p className="text-right">
                 {data?.tsagiinTuukh[0]?.orsonTsag &&
                   moment(data?.tsagiinTuukh[0]?.orsonTsag).format(
-                    "YYYY-MM-DD HH:mm"
+                    "YYYY-MM-DD HH:mm",
                   )}
               </p>
             </div>
@@ -488,7 +475,7 @@ function Tulbur(
               <p className="text-right">
                 {data?.tsagiinTuukh[0]?.garsanTsag &&
                   moment(data?.tsagiinTuukh[0]?.garsanTsag).format(
-                    "YYYY-MM-DD HH:mm"
+                    "YYYY-MM-DD HH:mm",
                   )}
               </p>
             </div>
@@ -528,7 +515,7 @@ function Tulbur(
             <div className="table-cell border-b-2 border-dashed p-2 text-right dark:text-gray-200">
               {formatNumber(
                 (niitDun ? niitDun : data?.tulukhDun) -
-                  tulbur.reduce((a, b) => a + b.dun, 0) || 0
+                  tulbur.reduce((a, b) => a + b.dun, 0) || 0,
               )}{" "}
               ₮
             </div>

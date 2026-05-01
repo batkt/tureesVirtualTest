@@ -22,7 +22,7 @@ function cameraVals({ token }) {
   }, [baiguullaga?._id, barilgiinId]);
   const { jagsaalt: parkingJagsaalt, mutate: parkingMutate } = useJagsaalt(
     "/parking",
-    streamQuery
+    streamQuery,
   );
   const [cameraJagsaalt, setCameraJagsaalt] = useState([]);
   const [cameraW, setCameraW] = useState("w-1/4");
@@ -77,33 +77,7 @@ function cameraVals({ token }) {
   };
 
   const khaalgaNeey = (ip) => {
-    if (baiguullaga?._id === "66c2c871597ea1390c3fd830") {
-      let data =
-        '<?xml version="1.0" encoding="UTF-8"?><BarrierGate><ctrlMode>open</ctrlMode></BarrierGate>';
-      let config = {
-        method: "put",
-        maxBodyLength: Infinity,
-        url: "http://" + ip + "/ISAPI/Parking/channels/1/barrierGate",
-        auth: {
-          username: "admin",
-          password: "Asdf1199",
-        },
-        headers: {
-          Accept: "*/*",
-          Connection: "keep-alive",
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-        data: data,
-      };
-      axios
-        .request(config)
-        .then((response) => {})
-        .catch((error) => {});
-    } else
-      zogsoolUilchilgee()
-        .get("/neeye/" + ip + "")
-        .then(function (response) {})
-        .catch(function (error) {});
+    console.log("ip cameravals ----->>>", ip);
   };
 
   return (

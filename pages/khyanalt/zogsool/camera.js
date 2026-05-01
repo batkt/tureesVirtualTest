@@ -2809,7 +2809,7 @@ function camera({ token }) {
       zogsoolUilchilgee()
         .get(`/neeye/${ip}`)
         .then((response) => {
-          console.log("neeye: --->" + response?.data);
+          console.log("neeye: --->" + response?.data + " ip: " + ip);
         })
         .catch((error) => {
           console.error("API error:", error);

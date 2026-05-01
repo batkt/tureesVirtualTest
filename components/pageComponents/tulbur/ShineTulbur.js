@@ -6,11 +6,7 @@ import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import moment from "moment";
 import QRCode from "react-qr-code";
-import uilchilgee, {
-  aldaaBarigch,
-  socket,
-  zogsoolUilchilgee,
-} from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
 import { useEffect } from "react";
 import { t } from "i18next";
 import { useQRCode } from "next-qrcode";
@@ -425,12 +421,6 @@ function ShineTulbur(
             ? setAlkham(ebarimtShuud ? 3 : 2)
             : ebarimtguiTulburDuusgakh();
           onRefresh();
-          suuliikhEsekh === true &&
-            !songogdsonZogsool?.garakhKhaalgaGarTokhirgoo;
-          zogsoolUilchilgee()
-            .get("/neeye/" + camerVal + "")
-            .then(function (response) {})
-            .catch(function (error) {});
           setLoading(false);
         } else {
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
