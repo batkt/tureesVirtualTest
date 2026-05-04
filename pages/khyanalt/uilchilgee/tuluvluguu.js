@@ -337,6 +337,25 @@ function Tuluvluguu() {
   };
 
   const isTaskOnDay = (task, day) => {
+    const checkDay = dayjs(day).startOf('day');
+
+    if (task.isLoop === true || task.isLoop === 'true') {
+      const start = task.ekhlekhOgnoo || task.ekhlekhTsag;
+      const end = task.duusakhOgnoo || task.duusakhTsag;
+      
+      if (start) {
+        const taskStart = dayjs(start).startOf('day');
+        if (checkDay.isBefore(taskStart)) return false;
+      }
+      
+      if (end) {
+        const taskEnd = dayjs(end).endOf('day');
+        if (checkDay.isAfter(taskEnd)) return false;
+      }
+      
+      return true;
+    }
+
     const start = task.ekhlekhOgnoo || task.ekhlekhTsag || task.duusakhTsag;
     const end = task.duusakhOgnoo || task.duusakhTsag || task.ekhlekhTsag;
     
@@ -344,7 +363,6 @@ function Tuluvluguu() {
     
     const taskStart = dayjs(start).startOf('day');
     const taskEnd = dayjs(end).endOf('day');
-    const checkDay = dayjs(day).startOf('day');
     
     return (checkDay.isSame(taskStart) || checkDay.isAfter(taskStart)) && 
            (checkDay.isSame(taskEnd) || checkDay.isBefore(taskEnd));
@@ -994,6 +1012,13 @@ useEffect(() => {
       } else if (projectId) {
         if (!selectedProjectIds.includes(projectId)) {
           setSelectedProjectIds(prev => [...prev, projectId]);
+        }
+        if (router.query.chat === 'open') {
+          const proj = projects.find(p => p.id === projectId || p._id === projectId);
+          if (proj) {
+            setSelectedProjectForChat(proj);
+            setIsProjectChatVisible(true);
+          }
         }
       }
     }
@@ -1708,8 +1733,12 @@ useEffect(() => {
                     className="[&>.ant-checkbox-inner]:!rounded-md" 
                   />
                   <div className="h-3 w-3 rounded shadow-sm shrink-0" style={{ backgroundColor: p.color }}></div>
-                  <span className="flex-1 truncate font-bold text-xs">{p.name}</span>
-                   <div className="opacity-0 group-hover:opacity-100 flex items-center space-x-1 shrink-0">
+                  <div className="flex-1 min-w-0">
+                    <Tooltip title={p.name} placement="topLeft">
+                      <div className="truncate font-bold text-xs">{p.name}</div>
+                    </Tooltip>
+                  </div>
+                   <div className="hidden group-hover:flex items-center space-x-1 shrink-0">
                      <Tooltip title="Чат">
                        <Button type="text" size="small" icon={<MessageOutlined className="text-gray-400 hover:text-teal-500 text-[12px]" />} onClick={(e) => openProjectChat(p, e)} />
                      </Tooltip>
@@ -3412,8 +3441,7 @@ useEffect(() => {
                <div className="flex justify-center py-10"><Spin /></div>
              ) : chatMessages.length === 0 ? (
                <div className="flex flex-col items-center justify-center text-gray-400 h-full opacity-50 space-y-3">
-                 <MessageOutlined className="text-4xl" />
-                 <p className="text-xs font-semibold uppercase ">Одоогоор мессеж байхгүй байна</p>
+                  
                </div>
              ) : (
                <div className="flex flex-col space-y-5">

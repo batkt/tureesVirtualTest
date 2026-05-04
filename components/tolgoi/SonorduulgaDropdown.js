@@ -536,7 +536,8 @@ const SonorduulgaDropdown = React.memo(
                       }
                       else if (notif.projectId || (notif.data && notif.data.projectId)) {
                         const pId = notif.projectId || notif.data.projectId;
-                        router.push(`/khyanalt/uilchilgee/tuluvluguu?projectId=${pId}`);
+                        const isChat = notif.turul === 'chat' || notif.turul === 'message';
+                        router.push(`/khyanalt/uilchilgee/tuluvluguu?projectId=${pId}${isChat ? '&chat=open' : ''}`);
                       }
                       // Priority 3: Fallback map based on type
                       else {

@@ -107,7 +107,7 @@ function BaraaMaterial() {
   const [savingProject, setSavingProject] = useState(false);
   const [projectForm] = Form.useForm();
   const [loadingHistory, setLoadingHistory] = useState(false);
-  const baiguullagiinId = ajiltan?.baiguullagiinId;
+  const baiguullagiinId = baiguullaga?._id || ajiltan?.baiguullagiinId;
   const api = useMemo(() => fsmApi.withAuth(token, FSM_BASE_URL), [token, FSM_BASE_URL]);
   const ajiltanJagsaalt = useJagsaalt("/ajiltan");
   const [history, setHistory] = useState([]);
@@ -1359,11 +1359,7 @@ function BaraaMaterial() {
             </div>
           ) : projectChatMessages.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center opacity-40 py-20">
-              <div className="w-24 h-24 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm mb-4 border border-gray-100 dark:border-gray-700">
-                <MessageOutlined className="text-4xl text-slate-300" />
-              </div>
-              <p className="text-slate-500 font-bold text-sm tracking-wider uppercase tracking-widest">Одоогоор мессеж байхгүй байна</p>
-              <p className="text-slate-400 text-xs mt-1 text-center">Төслийн талаар зурвас бичиж эхлээрэй</p>
+              
             </div>
           ) : (
             projectChatMessages.map((msg, i) => {
