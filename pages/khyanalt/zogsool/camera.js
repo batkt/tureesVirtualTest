@@ -1340,7 +1340,7 @@ function camera({ token }) {
     else {
       const h = Math.floor(m / 60);
       const min = m % 60;
-      res = h + " цаг " + (min && min + " мин");
+      res = h + " " + t("цаг") + " " + (min && min + " " + t("мин"));
     }
     return res;
   };
@@ -4358,8 +4358,8 @@ function camera({ token }) {
                     >
                       {t("Орлого")} [ F8 ]
                       <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 transform whitespace-nowrap rounded-md bg-zinc-700 px-3 py-2 text-sm text-white opacity-0 shadow-md transition-opacity duration-200 ease-in-out group-hover:opacity-100">
-                        Орсон цаг тодорхойгүй машинд гараас төлбөр оруулж
-                        бүртгэх
+                        {t("Орсон цаг тодорхойгүй машинд гараас төлбөр оруулж бүртгэх")}
+
                         <div className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-x-transparent border-t-zinc-700"></div>
                       </div>
                     </Button>
@@ -4767,7 +4767,7 @@ function camera({ token }) {
                                       },
                                     },
                                     {
-                                      title: "Төлөв",
+                                      title: t("Төлөв"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "center" },
                                       render: (v) => {

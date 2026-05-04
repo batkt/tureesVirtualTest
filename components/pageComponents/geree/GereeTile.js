@@ -48,7 +48,7 @@ function GereeTile({
             <EyeOutlined style={{ fontSize: "18px" }} />{" "}
             <label> {t("Харах")}</label>
           </a>
-          {tileProps.shuult?.utga !== "Цуцласан" && (
+          {tileProps.shuult?.utga !== t("Цуцласан") && (
             <a
               className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
               onClick={(e) => {
@@ -93,7 +93,7 @@ function GereeTile({
                 e.preventDefault();
                 e.stopPropagation();
                 Modal.confirm({
-                  content: `Цуцлахдаа итгэлтэй байна уу?`,
+                  content: `${t("Гэрээ цуцлахдаа итгэлтэй байна уу?")}`,
                   okText: t("Тийм"),
                   cancelText: t("Үгүй"),
                   onOk: () => tileProps.gereeTsutsalya(ugugdul),
@@ -112,7 +112,7 @@ function GereeTile({
                 e.preventDefault();
                 e.stopPropagation();
                 Modal.confirm({
-                  content: `Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?`,
+                  content: `${t("Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?")}`,
                   okText: t("Тийм"),
                   cancelText: t("Үгүй"),
                   onOk: () => tileProps.gereeSergeeye(ugugdul),

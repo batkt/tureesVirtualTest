@@ -1323,7 +1323,7 @@ function ZakhialgiinKhyanalt() {
 
                   {shuult?.utga !== "Цуцалсан" && (
                     <Popconfirm
-                      title="Цуцлахдаа итгэлтэй байна уу?"
+                      title={`${t("Гэрээ цуцлахдаа итгэлтэй байна уу?")}`}
                       okText={t("Тийм")}
                       cancelText={t("Үгүй")}
                       onConfirm={() => gereeTsutsalya(data)}
@@ -1338,7 +1338,7 @@ function ZakhialgiinKhyanalt() {
                   {shuult?.utga === "Цуцалсан" && (
                     <>
                       <Popconfirm
-                        title="Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?"
+                        title={`${t("Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?")}`}
                         okText={t("Тийм")}
                         cancelText={t("Үгүй")}
                         onConfirm={() => gereeSergeeye(data)}

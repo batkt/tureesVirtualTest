@@ -1286,14 +1286,14 @@ function Khynalt() {
             required
             rules={[{ required: true, message: t("Төслийн нэр оруулна уу") }]}
           >
-            <Input placeholder="Жишээ нь: Барилга А засвар" className="h-12 rounded-xl" />
+            <Input placeholder={t("Жишээ нь: Барилга А засвар")} className="h-12 rounded-xl" />
           </Form.Item>
 
           <Form.Item
             name="tailbar"
             label={<span className="text-gray-400 text-[12px] font-bold uppercase pl-1">{t("Тайлбар")}</span>}
           >
-            <Input.TextArea placeholder="Төслийн дэлгэрэнгүй тайлбар..." className="rounded-xl" rows={2} />
+            <Input.TextArea placeholder={t("Төслийн дэлгэрэнгүй тайлбар...")} className="rounded-xl" rows={2} />
           </Form.Item>
 
           <div className="grid grid-cols-2 gap-4">
@@ -1560,19 +1560,19 @@ function Khynalt() {
 
            <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center">
-                 <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">Гүйцэтгэсэн</span>
+                 <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">{t("Гүйцэтгэсэн")}</span>
                  <span className="text-xl font-black text-gray-800 dark:text-gray-100">{selectedMemberForKpi?.kpiDaalgavarToo}</span>
-                 <span className="text-[10px] font-medium text-gray-500 mt-0.5">даалгавар</span>
+                 <span className="text-[10px] font-medium text-gray-500 mt-0.5">{t("даалгавар")}</span>
               </div>
               <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center">
-                 <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">Дундаж оноо</span>
+                 <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">{t("Дундаж оноо")}</span>
                  <span className="text-xl font-black text-emerald-500">{selectedMemberForKpi?.kpiDundaj}</span>
-                 <span className="text-[10px] font-medium text-gray-500 mt-0.5">оноо</span>
+                 <span className="text-[10px] font-medium text-gray-500 mt-0.5">{t("оноо")}</span>
               </div>
            </div>
 
            <div className="text-center">
-              <span className="text-[10px] font-bold text-gray-400 uppercase block mb-3">Хамгийн сүүлд шинэчлэгдсэн</span>
+              <span className="text-[10px] font-bold text-gray-400 uppercase block mb-3">{t("Хамгийн сүүлд шинэчлэгдсэн")}</span>
               <div className="inline-flex items-center px-4 py-2 bg-emerald-50 dark:bg-emerald-900/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-xs font-bold border border-emerald-100 dark:border-emerald-800">
                 <ClockCircleOutlined className="mr-2" />
                 {selectedMemberForKpi?.lastShineelsn ? moment(selectedMemberForKpi.lastShineelsn).format("YYYY-MM-DD HH:mm") : "Мэдээлэл байхгүй"}

@@ -10,7 +10,7 @@ import {
 } from "antd";
 import _ from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
-import uilchilgee from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
@@ -19,21 +19,6 @@ import { OrderedListOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
 import { useTranslation } from "react-i18next";
 
-function labelTurul(guilgeeTurul) {
-  var text;
-  switch (guilgeeTurul) {
-    case "ashiglakh":
-      text = "Барьцаа ашиглах";
-      break;
-    case "butsaalt":
-      text = "Барьцаа буцаалт";
-      break;
-    default:
-      text = "Барьцаа төлөх";
-      break;
-  }
-  return text;
-}
 
 function BaritsaaUdirdlaga(
   { data, token, onFinish, destroy, baritsaaUdirdanKhadgalyaaId },
@@ -43,6 +28,22 @@ function BaritsaaUdirdlaga(
   const [dun, setDun] = useState(0);
   const [ognoo, setOgnoo] = useState(moment());
   const { t, i18n } = useTranslation();
+
+  function labelTurul(guilgeeTurul) {
+    var text;
+    switch (guilgeeTurul) {
+      case "ashiglakh":
+        text = t("Барьцаа ашиглах");
+        break;
+      case "butsaalt":
+        text = t("Барьцаа буцаалт");
+        break;
+      default:
+        text = t("Барьцаа төлөх");
+        break;
+    }
+    return text;
+  }
   const [turul, setTurul] = useState("tululkh");
   const [tulukhUldegdel, setTulukhUldegdel] = useState(
     (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
@@ -246,7 +247,7 @@ function BaritsaaUdirdlaga(
       </div>
       <Divider />
       <div className="flex flex-row dark:text-gray-200">
-        <div>{t(labelTurul(turul))}</div>
+        <div>{labelTurul(turul)}</div>
         <div className="ml-auto">
           {formatNumber(
             turul === "ashiglakh" || turul === "butsaalt" ? ashiglakhUldegdel : tulukhUldegdel

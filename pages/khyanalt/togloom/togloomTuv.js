@@ -64,6 +64,7 @@ import ShineTogloomTulbur from "components/pageComponents/togloomiinTuv/ShineTog
 
 const QrCodeAvakh = React.forwardRef(
   ({ destroy, duusakhTsag, ekhlekhTsag }, ref) => {
+    const { t } = useTranslation();
     const khevlekhRef = useRef(null);
     const { Canvas } = useQRCode();
     const handlePrint = useReactToPrint({
@@ -92,10 +93,10 @@ const QrCodeAvakh = React.forwardRef(
         >
           <div className="w-[80%] max-w-[400px] text-justify">
             <div>
-              Эхлэх хугацаа: {moment(ekhlekhTsag).format("YYYY-MM-DD HH:mm")}
+              {t("Эхлэх хугацаа")}: {moment(ekhlekhTsag).format("YYYY-MM-DD HH:mm")}
             </div>{" "}
             <div>
-              Дуусах хугацаа: {moment(duusakhTsag).format("YYYY-MM-DD HH:mm")}
+              {t("Дуусах хугацаа")}: {moment(duusakhTsag).format("YYYY-MM-DD HH:mm")}
             </div>
           </div>
           {!!duusakhTsag ? (
@@ -117,11 +118,10 @@ const QrCodeAvakh = React.forwardRef(
               }}
             />
           ) : (
-            <div>Хоосон</div>
+            <div>{t("Хоосон")}</div>
           )}
           <div className="max-w-[400px] text-center">
-            Энэхүү QR код нь тоглох хүчинтэй хугацаанд зөвхөн нэг удаа нэвтэрч
-            ороход ашиглагдахыг анхаарна уу!
+            {t("Энэхүү QR код нь тоглох хүчинтэй хугацаанд зөвхөн нэг удаа нэвтэрч ороход ашиглагдахыг анхаарна уу!")}
           </div>
         </div>
       </div>
@@ -166,6 +166,7 @@ const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
 
 const TsagSungakh = React.forwardRef(
   ({ data, destroy, confirm, token }, ref) => {
+    const { t } = useTranslation();
     const [niitDun, setNiitDun] = useState();
     const [khugatsaa, setKhugatsaa] = useState();
     const [ekhlekhTsag, setEkhlekhTsag] = useState(data?.duusakhTsag);
@@ -239,11 +240,11 @@ const TsagSungakh = React.forwardRef(
             onChange={(v) => {
               setAsragch(v);
             }}
-            placeholder="Асран хамгаалагч"
+            placeholder={t("Асран хамгаалагч")}
           >
             {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Бусад"].map((a) => {
-              return <Select.Option key={a}>{t(a)}</Select.Option>;
-            })}
+  return <Select.Option key={a}>{t(a)}</Select.Option>;
+})}
           </Select>
         </div>
         <div className="flex items-center">

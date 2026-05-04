@@ -160,7 +160,7 @@ function ZogsoolBurtgekh(
                 name="ner"
                 rules={[{ required: true, message: t("Нэр оруулна уу!") }]}
               >
-                <Input placeholder="Нэр" autoFocus />
+                <Input placeholder={t("Нэр")} autoFocus />
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
@@ -179,7 +179,7 @@ function ZogsoolBurtgekh(
                   },
                 ]}
               >
-                <Input placeholder="Тоо" />
+                <Input placeholder={t("Тоо")} />
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
@@ -198,7 +198,7 @@ function ZogsoolBurtgekh(
                   },
                 ]}
               >
-                <Input placeholder="Тариф " />
+                <Input placeholder={t("Тариф")} />
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
@@ -217,7 +217,7 @@ function ZogsoolBurtgekh(
                   },
                 ]}
               >
-                <Input placeholder="Зогсоолын данс" />
+                <Input placeholder={t("Зогсоолын данс")} />
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
@@ -236,7 +236,7 @@ function ZogsoolBurtgekh(
                   },
                 ]}
               >
-                <Input placeholder="Зогсоолын данс" />
+                <Input placeholder={t("Зогсоолын данс(Sticker)")} />
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
@@ -249,8 +249,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.undsenMin}
-                  checkedChildren="мин"
-                  unCheckedChildren="цаг"
+                  checkedChildren={t("мин")}
+                  unCheckedChildren={t("цаг")}
                 />
               </Form.Item>
             </div>
@@ -259,15 +259,16 @@ function ZogsoolBurtgekh(
                 {t("Гарах цаг")}
               </div>
               <div className="text-xs text-gray-400">
-                Төлбөрөө урьдчилж төлсөн тохиолдолд зогсоолоос гарах ёстой
-                хугацаа/мин. Хоосон тохиолдолд 30мин байна
+                {t(
+                  "Төлбөрөө урьдчилж төлсөн тохиолдолд зогсоолоос гарах ёстой хугацаа/мин. Хоосон тохиолдолд 30мин байна"
+                )}
               </div>
             </div>
             <div className="col-span-2">
               <Form.Item className="m-0" name="garakhTsag">
                 <InputNumber
                   style={{ width: "100%" }}
-                  placeholder="Хугацаа/мин"
+                  placeholder={t("Хугацаа/мин")}
                 />
               </Form.Item>
             </div>
@@ -276,12 +277,12 @@ function ZogsoolBurtgekh(
                 {t("Гадна зогсоол сонгох")}
               </div>
               <div className="text-xs text-gray-400">
-                Зөвхөн дотор зогсоол нэмэх үед сонгоно уу!
+                {t("Зөвхөн дотор зогсоол нэмэх үед сонгоно уу!")}
               </div>
             </div>
             <div className="col-span-2">
               <Form.Item className="m-0" name="gadnaZogsooliinId">
-                <Select placeholder="Зогсоол сонгох">
+                <Select placeholder={t("Зогсоол сонгох")}>
                   <Select.Option value={undefined}>---</Select.Option>
                   {jagsaalt.map((mur, i) =>
                     !!data ? (
@@ -306,12 +307,12 @@ function ZogsoolBurtgekh(
                     {t("Камер Stream тохиргоо")}
                   </div>
                   <div className="text-xs text-gray-400">
-                    Stream гаргахад шаардлагатай тохиргоо
+                    {t("Stream гаргахад шаардлагатай тохиргоо")}
                   </div>
                 </div>
                 <div className="col-span-2 flex items-center justify-start">
                   <Button type="primary" onClick={cameraTokhirgooOruulya}>
-                    Тохиргоо оруулах
+                    {t("Тохиргоо оруулах")}
                   </Button>
                 </div>
               </>
@@ -321,8 +322,8 @@ function ZogsoolBurtgekh(
                 {t("Орох хаалга гар тохиргоо")}
               </div>
               <div className="text-xs text-gray-400">
-                Асаах үед зогсоолын хаалтыг зөвхөн гараас, утраахад зогсоолын
-                хаалт автоматаар ажиллана.
+                {t("Асаах үед зогсоолын хаалтыг зөвхөн гараас, утраахад зогсоолын хаалт автоматаар ажиллана.")}
+                
               </div>
             </div>
             <div className="col-span-2">
@@ -330,8 +331,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.orokhKhaalgaGarTokhirgoo}
-                  checkedChildren="Гараас"
-                  unCheckedChildren="Автомат"
+                  checkedChildren={t("Гараас")}
+                  unCheckedChildren={t("Автомат")}
                 />
               </Form.Item>
             </div>
@@ -340,8 +341,7 @@ function ZogsoolBurtgekh(
                 {t("Гарах хаалга гар тохиргоо")}
               </div>
               <div className="text-xs text-gray-400">
-                Асаах үед зогсоолын хаалтыг зөвхөн гараас, унтраахад зогсоолын
-                хаалт автоматаар ажиллана.
+                {t("Асаах үед зогсоолын хаалтыг зөвхөн гараас, унтраахад зогсоолын хаалт автоматаар ажиллана.")}
               </div>
             </div>
             <div className="col-span-2">
@@ -349,8 +349,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.garakhKhaalgaGarTokhirgoo}
-                  checkedChildren="Гараас"
-                  unCheckedChildren="Автомат"
+                  checkedChildren={t("Гараас")}
+                  unCheckedChildren={t("Автомат")}
                 />
               </Form.Item>
             </div>
@@ -359,7 +359,7 @@ function ZogsoolBurtgekh(
                 {t("Шалтгаан заавал бүртгэх")}
               </div>
               <div className="text-xs text-gray-400">
-                Үйлчлүүлэгч үнэгүй гаргах үед зөрчил заавал бүртгэнэ.
+                {t("Үйлчлүүлэгч үнэгүй гаргах үед зөрчил заавал бүртгэнэ.")}
               </div>
             </div>
             <div className="col-span-2">
@@ -367,8 +367,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.zurchilZaavalBurtgekhEsekh}
-                  checkedChildren="Тийм"
-                  unCheckedChildren="Үгүй"
+                  checkedChildren={t("Тийм")}
+                  unCheckedChildren={t("Үгүй")}
                 />
               </Form.Item>
             </div>
@@ -377,9 +377,7 @@ function ZogsoolBurtgekh(
                 {t("Зогсоолын тоо хязгаарлах")}
               </div>
               <div className="text-xs text-gray-400">
-                Зогсоолд идэвхтэй байгаа машин зогсоолын даацтай тэнцсэн
-                тохиолдолд орох самбар дээр "Дүүрсэн" гэсэн текст харуулаад
-                хаалга онгойхгүй болно
+                {t("Зогсоолд идэвхтэй байгаа машин зогсоолын даацтай тэнцсэн тохиолдолд орох самбар дээр Дүүрсэн гэсэн текст харуулаад хаалга онгойхгүй болно")}
               </div>
             </div>
             <div className="col-span-2">
@@ -387,8 +385,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.zogsoolTooKhyazgaarlakhEsekh}
-                  checkedChildren="Тийм"
-                  unCheckedChildren="Үгүй"
+                  checkedChildren={t("Тийм")}
+                  unCheckedChildren={t("Үгүй")}
                 />
               </Form.Item>
             </div>
@@ -398,7 +396,7 @@ function ZogsoolBurtgekh(
                 {t("Хүлээлгийн горим ашиглах эсэх")}
               </div>
               <div className="text-xs text-gray-400">
-                Зогсоол дүүрсэн үед тухайн машиныг хүлээлгийн горимд шилжүүлнэ
+                {t("Зогсоол дүүрсэн үед тухайн машиныг хүлээлгийн горимд шилжүүлнэ")}
               </div>
             </div>
             <div className="col-span-2">
@@ -406,8 +404,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.zogsoolKhuleekhMashinEsekh}
-                  checkedChildren="Тийм"
-                  unCheckedChildren="Үгүй"
+                  checkedChildren={t("Тийм")}
+                  unCheckedChildren={t("Үгүй")}
                 />
               </Form.Item>
             </div>
@@ -423,8 +421,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.gadaaStickerAshiglakhEsekh}
-                  checkedChildren="Тийм"
-                  unCheckedChildren="Үгүй"
+                  checkedChildren={t("Тийм")}
+                  unCheckedChildren={t("Үгүй")}
                 />
               </Form.Item>
             </div>
@@ -439,8 +437,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.tokiEsekh}
-                  checkedChildren="Тийм"
-                  unCheckedChildren="Үгүй"
+                  checkedChildren={t("Тийм")}
+                  unCheckedChildren={t("Үгүй")}
                 />
               </Form.Item>
             </div>
@@ -455,8 +453,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.barilgaTusBur}
-                  checkedChildren="Тийм"
-                  unCheckedChildren="Үгүй"
+                  checkedChildren={t("Тийм")}
+                  unCheckedChildren={t("Үгүй")}
                 />
               </Form.Item>
             </div>
@@ -470,8 +468,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.vipMashinToolokhEsekh}
-                  checkedChildren="Тийм"
-                  unCheckedChildren="Үгүй"
+                  checkedChildren={t("Тийм")}
+                  unCheckedChildren={t("Үгүй")}
                 />
               </Form.Item>
             </div>
@@ -485,8 +483,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.burtgelguiMashinNeekhEsekh}
-                  checkedChildren="Тийм"
-                  unCheckedChildren="Үгүй"
+                  checkedChildren={t("Тийм")}
+                  unCheckedChildren={t("Үгүй")}
                 />
               </Form.Item>
             </div>
@@ -500,8 +498,8 @@ function ZogsoolBurtgekh(
                 <Switch
                   className="bg-gray-400"
                   defaultChecked={data?.togtmolTulburEsekh}
-                  checkedChildren="Тийм"
-                  unCheckedChildren="Үгүй"
+                  checkedChildren={t("Тийм")}
+                  unCheckedChildren={t("Үгүй")}
                   onChange={(checked) => {
                     if (!checked) {
                       form.setFieldsValue({ togtmolTulburiinDun: null });
@@ -535,7 +533,7 @@ function ZogsoolBurtgekh(
                       <Form.Item className="mr-5" name="togtmolTulburiinDun">
                         <InputNumber
                           style={{ width: "110%" }}
-                          placeholder="Тогтмол төлбөрийн дүн"
+                          placeholder={t("Тогтмол төлбөрийн дүн")}
                         />
                       </Form.Item>
                     </div>
@@ -546,14 +544,14 @@ function ZogsoolBurtgekh(
 
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
-                Зогсоолоос машин автоматаар гаргах цагийн тохиргоо
+                {t("Зогсоолоос машин автоматаар гаргах цагийн тохиргоо")}
               </div>
             </div>
             <div className="col-span-2">
               <Form.Item className="m-0" name="mashinGargakhKhugatsaa">
                 <InputNumber
                   style={{ width: "100%" }}
-                  placeholder="Хугацаа/цаг"
+                  placeholder={t("Хугацаа/цаг")}
                 />
               </Form.Item>
             </div>
@@ -576,7 +574,7 @@ function ZogsoolBurtgekh(
                   type="dashed"
                   onClick={() => add()}
                 >
-                  Тариф нэмэх
+                  {t("Тариф нэмэх")}
                 </Button>
 
                 <div className="max-h-screen space-y-3 overflow-y-auto sm:max-h-[65vh]">
@@ -606,7 +604,7 @@ function ZogsoolBurtgekh(
                   type="dashed"
                   onClick={() => add()}
                 >
-                  Хаалга нэмэх
+                  {t("Хаалга нэмэх")}
                 </Button>
 
                 <div className="max-h-screen space-y-3 overflow-y-auto sm:max-h-[65vh]">
@@ -713,7 +711,7 @@ function Khaalga({
         </div>
 
         <Form.Item
-          label="Нэр:"
+          label={t("Нэр:")}
           labelCol={{ span: 24 }}
           {...restField}
           name={[name, "ner"]}
@@ -726,7 +724,7 @@ function Khaalga({
 
         {/* Type */}
         <Form.Item
-          label="Төрөл:"
+          label={t("Төрөл:")}
           labelCol={{ span: 24 }}
           {...restField}
           name={[name, "turul"]}
@@ -763,7 +761,7 @@ function Khaalga({
                   className="col-span-3 m-0"
                   rules={[{ required: true, message: "Камер IP оруулна уу!" }]}
                 >
-                  <Input placeholder="Камер IP оруулна уу..." />
+                  <Input placeholder={t("Камер IP оруулна уу...")} />
                 </Form.Item>
 
                 <div className="flex gap-3 sm:col-span-1">
@@ -810,7 +808,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
         </div>
 
         <Form.Item
-          label="Цаг:"
+          label={t("Цаг") + ":"}
           labelCol={{ span: 24 }}
           {...restField}
           name={[name, "tsag"]}
@@ -819,7 +817,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
         >
           <TimePicker.RangePicker
             format="HH:mm"
-            placeholder={["Эхлэх", "Дуусах"]}
+            placeholder={[t("Эхлэх"), t("Дуусах")]}     
             order={false}
           />
         </Form.Item>

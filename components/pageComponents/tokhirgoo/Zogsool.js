@@ -300,7 +300,7 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate, barilgiinId }) {
               className="dark:border-dark-5 flex items-center justify-end pb-2"
               onClick={() => zogsoolBurtegye(jagsaalt, null)}
             >
-              <Button type="primary">Зогсоол бүртгэх</Button>
+              <Button type="primary">{t("Зогсоол бүртгэх")}</Button>
             </div>
           </div>
         </div>
@@ -329,13 +329,13 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate, barilgiinId }) {
         <div className="box mt-5 ">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              СМС тохиргоо
+              {t("СМС тохиргоо")}
             </h2>
             <div
               className="dark:border-dark-5 flex items-center justify-end pb-2"
               onClick={() => smsZagvar()}
             >
-              <Button type="primary">СМС загвар</Button>
+              <Button type="primary">{t("СМС загвар")}</Button>
             </div>
           </div>
         </div>

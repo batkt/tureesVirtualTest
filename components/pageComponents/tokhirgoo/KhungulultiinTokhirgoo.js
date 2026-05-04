@@ -389,7 +389,7 @@ function KhungulultiinTokhirgoo({
                 </div>
                 <div className="ml-auto">
                   <Select
-                    placeholder="Хөнгөлөх төрөл"
+                    placeholder={t("Хөнгөлөх төрөл")}
                     className="w-32"
                     value={barilgaTokhirgoo?.khungulukhSarBuriinTurul}
                     onChange={(v) =>
@@ -400,8 +400,8 @@ function KhungulultiinTokhirgoo({
                       }))
                     }
                   >
-                    <Select.Option key={"khuvi"}>Хувь</Select.Option>
-                    <Select.Option key={"mungunDun"}>Мөнгөн дүн</Select.Option>
+                    <Select.Option key={"khuvi"}>{t("Хувь")}</Select.Option>
+                    <Select.Option key={"mungunDun"}>{t("Мөнгөн дүн")}</Select.Option>
                   </Select>
                 </div>
               </div>

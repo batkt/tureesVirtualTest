@@ -466,7 +466,6 @@ function negtgelTailan({ token }) {
         <div className="w-full lg:w-auto">
           <DatePicker.RangePicker
             className="w-full"
-            locale={local}
             value={ognoo}
             onChange={setOgnoo}
           />

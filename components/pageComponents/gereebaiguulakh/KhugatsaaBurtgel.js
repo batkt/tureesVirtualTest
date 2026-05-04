@@ -484,7 +484,7 @@ const YurunkhiiMedeele = ({
                 `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
               parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-              placeholder="Гэрээний эхний сарын ашиглах хоног оруулах"
+              placeholder={t("Гэрээний эхний сарын ашиглах хоног оруулах")}
             />
           </Form.Item>
         </div>

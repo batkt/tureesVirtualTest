@@ -27,9 +27,8 @@ import {
   DeleteOutlined,
   MinusCircleOutlined,
 } from "@ant-design/icons";
-
+import { useTranslation } from "react-i18next";
 const order = { createdAt: -1 };
-
 function MashinBurtgel(
   {
     data,
@@ -44,6 +43,7 @@ function MashinBurtgel(
   },
   ref,
 ) {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const inputRefs = useRef([]);
   const [geree, setGeree] = useState(null);
@@ -67,6 +67,7 @@ function MashinBurtgel(
   const [gereetTulburBodokhEsekh, setGereetTulburBodokhEsekh] = useState(
     data?.gereetTulburBodokhEsekh || false,
   );
+  
   const [gereetTulburBodokhEsekhNemelt, setGereetTulburBodokhEsekhNemelt] =
     useState(!!data?.tulburBodokhTsagEkhlekhNeg || false);
   const [tulburBodokhTsag, setTulburBodokhTsag] = useState(
@@ -229,7 +230,7 @@ function MashinBurtgel(
       .join("");
     return `${too}${useg}`.toUpperCase();
   };
-  const t = (text) => text;
+ 
 
   useEffect(() => {
     function keyUp(e) {

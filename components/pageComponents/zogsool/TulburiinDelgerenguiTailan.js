@@ -596,7 +596,7 @@ function TulburiinDelgerenguiTailan(
           {tulburiinMedeelel.length > 0 && (
             <>
               <div className="border-b-2 border-green-500 pb-1 text-lg font-bold dark:text-gray-200">
-                Төлбөрийн хэлбэр
+                {t("Төлбөрийн хэлбэр")}
               </div>
               {tulburiinMedeelel
                 .sort(function (a, b) {
@@ -836,7 +836,7 @@ function TulburiinDelgerenguiTailan(
           {/* Нийт */}
           <div className="mt-4 border border-dashed bg-gray-600" />
           <div className="mt-2 flex items-center justify-between text-lg font-[600] dark:text-gray-200">
-            <div className="flex ">Бодогдсон дүн:</div>
+            <div className="flex ">{t("Бодогдсон дүн")}:</div>
             <div>
               {formatNumber(buhMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0) +
                 "₮"}
@@ -845,7 +845,7 @@ function TulburiinDelgerenguiTailan(
           <div className="">
             {tulburiinMedeelel.length > 0 && (
               <div className="flex items-center justify-between rounded bg-transparent p-2 text-lg font-[600]  dark:text-gray-200">
-                <div className="flex">Төлбөр авсан:</div>
+                <div className="flex">{t("Төлбөр авсан")}:</div>
                 <div>
                   {formatNumber(
                     tulburiinMedeelel

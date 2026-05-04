@@ -111,7 +111,6 @@ function Chart({
         </div>
         <DatePicker.RangePicker
           placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]}
-          locale={local}
           value={ognoo}
           onChange={setOgnoo}
         />

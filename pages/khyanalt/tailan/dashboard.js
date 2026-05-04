@@ -105,7 +105,7 @@ const BuildingStatsSummary = ({ baiguullaga, building, token, t }) => {
     nariivchlal: 'month'
   });
 
-  const actualData = tailanGaralt?.datasets?.find(d => d.label === "Гүйцэтгэл")?.data || [];
+  const actualData = tailanGaralt?.datasets?.find(d => d.label === "actual")?.data || [];
   const currentActual = Number(actualData[actualData.length - 1]) || 0;
   const previousActual = Number(actualData[actualData.length - 2]) || 0;
   const growthPercent = previousActual > 0 ? (((currentActual - previousActual) / previousActual) * 100).toFixed(1) : null;
@@ -149,7 +149,7 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
       { 
         type: 'bar', 
         label: t('Төлөвлөгөө'), 
-        data: tailanGaralt?.datasets?.find(d => d.label === "Төлөвлөгөө")?.data || [], 
+        data: tailanGaralt?.datasets?.find(d => d.label === "plan")?.data || [], 
         backgroundColor: isDark ? 'rgba(59, 130, 246, 0.5)' : 'rgba(59, 130, 246, 0.2)', 
         borderRadius: 4, 
         barThickness: 12 
@@ -157,7 +157,7 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
       { 
         type: 'line', 
         label: t('Гүйцэтгэл'), 
-        data: tailanGaralt?.datasets?.find(d => d.label === "Гүйцэтгэл")?.data || [], 
+        data: tailanGaralt?.datasets?.find(d => d.label === "actual")?.data || [], 
         borderColor: '#10b981', 
         backgroundColor: 'transparent', 
         fill: false, 
@@ -470,8 +470,8 @@ const BuildingRevenueTable = ({ building, token, t }) => {
 
   const incomeData = useMemo(() => {
     if (!tailanGaralt || !tailanGaralt.labels) return [];
-    const plannedDataset = tailanGaralt.datasets.find(d => d.label === "Төлөвлөгөө") || { data: [] };
-    const completedDataset = tailanGaralt.datasets.find(d => d.label === "Гүйцэтгэл") || { data: [] };
+    const plannedDataset = tailanGaralt.datasets.find(d => d.label === "plan") || { data: [] };
+    const completedDataset = tailanGaralt.datasets.find(d => d.label === "actual") || { data: [] };
     return tailanGaralt.labels.map((label, idx) => {
       const planned = Number(plannedDataset.data?.[idx] || 0);
       const completed = Number(completedDataset.data?.[idx] || 0);
@@ -523,7 +523,7 @@ const VacancyFloorTable = ({ building, baiguullaga, token, t }) => {
     const floorGroups = _.groupBy(vacantSpaces, 'davkhar');
     const floors = _.uniq(spaces.map(s => s.davkhar)).filter(f => f != null).sort((a,b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
     return floors.map(floor => ({
-      key: floor, location: `${floor}-р давхар`, count: floorGroups[floor]?.length || 0, potential: (floorGroups[floor] || []).reduce((sum, s) => sum + (Number(s.talbainNiitUne) || Number(s.sariinTurees) || 0), 0)
+      key: floor, location: t("floor_count", { count: floor }), count: floorGroups[floor]?.length || 0, potential: (floorGroups[floor] || []).reduce((sum, s) => sum + (Number(s.talbainNiitUne) || Number(s.sariinTurees) || 0), 0)
     }));
   }, [allSpaces]);
 
@@ -682,7 +682,7 @@ export default function BuildingDashboard() {
       // Get table section title from closest GlassCard
       const card = table.closest('.group');
       const titleEl = card?.querySelector('span.text-\\[11px\\]');
-      const sectionTitle = titleEl?.textContent || `Хүснэгт ${tableIdx + 1}`;
+      const sectionTitle = titleEl?.textContent || t("Хүснэгт") + ` ${tableIdx + 1}`;
       csv += `\n${sectionTitle}\n`;
 
       const rows = table.querySelectorAll('tr');
@@ -703,7 +703,7 @@ export default function BuildingDashboard() {
     });
 
     if (!csv.trim()) {
-      csv = 'Мэдээлэл байхгүй байна';
+      csv = t('Мэдээлэл байхгүй байна');
     }
 
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });

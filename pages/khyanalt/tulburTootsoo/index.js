@@ -642,7 +642,7 @@ function tulburTootsoo({ token }) {
           (_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`) || []).length > 0
             ? [
                 {
-                  title: "Төлөв",
+                  title: t("Төлөв"),
                   width: "4rem",
                   align: "center",
                   render(a) {
@@ -843,7 +843,7 @@ function tulburTootsoo({ token }) {
           (_.get(ajiltan, `tokhirgoo.guilgeeKhiikhEsekh`) || []).length > 0
             ? [
                 {
-                  title: "Төлөв",
+                  title: t("Төлөв"),
                   width: "4rem",
                   align: "center",
                   render(a) {
@@ -1146,7 +1146,7 @@ function tulburTootsoo({ token }) {
     }
     if (khuulgaTurul === "zarlaga")
       baganuud.push({
-        title: "Төлөв",
+        title: t("Төлөв"),
         width: "4rem",
         align: "center",
         render(a) {
