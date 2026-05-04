@@ -922,6 +922,29 @@ function GuilgeeKhiikh(
                 if (!!suuliinGuilgee?.suuliinZaalt) {
                   setUmnukhZaalt(suuliinGuilgee.suuliinZaalt);
                   setUmnukhZaalttaiEsekh(true);
+                } else if (data?.talbainDugaar) {
+                 
+                  uilchilgee(token)
+                    .get("/suuliinZaaltAvya", {
+                      params: {
+                        talbainDugaar: data.talbainDugaar,
+                        tailbar: utga.ner,
+                        khemjikhNegj: utga.turul,
+                      },
+                    })
+                    .then((res) => {
+                      if (res?.data?.suuliinZaalt) {
+                        setUmnukhZaalt(res.data.suuliinZaalt);
+                        setUmnukhZaalttaiEsekh(true);
+                      } else {
+                        setUmnukhZaalt(0);
+                        setUmnukhZaalttaiEsekh(false);
+                      }
+                    })
+                    .catch(() => {
+                      setUmnukhZaalt(0);
+                      setUmnukhZaalttaiEsekh(false);
+                    });
                 } else {
                   setUmnukhZaalt(0);
                   setUmnukhZaalttaiEsekh(false);
