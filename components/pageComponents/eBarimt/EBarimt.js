@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import moment from "moment";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
-import { InputNumber, Input, Switch } from "antd";
+import { InputNumber, Input, Switch, Spin } from "antd";
 import axios from "axios";
 import { isString } from "lodash";
 import { t } from "i18next";
@@ -26,7 +26,8 @@ function EBarimt({
   setIrgenEsekh,
   barimtKhevlekhEsekh,
   setBarimtKhevlekhEsekh,
-  eBarimtAutomataarShivikh,
+  searching,
+  setSearching,
   setCustomerTin,
 }) {
   function registerShalgaya(register) {
@@ -38,7 +39,8 @@ function EBarimt({
     if (
       register?.toString().length === 7 ||
       (irgenEsekh && register?.toString().length === 10)
-    )
+    ) {
+      setSearching(true);
       uilchilgee()
         .get(`/tatvaraasBaiguullagaAvya/${register}`)
         .then(({ data }) => {
@@ -46,7 +48,9 @@ function EBarimt({
             setBaiguullaga(data);
             setCustomerTin(data?.tin);
           }
-        });
+        })
+        .finally(() => setSearching(false));
+    }
   }
 
   useEffect(() => {
@@ -62,12 +66,23 @@ function EBarimt({
           </div>
           <div className="text-base font-medium">{register}</div>
         </div>
+        {searching && (
+          <div className="flex flex-row border-b-2 border-dashed py-2">
+            <Spin size="small" /> <div className="ml-2">{t("Хайж байна...")}</div>
+          </div>
+        )}
         {baiguullagiinMedeelel?.name && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>{t(`${irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} нэр`)}</div>
             <div className="ml-auto text-lg font-medium">
               {baiguullagiinMedeelel?.name}
             </div>
+          </div>
+        )}
+        {eBarimt?.lottery && (
+          <div className="flex flex-row border-b-2 border-dashed py-2">
+            <div>{t("Сугалааны дугаар")}</div>
+            <div className="ml-auto text-lg font-medium">{eBarimt?.lottery}</div>
           </div>
         )}
       </div>

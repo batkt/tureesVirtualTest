@@ -1,4 +1,4 @@
-import { Button, Spin, message } from "antd";
+import { Button, Spin, message, Modal } from "antd";
 import React, { useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
@@ -35,6 +35,7 @@ function Tulbur(
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false);
   const [loading, setLoading] = useState(false);
+  const [searching, setSearching] = React.useState(false);
   const eBarimtRef = React.useRef(null);
   const pageStyle = `
   @page {
@@ -85,28 +86,38 @@ function Tulbur(
         toast.warning(t("Байгууллагын регистр оруулна уу"));
         return;
       }
-      setLoading(true);
-      const body = {
-        id: id,
-        barilgiinId: data.barilgiinId,
+      const sendRequest = () => {
+        setLoading(true);
+        const body = {
+          id: id,
+          barilgiinId: data.barilgiinId,
+        };
+
+        if (baiguullagaEsekh === true || irgenEsekh === true) {
+          body.turul = "3";
+          body.register = register;
+          body.customerTin = customerTin;
+        }
+
+        uilchilgee(token)
+          .post("/ebarimtShivye", body)
+          .then(({ data }) => {
+            if (data.success === true || data.status == "SUCCESS") {
+              setEBarimt(data);
+              handlePrint();
+            }
+          })
+          .catch(aldaaBarigch)
+          .finally(() => setLoading(false));
       };
-
-      if (baiguullagaEsekh === true || irgenEsekh === true) {
-        body.turul = "3";
-        body.register = register;
-        body.customerTin = customerTin;
+      if (!baiguullagiinMedeelel?.name) {
+        Modal.confirm({
+          title: t("Иргэнээр гаргахдаа итгэлтэй байна уу?"),
+          onOk: () => sendRequest(),
+        });
+      } else {
+        sendRequest();
       }
-
-      uilchilgee(token)
-        .post("/ebarimtShivye", body)
-        .then(({ data }) => {
-          if (data.success === true || data.status == "SUCCESS") {
-            setEBarimt(data);
-            handlePrint();
-          }
-        })
-        .catch(aldaaBarigch)
-        .finally(() => setLoading(false));
     }
   }
 
@@ -137,17 +148,23 @@ function Tulbur(
         setBarimtKhevlekhEsekh={setBarimtKhevlekhEsekh}
         eBarimtAutomataarShivikh={eBarimtAutomataarShivikh}
         setCustomerTin={setCustomerTin}
+        searching={searching}
+        setSearching={setSearching}
       />
       <div className="mt-5 flex flex-row justify-between">
         <Button type="primary" danger onClick={khaaya}>
-          Хаах
+          {t("Хаах")}
         </Button>
         {(barimtKhevlekhEsekh === true ||
           baiguullagaEsekh === true ||
           irgenEsekh === true) && (
           <Spin spinning={loading}>
-            <Button type="primary" onClick={() => ebarimtAvya(data?._id)}>
-              Хэвлэх
+            <Button
+              type="primary"
+              disabled={searching}
+              onClick={() => ebarimtAvya(data?._id)}
+            >
+              {t("Хэвлэх")}
             </Button>
           </Spin>
         )}

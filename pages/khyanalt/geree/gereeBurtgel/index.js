@@ -1162,7 +1162,7 @@ function ZakhialgiinKhyanalt() {
     if (shuult?.utga == "Цуцалсан") {
       jagsaalt.push(
         {
-          title: "Цуцалсан шалтгаан",
+          title: t("Цуцалсан шалтгаан"),
           dataIndex: "gereeniiTuukhuud",
           align: "center",
           ellipsis: true,
@@ -1223,7 +1223,7 @@ function ZakhialgiinKhyanalt() {
         //   sorter: () => 0,
         // },
         {
-          title: "Түүх",
+          title: t("Түүх"),
           dataIndex: "gereeniiTuukhuud",
           align: "center",
           ellipsis: true,

@@ -725,33 +725,33 @@ function GuilgeeKhiikh(
         </div>
       )}
       {turul === "teglekh" && (() => {
-      
-        const tsakhilgaanGuilgeenuud = Array.isArray(guilgeeniiTuukh)
-          ? guilgeeniiTuukh.filter(
-              (x) =>
-                x?.tailbar?.includes("Цахилгаан") &&
-                x?.suuliinZaalt != null
-            )
-          : [];
-        const suuliinGuilgee =
-          tsakhilgaanGuilgeenuud.length > 0
-            ? tsakhilgaanGuilgeenuud[tsakhilgaanGuilgeenuud.length - 1]
-            : null;
+        const keywords = ["Цахилгаан", "Халуун ус", "Хүйтэн ус", "Ус"];
+        const suuliinGuilgeenuud = keywords
+          .map((kw) => {
+            const filtered = Array.isArray(guilgeeniiTuukh)
+              ? guilgeeniiTuukh.filter((x) => {
+                  if (x?.suuliinZaalt == null) return false;  
+                  if (kw === "Ус") {
+                    return x?.tailbar?.toLowerCase() === "ус";
+                  }
+                  return x?.tailbar?.toLowerCase().includes(kw.toLowerCase());
+                })
+              : [];
+            return filtered.length > 0 ? filtered[filtered.length - 1] : null;
+          })
+          .filter(Boolean);
 
-        async function doTeglekh() {
-          if (!suuliinGuilgee?._id || teglekhLoading) return;
-        
-          const originalZaalt = suuliinGuilgee.suuliinZaalt ?? 0;
+        async function doTeglekh(item) {
+          if (!item?._id || teglekhLoading) return;
+
           setTeglekhLoading(true);
           try {
             await uilchilgee(token).post("/zaaltTeglekh", {
-              guilgeeniiId: suuliinGuilgee._id,
+              guilgeeniiId: item._id,
               gereeniiId: data?._id,
             });
             notification.success({ message: t("Заалт амжилттай тэглэгдлээ") });
-            setTeglekhOriginalZaalt(originalZaalt);
             guilgeeniiTuukhMutate();
-            setTeglekhDone(true);
             _.isFunction(data.mutate) && data.mutate();
           } catch (err) {
             aldaaBarigch(err);
@@ -761,61 +761,79 @@ function GuilgeeKhiikh(
         }
 
         return (
-          <div className="flex flex-col gap-3">
-            {suuliinGuilgee ? (
-              <>
-                <div className="rounded-lg border border-dashed border-gray-400 bg-gray-50 dark:bg-gray-900/20 p-4 flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">{t("Сүүлийн гүйлгээ")}</span>
-                    <span className="text-xs text-gray-400">
-                      {suuliinGuilgee.ognoo
-                        ? moment(suuliinGuilgee.ognoo).format("YYYY-MM-DD")
-                        : ""}
-                    </span>
+          <div className="flex flex-col gap-4">
+            {suuliinGuilgeenuud.length > 0 ? (
+              suuliinGuilgeenuud.map((item) => {
+                const isDone = item.suuliinZaalt === 0;
+                return (
+                  <div
+                    key={item._id}
+                    className="flex flex-col gap-2 rounded-lg border border-dashed border-gray-400 bg-gray-50 p-4 dark:bg-gray-900/20"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold dark:text-gray-200">
+                        {item.tailbar}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        {item.ognoo
+                          ? moment(item.ognoo).format("YYYY-MM-DD")
+                          : ""}
+                      </span>
+                    </div>
+                    {item.tooluuriinDugaar && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium text-gray-500">
+                          {t("Тоолуурын №")}:
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {item.tooluuriinDugaar}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium dark:text-gray-200">
+                        {t("Өмнөх заалт")}:
+                      </span>
+                      <span className="text-sm dark:text-gray-200">
+                        {formatNumber(item.umnukhZaalt ?? 0)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium dark:text-gray-200">
+                        {t("Сүүлийн заалт")}:
+                      </span>
+                      <span
+                        className={`font-bold ${
+                          isDone
+                            ? "text-red-500"
+                            : "text-blue-600 dark:text-blue-400"
+                        }`}
+                      >
+                        {formatNumber(item.suuliinZaalt ?? 0)}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      disabled={isDone || teglekhLoading}
+                      onClick={() => doTeglekh(item)}
+                      className={`mt-1 w-full rounded-lg px-4 py-1 font-medium transition-all ${
+                        isDone
+                          ? "cursor-not-allowed bg-red-100 text-gray-800"
+                          : "bg-red-500 text-white hover:bg-red-600"
+                      }`}
+                    >
+                      {teglekhLoading
+                        ? t("Түр хүлээнэ үү...")
+                        : isDone
+                        ? t("Заалт тэглэгдсэн")
+                        : t("Заалт тэглэх")}
+                    </button>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium dark:text-gray-200">{t("Тайлбар")}:</span>
-                    <span className="text-sm dark:text-gray-200">{suuliinGuilgee.tailbar}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium dark:text-gray-200">{t("Өмнөх заалт")}:</span>
-                    <span className="text-sm dark:text-gray-200">
-                      {teglekhDone
-                        ? <span className="font-semibold">{formatNumber(teglekhOriginalZaalt ?? 0)}</span>
-                        : formatNumber(suuliinGuilgee.umnukhZaalt ?? 0)}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium dark:text-gray-200">{t("Сүүлийн заалт")}:</span>
-                    <span className="font-bold text-blue-600 dark:text-blue-400">
-                      {teglekhDone ? (
-                        <span className="text-red-500 font-bold">0</span>
-                      ) : (
-                        formatNumber(suuliinGuilgee.suuliinZaalt ?? 0)
-                      )}
-                    </span>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  disabled={teglekhDone || teglekhLoading}
-                  onClick={doTeglekh}
-                  className={`w-full rounded-lg py-2 px-4 font-medium transition-all ${
-                    teglekhDone
-                      ? "bg-red-100 text-gray-800 cursor-not-allowed"
-                      : "bg-red-500 hover:bg-red-600 text-white"
-                  }`}
-                >
-                  {teglekhLoading
-                    ? t("Түр хүлээнэ үү...")
-                    : teglekhDone
-                    ? t("Заалт тэглэгдсэн")
-                    : t("Заалт тэглэх")}
-                </button>
-              </>
+                );
+              })
             ) : (
-              <div className="text-center text-gray-400 py-6">
-                {t("Цахилгааны заалттай гүйлгээ олдсонгүй")}
+              <div className="py-6 text-center text-gray-400">
+                {t("Заалттай гүйлгээ олдсонгүй")}
               </div>
             )}
           </div>

@@ -378,7 +378,7 @@ function MashinBurtgel(
           <Form.Item label={t("Камер")} name="cameraIP">
             <Input
               style={{ width: "100%" }}
-              placeholder="Камер IP оруулна уу..."
+              placeholder={t("Камер IP оруулна уу...")}
             />
           </Form.Item>
         </React.Fragment>

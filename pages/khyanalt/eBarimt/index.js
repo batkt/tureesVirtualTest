@@ -319,6 +319,12 @@ function EbarimtMedeelel({ token }) {
         },
       },
       {
+        title: t("Сугалаа"),
+        dataIndex: "lottery",
+        align: "center",
+        width: "120px",
+      },
+      {
         title: t("Дүн"),
         dataIndex: "cashAmount",
         ellipsis: true,
@@ -465,6 +471,11 @@ function EbarimtMedeelel({ token }) {
         title: "ДДТД",
         __style__: { h: "center", width: 35 },
         dataIndex: "id",
+      },
+      {
+        title: "Сугалаа",
+        dataIndex: "lottery",
+        __style__: { h: "center" },
       },
       {
         title: "Дүн",

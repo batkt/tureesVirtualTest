@@ -273,6 +273,9 @@ function tulburTootsoo({ token }) {
     else if (songogdsonTurul === "Магадлалтай") {
       query.magadlaltaiGereenuud = { $exists: true, $ne: null };
       query.kholbosonGereeniiId = { $size: 0 };
+    } else if (songogdsonTurul === "Нийт / хэвлэсэн") {
+      query["kholbosonGereeniiId.0"] = { $exists: true };
+      query.ebarimtAvsanEsekh = { $ne: true };
     }
 
     query[
@@ -736,7 +739,7 @@ function tulburTootsoo({ token }) {
                             <div className="text-500 flex items-center justify-center">
                               {a?.kholbosonGereeniiId &&
                               a?.ebarimtAvsanEsekh === true ? (
-                                <Tooltip title="И-баримт хэвлэсэн байна">
+                                <Tooltip title={t("И-баримт хэвлэсэн байна")}>
                                   <CheckOutlined
                                     style={{ fontSize: "16px", color: "green" }}
                                   />
@@ -1182,7 +1185,7 @@ function tulburTootsoo({ token }) {
       loading={isValidating}
     >
       <Card className="cardgrid col-span-12 md:p-5">
-        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:py-0 md:gap-6 2xl:grid-cols-12">
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 md:grid md:grid-cols-5 sm:py-0 md:gap-4">
           {[
             { too: bankniiGuilgeeToololt?.niit || 0, utga: "Нийт" },
             {
@@ -1194,13 +1197,20 @@ function tulburTootsoo({ token }) {
               too: bankniiGuilgeeToololt?.magadlaltai || 0,
               utga: "Магадлалтай",
             },
+            {
+              too: `${bankniiGuilgeeToololt?.kholboson || 0} / ${
+                (bankniiGuilgeeToololt?.kholboson || 0) -
+                (bankniiGuilgeeToololt?.ebarimt || 0)
+              }`,
+              utga: "Нийт / хэвлэсэн",
+            },
           ].map((mur, index) => {
             return (
               <div
                 key={`${index}toololt`}
                 className={`group relative w-[65vw] cursor-pointer overflow-hidden rounded-2xl 
                   transition-all duration-300 ease-out hover:shadow-2xl 
-                  hover:shadow-gray-300 dark:hover:shadow-gray-800 md:col-span-6 md:w-auto lg:col-span-3 ${
+                  hover:shadow-gray-300 dark:hover:shadow-gray-800 md:col-span-1 md:w-auto ${
                     mur.utga === songogdsonTurul
                       ? "border-2 border-green-500 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"
                       : "border-2 border-green-200 bg-green-50/60 dark:border-green-900 dark:bg-green-950/40"

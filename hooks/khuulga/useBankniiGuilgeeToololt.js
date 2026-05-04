@@ -3,10 +3,11 @@ import useSWR from "swr";
 import moment from "moment";
 import { useAuth } from "services/auth";
 
-const fetcher = (url, token, ognoo, dans, barilgiinId) =>
+const fetcher = (url, token, ognoo, dans, barilgiinId, baiguullagiinId) =>
   axios(token)
     .post(url, {
       barilgiinId,
+      baiguullagiinId,
       ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
       dansniiDugaar: dans?.dugaar,
@@ -16,10 +17,17 @@ const fetcher = (url, token, ognoo, dans, barilgiinId) =>
     .catch(aldaaBarigch);
 
 function useBankniiGuilgeeToololt(token, ognoo, dans) {
-  const { barilgiinId } = useAuth();
+  const { barilgiinId, baiguullaga } = useAuth();
   const { data, mutate } = useSWR(
     !!token
-      ? [`/bankniiGuilgeeToololtAvya`, token, ognoo, dans, barilgiinId]
+      ? [
+          `/bankniiGuilgeeToololtAvya`,
+          token,
+          ognoo,
+          dans,
+          barilgiinId,
+          baiguullaga?._id,
+        ]
       : null,
     fetcher
   );
