@@ -35,7 +35,8 @@ import {
   PieChartOutlined,
   BarChartOutlined,
   RollbackOutlined,
-  FileOutlined
+  FileOutlined,
+  LoadingOutlined
 } from "@ant-design/icons";
 import { 
   Button, 
@@ -987,8 +988,12 @@ function BaraaMaterial() {
                         <div className="w-8 h-8 flex items-center justify-center rounded-xl text-[12px] font-bold text-white shadow-lg shrink-0 transform group-hover:scale-110 transition-transform" style={{ backgroundColor: p.color || "#10B981" }}>
                           {(p.name || "").slice(0, 2).toUpperCase()}
                         </div>
-                        <div className="flex flex-col flex-1 min-w-0">
-                          <span className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate transition-colors">{p.name}</span>
+                        <div className="flex flex-col flex-1 min-0">
+                          <Tooltip title={p.name} placement="right">
+                            <span className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate transition-colors cursor-help">
+                              {p.name}
+                            </span>
+                          </Tooltip>
                         </div>
                         <div className="opacity-0 group-hover:opacity-100 flex items-center space-x-1 shrink-0 transition-opacity">
                           <Tooltip title={t("Чат")}>
@@ -1327,183 +1332,149 @@ function BaraaMaterial() {
       />
 
       <Drawer
-        title={null}
-        closable={false}
-        visible={isProjectChatVisible}
-        onClose={() => setIsProjectChatVisible(false)}
-        width={typeof window !== 'undefined' && window.innerWidth < 768 ? '100%' : 400}
-        placement="right"
-        className="project-chat-drawer !p-0"
-        bodyStyle={{ padding: 0, display: 'flex', flexDirection: 'column', height: '100%', background: 'transparent' }}
-      >
-        <style>{`
-          .project-chat-drawer .ant-drawer-body { background: transparent; }
-          .project-chat-drawer .ant-drawer-content { background: transparent; }
-          .pchat-me { background: linear-gradient(135deg,#10b981,#059669); border-radius:1.2rem 1.2rem 0.25rem 1.2rem; }
-          .pchat-other { border-radius:1.2rem 1.2rem 1.2rem 0.25rem; }
-        `}</style>
-        <div className="flex flex-col h-full bg-white dark:bg-[#1b212f]">
-          <div className="flex items-center justify-between px-5 py-4 border-b dark:border-gray-800 shrink-0 bg-emerald-600 dark:bg-[#1b212f]">
-            <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[12px] font-bold text-white shadow-lg" style={{ backgroundColor: selectedProjectForChat?.color || '#10B981' }}>
-                {(selectedProjectForChat?.name || selectedProjectForChat?.ner || '').slice(0, 2).toUpperCase()}
-              </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-bold text-white leading-tight">{selectedProjectForChat?.name || selectedProjectForChat?.ner}</span>
-                <span className="text-[12px] text-emerald-100 dark:text-emerald-400 font-semibold uppercase ">Төслийн чат</span>
-              </div>
+        title={
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl">
+              <MessageOutlined className="text-emerald-500 text-lg" />
             </div>
-            <div className="flex items-center space-x-2">
-              <Button type="text" shape="circle" icon={<CloseOutlined className="text-white md:text-white hover:text-red-400" />} onClick={() => setIsProjectChatVisible(false)} />
+            <div>
+              <div className="text-[14px] font-bold text-slate-800 dark:text-slate-100 leading-tight">Харилцах</div>
+              <div className="text-[11px] font-medium text-slate-400 dark:text-slate-500">{selectedProjectForChat?.name || selectedProjectForChat?.ner}</div>
             </div>
           </div>
-
-          <div className="flex-1 overflow-y-auto px-4 py-5 bg-gray-50 dark:bg-[#1b212f] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700 [&::-webkit-scrollbar-thumb]:rounded-full">
-            {loadingProjectChat ? (
-              <div className="flex flex-col items-center justify-center h-full space-y-3">
-                <Spin size="large" />
-                <span className="text-xs font-semibold uppercase  animate-pulse text-gray-500">Уншиж байна...</span>
+        }
+        placement="right"
+        onClose={() => setIsProjectChatVisible(false)}
+        open={isProjectChatVisible}
+        width={420}
+        className="dark:bg-[#1a202c] project-chat-drawer"
+        headerStyle={{ borderBottom: '1px solid rgba(0,0,0,0.05)', padding: '16px 24px' }}
+        bodyStyle={{ padding: 0, display: 'flex', flexDirection: 'column', background: '#f8fafc' }}
+      >
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
+          {loadingProjectChat ? (
+            <div className="h-full flex flex-col items-center justify-center space-y-3">
+              <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+              <span className="text-slate-400 text-xs animate-pulse">Зурвас ачаалж байна...</span>
+            </div>
+          ) : projectChatMessages.length === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center opacity-40 py-20">
+              <div className="w-24 h-24 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm mb-4 border border-gray-100 dark:border-gray-700">
+                <MessageOutlined className="text-4xl text-slate-300" />
               </div>
-            ) : projectChatMessages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full space-y-4 opacity-50">
-                <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                  <MessageOutlined style={{ fontSize: 28 }} className="text-gray-400 dark:text-gray-500" />
-                </div>
-                <div className="text-center">
-                  <p className="text-gray-500 dark:text-gray-400 text-sm font-semibold">Зурвас байхгүй байна</p>
-                  <p className="text-gray-400 dark:text-gray-600 text-xs mt-1">Төслийн талаар бичих зүйлээ энд бичнэ үү</p>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col space-y-4">
-                {projectChatMessages.map((msg, idx) => {
-                  const isMe = msg.ajiltniiId === ajiltan?._id;
-                  if (msg.isDeleted) {
-                    return (
-                      <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2`}>
-                         <div className={`px-4 py-2 bg-gray-800/50 border border-dashed border-gray-700 rounded-xl text-[12px] text-gray-500 italic`}>
-                           Мессеж устгагдлаа
-                         </div>
-                      </div>
-                    );
-                  }
-                  return (
-                    <div key={msg._id || idx} className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2 group`}>
-                      {!isMe && (
-                        <Avatar size="medium" className="bg-gradient-to-tr from-emerald-300 to-gray-500 dark:from-emerald-700 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold border border-white dark:border-gray-800 shadow-xl">
-                          <UserOutlined className="text-black dark:text-white mt-2 scale-125" />
-                        </Avatar>
+              <p className="text-slate-500 font-bold text-sm tracking-wider uppercase tracking-widest">Одоогоор мессеж байхгүй байна</p>
+              <p className="text-slate-400 text-xs mt-1 text-center">Төслийн талаар зурвас бичиж эхлээрэй</p>
+            </div>
+          ) : (
+            projectChatMessages.map((msg, i) => {
+              const isMe = msg.ajiltniiId === ajiltan?._id;
+              return (
+                <div key={msg._id || i} className={`flex ${isMe ? 'justify-end' : 'justify-start'} group animate-entrance`}>
+                  <div className={`max-w-[85%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                    {!isMe && <span className="text-[10px] font-bold text-slate-400 mb-1 ml-1">{msg.ajiltniiNer}</span>}
+                    <div className={`relative px-4 py-2.5 rounded-2xl text-[13px] shadow-sm ${
+                      isMe 
+                        ? 'bg-emerald-500 text-white rounded-tr-none' 
+                        : 'bg-white dark:bg-gray-800 text-slate-700 dark:text-gray-200 rounded-tl-none border border-gray-100 dark:border-gray-700'
+                    }`}>
+                      {msg.replyTo && (
+                        <div className={`mb-2 p-2 rounded-lg text-[11px] border-l-2 ${
+                          isMe ? 'bg-emerald-600/30 border-emerald-300' : 'bg-slate-50 border-slate-300'
+                        }`}>
+                          <div className="font-bold mb-0.5">{msg.replyTo.ajiltniiNer}</div>
+                          <div className="truncate opacity-80">{msg.replyTo.medeelel}</div>
+                        </div>
                       )}
-                      <div className={`flex flex-col max-w-[80%] ${isMe ? 'items-end' : 'items-start'}`}>
-                        {!isMe && <span className="text-[12px] font-bold text-gray-400 mb-1 ml-1">{msg.ajiltniiNer}</span>}
-                        
-                        {/* Reply content */}
-                        {msg.replyTo?.chatId && (
-                           <div className={`mb-1 px-3 py-1 bg-gray-100 dark:bg-gray-800/50 border-l-2 border-emerald-500 rounded-r-lg text-[12px] truncate max-w-full ${isMe ? 'mr-1' : 'ml-1'}`}>
-                             <span className="text-emerald-600 dark:text-emerald-400 font-bold mr-1">{msg.replyTo.ajiltniiNer}:</span>
-                             <span className="text-gray-500 dark:text-gray-400">{msg.replyTo.medeelel || "(медиа)"}</span>
-                           </div>
-                        )}
+                      
+                      {msg.turul === 'zurag' ? (
+                        <div className="space-y-2">
+                          <Image src={msg.fileZam} className="rounded-lg max-h-60 object-cover" />
+                          {msg.medeelel && <p className="mb-0">{msg.medeelel}</p>}
+                        </div>
+                      ) : msg.turul === 'file' ? (
+                        <a href={msg.fileZam} target="_blank" rel="noreferrer" className={`flex items-center gap-2 p-2 rounded-lg ${isMe ? 'bg-emerald-600/50' : 'bg-slate-50'} transition-colors`}>
+                          <FileTextOutlined className="text-lg" />
+                          <span className="text-xs font-medium truncate max-w-[150px]">{msg.fileNer}</span>
+                        </a>
+                      ) : (
+                        <p className="mb-0 whitespace-pre-wrap leading-relaxed">{msg.medeelel}</p>
+                      )}
 
-                        {editingProjectMsg?._id === msg._id ? (
-                           <div className="flex flex-col gap-2 w-full min-w-[200px]">
-                             <Input.TextArea autoFocus value={editProjectMsgText} onChange={e => setEditProjectMsgText(e.target.value)} rows={2} className="rounded-xl text-xs bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-300" />
-                             <div className="flex justify-end gap-2">
-                               <Button size="small" type="primary" onClick={() => handleEditProjectChatMsg(msg._id, editProjectMsgText)}>{t("Засах")}</Button>
-                               <Button size="small" onClick={() => setEditingProjectMsg(null)}>{t("Болих")}</Button>
-                             </div>
-                           </div>
-                        ) : (
-                          <div className={`px-4 py-2.5 shadow-md relative group/bubble ${isMe ? 'pchat-me' : 'bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-black dark:text-gray-200 pchat-other'}`}>
-                            {msg.turul === 'zurag' && (msg.fileZam || msg.fileUrl || msg.path) ? (() => {
-                              const path = msg.fileZam || msg.fileUrl || msg.path || "";
-                              const url = path.startsWith('http') ? path : (path.startsWith('/') ? `${FSM_BASE_URL}${path}` : `${FSM_BASE_URL}/${path}`);
-                              return (
-                                <Image src={url} alt="img" className="max-w-[240px] max-h-[300px] object-cover rounded-xl cursor-pointer" preview={{ mask: <div className="text-[12px]">Томруулах</div> }} />
-                              );
-                            })() : msg.turul === 'file' && (msg.fileZam || msg.fileUrl || msg.path) ? (() => {
-                              const path = msg.fileZam || msg.fileUrl || msg.path || "";
-                              const url = path.startsWith('http') ? path : (path.startsWith('/') ? `${FSM_BASE_URL}${path}` : `${FSM_BASE_URL}/${path}`);
-                              return (
-                                <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-emerald-300 bg-white/5 p-2 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
-                                  <FileOutlined className="text-emerald-400" />
-                                  <span className="truncate max-w-[140px] text-xs text-gray-200">{msg.fileNer || 'Файл'}</span>
-                                </a>
-                              );
-                            })() : (
-                              <span className={`text-[13px] ${isMe ? 'text-white' : 'text-gray-800 dark:text-white'} whitespace-pre-wrap leading-relaxed`}>{msg.medeelel}</span>
-                            )}
-                            
-                            {/* Actions overlay */}
-                            <div className={`absolute top-0 ${isMe ? '-left-8' : '-right-8'} opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-1`}>
-                               <Tooltip title="Хариулах" placement={isMe ? "left" : "right"}>
-                                 <button onClick={() => setReplyToProject({ chatId: msg._id, medeelel: msg.medeelel, ajiltniiNer: msg.ajiltniiNer, turul: msg.turul })} className="w-7 h-7 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-gray-700 shadow-md border border-gray-100 dark:border-gray-700">
-                                   <RollbackOutlined style={{ fontSize: '11px' }} />
-                                 </button>
-                               </Tooltip>
-                               {isMe && (
-                                 <>
-                                   <Tooltip title="Засах" placement={isMe ? "left" : "right"}>
-                                     <button onClick={() => { setEditingProjectMsg(msg); setEditProjectMsgText(msg.medeelel); }} className="w-7 h-7 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-blue-500 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 shadow-md border border-gray-100 dark:border-gray-700">
-                                       <EditOutlined style={{ fontSize: '11px' }} />
-                                     </button>
-                                   </Tooltip>
-                                   <Tooltip title="Устгах" placement={isMe ? "left" : "right"}>
-                                     <button onClick={() => handleDeleteProjectChatMsg(msg._id)} className="w-7 h-7 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 shadow-md border border-gray-100 dark:border-gray-700">
-                                       <DeleteOutlined style={{ fontSize: '11px' }} />
-                                     </button>
-                                   </Tooltip>
-                                 </>
-                               )}
-                            </div>
-                          </div>
+                      <div className={`text-[9px] mt-1 opacity-60 flex items-center gap-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
+                        {dayjs(msg.createdAt).format('HH:mm')}
+                        {isMe && <CheckCircleOutlined className="text-[8px]" />}
+                      </div>
+
+                      <div className={`absolute top-0 ${isMe ? '-left-12' : '-right-12'} hidden group-hover:flex items-center gap-1 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm p-1.5 rounded-full shadow-lg border border-gray-100 dark:border-gray-800 transition-all`}>
+                        <Tooltip title="Хариулах">
+                          <Button type="text" size="small" shape="circle" icon={<RollbackOutlined className="text-[10px]" />} onClick={() => setReplyToProject({ chatId: msg._id, medeelel: msg.medeelel, ajiltniiNer: msg.ajiltniiNer, turul: msg.turul })} />
+                        </Tooltip>
+                        {isMe && (
+                          <>
+                            <Button type="text" size="small" shape="circle" icon={<EditOutlined className="text-[10px]" />} onClick={() => { setEditingProjectMsg(msg); setEditProjectMsgText(msg.medeelel); }} />
+                            <Popconfirm title="Устгах уу?" onConfirm={() => handleDeleteProjectChatMsg(msg._id)} okText="Тийм" cancelText="Үгүй">
+                              <Button type="text" size="small" shape="circle" icon={<DeleteOutlined className="text-[10px] text-red-400" />} />
+                            </Popconfirm>
+                          </>
                         )}
-                        <span className={`text-[12px] text-gray-600 mt-1 ${isMe ? 'mr-1' : 'ml-1'}`}>
-                          {dayjs(msg.createdAt).format('MM/DD HH:mm')}
-                          {msg.isEdited && <span className="ml-1 italic text-gray-500">(зассан)</span>}
-                        </span>
                       </div>
                     </div>
-                  );
-                })}
-                <div ref={projectChatEndRef} />
-              </div>
-            )}
-          </div>
-
-          <div className="shrink-0 bg-white dark:bg-[#1b212f] border-t border-gray-300 dark:border-gray-700/60 px-4 py-3">
-            {replyToProject && (
-              <div className="mb-2 flex items-center justify-between px-3 py-1.5 bg-emerald-900/30 border border-emerald-700/40 rounded-xl relative">
-                <div className="flex flex-col overflow-hidden">
-                   <span className="text-[12px] font-bold text-emerald-400 uppercase">{replyToProject.ajiltniiNer}-д хариулах</span>
-                   <span className="text-[12px] text-gray-400 truncate max-w-[300px]">{replyToProject.medeelel || "(медиа)"}</span>
+                  </div>
                 </div>
-                <Button type="text" size="small" icon={<CloseOutlined className="text-[12px] text-gray-500" />} onClick={() => setReplyToProject(null)} />
+              );
+            })
+          )}
+          <div ref={projectChatEndRef} />
+        </div>
+
+        <div className="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          {replyToProject && (
+            <div className="mb-3 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-xl flex items-center justify-between border-l-4 border-emerald-500 animate-slide-in">
+              <div className="flex-1 min-w-0 pr-4">
+                <div className="text-[10px] font-bold text-emerald-500 mb-0.5">Хариулах: {replyToProject.ajiltniiNer}</div>
+                <div className="text-xs text-slate-500 truncate">{replyToProject.medeelel}</div>
               </div>
-            )}
-            {selectedProjectChatFile && (
-              <div className="mb-2 flex items-center px-3 py-1.5 bg-emerald-900/30 border border-emerald-700/40 rounded-xl relative w-max">
-                <PaperClipOutlined className="text-emerald-400 mr-2" />
-                <span className="text-xs font-semibold text-emerald-300 truncate max-w-[200px]">{selectedProjectChatFile.name}</span>
-                <Button type="text" size="small" icon={<CloseOutlined className="text-[12px] text-gray-500" />} className="absolute right-1" onClick={() => setSelectedProjectChatFile(null)} />
-              </div>
-            )}
-            <div className="relative flex items-center bg-[#f3f4f6] dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700/60 shadow-inner overflow-hidden">
-              <Upload customRequest={handleProjectFileUpload} showUploadList={false} className="absolute left-3 top-1/2 -translate-y-1/2 z-10" disabled={uploadingProjectChatFile}>
-                <Button type="text" shape="circle" icon={uploadingProjectChatFile ? <LoadingOutlined className="text-emerald-500" /> : <PaperClipOutlined className="text-gray-500 hover:text-emerald-400 text-lg" />} disabled={uploadingProjectChatFile} className="p-0 border-none" />
-              </Upload>
-              <Input.TextArea
-                placeholder="Зурвас бичих..."
-                autoSize={{ minRows: 1, maxRows: 5 }}
-                value={projectChatInput}
-                onChange={(e) => setProjectChatInput(e.target.value)}
-                onPressEnter={(e) => { if (!e.shiftKey) { e.preventDefault(); handleSendProjectMessage(); } }}
-                style={{ background: 'transparent', border: 'none', boxShadow: 'none', color: 'inherit', outline: 'none' }}
-                className="pl-12 pr-12 py-3 resize-none placeholder:text-gray-500 dark:placeholder:text-gray-400 custom-scrollbar"
+              <Button type="text" size="small" shape="circle" icon={<CloseOutlined className="text-[10px]" />} onClick={() => setReplyToProject(null)} />
+            </div>
+          )}
+
+          <div className="relative flex items-center bg-[#f3f4f6] dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700/60 shadow-inner overflow-hidden">
+            <Upload customRequest={handleProjectFileUpload} showUploadList={false} className="absolute left-3 top-1/2 -translate-y-1/2 z-10" disabled={uploadingProjectChatFile}>
+              <Button type="text" shape="circle" icon={uploadingProjectChatFile ? <LoadingOutlined className="text-emerald-500" /> : <PaperClipOutlined className="text-gray-500 hover:text-emerald-400 text-lg" />} disabled={uploadingProjectChatFile} className="p-0 border-none" />
+            </Upload>
+            <Input.TextArea
+              placeholder="Зурвас бичих..."
+              autoSize={{ minRows: 1, maxRows: 4 }}
+              value={projectChatInput}
+              onChange={(e) => setProjectChatInput(e.target.value)}
+              onPressEnter={(e) => {
+                if (!e.shiftKey) {
+                  e.preventDefault();
+                  handleSendProjectMessage();
+                }
+              }}
+              className="!border-none !shadow-none !bg-transparent py-3 pl-12 pr-12 text-[13px] resize-none focus:!ring-0 dark:text-gray-200"
+            />
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 z-10">
+              <Button 
+                type="primary" 
+                shape="circle" 
+                icon={<SendOutlined className="text-sm" />} 
+                onClick={handleSendProjectMessage}
+                disabled={(!projectChatInput.trim() && !selectedProjectChatFile) || uploadingProjectChatFile}
+                className={`flex items-center justify-center shadow-lg transition-all duration-300 ${projectChatInput.trim() || selectedProjectChatFile ? 'scale-100 opacity-100 bg-emerald-500' : 'scale-75 opacity-0'}`}
               />
-              <Button type="primary" icon={<SendOutlined />} onClick={handleSendProjectMessage} disabled={(!projectChatInput.trim() && !selectedProjectChatFile) || uploadingProjectChatFile} loading={uploadingProjectChatFile} className="absolute right-2 bottom-2 bg-emerald-500 hover:bg-emerald-400 border-none h-8 w-8 rounded-lg flex items-center justify-center shadow-md" />
             </div>
           </div>
+          {selectedProjectChatFile && (
+            <div className="mt-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg flex items-center justify-between animate-entrance">
+              <div className="flex items-center gap-2 overflow-hidden">
+                <PaperClipOutlined className="text-emerald-500 text-xs" />
+                <span className="text-[10px] font-medium text-emerald-700 dark:text-emerald-300 truncate">{selectedProjectChatFile.name}</span>
+              </div>
+              <Button type="text" size="small" shape="circle" icon={<CloseOutlined className="text-[10px] text-emerald-400" />} onClick={() => setSelectedProjectChatFile(null)} />
+            </div>
+          )}
         </div>
       </Drawer>
     </Admin>

@@ -730,7 +730,8 @@ function GuilgeeKhiikh(
           .map((kw) => {
             const filtered = Array.isArray(guilgeeniiTuukh)
               ? guilgeeniiTuukh.filter((x) => {
-                  if (x?.suuliinZaalt == null) return false;  
+                
+                  if (x?.suuliinZaalt == null && !(x?.umnukhZaalt > 0)) return false;
                   if (kw === "Ус") {
                     return x?.tailbar?.toLowerCase() === "ус";
                   }
@@ -764,7 +765,7 @@ function GuilgeeKhiikh(
           <div className="flex flex-col gap-4">
             {suuliinGuilgeenuud.length > 0 ? (
               suuliinGuilgeenuud.map((item) => {
-                const isDone = item.suuliinZaalt === 0;
+                const isDone = item.suuliinZaalt === 0 || (item.suuliinZaalt == null && !(item.umnukhZaalt > 0));
                 return (
                   <div
                     key={item._id}
@@ -914,14 +915,22 @@ function GuilgeeKhiikh(
                 utga.turul === "1м3" ||
                 utga.turul === "кг"
               ) {
-                var suuliinGuilgee = guilgeeniiTuukh.filter(
+                var utilityEntries = guilgeeniiTuukh.filter(
                   (x) => x.khemjikhNegj == utga.turul && x.tailbar == utga.ner,
                 );
-                if (!!suuliinGuilgee && suuliinGuilgee.length > 0)
-                  suuliinGuilgee = suuliinGuilgee[suuliinGuilgee.length - 1];
+                
+                const hasUtilityEntries = utilityEntries.length > 0;
+                var suuliinGuilgee = hasUtilityEntries
+                  ? utilityEntries[utilityEntries.length - 1]
+                  : null;
                 if (!!suuliinGuilgee?.suuliinZaalt) {
+                  
                   setUmnukhZaalt(suuliinGuilgee.suuliinZaalt);
                   setUmnukhZaalttaiEsekh(true);
+                } else if (hasUtilityEntries) {
+
+                  setUmnukhZaalt(0);
+                  setUmnukhZaalttaiEsekh(false);
                 } else if (data?.talbainDugaar) {
                  
                   uilchilgee(token)
@@ -930,6 +939,7 @@ function GuilgeeKhiikh(
                         talbainDugaar: data.talbainDugaar,
                         tailbar: utga.ner,
                         khemjikhNegj: utga.turul,
+                        gereeniiId: data?._id,
                       },
                     })
                     .then((res) => {
