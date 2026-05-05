@@ -1037,9 +1037,7 @@ function GuilgeeKhiikh(
             <div className="dark:text-white">Өмнөх заалт</div>
             <InputNumber
               disabled={umnukhZaalttaiEsekh}
-              formatter={(value) =>
-                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
+              formatter={(value) => formatNumber(value, 2)}
               placeholder={`Тоолуурын заалт (${khemjikhNegj})`}
               style={{ width: "100%", textAlign: "center" }}
               value={umnukhZaalt}
@@ -1050,9 +1048,7 @@ function GuilgeeKhiikh(
           <div style={{ width: "49%" }}>
             <div className="dark:text-white">Сүүлийн заалт </div>
             <InputNumber
-              formatter={(value) =>
-                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
+              formatter={(value) => formatNumber(value, 2)}
               parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
               placeholder={`Тоолуурын заалт (${khemjikhNegj})`}
               style={{ width: "100%", textAlign: "center" }}
@@ -1066,9 +1062,7 @@ function GuilgeeKhiikh(
         <InputNumber
           onKeyDown={focuser}
           id="guilgeeDunInputNumber"
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
+          formatter={(value) => formatNumber(value, 2)}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
           placeholder={t(turul === "ashiglalt" ? "Нэгж" : "Дүн")}
           style={{ width: "100%", textAlign: "center" }}
@@ -1088,9 +1082,7 @@ function GuilgeeKhiikh(
             <div style={{ width: "34%" }}>
               <div>Гүйдлийн коэффициент </div>
               <InputNumber
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                }
+                formatter={(value) => formatNumber(value, 2)}
                 parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                 style={{ width: "100%", textAlign: "center" }}
                 value={guidliinKoep}

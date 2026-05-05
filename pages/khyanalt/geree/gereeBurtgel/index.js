@@ -494,9 +494,7 @@ const Tailbar = React.forwardRef(
                   <InputNumber
                     value={niilberAvlaga}
                     onChange={(v) => setNiilberAvlaga(v)}
-                    formatter={(value) =>
-                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
+                    formatter={(value) => formatNumber(value, 2)}
                     parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                     style={{ width: "100%" }}
                   />

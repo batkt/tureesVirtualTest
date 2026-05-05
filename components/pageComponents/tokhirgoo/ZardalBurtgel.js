@@ -21,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import numberToWords from "tools/function/numberToWords";
 import moment from "moment";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import formatNumber from "tools/function/formatNumber";
 
 function ZardalBurtgel(
   { data, destroy, baiguullagiinId, barilgiinId, token, togtmolEsekh, refresh },
@@ -242,9 +243,7 @@ function ZardalBurtgel(
         <InputNumber
           defaultValue={1}
           style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
+          formatter={(value) => formatNumber(value, 2)}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
@@ -256,9 +255,7 @@ function ZardalBurtgel(
         <InputNumber
           defaultValue={1}
           style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
+          formatter={(value) => formatNumber(value, 2)}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
@@ -271,9 +268,7 @@ function ZardalBurtgel(
           onChange={(e) => onChangeUsTariff(e)}
           min={0}
           style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
+          formatter={(value) => formatNumber(value, 2)}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
@@ -285,9 +280,7 @@ function ZardalBurtgel(
         <InputNumber
           min={0}
           style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
+          formatter={(value) => formatNumber(value, 2)}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
@@ -299,9 +292,7 @@ function ZardalBurtgel(
         <InputNumber
           min={0}
           style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
+          formatter={(value) => formatNumber(value, 2)}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
@@ -310,9 +301,7 @@ function ZardalBurtgel(
           onChange={(e) => onChangeTariff(e)}
           min={0}
           style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
+          formatter={(value) => formatNumber(value, 2)}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
@@ -331,9 +320,7 @@ function ZardalBurtgel(
         <InputNumber
           min={0}
           style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
+          formatter={(value) => formatNumber(value, 2)}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>

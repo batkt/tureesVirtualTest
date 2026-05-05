@@ -34,6 +34,7 @@ import useJagsaalt from "hooks/useJagsaalt";
 import compareFields from "tools/function/compareFields";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
+import formatNumber from "tools/function/formatNumber";
 
 const Konva = dynamic(() => import("components/konva"), { ssr: false });
 
@@ -347,9 +348,7 @@ function KhurunguudCard({
                   }}
                   style={{ width: "100%" }}
                   placeholder={t("Нэгж үнэ")}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
+                  formatter={(value) => formatNumber(value, 2)}
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                 />
               </Form.Item>
@@ -374,9 +373,7 @@ function KhurunguudCard({
                   }}
                   style={{ width: "100%" }}
                   placeholder={t("Нийт үнэ")}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
+                  formatter={(value) => formatNumber(value, 2)}
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                 />
               </Form.Item>
@@ -794,9 +791,7 @@ function TalbaiBurtgekh({ token }) {
                   style={{ width: "100%", borderRadius: '8px' }}
                   placeholder={t("Нэгж үнэ")}
                   value={talbaiState.talbainNegjUne}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
+                  formatter={(value) => formatNumber(value, 2)}
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                   onChange={(target) => onChange("talbainNegjUne", target)}
                 />

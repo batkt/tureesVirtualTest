@@ -488,9 +488,7 @@ function GuilgeeKholbokh(
                   style={{ width: "100%" }}
                   value={a.tulsunDun || 0}
                   onChange={(v) => onChange(i, "tulsunDun", v)}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
+                  formatter={(value) => formatNumber(value, 2)}
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                   onDoubleClick={() => tooBugluyu(i)}
                 />
