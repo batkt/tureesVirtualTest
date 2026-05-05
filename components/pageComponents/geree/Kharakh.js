@@ -154,7 +154,15 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
 
   return (
     <div>
-      <div className="absolute right-0 top-4 flex justify-end gap-5 px-10 font-semibold">
+      <style>{`
+        @media print {
+          @page {
+            size: A4;
+            margin: 2.5cm 2.5cm 2.5cm 3cm;
+          }
+        }
+      `}</style>
+      <div className="absolute right-0 top-4 flex justify-end gap-5 px-10 font-semibold print:hidden z-10">
         <div
           onClick={() =>
             KharakhKhesguud.find((a) => a === 1)
@@ -233,7 +241,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               {t("Гэрээ")}
             </div>
             <div
-              className=" flex w-full flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg dark:bg-gray-800  dark:text-white print:min-h-0 print:shadow-none"
+              className="flex w-full flex-col pt-10 space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] pb-[25mm] text-black shadow-lg dark:bg-gray-800 dark:text-white print:min-h-0 print:shadow-none print:pt-[25mm] print:pb-[25mm]"
               style={{ width: "210mm" }}
             >
               {gereeniiZagvar?.ner && (

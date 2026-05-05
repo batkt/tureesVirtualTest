@@ -592,13 +592,47 @@ const BuildingSegmentsTables = ({ building, baiguullaga, token, t, selectedSegme
     ];
   }, [groupedBySegment, t]);
 
-  const dataSource = useMemo(() => {
-    if (selectedSegment === 'all') {
-      const allSpaces = [];
-      Object.values(groupedBySegment).forEach(arr => allSpaces.push(...arr));
-      return _.uniqBy(allSpaces, '_id');
-    }
-    return groupedBySegment[selectedSegment] || [];
+  const aggregatedDataSource = useMemo(() => {
+    let result = [];
+    
+    const segmentsToProcess = selectedSegment === 'all' 
+      ? Object.keys(groupedBySegment) 
+      : [selectedSegment];
+
+    segmentsToProcess.forEach(segName => {
+      const spaces = groupedBySegment[segName] || [];
+      
+      const activeSpaces = spaces.filter(s => s.idevkhiteiEsekh === true);
+      const inactiveSpaces = spaces.filter(s => s.idevkhiteiEsekh === false);
+      
+      if (activeSpaces.length > 0) {
+        const totalM2 = activeSpaces.reduce((sum, s) => sum + (Number(s.talbainKhemjee) || 0), 0);
+        const totalPrice = activeSpaces.reduce((sum, s) => sum + (Number(s.talbainNiitUne) || 0), 0);
+        result.push({
+          key: `${segName}-active`,
+          segmentName: segName,
+          totalM2,
+          totalPrice,
+          status: true,
+          count: activeSpaces.length
+        });
+      }
+      
+      if (inactiveSpaces.length > 0) {
+        const totalM2 = inactiveSpaces.reduce((sum, s) => sum + (Number(s.talbainKhemjee) || 0), 0);
+        const totalPrice = inactiveSpaces.reduce((sum, s) => sum + (Number(s.talbainNiitUne) || 0), 0);
+        result.push({
+          key: `${segName}-inactive`,
+          segmentName: segName,
+          totalM2,
+          totalPrice,
+          status: false,
+          count: inactiveSpaces.length
+        });
+      }
+    });
+    
+    return result;
   }, [selectedSegment, groupedBySegment]);
 
   return (
@@ -626,21 +660,22 @@ const BuildingSegmentsTables = ({ building, baiguullaga, token, t, selectedSegme
       }
     >
       <Table 
-        size="small" dataSource={dataSource} loading={isValidating} 
+        size="small" dataSource={aggregatedDataSource} loading={isValidating} 
         pagination={isPrinting ? false : { pageSize: 15, showSizeChanger: false, size: 'small' }} scroll={{ x: 'max-content', y: isPrinting ? undefined : 220 }}
         className="premium-table"
         columns={[
-          { title: t('Код'), dataIndex: 'kod', key: 'kod', width: 70, render: (v) => <span className="font-bold text-xs">{v}</span> },
-          { title: 'm2', dataIndex: 'talbainKhemjee', align:'center', key: 'talbainKhemjee', width: 50, render: (v) => <span className="font-medium text-xs">{formatNumber(v)}</span> },
+          { title: t('Төрөл'), dataIndex: 'segmentName', key: 'segmentName', width: 100, render: (v) => <span className="font-bold text-[12px]">{v}</span> },
+          { title: 'm2', dataIndex: 'totalM2', align:'center', key: 'totalM2', width: 60, render: (v) => <span className="font-medium text-[12px]">{formatNumber(v)}</span> },
           { 
             title: <div className="text-center w-full">{t('Үнэ')}</div>, 
-            dataIndex: 'talbainNiitUne', key: 'talbainNiitUne', align: 'right', width: 90,
+            dataIndex: 'totalPrice', key: 'totalPrice', align: 'right', width: 90,
             render: (v) => <span className="text-slate-800 dark:text-white text-[13px]">{formatNumber(v)}</span> 
           },
           { 
-            title: t('Төлөв'), dataIndex: 'idevkhiteiEsekh', align:'center', key: 'idevkhiteiEsekh', width: 70,
+            title: t('Төлөв'), dataIndex: 'status', align:'center', key: 'status', width: 80,
             render: (v) => <Badge status={v ? "success" : "default"} text={<span className="text-[12px] dark:text-white">{v ? t("Идэвхтэй") : t("Идэвхгүй")}</span>} />
-          }
+          },
+          { title: t('Тоо'), dataIndex: 'count', align:'center', key: 'count', width: 50, render: (v) => <span className="text-[12px] text-slate-500">{v}</span> }
         ]}
       />
     </GlassCard>
