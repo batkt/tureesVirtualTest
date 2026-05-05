@@ -99,7 +99,7 @@ function BaraaMaterial() {
   const [incomeForm] = Form.useForm();
   const [filterType, setFilterType] = useState("all");
   const [loadingProjects, setLoadingProjects] = useState(false);
-  const { token, barilgiinId, ajiltan } = useAuth();
+  const { token, barilgiinId, ajiltan, baiguullaga } = useAuth();
   const [projects, setProjects] = useState([]);
   const [selectedProjectIds, setSelectedProjectIds] = useState([]);
   const [isProjectModalVisible, setIsProjectModalVisible] = useState(false);
@@ -114,7 +114,6 @@ function BaraaMaterial() {
   const [usageStats, setUsageStats] = useState([]);
   const [todayUsageStats, setTodayUsageStats] = useState([]);
   const [loadingStats, setLoadingStats] = useState(false);
-  const { baiguullaga } = useAuth();
   
   const [typeMap, setTypeMap] = useState({
     "Цэвэрлэгээ": "Цэвэрлэгээ",
