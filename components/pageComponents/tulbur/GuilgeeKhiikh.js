@@ -68,6 +68,7 @@ function GuilgeeKhiikh(
   const [teglekhLoading, setTeglekhLoading] = useState(false);
   const [teglekhDone, setTeglekhDone] = useState(false);
   const [teglekhOriginalZaalt, setTeglekhOriginalZaalt] = useState(null);
+  const [teglekhApiData, setTeglekhApiData] = useState([]);
 
   const [busadTurul, setBusadTurul] = useState();
   const [zardliinTurul, setZardliinTurul] = useState();
@@ -150,6 +151,40 @@ function GuilgeeKhiikh(
     undefined,
     token,
   );
+
+   
+  useEffect(() => {
+    if (turul !== "teglekh" || !data?.talbainDugaar || !data?._id) return;
+    const meteredZardluud = (zardal?.jagsaalt || []).filter(
+      (z) => z.turul && z.turul !== "Дурын",
+    );
+    if (!meteredZardluud.length) return;
+    Promise.all(
+      meteredZardluud.map((z) =>
+        uilchilgee(token)
+          .get("/suuliinZaaltAvya", {
+            params: {
+              talbainDugaar: data.talbainDugaar,
+              tailbar: z.ner,
+              khemjikhNegj: z.turul,
+              gereeniiId: data._id,
+            },
+          })
+          .then((res) => ({
+            tailbar: z.ner,
+            khemjikhNegj: z.turul,
+            suuliinZaalt: res?.data?.suuliinZaalt ?? 0,
+            umnukhZaalt: 0,
+            _id: res?.data?.guilgeeniiId,
+            _gereeniiId: res?.data?.gereeniiId,
+            _fromApi: true,
+          }))
+          .catch(() => null),
+      ),
+    ).then((results) => {
+      setTeglekhApiData(results.filter((r) => r && r.suuliinZaalt > 0));
+    });
+  }, [turul, data?._id, data?.talbainDugaar]);
 
   const zardalAll = useJagsaalt(
     "/ashiglaltiinZardluud",
@@ -726,7 +761,7 @@ function GuilgeeKhiikh(
       )}
       {turul === "teglekh" && (() => {
         const keywords = ["Цахилгаан", "Халуун ус", "Хүйтэн ус", "Ус"];
-        const suuliinGuilgeenuud = keywords
+        const fromHistory = keywords
           .map((kw) => {
             const filtered = Array.isArray(guilgeeniiTuukh)
               ? guilgeeniiTuukh.filter((x) => {
@@ -742,17 +777,29 @@ function GuilgeeKhiikh(
           })
           .filter(Boolean);
 
+        
+        const fromApi = teglekhApiData.filter(
+          (apiItem) =>
+            !fromHistory.some(
+              (h) => h.tailbar?.toLowerCase() === apiItem.tailbar?.toLowerCase(),
+            ),
+        );
+
+        const suuliinGuilgeenuud = [...fromHistory, ...fromApi];
+
         async function doTeglekh(item) {
           if (!item?._id || teglekhLoading) return;
-
+          
+          const targetGereeniiId = item._fromApi ? item._gereeniiId : data?._id;
           setTeglekhLoading(true);
           try {
             await uilchilgee(token).post("/zaaltTeglekh", {
               guilgeeniiId: item._id,
-              gereeniiId: data?._id,
+              gereeniiId: targetGereeniiId,
             });
             notification.success({ message: t("Заалт амжилттай тэглэгдлээ") });
             guilgeeniiTuukhMutate();
+            setTeglekhApiData((prev) => prev.filter((a) => a._id !== item._id));
             _.isFunction(data.mutate) && data.mutate();
           } catch (err) {
             aldaaBarigch(err);
