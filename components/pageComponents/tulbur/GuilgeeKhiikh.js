@@ -20,7 +20,7 @@ import React, {
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
-import formatNumber from "tools/function/formatNumber";
+import formatNumber, { formatNumberInput, parseNumber } from "tools/function/formatNumber";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 import { useGereeGuilgee } from "hooks/useGereeniiJagsaalt";
@@ -1037,7 +1037,7 @@ function GuilgeeKhiikh(
             <div className="dark:text-white">Өмнөх заалт</div>
             <InputNumber
               disabled={umnukhZaalttaiEsekh}
-              formatter={(value) => formatNumber(value, 2)}
+              formatter={formatNumberInput}
               placeholder={`Тоолуурын заалт (${khemjikhNegj})`}
               style={{ width: "100%", textAlign: "center" }}
               value={umnukhZaalt}
@@ -1048,7 +1048,7 @@ function GuilgeeKhiikh(
           <div style={{ width: "49%" }}>
             <div className="dark:text-white">Сүүлийн заалт </div>
             <InputNumber
-              formatter={(value) => formatNumber(value, 2)}
+              formatter={formatNumberInput}
               parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
               placeholder={`Тоолуурын заалт (${khemjikhNegj})`}
               style={{ width: "100%", textAlign: "center" }}
@@ -1062,8 +1062,8 @@ function GuilgeeKhiikh(
         <InputNumber
           onKeyDown={focuser}
           id="guilgeeDunInputNumber"
-          formatter={(value) => formatNumber(value, 2)}
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          formatter={formatNumberInput}
+          parser={parseNumber}
           placeholder={t(turul === "ashiglalt" ? "Нэгж" : "Дүн")}
           style={{ width: "100%", textAlign: "center" }}
           value={dun}
@@ -1082,8 +1082,8 @@ function GuilgeeKhiikh(
             <div style={{ width: "34%" }}>
               <div>Гүйдлийн коэффициент </div>
               <InputNumber
-                formatter={(value) => formatNumber(value, 2)}
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                formatter={formatNumberInput}
+                parser={parseNumber}
                 style={{ width: "100%", textAlign: "center" }}
                 value={guidliinKoep}
                 onChange={(v) => {

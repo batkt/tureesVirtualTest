@@ -28,7 +28,7 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
 import { useTalbai } from "hooks/useTalbai";
 import useTalbainToololt from "hooks/useTalbainToololt";
-import formatNumber from "tools/function/formatNumber";
+import formatNumber, { formatNumberInput, parseNumber } from "tools/function/formatNumber";
 import Aos from "aos";
 import {
   Chart as ChartJS,
@@ -125,10 +125,10 @@ const BuildingStatsSummary = ({ baiguullaga, building, token, t }) => {
   const contractGrowth = prevContractCount > 0 ? (((contractCount - prevContractCount) / prevContractCount) * 100).toFixed(1) : null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
-      <SummaryCard title={t("Орлого1")} value={currentActual} suffix="₮" icon={<BiMoneyWithdraw />} index={0} />
-      <SummaryCard title={t("Гэрээ1")} value={contractCount} suffix="" fixed={0} icon={<FileTextOutlined />} index={1} />
-    </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-6 lg:gap-10 print:gap-4">
+          <SummaryCard title={t("Орлого1")} value={currentActual} suffix="₮" icon={<BiMoneyWithdraw />} index={0} />
+          <SummaryCard title={t("Гэрээ1")} value={contractCount} suffix="" fixed={0} icon={<FileTextOutlined />} index={1} />
+        </div>
   );
 };
 
@@ -754,92 +754,15 @@ export default function BuildingDashboard() {
 
   return (
     <Admin khuudasniiNer="dashboard" title={t("Хяналтын самбар")}>
-      <style jsx global>{`
-        @page {
-          size: A4 landscape;
-          margin: 0;
-        }
-
-        @media print {
-          /* Hide EVERYTHING in the body except the dashboard */
-          body {
-            visibility: hidden;
-            background: white !important;
+      <style type="text/css" media="print">
+        {`
+          @page {
+            size: landscape;
+            margin: 6mm;
           }
-          
-          .print-container, .print-container * {
-            visibility: visible;
-          }
-
-          .print-container {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100% !important;
-            height: auto !important;
-            padding: 5mm !important;
-            margin: 0 !important;
-            zoom: 0.8; 
-            background: white !important;
-          }
-
-          /* Explicitly hide Admin UI elements that might still be taking up space */
-          nav, aside, header, footer, 
-          .ant-layout-sider, .ant-layout-header,
-          #garchig, .ant-btn, .ant-select, .ant-picker, .hide-on-print {
-            display: none !important;
-          }
-
-          .glass-card {
-            break-inside: avoid;
-            box-shadow: none !important;
-            border: 1px solid #eee !important;
-            margin-bottom: 0 !important;
-            background: white !important;
-          }
-
-          .glass-card * {
-            color: black !important;
-          }
-
-          .grid {
-            display: grid !important;
-            gap: 12px !important;
-          }
-
-          .grid.grid-cols-1.md\:grid-cols-2 {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          }
-
-          .grid.grid-cols-1.xl\:grid-cols-2 {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          }
-
-          .grid.grid-cols-1.xl\:grid-cols-3 {
-            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-          }
-
-          /* Tables should not scroll */
-          .premium-table .ant-table-body, 
-          .premium-table .ant-table-content {
-            max-height: none !important;
-            overflow: visible !important;
-          }
-
-          /* Force light mode */
-          .dark .glass-card, .dark .print-container {
-            background: white !important;
-            border-color: #eee !important;
-            color: black !important;
-          }
-
-          canvas {
-            max-width: 100% !important;
-            height: auto !important;
-          }
-        }
-      `}</style>
-      <div ref={dashboardRef} className="print-container col-span-12 flex flex-col h-[calc(100vh-80px)] w-full -mx-0 xl:-mx-1 text-black animate-entrance overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-6 pb-20">
+        `}
+      </style>
+      <div ref={dashboardRef} className="print-container col-span-12 flex flex-col h-[calc(100vh-80px)] w-full -mx-0 xl:-mx-1 text-black animate-entrance overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-6">
         
         <div className="flex justify-end items-center hide-on-print -mb-4">
           <div className="flex items-center gap-2">
@@ -856,12 +779,12 @@ export default function BuildingDashboard() {
 
         <BuildingStatsSummary baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 print:grid-cols-2 gap-6 print:gap-4">
            <BuildingIncomeChart baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
            <BuildingOccupancyDoughnut building={selectedBuilding} token={token} t={t} selectedSegment={selectedSegment} dateRange={dateRange} baiguullaga={baiguullaga} />
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-3 print:grid-cols-3 gap-6 print:gap-4">
            <BuildingRevenueTable building={selectedBuilding} token={token} t={t} />
            <VacancyFloorTable building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} />
            <BuildingSegmentsTables 

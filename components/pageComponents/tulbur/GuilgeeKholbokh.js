@@ -10,7 +10,7 @@ import {
 import _ from "lodash";
 import React from "react";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
-import formatNumber from "../../../tools/function/formatNumber";
+import formatNumber, { formatNumberInput, parseNumber } from "../../../tools/function/formatNumber";
 import getListMethod from "../../../tools/function/crud/getListMethod";
 import uilchilgee, { aldaaBarigch } from "../../../services/uilchilgee";
 import moment from "moment";
@@ -488,8 +488,8 @@ function GuilgeeKholbokh(
                   style={{ width: "100%" }}
                   value={a.tulsunDun || 0}
                   onChange={(v) => onChange(i, "tulsunDun", v)}
-                  formatter={(value) => formatNumber(value, 2)}
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  formatter={formatNumberInput}
+                  parser={parseNumber}
                   onDoubleClick={() => tooBugluyu(i)}
                 />
                 <MinusCircleOutlined

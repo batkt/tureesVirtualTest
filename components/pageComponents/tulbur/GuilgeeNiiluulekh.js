@@ -905,7 +905,7 @@ function GuilgeeNiiluulekh(
                       <input
                         className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700"
                         placeholder={t("Барьцаа дүн")}
-                        value={formatNumber(geree.baritsaaTulbur, 2)}
+                        value={formatter(geree.baritsaaTulbur)}
                         onDoubleClick={({ target }) =>
                           onDoubleClickKholbokhDun(target, index, "baritsaaTulbur")
                         }
@@ -926,7 +926,7 @@ function GuilgeeNiiluulekh(
                       <input
                         className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700"
                         placeholder="Барьцаа дүн"
-                        value={formatNumber(geree.tulsunAldangi, 2)}
+                        value={formatter(geree.tulsunAldangi)}
                         onDoubleClick={({ target }) =>
                           onDoubleClickKholbokhDun(target, index, "tulsunAldangi")
                         }
@@ -980,7 +980,7 @@ function GuilgeeNiiluulekh(
                       <input
                         className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700 "
                         placeholder={t("Төлөх дүн")}
-                        value={formatNumber(geree.tureesiinTulbur, 2)}
+                        value={formatter(geree.tureesiinTulbur)}
                         onDoubleClick={({ target }) =>
                           onDoubleClickKholbokhDun(
                             target,

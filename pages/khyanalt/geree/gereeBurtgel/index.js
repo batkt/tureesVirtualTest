@@ -38,7 +38,7 @@ import {
 import { toast } from "sonner";
 import { toWords } from "mon_num";
 import Admin from "components/Admin";
-import formatNumber from "tools/function/formatNumber";
+import formatNumber, { formatNumberInput, parseNumber } from "tools/function/formatNumber";
 import React, { useMemo, useEffect, useState } from "react";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import { useGereeniiJagsaaltToollolt } from "hooks/useGereeniiJagsaalt";
@@ -494,8 +494,8 @@ const Tailbar = React.forwardRef(
                   <InputNumber
                     value={niilberAvlaga}
                     onChange={(v) => setNiilberAvlaga(v)}
-                    formatter={(value) => formatNumber(value, 2)}
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    formatter={formatNumberInput}
+                    parser={parseNumber}
                     style={{ width: "100%" }}
                   />
                 </div>
