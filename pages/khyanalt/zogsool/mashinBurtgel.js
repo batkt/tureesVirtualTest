@@ -745,6 +745,13 @@ function mashinBurtgel({ token }) {
         ),
       },
       {
+        name: "Ажилтан",
+        too: formatNumber(
+          mashinToololt?.find((a) => a._id === "Ажилтан")?.too,
+          0,
+        ),
+      },
+      {
         name: "Дурын",
         too: formatNumber(
           mashinToololt?.find((a) => a._id === "Дурын")?.too,

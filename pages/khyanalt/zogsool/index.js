@@ -1070,6 +1070,7 @@ function Zogsool({ token }) {
           turul: {
             $nin: [
               "Дотоод",
+              "Ажилтан",
               "Түрээслэгч",
               "Гэрээт",
               "Дурын",
@@ -1112,6 +1113,17 @@ function Zogsool({ token }) {
         ),
         query: {
           turul: "Дотоод",
+        },
+      },
+      {
+        name: "Ажилтан",
+        too: formatNumber(
+          !!uilchiluulegchToololt &&
+            uilchiluulegchToololt[0].turul.find((a) => a._id === "Ажилтан")?.too,
+          0,
+        ),
+        query: {
+          turul: "Ажилтан",
         },
       },
       {

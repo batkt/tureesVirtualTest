@@ -67,7 +67,7 @@ function MashinBurtgel(
   const [gereetTulburBodokhEsekh, setGereetTulburBodokhEsekh] = useState(
     data?.gereetTulburBodokhEsekh || false,
   );
-  
+
   const [gereetTulburBodokhEsekhNemelt, setGereetTulburBodokhEsekhNemelt] =
     useState(!!data?.tulburBodokhTsagEkhlekhNeg || false);
   const [tulburBodokhTsag, setTulburBodokhTsag] = useState(
@@ -230,7 +230,6 @@ function MashinBurtgel(
       .join("");
     return `${too}${useg}`.toUpperCase();
   };
- 
 
   useEffect(() => {
     function keyUp(e) {
@@ -331,6 +330,7 @@ function MashinBurtgel(
             "Гэрээт",
             "Түрээслэгч",
             "Дотоод",
+            "Ажилтан",
             "Дурын",
             "СӨХ",
             "Байгууллага",
@@ -702,7 +702,7 @@ function MashinBurtgel(
           <Input
             maxLength={8}
             onKeyUp={focuser}
-            style= {{ borderRadius: '8px'}}
+            style={{ borderRadius: "8px" }}
             placeholder={t("Утас")}
             onChange={gereeAvya}
           />
@@ -739,7 +739,11 @@ function MashinBurtgel(
           label={t("Машины дугаар")}
           name="dugaar"
         >
-          <Input onKeyUp={focuser} placeholder={t("Машины дугаар")}  style={{borderRadius: '8px'}}/>
+          <Input
+            onKeyUp={focuser}
+            placeholder={t("Машины дугаар")}
+            style={{ borderRadius: "8px" }}
+          />
         </Form.Item>
       )}
       <Form.Item
@@ -753,10 +757,18 @@ function MashinBurtgel(
         label={t("Нэр")}
         name="ezemshigchiinNer"
       >
-        <Input onKeyUp={focuser} placeholder={t("Нэр")}  style={{borderRadius: '8px'}}/>
-        </Form.Item>
+        <Input
+          onKeyUp={focuser}
+          placeholder={t("Нэр")}
+          style={{ borderRadius: "8px" }}
+        />
+      </Form.Item>
       <Form.Item label={t("Тайлбар")} name="temdeglel">
-        <Input onKeyUp={focuser} placeholder={t("Тайлбар")}  style={{borderRadius: '8px'}}/>
+        <Input
+          onKeyUp={focuser}
+          placeholder={t("Тайлбар")}
+          style={{ borderRadius: "8px" }}
+        />
       </Form.Item>
       {turulShalgah === "Гэрээт" && (
         <Form.Item

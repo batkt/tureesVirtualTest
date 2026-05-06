@@ -260,7 +260,7 @@ function ZogsoolBurtgekh(
               </div>
               <div className="text-xs text-gray-400">
                 {t(
-                  "Төлбөрөө урьдчилж төлсөн тохиолдолд зогсоолоос гарах ёстой хугацаа/мин. Хоосон тохиолдолд 30мин байна"
+                  "Төлбөрөө урьдчилж төлсөн тохиолдолд зогсоолоос гарах ёстой хугацаа/мин. Хоосон тохиолдолд 30мин байна",
                 )}
               </div>
             </div>
@@ -322,8 +322,9 @@ function ZogsoolBurtgekh(
                 {t("Орох хаалга гар тохиргоо")}
               </div>
               <div className="text-xs text-gray-400">
-                {t("Асаах үед зогсоолын хаалтыг зөвхөн гараас, утраахад зогсоолын хаалт автоматаар ажиллана.")}
-                
+                {t(
+                  "Асаах үед зогсоолын хаалтыг зөвхөн гараас, утраахад зогсоолын хаалт автоматаар ажиллана.",
+                )}
               </div>
             </div>
             <div className="col-span-2">
@@ -341,7 +342,9 @@ function ZogsoolBurtgekh(
                 {t("Гарах хаалга гар тохиргоо")}
               </div>
               <div className="text-xs text-gray-400">
-                {t("Асаах үед зогсоолын хаалтыг зөвхөн гараас, унтраахад зогсоолын хаалт автоматаар ажиллана.")}
+                {t(
+                  "Асаах үед зогсоолын хаалтыг зөвхөн гараас, унтраахад зогсоолын хаалт автоматаар ажиллана.",
+                )}
               </div>
             </div>
             <div className="col-span-2">
@@ -377,7 +380,9 @@ function ZogsoolBurtgekh(
                 {t("Зогсоолын тоо хязгаарлах")}
               </div>
               <div className="text-xs text-gray-400">
-                {t("Зогсоолд идэвхтэй байгаа машин зогсоолын даацтай тэнцсэн тохиолдолд орох самбар дээр Дүүрсэн гэсэн текст харуулаад хаалга онгойхгүй болно")}
+                {t(
+                  "Зогсоолд идэвхтэй байгаа машин зогсоолын даацтай тэнцсэн тохиолдолд орох самбар дээр Дүүрсэн гэсэн текст харуулаад хаалга онгойхгүй болно",
+                )}
               </div>
             </div>
             <div className="col-span-2">
@@ -396,7 +401,9 @@ function ZogsoolBurtgekh(
                 {t("Хүлээлгийн горим ашиглах эсэх")}
               </div>
               <div className="text-xs text-gray-400">
-                {t("Зогсоол дүүрсэн үед тухайн машиныг хүлээлгийн горимд шилжүүлнэ")}
+                {t(
+                  "Зогсоол дүүрсэн үед тухайн машиныг хүлээлгийн горимд шилжүүлнэ",
+                )}
               </div>
             </div>
             <div className="col-span-2">
@@ -534,6 +541,60 @@ function ZogsoolBurtgekh(
                         <InputNumber
                           style={{ width: "110%" }}
                           placeholder={t("Тогтмол төлбөрийн дүн")}
+                        />
+                      </Form.Item>
+                    </div>
+                  </div>
+                )}
+              </Form.Item>
+            </div>
+
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
+                {t("Ажилтан тариф ашиглах эсэх")}
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item className="m-0" name="ajiltanTulburEsekh">
+                <Switch
+                  className="bg-gray-400"
+                  defaultChecked={data?.ajiltanTulburEsekh}
+                  checkedChildren={t("Тийм")}
+                  unCheckedChildren={t("Үгүй")}
+                  onChange={(checked) => {
+                    if (!checked) {
+                      form.setFieldsValue({ ajiltanTulburiinDun: null });
+                    }
+                  }}
+                />
+              </Form.Item>
+            </div>
+            <div className="col-span-4">
+              <Form.Item
+                noStyle
+                shouldUpdate={(prevValues, currentValues) =>
+                  prevValues.ajiltanTulburEsekh !==
+                  currentValues.ajiltanTulburEsekh
+                }
+              >
+                {({ getFieldValue }) => (
+                  <div
+                    className={`flex flex-row justify-between overflow-hidden transition-all duration-300 ease-in-out ${
+                      getFieldValue("ajiltanTulburEsekh")
+                        ? "max-h-20 translate-y-0 transform opacity-100"
+                        : "max-h-0 -translate-y-2 transform opacity-0"
+                    }`}
+                  >
+                    <div className="col-span-2 border-l-2 border-green-500 pl-4">
+                      <div className="font-medium dark:text-white">
+                        {t("Ажилтан тарифын дүн")}
+                      </div>
+                    </div>
+                    <div className="col-span-2">
+                      <Form.Item className="mr-5" name="ajiltanTulburiinDun">
+                        <InputNumber
+                          style={{ width: "110%" }}
+                          placeholder={t("Ажилтан тарифын дүн")}
                         />
                       </Form.Item>
                     </div>
@@ -817,7 +878,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
         >
           <TimePicker.RangePicker
             format="HH:mm"
-            placeholder={[t("Эхлэх"), t("Дуусах")]}     
+            placeholder={[t("Эхлэх"), t("Дуусах")]}
             order={false}
           />
         </Form.Item>
