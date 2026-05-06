@@ -118,6 +118,28 @@ function GereeBaiguulakh({ token }) {
           message: t("Гэрээ болон Ерөнхий мэдээллээ бүрэн оруулна уу!"),
         });
       }
+      if (data.utas) {
+        data.utas = String(data.utas).trim();
+        const utasStr = data.utas.replace(/[\s\-\(\)]/g, "");
+        const phoneRegex = /^[0-9]{8}$/;
+        if (!phoneRegex.test(utasStr)) {
+          if (!utgaShalgakh.includes(0)) utgaShalgakh.push(0);
+          notification.warning({
+            message: t("Утасны дугаар буруу байна (8 оронтой тоо байх ёстой)!"),
+          });
+        }
+      }
+
+      if (data.mail) {
+        data.mail = String(data.mail).trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.(com|mn)$/i;
+        if (!emailRegex.test(data.mail)) {
+          if (!utgaShalgakh.includes(0)) utgaShalgakh.push(0);
+          notification.warning({
+            message: t("И-мэйл хаяг .com эсвэл .mn-ээр төгссөн байх ёстой!"),
+          });
+        }
+      }
       if (
         !data.duusakhOgnoo ||
         !data.duusakhOn ||

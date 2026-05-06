@@ -126,7 +126,7 @@ const Sungakh = React.forwardRef(({ token, onClose, confirm, data }, ref) => {
         </div>
         <div className="flex w-full flex-row justify-between">
           <div className="dark: text-right ">
-            {data?.turGereeEsekh === true ? "Сунгах өдөр:" : "Сунгах сар:"}
+            {data?.turGereeEsekh === true ? t("Сунгах өдөр:") : t("Сунгах сар:")}
           </div>
           <InputNumber
             id="sungakhSar"

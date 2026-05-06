@@ -232,11 +232,11 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
 
     if (data.mail) {
       data.mail = String(data.mail).trim();
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.(com|mn)$/i;
       if (!emailRegex.test(data.mail)) {
         if (!utgaShalgakh.includes(0)) utgaShalgakh.push(0);
         notification.warning({
-          message: t("И-мэйл хаяг буруу байна!"),
+          message: t("И-мэйл хаяг .com эсвэл .mn-ээр төгссөн байх ёстой!"),
         });
       }
     }

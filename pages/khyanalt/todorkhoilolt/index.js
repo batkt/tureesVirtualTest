@@ -883,11 +883,11 @@ function Todorkhoilolt() {
                 rules={[
                   {
                     required: true,
-                    message: "И-мэйл хаяг оруулна уу!",
+                    message: t("И-мэйл хаяг оруулна уу!"),
                   },
                   {
                     type: "email",
-                    message: "И-мэйл хаяг буруу байна!",
+                    message: t("И-мэйл хаяг буруу байна!"),
                   },
                 ]}
               >
