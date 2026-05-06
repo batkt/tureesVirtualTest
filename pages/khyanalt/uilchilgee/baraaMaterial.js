@@ -270,7 +270,7 @@ function BaraaMaterial() {
       width: 100,
       render: (row) => (
         <span className="font-semibold text-blue-500 text-[12px]">
-          {usageMap[row.ner] || 0}
+          {usageMap[row._id] || 0}
         </span>
       )
     },
@@ -558,8 +558,8 @@ function BaraaMaterial() {
     const map = {};
     if (Array.isArray(usageStats)) {
       usageStats.forEach(s => {
-        if (s.ner && baraas.some(b => b.ner === s.ner)) {
-          map[s.ner] = s.too;
+        if (s.baraaId && baraas.some(b => b._id === s.baraaId)) {
+          map[s.baraaId] = s.too;
         }
       });
     }
@@ -568,11 +568,11 @@ function BaraaMaterial() {
   
 
   const filteredTodayUsage = useMemo(() => {
-    return todayUsageStats.filter(s => baraas.some(b => b.ner === s.ner));
+    return todayUsageStats.filter(s => baraas.some(b => b._id === s.baraaId));
   }, [todayUsageStats, baraas]);
 
   const filteredOverallUsage = useMemo(() => {
-    return usageStats.filter(s => baraas.some(b => b.ner === s.ner));
+    return usageStats.filter(s => baraas.some(b => b._id === s.baraaId));
   }, [usageStats, baraas]);
 
   
