@@ -1083,7 +1083,30 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "talbainDugaar",
         align: "center",
         ellipsis: true,
-        width: "7rem",
+        width: "10rem",
+        render: (talbainDugaar) => {
+          if (!talbainDugaar) return "-";
+          const spaces = talbainDugaar.split(",");
+          if (spaces.length > 1) {
+            return (
+              <Popover
+                content={
+                  <div className="max-h-60 overflow-y-auto">
+                    {spaces.map((s, i) => (
+                      <div key={i}>{s.trim()}</div>
+                    ))}
+                  </div>
+                }
+                title={t("Талбайн жагсаалт")}
+              >
+                <div className="cursor-pointer text-blue-600 hover:underline">
+                  {spaces[0]} + {spaces.length - 1}
+                </div>
+              </Popover>
+            );
+          }
+          return talbainDugaar;
+        },
         sortOrder: sortOrderShalgakh(order.talbainDugaar),
         showSorterTooltip: false,
         sorter: () => 0,

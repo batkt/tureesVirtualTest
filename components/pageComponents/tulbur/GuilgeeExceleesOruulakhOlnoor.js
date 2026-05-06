@@ -58,7 +58,13 @@ function GuilgeeExceleesOruulakhOlnoor(
 
   function zagvarAvya() {
     uilchilgee(token)
-      .get(`/${zagvariinZam}`, { responseType: "blob" })
+      .get(`/${zagvariinZam}`, {
+        params: {
+          ashiglaltiinId,
+          baiguullagiinId: baiguullaga?._id,
+        },
+        responseType: "blob",
+      })
       .then(({ data }) => {
         const url = window.URL.createObjectURL(data);
         const a = document.createElement("a");
@@ -67,6 +73,7 @@ function GuilgeeExceleesOruulakhOlnoor(
         a.download = `${zagvariinZam}.xlsx`;
         document.body.appendChild(a);
         a.click();
+        a.remove();
         window.URL.revokeObjectURL(url);
       });
   }
