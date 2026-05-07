@@ -56,7 +56,7 @@ import _ from "lodash";
 import updateMethod from "../../../tools/function/crud/updateMethod";
 import { tulburBodoy } from "../../../tools/function/tulburBodyo";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
-
+import useDans from "hooks/useDans";
 import { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
 import uilchilgee from "services/uilchilgee";
 import { registerServiceWorker, unregisterServiceWorker } from "utils/swHelper";
@@ -1305,13 +1305,37 @@ function camera({ token }) {
 
   const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } =
     useUilchluulegchZogsoolToo(token, tooQue);
-  const dugaar = !!songogdzonZogsool?.zogsooliinDans
+  const { dansGaralt } = useDans(token, baiguullaga?._id);
+  const [songogdsonDans, setSongogdsonDans] = useState(null);
+
+  useEffect(() => {
+    if (!dansGaralt?.jagsaalt?.length) return;
+    const zogsooliinDugaar = songogdzonZogsool?.zogsooliinDans;
+    const match = zogsooliinDugaar
+      ? dansGaralt.jagsaalt.find((a) => a.dugaar === zogsooliinDugaar)
+      : null;
+    setSongogdsonDans(match ?? dansGaralt.jagsaalt[0] ?? null);
+  }, [dansGaralt, songogdzonZogsool?.zogsooliinDans]);
+
+  function dansSongoy(dugaar) {
+    const dans = dansGaralt?.jagsaalt?.find((a) => a.dugaar === dugaar);
+    setSongogdsonDans(dans ?? null);
+  }
+
+  const defaultDugaar = !!songogdzonZogsool?.zogsooliinDans
     ? songogdzonZogsool?.zogsooliinDans
     : "";
+  const activeDugaar = songogdsonDans?.dugaar || defaultDugaar;
   const dasniiMedeelel = {
     baiguullagiinId: baiguullaga?._id,
-    dugaar,
-    bank: dugaar[0] == 4 ? "tdb" : dugaar[0] == 5 ? "khaan" : "golomt",
+    dugaar: activeDugaar,
+    bank:
+      songogdsonDans?.bank ||
+      (activeDugaar[0] == 4
+        ? "tdb"
+        : activeDugaar[0] == 5
+        ? "khaan"
+        : "golomt"),
   };
   const {
     dansniiKhuulgaGaralt,
@@ -3831,7 +3855,24 @@ function camera({ token }) {
                     e.stopPropagation();
                   }}
                 >
-                  <div className="absolute right-4 top-3">
+                  <div className="absolute right-4 top-3 flex items-center gap-2">
+                    {(dansGaralt?.jagsaalt?.length ?? 0) > 1 && (
+                      <Select
+                        placeholder={t("Данс")}
+                        style={{ width: 160 }}
+                        allowClear
+                        onChange={dansSongoy}
+                        value={songogdsonDans?.dugaar}
+                        getPopupContainer={(trigger) => trigger.parentElement}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {dansGaralt?.jagsaalt?.map((a) => (
+                          <Select.Option key={a.dugaar} value={a.dugaar}>
+                            {a.dugaar}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    )}
                     <Button
                       className={`${
                         guilgeeKharakh === false ? "mr-0" : "mr-8"
@@ -4358,7 +4399,9 @@ function camera({ token }) {
                     >
                       {t("Орлого")} [ F8 ]
                       <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 transform whitespace-nowrap rounded-md bg-zinc-700 px-3 py-2 text-sm text-white opacity-0 shadow-md transition-opacity duration-200 ease-in-out group-hover:opacity-100">
-                        {t("Орсон цаг тодорхойгүй машинд гараас төлбөр оруулж бүртгэх")}
+                        {t(
+                          "Орсон цаг тодорхойгүй машинд гараас төлбөр оруулж бүртгэх",
+                        )}
 
                         <div className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-x-transparent border-t-zinc-700"></div>
                       </div>
