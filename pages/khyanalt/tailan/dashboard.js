@@ -171,7 +171,7 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t, isPrinting, date
 
   return (
     <GlassCard title={t("Санхүүгийн гүйцэтгэл")} icon={<RiseOutlined />} className={isPrinting ? "" : "h-[350px]"}>
-      <div className={isPrinting ? "h-[110px]" : "h-[270px]"}>
+      <div className={isPrinting ? "h-[250px]" : "h-[270px]"}>
         <Bar data={chartData} options={{ 
           responsive: true, maintainAspectRatio: false, 
           interaction: { mode: 'index', intersect: false },

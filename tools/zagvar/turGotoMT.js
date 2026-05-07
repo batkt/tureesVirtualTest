@@ -1,5 +1,4 @@
 const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
-  const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
   return `
   <div style="height: 100%; width: 100%; page-break-after: always;">
     <div style="display: block; width: 100%; text-align: center; padding-top:1.5rem;">
@@ -201,19 +200,20 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
       <div style="width: 80%;">
         <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&lt;gariinUseg&gt;</p>
-          <p style="width: 40%; text-align: left; margin-top: 3.3rem; font-weight: 600;">
-            &nbsp;&nbsp;&nbsp;&nbsp;/${barilga?.nyagtlan || ""}/
-          </p>  
+          <div style="width: 45%; text-align: left; font-size: 11px; line-height: 1.4;">
+            <div style="font-weight: 600;">/${medeelel?.nyagtlanNer || ""}/</div>
+          </div>  
+          
         </div>
         <div style="margin-top: 0; display: flex; align-items: flex-start; justify-content: space-between;">
-          Холбогдох утас: 9990-0335
+          <p style="white-space: nowrap;">Холбогдох утас: ${medeelel?.nyagtlanUtas || ""}</p>
         </div>
-        <div style="margin-top: 0; display: flex; align-items: flex-start; justify-content: space-between;">
+        <div style="margin-top: 0; display: flex; align-items: flex-start;">
           <p style="white-space: nowrap;">Хүлээн зөвшөөрсөн...................................</p>
-          <p style="width: 40%; text-align: left; font-weight: 600;">
+          <p style="width: 40%; text-align: center; font-weight: 600;">
             &lt;ner&gt; 
           </p>
-        <div>
+        </div>
       </div>
       <div style="width: 20%; z-index:999">
         &lt;tamga&gt;

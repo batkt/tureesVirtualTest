@@ -232,7 +232,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
       </div>
       <div
         ref={ref}
-        className="print-show relative mt-0 h-[calc(100vh-10rem)] items-center justify-center gap-10 pb-5 pl-3 print:h-auto print:gap-0 print:pb-0 print:pl-0 print:p-[20mm]"
+        className="print-show relative mt-0 h-[calc(100vh-10rem)] items-center justify-center gap-10 pb-5 pl-3 print:h-auto print:gap-0 print:pb-0 print:pl-0"
       >
         {KharakhKhesguud.find((a) => a === 1) && (
           <div>
@@ -240,8 +240,15 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
               {t("Гэрээ")}
             </div>
             <div
-              className="flex w-full flex-col pt-10 space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] pb-[25mm] text-black shadow-lg dark:bg-gray-800 dark:text-white print:min-h-0 print:shadow-none print:pt-[25mm] print:pb-[25mm]"
-              style={{ width: "210mm" }}
+              className="flex w-full flex-col bg-white text-black shadow-lg dark:bg-gray-800 dark:text-white print:min-h-0 print:shadow-none"
+              style={{ 
+                width: "210mm", 
+                padding: "25mm 25mm 25mm 30mm",
+                fontFamily: "'Times New Roman', Times, serif",
+                fontSize: "12pt",
+                lineHeight: "1.15",
+                textAlign: "justify"
+              }}
             >
               {gereeniiZagvar?.ner && (
                 <div className="grid grid-cols-2 gap-4">
@@ -357,8 +364,15 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
             </div>
 
             <div
-              className=" flex w-full break-before-page flex-col space-y-1 bg-white p-[0] pl-[24mm] pr-[14mm] text-black shadow-lg dark:bg-gray-800 dark:text-white print:shadow-none"
-              style={{ width: "210mm" }}
+              className="flex w-full break-before-page flex-col bg-white text-black shadow-lg dark:bg-gray-800 dark:text-white print:shadow-none"
+              style={{ 
+                width: "210mm", 
+                padding: "25mm 25mm 25mm 30mm",
+                fontFamily: "'Times New Roman', Times, serif",
+                fontSize: "12pt",
+                lineHeight: "1.15",
+                textAlign: "justify"
+              }}
             >
               {akt?.ner && (
                 <div className="grid grid-cols-2 gap-4">

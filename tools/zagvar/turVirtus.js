@@ -244,7 +244,7 @@ const khatuuZagvarVirtus = (medeelel, ajiltan, baiguullaga) => {
     <tr class="footer-row">
       <td>Нягтлан бодогч:</td>
       <td></td>
-      <td style="padding-left: 0;">Б.Оюунбилэг</td>
+      <td style="padding-left: 0;">${medeelel?.nyagtlan || ""}</td>
       <td style="text-align: right;">88082530</td>
     </tr>
   </table>

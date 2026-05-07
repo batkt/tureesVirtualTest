@@ -633,19 +633,34 @@ audio::-webkit-media-controls-volume-control-container {
 
   /* Position the print-container to fill the entire page */
   .print-container {
-    position: fixed !important;
-    inset: 0 !important;
+    position: relative !important;
     width: 100% !important;
     box-sizing: border-box !important;
     height: auto !important;
-    max-height: 100vh !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     padding: 4mm !important;
     margin: 0 !important;
-    gap: 6px !important;
     display: flex !important;
     flex-direction: column !important;
-    z-index: 9999 !important;
+    visibility: visible !important;
+    background: white !important;
+  }
+
+  @media print {
+    .print-container {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      min-height: 100vh !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      z-index: 999999 !important;
+    }
+    
+    .hide-on-print {
+      display: none !important;
+    }
   }
 
   /* ── Table/Statement print variant (multi-page, no fixed clipping) ── */
@@ -656,9 +671,7 @@ audio::-webkit-media-controls-volume-control-container {
     max-height: none !important;
     overflow: visible !important;
     height: auto !important;
-    min-height: 0 !important;
-    display: block !important;
-    padding: 4mm !important;
+    padding: 0 !important;
   }
 
   /* Reset tbody scroll containers inside table print */

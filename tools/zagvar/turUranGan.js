@@ -243,7 +243,7 @@ const khatuuZagvarUranGan = (
         <div style="width: 100%; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="color: #4b5563;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /Б.Туул/
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /${medeelel?.nyagtlan || ""}/
           </p>
         </div>
       </td>
@@ -467,7 +467,7 @@ const khatuuZagvarUranGan = (
         <div style="width: 100%; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="color: #4b5563;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&lt;gariinUseg&gt;</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /Б.Туул/
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /${medeelel?.nyagtlan || ""}/
           </p>
         </div>
       </td>

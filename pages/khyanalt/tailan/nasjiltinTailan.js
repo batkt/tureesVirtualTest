@@ -21,6 +21,7 @@ import { useAuth } from "services/auth";
 import React, { Children, useMemo, useRef, useState } from "react";
 import moment from "moment";
 import { useReactToPrint } from "react-to-print";
+import { flushSync } from "react-dom";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 import axios from "services/uilchilgee";
@@ -28,7 +29,8 @@ import axios from "services/uilchilgee";
 function nasjiltinTailan({ token }) {
   const { barilgiinId, baiguullaga, ajiltan } = useAuth();
   const [excelUnshijBaina, setExcelUnshijBaina] = useState(false);
-  const [khadgalsanKhuudaslalt, setKhadgalsaKhuudaslalt] = useState(null);
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [khadgalsanKhuudaslalt, setKhadgalsanKhuudaslalt] = useState(null);
   const [shineBagana, setShineBagana] = useState([]);
   const { t } = useTranslation();
 
@@ -80,7 +82,18 @@ function nasjiltinTailan({ token }) {
   };
   const handlePrint = useReactToPrint({
     contentRef: printRef,
-    pageStyle: "print",
+    documentTitle: " ",
+    onBeforePrint: () => {
+      flushSync(() => setIsPrinting(true));
+      return Promise.resolve();
+    },
+    onAfterPrint: () => setIsPrinting(false),
+    pageStyle: `@media print {
+      @page { 
+        size: landscape;
+        margin: 0 !important;
+      }
+    }`,
   });
 
   const segments = useJagsaalt("/segment", undefined, undefined, undefined, undefined, undefined, 1000);
@@ -1309,14 +1322,16 @@ function nasjiltinTailan({ token }) {
         />
 
         {/* Hidden Printable Table */}
-        <div className="hidden">
-          <div ref={printRef}>
+        <div 
+          style={isPrinting ? { display: 'block' } : { position: 'absolute', top: '-10000px', left: '-10000px', width: '210mm' }}
+        >
+          <div ref={printRef} className="print-show print-container">
             <div className="flex w-full items-center justify-between text-sm">
               <div className="w-1/4 text-left text-sm">
                 {ognoo ? (
                   <div>
                     Огноо: {moment(ognoo[0]).format("YYYY-MM-DD")}-{" "}
-                    {moment(ognoo[1]).format("YYYY-MГД2405274M-DD")}
+                    {moment(ognoo[1]).format("YYYY-MM-DD")}
                   </div>
                 ) : (
                   <div>{""}</div>

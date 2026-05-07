@@ -33,6 +33,7 @@ import useNekhemjlekhDugaarlalt from "hooks/tulburTootsoo/useNekhemjlekhDugaarla
 import { mailtuukh } from "hooks/useMailTuukh";
 import _, { template, update } from "lodash";
 import { useReactToPrint } from "react-to-print";
+import { flushSync } from "react-dom";
 import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar";
 import { modal } from "components/ant/Modal";
 import { useAuth } from "services/auth";
@@ -201,6 +202,7 @@ function tulburTootsoo({ token }) {
   const [nekhemjleliinJagsaalt, setNekhemjleliinJagsaalt] = React.useState([]);
   const [songogdsonDans, setDans] = React.useState();
   const [olnoorSaraarEsekh, setOlnoorSaraarEsekh] = useState(false);
+  const [isPrinting, setIsPrinting] = useState(false);
   const [updatedMedeelelList, setUpdatedMedeelelList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -626,6 +628,9 @@ function tulburTootsoo({ token }) {
               ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "67512183c60497546f59513a"
             ) {
+              medeelel.nyagtlan = barilga?.nyagtlan;
+              medeelel.nyagtlanNer = ajiltan?.ner;
+              medeelel.nyagtlanUtas = ajiltan?.utas;
               if (zagvar.ner?.includes("20ны өдөр")) {
                 // goto MPM
                 zagvar.nekhemjlekh = khatuuZagvarGotoMPM(
@@ -659,6 +664,9 @@ function tulburTootsoo({ token }) {
               ajiltan?.baiguullagiinId === "6735c77a7fc60cd66deb2909" &&
               barilgiinId === "6735c77a7fc60cd66deb290a"
             ) {
+              medeelel.nyagtlan = barilga?.nyagtlan;
+              medeelel.nyagtlanNer = ajiltan?.ner;
+              medeelel.nyagtlanUtas = ajiltan?.utas;
               if (zagvar.ner?.includes("20ны өдөр")) {
                 // goto MT
                 zagvar.nekhemjlekh = khatuuZagvarGotoMT(
@@ -2174,14 +2182,20 @@ function tulburTootsoo({ token }) {
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
+    documentTitle: " ",
+    onBeforePrint: () => {
+      flushSync(() => setIsPrinting(true));
+      return Promise.resolve();
+    },
     onAfterPrint: () => {
+      setIsPrinting(false);
       if (songogdsonGereenuud?.length > 0)
         dugaarlaltKhadgalya(songogdsonGereenuud?.length + dugaarlalt - 1, () =>
           dugaarlaltMutate(),
         );
     },
     pageStyle: `@media print {
-      @page { size: A4 ${chiglelAvya()}; margin:0; }
+      @page { size: A4 ${chiglelAvya()}; margin:0 !important; }
        
       .A5, .A5-portrait, .A5-landscape, .a5 {
         margin-left: 12mm !important;
@@ -2749,6 +2763,11 @@ function tulburTootsoo({ token }) {
         const barilga = baiguullaga?.barilguud?.find(
           (a) => a._id === nekhemjlekh?.barilgiinId,
         );
+        nekhemjlekh.nyagtlan = barilga?.nyagtlan;
+        nekhemjlekh.nyagtlanOvog = ajiltan?.ovog;
+        nekhemjlekh.nyagtlanNer = ajiltan?.ner;
+        nekhemjlekh.nyagtlanUtas = ajiltan?.utas;
+        nekhemjlekh.nyagtlanAlbanTushaal = ajiltan?.albanTushaal;
 
         var text = songosonZagvar?.khatuuZagvarEsekh
           ? ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d"
@@ -4770,7 +4789,7 @@ function tulburTootsoo({ token }) {
       >
         <Spin spinning={loading}>
           <div
-            className={`grid w-full
+            className={`grid w-full print-show
             ${
               nekhemjlekhuud?.find(
                 (a) => a.khuudasniiKhemjee === "A4" || a.chiglel === "portrait",
@@ -4786,7 +4805,7 @@ function tulburTootsoo({ token }) {
                   key={`khevlekhNekhemjlel${i}`}
                   className={
                     !nekhemjlekh.khatuuZagvarEsekh
-                      ? `print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10"`
+                      ? `print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10`
                       : `print p-5 text-xs`
                   }
                   dangerouslySetInnerHTML={{
