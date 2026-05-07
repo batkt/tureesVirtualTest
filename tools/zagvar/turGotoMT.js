@@ -198,12 +198,10 @@ const khatuuZagvarGotoMT = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
     </div>
     <div style="display: flex; width: 100%; align-items: flex-start; margin-top: 0; padding:0;">
       <div style="width: 80%;">
-        <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
-          <p style="white-space: nowrap;">Нягтлан бодогч: &nbsp;&lt;gariinUseg&gt;</p>
-          <div style="width: 45%; text-align: left; font-size: 11px; line-height: 1.4;">
-            <div style="font-weight: 600;">/${medeelel?.nyagtlanNer || ""}/</div>
-          </div>  
-          
+        <div style="margin-top: 1rem; display: flex; align-items: center; gap: 10px;">
+          <div style="white-space: nowrap;">Нягтлан бодогч: </div>
+          <div style="flex: 1; text-align: center;">&lt;gariinUseg&gt;</div>
+          <div style="width: 45%; text-align: left; font-size: 11px; font-weight: 600; white-space: nowrap;">/${medeelel?.nyagtlanNer || ""}/</div>
         </div>
         <div style="margin-top: 0; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Холбогдох утас: ${medeelel?.nyagtlanUtas || ""}</p>
