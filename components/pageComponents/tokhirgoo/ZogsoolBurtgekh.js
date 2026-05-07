@@ -603,6 +603,40 @@ function ZogsoolBurtgekh(
               </Form.Item>
             </div>
 
+            <div className="col-span-4">
+              <Form.Item
+                noStyle
+                shouldUpdate={(prevValues, currentValues) =>
+                  prevValues.ajiltanTulburEsekh !==
+                  currentValues.ajiltanTulburEsekh
+                }
+              >
+                {({ getFieldValue }) => (
+                  <div
+                    className={`flex flex-row justify-between overflow-hidden transition-all duration-300 ease-in-out ${
+                      getFieldValue("ajiltanTulburEsekh")
+                        ? "max-h-20 translate-y-0 transform opacity-100"
+                        : "max-h-0 -translate-y-2 transform opacity-0"
+                    }`}
+                  >
+                    <div className="col-span-2 border-l-2 border-green-500 pl-4">
+                      <div className="font-medium dark:text-white">
+                        {t("Ажилтан үнэгүй хугацаа")}
+                      </div>
+                    </div>
+                    <div className="col-span-2">
+                      <Form.Item className="mr-5" name="ajiltanUneguiKhugatsaa">
+                        <InputNumber
+                          style={{ width: "110%" }}
+                          placeholder={t("Ажилтан үнэгүй хугацаа")}
+                        />
+                      </Form.Item>
+                    </div>
+                  </div>
+                )}
+              </Form.Item>
+            </div>
+
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
                 {t("Зогсоолоос машин автоматаар гаргах цагийн тохиргоо")}
