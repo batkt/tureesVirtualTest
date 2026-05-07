@@ -1,4 +1,5 @@
 const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
+  const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
   return `
 
   <div style="height: 100%; width: 100%; page-break-after: always; font-family: 'Arial', serif; font-size: 8pt; line-height: 1.2;">
@@ -315,7 +316,7 @@ const khatuuZagvarGotoMPM = (medeelel, ajiltan, baiguullaga, barilgiinId) => {
         <div style="margin-top: 0; display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap; z-index:-10;">Нягтлан бодогч: &nbsp;&nbsp;&nbsp;&nbsp;&lt;gariinUseg1&gt;</p>
           <p style="width: 40%; text-align: left; font-weight: 600;">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /Б.Бат-Өлзий/
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /${barilga?.nyagtlan || ""}/
           </p>  
         </div>
         <div style="margin-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between;">
