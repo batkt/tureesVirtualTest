@@ -1,5 +1,6 @@
 import { Button, DatePicker, Input, message, Popconfirm, Popover } from "antd";
 import React, { useImperativeHandle, useState, useMemo } from "react";
+import { flushSync } from "react-dom";
 import useSWR from "swr";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
@@ -13,6 +14,10 @@ import { useGereeGuilgee } from "hooks/useGereeniiJagsaalt";
 import { useTranslation } from "react-i18next";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import * as XLSX from "xlsx-js-style";
+import useBaiguullaga from "hooks/useBaiguullaga";
+import useDans from "hooks/useDans";
+import { useNekhemjlekhiinTuukh } from "hooks/useNekhemjlekhiinTuukh";
+import { url } from "services/uilchilgee";
 
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   const [tailbar, setTailbar] = useState("");
@@ -79,8 +84,39 @@ function GuilgeeniiTuukh(
     burtgesenOgnoo: null,
   });
   const [sortColumn, setSortColumn] = useState(null);
+  const { baiguullaga } = useBaiguullaga(
+    token,
+    ajiltan?.baiguullagiinId || data?.baiguullagiinId,
+  );
+  const { dansGaralt } = useDans(token, ajiltan?.baiguullagiinId);
+  const { nekhemjlekhiinTuukhJagsaalt } = useNekhemjlekhiinTuukh(
+    token,
+    { gereeniiId: data?._id },
+    { createdAt: -1 }
+  );
+
+  const suuliinNekhemjlekh = useMemo(() => {
+    return nekhemjlekhiinTuukhJagsaalt?.jagsaalt?.[0];
+  }, [nekhemjlekhiinTuukhJagsaalt]);
+
+  const barilga = useMemo(() => {
+    const bId = barilgiinId || data?.barilgiinId;
+    let b = baiguullaga?.barilguud?.find((a) => a._id === bId);
+    if (!b && baiguullaga?.barilguud && (data?.barilgiinNer || data?.barilgaId)) {
+      b = baiguullaga.barilguud.find(
+        (a) => a.ner === data?.barilgiinNer || a._id === data?.barilgaId,
+      );
+    }
+    return b;
+  }, [baiguullaga, barilgiinId, data]);
+
+  const songogdsonDans = useMemo(() => {
+    return dansGaralt?.jagsaalt?.[0];
+  }, [dansGaralt]);
+
   const tailbarRef = React.useRef(null);
   const printRef = React.useRef(null);
+  const [isPrinting, setIsPrinting] = useState(false);
   function uldegdelMutate() {
     _.isFunction(data.mutate) && data.mutate();
   }
@@ -160,6 +196,18 @@ function GuilgeeniiTuukh(
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
+    documentTitle: " ",
+    pageStyle: `@media print {
+      @page { 
+        size: auto;
+        margin: 0 !important;
+      }
+    }`,
+    onBeforePrint: () => {
+      flushSync(() => setIsPrinting(true));
+      return Promise.resolve();
+    },
+    onAfterPrint: () => setIsPrinting(false),
   });
 
   const toggleSortOrder = (column) => {
@@ -337,7 +385,7 @@ function GuilgeeniiTuukh(
 
   return (
     <div className="">
-      <div ref={printRef} className="flex flex-col">
+      <div ref={printRef} className="print-container print-table flex flex-col print:p-[15mm]">
         <div className="mb-6 flex w-full items-center justify-start gap-8">
           <div className="">
             <DatePicker.RangePicker
@@ -441,7 +489,7 @@ function GuilgeeniiTuukh(
         </th>
         <tbody
           className="overflownone min-w-[93rem]"
-          style={{ height: "calc(100vh - 15rem)" }}
+          style={isPrinting ? {} : { height: "calc(100vh - 15rem)", overflowY: "auto" }}
         >
           {sortedData
             ?.map((a, i) => (
@@ -519,6 +567,37 @@ function GuilgeeniiTuukh(
             ))
             .reverse()}
         </tbody>
+        <div className="relative mt-8 flex flex-col gap-1 text-sm font-medium opacity-0 h-0 overflow-hidden print:opacity-100 print:h-auto print:overflow-visible print:flex">
+          <div className="relative h-6">
+            <div className="relative z-10">
+              {suuliinNekhemjlekh?.baiguullagiinNer || baiguullaga?.ner}
+            </div>
+          </div>
+          <div className="relative z-10">
+            {suuliinNekhemjlekh?.nekhemjlekhiinBank ||
+              (songogdsonDans?.bank === "khanbank"
+                ? "Хаан банк"
+                : songogdsonDans?.bank === "golomt"
+                ? "Голомт банк"
+                : songogdsonDans?.bank === "bogd"
+                ? "Богд банк"
+                : songogdsonDans?.bank === "tdb"
+                ? "Худалдаа хөгжлийн банк"
+                : songogdsonDans?.bank)}{" "}
+            : {suuliinNekhemjlekh?.nekhemjlekhiinDans || songogdsonDans?.dugaar}
+          </div>
+          <div className="mt-2 flex items-center gap-2 relative z-10">
+            <div>
+              Нягтлан бодогч:{" "}
+              {barilga?.nyagtlan ||
+                suuliinNekhemjlekh?.maililgeesenAjiltniiNer ||
+                ""}
+            </div>
+          </div>
+          <div className="mt-2 relative z-10">
+            Хүлээн зөвшөөрсөн /................................/
+          </div>
+        </div>
       </div>
     </div>
   );

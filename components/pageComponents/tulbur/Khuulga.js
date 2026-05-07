@@ -36,7 +36,7 @@ function Khuulga(
   }, []);
   return (
     <div
-      className="flex flex-col space-y-2 overflow-x-auto"
+      className="flex flex-col space-y-2 overflow-hidden"
       style={{ height: "calc(90vh - 12rem)" }}
     >
       <GuilgeeniiTuukh

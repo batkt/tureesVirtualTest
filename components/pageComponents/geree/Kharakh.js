@@ -157,8 +157,8 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
       <style>{`
         @media print {
           @page {
-            size: A4;
-            margin: 2.5cm 2.5cm 2.5cm 3cm;
+            size: portrait;
+            margin: 0 !important;
           }
         }
       `}</style>
@@ -232,8 +232,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
       </div>
       <div
         ref={ref}
-        className="relative mt-0 items-center justify-center gap-10 pb-5 pl-3 print:gap-0 print:pb-0 print:pl-0"
-        style={{ height: "calc( 100vh - 10rem )" }}
+        className="print-show relative mt-0 h-[calc(100vh-10rem)] items-center justify-center gap-10 pb-5 pl-3 print:h-auto print:gap-0 print:pb-0 print:pl-0 print:p-[20mm]"
       >
         {KharakhKhesguud.find((a) => a === 1) && (
           <div>

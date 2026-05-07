@@ -595,7 +595,7 @@ audio::-webkit-media-controls-volume-control-container {
 @media print {
   /* ── Page setup ──────────────────────────────────────────────────── */
   @page {
-    size: landscape;
+    size: auto;
     margin: 6mm;
   }
 
@@ -619,6 +619,18 @@ audio::-webkit-media-controls-volume-control-container {
     visibility: visible !important;
   }
 
+  /* ── Visibility-only class for components with their own print layout ── */
+  /* (e.g. contracts that use their own @page A4 size and margins)          */
+  .print-show,
+  .print-show * {
+    visibility: visible !important;
+  }
+
+  /* Override global landscape @page for portrait documents (contracts) */
+  .print-portrait {
+    /* The @page inside the component's <style> tag overrides the global one */
+  }
+
   /* Position the print-container to fill the entire page */
   .print-container {
     position: fixed !important;
@@ -634,6 +646,33 @@ audio::-webkit-media-controls-volume-control-container {
     display: flex !important;
     flex-direction: column !important;
     z-index: 9999 !important;
+  }
+
+  /* ── Table/Statement print variant (multi-page, no fixed clipping) ── */
+  /* Use print-container + print-table together on the printRef element  */
+  .print-container.print-table {
+    position: static !important;
+    inset: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    display: block !important;
+    padding: 4mm !important;
+  }
+
+  /* Reset tbody scroll containers inside table print */
+  .print-container.print-table tbody {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    display: table-row-group !important;
+  }
+
+  /* Ensure hide-on-print elements are hidden */
+  .print-container.print-table .hide-on-print {
+    display: none !important;
+    visibility: hidden !important;
   }
 
   /* ── Force Grid Layouts for Print ───────────────────────────────── */

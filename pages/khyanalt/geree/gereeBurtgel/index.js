@@ -792,10 +792,11 @@ function ZakhialgiinKhyanalt() {
   }, [token]);
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
+    documentTitle: " ",
     pageStyle: `@media print {
       @page { 
         size: auto;
-        margin: 25mm 14mm 25mm 24mm;
+        margin: 0 !important;
       }
     }`,
   });
