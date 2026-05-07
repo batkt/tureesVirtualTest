@@ -83,7 +83,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
   const [dutuuAlkham, setDutuuAlkham] = useState([]);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState(
     _.cloneDeep(data) || {
-      ognoo: new Date(),
+      gereeniiOgnoo: new Date(),
       gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
     },
   );

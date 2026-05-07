@@ -15,7 +15,7 @@ import _ from "lodash";
 import { toast } from "sonner";
 import Aos from "aos";
 import { useEffect } from "react";
-import { aldaaBarigch } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { EyeInvisibleOutlined, FileTextOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import useAktiinZagvar from "hooks/useAktiinZagvar";
@@ -71,7 +71,7 @@ function GereeBaiguulakh({ token }) {
   const zagvarRef = React.useRef();
   const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
-    ognoo: new Date(),
+    gereeniiOgnoo: new Date(),
     baritsaaAvakhEsekh: true,
     gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
     baritsaaAvakhKhugatsaa: 1,
@@ -83,6 +83,45 @@ function GereeBaiguulakh({ token }) {
   const [waiting, setWaiting] = useState(false);
   const [dutuuAlkham, setDutuuAlkham] = useState([]);
   const [gereekharakhTovch, setGereekharakhTovch] = useState(false);
+
+  useEffect(() => {
+
+    const defaultPrefix = `ГД${moment(new Date()).format("YYMMDD")}`;
+    if (khadgalakhGeree.gereeniiDugaar === defaultPrefix) {
+      const unuudur = new Date();
+      const todayStart = new Date(unuudur.getFullYear(), unuudur.getMonth(), unuudur.getDate());
+      
+      uilchilgee(token)
+        .get("/geree/tooAvya", {
+          params: {
+            query: {
+              barilgiinId: barilgiinId,
+              baiguullagiinId: baiguullaga?._id,
+              gereeniiOgnoo: {
+                $gte: moment(todayStart).format("YYYY-MM-DD 00:00:00"),
+              },
+            },
+          },
+        })
+        .then(({ data: resData }) => {
+          const count = resData?.niitMur ?? resData ?? 0;
+          const nextDugaar = (parseInt(count) || 0) + 1;
+          const prefix = `ГД${moment(new Date()).format("YYMMDD")}`;
+          const finalDugaar = `${prefix}${nextDugaar.toString().padStart(2, "0")}`;
+          setKhagalakhGeree((prev) => ({
+            ...prev,
+            gereeniiDugaar: finalDugaar,
+          }));
+        })
+        .catch((err) => {
+          const prefix = `ГД${moment(new Date()).format("YYMMDD")}`;
+          setKhagalakhGeree((prev) => ({
+            ...prev,
+            gereeniiDugaar: `${prefix}01`,
+          }));
+        });
+    }
+  }, [khadgalakhGeree.gereeniiDugaar, token, barilgiinId, baiguullaga]);
 
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
   const [aktiinZagvar, setAktiinZagvar] = React.useState();
@@ -214,7 +253,7 @@ function GereeBaiguulakh({ token }) {
         .then(({ data }) => {
           if (data === "Amjilttai") {
             setKhagalakhGeree({
-              ognoo: new Date(),
+              gereeniiOgnoo: new Date(),
               baritsaaAvakhEsekh: true,
               gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
               baritsaaAvakhKhugatsaa: 1,
@@ -502,7 +541,7 @@ function GereeBaiguulakh({ token }) {
   useEffect(() => {
     if (barilgiinId !== khadgalakhGeree.barilgiinId) {
       setKhagalakhGeree({
-        ognoo: new Date(),
+        gereeniiOgnoo: new Date(),
         baritsaaAvakhEsekh: true,
         gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
         baritsaaAvakhKhugatsaa: 1,
@@ -569,7 +608,7 @@ function GereeBaiguulakh({ token }) {
       fixedZagvarNeegdsenEsekh={gereekharakhTovch}
       onChangeBarilga={() => {
         setKhagalakhGeree({
-          ognoo: new Date(),
+          gereeniiOgnoo: new Date(),
           baritsaaAvakhEsekh: true,
           gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
           baritsaaAvakhKhugatsaa: 1,
