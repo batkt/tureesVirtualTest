@@ -96,12 +96,12 @@ const SummaryCard = ({ title, value, icon, prefix = "₮", suffix = "₮", fixed
   );
 };
 
-const BuildingStatsSummary = ({ baiguullaga, building, token, t }) => {
+const BuildingStatsSummary = ({ baiguullaga, building, token, t, dateRange }) => {
   const { tailanGaralt } = useTailan("borluulaltiinTailanAvya", token, {
     baiguullagiinId: baiguullaga?._id,
     barilgiinId: building?._id,
-    ekhlekhOgnoo: moment().subtract(1, 'month').startOf('month').format('YYYY-MM-DD'),
-    duusakhOgnoo: moment().endOf('month').format('YYYY-MM-DD'),
+    ekhlekhOgnoo: dateRange[0].format('YYYY-MM-DD'),
+    duusakhOgnoo: dateRange[1].format('YYYY-MM-DD'),
     nariivchlal: 'month'
   });
 
@@ -111,12 +111,12 @@ const BuildingStatsSummary = ({ baiguullaga, building, token, t }) => {
   const growthPercent = previousActual > 0 ? (((currentActual - previousActual) / previousActual) * 100).toFixed(1) : null;
   
   const { data: contractsResponse } = useSWR(
-    !!token && !!building._id ? ["/geree", building._id] : null,
-    (u, bId) => uilchilgee(token).get(u, { params: { query: { baiguullagiinId: baiguullaga?._id, barilgiinId: bId, tuluv: { $nin: [-1] }, duusakhOgnoo: { $gte: moment().toISOString() } }, khuudasniiKhemjee: 1 } }).then(res => res.data)
+    !!token && !!building._id ? ["/geree-summary", building._id] : null,
+    (u, bId) => uilchilgee(token).get("/geree", { params: { query: { baiguullagiinId: baiguullaga?._id, barilgiinId: bId, tuluv: { $nin: [-1] }, duusakhOgnoo: { $gte: moment().toISOString() } }, khuudasniiKhemjee: 1 } }).then(res => res.data)
   );
   
   const { data: prevContractsResponse } = useSWR(
-    !!token && !!building._id ? ["/geree-prev", building._id] : null,
+    !!token && !!building._id ? ["/geree-summary-prev", building._id] : null,
     (u, bId) => uilchilgee(token).get("/geree", { params: { query: { baiguullagiinId: baiguullaga?._id, barilgiinId: bId, tuluv: { $nin: [-1] }, createdAt: { $lte: moment().subtract(1, 'month').endOf('month').toISOString() }, duusakhOgnoo: { $gte: moment().subtract(1, 'month').endOf('month').toISOString() } }, khuudasniiKhemjee: 1 } }).then(res => res.data)
   );
 
@@ -132,14 +132,14 @@ const BuildingStatsSummary = ({ baiguullaga, building, token, t }) => {
   );
 };
 
-const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
+const BuildingIncomeChart = ({ baiguullaga, building, token, t, isPrinting, dateRange }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const { tailanGaralt } = useTailan("borluulaltiinTailanAvya", token, {
     baiguullagiinId: baiguullaga?._id,
     barilgiinId: building?._id,
-    ekhlekhOgnoo: moment().subtract(5, 'months').startOf('month').format('YYYY-MM-DD'),
-    duusakhOgnoo: moment().endOf('month').format('YYYY-MM-DD'),
+    ekhlekhOgnoo: dateRange[0].format('YYYY-MM-DD'),
+    duusakhOgnoo: dateRange[1].format('YYYY-MM-DD'),
     nariivchlal: 'month'
   });
 
@@ -170,15 +170,17 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
   };
 
   return (
-    <GlassCard title={t("Санхүүгийн гүйцэтгэл")} icon={<RiseOutlined />} className="h-[350px]">
-      <div className="h-[270px]">
+    <GlassCard title={t("Санхүүгийн гүйцэтгэл")} icon={<RiseOutlined />} className={isPrinting ? "" : "h-[350px]"}>
+      <div className={isPrinting ? "h-[110px]" : "h-[270px]"}>
         <Bar data={chartData} options={{ 
           responsive: true, maintainAspectRatio: false, 
           interaction: { mode: 'index', intersect: false },
+          animation: { duration: isPrinting ? 0 : 1000 },
           plugins: { 
             legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 6, usePointStyle: true, font: { size: 10 } } },
             datalabels: { display: false },
             tooltip: { 
+              enabled: !isPrinting,
               cornerRadius: 8, padding: 8, mode: 'index', intersect: false,
               callbacks: {
                 label: function(context) {
@@ -216,7 +218,7 @@ const BuildingIncomeChart = ({ baiguullaga, building, token, t }) => {
   );
 };
 
-const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all', dateRange, baiguullaga }) => {
+const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all', dateRange, baiguullaga, isPrinting }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const chartRef = React.useRef(null);
@@ -351,11 +353,12 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
 
   const chartOptions = {
     maintainAspectRatio: false,
+    animation: { duration: isPrinting ? 0 : 1000 },
     plugins: {
       legend: { display: false },
       datalabels: { display: false },
       tooltip: {
-        enabled: true,
+        enabled: !isPrinting,
         cornerRadius: 8,
         padding: 12,
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
@@ -386,9 +389,9 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
   const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'];
 
   return (
-    <GlassCard title={t("Талбайн ашиглалт")} icon={<HomeOutlined />} className="h-[350px]">
+    <GlassCard title={t("Талбайн ашиглалт")} icon={<HomeOutlined />} className={isPrinting ? "" : "h-[350px]"}>
       <div className="flex flex-col md:flex-row items-center justify-around h-full gap-4 px-2">
-         <div className="relative h-44 w-44 flex-shrink-0">
+         <div className={`relative flex-shrink-0 ${isPrinting ? 'h-24 w-24' : 'h-44 w-44'}`}>
             {chartData.datasets[0]?.data?.length > 0 ? (
                <Doughnut ref={chartRef} data={chartData} options={chartOptions} className="relative z-10" />
             ) : (
@@ -407,7 +410,7 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
                    legend: { display: false }, 
                    datalabels: { display: false },
                    tooltip: { 
-                     enabled: true, 
+                     enabled: !isPrinting, 
                      cornerRadius: 8,
                      padding: 10,
                      backgroundColor: 'rgba(0, 0, 0, 0.9)',
@@ -459,9 +462,7 @@ const BuildingOccupancyDoughnut = ({ building, token, t, selectedSegment = 'all'
   );
 };
 
-const BuildingRevenueTable = ({ building, token, t }) => {
-  const [dateRange, setDateRange] = useState([moment().subtract(5, 'months').startOf('month'), moment().endOf('month')]);
-
+const BuildingRevenueTable = ({ building, token, t, dateRange, isPrinting }) => {
   const { tailanGaralt, loading } = useTailan("borluulaltiinTailanAvya", token, {
     baiguullagiinId: building.baiguullagiinId, barilgiinId: building._id,
     ekhlekhOgnoo: dateRange[0].format('YYYY-MM-DD 00:00:00'),
@@ -483,19 +484,10 @@ const BuildingRevenueTable = ({ building, token, t }) => {
     <GlassCard 
       title={t("Төлбөрийн түүх")} 
       icon={<BiMoneyWithdraw />} 
-      className="h-[380px]"
-      extra={
-        <DatePicker.RangePicker 
-          size="small"
-          value={dateRange}
-          onChange={(dates) => dates && setDateRange(dates)}
-          className="w-48 text-[11px]"
-          allowClear={false}
-        />
-      }
+      className={isPrinting ? "" : "h-[380px]"}
     >
       <Table 
-        dataSource={incomeData} loading={loading} size="small" scroll={{ x: 'max-content', y: 260 }} pagination={false}
+        dataSource={incomeData} loading={loading} size="small" scroll={isPrinting ? undefined : { x: 'max-content', y: 260 }} pagination={false}
         className="premium-table"
         columns={[
           { title: t('Сар'), dataIndex: 'month', key: 'month', width: 80, align: 'center', render: (v) => <span className="text-slate-700 dark:text-slate-200 text-xs">{v}</span> },
@@ -511,7 +503,7 @@ const BuildingRevenueTable = ({ building, token, t }) => {
   );
 };
 
-const VacancyFloorTable = ({ building, baiguullaga, token, t }) => {
+const VacancyFloorTable = ({ building, baiguullaga, token, t, isPrinting }) => {
   const { data: allSpaces, isValidating: loadingSpaces } = useSWR(
     !!token && !!building._id ? ["/talbai", building._id] : null,
     (u, bId) => uilchilgee(token).get(u, { params: { query: { baiguullagiinId: baiguullaga?._id, barilgiinId: bId }, khuudasniiKhemjee: 1000 } }).then(res => res.data)
@@ -528,9 +520,9 @@ const VacancyFloorTable = ({ building, baiguullaga, token, t }) => {
   }, [allSpaces]);
 
   return (
-    <GlassCard title={t("Идэвхгүй талбайн мэдээлэл")} icon={<HomeOutlined />} className="h-[380px]">
+    <GlassCard title={t("Идэвхгүй талбайн мэдээлэл")} icon={<HomeOutlined />} className={isPrinting ? "" : "h-[380px]"}>
       <Table 
-        dataSource={tableData} loading={loadingSpaces} size="small" scroll={{ x: 'max-content', y: 260 }} pagination={false}
+        dataSource={tableData} loading={loadingSpaces} size="small" scroll={isPrinting ? undefined : { x: 'max-content', y: 260 }} pagination={false}
         className="premium-table"
         columns={[
           { title: t('Давхар'), dataIndex: 'location', align: 'center', key: 'location', width: 100, 
@@ -639,16 +631,10 @@ const BuildingSegmentsTables = ({ building, baiguullaga, token, t, selectedSegme
     <GlassCard 
       title={t("Талбайн бүртгэл")} 
       icon={<HomeOutlined />} 
-      className="h-[380px]"
+      className={isPrinting ? "" : "h-[380px]"}
       extra={
         <div className="flex items-center gap-2">
-          <DatePicker.RangePicker 
-            size="small"
-            className="w-48 text-[11px]"
-            value={dateRange}
-            onChange={(dates) => setDateRange(dates)}
-            allowClear={false}
-          />
+
           <Select
             size="small"
             value={selectedSegment}
@@ -661,21 +647,21 @@ const BuildingSegmentsTables = ({ building, baiguullaga, token, t, selectedSegme
     >
       <Table 
         size="small" dataSource={aggregatedDataSource} loading={isValidating} 
-        pagination={isPrinting ? false : { pageSize: 15, showSizeChanger: false, size: 'small' }} scroll={{ x: 'max-content', y: isPrinting ? undefined : 220 }}
+        pagination={isPrinting ? false : { pageSize: 15, showSizeChanger: false, size: 'small' }} scroll={isPrinting ? undefined : { x: 'max-content', y: 220 }}
         className="premium-table"
         columns={[
-          { title: t('Төрөл'), dataIndex: 'segmentName', key: 'segmentName', width: 100, render: (v) => <span className="font-bold text-[12px]">{v}</span> },
-          { title: 'm2', dataIndex: 'totalM2', align:'center', key: 'totalM2', width: 60, render: (v) => <span className="font-medium text-[12px]">{formatNumber(v)}</span> },
+          { title: t('Төрөл'), dataIndex: 'segmentName', key: 'segmentName', width: 70, render: (v) => <span className={`font-bold ${isPrinting ? 'text-[8px]' : 'text-[12px]'}`}>{v}</span> },
+          { title: 'm2', dataIndex: 'totalM2', align:'center', key: 'totalM2', width: 45, render: (v) => <span className={`font-medium ${isPrinting ? 'text-[8px]' : 'text-[12px]'}`}>{formatNumber(v)}</span> },
           { 
             title: <div className="text-center w-full">{t('Үнэ')}</div>, 
-            dataIndex: 'totalPrice', key: 'totalPrice', align: 'right', width: 90,
-            render: (v) => <span className="text-slate-800 dark:text-white text-[13px]">{formatNumber(v)}</span> 
+            dataIndex: 'totalPrice', key: 'totalPrice', align: 'right', width: 75,
+            render: (v) => <span className={`text-slate-800 dark:text-white ${isPrinting ? 'text-[9px]' : 'text-[13px]'}`}>{formatNumber(v)}</span> 
           },
           { 
-            title: t('Төлөв'), dataIndex: 'status', align:'center', key: 'status', width: 80,
-            render: (v) => <Badge status={v ? "success" : "default"} text={<span className="text-[12px] dark:text-white">{v ? t("Идэвхтэй") : t("Идэвхгүй")}</span>} />
+            title: t('Төлөв'), dataIndex: 'status', align:'center', key: 'status', width: 65,
+            render: (v) => <Badge status={v ? "success" : "default"} text={<span className={`${isPrinting ? 'text-[8px]' : 'text-[12px]'} dark:text-white`}>{v ? t("Идэвхтэй") : t("Идэвхгүй")}</span>} />
           },
-          { title: t('Тоо'), dataIndex: 'count', align:'center', key: 'count', width: 50, render: (v) => <span className="text-[12px] text-slate-500">{v}</span> }
+          { title: t('Тоо'), dataIndex: 'count', align:'center', key: 'count', width: 35, render: (v) => <span className={`${isPrinting ? 'text-[8px]' : 'text-[12px]'} text-slate-500`}>{v}</span> }
         ]}
       />
     </GlassCard>
@@ -701,11 +687,14 @@ export default function BuildingDashboard() {
 
   const handlePrintPage = () => {
     setIsPrinting(true);
-    // Wait for state to update and re-render
+    // Dismiss any active chart tooltips before printing
     setTimeout(() => {
+      document.querySelectorAll('canvas').forEach(c => {
+        c.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+      });
       window.print();
       setIsPrinting(false);
-    }, 500);
+    }, 600);
   };
 
   const handleExportAllExcel = () => {
@@ -754,18 +743,17 @@ export default function BuildingDashboard() {
 
   return (
     <Admin khuudasniiNer="dashboard" title={t("Хяналтын самбар")}>
-      <style type="text/css" media="print">
-        {`
-          @page {
-            size: landscape;
-            margin: 6mm;
-          }
-        `}
-      </style>
-      <div ref={dashboardRef} className="print-container col-span-12 flex flex-col h-[calc(100vh-80px)] w-full -mx-0 xl:-mx-1 text-black animate-entrance overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-6">
+      <div ref={dashboardRef} className="print-container col-span-12 flex flex-col h-[calc(100vh-80px)] w-full -mx-0 xl:-mx-1 text-black animate-entrance overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-4">
         
-        <div className="flex justify-end items-center hide-on-print -mb-4">
+        <div className="flex justify-end items-center hide-on-print -mb-2">
           <div className="flex items-center gap-2">
+            <DatePicker.RangePicker 
+              size="medium"
+              className="w-60 text-[11px]"
+              value={dateRange}
+              onChange={(dates) => dates && setDateRange(dates)}
+              allowClear={false}
+            />
             <Button 
               icon={<PrinterOutlined />} 
               onClick={handlePrintPage}
@@ -773,20 +761,19 @@ export default function BuildingDashboard() {
             >
               <span className="hidden sm:inline text-xs">{t("Хэвлэх")}</span>
             </Button>
-            
           </div>
         </div>
 
-        <BuildingStatsSummary baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
+        <BuildingStatsSummary baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} dateRange={dateRange} />
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 print:grid-cols-2 gap-6 print:gap-4">
-           <BuildingIncomeChart baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} />
-           <BuildingOccupancyDoughnut building={selectedBuilding} token={token} t={t} selectedSegment={selectedSegment} dateRange={dateRange} baiguullaga={baiguullaga} />
+        <div className="grid grid-cols-1 xl:grid-cols-2 print:grid-cols-2 gap-4 print:gap-2">
+           <BuildingIncomeChart baiguullaga={baiguullaga} building={selectedBuilding} token={token} t={t} isPrinting={isPrinting} dateRange={dateRange} />
+           <BuildingOccupancyDoughnut building={selectedBuilding} token={token} t={t} selectedSegment={selectedSegment} dateRange={dateRange} baiguullaga={baiguullaga} isPrinting={isPrinting} />
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 print:grid-cols-3 gap-6 print:gap-4">
-           <BuildingRevenueTable building={selectedBuilding} token={token} t={t} />
-           <VacancyFloorTable building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} />
+        <div className="grid grid-cols-1 xl:grid-cols-3 print:grid-cols-3 gap-4 print:gap-2">
+           <BuildingRevenueTable building={selectedBuilding} token={token} t={t} dateRange={dateRange} isPrinting={isPrinting} />
+           <VacancyFloorTable building={selectedBuilding} baiguullaga={baiguullaga} token={token} t={t} isPrinting={isPrinting} />
            <BuildingSegmentsTables 
              building={selectedBuilding} 
              baiguullaga={baiguullaga} 

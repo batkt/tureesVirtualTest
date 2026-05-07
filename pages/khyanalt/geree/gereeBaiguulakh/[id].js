@@ -11,7 +11,7 @@ import KhugatsaaBurtgel from "components/pageComponents/gereebaiguulakh/Khugatsa
 import TulburTootsoo from "components/pageComponents/gereebaiguulakh/TulburTootsoo";
 import moment from "moment";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import uilchilgee, { url } from "services/uilchilgee";
+import uilchilgee, { url, aldaaBarigch } from "services/uilchilgee";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import compareFields from "tools/function/compareFields";
@@ -307,6 +307,9 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
           router.back();
           toast.success(t("Амжилттай хадгаллаа"));
         }
+      })
+      .catch((e) => {
+        aldaaBarigch(e);
       })
       .finally(() => {
         setWaiting(false);

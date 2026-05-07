@@ -795,7 +795,7 @@ function ZakhialgiinKhyanalt() {
     pageStyle: `@media print {
       @page { 
         size: auto;
-        margin: 15mm 0 15mm 0;
+        margin: 25mm 14mm 25mm 24mm;
       }
     }`,
   });
@@ -1976,6 +1976,18 @@ function ZakhialgiinKhyanalt() {
                   width: "7rem",
                   render: (talbainKhemjee) => {
                     return `${formatNumber(talbainKhemjee)} м2`;
+                  },
+                  showSorterTooltip: false,
+                  sorter: () => 0,
+                },
+                {
+                  title: t("И-мэйл"),
+                  dataIndex: "mail",
+                  align: "center",
+                  ellipsis: true,
+                  width: "7rem",
+                  render: (mail) => {
+                    return `${mail}`;
                   },
                   showSorterTooltip: false,
                   sorter: () => 0,
