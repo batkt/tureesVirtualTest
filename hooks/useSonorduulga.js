@@ -3,6 +3,7 @@ import useSWR from "swr";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useAuth } from "services/auth";
 import { notification } from "antd";
+import { useRouter } from "next/router";
 
 const filterDismissedNotifications = (notifications, keepDismissed = false) => {
   if (keepDismissed) {
@@ -125,6 +126,7 @@ const paginationFetcher = (
     .catch(aldaaBarigch);
 
 function useSonorduulga(token) {
+  const router = useRouter();
   const { baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [khuudaslalt, setKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -254,28 +256,45 @@ function useSonorduulga(token) {
           if (isDuudlaga) {
             let msg = "Шинэ дуудлага";
             let desc = "Шинэ дуудлага ирлээ";
+            let href = "/khyanalt/medegdel/duudlaga";
 
             if (notif.duudlagiinTurul === "sanal") {
               msg = "Шинэ санал хүсэлт";
               desc = "Шинэ санал хүсэлт ирлээ";
+              href = "/khyanalt/medegdel/sanalKhuselt";
             } else if (notif.duudlagiinTurul === "gomdol") {
               msg = "Шинэ гомдол";
               desc = "Шинэ гомдол ирлээ";
+              href = "/khyanalt/medegdel/sanalKhuselt";
             } else if (notif.duudlagiinTurul === "shaardlaga") {
               msg = "Шинэ шаардлага";
               desc = "Шинэ шаардлага ирлээ";
+              href = "/khyanalt/medegdel/shaardlaga";
             }
 
             notification.success({
               message: msg,
               description: desc,
               duration: 10,
+              onClick: () => {
+                router.push(href);
+              },
             });
           } else {
+            let href = "/khyanalt/medegdel";
+            if (notif.turul === "shaardlaga") {
+              href = "/khyanalt/medegdel/shaardlaga";
+            } else if (notif.turul === "sanal" || notif.turul === "gomdol") {
+              href = "/khyanalt/medegdel/sanalKhuselt";
+            }
+
             notification.success({
               message: notif.title || "Шинэ мэдэгдэл",
               description: notif.message || "Шинэ мэдэгдэл ирлээ",
               duration: 7,
+              onClick: () => {
+                router.push(href);
+              },
             });
           }
 

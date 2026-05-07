@@ -180,8 +180,6 @@ function Khyanalt({ token }) {
           "App",
           "sanal",
           "gomdol",
-          "duudlaga",
-          "shaardlaga",
         ],
       },
       khuleenAvagchiinId: khariltsagch?._id,
