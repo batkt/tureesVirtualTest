@@ -688,6 +688,23 @@ function ShineTulbur(
     };
   }, [turulruuKhiikhDun]);
 
+  useEffect(() => {
+    const handleEnterPress = (event) => {
+      if (
+        event.key === "Enter" &&
+        alkham === 2 &&
+        eBarimtAshiglakhEsekh === true &&
+        !loading
+      ) {
+        ebarimtAvya(uilchluugchiinId);
+      }
+    };
+    window.addEventListener("keydown", handleEnterPress);
+    return () => {
+      window.removeEventListener("keydown", handleEnterPress);
+    };
+  }, [alkham, eBarimtAshiglakhEsekh, loading, ebarimtAvya, uilchluugchiinId]);
+
   function handleTseverlekh() {
     setTurulruuKhiikhDun("0");
   }
@@ -1346,7 +1363,7 @@ function ShineTulbur(
               loading={loading}
               onClick={() => !loading && ebarimtAvya(uilchluugchiinId)}
             >
-              {t("Хэвлэх")}
+              {t("Хэвлэх")} <span>[Enter]</span>
             </Button>
           </div>
         )}
