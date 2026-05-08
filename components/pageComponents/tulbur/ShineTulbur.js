@@ -108,6 +108,7 @@ function ShineTulbur(
 
   const handlePrint = useReactToPrint({
     contentRef: eBarimtRef,
+    removeAfterPrint: true,
     onAfterPrint: () => {
       setEBarimt(null);
       setBaiguullagaEsekh(false);
