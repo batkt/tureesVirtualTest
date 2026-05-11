@@ -63,7 +63,7 @@ const GuidedTour = ({ steps, isOpen, onClose, currentStep: externalStep, onStepC
       setTooltipPos({ top: tTop, left: tLeft });
       
       // Target element zoom effect
-      target.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      target.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
       target.style.zIndex = '100001';
       target.style.position = 'relative'; 
       target.classList.add('tutorial-active-element');
@@ -113,11 +113,11 @@ const GuidedTour = ({ steps, isOpen, onClose, currentStep: externalStep, onStepC
               target.scrollIntoView({ behavior: 'smooth', block: 'center' });
               
               // Update spotlight position during and after scroll
-              let scrollInterval = setInterval(updateSpotlight, 50);
+              let scrollInterval = setInterval(updateSpotlight, 30);
               const timeout = setTimeout(() => {
                   clearInterval(scrollInterval);
                   updateSpotlight();
-              }, 1000);
+              }, 800);
 
               return () => {
                   clearInterval(scrollInterval);
@@ -141,14 +141,14 @@ const GuidedTour = ({ steps, isOpen, onClose, currentStep: externalStep, onStepC
   const content = (
     <div className="fixed inset-0 z-[200000] pointer-events-none">
       <div 
-        className="fixed inset-0 bg-black/60 backdrop-blur-[4px] pointer-events-auto transition-all duration-300"
+        className="fixed inset-0 bg-black/70 backdrop-blur-[2px] pointer-events-auto transition-all duration-300"
         style={{ clipPath, WebkitClipPath: clipPath }}
         onClick={onClose}
       />
       
       <div 
-        className="fixed bg-white dark:bg-[#1e293b] p-6 rounded-2xl shadow-[0_30px_70px_rgba(0,0,0,0.8)] w-[340px] pointer-events-auto z-[200001] border border-emerald-500/40"
-        style={{ top: tooltipPos.top, left: tooltipPos.left, transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
+        className="fixed bg-white dark:bg-[#0f172a] p-6 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] w-[340px] pointer-events-auto z-[200001] border border-emerald-500/30"
+        style={{ top: tooltipPos.top, left: tooltipPos.left, transition: 'all 0.2s ease-out' }}
       >
         <div className="flex justify-between items-start mb-4">
           <div className="bg-emerald-500/10 px-2.5 py-1 rounded-lg">
@@ -157,7 +157,7 @@ const GuidedTour = ({ steps, isOpen, onClose, currentStep: externalStep, onStepC
           <Button type="text" size="small" icon={<CloseOutlined className="text-gray-400 group-hover:text-emerald-500" />} onClick={onClose} className="hover:bg-emerald-500/10 rounded-lg" />
         </div>
         
-        <p className="text-slate-600 dark:text-slate-300 text-[13.5px] leading-relaxed mb-6 font-bold">
+        <p className="text-slate-700 dark:text-slate-200 text-[14px] leading-relaxed mb-6 font-medium">
           {step.description}
         </p>
 

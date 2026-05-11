@@ -925,7 +925,7 @@ function GuilgeeNiiluulekh(
                     <div className="flex items-center gap-1 text-right text-green-600">
                       <input
                         className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700"
-                        placeholder="Барьцаа дүн"
+                        placeholder={t("Төлөх дүн")}
                         value={formatter(geree.tulsunAldangi)}
                         onDoubleClick={({ target }) =>
                           onDoubleClickKholbokhDun(target, index, "tulsunAldangi")

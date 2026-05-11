@@ -119,6 +119,7 @@ function NTses({
   onChangeBarilga,
   barilgiinId,
 }) {
+  const { t } = useTranslation();
   const scrollRef = useRef(null);
 
   const barilguud = baiguullaga?.barilguud?.filter(
@@ -165,6 +166,17 @@ function NTses({
       el.removeEventListener("wheel", handleWheel);
     };
   }, []);
+
+  if (!baiguullaga && !!ajiltan) {
+    return (
+      <nav className="hidden h-full w-44 md:block">
+        <div className="flex flex-col items-center justify-center h-40">
+           <div className="w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+           <span className="text-[10px] text-white/50 font-bold uppercase mt-3 tracking-widest">{t("Уншиж байна")}...</span>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="hidden h-full w-44 md:block">

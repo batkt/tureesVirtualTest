@@ -210,36 +210,61 @@ function TableGuilgee({
               ? mur.dataIndex === "baritsaaAvakhDun"
                 ? formatNumber(
                     (guilgeeniiToololt?.baritsaaToololt?.[0]?.dun || 0) -
-                      (guilgeeniiToololt?.baritsaaniiUldegdel?.[0]?.dun || 0)
+                      (guilgeeniiToololt?.baritsaaniiUldegdel?.[0]?.dun || 0),
+                    2
                   )
                 : mur.dataIndex === "ashiglakhUldegdel" &&
                   turul === "eneSardTulukh"
-                ? formatNumber(guilgeeniiToololt?.ashiglakhUldegdel?.[0]?.dun)
+                ? formatNumber(guilgeeniiToololt?.ashiglakhUldegdel?.[0]?.dun, 2)
                 : mur.dataIndex === "baritsaaniiUldegdel"
-                ? formatNumber(guilgeeniiToololt?.baritsaaniiUldegdel?.[0]?.dun)
-                : mur.dataIndex === "uldegdel" || mur.dataIndex === "avlagiinUldegdel"
+                ? formatNumber(
+                    (guilgeeniiToololt?.baritsaaniiUldegdel?.[0]?.dun || 
+                     garalt?.jagsaalt?.reduce((a, b) => a + (parseFloat(b.baritsaaniiUldegdel) || 0), 0)) || 0,
+                    2
+                  )
+                : mur.dataIndex === "uldegdel"
                 ? formatNumber(
                     (turul === "tsutslagdsanAvlaga"
                       ? guilgeeniiToololt?.tsutslagdsanAvlaga?.[0]?.dun
-                      : guilgeeniiToololt?.avlaga?.[0]?.dun) || 0
+                      : guilgeeniiToololt?.avlaga?.[0]?.dun) || 
+                    garalt?.jagsaalt?.reduce((a, b) => a + (parseFloat(b.uldegdel || b.niitUldegdel) || 0), 0),
+                    2
+                  )
+                : mur.dataIndex === "avlagiinUldegdel"
+                ? formatNumber(
+                    ((turul === "tsutslagdsanAvlaga"
+                      ? guilgeeniiToololt?.tsutslagdsanAvlaga?.[0]?.dun
+                      : guilgeeniiToololt?.avlaga?.[0]?.dun) || 0) + 
+                    (guilgeeniiToololt?.avlagaAldangi?.[0]?.dun || 
+                     garalt?.jagsaalt?.reduce((a, b) => a + (parseFloat(b.aldangiinUldegdel) || 0), 0)),
+                    2
                   )
                 : mur.dataIndex === "aldangiinUldegdel"
-                ? formatNumber(guilgeeniiToololt?.avlagaAldangi?.[0]?.dun || 0)
+                ? formatNumber(
+                    (guilgeeniiToololt?.avlagaAldangi?.[0]?.dun || 
+                     garalt?.jagsaalt?.reduce((a, b) => a + (parseFloat(b.aldangiinUldegdel) || 0), 0)) || 0,
+                    2
+                  )
                 : mur.dataIndex === "niitTulsunAldangi"
-                ? formatNumber(guilgeeniiToololt?.niitTulsunAldangi?.[0]?.dun || 0)
+                ? formatNumber(
+                    (guilgeeniiToololt?.niitTulsunAldangi?.[0]?.dun || 
+                     garalt?.jagsaalt?.reduce((a, b) => a + (parseFloat(b.tulsunAldangi || b.niitTulsunAldangi) || 0), 0)) || 0,
+                    2
+                  )
                 : mur.dataIndex === "voucherDun"
-                ? formatNumber(guilgeeniiToololt?.voucher?.[0]?.dun)
+                ? formatNumber(guilgeeniiToololt?.voucher?.[0]?.dun, 2)
                 : mur.dataIndex === "khungulult"
-                ? formatNumber(guilgeeniiToololt?.khungulult?.[0]?.dun)
+                ? formatNumber(guilgeeniiToololt?.khungulult?.[0]?.dun, 2)
                 : mur.dataIndex === "tulsunDun"
-                ? formatNumber(guilgeeniiToololt?.eneSardTulsun?.[0]?.dun)
+                ? formatNumber(guilgeeniiToololt?.eneSardTulsun?.[0]?.dun, 2)
                 : mur.dataIndex === "tuluvluguut" || mur.dataIndex === "tulukhDun" || mur.dataIndex === "sariinTurees"
-                ? formatNumber(guilgeeniiToololt?.eneSardTulukh?.[0]?.dun)
+                ? formatNumber(guilgeeniiToololt?.eneSardTulukh?.[0]?.dun, 2)
                 : formatNumber(
                     garalt?.jagsaalt?.reduce(
                       (a, b) => a + (parseFloat(b[mur.dataIndex]) || 0),
                       0
-                    )
+                    ),
+                    2
                   )
               : ""}
           </Table.Summary.Cell>
@@ -1553,8 +1578,9 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
             {
               too: formatNumber(
                 (_.get(guilgeeniiToololt, "avlaga.0.dun") || 0) +
-                  (_.get(guilgeeniiToololt, "avlagaAldangi.0.dun") || 0),
-                0
+                  (_.get(guilgeeniiToololt, "avlagaAldangi.0.dun") || 
+                   garaltDeduplicated?.jagsaalt?.reduce((a, b) => a + (parseFloat(b.aldangiinUldegdel) || 0), 0)),
+                2
               ),
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "avlaga",
@@ -1565,7 +1591,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "voucher.0.dun") || 0,
-                0
+                2
               ),
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "voucher",
@@ -1575,7 +1601,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0,
-                0
+                2
               ),
               turul: "tsutslagdsanAvlaga",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -1587,7 +1613,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                 eneSardTuluuguiGereenuud?.niitTuluvluguut ??
                   _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") ??
                   0,
-                0
+                2
               ),
               turul: "eneSardTulukh",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -1597,7 +1623,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0,
-                0
+                2
               ),
               turul: "eneSardTulsun",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -1607,7 +1633,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "khungulult.0.dun") || 0,
-                0
+                2
               ),
               turul: "khungulult",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -1834,7 +1860,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                   render: (a) => {
                     return (
                       <div className="w-full text-right">
-                        {formatNumber(a || 0)}
+                        {formatNumber(a || 0, 2)}
                       </div>
                     );
                   },
@@ -1903,7 +1929,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                   render: (aldangiinUldegdel) => {
                     return (
                       <div className="w-full text-right">
-                        {formatNumber(aldangiinUldegdel || 0)}
+                        {formatNumber(aldangiinUldegdel || 0, 2)}
                       </div>
                     );
                   },
@@ -1919,7 +1945,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                   render: (niitTulsunAldangi) => {
                     return (
                       <div className="w-full text-right">
-                        {formatNumber(niitTulsunAldangi || 0)}
+                        {formatNumber(niitTulsunAldangi || 0, 2)}
                       </div>
                     );
                   },
@@ -1943,7 +1969,8 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                     return (
                       <div className="w-full text-right">
                         {formatNumber(
-                          effUldegdel + (data.aldangiinUldegdel || 0)
+                          effUldegdel + (data.aldangiinUldegdel || 0),
+                          2
                         )}
                       </div>
                     );
@@ -1962,7 +1989,8 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                       <div className="w-full text-right">
                         {formatNumber(
                           (baritsaaAvakhDun || 0) -
-                            (data.baritsaaniiUldegdel || 0)
+                            (data.baritsaaniiUldegdel || 0),
+                          2
                         )}
                       </div>
                     );
@@ -1979,7 +2007,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                   render: (baritsaaniiUldegdel) => {
                     return (
                       <div className="w-full text-right">
-                        {formatNumber(baritsaaniiUldegdel || 0)}
+                        {formatNumber(baritsaaniiUldegdel || 0, 2)}
                       </div>
                     );
                   },

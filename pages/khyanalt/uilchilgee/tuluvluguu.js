@@ -66,10 +66,15 @@ import isoWeek from "dayjs/plugin/isoWeek";
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(isoWeek);
+import moment from "moment";
+import "moment/locale/mn";
 import _ from "lodash";
 import fsmApi, { FSM_BASE_URL_ZEV as FSM_BASE_URL } from "services/fsmApi";
 import { useAuth } from "services/auth";
 import useJagsaalt from "hooks/useJagsaalt";
+import { ConfigProvider } from "antd";
+import mnMN from "antd/lib/locale/mn_MN";
+import enUS from "antd/lib/locale/en_US";
 
 import { useRouter } from "next/router";
 
@@ -176,12 +181,12 @@ function Tuluvluguu() {
   const [editingProjectMsg, setEditingProjectMsg] = useState(null);
   const [editProjectMsgText, setEditProjectMsgText] = useState("");
   const [taskScore, setTaskScore] = useState(null); 
-  const [scorePoints, setScorePoints] = useState(5);
+  const [scorePoints, setScorePoints] = useState(null);
   const [scoreNote, setScoreNote] = useState("");
   const [savingScore, setSavingScore] = useState(false);
   const [loadingScore, setLoadingScore] = useState(false);
 
-  const [clientScorePoints, setClientScorePoints] = useState(5);
+  const [clientScorePoints, setClientScorePoints] = useState(null);
   const [clientScoreNote, setClientScoreNote] = useState("");
   const [savingClientScore, setSavingClientScore] = useState(false);
 
@@ -373,10 +378,10 @@ function Tuluvluguu() {
   };
 
   const tutorialSteps = [
-    { targetId: "cal-stats", title: t("Статистик"), description: t("Нийт төсөл болон ажлын явцыг эндээс нэгдсэн байдлаар харж болно.") },
-    { targetId: "cal-sidebar", title: t("Төслүүд"), description: t("Төслүүдээ төрөлжүүлэн харах, шинэ төсөл нэмэх болон хайлт хийх хэсэг.") },
-    { targetId: "cal-views", title: t("Харагдац"), description: t("Сар, долоо хоног, өдрөөр  эндээс хурдан сольж болно.") },
-    { targetId: "cal-main", title: t("Хуанли"), description: t("Ажлуудаа хуанли дээр хянах, шинэ ажил нэмэх үндсэн хэсэг. Тухайн өдөр дээр дарж шинэ ажил үүсгэнэ үү.") },
+    { targetId: "cal-stats", title: t("Статистик"), description: t("Систем дээрх нийт төслүүд, ажлын гүйцэтгэл болон хугацаа хэтэрсэн даалгавруудыг нэгдсэн байдлаар эндээс хянах боломжтой.") },
+    { targetId: "cal-sidebar", title: t("Төслүүд удирдлага"), description: t("Шинэ төсөл үүсгэх, төслүүдээ өнгөөр ялгах болон төслийн чат ашиглан багтайгаа харилцах хэсэг.") },
+    { targetId: "cal-views", title: t("Харагдац солих"), description: t("Өөрийн ажлын онцлогоос хамаарч Сар, Долоо хоног, Өдөр болон Төлөвлөгөө (Agenda) харагдацуудын хооронд хурдан шилжих боломжтой.") },
+    { targetId: "cal-main", title: t("Төлөвлөгөөний хуанли"), description: t("Ажлуудаа хуанли дээр шууд чирч зөөх, шинэ ажил нэмэх болон төлөв өөрчлөх үндсэн талбар. Тухайн өдөр дээр дарж шинэ даалгавар үүсгэнэ үү.") },
   ];
 
   const ajiltanJagsaalt = useJagsaalt("/ajiltan");
@@ -808,6 +813,11 @@ function Tuluvluguu() {
         if (!b.baraaId) continue;
         const item = baraas.find(i => i._id === b.baraaId);
         const reqQty = Math.abs(Number(b.too) || 0);
+        if (reqQty <= 0) {
+          toast.warning(`${item?.ner || t("Бараа")}-ны тоо хэмжээ 0-ээс их байх ёстой`);
+          setSavingTask(false);
+          return;
+        }
         if (item && reqQty > (item.uldegdel || 0)) {
           toast.warning(`${item.ner} барааны үлдэгдэл хүрэлцэхгүй байна. (Боломжит: ${item.uldegdel || 0})`);
           setSavingTask(false);
@@ -978,18 +988,15 @@ function Tuluvluguu() {
       return deadline.isBefore(dayjs());
     }).length;
 
+    const pendingCount = filteredTasks.filter(t => t.tuluv === "shine").length;
+    const ongoingCount = filteredTasks.filter(t => t.tuluv === "khiigdej bui").length;
+
     return [
       { title: t("Нийт төсөл"), value: projects.length.toString() },
-      { title: t("Сонгосон ажил"), value: filteredTasks.length.toString() },
+      { title: t("Хүлээгдэж буй"), value: pendingCount.toString() },
+      { title: t("Хийгдэж буй"), value: ongoingCount.toString() },
       { title: t("Дууссан"), value: filteredTasks.filter(t => t.tuluv === "duussan" || t.tuluv === "shalga").length.toString() },
       { title: t("Хэтэрсэн"), value: overdueCount.toString() },
-      // { title: t("Яаралтай"), value: filteredTasks.filter(t => t.zereglel === "yaraltai" || t.zereglel === "nen yaraltai").length.toString() },
-      { 
-        title: t("Гүйцэтгэл"), 
-        value: companyKpis.length > 0 
-          ? (Math.round(companyKpis.reduce((acc, k) => acc + (k.kpiHuvv || 0), 0) / companyKpis.length)) + "%"
-          : "0%" 
-      },
     ];
   }, [projects.length, filteredTasks, t]);
 useEffect(() => {
@@ -1098,14 +1105,12 @@ useEffect(() => {
         }
         setClientScoreNote(res.data.data?.uilchluulegchOnoosonTailbar ?? "");
       } else {
-        // No data, reset to default
-        throw new Error("No data");
       }
     } catch (err) {
       setTaskScore(null);
-      setScorePoints(5);
+      setScorePoints(null);
       setScoreNote("");
-      setClientScorePoints(5);
+      setClientScorePoints(null);
       setClientScoreNote("");
     } finally {
       setLoadingScore(false);
@@ -1181,9 +1186,9 @@ useEffect(() => {
       if (tid) {
         // Reset score states immediately when opening a new task
         setTaskScore(null);
-        setScorePoints(5);
+        setScorePoints(null);
         setScoreNote("");
-        setClientScorePoints(5);
+        setClientScorePoints(null);
         setClientScoreNote("");
         
         fetchSubtasks(tid);
@@ -1195,9 +1200,9 @@ useEffect(() => {
       setIsAddingSubtask(false);
       setNewSubtaskTitle("");
       setTaskScore(null);
-      setScorePoints(5);
+      setScorePoints(null);
       setScoreNote("");
-      setClientScorePoints(5);
+      setClientScorePoints(null);
       setClientScoreNote("");
       setReplyTo(null);
       setEditingMsg(null);
@@ -1666,6 +1671,7 @@ useEffect(() => {
   const progressPercent = totalSubtasksCount === 0 ? 0 : Math.round((completedSubtasksCount / totalSubtasksCount) * 100);
 
   return (
+    <ConfigProvider locale={i18n.language === 'mn' ? mnMN : enUS}>
     <Admin title="Төлөвлөгөө" khuudasniiNer="tuluvluguu">
       <div className="col-span-12 flex flex-col xl:flex-row h-auto xl:h-H8HalfRem w-full -mx-0 xl:-mx-1 -mt-2 text-black lg:rounded-2xl shadow-2xl relative animate-entrance">
         <div className="flex-1 flex flex-col p-4 overflow-hidden relative min-w-0">
@@ -1739,13 +1745,13 @@ useEffect(() => {
                     </Tooltip>
                   </div>
                    <div className="hidden group-hover:flex items-center space-x-1 shrink-0">
-                     <Tooltip title="Чат">
+                     <Tooltip title={t("Чат")} destroyTooltipOnHide mouseLeaveDelay={0.1}>
                        <Button type="text" size="small" icon={<MessageOutlined className="text-gray-400 hover:text-teal-500 text-[12px]" />} onClick={(e) => openProjectChat(p, e)} />
                      </Tooltip>
-                     <Tooltip title="Засах">
+                     <Tooltip title={t("Засах")} destroyTooltipOnHide mouseLeaveDelay={0.1}>
                        <Button type="text" size="small" icon={<EditOutlined className="text-gray-400 hover:text-blue-500 text-[12px]" />} onClick={(e) => { e.stopPropagation(); handleEditProject(p); }} />
                      </Tooltip>
-                     <Popconfirm title="Төслийг устгах уу?" onConfirm={(e) => { e.stopPropagation(); handleDeleteProject(p.id); }} onCancel={(e) => e.stopPropagation()}>
+                     <Popconfirm title={t("Төслийг устгах уу?")} onConfirm={(e) => { e.stopPropagation(); handleDeleteProject(p.id); }} onCancel={(e) => e.stopPropagation()}>
                        <Button type="text" size="small" icon={<DeleteOutlined className="text-gray-400 hover:text-red-500 text-[12px]" />} onClick={(e) => e.stopPropagation()} />
                      </Popconfirm>
                    </div>
@@ -1777,9 +1783,10 @@ useEffect(() => {
                     bordered={false}
                     className="font-bold text-[12px] md:text-[12px] min-w-[100px] md:min-w-[150px] text-center text-gray-800 dark:text-gray-100 px-2 uppercase shadow-none cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg flex items-center justify-center h-full"
                     format={(date) => {
-                      if (view === "Month") return date.format("YYYY - MMMM");
+                      const loc = i18n.language === 'mn' ? 'mn' : 'en';
+                      if (view === "Month") return i18n.language === 'mn' ? date.locale('mn').format("YYYY оны MMMM") : date.locale('en').format("MMMM YYYY");
                       if (view === "Week") return `${date.startOf('isoWeek').format("MM/DD")} - ${date.endOf('isoWeek').format("MM/DD")}`;
-                      return date.format("YYYY/MM/DD");
+                      return date.locale(loc).format("YYYY/MM/DD");
                     }}
                   />
                   <Button type="text" size="small" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white p-0 flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-lg" onClick={next}>
@@ -1858,7 +1865,12 @@ useEffect(() => {
                         
                         <div className="flex flex-col space-y-1 overflow-hidden">
                           {dayTasks.slice(0, 3).map(task => (
-                            <Tooltip key={task.id} title={`${task.projectName}: ${task.title}`}>
+                            <Tooltip 
+                              key={task.id} 
+                              title={`${task.projectName}: ${task.title}`}
+                              destroyTooltipOnHide={true}
+                              mouseLeaveDelay={0.1}
+                            >
                               <div 
                                 onClick={(e) => handleTaskClick(task, e)}
                                 className="group/entry flex items-center space-x-1.5 px-1.5 py-1 rounded-md text-[12px] font-bold border-l-2 hover:opacity-80 transition-opacity cursor-pointer text-gray-800 dark:text-gray-200 tracking-tight shrink-0 relative"
@@ -2000,7 +2012,7 @@ useEffect(() => {
                   <div className="p-3 border-r border-gray-100 dark:border-gray-900 text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase flex items-center justify-center">{t("ЦАГ")}</div>
                   <div className="col-span-7 p-3 text-center">
                     <div className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{t(currentDate.format("dddd"))}</div>
-                    <div className="text-[12px] font-bold text-teal-500">{i18n.language === 'mn' ? currentDate.format(`YYYY ${t("оны")} MMMM DD`) : currentDate.format("MMMM DD, YYYY")}</div>
+                    <div className="text-[12px] font-bold text-teal-500">{i18n.language === 'mn' ? currentDate.locale('mn').format(`YYYY ${t("оны")} MMMM DD`) : currentDate.locale('en').format("MMMM DD, YYYY")}</div>
                   </div>
                 </div>
                 <div className="flex-1 grid grid-cols-8 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700">
@@ -2100,11 +2112,11 @@ useEffect(() => {
                 ? "text-blue-600 dark:text-blue-400 bg-blue-400/10"
                 : "text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700";
               const statusLabel = (tuluv) => {
-                if (tuluv === "duussan") return "Дууссан";
-                if (tuluv === "khiigdej bui") return "Хийгдэж буй";
-                if (tuluv === "khugatsaa khetersen") return "Хугацаа хэтэрсэн";
-                if (tuluv === "shalga") return "Шалгах";
-                return "Шинэ ажил";
+                if (tuluv === "duussan") return t("Дууссан");
+                if (tuluv === "khiigdej bui") return t("Хийгдэж буй");
+                if (tuluv === "khugatsaa khetersen") return t("Хугацаа хэтэрсэн");
+                if (tuluv === "shalga") return t("Шалгах");
+                return t("Шинэ ажил");
               };
               const priorityDot = (z) => z === "nen yaraltai" ? "bg-red-500" : z === "yaraltai" ? "bg-amber-500" : z === "engiin" ? "bg-yellow-400" : "bg-green-500";
 
@@ -2245,13 +2257,13 @@ useEffect(() => {
                           <span className="text-[13px] font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate transition-colors">{p.name}</span>
                         </div>
                         <div className="opacity-0 group-hover:opacity-100 flex items-center space-x-1 shrink-0 transition-opacity">
-                          <Tooltip title="Чат">
+                          <Tooltip title={t("Чат")} destroyTooltipOnHide mouseLeaveDelay={0.1}>
                             <Button type="text" size="small" icon={<MessageOutlined className="text-gray-400 hover:text-emerald-500 text-[12px]" />} onClick={(e) => openProjectChat(p, e)} />
                           </Tooltip>
-                          <Tooltip title="Засах">
+                          <Tooltip title={t("Засах")} destroyTooltipOnHide mouseLeaveDelay={0.1}>
                             <Button type="text" size="small" icon={<EditOutlined className="text-gray-400 hover:text-blue-500 text-[12px]" />} onClick={(e) => { e.stopPropagation(); handleEditProject(p); }} />
                           </Tooltip>
-                          <Popconfirm title="Төслийг устгах уу?" onConfirm={(e) => { e.stopPropagation(); handleDeleteProject(p.id); }} onCancel={(e) => e.stopPropagation()}>
+                          <Popconfirm title={t("Төслийг устгах уу?")} onConfirm={(e) => { e.stopPropagation(); handleDeleteProject(p.id); }} onCancel={(e) => e.stopPropagation()}>
                             <Button type="text" size="small" icon={<DeleteOutlined className="text-gray-400 hover:text-red-500 text-[12px]" />} onClick={(e) => e.stopPropagation()} />
                           </Popconfirm>
                         </div>
@@ -2663,11 +2675,11 @@ useEffect(() => {
                                     const alreadySelected = currentBaraaList.some((b, idx) => b?.baraaId === i._id && idx !== name);
                                     const isNegative = (i.uldegdel || 0) < 0;
                                     return (
-                                      <Select.Option key={i._id} value={i._id} label={i.ner} disabled={alreadySelected}>
+                                      <Select.Option key={i._id} value={i._id} label={i.ner} disabled={alreadySelected || (i.uldegdel || 0) <= 0}>
                                         <div className="flex justify-between items-center w-full">
                                           <span>{i.ner}</span>
-                                          <span className={`font-bold ${isNegative ? 'text-red-500' : 'text-gray-400'}`}>
-                                            ({i.uldegdel || 0} {negj}) {alreadySelected ? '(сонгогдсон)' : ''}
+                                          <span className={`font-bold ${(i.uldegdel || 0) <= 0 ? 'text-red-500' : 'text-gray-400'}`}>
+                                            ({i.uldegdel || 0} {negj}) {alreadySelected ? `(${t("Сонгосон")})` : (i.uldegdel || 0) <= 0 ? `(${t("Үлдэгдэлгүй")})` : ''}
                                           </span>
                                         </div>
                                       </Select.Option>
@@ -3260,11 +3272,14 @@ useEffect(() => {
                     min={0}
                     max={10}
                     step={0.5}
-                    value={scorePoints}
+                    value={scorePoints || 0}
                     onChange={e => setScorePoints(Number(e.target.value))}
                     className={`w-full h-2 rounded-full ${taskScore?.onooson != null ? 'accent-gray-400 opacity-50 cursor-not-allowed' : 'accent-teal-500'}`}
                     disabled={taskScore?.onooson != null}
                   />
+                  {!scorePoints && !taskScore?.onooson && (
+                    <p className="text-[10px] font-bold text-amber-500 uppercase animate-pulse">{t("Оноогоо сонгоно уу")}</p>
+                  )}
                   <Input.TextArea
                     placeholder="Тайлбар (заавал биш)"
                     value={scoreNote}
@@ -3942,6 +3957,7 @@ useEffect(() => {
         </div>
       </Modal>
     </Admin>
+    </ConfigProvider>
   );
 }
 
