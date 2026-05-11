@@ -588,19 +588,25 @@ function guilgeeniiTuukh({ token }) {
     isValidating,
   } = useJagsaalt(sericeName, query, order, undefined, searchKeys, null, 100);
 
-  useEffect(() => {
-    if (tulukhOgnoo !== undefined) {
-      mutate();
-    }
-  }, [tulukhOgnoo, mutate]);
-
-const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
+const { 
+  eneSardTuluuguiGereenuud, 
+  setEneSardTuluuguiGereenuud,
+  eneSardTuluuguiGereenuudMutate,
+  isValidating: isValidatingPlan
+} =
   useEneSardTuluuguiGereenuudAvya(
     (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun") && token,
       ognoo,
       query,
       showTsutslagdsanAvlagaColumn === true
     );
+
+  useEffect(() => {
+    if (tulukhOgnoo !== undefined) {
+      mutate();
+      eneSardTuluuguiGereenuudMutate();
+    }
+  }, [tulukhOgnoo, mutate, eneSardTuluuguiGereenuudMutate]);
 
   const aldangiBodoyo = async () => {
     if (!baiguullaga?._id || aldangiBodokhLoading) return;
@@ -638,7 +644,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
   const { gereeniiMedeelel, onSearch } = useMemo(() => {
     return {
       gereeniiMedeelel:
-        (turul === "baritsaaAshiglasanDun")
+        (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun")
   ? eneSardTuluuguiGereenuud
   : data,
       onSearch: (searchValue) => {
@@ -697,7 +703,11 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
         width: "2.5rem",
         align: "center",
         fixed: "left",
-        render: (text, record, index) => index + 1,
+        render: (text, record, index) => {
+          const current = gereeniiMedeelel?.khuudasniiDugaar || 1;
+          const pageSize = gereeniiMedeelel?.khuudasniiKhemjee || 100;
+          return (current - 1) * pageSize + index + 1;
+        },
       },
       {
         width: 100,
@@ -1567,7 +1577,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
       className="p-0 md:p-4"
       onSearch={onSearch}
       tsonkhniiId="61c2c6bc1c2830c4e6f90cb5"
-      loading={isValidating}
+      loading={isValidating || isValidatingPlan}
       setNeesenEsekh={setNeesenEsekh}
     >
       <Card className="cardgrid col-span-12">
