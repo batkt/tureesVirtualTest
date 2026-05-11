@@ -195,17 +195,7 @@ function TableGuilgee({
     guilgeeniiToololt,
   }) {
     const [uldegdel, setUldegdel] = useState(0);
-    useEffect(() => {
-      console.log("TableGuilgee - Backend Totals:", {
-        avlaga: getBackendTotal("avlagiinUldegdel"),
-        tsutslagdsanAvlaga: getBackendTotal("tsutslagdsanAvlaga"),
-        eneSardTulukh: getBackendTotal("eneSardTulukh"),
-        eneSardTulsun: getBackendTotal("eneSardTulsun"),
-        khungulult: getBackendTotal("khungulult"),
-        voucher: getBackendTotal("voucherDun"),
-        baritsaaniiUldegdel: getBackendTotal("baritsaaniiUldegdel"),
-      });
-    }, [garalt, columns, guilgeeniiToololt]);
+    
 
 
     const getBackendTotal = (dataIndex) => {
@@ -693,9 +683,6 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
     return { ...raw, jagsaalt: filtered, niitMur: raw?.niitMur ?? filtered.length };
   }, [gereeniiMedeelel, turul]);
 
-  useEffect(() => {
-    console.log("guilgeeniiToololt from Backend:", guilgeeniiToololt);
-  }, [guilgeeniiToololt]);
 
   useEffect(() => {
     if (gereeniiMedeelel?.jagsaalt) {
@@ -1661,9 +1648,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                   <div className="space-y-1">
                     <div className="font-bold border-b border-white/20 pb-1 mb-1">{t(mur.utga)}</div>
                     <div>{t(mur.tailbar)}</div>
-                    <div className="mt-2 pt-1 border-t border-white/20 text-[10px]">
-                      Backend: {formatNumber(mur.raw)}
-                    </div>
+                    
                   </div>
                 }>
                   <div className="relative h-20 w-[65vw] overflow-hidden rounded-2xl sm:h-20 sm:w-auto">
