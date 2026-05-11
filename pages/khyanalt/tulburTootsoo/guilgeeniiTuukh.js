@@ -196,7 +196,16 @@ function TableGuilgee({
   }) {
     const [uldegdel, setUldegdel] = useState(0);
     useEffect(() => {
-    }, [garalt, setLoadingIndex, columns]);
+      console.log("TableGuilgee - Backend Totals:", {
+        avlaga: getBackendTotal("avlagiinUldegdel"),
+        tsutslagdsanAvlaga: getBackendTotal("tsutslagdsanAvlaga"),
+        eneSardTulukh: getBackendTotal("eneSardTulukh"),
+        eneSardTulsun: getBackendTotal("eneSardTulsun"),
+        khungulult: getBackendTotal("khungulult"),
+        voucher: getBackendTotal("voucherDun"),
+        baritsaaniiUldegdel: getBackendTotal("baritsaaniiUldegdel"),
+      });
+    }, [garalt, columns, guilgeeniiToololt]);
 
 
     const getBackendTotal = (dataIndex) => {
@@ -255,41 +264,15 @@ function TableGuilgee({
             index={index}
             align="right"
           >
-            {mur.summary
-              ? mur.dataIndex === "baritsaaAvakhDun"
-                ? formatNumber(
-                    (garalt?.jagsaalt?.reduce(
-                      (a, b) => a + (parseFloat(b.baritsaaAvakhDun) || 0),
-                      0
-                    ) || 0) -
-                      (garalt?.jagsaalt?.reduce(
-                        (a, b) => a + (parseFloat(b.baritsaaniiUldegdel) || 0),
-                        0
-                      ) || 0)
-                  )
-                  : mur.dataIndex === "ashiglakhUldegdel" && turul === "eneSardTulukh"
-                  ? formatNumber(
-                      garalt?.jagsaalt?.reduce(
-                        (a, b) => a + (parseFloat(b.ashiglakhUldegdel) || 0),
-                        0
-                      )
-                    )
-                : mur.dataIndex === "baritsaaniiUldegdel"
-                ? formatNumber(
-                    garalt?.jagsaalt?.reduce(
-                      (a, b) => a + (parseFloat(b.baritsaaniiUldegdel) || 0),
-                      0
-                    )
-                  )
-                : getBackendTotal(mur.dataIndex) != null
-                ? formatNumber(getBackendTotal(mur.dataIndex))
-                : formatNumber(
-                    garalt?.jagsaalt?.reduce(
-                      (a, b) => a + (parseFloat(b[mur.dataIndex]) || 0),
-                      0
-                    )
-                  )
-              : ""}
+            {mur.summary ? (
+              <div className="font-bold">
+                {getBackendTotal(mur.dataIndex) !== null 
+                  ? formatNumber(getBackendTotal(mur.dataIndex))
+                  : ""}
+              </div>
+            ) : (
+              ""
+            )}
           </Table.Summary.Cell>
         ))}
       </Table.Summary.Row>
@@ -401,7 +384,7 @@ function guilgeeniiTuukh({ token }) {
     moment(moment().endOf("month").format("YYYY-MM-DD 23:59:59")),
   ]);
   const [tulukhOgnoo, setTulukhOgnoo] = React.useState();
-  const [turul, setTurul] = React.useState("");
+  const [turul, setTurul] = React.useState("avlaga");
   const [neesenEsekh, setNeesenEsekh] = useState(false);
   const [showTsutslagdsanAvlagaColumn, setShowTsutslagdsanAvlagaColumn] =
     useState(false);
@@ -552,7 +535,7 @@ function guilgeeniiTuukh({ token }) {
         tuluv: -1,
         barilgiinId,
       };
-} else if (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun") {
+} else if (turul === "baritsaaAshiglasanDun") {
   sericeName = null;
   query = {
     davkhar,
@@ -665,7 +648,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
   const { gereeniiMedeelel, onSearch } = useMemo(() => {
     return {
       gereeniiMedeelel:
-        (turul === "eneSardTulukh" || turul === "baritsaaAshiglasanDun")
+        (turul === "baritsaaAshiglasanDun")
   ? eneSardTuluuguiGereenuud
   : data,
       onSearch: (searchValue) => {
@@ -709,6 +692,11 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
     }
     return { ...raw, jagsaalt: filtered, niitMur: raw?.niitMur ?? filtered.length };
   }, [gereeniiMedeelel, turul]);
+
+  useEffect(() => {
+    console.log("guilgeeniiToololt from Backend:", guilgeeniiToololt);
+  }, [guilgeeniiToololt]);
+
   useEffect(() => {
     if (gereeniiMedeelel?.jagsaalt) {
     }
@@ -1584,6 +1572,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
     return forExcel;
   }, [columns]);
 
+
   return (
     <Admin
       title="Гүйлгээний түүх"
@@ -1598,10 +1587,8 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
         <div className="hideScroll grid w-full grid-cols-1 gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid-cols-6 sm:py-2 md:gap-6 2xl:grid-cols-12">
           {[
             {
-              too: formatNumber(
-                _.get(guilgeeniiToololt, "avlaga.0.dun") || 0,
-                0
-              ),
+              too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0, 0),
+              raw: _.get(guilgeeniiToololt, "avlaga.0.dun") || 0,
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "avlaga",
               utga: "Хуримтлагдсан авлага",
@@ -1609,32 +1596,24 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                 "Өмнө сарын төлбөрийн үлдэгдлүүдийн нийлбэр болон энэ сарын тооцоо болно.",
             },
             {
-              too: formatNumber(
-                _.get(guilgeeniiToololt, "voucher.0.dun") || 0,
-                0
-              ),
+              too: formatNumber(_.get(guilgeeniiToololt, "voucher.0.dun") || 0, 0),
+              raw: _.get(guilgeeniiToololt, "voucher.0.dun") || 0,
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "voucher",
               utga: "Ваучер төлөлт",
               tailbar: "Огноонд хамаарагдах бүх Ваучер төлөлтийн нийлбэр дүн",
             },
             {
-              too: formatNumber(
-                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0,
-                0
-              ),
+              too: formatNumber(_.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0, 0),
+              raw: _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0,
               turul: "tsutslagdsanAvlaga",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Цуцлагдсан гэрээний авлага",
               tailbar: "Идэвхигүй буюу цуцлагдсан гэрээний нийт авлага",
             },
             {
-              too: formatNumber(
-                eneSardTuluuguiGereenuud?.niitTuluvluguut ??
-                  _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") ??
-                  0,
-                0
-              ),
+              too: formatNumber(_.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0, 0),
+              raw: _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0,
               turul: "eneSardTulukh",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Төлөвлөгөө / сар",
@@ -1645,6 +1624,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                 _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0,
                 0
               ),
+              raw: _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0,
               turul: "eneSardTulsun",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Гүйцэтгэл / сар",
@@ -1655,6 +1635,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                 _.get(guilgeeniiToololt, "khungulult.0.dun") || 0,
                 0
               ),
+              raw: _.get(guilgeeniiToololt, "khungulult.0.dun") || 0,
               turul: "khungulult",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Хөнгөлөлт / сар",
@@ -1676,7 +1657,15 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <Tooltip title={<div>{t(mur.tailbar)}</div>}>
+                <Tooltip title={
+                  <div className="space-y-1">
+                    <div className="font-bold border-b border-white/20 pb-1 mb-1">{t(mur.utga)}</div>
+                    <div>{t(mur.tailbar)}</div>
+                    <div className="mt-2 pt-1 border-t border-white/20 text-[10px]">
+                      Backend: {formatNumber(mur.raw)}
+                    </div>
+                  </div>
+                }>
                   <div className="relative h-20 w-[65vw] overflow-hidden rounded-2xl sm:h-20 sm:w-auto">
                     <div className="absolute inset-0 bg-green-500 opacity-0 transition-opacity duration-300 group-hover:opacity-10"></div>
                     <div className="relative h-full rounded-2xl p-3">

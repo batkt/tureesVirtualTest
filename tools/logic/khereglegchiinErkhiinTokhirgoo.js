@@ -251,6 +251,12 @@ export const tsonknuud = [
     tokhirgoo: [],
   },
   {
+    key: "/khyanalt/tailan/avlagaTovchoo",
+    ner: "Авлагын товчоо",
+    tailbar: "Түрээслэгч бүрээр авлагын гүйлгээний товчоо тайлан.",
+    tokhirgoo: [],
+  },
+  {
     key: "/khyanalt/tailan/dashboard",
     ner: "Хяналтын самбар",
     tailbar: "Барилгын үйл ажиллагааны нэгдсэн хяналтын самбар.",
@@ -1027,6 +1033,12 @@ export const khuudasnuud = [
             }}
           />
         ),
+      },
+      {
+        ner: "Авлагын товчоо",
+        khuudasniiNer: "avlagaTovchoo",
+        href: "/khyanalt/tailan/avlagaTovchoo",
+        icon: <TbReportMoney style={{ width: "24", height: "24" }} />,
       },
     ],
   },
