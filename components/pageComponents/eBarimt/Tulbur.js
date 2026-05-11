@@ -93,10 +93,13 @@ function Tulbur(
           barilgiinId: data.barilgiinId,
         };
 
-        if (baiguullagaEsekh === true || irgenEsekh === true) {
+        if (baiguullagaEsekh === true) {
           body.turul = "3";
           body.register = register;
           body.customerTin = customerTin;
+        } else if (irgenEsekh === true) {
+          body.turul = "1";
+          body.register = register;
         }
 
         uilchilgee(token)

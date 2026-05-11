@@ -85,43 +85,34 @@ function GereeBaiguulakh({ token }) {
   const [gereekharakhTovch, setGereekharakhTovch] = useState(false);
 
   useEffect(() => {
-
     const defaultPrefix = `ГД${moment(new Date()).format("YYMMDD")}`;
     if (khadgalakhGeree.gereeniiDugaar === defaultPrefix) {
-      const unuudur = new Date();
-      const todayStart = new Date(unuudur.getFullYear(), unuudur.getMonth(), unuudur.getDate());
-      
       uilchilgee(token)
-        .get("/geree/tooAvya", {
+        .get("/geree/gereeniiDugaarlaltAvya", {
           params: {
             query: {
               barilgiinId: barilgiinId,
               baiguullagiinId: baiguullaga?._id,
-              gereeniiOgnoo: {
-                $gte: moment(todayStart).format("YYYY-MM-DD 00:00:00"),
-              },
             },
           },
         })
-        .then(({ data: resData }) => {
-          const count = resData?.niitMur ?? resData ?? 0;
-          const nextDugaar = (parseInt(count) || 0) + 1;
-          const prefix = `ГД${moment(new Date()).format("YYMMDD")}`;
-          const finalDugaar = `${prefix}${nextDugaar.toString().padStart(2, "0")}`;
+        .then(({ data: nextDugaar }) => {
+          const finalDugaar = `${defaultPrefix}${String(nextDugaar).padStart(2, "0")}`;
           setKhagalakhGeree((prev) => ({
             ...prev,
             gereeniiDugaar: finalDugaar,
           }));
         })
         .catch((err) => {
-          const prefix = `ГД${moment(new Date()).format("YYMMDD")}`;
           setKhagalakhGeree((prev) => ({
             ...prev,
-            gereeniiDugaar: `${prefix}01`,
+            gereeniiDugaar: `${defaultPrefix}01`,
           }));
         });
     }
   }, [khadgalakhGeree.gereeniiDugaar, token, barilgiinId, baiguullaga]);
+
+
 
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
   const [aktiinZagvar, setAktiinZagvar] = React.useState();
