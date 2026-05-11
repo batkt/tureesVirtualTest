@@ -184,6 +184,7 @@ function TableGuilgee({
   turul,
   showTsutslagdsanAvlagaColumn,
   setShowTsutslagdsanAvlagaColumn,
+  guilgeeniiToololt,
 }) {
   const { t } = useTranslation();
   function UilgelAvya({
@@ -191,28 +192,10 @@ function TableGuilgee({
     columns,
     turul,
     showTsutslagdsanAvlagaColumn,
+    guilgeeniiToololt,
   }) {
     const [uldegdel, setUldegdel] = useState(0);
-    useEffect(() => {
-    }, [garalt, setLoadingIndex, columns]);
-
-    const uldegdelSum =
-      (turul === "eneSardTulukh" || turul === "eneSardTulsun") &&
-      showTsutslagdsanAvlagaColumn
-        ? (garalt?.jagsaalt || []).reduce(
-            (sum, b) => {
-              const isCancelled =
-                b.tuluv == -1 || Number(b.tuluv) === -1;
-              const raw =
-                isCancelled
-                  ? b.uldegdel ?? b.niitUldegdel ?? b.tsutslagdsanAvlaga ?? b.tsutsalsanUldegdel ?? 0
-                  : b.uldegdel ?? 0;
-              const val = raw;
-              return sum + (parseFloat(val) || 0);
-            },
-            0
-          )
-        : null;
+    useEffect(() => {}, [garalt, setLoadingIndex, columns]);
 
     return (
       <Table.Summary.Row>
@@ -226,49 +209,32 @@ function TableGuilgee({
             {mur.summary
               ? mur.dataIndex === "baritsaaAvakhDun"
                 ? formatNumber(
-                    (garalt?.jagsaalt?.reduce(
-                      (a, b) => a + (parseFloat(b.baritsaaAvakhDun) || 0),
-                      0
-                    ) || 0) -
-                      (garalt?.jagsaalt?.reduce(
-                        (a, b) => a + (parseFloat(b.baritsaaniiUldegdel) || 0),
-                        0
-                      ) || 0)
+                    (guilgeeniiToololt?.baritsaaToololt?.[0]?.dun || 0) -
+                      (guilgeeniiToololt?.baritsaaniiUldegdel?.[0]?.dun || 0)
                   )
-                  : mur.dataIndex === "ashiglakhUldegdel" && turul === "eneSardTulukh"
-                  ? formatNumber(
-                      garalt?.jagsaalt?.reduce(
-                        (a, b) => a + (parseFloat(b.ashiglakhUldegdel) || 0),
-                        0
-                      )
-                    )
+                : mur.dataIndex === "ashiglakhUldegdel" &&
+                  turul === "eneSardTulukh"
+                ? formatNumber(guilgeeniiToololt?.ashiglakhUldegdel?.[0]?.dun)
                 : mur.dataIndex === "baritsaaniiUldegdel"
+                ? formatNumber(guilgeeniiToololt?.baritsaaniiUldegdel?.[0]?.dun)
+                : mur.dataIndex === "uldegdel" || mur.dataIndex === "avlagiinUldegdel"
                 ? formatNumber(
-                    garalt?.jagsaalt?.reduce(
-                      (a, b) => a + (parseFloat(b.baritsaaniiUldegdel) || 0),
-                      0
-                    )
+                    (turul === "tsutslagdsanAvlaga"
+                      ? guilgeeniiToololt?.tsutslagdsanAvlaga?.[0]?.dun
+                      : guilgeeniiToololt?.avlaga?.[0]?.dun) || 0
                   )
-                : mur.dataIndex === "avlagiinUldegdel"
-                ? formatNumber(
-                    garalt?.jagsaalt?.reduce(
-                      (a, b) => {
-                        const isCancelled =
-                          b.tuluv == -1 || Number(b.tuluv) === -1;
-                        const raw = parseFloat(b.uldegdel);
-                        const effUldegdel =
-                          isCancelled && raw == null 
-                            ? parseFloat(b.tsutsalsanUldegdel) || 0
-                            : parseFloat(b.uldegdel) || 0;
-                        return (
-                          a + effUldegdel + (parseFloat(b.aldangiinUldegdel) || 0)
-                        );
-                      },
-                      0
-                    )
-                  )
-                : mur.dataIndex === "uldegdel" && uldegdelSum != null
-                ? formatNumber(uldegdelSum)
+                : mur.dataIndex === "aldangiinUldegdel"
+                ? formatNumber(guilgeeniiToololt?.avlagaAldangi?.[0]?.dun || 0)
+                : mur.dataIndex === "niitTulsunAldangi"
+                ? formatNumber(guilgeeniiToololt?.niitTulsunAldangi?.[0]?.dun || 0)
+                : mur.dataIndex === "voucherDun"
+                ? formatNumber(guilgeeniiToololt?.voucher?.[0]?.dun)
+                : mur.dataIndex === "khungulult"
+                ? formatNumber(guilgeeniiToololt?.khungulult?.[0]?.dun)
+                : mur.dataIndex === "tulsunDun"
+                ? formatNumber(guilgeeniiToololt?.eneSardTulsun?.[0]?.dun)
+                : mur.dataIndex === "tuluvluguut" || mur.dataIndex === "tulukhDun" || mur.dataIndex === "sariinTurees"
+                ? formatNumber(guilgeeniiToololt?.eneSardTulukh?.[0]?.dun)
                 : formatNumber(
                     garalt?.jagsaalt?.reduce(
                       (a, b) => a + (parseFloat(b[mur.dataIndex]) || 0),
@@ -355,6 +321,7 @@ function TableGuilgee({
             columns={columns}
             turul={turul}
             showTsutslagdsanAvlagaColumn={showTsutslagdsanAvlagaColumn}
+            guilgeeniiToololt={guilgeeniiToololt}
           />{" "}
         </Table.Summary>
       )}
@@ -368,6 +335,7 @@ const searchKeys = [
   "talbainDugaar",
   "gereeniiDugaar",
   "utas",
+  "talbainKhemjee",
   "ovog",
   "ner",
 ];
@@ -395,13 +363,16 @@ function guilgeeniiTuukh({ token }) {
   const [aldangiBodokhLoading, setAldangiBodokhLoading] = useState(false);
   const [aldangiUstgahLoading, setAldangiUstgahLoading] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
+  const [search, setSearch] = useState("");
   const { guilgeeniiToololt, guilgeeniiToololtMutate } =
     useGuilgeeniiToololtAvya(
       token,
       ognoo,
       barilgiinId,
       baiguullaga?._id,
-      showTsutslagdsanAvlagaColumn
+      showTsutslagdsanAvlagaColumn,
+      search,
+      davkhar
     );
   const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
     useTuluugiiGereeniiToololtAvya(token, ognoo);
@@ -651,6 +622,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
   ? eneSardTuluuguiGereenuud
   : data,
       onSearch: (searchValue) => {
+        setSearch(searchValue);
         onSearchMedeelel(searchValue);
         setEneSardTuluuguiGereenuud((a) => ({
           ...a,
@@ -1580,7 +1552,8 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
           {[
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "avlaga.0.dun") || 0,
+                (_.get(guilgeeniiToololt, "avlaga.0.dun") || 0) +
+                  (_.get(guilgeeniiToololt, "avlagaAldangi.0.dun") || 0),
                 0
               ),
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -1909,6 +1882,17 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
                   sorter: () => 0,
                 },
                 {
+                  title: t("м2"),
+                  width: "3rem",
+                  dataIndex: "talbainKhemjee",
+                  ellipsis: true,
+                  align: "center",
+                  render(a) {
+                    return a;
+                  },
+                  sorter: () => 0,
+                },
+                {
                   title: t("Алданги"),
                   dataIndex: "aldangiinUldegdel",
                   className: "text-center",
@@ -2041,6 +2025,7 @@ const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
             showTsutslagdsanAvlagaColumn={showTsutslagdsanAvlagaColumn}
             setShowTsutslagdsanAvlagaColumn={setShowTsutslagdsanAvlagaColumn}
             guilgeeniiToololtMutate={guilgeeniiToololtMutate}
+            guilgeeniiToololt={guilgeeniiToololt}
           />
         </div>
         <CardList

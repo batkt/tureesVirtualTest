@@ -9,7 +9,9 @@ const guilgeeniiToololtFetcher = (
   ognoo,
   barilgiinId,
   baiguullagiinId,
-  showTsutslagdsanAvlagaColumn
+  showTsutslagdsanAvlagaColumn,
+  search,
+  davkhar
 ) => {
   return axios(token)
     .post(url, {
@@ -18,6 +20,8 @@ const guilgeeniiToololtFetcher = (
       ekhlekhOgnoo: moment(ognoo?.[0])?.startOf("month")?.toISOString(),
       duusakhOgnoo: moment(ognoo?.[1])?.endOf("month")?.toISOString(),
       showTsutslagdsanAvlagaColumn: !!showTsutslagdsanAvlagaColumn,
+      search,
+      davkhar,
     })
     .then((res) => res.data)
     .catch(aldaaBarigch);
@@ -39,7 +43,9 @@ function useGuilgeeniiToololtAvya(
   ognoo,
   barilgiinId,
   baiguullagiinId,
-  showTsutslagdsanAvlagaColumn
+  showTsutslagdsanAvlagaColumn,
+  search,
+  davkhar
 ) {
   const { data, mutate } = useSWR(
     !!token && ognoo?.[0] && ognoo?.[1]
@@ -50,6 +56,8 @@ function useGuilgeeniiToololtAvya(
           barilgiinId,
           baiguullagiinId,
           showTsutslagdsanAvlagaColumn,
+          search,
+          davkhar,
         ]
       : null,
     guilgeeniiToololtFetcher,
