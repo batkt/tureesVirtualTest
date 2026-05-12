@@ -209,7 +209,7 @@ function GuilgeeNiiluulekh(
     undefined,
     query,
     undefined,
-    50,
+    60,
   );
   useEffect(() => {
     inputRef.current.focus();
