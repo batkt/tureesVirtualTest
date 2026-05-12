@@ -199,20 +199,32 @@ function TableGuilgee({
 
 
     const getBackendTotal = (dataIndex) => {
-      if (!guilgeeniiToololt) return null;
-
       const totalAldangiInList = (garalt?.jagsaalt || []).reduce(
         (sum, b) => sum + (parseFloat(b.aldangiinUldegdel) || 0),
         0
       );
 
-      if (dataIndex === "avlagiinUldegdel")
+      if (dataIndex === "avlagiinUldegdel") {
+        if (turul === "tsutslagdsanAvlaga") {
+          return (garalt?.jagsaalt || []).reduce((sum, b) => {
+            const uldegdel = Math.abs(parseFloat(b.uldegdel) || 0);
+            const aldangi = parseFloat(b.aldangiinUldegdel) || 0;
+            return sum + uldegdel + aldangi;
+          }, 0);
+        }
         return _.get(guilgeeniiToololt, "avlaga.0.dun");
+      }
+
+      if (dataIndex === "aldangiinUldegdel")
+        return totalAldangiInList;
 
       switch (turul) {
         case "tsutslagdsanAvlaga":
-          if (dataIndex === "uldegdel")
-            return _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun");
+          if (dataIndex === "uldegdel") {
+            return (garalt?.jagsaalt || []).reduce((sum, b) => {
+              return sum + Math.abs(parseFloat(b.uldegdel) || 0);
+            }, 0);
+          }
           break;
         case "avlaga":
           if (dataIndex === "uldegdel")
@@ -239,8 +251,12 @@ function TableGuilgee({
           break;
       }
 
-      if (dataIndex === "baritsaaniiUldegdel")
-        return _.get(guilgeeniiToololt, "baritsaaToololt.0.dun");
+      if (dataIndex === "baritsaaniiUldegdel") {
+        return (garalt?.jagsaalt || []).reduce(
+          (sum, b) => sum + (parseFloat(b.baritsaaniiUldegdel) || 0),
+          0
+        );
+      }
 
       return null;
     };
@@ -300,7 +316,7 @@ function TableGuilgee({
         current: garalt?.khuudasniiDugaar,
         total: garalt?.niitMur,
         pageSizeOptions: [10, 20, 100, 200, 500],
-        defaultPageSize: 100,
+        defaultPageSize: 500,
         showSizeChanger: true,
         className:
           (turul === "eneSardTulukh" || turul === "eneSardTulsun") &&
@@ -539,8 +555,12 @@ function guilgeeniiTuukh({ token }) {
           $ne: -1,
         },
       };
-      if (turul === "eneSardTulsun" && showTsutslagdsanAvlagaColumn) {
-        query.showTsutslagdsanAvlaga = true;
+      if (showTsutslagdsanAvlagaColumn) {
+        if (turul === "eneSardTulsun") {
+          query.showTsutslagdsanAvlaga = true;
+        } else if (turul === "eneSardTulukh") {
+          query.tuluv = { $in: [1, -1] };
+        }
       }
     }
     if (query && !!tulukhOgnoo) {
@@ -586,7 +606,7 @@ function guilgeeniiTuukh({ token }) {
     onSearch: onSearchMedeelel,
     setKhuudaslalt,
     isValidating,
-  } = useJagsaalt(sericeName, query, order, undefined, searchKeys, null, 100);
+  } = useJagsaalt(sericeName, query, order, undefined, searchKeys, null, 500);
 
 const { 
   eneSardTuluuguiGereenuud, 
@@ -1686,7 +1706,8 @@ const {
                                   />
                                 </div>
                                 <div className="text-xs font-bold text-red-500">
-                                  {tolooguiGereeniiToo?.too}
+                                  {eneSardTuluuguiGereenuud?.niitMur ||
+                                    tolooguiGereeniiToo?.too}
                                 </div>
                               </>
                             )}
@@ -1851,6 +1872,20 @@ const {
                     return (
                       <div className="w-full text-right">
                         {formatNumber(a || 0)}
+                      </div>
+                    );
+                  },
+                },
+                {
+                  title: t("м2"),
+                  width: "3rem",
+                  dataIndex: "talbainKhemjee",
+                  summary: true,
+                  align: "center",
+                  render: (a) => {
+                    return (
+                      <div className="w-full text-center">
+                        {a}
                       </div>
                     );
                   },
