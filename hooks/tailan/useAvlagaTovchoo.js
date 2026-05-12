@@ -64,9 +64,27 @@ export function useavlagaTovchooDelgerengui(token, gereeniiDugaar, ekhlekhOgnoo,
     { revalidateOnFocus: false }
   );
 
+  // Fetch full geree document to get aldangi/baritsaa guilgeenuud + baritsaa fields
+  const { data: gereeData, isValidating: gereeLoading } = useSWR(
+    !!token && !!gereeniiDugaar
+      ? ["/avlagaTovchooDelgerengui/full", token, gereeniiDugaar, baiguullagiinId, barilgiinId]
+      : null,
+    () =>
+      detailFetcher("/avlagaTovchooGereeAvya", token, {
+        gereeniiDugaar,
+        ekhlekhOgnoo,
+        duusakhOgnoo,
+        baiguullagiinId,
+        barilgiinId,
+        tukhainBaaziinKholbolt,
+      }),
+    { revalidateOnFocus: false }
+  );
+
   return {
     detail: data,
-    detailUnshijBaina: isValidating,
+    gereeDetail: gereeData,
+    detailUnshijBaina: isValidating || gereeLoading,
   };
 }
 

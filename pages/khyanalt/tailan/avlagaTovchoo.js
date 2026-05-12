@@ -32,7 +32,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     ? moment(ognoo[1]).endOf("day").format("YYYY-MM-DD 23:59:59")
     : undefined;
 
-  const { detail, detailUnshijBaina } = useavlagaTovchooDelgerengui(
+  const { detail, gereeDetail, detailUnshijBaina } = useavlagaTovchooDelgerengui(
     open && token,
     record?.gereeniiDugaar,
     ekhlekhOgnoo,
@@ -61,32 +61,33 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     {
       title: "№",
       key: "idx",
-      width: 40,
+      width: 50,
       align: "center",
       render: (_, __, i) => i + 1,
     },
     {
       title: t("Огноо"),
       dataIndex: "ognoo",
-      width: 100,
+      width: 140,
       align: "center",
-      render: (v) => (v ? moment(v).format("YYYY-MM-DD") : ""),
+      render: (v) => (v ? moment(v).format("YYYY-MM-DD HH:mm") : ""),
     },
     {
       title: t("Тайлбар"),
       dataIndex: "tailbar",
-      ellipsis: true,
-      render: (v, r) => v || t(r.turul || ""),
+      render: (v, r) => (
+        <div>
+          <div className="font-medium text-gray-800">{v || t(r.turul || "")}</div>
+          {r.barimtNo && <div className="text-xs text-gray-500">{t("Баримт №")}: {r.barimtNo}</div>}
+        </div>
+      ),
     },
     {
       title: t("ДТ"),
       dataIndex: "tulukhDun",
       width: 110,
       align: "right",
-      render: (v) =>
-        v > 0 ? (
-          <span className="font-medium text-blue-600">{formatNumber(v, 2)}</span>
-        ) : null,
+      render: (v) => (v > 0 ? <span className="font-medium text-red-500">{formatNumber(v, 2)}</span> : "-"),
     },
     {
       title: t("КТ"),
@@ -95,18 +96,16 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       align: "right",
       render: (v, r) => {
         const total = (v || 0) + (r.khyamdral || 0);
-        return total > 0 ? (
-          <span className="font-medium text-blue-600">{formatNumber(total, 2)}</span>
-        ) : null;
+        return total > 0 ? <span className="font-medium text-blue-600">{formatNumber(total, 2)}</span> : "-";
       },
     },
     {
-      title: t("Эн/үлд"),
+      title: t("Үлдэгдэл"),
       dataIndex: "runningBalance",
       width: 120,
       align: "right",
       render: (v) => (
-        <span className={v > 0 ? "text-red-500 font-semibold" : "text-green-600"}>
+        <span className={`font-semibold ${v > 0 ? "text-red-500" : "text-green-600"}`}>
           {formatNumber(v, 2)}
         </span>
       ),
@@ -118,40 +117,25 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       open={open}
       onCancel={onClose}
       footer={null}
-      width={820}
-      title={
-        <div className="text-base font-bold">{t("Авлагын дэлгэрэнгүй тайлан")}</div>
-      }
+      width={1200}
+      title={<div className="text-lg text-blue-900 border-b pb-2 text-center">{t("Авлагын дэлгэрэнгүй тайлан")}</div>}
     >
-      {/* Header info */}
-      <div className="mb-3 grid grid-cols-2 gap-x-6 gap-y-1 text-xs">
-        <div>
-          <span className="text-gray-500">{t("Харилцагч")}: </span>
-          <span className="font-semibold">{record?.ner}</span>
+      <div className="bg-gray-50 p-4 rounded-lg mb-4 grid grid-cols-2 gap-4 border border-gray-100">
+        <div className="flex flex-col">
+          <span className="text-xs text-gray-500 uppercase">{t("Харилцагч")}</span>
+          <span className="font-bold text-gray-800">{record?.ner}</span>
         </div>
-        <div>
-          <span className="text-gray-500">{t("Барилга")}: </span>
-          <span className="font-semibold">{record?.barilgiiinNer || record?.barilgiinId}</span>
+        <div className="flex flex-col">
+          <span className="text-xs text-gray-500 uppercase">{t("Барилга / Талбай")}</span>
+          <span className="font-semibold text-gray-700">{record?.barilgiiinNer || record?.barilgiinId} / {record?.talbainDugaar}</span>
         </div>
-        <div>
-          <span className="text-gray-500">{t("Талбай дугаар")}: </span>
-          <span className="font-semibold">{record?.talbainDugaar}</span>
+        <div className="flex flex-col">
+          <span className="text-xs text-gray-500 uppercase">{t("Гэрээний дугаар")}</span>
+          <span className="font-semibold text-gray-700">{record?.gereeniiDugaar}</span>
         </div>
-        {detail?.talbainKhemjee > 0 && (
-          <div>
-            <span className="text-gray-500">{t("Талбай м²")}: </span>
-            <span className="font-semibold">{detail.talbainKhemjee}</span>
-          </div>
-        )}
-        <div>
-          <span className="text-gray-500">{t("Гэрээний дугаар")}: </span>
-          <span className="font-semibold">{record?.gereeniiDugaar}</span>
-        </div>
-        <div>
-          <span className="text-gray-500">{t("Эхний үлдэгдэл")}: </span>
-          <span className="font-semibold text-red-500">
-            {formatNumber(detail?.ekhniiUldegdel || 0, 2)}
-          </span>
+        <div className="flex flex-col">
+          <span className="text-xs text-gray-500 uppercase">{t("Эхний үлдэгдэл")}</span>
+          <span className="font-bold text-red-500 text-lg">{formatNumber(detail?.ekhniiUldegdel || 0, 2)}</span>
         </div>
       </div>
 
@@ -162,21 +146,22 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         columns={columns}
         dataSource={rows}
         pagination={false}
-        scroll={{ y: 380 }}
+        scroll={{ y: 400 }}
+        className="shadow-sm"
         summary={() => (
           <AntdTable.Summary fixed="bottom">
-            <AntdTable.Summary.Row>
-              <AntdTable.Summary.Cell index={0} colSpan={3}>
-                <span className="font-bold">{t("Түрээслэгчийн дүн")}</span>
+            <AntdTable.Summary.Row className="bg-gray-100">
+              <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
+                <span className="font-bold text-gray-700 uppercase">{t("Нийт дүн")}</span>
               </AntdTable.Summary.Cell>
               <AntdTable.Summary.Cell index={3} align="right">
-                <span className="font-bold text-blue-600">{formatNumber(totalDt, 2)}</span>
+                <span className="font-bold text-blue-700 text-sm">{formatNumber(totalDt, 2)}</span>
               </AntdTable.Summary.Cell>
               <AntdTable.Summary.Cell index={4} align="right">
-                <span className="font-bold text-blue-600">{formatNumber(totalKt, 2)}</span>
+                <span className="font-bold text-blue-700 text-sm">{formatNumber(totalKt, 2)}</span>
               </AntdTable.Summary.Cell>
               <AntdTable.Summary.Cell index={5} align="right">
-                <span className="font-bold text-red-500">
+                <span className="font-bold text-red-600">
                   {formatNumber(rows[rows.length - 1]?.runningBalance || 0, 2)}
                 </span>
               </AntdTable.Summary.Cell>
@@ -184,6 +169,100 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           </AntdTable.Summary>
         )}
       />
+
+      {/* ── Алданги section ── */}
+      {gereeDetail && (
+        <div className="mt-3 rounded border border-red-200 bg-red-50 p-2">
+          <div className="mb-1 font-bold text-red-600 text-sm">{t("Алданги")}</div>
+          {/* Summary row */}
+          <div className="grid grid-cols-3 gap-2 text-xs mb-2">
+            <div>
+              <span className="text-gray-500">{t("Нийт хуримтлагдсан ДТ")}: </span>
+              <span className="font-semibold text-red-500">{formatNumber(gereeDetail?.aldangiinUldegdel || 0, 2)}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">{t("Нийт төлсөн КТ")}: </span>
+              <span className="font-semibold text-blue-600">{formatNumber(gereeDetail?.niitTulsunAldangi || 0, 2)}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">{t("Үлдэгдэл")}: </span>
+              <span className="font-semibold text-red-500">{formatNumber((gereeDetail?.aldangiinUldegdel || 0) - (gereeDetail?.niitTulsunAldangi || 0), 2)}</span>
+            </div>
+          </div>
+          {/* Transaction rows */}
+          {(gereeDetail?.aldangiGuilgeenuud || []).length > 0 && (
+            <table className="w-full text-xs border-collapse">
+              <thead>
+                <tr className="bg-red-100">
+                  <th className="border border-red-200 px-1 py-0.5 text-center">№</th>
+                  <th className="border border-red-200 px-1 py-0.5 text-center">{t("Огноо")}</th>
+                  <th className="border border-red-200 px-1 py-0.5">{t("Тайлбар")}</th>
+                  <th className="border border-red-200 px-1 py-0.5 text-right">{t("ДТ")}</th>
+                  <th className="border border-red-200 px-1 py-0.5 text-right">{t("КТ")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(gereeDetail?.aldangiGuilgeenuud || []).map((g, i) => (
+                  <tr key={i} className="hover:bg-red-50">
+                    <td className="border border-red-100 px-1 py-0.5 text-center">{i + 1}</td>
+                    <td className="border border-red-100 px-1 py-0.5 text-center">{g.ognoo ? moment(g.ognoo).format("YYYY-MM-DD HH:mm") : ""}</td>
+                    <td className="border border-red-100 px-1 py-0.5">{g.tailbar || t("Алданги")}</td>
+                    <td className="border border-red-100 px-1 py-0.5 text-right font-medium text-red-500">{formatNumber(g.tulukhDun || 0, 2)}</td>
+                    <td className="border border-red-100 px-1 py-0.5 text-right font-medium text-blue-600">{formatNumber(g.tulsunDun || 0, 2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      )}
+
+      {/* ── Барьцаа section ── */}
+      {gereeDetail && (gereeDetail?.baritsaaAvakhDun || 0) > 0 && (
+        <div className="mt-2 rounded border border-blue-200 bg-blue-50 p-2">
+          <div className="mb-1 font-bold text-blue-700 text-sm">{t("Барьцаа")}</div>
+          {/* Summary row */}
+          <div className="grid grid-cols-3 gap-2 text-xs mb-2">
+            <div>
+              <span className="text-gray-500">{t("Авах дүн")}: </span>
+              <span className="font-semibold">{formatNumber(gereeDetail?.baritsaaAvakhDun || 0, 2)}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">{t("Төлсөн КТ")}: </span>
+              <span className="font-semibold text-blue-600">{formatNumber((gereeDetail?.baritsaaAvakhDun || 0) - (gereeDetail?.baritsaaniiUldegdel || 0), 2)}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">{t("Үлдэгдэл")}: </span>
+              <span className="font-semibold text-red-500">{formatNumber(gereeDetail?.baritsaaniiUldegdel || 0, 2)}</span>
+            </div>
+          </div>
+          {/* Transaction rows */}
+          {(gereeDetail?.baritsaaGuilgeenuud || []).length > 0 && (
+            <table className="w-full text-xs border-collapse">
+              <thead>
+                <tr className="bg-blue-100">
+                  <th className="border border-blue-200 px-1 py-0.5 text-center">№</th>
+                  <th className="border border-blue-200 px-1 py-0.5 text-center">{t("Огноо")}</th>
+                  <th className="border border-blue-200 px-1 py-0.5">{t("Тайлбар")}</th>
+                  <th className="border border-blue-200 px-1 py-0.5 text-right">{t("ДТ")}</th>
+                  <th className="border border-blue-200 px-1 py-0.5 text-right">{t("КТ")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(gereeDetail?.baritsaaGuilgeenuud || []).map((g, i) => (
+                  <tr key={i} className="hover:bg-blue-50">
+                    <td className="border border-blue-100 px-1 py-0.5 text-center">{i + 1}</td>
+                    <td className="border border-blue-100 px-1 py-0.5 text-center">{g.ognoo ? moment(g.ognoo).format("YYYY-MM-DD HH:mm") : ""}</td>
+                    <td className="border border-blue-100 px-1 py-0.5">{g.tailbar || t("Барьцаа")}</td>
+                    <td className="border border-blue-100 px-1 py-0.5 text-right font-medium text-red-500">{formatNumber(g.tulukhDun || 0, 2)}</td>
+                    <td className="border border-blue-100 px-1 py-0.5 text-right font-medium text-blue-600">{formatNumber((g.tulsunDun || 0) + (g.orlogo || 0), 2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      )}
     </Modal>
   );
 }
@@ -589,10 +668,10 @@ function avlagaTovchoo({ token }) {
                   <td className="border border-gray-400 px-1 py-0.5 text-center">{row.gereeniiDugaar}</td>
                   <td className="border border-gray-400 px-1 py-0.5 text-center">{row.talbainDugaar}</td>
                   <td className="border border-gray-400 px-1 py-0.5 text-center">{row.register}</td>
-                  <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(row.ekhniiUldegdel || 0, 2)}</td>
-                  <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(row.niitDt || 0, 2)}</td>
-                  <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(row.niitKt || 0, 2)}</td>
-                  <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(row.etssiinUldegdel || 0, 2)}</td>
+                  <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.ekhniiUldegdel || 0, 2)}</td>
+                  <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.niitDt || 0, 2)}</td>
+                  <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.niitKt || 0, 2)}</td>
+                  <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.etssiinUldegdel || 0, 2)}</td>
                 </tr>
               ))}
             </tbody>

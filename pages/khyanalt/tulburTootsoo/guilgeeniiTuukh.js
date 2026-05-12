@@ -195,43 +195,25 @@ function TableGuilgee({
     guilgeeniiToololt,
   }) {
     const [uldegdel, setUldegdel] = useState(0);
-    
-
 
     const getBackendTotal = (dataIndex) => {
-      const totalAldangiInList = (garalt?.jagsaalt || []).reduce(
-        (sum, b) => sum + (parseFloat(b.aldangiinUldegdel) || 0),
-        0
-      );
-
       if (dataIndex === "avlagiinUldegdel") {
-        if (turul === "tsutslagdsanAvlaga") {
-          return (garalt?.jagsaalt || []).reduce((sum, b) => {
-            const uldegdel = Math.abs(parseFloat(b.uldegdel) || 0);
-            const aldangi = parseFloat(b.aldangiinUldegdel) || 0;
-            return sum + uldegdel + aldangi;
-          }, 0);
-        }
+        if (turul === "tsutslagdsanAvlaga")
+          return _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun");
         return _.get(guilgeeniiToololt, "avlaga.0.dun");
       }
 
       if (dataIndex === "aldangiinUldegdel")
-        return totalAldangiInList;
+        return _.get(guilgeeniiToololt, "aldangi.0.dun");
 
       switch (turul) {
         case "tsutslagdsanAvlaga":
-          if (dataIndex === "uldegdel") {
-            return (garalt?.jagsaalt || []).reduce((sum, b) => {
-              return sum + Math.abs(parseFloat(b.uldegdel) || 0);
-            }, 0);
-          }
+          if (dataIndex === "uldegdel")
+            return _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun");
           break;
         case "avlaga":
           if (dataIndex === "uldegdel")
-            return (
-              (_.get(guilgeeniiToololt, "avlaga.0.dun") || 0) -
-              totalAldangiInList
-            );
+            return _.get(guilgeeniiToololt, "avlaga.0.dun");
           break;
         case "eneSardTulukh":
           if (dataIndex === "uldegdel")
@@ -251,12 +233,8 @@ function TableGuilgee({
           break;
       }
 
-      if (dataIndex === "baritsaaniiUldegdel") {
-        return (garalt?.jagsaalt || []).reduce(
-          (sum, b) => sum + (parseFloat(b.baritsaaniiUldegdel) || 0),
-          0
-        );
-      }
+      if (dataIndex === "baritsaaniiUldegdel")
+        return _.get(guilgeeniiToololt, "baritsaaToololt.0.dun");
 
       return null;
     };
