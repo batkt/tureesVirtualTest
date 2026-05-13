@@ -4,17 +4,13 @@ import socketIOClient from "socket.io-client";
 import _ from "lodash";
 import { t } from "i18next";
 //production
-export const url =
-  process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api";
+export const url = "https://turees.zevtabs.mn/api";
 let socketInstance = null;
 export const socket = () => {
   if (!socketInstance) {
-    socketInstance = socketIOClient(
-      process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
-      {
-        transports: ["websocket"],
-      },
-    );
+    socketInstance = socketIOClient("https://turees.zevtabs.mn", {
+      transports: ["websocket"],
+    });
   }
   return socketInstance;
 };
@@ -98,10 +94,7 @@ const uilchilgee = (token) => {
   };
   if (!!token) headers["Authorization"] = `bearer ${token}`;
   return axios.create({
-    baseURL:
-      typeof window === "undefined"
-        ? process.env.HTTP_URL || "http://103.48.116.100:8081"
-        : url,
+    baseURL: typeof window === "undefined" ? "http://103.48.116.100:8081" : url,
     headers,
   });
 };
