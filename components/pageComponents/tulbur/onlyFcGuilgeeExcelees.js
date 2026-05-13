@@ -152,6 +152,7 @@ function GuilgeeExceleesOruulakhOlnoor(
         tooluuriinDugaar: item.tooluuriinDugaar,
         talbainDugaar: item.talbainDugaar,
         suuliinZaalt: item.suuliinZaalt,
+        umnukhZaalt: item.umnukhZaalt,
         guidliinKoep: item.guidliinKoep,
       }));
 
