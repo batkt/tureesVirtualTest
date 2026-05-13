@@ -74,6 +74,7 @@ function ShineTulbur(
   const [songogdsonBank, setSongogdsonBank] = React.useState();
   const [songogdsonBusadTurul, setSongogdsonBusadTurul] = React.useState();
   const [loading, setLoading] = React.useState(false);
+  const [ipPaxJagsaajBaina, setIpPaxJagsaajBaina] = React.useState(false);
   const [tuluv, setTuluv] = React.useState(2);
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = React.useState();
   const [qpayModalTuluv, setQpayModalTuluv] = React.useState(false);
@@ -293,6 +294,25 @@ function ShineTulbur(
     }
   }
 
+  async function ipPaxZogsookhFunction() {
+    try {
+      await axios.post(
+        "/api/ecr",
+        { txnType: "CANCELLED" },
+        { timeout: 10000 },
+      );
+    } catch (_) {}
+    setIpPaxJagsaajBaina(false);
+    setLoading(false);
+    const index = tulbur.findIndex((a) => a.turul === "khaan");
+    if (index !== -1) {
+      setTurulruuKhiikhDun(tulbur[index].dun.toString());
+      tulbur.splice(index, 1);
+      setTulbur([...tulbur]);
+      setRefreshdekhEsekh(true);
+    }
+  }
+
   function batalgaajuuljDuusgakh() {
     setTerminal(false);
     tulbur.find((a) => a.turul === "khaan").isPayed = true;
@@ -502,8 +522,9 @@ function ShineTulbur(
     const dun = await tulbur.find((a) => a.turul === "khaan")?.dun;
     if (garaasSongosonTurul === "khaan" && dun > 0) {
       setTerminal(true);
-      await axios
-        .post(
+      let khaanbankAmjilttai = false;
+      try {
+        const { data } = await axios.post(
           "http://127.0.0.1:27028",
           {
             service_name: "doSaleTransaction",
@@ -514,32 +535,59 @@ function ShineTulbur(
             },
           },
           { timeout: 4000000 },
-        )
-        .then(({ data }) => {
-          if (data.status === true && data?.response?.response_code === "000") {
-            batalgaajuulya("khaan", data?.response);
-          } else if (
-            data?.status == true &&
-            data?.response?.response_code !== "000"
-          ) {
-            toast.error(data?.response?.response_msg, {
-              duration: 4000,
-            });
-            const index = tulbur.findIndex((a) => a.turul === "khaan");
-            if (index !== -1) {
-              setTurulruuKhiikhDun(tulbur[index].dun.toString());
-              tulbur.splice(index, 1);
-              setTulbur([...tulbur]);
-              setRefreshdekhEsekh(true);
-            }
+        );
+        khaanbankAmjilttai = true;
+        if (data.status === true && data?.response?.response_code === "000") {
+          batalgaajuulya("khaan", data?.response);
+        } else if (
+          data?.status == true &&
+          data?.response?.response_code !== "000"
+        ) {
+          toast.error(data?.response?.response_msg, { duration: 4000 });
+          const index = tulbur.findIndex((a) => a.turul === "khaan");
+          if (index !== -1) {
+            setTurulruuKhiikhDun(tulbur[index].dun.toString());
+            tulbur.splice(index, 1);
+            setTulbur([...tulbur]);
+            setRefreshdekhEsekh(true);
           }
-          setSongogdsonBank(null);
-          setTerminal(false);
-        })
-        .catch((e) => {
-          setTerminal(false);
+        }
+        setSongogdsonBank(null);
+        setTerminal(false);
+      } catch (_) {
+        setTerminal(false);
+        if (!khaanbankAmjilttai) {
+          setIpPaxJagsaajBaina(true);
+          try {
+            const { data } = await axios.post(
+              "/api/ecr",
+              { amount: dun, txnType: "sale" },
+              { timeout: 95000 },
+            );
+            if (data.success === true && data.responseCode === "00") {
+              batalgaajuulya("khaan", data);
+            } else {
+              toast.error(data?.message || "TDB карт төлбөр амжилтгүй", {
+                duration: 4000,
+              });
+              const index = tulbur.findIndex((a) => a.turul === "khaan");
+              if (index !== -1) {
+                setTurulruuKhiikhDun(tulbur[index].dun.toString());
+                tulbur.splice(index, 1);
+                setTulbur([...tulbur]);
+                setRefreshdekhEsekh(true);
+              }
+            }
+          } catch (__) {
+            guilgeeniiTuukhKhadgalya(tulbur, false, ebarimtShuud);
+          } finally {
+            setIpPaxJagsaajBaina(false);
+            setLoading(false);
+          }
+        } else {
           setLoading(false);
-        });
+        }
+      }
     } else if (garaasSongosonTurul === "qpay") {
       qpayTulugdsun === "qpayTulugdsun"
         ? guilgeeniiTuukhKhadgalya(tulbur, true, ebarimtShuud)
@@ -951,10 +999,27 @@ function ShineTulbur(
                       </div>
                     </div>
                   )}
-                  <>
-                    <BsFillCreditCardFill className="text-[30px] text-green-600" />
-                    <div className="text-lg font-bold text-green-600">Карт</div>
-                  </>
+                  {ipPaxJagsaajBaina ? (
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        ipPaxZogsookhFunction();
+                      }}
+                      className="flex animate-pulse flex-col items-center gap-1"
+                    >
+                      <CloseCircleOutlined className="text-[30px] text-red-500" />
+                      <div className="text-lg font-bold text-red-500">
+                        Цуцлах
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <BsFillCreditCardFill className="text-[30px] text-green-600" />
+                      <div className="text-lg font-bold text-green-600">
+                        Карт
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="flex gap-8">

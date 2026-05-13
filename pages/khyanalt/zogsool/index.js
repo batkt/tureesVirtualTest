@@ -815,7 +815,7 @@ function Zogsool({ token }) {
             },
           },
         ];
-      } else if (tuluv === 5) {
+      } else if (tuluv === 5 && tootsooKhelber !== "2") {
         nemeh = [
           {
             "tuukh.0.tuluv": -4,
@@ -1119,7 +1119,8 @@ function Zogsool({ token }) {
         name: "Ажилтан",
         too: formatNumber(
           !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].turul.find((a) => a._id === "Ажилтан")?.too,
+            uilchiluulegchToololt[0].turul.find((a) => a._id === "Ажилтан")
+              ?.too,
           0,
         ),
         query: {
@@ -1712,7 +1713,9 @@ function Zogsool({ token }) {
         render(v) {
           const { discount } = splitTulbur(v?.[0]?.tulbur);
           if (!discount) return null;
-          return <div className="w-full text-right">{formatNumber(discount, 0)}</div>;
+          return (
+            <div className="w-full text-right">{formatNumber(discount, 0)}</div>
+          );
         },
       },
       {
