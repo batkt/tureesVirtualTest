@@ -27,6 +27,7 @@ const nextConfig = {
       process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api",
     NEXT_PUBLIC_SOCKET:
       process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
+    HTTP_URL: process.env.HTTP_URL || "http://103.48.116.100:8081",
   },
 
   // env: {
@@ -34,6 +35,7 @@ const nextConfig = {
   //     process.env.NEXT_PUBLIC_URL || "https://rently.zevtabs.mn/api",
   //   NEXT_PUBLIC_SOCKET:
   //     process.env.NEXT_PUBLIC_SOCKET || "https://rently.zevtabs.mn",
+  //   HTTP_URL: process.env.HTTP_URL || "http://103.48.116.100:8081",
   // },
 
   // env: {
