@@ -153,7 +153,7 @@ const YurunkhiiMedeele = ({
                   { register: target.value },
                   { customerTin: target.value },
                 ],
-                turul: value.baiguullagaEsekh ? "ААН" : "Иргэн",
+                idevkhiteiEsekh: { $in: [true, false] },
               },
               select: {
                 ner: 1,
