@@ -94,7 +94,7 @@ const uilchilgee = (token) => {
   };
   if (!!token) headers["Authorization"] = `bearer ${token}`;
   return axios.create({
-    baseURL: typeof window === "undefined" ? "http://103.48.116.100:8081" : url,
+    baseURL: url,
     headers,
   });
 };
