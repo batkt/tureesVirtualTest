@@ -166,6 +166,7 @@ function GuilgeeExceleesOruulakhOlnoor(
         barilgiinId,
         nuatBodokhEsekh,
         jagsaalt: hadgalakhJagsaalt,
+        ekhSurvalj: "excelZaalt",
       })
       .then((response) => {
         if (response.status === 200) {

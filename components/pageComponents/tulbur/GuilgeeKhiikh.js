@@ -54,6 +54,7 @@ function GuilgeeKhiikh(
   const [guidliinKoep, setGuidliinKoep] = useState(0);
   const [umnukhZaalttaiEsekh, setUmnukhZaalttaiEsekh] = useState(false);
   const [suuliinZaalt, setSuuliinZaalt] = useState(null);
+  const [tooluuriinDugaar, setTooluuriinDugaar] = useState(null);
   const [khemjikhNegj, setKhemjikhNegj] = useState("");
   const [suuriKhuraamj, setSuuriKhuraamj] = useState(null);
   const { t, i18n } = useTranslation();
@@ -406,7 +407,9 @@ function GuilgeeKhiikh(
               ) {
                 guilgee["suuliinZaalt"] = suuliinZaalt;
                 guilgee["umnukhZaalt"] = umnukhZaalt;
+                guilgee["tooluuriinDugaar"] = tooluuriinDugaar;
               }
+              guilgee["ekhSurvalj"] = "guilgeeKhiikh";
             }
             break;
           default:
@@ -993,14 +996,17 @@ function GuilgeeKhiikh(
                       if (res?.data?.suuliinZaalt) {
                         setUmnukhZaalt(res.data.suuliinZaalt);
                         setUmnukhZaalttaiEsekh(true);
+                        setTooluuriinDugaar(res.data.tooluuriinDugaar || null);
                       } else {
                         setUmnukhZaalt(0);
                         setUmnukhZaalttaiEsekh(false);
+                        setTooluuriinDugaar(null);
                       }
                     })
                     .catch(() => {
                       setUmnukhZaalt(0);
                       setUmnukhZaalttaiEsekh(false);
+                      setTooluuriinDugaar(null);
                     });
                 } else {
                   setUmnukhZaalt(0);
