@@ -39,7 +39,7 @@ function GuilgeeKhiikh(
   ref,
 ) {
   const [dun, setDun] = useState(0);
-  const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
+  const [ognoo, setOgnoo] = useState(moment());
   const [shineOgnoo, setShineOgnoo] = useState(moment());
   const [turul, setTurul] = useState("voucher");
   const [tailbar, setTailbar] = useState("");
@@ -568,16 +568,30 @@ function GuilgeeKhiikh(
   }
 
   function handleTurulUurchlult(e) {
-    const ankhanOgnoo = ognoo;
     setTurul(e.target.value);
     setTureesEkhniiUldegdelEsekh(false);
     setTeglekhDone(false);
+    
+    
+    setDun(0);
+    setTailbar("");
+    setBusadTurul(undefined);
+    setZardliinTurul(undefined);
+    setAshiglaltiinId(undefined);
+    setAshiglaltiinNer(undefined);
+    setNegjUne(undefined);
+    setTseverUsDun("");
+    setBokhirUsDun("");
+    setUsKhalaasniiDun("");
+    setSuuriKhuraamj(null);
+    setSuuliinZaalt(null);
+    setUmnukhZaalt(0);
+    setTooluuriinDugaar(null);
+    setKhemjikhNegj("");
 
-    if (e.target.value === "ashiglalt" || e.target.value === "torguuli") {
-      setOgnoo(moment());
-    } else {
-      setOgnoo(ankhanOgnoo);
-    }
+   
+    setOgnoo(moment());
+    setShineOgnoo(moment());
   }
 
   function changedArgaar(e) {
@@ -904,26 +918,26 @@ function GuilgeeKhiikh(
           <Option value="tulultBurtgekh">{t("Төлөлт бүртгэх")}</Option>
         </Select>
       )}
-      {busadTurul === "aldangi" && (
+      {turul === "busad" && busadTurul === "aldangi" && (
         <div className="dark:text-white">
           {t("Алдангийн үлдэгдэл")}: {formatNumber(data?.aldangiinUldegdel, 2)}
         </div>
       )}
-      {busadTurul === "tulultBurtgekh" && (
+      {turul === "busad" && busadTurul === "tulultBurtgekh" && (
         <DatePicker
           locale={i18n.language === "mn" && locale}
           value={shineOgnoo}
           onChange={(v) => setShineOgnoo(v ? v.startOf("day") : null)}
         />
       )}
-      {busadTurul === "aldangi" && (
+      {turul === "busad" && busadTurul === "aldangi" && (
         <DatePicker
           locale={i18n.language === "mn" && locale}
           value={shineOgnoo}  
           onChange={(v) => setShineOgnoo(v ? v.startOf("day") : null)}
         />
       )}
-      {busadTurul === "barter" && (
+      {turul === "busad" && busadTurul === "barter" && (
         <DatePicker
           locale={i18n.language === "mn" && locale}
           value={shineOgnoo}
@@ -931,7 +945,7 @@ function GuilgeeKhiikh(
         />
       )}
 
-      {busadTurul === "zalruulga" && (
+      {turul === "busad" && busadTurul === "zalruulga" && (
         <DatePicker
           locale={i18n.language === "mn" && locale}
           value={shineOgnoo}
@@ -1028,7 +1042,9 @@ function GuilgeeKhiikh(
                     <p className={`mr-5 border-r text-right`}>{t(mur.turul)}</p>
                     <p className="text-right">
                       {mur.turul !== "Дурын"
-                        ? formatNumber(mur.tariff)
+                        ? (mur.ner?.includes("Хүйтэн ус") || mur.ner?.includes("Халуун ус")) && mur.tariff === 0
+                          ? formatNumber((mur.tseverUsDun || 0) + (mur.bokhirUsDun || 0) + (mur.usKhalaasniiDun || 0))
+                          : formatNumber(mur.tariff)
                         : "Дурын"}
                       {mur.turul !== "Дурын" && "₮"}
                     </p>
