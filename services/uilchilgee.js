@@ -33,7 +33,6 @@ export const url = "http://103.143.40.175:8081";
 export const socket = () =>
   socketIOClient("http://103.143.40.175:8081", {
     transports: ["websocket"],
-    z,
   });
 
 export const aldaaBarigch = (e) => {
