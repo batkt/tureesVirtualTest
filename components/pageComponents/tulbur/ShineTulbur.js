@@ -579,7 +579,6 @@ function ShineTulbur(
               }
             }
           } catch (__) {
-            guilgeeniiTuukhKhadgalya(tulbur, false, ebarimtShuud);
           } finally {
             setIpPaxJagsaajBaina(false);
             setLoading(false);

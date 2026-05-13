@@ -59,7 +59,7 @@ import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 import useDans from "hooks/useDans";
 import { zogsoolUilchilgee, aldaaBarigch, socket } from "services/uilchilgee";
 import uilchilgee from "services/uilchilgee";
-import { registerServiceWorker, unregisterServiceWorker } from "utils/swHelper";
+import { unregisterServiceWorker } from "utils/swHelper";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
@@ -281,10 +281,7 @@ function camera({ token }) {
 
   useEffect(() => {
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
-      registerServiceWorker().catch(() => {});
-      return () => {
-        unregisterServiceWorker().catch(() => {});
-      };
+      unregisterServiceWorker().catch(() => {});
     }
   }, []);
 
@@ -618,8 +615,10 @@ function camera({ token }) {
     if (Array.isArray(data) && data.length === 2) {
       setCamerVal(data);
     }
-    // Load pending updates
     if (typeof window !== "undefined") {
+      // Clear any stale pending cars from old offline logic
+      localStorage.removeItem("cameraPendingCars");
+      // Load pending updates
       const stored = JSON.parse(
         localStorage.getItem("cameraPendingUpdates") || "[]",
       );
@@ -2885,31 +2884,7 @@ function camera({ token }) {
 
     // Check if offline
     if (isOfflineMode || !isOnline) {
-      // Store as pending car
-      const pendingCar = {
-        type: "addCar",
-        data: {
-          ...body,
-          baiguullagiinId: baiguullaga?._id,
-          barilgiinId: barilgiinId,
-          createdAt: new Date().toISOString(),
-        },
-        timestamp: new Date().toISOString(),
-        id: Date.now(),
-      };
-      if (typeof window !== "undefined") {
-        const stored = JSON.parse(
-          localStorage.getItem("cameraPendingCars") || "[]",
-        );
-        stored.push(pendingCar);
-        localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
-        // Trigger UI update
-        setPendingCarsUpdateTrigger((prev) => prev + 1);
-      }
-
-      notification.success({ message: t("Амжилттай бүртгэгдлээ (Оффлайн)") });
-      setModalOpen({ bool: false, item: null, type: "" });
-      form.resetFields();
+      notification.warning({ message: t("Интернет холболт байхгүй байна") });
       return;
     }
 
@@ -3102,51 +3077,6 @@ function camera({ token }) {
         };
 
         const proceedWithOfflineExit = () => {
-          const pendingCar = {
-            type: "removeCar",
-            data: {
-              ...yavuulakhData,
-              originalData: data,
-              baiguullagiinId: baiguullaga?._id,
-            },
-            timestamp: new Date().toISOString(),
-            id: Date.now(),
-          };
-
-          if (typeof window !== "undefined") {
-            const stored = JSON.parse(
-              localStorage.getItem("cameraPendingCars") || "[]",
-            );
-            stored.push(pendingCar);
-            localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
-
-            // Handle offline-added cars differently
-            if (data._id && data._id.startsWith("pending_")) {
-              // This is an offline-added car, update it in localStorage
-              const updatedStored = stored.map((item) => {
-                if (item.id && data._id === `pending_${item.id}`) {
-                  return {
-                    ...item,
-                    data: {
-                      ...item.data,
-                      exitTimestamp: new Date().toISOString(),
-                      exitCamera: camerVal[1],
-                      tuluv: -1, // Mark as exited
-                    },
-                  };
-                }
-                return item;
-              });
-              localStorage.setItem(
-                "cameraPendingCars",
-                JSON.stringify(updatedStored),
-              );
-            }
-
-            // Trigger UI update
-            setPendingCarsUpdateTrigger((prev) => prev + 1);
-          }
-
           // Update online data if available
           if (
             data?._id &&
@@ -3410,31 +3340,7 @@ function camera({ token }) {
 
     // Check if offline
     if (isOfflineMode || !isOnline) {
-      // Store as pending car
-      const pendingCar = {
-        type: "addCarFromEntry",
-        data: {
-          ...yavuulakhData,
-          baiguullagiinId: baiguullaga?._id,
-          createdAt: new Date().toISOString(),
-        },
-        timestamp: new Date().toISOString(),
-        id: Date.now(),
-      };
-      if (typeof window !== "undefined") {
-        const stored = JSON.parse(
-          localStorage.getItem("cameraPendingCars") || "[]",
-        );
-        stored.push(pendingCar);
-        localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
-        // Trigger UI update
-        setPendingCarsUpdateTrigger((prev) => prev + 1);
-      }
-
-      notification.success({ message: t("Амжилттай бүртгэгдлээ (Оффлайн)") });
-      setModalOpen({ bool: false, item: null, type: "" });
-      form.resetFields();
-      onRefresh();
+      notification.warning({ message: t("Интернет холболт байхгүй байна") });
       return;
     }
 
@@ -3463,32 +3369,10 @@ function camera({ token }) {
         }
       })
       .catch((error) => {
-        // If network error, store as pending
         if (!navigator.onLine || isOfflineMode) {
-          const pendingCar = {
-            type: "addCarFromEntry",
-            data: {
-              ...yavuulakhData,
-              baiguullagiinId: baiguullaga?._id,
-              createdAt: new Date().toISOString(),
-            },
-            timestamp: new Date().toISOString(),
-            id: Date.now(),
-          };
-          if (typeof window !== "undefined") {
-            const stored = JSON.parse(
-              localStorage.getItem("cameraPendingCars") || "[]",
-            );
-            stored.push(pendingCar);
-            localStorage.setItem("cameraPendingCars", JSON.stringify(stored));
-            // Trigger UI update
-            setPendingCarsUpdateTrigger((prev) => prev + 1);
-          }
-          notification.warning(
-            t(
-              "Сүлжээний алдаа. Хадгалсан өгөгдөл сүлжээнд холбогдох үед нэгтгэл хийгдэнэ.",
-            ),
-          );
+          notification.warning({
+            message: t("Интернет холболт байхгүй байна"),
+          });
           onRefresh();
         } else {
           aldaaBarigch(error);
@@ -3521,92 +3405,10 @@ function camera({ token }) {
       }
     });
   }
-  // Merge pending cars with actual data for offline support
   const mergedJagsaalt = useMemo(() => {
     const actual = uilchluulegchGaralt?.jagsaalt || [];
-    const pendingCars =
-      typeof window !== "undefined"
-        ? JSON.parse(localStorage.getItem("cameraPendingCars") || "[]")
-        : [];
-
-    // Filter out pending cars that are already synced (exist in actual data) or duplicates
-    const unsyncedPending = pendingCars.filter((pending, index, arr) => {
-      if (pending.type === "addCar" || pending.type === "addCarFromEntry") {
-        const mashinDugaar =
-          pending.data.mashiniiDugaar?.toUpperCase() ||
-          pending.data.mashiniiDugaar;
-
-        // Check if this car already exists in actual data
-        const existsInActual = actual.some(
-          (item) => item.mashiniiDugaar?.toUpperCase() === mashinDugaar,
-        );
-
-        // Check for duplicates in pending array (keep only the first occurrence)
-        const isDuplicate =
-          arr.findIndex((p) => {
-            if (p.type === "addCar" || p.type === "addCarFromEntry") {
-              const otherDugaar =
-                p.data.mashiniiDugaar?.toUpperCase() || p.data.mashiniiDugaar;
-              return otherDugaar === mashinDugaar;
-            }
-            return false;
-          }) !== index;
-
-        return !existsInActual && !isDuplicate;
-      }
-      return false; // Remove operations don't need to be shown
-    });
-
-    // Add pending cars to the list with proper structure
-    const pendingToAdd = unsyncedPending
-      .filter((p) => p.type === "addCar" || p.type === "addCarFromEntry")
-      .map((p) => {
-        const carData = p.data;
-        // Ensure mashiniiDugaar is uppercase to match actual data format
-        const mashiniiDugaar =
-          carData.mashiniiDugaar?.toUpperCase() || carData.mashiniiDugaar;
-
-        // Check if this car has been exited offline
-        const isExited = carData.exitTimestamp || carData.tuluv === -1;
-
-        return {
-          _id: `pending_${p.id}`, // Temporary ID
-          mashiniiDugaar: mashiniiDugaar,
-          baiguullagiinId: carData.baiguullagiinId || baiguullaga?._id,
-          barilgiinId: carData.barilgiinId || barilgiinId,
-          turul: carData.turul || "Үйлчлүүлэгч", // Changed from "Үнэгүй" to "Үйлчлүүлэгч"
-          isPending: true,
-          createdAt: carData.createdAt || p.timestamp,
-          niitDun: carData.tulukhDun || 0,
-          tuukh: carData.tuukh || [
-            {
-              tuluv: isExited ? -1 : 0, // Update status based on exit
-              tulukhDun: carData.tulukhDun || 0, // Set to 0 for active status (no amount calculated yet)
-              tulbur: [], // Ensure no payment records for active status
-              garsanKhaalga: carData.exitCamera || null, // Add exit camera if available
-              tsagiinTuukh: [
-                {
-                  orsonTsag: new Date(carData.createdAt || p.timestamp),
-                  garsanTsag: carData.exitTimestamp
-                    ? new Date(carData.exitTimestamp)
-                    : null,
-                },
-              ],
-            },
-          ],
-          mashin: carData.mashin || {},
-        };
-      });
-
-    const merged = [...actual, ...pendingToAdd, ...localOfflineData];
-    return merged;
-  }, [
-    uilchluulegchGaralt?.jagsaalt,
-    baiguullaga?._id,
-    barilgiinId,
-    pendingCarsUpdateTrigger,
-    localOfflineData, // Add dependency for local .NET service data
-  ]);
+    return [...actual, ...localOfflineData];
+  }, [uilchluulegchGaralt?.jagsaalt, localOfflineData]);
 
   const filteredJagsaalt = useMemo(() => {
     if (!mergedJagsaalt || mergedJagsaalt.length === 0) return [];
