@@ -320,7 +320,16 @@ function avlagaTovchoo({ token }) {
       duusakhOgnoo: ognoo?.[1]
         ? moment(ognoo[1]).endOf("day").format("YYYY-MM-DD")
         : undefined,
-      khariltsagchiinId: songogdsonIds.length > 0 ? songogdsonIds : undefined,
+      // If the selected value starts with 'G:', it's a contract number
+      gereeniiDugaaruud: songogdsonIds
+        .filter((id) => id.startsWith("G:"))
+        .map((id) => id.replace("G:", "")),
+      // Otherwise it's a register (backward compatibility/customer level)
+      khariltsagchiinId: songogdsonIds
+        .filter((id) => !id.startsWith("G:"))
+        .length > 0
+        ? songogdsonIds.filter((id) => !id.startsWith("G:"))
+        : undefined,
     }),
     [ognoo, baiguullaga, barilgiinId, songogdsonIds]
   );
@@ -558,19 +567,13 @@ function avlagaTovchoo({ token }) {
             khariltsagchiinGaralt.setKhuudaslalt((a) => ({ ...a, search }))
           }
           onChange={setSongogdsonIds}
-          placeholder={t("Харилцагч сонгох")}
+          placeholder={t("Гэрээ эсвэл Харилцагч сонгох")}
         >
-          {[
-            ...new Map(
-              khariltsagchiinGaralt?.jagsaalt?.map((d) => [
-                d?.register || d?.customerTin,
-                d,
-              ])
-            ).values(),
-          ].map((d) => (
+          {/* Group by customer but allow selecting individual contracts */}
+          {(khariltsagchiinGaralt?.jagsaalt || []).map((d) => (
             <Select.Option
-              key={d?.register || d?.customerTin}
-              value={d?.register || d?.customerTin}
+              key={d?.gereeniiDugaar || d?._id}
+              value={`G:${d?.gereeniiDugaar}`}
               label={d?.ner}
               ner={d?.ner || ""}
               register={d?.register || d?.customerTin || ""}
