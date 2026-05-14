@@ -79,13 +79,23 @@ const GereeniiUldegdel = React.memo(
       },
     );
 
-    const displayUldegdel =
-      data?.uldegdel ??
-      ugugdul?.uldegdel ??
+    // Combined balance = lease balance + aldangi balance
+    const tureesiinUldegdelFromData = data?.tureesiinUldegdel ?? data?.uldegdel;
+    const aldangiFromData = data?.aldangiinUldegdel ?? 0;
+    const combinedFromData = data
+      ? (tureesiinUldegdelFromData ?? 0) + (aldangiFromData ?? 0)
+      : null;
+
+    // Fallback to contract record fields (include aldangiinUldegdel)
+    const fallbackUldegdel =
+      combinedFromData ??
+      ((ugugdul?.uldegdel ?? 0) + (ugugdul?.aldangiinUldegdel ?? 0)) ??
       ugugdul?.niitUldegdel ??
       ugugdul?.tsutslagdsanAvlaga ??
       (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
-    ugugdul.uldegdel = displayUldegdel ?? data?.uldegdel;
+
+    const displayUldegdel = fallbackUldegdel;
+    ugugdul.uldegdel = displayUldegdel;
     if (!isValidating && data && typeof refreshTotals === "function") {
       refreshTotals();
     }
@@ -93,11 +103,11 @@ const GereeniiUldegdel = React.memo(
 
     const content = (
       <div className="space-y-1 p-1 text-xs">
-        {(data?.uldegdel > 0 || data?.tureesiinUldegdel > 0) && (
+        {data?.tureesiinUldegdel > 0 && (
           <div className="flex justify-between gap-4">
             <span className="text-gray-500">{t("Түрээсийн үлдэгдэл")}:</span>
             <span className="font-bold text-red-500">
-              {formatNumber(data?.tureesiinUldegdel ?? data?.uldegdel)}
+              {formatNumber(data?.tureesiinUldegdel)}
             </span>
           </div>
         )}

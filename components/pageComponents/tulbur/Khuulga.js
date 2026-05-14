@@ -1,12 +1,19 @@
 import _ from "lodash";
 import React, { useEffect, useRef } from "react";
 import GuilgeeniiTuukh from "./GuilgeeniiTuukh";
+import { useAuth } from "services/auth";
 
 function Khuulga(
   { data, token, ognoo, onFinish, destroy, ajiltan, barilgiinId, shineOgnoo },
   ref
 ) {
   const refTuukh = useRef(null);
+  const { baiguullaga } = useAuth();
+  const aldangiTuukhKharakhEsekh =
+    baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
+  const uldegdelUdruurKharakhEsekh =
+    baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh;
+
   React.useImperativeHandle(
     ref,
     () => ({
@@ -47,6 +54,8 @@ function Khuulga(
         token={token}
         ognoo={ognoo}
         refreshData={onFinish}
+        aldangiTuukhKharakhEsekh={aldangiTuukhKharakhEsekh}
+        uldegdelUdruurKharakhEsekh={uldegdelUdruurKharakhEsekh}
       />
     </div>
   );
