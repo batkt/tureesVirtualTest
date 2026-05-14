@@ -18,6 +18,7 @@ export const socket = () => {
   }
   return socketInstance;
 };
+
 // test rently
 // export const url =
 //   process.env.NEXT_PUBLIC_URL || "https://rently.zevtabs.mn/api";
