@@ -96,16 +96,21 @@ function GereeBaiguulakh({ token }) {
         })
         .then(({ data: nextDugaar }) => {
           const finalDugaar = `${defaultPrefix}${String(nextDugaar).padStart(2, "0")}`;
-          setKhagalakhGeree((prev) => ({
-            ...prev,
-            gereeniiDugaar: finalDugaar,
-          }));
+          setKhagalakhGeree((prev) => {
+            if (!prev.gereeniiDugaar || prev.gereeniiDugaar === defaultPrefix) {
+              return { ...prev, gereeniiDugaar: finalDugaar };
+            }
+            return prev;
+          });
         })
         .catch((err) => {
-          setKhagalakhGeree((prev) => ({
-            ...prev,
-            gereeniiDugaar: `${defaultPrefix}01`,
-          }));
+          console.error("Failed to fetch next dugaar", err);
+          if (!khadgalakhGeree.gereeniiDugaar || khadgalakhGeree.gereeniiDugaar === defaultPrefix) {
+            setKhagalakhGeree((prev) => ({
+              ...prev,
+              gereeniiDugaar: `${defaultPrefix}01`,
+            }));
+          }
         });
     }
   }, [khadgalakhGeree.gereeniiDugaar, token, barilgiinId, baiguullaga]);
@@ -255,6 +260,8 @@ function GereeBaiguulakh({ token }) {
             message: t("Алдаа"),
             description: t("Бүртгэлтэй гэрээний дугаар байна: ") + data.gereeniiDugaar
           });
+          const defaultPrefix = `ГД${moment(new Date()).format("YYMMDD")}`;
+          setKhagalakhGeree(prev => ({ ...prev, gereeniiDugaar: defaultPrefix }));
           setWaiting(false);
           return;
         }
