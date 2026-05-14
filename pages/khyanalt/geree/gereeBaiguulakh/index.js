@@ -242,11 +242,11 @@ function GereeBaiguulakh({ token }) {
       
       uilchilgee(token).get("/geree", {
         params: {
-          query: {
+          query: JSON.stringify({
             gereeniiDugaar: data.gereeniiDugaar,
             tuluv: { $ne: -1 }
-          },
-          select: "gereeniiDugaar",
+          }),
+          select: JSON.stringify({ gereeniiDugaar: 1 }),
           khuudasniiKhemjee: 1
         }
       }).then(({ data: checkData }) => {
@@ -262,10 +262,21 @@ function GereeBaiguulakh({ token }) {
         createMethod("gereeKhadgalya", token, data)
           .then(({ data }) => {
             if (data === "Amjilttai") {
+              const defaultPrefix = `ГД${moment(new Date()).format("YYMMDD")}`;
               setKhagalakhGeree({
+                ovog: null,
+                ner: null,
+                register: null,
+                customerTin: null,
+                albanTushaal: null,
+                zakhirliinOvog: null,
+                zakhirliinNer: null,
+                utas: [],
+                mail: null,
+                khayag: null,
                 gereeniiOgnoo: new Date(),
                 baritsaaAvakhEsekh: true,
-                gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
+                gereeniiDugaar: defaultPrefix,
                 baritsaaAvakhKhugatsaa: 1,
                 baritsaaAvakhSar: _.get(
                   baiguullaga,
