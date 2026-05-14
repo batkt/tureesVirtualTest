@@ -86,12 +86,13 @@ function GereeBaiguulakh({ token }) {
 
   useEffect(() => {
     const defaultPrefix = `ГД${moment(new Date()).format("YYMMDD")}`;
-    if (!khadgalakhGeree.gereeniiDugaar || khadgalakhGeree.gereeniiDugaar === defaultPrefix) {
+    const bId = baiguullaga?._id || ajiltan?.baiguullagiinId;
+    if ((!khadgalakhGeree.gereeniiDugaar || khadgalakhGeree.gereeniiDugaar === defaultPrefix) && !!barilgiinId && !!bId) {
       uilchilgee(token)
         .get("/geree/gereeniiDugaarlaltAvya", {
           params: {
             barilgiinId: barilgiinId,
-            baiguullagiinId: baiguullaga?._id,
+            baiguullagiinId: bId,
           },
         })
         .then(({ data: nextDugaar }) => {
