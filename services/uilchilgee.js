@@ -33,7 +33,6 @@ export const socket = () => {
 // export const socket = () =>
 //   socketIOClient("http://103.143.40.175:8081", {
 //     transports: ["websocket"],
-//     z,
 //   });
 
 export const aldaaBarigch = (e) => {
@@ -101,7 +100,7 @@ const uilchilgee = (token) => {
   return axios.create({
     baseURL:
       typeof window === "undefined"
-        ? process.env.HTTP_URL || "http://103.48.116.100:8081"
+        ? process.env.HTTP_URL || "http://103.143.40.230:8081"
         : url,
     headers,
   });
