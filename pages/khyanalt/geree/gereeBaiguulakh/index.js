@@ -56,7 +56,7 @@ const steps = [
 
 function GereeBaiguulakh({ token }) {
   const { t } = useTranslation();
-  const { baiguullaga, barilgiinId } = useAuth();
+  const { baiguullaga, barilgiinId, ajiltan } = useAuth();
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -114,7 +114,7 @@ function GereeBaiguulakh({ token }) {
           }
         });
     }
-  }, [khadgalakhGeree.gereeniiDugaar, token, barilgiinId, baiguullaga]);
+  }, [khadgalakhGeree.gereeniiDugaar, token, barilgiinId, baiguullaga, ajiltan]);
 
 
 
