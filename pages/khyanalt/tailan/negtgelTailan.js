@@ -330,7 +330,12 @@ function negtgelTailan({ token }) {
           avlaga.filter((c) => c.tailbar === b.tailbar && c.ognoo === tempOgnoo)
             ?.length === 0
         ) {
-          if (b.tailbar?.includes("Менежментийн төлбөр"))
+          if (
+            b.tailbar?.includes("Менежментийн төлбөр") &&
+            avlaga.filter(
+              (c) => c.tailbar === "Менежмент нэгж" && c.ognoo === tempOgnoo
+            )?.length === 0
+          )
             avlaga.push({
               tailbar: "Менежмент нэгж",
               ognoo: tempOgnoo,

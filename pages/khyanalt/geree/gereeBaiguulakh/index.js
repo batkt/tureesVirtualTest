@@ -86,14 +86,12 @@ function GereeBaiguulakh({ token }) {
 
   useEffect(() => {
     const defaultPrefix = `ГД${moment(new Date()).format("YYMMDD")}`;
-    if (khadgalakhGeree.gereeniiDugaar === defaultPrefix) {
+    if (!khadgalakhGeree.gereeniiDugaar || khadgalakhGeree.gereeniiDugaar === defaultPrefix) {
       uilchilgee(token)
         .get("/geree/gereeniiDugaarlaltAvya", {
           params: {
-            query: {
-              barilgiinId: barilgiinId,
-              baiguullagiinId: baiguullaga?._id,
-            },
+            barilgiinId: barilgiinId,
+            baiguullagiinId: baiguullaga?._id,
           },
         })
         .then(({ data: nextDugaar }) => {
@@ -240,29 +238,54 @@ function GereeBaiguulakh({ token }) {
       if (!!data?.zuvshuurliinZurag)
         data.zuvshuurliinZurag = _.get(data, "zuvshuurliinZurag.0.response.id");
       setWaiting(true);
-      createMethod("gereeKhadgalya", token, data)
-        .then(({ data }) => {
-          if (data === "Amjilttai") {
-            setKhagalakhGeree({
-              gereeniiOgnoo: new Date(),
-              baritsaaAvakhEsekh: true,
-              gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
-              baritsaaAvakhKhugatsaa: 1,
-              baritsaaAvakhSar: _.get(
-                baiguullaga,
-                "tokhirgoo.baritsaaAvakhSar",
-              ),
-              barilgiinKhayag: songosonBarilgiinHayag,
-            });
-            setCurrent(0);
-            toast.success(t("Амжилттай хадгаллаа"));
-            setWaiting(false);
-          }
-        })
-        .catch((e) => {
-          aldaaBarigch(e);
+      
+      
+      uilchilgee(token).get("/geree", {
+        params: {
+          query: {
+            gereeniiDugaar: data.gereeniiDugaar,
+            tuluv: { $ne: -1 }
+          },
+          select: "gereeniiDugaar",
+          khuudasniiKhemjee: 1
+        }
+      }).then(({ data: checkData }) => {
+        if (checkData?.jagsaalt?.length > 0) {
+          notification.error({
+            message: t("Алдаа"),
+            description: t("Бүртгэлтэй гэрээний дугаар байна: ") + data.gereeniiDugaar
+          });
           setWaiting(false);
-        });
+          return;
+        }
+
+        createMethod("gereeKhadgalya", token, data)
+          .then(({ data }) => {
+            if (data === "Amjilttai") {
+              setKhagalakhGeree({
+                gereeniiOgnoo: new Date(),
+                baritsaaAvakhEsekh: true,
+                gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
+                baritsaaAvakhKhugatsaa: 1,
+                baritsaaAvakhSar: _.get(
+                  baiguullaga,
+                  "tokhirgoo.baritsaaAvakhSar",
+                ),
+                barilgiinKhayag: songosonBarilgiinHayag,
+              });
+              setCurrent(0);
+              toast.success(t("Амжилттай хадгаллаа"));
+              setWaiting(false);
+            }
+          })
+          .catch((e) => {
+            aldaaBarigch(e);
+            setWaiting(false);
+          });
+      }).catch(e => {
+        aldaaBarigch(e);
+        setWaiting(false);
+      });
     }
   };
   useEffect(() => {
@@ -307,8 +330,7 @@ function GereeBaiguulakh({ token }) {
 
     setKhagalakhGeree((prev) => ({
       ognoo: prev.ognoo || new Date(),
-      gereeniiDugaar:
-        prev.gereeniiDugaar || `ГД${moment(new Date()).format("YYMMDD")}`,
+      gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
       barilgiinId: prev.barilgiinId || barilgiinId,
       barilgiinKhayag: prev.barilgiinKhayag || songosonBarilgiinHayag,
       baiguullagaEsekh: prev.baiguullagaEsekh,

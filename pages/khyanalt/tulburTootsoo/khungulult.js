@@ -210,12 +210,11 @@ function tulburTootsoo() {
 
     const selectedZardal = zardal?.jagsaalt?.find((z) => z._id === zardliinId);
     return (
-      selectedZardal?.ner?.trim() === "Халаалт" ||
-      selectedZardal?.ner?.trim() === "Дулаан" ||
-      selectedZardal?.ner?.trim() === "Халуун ус" ||
-      selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
-      selectedZardal?.ner?.trim() === "Цахилгаан" ||
-      selectedZardal?.ner?.trim() === "Цахилгаан2"
+      selectedZardal?.ner?.includes("Халаалт") ||
+      selectedZardal?.ner?.includes("Дулаан") ||
+      selectedZardal?.ner?.includes("Халуун ус") ||
+      selectedZardal?.ner?.includes("Хүйтэн ус") ||
+      selectedZardal?.ner?.includes("Цахилгаан")
     );
   }, [
     form.getFieldValue("zardliinId"),
@@ -233,12 +232,11 @@ function tulburTootsoo() {
     const selectedZardal = zardluudMap.get(zardliinId);
 
     const isUtilityExpense =
-      selectedZardal?.ner?.trim() === "Халаалт" ||
-      selectedZardal?.ner?.trim() === "Дулаан" ||
-      selectedZardal?.ner?.trim() === "Халуун ус" ||
-      selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
-      selectedZardal?.ner?.trim() === "Цахилгаан" ||
-      selectedZardal?.ner?.trim() === "Цахилгаан2";
+      selectedZardal?.ner?.includes("Халаалт") ||
+      selectedZardal?.ner?.includes("Дулаан") ||
+      selectedZardal?.ner?.includes("Халуун ус") ||
+      selectedZardal?.ner?.includes("Хүйтэн ус") ||
+      selectedZardal?.ner?.includes("Цахилгаан");
 
     if (!isUtilityExpense) {
       return gereeniiMedeelel.jagsaalt;
@@ -277,8 +275,13 @@ function tulburTootsoo() {
 
   useEffect(() => {
     khungulukhDunTootsoolyo();
-  }, [songogdsonGereenuud, zardal?.jagsaalt, form?.getFieldValue("khungulukhTurul"),
-    ]);
+  }, [
+    songogdsonGereenuud,
+    zardal?.jagsaalt,
+    ognoonuud,
+    khonogTootsokhEsekh,
+    khungulukh,
+  ]);
 
   function disabledDate(current) {
     return ajiltan?.erkh == "Admin" ||
@@ -364,16 +367,16 @@ function tulburTootsoo() {
 
           var khymdraaguiDun;
           const isUtilityExpense =
-            zardliinData?.ner === "Халаалт" ||
-            zardliinData?.ner === "Дулаан" ||
-            zardliinData?.ner === "Халуун ус" ||
-            zardliinData?.ner === "Хүйтэн ус" ||
-            zardliinData?.ner === "Цахилгаан" ||
-            songogdsonZardal?.ner === "Халаалт" ||
-            songogdsonZardal?.ner === "Дулаан" ||
-            songogdsonZardal?.ner === "Халуун ус" ||
-            songogdsonZardal?.ner === "Хүйтэн ус" ||
-            songogdsonZardal?.ner === "Цахилгаан";
+            zardliinData?.ner?.includes("Халаалт") ||
+            zardliinData?.ner?.includes("Дулаан") ||
+            zardliinData?.ner?.includes("Халуун ус") ||
+            zardliinData?.ner?.includes("Хүйтэн ус") ||
+            zardliinData?.ner?.includes("Цахилгаан") ||
+            songogdsonZardal?.ner?.includes("Халаалт") ||
+            songogdsonZardal?.ner?.includes("Дулаан") ||
+            songogdsonZardal?.ner?.includes("Халуун ус") ||
+            songogdsonZardal?.ner?.includes("Хүйтэн ус") ||
+            songogdsonZardal?.ner?.includes("Цахилгаан");
 
           if (isUtilityExpense) {
             if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
@@ -381,8 +384,8 @@ function tulburTootsoo() {
             } else {
               const avlagaData = x?.avlaga?.guilgeenuud?.find(
                 (guilgee) =>
-                  guilgee.tailbar ===
-                    (zardliinData?.ner || songogdsonZardal?.ner) &&
+                  guilgee.tailbar?.trim() ===
+                    (zardliinData?.ner || songogdsonZardal?.ner)?.trim() &&
                   (guilgee.tulukhDun || 0) !== 0,
               );
               khymdraaguiDun = avlagaData?.tulukhDun || 0;
@@ -455,9 +458,11 @@ function tulburTootsoo() {
                 var khymdarsanDun = firstMonthTotal + secondMonthTotal;
               }
             } else if (ugugdul.khungulultKhuvi && ugugdul.khungulultKhuvi > 0) {
+              const totalDaysInMonth = moment(ognoonuud[0]).daysInMonth();
               var khymdarsanDun =
-                ugugdul.khungulultKhonog *
-                ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100);
+                (ugugdul.khungulultKhonog *
+                  ((ugugdul.khungulultKhuvi * khymdraaguiDun) / 100)) /
+                totalDaysInMonth;
             } else {
               var khymdarsanDun =
                 (ugugdul.khungulultKhonog * khymdraaguiDun) /
@@ -683,12 +688,11 @@ function tulburTootsoo() {
           );
 
           const isUtilityExpense =
-            selectedZardal?.ner?.trim() === "Халаалт" ||
-            selectedZardal?.ner?.trim() === "Дулаан" ||
-            selectedZardal?.ner?.trim() === "Халуун ус" ||
-            selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
-            selectedZardal?.ner?.trim() === "Цахилгаан" ||
-            selectedZardal?.ner?.trim() === "Цахилгаан2";
+            selectedZardal?.ner?.includes("Халаалт") ||
+            selectedZardal?.ner?.includes("Дулаан") ||
+            selectedZardal?.ner?.includes("Халуун ус") ||
+            selectedZardal?.ner?.includes("Хүйтэн ус") ||
+            selectedZardal?.ner?.includes("Цахилгаан");
 
           if (isUtilityExpense) {
             if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
@@ -697,7 +701,7 @@ function tulburTootsoo() {
 
             const avlagaData = data?.avlaga?.guilgeenuud?.find(
               (guilgee) =>
-                guilgee.tailbar === selectedZardal?.ner &&
+                guilgee.tailbar?.trim() === selectedZardal?.ner?.trim() &&
                 (guilgee.tulukhDun || 0) !== 0,
             );
 
@@ -1045,12 +1049,11 @@ function tulburTootsoo() {
         const selectedZardal = gereeZardal || selectedZardalMaster;
 
         const isUtilityExpense =
-          selectedZardal?.ner?.trim() === "Халаалт" ||
-          selectedZardal?.ner?.trim() === "Дулаан" ||
-          selectedZardal?.ner?.trim() === "Халуун ус" ||
-          selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
-          selectedZardal?.ner?.trim() === "Цахилгаан" ||
-          selectedZardal?.ner?.trim() === "Цахилгаан2";
+          selectedZardal?.ner?.includes("Халаалт") ||
+          selectedZardal?.ner?.includes("Дулаан") ||
+          selectedZardal?.ner?.includes("Халуун ус") ||
+          selectedZardal?.ner?.includes("Хүйтэн ус") ||
+          selectedZardal?.ner?.includes("Цахилгаан");
 
         if (isUtilityExpense) {
           if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
@@ -1058,7 +1061,7 @@ function tulburTootsoo() {
           } else {
             const avlagaData = e?.avlaga?.guilgeenuud?.find(
               (guilgee) =>
-                guilgee.tailbar === selectedZardal?.ner &&
+                guilgee.tailbar?.trim() === selectedZardal?.ner?.trim() &&
                 (guilgee.tulukhDun || 0) !== 0,
             );
             if (avlagaData) {
@@ -1109,12 +1112,11 @@ function tulburTootsoo() {
             gereeZardal || zardal?.jagsaalt?.find((z) => z._id === fVal);
 
           const isUtilityExpense =
-            selectedZardal?.ner?.trim() === "Халаалт" ||
-            selectedZardal?.ner?.trim() === "Дулаан" ||
-            selectedZardal?.ner?.trim() === "Халуун ус" ||
-            selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
-            selectedZardal?.ner?.trim() === "Цахилгаан" ||
-            selectedZardal?.ner?.trim() === "Цахилгаан2";
+            selectedZardal?.ner?.includes("Халаалт") ||
+            selectedZardal?.ner?.includes("Дулаан") ||
+            selectedZardal?.ner?.includes("Халуун ус") ||
+            selectedZardal?.ner?.includes("Хүйтэн ус") ||
+            selectedZardal?.ner?.includes("Цахилгаан");
 
           if (isUtilityExpense) {
             if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
@@ -1223,12 +1225,11 @@ function tulburTootsoo() {
             gereeZardal || zardal?.jagsaalt?.find((z) => z._id === fVal);
 
           const isUtilityExpense =
-            selectedZardal?.ner?.trim() === "Халаалт" ||
-            selectedZardal?.ner?.trim() === "Дулаан" ||
-            selectedZardal?.ner?.trim() === "Халуун ус" ||
-            selectedZardal?.ner?.trim() === "Хүйтэн ус" ||
-            selectedZardal?.ner?.trim() === "Цахилгаан" ||
-            selectedZardal?.ner?.trim() === "Цахилгаан2";
+            selectedZardal?.ner?.includes("Халаалт") ||
+            selectedZardal?.ner?.includes("Дулаан") ||
+            selectedZardal?.ner?.includes("Халуун ус") ||
+            selectedZardal?.ner?.includes("Хүйтэн ус") ||
+            selectedZardal?.ner?.includes("Цахилгаан");
 
           if (isUtilityExpense) {
             if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
@@ -1509,60 +1510,30 @@ function tulburTootsoo() {
                       />
                     </Form.Item>
                 
-  ) : !isSelectedUtilityExpense ? (
-    <Form.Item
-      labelAlign="left"
-      name="ognoonuud"
-      label={t("Хөнгөлөх сар")}
-      rules={[
-        {
-          required: true,
-          message: t("Хөнгөлөх сар бүртгэнэ үү!"),
-        },
-      ]}
-    >
-      <DatePicker.RangePicker
-        allowClear={false}
-        style={{ width: "100%" }}
-        disabledDate={disabledDate}
-        picker="month"
-        placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
-        onChange={(v) => {
-          setOgnoonuud(v);
-        }}
-      />
-    </Form.Item>
-  ) : (
-   
-    <Form.Item
-      labelAlign="left"
-      name="ognoonuud"
-      label={t("Хөнгөлөх өдөр")}
-      rules={[
-        {
-          required: true,
-          message: t("Хөнгөлөх өдөр бүртгэнэ үү!"),
-        },
-      ]}
-    >
-      <DatePicker.RangePicker
-        allowClear={false}
-        style={{ width: "100%" }}
-        disabledDate={disabledDate}
-        placeholder={[t("Эхлэх өдөр"), t("Дуусах өдөр")]}
-          onChange={(v) => {
-            setOgnoonuud(v);
-            if (v && v[0] && v[1] && khonogTootsokhEsekh) {
-              form.setFieldValue(
-                "khungulultKhonog",
-                moment(v[1]).diff(v[0], "d") + 1,
-              );
-            }
-            khungulukhDunTootsoolyo();
-          }}
-      />
-    </Form.Item>
-  )}
+                  ) : (
+                    <Form.Item
+                      labelAlign="left"
+                      name="ognoonuud"
+                      label={t("Хөнгөлөх сар")}
+                      rules={[
+                        {
+                          required: true,
+                          message: t("Хөнгөлөх сар бүртгэнэ үү!"),
+                        },
+                      ]}
+                    >
+                      <DatePicker.RangePicker
+                        allowClear={false}
+                        style={{ width: "100%" }}
+                        disabledDate={disabledDate}
+                        picker="month"
+                        placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
+                        onChange={(v) => {
+                          setOgnoonuud(v);
+                        }}
+                      />
+                    </Form.Item>
+                  )}
            
   {khonogTootsokhEsekh ? (
     <Form.Item
