@@ -60,7 +60,7 @@ function Chart({
   const { tailanGaralt, isValidating } = useTailan(
     barilgiinId && tailan,
     token,
-    query
+    query,
   );
 
   useEffect(() => {
@@ -143,7 +143,7 @@ function Chart({
                               (a.dun * 100) /
                               tailanGaralt?.jagsaalt.reduce(
                                 (a, b) => a + b.dun || 0,
-                                0
+                                0,
                               )
                             ).toFixed(0)
                           : 0
