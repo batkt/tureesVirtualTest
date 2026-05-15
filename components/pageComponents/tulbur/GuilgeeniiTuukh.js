@@ -588,11 +588,6 @@ function GuilgeeniiTuukh(
                   ) : (
                     a.tailbar
                   )}
-                  {a.ekhSurvalj && (
-                    <span className="ml-1 text-xs text-purple-500 font-medium">
-                      ({a.ekhSurvalj === "excelZaalt" ? "Заалт олноор" : a.ekhSurvalj === "guilgeeKhiikh" ? "Гүйлгээ хийх" : a.ekhSurvalj})
-                    </span>
-                  )}
                 </td>
                 <td className="min-w-[10rem] overflow-hidden p-1 text-center">
                   {a.guilgeeKhiisenOgnoo

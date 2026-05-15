@@ -579,6 +579,7 @@ function tulburTootsoo() {
             formRef.current.resetFields();
             setTootsoolol({});
             setOgnoonuud([]);
+            setTurul("turees");
           }
         })
         .catch((e) => {
