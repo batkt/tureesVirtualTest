@@ -15,6 +15,7 @@ import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
 import KhariltsagchiinLavlakh from "./KhariltsagchiinLavlakh";
 import formatNumber from "tools/function/formatNumber";
+import moment from "moment";
 
 var timeout = null;
 
@@ -221,6 +222,10 @@ const YurunkhiiMedeele = ({
     Aos.init({ once: true });
   });
   useEffect(() => {
+    const defaultPrefix = `ГД${moment(new Date()).format("YYMMDD")}`;
+    if (value.gereeniiDugaar === defaultPrefix) {
+      form.resetFields();
+    }
     form.setFieldsValue(value);
   }, [value]);
 

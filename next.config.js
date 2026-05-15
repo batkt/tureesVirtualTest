@@ -30,6 +30,7 @@ const nextConfig = {
     HTTP_URL: process.env.HTTP_URL || "http://103.48.116.100:8081",
   },
 
+  
   // env: {
   //   NEXT_PUBLIC_URL:
   //     process.env.NEXT_PUBLIC_URL || "https://rently.zevtabs.mn/api",

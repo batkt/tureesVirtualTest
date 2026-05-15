@@ -1,4 +1,4 @@
-import { Button, DatePicker, Input, message, Popconfirm, Popover } from "antd";
+import { Button, DatePicker, Input, message, Popconfirm, Popover, Modal } from "antd";
 import React, { useImperativeHandle, useState, useMemo } from "react";
 import { flushSync } from "react-dom";
 import useSWR from "swr";
@@ -18,6 +18,7 @@ import useBaiguullaga from "hooks/useBaiguullaga";
 import useDans from "hooks/useDans";
 import { useNekhemjlekhiinTuukh } from "hooks/useNekhemjlekhiinTuukh";
 import { url } from "services/uilchilgee";
+import GuilgeeniiTuukhAldangi from "./GuilgeeniiTuukhAldangi";
 
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   const [tailbar, setTailbar] = useState("");
@@ -59,11 +60,13 @@ const turulAvya = (turul) => {
 };
 
 function GuilgeeniiTuukh(
-  { token, data, refreshData, ognoo, ajiltan, barilgiinId },
+  { token, data, refreshData, ognoo, ajiltan, barilgiinId, aldangiTuukhKharakhEsekh, uldegdelUdruurKharakhEsekh },
   ref,
 ) {
   const { t, i18n } = useTranslation();
   const [shineOgnoo, setShineOgnoo] = useState(undefined);
+  const [aldangiModalOpen, setAldangiModalOpen] = useState(false);
+  const aldangiRef = React.useRef(null);
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
     token,
     data?._id,
@@ -95,6 +98,25 @@ function GuilgeeniiTuukh(
     { createdAt: -1 }
   );
 
+  const { data: contractAldangi } = useSWR(
+    data?._id ? ["/geree/aldangiinUldegdel", data._id] : null,
+    () =>
+      axios(token)
+        .get("/geree", {
+          params: {
+            query: { _id: data?._id },
+            select: { aldangiinUldegdel: 1 },
+          },
+        })
+        .then((res) => res.data?.jagsaalt?.[0]?.aldangiinUldegdel || 0)
+  );
+
+  const displayAldangi = useMemo(() => {
+    return contractAldangi !== undefined && contractAldangi !== null 
+      ? contractAldangi 
+      : data?.aldangiinUldegdel || 0;
+  }, [contractAldangi, data?.aldangiinUldegdel]);
+
   const suuliinNekhemjlekh = useMemo(() => {
     return nekhemjlekhiinTuukhJagsaalt?.jagsaalt?.[0];
   }, [nekhemjlekhiinTuukhJagsaalt]);
@@ -113,6 +135,9 @@ function GuilgeeniiTuukh(
   const songogdsonDans = useMemo(() => {
     return dansGaralt?.jagsaalt?.[0];
   }, [dansGaralt]);
+
+  const actualAldangiTuukhKharakhEsekh = baiguullaga ? baiguullaga.tokhirgoo?.aldangiTuukhKharakhEsekh : aldangiTuukhKharakhEsekh;
+  const actualUldegdelUdruurKharakhEsekh = baiguullaga ? baiguullaga.tokhirgoo?.uldegdelUdruurKharakhEsekh : uldegdelUdruurKharakhEsekh;
 
   const tailbarRef = React.useRef(null);
   const printRef = React.useRef(null);
@@ -421,9 +446,23 @@ function GuilgeeniiTuukh(
               <div className="dark:text-white">{data?.utas.join(",")}</div>
             </div>
           </div>
+          {actualAldangiTuukhKharakhEsekh && (
+            <div className="flex flex-col">
+              <div className="flex gap-2">
+                <div className="font-bold dark:text-red-500 text-red-600">{t("Нийт алданги")}:</div>
+                <div
+                  className={`dark:text-white ${actualAldangiTuukhKharakhEsekh ? "cursor-pointer text-green-500 underline" : ""}`}
+                  onClick={() => actualAldangiTuukhKharakhEsekh && setAldangiModalOpen(true)}
+                  title={actualAldangiTuukhKharakhEsekh ? t("Алдангийн түүх харах") : ""}
+                >
+                  {formatNumber(displayAldangi, 2)}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <th className="w-full">
-          <tr className="flex min-w-[93rem] divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
+          <tr className="flex min-w-[105rem] divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
             <td
               onClick={() => toggleSortOrder("ognoo")}
               className="min-w-[8rem] overflow-hidden p-1 text-center"
@@ -455,6 +494,12 @@ function GuilgeeniiTuukh(
               {t("Хямдрал")}
             </td>
             <td
+              onClick={() => toggleSortOrder("tulsunAldangi")}
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
+              {t("Төлсөн алданги")}
+            </td>
+            <td
               onClick={() => toggleSortOrder("tulsunDun")}
               className="min-w-[8rem] overflow-hidden p-1 text-center"
             >
@@ -462,7 +507,9 @@ function GuilgeeniiTuukh(
             </td>
             <td
               onClick={() => toggleSortOrder("uldegdel")}
-              className="min-w-[8rem] overflow-hidden p-1 text-center"
+              className={`min-w-[8rem] overflow-hidden p-1 text-center ${
+                actualUldegdelUdruurKharakhEsekh === false ? "hidden" : ""
+              }`}
             >
               {t("Үлдэгдэл")}
             </td>
@@ -488,12 +535,12 @@ function GuilgeeniiTuukh(
           </tr>
         </th>
         <tbody
-          className="overflownone min-w-[93rem]"
+          className="overflownone min-w-[105rem]"
           style={isPrinting ? {} : { height: "calc(100vh - 15rem)", overflowY: "auto" }}
         >
           {sortedData
             ?.map((a, i) => (
-              <tr className="flex min-w-[93rem] divide-x border-b border-gray-200 bg-gray-50 pr-1 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+              <tr className="flex min-w-[105rem] divide-x border-b border-gray-200 bg-gray-50 pr-1 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
                 <td className="min-w-[8rem] overflow-hidden p-1 text-center">
                   {moment(a.ognoo).format("YYYY-MM-DD")}
                 </td>
@@ -509,13 +556,18 @@ function GuilgeeniiTuukh(
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                   {formatNumber(a.khyamdral)}
                 </td>
+                <td className={`min-w-[8rem] overflow-hidden p-1 text-end ${
+                  a.tulsunAldangi > 0 ? "text-orange-500 font-medium" : ""
+                }`}>
+                  {a.tulsunAldangi > 0 ? formatNumber(a.tulsunAldangi) : ""}
+                </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                   {formatNumber(a.tulsunDun)}
                 </td>
                 <td
                   className={`min-w-[8rem] overflow-hidden p-1 text-end ${
                     a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-                  }`}
+                  } ${actualUldegdelUdruurKharakhEsekh === false ? "hidden" : ""}`}
                 >
                   {formatNumber(
                     a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
@@ -572,6 +624,28 @@ function GuilgeeniiTuukh(
             ))
             .reverse()}
         </tbody>
+        {/* Алдангийн түүх Modal */}
+        <Modal
+          visible={aldangiModalOpen}
+          onCancel={() => setAldangiModalOpen(false)}
+          title={t("Алдангийн түүх")}
+          width="80vw"
+          style={{ top: 20 }}
+          footer={[
+            <Button key="close" onClick={() => setAldangiModalOpen(false)}>{t("Хаах")}</Button>
+          ]}
+          destroyOnClose
+        >
+          <GuilgeeniiTuukhAldangi
+            ref={aldangiRef}
+            data={data}
+            token={token}
+            ognoo={ognoo}
+            ajiltan={ajiltan}
+            barilgiinId={barilgiinId}
+            refreshData={refreshData}
+          />
+        </Modal>
         <div className="relative mt-8 flex flex-col gap-1 text-sm font-medium opacity-0 h-0 overflow-hidden print:opacity-100 print:h-auto print:overflow-visible print:flex">
           <div className="relative h-6">
             <div className="relative z-10">

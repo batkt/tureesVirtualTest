@@ -56,7 +56,7 @@ const steps = [
 
 function GereeBaiguulakh({ token }) {
   const { t } = useTranslation();
-  const { baiguullaga, barilgiinId } = useAuth();
+  const { baiguullaga, barilgiinId, ajiltan } = useAuth();
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -86,29 +86,35 @@ function GereeBaiguulakh({ token }) {
 
   useEffect(() => {
     const defaultPrefix = `ГД${moment(new Date()).format("YYMMDD")}`;
-    if (!khadgalakhGeree.gereeniiDugaar || khadgalakhGeree.gereeniiDugaar === defaultPrefix) {
+    const bId = baiguullaga?._id || ajiltan?.baiguullagiinId;
+    if ((!khadgalakhGeree.gereeniiDugaar || khadgalakhGeree.gereeniiDugaar === defaultPrefix) && !!barilgiinId && !!bId) {
       uilchilgee(token)
         .get("/geree/gereeniiDugaarlaltAvya", {
           params: {
             barilgiinId: barilgiinId,
-            baiguullagiinId: baiguullaga?._id,
+            baiguullagiinId: bId,
           },
         })
         .then(({ data: nextDugaar }) => {
           const finalDugaar = `${defaultPrefix}${String(nextDugaar).padStart(2, "0")}`;
-          setKhagalakhGeree((prev) => ({
-            ...prev,
-            gereeniiDugaar: finalDugaar,
-          }));
+          setKhagalakhGeree((prev) => {
+            if (!prev.gereeniiDugaar || prev.gereeniiDugaar === defaultPrefix) {
+              return { ...prev, gereeniiDugaar: finalDugaar };
+            }
+            return prev;
+          });
         })
         .catch((err) => {
-          setKhagalakhGeree((prev) => ({
-            ...prev,
-            gereeniiDugaar: `${defaultPrefix}01`,
-          }));
+          console.error("Failed to fetch next dugaar", err);
+          if (!khadgalakhGeree.gereeniiDugaar || khadgalakhGeree.gereeniiDugaar === defaultPrefix) {
+            setKhagalakhGeree((prev) => ({
+              ...prev,
+              gereeniiDugaar: `${defaultPrefix}01`,
+            }));
+          }
         });
     }
-  }, [khadgalakhGeree.gereeniiDugaar, token, barilgiinId, baiguullaga]);
+  }, [khadgalakhGeree.gereeniiDugaar, token, barilgiinId, baiguullaga, ajiltan]);
 
 
 
@@ -242,11 +248,11 @@ function GereeBaiguulakh({ token }) {
       
       uilchilgee(token).get("/geree", {
         params: {
-          query: {
+          query: JSON.stringify({
             gereeniiDugaar: data.gereeniiDugaar,
             tuluv: { $ne: -1 }
-          },
-          select: "gereeniiDugaar",
+          }),
+          select: JSON.stringify({ gereeniiDugaar: 1 }),
           khuudasniiKhemjee: 1
         }
       }).then(({ data: checkData }) => {
@@ -255,6 +261,8 @@ function GereeBaiguulakh({ token }) {
             message: t("Алдаа"),
             description: t("Бүртгэлтэй гэрээний дугаар байна: ") + data.gereeniiDugaar
           });
+          const defaultPrefix = `ГД${moment(new Date()).format("YYMMDD")}`;
+          setKhagalakhGeree(prev => ({ ...prev, gereeniiDugaar: defaultPrefix }));
           setWaiting(false);
           return;
         }
@@ -262,10 +270,21 @@ function GereeBaiguulakh({ token }) {
         createMethod("gereeKhadgalya", token, data)
           .then(({ data }) => {
             if (data === "Amjilttai") {
+              const defaultPrefix = `ГД${moment(new Date()).format("YYMMDD")}`;
               setKhagalakhGeree({
+                ovog: null,
+                ner: null,
+                register: null,
+                customerTin: null,
+                albanTushaal: null,
+                zakhirliinOvog: null,
+                zakhirliinNer: null,
+                utas: [],
+                mail: null,
+                khayag: null,
                 gereeniiOgnoo: new Date(),
                 baritsaaAvakhEsekh: true,
-                gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
+                gereeniiDugaar: defaultPrefix,
                 baritsaaAvakhKhugatsaa: 1,
                 baritsaaAvakhSar: _.get(
                   baiguullaga,

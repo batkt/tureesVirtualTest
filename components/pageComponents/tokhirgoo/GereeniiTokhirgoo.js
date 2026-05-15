@@ -76,6 +76,11 @@ function KhuviinMedeelel({
     bichiltKhonog: baiguullaga?.tokhirgoo?.bichiltKhonog || 0,
 
     udruurBodokhEsekh: baiguullaga?.tokhirgoo?.udruurBodokhEsekh,
+
+    uldegdelUdruurKharakhEsekh:
+      baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh,
+    aldangiTuukhKharakhEsekh:
+      baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh,
   });
 
   const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState(null);
@@ -171,6 +176,9 @@ function KhuviinMedeelel({
         bichiltKhonog: gereeTokhirgoo?.bichiltKhonog,
 
         udruurBodokhEsekh: gereeTokhirgoo?.udruurBodokhEsekh,
+
+        uldegdelUdruurKharakhEsekh: gereeTokhirgoo?.uldegdelUdruurKharakhEsekh,
+        aldangiTuukhKharakhEsekh: gereeTokhirgoo?.aldangiTuukhKharakhEsekh,
       },
     };
 
@@ -220,7 +228,40 @@ function KhuviinMedeelel({
       });
     }
   }, [barilga]);
+
+  useEffect(() => {
+    if (baiguullaga?.tokhirgoo) {
+      setGereeTokhirgoo({
+        gereeAvtomataarSungakhEsekh:
+          baiguullaga.tokhirgoo.gereeAvtomataarSungakhEsekh,
+        bukhAjiltanGereendZasvarOruulakhEsekh:
+          baiguullaga.tokhirgoo.bukhAjiltanGereendZasvarOruulakhEsekh,
+        qpayShimtgelTusdaa: baiguullaga.tokhirgoo.qpayShimtgelTusdaa,
+        baritsaaAvakhEsekh: baiguullaga.tokhirgoo.baritsaaAvakhEsekh,
+        baritsaaAvakhSar: baiguullaga.tokhirgoo.baritsaaAvakhSar,
+        baritsaaUneAdiltgakhEsekh: baiguullaga.tokhirgoo.baritsaaUneAdiltgakhEsekh,
+        aktAshiglakhEsekh: baiguullaga.tokhirgoo.aktAshiglakhEsekh,
+        guidelBuchiltKhonogEsekh: baiguullaga.tokhirgoo.guidelBuchiltKhonogEsekh,
+        sekhDemjikhTulburAvakhEsekh:
+          baiguullaga.tokhirgoo.sekhDemjikhTulburAvakhEsekh,
+        bichiltKhonog: baiguullaga.tokhirgoo.bichiltKhonog || 0,
+        udruurBodokhEsekh: baiguullaga.tokhirgoo.udruurBodokhEsekh,
+        uldegdelUdruurKharakhEsekh: baiguullaga.tokhirgoo.uldegdelUdruurKharakhEsekh,
+        aldangiTuukhKharakhEsekh: baiguullaga.tokhirgoo.aldangiTuukhKharakhEsekh,
+      });
+    }
+  }, [baiguullaga?.tokhirgoo]);
   function khadgalakh() {
+    if (!!gereeTokhirgoo) {
+      if (!baiguullaga.tokhirgoo) {
+        baiguullaga.tokhirgoo = {};
+      }
+      baiguullaga.tokhirgoo = {
+        ...baiguullaga.tokhirgoo,
+        ...gereeTokhirgoo,
+      };
+    }
+
     const index = baiguullaga.barilguud.findIndex((a) => a._id === barilgiinId);
 
     if (deleteTamga) {
@@ -725,6 +766,52 @@ function KhuviinMedeelel({
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
                       qpayShimtgelTusdaa: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("Гүйлгээний түүхийг өдөр өдөрөөр үлдэгдэл харагдах эсэх")}
+                </div>
+                <div className="text-gray-600">
+                  {t("Хуулга дээр өдөрийн үлдэгдэл харагдана")}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh}
+                  onChange={(v) =>
+                    setGereeTokhirgoo((a) => ({
+                      ...(a || {}),
+                      uldegdelUdruurKharakhEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("Хуулга дээр алдангийн түүх харагдах эсэх")}
+                </div>
+                <div className="text-gray-600">
+                  {t("Нийт алданги, алдангийн түүх харагдана")}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh}
+                  onChange={(v) =>
+                    setGereeTokhirgoo((a) => ({
+                      ...(a || {}),
+                      aldangiTuukhKharakhEsekh: v,
                     }))
                   }
                 />
