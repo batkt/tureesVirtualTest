@@ -323,6 +323,10 @@ function EbarimtMedeelel({ token }) {
         dataIndex: "lottery",
         align: "center",
         width: "120px",
+        render: (data, object) => {
+          if (object.gereeniiDugaar) return "-";
+          return data;
+        },
       },
       {
         title: t("Дүн"),
