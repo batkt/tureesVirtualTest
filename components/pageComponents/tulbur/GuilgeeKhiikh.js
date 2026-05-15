@@ -145,7 +145,7 @@ function GuilgeeKhiikh(
     date,
   );
   const zardal = useJagsaalt(
-    data?.zardluud && "/ashiglaltiinZardluud",
+    data?.zardluud && (turul === "ashiglalt" || turul === "teglekh" || (turul === "avlaga" && busadTurul === "ashiglalt")) && "/ashiglaltiinZardluud",
     query,
     undefined,
     undefined,
@@ -188,7 +188,7 @@ function GuilgeeKhiikh(
   }, [turul, data?._id, data?.talbainDugaar]);
 
   const zardalAll = useJagsaalt(
-    "/ashiglaltiinZardluud",
+    (turul === "ashiglalt" || (turul === "avlaga" && busadTurul === "ashiglalt")) && "/ashiglaltiinZardluud",
     queryZardal,
     undefined,
     undefined,

@@ -58,9 +58,9 @@ import NekhemjlekhiinTuukhTsonkh from "components/pageComponents/tulbur/Nekhemjl
 
 const GereeniiUldegdel = React.memo(
   ({ ugugdul, token, ognoo, tsutsalsanTurul, refreshTotals }) => {
-    const { barilgiinId, baiguullaga } = useAuth();
+    const { barilgiinId, baiguullaga, ajiltan } = useAuth();
     const { t } = useTranslation();
-    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
+    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
     const { data, mutate, isValidating } = useSWR(
       !!ugugdul?.gereeniiDugaar && !!barilgiinId
         ? [
@@ -80,21 +80,24 @@ const GereeniiUldegdel = React.memo(
       },
     );
 
-    // Lease balance from aggregated calculation
+    const uldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1");
+    const showCombined = aldangiTuukhKharakhEsekh || uldegdelUdruurKharakhEsekh;
+
+     
     const tureesiinUldegdelFromData = data?.tureesiinUldegdel ?? 0;
     const aldangiFromData = data?.aldangiinUldegdel ?? 0;
 
-    // If aldangiTuukhKharakhEsekh is false, don't add aldangi to balance
+     
     const combinedFromData = data
-      ? aldangiTuukhKharakhEsekh
+      ? showCombined
         ? tureesiinUldegdelFromData + aldangiFromData
         : tureesiinUldegdelFromData
       : null;
 
-    // Fallback to contract record fields
+    
     const fallbackUldegdel =
       combinedFromData ??
-      ((ugugdul?.uldegdel ?? 0) + (aldangiTuukhKharakhEsekh ? (ugugdul?.aldangiinUldegdel ?? 0) : 0)) ??
+      ((ugugdul?.uldegdel ?? 0) + (showCombined ? (ugugdul?.aldangiinUldegdel ?? 0) : 0)) ??
       ugugdul?.niitUldegdel ??
       ugugdul?.tsutslagdsanAvlaga ??
       (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
@@ -2024,7 +2027,7 @@ const {
                 {
                   title: t("Авлагын үлдэгдэл"),
                   dataIndex: "avlagiinUldegdel",
-                  className: "text-center",
+                  className: `text-center ${ (baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1")) ? "hidden" : "" }`,
                   align: "center",
                   ellipsis: true,
                   width: "7rem",

@@ -122,6 +122,15 @@ function KhungulultiinTokhirgoo({
         };
         barilguudCopy[tukhainBarilgiinIndex] = updatedBarilga;
         yavuulakhData.barilguud = barilguudCopy;
+
+        // Merge global tokhirgoo changes into yavuulakhData to avoid race conditions
+        if (khungulultiinTokhirgoo) {
+          yavuulakhData.tokhirgoo = {
+            ...(yavuulakhData.tokhirgoo || {}),
+            ...khungulultiinTokhirgoo,
+          };
+        }
+
         uilchilgee(token)
           .put(`/baiguullaga/${baiguullaga?._id}`, yavuulakhData)
           .then(({ data }) => {
@@ -130,6 +139,7 @@ function KhungulultiinTokhirgoo({
                 message: "Амжилттай хадгалагдлаа",
                 duration: 2,
               });
+              setKhungulultiinTokhirgoo(null);
               baiguullagaMutate();
               setSongogdsonTsonkhniiIndex(0);
             }
@@ -138,17 +148,21 @@ function KhungulultiinTokhirgoo({
             aldaaBarigch(err);
           });
       }
+    } else if (khungulultiinTokhirgoo) {
+      uilchilgee(token)
+        .post("/baiguullagaTokhirgooZasya", {
+          baiguullagiinId: baiguullaga?._id,
+          tokhirgoo: khungulultiinTokhirgoo,
+        })
+        .then(({ data }) => {
+          if (data === "Amjilttai") {
+            notification.success({ message: t("Амжилттай засагдлаа") });
+            setKhungulultiinTokhirgoo(null);
+            baiguullagaMutate();
+            setSongogdsonTsonkhniiIndex(2);
+          }
+        });
     }
-    uilchilgee(token)
-      .post("/baiguullagaTokhirgooZasya", { tokhirgoo: khungulultiinTokhirgoo })
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
-          notification.success({ message: t("Амжилттай засагдлаа") });
-          setKhungulultiinTokhirgoo(null);
-          baiguullagaMutate();
-          setSongogdsonTsonkhniiIndex(2);
-        }
-      });
   };
 
   return (
