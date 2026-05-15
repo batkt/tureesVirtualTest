@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
+import { message } from "antd";
 import { MdMessage, MdClose, MdSend } from "react-icons/md";
 import { FaRobot, FaUser } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
@@ -52,6 +53,7 @@ export default function ChatWidget() {
       setMessages(msgRes.data.data);
     } catch (err) {
       console.error("Failed to init chat", err);
+      message.error("Чат холбогдоход алдаа гарлаа: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -87,7 +89,11 @@ export default function ChatWidget() {
   }, [conversation]);
 
   const sendMessage = async () => {
-    if (!input.trim() || !conversation) return;
+    if (!input.trim()) return;
+    if (!conversation) {
+      message.warning("Чат холбогдоогүй байна. Түр хүлээнэ үү.");
+      return;
+    }
     
     try {
       const text = input.trim();
@@ -108,7 +114,8 @@ export default function ChatWidget() {
       });
       
     } catch (err) {
-      console.error("Failed to send message", err);
+      console.error(err);
+      message.error("Мессеж илгээхэд алдаа гарлаа: " + err.message);
     }
   };
 
