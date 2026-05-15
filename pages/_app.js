@@ -26,6 +26,7 @@ import "../styles/globals.css";
 import "../styles/TipTapEditor.css";
 import "../services/i18n";
 import { Toaster } from "sonner";
+import ChatWidget from "../components/ChatWidget";
 
 // Register Chart.js components (used on many pages, so register early)
 ChartJS.register(
@@ -89,6 +90,7 @@ function MyApp({ Component, pageProps }) {
           <div key={router.asPath} className="page-transition-enter">
             <Component {...pageProps} />
           </div>
+          <ChatWidget />
         </ConfigProvider>
       </AuthProvider>
     </ThemeProvider>

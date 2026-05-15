@@ -79,7 +79,7 @@ function EBarimt({
             </div>
           </div>
         )}
-        {eBarimt?.lottery && (
+        {eBarimt?.lottery && !irgenEsekh && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>{t("Сугалааны дугаар")}</div>
             <div className="ml-auto text-lg font-medium">{eBarimt?.lottery}</div>
@@ -287,16 +287,6 @@ function EBarimt({
                   </td>
                 </tr>
                 {/* hamaarahq */}
-                {!!irgenEsekh && (
-                  <tr>
-                    <td colSpan={4} className="border">
-                      {t("Сугалааны дугаар")}
-                    </td>
-                    <td colSpan={2} className="border">
-                      {eBarimt?.lottery}
-                    </td>
-                  </tr>
-                )}
                 <tr>
                   <td colSpan={6}>
                     <div className="flex w-full justify-center p-5">
