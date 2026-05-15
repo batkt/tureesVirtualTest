@@ -130,7 +130,7 @@ const YurunkhiiMedeele = ({
   const [form] = Form.useForm();
   const formRef = useRef();
 
-  function onChangeRegister({ target }) {
+  function onChangeRegister({ target, selectedCustomer }) {
     var onookhKhariltsagch = {
       customerTin: undefined,
       ner: undefined,
@@ -139,22 +139,65 @@ const YurunkhiiMedeele = ({
       mail: undefined,
       zakhirliinOvog: undefined,
       zakhirliinNer: undefined,
+      khayag: undefined,
+      albanTushaal: undefined,
     };
     form.setFieldsValue(onookhKhariltsagch);
     clearTimeout(timeout);
+
+    if (selectedCustomer) {
+      const {
+        ner,
+        utas,
+        ovog,
+        mail,
+        zakhirliinOvog,
+        zakhirliinNer,
+        khayag,
+        customerTin,
+        albanTushaal,
+        register,
+      } = selectedCustomer;
+
+      const fillData = value.baiguullagaEsekh
+        ? {
+            utas,
+            zakhirliinOvog,
+            zakhirliinNer,
+            mail,
+            khayag,
+            register: register || target.value,
+            ner,
+            customerTin,
+            albanTushaal,
+          }
+        : {
+            ner,
+            utas,
+            ovog,
+            mail,
+            khayag,
+            register: register || target.value,
+            customerTin,
+            albanTushaal,
+          };
+
+      form.setFieldsValue(fillData);
+      onChange({ ...value, ...fillData });
+      return;
+    }
+
     if (!!target.value) {
       timeout = setTimeout(function () {
         uilchilgee(token)
           .get("/khariltsagch", {
             params: {
               query: {
-                barilgiinId,
                 baiguullagiinId: baiguullaga?._id,
                 $or: [
                   { register: target.value },
                   { customerTin: target.value },
                 ],
-                idevkhiteiEsekh: { $in: [true, false] },
               },
               select: {
                 ner: 1,
@@ -166,6 +209,7 @@ const YurunkhiiMedeele = ({
                 khayag: 1,
                 customerTin: 1,
                 albanTushaal: 1,
+                register: 1,
               },
             },
           })
@@ -181,33 +225,34 @@ const YurunkhiiMedeele = ({
                 khayag,
                 customerTin,
                 albanTushaal,
+                register,
               } = data?.jagsaalt[0];
-              if (value.baiguullagaEsekh) {
-                var onookhKhariltsagch = {
-                  utas,
-                  zakhirliinOvog,
-                  zakhirliinNer,
-                  mail,
-                  khayag,
-                  register: target.value,
-                  ner,
-                  customerTin,
-                  albanTushaal,
-                };
-              } else {
-                var onookhKhariltsagch = {
-                  ner,
-                  utas,
-                  ovog,
-                  mail,
-                  khayag,
-                  register: target.value,
-                  customerTin,
-                  albanTushaal,
-                };
-              }
-              form.setFieldsValue(onookhKhariltsagch);
-              onChange({ ...value, ...onookhKhariltsagch });
+
+              const fillData = value.baiguullagaEsekh
+                ? {
+                    utas,
+                    zakhirliinOvog,
+                    zakhirliinNer,
+                    mail,
+                    khayag,
+                    register: register || target.value,
+                    ner,
+                    customerTin,
+                    albanTushaal,
+                  }
+                : {
+                    ner,
+                    utas,
+                    ovog,
+                    mail,
+                    khayag,
+                    register: register || target.value,
+                    customerTin,
+                    albanTushaal,
+                  };
+
+              form.setFieldsValue(fillData);
+              onChange({ ...value, ...fillData });
             } else {
               form.setFieldValue("register", target.value);
               onChange({ ...value, register: target.value });

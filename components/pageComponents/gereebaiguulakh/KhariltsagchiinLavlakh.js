@@ -19,7 +19,6 @@ const KhariltsagchiinLavlakh = ({
   const searchKeys = ["ner", "register", "customerTin"];
   const kharitsagchQuery = useMemo(() => {
     return {
-      barilgiinId: barilgiinId,
       baiguullagiinId: baiguullaga?._id,
       turul: baiguullagaEsekh === true ? "ААН" : "Иргэн",
     };
@@ -81,7 +80,10 @@ const KhariltsagchiinLavlakh = ({
     <Dropdown
       trigger={"click"}
       open={dropDownNeekhEsekh}
-      onOpenChange={() => setDropDownNeekhEsekh(!dropDownNeekhEsekh)}
+      onOpenChange={(open) => {
+        setDropDownNeekhEsekh(open);
+        if (open) khariltsagchiinGaralt.mutate();
+      }}
       overlay={
         <div
           className="divide-y bg-white px-2 py-1 shadow-lg drop-shadow-2xl dark:bg-gray-700 dark:text-gray-200"
@@ -99,7 +101,7 @@ const KhariltsagchiinLavlakh = ({
                     ? mur.register
                     : mur.customerTin;
                   onChange(newValue);
-                  onChangeRegister({ target: { value: newValue } });
+                  onChangeRegister({ target: { value: newValue }, selectedCustomer: mur });
                   setDropDownNeekhEsekh(false);
                 }}
                 className="relative flex cursor-pointer items-center justify-between px-1 py-1 hover:bg-gray-100"
