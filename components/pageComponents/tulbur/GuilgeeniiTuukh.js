@@ -136,6 +136,9 @@ function GuilgeeniiTuukh(
     return dansGaralt?.jagsaalt?.[0];
   }, [dansGaralt]);
 
+  const actualAldangiTuukhKharakhEsekh = baiguullaga ? baiguullaga.tokhirgoo?.aldangiTuukhKharakhEsekh : aldangiTuukhKharakhEsekh;
+  const actualUldegdelUdruurKharakhEsekh = baiguullaga ? baiguullaga.tokhirgoo?.uldegdelUdruurKharakhEsekh : uldegdelUdruurKharakhEsekh;
+
   const tailbarRef = React.useRef(null);
   const printRef = React.useRef(null);
   const [isPrinting, setIsPrinting] = useState(false);
@@ -443,18 +446,20 @@ function GuilgeeniiTuukh(
               <div className="dark:text-white">{data?.utas.join(",")}</div>
             </div>
           </div>
-          <div className="flex flex-col">
-            <div className="flex gap-2">
-              <div className="font-bold dark:text-white">{t("Нийт алданги")}:</div>
-              <div
-                className={`dark:text-white ${aldangiTuukhKharakhEsekh ? "cursor-pointer text-orange-500 underline" : ""}`}
-                onClick={() => aldangiTuukhKharakhEsekh && setAldangiModalOpen(true)}
-                title={aldangiTuukhKharakhEsekh ? t("Алдангийн түүх харах") : ""}
-              >
-                {formatNumber(displayAldangi, 2)}
+          {actualAldangiTuukhKharakhEsekh && (
+            <div className="flex flex-col">
+              <div className="flex gap-2">
+                <div className="font-bold dark:text-red-500 text-red-600">{t("Нийт алданги")}:</div>
+                <div
+                  className={`dark:text-white ${actualAldangiTuukhKharakhEsekh ? "cursor-pointer text-green-500 underline" : ""}`}
+                  onClick={() => actualAldangiTuukhKharakhEsekh && setAldangiModalOpen(true)}
+                  title={actualAldangiTuukhKharakhEsekh ? t("Алдангийн түүх харах") : ""}
+                >
+                  {formatNumber(displayAldangi, 2)}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
         <th className="w-full">
           <tr className="flex min-w-[105rem] divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
@@ -503,7 +508,7 @@ function GuilgeeniiTuukh(
             <td
               onClick={() => toggleSortOrder("uldegdel")}
               className={`min-w-[8rem] overflow-hidden p-1 text-center ${
-                uldegdelUdruurKharakhEsekh === false ? "hidden" : ""
+                actualUldegdelUdruurKharakhEsekh === false ? "hidden" : ""
               }`}
             >
               {t("Үлдэгдэл")}
@@ -562,7 +567,7 @@ function GuilgeeniiTuukh(
                 <td
                   className={`min-w-[8rem] overflow-hidden p-1 text-end ${
                     a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-                  } ${uldegdelUdruurKharakhEsekh === false ? "hidden" : ""}`}
+                  } ${actualUldegdelUdruurKharakhEsekh === false ? "hidden" : ""}`}
                 >
                   {formatNumber(
                     a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,

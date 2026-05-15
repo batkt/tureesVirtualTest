@@ -779,12 +779,12 @@ function KhuviinMedeelel({
                   {t("Гүйлгээний түүхийг өдөр өдөрөөр үлдэгдэл харагдах эсэх")}
                 </div>
                 <div className="text-gray-600">
-                  {t("Хуулга дээр хуулаах үед мөр бүри өдөрийн үлдэгдэл харагдана")}
+                  {t("Хуулга дээр өдөрийн үлдэгдэл харагдана")}
                 </div>
               </div>
               <div className="ml-auto">
                 <Switch
-                  checked={gereeTokhirgoo?.uldegdelUdruurKharakhEsekh || false}
+                  defaultChecked={baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh}
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
@@ -802,12 +802,12 @@ function KhuviinMedeelel({
                   {t("Хуулга дээр алдангийн түүх харагдах эсэх")}
                 </div>
                 <div className="text-gray-600">
-                  {t("Нийт алданги дээр дараад түух алдангийн түүх харагдана")}
+                  {t("Нийт алданги, алдангийн түүх харагдана")}
                 </div>
               </div>
               <div className="ml-auto">
                 <Switch
-                  checked={gereeTokhirgoo?.aldangiTuukhKharakhEsekh || false}
+                  defaultChecked={baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh}
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
