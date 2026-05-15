@@ -2,7 +2,7 @@ import uilchilgee from "services/uilchilgee";
 
 function erkhteiEsekh(token, zam) {
   return uilchilgee(token)
-    .post(`${"https://turees.zevtabs.mn/api"}/erkhteiEsekh`, { zam })
+    .post("/erkhteiEsekh", { zam })
     .then(({ data }) => data);
 }
 
