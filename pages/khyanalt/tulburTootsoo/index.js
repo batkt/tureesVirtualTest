@@ -548,20 +548,28 @@ function tulburTootsoo({ token }) {
         footer: false,
       });
     }
-    if (baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh === true) {
+    const gereeId = Array.isArray(data.kholbosonGereeniiId) ? data.kholbosonGereeniiId[0] : data.kholbosonGereeniiId;
+    if (gereeId) {
       uilchilgee(token)
         .get("/geree", {
           params: {
-            query: { _id: data.kholbosonGereeniiId },
+            query: { _id: gereeId },
             select: { register: 1, turul: 1 },
           },
         })
-        .then(({ data }) => {
-          if (data.jagsaalt.length > 0) {
-            barimtShivya(data.jagsaalt[0].register, data.jagsaalt[0].turul);
+        .then(({ data: gereeData }) => {
+          if (gereeData && gereeData.jagsaalt && gereeData.jagsaalt.length > 0) {
+            barimtShivya(gereeData.jagsaalt[0].register || data.register, gereeData.jagsaalt[0].turul || data.turul);
+          } else {
+            barimtShivya(data.register, data.turul);
           }
+        })
+        .catch(() => {
+          barimtShivya(data.register, data.turul);
         });
-    } else barimtShivya();
+    } else {
+      barimtShivya(data.register, data.turul);
+    }
   }
 
   const columns = useMemo(() => {

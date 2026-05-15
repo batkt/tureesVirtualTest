@@ -24,11 +24,11 @@ function Tulbur(
   const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
-    defaultTurul === "ААН" ? true : false
+    defaultTurul === "ААН" || (defaultRegister && defaultRegister.toString().length === 7) ? true : false
   );
 
   const [irgenEsekh, setIrgenEsekh] = React.useState(
-    defaultTurul === "Иргэн" ? true : false
+    defaultTurul === "Иргэн" || (defaultRegister && defaultRegister.toString().length === 10) ? true : false
   );
   const [register, setRegister] = React.useState(defaultRegister || "");
   const [customerTin, setCustomerTin] = React.useState();
@@ -153,6 +153,7 @@ function Tulbur(
         setCustomerTin={setCustomerTin}
         searching={searching}
         setSearching={setSearching}
+        isFromKhuulga={true}
       />
       <div className="mt-5 flex flex-row justify-between">
         <Button type="primary" danger onClick={khaaya}>
