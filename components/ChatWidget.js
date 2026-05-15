@@ -6,8 +6,8 @@ import { FaRobot, FaUser } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import uilchilgee from "../services/uilchilgee";
 
-const BASE_API = "https://turees.zevtabs.mn/api/v1/chat";
-const SOCKET_URL = "https://turees.zevtabs.mn";
+const BASE_API = "https://admin.zevtabs.mn/api/v1/chat";
+const SOCKET_URL = "https://admin.zevtabs.mn";
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
