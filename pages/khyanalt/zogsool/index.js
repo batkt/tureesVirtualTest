@@ -2672,12 +2672,17 @@ function Zogsool({ token }) {
                             __cellType__: "TypeNumeric",
                             dataIndex: "niitDun",
                             render(v, data) {
-                              const total =
-                                v > 0
-                                  ? v
-                                  : (data.tuukh?.[0]?.tulukhDun || 0) +
-                                    (data.tuukh?.[1]?.tulukhDun || 0);
-                              return total || 0;
+                              if (data?.isSummary) return v || 0;
+                              const hasZeroTulukhDun = data.tuukh?.some(
+                                (t) => t?.tulukhDun === 0,
+                              );
+                              if (hasZeroTulukhDun) {
+                                return data.niitDun || 0;
+                              }
+                              return (
+                                (data.tuukh?.[0]?.tulukhDun || 0) +
+                                (data.tuukh?.[1]?.tulukhDun || 0)
+                              );
                             },
                           },
                           ...filteredPaymentColumns,
