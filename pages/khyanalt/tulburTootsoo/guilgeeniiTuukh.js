@@ -60,96 +60,98 @@ const GereeniiUldegdel = React.memo(
   ({ ugugdul, token, ognoo, tsutsalsanTurul, refreshTotals }) => {
     const { barilgiinId, baiguullaga } = useAuth();
     const { t } = useTranslation();
+    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
     const { data, mutate, isValidating } = useSWR(
       !!ugugdul?.gereeniiDugaar && !!barilgiinId
         ? [
             "/uldegdelBodyo",
             barilgiinId,
-            baiguullaga?._id,
             ugugdul?.gereeniiDugaar,
             ognoo,
-            ugugdul?._id,
+            tsutsalsanTurul,
           ]
         : null,
-      (url, barilgiinId, baiguullagiinId, gereeniiDugaar, ognoo, gereeniiId) =>
+      (url, barilgiinId, gereeniiDugaar, ognoo) =>
         uilchilgee(token)
-          .post(url, { 
-            barilgiinId, 
-            baiguullagiinId,
-            gereeniiDugaar, 
-            ognoo, 
-            gereeniiId,
-            tsutsalsanTurul 
-          })
+          .post(url, { barilgiinId, gereeniiDugaar, ognoo, tsutsalsanTurul })
           .then(({ data }) => data),
       {
         revalidateOnFocus: false,
       },
     );
 
-    const shouldAddAldangi = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== false;
+    // Lease balance from aggregated calculation
+    const tureesiinUldegdelFromData = data?.tureesiinUldegdel ?? 0;
+    const aldangiFromData = data?.aldangiinUldegdel ?? 0;
 
-    const displayUldegdel = data
-      ? (data.tureesiinUldegdel ?? 0) + (shouldAddAldangi ? (data.aldangiinUldegdel ?? 0) : 0)
-      : (ugugdul?.uldegdel ?? 0) + (shouldAddAldangi ? (ugugdul?.aldangiinUldegdel ?? 0) : 0);
+    // If aldangiTuukhKharakhEsekh is false, don't add aldangi to balance
+    const combinedFromData = data
+      ? aldangiTuukhKharakhEsekh
+        ? tureesiinUldegdelFromData + aldangiFromData
+        : tureesiinUldegdelFromData
+      : null;
 
-    // Update the record's uldegdel to the sum for consistency in the table
-    // However, we must be careful not to double count in computedTotals if it also sums them.
-    // In computedTotals, I've updated it to use the record's raw fields.
-    ugugdul.displayUldegdel = displayUldegdel; 
+    // Fallback to contract record fields
+    const fallbackUldegdel =
+      combinedFromData ??
+      ((ugugdul?.uldegdel ?? 0) + (aldangiTuukhKharakhEsekh ? (ugugdul?.aldangiinUldegdel ?? 0) : 0)) ??
+      ugugdul?.niitUldegdel ??
+      ugugdul?.tsutslagdsanAvlaga ??
+      (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
 
+    const displayUldegdel = fallbackUldegdel;
+    ugugdul.uldegdel = displayUldegdel;
     if (!isValidating && data && typeof refreshTotals === "function") {
       refreshTotals();
     }
     ugugdul.mutate = mutate;
 
     const content = (
-      <div className="space-y-1 p-1 text-xs min-w-[200px]">
-        {data?.detal?.khuvaari > 0 && (
+      <div className="space-y-1 p-1 text-xs">
+        {data?.tureesiinUldegdel > 0 && (
           <div className="flex justify-between gap-4">
             <span className="text-gray-500">{t("Түрээсийн үлдэгдэл")}:</span>
             <span className="font-bold text-red-500">
-              {formatNumber(data.detal.khuvaari)}
+              {formatNumber(data?.tureesiinUldegdel)}
             </span>
           </div>
         )}
-        {data?.detal?.ashiglalt > 0 && (
+        {data?.tulsun > 0 && (
           <div className="flex justify-between gap-4">
-            <span className="text-gray-500">{t("Ашиглалтын үлдэгдэл")}:</span>
+            <span className="text-gray-500">{t("Нийт төлсөн")}:</span>
+            <span className="font-bold text-green-500">
+              {formatNumber(data.tulsun)}
+            </span>
+          </div>
+        )}
+        {data?.khyamdral > 0 && (
+          <div className="flex justify-between gap-4">
+            <span className="text-gray-500">{t("Хямдрал")}:</span>
+            <span className="font-bold text-green-500">
+              {formatNumber(data.khyamdral)}
+            </span>
+          </div>
+        )}
+        {aldangiTuukhKharakhEsekh && data?.aldangiinUldegdel > 0 && (
+          <div className="flex justify-between gap-4">
+            <span className="text-gray-500">{t("Алдангийн үлдэгдэл")}:</span>
             <span className="font-bold text-red-500">
-              {formatNumber(data.detal.ashiglalt)}
-            </span>
-          </div>
-        )}
-        {data?.detal?.zardal > 0 && (
-          <div className="flex justify-between gap-4">
-            <span className="text-gray-500">{t("Зардлын үлдэгдэл")}:</span>
-            <span className="font-bold text-red-500">
-              {formatNumber(data.detal.zardal)}
-            </span>
-          </div>
-        )}
-        {data?.detal?.busad > 0 && (
-          <div className="flex justify-between gap-4">
-            <span className="text-gray-500">{t("Бусад авлагын үлдэгдэл")}:</span>
-            <span className="font-bold text-red-500">
-              {formatNumber(data.detal.busad)}
-            </span>
-          </div>
-        )}
-        <div className="my-1 border-t border-gray-100" />
-        {data?.aldangiinUldegdel > 0 && (
-          <div className="flex justify-between gap-4">
-            <span className="text-gray-500 font-medium">{t("Нийт алданги")}:</span>
-            <span className="font-bold text-red-600">
               {formatNumber(data.aldangiinUldegdel)}
+            </span>
+          </div>
+        )}
+        {aldangiTuukhKharakhEsekh && data?.niitTulsunAldangi > 0 && (
+          <div className="flex justify-between gap-4">
+            <span className="text-gray-500">{t("Төлсөн алданги")}:</span>
+            <span className="font-bold text-orange-500">
+              {formatNumber(data.niitTulsunAldangi)}
             </span>
           </div>
         )}
         {data?.baritsaaniiUldegdel > 0 && (
           <div className="flex justify-between gap-4">
             <span className="text-gray-500">{t("Барьцааны үлдэгдэл")}:</span>
-            <span className="font-bold text-blue-500">
+            <span className="font-bold text-red-500">
               {formatNumber(data.baritsaaniiUldegdel)}
             </span>
           </div>
@@ -709,7 +711,6 @@ const {
 
   const computedTotals = useMemo(() => {
     const list = gereeniiMedeelel?.jagsaalt || [];
-    const shouldAddAldangi = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== false;
     const totals = {
       avlaga: 0,
       voucher: 0,
@@ -726,7 +727,7 @@ const {
         isCancelled && rawUldegdel <= 0
           ? parseFloat(item?.tsutsalsanUldegdel) || 0
           : rawUldegdel;
-      const aldangi = shouldAddAldangi ? (parseFloat(item?.aldangiinUldegdel) || 0) : 0;
+      const aldangi = parseFloat(item?.aldangiinUldegdel) || 0;
 
       const totalItemAvlaga = effUldegdel + aldangi;
 
@@ -749,7 +750,7 @@ const {
     });
 
     return totals;
-  }, [gereeniiMedeelel?.jagsaalt, shineBagana, totalsUpdateCount, baiguullaga]);
+  }, [gereeniiMedeelel?.jagsaalt, shineBagana, totalsUpdateCount]);
 
 
   useEffect(() => {
@@ -878,15 +879,13 @@ const {
         },
         showSorterTooltip: false,
         sorter: (a, b) => {
-          const shouldAddAldangi = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== false;
-          const getEff = (item) => {
-            const raw = Number(
-              item?.uldegdel ?? (item?.tuluv == -1 ? item?.tsutsalsanUldegdel : 0)
-            );
-            const aldangi = shouldAddAldangi ? Number(item?.aldangiinUldegdel || 0) : 0;
-            return raw + aldangi;
-          };
-          return getEff(a) - getEff(b);
+          const effA = Number(
+            a?.uldegdel ?? (a?.tuluv == -1 ? a?.tsutsalsanUldegdel : 0)
+          );
+          const effB = Number(
+            b?.uldegdel ?? (b?.tuluv == -1 ? b?.tsutsalsanUldegdel : 0)
+          );
+          return effA - effB;
         },
       },
       {
@@ -1601,7 +1600,6 @@ const {
                   return tulsun - uldegdel;
                 }
                 if (a.dataIndex === "avlagiinUldegdel") {
-                  const shouldAddAldangi = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== false;
                   const isCancelled =
                     data?.tuluv == -1 || Number(data?.tuluv) === -1;
                   const raw = parseFloat(data?.uldegdel);
@@ -1609,17 +1607,15 @@ const {
                     isCancelled && (raw == null || raw <= 0)
                       ? parseFloat(data?.tsutsalsanUldegdel) || 0
                       : parseFloat(data?.uldegdel) || 0;
-                  return effUldegdel + (shouldAddAldangi ? (data?.aldangiinUldegdel || 0) : 0);
+                  return effUldegdel + (data?.aldangiinUldegdel || 0);
                 }
                 if (a.dataIndex === "uldegdel") {
-                  const shouldAddAldangi = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== false;
                   const isCancelled =
                     data?.tuluv == -1 || Number(data?.tuluv) === -1;
                   const raw = parseFloat(val);
-                  const effUldegdel = isCancelled && (raw == null || raw <= 0)
+                  return isCancelled && (raw == null || raw <= 0)
                     ? parseFloat(data?.tsutsalsanUldegdel) || 0
                     : val;
-                  return effUldegdel + (shouldAddAldangi ? (data?.aldangiinUldegdel || 0) : 0);
                 }
                 if (
                   a.dataIndex === "sariinTurees" ||
