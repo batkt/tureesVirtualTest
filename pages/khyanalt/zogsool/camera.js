@@ -981,6 +981,19 @@ function camera({ token }) {
         khuudasniiDugaar: 1,
       }));
     }
+    if (
+      tuluvFilter === "active" &&
+      JSON.stringify(order) ===
+        JSON.stringify({ "tuukh.0.tsagiinTuukh.0.garsanTsag": -1 })
+    ) {
+      setOrder({
+        "tuukh.tsagiinTuukh.garsanTsag": 1,
+        niitDun: 1,
+        "tuukh.tuluv": 1,
+        "tuukh.tsagiinTuukh.orsonTsag": -1,
+        zurchil: 1,
+      });
+    }
   }, [tuluvFilter]);
 
   useEffect(() => {
@@ -1578,17 +1591,22 @@ function camera({ token }) {
                   {t("Сүүлд орсон эхэнд")}
                 </div>
                 <div
-                  onClick={() =>
+                  onClick={() => {
+                    if (tuluvFilter === "active") return;
                     setOrder({
                       "tuukh.0.tsagiinTuukh.0.garsanTsag": -1,
-                    })
-                  }
+                    });
+                  }}
                   className={`relative ${
                     JSON.stringify(order) ==
                       JSON.stringify({
                         "tuukh.0.tsagiinTuukh.0.garsanTsag": -1,
                       }) && "bg-green-500 text-white"
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  } ${
+                    tuluvFilter === "active"
+                      ? "cursor-not-allowed opacity-40"
+                      : "cursor-pointer hover:bg-green-600 hover:bg-opacity-20"
+                  } flex items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
                 >
                   {t("Сүүлд гарсан эхэнд")}
                 </div>
