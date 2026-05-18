@@ -20,6 +20,7 @@ import { useReactToPrint } from "react-to-print";
 import { flushSync } from "react-dom";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
+import { Excel } from "antd-table-saveas-excel";
 
 const searchKeys = ["ner", "register", "customerTin", "talbainDugaar", "gereeniiDugaar", "utas"];
 
@@ -328,6 +329,123 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     },
   ];
 
+  function exceleerTatya() {
+    const excel = new Excel();
+    
+    const formattedRows = rows.map((r, i) => {
+      if (r._isHeaderRow1) {
+        return {
+          idx: "",
+          ognoo: t("Эхний үлдэгдэл"),
+          tailbar: `${t("Харилцагч")}: ${record?.ner || ""}`,
+          tulukhDun: 0,
+          tulsunDun: 0,
+          runningBalance: detail?.ekhniiUldegdel || 0
+        };
+      }
+      if (r._isHeaderRow2) {
+        return {
+          idx: "",
+          ognoo: "",
+          tailbar: `${t("Талбай дугаар")}: ${record?.talbainDugaar || ""}, м2: ${record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"}`,
+          tulukhDun: 0,
+          tulsunDun: 0,
+          runningBalance: ""
+        };
+      }
+      
+      let label;
+      if (r.turul === "khuvaari") {
+        if ((r.khyamdral || 0) > 0) {
+          label = t("Түрээс") + " (" + t("Хөнгөлөлттэй") + ")";
+        } else {
+          label = t("Түрээс");
+        }
+      } else if (r.turul === "khungulult" || (r.khyamdral > 0 && !r.tulukhDun)) {
+        label = r.tailbar || t("Хөнгөлөлт");
+      } else {
+        label = r.tailbar || t(r.turul || "");
+      }
+      if (r.barimtNo) {
+        label += ` (${t("Баримт №")}: ${r.barimtNo})`;
+      }
+
+      const totalKt = (r.tulsunDun || 0) + (r.khyamdral || 0);
+
+      return {
+        idx: i - 1,
+        ognoo: r.ognoo ? moment(r.ognoo).format("YYYY-MM-DD") : "",
+        tailbar: label,
+        tulukhDun: r.tulukhDun || 0,
+        tulsunDun: totalKt || 0,
+        runningBalance: r._isExtra ? "" : (r.runningBalance || 0)
+      };
+    });
+
+    formattedRows.push({
+      idx: "",
+      ognoo: "",
+      tailbar: t("Нийт гүйлгээ"),
+      tulukhDun: totalDt,
+      tulsunDun: totalKt,
+      runningBalance: ""
+    });
+
+    formattedRows.push({
+      idx: "",
+      ognoo: "",
+      tailbar: t("Эцсийн үлдэгдэл"),
+      tulukhDun: 0,
+      tulsunDun: 0,
+      runningBalance: lastBalance
+    });
+
+    const excelCol = [
+      {
+        title: "№",
+        dataIndex: "idx",
+        __style__: { h: "center" },
+      },
+      {
+        title: t("Огноо"),
+        dataIndex: "ognoo",
+        __style__: { h: "center" },
+      },
+      {
+        title: t("Тайлбар"),
+        dataIndex: "tailbar",
+        __style__: { h: "left" },
+      },
+      {
+        title: t("ДТ"),
+        dataIndex: "tulukhDun",
+        __style__: { h: "right" },
+        __numFmt__: "#,##0.00",
+        __cellType__: "TypeNumeric",
+      },
+      {
+        title: t("КТ"),
+        dataIndex: "tulsunDun",
+        __style__: { h: "right" },
+        __numFmt__: "#,##0.00",
+        __cellType__: "TypeNumeric",
+      },
+      {
+        title: t("Эц/үлд"),
+        dataIndex: "runningBalance",
+        __style__: { h: "right" },
+        __numFmt__: "#,##0.00",
+        __cellType__: "TypeNumeric",
+      },
+    ];
+
+    excel
+      .addSheet(t("Авлагын дэлгэрэнгүй тайлан"))
+      .addColumns(excelCol)
+      .addDataSource(formattedRows)
+      .saveAs(`${record?.ner || "Харилцагч"}_авлагын_дэлгэрэнгүй.xlsx`);
+  }
+
   return (
       <Modal
         open={open}
@@ -339,7 +457,30 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       >
         <div className="flex justify-between items-end mb-2 px-1 text-sm font-medium text-gray-700">
           <div>{t("Огноо")}: {moment().format("YYYY/MM/DD")}</div>
-          <div>{t("Барилга")}: {record?.barilgiiinNer || record?.barilgiinId || "NT"}</div>
+          <div className="flex items-center gap-3">
+            <div>{t("Барилга")}: {record?.barilgiiinNer || record?.barilgiinId || "--"}</div>
+            <button
+              onClick={exceleerTatya}
+              className="btn btn-outline-success flex h-8 items-center gap-1 text-sm"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              {t("Excel")}
+            </button>
+          </div>
         </div>
   
         <style>{`
@@ -414,6 +555,7 @@ function avlagaTovchoo({ token }) {
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [khakhTsutsalsan, setKhakhTsutsalsan] = useState(false);
+  const [excelUnshijBaina, setExcelUnshijBaina] = useState(false);
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
@@ -548,6 +690,98 @@ function avlagaTovchoo({ token }) {
       </div>
     );
   };
+
+  function exceleerTatya() {
+    const excel = new Excel();
+    setExcelUnshijBaina(true);
+
+    const formattedRows = dataSource.map((r, i) => ({
+      idx: i + 1,
+      ner: r.ner || "-",
+      gereeniiDugaar: r.gereeniiDugaar || "-",
+      talbainDugaar: r.talbainDugaar || "-",
+      register: r.register || "-",
+      ekhniiUldegdel: r.ekhniiUldegdel || 0,
+      niitDt: r.niitDt || 0,
+      niitTulsun: r.niitTulsun || 0,
+      etssiinUldegdel: r.etssiinUldegdel || 0,
+    }));
+
+    formattedRows.push({
+      idx: "",
+      ner: t("Нийт"),
+      gereeniiDugaar: "",
+      talbainDugaar: "",
+      register: "",
+      ekhniiUldegdel: totals.ekhniiUldegdel || 0,
+      niitDt: totals.niitDt || 0,
+      niitTulsun: totals.niitTulsun || 0,
+      etssiinUldegdel: totals.etssiinUldegdel || 0,
+    });
+
+    var excelCol = [
+      {
+        title: "№",
+        dataIndex: "idx",
+        __style__: { h: "center" },
+      },
+      {
+        title: t("Түрээслэгч"),
+        dataIndex: "ner",
+        __style__: { h: "left" },
+      },
+      {
+        title: t("Гэрээний дугаар"),
+        dataIndex: "gereeniiDugaar",
+        __style__: { h: "center" },
+      },
+      {
+        title: t("Талбай"),
+        dataIndex: "talbainDugaar",
+        __style__: { h: "center" },
+      },
+      {
+        title: t("РД"),
+        dataIndex: "register",
+        __style__: { h: "center" },
+      },
+      {
+        title: t("Эхний үлдэгдэл"),
+        dataIndex: "ekhniiUldegdel",
+        __style__: { h: "right" },
+        __numFmt__: "#,##0.00",
+        __cellType__: "TypeNumeric",
+      },
+      {
+        title: t("ДТ"),
+        dataIndex: "niitDt",
+        __style__: { h: "right" },
+        __numFmt__: "#,##0.00",
+        __cellType__: "TypeNumeric",
+      },
+      {
+        title: t("КТ"),
+        dataIndex: "niitTulsun",
+        __style__: { h: "right" },
+        __numFmt__: "#,##0.00",
+        __cellType__: "TypeNumeric",
+      },
+      {
+        title: t("Эцсийн үлдэгдэл"),
+        dataIndex: "etssiinUldegdel",
+        __style__: { h: "right" },
+        __numFmt__: "#,##0.00",
+        __cellType__: "TypeNumeric",
+      },
+    ];
+
+    excel
+      .addSheet(t("Авлагын товчоо"))
+      .addColumns(excelCol)
+      .addDataSource(formattedRows)
+      .saveAs(`${t("Авлагын товчоо")}.xlsx`);
+    setExcelUnshijBaina(false);
+  }
 
   const columns = useMemo(
     () => [
@@ -743,8 +977,29 @@ function avlagaTovchoo({ token }) {
           </Checkbox>
         </div>
 
-        {/* Print button */}
-        <div className="ml-auto">
+        {/* Print & Excel buttons */}
+        <div className="ml-auto flex gap-2">
+          <button
+            onClick={exceleerTatya}
+            className="btn btn-outline-success flex h-8 items-center gap-1 text-sm"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            {t("Excel")}
+          </button>
           <button
             onClick={handlePrint}
             className="btn btn-outline-secondary flex h-8 items-center gap-1 text-sm"

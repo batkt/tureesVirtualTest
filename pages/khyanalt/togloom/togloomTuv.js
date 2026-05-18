@@ -1756,7 +1756,21 @@ function togloom1() {
                               },
                             },
                           ],
-                          query,
+                          {
+                            ...query,
+                            ...(togloominTuviinGaralt.khuudaslalt?.search
+                              ? {
+                                  $or: searchKeys.map((key) => ({
+                                    [key]: {
+                                      $regex:
+                                        togloominTuviinGaralt.khuudaslalt
+                                          .search,
+                                      $options: "i",
+                                    },
+                                  })),
+                                }
+                              : {}),
+                          },
                           order,
                           "Тоглоомын төв",
                         );
