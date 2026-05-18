@@ -26,10 +26,10 @@ const searchKeys = ["ner", "register", "customerTin", "talbainDugaar", "gereenii
 function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgiinId }) {
   const { t } = useTranslation();
   const ekhlekhOgnoo = ognoo?.[0]
-    ? moment(ognoo[0]).startOf("day").format("YYYY-MM-DD 00:00:00")
+    ? moment(ognoo[0]).startOf("day").toISOString()
     : undefined;
   const duusakhOgnoo = ognoo?.[1]
-    ? moment(ognoo[1]).endOf("day").format("YYYY-MM-DD 23:59:59")
+    ? moment(ognoo[1]).endOf("day").toISOString()
     : undefined;
 
   const { detail, gereeDetail, detailUnshijBaina } = useavlagaTovchooDelgerengui(
@@ -132,31 +132,31 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       },
     },
     {
-      title: t("ДТ"),
+      title: <div className="text-center">{t("ДТ")}</div>,
       dataIndex: "tulukhDun",
-      width: 110,
+      width: 130,
       align: "right",
       render: (v) =>
-        !v || v === 0 ? "-" : <span className="font-medium">{formatNumber(v, 2)}</span>,
+        !v || v === 0 ? "-" : <span className="font-medium whitespace-nowrap">{formatNumber(v, 2)}</span>,
     },
     {
-      title: t("КТ"),
+      title: <div className="text-center">{t("КТ")}</div>,
       dataIndex: "tulsunDun",
-      width: 110,
+      width: 130,
       align: "right",
       render: (v, r) => {
         const total = (v || 0) + (r.khyamdral || 0);
-        return total <= 0 ? "-" : <span className="font-medium">{formatNumber(total, 2)}</span>;
+        return total <= 0 ? "-" : <span className="font-medium whitespace-nowrap">{formatNumber(total, 2)}</span>;
       },
     },
     {
-      title: t("Үлдэгдэл"),
+      title: <div className="text-center">{t("Үлдэгдэл")}</div>,
       dataIndex: "runningBalance",
-      width: 120,
+      width: 140,
       align: "right",
       render: (v, r) => r._isExtra
         ? <span className="text-gray-300">-</span>
-        : <span className="font-medium">{formatNumber(v, 2)}</span>,
+        : <span className="font-medium whitespace-nowrap">{formatNumber(v, 2)}</span>,
     },
   ];
 
@@ -224,13 +224,13 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
                 <span className="font-bold text-gray-700 uppercase">{t("Нийт дүн")}</span>
               </AntdTable.Summary.Cell>
               <AntdTable.Summary.Cell index={3} align="right">
-                <span className="font-bold text-blue-700 text-sm">{formatNumber(totalDt, 2)}</span>
+                <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalDt, 2)}</span>
               </AntdTable.Summary.Cell>
               <AntdTable.Summary.Cell index={4} align="right">
-                <span className="font-bold text-blue-700 text-sm">{formatNumber(totalKt, 2)}</span>
+                <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalKt, 2)}</span>
               </AntdTable.Summary.Cell>
               <AntdTable.Summary.Cell index={5} align="right">
-                <span className="font-bold text-red-600">
+                <span className="font-bold text-red-600 whitespace-nowrap">
                   {formatNumber(lastBalance, 2)}
                 </span>
               </AntdTable.Summary.Cell>
@@ -286,10 +286,10 @@ function avlagaTovchoo({ token }) {
       baiguullagiinId: baiguullaga?._id,
       barilgiinId,
       ekhlekhOgnoo: ognoo?.[0]
-        ? moment(ognoo[0]).startOf("day").format("YYYY-MM-DD")
+        ? moment(ognoo[0]).startOf("day").toISOString()
         : undefined,
       duusakhOgnoo: ognoo?.[1]
-        ? moment(ognoo[1]).endOf("day").format("YYYY-MM-DD")
+        ? moment(ognoo[1]).endOf("day").toISOString()
         : undefined,
       // If the selected value starts with 'G:', it's a contract number
       gereeniiDugaaruud: songogdsonIds
