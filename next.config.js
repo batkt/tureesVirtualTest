@@ -17,10 +17,10 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
-  //Experimental optimizations
-  experimental: {
-    optimizeCss: process.env.NODE_ENV === "production",
-  },
+  // Experimental optimizations
+  // experimental: {
+  //   optimizeCss: process.env.NODE_ENV === "production",
+  // },
 
   // env: {
   //   NEXT_PUBLIC_URL:

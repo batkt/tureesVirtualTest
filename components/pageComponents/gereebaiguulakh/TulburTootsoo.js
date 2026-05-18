@@ -185,9 +185,11 @@ const Tulbur = ({
     const updatedKhungulult = [...khungulultKhuvaari, addRow];
 
     setKhungulultKhuvaari(updatedKhungulult);
+    setOgnoonuud([]);
 
     value.khungulultuud = updatedKhungulult;
-    onChange({ ...value });
+    onChange({ ...value, khungulukhKhuvi: undefined, ognoonuud: undefined });
+    form.setFieldsValue({ khungulukhKhuvi: undefined, ognoonuud: undefined });
     khuvaariUusgey(updatedKhungulult);
   }
 

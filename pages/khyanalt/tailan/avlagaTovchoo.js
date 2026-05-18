@@ -43,19 +43,49 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   );
 
   const rows = useMemo(() => {
-    if (!detail?.guilgeenuud) return [];
-    let balance = detail.ekhniiUldegdel || 0;
-    return detail.guilgeenuud.map((g, i) => {
+    if (!detail?.guilgeenuud && !gereeDetail) return [];
+    let balance = detail?.ekhniiUldegdel || 0;
+    const mainRows = (detail?.guilgeenuud || []).map((g, i) => {
       const dt = g.tulukhDun || 0;
       const kt = g.tulsunDun || 0;
       const khyamdral = g.khyamdral || 0;
       balance = balance + dt - kt - khyamdral;
-      return { ...g, key: i, runningBalance: balance };
+      return { ...g, key: `main-${i}`, runningBalance: balance };
     });
-  }, [detail]);
+
+    // Add барьцаа payment rows if any exist
+    const baritsaaPayments = (gereeDetail?.baritsaaGuilgeenuud || [])
+      .filter((g) => (g.tulsunDun || 0) + (g.orlogo || 0) > 0)
+      .map((g, i) => ({
+        ...g,
+        key: `baritsaa-${i}`,
+        tailbar: t("Барьцаа төлөлт"),
+        tulukhDun: g.tulukhDun || 0,
+        tulsunDun: (g.tulsunDun || 0) + (g.orlogo || 0),
+        runningBalance: null, // shown as "-"
+        _isExtra: true,
+      }));
+
+    // Add алданги payment rows if any paid
+    const aldangiPayments = (gereeDetail?.aldangiGuilgeenuud || [])
+      .filter((g) => (g.tulsunAldangi || g.tulsunDun || 0) > 0)
+      .map((g, i) => ({
+        ...g,
+        key: `aldangi-${i}`,
+        tailbar: t("Алданги төлөлт"),
+        tulukhDun: 0,
+        tulsunDun: g.tulsunAldangi || g.tulsunDun || 0,
+        runningBalance: null,
+        _isExtra: true,
+      }));
+
+    return [...mainRows, ...baritsaaPayments, ...aldangiPayments];
+  }, [detail, gereeDetail]);
 
   const totalDt = rows.reduce((s, r) => s + (r.tulukhDun || 0), 0);
   const totalKt = rows.reduce((s, r) => s + ((r.tulsunDun || 0) + (r.khyamdral || 0)), 0);
+  // Compute closing balance: opening + period DT - period KT
+  const lastBalance = (detail?.ekhniiUldegdel || 0) + totalDt - totalKt;
 
   const columns = [
     {
@@ -76,7 +106,23 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       title: t("Тайлбар"),
       dataIndex: "tailbar",
       render: (v, r) => {
-        const label = r.turul === "khuvaari" ? t("Түрээс") : (v || t(r.turul || ""));
+        let label;
+        if (r.turul === "khuvaari") {
+          // For rent rows with discount, show discount info
+          if ((r.khyamdral || 0) > 0) {
+            label = t("Түрээс") + " (" + t("Хөнгөлөлттэй") + ")";
+          } else {
+            label = t("Түрээс");
+          }
+        } else if (r.turul === "khungulult" || (r.khyamdral > 0 && !r.tulukhDun)) {
+          // Explicit discount rows
+          const isUtil = r.zardliinTurul && r.zardliinTurul !== "turees";
+          label = isUtil
+            ? t("Ашиглалтын хөнгөлөлт") + (r.zardliinNer ? ": " + r.zardliinNer : "")
+            : t("Түрээсийн хөнгөлөлт");
+        } else {
+          label = v || t(r.turul || "");
+        }
         return (
           <div>
             <div className="font-medium text-gray-800">{label}</div>
@@ -108,7 +154,9 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       dataIndex: "runningBalance",
       width: 120,
       align: "right",
-      render: (v) => <span className="font-medium">{formatNumber(v, 2)}</span>,
+      render: (v, r) => r._isExtra
+        ? <span className="text-gray-300">-</span>
+        : <span className="font-medium">{formatNumber(v, 2)}</span>,
     },
   ];
 
@@ -120,7 +168,8 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       width={1200}
       title={<div className="text-lg text-blue-900 border-b pb-2 text-center">{t("Авлагын дэлгэрэнгүй тайлан")}</div>}
     >
-      <div className="bg-gray-50 p-4 rounded-lg mb-4 grid grid-cols-2 gap-4 border border-gray-100">
+      {/* ── Header info + Алданги + Барьцаа side by side ── */}
+      <div className="bg-gray-50 p-4 rounded-lg mb-4 grid grid-cols-2 md:grid-cols-3 gap-4 border border-gray-100">
         <div className="flex flex-col">
           <span className="text-xs text-gray-500 uppercase">{t("Харилцагч")}</span>
           <span className="font-bold text-gray-800">{record?.ner}</span>
@@ -137,6 +186,26 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           <span className="text-xs text-gray-500 uppercase">{t("Эхний үлдэгдэл")}</span>
           <span className="font-bold text-red-500 text-lg">{formatNumber(detail?.ekhniiUldegdel || 0, 2)}</span>
         </div>
+        {/* Алданги summary - only show if non-zero */}
+        {gereeDetail && (gereeDetail?.aldangiinUldegdel || 0) > 0 && (
+          <div className="flex flex-col border-l-2 border-red-200 pl-3">
+            <span className="text-xs text-red-600 font-bold uppercase">{t("Алданги")}</span>
+            <div className="text-xs mt-1">
+              <span className="text-gray-500">{t("Нийт алданги")}: </span>
+              <span className="font-semibold text-red-500">{formatNumber(gereeDetail?.aldangiinUldegdel || 0, 2)}</span>
+            </div>
+          </div>
+        )}
+        {/* Барьцаа summary - only show if non-zero */}
+        {gereeDetail && (gereeDetail?.baritsaaAvakhDun || 0) > 0 && (
+          <div className="flex flex-col border-l-2 border-blue-200 pl-3">
+            <span className="text-xs text-blue-700 font-bold uppercase">{t("Барьцаа")}</span>
+            <div className="text-xs mt-1">
+              <span className="text-gray-500">{t("Авах дүн")}: </span>
+              <span className="font-semibold text-red-500">{formatNumber(gereeDetail?.baritsaaAvakhDun || 0, 2)}</span>
+            </div>
+          </div>
+        )}
       </div>
 
       <Table
@@ -162,111 +231,13 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
               </AntdTable.Summary.Cell>
               <AntdTable.Summary.Cell index={5} align="right">
                 <span className="font-bold text-red-600">
-                  {formatNumber(rows[rows.length - 1]?.runningBalance || 0, 2)}
+                  {formatNumber(lastBalance, 2)}
                 </span>
               </AntdTable.Summary.Cell>
             </AntdTable.Summary.Row>
           </AntdTable.Summary>
         )}
       />
-
-      {/* ── Алданги section ── */}
-      {gereeDetail && (
-        <div className="mt-3 rounded border border-red-200 bg-red-50 p-2">
-          <div className="mb-1 font-bold text-red-600 text-sm">{t("Алданги")}</div>
-          {/* Summary row */}
-          <div className="grid grid-cols-3 gap-2 text-xs mb-2">
-            <div>
-              <span className="text-gray-500">{t("Нийт хуримтлагдсан ДТ")}: </span>
-              <span className="font-semibold text-red-500">{formatNumber(gereeDetail?.aldangiinUldegdel || 0, 2)}</span>
-            </div>
-            <div>
-              <span className="text-gray-500">{t("Нийт төлсөн КТ")}: </span>
-              <span className="font-semibold text-blue-600">{formatNumber(gereeDetail?.niitTulsunAldangi || 0, 2)}</span>
-            </div>
-            <div>
-              <span className="text-gray-500">{t("Үлдэгдэл")}: </span>
-              <span className="font-semibold text-red-500">{formatNumber((gereeDetail?.aldangiinUldegdel || 0) - (gereeDetail?.niitTulsunAldangi || 0), 2)}</span>
-            </div>
-          </div>
-          {/* Transaction rows - өдөр өдрөөр бодогдсон түүхээс */}
-          {(gereeDetail?.aldangiGuilgeenuud || []).length > 0 && (
-            <table className="w-full text-xs border-collapse">
-              <thead>
-                <tr className="bg-red-100">
-                  <th className="border border-red-200 px-1 py-0.5 text-center">№</th>
-                  <th className="border border-red-200 px-1 py-0.5 text-center">{t("Бодсон огноо")}</th>
-                  <th className="border border-red-200 px-1 py-0.5 text-center">{t("Чулуулах огноо")}</th>
-                  <th className="border border-red-200 px-1 py-0.5 text-center">{t("Үлдэгдэл")}</th>
-                  <th className="border border-red-200 px-1 py-0.5 text-right">{t("Хувь (%)")}</th>
-                  <th className="border border-red-200 px-1 py-0.5 text-right">{t("Хоног")}</th>
-                  <th className="border border-red-200 px-1 py-0.5 text-right font-bold text-red-600">{t("ДТ (Алданги)")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(gereeDetail?.aldangiGuilgeenuud || []).map((g, i) => (
-                  <tr key={i} className="hover:bg-red-50">
-                    <td className="border border-red-100 px-1 py-0.5 text-center">{i + 1}</td>
-                    <td className="border border-red-100 px-1 py-0.5 text-center">{g.aldangiBodsonOgnoo ? moment(g.aldangiBodsonOgnoo).format("YYYY-MM-DD") : (g.ognoo ? moment(g.ognoo).format("YYYY-MM-DD") : "")}</td>
-                    <td className="border border-red-100 px-1 py-0.5 text-center">{g.aldangiChuluulukhOgnoo ? moment(g.aldangiChuluulukhOgnoo).format("YYYY-MM-DD") : "-"}</td>
-                    <td className="border border-red-100 px-1 py-0.5 text-right">{formatNumber(g.uldegdel || 0, 2)}</td>
-                    <td className="border border-red-100 px-1 py-0.5 text-right">{g.aldangiinKhuvi ? `${g.aldangiinKhuvi}%` : "-"}</td>
-                    <td className="border border-red-100 px-1 py-0.5 text-right">{g.tulukhUdur || g.aldangiChuluulukhKhonog || "-"}</td>
-                    <td className="border border-red-100 px-1 py-0.5 text-right font-medium text-red-500">{formatNumber(g.aldangi || g.tulukhDun || 0, 2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      )}
-
-      {/* ── Барьцаа section ── */}
-      {gereeDetail && (gereeDetail?.baritsaaAvakhDun || 0) > 0 && (
-        <div className="mt-2 rounded border border-blue-200 bg-blue-50 p-2">
-          <div className="mb-1 font-bold text-blue-700 text-sm">{t("Барьцаа")}</div>
-          {/* Summary row */}
-          <div className="grid grid-cols-3 gap-2 text-xs mb-2">
-            <div>
-              <span className="text-gray-500">{t("Авах дүн")}: </span>
-              <span className="font-semibold text-red-500">{formatNumber(gereeDetail?.baritsaaAvakhDun || 0, 2)}</span>
-            </div>
-            <div>
-              <span className="text-gray-500">{t("Төлсөн КТ")}: </span>
-              <span className="font-semibold text-blue-600">{formatNumber((gereeDetail?.baritsaaAvakhDun || 0) - (gereeDetail?.baritsaaniiUldegdel || 0), 2)}</span>
-            </div>
-            <div>
-              <span className="text-gray-500">{t("Үлдэгдэл")}: </span>
-              <span className="font-semibold text-red-500">{formatNumber(gereeDetail?.baritsaaniiUldegdel || 0, 2)}</span>
-            </div>
-          </div>
-          {/* Transaction rows - avlaga.baritsaa-аас */}
-          {(gereeDetail?.baritsaaGuilgeenuud || []).length > 0 && (
-            <table className="w-full text-xs border-collapse">
-              <thead>
-                <tr className="bg-blue-100">
-                  <th className="border border-blue-200 px-1 py-0.5 text-center">№</th>
-                  <th className="border border-blue-200 px-1 py-0.5 text-center">{t("Огноо")}</th>
-                  <th className="border border-blue-200 px-1 py-0.5">{t("Тайлбар")}</th>
-                  <th className="border border-blue-200 px-1 py-0.5 text-right font-bold text-red-600">{t("ДТ")}</th>
-                  <th className="border border-blue-200 px-1 py-0.5 text-right font-bold text-blue-700">{t("КТ")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(gereeDetail?.baritsaaGuilgeenuud || []).map((g, i) => (
-                  <tr key={i} className="hover:bg-blue-50">
-                    <td className="border border-blue-100 px-1 py-0.5 text-center">{i + 1}</td>
-                    <td className="border border-blue-100 px-1 py-0.5 text-center">{g.ognoo ? moment(g.ognoo).format("YYYY-MM-DD HH:mm") : ""}</td>
-                    <td className="border border-blue-100 px-1 py-0.5">{g.tailbar || t("Барьцаа")}</td>
-                    <td className="border border-blue-100 px-1 py-0.5 text-right font-medium text-red-500">{formatNumber(g.tulukhDun || 0, 2)}</td>
-                    <td className="border border-blue-100 px-1 py-0.5 text-right font-medium text-blue-600">{formatNumber((g.tulsunDun || 0) + (g.orlogo || 0), 2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      )}
     </Modal>
   );
 }
@@ -392,7 +363,14 @@ function avlagaTovchoo({ token }) {
         width: 160,
         render: (v, record) => (
           <Tooltip title={`${record.gereeniiDugaar || ""} | ${record.talbainDugaar || ""}`}>
-            <div className="truncate font-medium">{v}</div>
+            <div className="truncate font-medium flex items-center gap-1">
+              {v}
+              {record.tuluv === -1 && (
+                <span className="text-[10px] bg-red-100 text-red-600 border border-red-300 rounded px-1 py-0 font-normal shrink-0">
+                  {t("Цуцласан")}
+                </span>
+              )}
+            </div>
           </Tooltip>
         ),
       },
@@ -453,36 +431,6 @@ function avlagaTovchoo({ token }) {
                 align: "center",
                 width: 110,
                 render: (v, record) => numCell(v, record, "kt"),
-              },
-              {
-                title: t("Түрээсийн хөнгөлөлт"),
-                dataIndex: "niitKhyamdralTurees",
-                key: "niitKhyamdralTurees",
-                align: "center",
-                width: 130,
-                render: (v) =>
-                  v > 0 ? (
-                    <div className="flex justify-end font-medium text-purple-600">
-                      {formatNumber(v, 2)}
-                    </div>
-                  ) : (
-                    <span>-</span>
-                  ),
-              },
-              {
-                title: t("Ашиглалтын хөнгөлөлт"),
-                dataIndex: "niitKhyamdralAshiglalt",
-                key: "niitKhyamdralAshiglalt",
-                align: "center",
-                width: 140,
-                render: (v) =>
-                  v > 0 ? (
-                    <div className="flex justify-end font-medium text-teal-600">
-                      {formatNumber(v, 2)}
-                    </div>
-                  ) : (
-                    <span>-</span>
-                  ),
               },
             ],
           },
@@ -644,12 +592,6 @@ function avlagaTovchoo({ token }) {
                   <span className="font-bold text-blue-600">{formatNumber(totals.niitTulsun, 2)}</span>
                 </AntdTable.Summary.Cell>
                 <AntdTable.Summary.Cell index={8} align="right">
-                  <span className="font-bold text-purple-600">{formatNumber(totals.niitKhyamdralTurees, 2)}</span>
-                </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell index={9} align="right">
-                  <span className="font-bold text-teal-600">{formatNumber(totals.niitKhyamdralAshiglalt, 2)}</span>
-                </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell index={10} align="right">
                   <span className="font-bold text-red-500">{formatNumber(totals.etssiinUldegdel, 2)}</span>
                 </AntdTable.Summary.Cell>
               </AntdTable.Summary.Row>

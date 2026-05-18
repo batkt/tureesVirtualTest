@@ -741,6 +741,18 @@ const {
     return totals;
   }, [gereeniiMedeelel?.jagsaalt, shineBagana, totalsUpdateCount]);
 
+  // Server-side totals for dashboard cards - always shows real amounts regardless of active tab
+  const serverTotals = useMemo(() => {
+    const gt = guilgeeniiToololt || {};
+    return {
+      avlaga: gt.avlaga?.[0]?.dun || 0,
+      voucher: gt.voucher?.[0]?.dun || 0,
+      tsutslagdsanAvlaga: gt.tsutslagdsanAvlaga?.[0]?.dun || 0,
+      eneSardTulukh: gt.eneSardTulukh?.[0]?.dun || 0,
+      eneSardTulsun: gt.eneSardTulsun?.[0]?.dun || 0,
+      khungulult: gt.khungulult?.[0]?.dun || 0,
+    };
+  }, [guilgeeniiToololt]);
 
   useEffect(() => {
     if (gereeniiMedeelel?.jagsaalt) {
@@ -1642,8 +1654,8 @@ const {
         <div className="hideScroll grid w-full grid-cols-1 gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid-cols-6 sm:py-2 md:gap-6 2xl:grid-cols-12">
           {[
             {
-              too: formatNumber(computedTotals.avlaga || 0, 0),
-              raw: computedTotals.avlaga || 0,
+              too: formatNumber(serverTotals.avlaga || 0, 0),
+              raw: serverTotals.avlaga || 0,
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "avlaga",
               utga: "Хуримтлагдсан авлага",
@@ -1651,40 +1663,40 @@ const {
                 "Өмнө сарын төлбөрийн үлдэгдлүүдийн нийлбэр болон энэ сарын тооцоо болно.",
             },
             {
-              too: formatNumber(computedTotals.voucher || 0, 0),
-              raw: computedTotals.voucher || 0,
+              too: formatNumber(serverTotals.voucher || 0, 0),
+              raw: serverTotals.voucher || 0,
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "voucher",
               utga: "Ваучер төлөлт",
               tailbar: "Огноонд хамаарагдах бүх Ваучер төлөлтийн нийлбэр дүн",
             },
             {
-              too: formatNumber(computedTotals.tsutslagdsanAvlaga || 0, 0),
-              raw: computedTotals.tsutslagdsanAvlaga || 0,
+              too: formatNumber(serverTotals.tsutslagdsanAvlaga || 0, 0),
+              raw: serverTotals.tsutslagdsanAvlaga || 0,
               turul: "tsutslagdsanAvlaga",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Цуцлагдсан гэрээний авлага",
               tailbar: "Идэвхигүй буюу цуцлагдсан гэрээний нийт авлага",
             },
             {
-              too: formatNumber(computedTotals.eneSardTulukh || 0, 0),
-              raw: computedTotals.eneSardTulukh || 0,
+              too: formatNumber(serverTotals.eneSardTulukh || 0, 0),
+              raw: serverTotals.eneSardTulukh || 0,
               turul: "eneSardTulukh",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Төлөвлөгөө / сар",
               tailbar: "Энэ сард төлөгдвөл зохих нийт дүн",
             },
             {
-              too: formatNumber(computedTotals.eneSardTulsun || 0, 0),
-              raw: computedTotals.eneSardTulsun || 0,
+              too: formatNumber(serverTotals.eneSardTulsun || 0, 0),
+              raw: serverTotals.eneSardTulsun || 0,
               turul: "eneSardTulsun",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Гүйцэтгэл / сар",
               tailbar: "Огноонд хамаарагдах бүх төлөгдсөн дүнгийн нийлбэр",
             },
             {
-              too: formatNumber(computedTotals.khungulult || 0, 0),
-              raw: computedTotals.khungulult || 0,
+              too: formatNumber(serverTotals.khungulult || 0, 0),
+              raw: serverTotals.khungulult || 0,
               turul: "khungulult",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Хөнгөлөлт / сар",

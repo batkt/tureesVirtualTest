@@ -214,7 +214,7 @@ function tulburTootsoo() {
       selectedZardal?.ner?.includes("Дулаан") ||
       selectedZardal?.ner?.includes("Халуун ус") ||
       selectedZardal?.ner?.includes("Хүйтэн ус") ||
-      selectedZardal?.ner?.includes("Цахилгаан")
+      selectedZardal?.ner?.includes("Цахилгаан") || selectedZardal?.ner?.toLowerCase().includes("менежмент") || selectedZardal?.ner?.toLowerCase().includes("menagment") || selectedZardal?.ner?.toLowerCase().includes("management") || selectedZardal?.ner?.toLowerCase().includes("menegment")
     );
   }, [
     form.getFieldValue("zardliinId"),
@@ -236,7 +236,7 @@ function tulburTootsoo() {
       selectedZardal?.ner?.includes("Дулаан") ||
       selectedZardal?.ner?.includes("Халуун ус") ||
       selectedZardal?.ner?.includes("Хүйтэн ус") ||
-      selectedZardal?.ner?.includes("Цахилгаан");
+      selectedZardal?.ner?.includes("Цахилгаан") || selectedZardal?.ner?.toLowerCase().includes("менежмент") || selectedZardal?.ner?.toLowerCase().includes("menagment") || selectedZardal?.ner?.toLowerCase().includes("management") || selectedZardal?.ner?.toLowerCase().includes("menegment");
 
     if (!isUtilityExpense) {
       return gereeniiMedeelel.jagsaalt;
@@ -250,7 +250,7 @@ function tulburTootsoo() {
 
       const hasAvlagaData = geree?.avlaga?.guilgeenuud?.some((guilgee) => {
         return (
-          guilgee.tailbar === selectedZardal?.ner &&
+          guilgee.zardliinId === zardliinId &&
           (guilgee.tulukhDun || 0) !== 0
         );
       });
@@ -371,12 +371,12 @@ function tulburTootsoo() {
             zardliinData?.ner?.includes("Дулаан") ||
             zardliinData?.ner?.includes("Халуун ус") ||
             zardliinData?.ner?.includes("Хүйтэн ус") ||
-            zardliinData?.ner?.includes("Цахилгаан") ||
+            zardliinData?.ner?.includes("Цахилгаан") || selectedZardal?.ner?.toLowerCase().includes("менежмент") || selectedZardal?.ner?.toLowerCase().includes("menagment") || selectedZardal?.ner?.toLowerCase().includes("management") || selectedZardal?.ner?.toLowerCase().includes("menegment") ||
             songogdsonZardal?.ner?.includes("Халаалт") ||
             songogdsonZardal?.ner?.includes("Дулаан") ||
             songogdsonZardal?.ner?.includes("Халуун ус") ||
             songogdsonZardal?.ner?.includes("Хүйтэн ус") ||
-            songogdsonZardal?.ner?.includes("Цахилгаан");
+            songogdsonZardal?.ner?.includes("Цахилгаан") || selectedZardal?.ner?.toLowerCase().includes("менежмент") || selectedZardal?.ner?.toLowerCase().includes("menagment") || selectedZardal?.ner?.toLowerCase().includes("management") || selectedZardal?.ner?.toLowerCase().includes("menegment");
 
           if (isUtilityExpense) {
             const avlagaData = [...(x?.avlaga?.guilgeenuud || [])].reverse().find(
@@ -695,14 +695,18 @@ function tulburTootsoo() {
             selectedZardal?.ner?.includes("Дулаан") ||
             selectedZardal?.ner?.includes("Халуун ус") ||
             selectedZardal?.ner?.includes("Хүйтэн ус") ||
-            selectedZardal?.ner?.includes("Цахилгаан");
+            selectedZardal?.ner?.includes("Цахилгаан") || selectedZardal?.ner?.toLowerCase().includes("менежмент") || selectedZardal?.ner?.toLowerCase().includes("menagment") || selectedZardal?.ner?.toLowerCase().includes("management") || selectedZardal?.ner?.toLowerCase().includes("menegment");
 
           if (isUtilityExpense) {
-            const avlagaData = [...(data?.avlaga?.guilgeenuud || [])].reverse().find(
-              (guilgee) =>
-                guilgee.tailbar?.trim() === selectedZardal?.ner?.trim() &&
-                (guilgee.tulukhDun || 0) !== 0,
-            );
+            // First check transactions by zardliinId (most recent)
+            const avlagaByZardliinId = [...(data?.avlaga?.guilgeenuud || [])]
+              .filter(
+                (guilgee) =>
+                  guilgee.zardliinId === zardliinId &&
+                  (guilgee.tulukhDun || 0) !== 0,
+              )
+              .sort((a, b) => new Date(b.ognoo) - new Date(a.ognoo));
+            const avlagaData = avlagaByZardliinId[0];
 
             if (avlagaData && (avlagaData.tulukhDun || 0) !== 0) {
               return formatNumber((avlagaData.tulukhDun || 0) * durationMultiplier, 2);
@@ -1054,17 +1058,21 @@ function tulburTootsoo() {
           selectedZardal?.ner?.includes("Дулаан") ||
           selectedZardal?.ner?.includes("Халуун ус") ||
           selectedZardal?.ner?.includes("Хүйтэн ус") ||
-          selectedZardal?.ner?.includes("Цахилгаан");
+          selectedZardal?.ner?.includes("Цахилгаан") || selectedZardal?.ner?.toLowerCase().includes("менежмент") || selectedZardal?.ner?.toLowerCase().includes("menagment") || selectedZardal?.ner?.toLowerCase().includes("management") || selectedZardal?.ner?.toLowerCase().includes("menegment");
 
         if (isUtilityExpense) {
           if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
             niitSariinTurees += Number(gereeZardal.tulukhDun || 0);
           } else {
-            const avlagaData = e?.avlaga?.guilgeenuud?.find(
-              (guilgee) =>
-                guilgee.tailbar?.trim() === selectedZardal?.ner?.trim() &&
-                (guilgee.tulukhDun || 0) !== 0,
-            );
+            // Match by zardliinId (most recent transaction for this expense)
+            const matchingTx = e?.avlaga?.guilgeenuud
+              ?.filter(
+                (guilgee) =>
+                  guilgee.zardliinId === fVal &&
+                  (guilgee.tulukhDun || 0) !== 0,
+              )
+              .sort((a, b) => new Date(b.ognoo) - new Date(a.ognoo));
+            const avlagaData = matchingTx?.[0];
             if (avlagaData) {
               niitSariinTurees += Number(avlagaData.tulukhDun || 0);
             }
@@ -1117,18 +1125,21 @@ function tulburTootsoo() {
             selectedZardal?.ner?.includes("Дулаан") ||
             selectedZardal?.ner?.includes("Халуун ус") ||
             selectedZardal?.ner?.includes("Хүйтэн ус") ||
-            selectedZardal?.ner?.includes("Цахилгаан");
+            selectedZardal?.ner?.includes("Цахилгаан") || selectedZardal?.ner?.toLowerCase().includes("менежмент") || selectedZardal?.ner?.toLowerCase().includes("menagment") || selectedZardal?.ner?.toLowerCase().includes("management") || selectedZardal?.ner?.toLowerCase().includes("menegment");
 
           if (isUtilityExpense) {
             if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
               khymdraaguiDun = gereeZardal.tulukhDun || 0;
             } else {
-              const avlagaData = geree?.avlaga?.guilgeenuud?.find(
-                (guilgee) =>
-                  guilgee.tailbar === selectedZardal?.ner &&
-                  (guilgee.tulukhDun || 0) !== 0,
-              );
-              khymdraaguiDun = avlagaData?.tulukhDun || 0;
+              // Match by zardliinId (most recent transaction for this expense)
+              const matchingTx = geree?.avlaga?.guilgeenuud
+                ?.filter(
+                  (guilgee) =>
+                    guilgee.zardliinId === fVal &&
+                    (guilgee.tulukhDun || 0) !== 0,
+                )
+                .sort((a, b) => new Date(b.ognoo) - new Date(a.ognoo));
+              khymdraaguiDun = matchingTx?.[0]?.tulukhDun || 0;
             }
           } else if (selectedZardal) {
             if (
@@ -1230,7 +1241,7 @@ function tulburTootsoo() {
             selectedZardal?.ner?.includes("Дулаан") ||
             selectedZardal?.ner?.includes("Халуун ус") ||
             selectedZardal?.ner?.includes("Хүйтэн ус") ||
-            selectedZardal?.ner?.includes("Цахилгаан");
+            selectedZardal?.ner?.includes("Цахилгаан") || selectedZardal?.ner?.toLowerCase().includes("менежмент") || selectedZardal?.ner?.toLowerCase().includes("menagment") || selectedZardal?.ner?.toLowerCase().includes("management") || selectedZardal?.ner?.toLowerCase().includes("menegment");
 
           if (isUtilityExpense) {
             const avlagaData = [...(geree?.avlaga?.guilgeenuud || [])].reverse().find(
@@ -1384,16 +1395,22 @@ function tulburTootsoo() {
                         <Select
                           className="ml-1 mr-3 flex-1"
                           onChange={(e) => {
+                            const zardluudFilter = {
+                              $or: [
+                                { "zardluud._id": e },
+                                { "avlaga.guilgeenuud.zardliinId": e },
+                              ],
+                            };
                             setShuult({
                               query: !!shuult?.query?.davkhar
                                 ? {
                                     davkhar: shuult.query.davkhar,
                                     tuluv: shuult.query.tuluv,
-                                    "zardluud._id": e,
+                                    ...zardluudFilter,
                                   }
                                 : {
                                     tuluv: shuult.query.tuluv,
-                                    "zardluud._id": e,
+                                    ...zardluudFilter,
                                   },
                             });
                             form.setFieldsValue({

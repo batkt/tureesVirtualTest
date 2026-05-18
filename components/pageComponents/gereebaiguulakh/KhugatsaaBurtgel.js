@@ -381,6 +381,7 @@ const YurunkhiiMedeele = ({
             />
           ) : (
             <Select
+              showSearch
               onChange={() => form.getFieldInstance("duusakhOgnoo").focus()}
               defaultValue={_.get(value, "tulukhUdur.0")}
               placeholder={t("Авлага үүсгэх огноо сар бүрийн / өдөр")}

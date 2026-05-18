@@ -176,12 +176,12 @@ const KhurungiinBurtgel = ({
   }, [baritsaaAvakhEsekh]);
 
   useEffect(() => {
+    const actualSar = baritsaaAvakhSar > 0 ? baritsaaAvakhSar : 1;
     if (
       value.baritsaaAvakhEsekh === true &&
-      baritsaaAvakhEsekh &&
-      baritsaaAvakhSar > 0
+      baritsaaAvakhEsekh
     ) {
-      form.setFieldValue("baritsaaAvakhKhugatsaa", baritsaaAvakhSar);
+      form.setFieldValue("baritsaaAvakhKhugatsaa", actualSar);
     } else if (!baritsaaAvakhEsekh) {
       form.setFieldValue("baritsaaAvakhKhugatsaa", 0);
     }
@@ -280,10 +280,11 @@ const KhurungiinBurtgel = ({
       0
     );
 
-    if (baritsaaAvakhSar > 0 && value.baritsaaAvakhEsekh === true) {
-      value.baritsaaAvakhDun = value.sariinTurees * baritsaaAvakhSar;
+    const actualBaritsaaAvakhSar = baritsaaAvakhSar > 0 ? baritsaaAvakhSar : 1;
+    if (value.baritsaaAvakhEsekh === true) {
+      value.baritsaaAvakhDun = value.sariinTurees * actualBaritsaaAvakhSar;
       value.baritsaaAvakhDunUsgeer = toWords(value.baritsaaAvakhDun);
-      value.baritsaaAvakhKhugatsaa = baritsaaAvakhSar;
+      value.baritsaaAvakhKhugatsaa = actualBaritsaaAvakhSar;
     } else if (value.baritsaaAvakhEsekh !== true) {
       value.baritsaaAvakhDun = 0;
       value.baritsaaAvakhDunUsgeer = "";
@@ -714,11 +715,11 @@ const KhurungiinBurtgel = ({
                 value.talbainKhemjeeMetrKube ? "col-span-3" : "col-span-4"
               } text-center text-base font-medium`}
             >
-              {parseFloat(value.talbainKhemjee || 0).toFixed(2)}
+              {Number(parseFloat(value.talbainKhemjee || 0).toFixed(2))}
             </div>
             {value.talbainKhemjeeMetrKube > 0 && (
               <div className="col-span-3 text-center text-base font-medium">
-                {parseFloat(value.talbainKhemjeeMetrKube || 0).toFixed(2)}
+                {Number(parseFloat(value.talbainKhemjeeMetrKube || 0).toFixed(2))}
               </div>
             )}
             <div

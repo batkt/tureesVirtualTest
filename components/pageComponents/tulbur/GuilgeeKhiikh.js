@@ -126,11 +126,14 @@ function GuilgeeKhiikh(
   }, [suuliinZaalt, umnukhZaalt]);
 
   const query = useMemo(
-    () => ({
-      ner: data?.zardluud && { $in: data.zardluud.map((a) => a.ner) },
-      turul: { $in: ["кВт", "1м3", "1м2", "кг"] },
-      barilgiinId,
-    }),
+    () => {
+      const zardalIds = data?.zardluud?.map((a) => a._id).filter(Boolean) || [];
+      return {
+        _id: zardalIds.length > 0 ? { $in: zardalIds } : undefined,
+        turul: { $in: ["кВт", "1м3", "1м2", "кг", "Дурын"] },
+        barilgiinId,
+      };
+    },
     [data, barilgiinId],
   );
   const queryZardal = useMemo(

@@ -141,6 +141,7 @@ const YurunkhiiMedeele = ({
       zakhirliinNer: undefined,
       khayag: undefined,
       albanTushaal: undefined,
+      khariltsagchiinNershil: undefined,
     };
     form.setFieldsValue(onookhKhariltsagch);
     clearTimeout(timeout);
@@ -184,6 +185,11 @@ const YurunkhiiMedeele = ({
 
       form.setFieldsValue(fillData);
       onChange({ ...value, ...fillData });
+      return;
+    }
+
+    if (!target.value) {
+      onChange({ ...value, ...onookhKhariltsagch, register: undefined });
       return;
     }
 
