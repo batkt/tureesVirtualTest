@@ -44,48 +44,161 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
 
   const rows = useMemo(() => {
     if (!detail?.guilgeenuud && !gereeDetail) return [];
-    let balance = detail?.ekhniiUldegdel || 0;
-    const mainRows = (detail?.guilgeenuud || []).map((g, i) => {
-      const dt = g.tulukhDun || 0;
-      const kt = g.tulsunDun || 0;
-      const khyamdral = g.khyamdral || 0;
-      balance = balance + dt - kt - khyamdral;
-      return { ...g, key: `main-${i}`, runningBalance: balance };
+    
+    // Combine all transaction types and sort chronologically
+    let combined = [...(detail?.guilgeenuud || [])];
+    
+    (gereeDetail?.baritsaaGuilgeenuud || []).forEach((g) => {
+      if (ognoo && ognoo[0] && ognoo[1]) {
+        const gDate = new Date(g.ognoo);
+        if (gDate < new Date(ognoo[0]) || gDate > new Date(ognoo[1])) {
+          return;
+        }
+      }
+      if ((g.tulsunDun || 0) + (g.orlogo || 0) > 0 || (g.tulukhDun || 0) > 0) {
+        combined.push({
+          ...g,
+          tailbar: g.tailbar || t("Барьцаа"),
+          tulsunDun: (g.tulsunDun || 0) + (g.orlogo || 0),
+          tulukhDun: 0,
+          turul: "baritsaa"
+        });
+      }
     });
 
-    // Add барьцаа payment rows if any exist
-    const baritsaaPayments = (gereeDetail?.baritsaaGuilgeenuud || [])
-      .filter((g) => (g.tulsunDun || 0) + (g.orlogo || 0) > 0)
-      .map((g, i) => ({
-        ...g,
-        key: `baritsaa-${i}`,
-        tailbar: t("Барьцаа төлөлт"),
-        tulukhDun: g.tulukhDun || 0,
-        tulsunDun: (g.tulsunDun || 0) + (g.orlogo || 0),
-        runningBalance: null, // shown as "-"
-        _isExtra: true,
-      }));
+    (gereeDetail?.aldangiGuilgeenuud || []).forEach((g) => {
+      if (ognoo && ognoo[0] && ognoo[1]) {
+        const gDate = new Date(g.ognoo);
+        if (gDate < new Date(ognoo[0]) || gDate > new Date(ognoo[1])) {
+          return;
+        }
+      }
+      if ((g.tulsunAldangi || g.tulsunDun || 0) > 0 || (g.tulukhDun || 0) > 0) {
+        combined.push({
+          ...g,
+          tailbar: g.tailbar || t("Алданги"),
+          tulsunDun: g.tulsunAldangi || g.tulsunDun || 0,
+          _isAldangiExtra: true
+        });
+      }
+    });
 
-    // Add алданги payment rows if any paid
-    const aldangiPayments = (gereeDetail?.aldangiGuilgeenuud || [])
-      .filter((g) => (g.tulsunAldangi || g.tulsunDun || 0) > 0)
-      .map((g, i) => ({
-        ...g,
-        key: `aldangi-${i}`,
-        tailbar: t("Алданги төлөлт"),
-        tulukhDun: 0,
-        tulsunDun: g.tulsunAldangi || g.tulsunDun || 0,
-        runningBalance: null,
-        _isExtra: true,
-      }));
+    combined.sort((a, b) => new Date(a.ognoo) - new Date(b.ognoo));
 
-    return [...mainRows, ...baritsaaPayments, ...aldangiPayments];
+    let balance = detail?.ekhniiUldegdel || 0;
+    let dataGroups = [];
+
+    combined.forEach((g, i) => {
+      const dt = g.tulukhDun || 0;
+      let kt = g.tulsunDun || 0;
+      const khyamdral = g.khyamdral || 0;
+      const aldangiPaid = g.tulsunAldangi || 0;
+      const baritsaaPaid = g.tulsunBaritsaa || 0;
+
+      const groupRows = [];
+
+      if (!g._isAldangiExtra) {
+        let remainingKt = kt;
+
+        if (dt > 0) {
+          balance += dt;
+          groupRows.push({
+            ...g,
+            key: `main-${i}-dt`,
+            tulukhDun: dt,
+            tulsunDun: 0,
+            khyamdral: 0,
+            runningBalance: balance,
+          });
+        }
+
+        if (khyamdral > 0) {
+          balance -= khyamdral;
+          const tailbarLower = (g.tailbar || "").trim().toLowerCase();
+          const isRentDiscount = tailbarLower === "хөнгөлөлт" || tailbarLower === "түрээсийн хөнгөлөлт" || tailbarLower === "түрээс хөнгөлөлт";
+          const isUtil = !!g.zardliinId || (g.zardliinTurul && g.zardliinTurul !== "turees") || (tailbarLower !== "" && !isRentDiscount);
+          
+          groupRows.push({
+            ...g,
+            key: `main-${i}-khyamdral`,
+            tulukhDun: 0,
+            tulsunDun: 0,
+            khyamdral: khyamdral,
+            turul: "khungulult",
+            tailbar: isUtil ? t("Зардал хөнгөлөлт") : t("Түрээс хөнгөлөлт"),
+            runningBalance: balance,
+          });
+        }
+
+        if (aldangiPaid > 0) {
+          remainingKt -= aldangiPaid;
+          balance -= aldangiPaid;
+          groupRows.push({
+            ...g,
+            key: `main-${i}-aldangi`,
+            tulukhDun: 0,
+            tulsunDun: aldangiPaid,
+            khyamdral: 0,
+            tailbar: t("Алданги төлөлт"),
+            runningBalance: balance,
+          });
+        }
+
+        if (baritsaaPaid > 0) {
+          remainingKt -= baritsaaPaid;
+          balance -= baritsaaPaid;
+          groupRows.push({
+            ...g,
+            key: `main-${i}-baritsaa`,
+            tulukhDun: 0,
+            tulsunDun: baritsaaPaid,
+            khyamdral: 0,
+            tailbar: t("Барьцаа төлөлт"),
+            runningBalance: balance,
+          });
+        }
+
+        if (remainingKt > 0) {
+          balance -= remainingKt;
+          groupRows.push({
+            ...g,
+            key: `main-${i}-kt`,
+            tulukhDun: 0,
+            tulsunDun: remainingKt,
+            khyamdral: 0,
+            tailbar: g.turul === "baritsaa" ? t("Барьцаа") : (g.tailbar?.replace("алданги төлөлт", "")?.replace(/,\s*$/, "") || t("Түрээс төлөлт")),
+            runningBalance: balance,
+          });
+        }
+
+        if (dt === 0 && kt === 0 && khyamdral === 0) {
+          groupRows.push({ ...g, key: `main-${i}`, runningBalance: balance });
+        }
+      } else {
+        balance -= kt;
+        groupRows.push({ ...g, key: `main-${i}-extra`, runningBalance: balance });
+      }
+
+      if (groupRows.length > 0) {
+        dataGroups.push(groupRows);
+      }
+    });
+
+    dataGroups.reverse();
+
+    const allRows = [
+      { _isHeaderRow1: true, key: "h1" },
+      { _isHeaderRow2: true, key: "h2" },
+      ...dataGroups.flat()
+    ];
+
+    return allRows;
   }, [detail, gereeDetail]);
 
   const totalDt = rows.reduce((s, r) => s + (r.tulukhDun || 0), 0);
-  const totalKt = rows.reduce((s, r) => s + ((r.tulsunDun || 0) + (r.khyamdral || 0)), 0);
-  // Compute closing balance: opening + period DT - period KT
-  const lastBalance = (detail?.ekhniiUldegdel || 0) + totalDt - totalKt;
+  const totalKt = rows.reduce((s, r) => s + (r.tulsunDun || 0), 0);
+  const totalKhyamdral = rows.reduce((s, r) => s + (r.khyamdral || 0), 0);
+  const lastBalance = (detail?.ekhniiUldegdel || 0) + totalDt - totalKt - totalKhyamdral;
 
   const columns = [
     {
@@ -93,35 +206,49 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       key: "idx",
       width: 50,
       align: "center",
-      render: (_, __, i) => i + 1,
+      render: (_, r, i) => {
+        if (r._isHeaderRow1) {
+          return {
+            children: <div className="text-left font-medium pl-2">Харилцагч: {record?.ner}</div>,
+            props: { colSpan: 3 }
+          };
+        }
+        if (r._isHeaderRow2) {
+          return {
+            children: <div className="text-left font-medium pl-2">Талбай дугаар: {record?.talbainDugaar}</div>,
+            props: { colSpan: 3 }
+          };
+        }
+        return i - 1;
+      },
     },
     {
       title: t("Огноо"),
       dataIndex: "ognoo",
-      width: 140,
+      width: 100,
       align: "center",
-      render: (v) => (v ? moment(v).format("YYYY-MM-DD") : ""),
+      render: (v, r) => {
+        if (r._isHeaderRow1 || r._isHeaderRow2) return { props: { colSpan: 0 } };
+        return v ? moment(v).format("YYYY/MM/DD") : "";
+      },
     },
     {
-      title: t("Тайлбар"),
+      title: <div className="text-center">{t("Тайлбар")}</div>,
       dataIndex: "tailbar",
+      width: 250,
       render: (v, r) => {
+        if (r._isHeaderRow1 || r._isHeaderRow2) return { props: { colSpan: 0 } };
         let label;
         if (r.turul === "khuvaari") {
-          // For rent rows with discount, show discount info
           if ((r.khyamdral || 0) > 0) {
             label = t("Түрээс") + " (" + t("Хөнгөлөлттэй") + ")";
           } else {
             label = t("Түрээс");
           }
         } else if (r.turul === "khungulult" || (r.khyamdral > 0 && !r.tulukhDun)) {
-          // Explicit discount rows
-          const isUtil = r.zardliinTurul && r.zardliinTurul !== "turees";
-          label = isUtil
-            ? t("Ашиглалтын хөнгөлөлт") + (r.zardliinNer ? ": " + r.zardliinNer : "")
-            : t("Түрээсийн хөнгөлөлт");
+          label = r.tailbar || t("Хөнгөлөлт");
         } else {
-          label = v || t(r.turul || "");
+          label = r.tailbar || t(r.turul || "");
         }
         return (
           <div>
@@ -132,96 +259,102 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       },
     },
     {
-      title: <div className="text-center">{t("ДТ")}</div>,
-      dataIndex: "tulukhDun",
-      width: 130,
-      align: "right",
-      render: (v) =>
-        !v || v === 0 ? "-" : <span className="font-medium whitespace-nowrap">{formatNumber(v, 2)}</span>,
+      title: <div className="text-center">{t("Гүйлгээ")}</div>,
+      children: [
+        {
+          title: <div className="text-center">{t("ДТ")}</div>,
+          dataIndex: "tulukhDun",
+          width: 130,
+          align: "right",
+          render: (v, r) => {
+            if (r._isHeaderRow1) {
+              return {
+                children: <div className="text-center italic">{t("Эхний үлдэгдэл")}</div>,
+                props: { colSpan: 2 }
+              };
+            }
+            if (r._isHeaderRow2) {
+              return {
+                children: <div className="text-center font-medium">Талбай м2: {record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"}м2</div>,
+                props: { colSpan: 2 }
+              };
+            }
+            return !v || v === 0 ? "-" : <span className="font-medium whitespace-nowrap">{formatNumber(v, 2)}</span>;
+          },
+        },
+        {
+          title: <div className="text-center">{t("КТ")}</div>,
+          dataIndex: "tulsunDun",
+          width: 130,
+          align: "right",
+          render: (v, r) => {
+            if (r._isHeaderRow1 || r._isHeaderRow2) return { props: { colSpan: 0 } };
+            // Display khyamdral in KT column visually, but it is not added to totalKt
+            const total = (v || 0) + (r.khyamdral || 0);
+            return total <= 0 ? "-" : <span className="font-medium whitespace-nowrap">{formatNumber(total, 2)}</span>;
+          },
+        },
+      ]
     },
     {
-      title: <div className="text-center">{t("КТ")}</div>,
-      dataIndex: "tulsunDun",
-      width: 130,
-      align: "right",
-      render: (v, r) => {
-        const total = (v || 0) + (r.khyamdral || 0);
-        return total <= 0 ? "-" : <span className="font-medium whitespace-nowrap">{formatNumber(total, 2)}</span>;
-      },
-    },
-    {
-      title: <div className="text-center">{t("Үлдэгдэл")}</div>,
+      title: <div className="text-center">{t("Эц/үлд")}</div>,
       dataIndex: "runningBalance",
       width: 140,
       align: "right",
-      render: (v, r) => r._isExtra
-        ? <span className="text-gray-300">-</span>
-        : <span className="font-medium whitespace-nowrap">{formatNumber(v, 2)}</span>,
+      render: (v, r) => {
+        if (r._isHeaderRow1) {
+          return <span className="font-medium italic text-blue-600 whitespace-nowrap">{formatNumber(detail?.ekhniiUldegdel, 2)}</span>;
+        }
+        if (r._isHeaderRow2) {
+          return "";
+        }
+        return r._isExtra
+          ? <span className="text-gray-300">-</span>
+          : <span className="font-medium whitespace-nowrap">{formatNumber(v, 2)}</span>;
+      },
     },
   ];
 
   return (
-    <Modal
-      open={open}
-      onCancel={onClose}
-      footer={null}
-      width={1200}
-      title={<div className="text-lg text-blue-900 border-b pb-2 text-center">{t("Авлагын дэлгэрэнгүй тайлан")}</div>}
-    >
-      {/* ── Header info + Алданги + Барьцаа side by side ── */}
-      <div className="bg-gray-50 p-4 rounded-lg mb-4 grid grid-cols-2 md:grid-cols-3 gap-4 border border-gray-100">
-        <div className="flex flex-col">
-          <span className="text-xs text-gray-500 uppercase">{t("Харилцагч")}</span>
-          <span className="font-bold text-gray-800">{record?.ner}</span>
+      <Modal
+        open={open}
+        onCancel={onClose}
+        footer={null}
+        width={1400}
+        style={{ top: 20 }}
+        title={<div className="text-lg text-blue-900 border-b pb-2 text-center">{t("Авлагын дэлгэрэнгүй тайлан")}</div>}
+      >
+        <div className="flex justify-between items-end mb-2 px-1 text-sm font-medium text-gray-700">
+          <div>{t("Огноо")}: {moment().format("YYYY/MM/DD")}</div>
+          <div>{t("Барилга")}: {record?.barilgiiinNer || record?.barilgiinId || "NT"}</div>
         </div>
-        <div className="flex flex-col">
-          <span className="text-xs text-gray-500 uppercase">{t("Барилга / Талбай")}</span>
-          <span className="font-semibold text-gray-700">{record?.barilgiiinNer || record?.barilgiinId} / {record?.talbainDugaar}</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-xs text-gray-500 uppercase">{t("Гэрээний дугаар")}</span>
-          <span className="font-semibold text-gray-700">{record?.gereeniiDugaar}</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-xs text-gray-500 uppercase">{t("Эхний үлдэгдэл")}</span>
-          <span className="font-bold text-red-500 text-lg">{formatNumber(detail?.ekhniiUldegdel || 0, 2)}</span>
-        </div>
-        {/* Алданги summary - only show if non-zero */}
-        {gereeDetail && (gereeDetail?.aldangiinUldegdel || 0) > 0 && (
-          <div className="flex flex-col border-l-2 border-red-200 pl-3">
-            <span className="text-xs text-red-600 font-bold uppercase">{t("Алданги")}</span>
-            <div className="text-xs mt-1">
-              <span className="text-gray-500">{t("Нийт алданги")}: </span>
-              <span className="font-semibold text-red-500">{formatNumber(gereeDetail?.aldangiinUldegdel || 0, 2)}</span>
-            </div>
-          </div>
-        )}
-        {/* Барьцаа summary - only show if non-zero */}
-        {gereeDetail && (gereeDetail?.baritsaaAvakhDun || 0) > 0 && (
-          <div className="flex flex-col border-l-2 border-blue-200 pl-3">
-            <span className="text-xs text-blue-700 font-bold uppercase">{t("Барьцаа")}</span>
-            <div className="text-xs mt-1">
-              <span className="text-gray-500">{t("Авах дүн")}: </span>
-              <span className="font-semibold text-red-500">{formatNumber(gereeDetail?.baritsaaAvakhDun || 0, 2)}</span>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <Table
-        size="small"
-        bordered
-        loading={detailUnshijBaina}
-        columns={columns}
-        dataSource={rows}
-        pagination={false}
-        scroll={{ y: 400 }}
-        className="shadow-sm"
+  
+        <style>{`
+          .compact-header-table .ant-table-thead > tr > th {
+            padding: 4px 8px !important;
+            height: auto !important;
+            font-size: 13px !important;
+          }
+        `}</style>
+  
+        <Table
+          size="small"
+          bordered
+          loading={detailUnshijBaina}
+          columns={columns}
+          dataSource={rows}
+          pagination={false}
+          scroll={{ y: 600 }}
+          className="shadow-sm compact-header-table"
+          rowClassName={(r) => {
+          if (r._isHeaderRow1) return "bg-green-50";
+          return r.turul === "khungulult" ? "text-gray-500 italic" : "";
+        }}
         summary={() => (
           <AntdTable.Summary fixed="bottom">
-            <AntdTable.Summary.Row className="bg-gray-100">
+            <AntdTable.Summary.Row className="bg-gray-50">
               <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
-                <span className="font-bold text-gray-700 uppercase">{t("Нийт дүн")}</span>
+                <span className="font-bold text-gray-700">{t("Нийт гүйлгээ")}</span>
               </AntdTable.Summary.Cell>
               <AntdTable.Summary.Cell index={3} align="right">
                 <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalDt, 2)}</span>
@@ -230,7 +363,18 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
                 <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalKt, 2)}</span>
               </AntdTable.Summary.Cell>
               <AntdTable.Summary.Cell index={5} align="right">
-                <span className="font-bold text-red-600 whitespace-nowrap">
+                <span className="text-gray-300">-</span>
+              </AntdTable.Summary.Cell>
+            </AntdTable.Summary.Row>
+            <AntdTable.Summary.Row className="bg-gray-100">
+              <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
+                {/* Empty column */}
+              </AntdTable.Summary.Cell>
+              <AntdTable.Summary.Cell index={3} colSpan={2} align="center">
+                <span className="font-bold text-gray-700 italic">{t("Эцсийн үлдэгдэл")}</span>
+              </AntdTable.Summary.Cell>
+              <AntdTable.Summary.Cell index={5} align="right">
+                <span className="font-bold text-red-600 text-sm whitespace-nowrap">
                   {formatNumber(lastBalance, 2)}
                 </span>
               </AntdTable.Summary.Cell>
@@ -365,11 +509,6 @@ function avlagaTovchoo({ token }) {
           <Tooltip title={`${record.gereeniiDugaar || ""} | ${record.talbainDugaar || ""}`}>
             <div className="truncate font-medium flex items-center gap-1">
               {v}
-              {record.tuluv === -1 && (
-                <span className="text-[10px] bg-red-100 text-red-600 border border-red-300 rounded px-1 py-0 font-normal shrink-0">
-                  {t("Цуцласан")}
-                </span>
-              )}
             </div>
           </Tooltip>
         ),
@@ -423,16 +562,11 @@ function avlagaTovchoo({ token }) {
           },
           {
             title: t("КТ"),
-            children: [
-              {
-                title: t("Төлөлт"),
-                dataIndex: "niitTulsun",
-                key: "niitTulsun",
-                align: "center",
-                width: 110,
-                render: (v, record) => numCell(v, record, "kt"),
-              },
-            ],
+            dataIndex: "niitTulsun",
+            key: "niitTulsun",
+            align: "center",
+            width: 110,
+            render: (v, record) => numCell(v, record, "kt"),
           },
         ],
       },
@@ -571,11 +705,15 @@ function avlagaTovchoo({ token }) {
           scroll={{ y: "calc(100vh - 28rem)", x: 1000 }}
           bordered
           size="small"
-          className="text-xs"
+          className="text-xs t-head"
           columns={columns}
           dataSource={dataSource}
           loading={unshijBaina}
           pagination={false}
+          rowClassName={(record) => {
+            const isCancelled = record?.tuluv === -1 || Number(record?.tuluv) === -1;
+            return isCancelled ? "text-red-500" : "";
+          }}
           summary={() => (
             <AntdTable.Summary fixed="bottom">
               <AntdTable.Summary.Row>
