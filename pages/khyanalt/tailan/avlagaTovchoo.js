@@ -338,7 +338,7 @@ function avlagaTovchoo({ token }) {
     token,
     query,
     searchKeys,
-    200
+    999999
   );
 
   const dataSource = useMemo(
@@ -620,23 +620,14 @@ function avlagaTovchoo({ token }) {
       <div className="col-span-12 w-full overflow-hidden rounded-lg border bg-white shadow-sm dark:bg-gray-800">
         <Table
           sticky={{ offsetHeader: 0 }}
-          scroll={{ y: "calc(100vh - 19rem)", x: 1000 }}
+          scroll={{ y: "calc(100vh - 28rem)", x: 1000 }}
           bordered
           size="small"
           className="text-xs"
           columns={columns}
           dataSource={dataSource}
           loading={unshijBaina}
-          pagination={{
-            current: avlagaTovchoo?.khuudasniiDugaar,
-            total: avlagaTovchoo?.niitMur || dataSource.length,
-            pageSizeOptions: [100, 200, 500],
-            defaultPageSize: 200,
-            showSizeChanger: true,
-            showTotal: (total) => `Нийт ${total}`,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setKhuudaslalt((kh) => ({ ...kh, khuudasniiDugaar, khuudasniiKhemjee })),
-          }}
+          pagination={false}
           summary={() => (
             <AntdTable.Summary fixed="bottom">
               <AntdTable.Summary.Row>

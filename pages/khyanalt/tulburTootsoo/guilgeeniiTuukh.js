@@ -81,26 +81,20 @@ const GereeniiUldegdel = React.memo(
     );
 
     const uldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1");
-    const showCombined = aldangiTuukhKharakhEsekh || uldegdelUdruurKharakhEsekh;
+    const showCombined = true; // Always combine aldangi per request
 
-     
-    const tureesiinUldegdelFromData = data?.tureesiinUldegdel ?? 0;
-    const aldangiFromData = data?.aldangiinUldegdel ?? 0;
+    const uldegdelTur = data?.tureesiinUldegdel ?? ugugdul?.tureesiinUldegdel ?? ugugdul?.uldegdel ?? 0;
+    const uldegdelAld = ugugdul?.aldangiinUldegdel ?? data?.aldangiinUldegdel ?? 0;
+    const uldegdelTulsun = data?.tulsun ?? ugugdul?.tulsun ?? 0;
+    const uldegdelKhyamdral = data?.khyamdral ?? ugugdul?.khyamdral ?? 0;
+    const uldegdelTulsunAldangi = ugugdul?.niitTulsunAldangi ?? data?.niitTulsunAldangi ?? 0;
 
-     
-    const combinedFromData = data
-      ? showCombined
-        ? tureesiinUldegdelFromData + aldangiFromData
-        : tureesiinUldegdelFromData
-      : null;
-
-    
-    const fallbackUldegdel =
-      combinedFromData ??
-      ((ugugdul?.uldegdel ?? 0) + (showCombined ? (ugugdul?.aldangiinUldegdel ?? 0) : 0)) ??
-      ugugdul?.niitUldegdel ??
-      ugugdul?.tsutslagdsanAvlaga ??
-      (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
+    const fallbackUldegdel = data 
+      ? uldegdelTur + uldegdelAld 
+      : (((ugugdul?.uldegdel ?? 0) + (ugugdul?.aldangiinUldegdel ?? 0)) ||
+         ugugdul?.niitUldegdel ||
+         ugugdul?.tsutslagdsanAvlaga ||
+         (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0));
 
     const displayUldegdel = fallbackUldegdel;
     ugugdul.uldegdel = displayUldegdel;
@@ -111,51 +105,43 @@ const GereeniiUldegdel = React.memo(
 
     const content = (
       <div className="space-y-1 p-1 text-xs">
-        {data?.tureesiinUldegdel > 0 && (
+        {uldegdelTur > 0 && (
           <div className="flex justify-between gap-4">
             <span className="text-gray-500">{t("Түрээсийн үлдэгдэл")}:</span>
             <span className="font-bold text-red-500">
-              {formatNumber(data?.tureesiinUldegdel)}
+              {formatNumber(uldegdelTur)}
             </span>
           </div>
         )}
-        {data?.tulsun > 0 && (
+        {uldegdelTulsun > 0 && (
           <div className="flex justify-between gap-4">
             <span className="text-gray-500">{t("Нийт төлсөн")}:</span>
             <span className="font-bold text-green-500">
-              {formatNumber(data.tulsun)}
+              {formatNumber(uldegdelTulsun)}
             </span>
           </div>
         )}
-        {data?.khyamdral > 0 && (
+        {uldegdelKhyamdral > 0 && (
           <div className="flex justify-between gap-4">
             <span className="text-gray-500">{t("Хямдрал")}:</span>
             <span className="font-bold text-green-500">
-              {formatNumber(data.khyamdral)}
+              {formatNumber(uldegdelKhyamdral)}
             </span>
           </div>
         )}
-        {aldangiTuukhKharakhEsekh && data?.aldangiinUldegdel > 0 && (
+        {uldegdelAld > 0 && (
           <div className="flex justify-between gap-4">
-            <span className="text-gray-500">{t("Алдангийн үлдэгдэл")}:</span>
+            <span className="text-gray-500">{t("Нийт алданги")}:</span>
             <span className="font-bold text-red-500">
-              {formatNumber(data.aldangiinUldegdel)}
+              {formatNumber(uldegdelAld)}
             </span>
           </div>
         )}
-        {aldangiTuukhKharakhEsekh && data?.niitTulsunAldangi > 0 && (
+        {uldegdelTulsunAldangi > 0 && (
           <div className="flex justify-between gap-4">
             <span className="text-gray-500">{t("Төлсөн алданги")}:</span>
             <span className="font-bold text-orange-500">
-              {formatNumber(data.niitTulsunAldangi)}
-            </span>
-          </div>
-        )}
-        {data?.baritsaaniiUldegdel > 0 && (
-          <div className="flex justify-between gap-4">
-            <span className="text-gray-500">{t("Барьцааны үлдэгдэл")}:</span>
-            <span className="font-bold text-red-500">
-              {formatNumber(data.baritsaaniiUldegdel)}
+              {formatNumber(uldegdelTulsunAldangi)}
             </span>
           </div>
         )}
