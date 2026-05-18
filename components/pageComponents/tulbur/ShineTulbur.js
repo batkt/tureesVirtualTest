@@ -110,6 +110,15 @@ function ShineTulbur(
   const handlePrint = useReactToPrint({
     contentRef: eBarimtRef,
     removeAfterPrint: true,
+    onBeforePrint: async () => {
+      try {
+        if ("caches" in window) {
+          const names = await caches.keys();
+          await Promise.all(names.map((name) => caches.delete(name)));
+        }
+        window.history.replaceState(null, "", window.location.href);
+      } catch (_) {}
+    },
     onAfterPrint: () => {
       setEBarimt(null);
       setBaiguullagaEsekh(false);
