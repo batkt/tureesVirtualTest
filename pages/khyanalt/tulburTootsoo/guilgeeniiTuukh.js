@@ -89,8 +89,12 @@ const GereeniiUldegdel = React.memo(
     const uldegdelKhyamdral = data?.khyamdral ?? ugugdul?.khyamdral ?? 0;
     const uldegdelTulsunAldangi = ugugdul?.niitTulsunAldangi ?? data?.niitTulsunAldangi ?? 0;
 
+    const reqBaritsaa = data?.baritsaaAvakhDun ?? ugugdul?.baritsaaAvakhDun ?? 0;
+    const paidBaritsaa = data?.baritsaaniiUldegdel ?? ugugdul?.baritsaaTulsunDun ?? ugugdul?.baritsaaniiUldegdel ?? 0;
+    const baritsaaBalance = Math.max(0, reqBaritsaa - paidBaritsaa);
+
     const fallbackUldegdel = data 
-      ? uldegdelTur + uldegdelAld 
+      ? (aldangiTuukhKharakhEsekh ? (uldegdelTur + uldegdelAld) : (uldegdelTur + baritsaaBalance + uldegdelAld))
       : (((ugugdul?.uldegdel ?? 0) + (ugugdul?.aldangiinUldegdel ?? 0)) ||
          ugugdul?.niitUldegdel ||
          ugugdul?.tsutslagdsanAvlaga ||
@@ -110,6 +114,14 @@ const GereeniiUldegdel = React.memo(
             <span className="text-gray-500">{t("Түрээсийн үлдэгдэл")}:</span>
             <span className="font-bold text-red-500">
               {formatNumber(uldegdelTur)}
+            </span>
+          </div>
+        )}
+        {baritsaaBalance > 0 && (
+          <div className="flex justify-between gap-4">
+            <span className="text-gray-500">{t("Барьцааны үлдэгдэл")}:</span>
+            <span className="font-bold text-red-500">
+              {formatNumber(baritsaaBalance)}
             </span>
           </div>
         )}

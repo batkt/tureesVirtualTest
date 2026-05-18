@@ -9,6 +9,7 @@ import {
   Spin,
   Tooltip,
   Table as AntdTable,
+  Checkbox,
 } from "antd";
 import formatNumber from "tools/function/formatNumber";
 import useAvlagaTovchoo, { useavlagaTovchooDelgerengui } from "hooks/tailan/useAvlagaTovchoo";
@@ -195,10 +196,22 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     return allRows;
   }, [detail, gereeDetail]);
 
+  const aldangiTuukhKharakhEsekh =
+    baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ||
+    baiguullaga?._id === "6735c77a7fc60cd66deb2909" ||
+    baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+
   const totalDt = rows.reduce((s, r) => s + (r.tulukhDun || 0), 0);
   const totalKt = rows.reduce((s, r) => s + (r.tulsunDun || 0), 0);
   const totalKhyamdral = rows.reduce((s, r) => s + (r.khyamdral || 0), 0);
-  const lastBalance = (detail?.ekhniiUldegdel || 0) + totalDt - totalKt - totalKhyamdral;
+
+  const tureesiinUldegdel = (detail?.ekhniiUldegdel || 0) + totalDt - totalKt - totalKhyamdral;
+  const aldangiBalance = gereeDetail?.aldangiinUldegdel || 0;
+  const baritsaaBalance = Math.max(0, (gereeDetail?.baritsaaAvakhDun || 0) - (gereeDetail?.baritsaaniiUldegdel || 0));
+
+  const lastBalance = aldangiTuukhKharakhEsekh
+    ? (tureesiinUldegdel + aldangiBalance)
+    : (tureesiinUldegdel + baritsaaBalance + aldangiBalance);
 
   const columns = [
     {
@@ -400,6 +413,7 @@ function avlagaTovchoo({ token }) {
   const [songogdsonIds, setSongogdsonIds] = useState([]);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [khakhTsutsalsan, setKhakhTsutsalsan] = useState(false);
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
@@ -422,7 +436,9 @@ function avlagaTovchoo({ token }) {
     khariltsagchQuery,
     undefined,
     { ner: 1, register: 1, customerTin: 1, gereeniiDugaar: 1, talbainDugaar: 1 },
-    searchKeys
+    searchKeys,
+    undefined,
+    999999
   );
 
   const query = useMemo(
@@ -456,14 +472,59 @@ function avlagaTovchoo({ token }) {
     999999
   );
 
-  const dataSource = useMemo(
-    () =>
-      (avlagaTovchoo?.jagsaalt || avlagaTovchoo || []).map((item, i) => ({
+  const dataSource = useMemo(() => {
+    const aldangiTuukhKharakhEsekh =
+      baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ||
+      baiguullaga?._id === "6735c77a7fc60cd66deb2909" ||
+      baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+
+    return (avlagaTovchoo?.jagsaalt || avlagaTovchoo || [])
+      .map((item) => {
+        const aldangiBalance = Number(item.aldangiinUldegdel) || 0;
+        const baritsaaBalance = Math.max(0, (Number(item.baritsaaAvakhDun) || 0) - (Number(item.baritsaaniiUldegdel) || 0));
+
+        const adjustedEkhniiUldegdel = aldangiTuukhKharakhEsekh
+          ? (Number(item.ekhniiUldegdel || 0) + aldangiBalance)
+          : (Number(item.ekhniiUldegdel || 0) + baritsaaBalance + aldangiBalance);
+
+        const adjustedEtssiinUldegdel = aldangiTuukhKharakhEsekh
+          ? (Number(item.etssiinUldegdel || 0) + aldangiBalance)
+          : (Number(item.etssiinUldegdel || 0) + baritsaaBalance + aldangiBalance);
+
+        return {
+          ...item,
+          ekhniiUldegdel: adjustedEkhniiUldegdel,
+          etssiinUldegdel: adjustedEtssiinUldegdel,
+        };
+      })
+      .filter((row) => {
+        const balance = Number(row.etssiinUldegdel) || 0;
+        const isCancelled = row.tuluv === -1 || Number(row.tuluv) === -1;
+
+        if (Math.abs(balance) < 0.01) {
+          return false;
+        }
+
+        if (balance < 0 && isCancelled) {
+          return false;
+        }
+
+        if (isCancelled && !khakhTsutsalsan) {
+          return false;
+        }
+
+        const niitDt = Number(row.niitDt) || 0;
+        if (Math.abs(niitDt) < 0.01) {
+          return false;
+        }
+
+        return true;
+      })
+      .map((item, i) => ({
         key: i.toString(),
         ...item,
-      })),
-    [avlagaTovchoo]
-  );
+      }));
+  }, [avlagaTovchoo, khakhTsutsalsan, baiguullaga]);
 
   function openDetail(record, field) {
     setSelectedRecord({ ...record, clickedField: field });
@@ -635,6 +696,7 @@ function avlagaTovchoo({ token }) {
           className="w-full lg:w-80"
           showSearch
           mode="multiple"
+          maxTagCount="responsive"
           allowClear
           filterOption={(input, option) => {
             const s = input.toLowerCase();
@@ -645,9 +707,7 @@ function avlagaTovchoo({ token }) {
               option?.talbainDugaar?.toLowerCase().includes(s)
             );
           }}
-          onSearch={(search) =>
-            khariltsagchiinGaralt.setKhuudaslalt((a) => ({ ...a, search }))
-          }
+          onSearch={khariltsagchiinGaralt.onSearch}
           onChange={setSongogdsonIds}
           placeholder={t("Гэрээ эсвэл Харилцагч сонгох")}
         >
@@ -671,6 +731,17 @@ function avlagaTovchoo({ token }) {
             </Select.Option>
           ))}
         </Select>
+
+        {/* Show cancelled checkbox */}
+        <div className="flex items-center gap-1.5 h-8">
+          <Checkbox
+            checked={khakhTsutsalsan}
+            onChange={(e) => setKhakhTsutsalsan(e.target.checked)}
+            className="font-medium text-gray-700 dark:text-gray-300 ml-2"
+          >
+            {t("Цуцлагдсан гэрээ")}
+          </Checkbox>
+        </div>
 
         {/* Print button */}
         <div className="ml-auto">
