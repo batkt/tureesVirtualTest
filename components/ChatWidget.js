@@ -46,7 +46,10 @@ export default function ChatWidget() {
     if (!guestId) return;
     try {
       setLoading(true);
-      const res = await axios.post(`${BASE_API}/conversations`, { guestId });
+      const res = await axios.post(`${BASE_API}/conversations`, { 
+        guestId,
+        project: 'turees'
+      });
       setConversation(res.data.data);
       
       const msgRes = await axios.get(`${BASE_API}/conversations/${res.data.data.id}/messages?guestId=${guestId}`);
@@ -101,7 +104,8 @@ export default function ChatWidget() {
       
       const res = await axios.post(`${BASE_API}/conversations/${conversation.id}/messages`, {
         text,
-        guestId
+        guestId,
+        project: 'turees'
       });
       
       const { userMsg, botMsg, humanMode } = res.data.data;
@@ -161,7 +165,15 @@ export default function ChatWidget() {
                   <div className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm ${
                     isUser ? "bg-green-600 dark:bg-green-700 text-white rounded-br-sm" : "bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-200 border border-gray-100 dark:border-slate-700 rounded-bl-sm shadow-sm"
                   }`}>
-                    {m.text}
+                    <p className="whitespace-pre-wrap break-words">{m.text}</p>
+                    {m.createdAt && (
+                      <p className={`text-[9px] mt-1 text-right ${isUser ? 'text-green-100' : 'text-gray-400'}`}>
+                        {new Date(m.createdAt).toLocaleTimeString('mn-MN', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </p>
+                    )}
                   </div>
                 </div>
               );
