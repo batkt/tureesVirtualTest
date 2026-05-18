@@ -379,16 +379,18 @@ function tulburTootsoo() {
             songogdsonZardal?.ner?.includes("Цахилгаан");
 
           if (isUtilityExpense) {
-            if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
+            const avlagaData = [...(x?.avlaga?.guilgeenuud || [])].reverse().find(
+              (guilgee) =>
+                guilgee.tailbar?.trim() ===
+                  (zardliinData?.ner || songogdsonZardal?.ner)?.trim() &&
+                (guilgee.tulukhDun || 0) !== 0,
+            );
+            if (avlagaData && (avlagaData.tulukhDun || 0) !== 0) {
+              khymdraaguiDun = avlagaData?.tulukhDun || 0;
+            } else if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
               khymdraaguiDun = zardliinData?.tulukhDun || 0;
             } else {
-              const avlagaData = x?.avlaga?.guilgeenuud?.find(
-                (guilgee) =>
-                  guilgee.tailbar?.trim() ===
-                    (zardliinData?.ner || songogdsonZardal?.ner)?.trim() &&
-                  (guilgee.tulukhDun || 0) !== 0,
-              );
-              khymdraaguiDun = avlagaData?.tulukhDun || 0;
+              khymdraaguiDun = 0;
             }
           } else if (zardliinData || songogdsonZardal) {
             const actingZardal = zardliinData || songogdsonZardal;
@@ -696,18 +698,16 @@ function tulburTootsoo() {
             selectedZardal?.ner?.includes("Цахилгаан");
 
           if (isUtilityExpense) {
-            if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
-              return formatNumber((zardliinData?.tulukhDun || 0) * durationMultiplier, 2);
-            }
-
-            const avlagaData = data?.avlaga?.guilgeenuud?.find(
+            const avlagaData = [...(data?.avlaga?.guilgeenuud || [])].reverse().find(
               (guilgee) =>
                 guilgee.tailbar?.trim() === selectedZardal?.ner?.trim() &&
                 (guilgee.tulukhDun || 0) !== 0,
             );
 
-            if (avlagaData) {
+            if (avlagaData && (avlagaData.tulukhDun || 0) !== 0) {
               return formatNumber((avlagaData.tulukhDun || 0) * durationMultiplier, 2);
+            } else if (zardliinData && (zardliinData.tulukhDun || 0) !== 0) {
+              return formatNumber((zardliinData?.tulukhDun || 0) * durationMultiplier, 2);
             }
           }
 
@@ -1233,15 +1233,17 @@ function tulburTootsoo() {
             selectedZardal?.ner?.includes("Цахилгаан");
 
           if (isUtilityExpense) {
-            if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
+            const avlagaData = [...(geree?.avlaga?.guilgeenuud || [])].reverse().find(
+              (guilgee) =>
+                guilgee.tailbar === selectedZardal?.ner &&
+                (guilgee.tulukhDun || 0) !== 0,
+            );
+            if (avlagaData && (avlagaData.tulukhDun || 0) !== 0) {
+              khymdraaguiDun = avlagaData?.tulukhDun || 0;
+            } else if (gereeZardal && (gereeZardal.tulukhDun || 0) !== 0) {
               khymdraaguiDun = gereeZardal.tulukhDun || 0;
             } else {
-              const avlagaData = geree?.avlaga?.guilgeenuud?.find(
-                (guilgee) =>
-                  guilgee.tailbar === selectedZardal?.ner &&
-                  (guilgee.tulukhDun || 0) !== 0,
-              );
-              khymdraaguiDun = avlagaData?.tulukhDun || 0;
+              khymdraaguiDun = 0;
             }
           } else if (selectedZardal) {
             if (

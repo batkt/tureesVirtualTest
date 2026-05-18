@@ -21,6 +21,7 @@ const KhariltsagchiinLavlakh = ({
     return {
       baiguullagiinId: baiguullaga?._id,
       turul: baiguullagaEsekh === true ? "ААН" : "Иргэн",
+      tuluv: { $nin: ["0", 0, "-1", -1] },
     };
   }, [baiguullaga, barilgiinId, baiguullagaEsekh]);
   const khariltsagchiinGaralt = useJagsaalt(
