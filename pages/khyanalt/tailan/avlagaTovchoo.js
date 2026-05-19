@@ -10,6 +10,7 @@ import {
   Tooltip,
   Table as AntdTable,
   Checkbox,
+  Input,
 } from "antd";
 import formatNumber from "tools/function/formatNumber";
 import useAvlagaTovchoo, { useavlagaTovchooDelgerengui } from "hooks/tailan/useAvlagaTovchoo";
@@ -55,7 +56,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     if (!detail?.guilgeenuud && !gereeDetail) return [];
     
     // Combine all transaction types and sort chronologically
-    let combined = [...(detail?.guilgeenuud || [])];
+    let combined = [...(detail?.guilgeenuud || []).map(g => g.turul === "aldangi" ? { ...g, _isAldangiExtra: true, tulsunDun: g.tulsunAldangi || g.tulsunDun || 0, tailbar: g.tailbar || t("Төлсөн алданги") } : g)];
     
     (gereeDetail?.baritsaaGuilgeenuud || []).forEach((g) => {
       if (ognoo && ognoo[0] && ognoo[1]) {
@@ -76,17 +77,24 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     });
 
     (gereeDetail?.aldangiGuilgeenuud || []).forEach((g) => {
-      if (ognoo && ognoo[0] && ognoo[1]) {
-        const gDate = new Date(g.ognoo);
-        if (gDate < new Date(ognoo[0]) || gDate > new Date(ognoo[1])) {
+      const gDate = g.aldangiBodsonOgnoo || g.ognoo;
+      if (ognoo && ognoo[0] && ognoo[1] && gDate) {
+        const d = new Date(gDate);
+        if (d < new Date(ognoo[0]) || d > new Date(ognoo[1])) {
           return;
         }
       }
-      if ((g.tulsunAldangi || g.tulsunDun || 0) > 0 || (g.tulukhDun || 0) > 0) {
+      const calculatedPenalty = g.aldangi || 0;
+      const paidPenalty = g.tulsunAldangi || g.tulsunDun || 0;
+
+      if (calculatedPenalty > 0 || paidPenalty > 0) {
         combined.push({
           ...g,
-          tailbar: g.tailbar || t("Алданги"),
-          tulsunDun: g.tulsunAldangi || g.tulsunDun || 0,
+          ognoo: gDate,
+          tailbar: g.tailbar || (calculatedPenalty > 0 ? t("Бодогдсон алданги") : t("Төлсөн алданги")),
+          tulukhDun: calculatedPenalty,
+          tulsunDun: paidPenalty,
+          khyamdral: 0,
           _isAldangiExtra: true
         });
       }
@@ -106,7 +114,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
 
       const groupRows = [];
 
-      if (!g._isAldangiExtra) {
+      if (!g._isAldangiExtra && g.turul !== "baritsaa") {
         let remainingKt = kt;
 
         if (dt > 0) {
@@ -141,7 +149,6 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
 
         if (aldangiPaid > 0) {
           remainingKt -= aldangiPaid;
-          balance -= aldangiPaid;
           groupRows.push({
             ...g,
             key: `main-${i}-aldangi`,
@@ -149,13 +156,14 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
             tulsunDun: aldangiPaid,
             khyamdral: 0,
             tailbar: t("Алданги төлөлт"),
-            runningBalance: balance,
+            _isExtra: true,
+            _isAldangiExtra: true,
+            runningBalance: null,
           });
         }
 
         if (baritsaaPaid > 0) {
           remainingKt -= baritsaaPaid;
-          balance -= baritsaaPaid;
           groupRows.push({
             ...g,
             key: `main-${i}-baritsaa`,
@@ -163,7 +171,9 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
             tulsunDun: baritsaaPaid,
             khyamdral: 0,
             tailbar: t("Барьцаа төлөлт"),
-            runningBalance: balance,
+            turul: "baritsaa",
+            _isExtra: true,
+            runningBalance: null,
           });
         }
 
@@ -184,8 +194,8 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           groupRows.push({ ...g, key: `main-${i}`, runningBalance: balance });
         }
       } else {
-        balance -= kt;
-        groupRows.push({ ...g, key: `main-${i}-extra`, runningBalance: balance });
+        // Penalty or extra transactions - do not modify the rental ledger running balance
+        groupRows.push({ ...g, key: `main-${i}-extra`, _isExtra: true, runningBalance: null });
       }
 
       if (groupRows.length > 0) {
@@ -216,10 +226,15 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
 
   const dataRowsOnly = rows.filter(r => !r._isEkhniiUldegdel);
   const totalDt = dataRowsOnly.reduce((s, r) => s + (r.tulukhDun || 0), 0);
-  const totalKt = dataRowsOnly.reduce((s, r) => s + (r.tulsunDun || 0), 0);
+  const totalKt = dataRowsOnly.reduce((s, r) => s + (r.tulsunDun || 0) + (r.khyamdral || 0), 0);
   const totalKhyamdral = dataRowsOnly.reduce((s, r) => s + (r.khyamdral || 0), 0);
 
-  const tureesiinUldegdel = (detail?.ekhniiUldegdel || 0) + totalDt - totalKt - totalKhyamdral;
+  // Pure rental outstanding balance from table rows, excluding baritsaa and aldangi extra transactions
+  const tureesiinUldegdel = (detail?.ekhniiUldegdel || 0) +
+    dataRowsOnly.filter(r => r.turul !== "baritsaa" && !r._isAldangiExtra).reduce((s, r) => s + (r.tulukhDun || 0), 0) -
+    dataRowsOnly.filter(r => r.turul !== "baritsaa" && !r._isAldangiExtra).reduce((s, r) => s + (r.tulsunDun || 0), 0) -
+    dataRowsOnly.filter(r => r.turul !== "baritsaa" && !r._isAldangiExtra).reduce((s, r) => s + (r.khyamdral || 0), 0);
+
   const aldangiBalance = gereeDetail?.aldangiinUldegdel || 0;
   const baritsaaBalance = Math.max(0, (gereeDetail?.baritsaaAvakhDun || 0) - (gereeDetail?.baritsaaniiUldegdel || 0));
 
@@ -443,10 +458,34 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
             
           </div>
 
-          <div className="mb-4 flex flex-wrap gap-x-8 text-sm font-semibold pb-2 border-b">
-            <div>Харилцагч: <span className="font-normal text-gray-800">{record?.ner}</span></div>
-            <div>Талбай дугаар: <span className="font-normal text-gray-800">{record?.talbainDugaar}</span></div>
-            <div>Талбай м2: <span className="font-normal text-gray-800">{record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
+          <div className="mb-4 flex flex-col gap-2 pb-2 border-b">
+            <div className="flex flex-wrap gap-x-8 text-sm font-semibold text-gray-800">
+              <div>Харилцагч: <span className="font-normal text-gray-800">{record?.ner}</span></div>
+              <div>Талбай дугаар: <span className="font-normal text-gray-800">{record?.talbainDugaar}</span></div>
+              <div>Талбай м2: <span className="font-normal text-gray-800">{record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
+            </div>
+            <div className="grid grid-cols-5 gap-2 pt-2 border-t text-xxs font-bold text-gray-700">
+              <div className="flex flex-col">
+                <span className="text-gray-400 font-medium">{t("Түрээсийн үлдэгдэл")}</span>
+                <span>{formatNumber(tureesiinUldegdel, 2)}₮</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-gray-400 font-medium">{t("Барьцаа үлдэгдэл")}</span>
+                <span>{formatNumber(baritsaaBalance, 2)}₮</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-gray-400 font-medium">{t("Бодогдсон алданги")}</span>
+                <span>{formatNumber((gereeDetail?.aldangiinUldegdel || 0) + (gereeDetail?.niitTulsunAldangi || 0), 2)}₮</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-gray-400 font-medium">{t("Төлсөн алданги")}</span>
+                <span>{formatNumber(gereeDetail?.niitTulsunAldangi || 0, 2)}₮</span>
+              </div>
+              <div className="flex flex-col text-red-600">
+                <span className="text-gray-400 font-medium">{t("Алдангийн үлдэгдэл")}</span>
+                <span>{formatNumber(gereeDetail?.aldangiinUldegdel || 0, 2)}₮</span>
+              </div>
+            </div>
           </div>
           
           <table className="w-full border-collapse border border-gray-400 text-xs">
@@ -553,13 +592,38 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         }
       >
         <div>
-          <div className="flex flex-wrap gap-x-8 px-3 py-2.5 text-sm font-semibold text-gray-700 bg-gray-50 rounded-lg border">
-            <span className="text-sm font-semibold text-gray-500 pb-2">
-              ({ognoo && ognoo[0] && ognoo[1] ? `${moment(ognoo[0]).format("YYYY/MM/DD")} – ${moment(ognoo[1]).format("YYYY/MM/DD")}` : moment().format("YYYY/MM/DD")})
-            </span>
-            <div>Харилцагч: <span className="font-normal text-gray-900">{record?.ner}</span></div>
-            <div>Талбай дугаар: <span className="font-normal text-gray-900">{record?.talbainDugaar}</span></div>
-            <div>Талбай м2: <span className="font-normal text-gray-900">{record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
+          <div className="flex flex-col gap-3 px-4 py-3 bg-gray-50 rounded-lg border mb-4 shadow-xs">
+            <div className="flex flex-wrap gap-x-8 text-sm font-semibold text-gray-700">
+              <span className="text-sm font-semibold text-gray-500">
+                ({ognoo && ognoo[0] && ognoo[1] ? `${moment(ognoo[0]).format("YYYY/MM/DD")} – ${moment(ognoo[1]).format("YYYY/MM/DD")}` : moment().format("YYYY/MM/DD")})
+              </span>
+              <div>Харилцагч: <span className="font-normal text-gray-950">{record?.ner}</span></div>
+              <div>Талбай дугаар: <span className="font-normal text-gray-950">{record?.talbainDugaar}</span></div>
+              <div>Талбай м2: <span className="font-normal text-gray-955">{record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 pt-3 border-t border-gray-200">
+              <div className="flex flex-col">
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Түрээсийн үлдэгдэл")}</span>
+                <span className="text-sm font-bold text-gray-800">{formatNumber(tureesiinUldegdel, 2)}₮</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Барьцаа үлдэгдэл")}</span>
+                <span className="text-sm font-bold text-gray-800">{formatNumber(baritsaaBalance, 2)}₮</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Бодогдсон алданги")}</span>
+                <span className="text-sm font-bold text-gray-800">{formatNumber((gereeDetail?.aldangiinUldegdel || 0) + (gereeDetail?.niitTulsunAldangi || 0), 2)}₮</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Төлсөн алданги")}</span>
+                <span className="text-sm font-bold text-gray-800">{formatNumber(gereeDetail?.niitTulsunAldangi || 0, 2)}₮</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Алдангийн үлдэгдэл")}</span>
+                <span className="text-sm font-bold text-red-600">{formatNumber(gereeDetail?.aldangiinUldegdel || 0, 2)}₮</span>
+              </div>
+            </div>
           </div>
   
         <style>{`
@@ -696,7 +760,7 @@ function avlagaTovchoo({ token }) {
     moment().startOf("month"),
     moment().endOf("month"),
   ]);
-  const [songogdsonIds, setSongogdsonIds] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [khakhTsutsalsan, setKhakhTsutsalsan] = useState(false);
@@ -738,18 +802,8 @@ function avlagaTovchoo({ token }) {
       duusakhOgnoo: ognoo?.[1]
         ? moment(ognoo[1]).endOf("day").toISOString()
         : undefined,
-      // If the selected value starts with 'G:', it's a contract number
-      gereeniiDugaaruud: songogdsonIds
-        .filter((id) => id.startsWith("G:"))
-        .map((id) => id.replace("G:", "")),
-      // Otherwise it's a register (backward compatibility/customer level)
-      khariltsagchiinId: songogdsonIds
-        .filter((id) => !id.startsWith("G:"))
-        .length > 0
-        ? songogdsonIds.filter((id) => !id.startsWith("G:"))
-        : undefined,
     }),
-    [ognoo, baiguullaga, barilgiinId, songogdsonIds]
+    [ognoo, baiguullaga, barilgiinId]
   );
 
   const { avlagaTovchoo, unshijBaina, setKhuudaslalt } = useAvlagaTovchoo(
@@ -768,15 +822,16 @@ function avlagaTovchoo({ token }) {
     return (avlagaTovchoo?.jagsaalt || avlagaTovchoo || [])
       .map((item) => {
         const aldangiBalance = Number(item.aldangiinUldegdel) || 0;
-        const baritsaaBalance = Math.max(0, (Number(item.baritsaaAvakhDun) || 0) - (Number(item.baritsaaniiUldegdel) || 0));
+        const baritsaaBalanceStart = Math.max(0, (Number(item.baritsaaAvakhDun) || 0) - (Number(item.baritsaaniiUldegdelAtStart !== undefined ? item.baritsaaniiUldegdelAtStart : item.baritsaaniiUldegdel) || 0));
+        const baritsaaBalanceEnd = Math.max(0, (Number(item.baritsaaAvakhDun) || 0) - (Number(item.baritsaaniiUldegdel) || 0));
 
         const adjustedEkhniiUldegdel = aldangiTuukhKharakhEsekh
           ? (Number(item.ekhniiUldegdel || 0) + aldangiBalance)
-          : (Number(item.ekhniiUldegdel || 0) + baritsaaBalance + aldangiBalance);
+          : (Number(item.ekhniiUldegdel || 0) + baritsaaBalanceStart + aldangiBalance);
 
         const adjustedEtssiinUldegdel = aldangiTuukhKharakhEsekh
           ? (Number(item.etssiinUldegdel || 0) + aldangiBalance)
-          : (Number(item.etssiinUldegdel || 0) + baritsaaBalance + aldangiBalance);
+          : (Number(item.etssiinUldegdel || 0) + baritsaaBalanceEnd + aldangiBalance);
 
         return {
           ...item,
@@ -805,13 +860,25 @@ function avlagaTovchoo({ token }) {
           return false;
         }
 
+        if (searchText) {
+          const s = searchText.toLowerCase();
+          const matches =
+            (row.ner || "").toLowerCase().includes(s) ||
+            (row.register || "").toLowerCase().includes(s) ||
+            (row.gereeniiDugaar || "").toLowerCase().includes(s) ||
+            (Array.isArray(row.talbainDugaar)
+              ? row.talbainDugaar.some((t) => String(t).toLowerCase().includes(s))
+              : String(row.talbainDugaar || "").toLowerCase().includes(s));
+          if (!matches) return false;
+        }
+
         return true;
       })
       .map((item, i) => ({
         key: i.toString(),
         ...item,
       }));
-  }, [avlagaTovchoo, khakhTsutsalsan, baiguullaga]);
+  }, [avlagaTovchoo, khakhTsutsalsan, baiguullaga, searchText]);
 
   function openDetail(record, field) {
     setSelectedRecord({ ...record, clickedField: field });
@@ -848,7 +915,7 @@ function avlagaTovchoo({ token }) {
       register: r.register || "-",
       ekhniiUldegdel: r.ekhniiUldegdel || 0,
       niitDt: r.niitDt || 0,
-      niitTulsun: r.niitTulsun || 0,
+      niitTulsun: r.niitKt || 0,
       etssiinUldegdel: r.etssiinUldegdel || 0,
     }));
 
@@ -860,7 +927,7 @@ function avlagaTovchoo({ token }) {
       register: "",
       ekhniiUldegdel: totals.ekhniiUldegdel || 0,
       niitDt: totals.niitDt || 0,
-      niitTulsun: totals.niitTulsun || 0,
+      niitTulsun: totals.niitKt || 0,
       etssiinUldegdel: totals.etssiinUldegdel || 0,
     });
 
@@ -1010,8 +1077,8 @@ function avlagaTovchoo({ token }) {
           },
           {
             title: t("КТ"),
-            dataIndex: "niitTulsun",
-            key: "niitTulsun",
+            dataIndex: "niitKt",
+            key: "niitKt",
             align: "center",
             width: 110,
             render: (v, record) => numCell(v, record, "kt"),
@@ -1078,46 +1145,14 @@ function avlagaTovchoo({ token }) {
           placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]}
         />
 
-        {/* Customer select */}
-        <Select
+        {/* Customer Search Input */}
+        <Input
           className="w-full lg:w-80"
-          showSearch
-          mode="multiple"
-          maxTagCount="responsive"
-          allowClear
-          filterOption={(input, option) => {
-            const s = input.toLowerCase();
-            return (
-              option?.ner?.toLowerCase().includes(s) ||
-              option?.register?.toLowerCase().includes(s) ||
-              option?.gereeniiDugaar?.toLowerCase().includes(s) ||
-              option?.talbainDugaar?.toLowerCase().includes(s)
-            );
-          }}
-          onSearch={khariltsagchiinGaralt.onSearch}
-          onChange={setSongogdsonIds}
           placeholder={t("Гэрээ эсвэл Харилцагч хайх")}
-        >
-          {/* Group by customer but allow selecting individual contracts */}
-          {(khariltsagchiinGaralt?.jagsaalt || []).map((d) => (
-            <Select.Option
-              key={d?.gereeniiDugaar || d?._id}
-              value={`G:${d?.gereeniiDugaar}`}
-              label={d?.ner}
-              ner={d?.ner || ""}
-              register={d?.register || d?.customerTin || ""}
-              gereeniiDugaar={d?.gereeniiDugaar || ""}
-              talbainDugaar={d?.talbainDugaar || ""}
-            >
-              <div className="flex flex-col">
-                <span className="font-semibold">{d?.ner}</span>
-                <span className="text-xs text-gray-400">
-                  {[d?.gereeniiDugaar, d?.talbainDugaar].filter(Boolean).join(" | ")}
-                </span>
-              </div>
-            </Select.Option>
-          ))}
-        </Select>
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          allowClear
+        />
 
         {/* Show cancelled checkbox */}
         <div className="flex items-center gap-1.5 h-8">
@@ -1210,7 +1245,7 @@ function avlagaTovchoo({ token }) {
                   <span className="font-bold text-red-500">{formatNumber(totals.niitDt, 2)}</span>
                 </AntdTable.Summary.Cell>
                 <AntdTable.Summary.Cell index={8} align="right">
-                  <span className="font-bold text-blue-600">{formatNumber(totals.niitTulsun, 2)}</span>
+                  <span className="font-bold text-blue-600">{formatNumber(totals.niitKt, 2)}</span>
                 </AntdTable.Summary.Cell>
                 <AntdTable.Summary.Cell index={9} align="right">
                   <span className="font-bold text-red-500">{formatNumber(totals.etssiinUldegdel, 2)}</span>

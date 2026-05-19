@@ -332,7 +332,10 @@ function GuilgeeniiTuukh(
       return result;
     }
 
-    const khuulsanData = [...processedGuilgeeniiTuukh];
+    let khuulsanData = [...processedGuilgeeniiTuukh];
+    const endOfToday = moment().endOf("day");
+    khuulsanData = khuulsanData.filter(item => moment(item.ognoo).isSameOrBefore(endOfToday));
+    
     khuulsanData.sort((a, b) => {
       const sortDaraalal = sortOrders[sortColumn];
       if (sortDaraalal === "asc") {
