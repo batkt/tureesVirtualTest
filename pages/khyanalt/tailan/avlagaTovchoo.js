@@ -44,8 +44,8 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   const { detail, gereeDetail, detailUnshijBaina } = useavlagaTovchooDelgerengui(
     open && token,
     record?.gereeniiDugaar,
-    ekhlekhOgnoo,
-    duusakhOgnoo,
+    "1970-01-01T00:00:00.000Z", // All-time start date
+    "2099-12-31T23:59:59.000Z", // All-time end date
     baiguullaga?._id,
     barilgiinId,
     baiguullaga?.tukhainBaaziinKholbolt
@@ -58,12 +58,6 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     let combined = [...(detail?.guilgeenuud || [])];
     
     (gereeDetail?.baritsaaGuilgeenuud || []).forEach((g) => {
-      if (ognoo && ognoo[0] && ognoo[1]) {
-        const gDate = new Date(g.ognoo);
-        if (gDate < new Date(ognoo[0]) || gDate > new Date(ognoo[1])) {
-          return;
-        }
-      }
       if ((g.tulsunDun || 0) + (g.orlogo || 0) > 0 || (g.tulukhDun || 0) > 0) {
         combined.push({
           ...g,
@@ -76,12 +70,6 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     });
 
     (gereeDetail?.aldangiGuilgeenuud || []).forEach((g) => {
-      if (ognoo && ognoo[0] && ognoo[1]) {
-        const gDate = new Date(g.ognoo);
-        if (gDate < new Date(ognoo[0]) || gDate > new Date(ognoo[1])) {
-          return;
-        }
-      }
       if ((g.tulsunAldangi || g.tulsunDun || 0) > 0 || (g.tulukhDun || 0) > 0) {
         combined.push({
           ...g,
@@ -196,22 +184,28 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     dataGroups.reverse();
 
     const allRows = [
-      { _isHeaderRow1: true, key: "h1" },
-      { _isHeaderRow2: true, key: "h2" },
+      { 
+        _isEkhniiUldegdel: true, 
+        key: "ekhnii", 
+        ognoo: ognoo && ognoo[0] ? ognoo[0] : null, 
+        tailbar: t("Эхний үлдэгдэл"), 
+        runningBalance: detail?.ekhniiUldegdel || 0 
+      },
       ...dataGroups.flat()
     ];
 
     return allRows;
-  }, [detail, gereeDetail]);
+  }, [detail, gereeDetail, t]);
 
   const aldangiTuukhKharakhEsekh =
     baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ||
     baiguullaga?._id === "6735c77a7fc60cd66deb2909" ||
     baiguullaga?._id === "6916c957511a8a4aebc1d65b";
 
-  const totalDt = rows.reduce((s, r) => s + (r.tulukhDun || 0), 0);
-  const totalKt = rows.reduce((s, r) => s + (r.tulsunDun || 0), 0);
-  const totalKhyamdral = rows.reduce((s, r) => s + (r.khyamdral || 0), 0);
+  const dataRowsOnly = rows.filter(r => !r._isEkhniiUldegdel);
+  const totalDt = dataRowsOnly.reduce((s, r) => s + (r.tulukhDun || 0), 0);
+  const totalKt = dataRowsOnly.reduce((s, r) => s + (r.tulsunDun || 0), 0);
+  const totalKhyamdral = dataRowsOnly.reduce((s, r) => s + (r.khyamdral || 0), 0);
 
   const tureesiinUldegdel = (detail?.ekhniiUldegdel || 0) + totalDt - totalKt - totalKhyamdral;
   const aldangiBalance = gereeDetail?.aldangiinUldegdel || 0;
@@ -228,19 +222,8 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       width: 50,
       align: "center",
       render: (_, r, i) => {
-        if (r._isHeaderRow1) {
-          return {
-            children: <div className="text-left font-medium pl-2">Харилцагч: {record?.ner}</div>,
-            props: { colSpan: 3 }
-          };
-        }
-        if (r._isHeaderRow2) {
-          return {
-            children: <div className="text-left font-medium pl-2">Талбай дугаар: {record?.talbainDugaar}, м2: {record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"}</div>,
-            props: { colSpan: 3 }
-          };
-        }
-        return i - 1;
+        if (r._isEkhniiUldegdel) return "-";
+        return i;
       },
     },
     {
@@ -249,16 +232,19 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       width: 100,
       align: "center",
       render: (v, r) => {
-        if (r._isHeaderRow1 || r._isHeaderRow2) return { props: { colSpan: 0 } };
+        if (r._isEkhniiUldegdel) return "-";
         return v ? moment(v).format("YYYY/MM/DD") : "";
       },
     },
+
     {
       title: <div className="text-center">{t("Тайлбар")}</div>,
       dataIndex: "tailbar",
       width: 250,
       render: (v, r) => {
-        if (r._isHeaderRow1 || r._isHeaderRow2) return { props: { colSpan: 0 } };
+        if (r._isEkhniiUldegdel) {
+          return <span className="font-semibold italic text-green-700">{v}</span>;
+        }
         let label;
         if (r.turul === "khuvaari") {
           if ((r.khyamdral || 0) > 0) {
@@ -288,18 +274,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           width: 130,
           align: "right",
           render: (v, r) => {
-            if (r._isHeaderRow1) {
-              return {
-                children: <div className="text-center italic">{t("Эхний үлдэгдэл")}</div>,
-                props: { colSpan: 2 }
-              };
-            }
-            if (r._isHeaderRow2) {
-              return {
-                children: <div className="text-center font-medium">Талбай м2: {record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"}м2</div>,
-                props: { colSpan: 2 }
-              };
-            }
+            if (r._isEkhniiUldegdel) return "-";
             return !v || v === 0 ? "-" : <span className="font-medium whitespace-nowrap">{formatNumber(v, 2)}</span>;
           },
         },
@@ -309,8 +284,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           width: 130,
           align: "right",
           render: (v, r) => {
-            if (r._isHeaderRow1 || r._isHeaderRow2) return { props: { colSpan: 0 } };
-            // Display khyamdral in KT column visually, but it is not added to totalKt
+            if (r._isEkhniiUldegdel) return "-";
             const total = (v || 0) + (r.khyamdral || 0);
             return total <= 0 ? "-" : <span className="font-medium whitespace-nowrap">{formatNumber(total, 2)}</span>;
           },
@@ -318,16 +292,13 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       ]
     },
     {
-      title: <div className="text-center">{t("Эц/үлд")}</div>,
+      title: <div className="text-center">{t("Эцсийн үлдэгдэл")}</div>,
       dataIndex: "runningBalance",
       width: 140,
       align: "right",
       render: (v, r) => {
-        if (r._isHeaderRow1) {
-          return <span className="font-medium italic text-blue-600 whitespace-nowrap">{formatNumber(detail?.ekhniiUldegdel, 2)}</span>;
-        }
-        if (r._isHeaderRow2) {
-          return "";
+        if (r._isEkhniiUldegdel) {
+          return <span className="font-bold text-blue-600 whitespace-nowrap">{formatNumber(v, 2)}</span>;
         }
         return r._isExtra
           ? <span className="text-gray-300">-</span>
@@ -340,24 +311,14 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     const excel = new Excel();
     
     const formattedRows = rows.map((r, i) => {
-      if (r._isHeaderRow1) {
+      if (r._isEkhniiUldegdel) {
         return {
           idx: "",
-          ognoo: t("Эхний үлдэгдэл"),
-          tailbar: `${t("Харилцагч")}: ${record?.ner || ""}`,
+          ognoo: r.ognoo ? moment(r.ognoo).format("YYYY-MM-DD") : "",
+          tailbar: r.tailbar,
           tulukhDun: 0,
           tulsunDun: 0,
           runningBalance: detail?.ekhniiUldegdel || 0
-        };
-      }
-      if (r._isHeaderRow2) {
-        return {
-          idx: "",
-          ognoo: "",
-          tailbar: `${t("Талбай дугаар")}: ${record?.talbainDugaar || ""}, м2: ${record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"}`,
-          tulukhDun: 0,
-          tulsunDun: 0,
-          runningBalance: ""
         };
       }
       
@@ -380,7 +341,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       const totalKt = (r.tulsunDun || 0) + (r.khyamdral || 0);
 
       return {
-        idx: i - 1,
+        idx: i,
         ognoo: r.ognoo ? moment(r.ognoo).format("YYYY-MM-DD") : "",
         tailbar: label,
         tulukhDun: r.tulukhDun || 0,
@@ -392,7 +353,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     formattedRows.push({
       idx: "",
       ognoo: "",
-      tailbar: t("Нийт гүйлгээ"),
+      tailbar: t("Нийт"),
       tulukhDun: totalDt,
       tulsunDun: totalKt,
       runningBalance: ""
@@ -465,60 +426,39 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         }}
       >
         <div ref={printRef} className="print-container p-4 text-xs">
-          <div className="mb-2 flex items-center justify-between text-sm">
-            <div>
-              {ognoo && ognoo[0] && ognoo[1] ? (
-                <span>
-                  Огноо: {moment(ognoo[0]).format("YYYY/MM/DD")} –{" "}
-                  {moment(ognoo[1]).format("YYYY/MM/DD")}
-                </span>
-              ) : (
-                <span>Огноо: {moment().format("YYYY/MM/DD")}</span>
-              )}
-            </div>
-            <div className="text-center text-base font-bold">Авлагын дэлгэрэнгүй тайлан</div>
-            <div />
+          <div className="mb-4 text-center py-4 border-b">
+            <div className="text-xl font-bold">Авлагын дэлгэрэнгүй тайлан</div>
+            
+          </div>
+
+          <div className="mb-4 flex flex-wrap gap-x-8 text-sm font-semibold pb-2 border-b">
+            <div>Харилцагч: <span className="font-normal text-gray-800">{record?.ner}</span></div>
+            <div>Талбай дугаар: <span className="font-normal text-gray-800">{record?.talbainDugaar}</span></div>
+            <div>Талбай м2: <span className="font-normal text-gray-800">{record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
           </div>
           
           <table className="w-full border-collapse border border-gray-400 text-xs">
             <thead className="bg-gray-200">
               <tr>
-                {["№", "Огноо", "Тайлбар", "ДТ", "КТ", "Үлдэгдэл"].map((h, i) => (
-                  <th key={i} className="border border-gray-400 px-1 py-1 text-center">
-                    {h}
-                  </th>
-                ))}
+                <th style={{ width: "5%" }} className="border border-gray-400 px-1 py-1 text-center">№</th>
+                <th style={{ width: "15%" }} className="border border-gray-400 px-1 py-1 text-center">Огноо</th>
+                <th style={{ width: "40%" }} className="border border-gray-400 px-1 py-1 text-center">Тайлбар</th>
+                <th style={{ width: "13%" }} className="border border-gray-400 px-1 py-1 text-center">ДТ</th>
+                <th style={{ width: "13%" }} className="border border-gray-400 px-1 py-1 text-center">КТ</th>
+                <th style={{ width: "14%" }} className="border border-gray-400 px-1 py-1 text-center">Үлдэгдэл</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((r, i) => {
-                if (r._isHeaderRow1) {
+                if (r._isEkhniiUldegdel) {
                   return (
-                    <tr key={r.key} className="bg-green-50">
-                      <td colSpan={3} className="border border-gray-400 px-1 py-0.5 text-left font-medium pl-2">
-                        Харилцагч: {record?.ner}
-                      </td>
-                      <td colSpan={2} className="border border-gray-400 px-1 py-0.5 text-center italic">
-                        Эхний үлдэгдэл
-                      </td>
-                      <td className="border border-gray-400 px-1.5 py-0.5 text-right font-medium text-blue-600">
-                        {formatNumber(detail?.ekhniiUldegdel, 2)}
-                      </td>
-                    </tr>
-                  );
-                }
-                if (r._isHeaderRow2) {
-                  return (
-                    <tr key={r.key} className="bg-green-50">
-                      <td colSpan={3} className="border border-gray-400 px-1 py-0.5 text-left font-medium pl-2">
-                        Талбай дугаар: {record?.talbainDugaar}, м2: {record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"}
-                      </td>
-                      <td colSpan={2} className="border border-gray-400 px-1 py-0.5 text-center font-medium">
-                        Талбай м2: {record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"}м2
-                      </td>
-                      <td className="border border-gray-400 px-1.5 py-0.5 text-right">
-                        -
-                      </td>
+                    <tr key={r.key} className="bg-green-50 font-medium">
+                      <td className="border border-gray-400 px-1 py-0.5 text-center">-</td>
+                      <td className="border border-gray-400 px-1 py-0.5 text-center">{r.ognoo ? moment(r.ognoo).format("YYYY/MM/DD") : "-"}</td>
+                      <td className="border border-gray-400 px-1 py-0.5 text-left pl-2 italic text-green-700">{r.tailbar}</td>
+                      <td className="border border-gray-400 px-1.5 py-0.5 text-right">-</td>
+                      <td className="border border-gray-400 px-1.5 py-0.5 text-right">-</td>
+                      <td className="border border-gray-400 px-1.5 py-0.5 text-right text-blue-600">{formatNumber(detail?.ekhniiUldegdel, 2)}</td>
                     </tr>
                   );
                 }
@@ -536,7 +476,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
                 
                 return (
                   <tr key={r.key} className={r.turul === "khungulult" ? "text-gray-500 italic" : ""}>
-                    <td className="border border-gray-400 px-1 py-0.5 text-center">{i - 1}</td>
+                    <td className="border border-gray-400 px-1 py-0.5 text-center">{i}</td>
                     <td className="border border-gray-400 px-1 py-0.5 text-center">{r.ognoo ? moment(r.ognoo).format("YYYY/MM/DD") : ""}</td>
                     <td className="border border-gray-400 px-1 py-0.5">
                       <div>
@@ -554,7 +494,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
             <tfoot>
               <tr className="font-bold bg-gray-50">
                 <td colSpan={3} className="border border-gray-400 px-1 py-0.5 text-right">
-                  Нийт гүйлгээ
+                  {t("Нийт гүйлгээ")}
                 </td>
                 <td className="border border-gray-400 px-1.5 py-0.5 text-right text-blue-700">{formatNumber(totalDt, 2)}</td>
                 <td className="border border-gray-400 px-1.5 py-0.5 text-right text-blue-700">{formatNumber(totalKt, 2)}</td>
@@ -593,19 +533,38 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         footer={null}
         width={1400}
         style={{ top: 20 }}
-        title={<div className="text-lg text-blue-900 pb-2 text-center">{t("Авлагын дэлгэрэнгүй тайлан")}</div>}
+        title={
+          <div className="text-xl text-blue-900 font-bold py-4 text-center">
+            {t("Авлагын дэлгэрэнгүй тайлан")}{" "}
+            
+          </div>
+        }
       >
-        <div className="p-4">
-          <div className="flex justify-between items-end mb-2 px-1 text-sm font-medium text-gray-700">
-            <div>{t("Огноо")}: {ognoo && ognoo[0] && ognoo[1] ? `${moment(ognoo[0]).format("YYYY/MM/DD")} - ${moment(ognoo[1]).format("YYYY/MM/DD")}` : moment().format("YYYY/MM/DD")}</div>
-          
-        </div>
+        <div>
+          <div className="flex flex-wrap gap-x-8 px-3 py-2.5 text-sm font-semibold text-gray-700 bg-gray-50 rounded-lg border">
+            <span className="text-sm font-semibold text-gray-500 pb-2">
+              ({ognoo && ognoo[0] && ognoo[1] ? `${moment(ognoo[0]).format("YYYY/MM/DD")} – ${moment(ognoo[1]).format("YYYY/MM/DD")}` : moment().format("YYYY/MM/DD")})
+            </span>
+            <div>Харилцагч: <span className="font-normal text-gray-900">{record?.ner}</span></div>
+            <div>Талбай дугаар: <span className="font-normal text-gray-900">{record?.talbainDugaar}</span></div>
+            <div>Талбай м2: <span className="font-normal text-gray-900">{record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
+          </div>
   
         <style>{`
           .compact-header-table .ant-table-thead > tr > th {
             padding: 4px 8px !important;
             height: auto !important;
             font-size: 13px !important;
+          }
+          @media print {
+            thead tr th {
+              background-color: #d4edda !important;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            .print-hidden-col {
+              display: none !important;
+            }
           }
         `}</style>
   
@@ -615,50 +574,54 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           loading={detailUnshijBaina}
           columns={columns}
           dataSource={rows}
-          pagination={false}
+          pagination={{
+            defaultPageSize: 50,
+            pageSizeOptions: ["10", "20", "50", "200"],
+            showSizeChanger: true,
+          }}
           scroll={{ y: 600 }}
           className="shadow-sm compact-header-table"
           rowClassName={(r) => {
-          if (r._isHeaderRow1) return "bg-green-50";
-          return r.turul === "khungulult" ? "text-gray-500 italic" : "";
-        }}
-        summary={() => (
-          <AntdTable.Summary fixed="bottom">
-            <AntdTable.Summary.Row className="bg-gray-50">
-              <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
-                <span className="font-bold text-gray-700">{t("Нийт гүйлгээ")}</span>
-              </AntdTable.Summary.Cell>
-              <AntdTable.Summary.Cell index={3} align="right">
-                <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalDt, 2)}</span>
-              </AntdTable.Summary.Cell>
-              <AntdTable.Summary.Cell index={4} align="right">
-                <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalKt, 2)}</span>
-              </AntdTable.Summary.Cell>
-              <AntdTable.Summary.Cell index={5} align="right">
-                <span className="text-gray-300">-</span>
-              </AntdTable.Summary.Cell>
-            </AntdTable.Summary.Row>
-            <AntdTable.Summary.Row className="bg-gray-100">
-              <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
-                {/* Empty column */}
-              </AntdTable.Summary.Cell>
-              <AntdTable.Summary.Cell index={3} colSpan={2} align="center">
-                <span className="font-bold text-gray-700 italic">{t("Эцсийн үлдэгдэл")}</span>
-              </AntdTable.Summary.Cell>
-              <AntdTable.Summary.Cell index={5} align="right">
-                <span className="font-bold text-red-600 text-sm whitespace-nowrap">
-                  {formatNumber(lastBalance, 2)}
-                </span>
-              </AntdTable.Summary.Cell>
-            </AntdTable.Summary.Row>
-          </AntdTable.Summary>
-        )}
-      />
-        </div> {/* Close the print wrapper div */}
-        <div className="flex justify-end pt-4 gap-3">
+            if (r._isEkhniiUldegdel) return "bg-green-50 font-medium";
+            return r.turul === "khungulult" ? "text-gray-500 italic" : "";
+          }}
+          summary={() => (
+            <AntdTable.Summary fixed="bottom">
+              <AntdTable.Summary.Row className="bg-gray-50">
+                <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
+                  <span className="font-bold text-gray-700">{t("Нийт гүйлгээ")}</span>
+                </AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell index={3} align="right">
+                  <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalDt, 2)}</span>
+                </AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell index={4} align="right">
+                  <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalKt, 2)}</span>
+                </AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell index={5} align="right">
+                  <span className="text-gray-300">-</span>
+                </AntdTable.Summary.Cell>
+              </AntdTable.Summary.Row>
+              <AntdTable.Summary.Row className="bg-gray-100">
+                <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
+                  {/* Empty column */}
+                </AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell index={3} colSpan={2} align="center">
+                  <span className="font-bold text-gray-700 italic">{t("Эцсийн үлдэгдэл")}</span>
+                </AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell index={5} align="right">
+                  <span className="font-bold text-red-600 text-sm whitespace-nowrap">
+                    {formatNumber(lastBalance, 2)}
+                  </span>
+                </AntdTable.Summary.Cell>
+              </AntdTable.Summary.Row>
+            </AntdTable.Summary>
+          )}
+        />
+        </div>
+        <div className="flex justify-end pt-4 gap-3 pr-4 pb-4 border-t bg-gray-50 rounded-b-lg">
           <button
             onClick={handlePrint}
-            className="btn btn-outline-primary flex h-8 items-center gap-1 text-sm"
+            className="btn btn-outline-primary flex h-8 items-center gap-1 text-sm bg-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -679,27 +642,33 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           </button>
           <button
             onClick={exceleerTatya}
-            className="btn btn-outline-success flex h-8 items-center gap-1 text-sm"
+            className="btn btn-outline-success flex h-8 items-center gap-1 text-sm bg-white"
           >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            {t("Excel")}
+          </button>
+          <button
+            onClick={onClose}
+            className="btn btn-outline-secondary flex h-8 items-center gap-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300"
           >
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          {t("Excel")}
-        </button>
-      </div>
-    </Modal>
+            {t("Хаах")}
+          </button>
+        </div>
+      </Modal>
     </>
   );
 }
@@ -1207,7 +1176,11 @@ function avlagaTovchoo({ token }) {
           columns={columns}
           dataSource={dataSource}
           loading={unshijBaina}
-          pagination={false}
+          pagination={{
+            defaultPageSize: 50,
+            pageSizeOptions: ["10", "20", "50", "200"],
+            showSizeChanger: true,
+          }}
           rowClassName={(record) => {
             const isCancelled = record?.tuluv === -1 || Number(record?.tuluv) === -1;
             return isCancelled ? "text-red-500" : "";
@@ -1256,28 +1229,26 @@ function avlagaTovchoo({ token }) {
         }
       >
         <div ref={printRef} className="print-container p-4">
-          <div className="mb-2 flex items-center justify-between text-sm">
-            <div>
-              {ognoo?.[0] && ognoo?.[1] && (
-                <span>
-                  Огноо: {moment(ognoo[0]).format("YYYY-MM-DD")} –{" "}
-                  {moment(ognoo[1]).format("YYYY-MM-DD")}
-                </span>
-              )}
+          <div className="mb-4 text-center py-4 border-b">
+            <div className="text-xl font-bold">Авлагын товчоо тайлан</div>
+            <div className="text-sm text-gray-500 font-semibold mt-1">
+              Огноо: {ognoo?.[0] && ognoo?.[1] ? `${moment(ognoo[0]).format("YYYY-MM-DD")} – ${moment(ognoo[1]).format("YYYY-MM-DD")}` : moment().format("YYYY-MM-DD")}
             </div>
-            <div className="text-center text-base font-bold">Авлагын товчоо</div>
-            <div />
           </div>
+          
           <table className="w-full border-collapse border border-gray-400 text-xs">
             <thead className="bg-gray-200">
               <tr>
-                {["№", "Түрээслэгч", "Гэрээ", "Талбай", "м2", "РД", "Эхний үлдэгдэл", "ДТ", "КТ", "Эцсийн үлдэгдэл"].map(
-                  (h, i) => (
-                    <th key={i} className="border border-gray-400 px-1 py-1 text-center">
-                      {h}
-                    </th>
-                  )
-                )}
+                <th style={{ width: "3%" }} className="border border-gray-400 px-1 py-1 text-center">№</th>
+                <th style={{ width: "22%" }} className="border border-gray-400 px-1 py-1 text-center">Түрээслэгч</th>
+                <th style={{ width: "10%" }} className="border border-gray-400 px-1 py-1 text-center">Гэрээ</th>
+                <th style={{ width: "7%" }} className="border border-gray-400 px-1 py-1 text-center">Талбай</th>
+                <th style={{ width: "6%" }} className="border border-gray-400 px-1 py-1 text-center">м2</th>
+                <th style={{ width: "8%" }} className="border border-gray-400 px-1 py-1 text-center">РД</th>
+                <th style={{ width: "11%" }} className="border border-gray-400 px-1 py-1 text-center">Эхний үлдэгдэл</th>
+                <th style={{ width: "11%" }} className="border border-gray-400 px-1 py-1 text-center">ДТ</th>
+                <th style={{ width: "11%" }} className="border border-gray-400 px-1 py-1 text-center">КТ</th>
+                <th style={{ width: "11%" }} className="border border-gray-400 px-1 py-1 text-center">Эцсийн үлдэгдэл</th>
               </tr>
             </thead>
             <tbody>

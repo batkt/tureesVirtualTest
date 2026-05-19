@@ -94,16 +94,19 @@ const GereeniiUldegdel = React.memo(
     const baritsaaBalance = Math.max(0, reqBaritsaa - paidBaritsaa);
 
     const fallbackUldegdel = data 
-      ? (aldangiTuukhKharakhEsekh ? (uldegdelTur + uldegdelAld) : uldegdelTur)
-      : (aldangiTuukhKharakhEsekh 
-          ? ((ugugdul?.uldegdel ?? 0) + (ugugdul?.aldangiinUldegdel ?? 0))
-          : (ugugdul?.uldegdel ?? 0)) ||
+      ? uldegdelTur
+      : (ugugdul?.tureesiinUldegdel !== undefined 
+          ? ugugdul.tureesiinUldegdel 
+          : (parseFloat(ugugdul?.uldegdel) || 0) - (parseFloat(ugugdul?.aldangiinUldegdel) || 0)) ||
          ugugdul?.niitUldegdel ||
          ugugdul?.tsutslagdsanAvlaga ||
          (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
 
-    const displayUldegdel = fallbackUldegdel;
+    const displayUldegdel = aldangiTuukhKharakhEsekh 
+      ? (fallbackUldegdel + uldegdelAld) 
+      : fallbackUldegdel;
     ugugdul.uldegdel = displayUldegdel;
+    ugugdul.tureesiinUldegdel = uldegdelTur;
     if (!isValidating && data && typeof refreshTotals === "function") {
       refreshTotals();
     }
@@ -215,7 +218,8 @@ function TableGuilgee({
   showTsutslagdsanAvlagaColumn,
   setShowTsutslagdsanAvlagaColumn,
   guilgeeniiToololt,
-  refreshTotals
+  refreshTotals,
+  baiguullaga
 }) {
   const { t } = useTranslation();
   function UilgelAvya({
@@ -230,15 +234,21 @@ function TableGuilgee({
       list.forEach((item) => {
         const isCancelled = item?.tuluv == -1 || Number(item?.tuluv) === -1;
 
-        const rawUldegdel = parseFloat(item?.uldegdel) || 0;
+        const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+        const tureesiinUld = item.tureesiinUldegdel !== undefined 
+          ? item.tureesiinUldegdel 
+          : (aldangiTuukhKharakhEsekh ? ((parseFloat(item.uldegdel) || 0) - (parseFloat(item.aldangiinUldegdel) || 0)) : (parseFloat(item.uldegdel) || 0));
+
         const effUldegdel =
-          isCancelled && rawUldegdel <= 0
+          isCancelled && tureesiinUld <= 0
             ? parseFloat(item?.tsutsalsanUldegdel) || 0
-            : rawUldegdel;
+            : tureesiinUld;
 
         let val = 0;
         if (dataIndex === "uldegdel") {
-          val = effUldegdel;
+          val = isCancelled && (parseFloat(item?.uldegdel) <= 0)
+            ? (parseFloat(item?.tsutsalsanUldegdel) || 0)
+            : (parseFloat(item?.uldegdel) || 0);
         } else if (dataIndex === "avlagiinUldegdel") {
           val = effUldegdel + (parseFloat(item?.aldangiinUldegdel) || 0);
         } else if (dataIndex === "aldangiinUldegdel") {
@@ -301,7 +311,7 @@ function TableGuilgee({
   }
   return (
     <Table
-      scroll={{ x: "max-content", y: "calc(100vh - 32rem)" }}
+      scroll={{ x: Math.max(1600, columns.length * 150), y: "calc(100vh - 32rem)" }}
       size="small"
       bordered
       columns={columns}
@@ -707,6 +717,7 @@ const {
 
   const computedTotals = useMemo(() => {
     const list = gereeniiMedeelel?.jagsaalt || [];
+    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
     const totals = {
       avlaga: 0,
       voucher: 0,
@@ -718,11 +729,14 @@ const {
 
     list.forEach((item) => {
       const isCancelled = item?.tuluv == -1 || Number(item?.tuluv) === -1;
-      const rawUldegdel = parseFloat(item?.uldegdel) || 0;
+      const tureesiinUld = item.tureesiinUldegdel !== undefined 
+        ? item.tureesiinUldegdel 
+        : (parseFloat(item.uldegdel) || 0);
+
       const effUldegdel =
-        isCancelled && rawUldegdel <= 0
+        isCancelled && tureesiinUld <= 0
           ? parseFloat(item?.tsutsalsanUldegdel) || 0
-          : rawUldegdel;
+          : tureesiinUld;
       const aldangi = parseFloat(item?.aldangiinUldegdel) || 0;
 
       const totalItemAvlaga = effUldegdel + aldangi;
@@ -746,7 +760,7 @@ const {
     });
 
     return totals;
-  }, [gereeniiMedeelel?.jagsaalt, shineBagana, totalsUpdateCount]);
+  }, [gereeniiMedeelel?.jagsaalt, shineBagana, totalsUpdateCount, baiguullaga]);
 
   // Server-side totals for dashboard cards - always shows real amounts regardless of active tab
   const serverTotals = useMemo(() => {
@@ -771,7 +785,7 @@ const {
       {
         title: "№",
         key: "index",
-        width: "2.5rem",
+        width: 50,
         align: "center",
         fixed: "left",
         render: (text, record, index) => {
@@ -819,7 +833,6 @@ const {
         dataIndex: "utas",
         ellipsis: true,
         align: "center",
-        fixed: "left",
         width: 100,
         render(data) {
           if (data && data.length > 1) {
@@ -866,7 +879,6 @@ const {
         width: 150,
         dataIndex: "uldegdel",
         align: "center",
-        fixed: "left",
         summary: true,
         render(text, record, index) {
           return (
@@ -994,16 +1006,21 @@ const {
       });
     }
 
+    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+    const filteredShineBagana = aldangiTuukhKharakhEsekh
+      ? shineBagana.filter((col) => col.dataIndex !== "avlagiinUldegdel")
+      : shineBagana;
+
     return [
       ...jagsaalt,
-      ...shineBagana,
+      ...filteredShineBagana,
       ...turulColumns,
       {
         title: t("Үйлдэл"),
-        width: "15rem",
+        width: 280,
         align: "center",
         fixed: "right",
-        dataIndex: "baritsaaniiUldegdel",
+        key: "action",
         render: (text, row) => {
           const khuvi =
             row.baritsaaAvakhDun > 0
@@ -1025,11 +1042,11 @@ const {
             <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
               <a
                 onClick={() => nekhemjleliinTuukhKharakh(row)}
-                className="text-green-500 hover:scale-110"
+                className="text-green-500 hover:scale-110 flex-shrink-0 px-[4px]"
               >
                 <Tooltip
                   title={t("Нэхэмжлэлийн түүх харах")}
-                  className="flex w-full items-center  justify-center px-[6px] "
+                  className="flex w-full items-center  justify-center "
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -1049,11 +1066,11 @@ const {
               </a>
               <a
                 onClick={() => khuulgaKharya(row)}
-                className="fill-current text-green-500 hover:scale-110"
+                className="fill-current text-green-500 hover:scale-110 flex-shrink-0 px-[4px]"
               >
                 <Tooltip
                   title={t("Хуулга")}
-                  className="flex w-full items-center  justify-center px-[6px] "
+                  className="flex w-full items-center  justify-center "
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -1073,22 +1090,22 @@ const {
               </a>
               <a
                 onClick={() => aldangiinKhuulgaKharya(row)}
-                className="fill-current text-green-500 hover:scale-110"
+                className="fill-current text-green-500 hover:scale-110 flex-shrink-0 px-[4px]"
               >
                 <Tooltip
                   title={t("Алдангийн хуулга")}
-                  className="flex w-full items-center  justify-center px-[6px] "
+                  className="flex w-full items-center  justify-center "
                 >
                   <LiaMoneyCheckAltSolid className="text-[30px] text-green-500" />
                 </Tooltip>
               </a>
               <a
                 onClick={() => guilgeeKhiiya(row)}
-                className="fill-current text-green-500 hover:scale-125"
+                className="fill-current text-green-500 hover:scale-125 flex-shrink-0 px-[4px]"
               >
                 <Tooltip
                   title={t("Гүйлгээ хийх")}
-                  className="flex w-full items-center  justify-center px-[6px] "
+                  className="flex w-full items-center  justify-center "
                 >
                   <svg
                     version="1.0"
@@ -1122,11 +1139,11 @@ const {
                 </Tooltip>
               </a>
               <div
-                className="text-red-500 hover:scale-110"
+                className="text-red-500 hover:scale-110 flex-shrink-0 px-[4px]"
                 onClick={() => baritsaaUdirdya(row)}
               >
                 <Tooltip
-                  className="flex w-full items-center justify-center px-[6px]"
+                  className="flex w-full items-center justify-center"
                   title={
                     khuvi < 100
                       ? t("Барьцаа дутуу", {
@@ -1175,6 +1192,7 @@ const {
     t,
     turul,
     showTsutslagdsanAvlagaColumn,
+    baiguullaga,
   ]);
 
   function onChangeTurul(turul) {
@@ -1610,11 +1628,14 @@ const {
                 if (a.dataIndex === "avlagiinUldegdel") {
                   const isCancelled =
                     data?.tuluv == -1 || Number(data?.tuluv) === -1;
-                  const raw = parseFloat(data?.uldegdel);
+                  const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+                  const tureesiinUld = data.tureesiinUldegdel !== undefined 
+                    ? data.tureesiinUldegdel 
+                    : (aldangiTuukhKharakhEsekh ? ((parseFloat(data.uldegdel) || 0) - (parseFloat(data.aldangiinUldegdel) || 0)) : (parseFloat(data.uldegdel) || 0));
                   const effUldegdel =
-                    isCancelled && (raw == null || raw <= 0)
+                    isCancelled && tureesiinUld <= 0
                       ? parseFloat(data?.tsutsalsanUldegdel) || 0
-                      : parseFloat(data?.uldegdel) || 0;
+                      : tureesiinUld;
                   return effUldegdel + (data?.aldangiinUldegdel || 0);
                 }
                 if (a.dataIndex === "uldegdel") {
@@ -1661,8 +1682,8 @@ const {
         <div className="hideScroll grid w-full grid-cols-1 gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid-cols-6 sm:py-2 md:gap-6 2xl:grid-cols-12">
           {[
             {
-              too: formatNumber(serverTotals.avlaga || 0, 0),
-              raw: serverTotals.avlaga || 0,
+              too: formatNumber(computedTotals.avlaga || 0, 0),
+              raw: computedTotals.avlaga || 0,
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "avlaga",
               utga: "Хуримтлагдсан авлага",
@@ -2032,19 +2053,22 @@ const {
                 {
                   title: t("Авлагын үлдэгдэл"),
                   dataIndex: "avlagiinUldegdel",
-                  className: `text-center ${ (baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1")) ? "hidden" : "" }`,
+                  className: "text-center",
                   align: "center",
                   ellipsis: true,
-                  width: "7rem",
+                  width: 120,
                   summary: true,
                   render(text, data, index) {
                     const isCancelled =
                       data?.tuluv == -1 || Number(data?.tuluv) === -1;
-                    const raw = parseFloat(data.uldegdel);
+                    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+                    const tureesiinUld = data.tureesiinUldegdel !== undefined 
+                      ? data.tureesiinUldegdel 
+                      : (aldangiTuukhKharakhEsekh ? ((parseFloat(data.uldegdel) || 0) - (parseFloat(data.aldangiinUldegdel) || 0)) : (parseFloat(data.uldegdel) || 0));
                     const effUldegdel =
-                      isCancelled && (raw == null || raw <= 0)
+                      isCancelled && tureesiinUld <= 0
                         ? parseFloat(data.tsutsalsanUldegdel) || 0
-                        : parseFloat(data.uldegdel) || 0;
+                        : tureesiinUld;
                     return (
                       <div className="w-full text-right">
                         {formatNumber(
@@ -2113,7 +2137,7 @@ const {
           </div>
         </div>
         <div
-          className="mt-5 hidden overflow-auto md:block"
+          className="mt-5 hidden md:block"
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="400"
@@ -2134,6 +2158,7 @@ const {
             guilgeeniiToololt={guilgeeniiToololt}
             guilgeeniiToololtMutate={guilgeeniiToololtMutate}
             refreshTotals={refreshTotals}
+            baiguullaga={baiguullaga}
           />
         </div>
         <CardList

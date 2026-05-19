@@ -555,29 +555,33 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
             });
         });
       } else if (key === "khungulultuud") {
-        const formattedDiscounts = (value ?? [])
-          .map((m) => {
-            const start = m.ognoonuud?.[0]
-              ? moment(m.ognoonuud[0]).format("YYYY/MM")
-              : "";
-            const end = m.ognoonuud?.[1]
-              ? moment(m.ognoonuud[1]).format("YYYY/MM")
-              : "";
-            return `${start} - ${end} хүртэл ${m.khungulukhKhuvi}% хөнгөлөлттэй`;
-          })
-          .join(". ");
+        const formattedDiscountsArray = (value ?? []).map((m) => {
+          const start = m.ognoonuud?.[0]
+            ? moment(m.ognoonuud[0]).format("YYYY/MM")
+            : "";
+          const end = m.ognoonuud?.[1]
+            ? moment(m.ognoonuud[1]).format("YYYY/MM")
+            : "";
+          
+          const dun = m.khungulukhDun || ((geree?.sariinTurees || 0) * (m.khungulukhKhuvi || 0) / 100);
+          return `${start} - ${end} хүртэл ${formatNumber(dun)}₮ (${m.khungulukhKhuvi}%) хөнгөлөлттэй`;
+        });
+        const formattedDiscounts = formattedDiscountsArray.join(". ");
 
         butsaakhUtga?.dedKhesguud
-          ?.filter(
-            (a) =>
-              !!a.zaalt &&
-              a.zaalt?.indexOf(`&lt;shatalsanKhungulult&gt;`) !== -1,
-          )
+          ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(`&lt;shatalsanKhungulult`) !== -1)
           ?.map((b) => {
             b.zaalt = b.zaalt.replace(
               new RegExp(`&lt;shatalsanKhungulult&gt;`, "g"),
               formattedDiscounts,
             );
+            
+            const maxTags = Math.max(15, formattedDiscountsArray.length);
+            for (let i = 0; i < maxTags; i++) {
+              const tag = `&lt;shatalsanKhungulult${i + 1}&gt;`;
+              const val = formattedDiscountsArray[i] || "";
+              b.zaalt = b.zaalt.replace(new RegExp(tag, "g"), val);
+            }
           });
       } else {
         butsaakhUtga?.dedKhesguud

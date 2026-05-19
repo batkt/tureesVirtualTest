@@ -57,6 +57,7 @@ const turulAvya = (turul) => {
   else if (turul === "tulultBurtgekh") return "Төлөлт бүртгэх";
   else if (turul === "qpay") return "QPay";
   else if (turul === "avlaga") return "Авлага";
+  else if (turul === "cgw") return "CGW";
 };
 
 function GuilgeeniiTuukh(
@@ -267,11 +268,15 @@ function GuilgeeniiTuukh(
       moment(ognoo[0]).isSame(moment(ognoo[0]).startOf('month'), 'day') &&
       moment(ognoo[1]).isSame(moment(ognoo[1]).endOf('month'), 'day');
 
-    const activeOgnoo = shineOgnoo || (!isFullMonth ? ognoo : undefined);
+    const activeOgnoo = shineOgnoo || (actualUldegdelUdruurKharakhEsekh ? (!isFullMonth ? ognoo : undefined) : ognoo);
 
-    if (actualUldegdelUdruurKharakhEsekh && activeOgnoo && activeOgnoo.length > 1) {
-      const startDate = moment(activeOgnoo[0]).startOf('day');
-      const endDate = moment(activeOgnoo[1]).endOf('day');
+    if (activeOgnoo && activeOgnoo.length > 1) {
+      const startDate = actualUldegdelUdruurKharakhEsekh
+        ? moment(activeOgnoo[0]).startOf('day')
+        : moment(activeOgnoo[0]).startOf('month');
+      const endDate = actualUldegdelUdruurKharakhEsekh
+        ? moment(activeOgnoo[1]).endOf('day')
+        : moment(activeOgnoo[1]).endOf('month');
 
       const beforeItems = processedGuilgeeniiTuukh.filter(item => moment(item.ognoo).isBefore(startDate));
       const openingBalance = beforeItems.length > 0 ? beforeItems[beforeItems.length - 1].uldegdel : 0;
@@ -622,84 +627,103 @@ function GuilgeeniiTuukh(
           style={isPrinting ? {} : { height: "calc(100vh - 15rem)", overflowY: "auto" }}
         >
           {sortedData
-            ?.map((a, i) => (
-              <tr className="flex min-w-[105rem] divide-x border-b border-gray-200 bg-gray-50 pr-1 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
-                <td className="min-w-[8rem] overflow-hidden p-1 text-center">
-                  {moment(a.ognoo).format("YYYY-MM-DD")}
-                </td>
-                <td className="min-w-[8rem] overflow-hidden p-1">
-                  {a.guilgeeKhiisenAjiltniiNer}
-                </td>
-                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.undsenDun)}
-                </td>
-                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.tulukhDun)}
-                </td>
-                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.khyamdral)}
-                </td>
-                <td className={`min-w-[8rem] overflow-hidden p-1 text-end ${
-                  a.tulsunAldangi > 0 ? "text-orange-500 font-medium" : ""
-                }`}>
-                  {a.tulsunAldangi > 0 ? formatNumber(a.tulsunAldangi) : ""}
-                </td>
-                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.tulsunDun)}
-                </td>
-                <td
-                  className={`min-w-[8rem] overflow-hidden p-1 text-end ${
-                    a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-                  } ${actualUldegdelUdruurKharakhEsekh === false ? "hidden" : ""}`}
+            ?.map((a, i) => {
+              const isBalanceRow = a.ekhniiUldegdelEsekh || a.etsiinUldegdelEsekh;
+              return (
+                <tr
+                  key={a._id || i}
+                  className={`flex min-w-[105rem] divide-x border-b border-gray-200 pr-1 text-gray-700 dark:text-gray-400 ${
+                    isBalanceRow
+                      ? "bg-blue-50/80 dark:bg-blue-950/40 font-semibold text-blue-950 dark:text-blue-200"
+                      : "bg-gray-50 dark:bg-gray-700 hover:bg-green-100 dark:hover:bg-gray-600"
+                  }`}
                 >
-                  {formatNumber(
-                    a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
-                  )}
-                </td>
-                <td className="min-w-[8rem] overflow-hidden p-1 text-center">
-                  {a.turul === "bank"
-                    ? a.tulsunDans !== " "
-                      ? a.tulsunDans
-                      : t("Банк")
-                    : turulAvya(a.turul)}
-                </td>
-                <td className="w-full min-w-[8rem] overflow-hidden p-1">
-                  {a.tailbar?.includes("төлөлт") ? (
-                    <span className="font-semibold text-red-500">
-                      {a.tailbar}
-                    </span>
-                  ) : (
-                    a.tailbar
-                  )}
-                </td>
-                <td className="min-w-[10rem] overflow-hidden p-1 text-center">
-                  {a.guilgeeKhiisenOgnoo
-                    ? moment(a.guilgeeKhiisenOgnoo).format(
-                        "YYYY-MM-DD HH:mm:ss",
-                      )
-                    : a.ekhniiUldegdelEsekh && a.ognoo
-                    ? moment(a.ognoo).format("YYYY-MM-DD")
-                    : ""}
-                </td>
-                <td className="min-w-[3rem] border-none p-1 text-center">
-                  {(ajiltan?.erkh === "Admin" ||
-                    !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
-                      (a) => a === barilgiinId,
-                    )) && !a.ekhniiUldegdelEsekh && !a.etsiinUldegdelEsekh && (
-                    <Popconfirm
-                      title={t("Төлөлт устгах уу?")}
-                      okText={t("Тийм")}
-                      cancelText={t("Үгүй")}
-                      onConfirm={() => tulultUstgaya(a)}
-                    >
-                      <div className="hide-on-print mx-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
-                        <DeleteOutlined />
+                  <td className="min-w-[8rem] overflow-hidden p-1 text-center">
+                    {moment(a.ognoo).format("YYYY-MM-DD")}
+                  </td>
+                  <td className="min-w-[8rem] overflow-hidden p-1">
+                    {isBalanceRow ? "" : a.guilgeeKhiisenAjiltniiNer}
+                  </td>
+                  <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                    {isBalanceRow ? "" : (a.undsenDun ? formatNumber(a.undsenDun) : "")}
+                  </td>
+                  <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                    {isBalanceRow ? "" : (a.tulukhDun ? formatNumber(a.tulukhDun) : "")}
+                  </td>
+                  <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                    {isBalanceRow ? "" : (a.khyamdral ? formatNumber(a.khyamdral) : "")}
+                  </td>
+                  <td className={`min-w-[8rem] overflow-hidden p-1 text-end ${
+                    a.tulsunAldangi > 0 ? "text-orange-500 font-medium" : ""
+                  }`}>
+                    {isBalanceRow ? "" : (a.tulsunAldangi > 0 ? formatNumber(a.tulsunAldangi) : "")}
+                  </td>
+                  <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                    {isBalanceRow ? "" : (a.tulsunDun ? formatNumber(a.tulsunDun) : "")}
+                  </td>
+                  <td
+                    className={`min-w-[8rem] overflow-hidden p-1 text-end ${
+                      a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+                    }`}
+                  >
+                    {formatNumber(
+                      a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
+                    )}
+                  </td>
+                  <td className="min-w-[8rem] overflow-hidden p-1 text-center">
+                    {isBalanceRow ? "" : (a.turul === "bank"
+                      ? a.tulsunDans !== " "
+                        ? a.tulsunDans
+                        : t("Банк")
+                      : turulAvya(a.turul))}
+                  </td>
+                  <td className="w-full min-w-[8rem] overflow-hidden p-1">
+                    {isBalanceRow ? (
+                      <div className="flex items-center gap-1 font-semibold text-blue-800 dark:text-blue-200">
+                        <span>{a.tailbar}</span>
                       </div>
-                    </Popconfirm>
-                  )}
-                </td>
-              </tr>
-            ))
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        {(a.turul === "cgw") && (
+                          <span className="dark:text-gray-300">
+                            CGW
+                          </span>
+                        )}
+                        {a.tailbar?.includes("төлөлт") ? (
+                          <span className="font-semibold text-red-500">{a.tailbar}</span>
+                        ) : (
+                          <span>{a.tailbar}</span>
+                        )}
+                      </div>
+                    )}
+                  </td>
+                  <td className="min-w-[10rem] overflow-hidden p-1 text-center">
+                    {isBalanceRow
+                      ? ""
+                      : a.guilgeeKhiisenOgnoo
+                      ? moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")
+                      : ""}
+                  </td>
+                  <td className="min-w-[3rem] border-none p-1 text-center">
+                    {(ajiltan?.erkh === "Admin" ||
+                      !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
+                        (a) => a === barilgiinId,
+                      )) && !a.ekhniiUldegdelEsekh && !a.etsiinUldegdelEsekh && (
+                      <Popconfirm
+                        title={t("Төлөлт устгах уу?")}
+                        okText={t("Тийм")}
+                        cancelText={t("Үгүй")}
+                        onConfirm={() => tulultUstgaya(a)}
+                      >
+                        <div className="hide-on-print mx-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
+                          <DeleteOutlined />
+                        </div>
+                      </Popconfirm>
+                    )}
+                  </td>
+                </tr>
+              );
+            })
             .reverse()}
         </tbody>
         {/* Алдангийн түүх Modal */}
