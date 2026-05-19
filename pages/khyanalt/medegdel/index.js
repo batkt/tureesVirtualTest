@@ -75,7 +75,7 @@ function IlgeesenToo({
         baiguullagiinId,
         ekhlekhOgnoo,
         duusakhOgnoo,
-      }).then((a) => a.data)
+      }).then((a) => a.data),
   );
   useEffect(() => {
     mutate();
@@ -120,23 +120,23 @@ function Khyanalt({ token }) {
     token,
     khariltsagchiinQuery,
     davkhar,
-    tuluv
+    tuluv,
   );
 
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
     token,
-    turul
+    turul,
   );
   const [neesenEsekh, setNeesenEsekh] = useState(false);
   const [progress, setProgress] = useState(null);
 
   useEffect(() => {
     if (baiguullaga?._id) {
-       const clientSocket = socket();
-       clientSocket.on(`mailProgress-${baiguullaga._id}`, (data) => {
-         setProgress(data);
-       });
-       return () => clientSocket.disconnect();
+      const clientSocket = socket();
+      clientSocket.on(`mailProgress-${baiguullaga._id}`, (data) => {
+        setProgress(data);
+      });
+      return () => clientSocket.disconnect();
     }
   }, [baiguullaga]);
 
@@ -147,8 +147,14 @@ function Khyanalt({ token }) {
   useEffect(() => {
     const handleRouteChange = (url) => {
       if (loading) {
-        if (!window.confirm(t("Мэдэгдэл илгээгдэж дуусаагүй байна. Та хуудсаа солихдоо итгэлтэй байна уу?"))) {
-          router.events.emit('routeChangeError');
+        if (
+          !window.confirm(
+            t(
+              "Мэдэгдэл илгээгдэж дуусаагүй байна. Та хуудсаа солихдоо итгэлтэй байна уу?",
+            ),
+          )
+        ) {
+          router.events.emit("routeChangeError");
           throw `Route change to ${url} was aborted.`;
         }
       }
@@ -157,30 +163,23 @@ function Khyanalt({ token }) {
     const handleBeforeUnload = (e) => {
       if (loading) {
         e.preventDefault();
-        e.returnValue = '';
+        e.returnValue = "";
       }
     };
 
-    router.events.on('routeChangeStart', handleRouteChange);
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    router.events.on("routeChangeStart", handleRouteChange);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      router.events.off('routeChangeStart', handleRouteChange);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      router.events.off("routeChangeStart", handleRouteChange);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [loading, t]);
 
   const query = useMemo(() => {
     return {
       turul: {
-        $in: [
-          "medegdel",
-          "Mail",
-          "SMS",
-          "App",
-          "sanal",
-          "gomdol",
-        ],
+        $in: ["medegdel", "Mail", "SMS", "App", "sanal", "gomdol"],
       },
       khuleenAvagchiinId: khariltsagch?._id,
     };
@@ -196,7 +195,7 @@ function Khyanalt({ token }) {
   const msjTuukh = useJagsaalt(
     "/msgTuukh",
     khariltsagchiinMsjTuukhKharakh,
-    order
+    order,
   );
 
   useEffect(() => {
@@ -431,7 +430,7 @@ function Khyanalt({ token }) {
                 khariltsagchiinId: a._id,
                 khariltsagchiinNer: a.ner,
                 barilgiinId: a.barilgiinId,
-              })
+              }),
             );
           else
             msgnuud.push({
@@ -459,7 +458,7 @@ function Khyanalt({ token }) {
               khariltsagchiinId: khariltsagch._id,
               khariltsagchiinNer: khariltsagch.ner,
               barilgiinId: khariltsagch.barilgiinId || barilgiinId,
-            })
+            }),
           );
         else
           msgnuud.push({
@@ -482,7 +481,7 @@ function Khyanalt({ token }) {
       uilchilgee(token)
         .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
         .then(({ data }) => {
-          if (data && data[0].Result === "SUCCESS") {
+          if (data && data[0]?.statusCode === 200) {
             toast.success(t("SMS Амжилттай илгээлээ"));
             setContent("");
             setTitle("");
@@ -517,7 +516,7 @@ function Khyanalt({ token }) {
             for (const [key, value] of Object.entries(a)) {
               zagvar = zagvar?.replace(
                 new RegExp(`&lt;${key}&gt;`, "g"),
-                value
+                value,
               );
             }
             if (!!a.mail) {
@@ -550,17 +549,24 @@ function Khyanalt({ token }) {
               if (data?.failedMails && data.failedMails.length > 0) {
                 toast.error(
                   <div>
-                    <div className="font-bold">Амжилтгүй илгээлт: {data.failedMails.length}</div>
+                    <div className="font-bold">
+                      Амжилтгүй илгээлт: {data.failedMails.length}
+                    </div>
                     <div className="mt-1 max-h-40 overflow-y-auto text-xs">
                       {data.failedMails.map((a, i) => (
-                        <div key={i} className="mb-1 border-b border-gray-300 pb-1 text-gray-800 dark:border-gray-600 dark:text-gray-200">
-                          <div className="font-semibold">{a.ner} ({a.mail})</div>
+                        <div
+                          key={i}
+                          className="mb-1 border-b border-gray-300 pb-1 text-gray-800 dark:border-gray-600 dark:text-gray-200"
+                        >
+                          <div className="font-semibold">
+                            {a.ner} ({a.mail})
+                          </div>
                           <div className="text-red-500">{a.aldaa}</div>
                         </div>
                       ))}
                     </div>
                   </div>,
-                  { duration: 10000 }
+                  { duration: 10000 },
                 );
               } else {
                 toast.success(t("И-мэйл Амжилттай илгээлээ"));
@@ -687,13 +693,13 @@ function Khyanalt({ token }) {
   }
   function seen() {
     const seenList = [...(medegdelAvya?.jagsaalt || [])].filter(
-      (a) => a.turul !== "medegdel" && a.kharsanEsekh !== true
+      (a) => a.turul !== "medegdel" && a.kharsanEsekh !== true,
     );
     if (seenList.length > 0) {
       const seenIds = seenList.map((a) => a._id);
       if (
         medegdelAvya?.jagsaalt.filter(
-          (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
+          (a) => a.turul !== "medegdel" && a.kharsanEsekh === false,
         ).length > 0
       )
         medegdelAvya?.setKhuudaslalt((a) => {
@@ -708,7 +714,7 @@ function Khyanalt({ token }) {
         .then(() => {
           if (
             medegdelAvya?.jagsaalt?.filter(
-              (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
+              (a) => a.turul !== "medegdel" && a.kharsanEsekh === false,
             ).length > 0
           )
             medegdelAvya?.mutate();
@@ -945,7 +951,7 @@ function Khyanalt({ token }) {
                           turul === "SMS" || turul === "App"
                             ? smsZagvarNemya(a)
                             : router.push(
-                                `/khyanalt/medegdel/mailMedegdel/${a._id}`
+                                `/khyanalt/medegdel/mailMedegdel/${a._id}`,
                               )
                         }
                       >
@@ -1032,7 +1038,7 @@ function Khyanalt({ token }) {
                         onClick={(e) => e.stopPropagation()}
                         checked={
                           songogdsonKhariltsagch.findIndex(
-                            (a) => a._id === mur._id
+                            (a) => a._id === mur._id,
                           ) !== -1
                         }
                         onChange={(e) => {
@@ -1040,7 +1046,7 @@ function Khyanalt({ token }) {
                             songogdsonKhariltsagch.push(mur);
                           } else {
                             const index = songogdsonKhariltsagch.findIndex(
-                              (a) => a._id === mur._id
+                              (a) => a._id === mur._id,
                             );
                             if (index !== -1) {
                               songogdsonKhariltsagch.splice(index, 1);
@@ -1375,7 +1381,7 @@ function Khyanalt({ token }) {
             <div className="flex items-center justify-between space-x-3">
               {progress && loading && turul === "Mail" && (
                 <div className="mr-2 font-semibold text-green-600">
-                   {progress.sent} / {progress.total}
+                  {progress.sent} / {progress.total}
                 </div>
               )}
               <label className="font-medium dark:!text-white">
@@ -1383,7 +1389,9 @@ function Khyanalt({ token }) {
               </label>
               <div
                 onClick={loading ? undefined : send}
-                className={`h-8 w-8 ${loading ? "cursor-not-allowed" : "cursor-pointer"} sm:h-8 sm:w-8 bg-green-${
+                className={`h-8 w-8 ${
+                  loading ? "cursor-not-allowed" : "cursor-pointer"
+                } sm:h-8 sm:w-8 bg-green-${
                   loading ? "200" : "600"
                 } flex flex-none items-center justify-center rounded-full text-white `}
               >

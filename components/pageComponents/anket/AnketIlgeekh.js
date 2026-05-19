@@ -5,7 +5,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 const AnketIlgeekh = (
   { data, token, barilgiinId, baiguullaga, destroy },
-  ref
+  ref,
 ) => {
   const { t } = useTranslation();
   const [utasniiDugaar, setUtasniiDugaar] = useState();
@@ -34,7 +34,7 @@ const AnketIlgeekh = (
               ],
             })
             .then(({ data }) => {
-              if (data && data[0].Result === "SUCCESS") {
+              if (data && data[0]?.statusCode === 200) {
                 notification.success({ message: t("SMS Амжилттай илгээлээ") });
                 setEmail("");
                 setUtasniiDugaar("");
@@ -98,7 +98,7 @@ const AnketIlgeekh = (
         destroy();
       },
     }),
-    [value, utasniiDugaar, baiguullaga, data, email]
+    [value, utasniiDugaar, baiguullaga, data, email],
   );
   useEffect(() => {
     function keyUp(e) {

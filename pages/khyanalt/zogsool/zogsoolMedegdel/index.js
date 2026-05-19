@@ -70,7 +70,7 @@ function IlgeesenToo({
         baiguullagiinId,
         ekhlekhOgnoo,
         duusakhOgnoo,
-      }).then((a) => a.data)
+      }).then((a) => a.data),
   );
   useEffect(() => {
     mutate();
@@ -120,11 +120,11 @@ function Khyanalt({ token }) {
     token,
     baiguullaga?._id,
     mashinQuery,
-    order
+    order,
   );
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
     token,
-    turul
+    turul,
   );
   const [neesenEsekh, setNeesenEsekh] = useState(false);
 
@@ -135,7 +135,7 @@ function Khyanalt({ token }) {
   const msjTuukh = useJagsaalt(
     "/msgTuukh",
     khariltsagchiinMsjTuukhKharakh,
-    order
+    order,
   );
 
   const medegdelQuery = useMemo(() => {
@@ -149,7 +149,7 @@ function Khyanalt({ token }) {
     "/sonorduulga",
     medegdelQuery,
     order,
-    undefined
+    undefined,
   );
 
   useEffect(() => {
@@ -195,7 +195,7 @@ function Khyanalt({ token }) {
       uilchilgee(token)
         .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
         .then(({ data }) => {
-          if (data && data[0].Result === "SUCCESS") {
+          if (data && data[0]?.statusCode === 200) {
             notification.success({ message: t("SMS Амжилттай илгээлээ") });
             setContent("");
             setTitle("");
@@ -519,7 +519,7 @@ function Khyanalt({ token }) {
                         onClick={(e) => e.stopPropagation()}
                         checked={
                           songogdsonKhariltsagch.findIndex(
-                            (a) => a._id === mur._id
+                            (a) => a._id === mur._id,
                           ) !== -1
                         }
                         onChange={(e) => {
@@ -527,7 +527,7 @@ function Khyanalt({ token }) {
                             songogdsonKhariltsagch.push(mur);
                           } else {
                             const index = songogdsonKhariltsagch.findIndex(
-                              (a) => a._id === mur._id
+                              (a) => a._id === mur._id,
                             );
                             if (index !== -1) {
                               songogdsonKhariltsagch.splice(index, 1);

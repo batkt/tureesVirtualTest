@@ -2719,7 +2719,7 @@ function tulburTootsoo({ token }) {
     uilchilgee(token)
       .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
       .then(({ data }) => {
-        if (data[0].Result === "SUCCESS") {
+        if (data[0]?.statusCode === 200) {
           notification.success({ message: t("SMS Амжилттай илгээлээ") });
         }
       })
@@ -4789,7 +4789,7 @@ function tulburTootsoo({ token }) {
       >
         <Spin spinning={loading}>
           <div
-            className={`grid w-full print-show
+            className={`print-show grid w-full
             ${
               nekhemjlekhuud?.find(
                 (a) => a.khuudasniiKhemjee === "A4" || a.chiglel === "portrait",
