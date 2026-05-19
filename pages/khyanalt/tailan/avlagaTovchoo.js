@@ -249,8 +249,14 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           groupRows.push({ ...g, key: `main-${i}`, runningBalance: balance });
         }
       } else {
-        // Penalty or extra transactions - do not modify the rental ledger running balance
-        groupRows.push({ ...g, key: `main-${i}-extra`, _isExtra: true, runningBalance: null });
+        // Penalty or deposit transaction - update the running balance progressively too!
+        if (dt > 0) {
+          balance += dt;
+        }
+        if (kt > 0) {
+          balance -= kt;
+        }
+        groupRows.push({ ...g, key: `main-${i}-extra`, _isExtra: true, runningBalance: balance });
       }
 
       if (groupRows.length > 0) {
@@ -258,7 +264,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       }
     });
 
-    dataGroups.reverse();
+    // dataGroups.reverse(); // Do not reverse to display oldest on top
 
     const allRows = [
       { 
@@ -280,7 +286,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     baiguullaga?._id === "6916c957511a8a4aebc1d65b";
 
   const dataRowsOnly = rows.filter(r => !r._isEkhniiUldegdel);
-  const totalDt = dataRowsOnly.reduce((s, r) => s + (r.tulukhDun || 0), 0);
+  const totalDt = (detail?.ekhniiUldegdel || 0) + dataRowsOnly.reduce((s, r) => s + (r.tulukhDun || 0), 0);
   const totalKt = dataRowsOnly.reduce((s, r) => s + (r.tulsunDun || 0) + (r.khyamdral || 0), 0);
   const totalKhyamdral = dataRowsOnly.reduce((s, r) => s + (r.khyamdral || 0), 0);
 
@@ -293,7 +299,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   const aldangiBalance = gereeDetail?.aldangiinUldegdel || 0;
   const baritsaaBalance = Math.max(0, (gereeDetail?.baritsaaAvakhDun || 0) - (gereeDetail?.baritsaaniiUldegdel || 0));
 
-  const lastBalance = record?.etssiinUldegdel !== undefined ? record.etssiinUldegdel : (detail?.etssiinUldegdel || 0);
+  const lastBalance = detail?.etssiinUldegdel !== undefined ? detail.etssiinUldegdel : 0;
 
   const columns = [
     {
@@ -311,6 +317,11 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       dataIndex: "ognoo",
       width: 100,
       align: "center",
+      sorter: (a, b) => {
+        if (a._isEkhniiUldegdel) return -1;
+        if (b._isEkhniiUldegdel) return 1;
+        return new Date(a.ognoo || 0) - new Date(b.ognoo || 0);
+      },
       render: (v, r) => {
         if (r._isEkhniiUldegdel) return "-";
         return v ? moment(v).format("YYYY/MM/DD") : "";
@@ -380,7 +391,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         if (r._isEkhniiUldegdel) {
           return <span className="font-bold text-blue-600 whitespace-nowrap">{formatNumber(v, 2)}</span>;
         }
-        return r._isExtra
+        return v === null || v === undefined
           ? <span className="text-gray-300">-</span>
           : <span className="font-medium whitespace-nowrap">{formatNumber(v, 2)}</span>;
       },
@@ -426,7 +437,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         tailbar: label,
         tulukhDun: r.tulukhDun || 0,
         tulsunDun: totalKt || 0,
-        runningBalance: r._isExtra ? "" : (r.runningBalance || 0)
+        runningBalance: r.runningBalance === null || r.runningBalance === undefined ? "" : r.runningBalance
       };
     });
 
@@ -590,7 +601,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
                     </td>
                     <td className="border border-gray-400 px-1.5 py-0.5 text-right">{!r.tulukhDun || r.tulukhDun === 0 ? "-" : formatNumber(r.tulukhDun, 2)}</td>
                     <td className="border border-gray-400 px-1.5 py-0.5 text-right">{totalKt <= 0 ? "-" : formatNumber(totalKt, 2)}</td>
-                    <td className="border border-gray-400 px-1.5 py-0.5 text-right">{r._isExtra ? "-" : formatNumber(r.runningBalance, 2)}</td>
+                    <td className="border border-gray-400 px-1.5 py-0.5 text-right">{r.runningBalance === null || r.runningBalance === undefined ? "-" : formatNumber(r.runningBalance, 2)}</td>
                   </tr>
                 );
               })}
@@ -878,13 +889,11 @@ function avlagaTovchoo({ token }) {
         const baritsaaBalanceStart = Math.max(0, (Number(item.baritsaaAvakhDun) || 0) - (Number(item.baritsaaniiUldegdelAtStart !== undefined ? item.baritsaaniiUldegdelAtStart : item.baritsaaniiUldegdel) || 0));
         const baritsaaBalanceEnd = Math.max(0, (Number(item.baritsaaAvakhDun) || 0) - (Number(item.baritsaaniiUldegdel) || 0));
 
-        const adjustedEkhniiUldegdel = aldangiTuukhKharakhEsekh
-          ? (Number(item.ekhniiUldegdel || 0) + aldangiBalance)
-          : (Number(item.ekhniiUldegdel || 0) + baritsaaBalanceStart + aldangiBalance);
+        const adjustedEkhniiUldegdel = Number(item.ekhniiUldegdel || 0);
 
         const adjustedEtssiinUldegdel = aldangiTuukhKharakhEsekh
-          ? (Number(item.etssiinUldegdel || 0) + aldangiBalance)
-          : (Number(item.etssiinUldegdel || 0) + baritsaaBalanceEnd + aldangiBalance);
+          ? Number(item.etssiinUldegdel || 0)
+          : Number(item.etssiinUldegdel || 0) + baritsaaBalanceEnd;
 
         return {
           ...item,
