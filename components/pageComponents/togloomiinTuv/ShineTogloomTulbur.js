@@ -100,8 +100,16 @@ function ShineTogloomTulbur(
   }
 
   const khaalgaNeey = (barCodes) => {
+    if (!barCodes) return;
+    const codesArray = Array.isArray(barCodes) ? barCodes : [barCodes];
+    const formattedBarcodes = codesArray
+      .filter(Boolean)
+      .map((code) => ({ barcode: Number(code), point: 1 }));
+
+    if (formattedBarcodes.length === 0) return;
+
     zogsoolUilchilgee()
-      .get("/userKhadgalakh/" + barCodes + "")
+      .get("/userKhadgalakh/" + JSON.stringify({ barcodes: formattedBarcodes }))
       .then(function (response) {})
       .catch(function (error) {
         toast.error("ERROR: /api/userKhadgalakh" + error);
