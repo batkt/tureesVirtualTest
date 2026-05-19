@@ -224,7 +224,7 @@ function ShineTulbur(
   }
 
   useEffect(() => {
-    if (!!alkham && alkham === 3 && !loading) {
+    if (!!alkham && alkham === 3 && !loading && !eBarimt) {
       ebarimtAvya(uilchluugchiinId);
     }
   }, [alkham, loading]);
@@ -788,9 +788,10 @@ function ShineTulbur(
             >
               <div className="text-center">Авто зогсоолын үйлчилгээ</div>
               <div className="text-center">
-                {baiguullaga?.tokhirgoo?.zogsoolNer
-                  ? baiguullaga?.tokhirgoo?.zogsoolNer
-                  : baiguullaga?.ner}
+                {baiguullaga?.barilguud?.find((a) => a._id === barilgiinId)
+                  ?.tokhirgoo?.eBarimtZogsoolNer ||
+                  baiguullaga?.tokhirgoo?.zogsoolNer ||
+                  baiguullaga?.ner}
               </div>
               {/* <div>Борлуулагч:</div> */}
               <div className="flex justify-between">

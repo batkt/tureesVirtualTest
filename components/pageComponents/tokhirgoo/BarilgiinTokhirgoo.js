@@ -25,8 +25,9 @@ function BarilgiinTokhirgoo({
     barilgiinId || null,
   );
   const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState();
-  const [zogsoolNer, setZogsoolNer] = useState(
-    baiguullaga?.tokhirgoo?.zogsoolNer,
+  const [eBarimtZogsoolNer, setEBarimtZogsoolNer] = useState(
+    baiguullaga?.barilguud?.find((a) => a._id === barilgiinId)?.tokhirgoo
+      ?.eBarimtZogsoolNer,
   );
 
   const [songogdsonDuureg, setSongogdsonDuureg] = useState();
@@ -69,6 +70,7 @@ function BarilgiinTokhirgoo({
       );
 
       setSongogdsonHorooKod(barilga?.tokhirgoo?.districtCode?.substring(2));
+      setEBarimtZogsoolNer(barilga?.tokhirgoo?.eBarimtZogsoolNer);
     }
   }, [barilga, songogdsonBarilga, duurguud.jagsaalt]);
 
@@ -82,11 +84,10 @@ function BarilgiinTokhirgoo({
     if (tukhainBarilgiinIndex !== -1) {
       const updatedBarilga = {
         ...barilguudCopy[tukhainBarilgiinIndex],
-        tokhirgoo: barilgaTokhirgoo,
+        tokhirgoo: { ...barilgaTokhirgoo, eBarimtZogsoolNer },
       };
       barilguudCopy[tukhainBarilgiinIndex] = updatedBarilga;
       yavuulakhData.barilguud = barilguudCopy;
-      yavuulakhData.tokhirgoo.zogsoolNer = zogsoolNer;
       if (!!barilgaTokhirgoo?.eBarimtShine) {
         if (
           !!barilgaTokhirgoo?.districtCode &&
@@ -339,8 +340,10 @@ function BarilgiinTokhirgoo({
                 </div>
                 <div className="ml-auto">
                   <Input
-                    value={zogsoolNer}
-                    onChange={({ target }) => setZogsoolNer(target.value)}
+                    value={eBarimtZogsoolNer}
+                    onChange={({ target }) =>
+                      setEBarimtZogsoolNer(target.value)
+                    }
                   />
                 </div>
               </div>
