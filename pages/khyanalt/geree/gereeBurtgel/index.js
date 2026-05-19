@@ -560,6 +560,7 @@ const select = {
   zoriulalt: 1,
   zurguud: 1,
   tusgaiZoriulalt: 1,
+  khungulultuud: 1,
 };
 
 function setURLSearchParam(key, value) {
@@ -1131,6 +1132,7 @@ function ZakhialgiinKhyanalt() {
         showSorterTooltip: false,
         sorter: () => 0,
       },
+      
 
       {
         title: t("Ангилал"),
@@ -1993,6 +1995,46 @@ function ZakhialgiinKhyanalt() {
                   showSorterTooltip: false,
                   sorter: () => 0,
                 },
+                {
+        title: t("Хөнгөлөлт"),
+        dataIndex: "khungulultuud",
+        align: "center",
+        ellipsis: true,
+        width: "7rem",
+        render: (khungulultuud) => {
+          if (!khungulultuud || khungulultuud.length === 0) return "-";
+          if (khungulultuud.length === 1) {
+            const m = khungulultuud[0];
+            return `${m.khungulukhKhuvi}%`;
+          }
+          return (
+            <Popover
+              content={
+                <div className="max-h-60 overflow-y-auto">
+                  {khungulultuud.map((m, i) => {
+                    const start = m.ognoonuud?.[0]
+                      ? moment(m.ognoonuud[0]).format("YYYY/MM")
+                      : "";
+                    const end = m.ognoonuud?.[1]
+                      ? moment(m.ognoonuud[1]).format("YYYY/MM")
+                      : "";
+                    return (
+                      <div key={i}>
+                        {start} - {end}: {m.khungulukhKhuvi}%
+                      </div>
+                    );
+                  })}
+                </div>
+              }
+              title={t("Хөнгөлөлтийн жагсаалт")}
+            >
+              <div className="cursor-pointer text-blue-600 hover:underline">
+                {t("Олон")} ({khungulultuud.length})
+              </div>
+            </Popover>
+          );
+        },
+      },
                 {
                   title: t("Бүртгэсэн"),
                   dataIndex: "createdAt",

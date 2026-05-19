@@ -67,11 +67,19 @@ function GuilgeeniiTuukh(
   const [shineOgnoo, setShineOgnoo] = useState(undefined);
   const [aldangiModalOpen, setAldangiModalOpen] = useState(false);
   const aldangiRef = React.useRef(null);
+  const { baiguullaga } = useBaiguullaga(
+    token,
+    ajiltan?.baiguullagiinId || data?.baiguullagiinId,
+  );
+
+  const actualAldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1") || aldangiTuukhKharakhEsekh;
+  const actualUldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1") || uldegdelUdruurKharakhEsekh;
+
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
     token,
     data?._id,
     ognoo,
-    shineOgnoo,
+    actualUldegdelUdruurKharakhEsekh ? undefined : shineOgnoo,
   );
   const [sortOrders, setSortOrders] = useState({
     ognoo: null,
@@ -87,10 +95,7 @@ function GuilgeeniiTuukh(
     burtgesenOgnoo: null,
   });
   const [sortColumn, setSortColumn] = useState(null);
-  const { baiguullaga } = useBaiguullaga(
-    token,
-    ajiltan?.baiguullagiinId || data?.baiguullagiinId,
-  );
+
   const { dansGaralt } = useDans(token, ajiltan?.baiguullagiinId);
   const { nekhemjlekhiinTuukhJagsaalt } = useNekhemjlekhiinTuukh(
     token,
@@ -136,8 +141,6 @@ function GuilgeeniiTuukh(
     return dansGaralt?.jagsaalt?.[0];
   }, [dansGaralt]);
 
-  const actualAldangiTuukhKharakhEsekh = baiguullaga ? baiguullaga.tokhirgoo?.aldangiTuukhKharakhEsekh : aldangiTuukhKharakhEsekh;
-  const actualUldegdelUdruurKharakhEsekh = baiguullaga ? baiguullaga.tokhirgoo?.uldegdelUdruurKharakhEsekh : uldegdelUdruurKharakhEsekh;
 
   const tailbarRef = React.useRef(null);
   const printRef = React.useRef(null);
@@ -246,7 +249,89 @@ function GuilgeeniiTuukh(
     if (!guilgeeniiTuukh) {
       return [];
     }
-    const khuulsanData = [...guilgeeniiTuukh];
+
+    
+    let runningAvlaga = 0;
+    const processedGuilgeeniiTuukh = guilgeeniiTuukh.map(x => {
+      runningAvlaga += (x?.tulukhDun || 0) - (x?.tulsunDun || 0) - (x?.khyamdral || 0);
+      
+      let uld = x.uldegdel;  
+      if (!actualAldangiTuukhKharakhEsekh) {
+        uld = runningAvlaga;  
+      }
+      
+      return { ...x, uldegdel: uld };
+    });
+
+    const isFullMonth = ognoo && ognoo[0] && ognoo[1] &&
+      moment(ognoo[0]).isSame(moment(ognoo[0]).startOf('month'), 'day') &&
+      moment(ognoo[1]).isSame(moment(ognoo[1]).endOf('month'), 'day');
+
+    const activeOgnoo = shineOgnoo || (!isFullMonth ? ognoo : undefined);
+
+    if (actualUldegdelUdruurKharakhEsekh && activeOgnoo && activeOgnoo.length > 1) {
+      const startDate = moment(activeOgnoo[0]).startOf('day');
+      const endDate = moment(activeOgnoo[1]).endOf('day');
+
+      const beforeItems = processedGuilgeeniiTuukh.filter(item => moment(item.ognoo).isBefore(startDate));
+      const openingBalance = beforeItems.length > 0 ? beforeItems[beforeItems.length - 1].uldegdel : 0;
+
+      const withinItems = processedGuilgeeniiTuukh.filter(item => {
+        const itemDate = moment(item.ognoo);
+        return itemDate.isSameOrAfter(startDate) && itemDate.isSameOrBefore(endDate);
+      });
+
+      const closingBalance = withinItems.length > 0 ? withinItems[withinItems.length - 1].uldegdel : openingBalance;
+
+      let processedItems = [...withinItems];
+      if (sortColumn) {
+        processedItems.sort((a, b) => {
+          const sortDaraalal = sortOrders[sortColumn];
+          if (sortDaraalal === "asc") {
+            if (sortColumn === "ognoo") return new Date(a[sortColumn]) - new Date(b[sortColumn]);
+            return a[sortColumn] - b[sortColumn];
+          } else if (sortDaraalal === "desc") {
+            if (sortColumn === "ognoo") return new Date(b[sortColumn]) - new Date(a[sortColumn]);
+            return b[sortColumn] - a[sortColumn];
+          }
+          return 0;
+        });
+      }
+
+      const result = [];
+      
+      result.push({
+        ognoo: startDate.toDate(),
+        tailbar: "Эхний үлдэгдэл",
+        uldegdel: openingBalance,
+        ekhniiUldegdelEsekh: true,
+        undsenDun: 0,
+        tulukhDun: 0,
+        khyamdral: 0,
+        tulsunAldangi: 0,
+        tulsunDun: 0,
+        _id: "opening_balance",
+      });
+
+      result.push(...processedItems);
+
+      result.push({
+        ognoo: endDate.toDate(),
+        tailbar: "Эцсийн үлдэгдэл",
+        uldegdel: closingBalance,
+        etsiinUldegdelEsekh: true,
+        undsenDun: 0,
+        tulukhDun: 0,
+        khyamdral: 0,
+        tulsunAldangi: 0,
+        tulsunDun: 0,
+        _id: "closing_balance",
+      });
+
+      return result;
+    }
+
+    const khuulsanData = [...processedGuilgeeniiTuukh];
     khuulsanData.sort((a, b) => {
       const sortDaraalal = sortOrders[sortColumn];
       if (sortDaraalal === "asc") {
@@ -264,7 +349,7 @@ function GuilgeeniiTuukh(
     });
 
     return khuulsanData;
-  }, [guilgeeniiTuukh, sortOrders, sortColumn, shineOgnoo]);
+  }, [guilgeeniiTuukh, sortOrders, sortColumn, shineOgnoo, ognoo, actualUldegdelUdruurKharakhEsekh, actualAldangiTuukhKharakhEsekh]);
 
   useImperativeHandle(
     ref,
@@ -418,7 +503,7 @@ function GuilgeeniiTuukh(
               onChange={(v) => setShineOgnoo(v)}
               locale={i18n.language === "mn" && locale}
               allowClear
-              picker="month"
+              picker={actualUldegdelUdruurKharakhEsekh ? undefined : "month"}
               disabledDate={(e) => e && e > moment().endOf("day")}
             />
           </div>
@@ -507,9 +592,7 @@ function GuilgeeniiTuukh(
             </td>
             <td
               onClick={() => toggleSortOrder("uldegdel")}
-              className={`min-w-[8rem] overflow-hidden p-1 text-center ${
-                actualUldegdelUdruurKharakhEsekh === false ? "hidden" : ""
-              }`}
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
             >
               {t("Үлдэгдэл")}
             </td>
@@ -602,7 +685,7 @@ function GuilgeeniiTuukh(
                   {(ajiltan?.erkh === "Admin" ||
                     !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
                       (a) => a === barilgiinId,
-                    )) && (
+                    )) && !a.ekhniiUldegdelEsekh && !a.etsiinUldegdelEsekh && (
                     <Popconfirm
                       title={t("Төлөлт устгах уу?")}
                       okText={t("Тийм")}

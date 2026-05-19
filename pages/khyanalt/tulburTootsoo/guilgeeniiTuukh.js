@@ -81,7 +81,7 @@ const GereeniiUldegdel = React.memo(
     );
 
     const uldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1");
-    const showCombined = true; // Always combine aldangi per request
+    const showCombined = true;
 
     const uldegdelTur = data?.tureesiinUldegdel ?? ugugdul?.tureesiinUldegdel ?? ugugdul?.uldegdel ?? 0;
     const uldegdelAld = ugugdul?.aldangiinUldegdel ?? data?.aldangiinUldegdel ?? 0;
@@ -94,11 +94,13 @@ const GereeniiUldegdel = React.memo(
     const baritsaaBalance = Math.max(0, reqBaritsaa - paidBaritsaa);
 
     const fallbackUldegdel = data 
-      ? (aldangiTuukhKharakhEsekh ? (uldegdelTur + uldegdelAld) : (uldegdelTur + baritsaaBalance + uldegdelAld))
-      : (((ugugdul?.uldegdel ?? 0) + (ugugdul?.aldangiinUldegdel ?? 0)) ||
+      ? (aldangiTuukhKharakhEsekh ? (uldegdelTur + uldegdelAld) : uldegdelTur)
+      : (aldangiTuukhKharakhEsekh 
+          ? ((ugugdul?.uldegdel ?? 0) + (ugugdul?.aldangiinUldegdel ?? 0))
+          : (ugugdul?.uldegdel ?? 0)) ||
          ugugdul?.niitUldegdel ||
          ugugdul?.tsutslagdsanAvlaga ||
-         (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0));
+         (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
 
     const displayUldegdel = fallbackUldegdel;
     ugugdul.uldegdel = displayUldegdel;
@@ -117,14 +119,7 @@ const GereeniiUldegdel = React.memo(
             </span>
           </div>
         )}
-        {baritsaaBalance > 0 && (
-          <div className="flex justify-between gap-4">
-            <span className="text-gray-500">{t("Барьцааны үлдэгдэл")}:</span>
-            <span className="font-bold text-red-500">
-              {formatNumber(baritsaaBalance)}
-            </span>
-          </div>
-        )}
+
         {uldegdelTulsun > 0 && (
           <div className="flex justify-between gap-4">
             <span className="text-gray-500">{t("Нийт төлсөн")}:</span>

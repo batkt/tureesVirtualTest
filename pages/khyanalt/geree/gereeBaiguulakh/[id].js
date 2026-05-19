@@ -554,6 +554,31 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
               );
             });
         });
+      } else if (key === "khungulultuud") {
+        const formattedDiscounts = (value ?? [])
+          .map((m) => {
+            const start = m.ognoonuud?.[0]
+              ? moment(m.ognoonuud[0]).format("YYYY/MM")
+              : "";
+            const end = m.ognoonuud?.[1]
+              ? moment(m.ognoonuud[1]).format("YYYY/MM")
+              : "";
+            return `${start} - ${end} хүртэл ${m.khungulukhKhuvi}% хөнгөлөлттэй`;
+          })
+          .join(". ");
+
+        butsaakhUtga?.dedKhesguud
+          ?.filter(
+            (a) =>
+              !!a.zaalt &&
+              a.zaalt?.indexOf(`&lt;shatalsanKhungulult&gt;`) !== -1,
+          )
+          ?.map((b) => {
+            b.zaalt = b.zaalt.replace(
+              new RegExp(`&lt;shatalsanKhungulult&gt;`, "g"),
+              formattedDiscounts,
+            );
+          });
       } else {
         butsaakhUtga?.dedKhesguud
           ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)

@@ -106,6 +106,7 @@ const tulburiinTalbaruud = [
   { ner: t("Сарын түрээс"), talbar: "sariinTurees" },
   { ner: t("Сарын нийлбэр дүн"), talbar: "sariinNiilberDun" },
   { ner: t("Мөнгөн дүн үсгээр"), talbar: "mungunDunUsgeer" },
+  { ner: t("Шаталсан хөнгөлөлт"), talbar: "shatalsanKhungulult" },
 ];
 
 function ZaaltZasvar({ destroy, value, change, zardal }, ref) {

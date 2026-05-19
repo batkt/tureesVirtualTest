@@ -27,6 +27,13 @@ const searchKeys = ["ner", "register", "customerTin", "talbainDugaar", "gereenii
 // ── Detail Modal ─────────────────────────────────────────────────────────────
 function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgiinId }) {
   const { t } = useTranslation();
+  const { ajiltan } = useAuth();
+  const printRef = useRef();
+  const handlePrint = useReactToPrint({
+    contentRef: printRef,
+    documentTitle: t("Авлагын дэлгэрэнгүй тайлан"),
+    pageStyle: `@media print { @page { size: portrait; margin: 0; } body { margin: 10mm; } }`,
+  });
   const ekhlekhOgnoo = ognoo?.[0]
     ? moment(ognoo[0]).startOf("day").toISOString()
     : undefined;
@@ -229,7 +236,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         }
         if (r._isHeaderRow2) {
           return {
-            children: <div className="text-left font-medium pl-2">Талбай дугаар: {record?.talbainDugaar}</div>,
+            children: <div className="text-left font-medium pl-2">Талбай дугаар: {record?.talbainDugaar}, м2: {record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"}</div>,
             props: { colSpan: 3 }
           };
         }
@@ -447,40 +454,151 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   }
 
   return (
+    <>
+      {/* Hidden Print Layout */}
+      <div
+        style={{
+          position: "absolute",
+          top: "-10000px",
+          left: "-10000px",
+          width: "210mm",
+        }}
+      >
+        <div ref={printRef} className="print-container p-4 text-xs">
+          <div className="mb-2 flex items-center justify-between text-sm">
+            <div>
+              {ognoo && ognoo[0] && ognoo[1] ? (
+                <span>
+                  Огноо: {moment(ognoo[0]).format("YYYY/MM/DD")} –{" "}
+                  {moment(ognoo[1]).format("YYYY/MM/DD")}
+                </span>
+              ) : (
+                <span>Огноо: {moment().format("YYYY/MM/DD")}</span>
+              )}
+            </div>
+            <div className="text-center text-base font-bold">Авлагын дэлгэрэнгүй тайлан</div>
+            <div />
+          </div>
+          
+          <table className="w-full border-collapse border border-gray-400 text-xs">
+            <thead className="bg-gray-200">
+              <tr>
+                {["№", "Огноо", "Тайлбар", "ДТ", "КТ", "Үлдэгдэл"].map((h, i) => (
+                  <th key={i} className="border border-gray-400 px-1 py-1 text-center">
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r, i) => {
+                if (r._isHeaderRow1) {
+                  return (
+                    <tr key={r.key} className="bg-green-50">
+                      <td colSpan={3} className="border border-gray-400 px-1 py-0.5 text-left font-medium pl-2">
+                        Харилцагч: {record?.ner}
+                      </td>
+                      <td colSpan={2} className="border border-gray-400 px-1 py-0.5 text-center italic">
+                        Эхний үлдэгдэл
+                      </td>
+                      <td className="border border-gray-400 px-1.5 py-0.5 text-right font-medium text-blue-600">
+                        {formatNumber(detail?.ekhniiUldegdel, 2)}
+                      </td>
+                    </tr>
+                  );
+                }
+                if (r._isHeaderRow2) {
+                  return (
+                    <tr key={r.key} className="bg-green-50">
+                      <td colSpan={3} className="border border-gray-400 px-1 py-0.5 text-left font-medium pl-2">
+                        Талбай дугаар: {record?.talbainDugaar}, м2: {record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"}
+                      </td>
+                      <td colSpan={2} className="border border-gray-400 px-1 py-0.5 text-center font-medium">
+                        Талбай м2: {record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"}м2
+                      </td>
+                      <td className="border border-gray-400 px-1.5 py-0.5 text-right">
+                        -
+                      </td>
+                    </tr>
+                  );
+                }
+                
+                let label;
+                if (r.turul === "khuvaari") {
+                  label = (r.khyamdral || 0) > 0 ? t("Түрээс") + " (" + t("Хөнгөлөлттэй") + ")" : t("Түрээс");
+                } else if (r.turul === "khungulult" || (r.khyamdral > 0 && !r.tulukhDun)) {
+                  label = r.tailbar || t("Хөнгөлөлт");
+                } else {
+                  label = r.tailbar || t(r.turul || "");
+                }
+                
+                const totalKt = (r.tulsunDun || 0) + (r.khyamdral || 0);
+                
+                return (
+                  <tr key={r.key} className={r.turul === "khungulult" ? "text-gray-500 italic" : ""}>
+                    <td className="border border-gray-400 px-1 py-0.5 text-center">{i - 1}</td>
+                    <td className="border border-gray-400 px-1 py-0.5 text-center">{r.ognoo ? moment(r.ognoo).format("YYYY/MM/DD") : ""}</td>
+                    <td className="border border-gray-400 px-1 py-0.5">
+                      <div>
+                        <div className="font-medium text-gray-800">{label}</div>
+                        {r.barimtNo && <div className="text-xs text-gray-500">{t("Баримт №")}: {r.barimtNo}</div>}
+                      </div>
+                    </td>
+                    <td className="border border-gray-400 px-1.5 py-0.5 text-right">{!r.tulukhDun || r.tulukhDun === 0 ? "-" : formatNumber(r.tulukhDun, 2)}</td>
+                    <td className="border border-gray-400 px-1.5 py-0.5 text-right">{totalKt <= 0 ? "-" : formatNumber(totalKt, 2)}</td>
+                    <td className="border border-gray-400 px-1.5 py-0.5 text-right">{r._isExtra ? "-" : formatNumber(r.runningBalance, 2)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            <tfoot>
+              <tr className="font-bold bg-gray-50">
+                <td colSpan={3} className="border border-gray-400 px-1 py-0.5 text-right">
+                  Нийт гүйлгээ
+                </td>
+                <td className="border border-gray-400 px-1.5 py-0.5 text-right text-blue-700">{formatNumber(totalDt, 2)}</td>
+                <td className="border border-gray-400 px-1.5 py-0.5 text-right text-blue-700">{formatNumber(totalKt, 2)}</td>
+                <td className="border border-gray-400 px-1.5 py-0.5 text-right">-</td>
+              </tr>
+              <tr className="font-bold bg-gray-100">
+                <td colSpan={3} className="border border-gray-400 px-1 py-0.5 text-right">
+                  {/* Empty */}
+                </td>
+                <td colSpan={2} className="border border-gray-400 px-1 py-0.5 text-center italic">
+                  Эцсийн үлдэгдэл
+                </td>
+                <td className="border border-gray-400 px-1.5 py-0.5 text-right text-red-600">{formatNumber(lastBalance, 2)}</td>
+              </tr>
+            </tfoot>
+          </table>
+          
+          <table className="mt-6 ml-4">
+            <tfoot>
+              <tr>
+                <td colSpan={3} />
+                <td colSpan={3} className="text-right italic text-xs">Тайлан гаргасан:</td>
+                <td className="text-xs">
+                  ................................/
+                  {ajiltan?.ovog?.[0]}{ajiltan?.ovog && "."}{ajiltan?.ner}/
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
       <Modal
         open={open}
         onCancel={onClose}
         footer={null}
         width={1400}
         style={{ top: 20 }}
-        title={<div className="text-lg text-blue-900 border-b pb-2 text-center">{t("Авлагын дэлгэрэнгүй тайлан")}</div>}
+        title={<div className="text-lg text-blue-900 pb-2 text-center">{t("Авлагын дэлгэрэнгүй тайлан")}</div>}
       >
-        <div className="flex justify-between items-end mb-2 px-1 text-sm font-medium text-gray-700">
-          <div>{t("Огноо")}: {moment().format("YYYY/MM/DD")}</div>
-          <div className="flex items-center gap-3">
-            <div>{t("Барилга")}: {record?.barilgiiinNer || record?.barilgiinId || "--"}</div>
-            <button
-              onClick={exceleerTatya}
-              className="btn btn-outline-success flex h-8 items-center gap-1 text-sm"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              {t("Excel")}
-            </button>
-          </div>
+        <div className="p-4">
+          <div className="flex justify-between items-end mb-2 px-1 text-sm font-medium text-gray-700">
+            <div>{t("Огноо")}: {ognoo && ognoo[0] && ognoo[1] ? `${moment(ognoo[0]).format("YYYY/MM/DD")} - ${moment(ognoo[1]).format("YYYY/MM/DD")}` : moment().format("YYYY/MM/DD")}</div>
+          
         </div>
   
         <style>{`
@@ -536,7 +654,53 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           </AntdTable.Summary>
         )}
       />
+        </div> {/* Close the print wrapper div */}
+        <div className="flex justify-end pt-4 gap-3">
+          <button
+            onClick={handlePrint}
+            className="btn btn-outline-primary flex h-8 items-center gap-1 text-sm"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="6 9 6 2 18 2 18 9" />
+              <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" />
+              <rect x="6" y="14" width="12" height="8" />
+            </svg>
+            {t("Хэвлэх")}
+          </button>
+          <button
+            onClick={exceleerTatya}
+            className="btn btn-outline-success flex h-8 items-center gap-1 text-sm"
+          >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          {t("Excel")}
+        </button>
+      </div>
     </Modal>
+    </>
   );
 }
 
@@ -643,7 +807,7 @@ function avlagaTovchoo({ token }) {
         const balance = Number(row.etssiinUldegdel) || 0;
         const isCancelled = row.tuluv === -1 || Number(row.tuluv) === -1;
 
-        if (Math.abs(balance) < 0.01) {
+        if (Math.abs(balance) < 0.01 && isCancelled) {
           return false;
         }
 
@@ -656,7 +820,7 @@ function avlagaTovchoo({ token }) {
         }
 
         const niitDt = Number(row.niitDt) || 0;
-        if (Math.abs(niitDt) < 0.01) {
+        if (Math.abs(niitDt) < 0.01 && isCancelled) {
           return false;
         }
 
@@ -825,6 +989,14 @@ function avlagaTovchoo({ token }) {
         ellipsis: true,
       },
       {
+        title: t("м2"),
+        dataIndex: "m2",
+        key: "m2",
+        align: "center",
+        width: 80,
+        render: (v, record) => record?.m2 || record?.talbainKhemjee || "-",
+      },
+      {
         title: t("РД"),
         dataIndex: "register",
         key: "register",
@@ -943,7 +1115,7 @@ function avlagaTovchoo({ token }) {
           }}
           onSearch={khariltsagchiinGaralt.onSearch}
           onChange={setSongogdsonIds}
-          placeholder={t("Гэрээ эсвэл Харилцагч сонгох")}
+          placeholder={t("Гэрээ эсвэл Харилцагч хайх")}
         >
           {/* Group by customer but allow selecting individual contracts */}
           {(khariltsagchiinGaralt?.jagsaalt || []).map((d) => (
@@ -973,7 +1145,7 @@ function avlagaTovchoo({ token }) {
             onChange={(e) => setKhakhTsutsalsan(e.target.checked)}
             className="font-medium text-gray-700 dark:text-gray-300 ml-2"
           >
-            {t("Цуцлагдсан гэрээ")}
+            {t("Цуцлагдсан гэрээг харах")}
           </Checkbox>
         </div>
 
@@ -1043,19 +1215,19 @@ function avlagaTovchoo({ token }) {
           summary={() => (
             <AntdTable.Summary fixed="bottom">
               <AntdTable.Summary.Row>
-                <AntdTable.Summary.Cell index={0} colSpan={5}>
+                <AntdTable.Summary.Cell index={0} colSpan={6}>
                   <span className="font-bold">{t("Нийт")}</span>
                 </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell index={5} align="right">
+                <AntdTable.Summary.Cell index={6} align="right">
                   <span className="font-bold">{formatNumber(totals.ekhniiUldegdel, 2)}</span>
                 </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell index={6} align="right">
+                <AntdTable.Summary.Cell index={7} align="right">
                   <span className="font-bold text-red-500">{formatNumber(totals.niitDt, 2)}</span>
                 </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell index={7} align="right">
+                <AntdTable.Summary.Cell index={8} align="right">
                   <span className="font-bold text-blue-600">{formatNumber(totals.niitTulsun, 2)}</span>
                 </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell index={8} align="right">
+                <AntdTable.Summary.Cell index={9} align="right">
                   <span className="font-bold text-red-500">{formatNumber(totals.etssiinUldegdel, 2)}</span>
                 </AntdTable.Summary.Cell>
               </AntdTable.Summary.Row>
@@ -1064,7 +1236,7 @@ function avlagaTovchoo({ token }) {
         />
       </div>
 
-      {/* ── Detail Modal ── */}
+       
       <DetailModal
         open={detailOpen}
         onClose={() => setDetailOpen(false)}
@@ -1075,7 +1247,7 @@ function avlagaTovchoo({ token }) {
         barilgiinId={barilgiinId}
       />
 
-      {/* ── Print view ── */}
+       
       <div
         style={
           isPrinting
@@ -1099,7 +1271,7 @@ function avlagaTovchoo({ token }) {
           <table className="w-full border-collapse border border-gray-400 text-xs">
             <thead className="bg-gray-200">
               <tr>
-                {["№", "Түрээслэгч", "Гэрээ", "Талбай", "РД", "Эхний үлдэгдэл", "ДТ", "Төлөлт", "Түрх", "Ашх", "Эцсийн үлдэгдэл"].map(
+                {["№", "Түрээслэгч", "Гэрээ", "Талбай", "м2", "РД", "Эхний үлдэгдэл", "ДТ", "КТ", "Эцсийн үлдэгдэл"].map(
                   (h, i) => (
                     <th key={i} className="border border-gray-400 px-1 py-1 text-center">
                       {h}
@@ -1115,28 +1287,26 @@ function avlagaTovchoo({ token }) {
                   <td className="border border-gray-400 px-1 py-0.5">{row.ner}</td>
                   <td className="border border-gray-400 px-1 py-0.5 text-center">{row.gereeniiDugaar}</td>
                   <td className="border border-gray-400 px-1 py-0.5 text-center">{row.talbainDugaar}</td>
+                  <td className="border border-gray-400 px-1 py-0.5 text-center">{row.m2 || row.talbainKhemjee || "-"}</td>
                   <td className="border border-gray-400 px-1 py-0.5 text-center">{row.register}</td>
                   <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.ekhniiUldegdel || 0, 2)}</td>
                   <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.niitDt || 0, 2)}</td>
                   <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.niitTulsun || 0, 2)}</td>
-                  <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.niitKhyamdralTurees || 0, 2)}</td>
-                  <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.niitKhyamdralAshiglalt || 0, 2)}</td>
                   <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.etssiinUldegdel || 0, 2)}</td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
               <tr className="font-bold">
-                <td colSpan={5} className="border border-gray-400 px-1 py-0.5 text-center">Нийт</td>
+                <td colSpan={6} className="border border-gray-400 px-1 py-0.5 text-center">Нийт</td>
                 <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(totals.ekhniiUldegdel, 2)}</td>
                 <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(totals.niitDt, 2)}</td>
                 <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(totals.niitTulsun, 2)}</td>
-                <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(totals.niitKhyamdralTurees, 2)}</td>
-                <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(totals.niitKhyamdralAshiglalt, 2)}</td>
                 <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(totals.etssiinUldegdel, 2)}</td>
               </tr>
             </tfoot>
           </table>
+          
           <table className="mt-6 ml-4">
             <tfoot>
               <tr>
