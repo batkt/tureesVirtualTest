@@ -55,27 +55,82 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   const rows = useMemo(() => {
     if (!detail?.guilgeenuud && !gereeDetail) return [];
     
-    // Combine all transaction types and sort chronologically
-    let combined = [...(detail?.guilgeenuud || []).map(g => g.turul === "aldangi" ? { ...g, _isAldangiExtra: true, tulsunDun: g.tulsunAldangi || g.tulsunDun || 0, tailbar: g.tailbar || t("Төлсөн алданги") } : g)];
-    
+    const seenIds = new Set();
+    let combined = [];
+
+   
+    (detail?.guilgeenuud || []).forEach((g) => {
+      let item = g;
+      if (g.turul === "aldangi") {
+        item = { 
+          ...g, 
+          _isAldangiExtra: true, 
+          tulsunDun: g.tulsunAldangi || g.tulsunDun || 0, 
+          tailbar: g.tailbar || t("Төлсөн алданги") 
+        };
+      } else if (g.turul === "baritsaa") {
+        
+        item = {
+          ...g,
+          tulsunDun: (g.tulsunDun || 0) + (g.orlogo || 0) + (g.zarlaga || 0),
+          tulukhDun: 0,
+          tailbar: g.tailbar || t("Барьцаа")
+        };
+      }
+      if (item._id) {
+        seenIds.add(item._id.toString());
+      }
+      combined.push(item);
+    });
+
+   
+    const requiredBaritsaa = Number(gereeDetail?.baritsaaAvakhDun || detail?.baritsaaAvakhDun) || 0;
+    if (requiredBaritsaa > 0) {
+      const baritsaaDate = gereeDetail?.ekhlekhOgnoo || gereeDetail?.ognoo || gereeDetail?.createdAt || "2026-05-01T00:00:00.000Z";
+      let includeBaritsaa = true;
+      if (ognoo && ognoo[0] && ognoo[1]) {
+        const d = new Date(baritsaaDate);
+        if (d < new Date(ognoo[0]) || d > new Date(ognoo[1])) {
+          includeBaritsaa = false;
+        }
+      }
+      if (includeBaritsaa) {
+        combined.push({
+          _id: `baritsaa-required-${gereeDetail?._id || detail?._id}`,
+          ognoo: baritsaaDate,
+          tailbar: t("Барьцаа үүссэн"),
+          tulukhDun: requiredBaritsaa,
+          tulsunDun: 0,
+          khyamdral: 0,
+          turul: "baritsaa"
+        });
+      }
+    }
+
+ 
     (gereeDetail?.baritsaaGuilgeenuud || []).forEach((g) => {
+      if (g._id && seenIds.has(g._id.toString())) {
+        return; 
+      }
       if (ognoo && ognoo[0] && ognoo[1]) {
         const gDate = new Date(g.ognoo);
         if (gDate < new Date(ognoo[0]) || gDate > new Date(ognoo[1])) {
           return;
         }
       }
-      if ((g.tulsunDun || 0) + (g.orlogo || 0) > 0 || (g.tulukhDun || 0) > 0) {
+      const paidAmount = (g.tulsunDun || 0) + (g.orlogo || 0) + (g.zarlaga || 0);
+      if (paidAmount > 0 || (g.tulukhDun || 0) > 0) {
         combined.push({
           ...g,
           tailbar: g.tailbar || t("Барьцаа"),
-          tulsunDun: (g.tulsunDun || 0) + (g.orlogo || 0),
+          tulsunDun: paidAmount,
           tulukhDun: 0,
           turul: "baritsaa"
         });
       }
     });
 
+    // 4. Add calculated penalties (DT)
     (gereeDetail?.aldangiGuilgeenuud || []).forEach((g) => {
       const gDate = g.aldangiBodsonOgnoo || g.ognoo;
       if (ognoo && ognoo[0] && ognoo[1] && gDate) {
@@ -238,9 +293,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   const aldangiBalance = gereeDetail?.aldangiinUldegdel || 0;
   const baritsaaBalance = Math.max(0, (gereeDetail?.baritsaaAvakhDun || 0) - (gereeDetail?.baritsaaniiUldegdel || 0));
 
-  const lastBalance = aldangiTuukhKharakhEsekh
-    ? (tureesiinUldegdel + aldangiBalance)
-    : (tureesiinUldegdel + baritsaaBalance + aldangiBalance);
+  const lastBalance = record?.etssiinUldegdel !== undefined ? record.etssiinUldegdel : (detail?.etssiinUldegdel || 0);
 
   const columns = [
     {
@@ -597,8 +650,8 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
               <span className="text-sm font-semibold text-gray-500">
                 ({ognoo && ognoo[0] && ognoo[1] ? `${moment(ognoo[0]).format("YYYY/MM/DD")} – ${moment(ognoo[1]).format("YYYY/MM/DD")}` : moment().format("YYYY/MM/DD")})
               </span>
-              <div>Харилцагч: <span className="font-normal text-gray-950">{record?.ner}</span></div>
-              <div>Талбай дугаар: <span className="font-normal text-gray-950">{record?.talbainDugaar}</span></div>
+              <div>Харилцагч: <span className="font-normal text-gray-955">{record?.ner}</span></div>
+              <div>Талбай дугаар: <span className="font-normal text-gray-955">{record?.talbainDugaar}</span></div>
               <div>Талбай м2: <span className="font-normal text-gray-955">{record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
             </div>
             
