@@ -299,7 +299,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   const aldangiBalance = gereeDetail?.aldangiinUldegdel || 0;
   const baritsaaBalance = Math.max(0, (gereeDetail?.baritsaaAvakhDun || 0) - (gereeDetail?.baritsaaniiUldegdel || 0));
 
-  const lastBalance = detail?.etssiinUldegdel !== undefined ? detail.etssiinUldegdel : 0;
+  const lastBalance = totalDt - totalKt;
 
   const columns = [
     {
