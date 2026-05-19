@@ -34,18 +34,18 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     documentTitle: t("Авлагын дэлгэрэнгүй тайлан"),
     pageStyle: `@media print { @page { size: portrait; margin: 0; } body { margin: 10mm; } }`,
   });
-  const ekhlekhOgnoo = ognoo?.[0]
+  const filteredEkhlekh = ognoo?.[0]
     ? moment(ognoo[0]).startOf("day").toISOString()
-    : undefined;
-  const duusakhOgnoo = ognoo?.[1]
+    : "1970-01-01T00:00:00.000Z";
+  const filteredDuusakh = ognoo?.[1]
     ? moment(ognoo[1]).endOf("day").toISOString()
-    : undefined;
+    : "2099-12-31T23:59:59.000Z";
 
   const { detail, gereeDetail, detailUnshijBaina } = useavlagaTovchooDelgerengui(
     open && token,
     record?.gereeniiDugaar,
-    "1970-01-01T00:00:00.000Z", // All-time start date
-    "2099-12-31T23:59:59.000Z", // All-time end date
+    filteredEkhlekh,
+    filteredDuusakh,
     baiguullaga?._id,
     barilgiinId,
     baiguullaga?.tukhainBaaziinKholbolt
@@ -58,6 +58,12 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     let combined = [...(detail?.guilgeenuud || [])];
     
     (gereeDetail?.baritsaaGuilgeenuud || []).forEach((g) => {
+      if (ognoo && ognoo[0] && ognoo[1]) {
+        const gDate = new Date(g.ognoo);
+        if (gDate < new Date(ognoo[0]) || gDate > new Date(ognoo[1])) {
+          return;
+        }
+      }
       if ((g.tulsunDun || 0) + (g.orlogo || 0) > 0 || (g.tulukhDun || 0) > 0) {
         combined.push({
           ...g,
@@ -70,6 +76,12 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     });
 
     (gereeDetail?.aldangiGuilgeenuud || []).forEach((g) => {
+      if (ognoo && ognoo[0] && ognoo[1]) {
+        const gDate = new Date(g.ognoo);
+        if (gDate < new Date(ognoo[0]) || gDate > new Date(ognoo[1])) {
+          return;
+        }
+      }
       if ((g.tulsunAldangi || g.tulsunDun || 0) > 0 || (g.tulukhDun || 0) > 0) {
         combined.push({
           ...g,
@@ -195,7 +207,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     ];
 
     return allRows;
-  }, [detail, gereeDetail, t]);
+  }, [detail, gereeDetail, t, ognoo]);
 
   const aldangiTuukhKharakhEsekh =
     baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ||

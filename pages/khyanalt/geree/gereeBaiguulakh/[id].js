@@ -563,7 +563,7 @@ function GereeBaiguulakh({ token, data, tsonkhniiId: propTsonkhniiId }) {
             ? moment(m.ognoonuud[1]).format("YYYY/MM")
             : "";
           
-          const dun = m.khungulukhDun || ((geree?.sariinTurees || 0) * (m.khungulukhKhuvi || 0) / 100);
+          const dun = m.khungulukhDun || ((khadgalakhGeree?.sariinTurees || 0) * (m.khungulukhKhuvi || 0) / 100);
           return `${start} - ${end} хүртэл ${formatNumber(dun)}₮ (${m.khungulukhKhuvi}%) хөнгөлөлттэй`;
         });
         const formattedDiscounts = formattedDiscountsArray.join(". ");

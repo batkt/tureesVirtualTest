@@ -264,11 +264,7 @@ function GuilgeeniiTuukh(
       return { ...x, uldegdel: uld };
     });
 
-    const isFullMonth = ognoo && ognoo[0] && ognoo[1] &&
-      moment(ognoo[0]).isSame(moment(ognoo[0]).startOf('month'), 'day') &&
-      moment(ognoo[1]).isSame(moment(ognoo[1]).endOf('month'), 'day');
-
-    const activeOgnoo = shineOgnoo || (actualUldegdelUdruurKharakhEsekh ? (!isFullMonth ? ognoo : undefined) : ognoo);
+    const activeOgnoo = shineOgnoo;
 
     if (activeOgnoo && activeOgnoo.length > 1) {
       const startDate = actualUldegdelUdruurKharakhEsekh
