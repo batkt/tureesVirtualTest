@@ -8,11 +8,6 @@ function Khuulga(
   ref
 ) {
   const refTuukh = useRef(null);
-  const { baiguullaga } = useAuth();
-  const aldangiTuukhKharakhEsekh =
-    baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
-  const uldegdelUdruurKharakhEsekh =
-    baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh;
 
   React.useImperativeHandle(
     ref,
@@ -54,8 +49,6 @@ function Khuulga(
         token={token}
         ognoo={ognoo}
         refreshData={onFinish}
-        aldangiTuukhKharakhEsekh={aldangiTuukhKharakhEsekh}
-        uldegdelUdruurKharakhEsekh={uldegdelUdruurKharakhEsekh}
       />
     </div>
   );

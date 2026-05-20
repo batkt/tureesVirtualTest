@@ -124,8 +124,6 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         });
       }
     });
-
-    // Also process baritsaaTulultArr (all baritsaa payments, unfiltered) when baritsaaGuilgeenuud is empty
     if (!gereeDetail?.baritsaaGuilgeenuud?.length) {
       const baritsaaTulultArr = gereeDetail?.baritsaaTulultArr || [];
       baritsaaTulultArr.forEach((g) => {
@@ -267,7 +265,6 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           groupRows.push({ ...g, key: `main-${i}`, runningBalance: balance });
         }
       } else {
-        // Penalty or deposit transaction - update the running balance progressively too!
         if (dt > 0) {
           balance += dt;
         }
@@ -281,9 +278,6 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         dataGroups.push(groupRows);
       }
     });
-
-    // dataGroups.reverse(); // Do not reverse to display oldest on top
-
     const allRows = [
       { 
         _isEkhniiUldegdel: true, 
@@ -301,11 +295,15 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
 
   const dataRowsOnly = rows.filter(r => !r._isEkhniiUldegdel);
-  const totalDt = (detail?.ekhniiUldegdel || 0) + dataRowsOnly.reduce((s, r) => s + (r.tulukhDun || 0), 0);
-  const totalKt = dataRowsOnly.reduce((s, r) => s + (r.tulsunDun || 0) + (r.khyamdral || 0), 0);
+  
+  const isAldangiMissingFromRows = !(gereeDetail?.aldangiGuilgeenuud?.length > 0);
+  const missingAldangiDt = isAldangiMissingFromRows ? ((gereeDetail?.aldangiinUldegdel || 0) + (gereeDetail?.niitTulsunAldangi || 0)) : 0;
+  const missingAldangiKt = isAldangiMissingFromRows ? (gereeDetail?.niitTulsunAldangi || 0) : 0;
+
+  const totalDt = (detail?.ekhniiUldegdel || 0) + dataRowsOnly.reduce((s, r) => s + (r.tulukhDun || 0), 0) + missingAldangiDt;
+  const totalKt = dataRowsOnly.reduce((s, r) => s + (r.tulsunDun || 0) + (r.khyamdral || 0), 0) + missingAldangiKt;
   const totalKhyamdral = dataRowsOnly.reduce((s, r) => s + (r.khyamdral || 0), 0);
 
-  // Pure rental outstanding balance from table rows, excluding baritsaa and aldangi extra transactions
   const tureesiinUldegdel = (detail?.ekhniiUldegdel || 0) +
     dataRowsOnly.filter(r => r.turul !== "baritsaa" && !r._isAldangiExtra).reduce((s, r) => s + (r.tulukhDun || 0), 0) -
     dataRowsOnly.filter(r => r.turul !== "baritsaa" && !r._isAldangiExtra).reduce((s, r) => s + (r.tulsunDun || 0), 0) -
@@ -314,7 +312,17 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   const aldangiBalance = gereeDetail?.aldangiinUldegdel || 0;
   const baritsaaBalance = Math.max(0, (gereeDetail?.baritsaaAvakhDun || 0) - (gereeDetail?.baritsaaniiUldegdel || 0));
 
-  const lastBalance = totalDt - totalKt;
+  const aldangiFromRows = dataRowsOnly
+    .filter(r => r._isAldangiExtra)
+    .reduce((s, r) => s + (r.tulukhDun || 0) - (r.tulsunDun || 0), 0);
+
+  
+  const effectiveAldangiUldegdel = (gereeDetail?.aldangiGuilgeenuud?.length > 0)
+    ? aldangiFromRows
+    : aldangiBalance;
+
+
+  const lastBalance = tureesiinUldegdel + effectiveAldangiUldegdel;
 
   const columns = [
     {
