@@ -145,21 +145,16 @@ const fetcherGuilgee = (url, token, gereeniiId, ognoo, shineOgnoo) => {
       params: params,
     })
     .then((res) => {
-      var avlagaUldegdel = 0;
       var aldangiUldegdel = 0;
       res.data.forEach((x) => {
-        avlagaUldegdel =
-          avlagaUldegdel +
-          (x?.tulukhDun || 0) -
-          (x?.tulsunDun || 0) -
-          (x?.khyamdral || 0);
         aldangiUldegdel =
           aldangiUldegdel +
           (x?.tulukhAldangi || 0) -
           (x?.tulsunAldangi || 0);
-        if (x.turul === "khyamdral" && avlagaUldegdel < 0)
+        x.avlagaUldegdel = x.uldegdel || 0;
+        if (x.turul === "khyamdral" && (x.uldegdel || 0) < 0)
           x.uldegdel = aldangiUldegdel > 0 ? aldangiUldegdel : 0;
-        else x.uldegdel = avlagaUldegdel + aldangiUldegdel;
+        else x.uldegdel = (x.uldegdel || 0) + aldangiUldegdel;
       });
       return res.data;
     })

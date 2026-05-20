@@ -60,9 +60,12 @@ const GereeniiUldegdel = React.memo(
   ({ ugugdul, token, ognoo, tsutsalsanTurul, refreshTotals }) => {
     const { barilgiinId, baiguullaga, ajiltan } = useAuth();
     const { t } = useTranslation();
+    const [visible, setVisible] = useState(false);
+
     const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
       ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
       : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b");
+
     const { data, mutate, isValidating } = useSWR(
       !!ugugdul?.gereeniiDugaar && !!barilgiinId
         ? [
@@ -129,53 +132,59 @@ const GereeniiUldegdel = React.memo(
     ugugdul.uldegdel = displayUldegdel;
     ugugdul.tureesiinUldegdel = uldegdelTur;
     ugugdul.aldangiinUldegdel = uldegdelAld;
-    if (!isValidating && data && typeof refreshTotals === "function") {
+    if (visible && !isValidating && data && typeof refreshTotals === "function") {
       refreshTotals();
     }
     ugugdul.mutate = mutate;
 
     const content = (
       <div className="space-y-1 p-1 text-xs">
-        {uldegdelTur > 0 && (
-          <div className="flex justify-between gap-4">
-            <span className="text-gray-500">{t("Түрээсийн үлдэгдэл")}:</span>
-            <span className="font-bold text-red-500">
-              {formatNumber(uldegdelTur)}
-            </span>
-          </div>
-        )}
+        {isValidating ? (
+          <div className="flex justify-center p-2"><Spin size="small" /></div>
+        ) : (
+          <>
+            {uldegdelTur > 0 && (
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-500">{t("Түрээсийн үлдэгдэл")}:</span>
+                <span className="font-bold text-red-500">
+                  {formatNumber(uldegdelTur)}
+                </span>
+              </div>
+            )}
 
-        {uldegdelTulsun > 0 && (
-          <div className="flex justify-between gap-4">
-            <span className="text-gray-500">{t("Нийт төлсөн")}:</span>
-            <span className="font-bold text-green-500">
-              {formatNumber(uldegdelTulsun)}
-            </span>
-          </div>
-        )}
-        {uldegdelKhyamdral > 0 && (
-          <div className="flex justify-between gap-4">
-            <span className="text-gray-500">{t("Хямдрал")}:</span>
-            <span className="font-bold text-green-500">
-              {formatNumber(uldegdelKhyamdral)}
-            </span>
-          </div>
-        )}
-        {aldangiTuukhKharakhEsekh && uldegdelAld > 0 && (
-          <div className="flex justify-between gap-4">
-            <span className="text-gray-500">{t("Нийт алданги")}:</span>
-            <span className="font-bold text-red-500">
-              {formatNumber(uldegdelAld)}
-            </span>
-          </div>
-        )}
-        {aldangiTuukhKharakhEsekh && uldegdelTulsunAldangi > 0 && (
-          <div className="flex justify-between gap-4">
-            <span className="text-gray-500">{t("Төлсөн алданги")}:</span>
-            <span className="font-bold text-orange-500">
-              {formatNumber(uldegdelTulsunAldangi)}
-            </span>
-          </div>
+            {uldegdelTulsun > 0 && (
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-500">{t("Нийт төлсөн")}:</span>
+                <span className="font-bold text-green-500">
+                  {formatNumber(uldegdelTulsun)}
+                </span>
+              </div>
+            )}
+            {uldegdelKhyamdral > 0 && (
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-500">{t("Хямдрал")}:</span>
+                <span className="font-bold text-green-500">
+                  {formatNumber(uldegdelKhyamdral)}
+                </span>
+              </div>
+            )}
+            {aldangiTuukhKharakhEsekh && uldegdelAld > 0 && (
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-500">{t("Нийт алданги")}:</span>
+                <span className="font-bold text-red-500">
+                  {formatNumber(uldegdelAld)}
+                </span>
+              </div>
+            )}
+            {aldangiTuukhKharakhEsekh && uldegdelTulsunAldangi > 0 && (
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-500">{t("Төлсөн алданги")}:</span>
+                <span className="font-bold text-orange-500">
+                  {formatNumber(uldegdelTulsunAldangi)}
+                </span>
+              </div>
+            )}
+          </>
         )}
       </div>
     );
@@ -185,10 +194,14 @@ const GereeniiUldegdel = React.memo(
         className={`text-right font-medium ${(displayUldegdel ?? 0) > 0 ? "text-red-500" : "text-green-500"
           }`}
       >
-        {isValidating ? (
-          <Spin size="small" />
-        ) : (displayUldegdel ?? 0) > 0 && !!data ? (
-          <Popover content={content} title={t("Үлдэгдлийн дэлгэрэнгүй")}>
+        {(displayUldegdel ?? 0) > 0 ? (
+          <Popover
+            content={content}
+            title={t("Үлдэгдлийн дэлгэрэнгүй")}
+            onOpenChange={(open) => {
+              if (open) setVisible(true);
+            }}
+          >
             <span className="cursor-pointer">
               {formatNumber(displayUldegdel ?? 0, 2)}
             </span>
@@ -200,6 +213,34 @@ const GereeniiUldegdel = React.memo(
     );
   },
 );
+
+const GereeniiAldangi = React.memo(({ ugugdul, token, aldangiTuukhKharakhEsekh }) => {
+  const { data: aldangiTuukhData } = useSWR(
+    aldangiTuukhKharakhEsekh && ugugdul?._id
+      ? ["/aldangiinTuukh/popover", ugugdul._id]
+      : null,
+    () =>
+      uilchilgee(token)
+        .get("/aldangiinTuukh", {
+          params: {
+            query: { gereeniiId: ugugdul?._id?.toString() },
+            order: { aldangiBodsonOgnoo: -1 },
+            khuudasniiKhemjee: 1,
+          },
+        })
+        .then((res) => res.data),
+    { revalidateOnFocus: false }
+  );
+
+  const liveAldangi = aldangiTuukhData?.jagsaalt?.[0]?.niitAldangi;
+  const displayAldangi = liveAldangi ?? ugugdul?.aldangiinUldegdel ?? 0;
+
+  return (
+    <div className="w-full text-right">
+      {formatNumber(displayAldangi || 0)}
+    </div>
+  );
+});
 
 function GereeniiAshiglakhUldegdel({ token, gereeniiId, record }) {
   const { data, isValidating } = useSWR(
@@ -2053,11 +2094,16 @@ function GuilgeeniiTuukh(props) {
                   ellipsis: true,
                   width: "7rem",
                   summary: true,
-                  render: (aldangiinUldegdel) => {
+                  render: (aldangiinUldegdel, record) => {
+                    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
+                      ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
+                      : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b");
                     return (
-                      <div className="w-full text-right">
-                        {formatNumber(aldangiinUldegdel || 0)}
-                      </div>
+                      <GereeniiAldangi
+                        ugugdul={record}
+                        token={token}
+                        aldangiTuukhKharakhEsekh={aldangiTuukhKharakhEsekh}
+                      />
                     );
                   },
                 },
