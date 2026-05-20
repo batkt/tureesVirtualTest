@@ -60,7 +60,7 @@ const GereeniiUldegdel = React.memo(
   ({ ugugdul, token, ognoo, tsutsalsanTurul, refreshTotals }) => {
     const { barilgiinId, baiguullaga, ajiltan } = useAuth();
     const { t } = useTranslation();
-    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+    const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
     const { data, mutate, isValidating } = useSWR(
       !!ugugdul?.gereeniiDugaar && !!barilgiinId
         ? [
@@ -234,10 +234,10 @@ function TableGuilgee({
       list.forEach((item) => {
         const isCancelled = item?.tuluv == -1 || Number(item?.tuluv) === -1;
 
-        const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+        const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
         const tureesiinUld = item.tureesiinUldegdel !== undefined 
           ? item.tureesiinUldegdel 
-          : (aldangiTuukhKharakhEsekh ? ((parseFloat(item.uldegdel) || 0) - (parseFloat(item.aldangiinUldegdel) || 0)) : (parseFloat(item.uldegdel) || 0));
+          : ((parseFloat(item.uldegdel) || 0) - (parseFloat(item.aldangiinUldegdel) || 0));
 
         const effUldegdel =
           isCancelled && tureesiinUld <= 0
@@ -246,9 +246,10 @@ function TableGuilgee({
 
         let val = 0;
         if (dataIndex === "uldegdel") {
-          val = isCancelled && (parseFloat(item?.uldegdel) <= 0)
+          const rawUld = isCancelled && (parseFloat(item?.uldegdel) <= 0)
             ? (parseFloat(item?.tsutsalsanUldegdel) || 0)
             : (parseFloat(item?.uldegdel) || 0);
+          val = aldangiTuukhKharakhEsekh ? rawUld : (rawUld - (parseFloat(item?.aldangiinUldegdel) || 0));
         } else if (dataIndex === "avlagiinUldegdel") {
           val = effUldegdel + (parseFloat(item?.aldangiinUldegdel) || 0);
         } else if (dataIndex === "aldangiinUldegdel") {
@@ -717,7 +718,7 @@ const {
 
   const computedTotals = useMemo(() => {
     const list = gereeniiMedeelel?.jagsaalt || [];
-    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+    const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
     const totals = {
       avlaga: 0,
       voucher: 0,
@@ -731,7 +732,7 @@ const {
       const isCancelled = item?.tuluv == -1 || Number(item?.tuluv) === -1;
       const tureesiinUld = item.tureesiinUldegdel !== undefined 
         ? item.tureesiinUldegdel 
-        : (parseFloat(item.uldegdel) || 0);
+        : ((parseFloat(item.uldegdel) || 0) - (parseFloat(item.aldangiinUldegdel) || 0));
 
       const effUldegdel =
         isCancelled && tureesiinUld <= 0
@@ -739,7 +740,7 @@ const {
           : tureesiinUld;
       const aldangi = parseFloat(item?.aldangiinUldegdel) || 0;
 
-      const totalItemAvlaga = effUldegdel + aldangi;
+      const totalItemAvlaga = aldangiTuukhKharakhEsekh ? (effUldegdel + aldangi) : effUldegdel;
 
       totals.avlaga += totalItemAvlaga;
       totals.voucher += parseFloat(item?.voucherDun) || 0;
@@ -1006,10 +1007,10 @@ const {
       });
     }
 
-    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+    const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
     const filteredShineBagana = aldangiTuukhKharakhEsekh
       ? shineBagana.filter((col) => col.dataIndex !== "avlagiinUldegdel")
-      : shineBagana;
+      : shineBagana.filter((col) => col.dataIndex !== "avlagiinUldegdel" && col.dataIndex !== "niitTulsunAldangi" && col.dataIndex !== "aldangiinUldegdel");
 
     return [
       ...jagsaalt,
@@ -1628,10 +1629,10 @@ const {
                 if (a.dataIndex === "avlagiinUldegdel") {
                   const isCancelled =
                     data?.tuluv == -1 || Number(data?.tuluv) === -1;
-                  const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+                  const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
                   const tureesiinUld = data.tureesiinUldegdel !== undefined 
                     ? data.tureesiinUldegdel 
-                    : (aldangiTuukhKharakhEsekh ? ((parseFloat(data.uldegdel) || 0) - (parseFloat(data.aldangiinUldegdel) || 0)) : (parseFloat(data.uldegdel) || 0));
+                    : ((parseFloat(data.uldegdel) || 0) - (parseFloat(data.aldangiinUldegdel) || 0));
                   const effUldegdel =
                     isCancelled && tureesiinUld <= 0
                       ? parseFloat(data?.tsutsalsanUldegdel) || 0
@@ -1641,10 +1642,17 @@ const {
                 if (a.dataIndex === "uldegdel") {
                   const isCancelled =
                     data?.tuluv == -1 || Number(data?.tuluv) === -1;
-                  const raw = parseFloat(val);
-                  return isCancelled && (raw == null || raw <= 0)
-                    ? parseFloat(data?.tsutsalsanUldegdel) || 0
-                    : val;
+                  const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
+                  const tureesiinUld = data.tureesiinUldegdel !== undefined 
+                    ? data.tureesiinUldegdel 
+                    : ((parseFloat(data.uldegdel) || 0) - (parseFloat(data.aldangiinUldegdel) || 0));
+                  const effUldegdel =
+                    isCancelled && tureesiinUld <= 0
+                      ? parseFloat(data?.tsutsalsanUldegdel) || 0
+                      : tureesiinUld;
+                  return aldangiTuukhKharakhEsekh
+                    ? (effUldegdel + (parseFloat(data?.aldangiinUldegdel) || 0))
+                    : effUldegdel;
                 }
                 if (
                   a.dataIndex === "sariinTurees" ||
@@ -2061,10 +2069,10 @@ const {
                   render(text, data, index) {
                     const isCancelled =
                       data?.tuluv == -1 || Number(data?.tuluv) === -1;
-                    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+                    const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
                     const tureesiinUld = data.tureesiinUldegdel !== undefined 
                       ? data.tureesiinUldegdel 
-                      : (aldangiTuukhKharakhEsekh ? ((parseFloat(data.uldegdel) || 0) - (parseFloat(data.aldangiinUldegdel) || 0)) : (parseFloat(data.uldegdel) || 0));
+                      : ((parseFloat(data.uldegdel) || 0) - (parseFloat(data.aldangiinUldegdel) || 0));
                     const effUldegdel =
                       isCancelled && tureesiinUld <= 0
                         ? parseFloat(data.tsutsalsanUldegdel) || 0
@@ -2132,7 +2140,16 @@ const {
                   },
                 },
                 
-              ]}
+              ].filter(col => {
+                const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
+                if (col.dataIndex === "avlagiinUldegdel") {
+                  return !aldangiTuukhKharakhEsekh;
+                }
+                if (col.dataIndex === "aldangiinUldegdel" || col.dataIndex === "niitTulsunAldangi") {
+                  return aldangiTuukhKharakhEsekh;
+                }
+                return true;
+              })}
             />
           </div>
         </div>

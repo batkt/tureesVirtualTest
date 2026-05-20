@@ -73,8 +73,9 @@ function GuilgeeniiTuukh(
     ajiltan?.baiguullagiinId || data?.baiguullagiinId,
   );
 
-  const actualAldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1") || aldangiTuukhKharakhEsekh;
+  const actualAldangiTuukhKharakhEsekh = !!aldangiTuukhKharakhEsekh;
   const actualUldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1") || uldegdelUdruurKharakhEsekh;
+  const minWidthClass = actualAldangiTuukhKharakhEsekh ? "min-w-[105rem]" : "min-w-[97rem]";
 
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
     token,
@@ -384,7 +385,7 @@ function GuilgeeniiTuukh(
     try {
       const wb = XLSX?.utils.book_new();
       const dataSubset = guilgeeniiTuukh?.reverse().map((item) => {
-        return {
+        const row = {
           Огноо:
             item.ognoo && moment(item.ognoo).isValid()
               ? moment(item.ognoo).format("YYYY/MM/DD")
@@ -392,25 +393,28 @@ function GuilgeeniiTuukh(
           Түрээс: formatNumber(item.undsenDun),
           "Төлөх дүн": formatNumber(item.tulukhDun),
           Хямдрал: formatNumber(item.khyamdral),
-          "Төлсөн алданги": formatNumber(item.tulsunAldangi),
-          "Төлсөн дүн": formatNumber(item.tulsunDun),
-          Үлдэгдэл: formatNumber(item.uldegdel),
-          Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
-          Хэлбэр:
-            item.turul === "bank"
-              ? item.tulsunDans !== " "
-                ? item.tulsunDans
-                : "Банк"
-              : turulAvya(item.turul) || "",
-          Тайлбар: item.tailbar || "",
-          "Нэмэлт тайлбар": item.nemeltTailbar || "",
-
-          "Бүртгэсэн огноо":
-            item.guilgeeKhiisenOgnoo &&
-            moment(item.guilgeeKhiisenOgnoo).isValid()
-              ? moment(item.guilgeeKhiisenOgnoo).format("YYYY/MM/DD")
-              : "",
         };
+        if (actualAldangiTuukhKharakhEsekh) {
+          row["Төлсөн алданги"] = formatNumber(item.tulsunAldangi);
+        }
+        row["Төлсөн дүн"] = formatNumber(item.tulsunDun);
+        row["Үлдэгдэл"] = formatNumber(item.uldegdel);
+        row["Ажилтан"] = item.guilgeeKhiisenAjiltniiNer || "";
+        row["Хэлбэр"] =
+          item.turul === "bank"
+            ? item.tulsunDans !== " "
+              ? item.tulsunDans
+              : "Банк"
+            : turulAvya(item.turul) || "";
+        row["Тайлбар"] = item.tailbar || "";
+        row["Нэмэлт тайлбар"] = item.nemeltTailbar || "";
+
+        row["Бүртгэсэн огноо"] =
+          item.guilgeeKhiisenOgnoo &&
+          moment(item.guilgeeKhiisenOgnoo).isValid()
+            ? moment(item.guilgeeKhiisenOgnoo).format("YYYY/MM/DD")
+            : "";
+        return row;
       });
 
       const ws = XLSX?.utils.json_to_sheet(dataSubset);
@@ -430,7 +434,9 @@ function GuilgeeniiTuukh(
               left: { style: "thin", color: { auto: 1 } },
               right: { style: "thin", color: { auto: 1 } },
             };
-            const numericColumns = ["B", "C", "D", "E", "F", "G"];
+            const numericColumns = actualAldangiTuukhKharakhEsekh
+              ? ["B", "C", "D", "E", "F", "G"]
+              : ["B", "C", "D", "E", "F"];
             const colLetter = XLSX.utils.encode_col(C);
             if (numericColumns.includes(colLetter)) {
               cell.s.alignment = { horizontal: "right" };
@@ -438,19 +444,11 @@ function GuilgeeniiTuukh(
           }
         }
 
-        var wscols = [
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-          { wch: 20 },
-        ];
+        var wscols = [];
+        const numCols = actualAldangiTuukhKharakhEsekh ? 12 : 11;
+        for (let i = 0; i < numCols; i++) {
+          wscols.push({ wch: 20 });
+        }
         ws["!cols"] = wscols;
 
         const headerStyle = {
@@ -466,18 +464,13 @@ function GuilgeeniiTuukh(
           },
         };
 
-        ws["A1"].s = headerStyle;
-        ws["B1"].s = headerStyle;
-        ws["C1"].s = headerStyle;
-        ws["D1"].s = headerStyle;
-        ws["E1"].s = headerStyle;
-        ws["F1"].s = headerStyle;
-        ws["G1"].s = headerStyle;
-        ws["H1"].s = headerStyle;
-        ws["I1"].s = headerStyle;
-        ws["J1"].s = headerStyle;
-        ws["K1"].s = headerStyle;
-        ws["L1"].s = headerStyle;
+        const colLetters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+        for (let i = 0; i < numCols; i++) {
+          const cellKey = `${colLetters[i]}1`;
+          if (ws[cellKey]) {
+            ws[cellKey].s = headerStyle;
+          }
+        }
 
         XLSX?.utils.book_append_sheet(wb, ws, "гүйлгээ");
 
@@ -551,7 +544,7 @@ function GuilgeeniiTuukh(
           )}
         </div>
         <th className="w-full">
-          <tr className="flex min-w-[105rem] divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
+          <tr className={`flex ${minWidthClass} divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400`}>
             <td
               onClick={() => toggleSortOrder("ognoo")}
               className="min-w-[8rem] overflow-hidden p-1 text-center"
@@ -582,12 +575,14 @@ function GuilgeeniiTuukh(
             >
               {t("Хямдрал")}
             </td>
-            <td
-              onClick={() => toggleSortOrder("tulsunAldangi")}
-              className="min-w-[8rem] overflow-hidden p-1 text-center"
-            >
-              {t("Төлсөн алданги")}
-            </td>
+            {actualAldangiTuukhKharakhEsekh && (
+              <td
+                onClick={() => toggleSortOrder("tulsunAldangi")}
+                className="min-w-[8rem] overflow-hidden p-1 text-center"
+              >
+                {t("Төлсөн алданги")}
+              </td>
+            )}
             <td
               onClick={() => toggleSortOrder("tulsunDun")}
               className="min-w-[8rem] overflow-hidden p-1 text-center"
@@ -622,7 +617,7 @@ function GuilgeeniiTuukh(
           </tr>
         </th>
         <tbody
-          className="overflownone min-w-[105rem]"
+          className={`overflownone ${minWidthClass}`}
           style={isPrinting ? {} : { height: "calc(100vh - 15rem)", overflowY: "auto" }}
         >
           {sortedData
@@ -631,7 +626,7 @@ function GuilgeeniiTuukh(
               return (
                 <tr
                   key={a._id || i}
-                  className={`flex min-w-[105rem] divide-x border-b border-gray-200 pr-1 text-gray-700 dark:text-gray-400 ${
+                  className={`flex ${minWidthClass} divide-x border-b border-gray-200 pr-1 text-gray-700 dark:text-gray-400 ${
                     isBalanceRow
                       ? "bg-blue-50/80 dark:bg-blue-950/40 font-semibold text-blue-950 dark:text-blue-200"
                       : "bg-gray-50 dark:bg-gray-700 hover:bg-green-100 dark:hover:bg-gray-600"
@@ -652,11 +647,13 @@ function GuilgeeniiTuukh(
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                     {isBalanceRow ? "" : (a.khyamdral ? formatNumber(a.khyamdral) : "")}
                   </td>
-                  <td className={`min-w-[8rem] overflow-hidden p-1 text-end ${
-                    a.tulsunAldangi > 0 ? "text-orange-500 font-medium" : ""
-                  }`}>
-                    {isBalanceRow ? "" : (a.tulsunAldangi > 0 ? formatNumber(a.tulsunAldangi) : "")}
-                  </td>
+                  {actualAldangiTuukhKharakhEsekh && (
+                    <td className={`min-w-[8rem] overflow-hidden p-1 text-end ${
+                      a.tulsunAldangi > 0 ? "text-orange-500 font-medium" : ""
+                    }`}>
+                      {isBalanceRow ? "" : (a.tulsunAldangi > 0 ? formatNumber(a.tulsunAldangi) : "")}
+                    </td>
+                  )}
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                     {isBalanceRow ? "" : (a.tulsunDun ? formatNumber(a.tulsunDun) : "")}
                   </td>
@@ -709,15 +706,15 @@ function GuilgeeniiTuukh(
                         (a) => a === barilgiinId,
                       )) && !a.ekhniiUldegdelEsekh && !a.etsiinUldegdelEsekh && (
                       <Popconfirm
-                        title={t("Төлөлт устгах уу?")}
-                        okText={t("Тийм")}
-                        cancelText={t("Үгүй")}
-                        onConfirm={() => tulultUstgaya(a)}
-                      >
-                        <div className="hide-on-print mx-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
-                          <DeleteOutlined />
-                        </div>
-                      </Popconfirm>
+                         title={t("Төлөлт устгах уу?")}
+                         okText={t("Тийм")}
+                         cancelText={t("Үгүй")}
+                         onConfirm={() => tulultUstgaya(a)}
+                       >
+                         <div className="hide-on-print mx-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
+                           <DeleteOutlined />
+                         </div>
+                       </Popconfirm>
                     )}
                   </td>
                 </tr>

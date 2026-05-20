@@ -86,49 +86,63 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
    
     const requiredBaritsaa = Number(gereeDetail?.baritsaaAvakhDun || detail?.baritsaaAvakhDun) || 0;
     if (requiredBaritsaa > 0) {
-      const baritsaaDate = gereeDetail?.ekhlekhOgnoo || gereeDetail?.ognoo || gereeDetail?.createdAt || "2026-05-01T00:00:00.000Z";
-      let includeBaritsaa = true;
-      if (ognoo && ognoo[0] && ognoo[1]) {
-        const d = new Date(baritsaaDate);
-        if (d < new Date(ognoo[0]) || d > new Date(ognoo[1])) {
-          includeBaritsaa = false;
-        }
-      }
-      if (includeBaritsaa) {
-        combined.push({
-          _id: `baritsaa-required-${gereeDetail?._id || detail?._id}`,
-          ognoo: baritsaaDate,
-          tailbar: t("Барьцаа үүссэн"),
-          tulukhDun: requiredBaritsaa,
-          tulsunDun: 0,
-          khyamdral: 0,
-          turul: "baritsaa"
-        });
-      }
+      // Use contract start date from backend, then fall back to first baritsaa payment date
+      const baritsaaTulultArr = gereeDetail?.baritsaaTulultArr || [];
+      // guilgeeKhiisenOgnoo = when the baritsaa was physically registered (most accurate)
+      const baritsaaDate = baritsaaTulultArr?.[0]?.guilgeeKhiisenOgnoo ||
+        baritsaaTulultArr?.[0]?.ognoo ||
+        gereeDetail?.gereeniiOgnoo || null;
+      // Always show Барьцаа үүссэн regardless of date range filter
+      combined.push({
+        _id: `baritsaa-required-${gereeDetail?._id || detail?._id}`,
+        ognoo: baritsaaDate,
+        tailbar: t("Барьцаа үүссэн"),
+        tulukhDun: requiredBaritsaa,
+        tulsunDun: 0,
+        khyamdral: 0,
+        turul: "baritsaa"
+      });
     }
 
  
-    (gereeDetail?.baritsaaGuilgeenuud || []).forEach((g) => {
-      if (g._id && seenIds.has(g._id.toString())) {
-        return; 
-      }
-      if (ognoo && ognoo[0] && ognoo[1]) {
-        const gDate = new Date(g.ognoo);
-        if (gDate < new Date(ognoo[0]) || gDate > new Date(ognoo[1])) {
-          return;
-        }
-      }
+    // Use baritsaaGuilgeenuud from gereeDetail if available; otherwise fall back to baritsaaTulultAvya data
+    const effectiveBaritsaaGuilgeenuud = (gereeDetail?.baritsaaGuilgeenuud?.length > 0)
+      ? gereeDetail.baritsaaGuilgeenuud
+      : [];
+
+    effectiveBaritsaaGuilgeenuud.forEach((g) => {
+      if (g._id && seenIds.has(g._id.toString())) return;
+      // No date-range filter for baritsaa payments so balance stays correct
       const paidAmount = (g.tulsunDun || 0) + (g.orlogo || 0) + (g.zarlaga || 0);
       if (paidAmount > 0 || (g.tulukhDun || 0) > 0) {
         combined.push({
           ...g,
-          tailbar: g.tailbar || t("Барьцаа"),
+          tailbar: g.tailbar || t("Барьцаа төлөлт"),
           tulsunDun: paidAmount,
           tulukhDun: 0,
           turul: "baritsaa"
         });
       }
     });
+
+    // Also process baritsaaTulultArr (all baritsaa payments, unfiltered) when baritsaaGuilgeenuud is empty
+    if (!gereeDetail?.baritsaaGuilgeenuud?.length) {
+      const baritsaaTulultArr = gereeDetail?.baritsaaTulultArr || [];
+      baritsaaTulultArr.forEach((g) => {
+        if (g._id && seenIds.has(g._id.toString())) return;
+        const paidAmount = (g.orlogo || 0) + (g.tulsunDun || 0);
+        if (paidAmount > 0) {
+          combined.push({
+            ...g,
+            ognoo: g.ognoo || g.guilgeeKhiisenOgnoo,
+            tailbar: g.tailbar || t("Барьцаа төлөлт"),
+            tulsunDun: paidAmount,
+            tulukhDun: 0,
+            turul: "baritsaa"
+          });
+        }
+      });
+    }
 
     // 4. Add calculated penalties (DT)
     (gereeDetail?.aldangiGuilgeenuud || []).forEach((g) => {
@@ -155,7 +169,11 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       }
     });
 
-    combined.sort((a, b) => new Date(a.ognoo) - new Date(b.ognoo));
+    combined.sort((a, b) => {
+      const dateA = new Date(a.ognoo || a.createdAt || 0);
+      const dateB = new Date(b.ognoo || b.createdAt || 0);
+      return dateA - dateB;
+    });
 
     let balance = detail?.ekhniiUldegdel || 0;
     let dataGroups = [];
@@ -280,10 +298,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     return allRows;
   }, [detail, gereeDetail, t, ognoo]);
 
-  const aldangiTuukhKharakhEsekh =
-    baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ||
-    baiguullaga?._id === "6735c77a7fc60cd66deb2909" ||
-    baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+  const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
 
   const dataRowsOnly = rows.filter(r => !r._isEkhniiUldegdel);
   const totalDt = (detail?.ekhniiUldegdel || 0) + dataRowsOnly.reduce((s, r) => s + (r.tulukhDun || 0), 0);
@@ -324,7 +339,8 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       },
       render: (v, r) => {
         if (r._isEkhniiUldegdel) return "-";
-        return v ? moment(v).format("YYYY/MM/DD") : "";
+        const displayDate = v || r.createdAt;
+        return displayDate ? moment(displayDate).format("YYYY/MM/DD") : "";
       },
     },
 
@@ -433,7 +449,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
 
       return {
         idx: i,
-        ognoo: r.ognoo ? moment(r.ognoo).format("YYYY-MM-DD") : "",
+        ognoo: (r.ognoo || r.createdAt) ? moment(r.ognoo || r.createdAt).format("YYYY-MM-DD") : "",
         tailbar: label,
         tulukhDun: r.tulukhDun || 0,
         tulsunDun: totalKt || 0,
@@ -569,7 +585,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
                   return (
                     <tr key={r.key} className="bg-green-50 font-medium">
                       <td className="border border-gray-400 px-1 py-0.5 text-center">-</td>
-                      <td className="border border-gray-400 px-1 py-0.5 text-center">{r.ognoo ? moment(r.ognoo).format("YYYY/MM/DD") : "-"}</td>
+                      <td className="border border-gray-400 px-1 py-0.5 text-center">{r.ognoo || r.createdAt ? moment(r.ognoo || r.createdAt).format("YYYY/MM/DD") : "-"}</td>
                       <td className="border border-gray-400 px-1 py-0.5 text-left pl-2 italic text-green-700">{r.tailbar}</td>
                       <td className="border border-gray-400 px-1.5 py-0.5 text-right">-</td>
                       <td className="border border-gray-400 px-1.5 py-0.5 text-right">-</td>
@@ -592,7 +608,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
                 return (
                   <tr key={r.key} className={r.turul === "khungulult" ? "text-gray-500 italic" : ""}>
                     <td className="border border-gray-400 px-1 py-0.5 text-center">{i}</td>
-                    <td className="border border-gray-400 px-1 py-0.5 text-center">{r.ognoo ? moment(r.ognoo).format("YYYY/MM/DD") : ""}</td>
+                    <td className="border border-gray-400 px-1 py-0.5 text-center">{r.ognoo || r.createdAt ? moment(r.ognoo || r.createdAt).format("YYYY/MM/DD") : ""}</td>
                     <td className="border border-gray-400 px-1 py-0.5">
                       <div>
                         <div className="font-medium text-gray-800">{label}</div>
@@ -878,10 +894,7 @@ function avlagaTovchoo({ token }) {
   );
 
   const dataSource = useMemo(() => {
-    const aldangiTuukhKharakhEsekh =
-      baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ||
-      baiguullaga?._id === "6735c77a7fc60cd66deb2909" ||
-      baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+    const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
 
     return (avlagaTovchoo?.jagsaalt || avlagaTovchoo || [])
       .map((item) => {
@@ -891,9 +904,7 @@ function avlagaTovchoo({ token }) {
 
         const adjustedEkhniiUldegdel = Number(item.ekhniiUldegdel || 0);
 
-        const adjustedEtssiinUldegdel = aldangiTuukhKharakhEsekh
-          ? Number(item.etssiinUldegdel || 0)
-          : Number(item.etssiinUldegdel || 0) + baritsaaBalanceEnd;
+        const adjustedEtssiinUldegdel = Number(item.etssiinUldegdel || 0);
 
         return {
           ...item,
