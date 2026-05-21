@@ -62,76 +62,54 @@ const GereeniiUldegdel = React.memo(
     const { t } = useTranslation();
     const [visible, setVisible] = useState(false);
 
-    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
-      ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
-      : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b");
+    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ?? false;
 
+    // Fetch correct balance using today's date
+    const { data: tulultData } = useSWR(
+      ugugdul?._id
+        ? [`/gereeniiTulultAvya/${ugugdul._id}`, moment().format("YYYY-MM-DD")]
+        : null,
+      () =>
+        uilchilgee(token)
+          .get(`/gereeniiTulultAvya/${ugugdul._id}`, {
+            params: {
+              duusakhOgnoo: moment().format("YYYY-MM-DD 23:59:59"),
+            },
+          })
+          .then(({ data }) => data),
+      { revalidateOnFocus: false }
+    );
+
+    // Take the last item's uldegdel as the true current balance
+    const displayUldegdel = useMemo(() => {
+      if (tulultData?.length) {
+        return tulultData[tulultData.length - 1]?.uldegdel ?? 0;
+      }
+      return parseFloat(ugugdul?.uldegdel) || 0;
+    }, [tulultData, ugugdul?.uldegdel]);
+
+    // Popover detail — lazy fetch on hover only
     const { data, mutate, isValidating } = useSWR(
-      !!ugugdul?.gereeniiDugaar && !!barilgiinId
-        ? [
-          "/uldegdelBodyo",
-          barilgiinId,
-          ugugdul?.gereeniiDugaar,
-          ognoo,
-          tsutsalsanTurul,
-        ]
+      visible && !!ugugdul?.gereeniiDugaar && !!barilgiinId
+        ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar, ognoo, tsutsalsanTurul]
         : null,
       (url, barilgiinId, gereeniiDugaar, ognoo) =>
         uilchilgee(token)
           .post(url, { barilgiinId, gereeniiDugaar, ognoo, tsutsalsanTurul })
           .then(({ data }) => data),
-      {
-        revalidateOnFocus: false,
-      },
-    );
-
-    const uldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1");
-    const showCombined = true;
-
-    const { data: aldangiTuukhData } = useSWR(
-      aldangiTuukhKharakhEsekh && ugugdul?._id
-        ? ["/aldangiinTuukh/popover", ugugdul._id]
-        : null,
-      () =>
-        uilchilgee(token)
-          .get("/aldangiinTuukh", {
-            params: {
-              query: { gereeniiId: ugugdul?._id?.toString() },
-              order: { aldangiBodsonOgnoo: -1 },
-              khuudasniiKhemjee: 1,
-            },
-          })
-          .then((res) => res.data),
       { revalidateOnFocus: false }
     );
 
-    const liveAldangi = aldangiTuukhData?.jagsaalt?.[0]?.niitAldangi;
+    const uldegdelTur = data?.tureesiinUldegdel ?? displayUldegdel;
+    const uldegdelAld = data?.aldangiinUldegdel ?? 0;
+    const uldegdelTulsun = data?.tulsun ?? 0;
+    const uldegdelKhyamdral = data?.khyamdral ?? 0;
+    const uldegdelTulsunAldangi = data?.niitTulsunAldangi ?? 0;
 
-    const uldegdelTur = data?.tureesiinUldegdel ?? ugugdul?.tureesiinUldegdel ?? ugugdul?.uldegdel ?? 0;
-    const uldegdelAld = liveAldangi ?? data?.aldangiinUldegdel ?? ugugdul?.aldangiinUldegdel ?? 0;
-    const uldegdelTulsun = data?.tulsun ?? ugugdul?.tulsun ?? 0;
-    const uldegdelKhyamdral = data?.khyamdral ?? ugugdul?.khyamdral ?? 0;
-    const uldegdelTulsunAldangi = ugugdul?.niitTulsunAldangi ?? data?.niitTulsunAldangi ?? 0;
-
-    const reqBaritsaa = data?.baritsaaAvakhDun ?? ugugdul?.baritsaaAvakhDun ?? 0;
-    const paidBaritsaa = data?.baritsaaniiUldegdel ?? ugugdul?.baritsaaTulsunDun ?? ugugdul?.baritsaaniiUldegdel ?? 0;
-    const baritsaaBalance = Math.max(0, reqBaritsaa - paidBaritsaa);
-
-    const fallbackUldegdel = data
-      ? uldegdelTur
-      : (ugugdul?.tureesiinUldegdel !== undefined
-        ? ugugdul.tureesiinUldegdel
-        : (parseFloat(ugugdul?.uldegdel) || 0) - (parseFloat(ugugdul?.aldangiinUldegdel) || 0)) ||
-      ugugdul?.niitUldegdel ||
-      ugugdul?.tsutslagdsanAvlaga ||
-      (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
-
-    const displayUldegdel = aldangiTuukhKharakhEsekh
-      ? (fallbackUldegdel + uldegdelAld)
-      : fallbackUldegdel;
     ugugdul.uldegdel = displayUldegdel;
     ugugdul.tureesiinUldegdel = uldegdelTur;
     ugugdul.aldangiinUldegdel = uldegdelAld;
+
     if (visible && !isValidating && data && typeof refreshTotals === "function") {
       refreshTotals();
     }
@@ -151,7 +129,6 @@ const GereeniiUldegdel = React.memo(
                 </span>
               </div>
             )}
-
             {uldegdelTulsun > 0 && (
               <div className="flex justify-between gap-4">
                 <span className="text-gray-500">{t("Нийт төлсөн")}:</span>
@@ -191,8 +168,9 @@ const GereeniiUldegdel = React.memo(
 
     return (
       <div
-        className={`text-right font-medium ${(displayUldegdel ?? 0) > 0 ? "text-red-500" : "text-green-500"
-          }`}
+        className={`text-right font-medium ${
+          (displayUldegdel ?? 0) > 0 ? "text-red-500" : "text-green-500"
+        }`}
       >
         {(displayUldegdel ?? 0) > 0 ? (
           <Popover
@@ -211,29 +189,11 @@ const GereeniiUldegdel = React.memo(
         )}
       </div>
     );
-  },
+  }
 );
 
-const GereeniiAldangi = React.memo(({ ugugdul, token, aldangiTuukhKharakhEsekh }) => {
-  const { data: aldangiTuukhData } = useSWR(
-    aldangiTuukhKharakhEsekh && ugugdul?._id
-      ? ["/aldangiinTuukh/popover", ugugdul._id]
-      : null,
-    () =>
-      uilchilgee(token)
-        .get("/aldangiinTuukh", {
-          params: {
-            query: { gereeniiId: ugugdul?._id?.toString() },
-            order: { aldangiBodsonOgnoo: -1 },
-            khuudasniiKhemjee: 1,
-          },
-        })
-        .then((res) => res.data),
-    { revalidateOnFocus: false }
-  );
-
-  const liveAldangi = aldangiTuukhData?.jagsaalt?.[0]?.niitAldangi;
-  const displayAldangi = liveAldangi ?? ugugdul?.aldangiinUldegdel ?? 0;
+const GereeniiAldangi = React.memo(({ ugugdul }) => {
+  const displayAldangi = ugugdul?.aldangiinUldegdel ?? 0;
 
   return (
     <div className="w-full text-right">
@@ -296,9 +256,7 @@ function TableGuilgee({
       list.forEach((item) => {
         const isCancelled = item?.tuluv == -1 || Number(item?.tuluv) === -1;
 
-        const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
-          ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
-          : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b");
+        const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ?? false;
         const tureesiinUld = item.tureesiinUldegdel !== undefined
           ? item.tureesiinUldegdel
           : (aldangiTuukhKharakhEsekh ? ((parseFloat(item.uldegdel) || 0) - (parseFloat(item.aldangiinUldegdel) || 0)) : (parseFloat(item.uldegdel) || 0));
@@ -781,9 +739,7 @@ function GuilgeeniiTuukh(props) {
 
   const computedTotals = useMemo(() => {
     const list = gereeniiMedeelel?.jagsaalt || [];
-    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
-      ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
-      : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b");
+    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ?? false;
     const totals = {
       avlaga: 0,
       voucher: 0,
@@ -1071,9 +1027,7 @@ function GuilgeeniiTuukh(props) {
       });
     }
 
-    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
-      ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
-      : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b");
+    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ?? false;
     const filteredShineBagana = aldangiTuukhKharakhEsekh
       ? shineBagana.filter((col) => col.dataIndex !== "avlagiinUldegdel")
       : shineBagana;
@@ -1695,9 +1649,7 @@ function GuilgeeniiTuukh(props) {
                 if (a.dataIndex === "avlagiinUldegdel") {
                   const isCancelled =
                     data?.tuluv == -1 || Number(data?.tuluv) === -1;
-                  const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
-                    ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
-                    : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b");
+                  const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ?? false;
                   const tureesiinUld = data.tureesiinUldegdel !== undefined
                     ? data.tureesiinUldegdel
                     : (aldangiTuukhKharakhEsekh ? ((parseFloat(data.uldegdel) || 0) - (parseFloat(data.aldangiinUldegdel) || 0)) : (parseFloat(data.uldegdel) || 0));
@@ -2095,9 +2047,7 @@ function GuilgeeniiTuukh(props) {
                   width: "7rem",
                   summary: true,
                   render: (aldangiinUldegdel, record) => {
-                    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
-                      ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
-                      : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b");
+                    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ?? false;
                     return (
                       <GereeniiAldangi
                         ugugdul={record}
@@ -2134,9 +2084,7 @@ function GuilgeeniiTuukh(props) {
                   render(text, data, index) {
                     const isCancelled =
                       data?.tuluv == -1 || Number(data?.tuluv) === -1;
-                    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
-                      ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
-                      : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b");
+                    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ?? false;
                     const tureesiinUld = data.tureesiinUldegdel !== undefined
                       ? data.tureesiinUldegdel
                       : (aldangiTuukhKharakhEsekh ? ((parseFloat(data.uldegdel) || 0) - (parseFloat(data.aldangiinUldegdel) || 0)) : (parseFloat(data.uldegdel) || 0));

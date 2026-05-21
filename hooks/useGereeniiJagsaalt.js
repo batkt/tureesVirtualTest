@@ -127,7 +127,7 @@ const fetcherGuilgee = (url, token, gereeniiId, ognoo, shineOgnoo) => {
   let params = {
     duusakhOgnoo: (Array.isArray(shineOgnoo) && shineOgnoo.length > 1)
       ? moment(shineOgnoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59")
-      : "2100-12-31 23:59:59",
+      : moment().format("YYYY-MM-DD 23:59:59"),
   };
   if (Array.isArray(shineOgnoo) && shineOgnoo.length > 1) {
     params.shineOgnoo = {
