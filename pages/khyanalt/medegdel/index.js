@@ -481,7 +481,10 @@ function Khyanalt({ token }) {
       uilchilgee(token)
         .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
         .then(({ data }) => {
-          if (data && data[0]?.statusCode === 200) {
+          if (
+            data &&
+            (data[0]?.statusCode === 200 || data[0].Result === "SUCCESS")
+          ) {
             toast.success(t("SMS Амжилттай илгээлээ"));
             setContent("");
             setTitle("");
