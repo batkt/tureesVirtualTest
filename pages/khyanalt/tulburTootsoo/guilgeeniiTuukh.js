@@ -88,30 +88,11 @@ const GereeniiUldegdel = React.memo(
     const uldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1");
     const showCombined = true;
 
-    const { data: aldangiTuukhData } = useSWR(
-      aldangiTuukhKharakhEsekh && ugugdul?._id
-        ? ["/aldangiinTuukh/popover", ugugdul._id]
-        : null,
-      () =>
-        uilchilgee(token)
-          .get("/aldangiinTuukh", {
-            params: {
-              query: { gereeniiId: ugugdul?._id?.toString() },
-              order: { aldangiBodsonOgnoo: -1 },
-              khuudasniiKhemjee: 1,
-            },
-          })
-          .then((res) => res.data),
-      { revalidateOnFocus: false }
-    );
-
-    const liveAldangi = aldangiTuukhData?.jagsaalt?.[0]?.niitAldangi;
-
     const uldegdelTur = data?.tureesiinUldegdel ?? ugugdul?.tureesiinUldegdel ?? ugugdul?.uldegdel ?? 0;
-    const uldegdelAld = liveAldangi ?? data?.aldangiinUldegdel ?? ugugdul?.aldangiinUldegdel ?? 0;
+    const uldegdelAld = data?.aldangiinUldegdel ?? 0;
     const uldegdelTulsun = data?.tulsun ?? ugugdul?.tulsun ?? 0;
     const uldegdelKhyamdral = data?.khyamdral ?? ugugdul?.khyamdral ?? 0;
-    const uldegdelTulsunAldangi = ugugdul?.niitTulsunAldangi ?? data?.niitTulsunAldangi ?? 0;
+    const uldegdelTulsunAldangi = data?.niitTulsunAldangi ?? 0;
 
     const reqBaritsaa = data?.baritsaaAvakhDun ?? ugugdul?.baritsaaAvakhDun ?? 0;
     const paidBaritsaa = data?.baritsaaniiUldegdel ?? ugugdul?.baritsaaTulsunDun ?? ugugdul?.baritsaaniiUldegdel ?? 0;
@@ -132,10 +113,13 @@ const GereeniiUldegdel = React.memo(
     ugugdul.uldegdel = displayUldegdel;
     ugugdul.tureesiinUldegdel = uldegdelTur;
     ugugdul.aldangiinUldegdel = uldegdelAld;
-    if (visible && !isValidating && data && typeof refreshTotals === "function") {
-      refreshTotals();
-    }
     ugugdul.mutate = mutate;
+
+    useEffect(() => {
+      if (!isValidating && data !== undefined && typeof refreshTotals === "function") {
+        refreshTotals();
+      }
+    }, [isValidating, data, refreshTotals]);
 
     const content = (
       <div className="space-y-1 p-1 text-xs">
@@ -263,7 +247,8 @@ function TableGuilgee({
   setShowTsutslagdsanAvlagaColumn,
   guilgeeniiToololt,
   refreshTotals,
-  baiguullaga
+  baiguullaga,
+  totalsUpdateCount
 }) {
   const { t } = useTranslation();
   function UilgelAvya({
@@ -332,6 +317,8 @@ function TableGuilgee({
       return sum;
     };
 
+    const dynamicIndexes = ["uldegdel", "avlagiinUldegdel", "aldangiinUldegdel", "niitTulsunAldangi"];
+
     return (
       <Table.Summary.Row>
         {columns.map((mur, index) => (
@@ -343,7 +330,11 @@ function TableGuilgee({
           >
             {mur.summary ? (
               <div className="font-bold">
-                {formatNumber(getSum(mur.dataIndex))}
+                {totalsUpdateCount === 0 && dynamicIndexes.includes(mur.dataIndex) && garalt?.jagsaalt?.length > 0 ? (
+                  <Spin size="small" />
+                ) : (
+                  formatNumber(getSum(mur.dataIndex))
+                )}
               </div>
             ) : (
               ""
@@ -447,8 +438,14 @@ const searchKeys = [
 
 function GuilgeeniiTuukh(props) {
   const { t, i18n } = useTranslation();
-  const { token, baiguullaga } = useAuth();
-  const [totalsUpdateCount, refreshTotals] = useReducer((s) => s + 1, 0);
+  const [totalsUpdateCount, refreshTotalsRaw] = useReducer((s) => s + 1, 0);
+  const refreshTotals = useMemo(() => _.debounce(refreshTotalsRaw, 300), [refreshTotalsRaw]);
+
+  useEffect(() => {
+    return () => {
+      refreshTotals.cancel();
+    };
+  }, [refreshTotals]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -456,7 +453,7 @@ function GuilgeeniiTuukh(props) {
   const ref = React.useRef(null);
   const excelref = React.useRef();
   const baritsaaref = React.useRef(null);
-  const { barilgiinId, ajiltan } = useAuth();
+  const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [ognoo, setOgnoo] = React.useState([
     moment(moment().startOf("month").format("YYYY-MM-DD 00:00:00")),
     moment(moment().endOf("month").format("YYYY-MM-DD 23:59:59")),
@@ -806,17 +803,17 @@ function GuilgeeniiTuukh(props) {
     return totals;
   }, [gereeniiMedeelel?.jagsaalt, shineBagana, totalsUpdateCount, baiguullaga]);
 
-const serverTotals = useMemo(() => {
-  const gt = guilgeeniiToololt || {};
-  return {
-    avlaga: gt.avlaga?.[0]?.dun || 0,  // already includes aldangi
-    voucher: gt.voucher?.[0]?.dun || 0,
-    tsutslagdsanAvlaga: gt.tsutslagdsanAvlaga?.[0]?.dun || 0,
-    eneSardTulukh: gt.eneSardTulukh?.[0]?.dun || 0,
-    eneSardTulsun: gt.eneSardTulsun?.[0]?.dun || 0,
-    khungulult: gt.khungulult?.[0]?.dun || 0,
-  };
-}, [guilgeeniiToololt]);
+  const serverTotals = useMemo(() => {
+    const gt = guilgeeniiToololt || {};
+    return {
+      avlaga: gt.avlaga?.[0]?.dun || 0,  // already includes aldangi
+      voucher: gt.voucher?.[0]?.dun || 0,
+      tsutslagdsanAvlaga: gt.tsutslagdsanAvlaga?.[0]?.dun || 0,
+      eneSardTulukh: gt.eneSardTulukh?.[0]?.dun || 0,
+      eneSardTulsun: gt.eneSardTulsun?.[0]?.dun || 0,
+      khungulult: gt.khungulult?.[0]?.dun || 0,
+    };
+  }, [guilgeeniiToololt]);
 
   useEffect(() => {
     if (gereeniiMedeelel?.jagsaalt) {
@@ -1723,11 +1720,13 @@ const serverTotals = useMemo(() => {
       <Card className="cardgrid col-span-12">
         <div className="hideScroll grid w-full grid-cols-1 gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid-cols-6 sm:py-2 md:gap-6 2xl:grid-cols-12">
           {[
-{
-  too: formatNumber(computedTotals.avlaga || 0, 0),
-  raw: computedTotals.avlaga || 0,
-  turul: "avlaga",
-  utga: "Хуримтлагдсан авлага",
+            {
+              too: (totalsUpdateCount === 0 && gereeniiMedeelel?.jagsaalt?.length > 0)
+                ? <Spin size="small" />
+                : formatNumber(computedTotals.avlaga || 0, 0),
+              raw: computedTotals.avlaga || 0,
+              turul: "avlaga",
+              utga: "Хуримтлагдсан авлага",
               tailbar:
                 "Өмнө сарын төлбөрийн үлдэгдлүүдийн нийлбэр болон энэ сарын тооцоо болно.",
             },
@@ -2202,6 +2201,7 @@ const serverTotals = useMemo(() => {
             guilgeeniiToololtMutate={guilgeeniiToololtMutate}
             refreshTotals={refreshTotals}
             baiguullaga={baiguullaga}
+            totalsUpdateCount={totalsUpdateCount}
           />
         </div>
         <CardList

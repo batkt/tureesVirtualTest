@@ -90,7 +90,11 @@ function MyApp({ Component, pageProps }) {
           <div key={router.asPath} className="page-transition-enter">
             <Component {...pageProps} />
           </div>
-          <ChatWidget />
+          {!router.pathname.startsWith('/khyanalt/kiosk') && 
+           !router.pathname.startsWith('/khyanalt/togloomKiosk') && 
+           !router.pathname.startsWith('/khyanalt/zogsool') && 
+           !router.pathname.startsWith('/khyanalt/zg') && 
+           <ChatWidget />}
         </ConfigProvider>
       </AuthProvider>
     </ThemeProvider>
