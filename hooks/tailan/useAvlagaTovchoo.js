@@ -65,6 +65,7 @@ export function useavlagaTovchooDelgerengui(token, gereeniiDugaar, ekhlekhOgnoo,
   );
 
   // Fetch full geree document to get aldangi/baritsaa guilgeenuud + baritsaa fields
+  // Now also returns baritsaaTulultArr (all baritsaa payments, unfiltered) and gereeniiOgnoo
   const { data: gereeData, isValidating: gereeLoading } = useSWR(
     !!token && !!gereeniiDugaar
       ? ["/avlagaTovchooDelgerengui/full", token, gereeniiDugaar, baiguullagiinId, barilgiinId]

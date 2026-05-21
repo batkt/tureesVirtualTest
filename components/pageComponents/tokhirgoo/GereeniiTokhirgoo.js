@@ -797,7 +797,7 @@ function KhuviinMedeelel({
               </div>
             </div>
           )}
-          {(baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b" || baiguullaga?._id ==="695c57511a8a4aebc1d65b02") && (
+          {(baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b" || baiguullaga?._id ==="695c57511a8a4aebc1d65b02" || baiguullaga?._id === "612f457d185280db676d0b51") && (
             <div className="box">
               <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">

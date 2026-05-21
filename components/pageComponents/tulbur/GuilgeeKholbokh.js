@@ -18,14 +18,19 @@ import { MinusCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import useSWR from "swr";
 import { t } from "i18next";
 
-function GereeniiUldegdel({ ugugdul, token, barilgiinId }) {
+function GereeniiUldegdel({ ugugdul, token, barilgiinId, baiguullagiinId }) {
+  const ognoo = React.useMemo(() => [
+    moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
+    moment().endOf("month").format("YYYY-MM-DD 23:59:59"),
+  ], []);
+
   const { data } = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
-      ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar]
+      ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar, baiguullagiinId, ognoo]
       : null,
-    (url, barilgiinId, gereeniiDugaar) =>
+    (url, barilgiinId, gereeniiDugaar, baiguullagiinId, ognoo) =>
       uilchilgee(token)
-        .post(url, { barilgiinId, gereeniiDugaar })
+        .post(url, { barilgiinId, gereeniiDugaar, baiguullagiinId, ognoo })
         .then(({ data }) => data)
         .catch(aldaaBarigch),
     {
@@ -407,6 +412,7 @@ function GuilgeeKholbokh(
                     ugugdul={mur}
                     token={token}
                     barilgiinId={barilgiinId}
+                    baiguullagiinId={baiguullagiinId}
                   />
                   <div className="text-right">
                     {mur.baritsaaniiUldegdel === 0 ? (

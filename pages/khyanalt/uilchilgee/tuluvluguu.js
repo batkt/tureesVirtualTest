@@ -345,6 +345,10 @@ function Tuluvluguu() {
     const checkDay = dayjs(day).startOf('day');
 
     if (task.isLoop === true || task.isLoop === 'true') {
+      if (task.loopWeekdaysOnly === true || task.loopWeekdaysOnly === 'true') {
+        const dayOfWeek = checkDay.day();
+        if (dayOfWeek === 0 || dayOfWeek === 6) return false;
+      }
       const start = task.ekhlekhOgnoo || task.ekhlekhTsag;
       const end = task.duusakhOgnoo || task.duusakhTsag;
       
@@ -702,7 +706,8 @@ function Tuluvluguu() {
         hariutsagchId: null,
         ajiltnuud: [],
         isDay: false,
-        isLoop: false
+        isLoop: false,
+        loopWeekdaysOnly: false
       });
     }
   }, [isTaskModalVisible, selectedDay, taskForm, editingTask]);
@@ -784,6 +789,7 @@ function Tuluvluguu() {
         duusakhOgnoo: getISOValue(values.dateRange?.[1], isDay ? null : values.endTime,   true),
         isDay: values.isDay || false,
         isLoop: values.isLoop || false,
+        loopWeekdaysOnly: values.loopWeekdaysOnly || false,
         zurag: uploadedImages, 
         hariutsagchZurag: uploadedImages,
         ajiltanZurag: [],
@@ -916,6 +922,7 @@ function Tuluvluguu() {
       endTime: dayjs(end),
       isDay: !!task.isDay,
       isLoop: !!task.isLoop,
+      loopWeekdaysOnly: !!task.loopWeekdaysOnly,
       bairshil: task.bairshil || "",
       davkhar: task.davkhar || "",
       baraa: (task.baraa || []).map(b => ({
@@ -2097,9 +2104,16 @@ useEffect(() => {
               const realToday = dayjs().format("YYYY-MM-DD");
               const selectedDay = currentDate.format("YYYY-MM-DD");
               const overdue = filteredTasks.filter(t => t.date < realToday && !t.completed);
-              const dueToday = filteredTasks.filter(t => 
-                (t.date === selectedDay || (t.startDate <= selectedDay && t.date >= selectedDay)) && !overdue.includes(t)
-              );
+              const dueToday = filteredTasks.filter(t => {
+                if (overdue.includes(t)) return false;
+                const isMatch = t.date === selectedDay || (t.startDate <= selectedDay && t.date >= selectedDay);
+                if (!isMatch) return false;
+                if ((t.isLoop === true || t.isLoop === 'true') && (t.loopWeekdaysOnly === true || t.loopWeekdaysOnly === 'true')) {
+                  const dayOfWeek = currentDate.day();
+                  if (dayOfWeek === 0 || dayOfWeek === 6) return false;
+                }
+                return true;
+              });
               const upcoming = filteredTasks.filter(t => t.startDate > selectedDay && !overdue.includes(t) && !dueToday.includes(t));
 
               const statusColor = (tuluv) => tuluv === "duussan"
@@ -2469,7 +2483,7 @@ useEffect(() => {
           <div className="bg-gray-50 dark:bg-gray-800/40 p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50 space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-gray-400 text-[12px] font-bold uppercase pl-1">{t("Хугацаа")}</span>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 flex-wrap justify-end">
                 <div className="flex items-center gap-2">
                   <span className="text-[12px] font-bold text-gray-500">{t("Бүтэн өдөр")}</span>
                   <Form.Item name="isDay" valuePropName="checked" className="!mb-0">
@@ -2484,6 +2498,16 @@ useEffect(() => {
                     <Switch size="small" />
                   </Form.Item>
                 </div>
+                {isLoopWatch && (
+                  <div className="flex items-center gap-2">
+                    <Tooltip title="Зөвхөн ажлын 5 өдөр (Даваа-Баасан) давтах">
+                      <span className="text-[12px] font-bold text-gray-500">{t("Ажлын өдрүүдэд")}</span>
+                    </Tooltip>
+                    <Form.Item name="loopWeekdaysOnly" valuePropName="checked" className="!mb-0">
+                      <Switch size="small" />
+                    </Form.Item>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -2925,7 +2949,7 @@ useEffect(() => {
                   )}
                   {selectedTask?.isLoop && (
                     <Tag color="purple" className="rounded-lg font-bold italic underline border-none px-3 py-1 flex items-center gap-2 m-0 shadow-sm">
-                      <RollbackOutlined /> Өдөр бүр давтагдах
+                      <RollbackOutlined /> {selectedTask?.loopWeekdaysOnly ? "Ажлын өдрүүдэд давтагдах" : "Өдөр бүр давтагдах"}
                     </Tag>
                   )}
                 </div>

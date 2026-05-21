@@ -142,10 +142,12 @@ function GuilgeeKhiikh(
     }),
     [data, barilgiinId],
   );
+  const contractBeginning = parseFloat(data?.avlaga?.ekhniiUldegdel || data?.ekhniiUldegdel || 0);
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
     token,
     data?._id,
     date,
+    undefined,
   );
   const zardal = useJagsaalt(
     data?.zardluud && (turul === "ashiglalt" || turul === "teglekh" || (turul === "avlaga" && busadTurul === "ashiglalt")) && "/ashiglaltiinZardluud",

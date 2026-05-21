@@ -22,10 +22,10 @@ import { flushSync } from "react-dom";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 import { Excel } from "antd-table-saveas-excel";
+import useSWR from "swr";
+import axios from "services/uilchilgee";
 
 const searchKeys = ["ner", "register", "customerTin", "talbainDugaar", "gereeniiDugaar", "utas"];
-
-// ── Detail Modal ─────────────────────────────────────────────────────────────
 function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgiinId }) {
   const { t } = useTranslation();
   const { ajiltan } = useAuth();
@@ -52,24 +52,62 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     baiguullaga?.tukhainBaaziinKholbolt
   );
 
-  const rows = useMemo(() => {
-    if (!detail?.guilgeenuud && !gereeDetail) return [];
-    
+  const actualAldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
+    ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
+    : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1"));
+
+  const { data: aldangiTuukhData } = useSWR(
+    open && gereeDetail?._id
+      ? ["/aldangiinTuukh/latest", gereeDetail._id]
+      : null,
+    () =>
+      axios(token)
+        .get("/aldangiinTuukh", {
+          params: {
+            query: { gereeniiId: gereeDetail?._id?.toString() },
+            order: { aldangiBodsonOgnoo: -1 },
+            khuudasniiKhemjee: 100,
+          },
+        })
+        .then((res) => res.data),
+    { revalidateOnFocus: false }
+  );
+
+  const displayAldangi = useMemo(() => {
+    if (!aldangiTuukhData?.jagsaalt || aldangiTuukhData.jagsaalt.length === 0) {
+      return gereeDetail?.aldangiinUldegdel || 0;
+    }
+    const sorted = [...aldangiTuukhData.jagsaalt].sort((a, b) => {
+      const dateA = new Date(a.aldangiBodsonOgnoo || a.createdAt || 0);
+      const dateB = new Date(b.aldangiBodsonOgnoo || b.createdAt || 0);
+      if (dateB - dateA !== 0) return dateB - dateA;
+      return (b.niitAldangi || 0) - (a.niitAldangi || 0);
+    });
+    const fromTuukh = sorted[0]?.niitAldangi;
+    if (fromTuukh != null) return fromTuukh;
+    return gereeDetail?.aldangiinUldegdel || 0;
+  }, [aldangiTuukhData, gereeDetail?.aldangiinUldegdel]);
+
+  const effectiveAldangiUldegdel = displayAldangi;
+
+  const { rows, finalTureesBalance } = useMemo(() => {
+    if (!detail?.guilgeenuud && !gereeDetail) return { rows: [], finalTureesBalance: 0 };
+
     const seenIds = new Set();
     let combined = [];
 
-   
+
     (detail?.guilgeenuud || []).forEach((g) => {
       let item = g;
       if (g.turul === "aldangi") {
-        item = { 
-          ...g, 
-          _isAldangiExtra: true, 
-          tulsunDun: g.tulsunAldangi || g.tulsunDun || 0, 
-          tailbar: g.tailbar || t("Төлсөн алданги") 
+        item = {
+          ...g,
+          _isAldangiExtra: true,
+          tulsunDun: g.tulsunAldangi || g.tulsunDun || 0,
+          tailbar: g.tailbar || t("Төлсөн алданги")
         };
       } else if (g.turul === "baritsaa") {
-        
+
         item = {
           ...g,
           tulsunDun: (g.tulsunDun || 0) + (g.orlogo || 0) + (g.zarlaga || 0),
@@ -83,54 +121,61 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       combined.push(item);
     });
 
-   
+
     const requiredBaritsaa = Number(gereeDetail?.baritsaaAvakhDun || detail?.baritsaaAvakhDun) || 0;
     if (requiredBaritsaa > 0) {
-      const baritsaaDate = gereeDetail?.ekhlekhOgnoo || gereeDetail?.ognoo || gereeDetail?.createdAt || "2026-05-01T00:00:00.000Z";
-      let includeBaritsaa = true;
-      if (ognoo && ognoo[0] && ognoo[1]) {
-        const d = new Date(baritsaaDate);
-        if (d < new Date(ognoo[0]) || d > new Date(ognoo[1])) {
-          includeBaritsaa = false;
-        }
-      }
-      if (includeBaritsaa) {
-        combined.push({
-          _id: `baritsaa-required-${gereeDetail?._id || detail?._id}`,
-          ognoo: baritsaaDate,
-          tailbar: t("Барьцаа үүссэн"),
-          tulukhDun: requiredBaritsaa,
-          tulsunDun: 0,
-          khyamdral: 0,
-          turul: "baritsaa"
-        });
-      }
+      const baritsaaTulultArr = gereeDetail?.baritsaaTulultArr || [];
+      const baritsaaDate = baritsaaTulultArr?.[0]?.guilgeeKhiisenOgnoo ||
+        baritsaaTulultArr?.[0]?.ognoo ||
+        gereeDetail?.gereeniiOgnoo || null;
+      combined.push({
+        _id: `baritsaa-required-${gereeDetail?._id || detail?._id}`,
+        ognoo: baritsaaDate,
+        tailbar: t("Барьцаа үүссэн"),
+        tulukhDun: requiredBaritsaa,
+        tulsunDun: 0,
+        khyamdral: 0,
+        turul: "baritsaa"
+      });
     }
 
- 
-    (gereeDetail?.baritsaaGuilgeenuud || []).forEach((g) => {
-      if (g._id && seenIds.has(g._id.toString())) {
-        return; 
-      }
-      if (ognoo && ognoo[0] && ognoo[1]) {
-        const gDate = new Date(g.ognoo);
-        if (gDate < new Date(ognoo[0]) || gDate > new Date(ognoo[1])) {
-          return;
-        }
-      }
+
+    const effectiveBaritsaaGuilgeenuud = (gereeDetail?.baritsaaGuilgeenuud?.length > 0)
+      ? gereeDetail.baritsaaGuilgeenuud
+      : [];
+
+    effectiveBaritsaaGuilgeenuud.forEach((g) => {
+      if (g._id && seenIds.has(g._id.toString())) return;
       const paidAmount = (g.tulsunDun || 0) + (g.orlogo || 0) + (g.zarlaga || 0);
       if (paidAmount > 0 || (g.tulukhDun || 0) > 0) {
         combined.push({
           ...g,
-          tailbar: g.tailbar || t("Барьцаа"),
+          tailbar: g.tailbar || t("Барьцаа төлөлт"),
           tulsunDun: paidAmount,
           tulukhDun: 0,
           turul: "baritsaa"
         });
       }
     });
+    if (!gereeDetail?.baritsaaGuilgeenuud?.length) {
+      const baritsaaTulultArr = gereeDetail?.baritsaaTulultArr || [];
+      baritsaaTulultArr.forEach((g) => {
+        if (g._id && seenIds.has(g._id.toString())) return;
+        const paidAmount = (g.orlogo || 0) + (g.tulsunDun || 0);
+        if (paidAmount > 0) {
+          combined.push({
+            ...g,
+            ognoo: g.ognoo || g.guilgeeKhiisenOgnoo,
+            tailbar: g.tailbar || t("Барьцаа төлөлт"),
+            tulsunDun: paidAmount,
+            tulukhDun: 0,
+            turul: "baritsaa"
+          });
+        }
+      });
+    }
 
-    // 4. Add calculated penalties (DT)
+
     (gereeDetail?.aldangiGuilgeenuud || []).forEach((g) => {
       const gDate = g.aldangiBodsonOgnoo || g.ognoo;
       if (ognoo && ognoo[0] && ognoo[1] && gDate) {
@@ -139,15 +184,14 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           return;
         }
       }
-      const calculatedPenalty = g.aldangi || 0;
       const paidPenalty = g.tulsunAldangi || g.tulsunDun || 0;
 
-      if (calculatedPenalty > 0 || paidPenalty > 0) {
+      if (paidPenalty > 0) {
         combined.push({
           ...g,
           ognoo: gDate,
-          tailbar: g.tailbar || (calculatedPenalty > 0 ? t("Бодогдсон алданги") : t("Төлсөн алданги")),
-          tulukhDun: calculatedPenalty,
+          tailbar: t("Алданги төлөлт"),
+          tulukhDun: 0,
           tulsunDun: paidPenalty,
           khyamdral: 0,
           _isAldangiExtra: true
@@ -155,7 +199,11 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       }
     });
 
-    combined.sort((a, b) => new Date(a.ognoo) - new Date(b.ognoo));
+    combined.sort((a, b) => {
+      const dateA = new Date(a.ognoo || a.createdAt || 0);
+      const dateB = new Date(b.ognoo || b.createdAt || 0);
+      return dateA - dateB;
+    });
 
     let balance = detail?.ekhniiUldegdel || 0;
     let dataGroups = [];
@@ -170,7 +218,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       const groupRows = [];
 
       if (!g._isAldangiExtra && g.turul !== "baritsaa") {
-        let remainingKt = kt;
+        let remainingKt = Math.max(0, kt - aldangiPaid - baritsaaPaid);
 
         if (dt > 0) {
           balance += dt;
@@ -189,7 +237,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           const tailbarLower = (g.tailbar || "").trim().toLowerCase();
           const isRentDiscount = tailbarLower === "хөнгөлөлт" || tailbarLower === "түрээсийн хөнгөлөлт" || tailbarLower === "түрээс хөнгөлөлт";
           const isUtil = !!g.zardliinId || (g.zardliinTurul && g.zardliinTurul !== "turees") || (tailbarLower !== "" && !isRentDiscount);
-          
+
           groupRows.push({
             ...g,
             key: `main-${i}-khyamdral`,
@@ -203,7 +251,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         }
 
         if (aldangiPaid > 0) {
-          remainingKt -= aldangiPaid;
+          balance -= aldangiPaid;
           groupRows.push({
             ...g,
             key: `main-${i}-aldangi`,
@@ -213,12 +261,12 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
             tailbar: t("Алданги төлөлт"),
             _isExtra: true,
             _isAldangiExtra: true,
-            runningBalance: null,
+            runningBalance: balance,
           });
         }
 
         if (baritsaaPaid > 0) {
-          remainingKt -= baritsaaPaid;
+          balance -= baritsaaPaid;
           groupRows.push({
             ...g,
             key: `main-${i}-baritsaa`,
@@ -228,7 +276,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
             tailbar: t("Барьцаа төлөлт"),
             turul: "baritsaa",
             _isExtra: true,
-            runningBalance: null,
+            runningBalance: balance,
           });
         }
 
@@ -249,13 +297,10 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           groupRows.push({ ...g, key: `main-${i}`, runningBalance: balance });
         }
       } else {
-        // Penalty or deposit transaction - update the running balance progressively too!
-        if (dt > 0) {
-          balance += dt;
-        }
-        if (kt > 0) {
-          balance -= kt;
-        }
+        const dtExtra = g.tulukhDun || 0;
+        const ktExtra = g.tulsunDun || 0;
+        const khyExtra = g.khyamdral || 0;
+        balance = balance + dtExtra - ktExtra - khyExtra;
         groupRows.push({ ...g, key: `main-${i}-extra`, _isExtra: true, runningBalance: balance });
       }
 
@@ -263,43 +308,50 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         dataGroups.push(groupRows);
       }
     });
-
-    // dataGroups.reverse(); // Do not reverse to display oldest on top
-
+    const aldangiBalance = effectiveAldangiUldegdel;
     const allRows = [
-      { 
-        _isEkhniiUldegdel: true, 
-        key: "ekhnii", 
-        ognoo: ognoo && ognoo[0] ? ognoo[0] : null, 
-        tailbar: t("Эхний үлдэгдэл"), 
-        runningBalance: detail?.ekhniiUldegdel || 0 
+      ...(aldangiBalance > 0 ? [{
+        _isBodogdsonAldangi: true,
+        key: "bodogdson-aldangi",
+        ognoo: null,
+        tailbar: t("Алдангийн үлдэгдэл"),
+        runningBalance: aldangiBalance
+      }] : []),
+      {
+        _isEkhniiUldegdel: true,
+        key: "ekhnii",
+        ognoo: ognoo && ognoo[0] ? ognoo[0] : null,
+        tailbar: t("Эхний үлдэгдэл"),
+        runningBalance: detail?.ekhniiUldegdel || 0
       },
       ...dataGroups.flat()
     ];
 
-    return allRows;
-  }, [detail, gereeDetail, t, ognoo]);
+    return { rows: allRows, finalTureesBalance: balance };
+  }, [detail, gereeDetail, t, ognoo, effectiveAldangiUldegdel]);
 
-  const aldangiTuukhKharakhEsekh =
-    baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ||
-    baiguullaga?._id === "6735c77a7fc60cd66deb2909" ||
-    baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+  const aldangiTuukhKharakhEsekh = actualAldangiTuukhKharakhEsekh;
 
-  const dataRowsOnly = rows.filter(r => !r._isEkhniiUldegdel);
-  const totalDt = (detail?.ekhniiUldegdel || 0) + dataRowsOnly.reduce((s, r) => s + (r.tulukhDun || 0), 0);
-  const totalKt = dataRowsOnly.reduce((s, r) => s + (r.tulsunDun || 0) + (r.khyamdral || 0), 0);
+  const dataRowsOnly = rows.filter(r => !r._isEkhniiUldegdel && !r._isBodogdsonAldangi);
+
+
+  const totalAldangiDt = (displayAldangi || 0);
+  const totalAldangiKt = (gereeDetail?.niitTulsunAldangi || 0);
+
+  const sumDtRows = dataRowsOnly.reduce((s, r) => s + (r.tulukhDun || 0), 0);
+  const sumKtRowsNoAldangi = dataRowsOnly
+    .filter(r => !r._isAldangiExtra)
+    .reduce((s, r) => s + (r.tulsunDun || 0) + (r.khyamdral || 0), 0);
+
+  const totalDt = (detail?.ekhniiUldegdel || 0) + sumDtRows + totalAldangiDt;
+  const totalKt = sumKtRowsNoAldangi + totalAldangiKt;
   const totalKhyamdral = dataRowsOnly.reduce((s, r) => s + (r.khyamdral || 0), 0);
 
-  // Pure rental outstanding balance from table rows, excluding baritsaa and aldangi extra transactions
-  const tureesiinUldegdel = (detail?.ekhniiUldegdel || 0) +
-    dataRowsOnly.filter(r => r.turul !== "baritsaa" && !r._isAldangiExtra).reduce((s, r) => s + (r.tulukhDun || 0), 0) -
-    dataRowsOnly.filter(r => r.turul !== "baritsaa" && !r._isAldangiExtra).reduce((s, r) => s + (r.tulsunDun || 0), 0) -
-    dataRowsOnly.filter(r => r.turul !== "baritsaa" && !r._isAldangiExtra).reduce((s, r) => s + (r.khyamdral || 0), 0);
+  const tureesiinUldegdel = finalTureesBalance;
 
-  const aldangiBalance = gereeDetail?.aldangiinUldegdel || 0;
   const baritsaaBalance = Math.max(0, (gereeDetail?.baritsaaAvakhDun || 0) - (gereeDetail?.baritsaaniiUldegdel || 0));
 
-  const lastBalance = totalDt - totalKt;
+  const lastBalance = tureesiinUldegdel;
 
   const columns = [
     {
@@ -308,7 +360,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       width: 50,
       align: "center",
       render: (_, r, i) => {
-        if (r._isEkhniiUldegdel) return "-";
+        if (r._isEkhniiUldegdel || r._isBodogdsonAldangi) return "-";
         return i;
       },
     },
@@ -318,13 +370,16 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       width: 100,
       align: "center",
       sorter: (a, b) => {
+        if (a._isBodogdsonAldangi) return -1;
+        if (b._isBodogdsonAldangi) return 1;
         if (a._isEkhniiUldegdel) return -1;
         if (b._isEkhniiUldegdel) return 1;
         return new Date(a.ognoo || 0) - new Date(b.ognoo || 0);
       },
       render: (v, r) => {
-        if (r._isEkhniiUldegdel) return "-";
-        return v ? moment(v).format("YYYY/MM/DD") : "";
+        if (r._isEkhniiUldegdel || r._isBodogdsonAldangi) return "-";
+        const displayDate = v || r.createdAt;
+        return displayDate ? moment(displayDate).format("YYYY/MM/DD") : "";
       },
     },
 
@@ -333,6 +388,9 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       dataIndex: "tailbar",
       width: 250,
       render: (v, r) => {
+        if (r._isBodogdsonAldangi) {
+          return <span className="font-semibold italic text-orange-700">{v}</span>;
+        }
         if (r._isEkhniiUldegdel) {
           return <span className="font-semibold italic text-green-700">{v}</span>;
         }
@@ -365,7 +423,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           width: 130,
           align: "right",
           render: (v, r) => {
-            if (r._isEkhniiUldegdel) return "-";
+            if (r._isEkhniiUldegdel || r._isBodogdsonAldangi) return "-";
             return !v || v === 0 ? "-" : <span className="font-medium whitespace-nowrap">{formatNumber(v, 2)}</span>;
           },
         },
@@ -375,7 +433,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           width: 130,
           align: "right",
           render: (v, r) => {
-            if (r._isEkhniiUldegdel) return "-";
+            if (r._isEkhniiUldegdel || r._isBodogdsonAldangi) return "-";
             const total = (v || 0) + (r.khyamdral || 0);
             return total <= 0 ? "-" : <span className="font-medium whitespace-nowrap">{formatNumber(total, 2)}</span>;
           },
@@ -388,6 +446,9 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       width: 140,
       align: "right",
       render: (v, r) => {
+        if (r._isBodogdsonAldangi) {
+          return <span className="font-bold text-orange-600 whitespace-nowrap">{formatNumber(v, 2)}</span>;
+        }
         if (r._isEkhniiUldegdel) {
           return <span className="font-bold text-blue-600 whitespace-nowrap">{formatNumber(v, 2)}</span>;
         }
@@ -400,8 +461,18 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
 
   function exceleerTatya() {
     const excel = new Excel();
-    
+
     const formattedRows = rows.map((r, i) => {
+      if (r._isBodogdsonAldangi) {
+        return {
+          idx: "",
+          ognoo: "",
+          tailbar: r.tailbar,
+          tulukhDun: 0,
+          tulsunDun: 0,
+          runningBalance: r.runningBalance || 0
+        };
+      }
       if (r._isEkhniiUldegdel) {
         return {
           idx: "",
@@ -412,7 +483,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           runningBalance: detail?.ekhniiUldegdel || 0
         };
       }
-      
+
       let label;
       if (r.turul === "khuvaari") {
         if ((r.khyamdral || 0) > 0) {
@@ -433,7 +504,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
 
       return {
         idx: i,
-        ognoo: r.ognoo ? moment(r.ognoo).format("YYYY-MM-DD") : "",
+        ognoo: (r.ognoo || r.createdAt) ? moment(r.ognoo || r.createdAt).format("YYYY-MM-DD") : "",
         tailbar: label,
         tulukhDun: r.tulukhDun || 0,
         tulsunDun: totalKt || 0,
@@ -519,7 +590,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         <div ref={printRef} className="print-container p-4 text-xs">
           <div className="mb-4 text-center py-4 border-b">
             <div className="text-xl font-bold">Авлагын дэлгэрэнгүй тайлан</div>
-            
+
           </div>
 
           <div className="mb-4 flex flex-col gap-2 pb-2 border-b">
@@ -528,7 +599,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
               <div>Талбай дугаар: <span className="font-normal text-gray-800">{record?.talbainDugaar}</span></div>
               <div>Талбай м2: <span className="font-normal text-gray-800">{record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
             </div>
-            <div className="grid grid-cols-5 gap-2 pt-2 border-t text-xxs font-bold text-gray-700">
+            <div className="grid grid-cols-4 gap-2 pt-2 border-t text-xxs font-bold text-gray-700">
               <div className="flex flex-col">
                 <span className="text-gray-400 font-medium">{t("Түрээсийн үлдэгдэл")}</span>
                 <span>{formatNumber(tureesiinUldegdel, 2)}₮</span>
@@ -538,20 +609,16 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
                 <span>{formatNumber(baritsaaBalance, 2)}₮</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-gray-400 font-medium">{t("Бодогдсон алданги")}</span>
-                <span>{formatNumber((gereeDetail?.aldangiinUldegdel || 0) + (gereeDetail?.niitTulsunAldangi || 0), 2)}₮</span>
-              </div>
-              <div className="flex flex-col">
                 <span className="text-gray-400 font-medium">{t("Төлсөн алданги")}</span>
                 <span>{formatNumber(gereeDetail?.niitTulsunAldangi || 0, 2)}₮</span>
               </div>
               <div className="flex flex-col text-red-600">
                 <span className="text-gray-400 font-medium">{t("Алдангийн үлдэгдэл")}</span>
-                <span>{formatNumber(gereeDetail?.aldangiinUldegdel || 0, 2)}₮</span>
+                <span>{formatNumber(effectiveAldangiUldegdel || 0, 2)}₮</span>
               </div>
             </div>
           </div>
-          
+
           <table className="w-full border-collapse border border-gray-400 text-xs">
             <thead className="bg-gray-200">
               <tr>
@@ -565,11 +632,23 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
             </thead>
             <tbody>
               {rows.map((r, i) => {
+                if (r._isBodogdsonAldangi) {
+                  return (
+                    <tr key={r.key} className="bg-orange-50 font-medium">
+                      <td className="border border-gray-400 px-1 py-0.5 text-center">-</td>
+                      <td className="border border-gray-400 px-1 py-0.5 text-center">-</td>
+                      <td className="border border-gray-400 px-1 py-0.5 text-left pl-2 italic text-orange-700">{r.tailbar}</td>
+                      <td className="border border-gray-400 px-1.5 py-0.5 text-right">-</td>
+                      <td className="border border-gray-400 px-1.5 py-0.5 text-right">-</td>
+                      <td className="border border-gray-400 px-1.5 py-0.5 text-right text-orange-600">{formatNumber(r.runningBalance, 2)}</td>
+                    </tr>
+                  );
+                }
                 if (r._isEkhniiUldegdel) {
                   return (
                     <tr key={r.key} className="bg-green-50 font-medium">
                       <td className="border border-gray-400 px-1 py-0.5 text-center">-</td>
-                      <td className="border border-gray-400 px-1 py-0.5 text-center">{r.ognoo ? moment(r.ognoo).format("YYYY/MM/DD") : "-"}</td>
+                      <td className="border border-gray-400 px-1 py-0.5 text-center">{r.ognoo || r.createdAt ? moment(r.ognoo || r.createdAt).format("YYYY/MM/DD") : "-"}</td>
                       <td className="border border-gray-400 px-1 py-0.5 text-left pl-2 italic text-green-700">{r.tailbar}</td>
                       <td className="border border-gray-400 px-1.5 py-0.5 text-right">-</td>
                       <td className="border border-gray-400 px-1.5 py-0.5 text-right">-</td>
@@ -577,7 +656,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
                     </tr>
                   );
                 }
-                
+
                 let label;
                 if (r.turul === "khuvaari") {
                   label = (r.khyamdral || 0) > 0 ? t("Түрээс") + " (" + t("Хөнгөлөлттэй") + ")" : t("Түрээс");
@@ -586,13 +665,13 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
                 } else {
                   label = r.tailbar || t(r.turul || "");
                 }
-                
+
                 const totalKt = (r.tulsunDun || 0) + (r.khyamdral || 0);
-                
+
                 return (
                   <tr key={r.key} className={r.turul === "khungulult" ? "text-gray-500 italic" : ""}>
                     <td className="border border-gray-400 px-1 py-0.5 text-center">{i}</td>
-                    <td className="border border-gray-400 px-1 py-0.5 text-center">{r.ognoo ? moment(r.ognoo).format("YYYY/MM/DD") : ""}</td>
+                    <td className="border border-gray-400 px-1 py-0.5 text-center">{r.ognoo || r.createdAt ? moment(r.ognoo || r.createdAt).format("YYYY/MM/DD") : ""}</td>
                     <td className="border border-gray-400 px-1 py-0.5">
                       <div>
                         <div className="font-medium text-gray-800">{label}</div>
@@ -626,7 +705,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
               </tr>
             </tfoot>
           </table>
-          
+
           <table className="mt-6 ml-4">
             <tfoot>
               <tr>
@@ -651,7 +730,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         title={
           <div className="text-xl text-blue-900 font-bold py-4 text-center">
             {t("Авлагын дэлгэрэнгүй тайлан")}{" "}
-            
+
           </div>
         }
       >
@@ -665,8 +744,8 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
               <div>Талбай дугаар: <span className="font-normal text-gray-955">{record?.talbainDugaar}</span></div>
               <div>Талбай м2: <span className="font-normal text-gray-955">{record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
             </div>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 pt-3 border-t border-gray-200">
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3 border-t border-gray-200">
               <div className="flex flex-col">
                 <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Түрээсийн үлдэгдэл")}</span>
                 <span className="text-sm font-bold text-gray-800">{formatNumber(tureesiinUldegdel, 2)}₮</span>
@@ -676,21 +755,17 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
                 <span className="text-sm font-bold text-gray-800">{formatNumber(baritsaaBalance, 2)}₮</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Бодогдсон алданги")}</span>
-                <span className="text-sm font-bold text-gray-800">{formatNumber((gereeDetail?.aldangiinUldegdel || 0) + (gereeDetail?.niitTulsunAldangi || 0), 2)}₮</span>
-              </div>
-              <div className="flex flex-col">
                 <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Төлсөн алданги")}</span>
                 <span className="text-sm font-bold text-gray-800">{formatNumber(gereeDetail?.niitTulsunAldangi || 0, 2)}₮</span>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col text-red-600">
                 <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Алдангийн үлдэгдэл")}</span>
-                <span className="text-sm font-bold text-red-600">{formatNumber(gereeDetail?.aldangiinUldegdel || 0, 2)}₮</span>
+                <span className="text-sm font-bold text-red-600">{formatNumber(effectiveAldangiUldegdel || 0, 2)}₮</span>
               </div>
             </div>
           </div>
-  
-        <style>{`
+
+          <style>{`
           .compact-header-table .ant-table-thead > tr > th {
             padding: 4px 8px !important;
             height: auto !important;
@@ -707,56 +782,57 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
             }
           }
         `}</style>
-  
-        <Table
-          size="small"
-          bordered
-          loading={detailUnshijBaina}
-          columns={columns}
-          dataSource={rows}
-          pagination={{
-            defaultPageSize: 50,
-            pageSizeOptions: ["10", "20", "50", "200"],
-            showSizeChanger: true,
-          }}
-          scroll={{ y: 600 }}
-          className="shadow-sm compact-header-table"
-          rowClassName={(r) => {
-            if (r._isEkhniiUldegdel) return "bg-green-50 font-medium";
-            return r.turul === "khungulult" ? "text-gray-500 italic" : "";
-          }}
-          summary={() => (
-            <AntdTable.Summary fixed="bottom">
-              <AntdTable.Summary.Row className="bg-gray-50">
-                <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
-                  <span className="font-bold text-gray-700">{t("Нийт гүйлгээ")}</span>
-                </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell index={3} align="right">
-                  <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalDt, 2)}</span>
-                </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell index={4} align="right">
-                  <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalKt, 2)}</span>
-                </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell index={5} align="right">
-                  <span className="text-gray-300">-</span>
-                </AntdTable.Summary.Cell>
-              </AntdTable.Summary.Row>
-              <AntdTable.Summary.Row className="bg-gray-100">
-                <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
-                  {/* Empty column */}
-                </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell index={3} colSpan={2} align="center">
-                  <span className="font-bold text-gray-700 italic">{t("Эцсийн үлдэгдэл")}</span>
-                </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell index={5} align="right">
-                  <span className="font-bold text-red-600 text-sm whitespace-nowrap">
-                    {formatNumber(lastBalance, 2)}
-                  </span>
-                </AntdTable.Summary.Cell>
-              </AntdTable.Summary.Row>
-            </AntdTable.Summary>
-          )}
-        />
+
+          <Table
+            size="small"
+            bordered
+            loading={detailUnshijBaina}
+            columns={columns}
+            dataSource={rows}
+            pagination={{
+              defaultPageSize: 50,
+              pageSizeOptions: ["10", "20", "50", "200"],
+              showSizeChanger: true,
+            }}
+            scroll={{ y: 600 }}
+            className="shadow-sm compact-header-table"
+            rowClassName={(r) => {
+              if (r._isBodogdsonAldangi) return "bg-orange-50 font-medium";
+              if (r._isEkhniiUldegdel) return "bg-green-50 font-medium";
+              return r.turul === "khungulult" ? "text-gray-500 italic" : "";
+            }}
+            summary={() => (
+              <AntdTable.Summary fixed="bottom">
+                <AntdTable.Summary.Row className="bg-gray-50">
+                  <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
+                    <span className="font-bold text-gray-700">{t("Нийт гүйлгээ")}</span>
+                  </AntdTable.Summary.Cell>
+                  <AntdTable.Summary.Cell index={3} align="right">
+                    <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalDt, 2)}</span>
+                  </AntdTable.Summary.Cell>
+                  <AntdTable.Summary.Cell index={4} align="right">
+                    <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalKt, 2)}</span>
+                  </AntdTable.Summary.Cell>
+                  <AntdTable.Summary.Cell index={5} align="right">
+                    <span className="text-gray-300">-</span>
+                  </AntdTable.Summary.Cell>
+                </AntdTable.Summary.Row>
+                <AntdTable.Summary.Row className="bg-gray-100">
+                  <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
+                    {/* Empty column */}
+                  </AntdTable.Summary.Cell>
+                  <AntdTable.Summary.Cell index={3} colSpan={2} align="center">
+                    <span className="font-bold text-gray-700 italic">{t("Эцсийн үлдэгдэл")}</span>
+                  </AntdTable.Summary.Cell>
+                  <AntdTable.Summary.Cell index={5} align="right">
+                    <span className="font-bold text-red-600 text-sm whitespace-nowrap">
+                      {formatNumber(lastBalance, 2)}
+                    </span>
+                  </AntdTable.Summary.Cell>
+                </AntdTable.Summary.Row>
+              </AntdTable.Summary>
+            )}
+          />
         </div>
         <div className="flex justify-end pt-4 gap-3 pr-4 pb-4 border-t bg-gray-50 rounded-b-lg">
           <button
@@ -813,7 +889,6 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   );
 }
 
-// ── Main Page ─────────────────────────────────────────────────────────────────
 function avlagaTovchoo({ token }) {
   const { barilgiinId, baiguullaga, ajiltan } = useAuth();
   const { t } = useTranslation();
@@ -841,7 +916,7 @@ function avlagaTovchoo({ token }) {
     pageStyle: `@media print { @page { size: landscape; margin: 10mm; } }`,
   });
 
-  // Customer dropdown list
+
   const khariltsagchQuery = useMemo(
     () => ({ barilgiinId, baiguullagiinId: baiguullaga?._id }),
     [baiguullaga, barilgiinId]
@@ -878,10 +953,7 @@ function avlagaTovchoo({ token }) {
   );
 
   const dataSource = useMemo(() => {
-    const aldangiTuukhKharakhEsekh =
-      baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ||
-      baiguullaga?._id === "6735c77a7fc60cd66deb2909" ||
-      baiguullaga?._id === "6916c957511a8a4aebc1d65b";
+    const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
 
     return (avlagaTovchoo?.jagsaalt || avlagaTovchoo || [])
       .map((item) => {
@@ -891,9 +963,7 @@ function avlagaTovchoo({ token }) {
 
         const adjustedEkhniiUldegdel = Number(item.ekhniiUldegdel || 0);
 
-        const adjustedEtssiinUldegdel = aldangiTuukhKharakhEsekh
-          ? Number(item.etssiinUldegdel || 0)
-          : Number(item.etssiinUldegdel || 0) + baritsaaBalanceEnd;
+        const adjustedEtssiinUldegdel = Number(item.etssiinUldegdel || 0);
 
         return {
           ...item,
@@ -1155,9 +1225,8 @@ function avlagaTovchoo({ token }) {
         width: 130,
         render: (v) => (
           <div
-            className={`flex justify-end font-semibold ${
-              (v || 0) > 0 ? "text-red-500" : "text-green-600"
-            }`}
+            className={`flex justify-end font-semibold ${(v || 0) > 0 ? "text-red-500" : "text-green-600"
+              }`}
           >
             {formatNumber(v || 0, 2)}
           </div>
@@ -1166,8 +1235,6 @@ function avlagaTovchoo({ token }) {
     ],
     [t]
   );
-
-  // Summary totals
   const totals = useMemo(
     () =>
       dataSource.reduce(
@@ -1318,7 +1385,7 @@ function avlagaTovchoo({ token }) {
         />
       </div>
 
-       
+
       <DetailModal
         open={detailOpen}
         onClose={() => setDetailOpen(false)}
@@ -1329,7 +1396,7 @@ function avlagaTovchoo({ token }) {
         barilgiinId={barilgiinId}
       />
 
-       
+
       <div
         style={
           isPrinting
@@ -1344,7 +1411,7 @@ function avlagaTovchoo({ token }) {
               Огноо: {ognoo?.[0] && ognoo?.[1] ? `${moment(ognoo[0]).format("YYYY-MM-DD")} – ${moment(ognoo[1]).format("YYYY-MM-DD")}` : moment().format("YYYY-MM-DD")}
             </div>
           </div>
-          
+
           <table className="w-full border-collapse border border-gray-400 text-xs">
             <thead className="bg-gray-200">
               <tr>
@@ -1386,7 +1453,7 @@ function avlagaTovchoo({ token }) {
               </tr>
             </tfoot>
           </table>
-          
+
           <table className="mt-6 ml-4">
             <tfoot>
               <tr>

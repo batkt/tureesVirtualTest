@@ -73,7 +73,9 @@ function GuilgeeniiTuukh(
     ajiltan?.baiguullagiinId || data?.baiguullagiinId,
   );
 
-  const actualAldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1") || aldangiTuukhKharakhEsekh;
+  const actualAldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
+    ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
+    : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1") || aldangiTuukhKharakhEsekh);
   const actualUldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1") || uldegdelUdruurKharakhEsekh;
 
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
@@ -104,24 +106,28 @@ function GuilgeeniiTuukh(
     { createdAt: -1 }
   );
 
-  const { data: contractAldangi } = useSWR(
-    data?._id ? ["/geree/aldangiinUldegdel", data._id] : null,
+  const { data: aldangiTuukhData } = useSWR(
+    data?._id
+      ? ["/aldangiinTuukh/latest", data._id]
+      : null,
     () =>
       axios(token)
-        .get("/geree", {
+        .get("/aldangiinTuukh", {
           params: {
-            query: { _id: data?._id },
-            select: { aldangiinUldegdel: 1 },
+            query: { gereeniiId: data?._id?.toString() },
+            order: { aldangiBodsonOgnoo: -1 },
+            khuudasniiKhemjee: 1,
           },
         })
-        .then((res) => res.data?.jagsaalt?.[0]?.aldangiinUldegdel || 0)
+        .then((res) => res.data),
+    { revalidateOnFocus: false }
   );
 
   const displayAldangi = useMemo(() => {
-    return contractAldangi !== undefined && contractAldangi !== null 
-      ? contractAldangi 
-      : data?.aldangiinUldegdel || 0;
-  }, [contractAldangi, data?.aldangiinUldegdel]);
+    const fromTuukh = aldangiTuukhData?.jagsaalt?.[0]?.niitAldangi;
+    if (fromTuukh != null && fromTuukh > 0) return fromTuukh;
+    return data?.aldangiinUldegdel || 0;
+  }, [aldangiTuukhData, data?.aldangiinUldegdel]);
 
   const suuliinNekhemjlekh = useMemo(() => {
     return nekhemjlekhiinTuukhJagsaalt?.jagsaalt?.[0];
@@ -251,16 +257,13 @@ function GuilgeeniiTuukh(
       return [];
     }
 
-    
-    let runningAvlaga = 0;
+
     const processedGuilgeeniiTuukh = guilgeeniiTuukh.map(x => {
-      runningAvlaga += (x?.tulukhDun || 0) - (x?.tulsunDun || 0) - (x?.khyamdral || 0);
-      
-      let uld = x.uldegdel;  
+      let uld = x.uldegdel;
       if (!actualAldangiTuukhKharakhEsekh) {
-        uld = runningAvlaga;  
+        uld = x.avlagaUldegdel ?? x.uldegdel;
       }
-      
+
       return { ...x, uldegdel: uld };
     });
 
@@ -300,7 +303,7 @@ function GuilgeeniiTuukh(
       }
 
       const result = [];
-      
+
       result.push({
         ognoo: startDate.toDate(),
         tailbar: "Эхний үлдэгдэл",
@@ -335,7 +338,7 @@ function GuilgeeniiTuukh(
     let khuulsanData = [...processedGuilgeeniiTuukh];
     const endOfToday = moment().endOf("day");
     khuulsanData = khuulsanData.filter(item => moment(item.ognoo).isSameOrBefore(endOfToday));
-    
+
     khuulsanData.sort((a, b) => {
       const sortDaraalal = sortOrders[sortColumn];
       if (sortDaraalal === "asc") {
@@ -407,7 +410,7 @@ function GuilgeeniiTuukh(
 
           "Бүртгэсэн огноо":
             item.guilgeeKhiisenOgnoo &&
-            moment(item.guilgeeKhiisenOgnoo).isValid()
+              moment(item.guilgeeKhiisenOgnoo).isValid()
               ? moment(item.guilgeeKhiisenOgnoo).format("YYYY/MM/DD")
               : "",
         };
@@ -631,11 +634,10 @@ function GuilgeeniiTuukh(
               return (
                 <tr
                   key={a._id || i}
-                  className={`flex min-w-[105rem] divide-x border-b border-gray-200 pr-1 text-gray-700 dark:text-gray-400 ${
-                    isBalanceRow
+                  className={`flex min-w-[105rem] divide-x border-b border-gray-200 pr-1 text-gray-700 dark:text-gray-400 ${isBalanceRow
                       ? "bg-blue-50/80 dark:bg-blue-950/40 font-semibold text-blue-950 dark:text-blue-200"
                       : "bg-gray-50 dark:bg-gray-700 hover:bg-green-100 dark:hover:bg-gray-600"
-                  }`}
+                    }`}
                 >
                   <td className="min-w-[8rem] overflow-hidden p-1 text-center">
                     {moment(a.ognoo).format("YYYY-MM-DD")}
@@ -652,18 +654,16 @@ function GuilgeeniiTuukh(
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                     {isBalanceRow ? "" : (a.khyamdral ? formatNumber(a.khyamdral) : "")}
                   </td>
-                  <td className={`min-w-[8rem] overflow-hidden p-1 text-end ${
-                    a.tulsunAldangi > 0 ? "text-orange-500 font-medium" : ""
-                  }`}>
+                  <td className={`min-w-[8rem] overflow-hidden p-1 text-end ${a.tulsunAldangi > 0 ? "text-orange-500 font-medium" : ""
+                    }`}>
                     {isBalanceRow ? "" : (a.tulsunAldangi > 0 ? formatNumber(a.tulsunAldangi) : "")}
                   </td>
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                     {isBalanceRow ? "" : (a.tulsunDun ? formatNumber(a.tulsunDun) : "")}
                   </td>
                   <td
-                    className={`min-w-[8rem] overflow-hidden p-1 text-end ${
-                      a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-                    }`}
+                    className={`min-w-[8rem] overflow-hidden p-1 text-end ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+                      }`}
                   >
                     {formatNumber(
                       a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
@@ -700,25 +700,25 @@ function GuilgeeniiTuukh(
                     {isBalanceRow
                       ? ""
                       : a.guilgeeKhiisenOgnoo
-                      ? moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")
-                      : ""}
+                        ? moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")
+                        : ""}
                   </td>
                   <td className="min-w-[3rem] border-none p-1 text-center">
                     {(ajiltan?.erkh === "Admin" ||
                       !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
                         (a) => a === barilgiinId,
                       )) && !a.ekhniiUldegdelEsekh && !a.etsiinUldegdelEsekh && (
-                      <Popconfirm
-                        title={t("Төлөлт устгах уу?")}
-                        okText={t("Тийм")}
-                        cancelText={t("Үгүй")}
-                        onConfirm={() => tulultUstgaya(a)}
-                      >
-                        <div className="hide-on-print mx-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
-                          <DeleteOutlined />
-                        </div>
-                      </Popconfirm>
-                    )}
+                        <Popconfirm
+                          title={t("Төлөлт устгах уу?")}
+                          okText={t("Тийм")}
+                          cancelText={t("Үгүй")}
+                          onConfirm={() => tulultUstgaya(a)}
+                        >
+                          <div className="hide-on-print mx-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
+                            <DeleteOutlined />
+                          </div>
+                        </Popconfirm>
+                      )}
                   </td>
                 </tr>
               );
@@ -758,12 +758,12 @@ function GuilgeeniiTuukh(
               (songogdsonDans?.bank === "khanbank"
                 ? "Хаан банк"
                 : songogdsonDans?.bank === "golomt"
-                ? "Голомт банк"
-                : songogdsonDans?.bank === "bogd"
-                ? "Богд банк"
-                : songogdsonDans?.bank === "tdb"
-                ? "Худалдаа хөгжлийн банк"
-                : songogdsonDans?.bank)}{" "}
+                  ? "Голомт банк"
+                  : songogdsonDans?.bank === "bogd"
+                    ? "Богд банк"
+                    : songogdsonDans?.bank === "tdb"
+                      ? "Худалдаа хөгжлийн банк"
+                      : songogdsonDans?.bank)}{" "}
             : {suuliinNekhemjlekh?.nekhemjlekhiinDans || songogdsonDans?.dugaar}
           </div>
           <div className="mt-2 flex items-center gap-2 relative z-10">

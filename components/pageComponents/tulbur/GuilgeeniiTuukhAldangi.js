@@ -159,15 +159,31 @@ function GuilgeeniiTuukhAldangi(
 
   const fetchAldangiinUldegdel = () => {
     axios(token)
-      .get("/geree", {
+      .get("/aldangiinTuukh", {
         params: {
-          query: { _id: data?._id, tuluv: { $ne: -1 } },
-          select: { aldangiinUldegdel: 1 },
+          query: { gereeniiId: data?._id?.toString() },
+          order: { aldangiBodsonOgnoo: -1 },
+          khuudasniiKhemjee: 1,
         },
       })
-      .then(({ data }) => {
-        if (data?.jagsaalt?.length > 0) {
-          setAldangiinUldegdel(data.jagsaalt[0].aldangiinUldegdel);
+      .then((res) => {
+        const latestAldangi = res.data?.jagsaalt?.[0]?.niitAldangi;
+        if (latestAldangi != null) {
+          setAldangiinUldegdel(latestAldangi);
+        } else {
+          axios(token)
+            .get("/geree", {
+              params: {
+                query: { _id: data?._id, tuluv: { $ne: -1 } },
+                select: { aldangiinUldegdel: 1 },
+              },
+            })
+            .then(({ data }) => {
+              if (data?.jagsaalt?.length > 0) {
+                setAldangiinUldegdel(data.jagsaalt[0].aldangiinUldegdel);
+              }
+            })
+            .catch(aldaaBarigch);
         }
       })
       .catch(aldaaBarigch);
