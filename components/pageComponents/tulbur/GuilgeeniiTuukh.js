@@ -630,7 +630,7 @@ function GuilgeeniiTuukh(
         >
           {sortedData
             ?.map((a, i) => {
-              const isBalanceRow = a.ekhniiUldegdelEsekh || a.etsiinUldegdelEsekh;
+              const isBalanceRow = (a.ekhniiUldegdelEsekh && a.turul === "khuvaari");
               return (
                 <tr
                   key={a._id || i}
@@ -646,20 +646,20 @@ function GuilgeeniiTuukh(
                     {isBalanceRow ? "" : a.guilgeeKhiisenAjiltniiNer}
                   </td>
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                    {isBalanceRow ? "" : (a.undsenDun ? formatNumber(a.undsenDun) : "")}
+                    {isBalanceRow ? "" : (a.undsenDun != null ? formatNumber(a.undsenDun) : "")}
                   </td>
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                    {isBalanceRow ? "" : (a.tulukhDun ? formatNumber(a.tulukhDun) : "")}
+                    {isBalanceRow ? "" : (a.tulukhDun != null ? formatNumber(a.tulukhDun) : "")}
                   </td>
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                    {isBalanceRow ? "" : (a.khyamdral ? formatNumber(a.khyamdral) : "")}
+                    {isBalanceRow ? "" : (a.khyamdral != null ? formatNumber(a.khyamdral) : "")}
                   </td>
                   <td className={`min-w-[8rem] overflow-hidden p-1 text-end ${a.tulsunAldangi > 0 ? "text-orange-500 font-medium" : ""
                     }`}>
-                    {isBalanceRow ? "" : (a.tulsunAldangi > 0 ? formatNumber(a.tulsunAldangi) : "")}
+                    {isBalanceRow ? "" : (a.tulsunAldangi != null ? formatNumber(a.tulsunAldangi) : "")}
                   </td>
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                    {isBalanceRow ? "" : (a.tulsunDun ? formatNumber(a.tulsunDun) : "")}
+                    {isBalanceRow ? "" : (a.tulsunDun != null ? formatNumber(a.tulsunDun) : "")}
                   </td>
                   <td
                     className={`min-w-[8rem] overflow-hidden p-1 text-end ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
