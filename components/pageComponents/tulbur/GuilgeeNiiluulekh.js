@@ -199,6 +199,11 @@ function GuilgeeNiiluulekh(
   const [expandedTurees, setExpandedTurees] = React.useState({});
   const inputRef = React.useRef();
 
+  const ognoo = React.useMemo(() => [
+    moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
+    moment().endOf("month").format("YYYY-MM-DD 23:59:59"),
+  ], []);
+
   const query = useMemo(() => {
     return { tuluv: khaagdsanGereeEsekh ? -1 : { $nin: [-1] }, barilgiinId };
   }, [khaagdsanGereeEsekh]);
@@ -377,20 +382,38 @@ function GuilgeeNiiluulekh(
                 .post("/uldegdelBodyo", {
                   barilgiinId,
                   gereeniiDugaar: mur.gereeniiDugaar,
+                  baiguullagiinId,
+                  ognoo,
                 })
                 .then(({ data }) => {
                   if (!!data) {
-                    mur.uldegdel = data.uldegdel;
+                    mur.uldegdel = data.tureesiinUldegdel ?? data.uldegdel;
+
+                    // Fetch aldangiinTuukh for niitAldangi
+                    const aldangiFetch = uilchilgee(token)
+                      .get("/aldangiinTuukh", {
+                        params: {
+                          query: { gereeniiId: mur._id?.toString() },
+                          order: { aldangiBodsonOgnoo: -1 },
+                          khuudasniiKhemjee: 1,
+                        },
+                      })
+                      .then((res) => {
+                        const liveAldangi = res.data?.jagsaalt?.[0]?.niitAldangi;
+                        if (liveAldangi !== undefined) {
+                          mur.aldangiinUldegdel = liveAldangi;
+                        }
+                      })
+                      .catch(() => {});
 
                     // Fetch full history to build breakdown
-                    uilchilgee(token)
+                    const historyFetch = uilchilgee(token)
                       .get(
                         `/gereeniiTulultAvya/${mur._id}?duusakhOgnoo=${moment()
                           .add(10, "year")
                           .toISOString()}`,
                       )
                       .then(({ data: history }) => {
-                        // Correct FIFO Breakdown Logic
                         const poolOfMoney = (history || []).reduce(
                           (acc, x) =>
                             acc + (x.tulsunDun || 0) + (x.khyamdral || 0),
@@ -422,7 +445,6 @@ function GuilgeeNiiluulekh(
                           }
                         });
 
-                        // Group by month
                         const monthsMap = {};
                         unpaidLines.forEach((line) => {
                           const mKey = moment(line.ognoo).format("YYYY-MM");
@@ -448,19 +470,24 @@ function GuilgeeNiiluulekh(
                           );
 
                         // Fetch allocation history
-                        uilchilgee(token)
+                        return uilchilgee(token)
                           .get(
                             `/avlagaTulsunTuukh?query={"gereeniiId":"${mur._id}"}`,
                           )
                           .then(({ data: tData }) => {
                             mur.pastAllocations = tData.jagsaalt || [];
-                            setGereenuud((a) => {
-                              if (a.find((x) => x._id === mur._id)) return a;
-                              return [...a, mur];
-                            });
-                            setVisible(false);
-                            setIsSelecting(false);
                           });
+                      });
+
+                    // Wait for both aldangiinTuukh and history+allocation to finish
+                    Promise.all([aldangiFetch, historyFetch])
+                      .then(() => {
+                        setGereenuud((a) => {
+                          if (a.find((x) => x._id === mur._id)) return a;
+                          return [...a, mur];
+                        });
+                        setVisible(false);
+                        setIsSelecting(false);
                       })
                       .catch(() => setIsSelecting(false));
                   } else {
@@ -948,7 +975,7 @@ function GuilgeeNiiluulekh(
               {Math.round((geree?.aldangiinUldegdel || 0) * 100) / 100 > 0 && (
                 <div className="w-full space-y-2">
                   <div className="box grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
-                    <div className="col-span-4">{t("Алдангийн үлдэгдэл")}</div>
+                    <div className="col-span-4">{t("Нийт алданги")}</div>
                     <div>{formatNumber(geree?.aldangiinUldegdel || 0, 2)}</div>
                     <div>{geree.talbainDugaar}</div>
                     <div className="flex items-center gap-1 text-right text-green-600">
