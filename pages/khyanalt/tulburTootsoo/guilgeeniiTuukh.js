@@ -62,54 +62,76 @@ const GereeniiUldegdel = React.memo(
     const { t } = useTranslation();
     const [visible, setVisible] = useState(false);
 
-    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ?? false;
+    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
+      ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
+      : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b");
 
-    // Fetch correct balance using today's date
-    const { data: tulultData } = useSWR(
-      ugugdul?._id
-        ? [`/gereeniiTulultAvya/${ugugdul._id}`, moment().format("YYYY-MM-DD")]
-        : null,
-      () =>
-        uilchilgee(token)
-          .get(`/gereeniiTulultAvya/${ugugdul._id}`, {
-            params: {
-              duusakhOgnoo: moment().format("YYYY-MM-DD 23:59:59"),
-            },
-          })
-          .then(({ data }) => data),
-      { revalidateOnFocus: false }
-    );
-
-    // Take the last item's uldegdel as the true current balance
-    const displayUldegdel = useMemo(() => {
-      if (tulultData?.length) {
-        return tulultData[tulultData.length - 1]?.uldegdel ?? 0;
-      }
-      return parseFloat(ugugdul?.uldegdel) || 0;
-    }, [tulultData, ugugdul?.uldegdel]);
-
-    // Popover detail — lazy fetch on hover only
     const { data, mutate, isValidating } = useSWR(
-      visible && !!ugugdul?.gereeniiDugaar && !!barilgiinId
-        ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar, ognoo, tsutsalsanTurul]
+      !!ugugdul?.gereeniiDugaar && !!barilgiinId
+        ? [
+          "/uldegdelBodyo",
+          barilgiinId,
+          ugugdul?.gereeniiDugaar,
+          ognoo,
+          tsutsalsanTurul,
+        ]
         : null,
       (url, barilgiinId, gereeniiDugaar, ognoo) =>
         uilchilgee(token)
           .post(url, { barilgiinId, gereeniiDugaar, ognoo, tsutsalsanTurul })
           .then(({ data }) => data),
+      {
+        revalidateOnFocus: false,
+      },
+    );
+
+    const uldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1");
+    const showCombined = true;
+
+    const { data: aldangiTuukhData } = useSWR(
+      aldangiTuukhKharakhEsekh && ugugdul?._id
+        ? ["/aldangiinTuukh/popover", ugugdul._id]
+        : null,
+      () =>
+        uilchilgee(token)
+          .get("/aldangiinTuukh", {
+            params: {
+              query: { gereeniiId: ugugdul?._id?.toString() },
+              order: { aldangiBodsonOgnoo: -1 },
+              khuudasniiKhemjee: 1,
+            },
+          })
+          .then((res) => res.data),
       { revalidateOnFocus: false }
     );
 
-    const uldegdelTur = data?.tureesiinUldegdel ?? displayUldegdel;
-    const uldegdelAld = data?.aldangiinUldegdel ?? 0;
-    const uldegdelTulsun = data?.tulsun ?? 0;
-    const uldegdelKhyamdral = data?.khyamdral ?? 0;
-    const uldegdelTulsunAldangi = data?.niitTulsunAldangi ?? 0;
+    const liveAldangi = aldangiTuukhData?.jagsaalt?.[0]?.niitAldangi;
 
+    const uldegdelTur = data?.tureesiinUldegdel ?? ugugdul?.tureesiinUldegdel ?? ugugdul?.uldegdel ?? 0;
+    const uldegdelAld = liveAldangi ?? data?.aldangiinUldegdel ?? ugugdul?.aldangiinUldegdel ?? 0;
+    const uldegdelTulsun = data?.tulsun ?? ugugdul?.tulsun ?? 0;
+    const uldegdelKhyamdral = data?.khyamdral ?? ugugdul?.khyamdral ?? 0;
+    const uldegdelTulsunAldangi = ugugdul?.niitTulsunAldangi ?? data?.niitTulsunAldangi ?? 0;
+
+    const reqBaritsaa = data?.baritsaaAvakhDun ?? ugugdul?.baritsaaAvakhDun ?? 0;
+    const paidBaritsaa = data?.baritsaaniiUldegdel ?? ugugdul?.baritsaaTulsunDun ?? ugugdul?.baritsaaniiUldegdel ?? 0;
+    const baritsaaBalance = Math.max(0, reqBaritsaa - paidBaritsaa);
+
+    const fallbackUldegdel = data
+      ? uldegdelTur
+      : (ugugdul?.tureesiinUldegdel !== undefined
+        ? ugugdul.tureesiinUldegdel
+        : (parseFloat(ugugdul?.uldegdel) || 0) - (parseFloat(ugugdul?.aldangiinUldegdel) || 0)) ||
+      ugugdul?.niitUldegdel ||
+      ugugdul?.tsutslagdsanAvlaga ||
+      (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
+
+    const displayUldegdel = aldangiTuukhKharakhEsekh
+      ? (fallbackUldegdel + uldegdelAld)
+      : fallbackUldegdel;
     ugugdul.uldegdel = displayUldegdel;
     ugugdul.tureesiinUldegdel = uldegdelTur;
     ugugdul.aldangiinUldegdel = uldegdelAld;
-
     if (visible && !isValidating && data && typeof refreshTotals === "function") {
       refreshTotals();
     }
@@ -129,6 +151,7 @@ const GereeniiUldegdel = React.memo(
                 </span>
               </div>
             )}
+
             {uldegdelTulsun > 0 && (
               <div className="flex justify-between gap-4">
                 <span className="text-gray-500">{t("Нийт төлсөн")}:</span>
@@ -168,9 +191,8 @@ const GereeniiUldegdel = React.memo(
 
     return (
       <div
-        className={`text-right font-medium ${
-          (displayUldegdel ?? 0) > 0 ? "text-red-500" : "text-green-500"
-        }`}
+        className={`text-right font-medium ${(displayUldegdel ?? 0) > 0 ? "text-red-500" : "text-green-500"
+          }`}
       >
         {(displayUldegdel ?? 0) > 0 ? (
           <Popover
@@ -189,7 +211,7 @@ const GereeniiUldegdel = React.memo(
         )}
       </div>
     );
-  }
+  },
 );
 
 const GereeniiAldangi = React.memo(({ ugugdul }) => {
@@ -784,18 +806,17 @@ function GuilgeeniiTuukh(props) {
     return totals;
   }, [gereeniiMedeelel?.jagsaalt, shineBagana, totalsUpdateCount, baiguullaga]);
 
-  // Server-side totals for dashboard cards - always shows real amounts regardless of active tab
-  const serverTotals = useMemo(() => {
-    const gt = guilgeeniiToololt || {};
-    return {
-      avlaga: gt.avlaga?.[0]?.dun || 0,
-      voucher: gt.voucher?.[0]?.dun || 0,
-      tsutslagdsanAvlaga: gt.tsutslagdsanAvlaga?.[0]?.dun || 0,
-      eneSardTulukh: gt.eneSardTulukh?.[0]?.dun || 0,
-      eneSardTulsun: gt.eneSardTulsun?.[0]?.dun || 0,
-      khungulult: gt.khungulult?.[0]?.dun || 0,
-    };
-  }, [guilgeeniiToololt]);
+const serverTotals = useMemo(() => {
+  const gt = guilgeeniiToololt || {};
+  return {
+    avlaga: gt.avlaga?.[0]?.dun || 0,  // already includes aldangi
+    voucher: gt.voucher?.[0]?.dun || 0,
+    tsutslagdsanAvlaga: gt.tsutslagdsanAvlaga?.[0]?.dun || 0,
+    eneSardTulukh: gt.eneSardTulukh?.[0]?.dun || 0,
+    eneSardTulsun: gt.eneSardTulsun?.[0]?.dun || 0,
+    khungulult: gt.khungulult?.[0]?.dun || 0,
+  };
+}, [guilgeeniiToololt]);
 
   useEffect(() => {
     if (gereeniiMedeelel?.jagsaalt) {
@@ -1702,12 +1723,11 @@ function GuilgeeniiTuukh(props) {
       <Card className="cardgrid col-span-12">
         <div className="hideScroll grid w-full grid-cols-1 gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid-cols-6 sm:py-2 md:gap-6 2xl:grid-cols-12">
           {[
-            {
-              too: formatNumber(computedTotals.avlaga || 0, 0),
-              raw: computedTotals.avlaga || 0,
-              selectedColor: "bg-green-50 dark:bg-gray-900",
-              turul: "avlaga",
-              utga: "Хуримтлагдсан авлага",
+{
+  too: formatNumber(computedTotals.avlaga || 0, 0),
+  raw: computedTotals.avlaga || 0,
+  turul: "avlaga",
+  utga: "Хуримтлагдсан авлага",
               tailbar:
                 "Өмнө сарын төлбөрийн үлдэгдлүүдийн нийлбэр болон энэ сарын тооцоо болно.",
             },
