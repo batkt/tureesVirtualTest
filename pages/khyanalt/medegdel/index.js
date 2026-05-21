@@ -483,7 +483,7 @@ function Khyanalt({ token }) {
         .then(({ data }) => {
           if (
             data &&
-            (data[0]?.statusCode === 200 || data[0].Result === "SUCCESS")
+            (data[0]?.statusCode === 200 || data[0]?.Result === "SUCCESS")
           ) {
             toast.success(t("SMS Амжилттай илгээлээ"));
             setContent("");

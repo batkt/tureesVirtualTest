@@ -2719,7 +2719,7 @@ function tulburTootsoo({ token }) {
     uilchilgee(token)
       .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
       .then(({ data }) => {
-        if (data[0]?.statusCode === 200) {
+        if (data[0]?.statusCode === 200 || data[0]?.Result === "SUCCESS") {
           notification.success({ message: t("SMS Амжилттай илгээлээ") });
         }
       })

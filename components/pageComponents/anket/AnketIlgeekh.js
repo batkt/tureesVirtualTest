@@ -34,7 +34,10 @@ const AnketIlgeekh = (
               ],
             })
             .then(({ data }) => {
-              if (data && data[0]?.statusCode === 200) {
+              if (
+                data &&
+                (data[0]?.statusCode === 200 || data[0]?.Result === "SUCCESS")
+              ) {
                 notification.success({ message: t("SMS Амжилттай илгээлээ") });
                 setEmail("");
                 setUtasniiDugaar("");
