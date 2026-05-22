@@ -1645,6 +1645,12 @@ function tulburTootsoo() {
                         
                         placeholder={t("Хөнгөлөх хувь")}
                         style={{borderRadius: '8px'}}
+                        rules={[
+                        {
+                          required: true,
+                          message: t("Хөнгөлөх хувь бүртгэнэ үү!"),
+                        },
+                      ]}
                         onChange={khungulukhDunTootsoolyo}
                       />
                     </Form.Item>
@@ -1720,11 +1726,23 @@ function tulburTootsoo() {
                       }
                       name="khungulukhKhuvi"
                       labelAlign="left"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("Хөнгөлөх дүн бүртгэнэ үү!"),
+                        },
+                      ]}
                     >
                       <Input
                         onKeyDown={focuser}
                         style={{borderRadius: '8px'}}
                         type={"number"}
+                        rules={[
+                        {
+                          required: true,
+                          message: t("Хөнгөлөх дүн бүртгэнэ үү!"),
+                        },
+                      ]}
                         placeholder={
                           khungulukh === "khuvi"
                             ? t("Хөнгөлөх хувь")

@@ -2144,7 +2144,7 @@ useEffect(() => {
                       <span className={`min-w-[20px] h-5 px-1.5 rounded-full ${countBg} text-white text-[12px] font-bold flex items-center justify-center`}>{groupTasks.length}</span>
                     </div>
                     
-                    <div className="grid grid-cols-12 px-5 py-2 border-b  border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800">
+                    <div className="grid grid-cols-12 px-5 py-2 border-b text-center border-gray-300 dark:border-gray-900 bg-white dark:bg-gray-800">
                       <div className="col-span-4 text-[12px]  font-bold text-gray-400 dark:text-gray-600 uppercase ">{t("Ажил")}</div>
                       <div className="col-span-2 text-[12px]  font-bold text-gray-400 dark:text-gray-600 uppercase ">{t("Төлөв")}</div>
                       <div className="col-span-3 text-[12px] font-bold text-gray-400 dark:text-gray-600 uppercase ">{t("Төсөл")}</div>
@@ -2165,16 +2165,16 @@ useEffect(() => {
                               {task.title}
                             </span>
                           </div>
-                          <div className="col-span-2">
+                          <div className="col-span-2 text-center">
                             <span className={`text-[12px] font-bold px-2 py-1 rounded-lg ${statusColor(task.tuluv)}`}>
                               {statusLabel(task.tuluv)}
                             </span>
                           </div>
-                          <div className="col-span-3 flex items-center gap-2 min-w-0">
-                            {proj && <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: proj.color || "#10B981" }} />}
+                          <div className="col-span-3 text-center gap-2 min-w-0">
+                            {proj && <div className="w-2 h-2 rounded-full shrink-0" />}
                             <span className="text-[12px] font-semibold text-gray-500 dark:text-gray-400 truncate">{proj?.name || "—"}</span>
                           </div>
-                          <div className="col-span-2">
+                          <div className="col-span-2 text-center">
                             <span className={`text-[12px] font-bold ${task.date < dayjs().format("YYYY-MM-DD") && !task.completed ? "text-red-500" : "text-gray-500 dark:text-gray-400"}`}>
                               {task.date ? dayjs(task.date).format("YYYY-MM-DD") : "—"}
                             </span>

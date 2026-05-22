@@ -198,8 +198,32 @@ const GereeniiUldegdel = React.memo(
   },
 );
 
-const GereeniiAldangi = React.memo(({ ugugdul }) => {
-  const displayAldangi = ugugdul?.aldangiinUldegdel ?? 0;
+const GereeniiAldangi = React.memo(({ ugugdul, token }) => {
+  const { baiguullaga } = useAuth();
+
+  const aldangiTuukhKharakhEsekh =
+    baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ?? false;
+
+  const { data: aldangiTuukhData } = useSWR(
+    aldangiTuukhKharakhEsekh && ugugdul?._id
+      ? ["/aldangiinTuukh/aldangi-col", ugugdul._id]
+      : null,
+    () =>
+      uilchilgee(token)
+        .get("/aldangiinTuukh", {
+          params: {
+            query: { gereeniiId: ugugdul?._id?.toString() },
+            order: { aldangiBodsonOgnoo: -1 },
+            khuudasniiKhemjee: 1,
+          },
+        })
+        .then((res) => res.data),
+    { revalidateOnFocus: false }
+  );
+
+  const displayAldangi = aldangiTuukhKharakhEsekh
+    ? (aldangiTuukhData?.jagsaalt?.[0]?.niitAldangi ?? ugugdul?.aldangiinUldegdel ?? 0)
+    : (ugugdul?.aldangiinUldegdel ?? 0);
 
   return (
     <div className="w-full text-right">
@@ -2066,15 +2090,13 @@ function GuilgeeniiTuukh(props) {
                   width: "7rem",
                   summary: true,
                   render: (aldangiinUldegdel, record) => {
-                    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ?? false;
-                    return (
-                      <GereeniiAldangi
-                        ugugdul={record}
-                        token={token}
-                        aldangiTuukhKharakhEsekh={aldangiTuukhKharakhEsekh}
-                      />
-                    );
-                  },
+  return (
+    <GereeniiAldangi
+      ugugdul={record}
+      token={token}
+    />
+  );
+},
                 },
                 {
                   title: t("Төлсөн алданги"),

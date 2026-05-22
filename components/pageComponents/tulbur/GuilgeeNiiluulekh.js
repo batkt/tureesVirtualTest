@@ -16,6 +16,7 @@ import {
 } from "antd";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import { formatter, parser } from "tools/function/inputFormatter";
+import useSWR, { mutate } from "swr";
 import {
   CloseCircleOutlined,
   CloseOutlined,
@@ -270,14 +271,22 @@ function GuilgeeNiiluulekh(
               return;
             }
             if (undsenGuilgee.length === 0) {
-              notification.success({
-                message: t("Амжилттай"),
-                description: t("Гүйлгээ амжилттай холбогдлоо"),
-              });
-              _.isFunction(onFinish) && onFinish();
-              destroy();
-              return; // End here if only baritsaa was meant to be saved
-            }
+  notification.success({
+    message: t("Амжилттай"),
+    description: t("Гүйлгээ амжилттай холбогдлоо"),
+  });
+  mutate(
+    (key) =>
+      Array.isArray(key) &&
+      typeof key[0] === "string" &&
+      key[0].includes("aldangiinTuukh"),
+    undefined,
+    { revalidate: true },
+  );
+  _.isFunction(onFinish) && onFinish();
+  destroy();
+  return;
+}
           } finally {
             setLoadingBaritsaa(false);
           }
@@ -310,20 +319,25 @@ function GuilgeeNiiluulekh(
             return uilchilgee(token)
               .post("/tulultOlnoorKhadgalya", { guilgeenuud: undsenGuilgee })
               .then(({ data }) => {
-                if (data === "Amjilttai") {
-                  notification.success({
-                    message: t("Амжилттай"),
-                    description: t("Гүйлгээ амжилттай холбогдлоо"),
-                  });
-                  _.isFunction(onFinish) && onFinish();
-                  destroy();
-                }
-              })
+  if (data === "Amjilttai") {
+    notification.success({
+      message: t("Амжилттай"),
+      description: t("Гүйлгээ амжилттай холбогдлоо"),
+    });
+    
+    mutate(
+      (key) => Array.isArray(key) && typeof key[0] === "string" && key[0].includes("aldangiinTuukh"),
+      undefined,
+      { revalidate: true },
+    );
+    _.isFunction(onFinish) && onFinish();
+    destroy();
+  }
+})
               .catch(aldaaBarigch)
               .finally(() => setLoading(false));
         } finally {
-          // If we reach here without returning above (e.g. no undsenGuilgee), we should ensure loading is off
-          // though typically it is handled in the promise chain or baritsaa block
+          
           if (undsenGuilgee.length === 0) setLoading(false);
         }
       },
