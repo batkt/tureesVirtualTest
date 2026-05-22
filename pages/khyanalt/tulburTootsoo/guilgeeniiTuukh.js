@@ -112,7 +112,6 @@ const GereeniiUldegdel = React.memo(
       : fallbackUldegdel;
     ugugdul.uldegdel = displayUldegdel;
     ugugdul.tureesiinUldegdel = uldegdelTur;
-    ugugdul.aldangiinUldegdel = uldegdelAld;
     ugugdul.mutate = mutate;
 
     useEffect(() => {
