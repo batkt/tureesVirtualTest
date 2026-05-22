@@ -198,36 +198,10 @@ const GereeniiUldegdel = React.memo(
   },
 );
 
-const GereeniiAldangi = React.memo(({ ugugdul, token }) => {
-  const { baiguullaga } = useAuth();
-
-  const aldangiTuukhKharakhEsekh =
-    baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh ?? false;
-
-  const { data: aldangiTuukhData } = useSWR(
-    aldangiTuukhKharakhEsekh && ugugdul?._id
-      ? ["/aldangiinTuukh/aldangi-col", ugugdul._id]
-      : null,
-    () =>
-      uilchilgee(token)
-        .get("/aldangiinTuukh", {
-          params: {
-            query: { gereeniiId: ugugdul?._id?.toString() },
-            order: { aldangiBodsonOgnoo: -1 },
-            khuudasniiKhemjee: 1,
-          },
-        })
-        .then((res) => res.data),
-    { revalidateOnFocus: false }
-  );
-
-  const displayAldangi = aldangiTuukhKharakhEsekh
-    ? (aldangiTuukhData?.jagsaalt?.[0]?.niitAldangi ?? ugugdul?.aldangiinUldegdel ?? 0)
-    : (ugugdul?.aldangiinUldegdel ?? 0);
-
+const GereeniiAldangi = React.memo(({ ugugdul }) => {
   return (
     <div className="w-full text-right">
-      {formatNumber(displayAldangi || 0)}
+      {formatNumber(ugugdul?.aldangiinUldegdel || 0)}
     </div>
   );
 });
