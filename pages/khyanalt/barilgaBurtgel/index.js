@@ -505,7 +505,7 @@ function BarilgaBurtgel({ token }) {
               label: (
                 <span className="flex items-center gap-1.5 font-semibold">
                   <ArrowDownOutlined className="text-red-500" />
-                  {t("Үлдэгдэл")}
+                  {t("Авлага")}
                 </span>
               ),
               children: ZarlagaTab,
