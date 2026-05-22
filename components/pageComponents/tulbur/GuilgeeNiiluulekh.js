@@ -16,7 +16,6 @@ import {
 } from "antd";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import { formatter, parser } from "tools/function/inputFormatter";
-import useSWR, { mutate } from "swr";
 import {
   CloseCircleOutlined,
   CloseOutlined,
@@ -275,14 +274,6 @@ function GuilgeeNiiluulekh(
     message: t("Амжилттай"),
     description: t("Гүйлгээ амжилттай холбогдлоо"),
   });
-  mutate(
-    (key) =>
-      Array.isArray(key) &&
-      typeof key[0] === "string" &&
-      key[0].includes("aldangiinTuukh"),
-    undefined,
-    { revalidate: true },
-  );
   _.isFunction(onFinish) && onFinish();
   destroy();
   return;
@@ -324,12 +315,6 @@ function GuilgeeNiiluulekh(
       message: t("Амжилттай"),
       description: t("Гүйлгээ амжилттай холбогдлоо"),
     });
-    
-    mutate(
-      (key) => Array.isArray(key) && typeof key[0] === "string" && key[0].includes("aldangiinTuukh"),
-      undefined,
-      { revalidate: true },
-    );
     _.isFunction(onFinish) && onFinish();
     destroy();
   }
@@ -402,23 +387,6 @@ function GuilgeeNiiluulekh(
                 .then(({ data }) => {
                   if (!!data) {
                     mur.uldegdel = data.tureesiinUldegdel ?? data.uldegdel;
-
-                    // Fetch aldangiinTuukh for niitAldangi
-                    const aldangiFetch = uilchilgee(token)
-                      .get("/aldangiinTuukh", {
-                        params: {
-                          query: { gereeniiId: mur._id?.toString() },
-                          order: { aldangiBodsonOgnoo: -1 },
-                          khuudasniiKhemjee: 1,
-                        },
-                      })
-                      .then((res) => {
-                        const liveAldangi = res.data?.jagsaalt?.[0]?.niitAldangi;
-                        if (liveAldangi !== undefined) {
-                          mur.aldangiinUldegdel = liveAldangi;
-                        }
-                      })
-                      .catch(() => {});
 
                     // Fetch full history to build breakdown
                     const historyFetch = uilchilgee(token)
@@ -493,8 +461,7 @@ function GuilgeeNiiluulekh(
                           });
                       });
 
-                    // Wait for both aldangiinTuukh and history+allocation to finish
-                    Promise.all([aldangiFetch, historyFetch])
+                    historyFetch
                       .then(() => {
                         setGereenuud((a) => {
                           if (a.find((x) => x._id === mur._id)) return a;

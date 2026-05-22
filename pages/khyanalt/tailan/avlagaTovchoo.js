@@ -22,7 +22,6 @@ import { flushSync } from "react-dom";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 import { Excel } from "antd-table-saveas-excel";
-import useSWR from "swr";
 import axios from "services/uilchilgee";
 
 const searchKeys = ["ner", "register", "customerTin", "talbainDugaar", "gereeniiDugaar", "utas"];
@@ -56,37 +55,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
     : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1"));
 
-  const { data: aldangiTuukhData } = useSWR(
-    open && gereeDetail?._id
-      ? ["/aldangiinTuukh/latest", gereeDetail._id]
-      : null,
-    () =>
-      axios(token)
-        .get("/aldangiinTuukh", {
-          params: {
-            query: { gereeniiId: gereeDetail?._id?.toString() },
-            order: { aldangiBodsonOgnoo: -1 },
-            khuudasniiKhemjee: 100,
-          },
-        })
-        .then((res) => res.data),
-    { revalidateOnFocus: false }
-  );
-
-  const displayAldangi = useMemo(() => {
-    if (!aldangiTuukhData?.jagsaalt || aldangiTuukhData.jagsaalt.length === 0) {
-      return gereeDetail?.aldangiinUldegdel || 0;
-    }
-    const sorted = [...aldangiTuukhData.jagsaalt].sort((a, b) => {
-      const dateA = new Date(a.aldangiBodsonOgnoo || a.createdAt || 0);
-      const dateB = new Date(b.aldangiBodsonOgnoo || b.createdAt || 0);
-      if (dateB - dateA !== 0) return dateB - dateA;
-      return (b.niitAldangi || 0) - (a.niitAldangi || 0);
-    });
-    const fromTuukh = sorted[0]?.niitAldangi;
-    if (fromTuukh != null) return fromTuukh;
-    return gereeDetail?.aldangiinUldegdel || 0;
-  }, [aldangiTuukhData, gereeDetail?.aldangiinUldegdel]);
+  const displayAldangi = gereeDetail?.aldangiinUldegdel || 0;
 
   const effectiveAldangiUldegdel = displayAldangi;
 

@@ -106,28 +106,7 @@ function GuilgeeniiTuukh(
     { createdAt: -1 }
   );
 
-  const { data: aldangiTuukhData } = useSWR(
-    data?._id
-      ? ["/aldangiinTuukh/latest", data._id]
-      : null,
-    () =>
-      axios(token)
-        .get("/aldangiinTuukh", {
-          params: {
-            query: { gereeniiId: data?._id?.toString() },
-            order: { aldangiBodsonOgnoo: -1 },
-            khuudasniiKhemjee: 1,
-          },
-        })
-        .then((res) => res.data),
-    { revalidateOnFocus: false }
-  );
-
-  const displayAldangi = useMemo(() => {
-    const fromTuukh = aldangiTuukhData?.jagsaalt?.[0]?.niitAldangi;
-    if (fromTuukh != null && fromTuukh > 0) return fromTuukh;
-    return data?.aldangiinUldegdel || 0;
-  }, [aldangiTuukhData, data?.aldangiinUldegdel]);
+  const displayAldangi = data?.aldangiinUldegdel || 0;
 
   const suuliinNekhemjlekh = useMemo(() => {
     return nekhemjlekhiinTuukhJagsaalt?.jagsaalt?.[0];
