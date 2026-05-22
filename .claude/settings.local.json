@@ -11,7 +11,8 @@
       "Bash(timeout:*)",
       "Bash(ping:*)",
       "Bash(nul)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(grep -n \"gereeniiTulultAvya\\\\|guilgeeniiTuukh\" /Users/macbookairm4/tureesBack/routes/gereeRoute.js | head -20)"
     ],
     "deny": [],
     "ask": []

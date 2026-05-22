@@ -628,7 +628,7 @@ function GuilgeeniiTuukh(
                     {isBalanceRow ? "" : (a.undsenDun != null ? formatNumber(a.undsenDun) : "")}
                   </td>
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                    {isBalanceRow ? "" : (a.tulukhDun != null ? formatNumber(a.tulukhDun) : "")}
+                    {a.tulukhDun != null ? formatNumber(a.tulukhDun) : ""}
                   </td>
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                     {isBalanceRow ? "" : (a.khyamdral != null ? formatNumber(a.khyamdral) : "")}
@@ -638,7 +638,7 @@ function GuilgeeniiTuukh(
                     {isBalanceRow ? "" : (a.tulsunAldangi != null ? formatNumber(a.tulsunAldangi) : "")}
                   </td>
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                    {isBalanceRow ? "" : (a.tulsunDun != null ? formatNumber(a.tulsunDun) : "")}
+                    {a.tulsunDun != null ? formatNumber(a.tulsunDun) : ""}
                   </td>
                   <td
                     className={`min-w-[8rem] overflow-hidden p-1 text-end ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
