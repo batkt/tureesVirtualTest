@@ -564,12 +564,14 @@ function GuilgeeniiTuukh(
             >
               {t("Хямдрал")}
             </td>
-            <td
-              onClick={() => toggleSortOrder("tulsunAldangi")}
-              className="min-w-[8rem] overflow-hidden p-1 text-center"
-            >
-              {t("Төлсөн алданги")}
-            </td>
+            {actualAldangiTuukhKharakhEsekh && (
+              <td
+                onClick={() => toggleSortOrder("tulsunAldangi")}
+                className="min-w-[8rem] overflow-hidden p-1 text-center"
+              >
+                {t("Төлсөн алданги")}
+              </td>
+            )}
             <td
               onClick={() => toggleSortOrder("tulsunDun")}
               className="min-w-[8rem] overflow-hidden p-1 text-center"
@@ -633,10 +635,11 @@ function GuilgeeniiTuukh(
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                     {isBalanceRow ? "" : (a.khyamdral != null ? formatNumber(a.khyamdral) : "")}
                   </td>
-                  <td className={`min-w-[8rem] overflow-hidden p-1 text-end ${a.tulsunAldangi > 0 ? "text-orange-500 font-medium" : ""
-                    }`}>
-                    {isBalanceRow ? "" : (a.tulsunAldangi != null ? formatNumber(a.tulsunAldangi) : "")}
-                  </td>
+                  {actualAldangiTuukhKharakhEsekh && (
+                    <td className={`min-w-[8rem] overflow-hidden p-1 text-end ${a.tulsunAldangi > 0 ? "text-orange-500 font-medium" : ""}`}>
+                      {isBalanceRow ? "" : (a.tulsunAldangi != null ? formatNumber(a.tulsunAldangi) : "")}
+                    </td>
+                  )}
                   <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                     {a.tulsunDun != null ? formatNumber(a.tulsunDun) : ""}
                   </td>

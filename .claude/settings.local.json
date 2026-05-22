@@ -12,7 +12,8 @@
       "Bash(ping:*)",
       "Bash(nul)",
       "Bash(npm run build:*)",
-      "Bash(grep -n \"gereeniiTulultAvya\\\\|guilgeeniiTuukh\" /Users/macbookairm4/tureesBack/routes/gereeRoute.js | head -20)"
+      "Bash(grep -n \"gereeniiTulultAvya\\\\|guilgeeniiTuukh\" /Users/macbookairm4/tureesBack/routes/gereeRoute.js | head -20)",
+      "Bash(grep -rn \"uldegdelBodyo\" /Users/macbookairm4/tureesBack --include=\"*.js\" -l)"
     ],
     "deny": [],
     "ask": []

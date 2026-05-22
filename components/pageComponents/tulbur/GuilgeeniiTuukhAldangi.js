@@ -248,6 +248,10 @@ function GuilgeeniiTuukhAldangi(
     return khuulsanData;
   }, [guilgeeniiAldangiTuukh, sortOrders, sortColumn, shineOgnoo]);
 
+  const tulsunSortedData = React.useMemo(() => {
+    return sortedData.filter((a) => (a.tulsunAldangi || a.tulsunDun || 0) > 0);
+  }, [sortedData]);
+
   useImperativeHandle(
     ref,
     () => ({
@@ -568,7 +572,7 @@ function GuilgeeniiTuukhAldangi(
           className="min-w-[50rem] overflow-y-scroll"
           style={{ height: "calc(90vh - 15rem)" }}
         >
-          {sortedData
+          {tulsunSortedData
             ?.map((a, i) => (
               <tr
                 key={i}
@@ -802,7 +806,7 @@ function GuilgeeniiTuukhAldangi(
                 </tr>
               </thead>
               <tbody>
-                {sortedData?.map((a, i) => (
+                {tulsunSortedData?.map((a, i) => (
                   <tr key={i}>
                     <td>{moment(a.ognoo).format("YYYY-MM-DD")}</td>
                     <td>{a.guilgeeKhiisenAjiltniiNer}</td>

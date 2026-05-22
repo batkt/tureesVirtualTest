@@ -62,6 +62,16 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   const { rows, finalTureesBalance } = useMemo(() => {
     if (!detail?.guilgeenuud && !gereeDetail) return { rows: [], finalTureesBalance: 0 };
 
+    const rangeStart = ognoo?.[0] ? moment(ognoo[0]).startOf("day").toDate() : null;
+    const rangeEnd = ognoo?.[1] ? moment(ognoo[1]).endOf("day").toDate() : null;
+    const inDateRange = (dateStr) => {
+      if (!dateStr) return false;
+      const d = new Date(dateStr);
+      if (rangeStart && d < rangeStart) return false;
+      if (rangeEnd && d > rangeEnd) return false;
+      return true;
+    };
+
     const seenIds = new Set();
     let combined = [];
 
@@ -97,15 +107,17 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       const baritsaaDate = baritsaaTulultArr?.[0]?.guilgeeKhiisenOgnoo ||
         baritsaaTulultArr?.[0]?.ognoo ||
         gereeDetail?.gereeniiOgnoo || null;
-      combined.push({
-        _id: `baritsaa-required-${gereeDetail?._id || detail?._id}`,
-        ognoo: baritsaaDate,
-        tailbar: t("Барьцаа үүссэн"),
-        tulukhDun: requiredBaritsaa,
-        tulsunDun: 0,
-        khyamdral: 0,
-        turul: "baritsaa"
-      });
+      if (inDateRange(baritsaaDate)) {
+        combined.push({
+          _id: `baritsaa-required-${gereeDetail?._id || detail?._id}`,
+          ognoo: baritsaaDate,
+          tailbar: t("Барьцаа үүссэн"),
+          tulukhDun: requiredBaritsaa,
+          tulsunDun: 0,
+          khyamdral: 0,
+          turul: "baritsaa"
+        });
+      }
     }
 
 
@@ -115,6 +127,8 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
 
     effectiveBaritsaaGuilgeenuud.forEach((g) => {
       if (g._id && seenIds.has(g._id.toString())) return;
+      const entryDate = g.ognoo || g.guilgeeKhiisenOgnoo;
+      if (!inDateRange(entryDate)) return;
       const paidAmount = (g.tulsunDun || 0) + (g.orlogo || 0) + (g.zarlaga || 0);
       if (paidAmount > 0 || (g.tulukhDun || 0) > 0) {
         combined.push({
@@ -130,11 +144,13 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       const baritsaaTulultArr = gereeDetail?.baritsaaTulultArr || [];
       baritsaaTulultArr.forEach((g) => {
         if (g._id && seenIds.has(g._id.toString())) return;
+        const entryDate = g.ognoo || g.guilgeeKhiisenOgnoo;
+        if (!inDateRange(entryDate)) return;
         const paidAmount = (g.orlogo || 0) + (g.tulsunDun || 0);
         if (paidAmount > 0) {
           combined.push({
             ...g,
-            ognoo: g.ognoo || g.guilgeeKhiisenOgnoo,
+            ognoo: entryDate,
             tailbar: g.tailbar || t("Барьцаа төлөлт"),
             tulsunDun: paidAmount,
             tulukhDun: 0,
