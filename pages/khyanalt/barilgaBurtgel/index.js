@@ -3,7 +3,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { useMemo, useState } from "react";
 import { aldaaBarigch } from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import { Tabs, DatePicker, Select, Empty, Spin } from "antd";
+import { Tabs, DatePicker, Select, Empty, Spin, Modal, Table } from "antd";
 import {
   ArrowUpOutlined,
   ArrowDownOutlined,
@@ -71,11 +71,159 @@ const TURUL_CONFIG = {
   zalruulga:  { nerKey: "Залруулга", icon: <SwapOutlined />,             color: "#a855f7", ring: "ring-purple-200 dark:ring-purple-800" },
 };
 
-function GlassCard({ children, className = "" }) {
+function GlassCard({ children, className = "", onClick }) {
   return (
-    <div className={`rounded-2xl bg-white shadow-sm ring-1 ring-slate-200/70 dark:bg-slate-900/70 dark:ring-slate-700/60 ${className}`}>
+    <div
+      className={`rounded-2xl bg-white shadow-sm ring-1 ring-slate-200/70 dark:bg-slate-900/70 dark:ring-slate-700/60 ${className}`}
+      onClick={onClick}
+    >
       {children}
     </div>
+  );
+}
+
+function DetailModal({ open, onClose, turul, cfg, token, query }) {
+  const { t } = useTranslation();
+  const { data, isValidating } = useSWR(
+    open && turul && token ? ["orlogiinTurulDelgerengui", token, query, turul] : null,
+    (url, tok, q, tur) =>
+      createMethod(url, tok, {
+        ekhlekhOgnoo: q.ekhlekhOgnoo,
+        duusakhOgnoo: q.duusakhOgnoo,
+        turul: tur,
+      })
+        .then(({ data }) => data)
+        .catch(aldaaBarigch),
+    { revalidateOnFocus: false }
+  );
+
+  const isBank = turul === "bank";
+
+  const columns = isBank
+    ? [
+        { title: "№", key: "idx", width: 48, align: "center", render: (_, __, i) => i + 1 },
+        { title: t("Харилцагч"), dataIndex: "ner", ellipsis: true },
+        { title: t("Герээ №"), dataIndex: "gereeniiDugaar", width: 130, ellipsis: true },
+        { title: t("Талбай"), dataIndex: "talbainDugaar", width: 80, align: "center" },
+        { title: t("Данс"), dataIndex: "dansniiDugaar", width: 160, ellipsis: true },
+        { title: t("Банк"), dataIndex: "bankNer", ellipsis: true },
+        {
+          title: t("Орсон"),
+          dataIndex: "tulsunDun",
+          align: "right",
+          width: 120,
+          render: (v) => <span className="font-semibold text-emerald-600">{formatNumber(v, 0)}₮</span>,
+        },
+      ]
+    : [
+        { title: "№", key: "idx", width: 48, align: "center", render: (_, __, i) => i + 1 },
+        { title: t("Харилцагч"), dataIndex: "ner", ellipsis: true },
+        { title: t("Герээ №"), dataIndex: "gereeniiDugaar", width: 130, ellipsis: true },
+        { title: t("Талбай"), dataIndex: "talbainDugaar", width: 80, align: "center" },
+        {
+          title: t("Бодогдсон"),
+          dataIndex: "tulukhDun",
+          align: "right",
+          width: 120,
+          render: (v) => formatNumber(v, 0),
+        },
+        {
+          title: t("Орсон"),
+          dataIndex: "tulsunDun",
+          align: "right",
+          width: 110,
+          render: (v) => <span className="font-semibold text-emerald-600">{formatNumber(v, 0)}</span>,
+        },
+        {
+          title: t("Хөнгөлөлт"),
+          dataIndex: "khyamdral",
+          align: "right",
+          width: 110,
+          render: (v) => (v > 0 ? <span className="text-amber-600">{formatNumber(v, 0)}</span> : "-"),
+        },
+        {
+          title: t("Үлдэгдэл"),
+          align: "right",
+          width: 120,
+          render: (_, r) => {
+            const d = Math.max(0, (r.tulukhDun || 0) - (r.khyamdral || 0) - (r.tulsunDun || 0));
+            return d > 0 ? (
+              <span className="font-semibold text-red-500">{formatNumber(d, 0)}</span>
+            ) : (
+              <span className="text-slate-400">—</span>
+            );
+          },
+        },
+      ];
+
+  const rows = (data || []).map((r, i) => ({ key: i, ...r }));
+  const totalTulsun = rows.reduce((s, r) => s + (r.tulsunDun || 0), 0);
+  const totalTulukh = rows.reduce((s, r) => s + (r.tulukhDun || 0), 0);
+  const totalKhyamdral = rows.reduce((s, r) => s + (r.khyamdral || 0), 0);
+  const totalDutuu = Math.max(0, totalTulukh - totalKhyamdral - totalTulsun);
+
+  return (
+    <Modal
+      open={open}
+      onCancel={onClose}
+      footer={null}
+      width={920}
+      style={{ top: 24 }}
+      title={
+        cfg && (
+          <div className="flex items-center gap-2 py-1">
+            <span
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-sm text-white"
+              style={{ backgroundColor: cfg.color }}
+            >
+              {cfg.icon}
+            </span>
+            <span className="text-base font-bold text-slate-800 dark:text-white">
+              {t(cfg.nerKey)} — {t("Дэлгэрэнгүй")}
+            </span>
+          </div>
+        )
+      }
+    >
+      <Table
+        size="small"
+        bordered
+        loading={isValidating}
+        columns={columns}
+        dataSource={rows}
+        pagination={{ pageSize: 20, showSizeChanger: false }}
+        scroll={{ y: 460 }}
+        summary={() => (
+          <Table.Summary fixed="bottom">
+            <Table.Summary.Row className="bg-slate-50 font-semibold">
+              <Table.Summary.Cell index={0} colSpan={isBank ? 4 : 4} align="right">
+                {t("Нийт")}
+              </Table.Summary.Cell>
+              {!isBank && (
+                <Table.Summary.Cell index={4} align="right">
+                  <span className="font-semibold">{formatNumber(totalTulukh, 0)}</span>
+                </Table.Summary.Cell>
+              )}
+              <Table.Summary.Cell index={isBank ? 4 : 5} align="right">
+                <span className="font-semibold text-emerald-600">{formatNumber(totalTulsun, 0)}</span>
+              </Table.Summary.Cell>
+              {!isBank && (
+                <>
+                  <Table.Summary.Cell index={6} align="right">
+                    <span className="text-amber-600">{totalKhyamdral > 0 ? formatNumber(totalKhyamdral, 0) : "—"}</span>
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={7} align="right">
+                    <span className={totalDutuu > 0 ? "font-semibold text-red-500" : "text-slate-400"}>
+                      {totalDutuu > 0 ? formatNumber(totalDutuu, 0) : "—"}
+                    </span>
+                  </Table.Summary.Cell>
+                </>
+              )}
+            </Table.Summary.Row>
+          </Table.Summary>
+        )}
+      />
+    </Modal>
   );
 }
 
@@ -96,7 +244,7 @@ function StatCard({ label, value, icon, color, sub }) {
   );
 }
 
-function IncomeTypeCard({ cfg, tulukhDun, tulsunDun, khyamdral }) {
+function IncomeTypeCard({ cfg, tulukhDun, tulsunDun, khyamdral, onClick }) {
   const { t } = useTranslation();
   const dutuu = Math.max(0, (tulukhDun || 0) - (khyamdral || 0) - (tulsunDun || 0));
   const pct = tulukhDun > 0
@@ -104,7 +252,10 @@ function IncomeTypeCard({ cfg, tulukhDun, tulsunDun, khyamdral }) {
     : 0;
 
   return (
-    <GlassCard className={`p-4 ring-1 ${cfg.ring}`}>
+    <GlassCard
+      className={`p-4 ring-1 ${cfg.ring} cursor-pointer transition-shadow hover:shadow-md`}
+      onClick={onClick}
+    >
       <div className="mb-3 flex items-center gap-2">
         <span
           className="flex h-8 w-8 items-center justify-center rounded-lg text-sm text-white"
@@ -150,7 +301,7 @@ function IncomeTypeCard({ cfg, tulukhDun, tulsunDun, khyamdral }) {
   );
 }
 
-function OutstandingCard({ cfg, tulukhDun, tulsunDun, khyamdral }) {
+function OutstandingCard({ cfg, tulukhDun, tulsunDun, khyamdral, onClick }) {
   const { t } = useTranslation();
   const dutuu = Math.max(0, (tulukhDun || 0) - (khyamdral || 0) - (tulsunDun || 0));
   const pct = tulukhDun > 0
@@ -159,7 +310,10 @@ function OutstandingCard({ cfg, tulukhDun, tulsunDun, khyamdral }) {
   const remaining = 100 - pct;
 
   return (
-    <GlassCard className={`p-4 ring-1 ${cfg.ring}`}>
+    <GlassCard
+      className={`p-4 ring-1 ${cfg.ring} cursor-pointer transition-shadow hover:shadow-md`}
+      onClick={onClick}
+    >
       <div className="mb-3 flex items-center gap-2">
         <span
           className="flex h-8 w-8 items-center justify-center rounded-lg text-sm text-white"
@@ -222,6 +376,7 @@ function BarilgaBurtgel({ token }) {
     moment().startOf("year"),
     moment().endOf("month"),
   ]);
+  const [detailModal, setDetailModal] = useState(null);
 
   const query = useMemo(() => ({
     nariivchlal,
@@ -400,6 +555,7 @@ function BarilgaBurtgel({ token }) {
                   tulukhDun={row.tulukhDun}
                   tulsunDun={row.tulsunDun}
                   khyamdral={row.khyamdral}
+                  onClick={() => setDetailModal({ turul: row._id, cfg })}
                 />
               );
             })}
@@ -467,6 +623,7 @@ function BarilgaBurtgel({ token }) {
                   tulukhDun={row.tulukhDun}
                   tulsunDun={row.tulsunDun}
                   khyamdral={row.khyamdral}
+                  onClick={() => setDetailModal({ turul: row._id, cfg })}
                 />
               );
             })}
@@ -483,6 +640,14 @@ function BarilgaBurtgel({ token }) {
       className="p-2 md:px-4"
       tsonkhniiId="61c2c6271c2830c4e6f90c85"
     >
+      <DetailModal
+        open={!!detailModal}
+        onClose={() => setDetailModal(null)}
+        turul={detailModal?.turul}
+        cfg={detailModal?.cfg}
+        token={token}
+        query={query}
+      />
       <div className="col-span-12 space-y-2 p-1 md:p-2">
         {Controls}
         <Tabs

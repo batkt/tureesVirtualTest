@@ -948,7 +948,7 @@ function avlagaTovchoo({ token }) {
 
         const adjustedEkhniiUldegdel = Number(item.ekhniiUldegdel || 0);
 
-        const adjustedEtssiinUldegdel = Number(item.etssiinUldegdel || 0);
+        const adjustedEtssiinUldegdel = Number(item.etssiinUldegdel || 0) + Number(item.aldangiinUldegdel || 0);
 
         return {
           ...item,
