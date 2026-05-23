@@ -87,7 +87,7 @@ function Tulbur(
       if (!!customerTin) khaaya();
       else handlePrint();
     }
-  }, [eBarimt]);
+  }, [eBarimt, customerTin]);
 
   const sendRequest = (id) => {
     setLoading(true);
