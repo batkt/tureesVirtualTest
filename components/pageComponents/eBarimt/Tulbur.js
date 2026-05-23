@@ -1,5 +1,5 @@
 import { Button, Spin, message, Modal } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
 import EBarimt from "./EBarimt";
@@ -19,16 +19,22 @@ function Tulbur(
     eBarimtAutomataarShivikh,
     defaultTurul,
   },
-  ref
+  ref,
 ) {
   const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
-    defaultTurul === "ААН" || (defaultRegister && defaultRegister.toString().length === 7) ? true : false
+    defaultTurul === "ААН" ||
+      (defaultRegister && defaultRegister.toString().length === 7)
+      ? true
+      : false,
   );
 
   const [irgenEsekh, setIrgenEsekh] = React.useState(
-    defaultTurul === "Иргэн" || (defaultRegister && defaultRegister.toString().length === 10) ? true : false
+    defaultTurul === "Иргэн" ||
+      (defaultRegister && defaultRegister.toString().length === 10)
+      ? true
+      : false,
   );
   const [register, setRegister] = React.useState(defaultRegister || "");
   const [customerTin, setCustomerTin] = React.useState();
@@ -73,8 +79,49 @@ function Tulbur(
         destroy();
       },
     }),
-    []
+    [],
   );
+
+  useEffect(() => {
+    if (eBarimt) {
+      if (!!customerTin) khaaya();
+      else handlePrint();
+    }
+  }, [eBarimt]);
+
+  const sendRequest = (id) => {
+    setLoading(true);
+    const body = {
+      id: id,
+      barilgiinId: data.barilgiinId,
+    };
+    console.log("name ----->", baiguullagiinMedeelel?.name);
+    console.log("customerTin ----->", customerTin);
+    if (
+      (baiguullagaEsekh === true || irgenEsekh === true) &&
+      baiguullagiinMedeelel?.name &&
+      customerTin
+    ) {
+      body.turul = "3";
+      body.register = register;
+      body.customerTin = customerTin;
+    } else {
+      body.turul = "1";
+      body.register = register;
+    }
+
+    uilchilgee(token)
+      .post("/ebarimtShivye", body)
+      .then(({ data }) => {
+        if (data.success === true || data.status == "SUCCESS") {
+          setEBarimt(data);
+          setCustomerTin(null);
+          setBaiguullaga(null);
+        }
+      })
+      .catch(aldaaBarigch)
+      .finally(() => setLoading(false));
+  };
 
   function ebarimtAvya(id) {
     if (!!eBarimt) handlePrint();
@@ -86,40 +133,13 @@ function Tulbur(
         toast.warning(t("Байгууллагын регистр оруулна уу"));
         return;
       }
-      const sendRequest = () => {
-        setLoading(true);
-        const body = {
-          id: id,
-          barilgiinId: data.barilgiinId,
-        };
-
-        if (baiguullagaEsekh === true) {
-          body.turul = "3";
-          body.register = register;
-          body.customerTin = customerTin;
-        } else if (irgenEsekh === true) {
-          body.turul = "1";
-          body.register = register;
-        }
-
-        uilchilgee(token)
-          .post("/ebarimtShivye", body)
-          .then(({ data }) => {
-            if (data.success === true || data.status == "SUCCESS") {
-              setEBarimt(data);
-              handlePrint();
-            }
-          })
-          .catch(aldaaBarigch)
-          .finally(() => setLoading(false));
-      };
       if (!baiguullagiinMedeelel?.name) {
         Modal.confirm({
           title: t("Иргэнээр гаргахдаа итгэлтэй байна уу?"),
-          onOk: () => sendRequest(),
+          onOk: () => sendRequest(id),
         });
       } else {
-        sendRequest();
+        sendRequest(id);
       }
     }
   }
