@@ -88,7 +88,7 @@ const GereeniiUldegdel = React.memo(
     const uldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1");
     const showCombined = true;
 
-    const uldegdelTur = data?.tureesiinUldegdel ?? ugugdul?.tureesiinUldegdel ?? ugugdul?.uldegdel ?? 0;
+    const uldegdelTur = (data?.tureesiinUldegdel || data?.uldegdel) ?? (ugugdul?.tureesiinUldegdel || ugugdul?.uldegdel) ?? 0;
     const uldegdelAld = data?.aldangiinUldegdel ?? 0;
     const uldegdelTulsun = data?.tulsun ?? ugugdul?.tulsun ?? 0;
     const uldegdelKhyamdral = data?.khyamdral ?? ugugdul?.khyamdral ?? 0;
@@ -128,7 +128,7 @@ const GereeniiUldegdel = React.memo(
           <>
             {uldegdelTur > 0 && (
               <div className="flex justify-between gap-4">
-                <span className="text-gray-500">{t("Түрээсийн үлдэгдэл")}:</span>
+                <span className="text-gray-500">{t("Үлдэгдэл")}:</span>
                 <span className="font-bold text-red-500">
                   {formatNumber(uldegdelTur)}
                 </span>

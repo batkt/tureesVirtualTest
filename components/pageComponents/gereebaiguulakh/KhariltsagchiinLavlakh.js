@@ -33,15 +33,15 @@ const KhariltsagchiinLavlakh = ({
     searchKeys
   );
 
-  useEffect(() => {
-    khariltsagchiinGaralt.mutate();
-    khariltsagchiinGaralt.setKhuudaslalt((a) => ({
-      ...a,
-      jagsaalt: [],
-      khuudasniiKhemjee: 20,
-      khuudasniiDugaar: 1,
-    }));
-  }, [baiguullagaEsekh]);
+useEffect(() => {
+  khariltsagchiinGaralt.setKhuudaslalt((a) => ({
+    ...a,
+    jagsaalt: [],
+    search: "",
+    khuudasniiKhemjee: 20,
+    khuudasniiDugaar: 1,
+  }));
+}, [baiguullagaEsekh]);
 
   function onScroll(e) {
     if (
@@ -83,9 +83,17 @@ const KhariltsagchiinLavlakh = ({
       trigger={"click"}
       open={dropDownNeekhEsekh}
       onOpenChange={(open) => {
-        setDropDownNeekhEsekh(open);
-        if (open) khariltsagchiinGaralt.mutate();
-      }}
+  setDropDownNeekhEsekh(open);
+  if (open) {
+    khariltsagchiinGaralt.setKhuudaslalt((a) => ({
+      ...a,
+      search: "",      
+      jagsaalt: [],
+      khuudasniiDugaar: 1,
+    }));
+    khariltsagchiinGaralt.mutate();
+  }
+}}
       overlay={
         <div
           className="divide-y bg-white px-2 py-1 shadow-lg drop-shadow-2xl dark:bg-gray-700 dark:text-gray-200"

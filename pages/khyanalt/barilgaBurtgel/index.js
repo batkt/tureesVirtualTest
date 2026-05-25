@@ -3,7 +3,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { useMemo, useState } from "react";
 import { aldaaBarigch } from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import { Tabs, DatePicker, Select, Empty, Spin, Modal, Table } from "antd";
+import { Tabs, DatePicker, Select, Empty, Spin, Modal, Table, Tooltip } from "antd";
 import {
   ArrowUpOutlined,
   ArrowDownOutlined,
@@ -39,7 +39,7 @@ import {
   PointElement,
   LineElement,
   Title,
-  Tooltip,
+  Tooltip as ChartTooltip,
   Legend,
   Filler,
 } from "chart.js";
@@ -50,25 +50,25 @@ ChartJS.register(
   PointElement,
   LineElement,
   Title,
-  Tooltip,
+  ChartTooltip,
   Legend,
   Filler
 );
 
 const TURUL_CONFIG = {
-  turees:     { nerKey: "Түрээс",     icon: <HomeOutlined />,             color: "#10b981", ring: "ring-emerald-200 dark:ring-emerald-800" },
-  ashiglalt:  { nerKey: "Ашиглалт",  icon: <ThunderboltOutlined />,      color: "#3b82f6", ring: "ring-blue-200 dark:ring-blue-800" },
-  aldangi:    { nerKey: "Алданги",   icon: <WarningOutlined />,          color: "#ef4444", ring: "ring-red-200 dark:ring-red-800" },
-  baritsaa:   { nerKey: "Барьцаа",   icon: <LockOutlined />,             color: "#8b5cf6", ring: "ring-violet-200 dark:ring-violet-800" },
-  khyamdral:  { nerKey: "Хөнгөлөлт", icon: <GiftOutlined />,            color: "#f59e0b", ring: "ring-amber-200 dark:ring-amber-800" },
-  khungulult: { nerKey: "Хөнгөлөлт", icon: <GiftOutlined />,            color: "#f59e0b", ring: "ring-amber-200 dark:ring-amber-800" },
-  bank:       { nerKey: "Банк",      icon: <BankOutlined />,             color: "#06b6d4", ring: "ring-cyan-200 dark:ring-cyan-800" },
-  qpay:       { nerKey: "QPay",      icon: <WalletOutlined />,           color: "#6366f1", ring: "ring-indigo-200 dark:ring-indigo-800" },
-  barter:     { nerKey: "Barter",    icon: <SwapOutlined />,             color: "#14b8a6", ring: "ring-teal-200 dark:ring-teal-800" },
-  voucher:    { nerKey: "Voucher",   icon: <GiftOutlined />,             color: "#ec4899", ring: "ring-pink-200 dark:ring-pink-800" },
-  khuvaari:   { nerKey: "Хуваарь",   icon: <BarChartOutlined />,         color: "#64748b", ring: "ring-slate-200 dark:ring-slate-700" },
-  avlaga:     { nerKey: "Авлага",    icon: <ExclamationCircleOutlined />, color: "#f97316", ring: "ring-orange-200 dark:ring-orange-800" },
-  zalruulga:  { nerKey: "Залруулга", icon: <SwapOutlined />,             color: "#a855f7", ring: "ring-purple-200 dark:ring-purple-800" },
+  turees: { nerKey: "Түрээс", icon: <HomeOutlined />, color: "#10b981", ring: "ring-emerald-200 dark:ring-emerald-800" },
+  ashiglalt: { nerKey: "Ашиглалт", icon: <ThunderboltOutlined />, color: "#3b82f6", ring: "ring-blue-200 dark:ring-blue-800" },
+  aldangi: { nerKey: "Алданги", icon: <WarningOutlined />, color: "#ef4444", ring: "ring-red-200 dark:ring-red-800" },
+  baritsaa: { nerKey: "Барьцаа", icon: <LockOutlined />, color: "#8b5cf6", ring: "ring-violet-200 dark:ring-violet-800" },
+  khyamdral: { nerKey: "Хөнгөлөлт", icon: <GiftOutlined />, color: "#f59e0b", ring: "ring-amber-200 dark:ring-amber-800" },
+  khungulult: { nerKey: "Хөнгөлөлт", icon: <GiftOutlined />, color: "#f59e0b", ring: "ring-amber-200 dark:ring-amber-800" },
+  bank: { nerKey: "Банк", icon: <BankOutlined />, color: "#06b6d4", ring: "ring-cyan-200 dark:ring-cyan-800" },
+  qpay: { nerKey: "QPay", icon: <WalletOutlined />, color: "#6366f1", ring: "ring-indigo-200 dark:ring-indigo-800" },
+  barter: { nerKey: "Бартер", icon: <SwapOutlined />, color: "#14b8a6", ring: "ring-teal-200 dark:ring-teal-800" },
+  voucher: { nerKey: "Ваучер", icon: <GiftOutlined />, color: "#ec4899", ring: "ring-pink-200 dark:ring-pink-800" },
+  khuvaari: { nerKey: "Хуваарь", icon: <BarChartOutlined />, color: "#64748b", ring: "ring-slate-200 dark:ring-slate-700" },
+  avlaga: { nerKey: "Авлага", icon: <ExclamationCircleOutlined />, color: "#f97316", ring: "ring-orange-200 dark:ring-orange-800" },
+  zalruulga: { nerKey: "Залруулга", icon: <SwapOutlined />, color: "#a855f7", ring: "ring-purple-200 dark:ring-purple-800" },
 };
 
 function GlassCard({ children, className = "", onClick }) {
@@ -81,6 +81,35 @@ function GlassCard({ children, className = "", onClick }) {
     </div>
   );
 }
+
+// Shared Талбай column — truncates long comma-separated values with a tooltip
+const makeTalbaiColumn = (t) => ({
+  title: t("Талбай"),
+  dataIndex: "talbainDugaar",
+  width: 120,
+  align: "center",
+  render: (v) => {
+    if (!v) return "-";
+    const str = String(v);
+    return (
+      <Tooltip title={str} placement="topLeft">
+        <span
+          style={{
+            display: "block",
+            maxWidth: 110,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            margin: "0 auto",
+            cursor: "default",
+          }}
+        >
+          {str}
+        </span>
+      </Tooltip>
+    );
+  },
+});
 
 function DetailModal({ open, onClose, turul, cfg, token, query }) {
   const { t } = useTranslation();
@@ -98,69 +127,84 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
   );
 
   const isBank = turul === "bank";
+  const isVoucher = turul === "voucher";
+
+  const talbaiCol = makeTalbaiColumn(t);
 
   const columns = isBank
     ? [
-        { title: "№", key: "idx", width: 48, align: "center", render: (_, __, i) => i + 1 },
-        { title: t("Харилцагч"), dataIndex: "ner", ellipsis: true },
-        { title: t("Герээ №"), dataIndex: "gereeniiDugaar", width: 130, ellipsis: true },
-        { title: t("Талбай"), dataIndex: "talbainDugaar", width: 80, align: "center" },
-        { title: t("Данс"), dataIndex: "dansniiDugaar", width: 160, ellipsis: true },
-        { title: t("Банк"), dataIndex: "bankNer", ellipsis: true },
-        {
-          title: t("Орсон"),
-          dataIndex: "tulsunDun",
-          align: "right",
-          width: 120,
-          render: (v) => <span className="font-semibold text-emerald-600">{formatNumber(v, 0)}₮</span>,
-        },
-      ]
+      { title: "№", key: "idx", width: 48, align: "center", render: (_, __, i) => i + 1 },
+      { title: t("Харилцагч"), align: "center", dataIndex: "ner", ellipsis: true },
+      { title: t("Гэрээ №"), align: "center", dataIndex: "gereeniiDugaar", width: 130, ellipsis: true },
+      talbaiCol,
+      { title: t("Данс"), align: "center", dataIndex: "dansniiDugaar", width: 160, ellipsis: true },
+      { title: t("Банк"), align: "center", dataIndex: "bankNer", ellipsis: true },
+      {
+        title: t("Гүйцэтгэл"),
+        dataIndex: "tulsunDun",
+        align: "center",
+        width: 120,
+        render: (v) => <span className="font-semibold text-right text-emerald-600">{formatNumber(v, 0)}₮</span>,
+      },
+    ]
     : [
-        { title: "№", key: "idx", width: 48, align: "center", render: (_, __, i) => i + 1 },
-        { title: t("Харилцагч"), dataIndex: "ner", ellipsis: true },
-        { title: t("Герээ №"), dataIndex: "gereeniiDugaar", width: 130, ellipsis: true },
-        { title: t("Талбай"), dataIndex: "talbainDugaar", width: 80, align: "center" },
-        {
+      { title: "№", key: "idx", width: 48, align: "center", render: (_, __, i) => i + 1 },
+      { title: t("Харилцагч"), align: "center", dataIndex: "ner", ellipsis: true },
+      { title: t("Гэрээ №"), align: "center", dataIndex: "gereeniiDugaar", width: 130, ellipsis: true },
+      talbaiCol,
+      // "Бодогдсон" column — hidden for voucher (has no planned amount)
+      ...(!isVoucher
+        ? [{
           title: t("Бодогдсон"),
           dataIndex: "tulukhDun",
-          align: "right",
+          align: "center",
           width: 120,
           render: (v) => formatNumber(v, 0),
-        },
-        {
-          title: t("Орсон"),
-          dataIndex: "tulsunDun",
-          align: "right",
-          width: 110,
-          render: (v) => <span className="font-semibold text-emerald-600">{formatNumber(v, 0)}</span>,
-        },
-        {
-          title: t("Хөнгөлөлт"),
-          dataIndex: "khyamdral",
-          align: "right",
-          width: 110,
-          render: (v) => (v > 0 ? <span className="text-amber-600">{formatNumber(v, 0)}</span> : "-"),
-        },
-        {
-          title: t("Үлдэгдэл"),
-          align: "right",
-          width: 120,
-          render: (_, r) => {
-            const d = Math.max(0, (r.tulukhDun || 0) - (r.khyamdral || 0) - (r.tulsunDun || 0));
-            return d > 0 ? (
-              <span className="font-semibold text-red-500">{formatNumber(d, 0)}</span>
-            ) : (
-              <span className="text-slate-400">—</span>
-            );
+        }]
+        : []),
+      {
+        title: t("Гүйцэтгэл"),
+        dataIndex: "tulsunDun",
+        align: "center",
+        width: 110,
+        render: (v) => <span className="font-semibold text-emerald-600">{formatNumber(v, 0)}</span>,
+      },
+      // Хөнгөлөлт & Үлдэгдэл — hidden for voucher
+      ...(!isVoucher
+        ? [
+          {
+            title: t("Хөнгөлөлт"),
+            dataIndex: "khyamdral",
+            align: "center",
+            width: 110,
+            render: (v) => (v > 0 ? <span className="text-amber-600">{formatNumber(v, 0)}</span> : "-"),
           },
-        },
-      ];
+          {
+            title: t("Үлдэгдэл"),
+            align: "center",
+            width: 120,
+            render: (_, r) => {
+              const d = Math.max(0, (r.tulukhDun || 0) - (r.khyamdral || 0) - (r.tulsunDun || 0));
+              return d > 0 ? (
+                <span className="font-semibold text-red-500">{formatNumber(d, 0)}</span>
+              ) : (
+                <span className="text-slate-400">—</span>
+              );
+            },
+          },
+        ]
+        : []),
+    ];
 
   const rows = (data || []).map((r, i) => ({ key: i, ...r }));
   const totalTulsun = rows.reduce((s, r) => s + (r.tulsunDun || 0), 0);
   const totalTulukh = rows.reduce((s, r) => s + (r.tulukhDun || 0), 0);
   const totalKhyamdral = rows.reduce((s, r) => s + (r.khyamdral || 0), 0);
   const totalDutuu = Math.max(0, totalTulukh - totalKhyamdral - totalTulsun);
+
+  // Summary colspan accounting for hidden columns per type
+  const baseColspan = 4; // №, Харилцагч, Гэрээ №, Талбай
+  const tulsunIndex = isBank ? 4 : isVoucher ? 4 : 5;
 
   return (
     <Modal
@@ -196,18 +240,18 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
         summary={() => (
           <Table.Summary fixed="bottom">
             <Table.Summary.Row className="bg-slate-50 font-semibold">
-              <Table.Summary.Cell index={0} colSpan={isBank ? 4 : 4} align="right">
+              <Table.Summary.Cell index={0} colSpan={baseColspan} align="right">
                 {t("Нийт")}
               </Table.Summary.Cell>
-              {!isBank && (
+              {!isBank && !isVoucher && (
                 <Table.Summary.Cell index={4} align="right">
                   <span className="font-semibold">{formatNumber(totalTulukh, 0)}</span>
                 </Table.Summary.Cell>
               )}
-              <Table.Summary.Cell index={isBank ? 4 : 5} align="right">
+              <Table.Summary.Cell index={tulsunIndex} align="right">
                 <span className="font-semibold text-emerald-600">{formatNumber(totalTulsun, 0)}</span>
               </Table.Summary.Cell>
-              {!isBank && (
+              {!isBank && !isVoucher && (
                 <>
                   <Table.Summary.Cell index={6} align="right">
                     <span className="text-amber-600">{totalKhyamdral > 0 ? formatNumber(totalKhyamdral, 0) : "—"}</span>
@@ -282,13 +326,13 @@ function IncomeTypeCard({ cfg, tulukhDun, tulsunDun, khyamdral, onClick }) {
           <div className="text-[11px] font-semibold leading-tight text-slate-700 dark:text-slate-200">
             {formatNumber(tulukhDun, 0)}
           </div>
-          <div className="mt-0.5 text-slate-400">{t("Бодогдсон")}</div>
+          <div className="mt-0.5 text-slate-400">{t("")}</div>
         </div>
         <div className="px-2">
           <div className="text-[11px] font-semibold leading-tight text-emerald-600 dark:text-emerald-400">
             {formatNumber(tulsunDun, 0)}
           </div>
-          <div className="mt-0.5 text-slate-400">{t("Орсон")}</div>
+          <div className="mt-0.5 text-slate-400">{t("Гүйцэтгэл")}</div>
         </div>
         <div className="pl-2">
           <div className={`text-[11px] font-semibold leading-tight ${dutuu > 0 ? "text-red-500" : "text-slate-400"}`}>
@@ -340,13 +384,13 @@ function OutstandingCard({ cfg, tulukhDun, tulsunDun, khyamdral, onClick }) {
           <div className="text-[11px] font-semibold leading-tight text-slate-700 dark:text-slate-200">
             {formatNumber(tulukhDun, 0)}
           </div>
-          <div className="mt-0.5 text-slate-400">{t("Бодогдсон")}</div>
+          <div className="mt-0.5 text-slate-400">{t("")}</div>
         </div>
         <div className="pl-2">
           <div className="text-[11px] font-semibold leading-tight text-emerald-600 dark:text-emerald-400">
             {formatNumber(tulsunDun, 0)}
           </div>
-          <div className="mt-0.5 text-slate-400">{t("Орсон")}</div>
+          <div className="mt-0.5 text-slate-400">{t("Гүйцэтгэл")}</div>
         </div>
       </div>
     </GlassCard>
@@ -514,13 +558,13 @@ function BarilgaBurtgel({ token }) {
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <StatCard
-          label={t("Нийт бодогдсон")}
+          label={t("Нийт төлөлт")}
           value={`${formatNumber(totalTulukh, 0)}₮`}
           icon={<DollarOutlined />}
           color="#10b981"
         />
         <StatCard
-          label={t("Нийт орсон")}
+          label={t("Нийт гүйцэтгэл")}
           value={`${formatNumber(totalTulsun, 0)}₮`}
           icon={<ArrowUpOutlined />}
           color="#3b82f6"
@@ -584,13 +628,13 @@ function BarilgaBurtgel({ token }) {
           color="#ef4444"
         />
         <StatCard
-          label={t("Нийт бодогдсон")}
+          label={t("Нийт төлөлт")}
           value={`${formatNumber(totalTulukh, 0)}₮`}
           icon={<DollarOutlined />}
           color="#64748b"
         />
         <StatCard
-          label={t("Нийт орсон")}
+          label={t("Нийт гүйцэтгэл")}
           value={`${formatNumber(totalTulsun, 0)}₮`}
           icon={<ArrowUpOutlined />}
           color="#10b981"

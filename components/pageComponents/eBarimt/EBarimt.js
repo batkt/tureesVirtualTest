@@ -102,7 +102,7 @@ function EBarimt({
               <tbody>
                 <tr>
                   <td colSpan={6} className="border text-center">
-                    {`${baiguullagaEsekh ? "ААН-д" : "Иргэнд"} очих баримт`}
+                    {`${baiguullagaEsekh && !irgenEsekh ? "ААН-д" : "Иргэнд"} очих баримт`}
                   </td>
                 </tr>
                 <tr>

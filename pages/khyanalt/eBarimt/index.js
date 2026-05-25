@@ -284,13 +284,13 @@ function EbarimtMedeelel({ token }) {
       ...shineColumn,
       ...shineColumn2,
       ...shineColumn3,
-      {
-        title: t("Регистр"),
-        dataIndex: "register",
-        align: "center",
-        width: 120,
-        render: (data) => data,
-      },
+      // {
+      //   title: t("Регистр"),
+      //   dataIndex: "register",
+      //   align: "center",
+      //   width: 120,
+      //   render: (data) => data,
+      // },
       {
         title: t("Нэр"),
         dataIndex: "customerName",

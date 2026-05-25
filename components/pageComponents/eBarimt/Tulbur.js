@@ -24,17 +24,23 @@ function Tulbur(
   const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
-    defaultTurul === "ААН" ||
-      (defaultRegister && defaultRegister.toString().length === 7)
-      ? true
-      : false,
+   
+    defaultRegister && defaultRegister.toString().length === 10
+      ? false
+      : defaultTurul === "ААН" ||
+          (defaultRegister && defaultRegister.toString().length === 7)
+        ? true
+        : false,
   );
 
   const [irgenEsekh, setIrgenEsekh] = React.useState(
-    defaultTurul === "Иргэн" ||
-      (defaultRegister && defaultRegister.toString().length === 10)
-      ? true
-      : false,
+  
+    defaultRegister && defaultRegister.toString().length === 7
+      ? false
+      : defaultTurul === "Иргэн" ||
+          (defaultRegister && defaultRegister.toString().length === 10)
+        ? true
+        : false,
   );
   const [register, setRegister] = React.useState(defaultRegister || "");
   const [customerTin, setCustomerTin] = React.useState();
@@ -95,13 +101,7 @@ function Tulbur(
       id: id,
       barilgiinId: data.barilgiinId,
     };
-    console.log("name ----->", baiguullagiinMedeelel?.name);
-    console.log("customerTin ----->", customerTin);
-    if (
-      (baiguullagaEsekh === true || irgenEsekh === true) &&
-      baiguullagiinMedeelel?.name &&
-      customerTin
-    ) {
+    if (baiguullagaEsekh === true && baiguullagiinMedeelel?.name && customerTin) {
       body.turul = "3";
       body.register = register;
       body.customerTin = customerTin;
@@ -131,7 +131,11 @@ function Tulbur(
         (baiguullagaEsekh === true && register?.toString().length !== 7) ||
         (irgenEsekh === true && register?.toString().length !== 10)
       ) {
-        toast.warning(t("Байгууллагын регистр оруулна уу"));
+        message.toast(t("Байгууллагын регистр оруулна уу"));
+        return;
+      }
+      if ((baiguullagaEsekh || irgenEsekh) && !baiguullagiinMedeelel?.name) {
+        message.toast(t("Регистр буруу байна"));
         return;
       }
       if (!baiguullagiinMedeelel?.name) {
