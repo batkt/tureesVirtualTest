@@ -51,9 +51,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     baiguullaga?.tukhainBaaziinKholbolt
   );
 
-  const actualAldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
-    ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
-    : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1"));
+  const actualAldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
 
   const displayAldangi = gereeDetail?.aldangiinUldegdel || 0;
 
@@ -948,7 +946,7 @@ function avlagaTovchoo({ token }) {
 
         const adjustedEkhniiUldegdel = Number(item.ekhniiUldegdel || 0);
 
-        const adjustedEtssiinUldegdel = Number(item.etssiinUldegdel || 0) + Number(item.aldangiinUldegdel || 0);
+        const adjustedEtssiinUldegdel = Number(item.etssiinUldegdel || 0);
 
         return {
           ...item,

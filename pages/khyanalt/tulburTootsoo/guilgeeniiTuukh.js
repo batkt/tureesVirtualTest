@@ -62,9 +62,7 @@ const GereeniiUldegdel = React.memo(
     const { t } = useTranslation();
     const [visible, setVisible] = useState(false);
 
-    const aldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
-      ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
-      : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b");
+    const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
 
     const { data, mutate, isValidating } = useSWR(
       !!ugugdul?.gereeniiDugaar && !!barilgiinId
@@ -85,10 +83,10 @@ const GereeniiUldegdel = React.memo(
       },
     );
 
-    const uldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1");
+    const uldegdelUdruurKharakhEsekh = !!baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh;
     const showCombined = true;
 
-    const uldegdelTur = (data?.tureesiinUldegdel || data?.uldegdel) ?? (ugugdul?.tureesiinUldegdel || ugugdul?.uldegdel) ?? 0;
+    const uldegdelTur = (data ? (data.tureesiinUldegdel ?? data.uldegdel) : (ugugdul?.tureesiinUldegdel ?? ugugdul?.uldegdel)) ?? 0;
     const uldegdelAld = data?.aldangiinUldegdel ?? 0;
     const uldegdelTulsun = data?.tulsun ?? ugugdul?.tulsun ?? 0;
     const uldegdelKhyamdral = data?.khyamdral ?? ugugdul?.khyamdral ?? 0;
@@ -99,7 +97,7 @@ const GereeniiUldegdel = React.memo(
     const baritsaaBalance = Math.max(0, reqBaritsaa - paidBaritsaa);
 
     const fallbackUldegdel = data
-      ? uldegdelTur
+      ? (data.tureesiinUldegdel ?? 0)
       : (ugugdul?.tureesiinUldegdel !== undefined
         ? ugugdul.tureesiinUldegdel
         : (parseFloat(ugugdul?.uldegdel) || 0) - (parseFloat(ugugdul?.aldangiinUldegdel) || 0)) ||
@@ -107,8 +105,8 @@ const GereeniiUldegdel = React.memo(
       ugugdul?.tsutslagdsanAvlaga ||
       (ugugdul?.tuluv == -1 ? ugugdul?.tsutsalsanUldegdel : 0);
 
-    const displayUldegdel = aldangiTuukhKharakhEsekh
-      ? (fallbackUldegdel + uldegdelAld)
+    const displayUldegdel = data
+      ? (aldangiTuukhKharakhEsekh ? (data.uldegdel ?? 0) : (data.tureesiinUldegdel ?? 0))
       : fallbackUldegdel;
     ugugdul.uldegdel = displayUldegdel;
     ugugdul.tureesiinUldegdel = uldegdelTur;
@@ -126,11 +124,11 @@ const GereeniiUldegdel = React.memo(
           <div className="flex justify-center p-2"><Spin size="small" /></div>
         ) : (
           <>
-            {uldegdelTur > 0 && (
+            {(aldangiTuukhKharakhEsekh ? uldegdelTur : displayUldegdel) > 0 && (
               <div className="flex justify-between gap-4">
                 <span className="text-gray-500">{t("Үлдэгдэл")}:</span>
                 <span className="font-bold text-red-500">
-                  {formatNumber(uldegdelTur)}
+                  {formatNumber(aldangiTuukhKharakhEsekh ? uldegdelTur : displayUldegdel)}
                 </span>
               </div>
             )}
@@ -151,10 +149,10 @@ const GereeniiUldegdel = React.memo(
                 </span>
               </div>
             )}
-            {aldangiTuukhKharakhEsekh && uldegdelAld > 0 && (
+            {aldangiTuukhKharakhEsekh && uldegdelAld !== 0 && (
               <div className="flex justify-between gap-4">
                 <span className="text-gray-500">{t("Нийт алданги")}:</span>
-                <span className="font-bold text-red-500">
+                <span className={`font-bold ${uldegdelAld > 0 ? "text-red-500" : "text-green-500"}`}>
                   {formatNumber(uldegdelAld)}
                 </span>
               </div>
@@ -177,7 +175,7 @@ const GereeniiUldegdel = React.memo(
         className={`text-right font-medium ${(displayUldegdel ?? 0) > 0 ? "text-red-500" : "text-green-500"
           }`}
       >
-        {(displayUldegdel ?? 0) > 0 ? (
+        {(displayUldegdel ?? 0) !== 0 ? (
           <Popover
             content={content}
             title={t("Үлдэгдлийн дэлгэрэнгүй")}
@@ -451,6 +449,7 @@ function GuilgeeniiTuukh(props) {
   const excelref = React.useRef();
   const baritsaaref = React.useRef(null);
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
+  const aldangiTuukhKharakhEsekh = !!baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh;
   const [ognoo, setOgnoo] = React.useState([
     moment(moment().startOf("month").format("YYYY-MM-DD 00:00:00")),
     moment(moment().endOf("month").format("YYYY-MM-DD 23:59:59")),
@@ -1524,6 +1523,7 @@ function GuilgeeniiTuukh(props) {
           baiguullagiinId={baiguullaga?._id}
           ognoo={ognoo}
           onFinish={refreshData}
+          aldangiTuukhKharakhEsekh={aldangiTuukhKharakhEsekh}
         />
       ),
       footer,
@@ -2063,13 +2063,13 @@ function GuilgeeniiTuukh(props) {
                   width: "7rem",
                   summary: true,
                   render: (aldangiinUldegdel, record) => {
-  return (
-    <GereeniiAldangi
-      ugugdul={record}
-      token={token}
-    />
-  );
-},
+                    return (
+                      <GereeniiAldangi
+                        ugugdul={record}
+                        token={token}
+                      />
+                    );
+                  },
                 },
                 {
                   title: t("Төлсөн алданги"),

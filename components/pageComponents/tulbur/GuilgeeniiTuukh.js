@@ -73,16 +73,14 @@ function GuilgeeniiTuukh(
     ajiltan?.baiguullagiinId || data?.baiguullagiinId,
   );
 
-  const actualAldangiTuukhKharakhEsekh = baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh !== undefined
-    ? baiguullaga?.tokhirgoo?.aldangiTuukhKharakhEsekh
-    : (baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1") || aldangiTuukhKharakhEsekh);
-  const actualUldegdelUdruurKharakhEsekh = baiguullaga?.tokhirgoo?.uldegdelUdruurKharakhEsekh || baiguullaga?._id === "6735c77a7fc60cd66deb2909" || (ajiltan?.username === "CAdmin1" || ajiltan?.ner === "CAdmin1") || uldegdelUdruurKharakhEsekh;
+  const actualAldangiTuukhKharakhEsekh = baiguullaga ? baiguullaga.tokhirgoo?.aldangiTuukhKharakhEsekh : aldangiTuukhKharakhEsekh;
+  const actualUldegdelUdruurKharakhEsekh = baiguullaga ? baiguullaga.tokhirgoo?.uldegdelUdruurKharakhEsekh : uldegdelUdruurKharakhEsekh;
 
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
     token,
     data?._id,
     ognoo,
-    actualUldegdelUdruurKharakhEsekh ? undefined : shineOgnoo,
+    shineOgnoo,
   );
   const [sortOrders, setSortOrders] = useState({
     ognoo: null,
@@ -232,110 +230,22 @@ function GuilgeeniiTuukh(
   };
 
   const sortedData = React.useMemo(() => {
-    if (!guilgeeniiTuukh) {
-      return [];
-    }
+    if (!guilgeeniiTuukh) return [];
 
-
-    const processedGuilgeeniiTuukh = guilgeeniiTuukh.map(x => {
-      let uld = x.uldegdel;
-      if (!actualAldangiTuukhKharakhEsekh) {
-        uld = x.avlagaUldegdel ?? x.uldegdel;
-      }
-
-      return { ...x, uldegdel: uld };
-    });
-
-    const activeOgnoo = shineOgnoo;
-
-    if (activeOgnoo && activeOgnoo.length > 1) {
-      const startDate = actualUldegdelUdruurKharakhEsekh
-        ? moment(activeOgnoo[0]).startOf('day')
-        : moment(activeOgnoo[0]).startOf('month');
-      const endDate = actualUldegdelUdruurKharakhEsekh
-        ? moment(activeOgnoo[1]).endOf('day')
-        : moment(activeOgnoo[1]).endOf('month');
-
-      const beforeItems = processedGuilgeeniiTuukh.filter(item => moment(item.ognoo).isBefore(startDate));
-      const openingBalance = beforeItems.length > 0 ? beforeItems[beforeItems.length - 1].uldegdel : 0;
-
-      const withinItems = processedGuilgeeniiTuukh.filter(item => {
-        const itemDate = moment(item.ognoo);
-        return itemDate.isSameOrAfter(startDate) && itemDate.isSameOrBefore(endDate);
-      });
-
-      const closingBalance = withinItems.length > 0 ? withinItems[withinItems.length - 1].uldegdel : openingBalance;
-
-      let processedItems = [...withinItems];
-      if (sortColumn) {
-        processedItems.sort((a, b) => {
-          const sortDaraalal = sortOrders[sortColumn];
-          if (sortDaraalal === "asc") {
-            if (sortColumn === "ognoo") return new Date(a[sortColumn]) - new Date(b[sortColumn]);
-            return a[sortColumn] - b[sortColumn];
-          } else if (sortDaraalal === "desc") {
-            if (sortColumn === "ognoo") return new Date(b[sortColumn]) - new Date(a[sortColumn]);
-            return b[sortColumn] - a[sortColumn];
-          }
-          return 0;
-        });
-      }
-
-      const result = [];
-
-      result.push({
-        ognoo: startDate.toDate(),
-        tailbar: "Эхний үлдэгдэл",
-        uldegdel: openingBalance,
-        ekhniiUldegdelEsekh: true,
-        undsenDun: 0,
-        tulukhDun: 0,
-        khyamdral: 0,
-        tulsunAldangi: 0,
-        tulsunDun: 0,
-        _id: "opening_balance",
-      });
-
-      result.push(...processedItems);
-
-      result.push({
-        ognoo: endDate.toDate(),
-        tailbar: "Эцсийн үлдэгдэл",
-        uldegdel: closingBalance,
-        etsiinUldegdelEsekh: true,
-        undsenDun: 0,
-        tulukhDun: 0,
-        khyamdral: 0,
-        tulsunAldangi: 0,
-        tulsunDun: 0,
-        _id: "closing_balance",
-      });
-
-      return result;
-    }
-
-    let khuulsanData = [...processedGuilgeeniiTuukh];
-    const endOfToday = moment().endOf("day");
-    khuulsanData = khuulsanData.filter(item => moment(item.ognoo).isSameOrBefore(endOfToday));
-
+    const khuulsanData = [...guilgeeniiTuukh];
     khuulsanData.sort((a, b) => {
       const sortDaraalal = sortOrders[sortColumn];
       if (sortDaraalal === "asc") {
-        if (sortColumn === "ognoo") {
-          return new Date(a[sortColumn]) - new Date(b[sortColumn]);
-        }
+        if (sortColumn === "ognoo") return new Date(a[sortColumn]) - new Date(b[sortColumn]);
         return a[sortColumn] - b[sortColumn];
       } else if (sortDaraalal === "desc") {
-        if (sortColumn === "ognoo") {
-          return new Date(b[sortColumn]) - new Date(a[sortColumn]);
-        }
+        if (sortColumn === "ognoo") return new Date(b[sortColumn]) - new Date(a[sortColumn]);
         return b[sortColumn] - a[sortColumn];
       }
       return 0;
     });
-
     return khuulsanData;
-  }, [guilgeeniiTuukh, sortOrders, sortColumn, shineOgnoo, ognoo, actualUldegdelUdruurKharakhEsekh, actualAldangiTuukhKharakhEsekh]);
+  }, [guilgeeniiTuukh, sortOrders, sortColumn, shineOgnoo]);
 
   useImperativeHandle(
     ref,
@@ -374,7 +284,7 @@ function GuilgeeniiTuukh(
           Түрээс: formatNumber(item.undsenDun),
           "Төлөх дүн": formatNumber(item.tulukhDun),
           Хямдрал: formatNumber(item.khyamdral),
-          "Төлсөн алданги": formatNumber(item.tulsunAldangi),
+          ...(actualAldangiTuukhKharakhEsekh ? { "Төлсөн алданги": formatNumber(item.tulsunAldangi) } : {}),
           "Төлсөн дүн": formatNumber(item.tulsunDun),
           Үлдэгдэл: formatNumber(item.uldegdel),
           Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
@@ -647,9 +557,7 @@ function GuilgeeniiTuukh(
                     className={`min-w-[8rem] overflow-hidden p-1 text-end ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
                       }`}
                   >
-                    {formatNumber(
-                      a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
-                    )}
+                    {formatNumber(a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel)}
                   </td>
                   <td className="min-w-[8rem] overflow-hidden p-1 text-center">
                     {isBalanceRow ? "" : (a.turul === "bank"

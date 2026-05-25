@@ -53,7 +53,7 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
 });
 
 function GuilgeeniiTuukhAldangi(
-  { token, data, refreshData, ognoo, ajiltan, barilgiinId },
+  { token, data, refreshData, ognoo, ajiltan, barilgiinId, aldangiTuukhKharakhEsekh },
   ref
 ) {
   const { t, i18n } = useTranslation();
@@ -62,7 +62,7 @@ function GuilgeeniiTuukhAldangi(
   const [shineOgnoo, setShineOgnoo] = useState(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState(aldangiTuukhKharakhEsekh ? "1" : "2");
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const [aldangiinUldegdel, setAldangiinUldegdel] = useState(undefined);
@@ -249,7 +249,7 @@ function GuilgeeniiTuukhAldangi(
   }, [guilgeeniiAldangiTuukh, sortOrders, sortColumn, shineOgnoo]);
 
   const tulsunSortedData = React.useMemo(() => {
-    return sortedData.filter((a) => (a.tulsunAldangi || a.tulsunDun || 0) > 0);
+    return sortedData.filter((a) => (a.tulsunAldangi || 0) > 0);
   }, [sortedData]);
 
   useImperativeHandle(
@@ -309,7 +309,7 @@ function GuilgeeniiTuukhAldangi(
             Огноо: moment(item.ognoo).format("YYYY/MM/DD"),
             Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
             "Төлөх алданги": item.tulukhAldangi || 0,
-            "Төлсөн алданги": item.tulsunAldangi || item.tulsunDun || 0,
+            "Төлсөн алданги": item.tulsunAldangi || 0,
             Данс: item.dansniiDugaar || "",
             "Төлсөн данс": item.tulsunDans || "",
             Тайлбар: item.tailbar || "",
@@ -588,7 +588,7 @@ function GuilgeeniiTuukhAldangi(
                   {formatNumber(a.tulukhAldangi, 2)}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.tulsunAldangi || a.tulsunDun, 2)}
+                  {formatNumber(a.tulsunAldangi, 2)}
                 </td>
                 <td className="flex min-w-[12rem] justify-center p-1 text-center ">
                   {a.dansniiDugaar}
@@ -814,7 +814,7 @@ function GuilgeeniiTuukhAldangi(
                       {formatNumber(a.tulukhAldangi, 0)}
                     </td>
                     <td className="text-right">
-                      {formatNumber(a.tulsunAldangi || a.tulsunDun, 0)}
+                      {formatNumber(a.tulsunAldangi, 0)}
                     </td>
                     <td>{a.dansniiDugaar}</td>
                     <td>{a.tulsunDans}</td>
@@ -938,11 +938,11 @@ function GuilgeeniiTuukhAldangi(
           defaultActiveKey={activeTab}
           activeKey={activeTab}
           items={[
-            {
+            ...(aldangiTuukhKharakhEsekh ? [{
               key: "1",
               label: t("Төлсөн алданги"),
               children: <TableContent />,
-            },
+            }] : []),
             {
               key: "2",
               label: t("Бодогдсон алданги"),

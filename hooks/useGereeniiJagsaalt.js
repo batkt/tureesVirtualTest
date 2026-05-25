@@ -127,7 +127,7 @@ const fetcherGuilgee = (url, token, gereeniiId, ognoo, shineOgnoo) => {
   let params = {
     duusakhOgnoo: (Array.isArray(shineOgnoo) && shineOgnoo.length > 1)
       ? moment(shineOgnoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59")
-      : moment().format("YYYY-MM-DD 23:59:59"),
+      : moment().endOf("day").format("YYYY-MM-DD 23:59:59"),
   };
   if (Array.isArray(shineOgnoo) && shineOgnoo.length > 1) {
     params.shineOgnoo = {
@@ -141,23 +141,8 @@ const fetcherGuilgee = (url, token, gereeniiId, ognoo, shineOgnoo) => {
   }
 
   return axios(token)
-    .get(`${url}/${gereeniiId}`, {
-      params: params,
-    })
-    .then((res) => {
-      var aldangiUldegdel = 0;
-      res.data.forEach((x) => {
-        aldangiUldegdel =
-          aldangiUldegdel +
-          (x?.tulukhAldangi || 0) -
-          (x?.tulsunAldangi || 0);
-        x.avlagaUldegdel = x.uldegdel || 0;
-        if (x.turul === "khyamdral" && (x.uldegdel || 0) < 0)
-          x.uldegdel = aldangiUldegdel > 0 ? aldangiUldegdel : 0;
-        else x.uldegdel = (x.uldegdel || 0) + aldangiUldegdel;
-      });
-      return res.data;
-    })
+    .get(`${url}/${gereeniiId}`, { params })
+    .then((res) => res.data)
     .catch(aldaaBarigch);
 };
 

@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import GuilgeeniiTuukhAldangi from "./GuilgeeniiTuukhAldangi";
 
 function KhuulgaAldangi(
-  { data, token, ognoo, onFinish, destroy, ajiltan, barilgiinId, shineOgnoo },
+  { data, token, ognoo, onFinish, destroy, ajiltan, barilgiinId, shineOgnoo, aldangiTuukhKharakhEsekh },
   ref
 ) {
   const refTuukh = useRef(null);
@@ -44,6 +44,7 @@ function KhuulgaAldangi(
         token={token}
         ognoo={ognoo}
         refreshData={onFinish}
+        aldangiTuukhKharakhEsekh={aldangiTuukhKharakhEsekh}
       />
     </div>
   );
