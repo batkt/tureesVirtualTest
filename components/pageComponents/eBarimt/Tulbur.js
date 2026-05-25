@@ -105,6 +105,7 @@ function Tulbur(
       body.turul = "3";
       body.register = register;
       body.customerTin = customerTin;
+      body.customerName = baiguullagiinMedeelel?.name;
     } else {
       body.turul = "1";
       body.register = register;
