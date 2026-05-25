@@ -79,6 +79,8 @@ function ZogsoolBurtgekh(
 
           let body = form.getFieldsValue();
 
+          if (body.gadnaZogsooliinId === undefined)
+            body.gadnaZogsooliinId = null;
           body.tokiNer = body?.tokiEsekh ? body?.ner : "";
           body.barilgiinId = barilgiinId;
 
@@ -282,8 +284,7 @@ function ZogsoolBurtgekh(
             </div>
             <div className="col-span-2">
               <Form.Item className="m-0" name="gadnaZogsooliinId">
-                <Select placeholder={t("Зогсоол сонгох")}>
-                  <Select.Option value={undefined}>---</Select.Option>
+                <Select placeholder={t("Зогсоол сонгох")} allowClear>
                   {jagsaalt.map((mur, i) =>
                     !!data ? (
                       mur._id !== data._id && (
