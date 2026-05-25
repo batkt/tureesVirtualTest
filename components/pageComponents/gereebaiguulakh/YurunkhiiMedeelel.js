@@ -200,6 +200,7 @@ const YurunkhiiMedeele = ({
             params: {
               query: {
                 baiguullagiinId: baiguullaga?._id,
+                barilgiinId: barilgiinId,
                 $or: [
                   { register: target.value },
                   { customerTin: target.value },
