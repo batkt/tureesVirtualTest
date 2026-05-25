@@ -1,4 +1,4 @@
-import { Form, Input, Switch, Button, Upload, Select } from "antd";
+import { Form, Input, Switch, Button, Upload, Select, message } from "antd";
 import {
   UploadOutlined,
   SolutionOutlined,
@@ -260,6 +260,14 @@ const YurunkhiiMedeele = ({
               form.setFieldsValue(fillData);
               onChange({ ...value, ...fillData });
             } else {
+              const maxLen = value.baiguullagaEsekh ? 7 : 10;
+              if (target.value.length > maxLen) {
+                message.error(t("Регистрийн дугаар буруу байна"));
+                const trimmed = target.value.slice(0, maxLen);
+                form.setFieldValue("register", trimmed);
+                onChange({ ...value, register: trimmed });
+                return;
+              }
               form.setFieldValue("register", target.value);
               onChange({ ...value, register: target.value });
             }

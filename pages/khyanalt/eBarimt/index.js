@@ -187,8 +187,8 @@ function EbarimtMedeelel({ token }) {
             {
               title: t("Машины дугаар"),
               dataIndex: "mashiniiDugaar",
-              ellipsis: true,
               align: "center",
+              width: 130,
               render: (data) => {
                 return data;
               },
@@ -203,8 +203,8 @@ function EbarimtMedeelel({ token }) {
             {
               title: t("Гэрээний дугаар"),
               dataIndex: "gereeniiDugaar",
-              ellipsis: true,
               align: "center",
+              width: 140,
               showSorterTooltip: false,
               sorter: () => 0,
               render: (data) => {
@@ -212,19 +212,10 @@ function EbarimtMedeelel({ token }) {
               },
             },
             {
-              title: t("Регистр"),
-              dataIndex: "customerNo",
-              ellipsis: true,
-              align: "center",
-              render: (data) => {
-                return data;
-              },
-            },
-            {
               title: t("Талбайн дугаар"),
               dataIndex: "talbainDugaar",
-              ellipsis: true,
               align: "center",
+              width: 130,
               showSorterTooltip: false,
               sorter: () => 0,
               render: (data) => {
@@ -261,7 +252,7 @@ function EbarimtMedeelel({ token }) {
         title: t("№"),
         key: "index",
         align: "center",
-        width: "60px",
+        width: 60,
         summary: true,
         render: (a, b, index) => {
           return index + 1;
@@ -270,8 +261,8 @@ function EbarimtMedeelel({ token }) {
       {
         title: t("Огноо"),
         dataIndex: "createdAt",
-        ellipsis: true,
         align: "center",
+        width: 170,
         render: (data) => {
           return moment(data).format("YYYY-MM-DD HH:mm:ss");
         },
@@ -281,8 +272,8 @@ function EbarimtMedeelel({ token }) {
       {
         title: t("Тайлант сар"),
         dataIndex: "reportMonth",
-        ellipsis: true,
         align: "center",
+        width: 120,
         render: (reportMonth, data) => {
           return reportMonth ? reportMonth : data.date;
         },
@@ -293,6 +284,20 @@ function EbarimtMedeelel({ token }) {
       ...shineColumn,
       ...shineColumn2,
       ...shineColumn3,
+      {
+        title: t("Регистр"),
+        dataIndex: "register",
+        align: "center",
+        width: 120,
+        render: (data) => data,
+      },
+      {
+        title: t("Нэр"),
+        dataIndex: "customerName",
+        align: "center",
+        width: 180,
+        render: (data) => data,
+      },
       {
         title: <div className="text-center font-semibold">{t("Төрөл")}</div>,
         align: "center",
@@ -331,8 +336,8 @@ function EbarimtMedeelel({ token }) {
       {
         title: t("Дүн"),
         dataIndex: "cashAmount",
-        ellipsis: true,
         align: "right",
+        width: 120,
         summary: true,
         render: (data, object) => {
           if (!!object.cashAmount) return formatNumber(data);
@@ -344,8 +349,8 @@ function EbarimtMedeelel({ token }) {
       {
         title: t("Үйлчилгээ"),
         dataIndex: "",
-        ellipsis: true,
         align: "center",
+        width: 100,
         render: (data) => {
           return (
             <div>
@@ -670,14 +675,15 @@ function EbarimtMedeelel({ token }) {
                 <AntdTable.Summary.Cell
                   colSpan={
                     uilchilgeeAvi === "Зогсоол"
-                      ? 6
-                      : uilchilgeeAvi === "Тоглоом"
-                      ? 7
-                      : uilchilgeeAvi === "Түрээс"
                       ? 8
-                      : 5
+                      : uilchilgeeAvi === "Тоглоом"
+                      ? 9
+                      : uilchilgeeAvi === "Түрээс"
+                      ? 9
+                      : 7
                   }
-                >
+                ></AntdTable.Summary.Cell>
+                <AntdTable.Summary.Cell>
                   <div className="truncate text-right font-bold ">
                     {formatNumber(
                       e?.reduce(
@@ -688,7 +694,6 @@ function EbarimtMedeelel({ token }) {
                     )}
                   </div>
                 </AntdTable.Summary.Cell>
-                <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
                 <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
                 <AntdTable.Summary.Cell></AntdTable.Summary.Cell>
               </AntdTable.Summary>

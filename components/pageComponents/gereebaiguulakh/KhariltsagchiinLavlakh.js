@@ -20,6 +20,7 @@ const KhariltsagchiinLavlakh = ({
   const kharitsagchQuery = useMemo(() => {
     return {
       baiguullagiinId: baiguullaga?._id,
+      barilgiinId: barilgiinId,
       turul: baiguullagaEsekh === true ? "ААН" : "Иргэн",
       tuluv: { $nin: ["0", 0, "-1", -1] },
     };

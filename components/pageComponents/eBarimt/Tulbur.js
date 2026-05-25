@@ -114,7 +114,7 @@ function Tulbur(
     uilchilgee(token)
       .post("/ebarimtShivye", body)
       .then(({ data }) => {
-        if (data.success === true || data.status == "SUCCESS") {
+        if ((data.success === true || data.status == "SUCCESS") && data.id) {
           setEBarimt(data);
           setCustomerTin(null);
           setBaiguullaga(null);
