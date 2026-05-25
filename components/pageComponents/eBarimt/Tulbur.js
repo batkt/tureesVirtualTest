@@ -109,6 +109,7 @@ function Tulbur(
     } else {
       body.turul = "1";
       body.register = register;
+      body.customerName = baiguullagiinMedeelel?.name || "";
     }
 
     uilchilgee(token)
