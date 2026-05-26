@@ -82,17 +82,17 @@ function useGereeniiJagsaalt(
   const { data, mutate, isValidating } = useSWR(
     token && baiguullagiinId
       ? [
-          "/geree",
-          token,
-          baiguullagiinId,
-          khuudaslalt,
-          register,
-          query,
-          tooAvakhEsekh,
-          barilgiinId,
-          order,
-          select,
-        ]
+        "/geree",
+        token,
+        baiguullagiinId,
+        khuudaslalt,
+        register,
+        query,
+        tooAvakhEsekh,
+        barilgiinId,
+        order,
+        select,
+      ]
       : null,
     fetcher,
     {
@@ -127,7 +127,7 @@ const fetcherGuilgee = (url, token, gereeniiId, ognoo, shineOgnoo) => {
   let params = {
     duusakhOgnoo: (Array.isArray(shineOgnoo) && shineOgnoo.length > 1)
       ? moment(shineOgnoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59")
-      : "2100-12-31 23:59:59",
+      : moment().endOf("day").format("YYYY-MM-DD 23:59:59"),
   };
   if (Array.isArray(shineOgnoo) && shineOgnoo.length > 1) {
     params.shineOgnoo = {
@@ -141,28 +141,8 @@ const fetcherGuilgee = (url, token, gereeniiId, ognoo, shineOgnoo) => {
   }
 
   return axios(token)
-    .get(`${url}/${gereeniiId}`, {
-      params: params,
-    })
-    .then((res) => {
-      var avlagaUldegdel = 0;
-      var aldangiUldegdel = 0;
-      res.data.forEach((x) => {
-        avlagaUldegdel =
-          avlagaUldegdel +
-          (x?.tulukhDun || 0) -
-          (x?.tulsunDun || 0) -
-          (x?.khyamdral || 0);
-        aldangiUldegdel =
-          aldangiUldegdel +
-          (x?.tulukhAldangi || 0) -
-          (x?.tulsunAldangi || 0);
-        if (x.turul === "khyamdral" && avlagaUldegdel < 0)
-          x.uldegdel = aldangiUldegdel > 0 ? aldangiUldegdel : 0;
-        else x.uldegdel = avlagaUldegdel + aldangiUldegdel;
-      });
-      return res.data;
-    })
+    .get(`${url}/${gereeniiId}`, { params })
+    .then((res) => res.data)
     .catch(aldaaBarigch);
 };
 

@@ -124,7 +124,7 @@ function KhuviinMedeelel({
         setTamga(undefined);
         setDeleteTamga(true);
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
@@ -772,7 +772,7 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
-          {(baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b" || baiguullaga?._id ==="695c57511a8a4aebc1d65b02") && (
+          {(baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b" || baiguullaga?._id === "695c57511a8a4aebc1d65b02") && (
             <div className="box">
               <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">
@@ -797,7 +797,7 @@ function KhuviinMedeelel({
               </div>
             </div>
           )}
-          {(baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b" || baiguullaga?._id ==="695c57511a8a4aebc1d65b02") && (
+          {(baiguullaga?._id === "6735c77a7fc60cd66deb2909" || baiguullaga?._id === "6916c957511a8a4aebc1d65b" || baiguullaga?._id === "695c57511a8a4aebc1d65b02" || baiguullaga?._id === "612f457d185280db676d0b51") && (
             <div className="box">
               <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">
@@ -823,9 +823,8 @@ function KhuviinMedeelel({
             </div>
           )}
           <div
-            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
-              !!gereeTokhirgoo ? "flex" : "hidden"
-            }`}
+            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${!!gereeTokhirgoo ? "flex" : "hidden"
+              }`}
           >
             <div className="dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2">
               {/* <Button
@@ -945,8 +944,7 @@ function KhuviinMedeelel({
                           <img
                             src={
                               tamga.url ||
-                              `${url}/zuragAvya/tamga/${baiguullaga?._id}/${
-                                tamga.id || tamga
+                              `${url}/zuragAvya/tamga/${baiguullaga?._id}/${tamga.id || tamga
                               }`
                             }
                             alt="image"
@@ -1030,8 +1028,7 @@ function KhuviinMedeelel({
                         <img
                           src={
                             gariinUseg.url ||
-                            `${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${
-                              gariinUseg.id || gariinUseg
+                            `${url}/zuragAvya/gariinUseg/${baiguullaga?._id}/${gariinUseg.id || gariinUseg
                             }`
                           }
                           alt="image"
@@ -1111,8 +1108,7 @@ function KhuviinMedeelel({
                         <img
                           src={
                             gariinUseg1.url ||
-                            `${url}/zuragAvya/gariinUseg1/${baiguullaga?._id}/${
-                              gariinUseg1.id || gariinUseg1
+                            `${url}/zuragAvya/gariinUseg1/${baiguullaga?._id}/${gariinUseg1.id || gariinUseg1
                             }`
                           }
                           alt="image"

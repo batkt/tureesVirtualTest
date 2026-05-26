@@ -68,10 +68,10 @@ function BaritsaaUdirdlaga(
       const balanceAtDate = Math.round(baritsaaKhuulga
         .filter((item) => moment(item.ognoo).isSameOrBefore(ognoo, "day"))
         .reduce((sum, item) => sum + (item.orlogo || 0) - (item.zarlaga || 0), 0) * 100) / 100;
-      
+
       setAshiglakhUldegdel(balanceAtDate);
       setTulukhUldegdel((data.baritsaaAvakhDun || 0) - balanceAtDate);
-      
+
       if (turul === "butsaalt") {
         setDun(balanceAtDate);
       }
@@ -132,7 +132,7 @@ function BaritsaaUdirdlaga(
         if (turul === "ashiglakh" || turul === "butsaalt") baritsaaniiGuilgee["zarlaga"] = dun;
         else baritsaaniiGuilgee["orlogo"] = dun;
 
-        if (loading) return; 
+        if (loading) return;
         setLoading(true);
 
         return uilchilgee(token)
@@ -232,8 +232,10 @@ function BaritsaaUdirdlaga(
           onChange={(e) => {
             setTurul(e.target.value);
             setOgnoo(moment());
+            setDun(0);
             if (e.target.value === "butsaalt") {
               setTailbar(t("Барьцаа буцаан олголт ") + moment().format("YYYY-MM-DD"));
+              setDun(ashiglakhUldegdel);
             } else {
               setTailbar("");
             }
