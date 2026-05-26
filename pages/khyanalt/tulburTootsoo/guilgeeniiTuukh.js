@@ -72,11 +72,19 @@ const GereeniiUldegdel = React.memo(
           ugugdul?.gereeniiDugaar,
           ognoo,
           tsutsalsanTurul,
+          ugugdul?._id,
         ]
         : null,
       (url, barilgiinId, gereeniiDugaar, ognoo) =>
         uilchilgee(token)
-          .post(url, { barilgiinId, gereeniiDugaar, ognoo, tsutsalsanTurul })
+          .post(url, {
+            barilgiinId,
+            baiguullagiinId: baiguullaga?._id || ugugdul?.baiguullagiinId,
+            gereeniiDugaar,
+            gereeniiId: ugugdul?._id,
+            ognoo,
+            tsutsalsanTurul,
+          })
           .then(({ data }) => data),
       {
         revalidateOnFocus: false,
