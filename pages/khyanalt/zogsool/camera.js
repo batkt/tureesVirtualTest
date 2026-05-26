@@ -351,6 +351,7 @@ function camera({ token }) {
     !!camerVal[1] && songogdsonCameraIP === camerVal[1];
   const searchUtga = useRef(null);
   const socketRef = useRef(null);
+  const localServiceDownRef = useRef(false);
 
   useEffect(() => {
     setShineBagana([]);
@@ -981,18 +982,24 @@ function camera({ token }) {
         khuudasniiDugaar: 1,
       }));
     }
-    if (
-      tuluvFilter === "active" &&
-      JSON.stringify(order) ===
+    if (tuluvFilter === "active") {
+      if (
+        JSON.stringify(order) ===
         JSON.stringify({ "tuukh.0.tsagiinTuukh.0.garsanTsag": -1 })
-    ) {
-      setOrder({
-        "tuukh.tsagiinTuukh.garsanTsag": 1,
-        niitDun: 1,
-        "tuukh.tuluv": 1,
-        "tuukh.tsagiinTuukh.orsonTsag": -1,
-        zurchil: 1,
-      });
+      ) {
+        setOrder({
+          "tuukh.tsagiinTuukh.garsanTsag": 1,
+          niitDun: 1,
+          "tuukh.tuluv": 1,
+          "tuukh.tsagiinTuukh.orsonTsag": -1,
+          zurchil: 1,
+        });
+      } else if (
+        JSON.stringify(order) ===
+        JSON.stringify({ "tuukh.0.niitKhugatsaa": -1 })
+      ) {
+        setOrder({ "tuukh.0.tsagiinTuukh.0.orsonTsag": 1 });
+      }
     }
   }, [tuluvFilter]);
 
@@ -1555,13 +1562,19 @@ function camera({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() =>
-                    setOrder({
-                      "tuukh.0.niitKhugatsaa": -1,
-                    })
+                    setOrder(
+                      tuluvFilter === "active"
+                        ? { "tuukh.0.tsagiinTuukh.0.orsonTsag": 1 }
+                        : { "tuukh.0.niitKhugatsaa": -1 },
+                    )
                   }
                   className={`relative flex ${
-                    JSON.stringify(order) ==
-                      JSON.stringify({ "tuukh.0.niitKhugatsaa": -1 }) &&
+                    (JSON.stringify(order) ==
+                      JSON.stringify({ "tuukh.0.niitKhugatsaa": -1 }) ||
+                      JSON.stringify(order) ==
+                        JSON.stringify({
+                          "tuukh.0.tsagiinTuukh.0.orsonTsag": 1,
+                        })) &&
                     "bg-green-500 text-white"
                   } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
