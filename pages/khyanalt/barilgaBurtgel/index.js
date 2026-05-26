@@ -3,7 +3,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { useMemo, useState } from "react";
 import { aldaaBarigch } from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import { Tabs, DatePicker, Select, Empty, Spin, Modal, Table, Tooltip } from "antd";
+import { Tabs, DatePicker, Select, Empty, Spin, Modal, Table, Tooltip, Card, Popover, Button } from "antd";
 import {
   ArrowUpOutlined,
   ArrowDownOutlined,
@@ -20,6 +20,8 @@ import {
   WalletOutlined,
   BarChartOutlined,
   LineChartOutlined,
+  MoreOutlined,
+  EditOutlined
 } from "@ant-design/icons";
 import useSWR from "swr";
 import createMethod from "tools/function/crud/createMethod";
@@ -411,7 +413,11 @@ function SectionHeading({ icon, title }) {
 function BarilgaBurtgel({ token }) {
   const { t, i18n } = useTranslation();
   const { theme } = useTheme();
-  useAuth();
+  const { baiguullaga, url } = useAuth();
+  const [editModal, setEditModal] = useState(null);
+  const barilgaBurtgel = (index) => {
+    setEditModal({ index, barilga: baiguullaga.barilguud[index] });
+  };
   const isDark = theme === "dark";
 
   const [activeTab, setActiveTab] = useState("orlogo");
@@ -721,6 +727,73 @@ function BarilgaBurtgel({ token }) {
             },
           ]}
         />
+        <div
+          className="overflow-y-auto lg:max-h-[33vh]"
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-delay="400"
+        >
+          {baiguullaga?.barilguud?.map((a) => (
+            <Card
+              key={a._id}
+              className="mb-3 rounded-xl border border-gray-200/50 bg-white shadow-md backdrop-blur-sm transition-all duration-300 hover:shadow-lg dark:border-gray-700/50 dark:bg-gradient-to-br dark:from-gray-800/95 dark:to-gray-900/95 dark:shadow-xl dark:hover:border-gray-600/50"
+              bodyStyle={{ padding: "1rem" }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <img
+                    className="h-12 w-12 rounded-lg object-cover shadow-sm ring-2 ring-gray-100 dark:ring-gray-700"
+                    alt={baiguullaga?.ner}
+                    src={
+                      baiguullaga?.zurgiinNer
+                        ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
+                        : "/favicon.ico"
+                    }
+                  />
+                  <div className="flex flex-col">
+                    <div className="font-semibold text-gray-900 dark:text-white">
+                      {a.ner}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      {a.register}
+                    </div>
+                    <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      {formatNumber(a?.niitTalbai)}м<sup>2</sup>
+                    </div>
+                  </div>
+                </div>
+
+                <Popover
+                  content={() => (
+                    <div className="flex w-32 flex-col space-y-2">
+                      <a
+                        className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
+                        onClick={() =>
+                          barilgaBurtgel(
+                            baiguullaga.barilguud.findIndex(
+                              (mur) => mur._id === a._id
+                            )
+                          )
+                        }
+                      >
+                        <EditOutlined className="text-xl text-green-400" />
+                        <label className="hover:text-black dark:hover:text-white text-black">{t("Засах")}</label>
+                      </a>
+                    </div>
+                  )}
+                  placement="bottomRight"
+                  trigger="click"
+                >
+                  <Button
+                    type="text"
+                    icon={<MoreOutlined />}
+                    className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
+                  />
+                </Popover>
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </Admin>
   );

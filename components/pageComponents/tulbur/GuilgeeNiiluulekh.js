@@ -34,10 +34,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
   let undsenGuilgee = [];
   let aldaa = [];
   gereenuud.forEach((mur) => {
-    if (
-      (parseFloat(mur.tureesiinTulbur) || 0) > 0 ||
-      (parseFloat(mur.tulsunAldangi) || 0) > 0
-    ) {
+    if ((parseFloat(mur.tureesiinTulbur) || 0) > 0 || (parseFloat(mur.tulsunAldangi) || 0) > 0) {
       let guilgeeniiMur = {
         turul: "bank",
         tulsunDun: parseFloat(mur.tureesiinTulbur) || 0,
@@ -94,7 +91,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
           break;
         default:
           aldaa.push(
-            `${mur.talbainDugaar} талбайн холбох гүйлгээний данс тодорхоогүй байна`,
+            `${mur.talbainDugaar} талбайн холбох гүйлгээний данс тодорхоогүй байна`
           );
           break;
       }
@@ -123,11 +120,11 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
           ((mur?.baritsaaAvakhDun || 0) -
             (mur?.baritsaaniiUldegdel || 0) +
             Number.EPSILON) *
-            10000,
+          10000
         ) / 10000;
       if (baritsaaDun < mur.baritsaaTulbur)
         aldaa.push(
-          `${mur.talbainDugaar} талбайн холбох гүйлгээний барьцааны дүн хэтэрсэн байна`,
+          `${mur.talbainDugaar} талбайн холбох гүйлгээний барьцааны дүн хэтэрсэн байна`
         );
       baritsaa.push(baritsaaniiMur);
     }
@@ -136,7 +133,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         ((mur?.baritsaaAvakhDun || 0) -
           (mur?.baritsaaniiUldegdel || 0) +
           Number.EPSILON) *
-          100,
+        100
       ) / 100;
     var aldangiinUldegdel =
       Math.round((mur.aldangiinUldegdel + Number.EPSILON) * 100) / 100;
@@ -146,7 +143,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         aldaa.push(
           t("талбайн алдангийн үлдэгдлийг түрүүлж төлнө үү", {
             too: mur.talbainDugaar,
-          }),
+          })
         );
       }
     }
@@ -186,7 +183,7 @@ function GuilgeeNiiluulekh(
     setLoading,
     setLoadingBaritsaa,
   },
-  ref,
+  ref
 ) {
   const [gereenuud, setGereenuud] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -199,11 +196,6 @@ function GuilgeeNiiluulekh(
   const [expandedTurees, setExpandedTurees] = React.useState({});
   const inputRef = React.useRef();
 
-  const ognoo = React.useMemo(() => [
-    moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
-    moment().endOf("month").format("YYYY-MM-DD 23:59:59"),
-  ], []);
-
   const query = useMemo(() => {
     return { tuluv: khaagdsanGereeEsekh ? -1 : { $nin: [-1] }, barilgiinId };
   }, [khaagdsanGereeEsekh]);
@@ -214,7 +206,7 @@ function GuilgeeNiiluulekh(
     undefined,
     query,
     undefined,
-    60,
+    5
   );
   useEffect(() => {
     inputRef.current.focus();
@@ -239,7 +231,7 @@ function GuilgeeNiiluulekh(
         const { aldaa, baritsaa, undsenGuilgee } = guilgeeBurduulya(
           gereenuud,
           dans,
-          data,
+          data
         );
         if (aldaa.length > 0) {
           notification.warning({
@@ -260,7 +252,7 @@ function GuilgeeNiiluulekh(
           try {
             const baritsaaniiGuilgee = await baritsaaniiGuilgeeKhiiya(
               token,
-              baritsaa,
+              baritsaa
             );
             if (baritsaaniiGuilgee.aldaa.length > 0) {
               notification.warning({
@@ -270,14 +262,14 @@ function GuilgeeNiiluulekh(
               return;
             }
             if (undsenGuilgee.length === 0) {
-  notification.success({
-    message: t("Амжилттай"),
-    description: t("Гүйлгээ амжилттай холбогдлоо"),
-  });
-  _.isFunction(onFinish) && onFinish();
-  destroy();
-  return;
-}
+              notification.success({
+                message: t("Амжилттай"),
+                description: t("Гүйлгээ амжилттай холбогдлоо"),
+              });
+              _.isFunction(onFinish) && onFinish();
+              destroy();
+              return; 
+            }
           } finally {
             setLoadingBaritsaa(false);
           }
@@ -290,8 +282,8 @@ function GuilgeeNiiluulekh(
             if (Array.isArray(mur.avlaguud) && mur.avlaguud.length > 0) {
               const months = Array.from(
                 new Set(
-                  mur.avlaguud.map((a) => moment(a.ognoo).format("YYYY-MM")),
-                ),
+                  mur.avlaguud.map((a) => moment(a.ognoo).format("YYYY-MM"))
+                )
               );
               prefixParts.push(months.join(", ") + " " + t("түрээс төлөлт"));
             }
@@ -310,24 +302,24 @@ function GuilgeeNiiluulekh(
             return uilchilgee(token)
               .post("/tulultOlnoorKhadgalya", { guilgeenuud: undsenGuilgee })
               .then(({ data }) => {
-  if (data === "Amjilttai") {
-    notification.success({
-      message: t("Амжилттай"),
-      description: t("Гүйлгээ амжилттай холбогдлоо"),
-    });
-    _.isFunction(onFinish) && onFinish();
-    destroy();
-  }
-})
+                if (data === "Amjilttai") {
+                  notification.success({
+                    message: t("Амжилттай"),
+                    description: t("Гүйлгээ амжилттай холбогдлоо"),
+                  });
+                  _.isFunction(onFinish) && onFinish();
+                  destroy();
+                }
+              })
               .catch(aldaaBarigch)
               .finally(() => setLoading(false));
         } finally {
-          
+         
           if (undsenGuilgee.length === 0) setLoading(false);
         }
       },
     }),
-    [gereenuud],
+    [gereenuud]
   );
 
   function garya() {
@@ -363,7 +355,7 @@ function GuilgeeNiiluulekh(
 
   const content = useMemo(
     () => (
-      <div className=" relative max-h-[400px] space-y-1 overflow-y-auto  bg-white p-3 shadow-xl drop-shadow-xl dark:bg-gray-900 dark:text-gray-200 lg:absolute lg:left-0 lg:w-[180%]">
+      <div className=" relative space-y-1 bg-white p-3  shadow-xl drop-shadow-xl dark:bg-gray-900 dark:text-gray-200 lg:absolute lg:left-0 lg:w-[180%]">
         {gereeniiMedeelel?.jagsaalt?.map((mur, i) => (
           <div
             className="grid cursor-pointer grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -381,21 +373,19 @@ function GuilgeeNiiluulekh(
                 .post("/uldegdelBodyo", {
                   barilgiinId,
                   gereeniiDugaar: mur.gereeniiDugaar,
-                  baiguullagiinId,
-                  ognoo,
                 })
                 .then(({ data }) => {
                   if (!!data) {
-                    mur.uldegdel = data.tureesiinUldegdel ?? data.uldegdel;
+                    mur.uldegdel = data.uldegdel;
 
-                    // Fetch full history to build breakdown
-                    const historyFetch = uilchilgee(token)
+                     
+                    uilchilgee(token)
                       .get(
-                        `/gereeniiTulultAvya/${mur._id}?duusakhOgnoo=${moment()
-                          .add(10, "year")
-                          .toISOString()}`,
+                        `/gereeniiTulultAvya/${mur._id
+                        }?duusakhOgnoo=${moment().add(10, "year").toISOString()}`,
                       )
                       .then(({ data: history }) => {
+                        
                         const poolOfMoney = (history || []).reduce(
                           (acc, x) =>
                             acc + (x.tulsunDun || 0) + (x.khyamdral || 0),
@@ -427,6 +417,7 @@ function GuilgeeNiiluulekh(
                           }
                         });
 
+                         
                         const monthsMap = {};
                         unpaidLines.forEach((line) => {
                           const mKey = moment(line.ognoo).format("YYYY-MM");
@@ -444,31 +435,25 @@ function GuilgeeNiiluulekh(
 
                         const currentMonthEnd = moment().endOf("month");
                         mur.sarUldegdel = Object.values(monthsMap)
-                          .filter((a) =>
-                            moment(a.ognoo).isSameOrBefore(currentMonthEnd),
-                          )
+                          .filter((a) => moment(a.ognoo).isSameOrBefore(currentMonthEnd))
                           .sort(
                             (a, b) => new Date(a.ognoo) - new Date(b.ognoo),
                           );
 
-                        // Fetch allocation history
-                        return uilchilgee(token)
+                         
+                        uilchilgee(token)
                           .get(
                             `/avlagaTulsunTuukh?query={"gereeniiId":"${mur._id}"}`,
                           )
                           .then(({ data: tData }) => {
                             mur.pastAllocations = tData.jagsaalt || [];
+                            setGereenuud((a) => {
+                              if (a.find((x) => x._id === mur._id)) return a;
+                              return [...a, mur];
+                            });
+                            setVisible(false);
+                            setIsSelecting(false);
                           });
-                      });
-
-                    historyFetch
-                      .then(() => {
-                        setGereenuud((a) => {
-                          if (a.find((x) => x._id === mur._id)) return a;
-                          return [...a, mur];
-                        });
-                        setVisible(false);
-                        setIsSelecting(false);
                       })
                       .catch(() => setIsSelecting(false));
                   } else {
@@ -488,7 +473,7 @@ function GuilgeeNiiluulekh(
         ))}
       </div>
     ),
-    [gereeniiMedeelel, gereenuud, magadlaltaiGereenuud],
+    [gereeniiMedeelel, gereenuud, magadlaltaiGereenuud]
   );
 
   function zuruuZun(index, talbar) {
@@ -531,7 +516,7 @@ function GuilgeeNiiluulekh(
           ((mur?.baritsaaAvakhDun || 0) -
             (mur?.baritsaaniiUldegdel || 0) +
             Number.EPSILON) *
-            100,
+          100
         ) / 100;
 
       if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
@@ -588,7 +573,6 @@ function GuilgeeNiiluulekh(
       });
     }
     setGereenuud((a) => {
-      // Preserve raw string if user is mid-decimal (e.g. "700000." or "700000.1")
       const hasDecimal = parsedStr.includes(".");
       _.set(a, `${index}.${talbar}`, hasDecimal ? parsedStr : numVal);
       return [...a];
@@ -605,7 +589,7 @@ function GuilgeeNiiluulekh(
           ((mur?.baritsaaAvakhDun || 0) -
             (mur?.baritsaaniiUldegdel || 0) +
             Number.EPSILON) *
-            100,
+          100
         ) / 100;
 
       if (aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
@@ -662,7 +646,7 @@ function GuilgeeNiiluulekh(
         ((gereenuud[index]?.baritsaaAvakhDun || 0) -
           (gereenuud[index]?.baritsaaniiUldegdel || 0) +
           Number.EPSILON) *
-          100,
+        100
       ) / 100;
 
     const currentTulsunAldangi = gereenuud[index]?.tulsunAldangi || 0;
@@ -705,13 +689,10 @@ function GuilgeeNiiluulekh(
   }
 
   return (
-    <div
-      className="flex w-full flex-col space-y-2 overflow-hidden"
-      style={{ height: "calc(100vh - 250px)" }}
-    >
+    <div className="flex w-full flex-col space-y-2 overflow-hidden" style={{ height: "calc(100vh - 250px)" }}>
       {magadlaltaiGereenuud?.length > 0 && (
         <div
-          className="group mt-2 flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-blue-100 bg-blue-50 p-3 transition-all duration-200 hover:bg-blue-100 dark:border-blue-900/30 dark:bg-blue-900/20"
+          className="flex items-center justify-between gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-900/30 cursor-pointer hover:bg-blue-100 transition-all duration-200 group mt-2"
           onClick={() => setShowMagadlalModal(true)}
         >
           <div className="flex items-center gap-3">
@@ -719,7 +700,7 @@ function GuilgeeNiiluulekh(
               <span className="font-bold">{magadlaltaiGereenuud.length}</span>
             </div>
             <div>
-              <div className="text-sm font-bold uppercase tracking-tight text-blue-900 dark:text-blue-100">
+              <div className="text-sm font-bold text-blue-900 dark:text-blue-100 uppercase tracking-tight">
                 {t("Магадлалтай гэрээ")}
               </div>
               <div className="text-xs text-blue-600 dark:text-blue-400">
@@ -727,11 +708,7 @@ function GuilgeeNiiluulekh(
               </div>
             </div>
           </div>
-          <Button
-            type="primary"
-            size="small"
-            className="rounded-full px-4 font-medium transition-transform group-hover:scale-105"
-          >
+          <Button type="primary" size="small" className="rounded-full px-4 font-medium transition-transform group-hover:scale-105">
             {t("Харах")}
           </Button>
         </div>
@@ -749,35 +726,23 @@ function GuilgeeNiiluulekh(
         <div className="space-y-3 p-2">
           {magadlaltaiGereenuud?.map((mur, i) => (
             <div
-              className="grid cursor-pointer grid-cols-3 gap-4 rounded-xl border border-gray-200 p-4 shadow-sm transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
+              className="grid grid-cols-3 gap-4 rounded-xl border border-gray-200 p-4 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors shadow-sm cursor-pointer"
               key={`magadlalmodal${i}`}
               onClick={() => {
                 setShowMagadlalModal(false);
               }}
             >
               <div className="flex flex-col">
-                <span className="mb-1 text-[10px] font-bold uppercase text-gray-400">
-                  {t("Талбай")}
-                </span>
-                <span className="font-bold text-gray-800 dark:text-white">
-                  {mur.talbainDugaar}
-                </span>
+                <span className="text-[10px] uppercase text-gray-400 font-bold mb-1">{t("Талбай")}</span>
+                <span className="font-bold text-gray-800 dark:text-white">{mur.talbainDugaar}</span>
               </div>
               <div className="flex flex-col">
-                <span className="mb-1 text-[10px] font-bold uppercase text-gray-400">
-                  {t("Регистр")}
-                </span>
-                <span className="font-bold text-gray-800 dark:text-white">
-                  {mur.register}
-                </span>
+                <span className="text-[10px] uppercase text-gray-400 font-bold mb-1">{t("Регистр")}</span>
+                <span className="font-bold text-gray-800 dark:text-white">{mur.register}</span>
               </div>
               <div className="flex flex-col">
-                <span className="mb-1 text-[10px] font-bold uppercase text-gray-400">
-                  {t("Нэр")}
-                </span>
-                <span className="truncate font-bold text-gray-800 dark:text-white">
-                  {mur.ner}
-                </span>
+                <span className="text-[10px] uppercase text-gray-400 font-bold mb-1">{t("Нэр")}</span>
+                <span className="font-bold text-gray-800 dark:text-white truncate">{mur.ner}</span>
               </div>
             </div>
           ))}
@@ -812,8 +777,8 @@ function GuilgeeNiiluulekh(
               value={
                 guilgeeniiTailbar === undefined
                   ? data.TxAddInf?.split("-&gt;")[0] ||
-                    data.description ||
-                    data.tranDesc
+                  data.description ||
+                  data.tranDesc
                   : guilgeeniiTailbar
               }
               onChange={inputChange}
@@ -823,7 +788,7 @@ function GuilgeeNiiluulekh(
               <FormOutlined
                 onClick={() =>
                   setGuilgeeniiTailbar(
-                    data.TxAddInf?.split("-&gt;")[0] || data.description,
+                    data.TxAddInf?.split("-&gt;")[0] || data.description
                   )
                 }
                 className="absolute right-2 cursor-pointer text-lg hover:text-yellow-600"
@@ -888,8 +853,8 @@ function GuilgeeNiiluulekh(
           </div>
         </div>
       </div>
-      <div className="flex flex-1 flex-col space-y-2 overflow-hidden px-2">
-        <div className="flex-1 space-y-2 overflow-y-auto pr-2">
+      <div className="flex flex-1 flex-col space-y-2 px-2 overflow-hidden">
+        <div className="flex-1 overflow-y-auto pr-2 space-y-2">
           {gereenuud.map((geree, index) => (
             <div
               key={`${index}geree-kholbolt`}
@@ -920,43 +885,39 @@ function GuilgeeNiiluulekh(
                 ((geree?.baritsaaAvakhDun || 0) -
                   (geree?.baritsaaniiUldegdel || 0) +
                   Number.EPSILON) *
-                  100,
+                100
               ) /
                 100 >
                 0 && (
-                <div className="box grid w-full grid-cols-3 rounded-md border bg-gray-100 p-1">
-                  <div className="col-span-4">{t("Барьцааны үлдэгдэл")}</div>
-                  <div>
-                    {formatNumber(
-                      (geree?.baritsaaAvakhDun || 0) -
+                  <div className="box grid w-full grid-cols-3 rounded-md border bg-gray-100 p-1">
+                    <div className="col-span-4">{t("Барьцааны үлдэгдэл")}</div>
+                    <div>
+                      {formatNumber(
+                        (geree?.baritsaaAvakhDun || 0) -
                         (geree.baritsaaniiUldegdel || 0),
-                      2,
-                    )}
+                        2
+                      )}
+                    </div>
+                    <div>{geree.talbainDugaar}</div>
+                    <div className="text-right text-green-600">
+                      <input
+                        className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700"
+                        placeholder={t("Барьцаа дүн")}
+                        value={formatter(geree.baritsaaTulbur)}
+                        onDoubleClick={({ target }) =>
+                          onDoubleClickKholbokhDun(target, index, "baritsaaTulbur")
+                        }
+                        onChange={({ target }) => {
+                          onChangeKholbokhDun(target, index, "baritsaaTulbur");
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div>{geree.talbainDugaar}</div>
-                  <div className="text-right text-green-600">
-                    <input
-                      className="w-full rounded-md border border-gray-400 bg-gray-200 px-2 text-right dark:bg-gray-700"
-                      placeholder={t("Барьцаа дүн")}
-                      value={formatter(geree.baritsaaTulbur)}
-                      onDoubleClick={({ target }) =>
-                        onDoubleClickKholbokhDun(
-                          target,
-                          index,
-                          "baritsaaTulbur",
-                        )
-                      }
-                      onChange={({ target }) => {
-                        onChangeKholbokhDun(target, index, "baritsaaTulbur");
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
+                )}
               {Math.round((geree?.aldangiinUldegdel || 0) * 100) / 100 > 0 && (
                 <div className="w-full space-y-2">
                   <div className="box grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
-                    <div className="col-span-4">{t("Нийт алданги")}</div>
+                    <div className="col-span-4">{t("Алдангийн үлдэгдэл")}</div>
                     <div>{formatNumber(geree?.aldangiinUldegdel || 0, 2)}</div>
                     <div>{geree.talbainDugaar}</div>
                     <div className="flex items-center gap-1 text-right text-green-600">
@@ -965,11 +926,7 @@ function GuilgeeNiiluulekh(
                         placeholder={t("Төлөх дүн")}
                         value={formatter(geree.tulsunAldangi)}
                         onDoubleClick={({ target }) =>
-                          onDoubleClickKholbokhDun(
-                            target,
-                            index,
-                            "tulsunAldangi",
-                          )
+                          onDoubleClickKholbokhDun(target, index, "tulsunAldangi")
                         }
                         onChange={({ target }) => {
                           onChangeKholbokhDun(target, index, "tulsunAldangi");
@@ -1011,9 +968,8 @@ function GuilgeeNiiluulekh(
                   <div className="box grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
                     <div className="col-span-4">{t("Түрээсийн үлдэгдэл")}</div>
                     <div
-                      className={`text-${
-                        geree.uldegdel > 0 ? "red" : "green"
-                      }-500`}
+                      className={`text-${geree.uldegdel > 0 ? "red" : "green"
+                        }-500`}
                     >
                       {formatNumber(geree.uldegdel, 2)}
                     </div>
@@ -1027,7 +983,7 @@ function GuilgeeNiiluulekh(
                           onDoubleClickKholbokhDun(
                             target,
                             index,
-                            "tureesiinTulbur",
+                            "tureesiinTulbur"
                           )
                         }
                         onChange={({ target }) => {
@@ -1065,14 +1021,14 @@ function GuilgeeNiiluulekh(
                 </div>
               )}
 
+
               {geree.sarUldegdel && geree.sarUldegdel.length > 0 && (
-                <div className="mt-2 w-full rounded-md border border-gray-300 bg-gray-50 p-2 text-sm dark:border-gray-600 dark:bg-gray-800">
+                <div className="mt-2 w-full rounded-md border border-gray-300 bg-gray-50 p-2 text-sm dark:bg-gray-800 dark:border-gray-600">
                   <div className="mb-2 font-semibold uppercase text-gray-600 dark:text-gray-300">
                     {t("Төлбөр хуваарилалт")}
                   </div>
                   {(() => {
-                    let remainingPayment =
-                      parseFloat(geree.tureesiinTulbur) || 0;
+                    let remainingPayment = parseFloat(geree.tureesiinTulbur) || 0;
                     const currentAllocations = [];
                     const rows = geree.sarUldegdel.map((monthDebt, mi) => {
                       let allocate = Math.min(remainingPayment, monthDebt.debt);
@@ -1096,8 +1052,7 @@ function GuilgeeNiiluulekh(
                         >
                           <div className="flex items-center justify-between">
                             <span className="font-bold text-gray-800 dark:text-gray-100">
-                              {monthDebt.year}-{monthDebt.month} (
-                              {monthDebt.turul})
+                              {monthDebt.year}-{monthDebt.month} ({monthDebt.turul})
                             </span>
                             {finalUldegdel <= 0 ? (
                               <span className="rounded bg-green-100 px-1 text-[10px] text-green-700 dark:bg-green-900/30 dark:text-green-400">
@@ -1118,7 +1073,7 @@ function GuilgeeNiiluulekh(
                             </span>
                             <span className="text-blue-500">
                               {t("Төлөх")}:{" "}
-                              <b className="font-bold text-blue-600">
+                              <b className="text-blue-600 font-bold">
                                 {formatNumber(allocate, 2)}
                               </b>
                             </span>
@@ -1140,7 +1095,7 @@ function GuilgeeNiiluulekh(
               )}
 
               {geree.pastAllocations && geree.pastAllocations.length > 0 && (
-                <div className="mt-2 w-full rounded-md border border-blue-200 bg-blue-50/50 p-2 text-xs dark:border-blue-800 dark:bg-blue-900/10">
+                <div className="mt-2 w-full rounded-md border border-blue-200 bg-blue-50/50 p-2 text-xs dark:bg-blue-900/10 dark:border-blue-800">
                   <div className="mb-1 font-semibold uppercase text-blue-600 dark:text-blue-400">
                     {t("Өмнөх хуваарилалтын түүх")}
                   </div>
@@ -1150,9 +1105,7 @@ function GuilgeeNiiluulekh(
                       className="mb-1 border-b border-blue-100 pb-1 last:border-0 dark:border-blue-900/30"
                     >
                       <div className="flex justify-between font-medium">
-                        <span>
-                          {moment(p.tulsunOgnoo).format("YYYY-MM-DD")}
-                        </span>
+                        <span>{moment(p.tulsunOgnoo).format("YYYY-MM-DD")}</span>
                         <span className="text-blue-700 dark:text-blue-400">
                           {formatNumber(p.tulsunDun)}₮
                         </span>
@@ -1176,7 +1129,7 @@ function GuilgeeNiiluulekh(
         </div>
         <Divider className="my-1" />
 
-        <div className="sticky bottom-0 z-10 grid w-full grid-cols-2 items-center divide-x-2 border-t bg-white px-2 py-2 dark:bg-gray-900">
+        <div className="sticky bottom-0 z-10 grid w-full grid-cols-2 divide-x-2 bg-white px-2 py-2 items-center border-t dark:bg-gray-900">
           <div className="flex flex-col justify-between pr-2 lg:flex-row">
             <div className="dark:text-gray-200">{t("Холбосон дүн")}:</div>
             <div className="text-right text-xl text-green-600">

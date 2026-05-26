@@ -69,12 +69,64 @@ const fetcher = (
   );
   return axios(token)
     .post(url, body)
-    .then((res) => {
-      return res.data;
-    })
+    .then((res) => res.data)
     .catch(aldaaBarigch);
 };
 
+const mergeFetcher = async (
+  url,
+  token,
+  ognoo,
+  barilgiinId,
+  khuudaslalt,
+  query,
+  baiguullagiinId
+) => {
+  const { search, ...rest } = khuudaslalt || {};
+  const pagination = rest;
+  const [activeRes, withCancelledRes] = await Promise.all([
+    axios(token)
+      .post(
+        url,
+        buildBody(ognoo, barilgiinId, pagination, query, search, false, baiguullagiinId)
+      )
+      .then((r) => r.data)
+      .catch(aldaaBarigch),
+    axios(token)
+      .post(
+        url,
+        buildBody(ognoo, barilgiinId, pagination, query, search, true, baiguullagiinId)
+      )
+      .then((r) => r.data)
+      .catch(aldaaBarigch),
+  ]);
+  if (!activeRes || !withCancelledRes) return activeRes || withCancelledRes;
+  const activeIds = new Set((activeRes?.jagsaalt || []).map((x) => x._id));
+  const cancelledIds = new Set();
+  const cancelledOnly = (withCancelledRes?.jagsaalt || []).filter((x) => {
+    if (!(x?.tuluv == -1 || x?.tuluv === -1)) return false;
+    if (activeIds.has(x._id)) return false;
+    if (cancelledIds.has(x._id)) return false;
+    cancelledIds.add(x._id);
+    return true;
+  });
+  const seenIds = new Set();
+  const mergedJagsaalt = [...(activeRes?.jagsaalt || []), ...cancelledOnly].filter(
+    (x) => {
+      const id = x?._id;
+      if (!id || seenIds.has(id)) return false;
+      seenIds.add(id);
+      return true;
+    }
+  );
+  return {
+    ...activeRes,
+    jagsaalt: mergedJagsaalt,
+    niitMur: mergedJagsaalt.length,
+    niitTuluvluguut:
+      withCancelledRes?.niitTuluvluguut ?? activeRes?.niitTuluvluguut,
+  };
+};
 
 function useEneSardTuluuguiGereenuudAvya(
   token,
@@ -106,12 +158,24 @@ function useEneSardTuluuguiGereenuudAvya(
 
   const chosenFetcher = useCallback(
     (...args) => {
+      if (showTsutslagdsanAvlaga) {
+        const [url, token, ognoo, barilgiinId, khuudaslalt, query, , baiguullagiinId] = args;
+        return mergeFetcher(
+          url,
+          token,
+          ognoo,
+          barilgiinId,
+          khuudaslalt,
+          query,
+          baiguullagiinId
+        );
+      }
       return fetcher(...args);
     },
-    []
+    [showTsutslagdsanAvlaga]
   );
 
-  const { data, mutate, isValidating } = useSWR(fetchKey, chosenFetcher, {
+  const { data, mutate } = useSWR(fetchKey, chosenFetcher, {
     revalidateOnFocus: false,
   });
 
@@ -119,7 +183,6 @@ function useEneSardTuluuguiGereenuudAvya(
     eneSardTuluuguiGereenuud: data,
     eneSardTuluuguiGereenuudMutate: mutate,
     setEneSardTuluuguiGereenuud,
-    isValidating,
   };
 }
 

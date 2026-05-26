@@ -232,10 +232,8 @@ function BaritsaaUdirdlaga(
           onChange={(e) => {
             setTurul(e.target.value);
             setOgnoo(moment());
-            setDun(0); 
             if (e.target.value === "butsaalt") {
               setTailbar(t("Барьцаа буцаан олголт ") + moment().format("YYYY-MM-DD"));
-              setDun(ashiglakhUldegdel); 
             } else {
               setTailbar("");
             }

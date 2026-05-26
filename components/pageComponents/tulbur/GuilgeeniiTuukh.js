@@ -1,4 +1,4 @@
-import { Button, DatePicker, Input, message, Popconfirm, Popover, Modal } from "antd";
+import { Button, DatePicker, Input, message, Popconfirm, Popover } from "antd";
 import React, { useImperativeHandle, useState, useMemo } from "react";
 import { flushSync } from "react-dom";
 import useSWR from "swr";
@@ -18,7 +18,6 @@ import useBaiguullaga from "hooks/useBaiguullaga";
 import useDans from "hooks/useDans";
 import { useNekhemjlekhiinTuukh } from "hooks/useNekhemjlekhiinTuukh";
 import { url } from "services/uilchilgee";
-import GuilgeeniiTuukhAldangi from "./GuilgeeniiTuukhAldangi";
 
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   const [tailbar, setTailbar] = useState("");
@@ -61,21 +60,11 @@ const turulAvya = (turul) => {
 };
 
 function GuilgeeniiTuukh(
-  { token, data, refreshData, ognoo, ajiltan, barilgiinId, aldangiTuukhKharakhEsekh, uldegdelUdruurKharakhEsekh },
+  { token, data, refreshData, ognoo, ajiltan, barilgiinId },
   ref,
 ) {
   const { t, i18n } = useTranslation();
   const [shineOgnoo, setShineOgnoo] = useState(undefined);
-  const [aldangiModalOpen, setAldangiModalOpen] = useState(false);
-  const aldangiRef = React.useRef(null);
-  const { baiguullaga } = useBaiguullaga(
-    token,
-    ajiltan?.baiguullagiinId || data?.baiguullagiinId,
-  );
-
-  const actualAldangiTuukhKharakhEsekh = baiguullaga ? baiguullaga.tokhirgoo?.aldangiTuukhKharakhEsekh : aldangiTuukhKharakhEsekh;
-  const actualUldegdelUdruurKharakhEsekh = baiguullaga ? baiguullaga.tokhirgoo?.uldegdelUdruurKharakhEsekh : uldegdelUdruurKharakhEsekh;
-
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
     token,
     data?._id,
@@ -96,15 +85,16 @@ function GuilgeeniiTuukh(
     burtgesenOgnoo: null,
   });
   const [sortColumn, setSortColumn] = useState(null);
-
+  const { baiguullaga } = useBaiguullaga(
+    token,
+    ajiltan?.baiguullagiinId || data?.baiguullagiinId,
+  );
   const { dansGaralt } = useDans(token, ajiltan?.baiguullagiinId);
   const { nekhemjlekhiinTuukhJagsaalt } = useNekhemjlekhiinTuukh(
     token,
     { gereeniiId: data?._id },
     { createdAt: -1 }
   );
-
-  const displayAldangi = data?.aldangiinUldegdel || 0;
 
   const suuliinNekhemjlekh = useMemo(() => {
     return nekhemjlekhiinTuukhJagsaalt?.jagsaalt?.[0];
@@ -124,7 +114,6 @@ function GuilgeeniiTuukh(
   const songogdsonDans = useMemo(() => {
     return dansGaralt?.jagsaalt?.[0];
   }, [dansGaralt]);
-
 
   const tailbarRef = React.useRef(null);
   const printRef = React.useRef(null);
@@ -230,20 +219,26 @@ function GuilgeeniiTuukh(
   };
 
   const sortedData = React.useMemo(() => {
-    if (!guilgeeniiTuukh) return [];
-
+    if (!guilgeeniiTuukh) {
+      return [];
+    }
     const khuulsanData = [...guilgeeniiTuukh];
     khuulsanData.sort((a, b) => {
       const sortDaraalal = sortOrders[sortColumn];
       if (sortDaraalal === "asc") {
-        if (sortColumn === "ognoo") return new Date(a[sortColumn]) - new Date(b[sortColumn]);
+        if (sortColumn === "ognoo") {
+          return new Date(a[sortColumn]) - new Date(b[sortColumn]);
+        }
         return a[sortColumn] - b[sortColumn];
       } else if (sortDaraalal === "desc") {
-        if (sortColumn === "ognoo") return new Date(b[sortColumn]) - new Date(a[sortColumn]);
+        if (sortColumn === "ognoo") {
+          return new Date(b[sortColumn]) - new Date(a[sortColumn]);
+        }
         return b[sortColumn] - a[sortColumn];
       }
       return 0;
     });
+
     return khuulsanData;
   }, [guilgeeniiTuukh, sortOrders, sortColumn, shineOgnoo]);
 
@@ -284,7 +279,7 @@ function GuilgeeniiTuukh(
           Түрээс: formatNumber(item.undsenDun),
           "Төлөх дүн": formatNumber(item.tulukhDun),
           Хямдрал: formatNumber(item.khyamdral),
-          ...(actualAldangiTuukhKharakhEsekh ? { "Төлсөн алданги": formatNumber(item.tulsunAldangi) } : {}),
+          "Төлсөн алданги": formatNumber(item.tulsunAldangi),
           "Төлсөн дүн": formatNumber(item.tulsunDun),
           Үлдэгдэл: formatNumber(item.uldegdel),
           Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
@@ -399,7 +394,7 @@ function GuilgeeniiTuukh(
               onChange={(v) => setShineOgnoo(v)}
               locale={i18n.language === "mn" && locale}
               allowClear
-              picker={actualUldegdelUdruurKharakhEsekh ? undefined : "month"}
+              picker="month"
               disabledDate={(e) => e && e > moment().endOf("day")}
             />
           </div>
@@ -427,23 +422,9 @@ function GuilgeeniiTuukh(
               <div className="dark:text-white">{data?.utas.join(",")}</div>
             </div>
           </div>
-          {actualAldangiTuukhKharakhEsekh && (
-            <div className="flex flex-col">
-              <div className="flex gap-2">
-                <div className="font-bold dark:text-red-500 text-red-600">{t("Нийт алданги")}:</div>
-                <div
-                  className={`dark:text-white ${actualAldangiTuukhKharakhEsekh ? "cursor-pointer text-green-500 underline" : ""}`}
-                  onClick={() => actualAldangiTuukhKharakhEsekh && setAldangiModalOpen(true)}
-                  title={actualAldangiTuukhKharakhEsekh ? t("Алдангийн түүх харах") : ""}
-                >
-                  {formatNumber(displayAldangi, 2)}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
         <th className="w-full">
-          <tr className="flex min-w-[105rem] divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
+          <tr className="flex min-w-[93rem] divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
             <td
               onClick={() => toggleSortOrder("ognoo")}
               className="min-w-[8rem] overflow-hidden p-1 text-center"
@@ -474,14 +455,6 @@ function GuilgeeniiTuukh(
             >
               {t("Хямдрал")}
             </td>
-            {actualAldangiTuukhKharakhEsekh && (
-              <td
-                onClick={() => toggleSortOrder("tulsunAldangi")}
-                className="min-w-[8rem] overflow-hidden p-1 text-center"
-              >
-                {t("Төлсөн алданги")}
-              </td>
-            )}
             <td
               onClick={() => toggleSortOrder("tulsunDun")}
               className="min-w-[8rem] overflow-hidden p-1 text-center"
@@ -516,62 +489,49 @@ function GuilgeeniiTuukh(
           </tr>
         </th>
         <tbody
-          className="overflownone min-w-[105rem]"
+          className="overflownone min-w-[93rem]"
           style={isPrinting ? {} : { height: "calc(100vh - 15rem)", overflowY: "auto" }}
         >
           {sortedData
-            ?.map((a, i) => {
-              const isBalanceRow = (a.ekhniiUldegdelEsekh && a.turul === "khuvaari");
-              return (
-                <tr
-                  key={a._id || i}
-                  className={`flex min-w-[105rem] divide-x border-b border-gray-200 pr-1 text-gray-700 dark:text-gray-400 ${isBalanceRow
-                      ? "bg-blue-50/80 dark:bg-blue-950/40 font-semibold text-blue-950 dark:text-blue-200"
-                      : "bg-gray-50 dark:bg-gray-700 hover:bg-green-100 dark:hover:bg-gray-600"
+            ?.map((a, i) => (
+              <tr className="flex min-w-[93rem] divide-x border-b border-gray-200 bg-gray-50 pr-1 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+                <td className="min-w-[8rem] overflow-hidden p-1 text-center">
+                  {moment(a.ognoo).format("YYYY-MM-DD")}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1">
+                  {a.guilgeeKhiisenAjiltniiNer}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                  {formatNumber(a.undsenDun)}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                  {formatNumber(a.tulukhDun)}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                  {formatNumber(a.khyamdral)}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                  {formatNumber(a.tulsunDun)}
+                </td>
+                <td
+                  className={`min-w-[8rem] overflow-hidden p-1 text-end ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
                     }`}
                 >
-                  <td className="min-w-[8rem] overflow-hidden p-1 text-center">
-                    {moment(a.ognoo).format("YYYY-MM-DD")}
-                  </td>
-                  <td className="min-w-[8rem] overflow-hidden p-1">
-                    {isBalanceRow ? "" : a.guilgeeKhiisenAjiltniiNer}
-                  </td>
-                  <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                    {isBalanceRow ? "" : (a.undsenDun != null ? formatNumber(a.undsenDun) : "")}
-                  </td>
-                  <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                    {a.tulukhDun != null ? formatNumber(a.tulukhDun) : ""}
-                  </td>
-                  <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                    {isBalanceRow ? "" : (a.khyamdral != null ? formatNumber(a.khyamdral) : "")}
-                  </td>
-                  {actualAldangiTuukhKharakhEsekh && (
-                    <td className={`min-w-[8rem] overflow-hidden p-1 text-end ${a.tulsunAldangi > 0 ? "text-orange-500 font-medium" : ""}`}>
-                      {isBalanceRow ? "" : (a.tulsunAldangi != null ? formatNumber(a.tulsunAldangi) : "")}
-                    </td>
+                  {formatNumber(
+                    a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
                   )}
-                  <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                    {a.tulsunDun != null ? formatNumber(a.tulsunDun) : ""}
-                  </td>
-                  <td
-                    className={`min-w-[8rem] overflow-hidden p-1 text-end ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-                      }`}
-                  >
-                    {formatNumber(a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel)}
-                  </td>
-                  <td className="min-w-[8rem] overflow-hidden p-1 text-center">
-                    {isBalanceRow ? "" : (a.turul === "bank"
-                      ? a.tulsunDans !== " "
-                        ? a.tulsunDans
-                        : t("Банк")
-                      : turulAvya(a.turul))}
-                  </td>
-                  <td className="w-full min-w-[8rem] overflow-hidden p-1">
-                    {isBalanceRow ? (
-                      <div className="flex items-center gap-1 font-semibold text-blue-800 dark:text-blue-200">
-                        <span>{a.tailbar}</span>
-                      </div>
-                    ) : (
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-center">
+                  {a.turul === "bank"
+                    ? a.tulsunDans !== " "
+                      ? a.tulsunDans
+                      : t("Банк")
+                    : turulAvya(a.turul)}
+                </td>
+                <td className="w-full min-w-[8rem] overflow-hidden p-1">
+                  {a.tailbar?.includes("төлөлт") ? (
+                    <span className="font-semibold text-red-500">
+                      {a.tailbar}
                       <div className="flex items-center gap-1">
                         {(a.turul === "cgw") && (
                           <span className="dark:text-gray-300">
@@ -584,59 +544,41 @@ function GuilgeeniiTuukh(
                           <span>{a.tailbar}</span>
                         )}
                       </div>
+                    </span>
+                  ) : (
+                    a.tailbar
+                  )}
+                </td>
+                <td className="min-w-[10rem] overflow-hidden p-1 text-center">
+                  {a.guilgeeKhiisenOgnoo
+                    ? moment(a.guilgeeKhiisenOgnoo).format(
+                      "YYYY-MM-DD HH:mm:ss",
+                    )
+                    : a.ekhniiUldegdelEsekh && a.ognoo
+                      ? moment(a.ognoo).format("YYYY-MM-DD")
+                      : ""}
+                </td>
+                <td className="min-w-[3rem] border-none p-1 text-center">
+                  {(ajiltan?.erkh === "Admin" ||
+                    !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
+                      (a) => a === barilgiinId,
+                    )) && (
+                      <Popconfirm
+                        title={t("Төлөлт устгах уу?")}
+                        okText={t("Тийм")}
+                        cancelText={t("Үгүй")}
+                        onConfirm={() => tulultUstgaya(a)}
+                      >
+                        <div className="hide-on-print mx-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
+                          <DeleteOutlined />
+                        </div>
+                      </Popconfirm>
                     )}
-                  </td>
-                  <td className="min-w-[10rem] overflow-hidden p-1 text-center">
-                    {isBalanceRow
-                      ? ""
-                      : a.guilgeeKhiisenOgnoo
-                        ? moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")
-                        : ""}
-                  </td>
-                  <td className="min-w-[3rem] border-none p-1 text-center">
-                    {(ajiltan?.erkh === "Admin" ||
-                      !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
-                        (a) => a === barilgiinId,
-                      )) && !a.ekhniiUldegdelEsekh && !a.etsiinUldegdelEsekh && (
-                        <Popconfirm
-                          title={t("Төлөлт устгах уу?")}
-                          okText={t("Тийм")}
-                          cancelText={t("Үгүй")}
-                          onConfirm={() => tulultUstgaya(a)}
-                        >
-                          <div className="hide-on-print mx-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
-                            <DeleteOutlined />
-                          </div>
-                        </Popconfirm>
-                      )}
-                  </td>
-                </tr>
-              );
-            })
+                </td>
+              </tr>
+            ))
             .reverse()}
         </tbody>
-        {/* Алдангийн түүх Modal */}
-        <Modal
-          visible={aldangiModalOpen}
-          onCancel={() => setAldangiModalOpen(false)}
-          title={t("Алдангийн түүх")}
-          width="80vw"
-          style={{ top: 20 }}
-          footer={[
-            <Button key="close" onClick={() => setAldangiModalOpen(false)}>{t("Хаах")}</Button>
-          ]}
-          destroyOnClose
-        >
-          <GuilgeeniiTuukhAldangi
-            ref={aldangiRef}
-            data={data}
-            token={token}
-            ognoo={ognoo}
-            ajiltan={ajiltan}
-            barilgiinId={barilgiinId}
-            refreshData={refreshData}
-          />
-        </Modal>
         <div className="relative mt-8 flex flex-col gap-1 text-sm font-medium opacity-0 h-0 overflow-hidden print:opacity-100 print:h-auto print:overflow-visible print:flex">
           <div className="relative h-6">
             <div className="relative z-10">
