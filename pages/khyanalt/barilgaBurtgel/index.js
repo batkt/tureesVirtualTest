@@ -3,7 +3,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { useMemo, useState } from "react";
 import { aldaaBarigch } from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import { Tabs, DatePicker, Select, Empty, Spin, Modal, Table, Tooltip, Card, Popover, Button } from "antd";
+import { Tabs, DatePicker, Select, Empty, Spin, Modal, Table, Tooltip, Card, Button } from "antd";
 import {
   ArrowUpOutlined,
   ArrowDownOutlined,
@@ -20,8 +20,6 @@ import {
   WalletOutlined,
   BarChartOutlined,
   LineChartOutlined,
-  MoreOutlined,
-  EditOutlined
 } from "@ant-design/icons";
 import useSWR from "swr";
 import createMethod from "tools/function/crud/createMethod";
@@ -71,6 +69,7 @@ const TURUL_CONFIG = {
   khuvaari: { nerKey: "Хуваарь", icon: <BarChartOutlined />, color: "#64748b", ring: "ring-slate-200 dark:ring-slate-700" },
   avlaga: { nerKey: "Авлага", icon: <ExclamationCircleOutlined />, color: "#f97316", ring: "ring-orange-200 dark:ring-orange-800" },
   zalruulga: { nerKey: "Залруулга", icon: <SwapOutlined />, color: "#a855f7", ring: "ring-purple-200 dark:ring-purple-800" },
+  orson: { nerKey: "Залруулга", icon: <SwapOutlined />, color: "#a855f7", ring: "ring-purple-200 dark:ring-purple-800" },
 };
 
 function GlassCard({ children, className = "", onClick }) {
@@ -122,6 +121,7 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
         ekhlekhOgnoo: q.ekhlekhOgnoo,
         duusakhOgnoo: q.duusakhOgnoo,
         turul: tur,
+        ...(q.barilgiinId ? { barilgiinId: q.barilgiinId } : {}),
       })
         .then(({ data }) => data)
         .catch(aldaaBarigch),
@@ -130,13 +130,15 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
 
   const isBank = turul === "bank";
   const isVoucher = turul === "voucher";
+  const isBaritsaa = turul === "baritsaa";
 
   const talbaiCol = makeTalbaiColumn(t);
+  const hCell = () => ({ style: { textAlign: "center" } });
 
   const columns = isBank
     ? [
       { title: "№", key: "idx", width: 48, align: "center", render: (_, __, i) => i + 1 },
-      { title: t("Харилцагч"), align: "center", dataIndex: "ner", ellipsis: true },
+      { title: t("Харилцагч"), align: "left", dataIndex: "ner", ellipsis: true },
       { title: t("Гэрээ №"), align: "center", dataIndex: "gereeniiDugaar", width: 130, ellipsis: true },
       talbaiCol,
       { title: t("Данс"), align: "center", dataIndex: "dansniiDugaar", width: 160, ellipsis: true },
@@ -144,76 +146,119 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
       {
         title: t("Гүйцэтгэл"),
         dataIndex: "tulsunDun",
-        align: "center",
-        width: 120,
-        render: (v) => <span className="font-semibold text-right text-emerald-600">{formatNumber(v, 0)}₮</span>,
+        align: "right",
+        onHeaderCell: hCell,
+        width: 130,
+        render: (v) => <span className="font-semibold text-emerald-600">{formatNumber(v, 0)}₮</span>,
       },
     ]
-    : [
-      { title: "№", key: "idx", width: 48, align: "center", render: (_, __, i) => i + 1 },
-      { title: t("Харилцагч"), align: "center", dataIndex: "ner", ellipsis: true },
-      { title: t("Гэрээ №"), align: "center", dataIndex: "gereeniiDugaar", width: 130, ellipsis: true },
-      talbaiCol,
-      // "Бодогдсон" column — hidden for voucher (has no planned amount)
-      ...(!isVoucher
-        ? [{
-          title: t("Бодогдсон"),
+    : isBaritsaa
+      ? [
+        { title: "№", key: "idx", width: 48, align: "center", render: (_, __, i) => i + 1 },
+        { title: t("Харилцагч"), align: "left", dataIndex: "ner", ellipsis: true },
+        { title: t("Гэрээ №"), align: "center", dataIndex: "gereeniiDugaar", width: 130, ellipsis: true },
+        talbaiCol,
+        {
+          title: t("Барьцааны дүн"),
           dataIndex: "tulukhDun",
-          align: "center",
+          align: "right",
+          onHeaderCell: hCell,
+          width: 130,
+          render: (v) => <span>{formatNumber(v, 0)}</span>,
+        },
+        {
+          title: t("Ашигласан"),
+          dataIndex: "tulsunDun",
+          align: "right",
+          onHeaderCell: hCell,
           width: 120,
-          render: (v) => formatNumber(v, 0),
-        }]
-        : []),
-      {
-        title: t("Гүйцэтгэл"),
-        dataIndex: "tulsunDun",
-        align: "center",
-        width: 110,
-        render: (v) => <span className="font-semibold text-emerald-600">{formatNumber(v, 0)}</span>,
-      },
-      // Хөнгөлөлт & Үлдэгдэл — hidden for voucher
-      ...(!isVoucher
-        ? [
-          {
-            title: t("Хөнгөлөлт"),
-            dataIndex: "khyamdral",
-            align: "center",
-            width: 110,
-            render: (v) => (v > 0 ? <span className="text-amber-600">{formatNumber(v, 0)}</span> : "-"),
+          render: (v) => <span className="font-semibold text-emerald-600">{formatNumber(v, 0)}</span>,
+        },
+        {
+          title: t("Буцаасан"),
+          dataIndex: "butsaanDun",
+          align: "right",
+          onHeaderCell: hCell,
+          width: 120,
+          render: (v) => v > 0 ? <span className="text-blue-500">{formatNumber(v, 0)}</span> : <span className="text-slate-400">—</span>,
+        },
+        {
+          title: t("Үлдэгдэл"),
+          align: "right",
+          onHeaderCell: hCell,
+          width: 130,
+          render: (_, r) => {
+            const d = Math.max(0, (r.tulukhDun || 0) - (r.tulsunDun || 0) - (r.butsaanDun || 0));
+            return d > 0
+              ? <span className="font-semibold text-red-500">{formatNumber(d, 0)}</span>
+              : <span className="text-slate-400">—</span>;
           },
-          {
-            title: t("Үлдэгдэл"),
-            align: "center",
-            width: 120,
-            render: (_, r) => {
-              const d = Math.max(0, (r.tulukhDun || 0) - (r.khyamdral || 0) - (r.tulsunDun || 0));
-              return d > 0 ? (
-                <span className="font-semibold text-red-500">{formatNumber(d, 0)}</span>
-              ) : (
-                <span className="text-slate-400">—</span>
-              );
+        },
+      ]
+      : [
+        { title: "№", key: "idx", width: 48, align: "center", render: (_, __, i) => i + 1 },
+        { title: t("Харилцагч"), align: "left", dataIndex: "ner", ellipsis: true },
+        { title: t("Гэрээ №"), align: "center", dataIndex: "gereeniiDugaar", width: 130, ellipsis: true },
+        talbaiCol,
+        ...(!isVoucher
+          ? [{
+            title: t("Бодогдсон"),
+            dataIndex: "tulukhDun",
+            align: "right",
+            onHeaderCell: hCell,
+            width: 130,
+            render: (v) => formatNumber(v, 0),
+          }]
+          : []),
+        {
+          title: t("Гүйцэтгэл"),
+          dataIndex: "tulsunDun",
+          align: "right",
+          onHeaderCell: hCell,
+          width: 120,
+          render: (v) => <span className="font-semibold text-emerald-600">{formatNumber(v, 0)}</span>,
+        },
+        ...(!isVoucher
+          ? [
+            {
+              title: t("Хөнгөлөлт"),
+              dataIndex: "khyamdral",
+              align: "right",
+              onHeaderCell: hCell,
+              width: 120,
+              render: (v) => v > 0 ? <span className="text-amber-600">{formatNumber(v, 0)}</span> : <span className="text-slate-400">—</span>,
             },
-          },
-        ]
-        : []),
-    ];
+            {
+              title: t("Үлдэгдэл"),
+              align: "right",
+              onHeaderCell: hCell,
+              width: 130,
+              render: (_, r) => {
+                const d = Math.max(0, (r.tulukhDun || 0) - (r.khyamdral || 0) - (r.tulsunDun || 0));
+                return d > 0
+                  ? <span className="font-semibold text-red-500">{formatNumber(d, 0)}</span>
+                  : <span className="text-slate-400">—</span>;
+              },
+            },
+          ]
+          : []),
+      ];
 
   const rows = (data || []).map((r, i) => ({ key: i, ...r }));
   const totalTulsun = rows.reduce((s, r) => s + (r.tulsunDun || 0), 0);
   const totalTulukh = rows.reduce((s, r) => s + (r.tulukhDun || 0), 0);
-  const totalKhyamdral = rows.reduce((s, r) => s + (r.khyamdral || 0), 0);
-  const totalDutuu = Math.max(0, totalTulukh - totalKhyamdral - totalTulsun);
-
-  // Summary colspan accounting for hidden columns per type
-  const baseColspan = 4; // №, Харилцагч, Гэрээ №, Талбай
-  const tulsunIndex = isBank ? 4 : isVoucher ? 4 : 5;
+  const totalKhyamdral = isBaritsaa ? 0 : rows.reduce((s, r) => s + (r.khyamdral || 0), 0);
+  const totalButsaan = isBaritsaa ? rows.reduce((s, r) => s + (r.butsaanDun || 0), 0) : 0;
+  const totalDutuu = isBaritsaa
+    ? Math.max(0, totalTulukh - totalTulsun - totalButsaan)
+    : Math.max(0, totalTulukh - totalKhyamdral - totalTulsun);
 
   return (
     <Modal
       open={open}
       onCancel={onClose}
       footer={null}
-      width={920}
+      width={1100}
       style={{ top: 24 }}
       title={
         cfg && (
@@ -237,32 +282,57 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
         loading={isValidating}
         columns={columns}
         dataSource={rows}
-        pagination={{ pageSize: 20, showSizeChanger: false }}
+        pagination={{ pageSize: 20, showSizeChanger: true, pageSizeOptions: ["10", "20", "50"] }}
         scroll={{ y: 460 }}
         summary={() => (
           <Table.Summary fixed="bottom">
             <Table.Summary.Row className="bg-slate-50 font-semibold">
-              <Table.Summary.Cell index={0} colSpan={baseColspan} align="right">
+              <Table.Summary.Cell index={0} colSpan={isBank ? 5 : 4} align="right">
                 {t("Нийт")}
               </Table.Summary.Cell>
-              {!isBank && !isVoucher && (
-                <Table.Summary.Cell index={4} align="right">
-                  <span className="font-semibold">{formatNumber(totalTulukh, 0)}</span>
-                </Table.Summary.Cell>
-              )}
-              <Table.Summary.Cell index={tulsunIndex} align="right">
-                <span className="font-semibold text-emerald-600">{formatNumber(totalTulsun, 0)}</span>
-              </Table.Summary.Cell>
-              {!isBank && !isVoucher && (
+              {isBaritsaa ? (
                 <>
+                  <Table.Summary.Cell index={4} align="right">
+                    <span className="font-semibold">{formatNumber(totalTulukh, 0)}</span>
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={5} align="right">
+                    <span className="font-semibold text-emerald-600">{formatNumber(totalTulsun, 0)}</span>
+                  </Table.Summary.Cell>
                   <Table.Summary.Cell index={6} align="right">
-                    <span className="text-amber-600">{totalKhyamdral > 0 ? formatNumber(totalKhyamdral, 0) : "—"}</span>
+                    <span className="text-blue-500">{totalButsaan > 0 ? formatNumber(totalButsaan, 0) : "—"}</span>
                   </Table.Summary.Cell>
                   <Table.Summary.Cell index={7} align="right">
                     <span className={totalDutuu > 0 ? "font-semibold text-red-500" : "text-slate-400"}>
                       {totalDutuu > 0 ? formatNumber(totalDutuu, 0) : "—"}
                     </span>
                   </Table.Summary.Cell>
+                </>
+              ) : isBank ? (
+                <Table.Summary.Cell index={5} align="right">
+                  <span className="font-semibold text-emerald-600">{formatNumber(totalTulsun, 0)}</span>
+                </Table.Summary.Cell>
+              ) : (
+                <>
+                  {!isVoucher && (
+                    <Table.Summary.Cell index={4} align="right">
+                      <span className="font-semibold">{formatNumber(totalTulukh, 0)}</span>
+                    </Table.Summary.Cell>
+                  )}
+                  <Table.Summary.Cell index={isVoucher ? 4 : 5} align="right">
+                    <span className="font-semibold text-emerald-600">{formatNumber(totalTulsun, 0)}</span>
+                  </Table.Summary.Cell>
+                  {!isVoucher && (
+                    <>
+                      <Table.Summary.Cell index={6} align="right">
+                        <span className="text-amber-600">{totalKhyamdral > 0 ? formatNumber(totalKhyamdral, 0) : "—"}</span>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell index={7} align="right">
+                        <span className={totalDutuu > 0 ? "font-semibold text-red-500" : "text-slate-400"}>
+                          {totalDutuu > 0 ? formatNumber(totalDutuu, 0) : "—"}
+                        </span>
+                      </Table.Summary.Cell>
+                    </>
+                  )}
                 </>
               )}
             </Table.Summary.Row>
@@ -328,7 +398,7 @@ function IncomeTypeCard({ cfg, tulukhDun, tulsunDun, khyamdral, onClick }) {
           <div className="text-[11px] font-semibold leading-tight text-slate-700 dark:text-slate-200">
             {formatNumber(tulukhDun, 0)}
           </div>
-          <div className="mt-0.5 text-slate-400">{t("")}</div>
+          <div className="mt-0.5 text-slate-400">{t("Бодогдсон")}</div>
         </div>
         <div className="px-2">
           <div className="text-[11px] font-semibold leading-tight text-emerald-600 dark:text-emerald-400">
@@ -386,7 +456,7 @@ function OutstandingCard({ cfg, tulukhDun, tulsunDun, khyamdral, onClick }) {
           <div className="text-[11px] font-semibold leading-tight text-slate-700 dark:text-slate-200">
             {formatNumber(tulukhDun, 0)}
           </div>
-          <div className="mt-0.5 text-slate-400">{t("")}</div>
+          <div className="mt-0.5 text-slate-400">{t("Бодогдсон")}</div>
         </div>
         <div className="pl-2">
           <div className="text-[11px] font-semibold leading-tight text-emerald-600 dark:text-emerald-400">
@@ -414,10 +484,6 @@ function BarilgaBurtgel({ token }) {
   const { t, i18n } = useTranslation();
   const { theme } = useTheme();
   const { baiguullaga, url } = useAuth();
-  const [editModal, setEditModal] = useState(null);
-  const barilgaBurtgel = (index) => {
-    setEditModal({ index, barilga: baiguullaga.barilguud[index] });
-  };
   const isDark = theme === "dark";
 
   const [activeTab, setActiveTab] = useState("orlogo");
@@ -427,12 +493,14 @@ function BarilgaBurtgel({ token }) {
     moment().endOf("month"),
   ]);
   const [detailModal, setDetailModal] = useState(null);
+  const [selectedBarilga, setSelectedBarilga] = useState(null);
 
   const query = useMemo(() => ({
     nariivchlal,
     ekhlekhOgnoo: lineOgnoo?.[0]?.format("YYYY-MM-DD 00:00:00"),
     duusakhOgnoo: lineOgnoo?.[1]?.format("YYYY-MM-DD 23:59:59"),
-  }), [lineOgnoo, nariivchlal]);
+    ...(selectedBarilga ? { barilgiinId: selectedBarilga } : {}),
+  }), [lineOgnoo, nariivchlal, selectedBarilga]);
 
   const { data: sambar } = useSWR(
     !!token ? ["khyanakhSambariinUgugdul", token, query] : null,
@@ -557,6 +625,19 @@ function BarilgaBurtgel({ token }) {
         <Select.Option value="month">{t("Сараар")}</Select.Option>
         <Select.Option value="year">{t("Жилээр")}</Select.Option>
       </Select>
+      {baiguullaga?.barilguud?.length > 1 && (
+        <Select
+          value={selectedBarilga}
+          onChange={setSelectedBarilga}
+          placeholder={t("Бүх барилга")}
+          allowClear
+          className="w-48 rounded-xl"
+        >
+          {baiguullaga.barilguud.map((b) => (
+            <Select.Option key={b._id} value={b._id}>{b.ner}</Select.Option>
+          ))}
+        </Select>
+      )}
     </div>
   );
 
@@ -727,73 +808,7 @@ function BarilgaBurtgel({ token }) {
             },
           ]}
         />
-        <div
-          className="overflow-y-auto lg:max-h-[33vh]"
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          data-aos-delay="400"
-        >
-          {baiguullaga?.barilguud?.map((a) => (
-            <Card
-              key={a._id}
-              className="mb-3 rounded-xl border border-gray-200/50 bg-white shadow-md backdrop-blur-sm transition-all duration-300 hover:shadow-lg dark:border-gray-700/50 dark:bg-gradient-to-br dark:from-gray-800/95 dark:to-gray-900/95 dark:shadow-xl dark:hover:border-gray-600/50"
-              bodyStyle={{ padding: "1rem" }}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <img
-                    className="h-12 w-12 rounded-lg object-cover shadow-sm ring-2 ring-gray-100 dark:ring-gray-700"
-                    alt={baiguullaga?.ner}
-                    src={
-                      baiguullaga?.zurgiinNer
-                        ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
-                        : "/favicon.ico"
-                    }
-                  />
-                  <div className="flex flex-col">
-                    <div className="font-semibold text-gray-900 dark:text-white">
-                      {a.ner}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {a.register}
-                    </div>
-                    <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {formatNumber(a?.niitTalbai)}м<sup>2</sup>
-                    </div>
-                  </div>
-                </div>
 
-                <Popover
-                  content={() => (
-                    <div className="flex w-32 flex-col space-y-2">
-                      <a
-                        className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
-                        onClick={() =>
-                          barilgaBurtgel(
-                            baiguullaga.barilguud.findIndex(
-                              (mur) => mur._id === a._id
-                            )
-                          )
-                        }
-                      >
-                        <EditOutlined className="text-xl text-green-400" />
-                        <label className="hover:text-black dark:hover:text-white text-black">{t("Засах")}</label>
-                      </a>
-                    </div>
-                  )}
-                  placement="bottomRight"
-                  trigger="click"
-                >
-                  <Button
-                    type="text"
-                    icon={<MoreOutlined />}
-                    className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
-                  />
-                </Popover>
-              </div>
-            </Card>
-          ))}
-        </div>
       </div>
     </Admin>
   );
