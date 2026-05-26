@@ -600,6 +600,10 @@ function Zogsool({ token }) {
       ...aa,
     };
 
+    if (tootsooKhelber === "1") {
+      baseQuery["tuukh.0.tuluv"] = 0;
+    }
+
     if (!!zogsoolId) {
       baseQuery["tuukh.zogsooliinId"] = zogsoolId;
     }
@@ -619,7 +623,12 @@ function Zogsool({ token }) {
           : tulbur;
     }
 
-    if (tuluv !== "" && tuluv !== null && tuluv !== undefined) {
+    if (
+      tuluv !== "" &&
+      tuluv !== null &&
+      tuluv !== undefined &&
+      !(tootsooKhelber === "1" && Number(tuluv) === 1)
+    ) {
       const tuluvValue = Number(tuluv);
 
       switch (tuluvValue) {
@@ -2087,7 +2096,6 @@ function Zogsool({ token }) {
           ))}
         </div>
       </Card>
-
       <Card className="col-span-12">
         <div className="grid-cols-3 gap-5 sm:grid xl:flex">
           <div className="flex flex-row gap-2">
@@ -3286,6 +3294,7 @@ function Zogsool({ token }) {
           />
         </div>
       </Card>
+      0
     </Admin>
   );
 }

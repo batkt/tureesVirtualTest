@@ -6,13 +6,14 @@ export const useFsmNotifications = (token, ajiltan) => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const apiRef = useRef(fsmApi.withAuth(token));
+  const serviceUnavailableRef = useRef(false);
 
   useEffect(() => {
     apiRef.current = fsmApi.withAuth(token);
   }, [token]);
 
   const fetchNotifications = useCallback(async () => {
-    if (!token) return;
+    if (!token || serviceUnavailableRef.current) return;
     setIsLoading(true);
     try {
       const [listRes, countRes] = await Promise.all([
@@ -22,7 +23,12 @@ export const useFsmNotifications = (token, ajiltan) => {
       setAllNotifications(listRes.data?.data || []);
       setUnreadCount(countRes.data?.count || 0);
     } catch (err) {
-      console.error('FSM Notifications fetch error:', err);
+      if (err?.response?.status >= 500) {
+        serviceUnavailableRef.current = true;
+        console.warn('FSM notification service unavailable, skipping future calls');
+      } else {
+        console.warn('FSM Notifications fetch error:', err);
+      }
     } finally {
       setIsLoading(false);
     }
