@@ -234,7 +234,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         }
 
         if (aldangiPaid > 0) {
-          balance -= aldangiPaid;
+
           groupRows.push({
             ...g,
             key: `main-${i}-aldangi`,
@@ -249,7 +249,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         }
 
         if (baritsaaPaid > 0) {
-          balance -= baritsaaPaid;
+
           groupRows.push({
             ...g,
             key: `main-${i}-baritsaa`,
@@ -283,7 +283,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         const dtExtra = g.tulukhDun || 0;
         const ktExtra = g.tulsunDun || 0;
         const khyExtra = g.khyamdral || 0;
-        balance = balance + dtExtra - ktExtra - khyExtra;
+
         groupRows.push({ ...g, key: `main-${i}-extra`, _isExtra: true, runningBalance: balance });
       }
 
@@ -580,7 +580,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
             <div className="flex flex-wrap gap-x-8 text-sm font-semibold text-gray-800">
               <div>Харилцагч: <span className="font-normal text-gray-800">{record?.ner}</span></div>
               <div>Талбай дугаар: <span className="font-normal text-gray-800">{record?.talbainDugaar}</span></div>
-              <div>Талбай м2: <span className="font-normal text-gray-800">{record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
+              <div>Талбай м2: <span className="font-normal text-gray-800">{record?.talbainKhemjee || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
             </div>
             <div className="grid grid-cols-4 gap-2 pt-2 border-t text-xxs font-bold text-gray-700">
               <div className="flex flex-col">
@@ -725,7 +725,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
               </span>
               <div>Харилцагч: <span className="font-normal text-gray-955">{record?.ner}</span></div>
               <div>Талбай дугаар: <span className="font-normal text-gray-955">{record?.talbainDugaar}</span></div>
-              <div>Талбай м2: <span className="font-normal text-gray-955">{record?.m2 || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
+              <div>Талбай м2: <span className="font-normal text-gray-955">{record?.talbainKhemjee || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3 border-t border-gray-200">
@@ -1030,7 +1030,7 @@ function avlagaTovchoo({ token }) {
       register: r.register || "-",
       ekhniiUldegdel: r.ekhniiUldegdel || 0,
       niitDt: r.niitDt || 0,
-      niitTulsun: r.niitKt || 0,
+      niitKt: r.niitKt || 0,
       etssiinUldegdel: r.etssiinUldegdel || 0,
     }));
 
@@ -1042,7 +1042,7 @@ function avlagaTovchoo({ token }) {
       register: "",
       ekhniiUldegdel: totals.ekhniiUldegdel || 0,
       niitDt: totals.niitDt || 0,
-      niitTulsun: totals.niitKt || 0,
+      niitKt: totals.niitKt || 0,
       etssiinUldegdel: totals.etssiinUldegdel || 0,
     });
 
@@ -1088,7 +1088,7 @@ function avlagaTovchoo({ token }) {
       },
       {
         title: t("КТ"),
-        dataIndex: "niitTulsun",
+        dataIndex: "niitKt",
         __style__: { h: "right" },
         __numFmt__: "#,##0.00",
         __cellType__: "TypeNumeric",
@@ -1157,7 +1157,7 @@ function avlagaTovchoo({ token }) {
         key: "m2",
         align: "center",
         width: 80,
-        render: (v, record) => record?.m2 || record?.talbainKhemjee || "-",
+        render: (v, record) => record?.talbainKhemjee || "-",
       },
       {
         title: t("РД"),
@@ -1417,11 +1417,11 @@ function avlagaTovchoo({ token }) {
                   <td className="border border-gray-400 px-1 py-0.5">{row.ner}</td>
                   <td className="border border-gray-400 px-1 py-0.5 text-center">{row.gereeniiDugaar}</td>
                   <td className="border border-gray-400 px-1 py-0.5 text-center">{row.talbainDugaar}</td>
-                  <td className="border border-gray-400 px-1 py-0.5 text-center">{row.m2 || row.talbainKhemjee || "-"}</td>
+                  <td className="border border-gray-400 px-1 py-0.5 text-center">{row.talbainKhemjee || "-"}</td>
                   <td className="border border-gray-400 px-1 py-0.5 text-center">{row.register}</td>
                   <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.ekhniiUldegdel || 0, 2)}</td>
                   <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.niitDt || 0, 2)}</td>
-                  <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.niitTulsun || 0, 2)}</td>
+                  <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.niitKt || 0, 2)}</td>
                   <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.etssiinUldegdel || 0, 2)}</td>
                 </tr>
               ))}
@@ -1431,7 +1431,7 @@ function avlagaTovchoo({ token }) {
                 <td colSpan={6} className="border border-gray-400 px-1 py-0.5 text-center">Нийт</td>
                 <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(totals.ekhniiUldegdel, 2)}</td>
                 <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(totals.niitDt, 2)}</td>
-                <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(totals.niitTulsun, 2)}</td>
+                <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(totals.niitKt, 2)}</td>
                 <td className="border border-gray-400 px-1 py-0.5 text-right">{formatNumber(totals.etssiinUldegdel, 2)}</td>
               </tr>
             </tfoot>
