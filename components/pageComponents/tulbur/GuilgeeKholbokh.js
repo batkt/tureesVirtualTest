@@ -18,19 +18,14 @@ import { MinusCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import useSWR from "swr";
 import { t } from "i18next";
 
-function GereeniiUldegdel({ ugugdul, token, barilgiinId, baiguullagiinId }) {
-  const ognoo = React.useMemo(() => [
-    moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
-    moment().endOf("month").format("YYYY-MM-DD 23:59:59"),
-  ], []);
-
+function GereeniiUldegdel({ ugugdul, token, barilgiinId }) {
   const { data } = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
-      ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar, baiguullagiinId, ognoo]
+      ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar]
       : null,
-    (url, barilgiinId, gereeniiDugaar, baiguullagiinId, ognoo) =>
+    (url, barilgiinId, gereeniiDugaar) =>
       uilchilgee(token)
-        .post(url, { barilgiinId, gereeniiDugaar, baiguullagiinId, ognoo })
+        .post(url, { barilgiinId, gereeniiDugaar })
         .then(({ data }) => data)
         .catch(aldaaBarigch),
     {
@@ -40,9 +35,8 @@ function GereeniiUldegdel({ ugugdul, token, barilgiinId, baiguullagiinId }) {
 
   return (
     <div
-      className={`text-right font-medium ${
-        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-      }`}
+      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+        }`}
     >
       {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
@@ -165,7 +159,7 @@ function GuilgeeKholbokh(
                             (data?.kholbosonDun || 0),
                           ognoo: moment(
                             data[
-                              `${dans?.bank === "tdb" ? "TxDt" : "tranDate"}`
+                            `${dans?.bank === "tdb" ? "TxDt" : "tranDate"}`
                             ]
                           ),
                           guilgeeniiId: data._id,
@@ -173,11 +167,10 @@ function GuilgeeKholbokh(
                           dansniiDugaar: data.dansniiDugaar,
                           tulsunDans:
                             data[
-                              `${
-                                dans?.bank === "tdb"
-                                  ? "CtAcntOrg"
-                                  : "relatedAccount"
-                              }`
+                            `${dans?.bank === "tdb"
+                              ? "CtAcntOrg"
+                              : "relatedAccount"
+                            }`
                             ],
                         },
                       ];
@@ -221,11 +214,10 @@ function GuilgeeKholbokh(
                       dansniiDugaar: data.dansniiDugaar,
                       tulsunDans:
                         data[
-                          `${
-                            dans?.bank === "tdb"
-                              ? "CtAcntOrg"
-                              : "relatedAccount"
-                          }`
+                        `${dans?.bank === "tdb"
+                          ? "CtAcntOrg"
+                          : "relatedAccount"
+                        }`
                         ],
                     },
                   ];
@@ -334,9 +326,8 @@ function GuilgeeKholbokh(
           </div>
           {magadlaltaiGereenuud.map((a, i) => (
             <div
-              className={`zoom-in grid grid-cols-12 gap-1 border-b border-l border-r p-2 ${
-                i === 0 ? "border-t" : ""
-              } ${a?._id === geree ? "bg-green-100" : ""}`}
+              className={`zoom-in grid grid-cols-12 gap-1 border-b border-l border-r p-2 ${i === 0 ? "border-t" : ""
+                } ${a?._id === geree ? "bg-green-100" : ""}`}
               key={a?._id}
               onClick={() => setGeree(a?._id)}
             >
@@ -412,7 +403,6 @@ function GuilgeeKholbokh(
                     ugugdul={mur}
                     token={token}
                     barilgiinId={barilgiinId}
-                    baiguullagiinId={baiguullagiinId}
                   />
                   <div className="text-right">
                     {mur.baritsaaniiUldegdel === 0 ? (

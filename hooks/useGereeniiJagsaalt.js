@@ -125,9 +125,7 @@ export function useGereeniiJagsaaltToollolt(token) {
 }
 const fetcherGuilgee = (url, token, gereeniiId, ognoo, shineOgnoo) => {
   let params = {
-    duusakhOgnoo: (Array.isArray(shineOgnoo) && shineOgnoo.length > 1)
-      ? moment(shineOgnoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59")
-      : moment().endOf("day").format("YYYY-MM-DD 23:59:59"),
+    duusakhOgnoo: moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59"),
   };
   if (Array.isArray(shineOgnoo) && shineOgnoo.length > 1) {
     params.shineOgnoo = {
@@ -141,8 +139,22 @@ const fetcherGuilgee = (url, token, gereeniiId, ognoo, shineOgnoo) => {
   }
 
   return axios(token)
-    .get(`${url}/${gereeniiId}`, { params })
-    .then((res) => res.data)
+    .get(`${url}/${gereeniiId}`, {
+      params: params,
+    })
+    .then((res) => {
+      var uldegdel = 0;
+      res.data.forEach((x) => {
+        uldegdel =
+          uldegdel +
+          (x?.tulukhDun || 0) -
+          (x?.tulsunDun || 0) -
+          (x?.khyamdral || 0);
+        if (x.turul === "khyamdral" && uldegdel < 0) x.uldegdel = 0;
+        else x.uldegdel = uldegdel;
+      });
+      return res.data;
+    })
     .catch(aldaaBarigch);
 };
 

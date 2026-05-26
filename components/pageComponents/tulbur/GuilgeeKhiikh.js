@@ -142,12 +142,10 @@ function GuilgeeKhiikh(
     }),
     [data, barilgiinId],
   );
-  const contractBeginning = parseFloat(data?.avlaga?.ekhniiUldegdel || data?.ekhniiUldegdel || 0);
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
     token,
     data?._id,
     date,
-    undefined,
   );
   const zardal = useJagsaalt(
     data?.zardluud && (turul === "ashiglalt" || turul === "teglekh" || (turul === "avlaga" && busadTurul === "ashiglalt")) && "/ashiglaltiinZardluud",
@@ -158,7 +156,7 @@ function GuilgeeKhiikh(
     token,
   );
 
-   
+
   useEffect(() => {
     if (turul !== "teglekh" || !data?.talbainDugaar || !data?._id) return;
     const meteredZardluud = (zardal?.jagsaalt || []).filter(
@@ -341,17 +339,17 @@ function GuilgeeKhiikh(
               var tempDun = m2argaarBodokhEsekh
                 ? dun * data?.talbainKhemjee
                 : (tailbar?.includes("Хүйтэн ус") ||
-                    tailbar?.includes("Халуун ус")) &&
+                  tailbar?.includes("Халуун ус")) &&
                   bodokhArga === "Khatuu"
-                ? tseverUsDun * dun +
+                  ? tseverUsDun * dun +
                   bokhirUsDun * dun +
                   (tailbar?.includes("Халуун ус") ? usKhalaasniiDun * dun : 0)
-                : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
-                  tailbar?.includes("Цахилгаан")
-                ? niitDun
-                : khemjikhNegj === "кг"
-                ? niitDunGaz
-                : negjUne * (tsakhilgaanUrjver || 1) * (dun || 0);
+                  : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
+                    tailbar?.includes("Цахилгаан")
+                    ? niitDun
+                    : khemjikhNegj === "кг"
+                      ? niitDunGaz
+                      : negjUne * (tsakhilgaanUrjver || 1) * (dun || 0);
               guilgee = {
                 turul: "avlaga",
                 tulsunDun: 0,
@@ -375,32 +373,32 @@ function GuilgeeKhiikh(
                 nuatBodokhEsekh,
                 tsakhilgaanKBTST:
                   baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
-                  tailbar?.includes("Цахилгаан")
+                    tailbar?.includes("Цахилгаан")
                     ? tsakhilgaanKBTST
                     : 0,
                 guidliinKoep:
                   baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
-                  tailbar?.includes("Цахилгаан")
+                    tailbar?.includes("Цахилгаан")
                     ? guidliinKoep
                     : 0,
                 bichiltKhonog:
                   baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
-                  tailbar?.includes("Цахилгаан")
+                    tailbar?.includes("Цахилгаан")
                     ? baiguullaga?.tokhirgoo?.bichiltKhonog || 0
                     : 0,
                 tsekhDun:
                   baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
-                  tailbar?.includes("Цахилгаан")
+                    tailbar?.includes("Цахилгаан")
                     ? tsekhDun
                     : 0,
                 chadalDun:
                   baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
-                  tailbar?.includes("Цахилгаан")
+                    tailbar?.includes("Цахилгаан")
                     ? chadalDun
                     : 0,
                 sekhDemjikhTulburDun:
                   baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
-                  tailbar?.includes("Цахилгаан")
+                    tailbar?.includes("Цахилгаан")
                     ? sekhDemjikhTulburDun
                     : 0,
                 togtmolUtga: khemjikhNegj === "кг" ? togtmolGaz : 0,
@@ -420,7 +418,7 @@ function GuilgeeKhiikh(
           default:
             break;
         }
-       
+
         if (turul === "teglekh") {
           onClose();
           return;
@@ -428,7 +426,7 @@ function GuilgeeKhiikh(
 
         const saveButton = document.getElementById(khadgalyaButtonId);
         saveButton?.setAttribute("disabled", true);
-        if (loading) return; 
+        if (loading) return;
         setLoading(true);
         return uilchilgee(token)
           .post("/gereeniiGuilgeeKhadgalya", {
@@ -510,7 +508,7 @@ function GuilgeeKhiikh(
       tailbar !== ankhniiUtga.current.tailbar ||
       negjUne !== ankhniiUtga.current.negjUne ||
       nekhemjlekhDeerKharagdakh !==
-        ankhniiUtga.current.nekhemjlekhDeerKharagdakh ||
+      ankhniiUtga.current.nekhemjlekhDeerKharagdakh ||
       busadTurul !== ankhniiUtga.current.busadTurul;
 
     if (uurchlugdsunUtga) {
@@ -576,8 +574,8 @@ function GuilgeeKhiikh(
     setTurul(e.target.value);
     setTureesEkhniiUldegdelEsekh(false);
     setTeglekhDone(false);
-    
-    
+
+
     setDun(0);
     setTailbar("");
     setBusadTurul(undefined);
@@ -594,7 +592,7 @@ function GuilgeeKhiikh(
     setTooluuriinDugaar(null);
     setKhemjikhNegj("");
 
-   
+
     setOgnoo(moment());
     setShineOgnoo(moment());
   }
@@ -624,7 +622,7 @@ function GuilgeeKhiikh(
           <Radio value={"avlaga"}>{t("Авлага")}</Radio>
           <Radio value={"torguuli"}>{t("Торгууль")}</Radio>
           <Radio value={"ashiglalt"}>{t("Ашиглалт")}</Radio>
-          
+
           <Radio value={"busad"}>{t("Бусад")} </Radio>
           <Radio value={"teglekh"}>{t("Заалт тэглэх")}</Radio>
         </Radio.Group>
@@ -705,19 +703,19 @@ function GuilgeeKhiikh(
                     )
                       ? "management"
                       : tukhainZardal?.ner === "Дулаан"
-                      ? "dulaan"
-                      : tukhainZardal?.ner?.includes("Цахилгаан")
-                      ? "tsakhilgaan"
-                      : tukhainZardal?.ner?.includes("Халуун ус")
-                      ? "khulaanUs"
-                      : tukhainZardal?.ner === "Ус"
-                      ? "us"
-                      : tukhainZardal?.ner?.includes("Хүйтэн ус")
-                      ? "khuitenUs"
-                      : tukhainZardal?.ner?.includes("Хөрөнгийн менежмент") ||
-                        tukhainZardal?.ner?.includes("Худалдааны менежмент")
-                      ? "managementGoto"
-                      : "busad";
+                        ? "dulaan"
+                        : tukhainZardal?.ner?.includes("Цахилгаан")
+                          ? "tsakhilgaan"
+                          : tukhainZardal?.ner?.includes("Халуун ус")
+                            ? "khulaanUs"
+                            : tukhainZardal?.ner === "Ус"
+                              ? "us"
+                              : tukhainZardal?.ner?.includes("Хүйтэн ус")
+                                ? "khuitenUs"
+                                : tukhainZardal?.ner?.includes("Хөрөнгийн менежмент") ||
+                                  tukhainZardal?.ner?.includes("Худалдааны менежмент")
+                                  ? "managementGoto"
+                                  : "busad";
                     setAshiglaltiinId(v);
                     setNegjUne(tukhainZardal.tariff);
                     setAshiglaltiinNer(tukhainZardal.ner);
@@ -738,10 +736,10 @@ function GuilgeeKhiikh(
                               ? "Дурын"
                               : a.ner?.includes("Хүйтэн ус") ||
                                 a.ner?.includes("Халуун ус")
-                              ? `Цэвэр: ${formatNumber(
+                                ? `Цэвэр: ${formatNumber(
                                   a.tseverUsDun || 0,
                                 )}₮ Бохир: ${formatNumber(a.bokhirUsDun || 0)}₮`
-                              : `${formatNumber(a.tariff || 0)}₮`}
+                                : `${formatNumber(a.tariff || 0)}₮`}
                           </p>
                         </div>
                       </div>
@@ -787,19 +785,19 @@ function GuilgeeKhiikh(
           .map((kw) => {
             const filtered = Array.isArray(guilgeeniiTuukh)
               ? guilgeeniiTuukh.filter((x) => {
-                
-                  if (x?.suuliinZaalt == null && !(x?.umnukhZaalt > 0)) return false;
-                  if (kw === "Ус") {
-                    return x?.tailbar?.toLowerCase() === "ус";
-                  }
-                  return x?.tailbar?.toLowerCase().includes(kw.toLowerCase());
-                })
+
+                if (x?.suuliinZaalt == null && !(x?.umnukhZaalt > 0)) return false;
+                if (kw === "Ус") {
+                  return x?.tailbar?.toLowerCase() === "ус";
+                }
+                return x?.tailbar?.toLowerCase().includes(kw.toLowerCase());
+              })
               : [];
             return filtered.length > 0 ? filtered[filtered.length - 1] : null;
           })
           .filter(Boolean);
 
-        
+
         const fromApi = teglekhApiData.filter(
           (apiItem) =>
             !fromHistory.some(
@@ -811,7 +809,7 @@ function GuilgeeKhiikh(
 
         async function doTeglekh(item) {
           if (!item?._id || teglekhLoading) return;
-          
+
           const targetGereeniiId = item._fromApi ? item._gereeniiId : data?._id;
           setTeglekhLoading(true);
           try {
@@ -873,11 +871,10 @@ function GuilgeeKhiikh(
                         {t("Сүүлийн заалт")}:
                       </span>
                       <span
-                        className={`font-bold ${
-                          isDone
+                        className={`font-bold ${isDone
                             ? "text-red-500"
                             : "text-blue-600 dark:text-blue-400"
-                        }`}
+                          }`}
                       >
                         {formatNumber(item.suuliinZaalt ?? 0)}
                       </span>
@@ -886,17 +883,16 @@ function GuilgeeKhiikh(
                       type="button"
                       disabled={isDone || teglekhLoading}
                       onClick={() => doTeglekh(item)}
-                      className={`mt-1 w-full rounded-lg px-4 py-1 font-medium transition-all ${
-                        isDone
+                      className={`mt-1 w-full rounded-lg px-4 py-1 font-medium transition-all ${isDone
                           ? "cursor-not-allowed bg-red-100 text-gray-800"
                           : "bg-red-500 text-white hover:bg-red-600"
-                      }`}
+                        }`}
                     >
                       {teglekhLoading
                         ? t("Түр хүлээнэ үү...")
                         : isDone
-                        ? t("Заалт тэглэгдсэн")
-                        : t("Заалт тэглэх")}
+                          ? t("Заалт тэглэгдсэн")
+                          : t("Заалт тэглэх")}
                     </button>
                   </div>
                 );
@@ -938,7 +934,7 @@ function GuilgeeKhiikh(
       {turul === "busad" && busadTurul === "aldangi" && (
         <DatePicker
           locale={i18n.language === "mn" && locale}
-          value={shineOgnoo}  
+          value={shineOgnoo}
           onChange={(v) => setShineOgnoo(v ? v.startOf("day") : null)}
         />
       )}
@@ -987,13 +983,13 @@ function GuilgeeKhiikh(
                 var utilityEntries = guilgeeniiTuukh.filter(
                   (x) => x.khemjikhNegj == utga.turul && x.tailbar == utga.ner,
                 );
-                
+
                 const hasUtilityEntries = utilityEntries.length > 0;
                 var suuliinGuilgee = hasUtilityEntries
                   ? utilityEntries[utilityEntries.length - 1]
                   : null;
                 if (!!suuliinGuilgee?.suuliinZaalt) {
-                  
+
                   setUmnukhZaalt(suuliinGuilgee.suuliinZaalt);
                   setUmnukhZaalttaiEsekh(true);
                 } else if (hasUtilityEntries) {
@@ -1001,7 +997,7 @@ function GuilgeeKhiikh(
                   setUmnukhZaalt(0);
                   setUmnukhZaalttaiEsekh(false);
                 } else if (data?.talbainDugaar) {
-                 
+
                   uilchilgee(token)
                     .get("/suuliinZaaltAvya", {
                       params: {
@@ -1102,10 +1098,10 @@ function GuilgeeKhiikh(
           )}
       </div>
       {turul === "ashiglalt" &&
-      !m2argaarBodokhEsekh &&
-      (khemjikhNegj === "кВт" ||
-        khemjikhNegj === "1м3" ||
-        khemjikhNegj === "кг") ? (
+        !m2argaarBodokhEsekh &&
+        (khemjikhNegj === "кВт" ||
+          khemjikhNegj === "1м3" ||
+          khemjikhNegj === "кг") ? (
         <div className="flex w-full justify-between dark:text-[#E5E7EB]">
           <div style={{ width: "49%" }}>
             <div className="dark:text-white">Өмнөх заалт</div>
@@ -1232,11 +1228,11 @@ function GuilgeeKhiikh(
                         ? dun * data?.talbainKhemjee
                         : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
                           tailbar?.includes("Цахилгаан")
-                        ? niitDun
-                        : khemjikhNegj === "кг"
-                        ? niitDunGaz
-                        : negjUne * dun * tsakhilgaanUrjver) +
-                        (suuriKhuraamj || 0) || 0,
+                          ? niitDun
+                          : khemjikhNegj === "кг"
+                            ? niitDunGaz
+                            : negjUne * dun * tsakhilgaanUrjver) +
+                      (suuriKhuraamj || 0) || 0,
                       2,
                     )}
                   </div>
@@ -1249,10 +1245,10 @@ function GuilgeeKhiikh(
                         ? dun * data?.talbainKhemjee
                         : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
                           tailbar?.includes("Цахилгаан")
-                        ? niitDun
-                        : khemjikhNegj === "кг"
-                        ? niitDunGaz
-                        : negjUne * dun * tsakhilgaanUrjver) +
+                          ? niitDun
+                          : khemjikhNegj === "кг"
+                            ? niitDunGaz
+                            : negjUne * dun * tsakhilgaanUrjver) +
                         (suuriKhuraamj || 0) || 0) / 10,
                     )}
                   </div>
@@ -1268,11 +1264,11 @@ function GuilgeeKhiikh(
                       ? dun * data?.talbainKhemjee
                       : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
                         tailbar?.includes("Цахилгаан")
-                      ? niitDun
-                      : khemjikhNegj === "кг"
-                      ? niitDunGaz
-                      : negjUne * dun * tsakhilgaanUrjver) +
-                      (suuriKhuraamj || 0) || 0,
+                        ? niitDun
+                        : khemjikhNegj === "кг"
+                          ? niitDunGaz
+                          : negjUne * dun * tsakhilgaanUrjver) +
+                    (suuriKhuraamj || 0) || 0,
                     2,
                   )}
                 </div>
@@ -1287,10 +1283,10 @@ function GuilgeeKhiikh(
                       ? dun * data?.talbainKhemjee
                       : baiguullaga?.tokhirgoo?.guidelBuchiltKhonogEsekh &&
                         tailbar?.includes("Цахилгаан")
-                      ? niitDun
-                      : khemjikhNegj === "кг"
-                      ? niitDunGaz
-                      : negjUne * dun * tsakhilgaanUrjver) +
+                        ? niitDun
+                        : khemjikhNegj === "кг"
+                          ? niitDunGaz
+                          : negjUne * dun * tsakhilgaanUrjver) +
                       (suuriKhuraamj || 0) || 0) * 1.1,
                   )}
                 </div>
@@ -1350,11 +1346,11 @@ function GuilgeeKhiikh(
                   <div>
                     {formatNumber(
                       tseverUsDun * dun +
-                        bokhirUsDun * dun +
-                        (tailbar?.includes("Халуун ус")
-                          ? usKhalaasniiDun * dun
-                          : 0) +
-                        (suuriKhuraamj || 0) || 0,
+                      bokhirUsDun * dun +
+                      (tailbar?.includes("Халуун ус")
+                        ? usKhalaasniiDun * dun
+                        : 0) +
+                      (suuriKhuraamj || 0) || 0,
                       2,
                     )}
                   </div>
@@ -1406,17 +1402,17 @@ function GuilgeeKhiikh(
       {(turul === "avlaga" ||
         turul === "ashiglalt" ||
         turul === "torguuli") && (
-        <div className="flex flex-row justify-between">
-          <div />
-          <div className="space-x-2">
-            <label>{t("Нэхэмжлэх дээр харах эсэх")}:</label>
-            <Switch
-              checked={nekhemjlekhDeerKharagdakh}
-              onChange={setNekhemjlekhDeerKharagdakh}
-            />
+          <div className="flex flex-row justify-between">
+            <div />
+            <div className="space-x-2">
+              <label>{t("Нэхэмжлэх дээр харах эсэх")}:</label>
+              <Switch
+                checked={nekhemjlekhDeerKharagdakh}
+                onChange={setNekhemjlekhDeerKharagdakh}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
       {turul === "ashiglalt" ||
         (turul === "torguuli" && (
           <div className="flex flex-row justify-between">

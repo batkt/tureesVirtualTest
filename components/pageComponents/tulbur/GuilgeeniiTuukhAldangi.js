@@ -53,7 +53,7 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
 });
 
 function GuilgeeniiTuukhAldangi(
-  { token, data, refreshData, ognoo, ajiltan, barilgiinId, aldangiTuukhKharakhEsekh },
+  { token, data, refreshData, ognoo, ajiltan, barilgiinId },
   ref
 ) {
   const { t, i18n } = useTranslation();
@@ -62,7 +62,7 @@ function GuilgeeniiTuukhAldangi(
   const [shineOgnoo, setShineOgnoo] = useState(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeTab, setActiveTab] = useState(aldangiTuukhKharakhEsekh ? "1" : "2");
+  const [activeTab, setActiveTab] = useState("1");
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const [aldangiinUldegdel, setAldangiinUldegdel] = useState(undefined);
@@ -158,7 +158,19 @@ function GuilgeeniiTuukhAldangi(
   });
 
   const fetchAldangiinUldegdel = () => {
-    setAldangiinUldegdel(data?.aldangiinUldegdel);
+    axios(token)
+      .get("/geree", {
+        params: {
+          query: { _id: data?._id, tuluv: { $ne: -1 } },
+          select: { aldangiinUldegdel: 1 },
+        },
+      })
+      .then(({ data }) => {
+        if (data?.jagsaalt?.length > 0) {
+          setAldangiinUldegdel(data.jagsaalt[0].aldangiinUldegdel);
+        }
+      })
+      .catch(aldaaBarigch);
   };
 
   const canEditAldangi = useMemo(() => {
@@ -248,10 +260,6 @@ function GuilgeeniiTuukhAldangi(
     return khuulsanData;
   }, [guilgeeniiAldangiTuukh, sortOrders, sortColumn, shineOgnoo]);
 
-  const tulsunSortedData = React.useMemo(() => {
-    return sortedData.filter((a) => (a.tulsunAldangi || 0) > 0);
-  }, [sortedData]);
-
   useImperativeHandle(
     ref,
     () => ({
@@ -309,7 +317,7 @@ function GuilgeeniiTuukhAldangi(
             Огноо: moment(item.ognoo).format("YYYY/MM/DD"),
             Ажилтан: item.guilgeeKhiisenAjiltniiNer || "",
             "Төлөх алданги": item.tulukhAldangi || 0,
-            "Төлсөн алданги": item.tulsunAldangi || 0,
+            "Төлсөн алданги": item.tulsunAldangi || item.tulsunDun || 0,
             Данс: item.dansniiDugaar || "",
             "Төлсөн данс": item.tulsunDans || "",
             Тайлбар: item.tailbar || "",
@@ -572,7 +580,7 @@ function GuilgeeniiTuukhAldangi(
           className="min-w-[50rem] overflow-y-scroll"
           style={{ height: "calc(90vh - 15rem)" }}
         >
-          {tulsunSortedData
+          {sortedData
             ?.map((a, i) => (
               <tr
                 key={i}
@@ -588,7 +596,7 @@ function GuilgeeniiTuukhAldangi(
                   {formatNumber(a.tulukhAldangi, 2)}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
-                  {formatNumber(a.tulsunAldangi, 2)}
+                  {formatNumber(a.tulsunAldangi || a.tulsunDun, 2)}
                 </td>
                 <td className="flex min-w-[12rem] justify-center p-1 text-center ">
                   {a.dansniiDugaar}
@@ -806,7 +814,7 @@ function GuilgeeniiTuukhAldangi(
                 </tr>
               </thead>
               <tbody>
-                {tulsunSortedData?.map((a, i) => (
+                {sortedData?.map((a, i) => (
                   <tr key={i}>
                     <td>{moment(a.ognoo).format("YYYY-MM-DD")}</td>
                     <td>{a.guilgeeKhiisenAjiltniiNer}</td>
@@ -814,7 +822,7 @@ function GuilgeeniiTuukhAldangi(
                       {formatNumber(a.tulukhAldangi, 0)}
                     </td>
                     <td className="text-right">
-                      {formatNumber(a.tulsunAldangi, 0)}
+                      {formatNumber(a.tulsunAldangi || a.tulsunDun, 0)}
                     </td>
                     <td>{a.dansniiDugaar}</td>
                     <td>{a.tulsunDans}</td>
@@ -938,11 +946,11 @@ function GuilgeeniiTuukhAldangi(
           defaultActiveKey={activeTab}
           activeKey={activeTab}
           items={[
-            ...(aldangiTuukhKharakhEsekh ? [{
+            {
               key: "1",
               label: t("Төлсөн алданги"),
               children: <TableContent />,
-            }] : []),
+            },
             {
               key: "2",
               label: t("Бодогдсон алданги"),
