@@ -689,13 +689,8 @@ function Zogsool({ token }) {
       }
     }
 
-    if (tootsooKhelber === "2") {
-      console.log("mongon dunger");
+    if (tootsooKhelber === "2" && ognoo?.[0] && ognoo?.[1]) {
       delete baseQuery.createdAt;
-      console.log(
-        moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-        moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-      );
       console.log("tuluv:", tuluv, typeof tuluv);
       if (Number(tuluv) === 2) {
         if (!baseQuery.$and) baseQuery.$and = [];
