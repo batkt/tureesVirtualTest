@@ -56,6 +56,7 @@ const turulAvya = (turul) => {
   else if (turul === "tulultBurtgekh") return "Төлөлт бүртгэх";
   else if (turul === "qpay") return "QPay";
   else if (turul === "avlaga") return "Авлага";
+  else if (turul === "cgw") return "CGW";
 };
 
 function GuilgeeniiTuukh(
@@ -526,6 +527,27 @@ function GuilgeeniiTuukh(
                       ? a.tulsunDans
                       : t("Банк")
                     : turulAvya(a.turul)}
+                </td>
+                <td className="w-full min-w-[8rem] overflow-hidden p-1">
+                  {a.tailbar?.includes("төлөлт") ? (
+                    <span className="font-semibold text-red-500">
+                      {a.tailbar}
+                      <div className="flex items-center gap-1">
+                        {(a.turul === "cgw") && (
+                          <span className="dark:text-gray-300">
+                            CGW
+                          </span>
+                        )}
+                        {a.tailbar?.includes("төлөлт") ? (
+                          <span className="font-semibold text-red-500">{a.tailbar}</span>
+                        ) : (
+                          <span>{a.tailbar}</span>
+                        )}
+                      </div>
+                    </span>
+                  ) : (
+                    a.tailbar
+                  )}
                 </td>
                 <td className="w-full min-w-[8rem] overflow-hidden p-1">
                   {a.tailbar?.includes("төлөлт") ? (

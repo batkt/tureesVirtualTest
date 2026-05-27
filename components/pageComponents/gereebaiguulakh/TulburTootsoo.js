@@ -59,6 +59,10 @@ const Tulbur = ({
   }, []);
 
   function onFinish() {
+    if ((ognoonuud && ognoonuud.length > 0) || (value.khungulukhKhuvi !== undefined && value.khungulukhKhuvi !== null && value.khungulukhKhuvi !== "")) {
+      notification.warning({ message: t("Та хөнгөлөлтөө нэмэх (+) товч дарж оруулах эсвэл хөнгөлөлтийн талбарыг хоосолно уу!") });
+      return;
+    }
     next(value);
   }
 
@@ -123,8 +127,12 @@ const Tulbur = ({
       notification.warning({ message: t("Сарын түрээс оруулна уу!") });
       return;
     }
-    if (!value.khungulukhKhuvi || value.khungulukhKhuvi === 0) {
-      notification.warning({ message: "Хөнгөлөлтийн хувь оруулна уу!" });
+    if (!value.khungulukhKhuvi) {
+      notification.warning({ message: t("Хөнгөлөлтийн хувь оруулна уу!") });
+      return;
+    }
+    if (Number(value.khungulukhKhuvi) <= 0) {
+      notification.warning({ message: t("Хөнгөлөлтийн хувь 0-ээс их байх ёстой!") });
       return;
     }
     if (ognoonuud?.length === 0) {

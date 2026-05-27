@@ -114,7 +114,7 @@ useEffect(() => {
                   onChangeRegister({ target: { value: newValue }, selectedCustomer: mur });
                   setDropDownNeekhEsekh(false);
                 }}
-                className="relative flex cursor-pointer items-center justify-between px-1 py-1 hover:bg-gray-100"
+                className="relative flex cursor-pointer items-center justify-between px-1 py-1 hover:dark:text-blue-500 hover:text-green-500"
               >
                 <div>{mur.register ? mur.register : mur.customerTin}</div>
                 <div>{mur.ner}</div>

@@ -94,6 +94,7 @@ function MyApp({ Component, pageProps }) {
            !router.pathname.startsWith('/khyanalt/togloomKiosk') && 
            !router.pathname.startsWith('/khyanalt/zogsool') && 
            !router.pathname.startsWith('/khyanalt/zg') && 
+           router.pathname !== '/' &&
            <ChatWidget />}
         </ConfigProvider>
       </AuthProvider>

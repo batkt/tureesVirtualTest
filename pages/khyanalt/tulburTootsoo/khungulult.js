@@ -1731,18 +1731,25 @@ function tulburTootsoo() {
                           required: true,
                           message: t("Хөнгөлөх дүн бүртгэнэ үү!"),
                         },
+                        {
+                          validator: (_, value) => {
+                            if (value === undefined || value === null || value === "") {
+                              return Promise.resolve();
+                            }
+                            if (Number(value) <= 0) {
+                              return Promise.reject(
+                                new Error(t("Хөнгөлөлтийн дүн/хувь 0-ээс их байх ёстой!"))
+                              );
+                            }
+                            return Promise.resolve();
+                          },
+                        },
                       ]}
                     >
                       <Input
                         onKeyDown={focuser}
                         style={{borderRadius: '8px'}}
                         type={"number"}
-                        rules={[
-                        {
-                          required: true,
-                          message: t("Хөнгөлөх дүн бүртгэнэ үү!"),
-                        },
-                      ]}
                         placeholder={
                           khungulukh === "khuvi"
                             ? t("Хөнгөлөх хувь")
