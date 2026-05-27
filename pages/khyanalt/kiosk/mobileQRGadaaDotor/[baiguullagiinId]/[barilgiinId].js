@@ -54,6 +54,7 @@ const KioskMobile = ({
   const [khungulukhDun, setKhungulukhDun] = useState(khungulukh);
   const [cameraIP, setCameraIP] = useState();
   const khungulultRef = React.useRef(null);
+  const endTimeRef = useRef(null);
   const [servereesAvsonOdooTsag, setServereesAvsonOdooTsag] = useState();
   const [countdown, setCountdown] = useState(100000);
   const [minutes, setMinutes] = useState(15);
@@ -209,32 +210,32 @@ const KioskMobile = ({
   useEffect(() => {
     if (!drawerOngoikh) return;
 
-    // Reset timer when drawer opens
-    setMinutes(15);
-    setSeconds(0);
+    endTimeRef.current = Date.now() + 15 * 60 * 1000;
+    let timer;
 
-    const timer = setInterval(() => {
-      setSeconds((prevSeconds) => {
-        if (prevSeconds > 0) {
-          return prevSeconds - 1;
-        } else {
-          // When seconds reach 0, check minutes
-          setMinutes((prevMinutes) => {
-            if (prevMinutes > 0) {
-              return prevMinutes - 1;
-            } else {
-              // Both minutes and seconds are 0, timeout
-              clearInterval(timer);
-              onTimeout();
-              return 0;
-            }
-          });
-          return 59;
-        }
-      });
-    }, 1000);
+    const tick = () => {
+      const remaining = Math.max(0, endTimeRef.current - Date.now());
+      const totalSeconds = Math.floor(remaining / 1000);
+      setMinutes(Math.floor(totalSeconds / 60));
+      setSeconds(totalSeconds % 60);
+      if (remaining <= 0) {
+        clearInterval(timer);
+        onTimeout();
+      }
+    };
 
-    return () => clearInterval(timer);
+    tick();
+    timer = setInterval(tick, 1000);
+
+    const handleVisibility = () => {
+      if (!document.hidden) tick();
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, [drawerOngoikh, onTimeout]);
 
   function qpayAvakh(
@@ -445,33 +446,39 @@ const KioskMobile = ({
 
   return (
     <div
-      className="relative flex h-[100dvh] w-screen flex-col overflow-hidden bg-[#0C0C12]"
+      className="relative flex h-[100dvh] w-screen flex-col overflow-hidden bg-[#0F0F14]"
       style={{ touchAction: "manipulation" }}
     >
       {/* Notice banner */}
       <div
-        className="pointer-events-none fixed top-0 z-[9999] w-full px-4 py-2 text-center text-[11px] font-medium text-[#00D987]"
+        className="pointer-events-none fixed top-0 z-[9999] w-full px-4 py-2 text-center text-[11px] font-medium text-[#00C97A]"
         style={{
-          background: "rgba(0,217,135,0.07)",
-          borderBottom: "1px solid rgba(0,217,135,0.12)",
+          background: "rgba(0,200,120,0.06)",
+          borderBottom: "1px solid rgba(0,200,120,0.10)",
         }}
       >
-        Төлбөр төлснөөс хойш {zogsool?.garakhTsag || 30} минут дотор
-        гараагүй бол нэмэлт төлбөр бодогдохыг анхаарна уу!
+        Төлбөр төлснөөс хойш {zogsool?.garakhTsag || 30} минут дотор гараагүй
+        бол нэмэлт төлбөр бодогдохыг анхаарна уу!
       </div>
 
       {/* Loading overlay */}
       {unshijBaina && (
         <div
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center gap-4"
-          style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(6px)" }}
+          style={{
+            background: "rgba(0,0,0,0.75)",
+            backdropFilter: "blur(6px)",
+          }}
         >
           <Spin
             indicator={
-              <LoadingOutlined style={{ fontSize: 56, color: "#00D987" }} spin />
+              <LoadingOutlined
+                style={{ fontSize: 56, color: "#00D987" }}
+                spin
+              />
             }
           />
-          <div className="animate-pulse text-sm text-[#00D987]">
+          <div className="animate-pulse text-sm text-[#00C97A]">
             Уншиж байна...
           </div>
         </div>
@@ -486,7 +493,7 @@ const KioskMobile = ({
         maskClosable={false}
         className="khuviinDrawerMobile bg-transparent text-base font-semibold text-gray-200 dark:bg-transparent"
       >
-        <div className="relative flex h-full flex-col overflow-hidden rounded-t-3xl bg-[#13131A]">
+        <div className="relative flex h-full flex-col overflow-hidden rounded-t-3xl bg-[#17171E]">
           {/* Drag handle */}
           <div className="flex w-full shrink-0 justify-center pb-1 pt-3">
             <div className="h-1 w-10 rounded-full bg-white/20" />
@@ -499,7 +506,7 @@ const KioskMobile = ({
                 ? "animate-pulse bg-red-600 ring-2 ring-red-400/50"
                 : minutes === 0 && seconds <= 20
                 ? "bg-orange-500 ring-2 ring-orange-400/40"
-                : "bg-red-800"
+                : "bg-[#2A1010]"
             }`}
           >
             <div
@@ -514,13 +521,12 @@ const KioskMobile = ({
 
           {/* Screens container */}
           <div className="relative flex-1 overflow-hidden">
-
             {/* ── Alkham 0: Vehicle list ── */}
             <div
               className={`absolute inset-0 flex flex-col transition-all duration-300 ${
                 alkham === 0
                   ? "scale-100 opacity-100"
-                  : "scale-0 opacity-0 pointer-events-none"
+                  : "pointer-events-none scale-0 opacity-0"
               }`}
             >
               <div className="flex shrink-0 items-center gap-3 px-4 pb-3 pt-1">
@@ -564,8 +570,8 @@ const KioskMobile = ({
                         onClick={() => mashinSongiy(mur)}
                         className="flex cursor-pointer items-center gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 transition-colors active:bg-white/10"
                       >
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#00D987]/10">
-                          <CarOutlined className="text-xl text-[#00D987]" />
+                        <div className="bg-[#00C97A]/8 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl">
+                          <CarOutlined className="text-xl text-[#00C97A]" />
                         </div>
                         <div className="flex-1">
                           <div className="text-lg font-bold tracking-widest text-white">
@@ -580,7 +586,9 @@ const KioskMobile = ({
                             </div>
                           )}
                         </div>
-                        <div className="text-2xl font-light text-white/25">›</div>
+                        <div className="text-2xl font-light text-white/25">
+                          ›
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -598,7 +606,7 @@ const KioskMobile = ({
               className={`absolute inset-0 flex flex-col transition-all duration-300 ${
                 alkham === 1
                   ? "scale-100 opacity-100"
-                  : "scale-0 opacity-0 pointer-events-none"
+                  : "pointer-events-none scale-0 opacity-0"
               }`}
             >
               <div className="flex shrink-0 items-center gap-3 px-4 pb-3 pt-1">
@@ -623,8 +631,8 @@ const KioskMobile = ({
               <div className="flex-1 overflow-y-auto pb-6">
                 {songogdsonData && (
                   <div className="mx-4 mt-1 overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-                    <div className="flex items-center gap-3 border-b border-white/8 px-5 py-3.5">
-                      <CarOutlined className="shrink-0 text-[#00D987]" />
+                    <div className="border-white/8 flex items-center gap-3 border-b px-5 py-3.5">
+                      <CarOutlined className="shrink-0 text-[#00C97A]" />
                       <span className="flex-1 text-xs text-white/50">
                         Улсын дугаар
                       </span>
@@ -632,8 +640,8 @@ const KioskMobile = ({
                         {songogdsonData.plate_number}
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 border-b border-white/8 px-5 py-3.5">
-                      <CalendarOutlined className="shrink-0 text-blue-400" />
+                    <div className="border-white/8 flex items-center gap-3 border-b px-5 py-3.5">
+                      <CalendarOutlined className="shrink-0 text-sky-300" />
                       <span className="flex-1 text-xs text-white/50">
                         Орсон цаг
                       </span>
@@ -643,8 +651,8 @@ const KioskMobile = ({
                         )}
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 border-b border-white/8 px-5 py-3.5">
-                      <CalendarOutlined className="shrink-0 text-purple-400" />
+                    <div className="border-white/8 flex items-center gap-3 border-b px-5 py-3.5">
+                      <CalendarOutlined className="shrink-0 text-violet-300" />
                       <span className="flex-1 text-xs text-white/50">
                         Гарсан цаг
                       </span>
@@ -656,8 +664,8 @@ const KioskMobile = ({
                           : moment().format("DD/MM/YYYY HH:mm")}
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 border-b border-white/8 px-5 py-3.5">
-                      <ClockCircleOutlined className="shrink-0 text-amber-400" />
+                    <div className="border-white/8 flex items-center gap-3 border-b px-5 py-3.5">
+                      <ClockCircleOutlined className="shrink-0 text-amber-300" />
                       <span className="flex-1 text-xs text-white/50">
                         Зогссон хугацаа
                       </span>
@@ -670,33 +678,36 @@ const KioskMobile = ({
                             moment(songogdsonData.enter_date),
                           );
                           const dur = moment.duration(diff);
-                          return `${String(dur.hours()).padStart(2, "0")}:${String(dur.minutes()).padStart(2, "0")}`;
+                          return `${String(dur.hours()).padStart(
+                            2,
+                            "0",
+                          )}:${String(dur.minutes()).padStart(2, "0")}`;
                         })()}
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 bg-red-500/10 px-5 py-4">
-                      <WalletOutlined className="shrink-0 text-lg text-red-400" />
+                    <div className="bg-red-500/8 flex items-center gap-3 px-5 py-4">
+                      <WalletOutlined className="shrink-0 text-lg text-red-300" />
                       <span className="flex-1 text-sm text-white/70">
                         Нийт төлбөр
                       </span>
-                      <span className="text-2xl font-bold text-red-400">
+                      <span className="text-2xl font-bold text-red-300">
                         {formatNumber(songogdsonData.pay_amount, 0)}₮
                       </span>
                     </div>
                     {khungulukhDun > 0 && (
-                      <div className="flex items-center gap-3 border-t border-white/8 bg-green-500/10 px-5 py-3.5">
-                        <MdOutlineDiscount className="shrink-0 text-lg text-green-400" />
+                      <div className="border-white/8 bg-emerald-500/8 flex items-center gap-3 border-t px-5 py-3.5">
+                        <MdOutlineDiscount className="shrink-0 text-lg text-emerald-300" />
                         <span className="flex-1 text-xs text-white/50">
                           Хөнгөлөлт
                         </span>
-                        <span className="font-semibold text-green-400">
+                        <span className="font-semibold text-emerald-300">
                           -{formatNumber(khungulukhDun, 0)}₮
                         </span>
                       </div>
                     )}
                     {baiguullagiinId === "673d88133987e97992f77c02" && (
-                      <div className="flex items-center gap-3 border-t border-white/8 px-5 py-3.5">
-                        <MdOutlineDiscount className="shrink-0 text-lg text-green-400" />
+                      <div className="border-white/8 flex items-center gap-3 border-t px-5 py-3.5">
+                        <MdOutlineDiscount className="shrink-0 text-lg text-emerald-300" />
                         <span className="flex-1 text-xs text-white/50">
                           Хөнгөлөлт
                         </span>
@@ -707,7 +718,7 @@ const KioskMobile = ({
                           <Button
                             onClick={() => showKhunglult()}
                             size="small"
-                            className="border-green-500/40 text-green-400"
+                            className="border-emerald-500/25 text-emerald-300"
                           >
                             Энд дар
                           </Button>
@@ -758,7 +769,7 @@ const KioskMobile = ({
                           songogdsonData.parking_id,
                         )
                       }
-                      className="flex items-center gap-2 rounded-2xl border border-green-500/40 bg-green-800/30 px-6 py-3 text-base font-semibold text-green-400 focus:outline-none active:bg-green-800/50"
+                      className="flex items-center gap-2 rounded-2xl border border-emerald-500/25 bg-emerald-900/30 px-6 py-3 text-base font-semibold text-emerald-300 focus:outline-none active:bg-green-800/50"
                     >
                       <MdOutlineDiscount className="text-lg" />
                       Хөнгөлөлт ашиглах
@@ -773,7 +784,7 @@ const KioskMobile = ({
               className={`absolute inset-0 flex flex-col items-center justify-center gap-6 transition-all duration-300 ${
                 alkham === 2
                   ? "scale-100 opacity-100"
-                  : "scale-0 opacity-0 pointer-events-none"
+                  : "pointer-events-none scale-0 opacity-0"
               }`}
             >
               <div className="text-xl font-bold text-white">
@@ -790,7 +801,7 @@ const KioskMobile = ({
               className={`absolute inset-0 flex flex-col transition-all duration-300 ${
                 alkham === 3
                   ? "scale-100 opacity-100"
-                  : "scale-0 opacity-0 pointer-events-none"
+                  : "pointer-events-none scale-0 opacity-0"
               }`}
             >
               <div className="flex shrink-0 items-center gap-3 px-4 pb-3 pt-1">
@@ -830,7 +841,7 @@ const KioskMobile = ({
                       }}
                       className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border p-4 transition-all duration-200 ${
                         eBarimtTurul === mur.ner
-                          ? "border-[#00D987]/50 bg-[#00D987]/10 text-[#00D987]"
+                          ? "bg-[#00C97A]/8 border-[#00C97A]/35 text-[#00C97A]"
                           : "border-white/10 bg-white/5 text-white/60"
                       }`}
                     >
@@ -863,7 +874,7 @@ const KioskMobile = ({
               className={`absolute inset-0 flex flex-col transition-all duration-300 ${
                 alkham === 4
                   ? "scale-100 opacity-100"
-                  : "scale-0 opacity-0 pointer-events-none"
+                  : "pointer-events-none scale-0 opacity-0"
               }`}
             >
               <div className="flex shrink-0 items-center gap-3 px-4 pb-3 pt-1">
@@ -880,16 +891,16 @@ const KioskMobile = ({
               </div>
 
               <div className="flex-1 overflow-y-auto px-4 pb-6">
-                <div className="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full bg-green-500/15 px-4 py-2">
+                <div className="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-2">
                   <div className="h-2 w-2 animate-pulse rounded-full bg-green-400" />
-                  <span className="text-sm font-medium text-green-400">
+                  <span className="text-sm font-medium text-emerald-300">
                     Төлбөр баталгаажсан
                   </span>
                 </div>
 
                 {eBarimt && eBarimtTurul === "khuviKhun" && (
                   <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-                    <div className="flex items-center justify-between border-b border-white/8 px-5 py-3.5">
+                    <div className="border-white/8 flex items-center justify-between border-b px-5 py-3.5">
                       <span className="text-xs text-white/50">
                         Сугалааны дугаар
                       </span>
@@ -898,8 +909,10 @@ const KioskMobile = ({
                       </span>
                     </div>
                     <div className="flex items-center justify-between px-5 py-3.5">
-                      <span className="text-xs text-white/50">Баримтын дүн</span>
-                      <span className="font-bold text-green-400">
+                      <span className="text-xs text-white/50">
+                        Баримтын дүн
+                      </span>
+                      <span className="font-bold text-emerald-300">
                         {formatNumber(
                           Number(
                             eBarimt?.amount
@@ -916,21 +929,23 @@ const KioskMobile = ({
 
                 {eBarimt && eBarimtTurul === "baiguullaga" && (
                   <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-                    <div className="flex items-center justify-between border-b border-white/8 px-5 py-3.5">
+                    <div className="border-white/8 flex items-center justify-between border-b px-5 py-3.5">
                       <span className="text-xs text-white/50">ТТД</span>
                       <span className="font-semibold text-white">
                         {eBarimt?.registerNo}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between border-b border-white/8 px-5 py-3.5">
+                    <div className="border-white/8 flex items-center justify-between border-b px-5 py-3.5">
                       <span className="text-xs text-white/50">ТТН</span>
                       <span className="max-w-[60%] truncate text-sm text-white">
                         {baiguullagaNer?.name}
                       </span>
                     </div>
                     <div className="flex items-center justify-between px-5 py-3.5">
-                      <span className="text-xs text-white/50">Баримтын дүн</span>
-                      <span className="font-bold text-green-400">
+                      <span className="text-xs text-white/50">
+                        Баримтын дүн
+                      </span>
+                      <span className="font-bold text-emerald-300">
                         {formatNumber(
                           Number(
                             eBarimt?.amount
@@ -957,7 +972,6 @@ const KioskMobile = ({
                 )}
               </div>
             </div>
-
           </div>
         </div>
       </Drawer>
@@ -967,7 +981,7 @@ const KioskMobile = ({
         <div className="relative">
           <div
             className="absolute inset-0 rounded-2xl blur-2xl"
-            style={{ background: "rgba(0,217,135,0.2)" }}
+            style={{ background: "rgba(0,200,120,0.15)" }}
           />
           <div className="relative h-20 w-20 overflow-hidden rounded-2xl sm:h-28 sm:w-28">
             <img
