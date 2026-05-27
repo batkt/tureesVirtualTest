@@ -19,7 +19,7 @@ function index({ token, data }) {
   const router = useRouter();
   const { t } = useTranslation();
   const [targetKeys, setTargetKeys] = useState(
-    _.cloneDeep(data?.tsonkhniiErkhuud) || []
+    _.cloneDeep(data?.tsonkhniiErkhuud) || [],
   );
   const [tokhirgoo, setTokhirgoo] = useState(data?.tokhirgoo || {});
   const { baiguullaga } = useAuth();
@@ -33,7 +33,7 @@ function index({ token, data }) {
       setBolomjitToonuud(
         khuudasniiJagsaalt?.moduluud?.map((a) => {
           return { zam: a.zam, bolomjit: a.bolomjit - (a.odoogiin || 0) };
-        })
+        }),
       );
     }
   }, [khuudasniiJagsaalt]);
@@ -140,7 +140,7 @@ function index({ token, data }) {
                         onChange={() => {
                           setBarilgiinErkh((value) => {
                             const index = value.findIndex(
-                              (row) => row === a._id
+                              (row) => row === a._id,
                             );
                             if (index !== -1) value.splice(index, 1);
                             else value.push(a._id);
@@ -203,7 +203,7 @@ function index({ token, data }) {
                     ? khuudasniiJagsaalt?.moduluud
                         ?.filter((a) => a.bolomjit - (a.odoogiin || 0) > 0)
                         .map((a) => a.zam)
-                    : []
+                    : [],
                 );
                 setErkhuud(
                   e.target.checked
@@ -211,18 +211,18 @@ function index({ token, data }) {
                         ?.filter(
                           (a) =>
                             !data?.tsonkhniiErkhuud?.find((b) => b === a.zam) &&
-                            a.bolomjit - (a.odoogiin || 0) > 0
+                            a.bolomjit - (a.odoogiin || 0) > 0,
                         )
                         .map((a) => {
                           return { zam: a.zam, too: 1 };
                         })
                     : khuudasniiJagsaalt?.moduluud
                         ?.filter((a) =>
-                          data?.tsonkhniiErkhuud?.find((b) => b === a.zam)
+                          data?.tsonkhniiErkhuud?.find((b) => b === a.zam),
                         )
                         .map((a) => {
                           return { zam: a.zam, too: -1 };
-                        })
+                        }),
                 );
               }}
             />
@@ -248,7 +248,7 @@ function index({ token, data }) {
                   bolomjitToonuud?.find((a) => a.zam === mur.href)?.bolomjit ||
                   0;
                 return (
-                  <div>
+                  <div key={`${mur.href}-${index}`}>
                     <div
                       className={`flex border ${
                         index % 2 === 0
@@ -256,10 +256,7 @@ function index({ token, data }) {
                           : "bg-green-100 dark:bg-gray-600"
                       }`}
                     >
-                      <div
-                        key={`${mur.href}-${index}`}
-                        className="flex w-1/2 flex-row space-x-2 p-1"
-                      >
+                      <div className="flex w-1/2 flex-row space-x-2 p-1">
                         {!mur?.sub && (
                           <Checkbox
                             disabled={
@@ -271,20 +268,20 @@ function index({ token, data }) {
                               if (e.target.checked === true) {
                                 if (
                                   !data?.tsonkhniiErkhuud?.find(
-                                    (a) => a === mur.href
+                                    (a) => a === mur.href,
                                   )
                                 ) {
                                   erkhuud.push({ zam: mur.href, too: 1 });
                                   setErkhuud([...erkhuud]);
                                 } else
                                   setErkhuud(
-                                    erkhuud.filter((a) => a.zam !== mur.href)
+                                    erkhuud.filter((a) => a.zam !== mur.href),
                                   );
                                 targetKeys.push(mur.href);
                                 if (!!mur?.bolomjit && mur.bolomjit > 0) {
                                   mur.bolomjit = mur.bolomjit - 1;
                                   var i = bolomjitToonuud?.findIndex(
-                                    (a) => a.zam === mur.href
+                                    (a) => a.zam === mur.href,
                                   );
                                   if (i !== -1)
                                     bolomjitToonuud[i].bolomjit =
@@ -294,22 +291,22 @@ function index({ token, data }) {
                               } else {
                                 if (
                                   !!data?.tsonkhniiErkhuud?.find(
-                                    (a) => a === mur.href
+                                    (a) => a === mur.href,
                                   )
                                 ) {
                                   erkhuud.push({ zam: mur.href, too: -1 });
                                   setErkhuud([...erkhuud]);
                                 } else
                                   setErkhuud(
-                                    erkhuud.filter((a) => a.zam !== mur.href)
+                                    erkhuud.filter((a) => a.zam !== mur.href),
                                   );
                                 targetKeys.splice(
                                   targetKeys.indexOf(mur.href),
-                                  1
+                                  1,
                                 );
                                 mur.bolomjit = (mur?.bolomjit || 0) + 1;
                                 var i = bolomjitToonuud?.findIndex(
-                                  (a) => a.zam === mur.href
+                                  (a) => a.zam === mur.href,
                                 );
                                 if (i !== -1)
                                   bolomjitToonuud[i].bolomjit =
@@ -339,16 +336,14 @@ function index({ token, data }) {
                               ?.bolomjit || 0;
                           return (
                             <div
+                              key={`${a.href}-${i}`}
                               className={`flex ${
                                 index % 2 === 0
                                   ? "bg-blue-50 dark:bg-gray-700"
                                   : "bg-green-50 dark:bg-gray-600"
                               }`}
                             >
-                              <div
-                                key={`${a.href}-${i}`}
-                                className="flex w-1/2 flex-row space-x-2 p-1 pl-5"
-                              >
+                              <div className="flex w-1/2 flex-row space-x-2 p-1 pl-5">
                                 <Checkbox
                                   disabled={
                                     !targetKeys?.find((b) => b === a.href) &&
@@ -361,7 +356,7 @@ function index({ token, data }) {
                                     if (e.target.checked === true) {
                                       if (
                                         !data?.tsonkhniiErkhuud?.find(
-                                          (b) => b === a.href
+                                          (b) => b === a.href,
                                         )
                                       ) {
                                         erkhuud.push({ zam: a.href, too: 1 });
@@ -369,14 +364,14 @@ function index({ token, data }) {
                                       } else
                                         setErkhuud(
                                           erkhuud.filter(
-                                            (b) => b.href !== a.href
-                                          )
+                                            (b) => b.href !== a.href,
+                                          ),
                                         );
                                       targetKeys.push(a.href);
                                       if (!!a?.bolomjit && a.bolomjit > 0) {
                                         a.bolomjit = a.bolomjit - 1;
                                         var ind = bolomjitToonuud?.findIndex(
-                                          (d) => d.zam === a.href
+                                          (d) => d.zam === a.href,
                                         );
                                         if (ind !== -1)
                                           bolomjitToonuud[ind].bolomjit =
@@ -386,7 +381,7 @@ function index({ token, data }) {
                                     } else {
                                       if (
                                         !!data?.tsonkhniiErkhuud?.find(
-                                          (b) => b === a.href
+                                          (b) => b === a.href,
                                         )
                                       ) {
                                         erkhuud.push({
@@ -397,16 +392,16 @@ function index({ token, data }) {
                                       } else
                                         setErkhuud(
                                           erkhuud.filter(
-                                            (b) => b.zam !== a.href
-                                          )
+                                            (b) => b.zam !== a.href,
+                                          ),
                                         );
                                       targetKeys.splice(
                                         targetKeys.indexOf(a.href),
-                                        1
+                                        1,
                                       );
                                       a.bolomjit = (a?.bolomjit || 0) + 1;
                                       var ind = bolomjitToonuud?.findIndex(
-                                        (d) => d.zam === a.href
+                                        (d) => d.zam === a.href,
                                       );
                                       if (ind !== -1)
                                         bolomjitToonuud[ind].bolomjit =
@@ -508,7 +503,7 @@ function index({ token, data }) {
                   <Switch
                     checked={
                       !!_.get(tokhirgoo, `${mur?.value}`)?.find((a) =>
-                        barilgiinErkh.find((b) => a === b)
+                        barilgiinErkh.find((b) => a === b),
                       )
                     }
                     onChange={(checked) => {
@@ -533,7 +528,7 @@ function index({ token, data }) {
                   </div>
                   <div className="text-gray-600 dark:text-gray-300">
                     {t(
-                      "Зогсоолын нэгтгэл дүн буюу системд бүртгэгдсэн нийт гүйлгээний задаргаа дүнг харах эсэх."
+                      "Зогсоолын нэгтгэл дүн буюу системд бүртгэгдсэн нийт гүйлгээний задаргаа дүнг харах эсэх.",
                     )}
                   </div>
                 </div>
@@ -563,7 +558,7 @@ function index({ token, data }) {
                   </div>
                   <div className="text-gray-600 dark:text-gray-300">
                     {t(
-                      "Тоглоомын төвийн нэгтгэл дүн буюу системд бүртгэгдсэн нийт гүйлгээний задаргаа дүнг харах эсэх."
+                      "Тоглоомын төвийн нэгтгэл дүн буюу системд бүртгэгдсэн нийт гүйлгээний задаргаа дүнг харах эсэх.",
                     )}
                   </div>
                 </div>
@@ -571,7 +566,7 @@ function index({ token, data }) {
                   <Switch
                     checked={_.get(
                       tokhirgoo,
-                      `togloomiinTuvNegtgelDunKharakhEsekh`
+                      `togloomiinTuvNegtgelDunKharakhEsekh`,
                     )}
                     onChange={(checked) => {
                       setTokhirgoo((a) => {
@@ -579,7 +574,7 @@ function index({ token, data }) {
                           _.set(
                             a,
                             `togloomiinTuvNegtgelDunKharakhEsekh`,
-                            false
+                            false,
                           );
                         } else
                           _.set(a, `togloomiinTuvNegtgelDunKharakhEsekh`, true);
@@ -594,13 +589,13 @@ function index({ token, data }) {
           {!!targetKeys.find((a) => a === "/khyanalt/zogsool/camera") && (
             <div className="box">
               <div className="flex items-center p-5">
-                <div className="border-l-2 border-green-500 pl-4">
+                <div className="border-l-2 border-[#F7B514] pl-4">
                   <div className="font-medium">
                     {t("Зогсоолын хөнгөлөлт үзүүлэх эсэх")}
                   </div>
                   <div className="text-gray-600 dark:text-gray-300">
                     {t(
-                      "Тухайн ажилтан зогсоолд зогссон машиныг хөнгөлөлт үзүүлэх эсэх."
+                      "Тухайн ажилтан зогсоолд зогссон машиныг хөнгөлөлт үзүүлэх эсэх.",
                     )}
                   </div>
                 </div>
@@ -623,13 +618,13 @@ function index({ token, data }) {
           {!!targetKeys.find((a) => a === "/khyanalt/zogsool/camera") && (
             <div className="box">
               <div className="flex items-center p-5">
-                <div className="border-l-2 border-green-500 pl-4">
+                <div className="border-l-2 border-[#F7B514] pl-4">
                   <div className="font-medium">
                     {t("Ажилтанд бүх төлбөрийн төрлүүдийг харах эсэх")}
                   </div>
                   <div className="text-gray-600 dark:text-gray-300">
                     {t(
-                      "Тухайн ажилтан өдрийн тайлангаа авахдаа бүх төлбөрийн төрлүүдийг харах эсэх."
+                      "Тухайн ажилтан өдрийн тайлангаа авахдаа бүх төлбөрийн төрлүүдийг харах эсэх.",
                     )}
                   </div>
                 </div>
@@ -650,17 +645,17 @@ function index({ token, data }) {
             </div>
           )}
           {!!targetKeys.find(
-            (a) => a === "/khyanalt/zogsool/mashinBurtgel"
+            (a) => a === "/khyanalt/zogsool/mashinBurtgel",
           ) && (
             <div className="box">
               <div className="flex items-center p-5">
-                <div className="border-l-2 border-green-500 pl-4">
+                <div className="border-l-2 border-[#F7B514] pl-4">
                   <div className="font-medium">
                     {t("Машины дугаар өөрчлөх эсэх")}
                   </div>
                   <div className="text-gray-600 dark:text-gray-300">
                     {t(
-                      "Тухайн машин зогсоол орсны дараа дугаар өөрчлөх боломж идэвхжүүлэх эсэх."
+                      "Тухайн машин зогсоол орсны дараа дугаар өөрчлөх боломж идэвхжүүлэх эсэх.",
                     )}
                   </div>
                 </div>
@@ -695,7 +690,7 @@ const ugudulAvchirya = async (ctx, session) => {
   const { data } = await readMethod(
     "ajiltan",
     session.tureestoken,
-    ctx.query.id
+    ctx.query.id,
   );
   return data;
 };
