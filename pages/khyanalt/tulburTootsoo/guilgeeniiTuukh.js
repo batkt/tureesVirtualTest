@@ -1620,8 +1620,11 @@ function GuilgeeniiTuukh(props) {
         <div className="hideScroll grid w-full grid-cols-1 gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid-cols-6 sm:py-2 md:gap-6 2xl:grid-cols-12">
           {[
             {
-              too: formatNumber(computedTotals.avlaga || 0, 0),
-              raw: computedTotals.avlaga || 0,
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "avlaga.0.dun") || 0,
+                0
+              ),
+              raw: _.get(guilgeeniiToololt, "avlaga.0.dun") || 0,
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "avlaga",
               utga: "Хуримтлагдсан авлага",
@@ -1629,40 +1632,55 @@ function GuilgeeniiTuukh(props) {
                 "Өмнө сарын төлбөрийн үлдэгдлүүдийн нийлбэр болон энэ сарын тооцоо болно.",
             },
             {
-              too: formatNumber(computedTotals.voucher || 0, 0),
-              raw: computedTotals.voucher || 0,
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "voucher.0.dun") || 0,
+                0
+              ),
+              raw: _.get(guilgeeniiToololt, "voucher.0.dun") || 0,
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "voucher",
               utga: "Ваучер төлөлт",
               tailbar: "Огноонд хамаарагдах бүх Ваучер төлөлтийн нийлбэр дүн",
             },
             {
-              too: formatNumber(computedTotals.tsutslagdsanAvlaga || 0, 0),
-              raw: computedTotals.tsutslagdsanAvlaga || 0,
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0,
+                0
+              ),
+              raw: _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0,
               turul: "tsutslagdsanAvlaga",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Цуцлагдсан гэрээний авлага",
               tailbar: "Идэвхигүй буюу цуцлагдсан гэрээний нийт авлага",
             },
             {
-              too: formatNumber(computedTotals.eneSardTulukh || 0, 0),
-              raw: computedTotals.eneSardTulukh || 0,
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0,
+                0
+              ),
+              raw: _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0,
               turul: "eneSardTulukh",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Төлөвлөгөө / сар",
               tailbar: "Энэ сард төлөгдвөл зохих нийт дүн",
             },
             {
-              too: formatNumber(computedTotals.eneSardTulsun || 0, 0),
-              raw: computedTotals.eneSardTulsun || 0,
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0,
+                0
+              ),
+              raw: _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0,
               turul: "eneSardTulsun",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Гүйцэтгэл / сар",
               tailbar: "Огноонд хамаарагдах бүх төлөгдсөн дүнгийн нийлбэр",
             },
             {
-              too: formatNumber(computedTotals.khungulult || 0, 0),
-              raw: computedTotals.khungulult || 0,
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "khungulult.0.dun") || 0,
+                0
+              ),
+              raw: _.get(guilgeeniiToololt, "khungulult.0.dun") || 0,
               turul: "khungulult",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Хөнгөлөлт / сар",

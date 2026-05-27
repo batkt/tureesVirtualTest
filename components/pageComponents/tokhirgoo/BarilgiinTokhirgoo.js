@@ -8,10 +8,12 @@ import {
   Switch,
   Input,
 } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import useJagsaalt from "hooks/useJagsaalt";
+import { useRouter } from "next/router";
 
 function BarilgiinTokhirgoo({
   token,
@@ -35,9 +37,16 @@ function BarilgiinTokhirgoo({
   const [songogdsonHoroo, setSongogdsonHoroo] = useState();
   const [songogdsonHorooKod, setSongogdsonHorooKod] = useState();
 
+  const router = useRouter();
+
   const barilga = useMemo(
     () => baiguullaga?.barilguud?.find((a) => a._id === songogdsonBarilga),
     [songogdsonBarilga],
+  );
+
+  const selectedIndex = useMemo(
+    () => baiguullaga?.barilguud?.findIndex((a) => a._id === songogdsonBarilga),
+    [baiguullaga, songogdsonBarilga],
   );
 
   const duurguud = useJagsaalt("/tatvariinAlba");
@@ -166,6 +175,26 @@ function BarilgiinTokhirgoo({
               </div>
             </div>
           </div>
+          {selectedIndex !== undefined && selectedIndex !== -1 && (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{t("Барилгын мэдээлэл")}</div>
+                  <div className="text-gray-600">
+                    {t("Нэр, регистр, давхар, хаяг зэрэг үндсэн мэдээлэл засах")}
+                  </div>
+                </div>
+                <div className="ml-auto">
+                  <Button
+                    icon={<EditOutlined />}
+                    onClick={() => router.push(`/khyanalt/barilgaBurtgel/${selectedIndex}`)}
+                  >
+                    {t("Засах")}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">

@@ -15,7 +15,8 @@ import {
 import formatNumber from "tools/function/formatNumber";
 import useAvlagaTovchoo, { useavlagaTovchooDelgerengui } from "hooks/tailan/useAvlagaTovchoo";
 import { useAuth } from "services/auth";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import useSWR from "swr";
 import moment from "moment";
 import { useReactToPrint } from "react-to-print";
 import { flushSync } from "react-dom";
@@ -319,7 +320,15 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
 
 
   const totalAldangiDt = (displayAldangi || 0);
-  const totalAldangiKt = (gereeDetail?.niitTulsunAldangi || 0);
+  // Compute from actual transactions filtered by date range — syncs with tulsunAldangiinTuukh
+  const totalAldangiKt = (gereeDetail?.aldangiGuilgeenuud || []).reduce((sum, g) => {
+    const gDate = g.aldangiBodsonOgnoo || g.ognoo;
+    if (ognoo?.[0] && ognoo?.[1] && gDate) {
+      const d = new Date(gDate);
+      if (d < new Date(ognoo[0]) || d > new Date(ognoo[1])) return sum;
+    }
+    return sum + (g.tulsunAldangi || g.tulsunDun || 0);
+  }, 0);
 
   const sumDtRows = dataRowsOnly.reduce((s, r) => s + (r.tulukhDun || 0), 0);
   const sumKtRowsNoAldangi = dataRowsOnly
@@ -872,6 +881,29 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
   );
 }
 
+function AvlagaEtssiinUldegdel({ record, token, ognoo, barilgiinId, onLoad }) {
+  const isCancelled = record?.tuluv === -1 || Number(record?.tuluv) === -1;
+  const { data, isValidating } = useSWR(
+    record?.gereeniiDugaar && barilgiinId
+      ? ["/uldegdelBodyo", barilgiinId, record.gereeniiDugaar, ognoo?.[0]?.valueOf(), ognoo?.[1]?.valueOf(), isCancelled]
+      : null,
+    () =>
+      axios(token)
+        .post("/uldegdelBodyo", { barilgiinId, gereeniiDugaar: record.gereeniiDugaar, ognoo, tsutsalsanTurul: isCancelled })
+        .then((res) => res.data),
+    { revalidateOnFocus: false }
+  );
+  const v = data?.tureesiinUldegdel ?? data?.uldegdel ?? 0;
+  useEffect(() => {
+    if (data && onLoad) onLoad(record.gereeniiDugaar, v);
+  }, [data]);
+  return (
+    <div className={`flex justify-end font-semibold ${v > 0 ? "text-red-500" : "text-green-600"}`}>
+      {isValidating && !data ? <Spin size="small" /> : formatNumber(v, 2)}
+    </div>
+  );
+}
+
 function avlagaTovchoo({ token }) {
   const { barilgiinId, baiguullaga, ajiltan } = useAuth();
   const { t } = useTranslation();
@@ -886,6 +918,11 @@ function avlagaTovchoo({ token }) {
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [khakhTsutsalsan, setKhakhTsutsalsan] = useState(false);
+  const [uldegdelMap, setUldegdelMap] = useState({});
+  const onUldegdelLoad = useCallback((gereeniiDugaar, value) => {
+    setUldegdelMap((prev) => ({ ...prev, [gereeniiDugaar]: value }));
+  }, []);
+  useEffect(() => { setUldegdelMap({}); }, [ognoo]);
   const [excelUnshijBaina, setExcelUnshijBaina] = useState(false);
 
   const handlePrint = useReactToPrint({
@@ -940,17 +977,18 @@ function avlagaTovchoo({ token }) {
 
     return (avlagaTovchoo?.jagsaalt || avlagaTovchoo || [])
       .map((item) => {
-        const aldangiBalance = Number(item.aldangiinUldegdel) || 0;
-        const baritsaaBalanceStart = Math.max(0, (Number(item.baritsaaAvakhDun) || 0) - (Number(item.baritsaaniiUldegdelAtStart !== undefined ? item.baritsaaniiUldegdelAtStart : item.baritsaaniiUldegdel) || 0));
-        const baritsaaBalanceEnd = Math.max(0, (Number(item.baritsaaAvakhDun) || 0) - (Number(item.baritsaaniiUldegdel) || 0));
+        const tulsunAldangi = Number(item.niitTulsunAldangi || 0);
 
         const adjustedEkhniiUldegdel = Number(item.ekhniiUldegdel || 0);
-
-        const adjustedEtssiinUldegdel = Number(item.etssiinUldegdel || 0);
+        // niitKt from backend includes aldangi payments — exclude them so KT reflects rent payments only (syncs with guilgeeniiTuukh)
+        const adjustedNiitKt = Number(item.niitKt || 0) - tulsunAldangi;
+        // Add back aldangi payments so balance equals rent balance (syncs with guilgeeniiTuukh uldegdel)
+        const adjustedEtssiinUldegdel = Number(item.etssiinUldegdel || 0) + tulsunAldangi;
 
         return {
           ...item,
           ekhniiUldegdel: adjustedEkhniiUldegdel,
+          niitKt: adjustedNiitKt,
           etssiinUldegdel: adjustedEtssiinUldegdel,
         };
       })
@@ -1031,7 +1069,7 @@ function avlagaTovchoo({ token }) {
       ekhniiUldegdel: r.ekhniiUldegdel || 0,
       niitDt: r.niitDt || 0,
       niitKt: r.niitKt || 0,
-      etssiinUldegdel: r.etssiinUldegdel || 0,
+      etssiinUldegdel: uldegdelMap[r.gereeniiDugaar] ?? r.etssiinUldegdel ?? 0,
     }));
 
     formattedRows.push({
@@ -1206,17 +1244,18 @@ function avlagaTovchoo({ token }) {
         key: "etssiinUldegdel",
         align: "center",
         width: 130,
-        render: (v) => (
-          <div
-            className={`flex justify-end font-semibold ${(v || 0) > 0 ? "text-red-500" : "text-green-600"
-              }`}
-          >
-            {formatNumber(v || 0, 2)}
-          </div>
+        render: (_, record) => (
+          <AvlagaEtssiinUldegdel
+            record={record}
+            token={token}
+            ognoo={ognoo}
+            barilgiinId={barilgiinId}
+            onLoad={onUldegdelLoad}
+          />
         ),
       },
     ],
-    [t]
+    [t, token, ognoo, barilgiinId, onUldegdelLoad]
   );
   const totals = useMemo(
     () =>
@@ -1228,11 +1267,11 @@ function avlagaTovchoo({ token }) {
           niitKhyamdralTurees: acc.niitKhyamdralTurees + (row.niitKhyamdralTurees || 0),
           niitKhyamdralAshiglalt: acc.niitKhyamdralAshiglalt + (row.niitKhyamdralAshiglalt || 0),
           niitKt: acc.niitKt + (row.niitKt || 0),
-          etssiinUldegdel: acc.etssiinUldegdel + (row.etssiinUldegdel || 0),
+          etssiinUldegdel: acc.etssiinUldegdel + (uldegdelMap[row.gereeniiDugaar] ?? row.etssiinUldegdel ?? 0),
         }),
         { ekhniiUldegdel: 0, niitDt: 0, niitTulsun: 0, niitKhyamdralTurees: 0, niitKhyamdralAshiglalt: 0, niitKt: 0, etssiinUldegdel: 0 }
       ),
-    [dataSource]
+    [dataSource, uldegdelMap]
   );
 
   return (
@@ -1422,7 +1461,7 @@ function avlagaTovchoo({ token }) {
                   <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.ekhniiUldegdel || 0, 2)}</td>
                   <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.niitDt || 0, 2)}</td>
                   <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.niitKt || 0, 2)}</td>
-                  <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(row.etssiinUldegdel || 0, 2)}</td>
+                  <td className="border border-gray-400 px-1.5 py-0.5 text-right">{formatNumber(uldegdelMap[row.gereeniiDugaar] ?? row.etssiinUldegdel ?? 0, 2)}</td>
                 </tr>
               ))}
             </tbody>
