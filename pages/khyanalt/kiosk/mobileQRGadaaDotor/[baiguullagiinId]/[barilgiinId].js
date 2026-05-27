@@ -2,7 +2,6 @@ import {
   CloseCircleFilled,
   LeftCircleFilled,
   LoadingOutlined,
-  WarningOutlined,
 } from "@ant-design/icons";
 import { Button, Drawer, Spin } from "antd";
 import { toast } from "sonner";
@@ -74,13 +73,14 @@ const KioskMobile = ({
     } else query = undefined;
     return query;
   }, [dugaar, drawerOngoikh]);
-  const { uilchluulegchGaralt, isValidating } = useUilchluulegchWithQuery(
-    token,
-    baiguullagiinId,
-    query,
-    barilgiinId,
-    order,
-  );
+  const { uilchluulegchGaralt, isValidating, uilchluulegchMutate } =
+    useUilchluulegchWithQuery(
+      token,
+      baiguullagiinId,
+      query,
+      barilgiinId,
+      order,
+    );
 
   const { qpayObject } = useQpayObject(token, qpayerTulukh?.id);
 
@@ -99,9 +99,7 @@ const KioskMobile = ({
   }, [token]);
 
   const msgNotif = (content) => {
-    toast.info(content, {
-      duration: 2000,
-    });
+    toast.warning(content, { duration: 2000 });
   };
 
   function showKhunglult() {
@@ -283,7 +281,6 @@ const KioskMobile = ({
   }
   const dugaarRef = useRef(null);
   const shineDugaarRef = useRef(null);
-  const autoSelectedRef = useRef(false);
   const handleUrgeljluulekh = () => {
     var ongoilgokhEsekh = true;
     dugaar.forEach((dug) => {
@@ -359,22 +356,14 @@ const KioskMobile = ({
               setUnshijBaina(false);
             }
           } else {
-            msgNotif(
-              <div className="flex items-center justify-center gap-2 rounded-full font-semibold">
-                <div className="text-yellow-500">
-                  <WarningOutlined style={{ fontSize: "14px" }} />
-                </div>
-                <div className="text-base">
-                  Тухайн машинд төлбөр бодогдоогүй байна.
-                </div>
-              </div>,
-            );
             setUnshijBaina(false);
-            clearObjects();
+            if ((uilchluulegchGaralt?.jagsaalt?.length ?? 0) < 2)
+              msgNotif("Тухайн машинд төлбөр бодогдоогүй байна.");
           }
         } else {
           setUnshijBaina(false);
-          clearObjects();
+          if ((uilchluulegchGaralt?.jagsaalt?.length ?? 0) < 2)
+            msgNotif("Тухайн машинд төлбөр бодогдоогүй байна.");
         }
       } else {
         setUnshijBaina(false);
@@ -386,20 +375,6 @@ const KioskMobile = ({
       toast.error(err);
     }
   };
-
-  const firstId = uilchluulegchGaralt?.jagsaalt?.[0]?._id;
-  useEffect(() => {
-    if (drawerOngoikh && !isValidating && !autoSelectedRef.current && firstId) {
-      autoSelectedRef.current = true;
-      mashinSongiy(uilchluulegchGaralt?.jagsaalt?.[0]);
-    }
-  }, [drawerOngoikh, isValidating, firstId]);
-
-  useEffect(() => {
-    if (!drawerOngoikh) {
-      autoSelectedRef.current = false;
-    }
-  }, [drawerOngoikh]);
 
   const eBarimtAvya = (
     uilchluulegchiinId,
@@ -544,6 +519,7 @@ const KioskMobile = ({
               {uilchluulegchGaralt?.jagsaalt?.map((mur) => {
                 return (
                   <div
+                    key={mur?._id}
                     onClick={() => mashinSongiy(mur)}
                     className="w-fit rounded-xl border-[4px] border-[#414143] px-4 py-3 tracking-wider"
                   >
@@ -570,10 +546,12 @@ const KioskMobile = ({
                 setTulburiinKhelber();
                 setQpayerTulukh(false);
                 setKhuleegdejBuiQpay();
+                uilchluulegchMutate();
               }}
               className="p-2"
-            ></div>
-            <LeftCircleFilled />
+            >
+              <LeftCircleFilled />
+            </div>
           </div>
           <div className="mt-8 flex w-full items-center justify-center">
             {tulburiinKhelber === "qpay" && "Төлбөрийн хэлбэрээ сонгоно уу."}
@@ -663,6 +641,7 @@ const KioskMobile = ({
                   ? qpayerTulukh?.urls?.map((mur) => {
                       return (
                         <a
+                          key={mur.link}
                           href={mur.link}
                           className="col-span-1 flex w-full flex-col gap-2 overflow-hidden rounded-[15px] border border-[#414143] bg-[#1E1E1E] p-4 hover:border-2"
                         >
