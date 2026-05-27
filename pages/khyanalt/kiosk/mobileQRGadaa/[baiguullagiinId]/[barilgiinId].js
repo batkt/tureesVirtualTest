@@ -2,7 +2,10 @@ import {
   CloseCircleFilled,
   LeftCircleFilled,
   LoadingOutlined,
-  WarningOutlined,
+  CarOutlined,
+  CalendarOutlined,
+  ClockCircleOutlined,
+  WalletOutlined,
 } from "@ant-design/icons";
 import { Button, Drawer, Spin } from "antd";
 import { toast } from "sonner";
@@ -50,7 +53,6 @@ const KioskMobile = ({
   const [minutes, setMinutes] = useState(15);
   const [seconds, setSeconds] = useState(0);
   const order = { "tuukh.0.tsagiinTuukh.0.garsanTsag": -1 };
-  const autoSelectedRef = useRef(false);
 
   const query = useMemo(() => {
     var query = {};
@@ -67,13 +69,14 @@ const KioskMobile = ({
     } else query = undefined;
     return query;
   }, [dugaar, drawerOngoikh]);
-  const { uilchluulegchGaralt, isValidating } = useUilchluulegchWithQuery(
-    token,
-    baiguullagiinId,
-    query,
-    barilgiinId,
-    order,
-  );
+  const { uilchluulegchGaralt, isValidating, uilchluulegchMutate } =
+    useUilchluulegchWithQuery(
+      token,
+      baiguullagiinId,
+      query,
+      barilgiinId,
+      order,
+    );
 
   const { qpayObject } = useQpayObject(token, qpayerTulukh?.id);
 
@@ -92,9 +95,7 @@ const KioskMobile = ({
   }, [token]);
 
   const msgNotif = (content) => {
-    toast.info(content, {
-      duration: 2000,
-    });
+    toast.warning(content, { duration: 2000 });
   };
 
   function showKhunglult() {
@@ -347,22 +348,14 @@ const KioskMobile = ({
               setUnshijBaina(false);
             }
           } else {
-            msgNotif(
-              <div className="flex items-center justify-center gap-2 rounded-full font-semibold">
-                <div className="text-yellow-500">
-                  <WarningOutlined style={{ fontSize: "14px" }} />
-                </div>
-                <div className="text-base">
-                  Тухайн машинд төлбөр бодогдоогүй байна.
-                </div>
-              </div>,
-            );
             setUnshijBaina(false);
-            clearObjects();
+            if ((uilchluulegchGaralt?.jagsaalt?.length ?? 0) < 2)
+              msgNotif("Тухайн машинд төлбөр бодогдоогүй байна.");
           }
         } else {
           setUnshijBaina(false);
-          clearObjects();
+          if ((uilchluulegchGaralt?.jagsaalt?.length ?? 0) < 2)
+            msgNotif("Тухайн машинд төлбөр бодогдоогүй байна.");
         }
       } else {
         setUnshijBaina(false);
@@ -374,20 +367,6 @@ const KioskMobile = ({
       toast.error(err);
     }
   };
-
-  const firstId = uilchluulegchGaralt?.jagsaalt?.[0]?._id;
-  useEffect(() => {
-    if (drawerOngoikh && !isValidating && !autoSelectedRef.current && firstId) {
-      autoSelectedRef.current = true;
-      mashinSongiy(uilchluulegchGaralt?.jagsaalt?.[0]);
-    }
-  }, [drawerOngoikh, isValidating, firstId]);
-
-  useEffect(() => {
-    if (!drawerOngoikh) {
-      autoSelectedRef.current = false;
-    }
-  }, [drawerOngoikh]);
 
   const eBarimtAvya = (
     uilchluulegchiinId,
@@ -454,392 +433,562 @@ const KioskMobile = ({
 
   return (
     <div
-      className="relative flex h-[100dvh] w-screen flex-col overflow-hidden bg-[#1E1E1E]"
+      className="relative flex h-[100dvh] w-screen flex-col overflow-hidden bg-[#0C0C12]"
       style={{ touchAction: "manipulation" }}
     >
-      <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] text-center text-xs text-[#00D987]">
-        Төлбөр төлснөөс хойш {zogsool?.garakhTsag || 30} минут дотор та
-        зогсоолоос гараагүй бол төлбөр нэмэгдэж бодогдохыг анхаарна уу!
+      {/* Notice banner */}
+      <div
+        className="fixed top-0 z-[9999] w-full px-4 py-2 text-center text-[11px] font-medium text-[#00D987]"
+        style={{
+          background: "rgba(0,217,135,0.07)",
+          borderBottom: "1px solid rgba(0,217,135,0.12)",
+        }}
+      >
+        Төлбөр төлснөөс хойш {zogsool?.garakhTsag || 30} минут дотор гараагүй
+        бол нэмэлт төлбөр бодогдохыг анхаарна уу!
       </div>
+
+      {/* Loading overlay */}
       {unshijBaina && (
         <div
-          className="fixed left-0 top-0 z-[9999] flex h-full w-full items-center justify-center bg-white bg-opacity-40"
-          style={{ pointerEvents: "all" }}
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center gap-4"
+          style={{
+            background: "rgba(0,0,0,0.75)",
+            backdropFilter: "blur(6px)",
+          }}
         >
           <Spin
-            indicator={<LoadingOutlined style={{ fontSize: 128 }} spin />}
+            indicator={
+              <LoadingOutlined
+                style={{ fontSize: 56, color: "#00D987" }}
+                spin
+              />
+            }
           />
+          <div className="animate-pulse text-sm text-[#00D987]">
+            Уншиж байна...
+          </div>
         </div>
       )}
+
+      {/* Bottom drawer */}
       <Drawer
         placement="bottom"
         open={drawerOngoikh}
-        height={"88dvh"}
+        height={"92dvh"}
         closable={false}
         maskClosable={false}
         className="khuviinDrawerMobile bg-transparent text-base font-semibold text-gray-200 dark:bg-transparent"
       >
-        <div
-          className={`absolute right-4 top-4 z-50 flex items-center justify-center rounded-2xl px-5 py-3 shadow-2xl transition-all duration-300 ${
-            minutes === 0 && seconds <= 10
-              ? "animate-pulse bg-red-700 ring-4 ring-red-400 ring-opacity-75"
-              : minutes === 0 && seconds <= 20
-              ? "bg-orange-600 ring-2 ring-orange-400 ring-opacity-50"
-              : "bg-gradient-to-br from-red-600 to-red-700"
-          }`}
-        >
+        <div className="relative flex h-full flex-col overflow-hidden rounded-t-3xl bg-[#13131A]">
+          {/* Drag handle */}
+          <div className="flex w-full shrink-0 justify-center pb-1 pt-3">
+            <div className="h-1 w-10 rounded-full bg-white/20" />
+          </div>
+
+          {/* Countdown timer */}
           <div
-            className={`text-3xl tracking-wider text-white ${
-              minutes === 0 && seconds <= 10 ? "animate-pulse" : ""
+            className={`absolute right-4 top-4 z-50 flex min-w-[68px] items-center justify-center rounded-2xl px-4 py-2 shadow-lg transition-all duration-300 ${
+              minutes === 0 && seconds <= 10
+                ? "animate-pulse bg-red-600 ring-2 ring-red-400/50"
+                : minutes === 0 && seconds <= 20
+                ? "bg-orange-500 ring-2 ring-orange-400/40"
+                : "bg-red-800"
             }`}
           >
-            {minutes > 0 ? `${minutes}:` : ""}
-            {seconds < 10 ? `0${seconds}` : seconds}
-          </div>
-        </div>
-        <div
-          className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
-            alkham === 0 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}
-        >
-          <div className="flex w-full items-center justify-center text-lg">
             <div
-              onClick={() => {
-                setDrawerOngoikh(false);
-                setSongogdsonData(null);
-                setTulburiinKhelber();
-                setKhuleegdejBuiQpay(null);
-                setDugaar(Array(4).fill(""));
-                setEbarimt();
-                setAlkham(0);
-              }}
-              className="p-2"
+              className={`font-mono text-2xl font-bold tracking-wider text-white ${
+                minutes === 0 && seconds <= 10 ? "animate-pulse" : ""
+              }`}
             >
-              <CloseCircleFilled />
+              {minutes > 0 ? `${minutes}:` : ""}
+              {seconds < 10 ? `0${seconds}` : seconds}
             </div>
           </div>
-          <div className="mt-8 flex w-full items-center justify-center">
-            {"Дугаар сонгоно уу."}
-          </div>
-          {isValidating ? (
-            <div className="flex w-full items-center justify-center">
-              <Spin
-                indicator={<LoadingOutlined style={{ fontSize: 128 }} spin />}
-              />
-            </div>
-          ) : uilchluulegchGaralt?.jagsaalt?.length > 0 ? (
-            <div className="grid w-full grid-cols-2 place-content-center place-items-center gap-8 overflow-y-scroll p-8">
-              {uilchluulegchGaralt?.jagsaalt?.map((mur) => {
-                return (
-                  <div
-                    onClick={() => mashinSongiy(mur)}
-                    className="w-fit rounded-xl border-[4px] border-[#414143] px-4 py-3 tracking-wider"
-                  >
-                    {mur?.mashiniiDugaar}
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="flex h-full w-full items-center justify-center">
-              Жагсаалт хоосон байна...
-            </div>
-          )}
-        </div>
-        <div
-          className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
-            alkham === 1 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}
-        >
-          <div className={`flex w-full items-center justify-center text-lg`}>
+
+          {/* Screens container */}
+          <div className="relative flex-1 overflow-hidden">
+            {/* ── Alkham 0: Vehicle list ── */}
             <div
-              onClick={() => {
-                setAlkham(0);
-                setTulburiinKhelber();
-                setQpayerTulukh(false);
-                setKhuleegdejBuiQpay();
-              }}
-              className="p-2"
-            ></div>
-            <LeftCircleFilled />
-          </div>
-          <div className="mt-8 flex w-full items-center justify-center">
-            {tulburiinKhelber === "qpay" && "Төлбөрийн хэлбэрээ сонгоно уу."}
-          </div>
-          <>
-            {songogdsonData && (
-              <div className="relative m-4 flex flex-col items-center justify-center rounded-xl bg-[#414143] p-2 py-4">
-                <div className="flex w-full justify-between px-6">
-                  <div>Улсын дугаар</div>
-                  <div>{songogdsonData.plate_number}</div>
+              className={`absolute inset-0 flex flex-col transition-all duration-300 ${
+                alkham === 0
+                  ? "scale-100 opacity-100"
+                  : "pointer-events-none scale-0 opacity-0"
+              }`}
+            >
+              <div className="flex shrink-0 items-center gap-3 px-4 pb-3 pt-1">
+                <div
+                  onClick={() => {
+                    setDrawerOngoikh(false);
+                    setSongogdsonData(null);
+                    setTulburiinKhelber();
+                    setKhuleegdejBuiQpay(null);
+                    setDugaar(Array(4).fill(""));
+                    setEbarimt();
+                    setAlkham(0);
+                  }}
+                  className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-white/10 text-white/60 active:bg-white/20"
+                >
+                  <CloseCircleFilled />
                 </div>
-                <div className="h-[1px] w-full bg-black dark:bg-black" />
-                <div className="flex w-full justify-between px-6">
-                  <div>Орсон </div>
-                  <div>
-                    {moment(songogdsonData.enter_date).format(
-                      "DD/MM/YYYY HH:mm",
+                <div className="flex-1 text-center text-sm font-semibold text-white/80">
+                  Машин сонгоно уу
+                </div>
+                <div className="w-9" />
+              </div>
+
+              {isValidating ? (
+                <div className="flex flex-1 items-center justify-center">
+                  <Spin
+                    indicator={
+                      <LoadingOutlined
+                        style={{ fontSize: 48, color: "#00D987" }}
+                        spin
+                      />
+                    }
+                  />
+                </div>
+              ) : uilchluulegchGaralt?.jagsaalt?.length > 0 ? (
+                <div className="flex-1 overflow-y-auto px-4 pb-6">
+                  <div className="flex flex-col gap-3">
+                    {uilchluulegchGaralt?.jagsaalt?.map((mur) => (
+                      <div
+                        key={mur?._id}
+                        onClick={() => mashinSongiy(mur)}
+                        className="flex cursor-pointer items-center gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 transition-colors active:bg-white/10"
+                      >
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#00D987]/10">
+                          <CarOutlined className="text-xl text-[#00D987]" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-lg font-bold tracking-widest text-white">
+                            {mur?.mashiniiDugaar}
+                          </div>
+                          {mur?.tuukh?.[0]?.tsagiinTuukh?.[0]?.orsonTsag && (
+                            <div className="mt-0.5 text-xs text-white/40">
+                              {moment(
+                                mur.tuukh[0].tsagiinTuukh[0].orsonTsag,
+                              ).format("MM/DD HH:mm")}{" "}
+                              орсон
+                            </div>
+                          )}
+                        </div>
+                        <div className="text-2xl font-light text-white/25">
+                          ›
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-1 flex-col items-center justify-center gap-3 text-white/25">
+                  <CarOutlined className="text-5xl" />
+                  <div className="text-sm">Жагсаалт хоосон байна</div>
+                </div>
+              )}
+            </div>
+
+            {/* ── Alkham 1: Payment ── */}
+            <div
+              className={`absolute inset-0 flex flex-col transition-all duration-300 ${
+                alkham === 1
+                  ? "scale-100 opacity-100"
+                  : "pointer-events-none scale-0 opacity-0"
+              }`}
+            >
+              <div className="flex shrink-0 items-center gap-3 px-4 pb-3 pt-1">
+                <div
+                  onClick={() => {
+                    setAlkham(0);
+                    setTulburiinKhelber();
+                    setQpayerTulukh(false);
+                    setKhuleegdejBuiQpay();
+                    uilchluulegchMutate();
+                  }}
+                  className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-white/10 text-white/60 active:bg-white/20"
+                >
+                  <LeftCircleFilled />
+                </div>
+                <div className="flex-1 text-center text-sm font-semibold text-white/80">
+                  Төлбөрийн мэдээлэл
+                </div>
+                <div className="w-9" />
+              </div>
+
+              <div className="flex-1 overflow-y-auto pb-6">
+                {songogdsonData && (
+                  <div className="mx-4 mt-1 overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+                    <div className="border-white/8 flex items-center gap-3 border-b px-5 py-3.5">
+                      <CarOutlined className="shrink-0 text-[#00D987]" />
+                      <span className="flex-1 text-xs text-white/50">
+                        Улсын дугаар
+                      </span>
+                      <span className="font-bold tracking-widest text-white">
+                        {songogdsonData.plate_number}
+                      </span>
+                    </div>
+                    <div className="border-white/8 flex items-center gap-3 border-b px-5 py-3.5">
+                      <CalendarOutlined className="shrink-0 text-blue-400" />
+                      <span className="flex-1 text-xs text-white/50">
+                        Орсон цаг
+                      </span>
+                      <span className="text-sm text-white">
+                        {moment(songogdsonData.enter_date).format(
+                          "DD/MM/YYYY HH:mm",
+                        )}
+                      </span>
+                    </div>
+                    <div className="border-white/8 flex items-center gap-3 border-b px-5 py-3.5">
+                      <CalendarOutlined className="shrink-0 text-purple-400" />
+                      <span className="flex-1 text-xs text-white/50">
+                        Гарсан цаг
+                      </span>
+                      <span className="text-sm text-white">
+                        {songogdsonData.garsanTsag
+                          ? moment(songogdsonData.garsanTsag).format(
+                              "DD/MM/YYYY HH:mm",
+                            )
+                          : moment().format("DD/MM/YYYY HH:mm")}
+                      </span>
+                    </div>
+                    <div className="border-white/8 flex items-center gap-3 border-b px-5 py-3.5">
+                      <ClockCircleOutlined className="shrink-0 text-amber-400" />
+                      <span className="flex-1 text-xs text-white/50">
+                        Зогссон хугацаа
+                      </span>
+                      <span className="text-sm text-white">
+                        {(() => {
+                          const garsanTsag = songogdsonData.garsanTsag
+                            ? moment(songogdsonData.garsanTsag)
+                            : moment();
+                          const diff = garsanTsag.diff(
+                            moment(songogdsonData.enter_date),
+                          );
+                          const dur = moment.duration(diff);
+                          return `${String(dur.hours()).padStart(
+                            2,
+                            "0",
+                          )}:${String(dur.minutes()).padStart(2, "0")}`;
+                        })()}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 bg-red-500/10 px-5 py-4">
+                      <WalletOutlined className="shrink-0 text-lg text-red-400" />
+                      <span className="flex-1 text-sm text-white/70">
+                        Нийт төлбөр
+                      </span>
+                      <span className="text-2xl font-bold text-red-400">
+                        {formatNumber(songogdsonData.pay_amount, 0)}₮
+                      </span>
+                    </div>
+                    {khungulukhDun > 0 && (
+                      <div className="border-white/8 flex items-center gap-3 border-t bg-green-500/10 px-5 py-3.5">
+                        <MdOutlineDiscount className="shrink-0 text-lg text-green-400" />
+                        <span className="flex-1 text-xs text-white/50">
+                          Хөнгөлөлт
+                        </span>
+                        <span className="font-semibold text-green-400">
+                          -{formatNumber(khungulukhDun, 0)}₮
+                        </span>
+                      </div>
+                    )}
+                    {baiguullagiinId === "673d88133987e97992f77c02" && (
+                      <div className="border-white/8 flex items-center gap-3 border-t px-5 py-3.5">
+                        <MdOutlineDiscount className="shrink-0 text-lg text-green-400" />
+                        <span className="flex-1 text-xs text-white/50">
+                          Хөнгөлөлт
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-white/60">
+                            {formatNumber(songogdsonData?.fitnessHungulult, 0)}₮
+                          </span>
+                          <Button
+                            onClick={() => showKhunglult()}
+                            size="small"
+                            className="border-green-500/40 text-green-400"
+                          >
+                            Энд дар
+                          </Button>
+                        </div>
+                      </div>
                     )}
                   </div>
-                </div>
-                <div className="h-[1px] w-full bg-black dark:bg-black" />
-                <div className="flex w-full justify-between px-6">
-                  <div>Гарсан</div>
-                  <div>
-                    {songogdsonData.garsanTsag
-                      ? moment(songogdsonData.garsanTsag).format(
-                          "DD/MM/YYYY HH:mm",
-                        )
-                      : moment().format("DD/MM/YYYY HH:mm")}
-                  </div>
-                </div>
-                <div className="h-[1px] w-full bg-black dark:bg-black" />
-                <div className="flex w-full justify-between px-6">
-                  <div>Зогссон хугацаа </div>
-                  <div>
-                    {(() => {
-                      const garsanTsag = songogdsonData.garsanTsag
-                        ? moment(songogdsonData.garsanTsag)
-                        : moment();
-                      const diff = garsanTsag.diff(
-                        moment(songogdsonData.enter_date),
-                      );
-                      const dur = moment.duration(diff);
-                      return `${String(dur.hours()).padStart(2, "0")}:${String(
-                        dur.minutes(),
-                      ).padStart(2, "0")}`;
-                    })()}
-                  </div>
-                </div>
-                <div className="h-[1px] w-full bg-black dark:bg-black" />
-                <div className="flex w-full justify-between px-6 text-red-400">
-                  <div>Төлбөр</div>
-                  <div>{formatNumber(songogdsonData.pay_amount, 0)}₮</div>
-                </div>
-                {khungulukhDun > 0 && (
-                  <div className="h-[1px] w-full bg-black dark:bg-black" />
                 )}
-                {khungulukhDun > 0 && (
-                  <div className="flex w-full justify-between px-6 text-red-400">
-                    <div>Хөнгөлөлт</div>
-                    <div>{formatNumber(khungulukhDun, 0)}₮</div>
-                  </div>
-                )}
-                {baiguullagiinId === "673d88133987e97992f77c02" && (
-                  <>
-                    <div className="w-full border border-[#1E1E1E]" />
-                    <div className="flex w-full justify-between px-6 ">
-                      <div className="text-red-400">Хөнгөлөлт</div>
-                      <div className="flex gap-4">
-                        Энд дар
-                        <Button
-                          onClick={() => showKhunglult()}
-                          className="cursor-pointer"
-                        >
-                          <MdOutlineDiscount className="text-green-400" />
-                        </Button>
-                        {formatNumber(songogdsonData?.fitnessHungulult, 0)}₮
-                      </div>
+
+                {qpayerTulukh && (
+                  <div className="mt-4 px-4">
+                    <div className="mb-3 text-xs font-medium uppercase tracking-wider text-white/30">
+                      Банк сонгоно уу
                     </div>
-                  </>
-                )}
-              </div>
-            )}
-            {qpayerTulukh && (
-              <div className="mt-2 grid max-h-[400px] w-full grid-cols-4 gap-2 overflow-y-auto px-4 py-2">
-                {qpayerTulukh?.urls?.length > 0
-                  ? qpayerTulukh?.urls?.map((mur) => {
-                      return (
-                        <a
-                          href={mur.link}
-                          className="col-span-1 flex w-full flex-col gap-2 overflow-hidden rounded-[15px] border border-[#414143] bg-[#1E1E1E] p-4 hover:border-2"
-                        >
-                          <div className="flex items-center justify-center rounded-xl">
+                    {qpayerTulukh?.urls?.length > 0 ? (
+                      <div className="grid grid-cols-4 gap-2.5">
+                        {qpayerTulukh?.urls?.map((mur) => (
+                          <a
+                            key={mur.link}
+                            href={mur.link}
+                            className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 transition-colors active:bg-white/10"
+                          >
                             <img
-                              className="h-10 w-10 overflow-hidden rounded-xl"
+                              className="h-10 w-10 rounded-xl"
                               src={`${mur?.logo}`}
                               alt=""
                             />
-                          </div>
-                          <div className="text-center text-buurJijig text-zinc-200">
-                            {mur.description}
-                          </div>
-                        </a>
-                      );
-                    })
-                  : "QPay тохиргоо хийгдээгүй байна"}
-              </div>
-            )}
-            {khungulukhDun > 0 && (
-              <div
-                className={`gap mt-auto flex w-full flex-col flex-col items-center items-center justify-center justify-center text-white`}
-              >
-                <button
-                  onClick={() =>
-                    khungulultKhadgalya(
-                      songogdsonData.session_id,
-                      songogdsonData.parking_id,
-                    )
-                  }
-                  className="my-4 flex items-center justify-center gap-1 rounded-xl border border-green-400 bg-green-800 bg-opacity-70 px-4 py-2 text-base font-bold text-green-400 focus:outline-none"
-                >
-                  <div>Хөнгөлөх</div>
-                </button>
-              </div>
-            )}
-          </>
-        </div>
-        <div
-          className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
-            alkham === 2 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}
-        >
-          <div className="flex h-full w-full flex-col items-center justify-center gap-16">
-            <div className="text-lg font-bold">Гүйлгээ амжилттай</div>
-            <Lottie
-              style={{ width: 300, height: 300 }}
-              animationData={amjilttaiAnimation}
-            />
-          </div>
-        </div>
-        <div
-          className={`absolute left-0 top-5 h-full w-full px-4 transition-all duration-300 ${
-            alkham === 3 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}
-        >
-          <div className="flex w-full items-center justify-center text-base">
-            <div
-              onClick={() => {
-                setDrawerOngoikh(false);
-                setSongogdsonData(null);
-                setTulburiinKhelber();
-                setKhuleegdejBuiQpay(null);
-                setDugaar(Array(4).fill(""));
-                setEbarimtTurul("");
-                setAlkham(0);
-                setEbarimt();
-              }}
-              className="p-2"
-            >
-              <CloseCircleFilled />
-            </div>
-          </div>
-          <div className="mt-8 flex w-full items-center justify-center">
-            {"И-Баримт төрөл сонгоно уу."}
-          </div>
-          <div className="mt-8 flex w-full items-center justify-between gap-8">
-            {ebarimtKhelberuud.map((mur) => {
-              return (
-                <div
-                  key={mur.key}
-                  onClick={() => {
-                    setEbarimtTurul(mur.ner);
-                    setRegister("");
-                    setBaiguullagaNer();
-                  }}
-                  className={`flex h-[100px] w-full flex-col
-                  items-center justify-center rounded-xl p-4 transition-all duration-300 ease-in-out ${
-                    eBarimtTurul === mur.ner ? "bg-zinc-700" : "bg-[#414143]"
-                  }`}
-                >
-                  <div className="h-12 w-12">
-                    <img src={mur.icon} alt="" />
+                            <div className="text-center text-[10px] leading-tight text-zinc-400">
+                              {mur.description}
+                            </div>
+                          </a>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center text-sm text-white/30">
+                        QPay тохиргоо хийгдээгүй байна
+                      </div>
+                    )}
                   </div>
-                  <div>{mur.label}</div>
+                )}
+
+                {khungulukhDun > 0 && (
+                  <div className="mt-4 flex justify-center px-4">
+                    <button
+                      onClick={() =>
+                        khungulultKhadgalya(
+                          songogdsonData.session_id,
+                          songogdsonData.parking_id,
+                        )
+                      }
+                      className="flex items-center gap-2 rounded-2xl border border-green-500/40 bg-green-800/30 px-6 py-3 text-base font-semibold text-green-400 focus:outline-none active:bg-green-800/50"
+                    >
+                      <MdOutlineDiscount className="text-lg" />
+                      Хөнгөлөлт ашиглах
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* ── Alkham 2: Success animation ── */}
+            <div
+              className={`absolute inset-0 flex flex-col items-center justify-center gap-6 transition-all duration-300 ${
+                alkham === 2
+                  ? "scale-100 opacity-100"
+                  : "pointer-events-none scale-0 opacity-0"
+              }`}
+            >
+              <div className="text-xl font-bold text-white">
+                Гүйлгээ амжилттай!
+              </div>
+              <Lottie
+                style={{ width: 260, height: 260 }}
+                animationData={amjilttaiAnimation}
+              />
+            </div>
+
+            {/* ── Alkham 3: E-receipt selection ── */}
+            <div
+              className={`absolute inset-0 flex flex-col transition-all duration-300 ${
+                alkham === 3
+                  ? "scale-100 opacity-100"
+                  : "pointer-events-none scale-0 opacity-0"
+              }`}
+            >
+              <div className="flex shrink-0 items-center gap-3 px-4 pb-3 pt-1">
+                <div
+                  onClick={() => {
+                    setDrawerOngoikh(false);
+                    setSongogdsonData(null);
+                    setTulburiinKhelber();
+                    setKhuleegdejBuiQpay(null);
+                    setDugaar(Array(4).fill(""));
+                    setEbarimtTurul("");
+                    setAlkham(0);
+                    setEbarimt();
+                  }}
+                  className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-white/10 text-white/60 active:bg-white/20"
+                >
+                  <CloseCircleFilled />
                 </div>
-              );
-            })}
-          </div>
-          <div className="flex h-2/3 w-full items-center justify-center">
-            <DugaarKeyboardMobile
-              dugaar={register}
-              setDugaar={setRegister}
-              handleUrgeljluulekh={handleEbarimtAvya}
-              setRegister={setRegister}
-              eBarimtTurul={eBarimtTurul}
-              dugaarRef={shineDugaarRef}
-              shineTurul={true}
-              baiguullagaNer={baiguullagaNer}
-              className={"!justify-start"}
-            />
-          </div>
-        </div>
-        <div
-          className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
-            alkham === 4 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}
-        >
-          <div className="flex w-full items-center justify-center text-base">
-            <div onClick={onTimeout} className="p-2">
-              <CloseCircleFilled />
-            </div>
-          </div>
-          <div className="mt-8 flex items-center justify-center text-lg text-zinc-200">
-            Амжилттай төлөгдлөө
-          </div>
-          {eBarimt && eBarimtTurul === "khuviKhun" && (
-            <div className="mx-4 mt-8 flex flex-col items-center justify-center gap-2 rounded-xl bg-[#414143] p-2 py-4">
-              <div className="flex w-full justify-between  pl-4">
-                <div>Сугалааны дугаар</div>
-                <div>{eBarimt?.lottery}</div>
+                <div className="flex-1 text-center text-sm font-semibold text-white/80">
+                  И-Баримт авах
+                </div>
+                <div className="w-9" />
               </div>
-              <div className="h-[1px] w-full bg-black dark:bg-black" />
-              <div className="flex w-full justify-between pl-4">
-                <div>Баримтын дүн</div>
-                <div>
-                  {formatNumber(
-                    Number(
-                      eBarimt?.amount ? eBarimt?.amount : eBarimt?.totalAmount,
-                    ),
-                    0,
-                  )}
-                  ₮
+
+              <div className="shrink-0 px-4 pb-3">
+                <div className="mb-2 text-xs font-medium uppercase tracking-wider text-white/30">
+                  Баримтын төрөл
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {ebarimtKhelberuud.map((mur) => (
+                    <div
+                      key={mur.key}
+                      onClick={() => {
+                        setEbarimtTurul(mur.ner);
+                        setRegister("");
+                        setBaiguullagaNer();
+                      }}
+                      className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border p-4 transition-all duration-200 ${
+                        eBarimtTurul === mur.ner
+                          ? "border-[#00D987]/50 bg-[#00D987]/10 text-[#00D987]"
+                          : "border-white/10 bg-white/5 text-white/60"
+                      }`}
+                    >
+                      <div className="h-10 w-10">
+                        <img src={mur.icon} alt="" className="h-full w-full" />
+                      </div>
+                      <div className="text-sm font-medium">{mur.label}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
+
+              <div className="flex flex-1 items-center justify-center overflow-hidden px-2">
+                <DugaarKeyboardMobile
+                  dugaar={register}
+                  setDugaar={setRegister}
+                  handleUrgeljluulekh={handleEbarimtAvya}
+                  setRegister={setRegister}
+                  eBarimtTurul={eBarimtTurul}
+                  dugaarRef={shineDugaarRef}
+                  shineTurul={true}
+                  baiguullagaNer={baiguullagaNer}
+                  className={"!justify-start"}
+                />
+              </div>
             </div>
-          )}
-          {eBarimt && eBarimtTurul === "baiguullaga" && (
-            <div className="mx-4 mt-8 flex flex-col items-center justify-center gap-2 rounded-xl bg-[#414143] p-2 py-4">
-              <div className="flex w-full justify-between  pl-4">
-                <div>ТТД</div>
-                <div>{eBarimt?.registerNo}</div>
-              </div>
-              <div className="h-[1px] w-full bg-black dark:bg-black" />
-              <div className="flex w-full justify-between pl-4">
-                <div>ТТН</div>
-                <div>{baiguullagaNer?.name}</div>
-              </div>
-              <div className="h-[1px] w-full bg-black dark:bg-black" />
-              <div className="flex w-full justify-between pl-4">
-                <div>Баримтын дүн</div>
-                <div>
-                  {formatNumber(
-                    Number(
-                      eBarimt?.amount ? eBarimt?.amount : eBarimt?.totalAmount,
-                    ),
-                    0,
-                  )}
-                  ₮
+
+            {/* ── Alkham 4: Receipt display ── */}
+            <div
+              className={`absolute inset-0 flex flex-col transition-all duration-300 ${
+                alkham === 4
+                  ? "scale-100 opacity-100"
+                  : "pointer-events-none scale-0 opacity-0"
+              }`}
+            >
+              <div className="flex shrink-0 items-center gap-3 px-4 pb-3 pt-1">
+                <div
+                  onClick={onTimeout}
+                  className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-white/10 text-white/60 active:bg-white/20"
+                >
+                  <CloseCircleFilled />
                 </div>
+                <div className="flex-1 text-center text-sm font-semibold text-white/80">
+                  Амжилттай төлөгдлөө
+                </div>
+                <div className="w-9" />
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-4 pb-6">
+                <div className="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full bg-green-500/15 px-4 py-2">
+                  <div className="h-2 w-2 animate-pulse rounded-full bg-green-400" />
+                  <span className="text-sm font-medium text-green-400">
+                    Төлбөр баталгаажсан
+                  </span>
+                </div>
+
+                {eBarimt && eBarimtTurul === "khuviKhun" && (
+                  <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+                    <div className="border-white/8 flex items-center justify-between border-b px-5 py-3.5">
+                      <span className="text-xs text-white/50">
+                        Сугалааны дугаар
+                      </span>
+                      <span className="font-bold text-white">
+                        {eBarimt?.lottery}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between px-5 py-3.5">
+                      <span className="text-xs text-white/50">
+                        Баримтын дүн
+                      </span>
+                      <span className="font-bold text-green-400">
+                        {formatNumber(
+                          Number(
+                            eBarimt?.amount
+                              ? eBarimt?.amount
+                              : eBarimt?.totalAmount,
+                          ),
+                          0,
+                        )}
+                        ₮
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {eBarimt && eBarimtTurul === "baiguullaga" && (
+                  <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+                    <div className="border-white/8 flex items-center justify-between border-b px-5 py-3.5">
+                      <span className="text-xs text-white/50">ТТД</span>
+                      <span className="font-semibold text-white">
+                        {eBarimt?.registerNo}
+                      </span>
+                    </div>
+                    <div className="border-white/8 flex items-center justify-between border-b px-5 py-3.5">
+                      <span className="text-xs text-white/50">ТТН</span>
+                      <span className="max-w-[60%] truncate text-sm text-white">
+                        {baiguullagaNer?.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between px-5 py-3.5">
+                      <span className="text-xs text-white/50">
+                        Баримтын дүн
+                      </span>
+                      <span className="font-bold text-green-400">
+                        {formatNumber(
+                          Number(
+                            eBarimt?.amount
+                              ? eBarimt?.amount
+                              : eBarimt?.totalAmount,
+                          ),
+                          0,
+                        )}
+                        ₮
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {eBarimt?.qrData && (
+                  <div className="mt-4 flex flex-col items-center gap-3">
+                    <div className="text-xs text-white/30">
+                      QR код уншуулна уу
+                    </div>
+                    <div className="rounded-2xl bg-white p-4">
+                      <QRCode value={eBarimt?.qrData} size={200} />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
-          {eBarimt?.qrData && (
-            <div className="mx-4 mt-4 flex items-center justify-center rounded-xl bg-zinc-200 p-4">
-              <QRCode value={eBarimt?.qrData} />
-            </div>
-          )}
+          </div>
         </div>
       </Drawer>
-      <div className="flex h-[28%] w-full flex-col items-center justify-center gap-3 pt-8">
-        <div className="xs:h-28 xs:w-28 h-20 w-20 rounded-lg sm:h-36 sm:w-36">
-          <img className="h-full w-full" src="/ParkEaseLogoShine.png" alt="" />
+
+      {/* ── Main screen: Hero + Keyboard ── */}
+      <div className="flex h-[32%] w-full flex-col items-center justify-center gap-4 pt-8">
+        <div className="relative">
+          <div
+            className="absolute inset-0 rounded-2xl blur-2xl"
+            style={{ background: "rgba(0,217,135,0.2)" }}
+          />
+          <div className="relative h-20 w-20 overflow-hidden rounded-2xl sm:h-28 sm:w-28">
+            <img
+              className="h-full w-full object-contain"
+              src="/ParkEaseLogoShine.png"
+              alt=""
+            />
+          </div>
         </div>
-        <div className="px-4 text-center text-sm font-bold text-zinc-200 sm:text-lg">
-          Зогсоолын төлбөрөө энд төлөн хугацаагаа хэмнээрэй
+        <div className="px-6 text-center">
+          <div className="text-base font-bold text-white sm:text-xl">
+            Зогсоолын Төлбөр
+          </div>
+          <div className="mt-1 text-xs text-white/40 sm:text-sm">
+            Дугаараа оруулж шуурхай төлөөрэй
+          </div>
         </div>
       </div>
-      <div className="flex w-full flex-1 flex-col items-center justify-center overflow-hidden text-white">
+
+      <div className="flex w-full flex-1 flex-col items-center justify-center overflow-hidden">
         <DugaarKeyboardMobile
           dugaar={dugaar}
           setDugaar={setDugaar}
