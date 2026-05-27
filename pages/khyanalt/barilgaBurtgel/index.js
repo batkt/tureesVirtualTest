@@ -58,20 +58,20 @@ ChartJS.register(
 );
 
 const TURUL_CONFIG = {
-  turees:    { nerKey: "Түрээс",    icon: <HomeOutlined />,            color: "#10b981", ring: "ring-emerald-200 dark:ring-emerald-800" },
-  ashiglalt: { nerKey: "Ашиглалт", icon: <ThunderboltOutlined />,      color: "#3b82f6", ring: "ring-blue-200 dark:ring-blue-800" },
-  aldangi:   { nerKey: "Алданги",   icon: <WarningOutlined />,          color: "#ef4444", ring: "ring-red-200 dark:ring-red-800" },
-  baritsaa:  { nerKey: "Барьцаа",   icon: <LockOutlined />,             color: "#8b5cf6", ring: "ring-violet-200 dark:ring-violet-800" },
-  khyamdral: { nerKey: "Хөнгөлөлт",icon: <GiftOutlined />,             color: "#f59e0b", ring: "ring-amber-200 dark:ring-amber-800" },
-  khungulult:{ nerKey: "Хөнгөлөлт",icon: <GiftOutlined />,             color: "#f59e0b", ring: "ring-amber-200 dark:ring-amber-800" },
-  bank:      { nerKey: "Банк",      icon: <BankOutlined />,             color: "#06b6d4", ring: "ring-cyan-200 dark:ring-cyan-800" },
-  qpay:      { nerKey: "QPay",      icon: <WalletOutlined />,           color: "#6366f1", ring: "ring-indigo-200 dark:ring-indigo-800" },
-  barter:    { nerKey: "Бартер",    icon: <SwapOutlined />,             color: "#14b8a6", ring: "ring-teal-200 dark:ring-teal-800" },
-  voucher:   { nerKey: "Ваучер",    icon: <GiftOutlined />,             color: "#ec4899", ring: "ring-pink-200 dark:ring-pink-800" },
-  khuvaari:  { nerKey: "Хуваарь",  icon: <BarChartOutlined />,         color: "#64748b", ring: "ring-slate-200 dark:ring-slate-700" },
-  avlaga:    { nerKey: "Авлага",    icon: <ExclamationCircleOutlined />,color: "#f97316", ring: "ring-orange-200 dark:ring-orange-800" },
-  zalruulga: { nerKey: "Залруулга", icon: <SwapOutlined />,             color: "#a855f7", ring: "ring-purple-200 dark:ring-purple-800" },
-  orson:     { nerKey: "Залруулга", icon: <SwapOutlined />,             color: "#a855f7", ring: "ring-purple-200 dark:ring-purple-800" },
+  turees:    { nerKey: "Түрээс",    icon: <HomeOutlined />,            color: "#10b981", ring: "ring-emerald-200 dark:ring-emerald-800", category: "turees" },
+  ashiglalt: { nerKey: "Ашиглалт", icon: <ThunderboltOutlined />,      color: "#3b82f6", ring: "ring-blue-200 dark:ring-blue-800",   category: "ashiglalt" },
+  aldangi:   { nerKey: "Алданги",   icon: <WarningOutlined />,          color: "#ef4444", ring: "ring-red-200 dark:ring-red-800",     category: "aldangi" },
+  baritsaa:  { nerKey: "Барьцаа",   icon: <LockOutlined />,             color: "#8b5cf6", ring: "ring-violet-200 dark:ring-violet-800", category: "turees" },
+  khyamdral: { nerKey: "Хөнгөлөлт",icon: <GiftOutlined />,             color: "#f59e0b", ring: "ring-amber-200 dark:ring-amber-800", category: "turees" },
+  khungulult:{ nerKey: "Хөнгөлөлт",icon: <GiftOutlined />,             color: "#f59e0b", ring: "ring-amber-200 dark:ring-amber-800", category: "turees" },
+  bank:      { nerKey: "Банк",      icon: <BankOutlined />,             color: "#06b6d4", ring: "ring-cyan-200 dark:ring-cyan-800",   category: "busd" },
+  qpay:      { nerKey: "QPay",      icon: <WalletOutlined />,           color: "#6366f1", ring: "ring-indigo-200 dark:ring-indigo-800", category: "busd" },
+  barter:    { nerKey: "Бартер",    icon: <SwapOutlined />,             color: "#14b8a6", ring: "ring-teal-200 dark:ring-teal-800",   category: "busd" },
+  voucher:   { nerKey: "Ваучер",    icon: <GiftOutlined />,             color: "#ec4899", ring: "ring-pink-200 dark:ring-pink-800",   category: "busd" },
+  khuvaari:  { nerKey: "Хуваарь",  icon: <BarChartOutlined />,         color: "#64748b", ring: "ring-slate-200 dark:ring-slate-700", category: "turees" },
+  avlaga:    { nerKey: "Авлага",    icon: <ExclamationCircleOutlined />,color: "#f97316", ring: "ring-orange-200 dark:ring-orange-800", category: "busd" },
+  zalruulga: { nerKey: "Залруулга", icon: <SwapOutlined />,             color: "#a855f7", ring: "ring-purple-200 dark:ring-purple-800", category: "busd" },
+  orson:     { nerKey: "Залруулга", icon: <SwapOutlined />,             color: "#a855f7", ring: "ring-purple-200 dark:ring-purple-800", category: "busd" },
 };
  
 function GlassCard({ children, className = "", onClick }) {
@@ -292,7 +292,7 @@ function KhuvaariUldegdelCell({ record, token, barilgiinId, onLoad }) {
   );
 }
 
-function DetailModal({ open, onClose, turul, cfg, token, query }) {
+function DetailModal({ open, onClose, turul, cfg, token, query, baiguullaga }) {
   const { t } = useTranslation();
   const { barilgiinId: authBarilgiinId } = useAuth();
   const barilgiinId = query?.barilgiinId || authBarilgiinId;
@@ -321,7 +321,7 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
       })
         .then(({ data }) => data)
         .catch(aldaaBarigch),
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: false, dedupingInterval: 0 }
   );
 
   const isBank      = turul === "bank";
@@ -329,6 +329,8 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
   const isBaritsaa  = turul === "baritsaa";
   const isZalruulga = turul === "zalruulga" || turul === "orson";
   const isKhuvaari  = turul === "khuvaari";
+
+  const showBuilding = !query?.barilgiinId;
 
   const baseLeft = [
     {
@@ -360,6 +362,26 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
         </span>
       ),
     },
+    ...(showBuilding
+      ? [{
+          title: t("Барилга"),
+          dataIndex: "barilgiinId",
+          align: "center",
+          ellipsis: true,
+          width: 120,
+          render: (barilgiinId, record) => {
+            const ner =
+              baiguullaga?.barilguud?.find((b) => b._id === (barilgiinId || record.barilgiiinNer))?.ner ||
+              record.barilgiiinNer ||
+              barilgiinId;
+            return ner ? (
+              <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[11px] text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                {ner}
+              </span>
+            ) : <span className="text-slate-300">—</span>;
+          },
+        }]
+      : []),
     {
       title: t("Талбай"),
       dataIndex: "talbainDugaar",
@@ -430,17 +452,140 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
     : [
         ...baseLeft,
         ...(!isVoucher && !isZalruulga
-          ? [numCol(t("Бодогдсон"), "tulukhDun",
-              (v) => <span className="text-slate-600 dark:text-slate-300">{formatNumber(v, 0)}</span>)]
+          ? [{
+              title: (
+                <Tooltip
+                  title={
+                    <div style={{ fontSize: 12 }}>
+                      <div style={{ fontWeight: 600, marginBottom: 4 }}>
+                        {cfg ? t(cfg.nerKey) : t("Бодогдсон")} — {t("Нийт дүн")}
+                      </div>
+                      <div>
+                        {t("Нийт")}:{" "}
+                        <span style={{ fontWeight: 600 }}>
+                          {formatNumber(
+                            (data || []).reduce((s, r) => s + (r.tulukhDun || 0), 0),
+                            0
+                          )}
+                          ₮
+                        </span>
+                      </div>
+                      <div style={{ marginTop: 2, color: "rgba(255,255,255,0.7)" }}>
+                        {(data || []).length} {t("гэрээ")}
+                      </div>
+                    </div>
+                  }
+                >
+                  <span className="cursor-help border-b border-dashed border-slate-400">{t("Бодогдсон")}</span>
+                </Tooltip>
+              ),
+              dataIndex: "tulukhDun",
+              align: "right",
+              width: 130,
+              render: (v, r) => {
+                const recs = (r.records || []).filter((rec) => (rec.tulukhDun || 0) > 0);
+                if (!recs.length)
+                  return <span className="text-slate-600 dark:text-slate-300">{formatNumber(v, 0)}</span>;
+                return (
+                  <Tooltip
+                    title={
+                      <div style={{ fontSize: 11 }}>
+                        {recs
+                          .slice()
+                          .sort((a, b) => new Date(a.ognoo) - new Date(b.ognoo))
+                          .map((rec, i) => (
+                            <div key={i} style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+                              <span style={{ color: "rgba(255,255,255,0.6)" }}>
+                                {moment(rec.ognoo).format("YYYY-MM-DD")}
+                                {rec.zardliinNer ? ` · ${rec.zardliinNer}` : ""}
+                              </span>
+                              <span style={{ fontWeight: 600 }}>{formatNumber(rec.tulukhDun, 0)}₮</span>
+                            </div>
+                          ))}
+                      </div>
+                    }
+                  >
+                    <span className="cursor-help border-b border-dashed border-slate-400 text-slate-600 dark:text-slate-300">
+                      {formatNumber(v, 0)}
+                    </span>
+                  </Tooltip>
+                );
+              },
+            }]
           : []),
-        numCol(t("Гүйцэтгэл"), "tulsunDun",
-          (v) => <span className="font-semibold text-emerald-600">{formatNumber(v, 0)}</span>),
+        {
+          title: t("Гүйцэтгэл"),
+          dataIndex: "tulsunDun",
+          align: "right",
+          width: 130,
+          render: (v, r) => {
+            const recs = (r.bankRecords || []).filter((rec) => (rec.tulsunDun || 0) > 0);
+            if (!recs.length)
+              return <span className="font-semibold text-emerald-600">{formatNumber(v, 0)}</span>;
+            return (
+              <Tooltip
+                title={
+                  <div style={{ fontSize: 11 }}>
+                    {recs
+                      .slice()
+                      .sort((a, b) => new Date(a.ognoo) - new Date(b.ognoo))
+                      .map((rec, i) => (
+                        <div key={i} style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+                          <span style={{ color: "rgba(255,255,255,0.6)" }}>
+                            {moment(rec.ognoo).format("YYYY-MM-DD")}
+                            {rec.turul ? ` · ${rec.turul}` : ""}
+                          </span>
+                          <span style={{ fontWeight: 600 }}>{formatNumber(rec.tulsunDun, 0)}₮</span>
+                        </div>
+                      ))}
+                  </div>
+                }
+              >
+                <span className="cursor-help border-b border-dashed border-emerald-400 font-semibold text-emerald-600">
+                  {formatNumber(v, 0)}
+                </span>
+              </Tooltip>
+            );
+          },
+        },
         ...(!isVoucher && !isZalruulga
           ? [
-              numCol(t("Хөнгөлөлт"), "khyamdral",
-                (v) => v > 0
-                  ? <span className="text-amber-600">{formatNumber(v, 0)}</span>
-                  : <span className="text-slate-300">—</span>),
+              {
+                title: t("Хөнгөлөлт"),
+                dataIndex: "khyamdral",
+                align: "right",
+                width: 130,
+                render: (v, r) => {
+                  if ((v || 0) <= 0) return <span className="text-slate-300">—</span>;
+                  const recs = (r.khRecords || []).filter((rec) => (rec.khyamdral || 0) > 0);
+                  if (!recs.length)
+                    return <span className="text-amber-600">{formatNumber(v, 0)}</span>;
+                  return (
+                    <Tooltip
+                      title={
+                        <div style={{ fontSize: 11 }}>
+                          {recs
+                            .slice()
+                            .sort((a, b) => new Date(a.ognoo) - new Date(b.ognoo))
+                            .map((rec, i) => (
+                              <div key={i} style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+                                <span style={{ color: "rgba(255,255,255,0.6)" }}>
+                                  {moment(rec.ognoo).format("YYYY-MM-DD")}
+                                  {rec.tailbar ? ` · ${rec.tailbar}` : ""}
+                                </span>
+                                <span style={{ fontWeight: 600 }}>{formatNumber(rec.khyamdral, 0)}₮</span>
+                              </div>
+                            ))}
+                        </div>
+                      }
+                    >
+                      <span className="cursor-help border-b border-dashed border-amber-400 text-amber-600">
+                        {formatNumber(v, 0)}
+                      </span>
+                    </Tooltip>
+                  );
+                },
+              },
               {
                 title: t("Үлдэгдэл"),
                 align: "right",
@@ -456,9 +601,9 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
                       />
                     );
                   }
-                  const d = Math.max(0, (r.tulukhDun || 0) - (r.khyamdral || 0) - (r.tulsunDun || 0));
-                  return d > 0
-                    ? <span className="font-semibold text-red-500">{formatNumber(d, 0)}</span>
+                  const v = r.uldegdel || 0;
+                  return v > 0
+                    ? <span className="font-semibold text-red-500">{formatNumber(v, 0)}</span>
                     : <span className="text-slate-300">—</span>;
                 },
               },
@@ -475,6 +620,8 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
     ? Math.max(0, totalTulukh - totalTulsun - totalButsaan)
     : Math.max(0, totalTulukh - totalKhyamdral - totalTulsun);
   const tureesiinUldegdel = rows.reduce((s, r) => s + (balances[r.gereeniiDugaar] || 0), 0);
+  // For non-khuvaari billing types, sum the stored outstanding balance from contracts
+  const storedUldegdelTotal = isKhuvaari ? tureesiinUldegdel : rows.reduce((s, r) => s + (r.uldegdel || 0), 0);
  
  
   const tdSum = (content, key) => (
@@ -517,9 +664,10 @@ function DetailModal({ open, onClose, turul, cfg, token, query }) {
         cells.push(tdSum(
           <span className="text-amber-600">{totalKhyamdral > 0 ? formatNumber(totalKhyamdral, 0) : "—"}</span>, "khyamdral"
         ));
+        const footerUldegdel = isBaritsaa ? totalDutuu : storedUldegdelTotal;
         cells.push(tdSum(
-          <span className={totalDutuu > 0 ? "font-bold text-red-500" : "text-slate-400"}>
-            {totalDutuu > 0 ? formatNumber(totalDutuu, 0) : "—"}
+          <span className={footerUldegdel > 0 ? "font-bold text-red-500" : "text-slate-400"}>
+            {footerUldegdel > 0 ? formatNumber(footerUldegdel, 0) : "—"}
           </span>, "dutuu"
         ));
       }
@@ -605,6 +753,10 @@ function IncomeTypeCard({ cfg, tulukhDun, tulsunDun, khyamdral, onClick }) {
   const dutuu = Math.max(0, (tulukhDun || 0) - (khyamdral || 0) - (tulsunDun || 0));
   const pct   = tulukhDun > 0 ? Math.min(100, Math.round(((tulsunDun || 0) / tulukhDun) * 100)) : 0;
 
+  // Хөнгөлөлт болон алдангийн тусгай харагдац
+  const isDiscountOnly = (tulukhDun || 0) === 0 && (tulsunDun || 0) === 0 && (khyamdral || 0) > 0;
+  const isAldangiOnly  = cfg.category === "aldangi" && (tulukhDun || 0) > 0;
+
   return (
     <GlassCard
       className={`p-4 ring-1 ${cfg.ring} cursor-pointer transition-shadow hover:shadow-md`}
@@ -618,39 +770,67 @@ function IncomeTypeCard({ cfg, tulukhDun, tulsunDun, khyamdral, onClick }) {
           {cfg.icon}
         </span>
         <span className="font-semibold text-slate-700 dark:text-slate-200">{t(cfg.nerKey)}</span>
-        <span
-          className="ml-auto rounded-full px-2 py-0.5 text-xs font-medium text-white"
-          style={{ backgroundColor: cfg.color }}
-        >
-          {pct}%
-        </span>
+        {!isDiscountOnly && !isAldangiOnly && (
+          <span
+            className="ml-auto rounded-full px-2 py-0.5 text-xs font-medium text-white"
+            style={{ backgroundColor: cfg.color }}
+          >
+            {pct}%
+          </span>
+        )}
       </div>
-      <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-        <div
-          className="h-full rounded-full transition-all duration-700"
-          style={{ width: `${pct}%`, backgroundColor: cfg.color }}
-        />
-      </div>
-      <div className="grid grid-cols-3 divide-x divide-slate-100 text-center text-xs dark:divide-slate-800">
-        <div className="pr-2">
-          <div className="text-[11px] font-semibold leading-tight text-slate-700 dark:text-slate-200">
-            {formatNumber(tulukhDun, 0)}
-          </div>
-          <div className="mt-0.5 text-slate-400">{t("Бодогдсон")}</div>
+      {!isDiscountOnly && !isAldangiOnly && (
+        <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+          <div
+            className="h-full rounded-full transition-all duration-700"
+            style={{ width: `${pct}%`, backgroundColor: cfg.color }}
+          />
         </div>
-        <div className="px-2">
-          <div className="text-[11px] font-semibold leading-tight text-emerald-600 dark:text-emerald-400">
-            {formatNumber(tulsunDun, 0)}
+      )}
+      {isDiscountOnly ? (
+        <div className="flex flex-col items-center py-1">
+          <div className="text-sm font-bold" style={{ color: cfg.color }}>
+            {formatNumber(khyamdral, 0)}₮
           </div>
-          <div className="mt-0.5 text-slate-400">{t("Гүйцэтгэл")}</div>
+          <div className="mt-0.5 text-xs text-slate-400">{t("Нийт хөнгөлөлт")}</div>
         </div>
-        <div className="pl-2">
-          <div className={`text-[11px] font-semibold leading-tight ${dutuu > 0 ? "text-red-500" : "text-slate-400"}`}>
-            {formatNumber(dutuu, 0)}
+      ) : isAldangiOnly ? (
+        <div className="grid grid-cols-2 divide-x divide-slate-100 text-center text-xs dark:divide-slate-800">
+          <div className="pr-2">
+            <div className="text-[11px] font-semibold leading-tight text-red-500">
+              {formatNumber(tulukhDun, 0)}
+            </div>
+            <div className="mt-0.5 text-slate-400">{t("Бодогдсон")}</div>
           </div>
-          <div className="mt-0.5 text-slate-400">{t("Үлдэгдэл")}</div>
+          <div className="pl-2">
+            <div className="text-[11px] font-semibold leading-tight text-emerald-600 dark:text-emerald-400">
+              {formatNumber(tulsunDun, 0)}
+            </div>
+            <div className="mt-0.5 text-slate-400">{t("Төлсөн")}</div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-3 divide-x divide-slate-100 text-center text-xs dark:divide-slate-800">
+          <div className="pr-2">
+            <div className="text-[11px] font-semibold leading-tight text-slate-700 dark:text-slate-200">
+              {formatNumber(tulukhDun, 0)}
+            </div>
+            <div className="mt-0.5 text-slate-400">{t("Бодогдсон")}</div>
+          </div>
+          <div className="px-2">
+            <div className="text-[11px] font-semibold leading-tight text-emerald-600 dark:text-emerald-400">
+              {formatNumber(tulsunDun, 0)}
+            </div>
+            <div className="mt-0.5 text-slate-400">{t("Гүйцэтгэл")}</div>
+          </div>
+          <div className="pl-2">
+            <div className={`text-[11px] font-semibold leading-tight ${dutuu > 0 ? "text-red-500" : "text-slate-400"}`}>
+              {formatNumber(dutuu, 0)}
+            </div>
+            <div className="mt-0.5 text-slate-400">{t("Үлдэгдэл")}</div>
+          </div>
+        </div>
+      )}
     </GlassCard>
   );
 }
@@ -724,6 +904,7 @@ function BarilgaBurtgel({ token }) {
   const [lineOgnoo,      setLineOgnoo]      = useState([moment().startOf("year"), moment().endOf("month")]);
   const [detailModal,    setDetailModal]    = useState(null);
   const [selectedBarilga,setSelectedBarilga]= useState(null);
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   const query = useMemo(() => ({
     nariivchlal,
@@ -781,15 +962,22 @@ function BarilgaBurtgel({ token }) {
   const incomeTypes = useMemo(() => {
     if (!turulData) return [];
     return turulData
-      .filter((a) => TURUL_CONFIG[a._id] && ((a.tulukhDun || 0) > 0 || (a.tulsunDun || 0) > 0))
+      .filter((a) => {
+        if (!TURUL_CONFIG[a._id]) return false;
+        const hasData = (a.tulukhDun || 0) > 0 || (a.tulsunDun || 0) > 0 || (a.khyamdral || 0) > 0;
+        if (!hasData) return false;
+        if (categoryFilter !== "all" && TURUL_CONFIG[a._id].category !== categoryFilter) return false;
+        return true;
+      })
       .sort((a, b) => (b.tulukhDun || 0) - (a.tulukhDun || 0));
-  }, [turulData]);
+  }, [turulData, categoryFilter]);
 
   const outstandingTypes = useMemo(() => {
     if (!turulData) return [];
     return turulData
       .filter((a) => {
         if (!TURUL_CONFIG[a._id]) return false;
+        if (categoryFilter !== "all" && TURUL_CONFIG[a._id].category !== categoryFilter) return false;
         return Math.max(0, (a.tulukhDun || 0) - (a.khyamdral || 0) - (a.tulsunDun || 0)) > 0;
       })
       .sort((a, b) => {
@@ -797,11 +985,15 @@ function BarilgaBurtgel({ token }) {
         const dB = Math.max(0, (b.tulukhDun || 0) - (b.khyamdral || 0) - (b.tulsunDun || 0));
         return dB - dA;
       });
-  }, [turulData]);
+  }, [turulData, categoryFilter]);
 
-  const totalTulukh    = useMemo(() => (turulData || []).reduce((s, a) => s + (a.tulukhDun  || 0), 0), [turulData]);
-  const totalTulsun    = useMemo(() => (turulData || []).reduce((s, a) => s + (a.tulsunDun  || 0), 0), [turulData]);
-  const totalKhyamdral = useMemo(() => (turulData || []).reduce((s, a) => s + (a.khyamdral  || 0), 0), [turulData]);
+  // bank/qpay/barter cards show payment-method info separately; their tulsunDun is
+  // already attributed proportionally to billing cards, so exclude them from totals
+  const PAYMENT_CARD_IDS = ["bank", "qpay", "barter"];
+  const aldangiRow     = useMemo(() => (turulData || []).find((a) => a._id === "aldangi"), [turulData]);
+  const totalTulukh    = useMemo(() => (turulData || []).filter((a) => a._id !== "aldangi" && !PAYMENT_CARD_IDS.includes(a._id)).reduce((s, a) => s + (a.tulukhDun  || 0), 0), [turulData]);
+  const totalTulsun    = useMemo(() => (turulData || []).filter((a) => a._id !== "aldangi" && !PAYMENT_CARD_IDS.includes(a._id)).reduce((s, a) => s + (a.tulsunDun  || 0), 0), [turulData]);
+  const totalKhyamdral = useMemo(() => (turulData || []).filter((a) => a._id !== "aldangi" && !PAYMENT_CARD_IDS.includes(a._id)).reduce((s, a) => s + (a.khyamdral  || 0), 0), [turulData]);
   const totalDutuu = Math.max(0, totalTulukh - totalKhyamdral - totalTulsun);
 
   const tenantTotal  = (sambar?.khariu || []).reduce((s, a) => s + a.too, 0);
@@ -827,6 +1019,13 @@ function BarilgaBurtgel({ token }) {
           ))}
         </Select>
       )}
+      <Select value={categoryFilter} onChange={setCategoryFilter} className="w-40 rounded-xl">
+        <Select.Option value="all">{t("Бүх төрөл")}</Select.Option>
+        <Select.Option value="turees">{t("Түрээс")}</Select.Option>
+        <Select.Option value="ashiglalt">{t("Ашиглалт")}</Select.Option>
+        <Select.Option value="aldangi">{t("Алданги")}</Select.Option>
+        <Select.Option value="busd">{t("Бусад")}</Select.Option>
+      </Select>
     </div>
   );
 
@@ -880,6 +1079,32 @@ function BarilgaBurtgel({ token }) {
         <StatCard label={t("Хөнгөлөлт")}      value={`${formatNumber(totalKhyamdral, 0)}₮`} icon={<GiftOutlined />}              color="#f59e0b" />
       </div>
 
+      {(aldangiRow?.tulukhDun > 0 || aldangiRow?.tulsunDun > 0) && (
+        <div>
+          <SectionHeading icon={<WarningOutlined />} title={t("Алданги")} />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <StatCard
+              label={t("Бодогдсон алданги")}
+              value={`${formatNumber(aldangiRow?.tulukhDun || 0, 0)}₮`}
+              icon={<WarningOutlined />}
+              color="#ef4444"
+            />
+            <StatCard
+              label={t("Төлсөн алданги")}
+              value={`${formatNumber(aldangiRow?.tulsunDun || 0, 0)}₮`}
+              icon={<ArrowUpOutlined />}
+              color="#10b981"
+            />
+            <StatCard
+              label={t("Алдангийн үлдэгдэл")}
+              value={`${formatNumber(Math.max(0, (aldangiRow?.tulukhDun || 0) - (aldangiRow?.tulsunDun || 0)), 0)}₮`}
+              icon={<ExclamationCircleOutlined />}
+              color="#f97316"
+            />
+          </div>
+        </div>
+      )}
+
       <div>
         <SectionHeading icon={<ArrowDownOutlined />} title={t("Үлдэгдэл төрлөөр")} />
         {turulLoading ? (
@@ -912,6 +1137,7 @@ function BarilgaBurtgel({ token }) {
         cfg={detailModal?.cfg}
         token={token}
         query={query}
+        baiguullaga={baiguullaga}
       />
       <div className="col-span-12 space-y-2 p-1 md:p-2">
         {Controls}

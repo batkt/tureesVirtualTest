@@ -1148,6 +1148,8 @@ function avlagaTovchoo({ token }) {
     setExcelUnshijBaina(false);
   }
 
+  const showBuilding = !barilgiinId;
+
   const columns = useMemo(
     () => [
       {
@@ -1181,6 +1183,25 @@ function avlagaTovchoo({ token }) {
         width: 140,
         ellipsis: true,
       },
+      ...(showBuilding ? [{
+        title: t("Барилга"),
+        dataIndex: "barilgiinId",
+        key: "barilgiinId",
+        align: "center",
+        width: 110,
+        ellipsis: true,
+        render: (barilgiinId, record) => {
+          const ner =
+            baiguullaga?.barilguud?.find((b) => b._id === (barilgiinId || record.barilgiiinNer))?.ner ||
+            record.barilgiiinNer ||
+            barilgiinId;
+          return ner ? (
+            <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[11px] text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+              {ner}
+            </span>
+          ) : <span className="text-slate-300">—</span>;
+        },
+      }] : []),
       {
         title: t("Талбай"),
         dataIndex: "talbainDugaar",
@@ -1255,7 +1276,7 @@ function avlagaTovchoo({ token }) {
         ),
       },
     ],
-    [t, token, ognoo, barilgiinId, onUldegdelLoad]
+    [t, token, ognoo, barilgiinId, baiguullaga, onUldegdelLoad]
   );
   const totals = useMemo(
     () =>
