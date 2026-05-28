@@ -313,7 +313,9 @@ function EbarimtMedeelel({ token }) {
           return (
               <div className="flex flex-row space-x-2">
                 <div>Иргэн</div>
-                <div>{mur.customerTin}</div>
+                {mur.customerTin && (
+                  <div>{mur.customerTin}</div>
+                )}
               </div>
             );
         },

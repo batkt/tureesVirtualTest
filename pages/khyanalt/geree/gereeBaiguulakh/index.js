@@ -93,6 +93,7 @@ function GereeBaiguulakh({ token }) {
           params: {
             barilgiinId: barilgiinId,
             baiguullagiinId: bId,
+            _t: Date.now()
           },
         })
         .then(({ data: nextDugaar }) => {

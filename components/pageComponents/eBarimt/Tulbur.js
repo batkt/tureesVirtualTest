@@ -1,7 +1,7 @@
 import { Button, Spin, message, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import { useReactToPrint } from "react-to-print";
-
+import { toast } from "sonner";
 import EBarimt from "./EBarimt";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { t } from "i18next";
@@ -110,8 +110,12 @@ function Tulbur(
       body.turul = "1";
       body.register = register;
       body.customerName = baiguullagiinMedeelel?.name || "";
-      if (irgenEsekh && customerTin) {
-        body.customerTin = customerTin;
+      
+      if (irgenEsekh && register) {
+        body.customerNo = register;
+        if (customerTin) {
+          body.individualTin = customerTin;
+        }
       }
     }
 
@@ -135,11 +139,11 @@ function Tulbur(
         (baiguullagaEsekh === true && register?.toString().length !== 7) ||
         (irgenEsekh === true && register?.toString().length !== 10)
       ) {
-        message.toast(t("Байгууллагын регистр оруулна уу"));
+        toast.error(t("Байгууллагын регистр оруулна уу"));
         return;
       }
       if ((baiguullagaEsekh || irgenEsekh) && !baiguullagiinMedeelel?.name) {
-        message.toast(t("Регистрийн дугаар буруу"));
+        toast.error(t("Регистрийн дугаар буруу"));
         return;
       }
       if (!baiguullagiinMedeelel?.name) {
