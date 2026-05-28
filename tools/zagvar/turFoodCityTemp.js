@@ -185,7 +185,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                   a.tailbar === "Ус-2" ||
                   a.tailbar === "Ус" ||
                   a.tailbar?.includes("Ус") ||
-                  a.tailbar?.includes("Засвар үйлчилгээний зардал") ||
+                  a.tailbar?.includes("Засвар") ||
                   a.tailbar?.includes("Торгууль"),
               );
 
