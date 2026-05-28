@@ -101,7 +101,7 @@ const uilchilgee = (token) => {
   return axios.create({
     baseURL:
       typeof window === "undefined"
-        ? process.env.HTTP_URL || "http://127.0.0.1:8081"
+        ? process.env.HTTP_URL || "http://103.48.116.100:8081"
         : url,
     headers,
   });
