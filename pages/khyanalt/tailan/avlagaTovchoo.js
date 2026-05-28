@@ -77,6 +77,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
 
 
     (detail?.guilgeenuud || []).forEach((g) => {
+      if (g.turul === "baritsaa") return;
       let item = g;
       if (g.turul === "aldangi") {
         item = {
@@ -85,80 +86,12 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           tulsunDun: g.tulsunAldangi || g.tulsunDun || 0,
           tailbar: g.tailbar || t("Төлсөн алданги")
         };
-      } else if (g.turul === "baritsaa") {
-
-        item = {
-          ...g,
-          tulsunDun: (g.tulsunDun || 0) + (g.orlogo || 0) + (g.zarlaga || 0),
-          tulukhDun: 0,
-          tailbar: g.tailbar || t("Барьцаа")
-        };
       }
       if (item._id) {
         seenIds.add(item._id.toString());
       }
       combined.push(item);
     });
-
-
-    const requiredBaritsaa = Number(gereeDetail?.baritsaaAvakhDun || detail?.baritsaaAvakhDun) || 0;
-    if (requiredBaritsaa > 0) {
-      const baritsaaTulultArr = gereeDetail?.baritsaaTulultArr || [];
-      const baritsaaDate = baritsaaTulultArr?.[0]?.guilgeeKhiisenOgnoo ||
-        baritsaaTulultArr?.[0]?.ognoo ||
-        gereeDetail?.gereeniiOgnoo || null;
-      if (inDateRange(baritsaaDate)) {
-        combined.push({
-          _id: `baritsaa-required-${gereeDetail?._id || detail?._id}`,
-          ognoo: baritsaaDate,
-          tailbar: t("Барьцаа үүссэн"),
-          tulukhDun: requiredBaritsaa,
-          tulsunDun: 0,
-          khyamdral: 0,
-          turul: "baritsaa"
-        });
-      }
-    }
-
-
-    const effectiveBaritsaaGuilgeenuud = (gereeDetail?.baritsaaGuilgeenuud?.length > 0)
-      ? gereeDetail.baritsaaGuilgeenuud
-      : [];
-
-    effectiveBaritsaaGuilgeenuud.forEach((g) => {
-      if (g._id && seenIds.has(g._id.toString())) return;
-      const entryDate = g.ognoo || g.guilgeeKhiisenOgnoo;
-      if (!inDateRange(entryDate)) return;
-      const paidAmount = (g.tulsunDun || 0) + (g.orlogo || 0) + (g.zarlaga || 0);
-      if (paidAmount > 0 || (g.tulukhDun || 0) > 0) {
-        combined.push({
-          ...g,
-          tailbar: g.tailbar || t("Барьцаа төлөлт"),
-          tulsunDun: paidAmount,
-          tulukhDun: 0,
-          turul: "baritsaa"
-        });
-      }
-    });
-    if (!gereeDetail?.baritsaaGuilgeenuud?.length) {
-      const baritsaaTulultArr = gereeDetail?.baritsaaTulultArr || [];
-      baritsaaTulultArr.forEach((g) => {
-        if (g._id && seenIds.has(g._id.toString())) return;
-        const entryDate = g.ognoo || g.guilgeeKhiisenOgnoo;
-        if (!inDateRange(entryDate)) return;
-        const paidAmount = (g.orlogo || 0) + (g.tulsunDun || 0);
-        if (paidAmount > 0) {
-          combined.push({
-            ...g,
-            ognoo: entryDate,
-            tailbar: g.tailbar || t("Барьцаа төлөлт"),
-            tulsunDun: paidAmount,
-            tulukhDun: 0,
-            turul: "baritsaa"
-          });
-        }
-      });
-    }
 
 
     (gereeDetail?.aldangiGuilgeenuud || []).forEach((g) => {
@@ -382,10 +315,10 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
       width: 250,
       render: (v, r) => {
         if (r._isBodogdsonAldangi) {
-          return <span className="font-semibold italic text-orange-700">{v}</span>;
+          return <span className="font-semibold italic text-orange-700 dark:text-orange-500">{v}</span>;
         }
         if (r._isEkhniiUldegdel) {
-          return <span className="font-semibold italic text-green-700">{v}</span>;
+          return <span className="font-semibold italic text-green-700 dark:text-green-500">{v}</span>;
         }
         let label;
         if (r.turul === "khuvaari") {
@@ -401,8 +334,8 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         }
         return (
           <div>
-            <div className="font-medium text-gray-800">{label}</div>
-            {r.barimtNo && <div className="text-xs text-gray-500">{t("Баримт №")}: {r.barimtNo}</div>}
+            <div className="font-medium text-gray-800 dark:text-gray-200">{label}</div>
+            {r.barimtNo && <div className="text-xs text-gray-500 dark:text-gray-400">{t("Баримт №")}: {r.barimtNo}</div>}
           </div>
         );
       },
@@ -446,7 +379,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           return <span className="font-bold text-blue-600 whitespace-nowrap">{formatNumber(v, 2)}</span>;
         }
         return v === null || v === undefined
-          ? <span className="text-gray-300">-</span>
+          ? <span className="text-gray-300 dark:text-gray-600">-</span>
           : <span className="font-medium whitespace-nowrap">{formatNumber(v, 2)}</span>;
       },
     },
@@ -689,7 +622,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
               </tr>
               <tr className="font-bold bg-gray-100">
                 <td colSpan={3} className="border border-gray-400 px-1 py-0.5 text-right">
-                  {/* Empty */}
+                 
                 </td>
                 <td colSpan={2} className="border border-gray-400 px-1 py-0.5 text-center italic">
                   Эцсийн үлдэгдэл
@@ -721,39 +654,39 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
         width={1400}
         style={{ top: 20 }}
         title={
-          <div className="text-xl text-blue-900 font-bold py-4 text-center">
+          <div className="text-xl text-blue-900 dark:text-blue-400 font-bold py-4 text-center">
             {t("Авлагын дэлгэрэнгүй тайлан")}{" "}
 
           </div>
         }
       >
         <div>
-          <div className="flex flex-col gap-3 px-4 py-3 bg-gray-50 rounded-lg border mb-4 shadow-xs">
-            <div className="flex flex-wrap gap-x-8 text-sm font-semibold text-gray-700">
-              <span className="text-sm font-semibold text-gray-500">
+          <div className="flex flex-col gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-lg border dark:border-gray-700 mb-4 shadow-xs">
+            <div className="flex flex-wrap gap-x-8 text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <span className="text-sm font-semibold text-gray-500 dark:text-gray-400">
                 ({ognoo && ognoo[0] && ognoo[1] ? `${moment(ognoo[0]).format("YYYY/MM/DD")} – ${moment(ognoo[1]).format("YYYY/MM/DD")}` : moment().format("YYYY/MM/DD")})
               </span>
-              <div>Харилцагч: <span className="font-normal text-gray-955">{record?.ner}</span></div>
-              <div>Талбай дугаар: <span className="font-normal text-gray-955">{record?.talbainDugaar}</span></div>
-              <div>Талбай м2: <span className="font-normal text-gray-955">{record?.talbainKhemjee || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
+              <div>Харилцагч: <span className="font-normal text-gray-900 dark:text-gray-100">{record?.ner}</span></div>
+              <div>Талбай дугаар: <span className="font-normal text-gray-900 dark:text-gray-100">{record?.talbainDugaar}</span></div>
+              <div>Талбай м2: <span className="font-normal text-gray-900 dark:text-gray-100">{record?.talbainKhemjee || gereeDetail?.talbainKhemjee || detail?.talbainKhemjee || "-"} м2</span></div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3 border-t border-gray-200">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3 border-t border-gray-200 dark:border-gray-700">
               <div className="flex flex-col">
-                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Түрээсийн үлдэгдэл")}</span>
-                <span className="text-sm font-bold text-gray-800">{formatNumber(tureesiinUldegdel, 2)}₮</span>
+                <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">{t("Түрээсийн үлдэгдэл")}</span>
+                <span className="text-sm font-bold text-gray-800 dark:text-gray-100">{formatNumber(tureesiinUldegdel, 2)}₮</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Барьцаа үлдэгдэл")}</span>
-                <span className="text-sm font-bold text-gray-800">{formatNumber(baritsaaBalance, 2)}₮</span>
+                <span className="text-xs font-semibold text-gray-400 dark:text-gray-100 uppercase tracking-wide">{t("Барьцаа үлдэгдэл")}</span>
+                <span className="text-sm font-bold text-gray-800 dark:text-gray-100">{formatNumber(baritsaaBalance, 2)}₮</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Төлсөн алданги")}</span>
-                <span className="text-sm font-bold text-gray-800">{formatNumber(gereeDetail?.niitTulsunAldangi || 0, 2)}₮</span>
+                <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">{t("Төлсөн алданги")}</span>
+                <span className="text-sm font-bold text-gray-800 dark:text-gray-100">{formatNumber(gereeDetail?.niitTulsunAldangi || 0, 2)}₮</span>
               </div>
-              <div className="flex flex-col text-red-600">
-                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t("Алдангийн үлдэгдэл")}</span>
-                <span className="text-sm font-bold text-red-600">{formatNumber(effectiveAldangiUldegdel || 0, 2)}₮</span>
+              <div className="flex flex-col text-red-600 dark:text-red-500">
+                <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">{t("Алдангийн үлдэгдэл")}</span>
+                <span className="text-sm font-bold text-red-600 dark:text-red-500">{formatNumber(effectiveAldangiUldegdel || 0, 2)}₮</span>
               </div>
             </div>
           </div>
@@ -796,29 +729,29 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
             }}
             summary={() => (
               <AntdTable.Summary fixed="bottom">
-                <AntdTable.Summary.Row className="bg-gray-50">
+                <AntdTable.Summary.Row className="bg-gray-50 dark:bg-gray-800">
                   <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
-                    <span className="font-bold text-gray-700">{t("Нийт гүйлгээ")}</span>
+                    <span className="font-bold text-gray-700 dark:text-gray-300">{t("Нийт гүйлгээ")}</span>
                   </AntdTable.Summary.Cell>
                   <AntdTable.Summary.Cell index={3} align="right">
-                    <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalDt, 2)}</span>
+                    <span className="font-bold text-blue-700 dark:text-blue-400 text-sm whitespace-nowrap">{formatNumber(totalDt, 2)}</span>
                   </AntdTable.Summary.Cell>
                   <AntdTable.Summary.Cell index={4} align="right">
-                    <span className="font-bold text-blue-700 text-sm whitespace-nowrap">{formatNumber(totalKt, 2)}</span>
+                    <span className="font-bold text-blue-700 dark:text-blue-400 text-sm whitespace-nowrap">{formatNumber(totalKt, 2)}</span>
                   </AntdTable.Summary.Cell>
                   <AntdTable.Summary.Cell index={5} align="right">
-                    <span className="text-gray-300">-</span>
+                    <span className="text-gray-300 dark:text-gray-600">-</span>
                   </AntdTable.Summary.Cell>
                 </AntdTable.Summary.Row>
-                <AntdTable.Summary.Row className="bg-gray-100">
+                <AntdTable.Summary.Row className="bg-gray-100 dark:bg-gray-900">
                   <AntdTable.Summary.Cell index={0} colSpan={3} align="right">
-                    {/* Empty column */}
+                   
                   </AntdTable.Summary.Cell>
                   <AntdTable.Summary.Cell index={3} colSpan={2} align="center">
-                    <span className="font-bold text-gray-700 italic">{t("Эцсийн үлдэгдэл")}</span>
+                    <span className="font-bold text-gray-700 dark:text-gray-300 italic">{t("Эцсийн үлдэгдэл")}</span>
                   </AntdTable.Summary.Cell>
                   <AntdTable.Summary.Cell index={5} align="right">
-                    <span className="font-bold text-red-600 text-sm whitespace-nowrap">
+                    <span className="font-bold text-red-600 dark:text-red-500 text-sm whitespace-nowrap">
                       {formatNumber(lastBalance, 2)}
                     </span>
                   </AntdTable.Summary.Cell>
@@ -827,10 +760,10 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
             )}
           />
         </div>
-        <div className="flex justify-end pt-4 gap-3 pr-4 pb-4 border-t bg-gray-50 rounded-b-lg">
+        <div className="flex justify-end pt-4 gap-3 pr-4 pb-4 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-b-lg">
           <button
             onClick={handlePrint}
-            className="btn btn-outline-primary flex h-8 items-center gap-1 text-sm bg-white"
+            className="btn btn-outline-primary flex h-8 items-center gap-1 text-sm bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -851,7 +784,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           </button>
           <button
             onClick={exceleerTatya}
-            className="btn btn-outline-success flex h-8 items-center gap-1 text-sm bg-white"
+            className="btn btn-outline-success flex h-8 items-center gap-1 text-sm bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -872,7 +805,7 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
           </button>
           <button
             onClick={onClose}
-            className="btn btn-outline-secondary flex h-8 items-center gap-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300"
+            className="btn btn-outline-secondary flex h-8 items-center gap-1 text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600"
           >
             {t("Хаах")}
           </button>
