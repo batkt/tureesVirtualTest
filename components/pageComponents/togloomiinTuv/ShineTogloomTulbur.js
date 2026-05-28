@@ -66,6 +66,7 @@ function ShineTogloomTulbur(
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = React.useState();
   const [qpayModalTuluv, setQpayModalTuluv] = React.useState(false);
   const [tin, setTin] = React.useState("");
+  const [qpayKhariltsagchMedeelel, setQpayKhariltsagchMedeelel] = React.useState();
 
   const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(() => {
     const totalAmount = data?.dutuuDun ?? data?.niitDun ?? 0;
@@ -358,6 +359,21 @@ function ShineTogloomTulbur(
     };
   }, [khuleegdejBuiQpay, baiguullaga, loading]);
 
+  useEffect(() => {
+    if (!!baiguullaga?.register) {
+      uilchilgee(token)
+        .post("/qpayKhariltsagchAvay", { register: baiguullaga.register })
+        .then(({ data }) => {
+          if (data) {
+            setQpayKhariltsagchMedeelel(data);
+          }
+        })
+        .catch((err) => {
+          console.error("QPay config fetch failed:", err);
+        });
+    }
+  }, [baiguullaga, token]);
+
   function qpayAvakh() {
     var ilgeekhDun = tulbur.find((a) => a.turul === "qpay")?.dun;
     if (!ilgeekhDun || ilgeekhDun <= 0) {
@@ -365,13 +381,34 @@ function ShineTogloomTulbur(
       setLoading(false);
       return;
     }
+
+    let dansniiDugaar = undefined;
+    if (qpayKhariltsagchMedeelel?.salbaruud) {
+      const salbar = qpayKhariltsagchMedeelel.salbaruud.find(
+        (a) => a.salbariinId === barilgiinId
+      );
+      if (salbar?.bank_accounts && salbar.bank_accounts.length > 0) {
+        const matchedAccount =
+          salbar.bank_accounts.find((a) => a.default || a.is_default) ||
+          salbar.bank_accounts[0];
+        dansniiDugaar = matchedAccount?.account_number;
+      }
+    }
+
     setKhuleegdejBuiQpay(`${data?._id}${ilgeekhDun}`);
+    
+    const requestBody = {
+      dun: ilgeekhDun,
+      zakhialgiinDugaar: `${data?._id}${ilgeekhDun}`,
+      barilgiinId: barilgiinId,
+    };
+
+    if (dansniiDugaar) {
+      requestBody.dansniiDugaar = dansniiDugaar;
+    }
+
     uilchilgee(token)
-      .post("/qpayGargaya", {
-        dun: ilgeekhDun,
-        zakhialgiinDugaar: `${data?._id}${ilgeekhDun}`,
-        barilgiinId: barilgiinId,
-      })
+      .post("/qpayGargaya", requestBody)
       .then(({ data }) => {
         setQpayerTulukh(data);
         setLoading(false);
