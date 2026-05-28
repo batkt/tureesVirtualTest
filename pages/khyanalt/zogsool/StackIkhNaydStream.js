@@ -8,7 +8,9 @@ function StackIkhNaydStream({ barilgiinId, token }) {
 
   useEffect(() => {
     uilchilgee(token)
-      .get("https://turees.zevtabs.mn/api/zogsooliinIpAvaya/" + barilgiinId)
+      .get(
+        "https://testvertual.zevtabs.mn/api/zogsooliinIpAvaya/" + barilgiinId,
+      )
       .then(function (response) {
         if (!!response) setCameraIps(response?.data?.ip);
       })

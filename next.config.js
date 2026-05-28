@@ -2,7 +2,11 @@
 const nextConfig = {
   output: "standalone",
 
-  turbopack: {},
+  turbopack: {
+    resolveAlias: {
+      canvas: "./lib/canvas-stub.js",
+    },
+  },
 
   // Production optimizations
   compress: true,
@@ -24,10 +28,10 @@ const nextConfig = {
 
   env: {
     NEXT_PUBLIC_URL:
-      process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api",
+      process.env.NEXT_PUBLIC_URL || "https://testvertual.zevtabs.mn/api",
     NEXT_PUBLIC_SOCKET:
-      process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
-    HTTP_URL: process.env.HTTP_URL || "http://103.143.40.230:8081",
+      process.env.NEXT_PUBLIC_SOCKET || "https://testvertual.zevtabs.mn",
+    HTTP_URL: process.env.HTTP_URL || "http://103.48.116.100:8081",
   },
 
   // env: {
@@ -35,7 +39,7 @@ const nextConfig = {
   //     process.env.NEXT_PUBLIC_URL || "https://rently.zevtabs.mn/api",
   //   NEXT_PUBLIC_SOCKET:
   //     process.env.NEXT_PUBLIC_SOCKET || "https://rently.zevtabs.mn",
-  //   HTTP_URL: process.env.HTTP_URL || "http://103.143.40.230:8081",
+  //   HTTP_URL: process.env.HTTP_URL || "http://103.48.116.100:8081",
   // },
 
   // env: {
@@ -103,7 +107,14 @@ const nextConfig = {
       config.resolve.alias = {
         ...config.resolve.alias,
         "react-plotly.js": require.resolve("./lib/react-plotly-stub.js"),
+        canvas: false,
       };
+
+      config.externals = [
+        ...(Array.isArray(config.externals) ? config.externals : []),
+        /^canvas/,
+        /^konva/,
+      ];
     }
 
     return config;

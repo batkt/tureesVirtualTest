@@ -29,7 +29,7 @@ const AnketIlgeekh = (
               msgnuud: [
                 {
                   to: utasniiDugaar,
-                  text: `Ta daraakh kholboosoor orj anket bogolnuu: https://turees.zevtabs.mn/khyanalt/anket/${baiguullaga?._id}/${data._id}`,
+                  text: `Ta daraakh kholboosoor orj anket bogolnuu: https://testvertual.zevtabs.mn/khyanalt/anket/${baiguullaga?._id}/${data._id}`,
                 },
               ],
             })
@@ -64,7 +64,7 @@ const AnketIlgeekh = (
                 {
                   mail: email,
                   subject: "Анкет",
-                  content: `Та <a style="text-decoration: underline; font-size:20px" href="https://turees.zevtabs.mn/khyanalt/anket/${baiguullaga?._id}/${data._id}">энд</a> дарж анкет илгээнэ үү.`,
+                  content: `Та <a style="text-decoration: underline; font-size:20px" href="https://testvertual.zevtabs.mn/khyanalt/anket/${baiguullaga?._id}/${data._id}">энд</a> дарж анкет илгээнэ үү.`,
                 },
               ],
             })

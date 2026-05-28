@@ -32,7 +32,7 @@ const isOnline = () => {
 };
 // Heartbeat check to detect real network connectivity using the API server
 // const HEARTBEAT_URL = API_URL || "http://103.143.40.175:8081";
-const HEARTBEAT_URL = API_URL || "https://turees.zevtabs.mn/api";
+const HEARTBEAT_URL = API_URL || "https://testvertual.zevtabs.mn/api";
 const heartbeatCheck = async (url = HEARTBEAT_URL, timeout = 5000) => {
   try {
     const controller = new AbortController();

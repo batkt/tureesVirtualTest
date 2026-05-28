@@ -5,12 +5,12 @@ import _ from "lodash";
 import { t } from "i18next";
 //production
 export const url =
-  process.env.NEXT_PUBLIC_URL || "https://turees.zevtabs.mn/api";
+  process.env.NEXT_PUBLIC_URL || "https://testvertual.zevtabs.mn/api";
 let socketInstance = null;
 export const socket = () => {
   if (!socketInstance) {
     socketInstance = socketIOClient(
-      process.env.NEXT_PUBLIC_SOCKET || "https://turees.zevtabs.mn",
+      process.env.NEXT_PUBLIC_SOCKET || "https://testvertual.zevtabs.mn",
       {
         transports: ["websocket"],
       },
@@ -101,7 +101,7 @@ const uilchilgee = (token) => {
   return axios.create({
     baseURL:
       typeof window === "undefined"
-        ? process.env.HTTP_URL || "http://103.143.40.230:8081"
+        ? process.env.HTTP_URL || "http://103.48.116.100:8081"
         : url,
     headers,
   });
