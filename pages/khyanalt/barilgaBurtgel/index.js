@@ -265,9 +265,10 @@ function TailwindTable({ columns, rows, loading, summary }) {
 
 
 function KhuvaariUldegdelCell({ record, token, barilgiinId, onLoad }) {
+  const actualBarilgiinId = barilgiinId || record?.barilgiinId;
   const { data, isValidating } = useSWR(
-    record?.gereeniiDugaar && barilgiinId
-      ? ["/uldegdelBodyo", barilgiinId, record.gereeniiDugaar]
+    record?.gereeniiDugaar && actualBarilgiinId
+      ? ["/uldegdelBodyo", actualBarilgiinId, record.gereeniiDugaar]
       : null,
     (url, barId, gereeDug) =>
       uilchilgee(token)
@@ -286,8 +287,8 @@ function KhuvaariUldegdelCell({ record, token, barilgiinId, onLoad }) {
   if (isValidating && !data) return <Spin size="small" />;
 
   return (
-    <span className={`font-semibold ${v > 0 ? "text-red-500" : "text-slate-400"}`}>
-      {v > 0 ? formatNumber(v, 2) : "—"}
+    <span className={`font-semibold ${v !== 0 ? (v > 0 ? "text-red-500" : "text-emerald-500") : "text-slate-400"}`}>
+      {v !== 0 ? formatNumber(v, 2) : "0"}
     </span>
   );
 }
@@ -602,9 +603,9 @@ function DetailModal({ open, onClose, turul, cfg, token, query, baiguullaga }) {
                     );
                   }
                   const v = r.uldegdel || 0;
-                  return v > 0
-                    ? <span className="font-semibold text-red-500">{formatNumber(v, 0)}</span>
-                    : <span className="text-slate-300">—</span>;
+                  return v !== 0
+                    ? <span className={`font-semibold ${v > 0 ? "text-red-500" : "text-emerald-500"}`}>{formatNumber(v, 0)}</span>
+                    : <span className="text-slate-400">0</span>;
                 },
               },
             ]
@@ -666,8 +667,8 @@ function DetailModal({ open, onClose, turul, cfg, token, query, baiguullaga }) {
         ));
         const footerUldegdel = isBaritsaa ? totalDutuu : storedUldegdelTotal;
         cells.push(tdSum(
-          <span className={footerUldegdel > 0 ? "font-bold text-red-500" : "text-slate-400"}>
-            {footerUldegdel > 0 ? formatNumber(footerUldegdel, 0) : "—"}
+          <span className={footerUldegdel !== 0 ? (footerUldegdel > 0 ? "font-bold text-red-500" : "font-bold text-emerald-500") : "text-slate-400"}>
+            {footerUldegdel !== 0 ? formatNumber(footerUldegdel, 0) : "0"}
           </span>, "dutuu"
         ));
       }

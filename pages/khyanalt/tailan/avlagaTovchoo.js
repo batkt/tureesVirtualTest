@@ -42,13 +42,14 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
     ? moment(ognoo[1]).endOf("day").toISOString()
     : "2099-12-31T23:59:59.000Z";
 
+  const actualBarilgiinId = barilgiinId || record?.barilgiinId;
   const { detail, gereeDetail, detailUnshijBaina } = useavlagaTovchooDelgerengui(
     open && token,
     record?.gereeniiDugaar,
     filteredEkhlekh,
     filteredDuusakh,
     baiguullaga?._id,
-    barilgiinId,
+    actualBarilgiinId,
     baiguullaga?.tukhainBaaziinKholbolt
   );
 
@@ -883,13 +884,14 @@ function DetailModal({ open, onClose, record, ognoo, token, baiguullaga, barilgi
 
 function AvlagaEtssiinUldegdel({ record, token, ognoo, barilgiinId, onLoad }) {
   const isCancelled = record?.tuluv === -1 || Number(record?.tuluv) === -1;
+  const actualBarilgiinId = barilgiinId || record?.barilgiinId;
   const { data, isValidating } = useSWR(
-    record?.gereeniiDugaar && barilgiinId
-      ? ["/uldegdelBodyo", barilgiinId, record.gereeniiDugaar, ognoo?.[0]?.valueOf(), ognoo?.[1]?.valueOf(), isCancelled]
+    record?.gereeniiDugaar && actualBarilgiinId
+      ? ["/uldegdelBodyo", actualBarilgiinId, record.gereeniiDugaar, ognoo?.[0]?.valueOf(), ognoo?.[1]?.valueOf(), isCancelled]
       : null,
     () =>
       axios(token)
-        .post("/uldegdelBodyo", { barilgiinId, gereeniiDugaar: record.gereeniiDugaar, ognoo, tsutsalsanTurul: isCancelled })
+        .post("/uldegdelBodyo", { barilgiinId: actualBarilgiinId, gereeniiDugaar: record.gereeniiDugaar, ognoo, tsutsalsanTurul: isCancelled })
         .then((res) => res.data),
     { revalidateOnFocus: false }
   );

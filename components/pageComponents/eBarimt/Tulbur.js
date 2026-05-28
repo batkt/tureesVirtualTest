@@ -110,6 +110,9 @@ function Tulbur(
       body.turul = "1";
       body.register = register;
       body.customerName = baiguullagiinMedeelel?.name || "";
+      if (irgenEsekh && customerTin) {
+        body.customerTin = customerTin;
+      }
     }
 
     uilchilgee(token)
@@ -136,7 +139,7 @@ function Tulbur(
         return;
       }
       if ((baiguullagaEsekh || irgenEsekh) && !baiguullagiinMedeelel?.name) {
-        message.toast(t("Регистр буруу байна"));
+        message.toast(t("Регистрийн дугаар буруу"));
         return;
       }
       if (!baiguullagiinMedeelel?.name) {
