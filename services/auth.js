@@ -39,7 +39,7 @@ const heartbeatCheck = async (url = HEARTBEAT_URL, timeout = 5000) => {
     const id = setTimeout(() => controller.abort(), timeout);
 
     // Use a proper API endpoint instead of no-cors HEAD request
-    const checkUrl = `${url}/api/health?_t=${Date.now()}`;
+    const checkUrl = `${url}/health?_t=${Date.now()}`;
 
     const response = await fetch(checkUrl, {
       method: "GET",
